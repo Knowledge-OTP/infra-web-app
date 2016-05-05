@@ -1,0 +1,7 @@
+/node_modules
+/.tmp
+/.sass-cache
+/.localTmp
+/bower_components
+/.idea
+.DS_Store
