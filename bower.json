@@ -1,12 +1,12 @@
 {
-  "name": "infra",
-  "version": "v4.0.0",
+  "name": "infra-web-app",
+  "version": "v1.0.0",
   "authors": [
     "Zinkerz"
   ],
   "dependencies": {
-    "angular": "1.5.3",
-    "angular-animate": "1.5.3",
+    "angular": "~1.5.3",
+    "angular-animate": "~1.5.3",
     "Swiper": "swiper#~3.2.7",
     "firebase": "~2.3.2"
   },
@@ -17,12 +17,9 @@
     "demo"
   ],
   "main": [
-      "dist/znk.infra.js",
+      "dist/main.js",
       "dist/main.css"
   ],
-  "resolutions": {
-    "angular": "1.5.4"
-  },
   "devDependencies": {
     "es5-shim": "~4.4.1",
     "angular-mocks": "1.4.3",
