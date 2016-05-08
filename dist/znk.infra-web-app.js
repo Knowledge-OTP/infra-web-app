@@ -1,9 +1,41 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.config', []).config([
+        function($translateProvider){
+            $translateProvider.useLoader('$translatePartialLoader', {
+                urlTemplate: '/i18n/{part}/{lang}.json'
+            });
+        }
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.loginForm', ['pascalprecht.translate']);
 
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.config').provider('InfraConfigSrv', [
+        function () {
+            this.$get = [
+                function () {
+                    var InfraConfigSrv = {};
+
+                    return InfraConfigSrv;
+                }
+            ];
+        }
+    ]);
+})(angular);
+
+angular.module('znk.infra-web-app.config').run(['$templateCache', function($templateCache) {
+
+}]);
 
 /**
  * attrs:
@@ -69,3 +101,9 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     "</form>\n" +
     "");
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app', []);
+})(angular);

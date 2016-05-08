@@ -2,3 +2,93 @@
         './src/scss/imports/colors',
         './src/scss/imports/mixins';
 
+login-form{
+    width: 413px;
+
+    .login-form-container{
+        font:{
+            family: Lato;
+            weight: $lightFontWeight    ;
+        }
+
+        .title{
+            padding: {
+                top: 33px;
+                bottom: 22px;
+            }
+            text-align: center;
+            font-size: 39px;
+
+        }
+
+        .input-wrapper{
+            width: 340px;
+            border: 1px $borderColor1 solid;
+            border-radius: 30px;
+            margin: {
+                right: auto;
+                bottom: 11px;
+                left: auto;
+            }
+
+            &:last-child{
+                margin: {
+                    bottom: 35px;
+                };
+            }
+
+            input{
+                height: 40px;
+                border: none;
+            }
+        }
+
+        .submit-btn-wrapper{
+            margin: {
+                bottom: 15px;
+            };
+            text-align: center;
+        }
+
+        .forgot-pwd-wrapper{
+            margin: {
+                bottom: 26px;
+            };
+            text-align: right;
+        }
+
+        .divider{
+            position: relative;
+            text-align: center;
+
+            &:before{
+                content: '';
+                position: absolute;
+                top: 7px;
+                right: 0;
+                left: 0;
+                border: 1px $borderColor2 solid;
+            }
+
+            .text{
+                display: inline-block;
+                background: $bgColor1;
+                position: relative;
+                z-index: 1;
+                padding: {
+                    right: 15px;
+                    left: 15px;
+                };
+            }
+        }
+
+        .social-auth-container{
+            margin: {
+                top: 28px;
+                right: 44px;
+                left: 44px;
+            };
+            text-align: center;
+        }
+    }
+}
