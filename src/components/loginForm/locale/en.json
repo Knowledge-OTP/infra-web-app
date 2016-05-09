@@ -4,6 +4,8 @@
         "LOGIN_IN": "Log In",
         "FORGOT_PWD": "Forgot password?",
         "OR": "or",
-        "CONNECT_WITH": "Connect with"
+        "CONNECT_WITH": "Connect with",
+        "EMAIL": "Email",
+        "PASSWORD": "Password"
     }
 }

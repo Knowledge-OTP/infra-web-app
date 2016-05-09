@@ -1,16 +1,21 @@
 @import './src/scss/imports/variables',
         './src/scss/imports/colors',
-        './src/scss/imports/mixins';
+        'bower_components/infra/dist/mixins/mixins';
 
 login-form{
     width: 413px;
+    background: $bgColor1;
+    border-radius: 30px;
+    font:{
+        family: Lato;
+    }
+    padding: {
+        right: 33px;
+        left: 33px;
+    };
+    box-shadow: 0px 3px 9px 0px $bsColor2;
 
     .login-form-container{
-        font:{
-            family: Lato;
-            weight: $lightFontWeight    ;
-        }
-
         .title{
             padding: {
                 top: 33px;
@@ -18,28 +23,62 @@ login-form{
             }
             text-align: center;
             font-size: 39px;
-
+            color: $fontColor2;
+            font:{
+                weight: $lightFontWeight;
+                size: 39px;
+            }
         }
 
-        .input-wrapper{
-            width: 340px;
-            border: 1px $borderColor1 solid;
-            border-radius: 30px;
-            margin: {
-                right: auto;
-                bottom: 11px;
-                left: auto;
-            }
-
-            &:last-child{
+        .inputs-container{
+            .input-wrapper{
+                box-sizing: border-box;
+                width: 340px;
+                border: 1px $borderColor1 solid;
+                border-radius: 30px;
                 margin: {
-                    bottom: 35px;
-                };
-            }
+                    right: auto;
+                    bottom: 11px;
+                    left: auto;
+                }
+                padding:{
+                    right: 21px;
+                    left: 21px;
+                }
+                display: flex;
+                align-items: center;
 
-            input{
-                height: 40px;
-                border: none;
+
+                &:last-child{
+                    margin: {
+                        bottom: 35px;
+                    };
+                }
+
+                svg-icon{
+                    width: 36px;
+                }
+
+                input{
+                    height: 41px;
+                    border: none;
+                    flex-grow: 1;
+                    padding: 0;
+                    @include placeholder(){
+                        color: $fontColor3;
+                        font:{
+                            family: Lato;
+                            weight: $lightFontWeight;
+                            size: 14px;
+                        }
+                    }
+                    outline: none;
+                    font:{
+                        weight: $regularFontWeight;
+                        size: 14px;
+                    }
+                    color: $fontColor2;
+                }
             }
         }
 
@@ -48,6 +87,21 @@ login-form{
                 bottom: 15px;
             };
             text-align: center;
+
+            button{
+                box-sizing: border-box;
+                height: 43px;
+                width: 340px;
+                color: $fontColor1;
+                border-radius: 30px;
+                border: none;
+                background: $bgColor2;
+                font:{
+                    size: 18px;
+                    weight: $regularFontWeight;
+                }
+                box-shadow: 0px 3px 0px 0px $bsColor1;
+            }
         }
 
         .forgot-pwd-wrapper{
@@ -55,6 +109,11 @@ login-form{
                 bottom: 26px;
             };
             text-align: right;
+            color: $fontColor4;
+            font:{
+                weight: $lightFontWeight;
+                size: 14px;
+            }
         }
 
         .divider{
@@ -64,7 +123,7 @@ login-form{
             &:before{
                 content: '';
                 position: absolute;
-                top: 7px;
+                top: 11px;
                 right: 0;
                 left: 0;
                 border: 1px $borderColor2 solid;
@@ -79,6 +138,11 @@ login-form{
                     right: 15px;
                     left: 15px;
                 };
+                color: $fontColor5;
+                font:{
+                    weight: $lightFontWeight;
+                    size: 14px;
+                }
             }
         }
 
