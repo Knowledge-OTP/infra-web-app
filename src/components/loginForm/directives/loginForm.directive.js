@@ -18,8 +18,8 @@
 
                     scope.vm.submit = function(){
                         LoginFormSrv.login(scope.vm.formData).catch(function(err){
-                            console.log(err);
-                            alert(err);
+                            console.error(err);
+                            window.alert(err);
                         });
                     };
                 }
