@@ -37,8 +37,8 @@
 
                     scope.vm.submit = function(){
                         LoginFormSrv.login(scope.vm.formData).catch(function(err){
-                            console.log(err);
-                            alert(err);
+                            console.error(err);
+                            window.alert(err);
                         });
                     };
                 }
@@ -69,7 +69,7 @@
 
                     return $http.post(postUrl, postData).then(function (token) {
                         var refDataDB = new Firebase(ENV.fbDataEndPoint);
-                        refDataDB.authWithCustomToken(token.data).then(function(res){
+                        refDataDB.authWithCustomToken(token.data).then(function(){
                             var appUrl = ENV.redirectLogin;
                             $window.location.replace(appUrl);
                         });

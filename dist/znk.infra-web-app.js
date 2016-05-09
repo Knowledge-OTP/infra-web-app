@@ -69,8 +69,8 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 
                     scope.vm.submit = function(){
                         LoginFormSrv.login(scope.vm.formData).catch(function(err){
-                            console.log(err);
-                            alert(err);
+                            console.error(err);
+                            window.alert(err);
                         });
                     };
                 }
@@ -101,7 +101,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 
                     return $http.post(postUrl, postData).then(function (token) {
                         var refDataDB = new Firebase(ENV.fbDataEndPoint);
-                        refDataDB.authWithCustomToken(token.data).then(function(res){
+                        refDataDB.authWithCustomToken(token.data).then(function(){
                             var appUrl = ENV.redirectLogin;
                             $window.location.replace(appUrl);
                         });
@@ -207,64 +207,6 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     "    </div>\n" +
     "</form>\n" +
     "");
-}]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.loginForm').service('LoginFormSrv', [
-        'ENV',
-        function (ENV) {
-            this.login = function(loginData){
-                var ref = new Firebase(ENV.fbGlobalEndPoint);
-                return ref.authWithPassword(loginData).then(function(){
-
-                });
-                 
-/*                var deferred = $q.defer();
-
-                fbAuth.$unauth();
-
-                fbAuth.$authWithPassword(loginData).then(function (authData) {
-                    $log.debug('authSrv::login(): uid=' + authData.uid);
-                    _$onAuth(authData).then(function () {
-                        deferred.resolve(authData);
-                    });
-                }).catch(function (err) {
-                    self.logout();
-                    deferred.reject(err);
-                });
-
-
-                var postUrl = ENV.backendEndpoint + 'firebase/token';
-                var authData = refAuthDB.getAuth();
-                var postData = {
-                    email: authData.password ? authData.password.email : '',
-                    uid: authData.uid,
-                    fbDataEndPoint: ENV.fbDataEndPoint,
-                    fbEndpoint: ENV.fbGlobalEndPoint,
-                    auth: ENV.dataAuthSecret,
-                    token: authData.token
-                };
-
-                return $http.post(postUrl, postData).then(function (token) {
-                    var defer = $q.defer();
-                    refDataDB.authWithCustomToken(token.data, function (error, userAuthData) {
-                        if (error) {
-                            defer.reject(error);
-                        }
-                        $log.debug('authSrv::login(): uid=' + userAuthData.uid);
-                        defer.resolve(userAuthData);
-                    });
-                    return defer.promise;
-                });*/
-            };
-        }
-    ]);
-})(angular);
-
-angular.module('znk.infra-web-app.services').run(['$templateCache', function($templateCache) {
-
 }]);
 
 (function (angular) {

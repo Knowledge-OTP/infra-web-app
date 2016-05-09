@@ -19,7 +19,7 @@
 
                     return $http.post(postUrl, postData).then(function (token) {
                         var refDataDB = new Firebase(ENV.fbDataEndPoint);
-                        refDataDB.authWithCustomToken(token.data).then(function(res){
+                        refDataDB.authWithCustomToken(token.data).then(function(){
                             var appUrl = ENV.redirectLogin;
                             $window.location.replace(appUrl);
                         });
