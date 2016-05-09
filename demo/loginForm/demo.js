@@ -1,9 +1,10 @@
-angular.module('demo', ['znk.infra-web-app.loginForm'])
+angular.module('demo', ['znk.infra-web-app.loginForm', 'ngSanitize'])
     .config(function ($translateProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
                 urlTemplate: '/{part}/locale/{lang}.json'
             })
-            .preferredLanguage('en');
+            .preferredLanguage('en')
+            .useSanitizeValueStrategy('sanitize');
     })
     .run(function ($rootScope, $translate) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
