@@ -1,0 +1,33 @@
+<form novalidate class="login-form-container" translate-namespace="LOGIN_FORM" ng-submit="vm.submit()">
+    <div class="title"
+         translate=".LOGIN">
+    </div>
+    <div class="inputs-container">
+        <div class="input-wrapper">
+            <svg-icon name="login-form-envelope"></svg-icon>
+            <input type="text"
+                   placeholder="{{'LOGIN_FORM.EMAIL' | translate}}"
+                   name="email"
+                   ng-model="vm.formData.email">
+        </div>
+        <div class="input-wrapper">
+            <svg-icon name="login-form-lock"></svg-icon>
+            <input type="password"
+                   placeholder="{{'LOGIN_FORM.PASSWORD' | translate}}"
+                   name="password"
+                   ng-model="vm.formData.password">
+        </div>
+    </div>
+    <div class="submit-btn-wrapper">
+        <button type="submit" translate=".LOGIN_IN"></button>
+    </div>
+    <div class="forgot-pwd-wrapper">
+        <span translate=".FORGOT_PWD"></span>
+    </div>
+    <div class="divider">
+        <div translate=".OR" class="text"></div>
+    </div>
+    <div class="social-auth-container">
+        <div class="social-auth-title" translate=".CONNECT_WITH"></div>
+    </div>
+</form>

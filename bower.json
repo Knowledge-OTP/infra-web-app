@@ -8,7 +8,10 @@
     "angular": "~1.5.3",
     "angular-animate": "~1.5.3",
     "Swiper": "swiper#~3.2.7",
-    "firebase": "~2.3.2"
+    "firebase": "^2.4.2",
+    "angular-translate-loader-partial": "^2.11.0",
+    "angular-translate": "^2.11.0",
+    "infra": "https://github.com/Knowledge-OTP/infra.git#igor/svg-icon-style-change"
   },
   "ignore": [
     ".*",
@@ -17,13 +20,16 @@
     "demo"
   ],
   "main": [
-      "dist/main.js",
-      "dist/main.css"
+    "dist/main.js",
+    "dist/main.css"
   ],
   "devDependencies": {
     "es5-shim": "~4.4.1",
-    "angular-mocks": "1.4.3",
+    "angular-mocks": "~1.5.3",
     "mockfirebase": "~0.11.0",
     "jasmine-jquery": "^2.1.1"
+  },
+  "resolutions": {
+    "firebase": "^2.4.2"
   }
 }

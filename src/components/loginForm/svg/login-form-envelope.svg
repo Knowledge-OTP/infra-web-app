@@ -1,0 +1,22 @@
+<svg
+    class="login-form-envelope-svg"
+    x="0px"
+    y="0px"
+    viewBox="0 0 190.2 143.7">
+    <style>
+        .login-form-envelope-svg{
+            width: 20px;
+            stroke: #CACACA;
+            fill: none;
+            stroke-width: 10;
+            stroke-miterlimit: 10;
+        }
+    </style>
+<g>
+	<path class="st0" d="M174.7,141.2H15.4c-7.1,0-12.9-5.8-12.9-12.9V15.4c0-7.1,5.8-12.9,12.9-12.9h159.3c7.1,0,12.9,5.8,12.9,12.9
+		v112.8C187.7,135.3,181.9,141.2,174.7,141.2z"/>
+	<path class="st0" d="M4.1,7.3l77.3,75.1c7.6,7.4,19.8,7.4,27.4,0l77.3-75.1"/>
+	<line class="st0" x1="77" y1="78" x2="7.7" y2="135.5"/>
+	<line class="st0" x1="112.8" y1="78" x2="182.1" y2="135.5"/>
+</g>
+</svg>
