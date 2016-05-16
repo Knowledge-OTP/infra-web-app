@@ -1,0 +1,57 @@
+<div class="school-selector" translate-namespace="SCHOOL_SELECT">
+    <div class="selector">
+        <div class="tag-input-wrap">
+            <div class="search-icon-container">
+                <svg-icon name="search-icon"></svg-icon>
+            </div>
+            <tags-input ng-model="d.userSchools"
+                        text="d.text"
+                        key-property="id"
+                        placeholder="{{d.placeholder}}"
+                        allow-leftover-text="true"
+                        add-from-autocomplete-only="true"
+                        on-tag-adding="d.onTagAdding($tag)"
+                        on-tag-added="d.onTagAdded()"
+                        on-tag-removed="d.onTagRemoved()"
+                        max-tags="3"
+                        template="tag-input-template">
+                <auto-complete source="d.querySchools($query)"
+                               debounce-delay="100"
+                               display-property="text"
+                               max-results-to-show="9999"
+                               highlight-matched-text="true"
+                               min-length="{{d.minLengthAutoComplete}}"
+                               load-on-focus="true"
+                               template="auto-complete-template">
+                </auto-complete>
+            </tags-input>
+            <button class="select-btn go-btn"
+                    ng-click="d.save()"
+                    title="{{::'SCHOOL_SELECT.SELECT_TO_CONTINUE' | translate}}"
+                    ng-disabled="d.tagsInputNgModelCtrl.$pristine">
+                <svg-icon name="arrow-icon"
+                          class="arrow-icon">
+                </svg-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="auto-complete-template">
+    <div ng-show="$index==0" class="list-title">
+        <div class="list-left-panel" translate=".SCHOOLS"></div>
+        <div class="list-right-panel" translate=".REQUIRED_SCORE"></div>
+    </div>
+    <div class="left-panel">
+        {{::data.text}}
+        <span class="location">{{::data.city}}, {{::data.state}}</span>
+    </div>
+    <div class="right-panel">
+        {{::data.total25th}}{{data.total75th == 'N/A' ? '' : '-' + data.total75th}}
+    </div>
+</script>
+<script type="text/ng-template" id="tag-input-template">
+    <div class="tag-wrap">
+        <span title="{{data.text}}">{{data.text | cutString: 15}}</span>
+        <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+    </div>
+</script>

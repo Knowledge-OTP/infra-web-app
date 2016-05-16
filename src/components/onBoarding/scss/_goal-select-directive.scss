@@ -1,0 +1,28 @@
+goal-select{
+    @include text-style(26px, $fcColor7, Quicksand, $regularFontWeight);
+    @include display-flex;
+    @include flex-direction(row);
+    @include align-items(center);
+    .goal{
+        width: 45px;
+        text-align: center;
+    }
+    .action-btn{
+        width: 40px;
+        height: 40px;
+        font-size:120%;
+        text-align: center;
+        cursor: pointer;
+        svg {
+            width: 35%;
+            line {
+                stroke: $fcColor5;
+            }
+        }
+        &.minus {
+            .st0 {
+                display:none;
+            }
+        }
+    }
+}
