@@ -141,7 +141,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     "</svg>\n" +
     "");
   $templateCache.put("components/loginForm/templates/loginForm.directive.html",
-    "<form novalidate class=\"login-form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"vm.submit()\">\n" +
+    "<ng-form novalidate class=\"login-form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"vm.submit()\">\n" +
     "    <div class=\"title\"\n" +
     "         translate=\".LOGIN\">\n" +
     "    </div>\n" +
@@ -173,6 +173,6 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth-title\" translate=\".CONNECT_WITH\"></div>\n" +
     "    </div>\n" +
-    "</form>\n" +
+    "</ng-form>\n" +
     "");
 }]);
