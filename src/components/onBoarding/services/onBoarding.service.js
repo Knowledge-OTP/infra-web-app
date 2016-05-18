@@ -1,16 +1,16 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').service('OnBoardingService', ['ActStorageSrv', function(ActStorageSrv) {
+    angular.module('znk.infra-web-app.onBoarding').service('OnBoardingService', ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
         var self = this;
 
-        var ONBOARDING_PATH = ActStorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
+        var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
 
         var onBoardingUrls = {
-            1: 'app.onBoarding.welcome',
-            2: 'app.onBoarding.schools',
-            3: 'app.onBoarding.goals',
-            4: 'app.onBoarding.diagnostic',
-            5: 'app.workouts.roadmap'
+            1: 'onBoarding.welcome',
+            2: 'onBoarding.schools',
+            3: 'onBoarding.goals',
+            4: 'onBoarding.diagnostic',
+            5: 'workouts.roadmap'
         };
 
         this.steps = {
@@ -32,16 +32,24 @@
         this.setOnBoardingStep = function (stepNum) {
             return getProgress().then(function (progress) {
                 progress.step = stepNum;
-                return ActStorageSrv.set(ONBOARDING_PATH, progress);
+                return setProgress(progress);
             });
         };
 
         function getProgress() {
-            return ActStorageSrv.get(ONBOARDING_PATH).then(function (progress) {
-                if (!progress.step) {
-                    progress.step = 1;
-                }
-                return progress;
+            return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                return studentStorage.get(ONBOARDING_PATH).then(function (progress) {
+                    if (!progress.step) {
+                        progress.step = 1;
+                    }
+                    return progress;
+                });
+            });
+        }
+
+        function setProgress(progress) {
+            return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                return studentStorage.set(ONBOARDING_PATH, progress);
             });
         }
 

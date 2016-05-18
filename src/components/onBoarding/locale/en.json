@@ -18,5 +18,27 @@
         "START_TEST": "START TEST",
         "LETS_LEARN": "Let's learn a little about your mastery level in each subject.",
         "THIS_QUICK_TEST": "This quick test will determine your initial estimated score and your training roadmap."
+    },
+    "SCHOOL_SELECT": {
+        "SELECT_TO_CONTINUE": "Select up to 3 dream schools to continue",
+        "SCHOOLS": "Schools",
+        "REQUIRED_SCORE": "Required Score",
+        "SELECT_3_SCHOOLS": "Enter at least 3 letters to search for schools",
+        "NO_RESULTS": "No schools matched your search"
+    },
+    "USER_GOALS": {
+        "DREAM_SCHOOLS": "DREAM SCHOOLS",
+        "EDIT": "edit",
+        "CANCEL": "cancel",
+        "RECOMMENDED_GOALS": "Recommended Goals",
+        "GOALS_INFO": "The SAT test includes 2 section scores, each with a score range of 200-800. The range of the total score is 400-1600. You can change your target score at any time.",
+        "VERBAL": "Verbal",
+        "MATH": "Math",
+        "MATHEMATICS": "mathematics",
+        "TOTAL_SCORE": "Total Score:",
+        "SAVE_AND_CONTINUE": "SAVE & CONTINUE",
+        "SAVE": "SAVE",
+        "SAVED": "SAVED",
+        "I_DONT_KNOW": "I don't know yet..."
     }
 }

@@ -9,7 +9,7 @@
                 znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingWelcomeStep' });
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.GOALS);//   todo(dream school)
                 // $state.go('app.onBoarding.schools');todo(dream school)
-                $state.go('app.onBoarding.goals');
+                $state.go('onBoarding.goals');
             };
     }]);
 })(angular);

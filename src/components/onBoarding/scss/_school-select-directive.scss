@@ -29,7 +29,7 @@ school-select{
 
                 [disabled="disabled"] *{
                     width: 48px;
-                    fill: $bgColor8;
+                    fill: $bgColor4;
                     cursor: default;
                 }
 
@@ -43,7 +43,7 @@ school-select{
                         width: 17px;
                     }
                     svg-icon.search-icon *{
-                        stroke: $bgColor23;
+                        stroke: $bgColor5;
                     }
                 }
 
@@ -58,7 +58,7 @@ school-select{
                         cursor: pointer;
                     }
                     svg-icon.dropdown-arrow-icon *{
-                        stroke: $bgColor23;
+                        stroke: $bgColor5;
                     }
                 }
 

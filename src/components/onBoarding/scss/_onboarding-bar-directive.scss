@@ -10,7 +10,7 @@ on-boarding-bar {
                 width: 45px;
                 height: 45px;
                 border-radius: 50%;
-                border: 2px solid $bgColor12;
+                border: 2px solid $bgColor7;
                 display: flex;
                 display: -webkit-flex;
                 flex-direction: column;
@@ -21,12 +21,12 @@ on-boarding-bar {
                     width: 30px;
                     margin: 6px auto 0;
                     * {
-                        fill: $bgColor12;
+                        fill: $bgColor7;
                     }
 
                 }
                 &.heart-circle-selected, &.target-circle-selected, &.hat-circle-selected {
-                    background-color: $bgColor12;
+                    background-color: $bgColor7;
                     .icon {
                         * {
                             fill: white;
@@ -38,7 +38,7 @@ on-boarding-bar {
             @include display-flex;
             @include justify-content(center);
             @include align-items(center);
-            background-color: $bgColor2;
+            background-color: $bgColor1;
             width: 30%;
             margin-left: auto;
             margin-right: auto;
@@ -47,7 +47,7 @@ on-boarding-bar {
 
             .divider {
                 width: 21px;
-                border-top: 1px solid $bgColor12;
+                border-top: 1px solid $bgColor7;
                 height: 1px;
                 margin-left: 20px;
                 margin-right: 20px;

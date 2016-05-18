@@ -4,7 +4,7 @@
 
         var directive = {
             restrict: 'E',
-            templateUrl: 'app/components/goalSelect/goalSelect.template.html',
+            templateUrl: 'components/onBoarding/templates/goalSelect.template.html',
             require: 'ngModel',
             scope: {},
             link: function link(scope, element, attrs, ngModelCtrl) {

@@ -3,7 +3,7 @@ user-goals {
 
     .school-selector-wrap {
         @include absolute-position(24px, 0, 0, 0);
-        background: $bgColor76;
+        background: $bgColor6;
     }
 
     & > section {
@@ -22,11 +22,11 @@ user-goals {
         margin-top: 41px;
 
         .edit-title {
-            @include text-style(18px, $fcColor7, Quicksand, $regularFontWeight);
+            @include text-style(18px, $fontColor3, Quicksand, $regularFontWeight);
         }
 
         .edit-link {
-            @include text-style(14px, $fcColor5, Lato, $regularFontWeight);
+            @include text-style(14px, $fontColor6, Lato, $regularFontWeight);
             margin-left: 5px;
             cursor: pointer;
             outline: none;
@@ -52,7 +52,7 @@ user-goals {
     .no-school-selected {
         margin-top: 5px;
         text-align: center;
-        @include text-style(12px, $fcColor11, Lato, $regularFontWeight);
+        @include text-style(12px, $fontColor4, Lato, $regularFontWeight);
     }
 
     .selected-schools {
@@ -62,7 +62,7 @@ user-goals {
 
         .school {
             display: inline-block;
-            @include text-style(16px, $fcColor11, Lato, $lightFontWeight);
+            @include text-style(16px, $fontColor4, Lato, $lightFontWeight);
             padding-left: 3px;
         }
         .school:not(:last-child):after {
@@ -82,7 +82,7 @@ user-goals {
         display: flex;
         justify-content: center;
         align-items: center;
-        @include text-style(20px, $fcColor7, Quicksand, $regularFontWeight, null, uppercase);
+        @include text-style(20px, $fontColor3, Quicksand, $regularFontWeight, null, uppercase);
         text-align: center;
         .recommended-title {
             display: flex;
@@ -97,6 +97,7 @@ user-goals {
             .info-icon {
                 cursor: pointer;
                 margin-top: 2px;
+                width: 15px;
             }
         }
     }
@@ -142,14 +143,14 @@ user-goals {
                             display: block;
 
                             * {
-                                fill: $bgColor2;
+                                fill: $bgColor1;
                             }
                         }
                     }
                 }
 
                 .subject-title {
-                    @include text-style(18px, $fcColor7, Lato, $regularFontWeight);
+                    @include text-style(18px, $fontColor3, Lato, $regularFontWeight);
                     padding-left: 15px;
                     width: auto;
                     min-width: 63px;
@@ -167,12 +168,12 @@ user-goals {
 
         .composite-score {
             display: inline-block;
-            background-color: $bgColor6;
+            background-color: $bgColor23;
             border-radius: 30px;
             padding: 10px 20px;
             width: 315px;
             box-sizing: border-box;
-            @include text-style(28px, $fcColor11, Quicksand, $boldFontWeight);
+            @include text-style(28px, $fontColor4, Quicksand, $boldFontWeight);
 
             & > div{
                 display: inline-block;
@@ -216,7 +217,7 @@ user-goals {
                 transform: rotate(-90deg);
 
                 polyline {
-                    stroke: $bgColor2;
+                    stroke: $bgColor1;
                 }
 
             }

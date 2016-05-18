@@ -181,6 +181,10 @@ module.exports = function (grunt) {
             locale:{
                 files: ['<%= yeoman.src %>/**/locale/*.json'],
                 tasks:['copy:dist']
+            },
+            images:{
+                files: ['<%= yeoman.src %>/**/images/*.*'],
+                tasks:['copy:dist']
             }
         },
         sass: {
@@ -208,6 +212,11 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/locale/*.*',
+                    dest: '<%= yeoman.dist %>'
+                }, {
+                    expand: true,
+                    cwd: '<%= yeoman.src %>/components',
+                    src: '*/images/*.*',
                     dest: '<%= yeoman.dist %>'
                 }]
 

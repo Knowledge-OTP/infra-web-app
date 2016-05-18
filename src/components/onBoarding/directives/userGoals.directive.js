@@ -5,7 +5,7 @@
 
             var directive = {
                 restrict: 'E',
-                templateUrl: 'app/components/userGoals/userGoals.template.html',
+                templateUrl: 'components/onBoarding/templates/userGoals.template.html',
                 scope: {
                     onSave: '&?',
                     setting: '='

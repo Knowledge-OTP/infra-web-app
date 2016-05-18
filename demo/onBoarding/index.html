@@ -1,21 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" style="height: 100%;background: rgba(43, 43, 191, 0.08);">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="onBoarding/main.css">
     <link rel="stylesheet" href="infra/dist/svgIcon/main.css">
+    <style>
+        .main-content {
+            width: 1060px;
+            padding-top: 18px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
-<body ng-app="demo">
-    <div ui-view></div>
+<body style="height: 100%;background: rgba(43, 43, 191, 0.08);" ng-app="demo">
+    <div class="main-content" layout="column" flex="grow">
+        <div ui-view></div>
+    </div>
     <script src="angular/angular.js"></script>
     <script src="angular-ui-router/release/angular-ui-router.js"></script>
     <script src="angular-sanitize/angular-sanitize.js"></script>
     <script src="angular-translate/angular-translate.js"></script>
     <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+    <script src="angular-aria/angular-aria.js"></script>
+    <script src="angular-animate/angular-animate.js"></script>
+    <script src="angular-material/angular-material.js"></script>
     <script src="firebase/firebase-debug.js"></script>
     <script src="infra/dist/svgIcon/svgIcon.js"></script>
     <script src="infra/dist/utility/utility.js"></script>
+    <script src="infra/dist/config/config.js"></script>
+    <script src="infra/dist/analytics/analytics.js"></script>
+    <script src="infra/dist/storage/storage.js"></script>
+    <script src="infra/dist/user/user.js"></script>
 
     <script src="onBoarding/onBoarding.js"></script>
 

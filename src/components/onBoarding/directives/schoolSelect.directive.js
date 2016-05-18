@@ -13,7 +13,7 @@
 
             var directive = {
                 restrict: 'E',
-                templateUrl: 'app/components/schoolSelect/schoolSelect.template.html',
+                templateUrl: 'components/onBoarding/templates/schoolSelect.template.html',
                 scope: {
                     events: '=?',
                     getSelectedSchools: '&?'

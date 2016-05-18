@@ -5,20 +5,28 @@
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'znk.infra.utility',
-        'ui.router'
+        'znk.infra.config',
+        'znk.infra.analytics',
+        'znk.infra.storage',
+        'znk.infra.user',
+        'ui.router',
+        'ngMaterial'
     ]).config([
         'SvgIconSrvProvider', '$stateProvider',
         function (SvgIconSrvProvider, $stateProvider) {
             var svgMap = {
                 'plus-icon': 'components/onBoarding/svg/plus-icon.svg',
-                'on-boarding-heart': 'components/onBoarding/svg/on-boarding-heart.svg',
-                'on-boarding-target': 'components/onBoarding/svg/on-boarding-target.svg',
-                'on-boarding-hat': 'components/onBoarding/svg/on-boarding-hat.svg',
+                'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg',
+                'on-boarding-target': 'components/onBoarding/svg/onboarding-target-icon.svg',
+                'on-boarding-hat': 'components/onBoarding/svg/onboarding-hat-icon.svg',
                 'dropdown-arrow-icon': 'components/onBoarding/svg/dropdown-arrow.svg',
                 'search-icon': 'components/onBoarding/svg/search-icon.svg',
                 'arrow-icon': 'components/onBoarding/svg/arrow-icon.svg',
                 'info-icon': 'components/onBoarding/svg/info-icon.svg',
-                'v-icon': 'components/onBoarding/svg/v-icon.svg'
+                'v-icon': 'components/onBoarding/svg/v-icon.svg',
+                'math-section-icon': 'components/onBoarding/svg/math-section-icon.svg',
+                'verbal-icon': 'components/onBoarding/svg/verbal-icon.svg'
+
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
 
@@ -30,7 +38,7 @@
                     controllerAs: 'vm',
                     resolve: {
                         onBoardingStep: ['OnBoardingService', function (OnBoardingService) {
-                           return OnBoardingService.getOnBoardingStep();
+                            return OnBoardingService.getOnBoardingStep();
                         }]
                     }
                 })
@@ -40,9 +48,9 @@
                     controller: 'OnBoardingWelcomesController',
                     controllerAs: 'vm',
                     resolve: {
-                        userProfile: function (UserProfileService) {
+                        userProfile: ['UserProfileService', function (UserProfileService) {
                             return UserProfileService.getProfile();
-                        }
+                        }]
                     }
                 })
                 .state('onBoarding.schools', {
@@ -64,9 +72,7 @@
                     controllerAs: 'vm'
                 });
         }
-    ]).run(['$translatePartialLoader', function ($translatePartialLoader) {
-        $translatePartialLoader.addPart('onBoarding');
-    }]);
+    ]);
 
 })(angular);
 
