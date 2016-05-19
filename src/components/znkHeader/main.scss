@@ -1,0 +1,193 @@
+@import './src/scss/imports/variables',
+        './src/scss/imports/colors',
+        'bower_components/infra/dist/mixins/mixins';
+
+
+.app-header {
+    background: $bgColor2;
+    height: 57px;
+    border-bottom: 1px solid $bcColor17;
+    font-family: Lato;
+    .main-content-header {
+        margin: 0 auto;
+        height: 100%;
+        width: $mainContentWidth;
+        .raccoon-logo-icon {
+            svg {
+                height: 37.5px;
+                width: 57px;
+                margin-top: 10px;
+                cursor: pointer;
+            }
+        }
+        .app-states-list {
+            margin-left: 20px;
+            md-list {
+                padding-top: 5px;
+                padding-bottom: 0;
+                md-list-item {
+                    cursor: pointer;
+                    flex: initial;
+                    .title {
+                        text-transform: capitalize;
+                        align-self: stretch;
+                        padding-top: 15px;
+                    }
+                    &:hover {
+                        .title {
+                            color: $fcColor5;
+                        }
+                    }
+                    &.active{
+                        .title {
+                            color: $fcColor5;
+                        }
+                    }
+                }
+            }
+        }
+        .app-user-area {
+            align-self: center;
+            margin-left: auto;
+            .profile-status {
+                font-size: 16px;
+                padding: 0 12px 0 0;
+                border-right: 1px solid $bcColor10;
+                cursor: pointer;
+
+                .pending-purchase-icon-wrapper {
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 10px;
+                    float:left;
+                    & + span {
+                        @include text-style(16px, null, Lato ,Light, null, null, italic);
+                    }
+                }
+
+            }
+
+            .profile-status:hover {
+                color: $fcColor5;
+            }
+
+            .profile-open-modal-btn {
+                text-transform: none;
+                font-size: 16px;
+            }
+            .profile-open-modal-btn:hover {
+                color: $fcColor5;
+            }
+            .md-button {
+                background: $bgColor2;
+                width: auto;
+                div{
+                    min-width: 40px;
+                }
+            }
+        }
+    }
+}
+
+
+.md-open-menu-container {
+    .header-modal-item {
+        font-family: Lato;
+        a {
+            width: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+        &:not(.purchase-status) span {width: 100%;}
+        &.header-modal-item-profile {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 11px;
+            .username {
+                margin-bottom: 5px;
+            }
+            .email {
+                @include text-style(14px, $fcColor15, Lato, 300);
+                border-bottom: 1px solid $bcColor11;
+                width: 100%;
+                padding-bottom: 15px;
+            }
+        }
+        &.header-modal-item-uppercase {
+            min-height: 35px;
+            line-height: 35px;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: $bookFontWeight;
+            cursor: pointer;
+            &.links {
+                color:$fcColor6;
+            }
+            &.logout {
+                color:$fcColor16;
+            }
+        }
+        .check-mark-wrapper {
+            position: relative;
+            top: -2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: $bgColor12;
+            margin-left: 10px;
+            svg-icon {
+                height: 100%;
+            }
+            svg-icon svg {
+                width:75%;
+                height: 100%;
+                margin: auto;
+                display: block;
+            }
+        }
+        &:hover:not(.header-modal-item-profile) {
+            background-color: $bgColor69;
+        }
+    }
+}
+
+
+md-menu-content.md-menu-content-znk-header {
+    min-width: 270px;
+    max-height: none;
+    padding: 16px 0;
+
+    md-list {
+        padding: {
+            top: 0;
+            bottom: 0;
+        }
+        .divider {
+            height: 1px;
+            margin: 10px 16px;
+            border-top: 1px solid $bcColor11;
+        }
+    }
+
+    .pending-purchase-icon-wrapper {
+        width: 16px;
+        height: auto;
+        margin-left: 10px;
+        position: relative;
+        top:3px;
+    }
+
+    [disabled="disabled"]{
+        opacity: 0.5;
+        cursor: default;
+    }
+}
+
+.link-full-item {
+    position: absolute;
+    overflow: hidden;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
