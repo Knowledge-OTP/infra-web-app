@@ -57,7 +57,7 @@
                    ng-click="saveChanges()"
                    ng-class="setting.saveBtn.wrapperClassName">
             <svg-icon name="v-icon" class="v-icon" ng-show="showVIcon"></svg-icon>
-            <span>{{saveTitle}}</span>
+            <span ng-bind-html="saveTitle"></span>
             <svg-icon name="dropdown-arrow-icon" class="dropdown-arrow-icon" ng-show="setting.saveBtn.showSaveIcon"></svg-icon>
         </md-button>
     </div>

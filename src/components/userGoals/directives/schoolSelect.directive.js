@@ -5,7 +5,7 @@
  * */
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').directive('schoolSelect', ['UserSchoolsService', '$filter', 'UtilitySrv', '$timeout', '$q',
+    angular.module('znk.infra-web-app.userGoals').directive('schoolSelect', ['UserSchoolsService', '$filter', 'UtilitySrv', '$timeout', '$q',
         function SchoolSelectDirective(UserSchoolsService, $filter, UtilitySrv, $timeout, $q) {
             'ngInject';
 
@@ -13,7 +13,7 @@
 
             var directive = {
                 restrict: 'E',
-                templateUrl: 'components/onBoarding/templates/schoolSelect.template.html',
+                templateUrl: 'components/userGoals/templates/schoolSelect.template.html',
                 scope: {
                     events: '=?',
                     getSelectedSchools: '&?'

@@ -1,11 +1,11 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').directive('userGoals',['UserGoalsService', '$filter', '$timeout', 'UserSchoolsService', '$q',
-        function UserGoalsDirective(UserGoalsService, $filter, $timeout, UserSchoolsService, $q) {
+    angular.module('znk.infra-web-app.userGoals').directive('userGoals',['UserGoalsService', '$filter', '$timeout', 'UserSchoolsService', '$q', '$translatePartialLoader',
+        function UserGoalsDirective(UserGoalsService, $filter, $timeout, UserSchoolsService, $q, $translatePartialLoader) {
 
             var directive = {
                 restrict: 'E',
-                templateUrl: 'components/onBoarding/templates/userGoals.template.html',
+                templateUrl: 'components/userGoals/templates/userGoals.template.html',
                 scope: {
                     onSave: '&?',
                     setting: '='
@@ -15,6 +15,8 @@
                     var defaultTitle = translateFilter('USER_GOALS.SAVE');
                     var userGoalRef;
                     scope.saveTitle = scope.setting.saveBtn.title || defaultTitle;
+
+                    $translatePartialLoader.addPart('userGoals');
 
                     UserGoalsService.getGoals().then(function (userGoals) {
                         userGoalRef = userGoals;

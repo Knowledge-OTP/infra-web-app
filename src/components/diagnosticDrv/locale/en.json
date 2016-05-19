@@ -1,0 +1,25 @@
+{
+    "DIAGNOSTIC_INTRO": {
+        "DIAG_INTR_LETS_LEARN": "Let's learn a little about your mastery level in each subject.",
+        "DIAG_INTR_THIS_QUICK_TEST": "This quick test will determine your initial estimated score and your training roadmap.",
+        "DIAG_INTR_WELL_DONE": "Well done! Only three more to go.",
+        "DIAG_INTR_THIS_SHORT_TEST": "This short test will help us determine your current mastery level in Math.",
+        "DIAG_INTR_THIS_HALFWAY": "Nice work! You're halfway there!",
+        "DIAG_INTR_THIS_ALMOST_THERE": "Almost there! Only 4 more questions to go.",
+        "WRITING": "Writing",
+        "READING": "Reading",
+        "MATH_CALC": "Math - Calculator",
+        "MATH_NO_CALC": "Math - No Calculator",
+        "QUESTIONS": "questions",
+        "LETS_START_MATH_CALC": "Let’s start with 4",
+        "LETS_START_MATH_NO_CALC": "Let’s do 4",
+        "LETS_DO_WRITING_QUESTIONS": "To Finish up, we'll do 4",
+        "LETS_DO_READING_QUESTIONS": "Let’s do 4",
+        "DIAG_INTR_ALL_THAT_LEFT": "To finish up, we'll do 4",
+        "INSTRUCTIONS_TITLE": "Instructions:",
+        "INSTRUCTIONS_MATH_CALC": "Solve the following problems. The use of a calculator is permitted.",
+        "INSTRUCTIONS_MATH_NO_CALC": "Solve the following problems. The use of a calculator is NOT permitted.",
+        "INSTRUCTIONS_READING": "After reading each passage, choose the best answer to each question based on what is stated or implied in the passage and in any accompanying graphics (such as a table or graph).",
+        "INSTRUCTIONS_WRITING": "After reading each passage, choose the answer to each question that most effectively improves the quality of writing in the passage or that makes the passage conform to the conventions of standard written English."
+    }
+}

@@ -1,0 +1,116 @@
+<div class="diagnostic-intro-drv" translate-namespace="DIAGNOSTIC_INTRO">
+    <ng-switch class="description" on="d.currTestScoreCategoryIndex">
+        <div ng-switch-when="1"
+             class="diagnostic-text">
+            <ng-switch on="!!d.noCalc">
+                <div ng-switch-when="false" translate=".DIAG_INTR_THIS_SHORT_TEST"></div>
+                <div ng-switch-when="true" translate=".DIAG_INTR_WELL_DONE"></div>
+            </ng-switch>
+        </div>
+        <div ng-switch-when="2" class="diagnostic-text" translate=".DIAG_INTR_THIS_HALFWAY"></div>
+        <div ng-switch-when="3" class="diagnostic-text" translate=".DIAG_INTR_THIS_ALMOST_THERE"></div>
+        <div ng-switch-default class="diagnostic-text">
+            <div translate=".DIAG_INTR_LETS_LEARN"></div>
+            <div translate=".DIAG_INTR_THIS_QUICK_TEST"></div>
+        </div>
+    </ng-switch>
+    <div class="icons-section">
+        <div class="first-icon-row">
+            <div class="icon-circle math-color"
+                 ng-class="{
+                    active: d.testScoreCategoryIndexMap.math === d.currTestScoreCategoryIndex && d.noCalc,
+                    done: d.testScoreCategoryIndexMap.math < d.currTestScoreCategoryIndex
+                }">
+                <div class="math-no-calc"></div>
+                <div class="icon-wrapper">
+                    <svg-icon class="subject-icon" name="math-icon"></svg-icon>
+                    <svg-icon class="section-complete" name="check-mark"></svg-icon>
+                </div>
+            </div>
+            <div class="icon-circle verbal-color"
+                 ng-class="{
+                    active: d.testScoreCategoryIndexMap.writing === d.currTestScoreCategoryIndex,
+                    done: d.testScoreCategoryIndexMap.writing < d.currTestScoreCategoryIndex
+                }">
+                <div class="icon-wrapper">
+                    <svg-icon class="subject-icon" name="reading-icon"></svg-icon>
+                    <svg-icon class="section-complete" name="check-mark"></svg-icon>
+                </div>
+            </div>
+        </div>
+        <div class="second-icon-row">
+            <div class="icon-circle math-color"
+                 ng-class="{
+                    active: d.testScoreCategoryIndexMap.math === d.currTestScoreCategoryIndex && !d.noCalc,
+                    done: (d.testScoreCategoryIndexMap.math < d.currTestScoreCategoryIndex) ||
+                          (d.currTestScoreCategoryIndex === d.testScoreCategoryIndexMap.math && d.noCalc)
+                 }">
+                <div class="icon-wrapper">
+                    <svg-icon class="subject-icon" name="math-icon"></svg-icon>
+                    <svg-icon class="section-complete" name="check-mark"></svg-icon>
+                </div>
+            </div>
+            <div class="icon-circle verbal-color"
+                 ng-class="{
+                     active: d.testScoreCategoryIndexMap.reading === d.currTestScoreCategoryIndex,
+                     done: d.testScoreCategoryIndexMap.reading < d.currTestScoreCategoryIndex
+                 }">
+                <div class="icon-wrapper">
+                    <svg-icon class="subject-icon" name="writing-icon"></svg-icon>
+                    <svg-icon class="section-complete" name="check-mark"></svg-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="raccoon-img-container">
+        <div class="raccoon-img-wrapper">
+            <div class="diagnostic-raccoon" ng-class="d.raccoonClassName"></div>
+        </div>
+    </div>
+    <div class="section-question">
+        <ng-switch on="d.currTestScoreCategoryIndex">
+            <div ng-switch-when="1">
+
+                <ng-switch on="!!d.noCalc">
+                    <div ng-switch-when="false">
+                        <span translate=".LETS_START_MATH_CALC"></span>
+                        <span class="math" translate=".MATH_CALC"></span>
+                        <span translate=".QUESTIONS"></span>
+                        <div class="diagnostic-instructions" ng-if="showInstructions">
+                            <span class="diagnostic-instructions-title" translate=".INSTRUCTIONS_TITLE"></span>
+                            <span class="diagnostic-instructions-text" translate=".INSTRUCTIONS_MATH_CALC"></span>
+                        </div>
+                    </div>
+                    <div ng-switch-when="true">
+                        <span translate=".LETS_START_MATH_NO_CALC"></span>
+                        <span class="math" translate=".MATH_NO_CALC"></span>
+                        <span translate=".QUESTIONS"></span>
+                        <div class="diagnostic-instructions" ng-if="showInstructions">
+                            <span class="diagnostic-instructions-title" translate=".INSTRUCTIONS_TITLE"></span>
+                            <span class="diagnostic-instructions-text" translate=".INSTRUCTIONS_MATH_NO_CALC"></span>
+                        </div>
+                    </div>
+                </ng-switch>
+            </div>
+            <div ng-switch-when="2">
+                <span translate=".LETS_DO_READING_QUESTIONS"></span>
+                <span class="verbal" translate=".READING"></span>
+                <span translate=".QUESTIONS"></span>
+                <div class="diagnostic-instructions" ng-if="showInstructions">
+                    <span class="diagnostic-instructions-title" translate=".INSTRUCTIONS_TITLE"></span>
+                    <span class="diagnostic-instructions-text" translate=".INSTRUCTIONS_READING"></span>
+                </div>
+            </div>
+            <div ng-switch-when="3">
+                <span translate=".LETS_DO_WRITING_QUESTIONS"></span>
+                <span class="verbal" translate=".WRITING"></span>
+                <span translate=".QUESTIONS"></span>
+                <div class="diagnostic-instructions" ng-if="showInstructions">
+                    <span class="diagnostic-instructions-title" translate=".INSTRUCTIONS_TITLE"></span>
+                    <span class="diagnostic-instructions-text" translate=".INSTRUCTIONS_WRITING"></span>
+                </div>
+            </div>
+
+        </ng-switch>
+    </div>
+</div>

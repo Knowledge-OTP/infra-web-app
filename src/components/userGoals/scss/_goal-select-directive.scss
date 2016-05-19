@@ -13,7 +13,10 @@ goal-select{
         font-size:120%;
         text-align: center;
         cursor: pointer;
+        @include display-flex;
+        @include align-items(center);
         svg {
+            margin: 0 auto;
             width: 35%;
             line {
                 stroke: $fontColor6;

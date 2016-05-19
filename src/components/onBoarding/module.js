@@ -10,7 +10,8 @@
         'znk.infra.storage',
         'znk.infra.user',
         'ui.router',
-        'ngMaterial'
+        'ngMaterial',
+        'znk.infra-web-app.userGoals'
     ]).config([
         'SvgIconSrvProvider', '$stateProvider',
         function (SvgIconSrvProvider, $stateProvider) {
@@ -26,7 +27,6 @@
                 'v-icon': 'components/onBoarding/svg/v-icon.svg',
                 'math-section-icon': 'components/onBoarding/svg/math-section-icon.svg',
                 'verbal-icon': 'components/onBoarding/svg/verbal-icon.svg'
-
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
 

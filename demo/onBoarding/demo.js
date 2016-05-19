@@ -21,11 +21,11 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
 
         var storageFake = ['$q', function($q) {
             return {
-                get: function() {
-                    return $q.when({});
+                get: function(path, data) {
+                    return $q.when(data || {});
                 },
                 set: function(path, data) {
-                    return $q.when(data);
+                    return $q.when(data || {});
                 },
                 variables: {
                     appUserSpacePath: ''
@@ -61,6 +61,6 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
         }
     })// mock ENV
     .service('ENV', function () {
-        this.dreamSchoolJsonUrl = "URL://";
+        this.dreamSchoolJsonUrl = "./mock/dreamSchools.json";
         this.promiseTimeOut = 5000;
     });
