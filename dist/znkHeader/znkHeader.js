@@ -1,8 +1,15 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate','ngAnimate']);
-
+    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate', 'znk.infra.svgIcon', 'pascalprecht.translate'])
+        .config([
+            'SvgIconSrvProvider',
+            function(SvgIconSrvProvider){
+                var svgMap = {
+                    'raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
 })(angular);
 
 (function (angular) {
@@ -13,10 +20,9 @@
     //    function() {
 
 
-    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        [
-        function() {
-
+    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',[ '$translatePartialLoader',
+        function($translatePartialLoader) {
+            //$translatePartialLoader.addPart('znkHeader');
     }]);
 })(angular);
 
@@ -41,6 +47,34 @@
 
 
 angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/znkHeader/svg/raccoon-logo.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 237 158\"\n" +
+    "    class=\"raccoon-logo-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .raccoon-logo-svg .circle{fill:#000001;}\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <circle class=\"circle\" cx=\"175\" cy=\"93.1\" r=\"13.7\"/>\n" +
+    "        <path class=\"circle\" d=\"M118.5,155.9c10.2,0,18.5-8.3,18.5-18.5c0-10.2-8.3-18.5-18.5-18.5c-10.2,0-18.5,8.3-18.5,18.5\n" +
+    "		C100,147.6,108.3,155.9,118.5,155.9z\"/>\n" +
+    "        <path class=\"circle\" d=\"M172.4,67.5c-15.8-9.7-34.3-15.3-53.9-15.3c-19.6,0-38.2,5.5-53.9,15.3\n" +
+    "		c13,1.3,23.1,12.3,23.1,25.6c0,1.8-0.2,3.5-0.5,5.1c9.3-5.2,20-8.1,31.3-8.1c11.3,0,22,2.9,31.4,8.1c-0.3-1.7-0.5-3.4-0.5-5.1\n" +
+    "		C149.3,79.8,159.5,68.8,172.4,67.5z\"/>\n" +
+    "        <path class=\"circle\" d=\"M36.3,93.5c-8,10.8-14,23.4-17.4,37.2c-1.2,4.9-0.4,10,2.3,14.3c2.6,4.3,6.8,7.3,11.7,8.5\n" +
+    "		c1.5,0.4,3,0.5,4.5,0.5c8.8,0,16.3-6,18.4-14.5c1.8-7.7,5-14.7,9.2-20.9c-1,0.1-2,0.2-3,0.2C47.9,118.8,36.5,107.5,36.3,93.5z\"/>\n" +
+    "        <path class=\"circle\" d=\"M232.2,92.5c0.6-6.7,6.5-78-4.5-88.4c-9.5-9.1-60.3,16-77.5,24.9\n" +
+    "		C185.3,37.8,215,60.9,232.2,92.5z\"/>\n" +
+    "        <circle class=\"circle\" cx=\"62\" cy=\"93.1\" r=\"13.7\"/>\n" +
+    "        <path class=\"circle\" d=\"M204.1,153.6c10.2-2.4,16.4-12.7,14-22.8c-3.3-13.8-9.3-26.4-17.4-37.2\n" +
+    "		c-0.2,14-11.6,25.3-25.7,25.3c-1,0-2-0.1-3-0.2c4.2,6.2,7.4,13.3,9.2,21c2,8.6,9.6,14.5,18.4,14.5\n" +
+    "		C201.1,154.1,202.6,153.9,204.1,153.6\"/>\n" +
+    "        <path class=\"circle\" d=\"M86.7,29C69.5,20.1,18.8-5,9.2,4.1c-11,10.4-5.1,81.5-4.5,88.4C22,60.8,51.7,37.8,86.7,29z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/znkHeader/templates/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
@@ -127,7 +161,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                        <md-list-item\n" +
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <a ng-href=\"http://zinkerz.com/contact/\" target=\"_blank\">  // take from env\n" +
+    "                            <a ng-href=\"http://zinkerz.com/contact/\" target=\"_blank\">  <!--take from env -------------------------------------------------->\n" +
     "                                <span translate=\".PROFILE_SUPPORT\"></span>\n" +
     "                            </a>\n" +
     "                        </md-list-item>\n" +

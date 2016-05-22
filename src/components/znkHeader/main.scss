@@ -1,17 +1,21 @@
 @import './src/scss/imports/variables',
         './src/scss/imports/colors',
-        'bower_components/infra/dist/mixins/mixins';
+        '../../../bower_components/infra/dist/mixins/mixins';
 
 
 .app-header {
-    background: $bgColor2;
+    background: $bgColor1;
     height: 57px;
-    border-bottom: 1px solid $bcColor17;
+    border-bottom: 1px solid $borderColor3;
     font-family: Lato;
+
     .main-content-header {
         margin: 0 auto;
         height: 100%;
         width: $mainContentWidth;
+        display: flex;
+        flex-direction: row;
+
         .raccoon-logo-icon {
             svg {
                 height: 37.5px;
@@ -35,12 +39,12 @@
                     }
                     &:hover {
                         .title {
-                            color: $fcColor5;
+                            color: $fontColor6;
                         }
                     }
                     &.active{
                         .title {
-                            color: $fcColor5;
+                            color: $fontColor6;
                         }
                     }
                 }
@@ -52,7 +56,7 @@
             .profile-status {
                 font-size: 16px;
                 padding: 0 12px 0 0;
-                border-right: 1px solid $bcColor10;
+                //border-right: 1px solid $bcColor10;
                 cursor: pointer;
 
                 .pending-purchase-icon-wrapper {
@@ -61,14 +65,14 @@
                     margin-right: 10px;
                     float:left;
                     & + span {
-                        @include text-style(16px, null, Lato ,Light, null, null, italic);
+                        //@include text-style(16px, null, Lato ,Light, null, null, italic);
                     }
                 }
 
             }
 
             .profile-status:hover {
-                color: $fcColor5;
+                color: $fontColor6;
             }
 
             .profile-open-modal-btn {
@@ -76,10 +80,10 @@
                 font-size: 16px;
             }
             .profile-open-modal-btn:hover {
-                color: $fcColor5;
+                color: $fontColor6;
             }
             .md-button {
-                background: $bgColor2;
+                background: $bgColor1;
                 width: auto;
                 div{
                     min-width: 40px;
@@ -107,8 +111,8 @@
                 margin-bottom: 5px;
             }
             .email {
-                @include text-style(14px, $fcColor15, Lato, 300);
-                border-bottom: 1px solid $bcColor11;
+                //@include text-style(14px, $fontColor7, Lato, 300);
+                border-bottom: 1px solid $borderColor4;
                 width: 100%;
                 padding-bottom: 15px;
             }
@@ -121,10 +125,10 @@
             font-weight: $bookFontWeight;
             cursor: pointer;
             &.links {
-                color:$fcColor6;
+                color: $fontColor2;
             }
             &.logout {
-                color:$fcColor16;
+                color: $fontColor8;
             }
         }
         .check-mark-wrapper {
@@ -133,7 +137,7 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background-color: $bgColor12;
+            background-color: $borderColor5;
             margin-left: 10px;
             svg-icon {
                 height: 100%;
@@ -146,7 +150,7 @@
             }
         }
         &:hover:not(.header-modal-item-profile) {
-            background-color: $bgColor69;
+            background-color: $borderColor6;
         }
     }
 }
@@ -165,7 +169,7 @@ md-menu-content.md-menu-content-znk-header {
         .divider {
             height: 1px;
             margin: 10px 16px;
-            border-top: 1px solid $bcColor11;
+            border-top: 1px solid $borderColor4;
         }
     }
 

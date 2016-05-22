@@ -6,13 +6,13 @@
   ],
   "dependencies": {
     "angular": "~1.5.3",
-    "angular-animate": "~1.5.3",
+    "angular-animate": "1.4.8",
+    "angular-material": "1.0.2",
     "Swiper": "swiper#~3.2.7",
     "firebase": "^2.4.2",
     "angular-translate-loader-partial": "^2.11.0",
     "angular-translate": "^2.11.0",
-    "infra": "https://github.com/Knowledge-OTP/infra.git#igor/svg-icon-style-change",
-    "angular-material": "1.0.2"
+    "infra": "https://github.com/Knowledge-OTP/infra.git#igor/svg-icon-style-change"
   },
   "ignore": [
     ".*",

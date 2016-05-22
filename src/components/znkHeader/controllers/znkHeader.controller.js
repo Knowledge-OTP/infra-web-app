@@ -6,10 +6,9 @@
     //    function() {
 
 
-    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        [
-        function() {
-
+    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',[ '$translatePartialLoader',
+        function($translatePartialLoader) {
+            //$translatePartialLoader.addPart('znkHeader');
     }]);
 })(angular);
 

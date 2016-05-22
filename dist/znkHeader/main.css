@@ -1,6 +1,139 @@
 /* fonts size */
+/* general */
 /*border color*/
 /*background*/
 /* box shadow */
 /* font color*/
 /* full background image with retina */
+.app-header {
+  background: white;
+  height: 57px;
+  border-bottom: 1px solid #f2f2f2;
+  font-family: Lato; }
+  .app-header .main-content-header {
+    margin: 0 auto;
+    height: 100%;
+    width: 1060px;
+    display: flex;
+    flex-direction: row; }
+    .app-header .main-content-header .raccoon-logo-icon svg {
+      height: 37.5px;
+      width: 57px;
+      margin-top: 10px;
+      cursor: pointer; }
+    .app-header .main-content-header .app-states-list {
+      margin-left: 20px; }
+      .app-header .main-content-header .app-states-list md-list {
+        padding-top: 5px;
+        padding-bottom: 0; }
+        .app-header .main-content-header .app-states-list md-list md-list-item {
+          cursor: pointer;
+          flex: initial; }
+          .app-header .main-content-header .app-states-list md-list md-list-item .title {
+            text-transform: capitalize;
+            align-self: stretch;
+            padding-top: 15px; }
+          .app-header .main-content-header .app-states-list md-list md-list-item:hover .title {
+            color: #0a9bad; }
+          .app-header .main-content-header .app-states-list md-list md-list-item.active .title {
+            color: #0a9bad; }
+    .app-header .main-content-header .app-user-area {
+      align-self: center;
+      margin-left: auto; }
+      .app-header .main-content-header .app-user-area .profile-status {
+        font-size: 16px;
+        padding: 0 12px 0 0;
+        cursor: pointer; }
+        .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper {
+          width: 16px;
+          height: 16px;
+          margin-right: 10px;
+          float: left; }
+      .app-header .main-content-header .app-user-area .profile-status:hover {
+        color: #0a9bad; }
+      .app-header .main-content-header .app-user-area .profile-open-modal-btn {
+        text-transform: none;
+        font-size: 16px; }
+      .app-header .main-content-header .app-user-area .profile-open-modal-btn:hover {
+        color: #0a9bad; }
+      .app-header .main-content-header .app-user-area .md-button {
+        background: white;
+        width: auto; }
+        .app-header .main-content-header .app-user-area .md-button div {
+          min-width: 40px; }
+
+.md-open-menu-container .header-modal-item {
+  font-family: Lato; }
+  .md-open-menu-container .header-modal-item a {
+    width: 100%;
+    text-decoration: none;
+    color: inherit; }
+  .md-open-menu-container .header-modal-item:not(.purchase-status) span {
+    width: 100%; }
+  .md-open-menu-container .header-modal-item.header-modal-item-profile {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 11px; }
+    .md-open-menu-container .header-modal-item.header-modal-item-profile .username {
+      margin-bottom: 5px; }
+    .md-open-menu-container .header-modal-item.header-modal-item-profile .email {
+      border-bottom: 1px solid #ebebeb;
+      width: 100%;
+      padding-bottom: 15px; }
+  .md-open-menu-container .header-modal-item.header-modal-item-uppercase {
+    min-height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 300;
+    cursor: pointer; }
+    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
+      color: #161616; }
+    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
+      color: #898989; }
+  .md-open-menu-container .header-modal-item .check-mark-wrapper {
+    position: relative;
+    top: -2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #87ca4d;
+    margin-left: 10px; }
+    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
+      height: 100%; }
+    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
+      width: 75%;
+      height: 100%;
+      margin: auto;
+      display: block; }
+  .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
+    background-color: #f8f8f8; }
+
+md-menu-content.md-menu-content-znk-header {
+  min-width: 270px;
+  max-height: none;
+  padding: 16px 0; }
+  md-menu-content.md-menu-content-znk-header md-list {
+    padding-top: 0;
+    padding-bottom: 0; }
+    md-menu-content.md-menu-content-znk-header md-list .divider {
+      height: 1px;
+      margin: 10px 16px;
+      border-top: 1px solid #ebebeb; }
+  md-menu-content.md-menu-content-znk-header .pending-purchase-icon-wrapper {
+    width: 16px;
+    height: auto;
+    margin-left: 10px;
+    position: relative;
+    top: 3px; }
+  md-menu-content.md-menu-content-znk-header [disabled="disabled"] {
+    opacity: 0.5;
+    cursor: default; }
+
+.link-full-item {
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; }
