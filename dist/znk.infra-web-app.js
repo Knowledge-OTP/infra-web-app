@@ -233,7 +233,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
                 .state('workoutsRoadmap', {
                     templateUrl: 'app/workouts/templates/workoutsRoadmap.template.html',
                     resolve: {
-                        data: function data(ExerciseStatusEnum, WorkoutsSrv, /*WorkoutsDiagnosticFlow,*/ $q) {
+                        data: ["ExerciseStatusEnum", "WorkoutsSrv", "$q", function data(ExerciseStatusEnum, WorkoutsSrv, /*WorkoutsDiagnosticFlow,*/ $q) {
                             'ngInject';
 
                             // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();
@@ -251,7 +251,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
                                     workoutsProgress: workoutsProgress
                                 };
                             });
-                        }
+                        }]
                     },
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
