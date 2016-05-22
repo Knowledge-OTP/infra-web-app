@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate', 'znk.infra.svgIcon', 'pascalprecht.translate'])
+    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate', 'ngMaterial', 'znk.infra.svgIcon', 'pascalprecht.translate'])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){
@@ -20,10 +20,30 @@
     //    function() {
 
 
-    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',[ '$translatePartialLoader',
-        function($translatePartialLoader) {
-            //$translatePartialLoader.addPart('znkHeader');
-    }]);
+    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',['$scope', '$translatePartialLoader',
+        function($scope,$translatePartialLoader) {
+            $translatePartialLoader.addPart('znkHeader');
+
+            var self = this;
+            self.expandIcon = 'expand_more';
+
+            //self.userProfile = {
+            //    username: 'asdadasd',
+            //    email:'asdasdasd@zasasdasd'
+            //};
+
+            this.znkOpenModal = function() {
+                this.expandIcon = 'expand_less';
+                //OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
+                //    self.isOnBoardingCompleted = isCompleted;
+                //});
+            };
+
+            $scope.$on('$mdMenuClose', function(){
+                self.expandIcon = 'expand_more';
+            });
+
+        }]);
 })(angular);
 
 
@@ -161,7 +181,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                        <md-list-item\n" +
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <a ng-href=\"http://zinkerz.com/contact/\" target=\"_blank\">  <!--take from env -------------------------------------------------->\n" +
+    "                            <a ng-href=\"http://zinkerz.com/contact/\" target=\"_blank\">\n" +
     "                                <span translate=\".PROFILE_SUPPORT\"></span>\n" +
     "                            </a>\n" +
     "                        </md-list-item>\n" +

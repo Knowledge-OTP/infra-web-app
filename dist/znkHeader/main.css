@@ -1,10 +1,11 @@
-/* fonts size */
-/* general */
 /*border color*/
 /*background*/
 /* box shadow */
 /* font color*/
+/* fonts size */
+/* general */
 /* full background image with retina */
+@import url(http://fonts.googleapis.com/icon?family=Material+Icons);
 .app-header {
   background: white;
   height: 57px;
@@ -13,9 +14,7 @@
   .app-header .main-content-header {
     margin: 0 auto;
     height: 100%;
-    width: 1060px;
-    display: flex;
-    flex-direction: row; }
+    width: 1060px; }
     .app-header .main-content-header .raccoon-logo-icon svg {
       height: 37.5px;
       width: 57px;
@@ -28,21 +27,25 @@
         padding-bottom: 0; }
         .app-header .main-content-header .app-states-list md-list md-list-item {
           cursor: pointer;
-          flex: initial; }
+          -ms-flex: initial;
+              flex: initial; }
           .app-header .main-content-header .app-states-list md-list md-list-item .title {
             text-transform: capitalize;
-            align-self: stretch;
+            -ms-flex-item-align: stretch;
+                align-self: stretch;
             padding-top: 15px; }
           .app-header .main-content-header .app-states-list md-list md-list-item:hover .title {
             color: #0a9bad; }
           .app-header .main-content-header .app-states-list md-list md-list-item.active .title {
             color: #0a9bad; }
     .app-header .main-content-header .app-user-area {
-      align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center;
       margin-left: auto; }
       .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
         padding: 0 12px 0 0;
+        border-right: 1px solid #d3d0d0;
         cursor: pointer; }
         .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper {
           width: 16px;
@@ -71,8 +74,10 @@
   .md-open-menu-container .header-modal-item:not(.purchase-status) span {
     width: 100%; }
   .md-open-menu-container .header-modal-item.header-modal-item-profile {
-    flex-direction: column;
-    align-items: flex-start;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: start;
+        align-items: flex-start;
     margin-bottom: 11px; }
     .md-open-menu-container .header-modal-item.header-modal-item-profile .username {
       margin-bottom: 5px; }

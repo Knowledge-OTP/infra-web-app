@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate', 'znk.infra.svgIcon', 'pascalprecht.translate'])
+    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate', 'ngMaterial', 'znk.infra.svgIcon', 'pascalprecht.translate'])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){

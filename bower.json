@@ -1,36 +1,37 @@
 {
-  "name": "infra-web-app",
-  "version": "v1.0.0",
-  "authors": [
-    "Zinkerz"
-  ],
-  "dependencies": {
-    "angular": "~1.5.3",
-    "angular-animate": "1.4.8",
-    "angular-material": "1.0.2",
-    "Swiper": "swiper#~3.2.7",
-    "firebase": "^2.4.2",
-    "angular-translate-loader-partial": "^2.11.0",
-    "angular-translate": "^2.11.0",
-    "infra": "https://github.com/Knowledge-OTP/infra.git#igor/svg-icon-style-change"
-  },
-  "ignore": [
-    ".*",
-    "src",
-    "test",
-    "demo"
-  ],
-  "main": [
-    "dist/main.js",
-    "dist/main.css"
-  ],
-  "devDependencies": {
-    "es5-shim": "~4.4.1",
-    "angular-mocks": "~1.5.3",
-    "mockfirebase": "~0.11.0",
-    "jasmine-jquery": "^2.1.1"
-  },
-  "resolutions": {
-    "firebase": "^2.4.2"
-  }
+    "name": "infra-web-app",
+    "version": "v1.0.0",
+    "authors": [
+        "Zinkerz"
+    ],
+    "dependencies": {
+        "angular": "~1.5.3",
+        "angular-animate": "1.4.8",
+        "angular-material": "1.0.2",
+        "Swiper": "swiper#~3.2.7",
+        "firebase": "^2.4.2",
+        "angular-translate-loader-partial": "^2.11.0",
+        "angular-translate": "^2.11.0",
+        "infra": "https://github.com/Knowledge-OTP/infra.git#igor/svg-icon-style-change",
+        "material-design-iconfont": "0.0.2"
+    },
+    "ignore": [
+        ".*",
+        "src",
+        "test",
+        "demo"
+    ],
+    "main": [
+        "dist/main.js",
+        "dist/main.css"
+    ],
+    "devDependencies": {
+        "es5-shim": "~4.4.1",
+        "angular-mocks": "~1.5.3",
+        "mockfirebase": "~0.11.0",
+        "jasmine-jquery": "^2.1.1"
+    },
+    "resolutions": {
+        "firebase": "^2.4.2"
+    }
 }
