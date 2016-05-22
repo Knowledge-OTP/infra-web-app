@@ -1,230 +1,324 @@
-//diagnostic-intro {
-//    display: block;
-//
-//    .diagnostic-intro-drv {
-//        text-align: center;
-//
-//        ng-switch {
-//            display: block;
-//
-//            .diagnostic-text {
-//                margin: 20px auto;
-//                max-height: 45px;
-//                @include text-style(16px, $fcColor7, Lato, $lightFontWeight);
-//            }
-//        }
-//
-//        .raccoon-img-container{
-//            position: relative;
-//            height: 122px;
-//
-//            .raccoon-img-wrapper {
-//                @include absolute-position(0,0,null,0);
-//
-//                .diagnostic-raccoon {
-//                    position: relative;
-//                    top: -48px;
-//                    background-size: contain;
-//                }
-//            }
-//        }
-//
-//
-//        .icons-section {
-//            .first-icon-row,
-//            .second-icon-row {
-//                text-align: center;
-//                font-size: 0;
-//
-//                .icon-circle {
-//                    width: 65px;
-//                    height: 65px;
-//                    border-radius: 50%;
-//                    display: inline-block;
-//                    border: 2px solid;
-//                    border-color: $bcColor12;
-//                    position: relative;
-//
-//                    .math-no-calc {
-//                        position: absolute;
-//                        top: calc(50% - 2px);
-//                        width: 100%;
-//                        height: 2px;
-//                        transform: rotate(45deg);
-//                        background-color: $mathColor;
-//                    }
-//
-//                    &.math-color {
-//                        border-color: $mathColor;
-//                        svg-icon {
-//                            svg {
-//                                fill: $mathColor;
-//                            }
-//                        }
-//                        &.active {
-//                            .math-no-calc {
-//                                background-color: $bgColor2;
-//                            }
-//                            background-color: $mathColor;
-//                            svg-icon {
-//                                svg {
-//                                    fill: $bgColor2;
-//                                }
-//                            }
-//                        }
-//                        &.done {
-//                            border-color: $mathColor;
-//                            background-color: $mathColor;
-//                            .math-no-calc,
-//                            .subject-icon {
-//                                display: none;
-//                            }
-//
-//                        }
-//                    }
-//
-//                    &.verbal-color {
-//                        border-color: $verbalColor;
-//                        svg-icon {
-//                            svg {
-//                                * {
-//                                    fill: $verbalColor;
-//                                    stroke: $bgColor2;
-//                                }
-//                            }
-//                        }
-//                        &.active {
-//                            border-color: $readingColor;
-//                            background-color: $readingColor;
-//                            svg-icon {
-//                                svg {
-//                                    * {
-//                                        fill: $bgColor2;
-//                                        stroke: $bgColor2;
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        &.done {
-//                            border-color: $readingColor;
-//                            background-color: $readingColor;
-//                            .subject-icon {
-//                                display: none;
-//                            }
-//                        }
-//                    }
-//
-//                    &.done {
-//                        .icon-wrapper {
-//                            svg-icon.section-complete {
-//                                display: block;
-//                            }
-//                        }
-//                    }
-//
-//                    .icon-wrapper {
-//                        height: 100%;
-//                        display: flex;
-//                        align-items: center;
-//                        justify-content: center;
-//                        vertical-align: top;
-//
-//                        svg-icon {
-//                            &.math-icon {
-//                                width: 45%;
-//                            }
-//                            &[name="reading-icon"] {
-//                                width: 41px;
-//                            }
-//                            &.writing-icon {
-//                                width: 75%;
-//                            }
-//                            &.section-complete {
-//                                display: none;
-//                                width: 65%;
-//                                svg {
-//                                    line {
-//                                        stroke: $bgColor2;
-//                                        stroke-width: 30px;
-//                                    }
-//                                }
-//                            }
-//                        }
-//
-//                        &.onlySubjectIcon {
-//                            svg-icon.section-complete {
-//                                display: none;
-//                            }
-//                            .subject-icon {
-//                                display: inline-block;
-//                            }
-//                        }
-//                        &.onlyDoneIcon {
-//                            .subject-icon {
-//                                display: none;
-//                            }
-//                            svg-icon.section-complete {
-//                                display: inline-block;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//            .first-icon-row {
-//                & > div {
-//                    &:first-child {
-//                        margin: {
-//                            right: 54px;
-//                        }
-//                    }
-//                }
-//            }
-//
-//            .second-icon-row {
-//                & > div {
-//                    &:first-child {
-//                        margin: {
-//                            right: 260px;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        .section-question {
-//            @include text-style(18px, $fcColor11, Lato, $regularFontWeight);
-//            text-transform: uppercase;
-//            margin-top: 25px;
-//
-//            .math {
-//                color: $mathColor;
-//            }
-//
-//            .verbal {
-//                color: $verbalColor;
-//            }
-//
-//            .diagnostic-instructions {
-//                margin-top: 40px;
-//                text-transform: none;
-//                display: flex;
-//                flex-direction: column;
-//                padding: {
-//                    right: 110px;
-//                    left: 110px;
-//                };
-//
-//                .diagnostic-instructions-title {
-//                    @include text-style(16px, $fcColor7, Lato, $normalFontWeight);
-//                }
-//
-//                .diagnostic-instructions-text {
-//                    @include text-style(16px, $fcColor7, Lato, $lightFontWeight);
-//                    margin-top: 5px;
-//                    min-height: 38px;
-//                }
-//            }
-//        }
-//    }
-//}
+@import './src/scss/imports/variables',
+        './src/scss/imports/colors',
+        './bower_components/angular-material/angular-material.scss',
+        './bower_components/infra/dist/mixins/mixins',
+        './src/scss/imports/angular-material-override';
+
+/**
+*  FONTS
+*/
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Lato Regular'), local('Lato-Regular'), url(http://fonts.gstatic.com/s/lato/v11/UyBMtLsHKBKXelqf4x7VRQ.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Lato Regular'), local('Lato-Regular'), url(http://fonts.gstatic.com/s/lato/v11/1YwB1sO8YE1Lyjf12WNiUA.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Quicksand Regular'), local('Quicksand-Regular'), url(http://fonts.gstatic.com/s/quicksand/v5/sKd0EMYPAh5PYCRKSryvW1tXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Quicksand Bold'), local('Quicksand-Bold'), url(http://fonts.gstatic.com/s/quicksand/v5/32nyIRHyCu6iqEka_hbKsugdm0LZdjqr5-oayXSOefg.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+
+diagnostic-intro {
+
+    .diagnostic-intro-drv {
+        text-align: center;
+
+            .diagnostic-text {
+                margin: 20px auto;
+                max-height: 45px;
+                @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+            }
+
+        .raccoon-img-container{
+            position: relative;
+
+            .raccoon-img-wrapper {
+                .diagnostic-raccoon {
+                    position: relative;
+                    top: -48px;
+                    background-size: contain;
+                    @include full-background-image-retina('./images/diagnostic-raccoon', 160px, 169px);
+                }
+                .diagnostic-raccoon-english{
+                    @include full-background-image-retina('./images/diagnostic-raccoon-english', 289px, 207px);
+                }
+                .diagnostic-raccoon-math{
+                    @include full-background-image-retina('./images/diagnostic-raccoon-math', 271px, 179px);
+                }
+                .diagnostic-raccoon-reading{
+                    @include full-background-image-retina('./images/diagnostic-raccoon-reading', 212px, 224px);
+                }
+                .diagnostic-raccoon-science{
+                    @include full-background-image-retina('./images/diagnostic-raccoon-science', 194px, 186px);
+                }
+            }
+        }
+
+
+        .icons-section {
+                display: flex;
+                justify-content: space-around;
+                width: 40%;
+                margin: 0 auto;
+                min-height: 140px;
+                .icon-circle {
+                    width: 65px;
+                    height: 65px;
+                    border-radius: 50%;
+                    display: inline-block;
+                    border: 2px solid;
+                    border-color: $borderColor5;
+                    position: relative;
+
+                    &:nth-child(3n+1) {
+                        align-self: flex-end;
+                    }
+                    &.math-color {
+                        border-color: $mathColor;
+                        svg-icon {
+                            svg {
+                                fill: $mathColor;
+                            }
+                        }
+                        &.active {
+                            background-color: $mathColor;
+                            svg-icon {
+                                svg {
+                                    fill: $bgColor1;
+                                }
+                            }
+                        }
+                        &.done {
+                            border-color: $mathColor;
+                            background-color: $mathColor;
+                            .subject-icon {
+                                display: none;
+                            }
+
+                        }
+                    }
+                    &.verbal-color {
+                        border-color: $verbalColor;
+                        svg-icon {
+                            svg {
+                                * {
+                                    fill: $verbalColor;
+                                    stroke: $bgColor1;
+                                }
+                            }
+                        }
+                        &.active {
+                            border-color: $readingColor;
+                            background-color: $readingColor;
+                            svg-icon {
+                                svg {
+                                    * {
+                                        fill: $bgColor1;
+                                        stroke: $bgColor1;
+                                    }
+                                }
+                            }
+                        }
+                        &.done {
+                            border-color: $readingColor;
+                            background-color: $readingColor;
+                            .subject-icon {
+                                display: none;
+                            }
+                        }
+                    }
+                    &.english-color {
+                        border-color: $englishColor;
+                        svg-icon {
+                            svg {
+                                fill: $englishColor;
+                            }
+                        }
+                        &.active {
+                            border-color: $englishColor;
+                            background-color: $englishColor;
+                            svg-icon {
+                                svg {
+                                    * {
+                                        fill: $bgColor1;
+                                        stroke: $bgColor1;
+                                    }
+                                }
+                            }
+                        }
+                        &.done {
+                            border-color: $englishColor;
+                            background-color: $englishColor;
+                            .subject-icon {
+                                display: none;
+                            }
+                        }
+                    }
+                    &.reading-color {
+                        border-color: $readingColor;
+                        svg-icon {
+                            svg {
+                                fill: $readingColor;
+                            }
+                        }
+                        &.active {
+                            border-color: $readingColor;
+                            background-color: $readingColor;
+                            svg-icon {
+                                svg {
+                                    * {
+                                        fill: $bgColor1;
+                                        stroke: $bgColor1;
+                                    }
+                                }
+                            }
+                        }
+                        &.done {
+                            border-color: $readingColor;
+                            background-color: $readingColor;
+                            .subject-icon {
+                                display: none;
+                            }
+                        }
+                    }
+                    &.science-color {
+                        border-color: $scienceColor;
+                        svg-icon {
+                            svg {
+                                fill: $scienceColor;
+                            }
+                        }
+                        &.active {
+                            border-color: $scienceColor;
+                            background-color: $scienceColor;
+                            svg-icon {
+                                svg {
+                                    * {
+                                        fill: $bgColor1;
+                                        stroke: $bgColor1;
+                                    }
+                                }
+                            }
+                        }
+                        &.done {
+                            border-color: $scienceColor;
+                            background-color: $scienceColor;
+                            .subject-icon {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    &.done {
+                        .icon-wrapper {
+                            svg-icon.section-complete {
+                                display: block;
+                            }
+                        }
+                    }
+
+                    .icon-wrapper {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        vertical-align: top;
+
+                        .subject-icon {
+                            width: 45px;
+                        }
+
+                        svg-icon {
+                            &.section-complete {
+                                display: none;
+                                width: 65%;
+                                svg {
+                                    line {
+                                        stroke: $bgColor1;
+                                        stroke-width: 30px;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.onlySubjectIcon {
+                            svg-icon.section-complete {
+                                display: none;
+                            }
+                            .subject-icon {
+                                display: inline-block;
+                            }
+                        }
+                        &.onlyDoneIcon {
+                            .subject-icon {
+                                display: none;
+                            }
+                            svg-icon.section-complete {
+                                display: inline-block;
+                            }
+                        }
+                    }
+                }
+        }
+
+        .section-question {
+            @include text-style(18px, $fontColor4, Lato, $regularFontWeight);
+            text-transform: uppercase;
+            .math {
+                color: $mathColor;
+            }
+            .verbal {
+                color: $verbalColor;
+            }
+            .english {
+                color: $englishColor;
+            }
+            .reading {
+                color: $readingColor;
+            }
+            .science {
+                color: $scienceColor;
+            }
+            .diagnostic-instructions {
+                margin-top: 40px;
+                text-transform: none;
+                display: flex;
+                flex-direction: column;
+                padding: {
+                    right: 110px;
+                    left: 110px;
+                };
+                .diagnostic-instructions-title {
+                    @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
+                }
+                .diagnostic-instructions-text {
+                    @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+                    margin-top: 5px;
+                    min-height: 38px;
+                }
+            }
+        }
+    }
+}

@@ -22,8 +22,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'plus-icon': 'components/onBoarding/svg/plus-icon.svg',
-                'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg'
+                'check-mark': 'components/diagnosticDrv/svg/check-mark-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -64,7 +63,8 @@
         'znk.infra.user',
         'ui.router',
         'ngMaterial',
-        'znk.infra-web-app.userGoals'
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.diagnosticDrv'
     ]).config([
         'SvgIconSrvProvider', '$stateProvider',
         function (SvgIconSrvProvider, $stateProvider) {
@@ -178,8 +178,8 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 
 'use strict';
 
-angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', ['TestScoreCategoryEnum', 'WorkoutsDiagnosticFlow', '$translatePartialLoader',
-    function DiagnosticIntroDirective(TestScoreCategoryEnum, WorkoutsDiagnosticFlow, $translatePartialLoader) {
+angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', ['DiagnosticIntroSrv', '$translatePartialLoader', '$log',
+    function DiagnosticIntroDirective(DiagnosticIntroSrv, $translatePartialLoader, $log) {
 
     var directive = {
         restrict: 'E',
@@ -191,50 +191,42 @@ angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', [
 
             $translatePartialLoader.addPart('diagnosticDrv');
 
-            var testScoreCategoryIndexMap = {
-                math: 1,
-                writing: 2,
-                reading: 3
-            };
+            scope.d = {};
 
-            var testScoreIdToIndexMap = {};
-
-            testScoreIdToIndexMap[TestScoreCategoryEnum.MATH.enum] = {
-                id: 1,
-                className: 'diagnostic-raccoon-math'
-            };
-            testScoreIdToIndexMap[TestScoreCategoryEnum.READING.enum] = {
-                id: 2,
-                className: 'diagnostic-raccoon-reading'
-            };
-            testScoreIdToIndexMap[TestScoreCategoryEnum.WRITING.enum] = {
-                id: 3,
-                className: 'diagnostic-raccoon-writing'
-            };
-            testScoreIdToIndexMap.all = {
-                id: Infinity,
-                className: 'diagnostic-raccoon'
-            };
-            testScoreIdToIndexMap.none = {
-                id: -1,
-                className: 'diagnostic-raccoon'
-            };
-
-            scope.d = {
-                testScoreCategoryIndexMap: testScoreCategoryIndexMap
-            };
-
-            WorkoutsDiagnosticFlow.getActiveSectionData().then(function (activeTestScoreData) {
-                var activeTestScoreId = activeTestScoreData.id;
-                scope.d.noCalc = activeTestScoreData.noCalc;
-
-                scope.d.currTestScoreCategoryIndex = testScoreIdToIndexMap[activeTestScoreId].id;
-
-                scope.d.raccoonClassName = testScoreIdToIndexMap[activeTestScoreId].className;
-
-                if (activeTestScoreId === TestScoreCategoryEnum.MATH.enum && activeTestScoreData.noCalc) {
-                    scope.d.raccoonClassName = testScoreIdToIndexMap[activeTestScoreId].className + '-no-calc';
+            DiagnosticIntroSrv.getActiveData().then(function(activeData) {
+                if (!activeData || !activeData.id) {
+                    $log.error('DiagnosticIntroDirective: activeData id must exist!');
                 }
+                scope.d.activeId = activeData.id;
+                return DiagnosticIntroSrv.getConfigMap();
+            }).then(function(mapData) {
+                if (!angular.isArray(mapData.subjects)) {
+                    $log.error('DiagnosticIntroDirective: configMap must have subjects array!');
+                }
+                var currMapData;
+                var currMapIndex;
+
+                scope.d.subjects = mapData.subjects.map(function (subject, index) {
+                    subject.mapId = index + 1;
+                    return subject;
+                });
+
+                if (scope.d.activeId === 'none') {
+                    currMapIndex = -1;
+                    currMapData = mapData.none;
+                } else if (scope.d.activeId === 'all') {
+                    currMapIndex = Infinity;
+                    currMapData = mapData.all;
+                } else {
+                    currMapData = scope.d.subjects.filter(function(subject) {
+                        return subject.id === scope.d.activeId;
+                    })[0];
+                    currMapIndex = currMapData.mapId;
+                }
+                scope.d.currMapData = currMapData;
+                scope.d.currMapIndex = currMapIndex;
+            }).catch(function(err) {
+                $log.error('DiagnosticIntroDirective: Error catch' + err);
             });
         }
     };
@@ -247,139 +239,97 @@ angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', [
 angular.module('znk.infra-web-app.diagnosticDrv').provider('DiagnosticIntroSrv', [
     function DiagnosticIntroSrv() {
 
-        var _getActive;
+        var _activeData;
 
+        var _configMap;
 
-        this.setActiveFn = function(getActive) {
-            _getActive = getActive;
+        this.setActiveFn = function(activeData) {
+            _activeData = activeData;
         };
 
-        this.$get = function() {
+        this.setConfigMapFn = function(configMap) {
+            _configMap = configMap;
+        };
+
+        this.$get = ['$injector', '$log', '$q', function($injector, $log, $q) {
             return {
-
+                getActiveData: function() {
+                    if (!_activeData) {
+                        $log.error('DiagnosticIntroSrv: no activeData!');
+                    }
+                    return $q.when($injector.invoke(_activeData));
+                },
+                getConfigMap: function() {
+                    if (!_configMap) {
+                        $log.error('DiagnosticIntroSrv: no configMap!');
+                    }
+                    return $q.when($injector.invoke(_configMap));
+                }
             };
-        };
-
+        }];
 }]);
 
 angular.module('znk.infra-web-app.diagnosticDrv').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticDrv/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
-    "    <ng-switch class=\"description\" on=\"d.currTestScoreCategoryIndex\">\n" +
-    "        <div ng-switch-when=\"1\"\n" +
-    "             class=\"diagnostic-text\">\n" +
-    "            <ng-switch on=\"!!d.noCalc\">\n" +
-    "                <div ng-switch-when=\"false\" translate=\".DIAG_INTR_THIS_SHORT_TEST\"></div>\n" +
-    "                <div ng-switch-when=\"true\" translate=\".DIAG_INTR_WELL_DONE\"></div>\n" +
-    "            </ng-switch>\n" +
-    "        </div>\n" +
-    "        <div ng-switch-when=\"2\" class=\"diagnostic-text\" translate=\".DIAG_INTR_THIS_HALFWAY\"></div>\n" +
-    "        <div ng-switch-when=\"3\" class=\"diagnostic-text\" translate=\".DIAG_INTR_THIS_ALMOST_THERE\"></div>\n" +
-    "        <div ng-switch-default class=\"diagnostic-text\">\n" +
-    "            <div translate=\".DIAG_INTR_LETS_LEARN\"></div>\n" +
-    "            <div translate=\".DIAG_INTR_THIS_QUICK_TEST\"></div>\n" +
-    "        </div>\n" +
-    "    </ng-switch>\n" +
-    "    <div class=\"icons-section\">\n" +
-    "        <div class=\"first-icon-row\">\n" +
-    "            <div class=\"icon-circle math-color\"\n" +
-    "                 ng-class=\"{\n" +
-    "                    active: d.testScoreCategoryIndexMap.math === d.currTestScoreCategoryIndex && d.noCalc,\n" +
-    "                    done: d.testScoreCategoryIndexMap.math < d.currTestScoreCategoryIndex\n" +
-    "                }\">\n" +
-    "                <div class=\"math-no-calc\"></div>\n" +
-    "                <div class=\"icon-wrapper\">\n" +
-    "                    <svg-icon class=\"subject-icon\" name=\"math-icon\"></svg-icon>\n" +
-    "                    <svg-icon class=\"section-complete\" name=\"check-mark\"></svg-icon>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"icon-circle verbal-color\"\n" +
-    "                 ng-class=\"{\n" +
-    "                    active: d.testScoreCategoryIndexMap.writing === d.currTestScoreCategoryIndex,\n" +
-    "                    done: d.testScoreCategoryIndexMap.writing < d.currTestScoreCategoryIndex\n" +
-    "                }\">\n" +
-    "                <div class=\"icon-wrapper\">\n" +
-    "                    <svg-icon class=\"subject-icon\" name=\"reading-icon\"></svg-icon>\n" +
-    "                    <svg-icon class=\"section-complete\" name=\"check-mark\"></svg-icon>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"second-icon-row\">\n" +
-    "            <div class=\"icon-circle math-color\"\n" +
-    "                 ng-class=\"{\n" +
-    "                    active: d.testScoreCategoryIndexMap.math === d.currTestScoreCategoryIndex && !d.noCalc,\n" +
-    "                    done: (d.testScoreCategoryIndexMap.math < d.currTestScoreCategoryIndex) ||\n" +
-    "                          (d.currTestScoreCategoryIndex === d.testScoreCategoryIndexMap.math && d.noCalc)\n" +
-    "                 }\">\n" +
-    "                <div class=\"icon-wrapper\">\n" +
-    "                    <svg-icon class=\"subject-icon\" name=\"math-icon\"></svg-icon>\n" +
-    "                    <svg-icon class=\"section-complete\" name=\"check-mark\"></svg-icon>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"icon-circle verbal-color\"\n" +
-    "                 ng-class=\"{\n" +
-    "                     active: d.testScoreCategoryIndexMap.reading === d.currTestScoreCategoryIndex,\n" +
-    "                     done: d.testScoreCategoryIndexMap.reading < d.currTestScoreCategoryIndex\n" +
-    "                 }\">\n" +
-    "                <div class=\"icon-wrapper\">\n" +
-    "                    <svg-icon class=\"subject-icon\" name=\"writing-icon\"></svg-icon>\n" +
-    "                    <svg-icon class=\"section-complete\" name=\"check-mark\"></svg-icon>\n" +
-    "                </div>\n" +
+    "    <div class=\"description\">\n" +
+    "        <div class=\"diagnostic-text\" translate=\"{{d.currMapData.descriptionTranslate}}\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"icons-section\" ng-class=\"{pristine: d.currMapIndex === -1}\">\n" +
+    "        <div ng-repeat=\"subject in d.subjects\"\n" +
+    "             class=\"icon-circle {{subject.iconCircleClassName}}\"\n" +
+    "             ng-class=\"{\n" +
+    "                    active: subject.mapId === d.currMapIndex,\n" +
+    "                    done: subject.mapId < d.currMapIndex\n" +
+    "            }\">\n" +
+    "            <div class=\"icon-wrapper\">\n" +
+    "                <svg-icon class=\"subject-icon\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
+    "                <svg-icon class=\"section-complete\" name=\"check-mark\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"raccoon-img-container\">\n" +
     "        <div class=\"raccoon-img-wrapper\">\n" +
-    "            <div class=\"diagnostic-raccoon\" ng-class=\"d.raccoonClassName\"></div>\n" +
+    "            <div class=\"diagnostic-raccoon\" ng-class=\"d.currMapData.raccoonClassName\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"section-question\">\n" +
-    "        <ng-switch on=\"d.currTestScoreCategoryIndex\">\n" +
-    "            <div ng-switch-when=\"1\">\n" +
-    "\n" +
-    "                <ng-switch on=\"!!d.noCalc\">\n" +
-    "                    <div ng-switch-when=\"false\">\n" +
-    "                        <span translate=\".LETS_START_MATH_CALC\"></span>\n" +
-    "                        <span class=\"math\" translate=\".MATH_CALC\"></span>\n" +
-    "                        <span translate=\".QUESTIONS\"></span>\n" +
-    "                        <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
-    "                            <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
-    "                            <span class=\"diagnostic-instructions-text\" translate=\".INSTRUCTIONS_MATH_CALC\"></span>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                    <div ng-switch-when=\"true\">\n" +
-    "                        <span translate=\".LETS_START_MATH_NO_CALC\"></span>\n" +
-    "                        <span class=\"math\" translate=\".MATH_NO_CALC\"></span>\n" +
-    "                        <span translate=\".QUESTIONS\"></span>\n" +
-    "                        <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
-    "                            <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
-    "                            <span class=\"diagnostic-instructions-text\" translate=\".INSTRUCTIONS_MATH_NO_CALC\"></span>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                </ng-switch>\n" +
-    "            </div>\n" +
-    "            <div ng-switch-when=\"2\">\n" +
-    "                <span translate=\".LETS_DO_READING_QUESTIONS\"></span>\n" +
-    "                <span class=\"verbal\" translate=\".READING\"></span>\n" +
+    "    <div class=\"section-question\" ng-if=\"!d.currMapData.hideSectionQuestion\">\n" +
+    "            <div>\n" +
+    "                <span translate=\"{{d.currMapData.subjectTextTranslate}}\"></span>\n" +
+    "                <span\n" +
+    "                    class=\"{{d.currMapData.colorClassName}}\"\n" +
+    "                    translate=\"{{d.currMapData.subjectNameTranslate}}\">\n" +
+    "                </span>\n" +
     "                <span translate=\".QUESTIONS\"></span>\n" +
     "                <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
     "                    <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
-    "                    <span class=\"diagnostic-instructions-text\" translate=\".INSTRUCTIONS_READING\"></span>\n" +
+    "                    <span class=\"diagnostic-instructions-text\" translate=\"{{d.currMapData.instructionsTranslate}}\"></span>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div ng-switch-when=\"3\">\n" +
-    "                <span translate=\".LETS_DO_WRITING_QUESTIONS\"></span>\n" +
-    "                <span class=\"verbal\" translate=\".WRITING\"></span>\n" +
-    "                <span translate=\".QUESTIONS\"></span>\n" +
-    "                <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
-    "                    <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
-    "                    <span class=\"diagnostic-instructions-text\" translate=\".INSTRUCTIONS_WRITING\"></span>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </ng-switch>\n" +
     "    </div>\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/diagnosticDrv/svg/check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
     "");
 }]);
 

@@ -10,8 +10,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'plus-icon': 'components/onBoarding/svg/plus-icon.svg',
-                'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg'
+                'check-mark': 'components/diagnosticDrv/svg/check-mark-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }

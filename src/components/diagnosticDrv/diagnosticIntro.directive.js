@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', ['TestScoreCategoryEnum', 'WorkoutsDiagnosticFlow', '$translatePartialLoader',
-    function DiagnosticIntroDirective(TestScoreCategoryEnum, WorkoutsDiagnosticFlow, $translatePartialLoader) {
+angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', ['DiagnosticIntroSrv', '$translatePartialLoader', '$log',
+    function DiagnosticIntroDirective(DiagnosticIntroSrv, $translatePartialLoader, $log) {
 
     var directive = {
         restrict: 'E',
@@ -13,50 +13,42 @@ angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', [
 
             $translatePartialLoader.addPart('diagnosticDrv');
 
-            var testScoreCategoryIndexMap = {
-                math: 1,
-                writing: 2,
-                reading: 3
-            };
+            scope.d = {};
 
-            var testScoreIdToIndexMap = {};
-
-            testScoreIdToIndexMap[TestScoreCategoryEnum.MATH.enum] = {
-                id: 1,
-                className: 'diagnostic-raccoon-math'
-            };
-            testScoreIdToIndexMap[TestScoreCategoryEnum.READING.enum] = {
-                id: 2,
-                className: 'diagnostic-raccoon-reading'
-            };
-            testScoreIdToIndexMap[TestScoreCategoryEnum.WRITING.enum] = {
-                id: 3,
-                className: 'diagnostic-raccoon-writing'
-            };
-            testScoreIdToIndexMap.all = {
-                id: Infinity,
-                className: 'diagnostic-raccoon'
-            };
-            testScoreIdToIndexMap.none = {
-                id: -1,
-                className: 'diagnostic-raccoon'
-            };
-
-            scope.d = {
-                testScoreCategoryIndexMap: testScoreCategoryIndexMap
-            };
-
-            WorkoutsDiagnosticFlow.getActiveSectionData().then(function (activeTestScoreData) {
-                var activeTestScoreId = activeTestScoreData.id;
-                scope.d.noCalc = activeTestScoreData.noCalc;
-
-                scope.d.currTestScoreCategoryIndex = testScoreIdToIndexMap[activeTestScoreId].id;
-
-                scope.d.raccoonClassName = testScoreIdToIndexMap[activeTestScoreId].className;
-
-                if (activeTestScoreId === TestScoreCategoryEnum.MATH.enum && activeTestScoreData.noCalc) {
-                    scope.d.raccoonClassName = testScoreIdToIndexMap[activeTestScoreId].className + '-no-calc';
+            DiagnosticIntroSrv.getActiveData().then(function(activeData) {
+                if (!activeData || !activeData.id) {
+                    $log.error('DiagnosticIntroDirective: activeData id must exist!');
                 }
+                scope.d.activeId = activeData.id;
+                return DiagnosticIntroSrv.getConfigMap();
+            }).then(function(mapData) {
+                if (!angular.isArray(mapData.subjects)) {
+                    $log.error('DiagnosticIntroDirective: configMap must have subjects array!');
+                }
+                var currMapData;
+                var currMapIndex;
+
+                scope.d.subjects = mapData.subjects.map(function (subject, index) {
+                    subject.mapId = index + 1;
+                    return subject;
+                });
+
+                if (scope.d.activeId === 'none') {
+                    currMapIndex = -1;
+                    currMapData = mapData.none;
+                } else if (scope.d.activeId === 'all') {
+                    currMapIndex = Infinity;
+                    currMapData = mapData.all;
+                } else {
+                    currMapData = scope.d.subjects.filter(function(subject) {
+                        return subject.id === scope.d.activeId;
+                    })[0];
+                    currMapIndex = currMapData.mapId;
+                }
+                scope.d.currMapData = currMapData;
+                scope.d.currMapIndex = currMapIndex;
+            }).catch(function(err) {
+                $log.error('DiagnosticIntroDirective: Error catch' + err);
             });
         }
     };

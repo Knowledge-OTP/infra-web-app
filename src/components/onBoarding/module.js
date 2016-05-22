@@ -11,7 +11,8 @@
         'znk.infra.user',
         'ui.router',
         'ngMaterial',
-        'znk.infra-web-app.userGoals'
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.diagnosticDrv'
     ]).config([
         'SvgIconSrvProvider', '$stateProvider',
         function (SvgIconSrvProvider, $stateProvider) {
