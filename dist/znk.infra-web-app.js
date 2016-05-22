@@ -521,13 +521,12 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController', ['$state', '$filter', 'OnBoardingService', 'znkAnalyticsSrv',
-        function($state, $filter, OnBoardingService, znkAnalyticsSrv) {
-            var translateFilter = $filter('translate');
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
+        function($state, OnBoardingService, znkAnalyticsSrv) {
             this.userGoalsSetting = {
                 recommendedGoalsTitle: true,
                 saveBtn: {
-                    title: translateFilter('USER_GOALS.SAVE_AND_CONTINUE'),
+                    title: '.SAVE_AND_CONTINUE',
                     showSaveIcon: true
                 }
             };
@@ -1189,8 +1188,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoals').directive('userGoals',['UserGoalsService', '$filter', '$timeout', 'UserSchoolsService', '$q', '$translatePartialLoader',
-        function UserGoalsDirective(UserGoalsService, $filter, $timeout, UserSchoolsService, $q, $translatePartialLoader) {
+    angular.module('znk.infra-web-app.userGoals').directive('userGoals',['UserGoalsService', '$timeout', 'UserSchoolsService', '$q', '$translatePartialLoader',
+        function UserGoalsDirective(UserGoalsService, $timeout, UserSchoolsService, $q, $translatePartialLoader) {
 
             var directive = {
                 restrict: 'E',
@@ -1200,12 +1199,9 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     setting: '='
                 },
                 link: function link(scope) {
-                    var translateFilter = $filter('translate');
-                    var defaultTitle = translateFilter('USER_GOALS.SAVE');
-                    var userGoalRef;
-                    scope.saveTitle = scope.setting.saveBtn.title || defaultTitle;
-
                     $translatePartialLoader.addPart('userGoals');
+                    var userGoalRef;
+                    scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
 
                     UserGoalsService.getGoals().then(function (userGoals) {
                         userGoalRef = userGoals;
@@ -1696,7 +1692,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
     "                   ng-click=\"saveChanges()\"\n" +
     "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
     "            <svg-icon name=\"v-icon\" class=\"v-icon\" ng-show=\"showVIcon\"></svg-icon>\n" +
-    "            <span ng-bind-html=\"saveTitle\"></span>\n" +
+    "            <span translate=\"{{saveTitle}}\"></span>\n" +
     "            <svg-icon name=\"dropdown-arrow-icon\" class=\"dropdown-arrow-icon\" ng-show=\"setting.saveBtn.showSaveIcon\"></svg-icon>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
