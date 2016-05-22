@@ -23,8 +23,8 @@ module.exports = function (grunt) {
     var appConfig = {
         src: 'src',
         dist: 'dist',
-        appName: 'znk.infra-web-app',
-        tmp: '.tmp'
+        tmp: '.tmp',
+        appName: 'znk.infra-web-app'
     };
 
     // Define the configuration for all the tasks
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
                 files: [{
                     dot: true,
                     src: [
-                        '.tmp',
+                        '<%= yeoman.tmp %>',
                         '<%= yeoman.dist %>/{,*/}*',
                         '!<%= yeoman.dist %>/.git{,*/}*'
                     ]
@@ -89,16 +89,23 @@ module.exports = function (grunt) {
                 }
             }
         },
-        concat: {
+        concat: {/*
             dist: {
                 files: [{
-                    src: ['.tmp/components/**/module.js', '.tmp/components/**/*.js', '.tmp/module.js'],
-                    dest: '<%= yeoman.dist %>/<%= yeoman.appName %>.js'
-                }, {
-                    src: ['<%= yeoman.dist %>/**/main.css', '.tmp/general.css'],
+                    src: [
+                        '<%= yeoman.tmp %>/components/!**!/module.js',
+                        '<%= yeoman.tmp %>/components/!**!/!*.js',
+                        '<%= yeoman.tmp %>/module.js'
+                    ],
+                    dest: '<%= yeoman.tmp %>/<%= yeoman.appName %>.js'
+                },{
+                    src: [
+                        '<%= yeoman.tmp %>/!**!/main.css',
+                        '<%= yeoman.tmp %>/general.css'
+                    ],
                     dest: '<%= yeoman.dist %>/main.css'
                 }]
-            }
+            }*/
         },
         uglify: {
             dist: {
@@ -144,13 +151,13 @@ module.exports = function (grunt) {
         },
         connect: {
             options: {
-                base: ['dist', 'bower_components'],
+                base: ['.tmp', 'bower_components', 'demoShared'],
                 open: true,
-                livereload: 35730
+                livereload: 35731
             },
             serve: {
                 options: {
-                    port: 9001,
+                    port: 9002,
                     hostname: 'localhost'
                 }
             }
