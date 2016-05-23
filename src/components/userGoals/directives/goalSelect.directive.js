@@ -6,17 +6,18 @@
             restrict: 'E',
             templateUrl: 'components/userGoals/templates/goalSelect.template.html',
             require: 'ngModel',
-            scope: {},
+            scope: {
+                minScore: '=',
+                maxScore: '=',
+                updateGoalNum: '='
+            },
             link: function link(scope, element, attrs, ngModelCtrl) {
-                scope.MAX_SCORE = 800;
-                scope.MIN_SCORE = 200;
-
-                scope.updateGoal = function (add) {
-                    scope.target += add;
-                    if (scope.target < scope.MIN_SCORE) {
-                        scope.target = scope.MIN_SCORE;
-                    } else if (scope.target > scope.MAX_SCORE) {
-                        scope.target = scope.MAX_SCORE;
+                scope.updateGoal = function (isPlus) {
+                    scope.target += (isPlus) ? scope.updateGoalNum : -Math.abs(scope.updateGoalNum);
+                    if (scope.target < scope.minScore) {
+                        scope.target = scope.minScore;
+                    } else if (scope.target > scope.maxScore) {
+                        scope.target = scope.maxScore;
                     }
 
                     if (angular.isFunction(scope.onChange)) {

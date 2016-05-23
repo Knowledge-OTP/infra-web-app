@@ -111,6 +111,9 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
             defaultSubjectScore: 600,
             minSchoolScore: 400,
             maxSchoolScore: 1600,
+            minGoalsScore: 200,
+            maxGoalsScore: 800,
+            updateGoalNum: 10,
             scoreTitleTranslate: '.TOTAL_SCORE',
             goalsInfoTranslate: '.GOALS_INFO',
             subjects: [

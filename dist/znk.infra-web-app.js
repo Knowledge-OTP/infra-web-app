@@ -1078,17 +1078,18 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             restrict: 'E',
             templateUrl: 'components/userGoals/templates/goalSelect.template.html',
             require: 'ngModel',
-            scope: {},
+            scope: {
+                minScore: '=',
+                maxScore: '=',
+                updateGoalNum: '='
+            },
             link: function link(scope, element, attrs, ngModelCtrl) {
-                scope.MAX_SCORE = 800;
-                scope.MIN_SCORE = 200;
-
-                scope.updateGoal = function (add) {
-                    scope.target += add;
-                    if (scope.target < scope.MIN_SCORE) {
-                        scope.target = scope.MIN_SCORE;
-                    } else if (scope.target > scope.MAX_SCORE) {
-                        scope.target = scope.MAX_SCORE;
+                scope.updateGoal = function (isPlus) {
+                    scope.target += (isPlus) ? scope.updateGoalNum : -Math.abs(scope.updateGoalNum);
+                    if (scope.target < scope.minScore) {
+                        scope.target = scope.minScore;
+                    } else if (scope.target > scope.maxScore) {
+                        scope.target = scope.maxScore;
                     }
 
                     if (angular.isFunction(scope.onChange)) {
@@ -1656,11 +1657,11 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
     "</svg>\n" +
     "");
   $templateCache.put("components/userGoals/templates/goalSelect.template.html",
-    "<div class=\"action-btn minus\" ng-click=\"updateGoal(-10)\" ng-show=\"target > MIN_SCORE\">\n" +
+    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-show=\"target > minScore\">\n" +
     "    <svg-icon name=\"plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "<div class=\"goal\">{{target}}</div>\n" +
-    "<div class=\"action-btn plus\" ng-click=\"updateGoal(10)\" ng-show=\"target < MAX_SCORE\">\n" +
+    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-show=\"target < maxScore\">\n" +
     "    <svg-icon name=\"plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "");
@@ -1760,7 +1761,13 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
     "                        <svg-icon name=\"{{subject.svgIcon}}\"></svg-icon>\n" +
     "                    </div>\n" +
     "                    <span class=\"subject-title\" translate=\"{{subject.subjectTranslate}}\"></span>\n" +
-    "                    <goal-select ng-model=\"userGoals[subject.name]\" ng-change=\"calcTotal()\"></goal-select>\n" +
+    "                    <goal-select\n" +
+    "                        min-score=\"goalsSettingsFromSrv.minGoalsScore\"\n" +
+    "                        max-score=\"goalsSettingsFromSrv.maxGoalsScore\"\n" +
+    "                        update-goal-num=\"goalsSettingsFromSrv.updateGoalNum\"\n" +
+    "                        ng-model=\"userGoals[subject.name]\"\n" +
+    "                        ng-change=\"calcTotal()\">\n" +
+    "                    </goal-select>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +

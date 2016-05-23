@@ -34,7 +34,13 @@
                         <svg-icon name="{{subject.svgIcon}}"></svg-icon>
                     </div>
                     <span class="subject-title" translate="{{subject.subjectTranslate}}"></span>
-                    <goal-select ng-model="userGoals[subject.name]" ng-change="calcTotal()"></goal-select>
+                    <goal-select
+                        min-score="goalsSettingsFromSrv.minGoalsScore"
+                        max-score="goalsSettingsFromSrv.maxGoalsScore"
+                        update-goal-num="goalsSettingsFromSrv.updateGoalNum"
+                        ng-model="userGoals[subject.name]"
+                        ng-change="calcTotal()">
+                    </goal-select>
                 </div>
             </div>
         </div>
