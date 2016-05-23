@@ -10,7 +10,7 @@
             vm.diagnostic = data.diagnostic;
 
             var search = $location.search();
-            var DIAGNOSTIC_STATE = 'app.workouts.roadmap.diagnostic';
+            var DIAGNOSTIC_STATE = 'workoutsRoadmap.diagnostic';
             var WORKOUT_STATE = 'app.workouts.roadmap.workout';
 
             function getActiveWorkout() {
@@ -94,17 +94,17 @@
 
                 var currentStateName = $state.current.name;
                 if (newItem.workoutOrder === 0) {
-                    if (currentStateName !== 'app.workouts.roadmap.diagnostic') {
-                        $state.go('app.workouts.roadmap.diagnostic');
+                    if (currentStateName !== DIAGNOSTIC_STATE) {
+                        // $state.go(DIAGNOSTIC_STATE);
                     }
                 } else {
                     search = $location.search();
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        $state.go('app.workouts.roadmap.workout', {
-                            workout: newItem.workoutOrder
-                        });
+                        //$state.go('app.workouts.roadmap.workout', {
+                        //     workout: newItem.workoutOrder
+                        // });
                     }
                 }
             });

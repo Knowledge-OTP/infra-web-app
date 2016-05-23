@@ -1,0 +1,44 @@
+<znk-scroll actions="vm.scrollActions" scroll-on-mouse-wheel="true">
+    <div class="items-container">
+        <div class="dotted-lines-container">
+            <div class="dotted-line progress"></div>
+            <div class="dotted-line future"></div>
+        </div>
+        <div class="item-container diagnostic">
+            <div class="item"
+                 ng-class="{
+                    selected: vm.selectedWorkout === vm.diagnostic.workoutOrder
+                 }"
+                 ng-click="vm.workoutClick(vm.diagnostic.workoutOrder)">
+                <ng-switch on="vm.diagnostic.status">
+                    <svg-icon class="check-mark-icon" name="check-mark" ng-switch-when="2"></svg-icon>
+                    <svg-icon class="flag-icon" name="workouts-progress-flag" ng-switch-default></svg-icon>
+                </ng-switch>
+            </div>
+        </div>
+        <div class="item-container"
+             ng-repeat="workout in vm.workouts">
+            <div class="item"
+                 subject-id-to-attr-drv="workout.subjectId"
+                 suffix="bg"
+                 ng-class="{
+                    selected: vm.selectedWorkout === workout.workoutOrder,
+                    pristine: workout.subjectId === undefined
+                 }"
+                 ng-click="vm.workoutClick(workout.workoutOrder)">
+                <ng-switch on="workout.status">
+                    <svg-icon class="check-mark-icon" name="check-mark" ng-switch-when="2"></svg-icon>
+                    <span ng-switch-default>
+                        {{::workout.workoutOrder}}
+                    </span>
+                </ng-switch>
+            </div>
+        </div>
+        <div class="future-item"></div>
+        <div class="future-item"></div>
+        <div class="future-item"></div>
+        <div class="future-item"></div>
+        <div class="future-item"></div>
+        <div class="future-item"></div>
+    </div>
+</znk-scroll>

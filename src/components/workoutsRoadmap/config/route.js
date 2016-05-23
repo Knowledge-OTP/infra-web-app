@@ -31,18 +31,18 @@
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
                 })
-            /*                .state('app.workouts.roadmap.diagnostic', {
-             url: '/diagnostic',
-             template: '<ui-view></ui-view>',
-             controller: 'WorkoutsRoadMapDiagnosticController',
-             controllerAs: 'vm'
-             })
-             .state('app.workouts.roadmap.diagnostic.intro', {
-             templateUrl: 'app/workouts/templates/workoutsRoadmapDiagnosticIntro.template.html',
-             controller: 'WorkoutsRoadMapDiagnosticIntroController',
-             controllerAs: 'vm'
-             })
-             .state('app.workouts.roadmap.diagnostic.preSummary', {
+                .state('workoutsRoadmap.diagnostic', {
+                    url: '/diagnostic',
+                    template: '<ui-view></ui-view>',
+                    controller: 'WorkoutsRoadMapDiagnosticController',
+                    controllerAs: 'vm'
+                })
+                .state('workoutsRoadmap.diagnostic.intro', {
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticIntro.template.html',
+                    controller: 'WorkoutsRoadMapDiagnosticIntroController',
+                    controllerAs: 'vm'
+                })
+            /*  .state('app.workouts.roadmap.diagnostic.preSummary', {
              templateUrl: 'app/workouts/templates/workoutsRoadmapBasePreSummary.template.html',
              controller: 'WorkoutsRoadMapBasePreSummaryController',
              controllerAs: 'vm'
