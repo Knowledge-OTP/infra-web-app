@@ -5,7 +5,8 @@
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'znk.infra.utility',
-        'ngMaterial'
+        'ngMaterial',
+        'ngTagsInput'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {

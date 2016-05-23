@@ -109,6 +109,10 @@
         @include full-background-image-retina('./images/smile-raccoon', 293px, 373px);
     }
 
+    .thinking-raccoon {
+        @include full-background-image-retina('./images/thinking-raccoon', 360px, 217px);
+    }
+
     position: relative;
 
     .container {

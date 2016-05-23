@@ -5,8 +5,8 @@
  * */
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoals').directive('schoolSelect', ['UserSchoolsService', '$filter', 'UtilitySrv', '$timeout', '$q',
-        function SchoolSelectDirective(UserSchoolsService, $filter, UtilitySrv, $timeout, $q) {
+    angular.module('znk.infra-web-app.userGoals').directive('schoolSelect', ['UserSchoolsService', '$translate', 'UtilitySrv', '$timeout', '$q', '$translatePartialLoader',
+        function SchoolSelectDirective(UserSchoolsService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
             'ngInject';
 
             var schoolList = [];
@@ -19,9 +19,10 @@
                     getSelectedSchools: '&?'
                 },
                 link: function link(scope, element, attrs) {
+                    $translatePartialLoader.addPart('userGoals');
+
                     var MIN_LENGTH_AUTO_COMPLETE = 3;
                     var MAX_SCHOOLS_SELECT = 3;
-                    var tagsInputEmptyPlaceHolder = $filter('translate')('SCHOOL_SELECT.SELECT_3_SCHOOLS');
                     var userSchools;
 
                     function disableSearchOption() {
@@ -66,7 +67,9 @@
                     getSelectedSchoolsProm.then(function (_userSchools) {
                         userSchools = _userSchools;
                         scope.d.userSchools = angular.copy(userSchools);
-                        scope.d.placeholder = scope.d.userSchools.length ? ' ' : tagsInputEmptyPlaceHolder;
+                        $translate('SCHOOL_SELECT.SELECT_3_SCHOOLS').then(function(val) {
+                            scope.d.placeholder = scope.d.userSchools.length ? ' ' : val;
+                        });
                         disableSearchOption();
                     });
 
@@ -90,7 +93,9 @@
 
                     scope.d.onTagRemoved = function () {
                         if (!scope.d.userSchools.length) {
-                            scope.d.placeholder = tagsInputEmptyPlaceHolder;
+                            $translate('SCHOOL_SELECT.SELECT_3_SCHOOLS').then(function(val) {
+                                scope.d.placeholder =  val;
+                            });
                         }
                         disableSearchOption();
                         return true;
@@ -98,17 +103,20 @@
 
                     scope.d.querySchools = function ($query) {
                         if ($query.length < 3) {
-                            return [];
+                            return $q.when([]);
                         }
                         var resultsArr = schoolList.filter(function (school) {
                             return school.text.toLowerCase().indexOf($query.toLowerCase()) > -1;
                         });
                         if (!resultsArr.length) {
-                            resultsArr = [{
-                                text: $filter('translate')('SCHOOL_SELECT.NO_RESULTS')
-                            }];
+                            resultsArr = $translate('SCHOOL_SELECT.NO_RESULTS').then(function(val) {
+                                return [{
+                                    text: val
+                                }];
+                            });
+
                         }
-                        return resultsArr;
+                        return $q.when(resultsArr);
                     };
 
                     scope.d.save = function () {

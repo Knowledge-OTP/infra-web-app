@@ -70,7 +70,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
                     });
 
                     userGoals.compositeScore = averageSubjectsGoal(userGoals);
-                    return save ? self.setGoals(userGoals) : $q.when(userGoals);
+                    return save ? userGoalsServiceObj.setGoals(userGoals) : $q.when(userGoals);
                 });
             };
 

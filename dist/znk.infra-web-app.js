@@ -137,7 +137,8 @@
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'znk.infra.utility',
-        'ngMaterial'
+        'ngMaterial',
+        'ngTagsInput'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -211,18 +212,22 @@ angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', [
                     return subject;
                 });
 
-                if (scope.d.activeId === 'none') {
-                    currMapIndex = -1;
-                    currMapData = mapData.none;
-                } else if (scope.d.activeId === 'all') {
-                    currMapIndex = Infinity;
-                    currMapData = mapData.all;
-                } else {
-                    currMapData = scope.d.subjects.filter(function(subject) {
-                        return subject.id === scope.d.activeId;
-                    })[0];
-                    currMapIndex = currMapData.mapId;
+                switch (scope.d.activeId) {
+                    case 'none':
+                        currMapIndex = -1;
+                        currMapData = mapData.none;
+                        break;
+                    case 'all':
+                        currMapIndex = Infinity;
+                        currMapData = mapData.all;
+                        break;
+                    default:
+                        currMapData = scope.d.subjects.filter(function(subject) {
+                            return subject.id === scope.d.activeId;
+                        })[0];
+                        currMapIndex = currMapData.mapId;
                 }
+
                 scope.d.currMapData = currMapData;
                 scope.d.currMapIndex = currMapIndex;
             }).catch(function(err) {
@@ -582,13 +587,22 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController', ['userProfile', 'OnBoardingService', '$state', 'znkAnalyticsSrv',
         function(userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
 
+            var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.username = userProfile.nickname || '';
 
             this.nextStep = function () {
+                var nextStep;
+                var nextState;
                 znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingWelcomeStep' });
-                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.GOALS);//   todo(dream school)
-                // $state.go('app.onBoarding.schools');todo(dream school)
-                $state.go('onBoarding.goals');
+                if (onBoardingSettings.showSchoolStep) {
+                    nextStep = OnBoardingService.steps.SCHOOLS;
+                    nextState = 'onBoarding.schools';
+                } else {
+                    nextStep = OnBoardingService.steps.GOALS;
+                    nextState = 'onBoarding.goals';
+                }
+                OnBoardingService.setOnBoardingStep(nextStep);
+                $state.go(nextState);
             };
     }]);
 })(angular);
@@ -613,64 +627,72 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').service('OnBoardingService', ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
-        var self = this;
+    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function() {
+        this.$get = ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
+            var self = this;
+            var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
+            var onBoardingServiceObj = {};
 
-        var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
+            var onBoardingUrls = {
+                1: 'onBoarding.welcome',
+                2: 'onBoarding.schools',
+                3: 'onBoarding.goals',
+                4: 'onBoarding.diagnostic',
+                5: 'workouts.roadmap'
+            };
 
-        var onBoardingUrls = {
-            1: 'onBoarding.welcome',
-            2: 'onBoarding.schools',
-            3: 'onBoarding.goals',
-            4: 'onBoarding.diagnostic',
-            5: 'workouts.roadmap'
-        };
+            onBoardingServiceObj.steps = {
+                WELCOME: 1,
+                SCHOOLS: 2,
+                GOALS: 3,
+                DIAGNOSTIC: 4,
+                ROADMAP: 5
+            };
 
-        this.steps = {
-            WELCOME: 1,
-            SCHOOLS: 2,
-            GOALS: 3,
-            DIAGNOSTIC: 4,
-            ROADMAP: 5
-        };
-
-        this.getOnBoardingStep = function () {
-            return getProgress().then(function (progress) {
-                return {
-                    url: onBoardingUrls[progress.step]
-                };
-            });
-        };
-
-        this.setOnBoardingStep = function (stepNum) {
-            return getProgress().then(function (progress) {
-                progress.step = stepNum;
-                return setProgress(progress);
-            });
-        };
-
-        function getProgress() {
-            return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
-                return studentStorage.get(ONBOARDING_PATH).then(function (progress) {
-                    if (!progress.step) {
-                        progress.step = 1;
-                    }
-                    return progress;
+            onBoardingServiceObj.getOnBoardingStep = function () {
+                return getProgress().then(function (progress) {
+                    return {
+                        url: onBoardingUrls[progress.step]
+                    };
                 });
-            });
-        }
+            };
 
-        function setProgress(progress) {
-            return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
-                return studentStorage.set(ONBOARDING_PATH, progress);
-            });
-        }
+            onBoardingServiceObj.setOnBoardingStep = function (stepNum) {
+                return getProgress().then(function (progress) {
+                    progress.step = stepNum;
+                    return setProgress(progress);
+                });
+            };
 
-        this.isOnBoardingCompleted = function () {
-            return getProgress().then(function (onBoardingProgress) {
-                return onBoardingProgress.step === self.steps.ROADMAP;
-            });
-        };
+            function getProgress() {
+                return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                    return studentStorage.get(ONBOARDING_PATH).then(function (progress) {
+                        if (!progress.step) {
+                            progress.step = 1;
+                        }
+                        return progress;
+                    });
+                });
+            }
+
+            function setProgress(progress) {
+                return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                    return studentStorage.set(ONBOARDING_PATH, progress);
+                });
+            }
+
+            onBoardingServiceObj.isOnBoardingCompleted = function () {
+                return getProgress().then(function (onBoardingProgress) {
+                    return onBoardingProgress.step === self.steps.ROADMAP;
+                });
+            };
+
+            onBoardingServiceObj.getOnBoardingSettings = function() {
+                return self.settings;
+            };
+
+            return onBoardingServiceObj;
+        }];
     }]);
 })(angular);
 
@@ -1018,6 +1040,38 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.userGoals').filter('cutString', function cutStringFilter() {
+        return function (str, length, onlyFullWords) {
+            length = +length;
+            if (!str || length <= 0) {
+                return '';
+            }
+            if (isNaN(length) || str.length < length) {
+                return str;
+            }
+            var words = str.split(' ');
+            var newStr = '';
+            if (onlyFullWords) {
+                for (var i = 0; i < words.length; i++) {
+                    if (newStr.length + words[i].length <= length) {
+                        newStr = newStr + words[i] + ' ';
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                newStr = str.substr(0, length);
+            }
+
+            return newStr + '...';
+        };
+    });
+})(angular);
+
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.userGoals').directive('goalSelect', function GoalSelectDirective() {
 
         var directive = {
@@ -1061,8 +1115,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
  * */
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoals').directive('schoolSelect', ['UserSchoolsService', '$filter', 'UtilitySrv', '$timeout', '$q',
-        function SchoolSelectDirective(UserSchoolsService, $filter, UtilitySrv, $timeout, $q) {
+    angular.module('znk.infra-web-app.userGoals').directive('schoolSelect', ['UserSchoolsService', '$translate', 'UtilitySrv', '$timeout', '$q', '$translatePartialLoader',
+        function SchoolSelectDirective(UserSchoolsService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
             'ngInject';
 
             var schoolList = [];
@@ -1075,9 +1129,10 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     getSelectedSchools: '&?'
                 },
                 link: function link(scope, element, attrs) {
+                    $translatePartialLoader.addPart('userGoals');
+
                     var MIN_LENGTH_AUTO_COMPLETE = 3;
                     var MAX_SCHOOLS_SELECT = 3;
-                    var tagsInputEmptyPlaceHolder = $filter('translate')('SCHOOL_SELECT.SELECT_3_SCHOOLS');
                     var userSchools;
 
                     function disableSearchOption() {
@@ -1122,7 +1177,9 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     getSelectedSchoolsProm.then(function (_userSchools) {
                         userSchools = _userSchools;
                         scope.d.userSchools = angular.copy(userSchools);
-                        scope.d.placeholder = scope.d.userSchools.length ? ' ' : tagsInputEmptyPlaceHolder;
+                        $translate('SCHOOL_SELECT.SELECT_3_SCHOOLS').then(function(val) {
+                            scope.d.placeholder = scope.d.userSchools.length ? ' ' : val;
+                        });
                         disableSearchOption();
                     });
 
@@ -1146,7 +1203,9 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
                     scope.d.onTagRemoved = function () {
                         if (!scope.d.userSchools.length) {
-                            scope.d.placeholder = tagsInputEmptyPlaceHolder;
+                            $translate('SCHOOL_SELECT.SELECT_3_SCHOOLS').then(function(val) {
+                                scope.d.placeholder =  val;
+                            });
                         }
                         disableSearchOption();
                         return true;
@@ -1154,17 +1213,20 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
                     scope.d.querySchools = function ($query) {
                         if ($query.length < 3) {
-                            return [];
+                            return $q.when([]);
                         }
                         var resultsArr = schoolList.filter(function (school) {
                             return school.text.toLowerCase().indexOf($query.toLowerCase()) > -1;
                         });
                         if (!resultsArr.length) {
-                            resultsArr = [{
-                                text: $filter('translate')('SCHOOL_SELECT.NO_RESULTS')
-                            }];
+                            resultsArr = $translate('SCHOOL_SELECT.NO_RESULTS').then(function(val) {
+                                return [{
+                                    text: val
+                                }];
+                            });
+
                         }
-                        return resultsArr;
+                        return $q.when(resultsArr);
                     };
 
                     scope.d.save = function () {
@@ -1202,7 +1264,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     $translatePartialLoader.addPart('userGoals');
                     var userGoalRef;
                     scope.goalsSettingsFromSrv = UserGoalsService.getGoalsSettings();
-                    scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
+                    var defaultTitle = scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
 
                     var initTotalScore = 0;
                     angular.forEach(scope.goalsSettingsFromSrv.subjects, function() {
@@ -1354,7 +1416,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
                     });
 
                     userGoals.compositeScore = averageSubjectsGoal(userGoals);
-                    return save ? self.setGoals(userGoals) : $q.when(userGoals);
+                    return save ? userGoalsServiceObj.setGoals(userGoals) : $q.when(userGoals);
                 });
             };
 

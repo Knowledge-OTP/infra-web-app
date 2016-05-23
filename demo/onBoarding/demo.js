@@ -1,5 +1,5 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
-    .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider) {
+    .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider) {
 
         $urlRouterProvider.otherwise('/onBoarding');
 
@@ -38,6 +38,10 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
         InfraConfigSrvProvider.setUserDataFn(['AuthService', function (AuthService) {
             return AuthService.getAuth();
         }]);
+
+        OnBoardingServiceProvider.settings = {
+           showSchoolStep: true
+        };
 
         DiagnosticIntroSrvProvider.setConfigMapFn(['ENV', function(ENV) {
             return {
@@ -137,7 +141,7 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
         }
     })// mock ENV
     .service('ENV', function () {
-        this.dreamSchoolJsonUrl = "./mock/dreamSchools.json";
+        this.dreamSchoolJsonUrl = "./onBoarding/mock/dreamSchools.json";
         this.promiseTimeOut = 5000;
         this.MATH = 0; // mock subject id from enum
         this.ENGLISH = 7;

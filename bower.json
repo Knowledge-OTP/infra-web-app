@@ -15,7 +15,8 @@
     "angular-ui-router": "ui-router#^0.3.0",
     "angular-material": "^1.0.8",
     "angular-aria": "^1.4.8",
-    "angular-messages": "^1.4.8"
+    "angular-messages": "^1.4.8",
+    "ng-tags-input": "^3.0.0"
   },
   "ignore": [
     ".*",

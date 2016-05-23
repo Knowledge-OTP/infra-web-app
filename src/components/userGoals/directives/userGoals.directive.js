@@ -14,7 +14,7 @@
                     $translatePartialLoader.addPart('userGoals');
                     var userGoalRef;
                     scope.goalsSettingsFromSrv = UserGoalsService.getGoalsSettings();
-                    scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
+                    var defaultTitle = scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
 
                     var initTotalScore = 0;
                     angular.forEach(scope.goalsSettingsFromSrv.subjects, function() {

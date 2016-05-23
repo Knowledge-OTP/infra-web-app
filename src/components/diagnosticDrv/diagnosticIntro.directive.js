@@ -33,18 +33,22 @@ angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', [
                     return subject;
                 });
 
-                if (scope.d.activeId === 'none') {
-                    currMapIndex = -1;
-                    currMapData = mapData.none;
-                } else if (scope.d.activeId === 'all') {
-                    currMapIndex = Infinity;
-                    currMapData = mapData.all;
-                } else {
-                    currMapData = scope.d.subjects.filter(function(subject) {
-                        return subject.id === scope.d.activeId;
-                    })[0];
-                    currMapIndex = currMapData.mapId;
+                switch (scope.d.activeId) {
+                    case 'none':
+                        currMapIndex = -1;
+                        currMapData = mapData.none;
+                        break;
+                    case 'all':
+                        currMapIndex = Infinity;
+                        currMapData = mapData.all;
+                        break;
+                    default:
+                        currMapData = scope.d.subjects.filter(function(subject) {
+                            return subject.id === scope.d.activeId;
+                        })[0];
+                        currMapIndex = currMapData.mapId;
                 }
+
                 scope.d.currMapData = currMapData;
                 scope.d.currMapIndex = currMapIndex;
             }).catch(function(err) {
