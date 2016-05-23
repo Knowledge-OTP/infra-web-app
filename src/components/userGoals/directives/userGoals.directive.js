@@ -13,7 +13,14 @@
                 link: function link(scope) {
                     $translatePartialLoader.addPart('userGoals');
                     var userGoalRef;
+                    scope.goalsSettingsFromSrv = UserGoalsService.getGoalsSettings();
                     scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
+
+                    var initTotalScore = 0;
+                    angular.forEach(scope.goalsSettingsFromSrv.subjects, function() {
+                        initTotalScore += scope.goalsSettingsFromSrv.defaultSubjectScore;
+                    });
+                    scope.totalScore = initTotalScore;
 
                     UserGoalsService.getGoals().then(function (userGoals) {
                         userGoalRef = userGoals;
@@ -35,7 +42,13 @@
 
                     scope.calcTotal = function () {
                         var goals = scope.userGoals;
-                        goals.totalScore = goals.verbal + goals.math;
+                        var newTotalScore = 0;
+                        angular.forEach(goals, function(goal, key) {
+                            if (angular.isNumber(goal) && key !== 'totalScore') {
+                                newTotalScore += goal;
+                            }
+                        });
+                        goals.totalScore = scope.totalScore = newTotalScore;
                         return goals.totalScore;
                     };
 

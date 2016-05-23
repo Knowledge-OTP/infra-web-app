@@ -1,5 +1,5 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
-    .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, DiagnosticIntroSrvProvider) {
+    .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider) {
 
         $urlRouterProvider.otherwise('/onBoarding');
 
@@ -102,6 +102,18 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
         DiagnosticIntroSrvProvider.setActiveFn(['ENV', function(ENV) {
             return { id: ENV.ENGLISH };
         }]);
+
+        UserGoalsServiceProvider.settings = {
+            defaultSubjectScore: 600,
+            minSchoolScore: 400,
+            maxSchoolScore: 1600,
+            scoreTitleTranslate: '.TOTAL_SCORE',
+            goalsInfoTranslate: '.GOALS_INFO',
+            subjects: [
+                { name: 'math', bgClass: 'math-bg', svgIcon: 'math-section-icon', subjectTranslate: '.MATH' },
+                { name: 'verbal', bgClass: 'verbal-bg', svgIcon: 'verbal-icon', subjectTranslate: '.VERBAL' }
+            ]
+        };
     })
     .run(function ($rootScope, $translate) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
