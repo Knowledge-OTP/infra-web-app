@@ -81,7 +81,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
             function _defaultUserGoals() {
                 var defaultUserGoals = {
                     isCompleted: false,
-                    totalScore: defaultSubjectScore * 2
+                    totalScore: defaultSubjectScore * subjects.length
                 };
                 angular.forEach(subjects, function(subject) {
                     defaultUserGoals[subject.name] = defaultSubjectScore;
