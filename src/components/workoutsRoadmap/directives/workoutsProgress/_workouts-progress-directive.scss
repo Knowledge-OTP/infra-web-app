@@ -1,3 +1,5 @@
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+
 workouts-progress {
     display: block;
     position: relative;
@@ -29,7 +31,7 @@ workouts-progress {
                 &.future {
                     flex-grow: 1;
                     border: {
-                        top-color: $borderColor7;
+                        top-color: $borderColor5;
                     }
                 }
             }
@@ -47,7 +49,7 @@ workouts-progress {
 
             &.diagnostic {
                 .item {
-                    background: $bgColor12;
+                    background: $bgColor7;
 
                     &.selected:after {
                         border-color: $borderColor3;
@@ -56,7 +58,7 @@ workouts-progress {
                     .flag-icon {
                         width: 23px;
                         .sto {
-                            //stroke: $bgColor2;
+                            //stroke: $#bgColor2;
                         }
                     }
                 }
@@ -68,20 +70,20 @@ workouts-progress {
                 display: inline-block;
                 @include dimension(50px);
                 border-radius: 50%;
-                @include text-style(28px, $fontColor9, Quicksand);
+                @include text-style(28px, $fontColor8, Quicksand);
                 @include flex-inline-middle;
                 transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1);
 
                 &.selected {
                     //font-size: 28px;
                     transform: scale(1);
-                    color: $fontColor9;
+                    color: $fontColor8;
                     position: relative;
                     border: none;
                     &:after {
                         content: '';
                         @include absolute-position(-3px, -3px, -3px, -3px);
-                        border: 1px solid $borderColor8;
+                        border: 1px solid $borderColor6;
                         border: {
                             radius: 50%;
                         }
@@ -89,38 +91,38 @@ workouts-progress {
 
                     &.pristine {
                         background: $bgColor24;
-                        color: $fontColor9;
+                        color: $fontColor8;
                         &.selected {
                             &:after {
-                                border: 1px solid $borderColor8;
+                                border: 1px solid $borderColor6;
                             }
                         }
                     }
 
-                    &.math-bg:after {
-                        border-color: $mathColor;
-                    }
-
-                    &.verbal-bg:after {
-                        border-color: $verbalColor;
-                    }
-
-                    &.essay-bg:after {
-                        border-color: $essayColor;
-                    }
+                    //&.math-bg:after {
+                    //    border-color: $mathColor;
+                    //}
+                    //
+                    //&.verbal-bg:after {
+                    //    border-color: $verbalColor;
+                    //}
+                    //
+                    //&.essay-bg:after {
+                    //    border-color: $essayColor;
+                    //}
                 }
 
                 &.pristine {
-                    background: $bgColor2;
+                    background: $bgColor3;
                     border: 1px solid $bgColor24;
-                    color: $fontColor8;
+                    color: $fontColor9;
                 }
 
                 .check-mark-icon {
                     width: 1em;
 
                     .st0 {
-                        stroke: $bgColor2;
+                        stroke: $bgColor3;
                     }
                 }
             }
@@ -129,8 +131,8 @@ workouts-progress {
         .future-item{
             @include dimension(10px);
             border-radius: 50%;
-            border: 1px solid $borderColor8;
-            background: $bgColor2;
+            border: 1px solid $borderColor6;
+            background: $bgColor3;
             box-sizing: border-box;
             position: relative;
             z-index: 1;
