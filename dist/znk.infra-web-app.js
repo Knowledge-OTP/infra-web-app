@@ -238,10 +238,10 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
             var self = this;
             self.expandIcon = 'expand_more';
 
-            //self.userProfile = {
-            //    username: 'asdadasd',
-            //    email:'asdasdasd@zasasdasd'
-            //};
+            self.userProfile = {  // mock
+                username: 'asdada',
+                email:'asdasdasd@zasasdasd'
+            };
 
             this.znkOpenModal = function() {
                 this.expandIcon = 'expand_less';
@@ -249,6 +249,8 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
                 //    self.isOnBoardingCompleted = isCompleted;
                 //});
             };
+
+            this.subscriptionStatus = '.PROFILE_STATUS_BASIC';  // mock
 
             $scope.$on('$mdMenuClose', function(){
                 self.expandIcon = 'expand_more';

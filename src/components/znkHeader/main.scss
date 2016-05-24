@@ -1,6 +1,6 @@
 @import '../../../src/scss/imports/colors',
         '../../../src/scss/imports/variables',
-        //'../../../bower_components/angular-material/angular-material.css',    // check why angular material not loaded from here (only from index.html)
+        '../../../bower_components/angular-material/angular-material.scss',    // check why angular material not loaded from here (only from index.html)
         '../../../bower_components/infra/dist/mixins/mixins';
 
 @import url(http://fonts.googleapis.com/icon?family=Material+Icons);  // need to make it shared scss ?
@@ -85,6 +85,9 @@
             .md-button {
                 background: $bgColor1;
                 width: auto;
+                display: flex !important;             // shared style for buttons?
+                justify-content: center;
+                align-items: center;
                 div{
                     min-width: 40px;
                 }

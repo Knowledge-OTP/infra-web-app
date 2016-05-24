@@ -32,10 +32,8 @@ login-form {
     margin-left: auto;
     padding-right: 21px;
     padding-left: 21px;
-    display: -ms-flexbox;
     display: flex;
-    -ms-flex-align: center;
-        align-items: center; }
+    align-items: center; }
     login-form .login-form-container .inputs-container .input-wrapper:last-child {
       margin-bottom: 35px; }
     login-form .login-form-container .inputs-container .input-wrapper svg-icon {
@@ -43,8 +41,7 @@ login-form {
     login-form .login-form-container .inputs-container .input-wrapper input {
       height: 41px;
       border: none;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+      flex-grow: 1;
       padding: 0;
       outline: none;
       font-weight: 400;
