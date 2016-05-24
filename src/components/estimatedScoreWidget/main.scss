@@ -1,0 +1,291 @@
+estimated-score-widget {
+
+    &.is-nav-menu .score-estimate-container {
+        .subjects-wrap {
+            border: {
+                top: solid;
+                color: $bcColor17;
+                width: 2px;
+            }
+        }
+        .subject {
+            color: transparent;
+            margin: 0;
+            height: 92px;
+            padding: 27px 31px;
+            transition: border 0.2s;
+            border-bottom: {
+                style: solid;
+                color: $bcColor17;
+                width: 2px;
+            }
+            border-left: {
+                style: solid;
+                width: 2px;
+            }
+            &.english {
+                border-left-color: $englishDone;
+            }
+            &.math {
+                border-left-color: $mathDone;
+            }
+            &.reading {
+                border-left-color: $readingDone;
+            }
+            &.science {
+                border-left-color: $scienceDone;
+            }
+            &.writing {
+                border-left-color: $writingDone;
+            }
+            &.selected {
+                background-color: $bgColor1;
+                border-left: {
+                    width: 7px;
+                }
+                border-top: {
+                    style: solid;
+                    color: $bcColor18;
+                    width:1px;
+                }
+                border-bottom: {
+                    style: solid;
+                    color: $bcColor18;
+                    width:1px;
+                }
+            }
+        }
+        .divider {
+            display: none;
+        }
+    }
+
+    .score-estimate-container {
+        width: 323px;
+        position: relative;
+
+        .inner {
+            padding: 18px 31px;
+        }
+
+        .divider {
+            width:100%;
+            height:2px;
+            position: absolute;
+            background-color: $bgColor1;
+        }
+
+        .title {
+            text-align: center;
+            @include text-style(18px, $fcColor7, Quicksand, 700);
+            padding: 18px 31px 0 31px;
+            margin-bottom: 50px;
+        }
+
+        .unfinished-diagnostic-title{
+            @include text-style(11px, $fcColor11, Lato, $lightFontWeight);
+            width: 200px;
+            position: relative;
+            bottom: 43px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        // progress bar
+
+        .subject {
+            box-sizing: border-box;
+            margin-bottom: 25px;
+            padding: 0 31px;
+            .subject-title {
+                text-align: left;
+                @include text-style(16px, $fcColor7, Lato, 400);
+                .to-go {
+                    float:right;
+                    @include text-style(13px, $fcColor7, Lato, 300);
+                }
+            }
+
+            &:hover {
+                background-color: $bgColor58;
+            }
+
+            .score {
+                position: relative;
+                height: 30px;
+                z-index: 10;
+                hr.bar,
+                hr.user-goal-fill,
+                hr.current-estimated-score-fill {
+                    height: 9px;
+                    border: none;
+                    position: absolute;
+                    z-index: 1;
+                    margin: 10px 0;
+                }
+                hr.bar {
+                    width: 100%;
+                    background: $bgColor69;
+                    border-radius: 10px;
+                }
+                hr.user-goal-fill {
+                    width: 0;
+                    background: $bgColor67;
+                    border-bottom-left-radius: 10px;
+                    border-top-left-radius: 10px;
+                    &.bar-full {
+                        border-bottom-right-radius: 10px;
+                        border-top-right-radius: 10px;
+                    }
+                    &.user-goal-met {
+                        z-index: 2;
+                        background: transparent;
+                        border-right: {
+                            width: 2px;
+                            style: solid;
+                        }
+                        &.english {
+                            border-right-color: $englishDone;
+                        }
+                        &.math {
+                            border-right-color: $mathDone;
+                        }
+                        &.reading {
+                            border-right-color: $readingDone;
+                        }
+                        &.science {
+                            border-right-color: $scienceDone;
+                        }
+                        &.writing {
+                            border-right-color: $writingDone;
+                        }
+                    }
+                }
+                hr.current-estimated-score-fill {
+                    width: 0;
+                    border-bottom-left-radius: 10px;
+                    border-top-left-radius: 10px;
+                }
+                div.current-estimated-score {
+                    text-align: center;
+                    font-size: 12px;
+                    position: relative;
+                    span {
+                        @include text-style(17px, $fcColor7, Lato, 400);
+                        position: absolute;
+                        width: 28px;
+                        height: 28px;
+                        line-height: 29px;
+                        border-radius: 20px;
+                        border: {
+                            width: 1px;
+                            style: solid;
+                        }
+                        background: $bgColor2;
+                        left: 0;
+                        margin-left: -15px;
+                        content: '';
+                        z-index: 4;
+                        cursor: default;
+                    }
+                }
+            }
+        }
+
+        table.score-summary {
+            border-spacing: 15px;
+            margin: {
+                top: 0;
+                right: -15px;
+                bottom: 15px;
+                left: -15px;
+            }
+            tr.composite {
+                @include text-style(18px, $fcColor7, Lato, 400);
+                td.num {
+                    @include text-style(21px, $fcColor7, Quicksand, 700);
+                }
+            }
+            tr.goal {
+                @include text-style(18px, $fcColor7, Lato, 300);
+                td.num {
+                    @include text-style(21px, $fcColor7, Quicksand, 400);
+                }
+            }
+        }
+
+        span.edit-my-goals {
+            text-align: left;
+            @include text-style(14px, $fcColor5, Lato, 400);
+            &:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .estimated-score-animation {
+        hr{
+            &.current-estimated-score-fill{
+                transition: width 0.4s;
+            }
+        }
+        .current-estimated-score {
+            span {
+                transition: left 0.4s;
+            }
+        }
+    }
+}
+
+md-tooltip.tooltip-for-estimated-score-widget {
+    opacity: 0;
+    width: 150px;
+    height: 87px;
+    background: $bgColor2;
+    padding:0 5px;
+    .md-content {
+        height: auto;
+        text-align: center;
+        background: $bgColor2;
+        white-space: normal;
+        // override and cancel .md-content transitions and transform
+        &.md-show {
+            opacity: 1;
+            transform: none;
+            transition: none;
+            pointer-events: auto;
+            will-change: auto;
+        }
+        &.md-show-remove {
+            transition: none;
+            &.md-show-remove-active {
+                transform: none;
+                opacity: 0;
+            }
+        }
+        .top-text {
+            margin: {
+                top: 22px;
+                bottom: 12px;
+            }
+            @include text-style(16px, $fcColor7, Lato, 400);
+        }
+        .bottom-text {
+            line-height: 12px;
+            @include text-style(12px, $fcColor7, Lato, 300);
+        }
+    }
+
+    &.md-hide {
+        transition: opacity 0.4s;
+        opacity: 0;
+    }
+
+    &.md-show {
+        opacity: 1;
+        transition: opacity 0.4s;
+        pointer-events: auto;
+        will-change: opacity;
+    }
+}
