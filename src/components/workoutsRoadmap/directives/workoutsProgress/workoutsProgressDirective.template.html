@@ -11,8 +11,14 @@
                  }"
                  ng-click="vm.workoutClick(vm.diagnostic.workoutOrder)">
                 <ng-switch on="vm.diagnostic.status">
-                    <svg-icon class="check-mark-icon" name="check-mark" ng-switch-when="2"></svg-icon>
-                    <svg-icon class="flag-icon" name="workouts-progress-flag" ng-switch-default></svg-icon>
+                    <svg-icon class="check-mark-icon"
+                              name="workouts-progress-check-mark-icon"
+                              ng-switch-when="2">
+                    </svg-icon>
+                    <svg-icon class="flag-icon"
+                              name="workouts-progress-flag"
+                              ng-switch-default>
+                    </svg-icon>
                 </ng-switch>
             </div>
         </div>
@@ -27,7 +33,7 @@
                  }"
                  ng-click="vm.workoutClick(workout.workoutOrder)">
                 <ng-switch on="workout.status">
-                    <svg-icon class="check-mark-icon" name="check-mark" ng-switch-when="2"></svg-icon>
+                    <svg-icon class="check-mark-icon" name="workouts-progress-check-mark-icon" ng-switch-when="2"></svg-icon>
                     <span ng-switch-default>
                         {{::workout.workoutOrder}}
                     </span>

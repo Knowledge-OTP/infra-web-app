@@ -1,11 +1,11 @@
 angular.module('demo', [
-        'znk.infra-web-app.workoutsRoadmap',
-        'pascalprecht.translate'])
+    'znk.infra-web-app.workoutsRoadmap',
+    'pascalprecht.translate'])
     .config(function ($translateProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
-                urlTemplate: '/{part}/locale/{lang}.json'
-            })
-            .preferredLanguage('en');
+            urlTemplate: '/{part}/locale/{lang}.json'
+        })
+        .preferredLanguage('en');
     })
     .run(function ($rootScope, $translate) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {

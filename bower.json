@@ -12,7 +12,8 @@
     "angular-translate-loader-partial": "^2.11.0",
     "angular-translate": "^2.11.0",
     "infra": "https://github.com/Knowledge-OTP/infra.git#igor/ver-5-workouts-srv",
-    "angular-ui-router": "ui-router#^0.3.0"
+    "angular-ui-router": "0.3.0",
+    "angular-material": "1.0.9"
   },
   "ignore": [
     ".*",

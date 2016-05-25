@@ -1,7 +1,9 @@
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        function (data, $state, $scope, ExerciseStatusEnum, $location) {
+        function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
+
+            $translatePartialLoader.addPart('workoutsRoadmap');
 
             var vm = this;
             var activeWorkout;
@@ -95,7 +97,7 @@
                 var currentStateName = $state.current.name;
                 if (newItem.workoutOrder === 0) {
                     if (currentStateName !== DIAGNOSTIC_STATE) {
-                        // $state.go(DIAGNOSTIC_STATE);
+                        $state.go(DIAGNOSTIC_STATE);
                     }
                 } else {
                     search = $location.search();
