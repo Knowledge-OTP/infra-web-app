@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;background: rgba(43, 43, 191, 0.08);">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="angular-material/angular-material.css">
+    <link rel="stylesheet" href="uiTheme/main.css">
+    <style>
+        .main-container{
+            text-align: center;
+        }
+    </style>
+</head>
+<body ng-app="demo">
+<div class="main-container">
+    <div>
+        <md-button class="md-primary znk"
+                   md-no-ink
+                   ng-disabled="true"
+                   ng-cloak>Primary Flat
+        </md-button>
+    </div>
+    <div>
+        <md-button class="md-primary znk"
+                   href="localhost:9002"
+                   md-no-ink
+                   ng-cloak>Primary Flat href
+        </md-button>
+    </div>
+</div>
+<script src="angular/angular.js"></script>
+<script src="angular-animate/angular-animate.js"></script>
+<script src="angular-aria/angular-aria.js"></script>
+<script src="angular-material/angular-material.js"></script>
+
+
+<script src="demo.js"></script>
+</body>
+</html>

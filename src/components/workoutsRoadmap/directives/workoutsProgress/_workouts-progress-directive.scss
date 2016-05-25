@@ -1,0 +1,143 @@
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+
+workouts-progress {
+    display: block;
+    position: relative;
+    overflow: hidden;
+
+    .items-container {
+        height: 67px;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        padding: {
+            right: 90px;
+            left: 300px;
+        }
+
+        .dotted-lines-container {
+            @include absolute-full-cover;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+
+            .dotted-line {
+                border: {
+                    top: 2px dotted $borderColor4;
+                }
+                display: inline-block;
+
+                &.future {
+                    flex-grow: 1;
+                    border: {
+                        top-color: $borderColor5;
+                    }
+                }
+            }
+        }
+
+        .item-container {
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            cursor: pointer;
+            padding: {
+                left: 17.5px;
+                right: 17.5px;
+            }
+
+            &.diagnostic {
+                .item {
+                    background: $bgColor7;
+
+                    &.selected:after {
+                        border-color: $borderColor3;
+                    }
+
+                    .flag-icon {
+                        width: 23px;
+                        .sto {
+                            //stroke: $#bgColor2;
+                        }
+                    }
+                }
+            }
+
+            .item {
+                transform: scale(0.6);
+                box-sizing: border-box;
+                display: inline-block;
+                @include dimension(50px);
+                border-radius: 50%;
+                @include text-style(28px, $fontColor8, Quicksand);
+                @include flex-inline-middle;
+                transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1);
+
+                &.selected {
+                    //font-size: 28px;
+                    transform: scale(1);
+                    color: $fontColor8;
+                    position: relative;
+                    border: none;
+                    &:after {
+                        content: '';
+                        @include absolute-position(-3px, -3px, -3px, -3px);
+                        border: 1px solid $borderColor6;
+                        border: {
+                            radius: 50%;
+                        }
+                    }
+
+                    &.pristine {
+                        background: $bgColor24;
+                        color: $fontColor8;
+                        &.selected {
+                            &:after {
+                                border: 1px solid $borderColor6;
+                            }
+                        }
+                    }
+
+                    //&.math-bg:after {
+                    //    border-color: $mathColor;
+                    //}
+                    //
+                    //&.verbal-bg:after {
+                    //    border-color: $verbalColor;
+                    //}
+                    //
+                    //&.essay-bg:after {
+                    //    border-color: $essayColor;
+                    //}
+                }
+
+                &.pristine {
+                    background: $bgColor3;
+                    border: 1px solid $bgColor24;
+                    color: $fontColor9;
+                }
+
+                .check-mark-icon {
+                    width: 1em;
+
+                    .st0 {
+                        stroke: $bgColor3;
+                    }
+                }
+            }
+        }
+
+        .future-item{
+            @include dimension(10px);
+            border-radius: 50%;
+            border: 1px solid $borderColor6;
+            background: $bgColor3;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            margin-right: 17px;
+            margin-left: 17px;
+        }
+    }
+}
