@@ -56,146 +56,11 @@ diagnostic-intro {
                     border-radius: 50%;
                     display: inline-block;
                     border: 2px solid;
-                    border-color: $borderColor5;
+                    border-color: $borderColor8;
                     position: relative;
 
                     &:nth-child(3n+1) {
                         align-self: flex-end;
-                    }
-                    &.math-color {
-                        border-color: $mathColor;
-                        svg-icon {
-                            svg {
-                                fill: $mathColor;
-                            }
-                        }
-                        &.active {
-                            background-color: $mathColor;
-                            svg-icon {
-                                svg {
-                                    fill: $bgColor1;
-                                }
-                            }
-                        }
-                        &.done {
-                            border-color: $mathColor;
-                            background-color: $mathColor;
-                            .subject-icon {
-                                display: none;
-                            }
-
-                        }
-                    }
-                    &.verbal-color {
-                        border-color: $verbalColor;
-                        svg-icon {
-                            svg {
-                                * {
-                                    fill: $verbalColor;
-                                    stroke: $bgColor1;
-                                }
-                            }
-                        }
-                        &.active {
-                            border-color: $readingColor;
-                            background-color: $readingColor;
-                            svg-icon {
-                                svg {
-                                    * {
-                                        fill: $bgColor1;
-                                        stroke: $bgColor1;
-                                    }
-                                }
-                            }
-                        }
-                        &.done {
-                            border-color: $readingColor;
-                            background-color: $readingColor;
-                            .subject-icon {
-                                display: none;
-                            }
-                        }
-                    }
-                    &.english-color {
-                        border-color: $englishColor;
-                        svg-icon {
-                            svg {
-                                fill: $englishColor;
-                            }
-                        }
-                        &.active {
-                            border-color: $englishColor;
-                            background-color: $englishColor;
-                            svg-icon {
-                                svg {
-                                    * {
-                                        fill: $bgColor1;
-                                        stroke: $bgColor1;
-                                    }
-                                }
-                            }
-                        }
-                        &.done {
-                            border-color: $englishColor;
-                            background-color: $englishColor;
-                            .subject-icon {
-                                display: none;
-                            }
-                        }
-                    }
-                    &.reading-color {
-                        border-color: $readingColor;
-                        svg-icon {
-                            svg {
-                                fill: $readingColor;
-                            }
-                        }
-                        &.active {
-                            border-color: $readingColor;
-                            background-color: $readingColor;
-                            svg-icon {
-                                svg {
-                                    * {
-                                        fill: $bgColor1;
-                                        stroke: $bgColor1;
-                                    }
-                                }
-                            }
-                        }
-                        &.done {
-                            border-color: $readingColor;
-                            background-color: $readingColor;
-                            .subject-icon {
-                                display: none;
-                            }
-                        }
-                    }
-                    &.science-color {
-                        border-color: $scienceColor;
-                        svg-icon {
-                            svg {
-                                fill: $scienceColor;
-                            }
-                        }
-                        &.active {
-                            border-color: $scienceColor;
-                            background-color: $scienceColor;
-                            svg-icon {
-                                svg {
-                                    * {
-                                        fill: $bgColor1;
-                                        stroke: $bgColor1;
-                                    }
-                                }
-                            }
-                        }
-                        &.done {
-                            border-color: $scienceColor;
-                            background-color: $scienceColor;
-                            .subject-icon {
-                                display: none;
-                            }
-                        }
                     }
 
                     &.done {
@@ -253,21 +118,6 @@ diagnostic-intro {
         .section-question {
             @include text-style(18px, $fontColor4, Lato, $regularFontWeight);
             text-transform: uppercase;
-            .math {
-                color: $mathColor;
-            }
-            .verbal {
-                color: $verbalColor;
-            }
-            .english {
-                color: $englishColor;
-            }
-            .reading {
-                color: $readingColor;
-            }
-            .science {
-                color: $scienceColor;
-            }
             .diagnostic-instructions {
                 margin-top: 40px;
                 text-transform: none;

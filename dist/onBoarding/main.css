@@ -17655,24 +17655,9 @@ on-boarding-bar {
 /* Material+Icons */
 .on-board {
   /**
-    *  MAIN COLORS
-    */
-  /**
      *  SVG
      */
   position: relative; }
-  .on-board .math-bc {
-    border-color: #AF89D2; }
-  .on-board .math-bg {
-    background-color: #AF89D2; }
-  .on-board .verbal-bc {
-    border-color: #F9D41B; }
-  .on-board .verbal-bg {
-    background-color: #F9D41B; }
-  .on-board .essay-bc {
-    border-color: #FF5895; }
-  .on-board .essay-bg {
-    background-color: #FF5895; }
   .on-board .svg-wrapper {
     height: 100%;
     display: flex;

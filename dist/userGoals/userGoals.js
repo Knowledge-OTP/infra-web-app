@@ -687,7 +687,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
     "                <md-tooltip md-visible=\"vm.showTooltip\" md-direction=\"top\" class=\"goals-info md-whiteframe-2dp\">\n" +
     "                    <div translate=\".GOALS_INFO\" class=\"top-text\"></div>\n" +
     "                </md-tooltip>\n" +
-    "                <svg-icon class=\"user-goals-info-icon\" name=\"info-icon\" ng-mouseover=\"vm.showTooltip=true\" ng-mouseleave=\"vm.showTooltip=false\"></svg-icon>\n" +
+    "                <svg-icon class=\"info-icon\" name=\"user-goals-info-icon\" ng-mouseover=\"vm.showTooltip=true\" ng-mouseleave=\"vm.showTooltip=false\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"subject-goal-wrap\">\n" +

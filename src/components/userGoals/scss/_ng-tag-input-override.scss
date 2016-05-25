@@ -42,7 +42,7 @@ tags-input{
         }
         .suggestion-item.selected{
             &.selected{
-                background-color: $borderColor6;
+                background-color: $borderColor9;
                 color: white;
             }
         }
@@ -70,7 +70,7 @@ tags-input{
                 @include text-style(14px, $fontColor6,Lato,$regularFontWeight);
                 float: left;
                 .location{
-                    @include text-style(12px, $fontColor8,Lato,$lightFontWeight);
+                    @include text-style(12px, $fontColor9,Lato,$lightFontWeight);
                 }
             }
 
