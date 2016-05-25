@@ -10,10 +10,6 @@
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.config').run(['$templateCache', function($templateCache) {
-
-}]);
-
 (function (angular) {
     'use strict';
 
@@ -29,3 +25,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
         }
     ]);
 })(angular);
+
+angular.module('znk.infra-web-app.config').run(['$templateCache', function($templateCache) {
+
+}]);

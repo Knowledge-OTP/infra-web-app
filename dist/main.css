@@ -35522,7 +35522,7 @@ on-boarding-bar {
     box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
   .on-board .smile-raccoon {
     /*CSS for basic styling and non-retina image path:*/
-    background-image: url("./images/smile-raccoon.png");
+    background-image: url("./assets/images/smile-raccoon.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -35532,7 +35532,7 @@ on-boarding-bar {
     /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
     @media only screen and (min-resolution: 1.5dppx) {
       .on-board .smile-raccoon {
-        background-image: url("./images/smile-raccoon@2x.png");
+        background-image: url("./assets/images/smile-raccoon@2x.png");
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
@@ -53596,4 +53596,3 @@ school-select .school-selector .selector .tag-input-wrap {
   font-weight: 200;
   margin-bottom: 20px;
   text-align: center; }
-
