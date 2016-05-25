@@ -227,12 +227,11 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     'use strict';
 
     //angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-    //    ['$scope', 'purchaseService', 'AuthService', '$window', '$mdDialog', 'UserProfileService', 'PurchaseStateEnum', 'ENV', 'OnBoardingService',
-    //    function() {
+    //    ['purchaseService', 'AuthService', 'UserProfileService', 'PurchaseStateEnum', 'ENV', 'OnBoardingService',
 
 
-    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',['$scope', '$translatePartialLoader',
-        function($scope,$translatePartialLoader) {
+    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',['$scope', '$translatePartialLoader','$mdDialog', '$window',
+        function($scope,$translatePartialLoader, $mdDialog, $window) {
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
