@@ -1,3 +1,4 @@
+"use strict";
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticIntroController',
         function (/*WorkoutsDiagnosticFlow*/) {
