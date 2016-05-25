@@ -66,7 +66,11 @@
             function(SvgIconSrvProvider){
 
                 var svgMap = {
-                    'raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg'
+                    'raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
+                    'purchase-popup-bullet-1-icon': 'components/znkHeader/svg/purchase-popup-bullet-1-icon.svg',
+                    'purchase-popup-bullet-2-icon': 'components/znkHeader/svg/purchase-popup-bullet-2-icon.svg',
+                    'purchase-popup-bullet-3-icon': 'components/znkHeader/svg/purchase-popup-bullet-3-icon.svg',
+                    'purchase-popup-bullet-4-icon': 'components/znkHeader/svg/purchase-popup-bullet-4-icon.svg',
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -624,7 +628,7 @@ angular.module('znk.infra-web-app.purchase').service('UserProfileService', funct
                 //});
                 return $mdDialog.show({
                     controller: 'PurchaseDialogController',
-                    templateUrl: 'components/purchase/templates/purchaseBtn.template.html',
+                    templateUrl: 'components/purchase/templates/purchasePopup.template.html',
                     disableParentScroll: false,
                     clickOutsideToClose: true,
                     fullscreen: false,
@@ -636,11 +640,11 @@ angular.module('znk.infra-web-app.purchase').service('UserProfileService', funct
                 return $mdDialog.hide();
             };
 
-            //this.showPurchaseError = function () {
-            //    var popUpTitle = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_TITLE');
-            //    var popUpContent = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_CONTENT');
-            //    PopUpSrv.error(popUpTitle, popUpContent);
-            //};
+            this.showPurchaseError = function () {
+                var popUpTitle = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_TITLE');
+                var popUpContent = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_CONTENT');
+                PopUpSrv.error(popUpTitle, popUpContent);
+            };
 
             this.getPendingPurchase = function () {
                 return pendingPurchaseDefer && pendingPurchaseDefer.promise;
@@ -731,12 +735,186 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    </g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/purchase/svg/previous-icon.svg",
+    "<svg class=\"previous-icon\" x=\"0px\" y=\"0px\" viewBox=\"-406.9 425.5 190.9 175.7\">\n" +
+    "    <circle cx=\"-402.8\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"513\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"496.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"529.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"479.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"529.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"479.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"462.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"563.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"463.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"446.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"479.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"496.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"547\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"563.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"446.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"429.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"463.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"496.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"479.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"530.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"563.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"546.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"597.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"496.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"513.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"496.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"529.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"512.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"496.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"513.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"496.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"513.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/purchase-popup-bullet-1-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 117.5 141\">\n" +
+    "<path class=\"st0\" d=\"M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
+    "	C115.5,135.3,111.8,139,107.2,139z\"/>\n" +
+    "<line class=\"st0\" x1=\"19\" y1=\"26.5\" x2=\"96\" y2=\"26.5\"/>\n" +
+    "<line class=\"st0\" x1=\"19\" y1=\"44.7\" x2=\"70.5\" y2=\"44.7\"/>\n" +
+    "<line class=\"st0\" x1=\"48.5\" y1=\"62.9\" x2=\"96\" y2=\"62.9\"/>\n" +
+    "<line class=\"st0\" x1=\"22.5\" y1=\"81.1\" x2=\"96\" y2=\"81.1\"/>\n" +
+    "<line class=\"st0\" x1=\"22.5\" y1=\"99.3\" x2=\"59.2\" y2=\"99.3\"/>\n" +
+    "<line class=\"st0\" x1=\"72.2\" y1=\"99.3\" x2=\"94.2\" y2=\"99.3\"/>\n" +
+    "<line class=\"st0\" x1=\"22\" y1=\"117.5\" x2=\"95.5\" y2=\"117.5\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/purchase-popup-bullet-2-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 124 141\">\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M77.7,139H16.8c-4.5,0-8.3-3.7-8.3-8.3V10.3c0-4.5,3.7-8.3,8.3-8.3h60.9c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
+    "		C85.9,135.3,82.2,139,77.7,139z\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"21.2\" x2=\"17\" y2=\"21.2\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"40.9\" x2=\"17\" y2=\"40.9\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"60.6\" x2=\"17\" y2=\"60.6\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"80.4\" x2=\"17\" y2=\"80.4\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"100.1\" x2=\"17\" y2=\"100.1\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"119.8\" x2=\"17\" y2=\"119.8\"/>\n" +
+    "	<g>\n" +
+    "		<path class=\"st2\" d=\"M122,2v116l-7.3,21l-8.7-20.1V24.5V7.2c0,0,1-5.2,6.6-5.2S122,2,122,2z\"/>\n" +
+    "		<line class=\"st2\" x1=\"106\" y1=\"21.7\" x2=\"122\" y2=\"21.7\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/purchase-popup-bullet-3-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 117.5 141\">\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
+    "		C115.5,135.3,111.8,139,107.2,139z\"/>\n" +
+    "	<g>\n" +
+    "		<path class=\"st1\" d=\"M39.6,54.6c4.4-5.7,11.7-9.2,19.7-8.2c9.7,1.2,17.4,9.1,18.4,18.7c1.2,11-5.9,20.6-15.9,23.1\n" +
+    "			c-3.1,0.8-5.3,3.7-5.3,6.9v8.6\"/>\n" +
+    "		<circle cx=\"56.5\" cy=\"116.7\" r=\"2.8\"/>\n" +
+    "	</g>\n" +
+    "	<line class=\"st2\" x1=\"32.7\" y1=\"34.2\" x2=\"25.7\" y2=\"21.6\"/>\n" +
+    "	<line class=\"st2\" x1=\"84.8\" y1=\"34.2\" x2=\"91.8\" y2=\"21.6\"/>\n" +
+    "	<line class=\"st2\" x1=\"59.3\" y1=\"29.5\" x2=\"59.3\" y2=\"18.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/purchase-popup-bullet-4-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 208.1 203\" class=\"purchase-popup-bullet-4-icon\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .purchase-popup-bullet-4-icon .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #231F20;\n" +
+    "            stroke-width: 6;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .purchase-popup-bullet-4-icon .st1 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #231F20;\n" +
+    "            stroke-width: 6;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .purchase-popup-bullet-4-icon .st2 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #231F20;\n" +
+    "            stroke-width: 4;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path class=\"st0\" d=\"M104.2,3h74c0,0-8.8,65.7-14.7,82.9c-5.3,15.6-13,32.6-36.7,43.2c-12.3,5.5-10.3,21.7-10.3,31.5\n" +
+    "		c0,11.2,5.4,16.7,13.3,20.4c3.7,1.7,8.3,3.2,14.3,4v15h-40\"/>\n" +
+    "        <path class=\"st0\" d=\"M104.2,3h-74c0,0,8.8,65.7,14.7,82.9c5.3,15.6,13,32.6,36.7,43.2c12.3,5.5,10.3,21.7,10.3,31.5\n" +
+    "		c0,11.2-5.4,16.7-13.3,20.4c-3.7,1.7-8.3,3.2-14.3,4v15h40\"/>\n" +
+    "    </g>\n" +
+    "    <path class=\"st1\" d=\"M176.8,20.4c0,0,71.3-1.5-12.2,67.5\"/>\n" +
+    "    <path class=\"st1\" d=\"M31.3,20.4c0,0-71.3-1.5,12.2,67.5\"/>\n" +
+    "    <polygon class=\"st1\" points=\"102.6,22 113.1,43.4 136.6,46.8 119.6,63.4 123.6,86.9 102.6,75.8 81.5,86.9 85.5,63.4 68.5,46.8\n" +
+    "	92,43.4 \"/>\n" +
+    "    <line class=\"st2\" x1=\"66.6\" y1=\"193.9\" x2=\"143.6\" y2=\"193.9\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/purchase-popup-bullet-5-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 148.7 174.7\"\n" +
+    "    style=\"enable-background:new 0 0 148.7 174.7;\">\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M93.4,171.7H12.6c-5.3,0-9.6-4.3-9.6-9.6V81.3c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
+    "		C103,167.4,98.7,171.7,93.4,171.7z\"/>\n" +
+    "	<path class=\"st0\" d=\"M78.7,71.7V39.9C78.7,19.6,93.8,3,112.2,3h0c18.4,0,33.5,16.6,33.5,36.9v31.9\"/>\n" +
+    "	<path class=\"st1\" d=\"M53.2,101c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
+    "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,106.1,47.1,101,53.2,101\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/purchase/templates/purchaseBtn.template.html",
-    "<!--<ng-switch on=\"purchaseState\">-->\n" +
+    "<ng-switch on=\"purchaseState\" translate-namespace=\"PURCHASE_POPUP\">\n" +
     "\n" +
-    "    <!--<div ng-switch-when=\"pending\">-->\n" +
+    "    <div ng-switch-when=\"pending\">\n" +
     "\n" +
-    "        <div class=\"upgraded flex-container\">\n" +
+    "        <div class=\"upgraded flex-container\" >\n" +
     "            <div class=\"flex-item\">\n" +
     "                <div class=\"pending\">\n" +
     "                    <md-progress-circular md-mode=\"indeterminate\" md-diameter=\"45\"></md-progress-circular>\n" +
@@ -745,8 +923,8 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "    <!--</div>-->\n" +
-    "    <!--<div ng-switch-when=\"pro\">-->\n" +
+    "    </div>\n" +
+    "    <div ng-switch-when=\"pro\">\n" +
     "\n" +
     "        <div class=\"upgraded flex-container\">\n" +
     "            <div class=\"flex-item\">\n" +
@@ -757,11 +935,11 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "    <!--</div>-->\n" +
-    "    <!--<div ng-switch-when=\"none\">-->\n" +
+    "    </div>\n" +
+    "    <div ng-switch-when=\"none\">\n" +
     "\n" +
-    "        <!--<ng-switch on=\"vm.showForm\">-->\n" +
-    "            <!--<div ng-switch-when=\"true\">-->\n" +
+    "        <ng-switch on=\"vm.showForm\">\n" +
+    "            <div ng-switch-when=\"true\">\n" +
     "                <form\n" +
     "                    action=\"{{::vm.formAction}}\"\n" +
     "                    method=\"post\"\n" +
@@ -780,22 +958,22 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                                name=\"submit\">\n" +
     "                        </button>\n" +
     "                    </div>\n" +
-    "                    <!--<input type=\"image\" src=\"{{vm.btnImgSrc}}\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">-->\n" +
+    "                    <input type=\"image\" src=\"{{vm.btnImgSrc}}\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">\n" +
     "                    <img border=\"0\" ng-src=\"{{::vm.pixelGifSrc}}\" width=\"1\" height=\"1\" alt=\"{{vm.translate('PURCHASE_POPUP.PAYPAL_IMG_ALT')}}\" >\n" +
     "                </form>\n" +
-    "            <!--</div>-->\n" +
-    "            <!--<div ng-switch-default>-->\n" +
+    "            </div>\n" +
+    "            <div ng-switch-default>\n" +
     "                <button ng-click=\"vm.showPurchaseError()\"\n" +
     "                        class=\"md-button success drop-shadow\"\n" +
     "                        translate=\".UPGRADE_NOW\"\n" +
     "                        name=\"submit\">\n" +
     "                </button>\n" +
-    "            <!--</div>-->\n" +
+    "            </div>\n" +
     "\n" +
-    "        <!--</ng-switch>-->\n" +
+    "        </ng-switch>\n" +
     "\n" +
-    "    <!--</div>-->\n" +
-    "<!--</ng-switch>-->\n" +
+    "    </div>\n" +
+    "</ng-switch>\n" +
     "");
   $templateCache.put("components/purchase/templates/purchasePopup.template.html",
     "<md-dialog class=\"purchase-popup base-border-radius\" aria-label=\"Get Zinkerz\" translate-namespace=\"PURCHASE_POPUP\">\n" +

@@ -145,7 +145,7 @@
                 //});
                 return $mdDialog.show({
                     controller: 'PurchaseDialogController',
-                    templateUrl: 'components/purchase/templates/purchaseBtn.template.html',
+                    templateUrl: 'components/purchase/templates/purchasePopup.template.html',
                     disableParentScroll: false,
                     clickOutsideToClose: true,
                     fullscreen: false,
@@ -157,11 +157,11 @@
                 return $mdDialog.hide();
             };
 
-            //this.showPurchaseError = function () {
-            //    var popUpTitle = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_TITLE');
-            //    var popUpContent = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_CONTENT');
-            //    PopUpSrv.error(popUpTitle, popUpContent);
-            //};
+            this.showPurchaseError = function () {
+                var popUpTitle = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_TITLE');
+                var popUpContent = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_CONTENT');
+                PopUpSrv.error(popUpTitle, popUpContent);
+            };
 
             this.getPendingPurchase = function () {
                 return pendingPurchaseDefer && pendingPurchaseDefer.promise;
