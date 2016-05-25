@@ -1,4 +1,4 @@
-angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
+angular.module('demo', ['znk.infra-web-app.onBoarding'])
     .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider) {
 
         var svgMap = {
@@ -12,8 +12,7 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
         $translateProvider.useLoader('$translatePartialLoader', {
                 urlTemplate: '/{part}/locale/{lang}.json'
             })
-            .preferredLanguage('en')
-            .useSanitizeValueStrategy('sanitize');
+            .preferredLanguage('en');
 
         znkAnalyticsSrvProvider.setEventsHandler(function () {
             return {
