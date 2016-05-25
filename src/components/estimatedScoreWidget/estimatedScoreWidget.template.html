@@ -18,7 +18,7 @@
                       translate=".PTS_TO_GO"
                       translate-values="{pts: {{widgetItem.pointsLeftToMeetUserGoal}} }"></span>
             </div>
-            <div class="score">
+            <div class="score" ng-if="widgetItem.showScore">
                 <hr class="bar">
                 <hr class="user-goal-fill"
                     subject-id-to-attr-drv="{{widgetItem.subjectId}}"
@@ -67,6 +67,9 @@
                 <td class="num">{{vm.userCompositeGoal}}</td>
             </tr>
         </table>
-        <span class="edit-my-goals" ng-click="vm.showGoalsEdit()" translate=".EDIT_MY_GOALS"></span>
+        <span class="edit-my-goals ng-hide"
+              ng-show="vm.isDiagnosticComplete"
+              ng-click="vm.showGoalsEdit()"
+              translate=".EDIT_MY_GOALS"></span>
     </div>
 </div>

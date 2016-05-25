@@ -6,7 +6,7 @@
     'use strict';
 
     // angular.module('znk.infra-web-app').directive('EstimatedScoreWidget', ['$q', '$timeout', 'SubjectEnum', '$mdDialog', 'EstimatedScoreSrv', 'UserGoalsService', 'appConstants', 'WorkoutsDiagnosticFlow',
-    angular.module('znk.infra-web-app').directive('EstimatedScoreWidget', [
+    angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget', [
         function () {
             return {
                 templateUrl: 'app/components/estimatedScore/estimatedScoreWidget.template.html',
