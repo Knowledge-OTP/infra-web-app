@@ -1,4 +1,4 @@
-angular.module('demo', ['znk.infra-web-app.purchase'])
+angular.module('demo', ['znk.infra-web-app.purchase', 'ngSanitize'])
     .config(function ($translateProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: '/{part}/locale/{lang}.json'

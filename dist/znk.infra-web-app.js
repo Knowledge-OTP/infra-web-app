@@ -33,14 +33,34 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase',
-        ['ngAnimate', 'ngMaterial', 'pascalprecht.translate', 'znk.infra.svgIcon', 'znk.infra.enum']);
+        ['ngAnimate',
+            'ngMaterial',
+            'pascalprecht.translate',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'znk.infra.enum'])
+        .config([
+            'SvgIconSrvProvider',
+            function(SvgIconSrvProvider){
+
+                var svgMap = {
+                    'check-mark': 'components/purchase/svg/check-mark-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
 
 })(angular);
 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate', 'ngMaterial', 'znk.infra.svgIcon', 'pascalprecht.translate', 'znk.infra-web-app.purchase'])
+    angular.module('znk.infra-web-app.znkHeader',
+        ['ngAnimate',
+            'ngMaterial',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'znk.infra-web-app.purchase'])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){
@@ -280,8 +300,8 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn', [
-        'ENV', '$q', '$sce', 'AuthService', 'UserProfileService', '$location', 'purchaseService', '$filter', 'PurchaseStateEnum', '$log',
-        function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log) {
+        'ENV', '$q', '$sce', 'AuthService', 'UserProfileService', '$location', 'purchaseService', '$filter', 'PurchaseStateEnum', '$log', '$translatePartialLoader',
+        function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader) {
             return {
                 templateUrl:  'components/purchase/templates/purchaseBtn.template.html',
                 restrict: 'E',
@@ -289,6 +309,8 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
                     purchaseState: '='
                 },
                 link: function (scope) {
+                    $translatePartialLoader.addPart('purchase');
+
                     scope.vm = {};
 
                     scope.vm.translate = $filter('translate');
@@ -687,10 +709,32 @@ angular.module('znk.infra-web-app.purchase').service('UserProfileService', funct
 
 
 angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/purchase/svg/check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/purchase/templates/purchaseBtn.template.html",
-    "<ng-switch on=\"purchaseState\">\n" +
+    "<!--<ng-switch on=\"purchaseState\">-->\n" +
     "\n" +
-    "    <div ng-switch-when=\"pending\">\n" +
+    "    <!--<div ng-switch-when=\"pending\">-->\n" +
     "\n" +
     "        <div class=\"upgraded flex-container\">\n" +
     "            <div class=\"flex-item\">\n" +
@@ -701,8 +745,8 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "    </div>\n" +
-    "    <div ng-switch-when=\"pro\">\n" +
+    "    <!--</div>-->\n" +
+    "    <!--<div ng-switch-when=\"pro\">-->\n" +
     "\n" +
     "        <div class=\"upgraded flex-container\">\n" +
     "            <div class=\"flex-item\">\n" +
@@ -713,11 +757,11 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "    </div>\n" +
-    "    <div ng-switch-when=\"none\">\n" +
+    "    <!--</div>-->\n" +
+    "    <!--<div ng-switch-when=\"none\">-->\n" +
     "\n" +
-    "        <ng-switch on=\"vm.showForm\">\n" +
-    "            <div ng-switch-when=\"true\">\n" +
+    "        <!--<ng-switch on=\"vm.showForm\">-->\n" +
+    "            <!--<div ng-switch-when=\"true\">-->\n" +
     "                <form\n" +
     "                    action=\"{{::vm.formAction}}\"\n" +
     "                    method=\"post\"\n" +
@@ -739,19 +783,19 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                    <!--<input type=\"image\" src=\"{{vm.btnImgSrc}}\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">-->\n" +
     "                    <img border=\"0\" ng-src=\"{{::vm.pixelGifSrc}}\" width=\"1\" height=\"1\" alt=\"{{vm.translate('PURCHASE_POPUP.PAYPAL_IMG_ALT')}}\" >\n" +
     "                </form>\n" +
-    "            </div>\n" +
-    "            <div ng-switch-default>\n" +
+    "            <!--</div>-->\n" +
+    "            <!--<div ng-switch-default>-->\n" +
     "                <button ng-click=\"vm.showPurchaseError()\"\n" +
     "                        class=\"md-button success drop-shadow\"\n" +
     "                        translate=\".UPGRADE_NOW\"\n" +
     "                        name=\"submit\">\n" +
     "                </button>\n" +
-    "            </div>\n" +
+    "            <!--</div>-->\n" +
     "\n" +
-    "        </ng-switch>\n" +
+    "        <!--</ng-switch>-->\n" +
     "\n" +
-    "    </div>\n" +
-    "</ng-switch>\n" +
+    "    <!--</div>-->\n" +
+    "<!--</ng-switch>-->\n" +
     "");
   $templateCache.put("components/purchase/templates/purchasePopup.template.html",
     "<md-dialog class=\"purchase-popup base-border-radius\" aria-label=\"Get Zinkerz\" translate-namespace=\"PURCHASE_POPUP\">\n" +

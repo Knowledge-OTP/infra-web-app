@@ -1,6 +1,6 @@
 //@import 'directives/purchaseBtn',
 //        '../../../bower_components/infra/dist/mixins/mixins';
-//
+
 //md-dialog.purchase-popup {
 //    width: 585px;
 //    overflow: visible;
@@ -11,7 +11,7 @@
 //    }
 //
 //    .close-popup-wrap {
-//        @include absolute-position(-35px, -35px);
+//        //@include absolute-position(-35px, -35px);
 //        height:14px;
 //        width: 14px;
 //        padding: 0;
@@ -22,7 +22,7 @@
 //    .popup-header {
 //        position: relative;
 //        height: 40px;
-//        background-color: $bgColor23;
+//        //background-color: $bgColor23;
 //        border-top-left-radius: 15px;
 //        border-top-right-radius: 15px;
 //
@@ -33,7 +33,7 @@
 //            margin:0 auto;
 //            position: relative;
 //            bottom: 17.5px;
-//            background-color: $bgColor23;
+//            //background-color: $bgColor23;
 //
 //            .raccoon-logo-icon {
 //                width: 45px;
@@ -41,7 +41,7 @@
 //                margin: 0 auto;
 //                padding-top: 20px;
 //                * {
-//                    fill: $bgColor2;
+//                    //fill: $bgColor2;
 //                }
 //            }
 //
@@ -51,12 +51,12 @@
 //
 //    .md-dialog-content {
 //        padding:20px 20px 60px;
-//        background-color: $bgColor2;
+//        //background-color: $bgColor2;
 //        border-bottom-left-radius: 15px;
 //        border-bottom-right-radius: 15px;
 //
 //        h2 {
-//            @include text-style(25px, $fcColor6, Quicksand, $boldFontWeight, null, null, null, center);
+//            //@include text-style(25px, $fcColor6, Quicksand, $boldFontWeight, null, null, null, center);
 //            margin: 15px 0 10px;
 //            .pro {
 //                font-size: 20px;
@@ -65,7 +65,7 @@
 //        }
 //
 //        p {
-//            @include text-style(16px, $fcColor7, Lato, $lightFontWeight);
+//            //@include text-style(16px, $fcColor7, Lato, $lightFontWeight);
 //            text-align: center;
 //        }
 //
@@ -73,7 +73,7 @@
 //            width: 300px;
 //            margin: 15px auto;
 //            padding: 25px 40px;
-//            background-color: $bgColor35;
+//            //background-color: $bgColor35;
 //
 //            .purchase-popup-bullet-1-icon,
 //            .purchase-popup-bullet-2-icon,
@@ -90,7 +90,7 @@
 //                list-style: none;
 //
 //                li {
-//                    @include text-style(18px, $fcColor7, Quicksand, normal);
+//                    //@include text-style(18px, $fcColor7, Quicksand, normal);
 //                    line-height: 50px;
 //                    .bullet {
 //                        float:left;
@@ -106,12 +106,12 @@
 //        }
 //
 //        .price {
-//            @include text-style(16px, $fcColor11, Lato, lighter);
+//            //@include text-style(16px, $fcColor11, Lato, lighter);
 //            text-align: center;
 //            margin-bottom: 15px;
 //
 //            b {
-//                @include text-style(20px, $fcColor7, Lato, normal);
+//                //@include text-style(20px, $fcColor7, Lato, normal);
 //                margin: 0 10px 0 15px;
 //            }
 //
@@ -121,14 +121,14 @@
 //            .md-button {
 //                width: 300px;
 //                margin:0 auto;
-//                @include text-style(20px, $fcColor1, Lato, normal);
+//                //@include text-style(20px, $fcColor1, Lato, normal);
 //            }
 //        }
 //
 //        .upgraded-container{
 //            text-align: center;
-//            @include text-style(16px, $fcColor7, Lato, $regularFontWeight);
-//            @include flex-middle;
+//            //@include text-style(16px, $fcColor7, Lato, $regularFontWeight);
+//            //@include flex-middle;
 //
 //            svg-icon{
 //                margin: {

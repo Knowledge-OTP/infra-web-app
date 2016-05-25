@@ -6,8 +6,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn', [
-        'ENV', '$q', '$sce', 'AuthService', 'UserProfileService', '$location', 'purchaseService', '$filter', 'PurchaseStateEnum', '$log',
-        function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log) {
+        'ENV', '$q', '$sce', 'AuthService', 'UserProfileService', '$location', 'purchaseService', '$filter', 'PurchaseStateEnum', '$log', '$translatePartialLoader',
+        function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader) {
             return {
                 templateUrl:  'components/purchase/templates/purchaseBtn.template.html',
                 restrict: 'E',
@@ -15,6 +15,8 @@
                     purchaseState: '='
                 },
                 link: function (scope) {
+                    $translatePartialLoader.addPart('purchase');
+
                     scope.vm = {};
 
                     scope.vm.translate = $filter('translate');
