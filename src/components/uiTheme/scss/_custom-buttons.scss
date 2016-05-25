@@ -1,0 +1,29 @@
+.md-button.znk{
+    &.md-primary{
+        color: $fontColor8;
+        background: $bgColor5;
+        padding: {
+            right: 90px;
+            left: 90px;
+        };
+        border-radius: 30px;
+        font:{
+            family: Lato;
+            weight: $regularFontWeight;
+            size: 16px;
+        }
+
+        &:hover{
+            background: $bgColor10;
+        }
+
+        &:active{
+            background: $bgColor9;
+        }
+
+        &[disabled="disabled"]{
+            background: $bgColor26;
+            color: $fontColor10 !important;
+        }
+    }
+}

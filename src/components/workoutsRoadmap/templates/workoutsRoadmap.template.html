@@ -1,0 +1,15 @@
+<div class="app-workouts">
+    <div class="workouts-container base-border-radius base-box-shadow">
+        <workouts-progress workouts="vm.workoutsProgress"
+                           ng-disabled="vm.freezeWorkoutProgressComponent"
+                           diagnostic="vm.diagnostic"
+                           active-workout-order="{{vm.activeWorkoutOrder}}"
+                           ng-model="vm.selectedItem">
+        </workouts-progress>
+        <div class="workout-container"
+             ng-class="vm.workoutSwitchAnimation">
+            <ui-view class="intro-ui-view"></ui-view>
+        </div>
+    </div>
+    <estimated-score-widget></estimated-score-widget>
+</div>

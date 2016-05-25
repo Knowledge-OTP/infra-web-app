@@ -1,14 +1,45 @@
 /*border color*/
 $borderColor1: #9a9797;
 $borderColor2: #e5e2e2;
+$borderColor3: #87ca4d;
+$borderColor4: #0a9bad;
+$borderColor5: #cfcfcf;
+$borderColor6: #b7b7b7;
+$borderColor7: #ebebeb;
 
 /*background*/
+$transparent : transparent;
 $bgColor1: white;
 $bgColor2: #ff931e;
+$bgColor3 : #ffffff;
+$bgColor4: #E4E0E0;
+$bgColor5: #0a9bad;
+$bgColor6 : rgba(255, 255, 255, 0.8);
+$bgColor7: #87ca4d;
+$bgColor8: #fafaff;
+$bgColor9: #037684;
+$bgColor10: #0a8999;
+$bgColor11: #a65e10;
+$bgColor12: #d67914;
+$bgColor13: #67a531;
+$bgColor14: #76b63e;
+$bgColor15: #72ab40;
+$bgColor16: #df4a31;
+$bgColor17: #D93418;
+$bgColor18: #E8E8E8;
+$bgColor19: #c7e0e3;
+$bgColor20: #067f8e;
+$bgColor21: rgba(255, 255, 255, 0.55);
+$bgColor22: rgb(197,202,233);
+$bgColor23: #f7f7f7;
+$bgColor24: #b7b7b7;
+$bgColor25: #5ca7b0;
+$bgColor26: rgba(10, 155, 173, 0.6);
 
 /* box shadow */
 $bsColor1: #ec881c;
 $bsColor2: rgba(0, 0, 0, 0.23);
+$bsColor3 : rgba(0, 0, 0, 0.27);
 
 /* font color*/
 $fontColor1: white;
@@ -16,3 +47,193 @@ $fontColor2: #161616;
 $fontColor3: #4f4d4d;
 $fontColor4: #757a83;
 $fontColor5: #c2c2c2;
+$fontColor6: #0a9bad;
+$fontColor7: #87ca4d;
+$fontColor8: #ffffff;
+$fontColor9: #b7b7b7;
+$fontColor10: rgba(255,255,255, 0.6);
+
+
+////background
+//$transparent : transparent;
+//$bgColor1 : #f2f2f2;
+//$bgColor2 : #ffffff;
+//$bgColor3 : rgba(0, 0, 0, 0.2);
+//$bgColor4 : #e5e2e2;
+//$bgColor5 : #CACACA;
+//$bgColor6 : #f7f7f7;
+//$bgColor7 : #e9ebe8;
+//$bgColor8 : #E4E0E0;
+//$bgColor9 : #336699;
+//$bgColor10 : #2d5a87;
+//$bgColor11 : #365A7D;
+//$bgColor12 : #87ca4d;
+//$bgColor13 : #73ae40;
+//$bgColor14 : #97b394;
+//$bgColor15 : #fafaff;
+//$bgColor16 : #72ab40;
+//$bgColor17 : #7EBF46;
+//$bgColor18 : #ff6766;
+//$bgColor19 : #76b63e;
+//$bgColor20 : #67a531;
+//$bgColor21 : #e2f0f2;
+//$bgColor22 : #c7e0e3;
+//$bgColor23 : #0a9bad;
+//$bgColor24 : #067f8e;
+//$bgColor25 : #085c66;
+//$bgColor26 : #ff931e;
+//$bgColor27 : #d67914;
+//$bgColor28 : #a65e10;
+//$bgColor29 : #b7b7b7;
+//$bgColor30 : #E8E8E8;
+//$bgColor31 : rgba(255, 255, 255, 0.55);
+//$bgColor32 : #c1c1c3;
+//$bgColor33 : #e8e8e7;
+//$bgColor34 : #acacac;
+//$bgColor35 : #f9f9f9;
+//$bgColor36 : #c9c9c9;
+//$bgColor37 : #c95050;
+//$bgColor38 : #e8e7e7;
+//$bgColor39 : #f7f6f6;
+//$bgColor40 : #CACBCC;
+//$bgColor41 : #D1D2D2;
+//$bgColor42 : #231F20;
+//$bgColor43 : #88C54F;
+//$bgColor44 : #9674b5;
+//$bgColor45 : #66b5d0;
+//$bgColor46 : #dbb910;
+//$bgColor47 : #40b4a2;
+//$bgColor48 : #d5457a;
+//$bgColor49 : #ebebeb;
+//$bgColor50 : #f4f4f4;
+//$bgColor51 : #0a8999;
+//$bgColor52 : #037684;
+//$bgColor53 : #a6cfd4;
+//$bgColor54 : #89ABAF;
+//$bgColor55 : #df4a31;
+//$bgColor56 : #B33520;
+//$bgColor57 : #c3c3c3;
+//$bgColor58 : #FCFCFC;
+//$bgColor59 : #df4a31;
+//$bgColor60 : #D93418;
+//$bgColor61 : #f3f2f2;
+//$bgColor62 : #eeeded;
+//$bgColor63: rgb(197,202,233);
+//$bgColor64: #fafafa;
+//$bgColor65: #f3f3f3;
+//$bgColor66: #c4bfbf;
+//$bgColor67 : #dfdede;
+//$bgColor68 : #dcdcdc;
+//$bgColor69 : #f8f8f8;
+//$bgColor70 : #161616;
+//$bgColor71 : #e5e5e5;
+//$bgColor72 : #eeeeee;
+//$bgColor73 : #4f4d4d;
+//$bgColor74 : #c2c2c2;
+//$bgColor75 : #FDFDFD;
+//$bgColor76 : rgba(255, 255, 255, 0.8);
+//$bgColor77: #f6f6f6;
+//$bgColor78: #92969d;
+//$bgColor79 : #088E9E;
+//$bgColor80: #f6f6f6;
+//$bgColor81 : #81649c;
+//$bgColor82: #76b043;
+//$bgColor83 : black;
+//
+////font-color
+//$fcColor1 : #ffffff;
+//$fcColor2 : #7d7d7d;
+//$fcColor3 : #9a9797;
+//$fcColor4 : #CACACA;
+//$fcColor5 : #0a9bad;
+//$fcColor6 : #161616;
+//$fcColor7 : #4f4d4d;
+//$fcColor8 : #87ca4d;
+//$fcColor9 : #64b61d;
+//$fcColor10 : #ff6766;
+//$fcColor11 : #757a83;
+//$fcColor12 : #b7b7b7;
+//$fcColor13 : #2B2929;
+//$fcColor14 : #4C8A17;
+//$fcColor15 : #acacac;
+//$fcColor16 : #898989;
+//$fcColor17 : #968E8E;
+//$fcColor18 : #626060;
+//$fcColor19 : #2AB79E;
+//$fcColor20 : #959595;
+//$fcColor21 : #161616;
+//
+////box shadow
+//$bsColor1 : rgba(0, 0, 0, 0.27);
+//$bsColor2 : rgba(190, 190, 190, 0.75);
+//$bsColor3 : #0a9bad;
+//$bsColor4 : rgba(0, 0, 0, 0.50);
+//$bsColor5: #bebebe;
+//$bsColor6: #ffffff;
+//$bsColor7: rgba(63, 63, 63, 0.2);
+//$bsColor8: 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
+//$bsColor9: 0px 9px 12px 1px rgba(0, 0, 0, 0.14);
+//$bsColor10: 0px 3px 16px 2px rgba(0, 0, 0, 0.12);
+//
+////border color
+//$bcColor1 : #dddddd;
+//$bcColor2 : #e5e2e2;
+//$bcColor3 : #c7e0e3;
+//$bcColor4 : #0a9bad;
+//$bcColor5 : #CACACA;
+//$bcColor6 : #A29D9D;
+//$bcColor7 : #f4f4f4;
+//$bcColor8 : #cfcfcf;
+//$bcColor9 : #87ca4d;
+//$bcColor10 : #d3d0d0;
+//$bcColor11 : #ebebeb;
+//$bcColor12 : #cccccc;
+//$bcColor13 : #e7e7e7;
+//$bcColor14 : #e1e1e1;
+//$bcColor15: #d3b315;
+//$bcColor16: #b7b7b7;
+//$bcColor17 : #f2f2f2;
+//$bcColor18 : #dcdcdc;
+//$bcColor19 : #ff6766;
+//$bcColor20 : #ffffff;
+//$bcColor21 : #ddd9d9;
+//$bcColor22 : #c1c1c3;
+//$bcColor23 : #acacac;
+//$bcColor24 : #81649c;
+//$bcColor25 : rgba(0, 0, 0, 0.25);
+//
+////Subjects colors
+//$mathColor : #AF89D2;
+//$verbalColor : #F9D41B;
+//$essayColor : #FF5895;
+//$writingColor : #FF5895;
+//$readingColor : #F9D41B;
+//$scienceColor : #51CDBA;
+//$englishColor : #AF89D2;
+//
+////Subjects colors when it done
+//$mathDone : #8e6fab;
+//$verbalDone : #d0b114;
+//$essayDone : #db4c81;
+//$englishDone : #AF89D2;
+//$mathDone : #a07ec1;
+//$readingDone : #d0b114;
+//$scienceDone : #45b0a0;
+//$writingDone : #db4c81;
+//$essayDone : #db4c81;
+//
+////Subjects colors when it locked
+//$mathLocked : #a48bbb;
+//$verbalLocked : #c8b369;
+//$essayLocked : #d6779a;
+//$readingLocked : #c8b369;
+//$scienceLocked : #6fbfb3;
+//$writingLocked : #db4c81;
+//$englishLocked : #a48bbb;
+//
+////login
+//$facebookColor : #369;
+//$gplusColor : #df4a31;
+//
+////
+//$scrollBarColor: #ECECEC;
