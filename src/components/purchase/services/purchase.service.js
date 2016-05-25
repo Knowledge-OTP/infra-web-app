@@ -24,17 +24,9 @@
         return mock;
     }]);
 
-    angular.module('znk.infra-web-app.purchase').service('PopUpSrv', function(){
-        return {
-            error:function(){
-
-            }
-        };
-    });
-
     angular.module('znk.infra-web-app.purchase').service('purchaseService', [
-        '$q', '$mdDialog', 'PopUpSrv', '$filter', 'ActStorageSrv', 'AuthService', 'ENV', '$log', '$mdToast', '$window',
-        function ($q, $mdDialog, PopUpSrv, $filter, ActStorageSrv, AuthService, ENV, $log, $mdToast, $window) {
+        '$q', '$mdDialog' , '$filter', 'ActStorageSrv', 'AuthService', 'ENV', '$log', '$mdToast', '$window',
+        function ($q, $mdDialog, $filter, ActStorageSrv, AuthService, ENV, $log, $mdToast, $window) {
 
             var self = this;
 
@@ -153,7 +145,7 @@
                 //});
                 return $mdDialog.show({
                     controller: 'PurchaseDialogController',
-                    templateUrl: 'app/components/purchase/templates/purchasePopup.template.html',
+                    templateUrl: 'components/purchase/templates/purchaseBtn.template.html',
                     disableParentScroll: false,
                     clickOutsideToClose: true,
                     fullscreen: false,
@@ -165,11 +157,11 @@
                 return $mdDialog.hide();
             };
 
-            this.showPurchaseError = function () {
-                var popUpTitle = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_TITLE');
-                var popUpContent = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_CONTENT');
-                PopUpSrv.error(popUpTitle, popUpContent);
-            };
+            //this.showPurchaseError = function () {
+            //    var popUpTitle = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_TITLE');
+            //    var popUpContent = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_CONTENT');
+            //    PopUpSrv.error(popUpTitle, popUpContent);
+            //};
 
             this.getPendingPurchase = function () {
                 return pendingPurchaseDefer && pendingPurchaseDefer.promise;
