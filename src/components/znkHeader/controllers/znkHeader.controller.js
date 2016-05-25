@@ -5,12 +5,16 @@
     //    ['purchaseService', 'AuthService', 'UserProfileService', 'PurchaseStateEnum', 'ENV', 'OnBoardingService',
 
 
-    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',['$scope', '$translatePartialLoader','$mdDialog', '$window',
-        function($scope,$translatePartialLoader, $mdDialog, $window) {
+    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',['$scope', '$translatePartialLoader','$mdDialog', '$window', 'purchaseService',
+        function($scope,$translatePartialLoader, $mdDialog, $window, purchaseService) {
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
+
+            this.showPurchaseDialog = function () {
+                purchaseService.showPurchaseDialog();
+            };
 
             self.userProfile = {  // mock
                 username: 'asdada',

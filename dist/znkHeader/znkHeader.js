@@ -1,10 +1,11 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate', 'ngMaterial', 'znk.infra.svgIcon', 'pascalprecht.translate'])
+    angular.module('znk.infra-web-app.znkHeader', ['ngAnimate', 'ngMaterial', 'znk.infra.svgIcon', 'pascalprecht.translate', 'znk.infra-web-app.purchase'])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){
+
                 var svgMap = {
                     'raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg'
                 };
@@ -19,12 +20,16 @@
     //    ['purchaseService', 'AuthService', 'UserProfileService', 'PurchaseStateEnum', 'ENV', 'OnBoardingService',
 
 
-    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',['$scope', '$translatePartialLoader','$mdDialog', '$window',
-        function($scope,$translatePartialLoader, $mdDialog, $window) {
+    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',['$scope', '$translatePartialLoader','$mdDialog', '$window', 'purchaseService',
+        function($scope,$translatePartialLoader, $mdDialog, $window, purchaseService) {
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
+
+            this.showPurchaseDialog = function () {
+                purchaseService.showPurchaseDialog();
+            };
 
             self.userProfile = {  // mock
                 username: 'asdada',
@@ -64,6 +69,39 @@
             };
         }
     ]);
+})(angular);
+
+
+/**
+ * znkAnalyticsSrv
+ *
+ *   api:
+ *     addAdditionalItems function - set items that will be clickable in the header. need to supply object (or array of
+*                                    objects) with the properties: text and handler
+ */
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.purchase').provider('znkHeaderSrv',
+
+        function () {
+            var additionalHeaderItems = [];
+
+            this.addAdditionalItems = function(additionalHeaderItems) {
+                if(!angular.isArray(additionalHeaderItems)){
+                    additionalHeaderItems.push(additionalHeaderItems);
+                }
+                additionalHeaderItems = additionalHeaderItems;
+            };
+
+            this.$get ={
+                getAdditionalItems: function() {
+                    return additionalHeaderItems;
+                }
+            };
+        }
+
+    );
 })(angular);
 
 
@@ -126,6 +164,12 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                    <a ui-sref=\"app.performance\" class=\"link-full-item\"></a>\n" +
     "                </md-list-item>\n" +
     "            </md-list>\n" +
+    "\n" +
+    "            <!--<md-list ng-repeat=\"vm.additionalFileds\">-->\n" +
+    "                <!--<span class=\"title\" translate=\".PERFORMANCE\"></span>-->\n" +
+    "                <!--<a ui-sref=\"app.performance\" class=\"link-full-item\"></a>-->\n" +
+    "            <!--</md-list>-->\n" +
+    "\n" +
     "        </div>\n" +
     "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
     "            <invitation-manager></invitation-manager>\n" +
