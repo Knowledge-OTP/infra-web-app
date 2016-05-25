@@ -1,17 +1,17 @@
 'use strict';
 
-angular.module('znk.infra-web-app.diagnosticDrv').provider('DiagnosticIntroSrv', [
+angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv', [
     function DiagnosticIntroSrv() {
 
         var _activeData;
 
         var _configMap;
 
-        this.setActiveFn = function(activeData) {
+        this.setActiveSubjectGetter = function(activeData) {
             _activeData = activeData;
         };
 
-        this.setConfigMapFn = function(configMap) {
+        this.setConfigGetter = function(configMap) {
             _configMap = configMap;
         };
 

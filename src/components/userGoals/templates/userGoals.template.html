@@ -22,18 +22,18 @@
             <div class="recommended-title" translate=".RECOMMENDED_GOALS"></div>
             <div class="info-wrap">
                 <md-tooltip md-visible="vm.showTooltip" md-direction="top" class="goals-info md-whiteframe-2dp">
-                    <div translate="{{goalsSettingsFromSrv.goalsInfoTranslate}}" class="top-text"></div>
+                    <div translate=".GOALS_INFO" class="top-text"></div>
                 </md-tooltip>
-                <svg-icon class="info-icon" name="info-icon" ng-mouseover="vm.showTooltip=true" ng-mouseleave="vm.showTooltip=false"></svg-icon>
+                <svg-icon class="user-goals-info-icon" name="info-icon" ng-mouseover="vm.showTooltip=true" ng-mouseleave="vm.showTooltip=false"></svg-icon>
             </div>
         </div>
         <div class="subject-goal-wrap">
             <div class="subjects-goal noselect">
                 <div class="subject" ng-repeat="subject in goalsSettingsFromSrv.subjects">
-                    <div class="icon-wrapper svg-wrapper" ng-class="subject.bgClass">
+                    <div class="icon-wrapper svg-wrapper" ng-class="subject.name+'-bg'">
                         <svg-icon name="{{subject.svgIcon}}"></svg-icon>
                     </div>
-                    <span class="subject-title" translate="{{subject.subjectTranslate}}"></span>
+                    <span class="subject-title" translate=".{{subject.name | uppercase}}"></span>
                     <goal-select
                         min-score="goalsSettingsFromSrv.minGoalsScore"
                         max-score="goalsSettingsFromSrv.maxGoalsScore"
@@ -46,7 +46,7 @@
         </div>
         <div class="composite-wrap">
             <div class="composite-score">
-                <div class="score-title" translate="{{goalsSettingsFromSrv.scoreTitleTranslate}}"></div>
+                <div class="score-title" translate=".TOTAL_SCORE"></div>
                 <div class="score">{{totalScore}}</div>
             </div>
         </div>
@@ -56,9 +56,9 @@
                    class="md-sm primary inline-block"
                    ng-click="saveChanges()"
                    ng-class="setting.saveBtn.wrapperClassName">
-            <svg-icon name="v-icon" class="v-icon" ng-show="showVIcon"></svg-icon>
+            <svg-icon name="user-goals-v-icon" class="v-icon" ng-show="showVIcon"></svg-icon>
             <span translate="{{saveTitle}}"></span>
-            <svg-icon name="dropdown-arrow-icon" class="dropdown-arrow-icon" ng-show="setting.saveBtn.showSaveIcon"></svg-icon>
+            <svg-icon name="user-goals-dropdown-arrow-icon" class="dropdown-arrow-icon" ng-show="setting.saveBtn.showSaveIcon"></svg-icon>
         </md-button>
     </div>
     <div class="school-selector-wrap animate-if"

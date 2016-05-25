@@ -6,7 +6,7 @@
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
 
-            var onBoardingUrls = {
+            var onBoardingStates = {
                 1: 'onBoarding.welcome',
                 2: 'onBoarding.schools',
                 3: 'onBoarding.goals',
@@ -25,7 +25,7 @@
             onBoardingServiceObj.getOnBoardingStep = function () {
                 return getProgress().then(function (progress) {
                     return {
-                        url: onBoardingUrls[progress.step]
+                        url: onBoardingStates[progress.step]
                     };
                 });
             };

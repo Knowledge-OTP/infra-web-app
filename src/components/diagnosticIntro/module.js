@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticDrv', [
+    angular.module('znk.infra-web-app.diagnosticIntro', [
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'znk.infra.config',
@@ -10,7 +10,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'check-mark': 'components/diagnosticDrv/svg/check-mark-icon.svg'
+                'diagnostic-intro-check-mark': 'components/diagnosticIntro/svg/check-mark-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }

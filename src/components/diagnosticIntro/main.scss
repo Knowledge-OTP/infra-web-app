@@ -7,38 +7,17 @@
 /**
 *  FONTS
 */
-@font-face {
-    font-family: 'Lato';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Lato Regular'), local('Lato-Regular'), url(http://fonts.gstatic.com/s/lato/v11/UyBMtLsHKBKXelqf4x7VRQ.woff2) format('woff2');
-    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-    font-family: 'Lato';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Lato Regular'), local('Lato-Regular'), url(http://fonts.gstatic.com/s/lato/v11/1YwB1sO8YE1Lyjf12WNiUA.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-}
-
-@font-face {
-    font-family: 'Quicksand';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Quicksand Regular'), local('Quicksand-Regular'), url(http://fonts.gstatic.com/s/quicksand/v5/sKd0EMYPAh5PYCRKSryvW1tXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-}
-
-@font-face {
-    font-family: 'Quicksand';
-    font-style: normal;
-    font-weight: 700;
-    src: local('Quicksand Bold'), local('Quicksand-Bold'), url(http://fonts.gstatic.com/s/quicksand/v5/32nyIRHyCu6iqEka_hbKsugdm0LZdjqr5-oayXSOefg.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
-}
-
+/* Lato fonts from google*/
+@import url(#{$googleFontCDN}css?family=Lato:300);
+@import url(#{$googleFontCDN}css?family=Lato:300italic);
+@import url(#{$googleFontCDN}css?family=Lato:400);
+@import url(#{$googleFontCDN}css?family=Lato:400italic);
+/* Quicksand fonts */
+@import url(#{$googleFontCDN}css?family=Quicksand);
+@import url(#{$googleFontCDN}css?family=Quicksand:300);
+@import url(#{$googleFontCDN}css?family=Quicksand:700);
+/* Material+Icons */
+@import url(#{$googleFontCDN}icon?family=Material+Icons);
 
 diagnostic-intro {
 
@@ -60,18 +39,6 @@ diagnostic-intro {
                     top: -48px;
                     background-size: contain;
                     @include full-background-image-retina('./images/diagnostic-raccoon', 160px, 169px);
-                }
-                .diagnostic-raccoon-english{
-                    @include full-background-image-retina('./images/diagnostic-raccoon-english', 289px, 207px);
-                }
-                .diagnostic-raccoon-math{
-                    @include full-background-image-retina('./images/diagnostic-raccoon-math', 271px, 179px);
-                }
-                .diagnostic-raccoon-reading{
-                    @include full-background-image-retina('./images/diagnostic-raccoon-reading', 212px, 224px);
-                }
-                .diagnostic-raccoon-science{
-                    @include full-background-image-retina('./images/diagnostic-raccoon-science', 194px, 186px);
                 }
             }
         }

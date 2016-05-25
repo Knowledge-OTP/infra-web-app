@@ -1,9 +1,18 @@
 /* fonts size */
 /* general */
+/* paths */
 /*border color*/
 /*background*/
 /* box shadow */
 /* font color*/
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
 html, body {
   height: 100%;
   color: rgba(0, 0, 0, 0.87);
@@ -17555,34 +17564,9 @@ md-dialog .close-popup {
 /**
 *  FONTS
 */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Lato Regular"), local("Lato-Regular"), url(http://fonts.gstatic.com/s/lato/v11/UyBMtLsHKBKXelqf4x7VRQ.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Lato Regular"), local("Lato-Regular"), url(http://fonts.gstatic.com/s/lato/v11/1YwB1sO8YE1Lyjf12WNiUA.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Quicksand Regular"), local("Quicksand-Regular"), url(http://fonts.gstatic.com/s/quicksand/v5/sKd0EMYPAh5PYCRKSryvW1tXRa8TVwTICgirnJhmVJw.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Quicksand Bold"), local("Quicksand-Bold"), url(http://fonts.gstatic.com/s/quicksand/v5/32nyIRHyCu6iqEka_hbKsugdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
+/* Lato fonts from google*/
+/* Quicksand fonts */
+/* Material+Icons */
 diagnostic-intro .diagnostic-intro-drv {
   text-align: center; }
   diagnostic-intro .diagnostic-intro-drv .diagnostic-text {
@@ -17616,82 +17600,6 @@ diagnostic-intro .diagnostic-intro-drv {
           display: inline-block;
           width: 160px;
           height: 169px; } }
-    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-english {
-      /*CSS for basic styling and non-retina image path:*/
-      background-image: url("./images/diagnostic-raccoon-english.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      display: inline-block;
-      width: 289px;
-      height: 207px;
-      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-      @media only screen and (min-resolution: 1.5dppx) {
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-english {
-          background-image: url("./images/diagnostic-raccoon-english@2x.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 289px;
-          height: 207px; } }
-    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-math {
-      /*CSS for basic styling and non-retina image path:*/
-      background-image: url("./images/diagnostic-raccoon-math.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      display: inline-block;
-      width: 271px;
-      height: 179px;
-      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-      @media only screen and (min-resolution: 1.5dppx) {
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-math {
-          background-image: url("./images/diagnostic-raccoon-math@2x.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 271px;
-          height: 179px; } }
-    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-reading {
-      /*CSS for basic styling and non-retina image path:*/
-      background-image: url("./images/diagnostic-raccoon-reading.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      display: inline-block;
-      width: 212px;
-      height: 224px;
-      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-      @media only screen and (min-resolution: 1.5dppx) {
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-reading {
-          background-image: url("./images/diagnostic-raccoon-reading@2x.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 212px;
-          height: 224px; } }
-    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-science {
-      /*CSS for basic styling and non-retina image path:*/
-      background-image: url("./images/diagnostic-raccoon-science.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      display: inline-block;
-      width: 194px;
-      height: 186px;
-      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-      @media only screen and (min-resolution: 1.5dppx) {
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-science {
-          background-image: url("./images/diagnostic-raccoon-science@2x.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 194px;
-          height: 186px; } }
   diagnostic-intro .diagnostic-intro-drv .icons-section {
     display: flex;
     justify-content: space-around;
@@ -17844,6 +17752,7 @@ diagnostic-intro .diagnostic-intro-drv {
 
 /* fonts size */
 /* general */
+/* paths */
 /*border color*/
 /*background*/
 /* box shadow */
@@ -17960,10 +17869,19 @@ login-form {
 
 /* fonts size */
 /* general */
+/* paths */
 /*border color*/
 /*background*/
 /* box shadow */
 /* font color*/
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
 html, body {
   height: 100%;
   color: rgba(0, 0, 0, 0.87);
@@ -35556,34 +35474,9 @@ on-boarding-bar {
 /**
 *  FONTS
 */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Lato Regular"), local("Lato-Regular"), url(http://fonts.gstatic.com/s/lato/v11/UyBMtLsHKBKXelqf4x7VRQ.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Lato Regular"), local("Lato-Regular"), url(http://fonts.gstatic.com/s/lato/v11/1YwB1sO8YE1Lyjf12WNiUA.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Quicksand Regular"), local("Quicksand-Regular"), url(http://fonts.gstatic.com/s/quicksand/v5/sKd0EMYPAh5PYCRKSryvW1tXRa8TVwTICgirnJhmVJw.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Quicksand Bold"), local("Quicksand-Bold"), url(http://fonts.gstatic.com/s/quicksand/v5/32nyIRHyCu6iqEka_hbKsugdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
+/* Lato fonts from google*/
+/* Quicksand fonts */
+/* Material+Icons */
 .on-board {
   /**
     *  MAIN COLORS
@@ -35769,10 +35662,19 @@ on-boarding-bar {
 
 /* fonts size */
 /* general */
+/* paths */
 /*border color*/
 /*background*/
 /* box shadow */
 /* font color*/
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
 html, body {
   height: 100%;
   color: rgba(0, 0, 0, 0.87);
@@ -53665,34 +53567,9 @@ school-select .school-selector .selector .tag-input-wrap {
 /**
 *  FONTS
 */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Lato Regular"), local("Lato-Regular"), url(http://fonts.gstatic.com/s/lato/v11/UyBMtLsHKBKXelqf4x7VRQ.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Lato Regular"), local("Lato-Regular"), url(http://fonts.gstatic.com/s/lato/v11/1YwB1sO8YE1Lyjf12WNiUA.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Quicksand Regular"), local("Quicksand-Regular"), url(http://fonts.gstatic.com/s/quicksand/v5/sKd0EMYPAh5PYCRKSryvW1tXRa8TVwTICgirnJhmVJw.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Quicksand Bold"), local("Quicksand-Bold"), url(http://fonts.gstatic.com/s/quicksand/v5/32nyIRHyCu6iqEka_hbKsugdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
+/* Lato fonts from google*/
+/* Quicksand fonts */
+/* Material+Icons */
 .goals .sub-title {
   font-size: 24px;
   color: #161616;

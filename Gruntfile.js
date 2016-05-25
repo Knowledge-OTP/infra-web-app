@@ -185,10 +185,6 @@ module.exports = function (grunt) {
             images:{
                 files: ['<%= yeoman.src %>/**/images/*.*'],
                 tasks:['copy:dist']
-            },
-            mock:{
-                files: ['<%= yeoman.src %>/**/mock/*.json*'],
-                tasks:['copy:dist']
             }
         },
         sass: {
@@ -221,11 +217,6 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/images/*.*',
-                    dest: '<%= yeoman.dist %>'
-                }, {
-                    expand: true,
-                    cwd: '<%= yeoman.src %>/components',
-                    src: '*/mock/*.json*',
                     dest: '<%= yeoman.dist %>'
                 }]
 

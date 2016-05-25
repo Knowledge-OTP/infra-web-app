@@ -5,7 +5,7 @@
     <title>Title</title>
     <link rel="stylesheet" href="onBoarding/main.css">
     <link rel="stylesheet" href="userGoals/main.css">
-    <link rel="stylesheet" href="diagnosticDrv/main.css">
+    <link rel="stylesheet" href="diagnosticIntro/main.css">
     <link rel="stylesheet" href="infra/dist/svgIcon/main.css">
     <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css">
     <style>
@@ -14,6 +14,82 @@
             padding-top: 18px;
             margin: 0 auto;
         }
+        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-english {
+            /*CSS for basic styling and non-retina image path:*/
+            background-image: url("./images/diagnostic-raccoon-english.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: inline-block;
+            width: 289px;
+            height: 207px;
+            /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+        @media only screen and (min-resolution: 1.5dppx) {
+            diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-english {
+                background-image: url("./images/diagnostic-raccoon-english@2x.png");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                display: inline-block;
+                width: 289px;
+                height: 207px; } }
+        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-math {
+            /*CSS for basic styling and non-retina image path:*/
+            background-image: url("./images/diagnostic-raccoon-math.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: inline-block;
+            width: 271px;
+            height: 179px;
+            /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+        @media only screen and (min-resolution: 1.5dppx) {
+            diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-math {
+                background-image: url("./images/diagnostic-raccoon-math@2x.png");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                display: inline-block;
+                width: 271px;
+                height: 179px; } }
+        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-reading {
+            /*CSS for basic styling and non-retina image path:*/
+            background-image: url("./images/diagnostic-raccoon-reading.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: inline-block;
+            width: 212px;
+            height: 224px;
+            /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+        @media only screen and (min-resolution: 1.5dppx) {
+            diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-reading {
+                background-image: url("./images/diagnostic-raccoon-reading@2x.png");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                display: inline-block;
+                width: 212px;
+                height: 224px; } }
+        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-science {
+            /*CSS for basic styling and non-retina image path:*/
+            background-image: url("./images/diagnostic-raccoon-science.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: inline-block;
+            width: 194px;
+            height: 186px;
+            /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+        @media only screen and (min-resolution: 1.5dppx) {
+            diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-science {
+                background-image: url("./images/diagnostic-raccoon-science@2x.png");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                display: inline-block;
+                width: 194px;
+                height: 186px; } }
     </style>
 </head>
 <body style="height: 100%;background: rgba(43, 43, 191, 0.08);" ng-app="demo">
@@ -25,6 +101,7 @@
     <script src="angular-sanitize/angular-sanitize.js"></script>
     <script src="angular-translate/angular-translate.js"></script>
     <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+    <script src="angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
     <script src="angular-aria/angular-aria.js"></script>
     <script src="ng-tags-input/ng-tags-input.js"></script>
     <script src="angular-animate/angular-animate.js"></script>
@@ -38,7 +115,7 @@
     <script src="infra/dist/user/user.js"></script>
 
     <script src="userGoals/userGoals.js"></script>
-    <script src="diagnosticDrv/diagnosticDrv.js"></script>
+    <script src="diagnosticIntro/diagnosticIntro.js"></script>
     <script src="onBoarding/onBoarding.js"></script>
 
     <script src="demo.js"></script>

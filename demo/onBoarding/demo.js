@@ -1,5 +1,11 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
-    .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider) {
+    .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider) {
+
+        var svgMap = {
+            'math-section-icon': 'svg/math-section-icon.svg',
+            'verbal-icon': 'svg/verbal-icon.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
 
         $urlRouterProvider.otherwise('/onBoarding');
 
@@ -43,67 +49,41 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
            showSchoolStep: true
         };
 
-        DiagnosticIntroSrvProvider.setConfigMapFn(['ENV', function(ENV) {
+        DiagnosticIntroSrvProvider.setConfigGetter(['ENV', function(ENV) {
             return {
                 subjects: [
                     {
                         id: ENV.MATH,
-                        subjectIconName: 'math-section-icon',
-                        raccoonClassName: 'diagnostic-raccoon-math',
-                        iconCircleClassName: 'math-color',
-                        colorClassName: 'math',
-                        descriptionTranslate: '.DIAG_INTR_LETS_LEARN',
-                        instructionsTranslate: '.INSTRUCTIONS_MATH_CALC',
-                        subjectNameTranslate: '.MATH_CALC',
-                        subjectTextTranslate: '.LETS_START_MATH_CALC'
+                        subjectNameAlias: 'math',
+                        subjectIconName: 'math-section-icon'
                     },
                     {
                         id: ENV.ENGLISH,
-                        subjectIconName: 'math-section-icon',
-                        raccoonClassName: 'diagnostic-raccoon-english',
-                        iconCircleClassName: 'english-color',
-                        colorClassName: 'english',
-                        descriptionText: '.DIAG_INTR_THIS_HALFWAY',
-                        instructionsTranslate: '.INSTRUCTIONS_MATH_CALC',
-                        subjectNameTranslate: '.MATH_CALC',
-                        subjectTextTranslate: '.LETS_START_MATH_CALC'
+                        subjectNameAlias: 'english',
+                        subjectIconName: 'math-section-icon'
                     },               {
                         id: ENV.READING,
-                        subjectIconName: 'math-section-icon',
-                        raccoonClassName: 'diagnostic-raccoon-reading',
-                        iconCircleClassName: 'reading-color',
-                        colorClassName: 'reading',
-                        descriptionText: '.DIAG_INTR_THIS_ALMOST_THERE',
-                        instructionsTranslate: '.INSTRUCTIONS_MATH_CALC',
-                        subjectNameTranslate: '.MATH_CALC',
-                        subjectTextTranslate: '.LETS_START_MATH_CALC'
+                        subjectNameAlias: 'reading',
+                        subjectIconName: 'math-section-icon'
                     },
                     {
                         id: ENV.SCIENCE,
-                        subjectIconName: 'math-section-icon',
-                        raccoonClassName: 'diagnostic-raccoon-science',
-                        iconCircleClassName: 'science-color',
-                        colorClassName: 'science',
-                        descriptionText: '.DIAG_INTR_THIS_QUICK_TEST',
-                        instructionsTranslate: '.INSTRUCTIONS_MATH_CALC',
-                        subjectNameTranslate: '.MATH_CALC',
-                        subjectTextTranslate: '.LETS_START_MATH_CALC'
+                        subjectNameAlias: 'science',
+                        subjectIconName: 'math-section-icon'
                     }
                 ],
                 all: {
-                    raccoonClassName: 'diagnostic-raccoon',
-                    descriptionTranslate: '.DIAG_INTR_LETS_LEARN',
+                    subjectNameAlias: 'all',
                     hideSectionQuestion: true
                 },
                 none: {
-                    raccoonClassName: 'diagnostic-raccoon',
-                    descriptionTranslate: '.DIAG_INTR_LETS_LEARN',
+                    subjectNameAlias: 'none',
                     hideSectionQuestion: true
                 }
             };
         }]);
 
-        DiagnosticIntroSrvProvider.setActiveFn(['ENV', function(ENV) {
+        DiagnosticIntroSrvProvider.setActiveSubjectGetter(['ENV', function(ENV) {
             return { id: ENV.ENGLISH };
         }]);
 
@@ -114,18 +94,18 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
             minGoalsScore: 200,
             maxGoalsScore: 800,
             updateGoalNum: 10,
-            scoreTitleTranslate: '.TOTAL_SCORE',
-            goalsInfoTranslate: '.GOALS_INFO',
             subjects: [
-                { name: 'math', bgClass: 'math-bg', svgIcon: 'math-section-icon', subjectTranslate: '.MATH' },
-                { name: 'verbal', bgClass: 'verbal-bg', svgIcon: 'verbal-icon', subjectTranslate: '.VERBAL' }
+                { name: 'math', svgIcon: 'math-section-icon' },
+                { name: 'verbal', svgIcon: 'verbal-icon' }
             ]
         };
     })
-    .run(function ($rootScope, $translate) {
+    .run(function ($rootScope, $translate, $translatePartialLoader) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         });
+
+        $translatePartialLoader.addPart('demo');
 
     }) // mock AuthService
     .factory('AuthService', function() {
@@ -144,7 +124,7 @@ angular.module('demo', ['znk.infra-web-app.onBoarding', 'ngSanitize'])
         }
     })// mock ENV
     .service('ENV', function () {
-        this.dreamSchoolJsonUrl = "./onBoarding/mock/dreamSchools.json";
+        this.dreamSchoolJsonUrl = "./dreamSchools.json";
         this.promiseTimeOut = 5000;
         this.MATH = 0; // mock subject id from enum
         this.ENGLISH = 7;

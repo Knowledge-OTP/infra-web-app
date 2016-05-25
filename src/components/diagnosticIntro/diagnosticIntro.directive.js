@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', ['DiagnosticIntroSrv', '$translatePartialLoader', '$log',
+angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro', ['DiagnosticIntroSrv', '$translatePartialLoader', '$log',
     function DiagnosticIntroDirective(DiagnosticIntroSrv, $translatePartialLoader, $log) {
 
     var directive = {
@@ -8,10 +8,10 @@ angular.module('znk.infra-web-app.diagnosticDrv').directive('diagnosticIntro', [
         scope: {
             showInstructions: '=?'
         },
-        templateUrl: 'components/diagnosticDrv/diagnosticIntro.template.html',
+        templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
         link: function link(scope) {
 
-            $translatePartialLoader.addPart('diagnosticDrv');
+            $translatePartialLoader.addPart('diagnosticIntro');
 
             scope.d = {};
 
