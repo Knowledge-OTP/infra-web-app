@@ -2,7 +2,7 @@
  * usage instructions:
  *      workout progress:
  *      - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
- *              .reading-bg{ 
+ *              .reading-bg{
  *                  background: red;
  *              }
  *      - define <%= subjectName %>-bg:after style for border color for example
@@ -16,20 +16,13 @@
 
     angular.module('znk.infra-web-app.workoutsRoadmap', [
         'pascalprecht.translate',
-        'znk.infra.svgIcon',
+        'ngMaterial',
         'ui.router',
+        'ngAnimate',
+        'znk.infra.svgIcon',
         'znk.infra.enum',
         'znk.infra.exerciseUtility',
-        'ngAnimate',
         'znk.infra.scroll',
         'znk.infra.general'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'workouts-progress-flag': 'components/workoutsRoadmap/svg/flag-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
     ]);
 })(angular);
