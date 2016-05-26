@@ -28,7 +28,7 @@
  *                   "exerciseId" : 150,
  *                   "exerciseTypeId" : 1,
  *                   "subjectId" : 0
- *                 }, 
+ *                 },
  *                 "10" : {
  *                   "categoryId" : 263,
  *                   "exerciseId" : 109,
@@ -58,6 +58,7 @@
         'znk.infra.enum',
         'znk.infra.exerciseUtility',
         'znk.infra.scroll',
-        'znk.infra.general'
+        'znk.infra.general',
+        'znk.infra-web-app.purchase'
     ]);
 })(angular);
