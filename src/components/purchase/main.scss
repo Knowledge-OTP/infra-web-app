@@ -13,8 +13,8 @@
 
     .close-popup-wrap {
         @include absolute-position(-35px, -35px);
-        height:14px;
-        width: 14px;
+        height:24px;
+        width: 24px;
         padding: 0;
         margin: 10px;
         cursor: pointer;
@@ -167,31 +167,4 @@
         padding: 5px 15px;
         border-radius: 20px;
     }
-}
-
-// Purchase Pop-up icons
-.close-popup {
-    .st0{fill:none;}
-    .st1{fill:none;stroke:$bgColor3;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}
-}
-
-.purchase-popup-bullet-1-icon {
-    .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
-}
-
-.purchase-popup-bullet-2-icon {
-    .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
-    .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}
-    .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-}
-
-.purchase-popup-bullet-3-icon {
-    .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
-    .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-    .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}
-}
-
-.purchase-popup-bullet-5-icon {
-    .st0{fill:none;stroke:#231F20;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-    .st1{fill:none;stroke:#231F20;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 }

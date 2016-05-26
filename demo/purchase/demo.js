@@ -1,4 +1,4 @@
-angular.module('demo', ['znk.infra-web-app.purchase', 'znk.infra-web-app.znkAnalytics'])
+angular.module('demo', ['znk.infra-web-app.purchase'])
     .config(function ($translateProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: '/{part}/locale/{lang}.json'

@@ -13,7 +13,7 @@
             function(SvgIconSrvProvider){
 
                 var svgMap = {
-                    'raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg'
+                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
