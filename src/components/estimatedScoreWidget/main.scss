@@ -9,7 +9,7 @@ estimated-score-widget {
             .subjects-wrap {
                 border: {
                     top: solid;
-                    color: $borderColor9;
+                    color: $borderColor11;
                     width: 2px;
                 }
             }
@@ -21,7 +21,7 @@ estimated-score-widget {
                 transition: border 0.2s;
                 border-bottom: {
                     style: solid;
-                    color: $borderColor9;
+                    color: $borderColor11;
                     width: 2px;
                 }
                 border-left: {
@@ -45,12 +45,12 @@ estimated-score-widget {
                     }
                     border-top: {
                         style: solid;
-                        color: $borderColor8;
+                        color: $borderColor10;
                         width: 1px;
                     }
                     border-bottom: {
                         style: solid;
-                        color: $borderColor8;
+                        color: $borderColor10;
                         width: 1px;
                     }
                 }

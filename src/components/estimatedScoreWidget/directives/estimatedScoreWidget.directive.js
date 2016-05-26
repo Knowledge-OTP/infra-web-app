@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum) {
+        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService) {
             'ngInject';
 
             return {

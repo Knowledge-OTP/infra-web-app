@@ -14,7 +14,8 @@
         'znk.infra.scroll',
         'znk.infra.autofocus',
         'znk.infra.exerciseUtility',
-        'znk.infra.estimatedScore'
+        'znk.infra.estimatedScore',
+        'znk.infra-web-app.userGoals'
     ]).config([
         'SvgIconSrvProvider', 
         function (SvgIconSrvProvider) {
