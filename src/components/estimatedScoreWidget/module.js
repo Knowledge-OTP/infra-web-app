@@ -16,7 +16,7 @@
         'znk.infra.exerciseUtility',
         'znk.infra.estimatedScore'
     ]).config([
-        'SvgIconSrvProvider',
+        'SvgIconSrvProvider', 
         function (SvgIconSrvProvider) {
             var svgMap = {
 

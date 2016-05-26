@@ -5,11 +5,12 @@
 (function (angular) {
     'use strict';
 
-    // angular.module('znk.infra-web-app').directive('EstimatedScoreWidget', ['$q', '$timeout', 'SubjectEnum', '$mdDialog', 'EstimatedScoreSrv', 'UserGoalsService', 'appConstants', 'WorkoutsDiagnosticFlow',
-    angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget', [
-        function () {
+    angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
+        function (EstimatedScoreSrv, $q, SubjectEnum) {
+            'ngInject';
+
             return {
-                templateUrl: 'app/components/estimatedScore/estimatedScoreWidget.template.html',
+                templateUrl: 'components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html',
                 require: '?ngModel',
                 restrict: 'E',
                 scope: {
@@ -19,29 +20,32 @@
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
-                    var getEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScores();
-                    var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
-                    var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
+                    // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
+                    // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();todo implement once diagnostic service will be ready
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
 
                     if (isNavMenuFlag) angular.element.addClass(element[0], 'is-nav-menu');
 
                     function adjustWidgetData(userGoals) {
-                        $q.all([getEstimatedScoreProm, getEstimatedScoreCompositeProm, isDiagnosticCompletedProm]).then(function (res) {
+                        $q.all([
+                            getLatestEstimatedScoreProm,
+                            $q.when(false)
+                        ]).then(function (res) {
                             var estimatedScore = res[0];
-                            var isDiagnosticCompleted = res[2];
+                            var isDiagnosticCompleted = res[1];
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted;
-                            scope.d.estimatedCompositeScore = isDiagnosticCompleted ? res[1].compositeScoreResults || '-' : '-';
+                            // scope.d.estimatedCompositeScore = isDiagnosticCompleted ? res[1].compositeScoreResults || '-' : '-';todo need to figure out what it do
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.compositeScore : '-';
                             scope.d.widgetItems = [];
 
-                            var subjectToIndexMap = {
-                                [SubjectEnum.ENGLISH.enum]: 0,
-                                [SubjectEnum.MATH.enum]: 1,
-                                [SubjectEnum.READING.enum]: 2,
-                                [SubjectEnum.SCIENCE.enum]: 3,
-                                [SubjectEnum.WRITING.enum]: 4
-                            };
+                            // var subjectToIndexMap = {
+                            //     [SubjectEnum.ENGLISH.enum]: 0,
+                            //     [SubjectEnum.MATH.enum]: 1,
+                            //     [SubjectEnum.READING.enum]: 2,
+                            //     [SubjectEnum.SCIENCE.enum]: 3,
+                            //     [SubjectEnum.WRITING.enum]: 4
+                            // };
 
                             angular.forEach(estimatedScore, function (estimatedScoreForSubject, subjectId) {
                                 var subjectIndex = subjectToIndexMap[subjectId];
@@ -107,6 +111,6 @@
                 }
             };
         }
-    ]);
+    );
 })(angular);
 
