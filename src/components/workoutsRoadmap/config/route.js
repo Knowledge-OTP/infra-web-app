@@ -16,7 +16,7 @@
 
                             return $q.all([workoutsProgressProm, /*isDiagnosticCompletedProm, */]).then(function (res) {
                                 var workoutsProgress = res[0];
-                                var isDiagnosticCompleted = !!res[1];
+                                var isDiagnosticCompleted = true;//!!res[1];
 
                                 return {
                                     diagnostic: {
@@ -42,12 +42,12 @@
                     controller: 'WorkoutsRoadMapDiagnosticIntroController',
                     controllerAs: 'vm'
                 })
-            /*  .state('app.workouts.roadmap.diagnostic.preSummary', {
-             templateUrl: 'app/workouts/templates/workoutsRoadmapBasePreSummary.template.html',
-             controller: 'WorkoutsRoadMapBasePreSummaryController',
-             controllerAs: 'vm'
-             })
-             .state('app.workouts.roadmap.diagnostic.summary', {
+                .state('workoutsRoadmap.diagnostic.preSummary', {
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
+                    controller: 'WorkoutsRoadMapBasePreSummaryController',
+                    controllerAs: 'vm'
+                })
+            /* .state('app.workouts.roadmap.diagnostic.summary', {
              resolve: {
              diagnosticData: function (WorkoutsDiagnosticFlow) {
              'ngInject';

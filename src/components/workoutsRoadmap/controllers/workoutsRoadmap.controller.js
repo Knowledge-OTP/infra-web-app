@@ -6,7 +6,7 @@
             $translatePartialLoader.addPart('workoutsRoadmap');
 
             var vm = this;
-            var activeWorkout;
+            //var activeWorkout;
 
             vm.workoutsProgress = data.workoutsProgress;
             vm.diagnostic = data.diagnostic;
@@ -16,6 +16,7 @@
             var WORKOUT_STATE = 'app.workouts.roadmap.workout';
 
             function getActiveWorkout() {
+                return data.diagnostic;//todo
                 var i = 0;
                 for (; i < vm.workoutsProgress.length; i++) {
                     if (vm.workoutsProgress[i].status !== ExerciseStatusEnum.COMPLETED.enum) {
@@ -30,18 +31,17 @@
 
             function _isFirstWorkoutStarted() {
                 var firstWorkout = vm.workoutsProgress[0];
-                return data.diagnostic.status !== ExerciseStatusEnum.COMPLETED.enum ||
-                    angular.isUndefined(firstWorkout.subjectId);
+                // return angular.isDefined(firstWorkout.subjectId);todo
+                return true;
             }
 
-            function _setActiveWorkout() {
-                activeWorkout = getActiveWorkout();
-                vm.activeWorkoutOrder = +activeWorkout.workoutOrder;
-            }
+            // function _setActiveWorkout() {
+            //     activeWorkout = getActiveWorkout();
+            // }
 
-            _setActiveWorkout();
+            // _setActiveWorkout();
 
-
+            //set selected item
             switch ($state.current.name) {
                 case DIAGNOSTIC_STATE:
                     vm.selectedItem = vm.diagnostic;
@@ -49,16 +49,16 @@
                 case WORKOUT_STATE:
                     var workoutOrder = +search.workout;
                     if (isNaN(workoutOrder) || workoutOrder < 0 || workoutOrder > vm.workoutsProgress.length) {
-                        vm.selectedItem = activeWorkout;
+                        vm.selectedItem = getActiveWorkout();
                     } else {
                         vm.selectedItem = vm.workoutsProgress[workoutOrder - 1];
                     }
                     break;
                 default:
                     if (_isFirstWorkoutStarted()) {
-                        vm.selectedItem = vm.diagnostic;
+                        vm.selectedItem = getActiveWorkout();
                     } else {
-                        vm.selectedItem = activeWorkout;
+                        vm.selectedItem = vm.diagnostic;
                     }
             }
 
@@ -71,7 +71,7 @@
                 } else {
                     vm.selectedItem = vm.workoutsProgress[_workoutOrder - 1];
                 }
-                _setActiveWorkout();
+                // _setActiveWorkout();
             };
             data.roadmapCtrlActions.freezeWorkoutProgressComponent = function (freeze) {
                 vm.freezeWorkoutProgressComponent = freeze;
