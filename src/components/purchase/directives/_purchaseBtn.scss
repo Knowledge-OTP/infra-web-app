@@ -1,78 +1,81 @@
-//purchase-btn {
-//
-//    form {
-//        img {
-//            display: block;
-//        }
-//    }
-//
-//    .flex-container {
-//        padding: 0;
-//        margin: 0 -15px;
-//        list-style: none;
-//        display: flex;
-//        -webkit-flex-flow: row wrap;
-//        justify-content: flex-start;
-//    }
-//
-//    .flex-item {
-//        padding: 0;
-//        margin: auto;
-//    }
-//    .upgrade-btn-wrapper{
-//        text-align: center;
-//
-//        .md-button {
-//            padding:0;
-//        }
-//    }
-//    .upgraded {
-//        .pending {
-//            md-progress-circular {
-//                margin-right: 20px;
-//                float:left;
-//                top: -10px;
-//                .md-spinner-wrapper .md-inner {
-//                    .md-left,
-//                    .md-right {
-//                        .md-half-circle {
-//                            //border-top-color: $bgColor12;
-//                        }
-//                    }
-//                    .md-left {
-//                        .md-half-circle {
-//                            //border-left-color: $bgColor12;
-//                        }
-//                    }
-//                    .md-right {
-//                        .md-half-circle {
-//                            //border-right-color: $bgColor12;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        .icon-wrapper {
-//            display: inline-block;
-//            width: 25px;
-//            height: 25px;
-//            border-radius: 50%;
-//            //background-color: $bgColor12;
-//            float:left;
-//            margin-right: 20px;
-//            svg-icon {
-//                height: 100%;
-//            }
-//            svg-icon svg {
-//                width:75%;
-//                height: 100%;
-//                margin: auto;
-//                display: block;
-//            }
-//        }
-//        .text {
-//            line-height: 25px;
-//            display: inline-block;
-//        }
-//    }
-//}
+@import '../../../../src/scss/imports/colors';
+
+purchase-btn {
+
+    form {
+        img {
+            display: block;
+        }
+    }
+
+    .flex-container {
+        padding: 0;
+        margin: 0 -15px;
+        list-style: none;
+        display: flex;
+        -webkit-flex-flow: row wrap;
+        justify-content: flex-start;
+    }
+
+    .flex-item {
+        padding: 0;
+        margin: auto;
+    }
+    .upgrade-btn-wrapper{
+        text-align: center;
+
+        .md-button {
+            padding:0;
+        }
+    }
+    .upgraded {
+        .pending {
+            md-progress-circular {
+                margin-right: 20px;
+                float:left;
+                top: -10px;
+                .md-spinner-wrapper .md-inner {
+                    .md-left,
+                    .md-right {
+                        .md-half-circle {
+                            border-top-color: $borderColor5;
+                        }
+                    }
+                    .md-left {
+                        .md-half-circle {
+                            border-left-color: $borderColor5;
+                        }
+                    }
+                    .md-right {
+                        .md-half-circle {
+                            border-right-color: $borderColor5;
+                        }
+                    }
+                }
+            }
+        }
+        .icon-wrapper {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: $bgColor5;
+            float:left;
+            margin-right: 20px;
+            svg-icon {
+                height: 100%;
+            }
+            svg-icon svg {
+                width:75%;
+                height: 100%;
+                margin: auto;
+                display: block;
+            }
+        }
+        .text {
+            line-height: 25px;
+            display: inline-block;
+        }
+    }
+
+}

@@ -25,8 +25,8 @@
     }]);
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService', [
-        '$q', '$mdDialog' , '$filter', 'ActStorageSrv', 'AuthService', 'ENV', '$log', '$mdToast', '$window',
-        function ($q, $mdDialog, $filter, ActStorageSrv, AuthService, ENV, $log, $mdToast, $window) {
+        '$q', '$mdDialog' , '$filter', 'ActStorageSrv', 'AuthService', 'ENV', '$log', '$mdToast', '$window', 'PopUpSrv',
+        function ($q, $mdDialog, $filter, ActStorageSrv, AuthService, ENV, $log, $mdToast, $window, PopUpSrv) {
 
             var self = this;
 

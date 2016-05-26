@@ -135,7 +135,7 @@ angular.module('znk.infra-web-app.purchase').service('UserProfileService', funct
     this.getProfile = function(){
         var mock = {
             email: 'asdasdad'
-        }
+        };
         return mock;
     };
 });
@@ -145,7 +145,7 @@ angular.module('znk.infra-web-app.purchase').service('AuthService', function(){
     this.getAuth = function(){
         var mock ={
             uid: 3
-        }
+        };
         return mock;
     };
 });
