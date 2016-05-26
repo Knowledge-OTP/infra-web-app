@@ -1,0 +1,21 @@
+{
+    "DIAGNOSTIC_INTRO": {
+        "DIAG_DESCRIPTION_ENGLISH": "This quick test will determine your initial estimated score and your training roadmap.",
+        "DIAG_SUBJECT_TEXT_ENGLISH": "Let’s do 4",
+        "DIAG_SUBJECT_NAME_ENGLISH": "English",
+        "DIAG_INSTRUCTIONS_ENGLISH": "Solve the following problems. The use of a calculator is NOT permitted.",
+        "DIAG_DESCRIPTION_NONE": "what???",
+        "DIAG_INSTRUCTIONS_ALL": "all for one and one for all",
+        "DIAG_INSTRUCTIONS_NONE": "none is the best"
+    },
+    "USER_GOALS": {
+        "GOALS_INFO": "The SAT test includes 2 section scores, each with a score range of 200-800. The range of the total score is 400-1600. You can change your target score at any time.",
+        "VERBAL": "Verbal",
+        "MATH": "Math",
+        "MATHEMATICS": "mathematics",
+        "TOTAL_SCORE": "Total Score:"
+    },
+    "ON_BOARDING.WELCOME": {
+        "ZINKERZ_APP_WELCOME_TEXT": "Zinkerz Prep for the ACT® Test."
+    }
+}

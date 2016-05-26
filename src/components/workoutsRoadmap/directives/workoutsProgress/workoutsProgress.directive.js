@@ -1,3 +1,4 @@
+"use strict";
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config([
@@ -12,8 +13,6 @@
         ])
         .directive('workoutsProgress',
             function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
-                'ngInject';
-
                 'ngInject';
 
                 var config = {

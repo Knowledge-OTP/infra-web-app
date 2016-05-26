@@ -1,0 +1,203 @@
+@import './src/scss/imports/variables',
+        './src/scss/imports/colors',
+        './bower_components/angular-material/angular-material.scss',
+        './bower_components/infra/dist/mixins/mixins',
+        './src/scss/imports/angular-material-override',
+        './scss/onboarding-bar-directive';
+
+/**
+*  FONTS
+*/
+/* Lato fonts from google*/
+@import url(#{$googleFontCDN}css?family=Lato:300);
+@import url(#{$googleFontCDN}css?family=Lato:300italic);
+@import url(#{$googleFontCDN}css?family=Lato:400);
+@import url(#{$googleFontCDN}css?family=Lato:400italic);
+/* Quicksand fonts */
+@import url(#{$googleFontCDN}css?family=Quicksand);
+@import url(#{$googleFontCDN}css?family=Quicksand:300);
+@import url(#{$googleFontCDN}css?family=Quicksand:700);
+/* Material+Icons */
+@import url(#{$googleFontCDN}icon?family=Material+Icons);
+
+
+
+.on-board {
+     /**
+     *  SVG
+     */
+    .svg-wrapper {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .clearfix:after {
+        content: " ";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+
+    .main-title {
+        @include text-style(32px, $fontColor3,Quicksand,$semiBoldFontWeight);
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .inline-block {
+        display: inline-block;
+    }
+
+    .base-border-radius {
+        border: {
+            radius: $baseBorderRadiusCorner;
+        }
+    }
+
+    .base-box-shadow {
+        box-shadow: 0 3px 7px 0 $bsColor3;
+    }
+
+    .smile-raccoon {
+        @include full-background-image-retina('./assets/images/smile-raccoon', 293px, 373px);
+    }
+
+    .thinking-raccoon {
+        @include full-background-image-retina('./assets/images/thinking-raccoon', 360px, 217px);
+    }
+
+    position: relative;
+
+    .container {
+        min-height: 535px;
+        background-color: $bgColor3;
+        box-sizing: border-box;
+        position: relative;
+
+        .step{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .welcome{
+                .main-title{
+                    margin-bottom: 50px;
+                }
+                .sub-title{
+                    @include text-style(22px, $fontColor2, Lato, $demiFontWeight);
+                    margin-bottom: 8px;
+                    div{
+                        display: inline-block;
+                    }
+                    span{
+                        color: $fontColor6;
+                        font-weight: $regularFontWeight;
+                        margin-left: 4px;
+                    }
+                }
+
+                .btn-wrap{
+                    margin-top: 105px;
+                    text-align: center;
+
+                    .continue-title {
+                        vertical-align: top;
+                        position: relative;
+                        top: 3px;
+                    }
+
+                    .md-button {
+                        width: 234px;
+                        height: 50px;
+                        border-radius: 30px;
+                        @include text-style(21px, $fontColor1, Lato, $regularFontWeight);
+                        .dropdown-arrow-icon{
+                            svg {
+                                width: 16px;
+                                transform: rotate(-90deg);
+                                polyline {
+                                    stroke: $bgColor3;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .goals{
+                .sub-title{
+                    @include text-style(24px, $fontColor2, Quicksand, $regularFontWeight);
+                    text-align: center;
+                    margin-top: 32px;
+                    margin-bottom: 10px;
+                }
+
+                .light-title{
+                    @include text-style(12px, $fontColor4, Lato, $lightFontWeight);
+                    text-align: center;
+                    margin-top: 15px;
+                    cursor: pointer;
+                    outline: none;
+                }
+                .select-schools-title{
+                    @include text-style(16px, $fontColor2, Lato, $lightFontWeight);
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+            }
+
+            .bg-wrap{
+                position: absolute;
+                bottom: 0;
+                left: calc(50% - 180px);
+                .thinking-raccoon {
+                    display:block;
+                }
+            }
+
+            &.make-padding{
+                flex-direction: row;
+                padding: {
+                    top: 61px;
+                    bottom: 61px;
+                }
+            }
+
+            &.diagnostic{
+                .diagnostic-title{
+                    @include text-style(32px, $fontColor3,Quicksand,$semiBoldFontWeight);
+                    text-align: center;
+                    margin-top: 20px;
+                }
+
+                .diagnostic-sub-title{
+                    @include text-style(16px, $fontColor3,Lato,$lightFontWeight);
+                    text-align: center;
+                    margin-top: 15px;
+                }
+
+                .btn-wrap{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    margin:{
+                        top: 52px;
+                        right: 20px;
+                    }
+
+                    button{
+                        display: inline-block;
+                    }
+                }
+
+                diagnostic-intro {
+                    .section-question {
+                        margin-top: -25px;
+                    }
+                }
+            }
+        }
+    }
+}
