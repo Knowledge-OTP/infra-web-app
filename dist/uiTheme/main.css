@@ -1,0 +1,33 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+.md-button.znk.md-primary {
+  color: #898989;
+  background: #87ca4d;
+  padding-right: 90px;
+  padding-left: 90px;
+  border-radius: 30px;
+  font-family: Lato;
+  font-weight: 400;
+  font-size: 16px; }
+  .md-button.znk.md-primary:hover {
+    background: #0a8999; }
+  .md-button.znk.md-primary:active {
+    background: #037684; }
+  .md-button.znk.md-primary[disabled="disabled"] {
+    background: rgba(10, 155, 173, 0.6);
+    color: rgba(255, 255, 255, 0.6) !important; }
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important; }

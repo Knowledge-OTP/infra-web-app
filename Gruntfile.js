@@ -210,25 +210,19 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/locale/*.*',
                     dest: '<%= yeoman.tmp %>'
+                },{
+                    expand: true,
+                    cwd: '<%= yeoman.src %>/components',
+                    src: '*/assets/**/*.*',
+                    dest: '<%= yeoman.tmp %>'
                 }]
             },
             dist: {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.tmp %>/',
-                    src: '*/main.css',
+                    src: ['**/*.*', '!**/*.js'],
                     dest: '<%= yeoman.dist %>/'
-                },{
-                    expand: true,
-                    cwd: '<%= yeoman.tmp %>/',
-                    src: '*/locale/*.*',
-                    dest: '<%= yeoman.dist %>/'
-                }, {
-                    src: '<%= yeoman.tmp %>/' + appConfig.appName + '.js',
-                    dest: '<%= yeoman.dist %>/' + appConfig.appName + '.js'
-                }, {
-                    src: '<%= yeoman.tmp %>/main.css',
-                    dest: '<%= yeoman.dist %>/main.css'
                 }]
             }
         },
