@@ -129,10 +129,10 @@
             font-weight: $bookFontWeight;
             cursor: pointer;
             &.links {
-                //color: $fontColor2;
+                color: $fontColor2;
             }
             &.logout {
-                //color: $fontColor8;
+                color: $fontColor8;
             }
         }
         .check-mark-wrapper {
@@ -141,7 +141,7 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            //background-color: $borderColor5;
+            background-color: $borderColor5;
             margin-left: 10px;
             svg-icon {
                 height: 100%;

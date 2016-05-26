@@ -16,8 +16,7 @@
         "angular-material": "^1.0.9",
         "angular-aria": "1.5.5",
         "angular-messages": "1.5.5",
-        "ng-tags-input": "^3.0.0",
-        "angular-sanitize": "^1.5.5"
+        "ng-tags-input": "^3.0.0"
     },
     "ignore": [
         ".*",
