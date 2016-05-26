@@ -130,30 +130,42 @@ angular.module('znk.infra-web-app.purchase').service('ENV', function(){
     };
 });
 
+angular.module('znk.infra-web-app.purchase').service('UserProfileService', function(){
+    'use strict';
+    this.getProfile = function(){
+        var mock = {
+            email: 'asdasdad'
+        }
+        return mock;
+    };
+});
+
 angular.module('znk.infra-web-app.purchase').service('AuthService', function(){
     'use strict';
     this.getAuth = function(){
-        function uid(){
-            return 3;
+        var mock ={
+            uid: 3
         }
-        return uid;
+        return mock;
     };
 });
 
-angular.module('znk.infra-web-app.purchase').service('UserProfileService', function() {
+angular.module('znk.infra-web-app.purchase').factory('ENV', function(){
     'use strict';
+
     var mock = {};
-    mock.getAuth = function(){
-        function uid(){
-            return 3;
-        }
-        return uid;
+
+    mock.purchasePaypalParams = {
+        hostedButtonId:123,
+        formAction: 'asasd',
+        btnImgSrc: 'asdsad',
+        pixelGifSrc: 'sdsadsad'
     };
 
-    mock.getProfile = function(){
-        return {
-            email:'asdsad'
-        };
-    };
+    mock.fbDataEndPoint = 'sadasd';
+    mock.firebaseAppScopeName = 'sadasd';
+    return mock;
+
 });
+
 //    ********************  mock    *************** //

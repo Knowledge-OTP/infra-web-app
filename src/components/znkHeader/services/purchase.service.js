@@ -8,7 +8,7 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.purchase').provider('znkHeaderSrv',
+    angular.module('znk.infra-web-app.znkHeader').provider('znkHeaderSrv',
 
         function () {
             var additionalHeaderItems = [];
