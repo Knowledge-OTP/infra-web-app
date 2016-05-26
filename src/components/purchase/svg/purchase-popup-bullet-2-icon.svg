@@ -3,14 +3,12 @@
     y="0px"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 124 141"
+    xmlns="http://www.w3.org/2000/svg"
     class="purchase-popup-bullet-2-icon">
     <style>
-        .purchase-popup-bullet-2-icon {
-        .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
-        .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}
-        .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-        }
-
+        .purchase-popup-bullet-2-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
+        .purchase-popup-bullet-2-icon .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}
+        .purchase-popup-bullet-2-icon .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
     </style>
 <g>
 	<path class="st0" d="M77.7,139H16.8c-4.5,0-8.3-3.7-8.3-8.3V10.3c0-4.5,3.7-8.3,8.3-8.3h60.9c4.5,0,8.3,3.7,8.3,8.3v120.5
