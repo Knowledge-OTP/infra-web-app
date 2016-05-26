@@ -7,7 +7,12 @@
             'pascalprecht.translate',
             'znk.infra.svgIcon',
             'znk.infra.popUp',
-            'znk.infra.enum'])
+            'znk.infra.enum',
+            'znk.infra.config',
+            'znk.infra.storage',
+            'znk.infra.auth',
+            'znk.infra.analytics'
+        ])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){

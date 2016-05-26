@@ -5,9 +5,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.purchase').directive('purchaseBtn', [
-        'ENV', '$q', '$sce', 'AuthService', 'UserProfileService', '$location', 'purchaseService', '$filter', 'PurchaseStateEnum', '$log', '$translatePartialLoader',
-        function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader) {
+    angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
+        function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
             return {
                 templateUrl:  'components/purchase/templates/purchaseBtn.template.html',
                 restrict: 'E',
@@ -21,9 +20,9 @@
 
                     scope.vm.translate = $filter('translate');
 
-                    //scope.vm.saveAnalytics = function () {
-                    //    znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
-                    //};
+                    scope.vm.saveAnalytics = function () {
+                        znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
+                    };
 
                     scope.$watch('purchaseState', function (newPurchaseState) {
                         if (angular.isUndefined(newPurchaseState)) {
@@ -110,62 +109,5 @@
 
             };
         }
-    ]);
+    );
 })(angular);
-
-
-
-
-//    ********************  mock    *************** //
-
-angular.module('znk.infra-web-app.purchase').service('ENV', function(){
-    'use strict';
-
-    var mock = {};
-    mock.purchasePaypalParams = {
-        hostedButtonId: 3,
-        fbDataEndPoint:3,
-        firebaseAppScopeName:3,
-        formAction:3
-    };
-});
-
-angular.module('znk.infra-web-app.purchase').service('UserProfileService', function(){
-    'use strict';
-    this.getProfile = function(){
-        var mock = {
-            email: 'asdasdad'
-        };
-        return mock;
-    };
-});
-
-angular.module('znk.infra-web-app.purchase').service('AuthService', function(){
-    'use strict';
-    this.getAuth = function(){
-        var mock ={
-            uid: 3
-        };
-        return mock;
-    };
-});
-
-angular.module('znk.infra-web-app.purchase').factory('ENV', function(){
-    'use strict';
-
-    var mock = {};
-
-    mock.purchasePaypalParams = {
-        hostedButtonId:123,
-        formAction: 'asasd',
-        btnImgSrc: 'asdsad',
-        pixelGifSrc: 'sdsadsad'
-    };
-
-    mock.fbDataEndPoint = 'sadasd';
-    mock.firebaseAppScopeName = 'sadasd';
-    return mock;
-
-});
-
-//    ********************  mock    *************** //

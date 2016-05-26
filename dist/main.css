@@ -72006,6 +72006,8 @@ purchase-btn .upgraded .text {
       height: 100%;
       margin: auto;
       display: block; }
+  .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
+    background-color: #f8f8f8; }
 
 md-menu-content.md-menu-content-znk-header {
   min-width: 270px;
@@ -72017,7 +72019,7 @@ md-menu-content.md-menu-content-znk-header {
     md-menu-content.md-menu-content-znk-header md-list .divider {
       height: 1px;
       margin: 10px 16px;
-      border-top: 1px solid #ebebeb; }
+      border-top: 1px solid #d3d0d0; }
   md-menu-content.md-menu-content-znk-header .pending-purchase-icon-wrapper {
     width: 16px;
     height: auto;
