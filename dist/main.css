@@ -71987,12 +71987,17 @@ purchase-btn .upgraded .text {
     text-transform: uppercase;
     font-weight: 300;
     cursor: pointer; }
+    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
+      color: #161616; }
+    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
+      color: #898989; }
   .md-open-menu-container .header-modal-item .check-mark-wrapper {
     position: relative;
     top: -2px;
     width: 16px;
     height: 16px;
     border-radius: 50%;
+    background-color: #87ca4d;
     margin-left: 10px; }
     .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
       height: 100%; }

@@ -1,10 +1,9 @@
-angular.module('demo', ['znk.infra-web-app.znkHeader', 'ngSanitize'])
+angular.module('demo', ['znk.infra-web-app.znkHeader'])
     .config(function ($translateProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: '/{part}/locale/{lang}.json'
         })
             .preferredLanguage('en')
-            .useSanitizeValueStrategy('sanitize');
     })
     .run(function ($rootScope, $translate) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
