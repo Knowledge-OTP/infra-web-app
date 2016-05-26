@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        function ($q, $mdDialog, $filter, InfraConfigSrv, AuthService, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
+        function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
             'ngInject';
 
             var self = this;
@@ -32,18 +32,18 @@
                 };
 
                 self.purchaseDataExists = function () {
-                    var isPurchased;
-                    var authData = AuthService.getAuth();
-                    if (authData) {
-                        var currentUID = authData.uid;
-                        var purchaseFullPath = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-                        purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
-                        return StudentStorageSrv.get(purchaseFullPath).then(function (purchaseObj) {
-                            isPurchased = (angular.equals(purchaseObj, {})) ? false : true;
-                            return isPurchased;
-                        });
-                    }
-                    return $q.reject();
+                    //var isPurchased;
+                    //var authData = AuthService.getAuth();
+                    //if (authData) {
+                    //    var currentUID = authData.uid;
+                    //    var purchaseFullPath = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                    //    purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
+                    //    return StudentStorageSrv.get(purchaseFullPath).then(function (purchaseObj) {
+                    //        isPurchased = (angular.equals(purchaseObj, {})) ? false : true;
+                    //        return isPurchased;
+                    //    });
+                    //}
+                    //return $q.reject();
                 };
 
                 self.checkPendingStatus = function () {
@@ -91,32 +91,32 @@
                     }
                     return StudentStorageSrv.set(pendingPurchasesPath, null);
                 };
-
-                self.listenToPurchaseStatus = function () {
-                    var authData = AuthService.getAuth();
-                    if (authData) {
-                        var currentUID = authData.uid;
-                        var purchaseFullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-                        purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
-                        var ref = new Firebase(purchaseFullPath);
-                        ref.on('value', function (dataSnapshot) {
-                            var dataSnapshotVal = dataSnapshot.val();
-
-                            //if (angular.isDefined(dataSnapshotVal)) {
-                            //    if ($state.current.name && $state.current.name !== '') {
-                            //        $state.reload();
-                            //    }
-                            //}
-
-                            purchaseData = dataSnapshotVal;
-
-                            StudentStorageSrv.cleanPathCache(PURCHASE_PATH);
-                            if (purchaseData) {
-                                self.removePendingPurchase();
-                            }
-                        });
-                    }
-                };
+                //
+                //self.listenToPurchaseStatus = function () {
+                //    var authData = AuthService.getAuth();
+                //    if (authData) {
+                //        var currentUID = authData.uid;
+                //        var purchaseFullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                //        purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
+                //        var ref = new Firebase(purchaseFullPath);
+                //        ref.on('value', function (dataSnapshot) {
+                //            var dataSnapshotVal = dataSnapshot.val();
+                //
+                //            //if (angular.isDefined(dataSnapshotVal)) {
+                //            //    if ($state.current.name && $state.current.name !== '') {
+                //            //        $state.reload();
+                //            //    }
+                //            //}
+                //
+                //            purchaseData = dataSnapshotVal;
+                //
+                //            StudentStorageSrv.cleanPathCache(PURCHASE_PATH);
+                //            if (purchaseData) {
+                //                self.removePendingPurchase();
+                //            }
+                //        });
+                //    }
+                //};
 
                 self.showPurchaseDialog = function () {
                     //a.eventTrack({
