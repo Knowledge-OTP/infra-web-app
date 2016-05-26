@@ -1,0 +1,37 @@
+<div class="diagnostic-intro-drv" translate-namespace="DIAGNOSTIC_INTRO">
+    <div class="description">
+        <div class="diagnostic-text" translate=".DIAG_DESCRIPTION_{{d.currMapData.subjectNameAlias | uppercase}}"></div>
+    </div>
+    <div class="icons-section" ng-class="{pristine: d.currMapIndex === -1}">
+        <div ng-repeat="subject in d.subjects"
+             class="icon-circle {{subject.subjectNameAlias}}-color"
+             ng-class="{
+                    active: subject.mapId === d.currMapIndex,
+                    done: subject.mapId < d.currMapIndex
+            }">
+            <div class="icon-wrapper">
+                <svg-icon class="subject-icon" name="{{subject.subjectIconName}}"></svg-icon>
+                <svg-icon class="section-complete" name="diagnostic-intro-check-mark"></svg-icon>
+            </div>
+        </div>
+    </div>
+    <div class="raccoon-img-container">
+        <div class="raccoon-img-wrapper">
+            <div class="diagnostic-raccoon" ng-class="'diagnostic-raccoon-'+d.currMapData.subjectNameAlias"></div>
+        </div>
+    </div>
+    <div class="section-question" ng-if="!d.currMapData.hideSectionQuestion">
+            <div>
+                <span translate=".DIAG_SUBJECT_TEXT_{{d.currMapData.subjectNameAlias | uppercase}}"></span>
+                <span
+                    class="{{d.currMapData.subjectNameAlias}}"
+                    translate=".DIAG_SUBJECT_NAME_{{d.currMapData.subjectNameAlias | uppercase}}">
+                </span>
+                <span translate=".QUESTIONS"></span>
+                <div class="diagnostic-instructions" ng-if="showInstructions">
+                    <span class="diagnostic-instructions-title" translate=".INSTRUCTIONS_TITLE"></span>
+                    <span class="diagnostic-instructions-text" translate=".DIAG_INSTRUCTIONS_{{d.currMapData.subjectNameAlias | uppercase}}"></span>
+                </div>
+            </div>
+    </div>
+</div>

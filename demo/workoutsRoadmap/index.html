@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;background: rgba(43, 43, 191, 0.08);">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="workoutsRoadmap/main.css">
+    <link rel="stylesheet" href="uiTheme/main.css">
+    <link rel="stylesheet" href="infra/dist/svgIcon/main.css">
+    <link rel=" stylesheet" href="infra/dist/scroll/main.css">
+    <link rel="stylesheet" href="angular-material/angular-material.css">
+    <style>
+        body{
+            background: #E6E5E5;
+        }
+
+        .reading-bg {
+            background: red;
+        }
+
+        .writing-bg {
+            background: #54ff23;
+        }
+
+        .listening-bg {
+            background: #32b7ff;
+        }
+
+        .speaking-bg {
+            background: #ef3fff;
+        }
+
+        .english-bg {
+            background: #ecff56;
+        }
+
+        .science-bg {
+            background: #d7dcff;
+        }
+
+        .verbal-bg {
+            background: #5a49ff;
+        }
+
+        .essay-bg {
+            background: #ff6037;
+        }
+
+        workouts-progress .items-container .item-container .item.selected.reading-bg:after {
+            border-color: red;
+        }
+
+        workouts-progress .items-container .item-container .item.selected.writing-bg:after {
+            border-color: #54ff23;
+        }
+
+        workouts-progress .items-container .item-container .item.selected.listening-bg:after {
+            border-color: #32b7ff;
+        }
+
+        workouts-progress .items-container .item-container .item.selected.speaking-bg:after {
+            border-color: #ef3fff;
+        }
+
+        workouts-progress .items-container .item-container .item.selected.english-bg:after {
+            border-color: #ecff56;
+        }
+
+        workouts-progress .items-container .item-container .item.selected.science-bg:after {
+            border-color: #d7dcff;
+        }
+
+
+        workouts-progress .items-container .item-container .item.selected.verbal-bg:after {
+            border-color: #5a49ff;
+        }
+
+        workouts-progress .items-container .item-container .item.selected.essay-bg:after {
+            border-color: #ff6037;
+        }
+    </style>
+</head>
+<body ng-app="demo">
+<button ui-sref="workoutsRoadmap">Go To Roadmap</button>
+<ui-view></ui-view>
+
+<script src="angular/angular.js"></script>
+<script src="angular-translate/angular-translate.js"></script>
+<script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+<script src="angular-ui-router/release/angular-ui-router.js"></script>
+<script src="firebase/firebase-debug.js"></script>
+<script src="angular-animate/angular-animate.js"></script>
+<script src="angular-aria/angular-aria.js"></script>
+<script src="angular-material/angular-material.js"></script>
+
+<script src="infra/dist/svgIcon/svgIcon.js"></script>
+<script src="infra/dist/enum/enum.js"></script>
+<script src="infra/dist/exerciseUtility/exerciseUtility.js"></script>
+<script src="infra/dist/config/config.js"></script>
+<script src="infra/dist/storage/storage.js"></script>
+<script src="infra/dist/exerciseResult/exerciseResult.js"></script>
+<script src="infra/dist/utility/utility.js"></script>
+<script src="infra/dist/content/content.js"></script>
+<script src="infra/dist/contentAvail/contentAvail.js"></script>
+<script src="infra/dist/scroll/scroll.js"></script>
+<script src="infra/dist/general/general.js"></script>
+
+<script src="workoutsRoadmap/workoutsRoadmap.js"></script>
+<script src="workoutsRoadmap/templates.js"></script>
+
+<script src="demo.js"></script>
+<script src="infra/demoShared/contentConfig.js"></script>
+<script src="infra/demoShared/storagesConfig.js"></script>
+</body>
+</html>

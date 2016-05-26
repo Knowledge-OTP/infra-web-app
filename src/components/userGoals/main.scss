@@ -1,0 +1,47 @@
+@import './src/scss/imports/variables',
+        './src/scss/imports/colors',
+        './bower_components/angular-material/angular-material.scss',
+        './bower_components/infra/dist/mixins/mixins',
+        './src/scss/imports/angular-material-override',
+        './scss/ng-tag-input-override',
+        './scss/user-goals-directive',
+        './scss/goal-select-directive',
+        './scss/school-select-directive';
+
+/**
+*  FONTS
+*/
+/* Lato fonts from google*/
+@import url(#{$googleFontCDN}css?family=Lato:300);
+@import url(#{$googleFontCDN}css?family=Lato:300italic);
+@import url(#{$googleFontCDN}css?family=Lato:400);
+@import url(#{$googleFontCDN}css?family=Lato:400italic);
+/* Quicksand fonts */
+@import url(#{$googleFontCDN}css?family=Quicksand);
+@import url(#{$googleFontCDN}css?family=Quicksand:300);
+@import url(#{$googleFontCDN}css?family=Quicksand:700);
+/* Material+Icons */
+@import url(#{$googleFontCDN}icon?family=Material+Icons);
+
+.goals{
+    .sub-title{
+        @include text-style(24px, $fontColor2, Quicksand, $regularFontWeight);
+        text-align: center;
+        margin-top: 32px;
+        margin-bottom: 10px;
+    }
+
+    .light-title{
+        @include text-style(12px, $fontColor4, Lato, $lightFontWeight);
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        outline: none;
+    }
+    .select-schools-title{
+        @include text-style(16px, $fontColor2, Lato, $lightFontWeight);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}
+

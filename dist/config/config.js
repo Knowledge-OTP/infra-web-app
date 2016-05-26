@@ -2,24 +2,20 @@
     'use strict';
 
     angular.module('znk.infra-web-app.config', []).config([
-        function($translateProvider){
-            $translateProvider.useLoader('$translatePartialLoader', {
-                urlTemplate: '/i18n/{part}/{lang}.json'
-            });
-        }
+        function(){}
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.config').provider('InfraConfigSrv', [
+    angular.module('znk.infra-web-app.config').provider('WebAppInfraConfigSrv', [
         function () {
             this.$get = [
                 function () {
-                    var InfraConfigSrv = {};
+                    var webAppInfraConfigSrv = {};
 
-                    return InfraConfigSrv;
+                    return webAppInfraConfigSrv;
                 }
             ];
         }

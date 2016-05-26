@@ -1,0 +1,8 @@
+@import 'src/scss/imports/variables',
+        'src/scss/imports/colors',
+        'bower_components/infra/dist/mixins/mixins';
+
+@import 'directives/workoutsProgress/workouts-progress-directive';
+
+@import 'scss/workoutsRoadmap',
+        'scss/workoutsRoadmap-diagnostic';

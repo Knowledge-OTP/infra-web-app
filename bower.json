@@ -5,18 +5,19 @@
         "Zinkerz"
     ],
     "dependencies": {
-        "angular": "~1.5.3",
-        "angular-animate": "1.4.8",
-        "angular-material": "1.0.2",
+        "angular": "1.5.5",
+        "angular-animate": "1.5.5",
         "Swiper": "swiper#~3.2.7",
         "firebase": "^2.4.2",
-        "angular-translate-loader-partial": "^2.11.0",
         "angular-translate": "^2.11.0",
-        "angulartics": "1.0.3",
-        "infra": "https://github.com/Knowledge-OTP/infra.git#igor/svg-icon-style-change",
-        "material-design-iconfont": "0.0.2",
+        "angular-translate-loader-partial": "^2.11.0",
+        "infra": "https://github.com/Knowledge-OTP/infra.git#zinkerz/version-5",
+        "angular-ui-router": "ui-router#^0.3.0",
+        "angular-material": "^1.0.9",
+        "angular-aria": "1.5.5",
+        "angular-messages": "1.5.5",
+        "ng-tags-input": "^3.0.0",
         "angular-sanitize": "^1.5.5",
-        "angular-ui-router": "0.2.15"
     },
     "ignore": [
         ".*",
