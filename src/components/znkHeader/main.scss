@@ -1,6 +1,6 @@
 @import '../../../src/scss/imports/colors',
         '../../../src/scss/imports/variables',
-        '../../../bower_components/angular-material/angular-material.scss',    // check why angular material not loaded from here (only from index.html)
+        '../../../bower_components/angular-material/angular-material.scss',
         '../../../bower_components/infra/dist/mixins/mixins',
         '../purchase/main.scss';
 
@@ -9,7 +9,7 @@
 .app-header {
     background: $bgColor1;
     height: 57px;
-    border-bottom: 1px solid $borderColor3;
+    border-bottom: 1px solid $bgColor28;
     font-family: Lato;
 
     .main-content-header {
@@ -84,7 +84,7 @@
                 color: $fontColor6;
             }
             .md-button {
-                background: $bgColor1;
+                //background: $bgColor1;
                 width: auto;
                 display: flex !important;             // shared style for buttons?
                 justify-content: center;
@@ -115,7 +115,7 @@
                 margin-bottom: 5px;
             }
             .email {
-                //@include text-style(14px, $fontColor7, Lato, 300);
+                @include text-style(14px, $fontColor7, Lato, 300);
                 border-bottom: 1px solid $borderColor4;
                 width: 100%;
                 padding-bottom: 15px;
@@ -129,10 +129,10 @@
             font-weight: $bookFontWeight;
             cursor: pointer;
             &.links {
-                color: $fontColor2;
+                //color: $fontColor2;
             }
             &.logout {
-                color: $fontColor8;
+                //color: $fontColor8;
             }
         }
         .check-mark-wrapper {
@@ -141,7 +141,7 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background-color: $borderColor5;
+            //background-color: $borderColor5;
             margin-left: 10px;
             svg-icon {
                 height: 100%;
@@ -154,7 +154,7 @@
             }
         }
         &:hover:not(.header-modal-item-profile) {
-            background-color: $borderColor6;
+            //background-color: $borderColor6;
         }
     }
 }

@@ -38,17 +38,17 @@ purchase-btn {
                     .md-left,
                     .md-right {
                         .md-half-circle {
-                            border-top-color: $borderColor5;
+                            border-top-color: $borderColor3;
                         }
                     }
                     .md-left {
                         .md-half-circle {
-                            border-left-color: $borderColor5;
+                            border-left-color: $borderColor3;
                         }
                     }
                     .md-right {
                         .md-half-circle {
-                            border-right-color: $borderColor5;
+                            border-right-color: $borderColor3;
                         }
                     }
                 }
@@ -59,7 +59,7 @@ purchase-btn {
             width: 25px;
             height: 25px;
             border-radius: 50%;
-            background-color: $bgColor5;
+            background-color: $bgColor7;
             float:left;
             margin-right: 20px;
             svg-icon {
