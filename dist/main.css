@@ -6,10 +6,6 @@
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 @import url(//fonts.googleapis.com/css?family=Lato:300);
 @import url(//fonts.googleapis.com/css?family=Lato:300italic);
 @import url(//fonts.googleapis.com/css?family=Lato:400);
@@ -2937,9 +2933,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -17440,7 +17436,7 @@ a.md-button,
       background-color: transparent; }
   a.md-button.primary,
   .md-button.primary {
-    background-color: #87ca4d;
+    background-color: #0a9bad;
     color: white; }
     a.md-button.primary:active,
     .md-button.primary:active {
@@ -17496,15 +17492,15 @@ a.md-button,
   a.md-button.outline-green,
   .md-button.outline-green {
     background: #ff931e;
-    border: 1px solid #f2f2f2;
-    color: #acacac; }
+    border: 1px solid #87ca4d;
+    color: #87ca4d; }
     a.md-button.outline-green:active,
     .md-button.outline-green:active {
       background-color: #E8E8E8; }
   a.md-button.outline-blue,
   .md-button.outline-blue {
     background: #ff931e;
-    border: 1px solid #ebebeb;
+    border: 1px solid #0a9bad;
     color: #0a9bad; }
     a.md-button.outline-blue:active,
     .md-button.outline-blue:active {
@@ -17724,10 +17720,6 @@ diagnostic-intro .diagnostic-intro-drv {
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 /* full background image with retina */
 /* full background image with retina */
 login-form {
@@ -17842,10 +17834,6 @@ login-form {
 /* general */
 /* paths */
 /* general */
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 /*border color*/
 /*background*/
 /* box shadow */
@@ -20777,9 +20765,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -35280,7 +35268,7 @@ a.md-button,
       background-color: transparent; }
   a.md-button.primary,
   .md-button.primary {
-    background-color: #87ca4d;
+    background-color: #0a9bad;
     color: white; }
     a.md-button.primary:active,
     .md-button.primary:active {
@@ -35336,15 +35324,15 @@ a.md-button,
   a.md-button.outline-green,
   .md-button.outline-green {
     background: #ff931e;
-    border: 1px solid #f2f2f2;
-    color: #acacac; }
+    border: 1px solid #87ca4d;
+    color: #87ca4d; }
     a.md-button.outline-green:active,
     .md-button.outline-green:active {
       background-color: #E8E8E8; }
   a.md-button.outline-blue,
   .md-button.outline-blue {
     background: #ff931e;
-    border: 1px solid #ebebeb;
+    border: 1px solid #0a9bad;
     color: #0a9bad; }
     a.md-button.outline-blue:active,
     .md-button.outline-blue:active {
@@ -35566,7 +35554,7 @@ on-boarding-bar {
         height: 217px; } }
   .on-board .container {
     min-height: 535px;
-    background-color: #0a9bad;
+    background-color: #ffffff;
     box-sizing: border-box;
     position: relative; }
     .on-board .container .step {
@@ -35606,7 +35594,7 @@ on-boarding-bar {
             width: 16px;
             transform: rotate(-90deg); }
             .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg polyline {
-              stroke: #0a9bad; }
+              stroke: #ffffff; }
       .on-board .container .step .goals .sub-title {
         font-size: 24px;
         color: #161616;
@@ -35670,10 +35658,6 @@ on-boarding-bar {
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 purchase-btn form img {
   display: block; }
 
@@ -35700,11 +35684,11 @@ purchase-btn .upgraded .pending md-progress-circular {
   top: -10px; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle,
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
-    border-top-color: #f2f2f2; }
+    border-top-color: #87ca4d; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle {
-    border-left-color: #f2f2f2; }
+    border-left-color: #87ca4d; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
-    border-right-color: #f2f2f2; }
+    border-right-color: #87ca4d; }
 
 purchase-btn .upgraded .icon-wrapper {
   display: inline-block;
@@ -35742,8 +35726,8 @@ purchase-btn .upgraded .text {
     position: absolute;
     top: -35px;
     right: -35px;
-    height: 14px;
-    width: 14px;
+    height: 24px;
+    width: 24px;
     padding: 0;
     margin: 10px;
     cursor: pointer; }
@@ -35752,7 +35736,7 @@ purchase-btn .upgraded .text {
   .purchase-popup .popup-header {
     position: relative;
     height: 40px;
-    background-color: #0a9bad;
+    background-color: #ffffff;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px; }
     .purchase-popup .popup-header .raccoon {
@@ -35762,7 +35746,7 @@ purchase-btn .upgraded .text {
       margin: 0 auto;
       position: relative;
       bottom: 17.5px;
-      background-color: #0a9bad;
+      background-color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center; }
@@ -35802,7 +35786,7 @@ purchase-btn .upgraded .text {
       width: 300px;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #f9f9f9; }
+      background-color: #E4E0E0; }
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
@@ -35870,80 +35854,6 @@ purchase-btn .upgraded .text {
     padding: 5px 15px;
     border-radius: 20px; }
 
-.close-popup .st0 {
-  fill: none; }
-
-.close-popup .st1 {
-  fill: none;
-  stroke: #0a9bad;
-  stroke-width: 8;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-1-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st2 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st2 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-5-icon .st0 {
-  fill: none;
-  stroke: #231F20;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-5-icon .st1 {
-  fill: none;
-  stroke: #231F20;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
 /* fonts size */
 /* general */
 /* paths */
@@ -35952,15 +35862,11 @@ purchase-btn .upgraded .text {
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 /* full background image with retina */
 /* full background image with retina */
 .md-button.znk.md-primary {
-  color: #898989;
-  background: #87ca4d;
+  color: #ffffff;
+  background: #0a9bad;
   padding-right: 90px;
   padding-left: 90px;
   border-radius: 30px;
@@ -35982,10 +35888,6 @@ purchase-btn .upgraded .text {
 /* general */
 /* paths */
 /* general */
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 /*border color*/
 /*background*/
 /* box shadow */
@@ -38917,9 +38819,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -53420,7 +53322,7 @@ a.md-button,
       background-color: transparent; }
   a.md-button.primary,
   .md-button.primary {
-    background-color: #87ca4d;
+    background-color: #0a9bad;
     color: white; }
     a.md-button.primary:active,
     .md-button.primary:active {
@@ -53476,15 +53378,15 @@ a.md-button,
   a.md-button.outline-green,
   .md-button.outline-green {
     background: #ff931e;
-    border: 1px solid #f2f2f2;
-    color: #acacac; }
+    border: 1px solid #87ca4d;
+    color: #87ca4d; }
     a.md-button.outline-green:active,
     .md-button.outline-green:active {
       background-color: #E8E8E8; }
   a.md-button.outline-blue,
   .md-button.outline-blue {
     background: #ff931e;
-    border: 1px solid #ebebeb;
+    border: 1px solid #0a9bad;
     color: #0a9bad; }
     a.md-button.outline-blue:active,
     .md-button.outline-blue:active {
@@ -53596,18 +53498,18 @@ tags-input .host .tags {
   padding-left: 35px;
   min-height: 41px;
   max-height: 41px;
-  border: 2px solid #ebebeb;
+  border: 2px solid #0a9bad;
   border-radius: 20px; }
   tags-input .host .tags ::-webkit-input-placeholder {
-    color: #ebebeb; }
+    color: #0a9bad; }
   tags-input .host .tags :-moz-placeholder {
-    color: #ebebeb;
+    color: #0a9bad;
     opacity: 1; }
   tags-input .host .tags ::-moz-placeholder {
-    color: #ebebeb;
+    color: #0a9bad;
     opacity: 1; }
   tags-input .host .tags :-ms-input-placeholder {
-    color: #ebebeb; }
+    color: #0a9bad; }
   tags-input .host .tags .custom-tag-item {
     font-size: 14px;
     color: white;
@@ -53902,7 +53804,7 @@ school-select .school-selector .selector .tag-input-wrap {
       height: 44px; }
   school-select .school-selector .selector .tag-input-wrap [disabled="disabled"] * {
     width: 48px;
-    fill: #f9f9f9;
+    fill: #E4E0E0;
     cursor: default; }
   school-select .school-selector .selector .tag-input-wrap .search-icon-container {
     position: absolute;
@@ -53912,7 +53814,7 @@ school-select .school-selector .selector .tag-input-wrap {
     school-select .school-selector .selector .tag-input-wrap .search-icon-container svg-icon.search-icon {
       width: 17px; }
     school-select .school-selector .selector .tag-input-wrap .search-icon-container svg-icon.search-icon * {
-      stroke: #87ca4d; }
+      stroke: #0a9bad; }
   school-select .school-selector .selector .tag-input-wrap .dropdown-arrow-container {
     position: absolute;
     z-index: 1;
@@ -53922,7 +53824,7 @@ school-select .school-selector .selector .tag-input-wrap {
       width: 20px;
       cursor: pointer; }
     school-select .school-selector .selector .tag-input-wrap .dropdown-arrow-container svg-icon.dropdown-arrow-icon * {
-      stroke: #87ca4d; }
+      stroke: #0a9bad; }
   school-select .school-selector .selector .tag-input-wrap .select-btn {
     background: transparent;
     border: none;
@@ -53973,10 +53875,6 @@ school-select .school-selector .selector .tag-input-wrap {
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 /* full background image with retina */
 /* full background image with retina */
 @import url(//fonts.googleapis.com/css?family=Quicksand);
@@ -54001,11 +53899,11 @@ workouts-progress {
       flex-direction: row;
       align-items: center; }
       workouts-progress .items-container .dotted-lines-container .dotted-line {
-        border-top: 2px dotted #ebebeb;
+        border-top: 2px dotted #0a9bad;
         display: inline-block; }
         workouts-progress .items-container .dotted-lines-container .dotted-line.future {
           flex-grow: 1;
-          border-top-color: #87ca4d; }
+          border-top-color: #cfcfcf; }
     workouts-progress .items-container .item-container {
       display: inline-flex;
       align-items: center;
@@ -54016,7 +53914,7 @@ workouts-progress {
       workouts-progress .items-container .item-container.diagnostic .item {
         background: #87ca4d; }
         workouts-progress .items-container .item-container.diagnostic .item.selected:after {
-          border-color: #f2f2f2; }
+          border-color: #87ca4d; }
         workouts-progress .items-container .item-container.diagnostic .item .flag-icon {
           width: 23px; }
       workouts-progress .items-container .item-container .item {
@@ -54027,7 +53925,7 @@ workouts-progress {
         height: 50px;
         border-radius: 50%;
         font-size: 28px;
-        color: #898989;
+        color: #ffffff;
         font-family: Quicksand;
         display: inline-flex;
         justify-content: center;
@@ -54035,7 +53933,7 @@ workouts-progress {
         transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1); }
         workouts-progress .items-container .item-container .item.selected {
           transform: scale(1);
-          color: #898989;
+          color: #ffffff;
           position: relative;
           border: none; }
           workouts-progress .items-container .item-container .item.selected:after {
@@ -54045,27 +53943,27 @@ workouts-progress {
             right: -3px;
             bottom: -3px;
             left: -3px;
-            border: 1px solid #f8f8f8;
+            border: 1px solid #b7b7b7;
             border-radius: 50%; }
           workouts-progress .items-container .item-container .item.selected.pristine {
             background: #b7b7b7;
-            color: #898989; }
+            color: #ffffff; }
             workouts-progress .items-container .item-container .item.selected.pristine.selected:after {
-              border: 1px solid #f8f8f8; }
+              border: 1px solid #b7b7b7; }
         workouts-progress .items-container .item-container .item.pristine {
-          background: #0a9bad;
+          background: #ffffff;
           border: 1px solid #b7b7b7;
           color: #b7b7b7; }
         workouts-progress .items-container .item-container .item .check-mark-icon {
           width: 1em; }
           workouts-progress .items-container .item-container .item .check-mark-icon .st0 {
-            stroke: #0a9bad; }
+            stroke: #ffffff; }
     workouts-progress .items-container .future-item {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      border: 1px solid #f8f8f8;
-      background: #0a9bad;
+      border: 1px solid #b7b7b7;
+      background: #ffffff;
       box-sizing: border-box;
       position: relative;
       z-index: 1;
@@ -54079,7 +53977,7 @@ workouts-progress {
     width: 100%;
     height: 100%; }
   .app-workouts .workouts-container, .app-workouts .score-estimate-container {
-    background: #0a9bad;
+    background: #ffffff;
     min-height: 675px; }
   .app-workouts .workouts-container {
     margin-right: 30px;
@@ -54150,8 +54048,8 @@ workouts-progress {
 .diagnostic-workout-pane {
   width: 575px;
   height: 523px;
-  background-color: #0a9bad;
-  border: 1px solid #d3d0d0;
+  background-color: #ffffff;
+  border: 1px solid #ebebeb;
   position: relative;
   margin: 15px auto;
   text-align: center;
@@ -54225,10 +54123,6 @@ workouts-progress {
   .diagnostic-workout-pane diagnostic-intro .diagnostic-intro-drv ng-switch .diagnostic-text {
     font-size: 15px; }
 
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 /*border color*/
 /*background*/
 /* box shadow */
@@ -57157,9 +57051,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -71626,10 +71520,6 @@ md-tooltip {
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 purchase-btn form img {
   display: block; }
 
@@ -71656,11 +71546,11 @@ purchase-btn .upgraded .pending md-progress-circular {
   top: -10px; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle,
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
-    border-top-color: #f2f2f2; }
+    border-top-color: #87ca4d; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle {
-    border-left-color: #f2f2f2; }
+    border-left-color: #87ca4d; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
-    border-right-color: #f2f2f2; }
+    border-right-color: #87ca4d; }
 
 purchase-btn .upgraded .icon-wrapper {
   display: inline-block;
@@ -71698,8 +71588,8 @@ purchase-btn .upgraded .text {
     position: absolute;
     top: -35px;
     right: -35px;
-    height: 14px;
-    width: 14px;
+    height: 24px;
+    width: 24px;
     padding: 0;
     margin: 10px;
     cursor: pointer; }
@@ -71708,7 +71598,7 @@ purchase-btn .upgraded .text {
   .purchase-popup .popup-header {
     position: relative;
     height: 40px;
-    background-color: #0a9bad;
+    background-color: #ffffff;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px; }
     .purchase-popup .popup-header .raccoon {
@@ -71718,7 +71608,7 @@ purchase-btn .upgraded .text {
       margin: 0 auto;
       position: relative;
       bottom: 17.5px;
-      background-color: #0a9bad;
+      background-color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center; }
@@ -71758,7 +71648,7 @@ purchase-btn .upgraded .text {
       width: 300px;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #f9f9f9; }
+      background-color: #E4E0E0; }
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
@@ -71826,80 +71716,6 @@ purchase-btn .upgraded .text {
     padding: 5px 15px;
     border-radius: 20px; }
 
-.close-popup .st0 {
-  fill: none; }
-
-.close-popup .st1 {
-  fill: none;
-  stroke: #0a9bad;
-  stroke-width: 8;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-1-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st2 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st2 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-5-icon .st0 {
-  fill: none;
-  stroke: #231F20;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-5-icon .st1 {
-  fill: none;
-  stroke: #231F20;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
 .app-header {
   background: white;
   height: 57px;
@@ -71936,7 +71752,7 @@ purchase-btn .upgraded .text {
       .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
         padding: 0 12px 0 0;
-        border-right: 1px solid #d3d0d0;
+        border-right: 1px solid #ebebeb;
         cursor: pointer; }
         .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper {
           width: 16px;
@@ -71974,10 +71790,10 @@ purchase-btn .upgraded .text {
       margin-bottom: 5px; }
     .md-open-menu-container .header-modal-item.header-modal-item-profile .email {
       font-size: 14px;
-      color: #acacac;
+      color: #87ca4d;
       font-family: Lato;
       font-weight: 300;
-      border-bottom: 1px solid #ebebeb;
+      border-bottom: 1px solid #0a9bad;
       width: 100%;
       padding-bottom: 15px; }
   .md-open-menu-container .header-modal-item.header-modal-item-uppercase {
@@ -71990,14 +71806,14 @@ purchase-btn .upgraded .text {
     .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
       color: #161616; }
     .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
-      color: #898989; }
+      color: #ffffff; }
   .md-open-menu-container .header-modal-item .check-mark-wrapper {
     position: relative;
     top: -2px;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: #87ca4d;
+    background-color: #cfcfcf;
     margin-left: 10px; }
     .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
       height: 100%; }
@@ -72019,7 +71835,7 @@ md-menu-content.md-menu-content-znk-header {
     md-menu-content.md-menu-content-znk-header md-list .divider {
       height: 1px;
       margin: 10px 16px;
-      border-top: 1px solid #d3d0d0; }
+      border-top: 1px solid #ebebeb; }
   md-menu-content.md-menu-content-znk-header .pending-purchase-icon-wrapper {
     width: 16px;
     height: auto;

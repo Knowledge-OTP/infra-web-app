@@ -47,12 +47,12 @@
             }
 
             function diagnosticPreSummary() {
-                vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMERY.DIAGNOSTIC_TEST');
+                vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMARY.DIAGNOSTIC_TEST');
                 _getToNextWorkout();
             }
 
             function workoutPreSummary() {
-                vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMERY.WORKOUT') + ' ';
+                vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMARY.WORKOUT') + ' ';
                 vm.text += +data.exercise.workoutOrder;
                 _getToNextWorkout();
             }

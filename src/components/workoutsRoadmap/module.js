@@ -60,5 +60,11 @@
         'znk.infra.scroll',
         'znk.infra.general',
         'znk.infra-web-app.purchase'
-    ]);
+    ])
+    .config(function (SvgIconSrvProvider) {
+        var svgMap = {
+            'workoutsRoadmap-checkmark': 'components/workoutsRoadmap/svg/checkmark-icon.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+    });
 })(angular);
