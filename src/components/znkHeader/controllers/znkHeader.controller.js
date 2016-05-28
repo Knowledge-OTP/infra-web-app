@@ -1,12 +1,9 @@
 (function (angular) {
     'use strict';
 
-    //angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-    //    ['purchaseService', 'AuthService', 'UserProfileService', 'PurchaseStateEnum', 'ENV', 'OnBoardingService',
-
-
-    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',['$scope', '$translatePartialLoader','$mdDialog', '$window', 'purchaseService',
-        function($scope,$translatePartialLoader, $mdDialog, $window, purchaseService) {
+    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
+        function($scope,$translatePartialLoader, $mdDialog, $window, purchaseService, UserProfileService) {
+            'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
@@ -34,6 +31,6 @@
                 self.expandIcon = 'expand_more';
             });
 
-        }]);
+        });
 })(angular);
 

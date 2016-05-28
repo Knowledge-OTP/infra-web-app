@@ -1,5 +1,4 @@
 /**
- * znkAnalyticsSrv
  *
  *   api:
  *     addAdditionalItems function - set items that will be clickable in the header. need to supply object (or array of
