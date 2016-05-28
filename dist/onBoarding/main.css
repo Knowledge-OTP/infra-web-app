@@ -6,10 +6,6 @@
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 @import url(//fonts.googleapis.com/css?family=Lato:300);
 @import url(//fonts.googleapis.com/css?family=Lato:300italic);
 @import url(//fonts.googleapis.com/css?family=Lato:400);
@@ -17440,7 +17436,7 @@ a.md-button,
       background-color: transparent; }
   a.md-button.primary,
   .md-button.primary {
-    background-color: #87ca4d;
+    background-color: #0a9bad;
     color: white; }
     a.md-button.primary:active,
     .md-button.primary:active {
@@ -17496,15 +17492,15 @@ a.md-button,
   a.md-button.outline-green,
   .md-button.outline-green {
     background: #ff931e;
-    border: 1px solid #f2f2f2;
-    color: #acacac; }
+    border: 1px solid #87ca4d;
+    color: #87ca4d; }
     a.md-button.outline-green:active,
     .md-button.outline-green:active {
       background-color: #E8E8E8; }
   a.md-button.outline-blue,
   .md-button.outline-blue {
     background: #ff931e;
-    border: 1px solid #ebebeb;
+    border: 1px solid #0a9bad;
     color: #0a9bad; }
     a.md-button.outline-blue:active,
     .md-button.outline-blue:active {
@@ -17726,7 +17722,7 @@ on-boarding-bar {
         height: 217px; } }
   .on-board .container {
     min-height: 535px;
-    background-color: #0a9bad;
+    background-color: #ffffff;
     box-sizing: border-box;
     position: relative; }
     .on-board .container .step {
@@ -17766,7 +17762,7 @@ on-boarding-bar {
             width: 16px;
             transform: rotate(-90deg); }
             .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg polyline {
-              stroke: #0a9bad; }
+              stroke: #ffffff; }
       .on-board .container .step .goals .sub-title {
         font-size: 24px;
         color: #161616;

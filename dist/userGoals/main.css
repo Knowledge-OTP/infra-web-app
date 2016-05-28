@@ -6,10 +6,6 @@
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 @import url(//fonts.googleapis.com/css?family=Lato:300);
 @import url(//fonts.googleapis.com/css?family=Lato:300italic);
 @import url(//fonts.googleapis.com/css?family=Lato:400);
@@ -17440,7 +17436,7 @@ a.md-button,
       background-color: transparent; }
   a.md-button.primary,
   .md-button.primary {
-    background-color: #87ca4d;
+    background-color: #0a9bad;
     color: white; }
     a.md-button.primary:active,
     .md-button.primary:active {
@@ -17496,15 +17492,15 @@ a.md-button,
   a.md-button.outline-green,
   .md-button.outline-green {
     background: #ff931e;
-    border: 1px solid #f2f2f2;
-    color: #acacac; }
+    border: 1px solid #87ca4d;
+    color: #87ca4d; }
     a.md-button.outline-green:active,
     .md-button.outline-green:active {
       background-color: #E8E8E8; }
   a.md-button.outline-blue,
   .md-button.outline-blue {
     background: #ff931e;
-    border: 1px solid #ebebeb;
+    border: 1px solid #0a9bad;
     color: #0a9bad; }
     a.md-button.outline-blue:active,
     .md-button.outline-blue:active {
@@ -17616,18 +17612,18 @@ tags-input .host .tags {
   padding-left: 35px;
   min-height: 41px;
   max-height: 41px;
-  border: 2px solid #ebebeb;
+  border: 2px solid #0a9bad;
   border-radius: 20px; }
   tags-input .host .tags ::-webkit-input-placeholder {
-    color: #ebebeb; }
+    color: #0a9bad; }
   tags-input .host .tags :-moz-placeholder {
-    color: #ebebeb;
+    color: #0a9bad;
     opacity: 1; }
   tags-input .host .tags ::-moz-placeholder {
-    color: #ebebeb;
+    color: #0a9bad;
     opacity: 1; }
   tags-input .host .tags :-ms-input-placeholder {
-    color: #ebebeb; }
+    color: #0a9bad; }
   tags-input .host .tags .custom-tag-item {
     font-size: 14px;
     color: white;
@@ -17922,7 +17918,7 @@ school-select .school-selector .selector .tag-input-wrap {
       height: 44px; }
   school-select .school-selector .selector .tag-input-wrap [disabled="disabled"] * {
     width: 48px;
-    fill: #f9f9f9;
+    fill: #E4E0E0;
     cursor: default; }
   school-select .school-selector .selector .tag-input-wrap .search-icon-container {
     position: absolute;
@@ -17932,7 +17928,7 @@ school-select .school-selector .selector .tag-input-wrap {
     school-select .school-selector .selector .tag-input-wrap .search-icon-container svg-icon.search-icon {
       width: 17px; }
     school-select .school-selector .selector .tag-input-wrap .search-icon-container svg-icon.search-icon * {
-      stroke: #87ca4d; }
+      stroke: #0a9bad; }
   school-select .school-selector .selector .tag-input-wrap .dropdown-arrow-container {
     position: absolute;
     z-index: 1;
@@ -17942,7 +17938,7 @@ school-select .school-selector .selector .tag-input-wrap {
       width: 20px;
       cursor: pointer; }
     school-select .school-selector .selector .tag-input-wrap .dropdown-arrow-container svg-icon.dropdown-arrow-icon * {
-      stroke: #87ca4d; }
+      stroke: #0a9bad; }
   school-select .school-selector .selector .tag-input-wrap .select-btn {
     background: transparent;
     border: none;

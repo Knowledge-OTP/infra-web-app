@@ -68,6 +68,8 @@
                     var product = res[0];
                     var isPurchased = res[1];
                     var StudentStorageSrv = res[2];
+                    var pendingPurchasesPath = 'pendingPurchases/' + StudentStorageSrv.variables.uid;
+
                     if (!isPurchased) {
                         var pendingPurchaseVal = {
                             id: product.id,
@@ -96,8 +98,9 @@
                     pendingPurchaseDefer.resolve();
                 }
                 $q.when(studentStorageProm).then(function (StudentStorageSrv) {
+                    var pendingPurchasesPath = 'pendingPurchases/' + StudentStorageSrv.variables.uid;
                     return StudentStorageSrv.set(pendingPurchasesPath, null);
-                })
+                });
             };
             //
             //self.listenToPurchaseStatus = function () {

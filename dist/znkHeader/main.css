@@ -2,10 +2,6 @@
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 /* fonts size */
 /* general */
 /* paths */
@@ -17399,10 +17395,6 @@ md-tooltip {
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 purchase-btn form img {
   display: block; }
 
@@ -17429,11 +17421,11 @@ purchase-btn .upgraded .pending md-progress-circular {
   top: -10px; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle,
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
-    border-top-color: #f2f2f2; }
+    border-top-color: #87ca4d; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle {
-    border-left-color: #f2f2f2; }
+    border-left-color: #87ca4d; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
-    border-right-color: #f2f2f2; }
+    border-right-color: #87ca4d; }
 
 purchase-btn .upgraded .icon-wrapper {
   display: inline-block;
@@ -17471,8 +17463,8 @@ purchase-btn .upgraded .text {
     position: absolute;
     top: -35px;
     right: -35px;
-    height: 14px;
-    width: 14px;
+    height: 24px;
+    width: 24px;
     padding: 0;
     margin: 10px;
     cursor: pointer; }
@@ -17495,10 +17487,10 @@ purchase-btn .upgraded .text {
       display: flex;
       justify-content: center;
       align-items: center; }
-      .purchase-popup .popup-header .raccoon .raccoon-logo-icon svg {
+      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
         width: 45px;
         height: 45px; }
-        .purchase-popup .popup-header .raccoon .raccoon-logo-icon svg * {
+        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
           fill: white; }
   .purchase-popup .md-dialog-content {
     padding: 20px 20px 60px;
@@ -17531,7 +17523,7 @@ purchase-btn .upgraded .text {
       width: 300px;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #f9f9f9; }
+      background-color: #E4E0E0; }
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
@@ -17599,80 +17591,6 @@ purchase-btn .upgraded .text {
     padding: 5px 15px;
     border-radius: 20px; }
 
-.close-popup .st0 {
-  fill: none; }
-
-.close-popup .st1 {
-  fill: none;
-  stroke: #0a9bad;
-  stroke-width: 8;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-1-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st2 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st2 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-5-icon .st0 {
-  fill: none;
-  stroke: #231F20;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-5-icon .st1 {
-  fill: none;
-  stroke: #231F20;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
 .app-header {
   background: white;
   height: 57px;
@@ -17709,7 +17627,7 @@ purchase-btn .upgraded .text {
       .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
         padding: 0 12px 0 0;
-        border-right: 1px solid #d3d0d0;
+        border-right: 1px solid #ebebeb;
         cursor: pointer; }
         .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper {
           width: 16px;
@@ -17747,10 +17665,10 @@ purchase-btn .upgraded .text {
       margin-bottom: 5px; }
     .md-open-menu-container .header-modal-item.header-modal-item-profile .email {
       font-size: 14px;
-      color: #acacac;
+      color: #87ca4d;
       font-family: Lato;
       font-weight: 300;
-      border-bottom: 1px solid #ebebeb;
+      border-bottom: 1px solid #0a9bad;
       width: 100%;
       padding-bottom: 15px; }
   .md-open-menu-container .header-modal-item.header-modal-item-uppercase {
@@ -17763,14 +17681,14 @@ purchase-btn .upgraded .text {
     .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
       color: #161616; }
     .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
-      color: #898989; }
+      color: #ffffff; }
   .md-open-menu-container .header-modal-item .check-mark-wrapper {
     position: relative;
     top: -2px;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: #87ca4d;
+    background-color: #cfcfcf;
     margin-left: 10px; }
     .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
       height: 100%; }
@@ -17792,7 +17710,7 @@ md-menu-content.md-menu-content-znk-header {
     md-menu-content.md-menu-content-znk-header md-list .divider {
       height: 1px;
       margin: 10px 16px;
-      border-top: 1px solid #d3d0d0; }
+      border-top: 1px solid #ebebeb; }
   md-menu-content.md-menu-content-znk-header .pending-purchase-icon-wrapper {
     width: 16px;
     height: auto;

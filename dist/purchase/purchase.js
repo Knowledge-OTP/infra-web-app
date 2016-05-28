@@ -18,13 +18,14 @@
             function(SvgIconSrvProvider){
 
                 var svgMap = {
-                    'check-mark': 'components/purchase/svg/check-mark-icon.svg',
-                    'close-popup': 'components/purchase/svg/close-popup.svg',
+                    'purchase-check-mark': 'components/purchase/svg/check-mark-icon.svg',
+                    'purchase-close-popup': 'components/purchase/svg/close-popup.svg',
                     'purchase-popup-bullet-1-icon': 'components/purchase/svg/purchase-popup-bullet-1-icon.svg',
                     'purchase-popup-bullet-2-icon': 'components/purchase/svg/purchase-popup-bullet-2-icon.svg',
                     'purchase-popup-bullet-3-icon': 'components/purchase/svg/purchase-popup-bullet-3-icon.svg',
                     'purchase-popup-bullet-4-icon': 'components/purchase/svg/purchase-popup-bullet-4-icon.svg',
-                    'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg'
+                    'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg',
+                    'purchase-raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -119,7 +120,8 @@
                     function buildForm() {
                         $q.all([UserProfileService.getProfile(), purchaseService.getProduct()]).then(function (results) {
                             var userEmail = results[0].email;
-                            var userId = AuthService.getAuth().uid;
+                            //var userId = AuthService.getAuth().uid;
+                            var userId;
                             var productId = results[1].id;
 
                             if (userEmail && userId) {
@@ -205,52 +207,56 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        function ($q, $mdDialog, $filter, InfraConfigSrv, AuthService, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
+        function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
             'ngInject';
 
             var self = this;
 
-            InfraConfigSrv.getStudentStorage().then(function(StudentStorageSrv){
+            var studentStorageProm = InfraConfigSrv.getStudentStorage();
 
-                var pendingPurchaseDefer;
+            var pendingPurchaseDefer;
 
-                var purchaseData = null;
+            var purchaseData = null;
 
-                var pendingPurchasesPath = 'pendingPurchases/' + StudentStorageSrv.variables.uid;
-
-                var PURCHASE_PATH = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-
-                self.getProduct = function () {
-                    var productDataPath = 'iap/desktop/allContent';
+            self.getProduct = function () {
+                var productDataPath = 'iap/desktop/allContent';
+                return $q.when(studentStorageProm).then(function (StudentStorageSrv) {
                     return StudentStorageSrv.get(productDataPath);
-                };
+                });
+            };
 
-                self.getUpgradeData = function () {
+            self.getUpgradeData = function () {
+                $q.when(studentStorageProm).then(function (StudentStorageSrv) {
+                    var PURCHASE_PATH = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
                     return StudentStorageSrv.get(PURCHASE_PATH);
-                };
+                });
+            };
 
-                self.hasProVersion = function () {
-                    var hasProVersion = !!purchaseData;
-                    return $q.when(hasProVersion);
-                };
+            self.hasProVersion = function () {
+                var hasProVersion = !!purchaseData;
+                return $q.when(hasProVersion);
+            };
 
-                self.purchaseDataExists = function () {
-                    var isPurchased;
-                    var authData = AuthService.getAuth();
-                    if (authData) {
-                        var currentUID = authData.uid;
-                        var purchaseFullPath = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-                        purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
-                        return StudentStorageSrv.get(purchaseFullPath).then(function (purchaseObj) {
-                            isPurchased = (angular.equals(purchaseObj, {})) ? false : true;
-                            return isPurchased;
-                        });
-                    }
-                    return $q.reject();
-                };
+            self.purchaseDataExists = function () {
+                //var isPurchased;
+                //var authData = AuthService.getAuth();
+                //if (authData) {
+                //    var currentUID = authData.uid;
+                //    var purchaseFullPath = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                //    purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
+                //    return StudentStorageSrv.get(purchaseFullPath).then(function (purchaseObj) {
+                //        isPurchased = (angular.equals(purchaseObj, {})) ? false : true;
+                //        return isPurchased;
+                //    });
+                //}
+                //return $q.reject();
+            };
 
-                self.checkPendingStatus = function () {
-                    var isPending;
+            self.checkPendingStatus = function () {
+                var isPending;
+                return $q.when(studentStorageProm).then(function (StudentStorageSrv) {
+                    var pendingPurchasesPath = 'pendingPurchases/' + StudentStorageSrv.variables.uid;
+
                     return StudentStorageSrv.get(pendingPurchasesPath).then(function (pendingObj) {
                         isPending = (angular.equals(pendingObj, {})) ? false : true;
                         if (isPending) {
@@ -258,155 +264,164 @@
                         }
                         return isPending;
                     });
-                };
+                });
+            };
 
-                self.setPendingPurchase = function () {
-                    pendingPurchaseDefer = $q.defer();
-                    return $q.all([self.getProduct(), self.purchaseDataExists()]).then(function (res) {
-                        var product = res[0];
-                        var isPurchased = res[1];
-                        if (!isPurchased) {
-                            var pendingPurchaseVal = {
-                                id: product.id,
-                                purchaseTime: StudentStorageSrv.variables.currTimeStamp
-                            };
-                            StudentStorageSrv.set(pendingPurchasesPath, pendingPurchaseVal);
-                        } else {
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'purchaseOrderCompleted', props: product
-                            });
-                            if ($window.fbq) {
-                                $window.fbq('track', 'Purchase', {
-                                    value: product.price,
-                                    currency: 'USD'
-                                });
-                            }
-                        }
-                    }).catch(function (err) {
-                        $log.error('setPendingPurchase promise failed', err);
-                        pendingPurchaseDefer.reject(err);
-                    });
-                };
+            self.setPendingPurchase = function () {
+                pendingPurchaseDefer = $q.defer();
+                return $q.all([self.getProduct(), self.purchaseDataExists(), studentStorageProm]).then(function (res) {
+                    var product = res[0];
+                    var isPurchased = res[1];
+                    var StudentStorageSrv = res[2];
+                    var pendingPurchasesPath = 'pendingPurchases/' + StudentStorageSrv.variables.uid;
 
-                self.removePendingPurchase = function () {
-                    if (pendingPurchaseDefer) {
-                        pendingPurchaseDefer.resolve();
-                    }
-                    return StudentStorageSrv.set(pendingPurchasesPath, null);
-                };
-
-                self.listenToPurchaseStatus = function () {
-                    var authData = AuthService.getAuth();
-                    if (authData) {
-                        var currentUID = authData.uid;
-                        var purchaseFullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-                        purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
-                        var ref = new Firebase(purchaseFullPath);
-                        ref.on('value', function (dataSnapshot) {
-                            var dataSnapshotVal = dataSnapshot.val();
-
-                            //if (angular.isDefined(dataSnapshotVal)) {
-                            //    if ($state.current.name && $state.current.name !== '') {
-                            //        $state.reload();
-                            //    }
-                            //}
-
-                            purchaseData = dataSnapshotVal;
-
-                            StudentStorageSrv.cleanPathCache(PURCHASE_PATH);
-                            if (purchaseData) {
-                                self.removePendingPurchase();
-                            }
+                    if (!isPurchased) {
+                        var pendingPurchaseVal = {
+                            id: product.id,
+                            purchaseTime: StudentStorageSrv.variables.currTimeStamp
+                        };
+                        StudentStorageSrv.set(pendingPurchasesPath, pendingPurchaseVal);
+                    } else {
+                        znkAnalyticsSrv.eventTrack({
+                            eventName: 'purchaseOrderCompleted', props: product
                         });
+                        if ($window.fbq) {
+                            $window.fbq('track', 'Purchase', {
+                                value: product.price,
+                                currency: 'USD'
+                            });
+                        }
                     }
+                }).catch(function (err) {
+                    $log.error('setPendingPurchase promise failed', err);
+                    pendingPurchaseDefer.reject(err);
+                });
+            };
+
+            self.removePendingPurchase = function () {
+                if (pendingPurchaseDefer) {
+                    pendingPurchaseDefer.resolve();
+                }
+                $q.when(studentStorageProm).then(function (StudentStorageSrv) {
+                    var pendingPurchasesPath = 'pendingPurchases/' + StudentStorageSrv.variables.uid;
+                    return StudentStorageSrv.set(pendingPurchasesPath, null);
+                });
+            };
+            //
+            //self.listenToPurchaseStatus = function () {
+            //    var authData = AuthService.getAuth();
+            //    if (authData) {
+            //        var currentUID = authData.uid;
+            //        var purchaseFullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+            //        purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
+            //        var ref = new Firebase(purchaseFullPath);
+            //        ref.on('value', function (dataSnapshot) {
+            //            var dataSnapshotVal = dataSnapshot.val();
+            //
+            //            //if (angular.isDefined(dataSnapshotVal)) {
+            //            //    if ($state.current.name && $state.current.name !== '') {
+            //            //        $state.reload();
+            //            //    }
+            //            //}
+            //
+            //            purchaseData = dataSnapshotVal;
+            //
+            //            StudentStorageSrv.cleanPathCache(PURCHASE_PATH);
+            //            if (purchaseData) {
+            //                self.removePendingPurchase();
+            //            }
+            //        });
+            //    }
+            //};
+
+            self.showPurchaseDialog = function () {
+                //a.eventTrack({
+                //    eventName: 'purchaseModalOpened'
+                //});
+                return $mdDialog.show({
+                    controller: 'PurchaseDialogController',
+                    templateUrl: 'components/purchase/templates/purchasePopup.template.html',
+                    disableParentScroll: false,
+                    clickOutsideToClose: true,
+                    fullscreen: false,
+                    controllerAs: 'vm'
+                });
+            };
+
+            self.hidePurchaseDialog = function () {
+                return $mdDialog.hide();
+            };
+
+            self.showPurchaseError = function () {
+                var popUpTitle = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_TITLE');
+                var popUpContent = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_CONTENT');
+                PopUpSrv.error(popUpTitle, popUpContent);
+            };
+
+            self.getPendingPurchase = function () {
+                return pendingPurchaseDefer && pendingPurchaseDefer.promise;
+            };
+
+            self.setProductDataOnce = function () {
+                var path = 'iap/desktop/allContent';
+                var productData = {
+                    alias: 'allContent',
+                    id: 'com.zinkerz.act.allcontent',
+                    type: 'non consumable',
+                    price: '39.99',
+                    previousPrice: '44.99'
                 };
 
-                self.showPurchaseDialog = function () {
-                    //a.eventTrack({
-                    //    eventName: 'purchaseModalOpened'
-                    //});
-                    return $mdDialog.show({
-                        controller: 'PurchaseDialogController',
-                        templateUrl: 'components/purchase/templates/purchasePopup.template.html',
-                        disableParentScroll: false,
-                        clickOutsideToClose: true,
-                        fullscreen: false,
-                        controllerAs: 'vm'
-                    });
-                };
-
-                self.hidePurchaseDialog = function () {
-                    return $mdDialog.hide();
-                };
-
-                self.showPurchaseError = function () {
-                    var popUpTitle = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_TITLE');
-                    var popUpContent = $filter('translate')('PURCHASE_POPUP.UPGRADE_ERROR_POPUP_CONTENT');
-                    PopUpSrv.error(popUpTitle, popUpContent);
-                };
-
-                self.getPendingPurchase = function () {
-                    return pendingPurchaseDefer && pendingPurchaseDefer.promise;
-                };
-
-                self.setProductDataOnce = function () {
-                    var path = 'iap/desktop/allContent';
-                    var productData = {
-                        alias: 'allContent',
-                        id: 'com.zinkerz.act.allcontent',
-                        type: 'non consumable',
-                        price: '39.99',
-                        previousPrice: '44.99'
-                    };
+                $q.when(studentStorageProm).then(function (StudentStorageSrv) {
                     StudentStorageSrv.set(path, productData).then(function (resp) {
                         $log.info(resp);
                     }).catch(function (err) {
                         $log.info(err);
                     });
-                };
+                });
+            };
 
-                /**
-                 * @param mode:
-                 *  1 - completed first workout
-                 *  2 - completed all free content
-                 */
-                self.openPurchaseNudge = function (mode, num) {
-                    var toastTemplate =
-                        '<md-toast class="purchase-nudge" ng-class="{first: vm.mode === 1, all: vm.mode === 2}" translate-namespace="PURCHASE_POPUP">' +
-                        '<div class="md-toast-text" flex>' +
-                        '<div class="close-toast cursor-pointer" ng-click="vm.closeToast()"><svg-icon name="close-popup"></svg-icon></div>' +
-                        '<span translate="{{vm.nudgeMessage}}" translate-values="{num: {{vm.num}} }"></span> ' +
-                        '<span class="open-dialog" ng-click="vm.showPurchaseDialog()"><span translate="{{vm.nudgeAction}}"></span></span>' +
-                        '</div>' +
-                        '</md-toast>';
+            /**
+             * @param mode:
+             *  1 - completed first workout
+             *  2 - completed all free content
+             */
+            self.openPurchaseNudge = function (mode, num) {
+                var toastTemplate =
+                    '<md-toast class="purchase-nudge" ng-class="{first: vm.mode === 1, all: vm.mode === 2}" translate-namespace="PURCHASE_POPUP">' +
+                    '<div class="md-toast-text" flex>' +
+                    '<div class="close-toast cursor-pointer" ng-click="vm.closeToast()"><svg-icon name="close-popup"></svg-icon></div>' +
+                    '<span translate="{{vm.nudgeMessage}}" translate-values="{num: {{vm.num}} }"></span> ' +
+                    '<span class="open-dialog" ng-click="vm.showPurchaseDialog()"><span translate="{{vm.nudgeAction}}"></span></span>' +
+                    '</div>' +
+                    '</md-toast>';
 
-                    $mdToast.show({
-                        template: toastTemplate,
-                        position: 'top',
-                        hideDelay: false,
-                        controller: function () {
-                            self.closeToast = function () {
-                                $mdToast.hide();
-                            };
+                $mdToast.show({
+                    template: toastTemplate,
+                    position: 'top',
+                    hideDelay: false,
+                    controller: function () {
+                        self.closeToast = function () {
+                            $mdToast.hide();
+                        };
 
-                            self.showPurchaseDialog = function () {
-                                self.showPurchaseDialog();
-                            };
+                        self.showPurchaseDialog = function () {
+                            self.showPurchaseDialog();
+                        };
 
-                            if (mode === 1) { // completed first workout
-                                self.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT';
-                                self.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT';
-                            } else if (mode === 2) { // completed all free content
-                                self.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT';
-                                self.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT';
-                            }
-                            self.mode = mode;
-                            self.num = num;
-                        },
-                        controllerAs: 'vm'
-                    });
-                };
-            });
+                        if (mode === 1) { // completed first workout
+                            self.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT';
+                            self.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT';
+                        } else if (mode === 2) { // completed all free content
+                            self.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT';
+                            self.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT';
+                        }
+                        self.mode = mode;
+                        self.num = num;
+                    },
+                    controllerAs: 'vm'
+                });
+            };
         }
     );
 })(angular);
@@ -415,7 +430,8 @@
 angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/purchase/svg/check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
-    "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
     "     y=\"0px\"\n" +
     "	 viewBox=\"0 0 329.5 223.7\"\n" +
     "	 class=\"check-mark-svg\">\n" +
@@ -440,7 +456,14 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
-    "    viewBox=\"-596.6 492.3 133.2 133.5\">\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\"\n" +
+    "    class=\"close-popup\">\n" +
+    "    <style>\n" +
+    "\n" +
+    "        .close-popup .st0{fill:none;}\n" +
+    "        .close-popup .st1{fill:none;stroke:$bgColor3;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
     "<path class=\"st0\"/>\n" +
     "<g>\n" +
     "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
@@ -449,7 +472,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "</svg>\n" +
     "");
   $templateCache.put("components/purchase/svg/previous-icon.svg",
-    "<svg class=\"previous-icon\" x=\"0px\" y=\"0px\" viewBox=\"-406.9 425.5 190.9 175.7\">\n" +
+    "<svg class=\"previous-icon\" x=\"0px\" y=\"0px\" viewBox=\"-406.9 425.5 190.9 175.7\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
     "    <circle cx=\"-402.8\" cy=\"512.9\" r=\"4.1\"/>\n" +
     "    <circle cx=\"-386.1\" cy=\"513\" r=\"4.1\"/>\n" +
     "    <circle cx=\"-386.1\" cy=\"496.1\" r=\"4.1\"/>\n" +
@@ -510,7 +533,13 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "<svg\n" +
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
-    "    viewBox=\"0 0 117.5 141\">\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 117.5 141\"\n" +
+    "    class=\"purchase-popup-bullet-1-icon\">\n" +
+    "    <style>\n" +
+    "        .purchase-popup-bullet-1-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
     "<path class=\"st0\" d=\"M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
     "	C115.5,135.3,111.8,139,107.2,139z\"/>\n" +
     "<line class=\"st0\" x1=\"19\" y1=\"26.5\" x2=\"96\" y2=\"26.5\"/>\n" +
@@ -526,7 +555,15 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "<svg\n" +
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
-    "    viewBox=\"0 0 124 141\">\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 124 141\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    class=\"purchase-popup-bullet-2-icon\">\n" +
+    "    <style>\n" +
+    "        .purchase-popup-bullet-2-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-2-icon .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-2-icon .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "    </style>\n" +
     "<g>\n" +
     "	<path class=\"st0\" d=\"M77.7,139H16.8c-4.5,0-8.3-3.7-8.3-8.3V10.3c0-4.5,3.7-8.3,8.3-8.3h60.9c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
     "		C85.9,135.3,82.2,139,77.7,139z\"/>\n" +
@@ -547,7 +584,17 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "<svg\n" +
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
-    "    viewBox=\"0 0 117.5 141\">\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 117.5 141\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    class=\"purchase-popup-bullet-3-icon\">\n" +
+    "    <style>\n" +
+    "\n" +
+    "        .purchase-popup-bullet-3-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-3-icon .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-3-icon .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
     "<g>\n" +
     "	<path class=\"st0\" d=\"M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
     "		C115.5,135.3,111.8,139,107.2,139z\"/>\n" +
@@ -566,6 +613,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "<svg\n" +
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "    viewBox=\"0 0 208.1 203\" class=\"purchase-popup-bullet-4-icon\">\n" +
     "\n" +
     "    <style type=\"text/css\">\n" +
@@ -611,8 +659,16 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "<svg\n" +
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "    viewBox=\"0 0 148.7 174.7\"\n" +
-    "    style=\"enable-background:new 0 0 148.7 174.7;\">\n" +
+    "    style=\"enable-background:new 0 0 148.7 174.7;\"\n" +
+    "    class=\"purchase-popup-bullet-5-icon\">\n" +
+    "    <style>\n" +
+    "\n" +
+    "        .purchase-popup-bullet-5-icon .st0{fill:none;stroke:#231F20;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-5-icon .st1{fill:none;stroke:#231F20;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
     "<g>\n" +
     "	<path class=\"st0\" d=\"M93.4,171.7H12.6c-5.3,0-9.6-4.3-9.6-9.6V81.3c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
     "		C103,167.4,98.7,171.7,93.4,171.7z\"/>\n" +
@@ -620,6 +676,34 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "	<path class=\"st1\" d=\"M53.2,101c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
     "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,106.1,47.1,101,53.2,101\"/>\n" +
     "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/raccoon-logo.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 237 158\"\n" +
+    "    class=\"raccoon-logo-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .raccoon-logo-svg .circle{fill:#000001;}\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <circle class=\"circle\" cx=\"175\" cy=\"93.1\" r=\"13.7\"/>\n" +
+    "        <path class=\"circle\" d=\"M118.5,155.9c10.2,0,18.5-8.3,18.5-18.5c0-10.2-8.3-18.5-18.5-18.5c-10.2,0-18.5,8.3-18.5,18.5\n" +
+    "		C100,147.6,108.3,155.9,118.5,155.9z\"/>\n" +
+    "        <path class=\"circle\" d=\"M172.4,67.5c-15.8-9.7-34.3-15.3-53.9-15.3c-19.6,0-38.2,5.5-53.9,15.3\n" +
+    "		c13,1.3,23.1,12.3,23.1,25.6c0,1.8-0.2,3.5-0.5,5.1c9.3-5.2,20-8.1,31.3-8.1c11.3,0,22,2.9,31.4,8.1c-0.3-1.7-0.5-3.4-0.5-5.1\n" +
+    "		C149.3,79.8,159.5,68.8,172.4,67.5z\"/>\n" +
+    "        <path class=\"circle\" d=\"M36.3,93.5c-8,10.8-14,23.4-17.4,37.2c-1.2,4.9-0.4,10,2.3,14.3c2.6,4.3,6.8,7.3,11.7,8.5\n" +
+    "		c1.5,0.4,3,0.5,4.5,0.5c8.8,0,16.3-6,18.4-14.5c1.8-7.7,5-14.7,9.2-20.9c-1,0.1-2,0.2-3,0.2C47.9,118.8,36.5,107.5,36.3,93.5z\"/>\n" +
+    "        <path class=\"circle\" d=\"M232.2,92.5c0.6-6.7,6.5-78-4.5-88.4c-9.5-9.1-60.3,16-77.5,24.9\n" +
+    "		C185.3,37.8,215,60.9,232.2,92.5z\"/>\n" +
+    "        <circle class=\"circle\" cx=\"62\" cy=\"93.1\" r=\"13.7\"/>\n" +
+    "        <path class=\"circle\" d=\"M204.1,153.6c10.2-2.4,16.4-12.7,14-22.8c-3.3-13.8-9.3-26.4-17.4-37.2\n" +
+    "		c-0.2,14-11.6,25.3-25.7,25.3c-1,0-2-0.1-3-0.2c4.2,6.2,7.4,13.3,9.2,21c2,8.6,9.6,14.5,18.4,14.5\n" +
+    "		C201.1,154.1,202.6,153.9,204.1,153.6\"/>\n" +
+    "        <path class=\"circle\" d=\"M86.7,29C69.5,20.1,18.8-5,9.2,4.1c-11,10.4-5.1,81.5-4.5,88.4C22,60.8,51.7,37.8,86.7,29z\"/>\n" +
+    "    </g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/purchase/templates/purchaseBtn.template.html",
@@ -642,7 +726,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "        <div class=\"upgraded flex-container\">\n" +
     "            <div class=\"flex-item\">\n" +
     "                <div class=\"icon-wrapper completed\">\n" +
-    "                    <svg-icon name=\"check-mark\"></svg-icon>\n" +
+    "                    <svg-icon name=\"purchase-check-mark\"></svg-icon>\n" +
     "                </div>\n" +
     "                <span class=\"text\" translate=\".UPGRADED_ON\" translate-values=\"{upgradeDate: vm.upgradeDate}\"></span>\n" +
     "            </div>\n" +
@@ -693,10 +777,10 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    <div class=\"purchase-popup-container\">\n" +
     "        <div class=\"popup-header\">\n" +
     "            <div class=\"raccoon\">\n" +
-    "                <svg-icon name=\"raccoon-logo-icon\"></svg-icon>\n" +
+    "                <svg-icon name=\"purchase-raccoon-logo-icon\"></svg-icon>\n" +
     "            </div>\n" +
     "            <div class=\"close-popup-wrap\">\n" +
-    "                <svg-icon name=\"close-popup\" ng-click=\"vm.close()\"></svg-icon>\n" +
+    "                <svg-icon name=\"purchase-close-popup\" ng-click=\"vm.close()\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <md-dialog-content>\n" +

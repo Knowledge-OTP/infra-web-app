@@ -26,12 +26,15 @@
                     <span class="title" translate=".PERFORMANCE"></span>
                     <a ui-sref="app.performance" class="link-full-item"></a>
                 </md-list-item>
+
+                <div ng-repeat="headerItem in vm.additionalItems" ng-click="headerItem.handler()">
+                    <md-list-item md-ink-ripple ui-sref-active="active">
+                        <span class="title">{{headerItem.text}}</span>
+                    </md-list-item>
+                </div>
             </md-list>
 
-            <!--<md-list ng-repeat="vm.additionalFileds">-->
-                <!--<span class="title" translate=".PERFORMANCE"></span>-->
-                <!--<a ui-sref="app.performance" class="link-full-item"></a>-->
-            <!--</md-list>-->
+
 
         </div>
         <div class="app-user-area" layout="row" layout-align="center center">

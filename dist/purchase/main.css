@@ -2,10 +2,6 @@
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 purchase-btn form img {
   display: block; }
 
@@ -32,11 +28,11 @@ purchase-btn .upgraded .pending md-progress-circular {
   top: -10px; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle,
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
-    border-top-color: #f2f2f2; }
+    border-top-color: #87ca4d; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle {
-    border-left-color: #f2f2f2; }
+    border-left-color: #87ca4d; }
   purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
-    border-right-color: #f2f2f2; }
+    border-right-color: #87ca4d; }
 
 purchase-btn .upgraded .icon-wrapper {
   display: inline-block;
@@ -74,8 +70,8 @@ purchase-btn .upgraded .text {
     position: absolute;
     top: -35px;
     right: -35px;
-    height: 14px;
-    width: 14px;
+    height: 24px;
+    width: 24px;
     padding: 0;
     margin: 10px;
     cursor: pointer; }
@@ -98,10 +94,10 @@ purchase-btn .upgraded .text {
       display: flex;
       justify-content: center;
       align-items: center; }
-      .purchase-popup .popup-header .raccoon .raccoon-logo-icon svg {
+      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
         width: 45px;
         height: 45px; }
-        .purchase-popup .popup-header .raccoon .raccoon-logo-icon svg * {
+        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
           fill: white; }
   .purchase-popup .md-dialog-content {
     padding: 20px 20px 60px;
@@ -134,7 +130,7 @@ purchase-btn .upgraded .text {
       width: 300px;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #f9f9f9; }
+      background-color: #E4E0E0; }
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
       .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
@@ -201,77 +197,3 @@ purchase-btn .upgraded .text {
     color: white;
     padding: 5px 15px;
     border-radius: 20px; }
-
-.close-popup .st0 {
-  fill: none; }
-
-.close-popup .st1 {
-  fill: none;
-  stroke: #0a9bad;
-  stroke-width: 8;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-1-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-2-icon .st2 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st0 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st1 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-3-icon .st2 {
-  fill: none;
-  stroke: #000000;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-5-icon .st0 {
-  fill: none;
-  stroke: #231F20;
-  stroke-width: 6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }
-
-.purchase-popup-bullet-5-icon .st1 {
-  fill: none;
-  stroke: #231F20;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-miterlimit: 10; }

@@ -6,10 +6,6 @@
 /*background*/
 /* box shadow */
 /* font color*/
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
 /* full background image with retina */
 /* full background image with retina */
 @import url(//fonts.googleapis.com/css?family=Quicksand);
@@ -34,11 +30,11 @@ workouts-progress {
       flex-direction: row;
       align-items: center; }
       workouts-progress .items-container .dotted-lines-container .dotted-line {
-        border-top: 2px dotted #ebebeb;
+        border-top: 2px dotted #0a9bad;
         display: inline-block; }
         workouts-progress .items-container .dotted-lines-container .dotted-line.future {
           flex-grow: 1;
-          border-top-color: #87ca4d; }
+          border-top-color: #cfcfcf; }
     workouts-progress .items-container .item-container {
       display: inline-flex;
       align-items: center;
@@ -49,7 +45,7 @@ workouts-progress {
       workouts-progress .items-container .item-container.diagnostic .item {
         background: #87ca4d; }
         workouts-progress .items-container .item-container.diagnostic .item.selected:after {
-          border-color: #f2f2f2; }
+          border-color: #87ca4d; }
         workouts-progress .items-container .item-container.diagnostic .item .flag-icon {
           width: 23px; }
       workouts-progress .items-container .item-container .item {
@@ -60,7 +56,7 @@ workouts-progress {
         height: 50px;
         border-radius: 50%;
         font-size: 28px;
-        color: #898989;
+        color: #ffffff;
         font-family: Quicksand;
         display: inline-flex;
         justify-content: center;
@@ -68,7 +64,7 @@ workouts-progress {
         transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1); }
         workouts-progress .items-container .item-container .item.selected {
           transform: scale(1);
-          color: #898989;
+          color: #ffffff;
           position: relative;
           border: none; }
           workouts-progress .items-container .item-container .item.selected:after {
@@ -78,27 +74,27 @@ workouts-progress {
             right: -3px;
             bottom: -3px;
             left: -3px;
-            border: 1px solid #f8f8f8;
+            border: 1px solid #b7b7b7;
             border-radius: 50%; }
           workouts-progress .items-container .item-container .item.selected.pristine {
             background: #b7b7b7;
-            color: #898989; }
+            color: #ffffff; }
             workouts-progress .items-container .item-container .item.selected.pristine.selected:after {
-              border: 1px solid #f8f8f8; }
+              border: 1px solid #b7b7b7; }
         workouts-progress .items-container .item-container .item.pristine {
-          background: #0a9bad;
+          background: #ffffff;
           border: 1px solid #b7b7b7;
           color: #b7b7b7; }
         workouts-progress .items-container .item-container .item .check-mark-icon {
           width: 1em; }
           workouts-progress .items-container .item-container .item .check-mark-icon .st0 {
-            stroke: #0a9bad; }
+            stroke: #ffffff; }
     workouts-progress .items-container .future-item {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      border: 1px solid #f8f8f8;
-      background: #0a9bad;
+      border: 1px solid #b7b7b7;
+      background: #ffffff;
       box-sizing: border-box;
       position: relative;
       z-index: 1;
@@ -112,7 +108,7 @@ workouts-progress {
     width: 100%;
     height: 100%; }
   .app-workouts .workouts-container, .app-workouts .score-estimate-container {
-    background: #0a9bad;
+    background: #ffffff;
     min-height: 675px; }
   .app-workouts .workouts-container {
     margin-right: 30px;
@@ -183,8 +179,8 @@ workouts-progress {
 .diagnostic-workout-pane {
   width: 575px;
   height: 523px;
-  background-color: #0a9bad;
-  border: 1px solid #d3d0d0;
+  background-color: #ffffff;
+  border: 1px solid #ebebeb;
   position: relative;
   margin: 15px auto;
   text-align: center;
