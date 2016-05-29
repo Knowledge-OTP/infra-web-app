@@ -8,7 +8,7 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
 
         var demoItem1 = {
             text: 'item 1',
-            handler: function (purchaseService) {
+            onClickHandler: function (purchaseService) {
                 if(angular.isUndefined(purchaseService)){
                     alert('DI error');
                 }
@@ -18,7 +18,7 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
 
         var demoItem2 = {
             text: 'item 2',
-            handler: function () {
+            onClickHandler: function () {
                 alert('item 2 was clicked')
             }
         };

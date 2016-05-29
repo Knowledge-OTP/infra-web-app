@@ -2,7 +2,7 @@
  *
  *   api:
  *     addAdditionalItems function - set items that will be clickable in the header. need to supply object (or array of
- *                                    objects) with the properties: text and handler
+ *                                    objects) with the properties: text and onClickHandler
  */
 
 (function (angular) {
