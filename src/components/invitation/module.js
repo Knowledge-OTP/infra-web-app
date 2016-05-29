@@ -7,6 +7,15 @@
         'znk.infra.popUp',
         'pascalprecht.translate',
         'znk.infra-web-app.purchase',
-        'znk.infra.user']);
+        'znk.infra.user'])
+        .config([
+            'SvgIconSrvProvider',
+            function(SvgIconSrvProvider){
+
+                var svgMap = {
+                    'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
 
 })(angular);

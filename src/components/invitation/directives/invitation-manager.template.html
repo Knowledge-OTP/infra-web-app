@@ -2,7 +2,7 @@
     <div ng-click="$mdOpenMenu($event);" class="md-icon-button invite-icon-btn" aria-label="Open Invite menu" ng-switch="hasItems(myTeachers)">
         <div class="num-of-receive" ng-if="hasItems(invitations)">{{getItemsCount(invitations)}}</div>
         <section ng-switch-when="false" class="circle-invite-wrap teacher-icon-wrap">
-            <svg-icon name="teacher-icon"></svg-icon>
+            <svg-icon name="invitation-teacher-icon"></svg-icon>
         </section>
         <section ng-switch-when="true" class="circle-invite-wrap teacher-active-icon-wrap">
             <svg-icon name="teacher-active-icon"></svg-icon>
