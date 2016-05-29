@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService) {
+        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv) {
             'ngInject';
 
             return {
@@ -38,6 +38,7 @@
                             // scope.d.estimatedCompositeScore = isDiagnosticCompleted ? res[1].compositeScoreResults || '-' : '-';todo need to figure out what it do
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.compositeScore : '-';
                             scope.d.widgetItems = [];
+
 
                             // var subjectToIndexMap = {
                             //     [SubjectEnum.ENGLISH.enum]: 0,
