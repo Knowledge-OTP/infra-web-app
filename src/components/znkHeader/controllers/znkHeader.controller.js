@@ -2,7 +2,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv, UserProfileService, $injector) {
+        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
+                  UserProfileService, $injector, PurchaseStateEnum) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
@@ -32,7 +33,24 @@
                 //});
             };
 
-            this.subscriptionStatus = '.PROFILE_STATUS_BASIC';  // mock
+            var pendingPurchaseProm = purchaseService.getPendingPurchase();
+            if (pendingPurchaseProm) {
+                self.purchaseState = PurchaseStateEnum.PENDING.enum;
+                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+                pendingPurchaseProm.then(function () {
+                    _checkIfHasProVersion();
+                });
+            } else {
+                _checkIfHasProVersion();
+            }
+
+            function _checkIfHasProVersion() {
+                purchaseService.hasProVersion().then(function (hasProVersion) {
+                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+                });
+            }
+
 
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
