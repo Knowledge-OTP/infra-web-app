@@ -1,0 +1,54 @@
+<md-dialog class="invite-teacher-modal-wrap" ng-cloak translate-namespace="INVITE_TEACHER_MODAL">
+    <md-toolbar>
+        <div class="close-popup-wrap" ng-click="vm.closeModal()">
+            <svg-icon name="close-popup"></svg-icon>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="modal-content invite-teacher-content" ng-switch="!!vm.showSuccess">
+        <div class="modal-main-title" translate=".INVITE_TEACHER"></div>
+        <form ng-switch-when="false" class="invite-teacher-form" novalidate name="inviteTeacherForm"
+              ng-submit="inviteTeacherForm.$valid && vm.sendInvitation()">
+            <div class="znk-input-group" ng-class="{'invalid-input': !vm.teacherEmail && inviteTeacherForm.$submitted}">
+                <input type="email" autocomplete="off"
+                       placeholder="{{::'INVITE_TEACHER_MODAL.TEACHER_EMAIL' | translate}}" name="teacherEmail"
+                       ng-minlength="6" ng-maxlength="25" ng-required="true" ng-model="vm.teacherEmail">
+                <div class="error-msg" translate=".REQUIRED"></div>
+            </div>
+            <div class="znk-input-group">
+                <input type="text" autocomplete="off"
+                       placeholder="{{::'INVITE_TEACHER_MODAL.TEACHER_NAME' | translate}}" name="teacherName"
+                       ng-model="vm.teacherName">
+            </div>
+            <div class="btn-wrap">
+                <div translate=".INVITE_MSG" class="invite-msg"></div>
+               <!-- <button type="submit" class="md-button success lg drop-shadow" translate=".INVITE"></button>-->
+                <button type="submit" class="md-button lg success drop-shadow"
+                    element-loader
+                    fill-loader="vm.fillLoader"
+                    show-loader="vm.startLoader"
+                    bg-loader="'#72ab40'"
+                    precentage="50"
+                    font-color="'#FFFFFF'"
+                    bg="'#87ca4d'">
+                    <span translate=".INVITE"></span>
+                </button>
+            </div>
+        </form>
+        <div class="big-success-msg" ng-switch-when="true">
+            <svg-icon class="completed-v-icon-wrap" name="completed-v-icon"></svg-icon>
+            <div translate=".SUCCESS_INVITE"></div>
+            <div class="done-btn-wrap">
+                <md-button class="success lg drop-shadow" ng-click="vm.closeModal()">
+                    <span translate=".DONE"></span>
+                </md-button>
+            </div>
+        </div>
+    </md-dialog-content>
+    <div class="top-icon-wrap">
+        <div class="top-icon">
+            <div class="round-icon-wrap">
+                <div class="invite-teacher-icon"></div>
+            </div>
+        </div>
+    </div>
+</md-dialog>
