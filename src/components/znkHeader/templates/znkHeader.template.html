@@ -1,0 +1,110 @@
+<div class="app-header" translate-namespace="ZNK_HEADER">
+    <div class="main-content-header" layout="row" layout-align="start start">
+        <svg-icon class="raccoon-logo-icon"
+                  name="znkHeader-raccoon-logo-icon"
+                  ui-sref="app.workouts.roadmap"
+                  ui-sref-opts="{reload: true}">
+        </svg-icon>
+        <div class="app-states-list">
+            <md-list flex="grow" layout="row" layout-align="start center">
+                <md-list-item md-ink-ripple ui-sref-active="active">
+                    <span class="title" translate=".WORKOUTS"></span>
+                    <a ui-sref="app.workouts.roadmap"
+                       ui-sref-opts="{reload: true}"
+                       class="link-full-item">
+                    </a>
+                </md-list-item>
+                <md-list-item md-ink-ripple ui-sref-active="active">
+                    <span class="title" translate=".TESTS"></span>
+                    <a ui-sref="app.tests.roadmap" class="link-full-item"></a>
+                </md-list-item>
+                <md-list-item md-ink-ripple ui-sref-active="active">
+                    <span class="title" translate=".TUTORIALS"></span>
+                    <a ui-sref="app.tutorials.roadmap" class="link-full-item"></a>
+                </md-list-item>
+                <md-list-item md-ink-ripple ui-sref-active="active">
+                    <span class="title" translate=".PERFORMANCE"></span>
+                    <a ui-sref="app.performance" class="link-full-item"></a>
+                </md-list-item>
+
+                <div ng-repeat="headerItem in vm.additionalItems" ng-click="vm.invokeOnClickHandler(headerItem.onClickHandler)">
+                    <md-list-item md-ink-ripple ui-sref-active="active">
+                        <span class="title">{{headerItem.text}}</span>
+                    </md-list-item>
+                </div>
+            </md-list>
+
+
+
+        </div>
+        <div class="app-user-area" layout="row" layout-align="center center">
+            <invitation-manager></invitation-manager>
+            <div class="profile-status" ng-click="vm.showPurchaseDialog()">
+                <div class="pending-purchase-icon-wrapper" ng-if="vm.purchaseState === 'pending'">
+                    <svg-icon name="pending-purchase-clock-icon"></svg-icon>
+                </div>
+                <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
+            </div>
+            <md-menu md-offset="-61 68">
+                <md-button ng-click="$mdOpenMenu($event); vm.znkOpenModal();"
+                           class="md-icon-button profile-open-modal-btn"
+                           aria-label="Open sample menu">
+                    <div>{{::vm.userProfile.username}}</div>
+                    <md-icon class="material-icons">{{vm.expandIcon}}</md-icon>
+                </md-button>
+                <md-menu-content class="md-menu-content-znk-header">
+                    <md-list>
+                        <md-list-item class="header-modal-item header-modal-item-profile">
+                            <span class="username">{{::vm.userProfile.username}}</span>
+                            <span class="email">{{::vm.userProfile.email}}</span>
+                        </md-list-item>
+                        <md-list-item md-ink-ripple class="header-modal-item header-modal-item-uppercase links purchase-status">
+                            <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
+                            <span class="link-full-item" ng-click="vm.showPurchaseDialog()"></span>
+                            <ng-switch on="vm.purchaseState">
+                                <div ng-switch-when="pending" class="pending-purchase-icon-wrapper">
+                                    <svg-icon name="pending-purchase-clock-icon"></svg-icon>
+                                </div>
+                                <div ng-switch-when="pro" class="check-mark-wrapper">
+                                    <svg-icon name="check-mark"></svg-icon>
+                                </div>
+                            </ng-switch>
+                        </md-list-item>
+                        <md-list-item
+                            md-ink-ripple
+                            class="header-modal-item header-modal-item-uppercase links">
+                            <span ng-disabled="!vm.isOnBoardingCompleted"
+                                  ng-click="vm.showGoalsEdit()"
+                                  translate=".PROFILE_GOALS"></span>
+                        </md-list-item>
+                        <md-list-item
+                            md-ink-ripple
+                            class="header-modal-item header-modal-item-uppercase links">
+                            <span ng-click="vm.showChangePassword()" translate=".PROFILE_CHANGE_PASSWORD"></span>
+                        </md-list-item>
+                        <md-list-item
+                            md-ink-ripple
+                            class="header-modal-item header-modal-item-uppercase links">
+                            <a ui-sref="app.faq">
+                                <span translate=".WHAT_IS_THE_ACT_TEST"></span>
+                            </a>
+                        </md-list-item>
+                        <md-list-item
+                            md-ink-ripple
+                            class="header-modal-item header-modal-item-uppercase links">
+                            <a ng-href="http://zinkerz.com/contact/" target="_blank">
+                                <span translate=".PROFILE_SUPPORT"></span>
+                            </a>
+                        </md-list-item>
+                        <div class="divider"></div>
+                        <md-list-item
+                            md-ink-ripple
+                            class="header-modal-item header-modal-item-uppercase logout">
+                            <span ng-click="vm.logout()" translate=".PROFILE_LOGOUT"></span>
+                        </md-list-item>
+                    </md-list>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
+</div>
