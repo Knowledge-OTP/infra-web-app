@@ -10,8 +10,8 @@
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
 
-            self.invokeOnClickHandler = function(onClickHandlder){
-                $injector.invoke(onClickHandlder);
+            self.invokeOnClickHandler = function(onClickHandler){
+                $injector.invoke(onClickHandler);
             };
 
             this.showPurchaseDialog = function () {

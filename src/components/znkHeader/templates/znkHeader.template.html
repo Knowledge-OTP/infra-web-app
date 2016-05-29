@@ -27,7 +27,7 @@
                     <a ui-sref="app.performance" class="link-full-item"></a>
                 </md-list-item>
 
-                <div ng-repeat="headerItem in vm.additionalItems" ng-click="vm.invokeOnClickHandler(headerItem.handler)">
+                <div ng-repeat="headerItem in vm.additionalItems" ng-click="vm.invokeOnClickHandler(headerItem.onClickHandler)">
                     <md-list-item md-ink-ripple ui-sref-active="active">
                         <span class="title">{{headerItem.text}}</span>
                     </md-list-item>
