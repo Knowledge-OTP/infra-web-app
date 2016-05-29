@@ -13,7 +13,7 @@
             var additionalHeaderItems = [];
 
             this.addAdditionalItems = function (additionalItems) {
-                if (!angular.isArray(additionalHeaderItems)) {
+                if (!angular.isArray(additionalItems)) {
                     additionalHeaderItems.push(additionalItems);
                 } else {
                     additionalHeaderItems = additionalItems;
