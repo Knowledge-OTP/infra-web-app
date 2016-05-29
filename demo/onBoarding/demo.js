@@ -1,5 +1,5 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding'])
-    .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider) {
+    .config(function ($translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -13,16 +13,6 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
                 urlTemplate: '/{part}/locale/{lang}.json'
             })
             .preferredLanguage('en');
-
-        znkAnalyticsSrvProvider.setEventsHandler(function () {
-            return {
-                eventTrack: angular.noop,
-                timeTrack: angular.noop,
-                pageTrack: angular.noop,
-                setUsername: angular.noop,
-                setUserProperties: angular.noop
-            };
-        });
 
         var storageFake = ['$q', function($q) {
             return {
