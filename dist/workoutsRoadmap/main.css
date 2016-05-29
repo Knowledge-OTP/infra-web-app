@@ -1,0 +1,255 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+workouts-progress {
+  display: block;
+  position: relative;
+  overflow: hidden; }
+  workouts-progress .items-container {
+    height: 67px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    padding-right: 90px;
+    padding-left: 300px; }
+    workouts-progress .items-container .dotted-lines-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center; }
+      workouts-progress .items-container .dotted-lines-container .dotted-line {
+        border-top: 2px dotted #0a9bad;
+        display: inline-block; }
+        workouts-progress .items-container .dotted-lines-container .dotted-line.future {
+          flex-grow: 1;
+          border-top-color: #cfcfcf; }
+    workouts-progress .items-container .item-container {
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+      cursor: pointer;
+      padding-left: 17.5px;
+      padding-right: 17.5px; }
+      workouts-progress .items-container .item-container.diagnostic .item {
+        background: #87ca4d; }
+        workouts-progress .items-container .item-container.diagnostic .item.selected:after {
+          border-color: #87ca4d; }
+        workouts-progress .items-container .item-container.diagnostic .item .flag-icon {
+          width: 23px; }
+      workouts-progress .items-container .item-container .item {
+        transform: scale(0.6);
+        box-sizing: border-box;
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 28px;
+        color: #ffffff;
+        font-family: Quicksand;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1); }
+        workouts-progress .items-container .item-container .item.selected {
+          transform: scale(1);
+          color: #ffffff;
+          position: relative;
+          border: none; }
+          workouts-progress .items-container .item-container .item.selected:after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            bottom: -3px;
+            left: -3px;
+            border: 1px solid #b7b7b7;
+            border-radius: 50%; }
+          workouts-progress .items-container .item-container .item.selected.pristine {
+            background: #b7b7b7;
+            color: #ffffff; }
+            workouts-progress .items-container .item-container .item.selected.pristine.selected:after {
+              border: 1px solid #b7b7b7; }
+        workouts-progress .items-container .item-container .item.pristine {
+          background: #ffffff;
+          border: 1px solid #b7b7b7;
+          color: #b7b7b7; }
+        workouts-progress .items-container .item-container .item .check-mark-icon {
+          width: 1em; }
+          workouts-progress .items-container .item-container .item .check-mark-icon .st0 {
+            stroke: #ffffff; }
+    workouts-progress .items-container .future-item {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid #b7b7b7;
+      background: #ffffff;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+      margin-right: 17px;
+      margin-left: 17px; }
+
+.app-workouts {
+  display: flex;
+  justify-content: center; }
+  .app-workouts ui-view {
+    width: 100%;
+    height: 100%; }
+  .app-workouts .workouts-container, .app-workouts .score-estimate-container {
+    background: #ffffff;
+    min-height: 675px; }
+  .app-workouts .workouts-container {
+    margin-right: 30px;
+    width: 705px;
+    overflow: hidden;
+    height: 675px; }
+    .app-workouts .workouts-container workouts-progress {
+      height: 67px;
+      padding-top: 20px; }
+    .app-workouts .workouts-container .workout-container {
+      flex-grow: 1;
+      position: relative; }
+      .app-workouts .workouts-container .workout-container.left-animation .intro-ui-view.ng-leave, .app-workouts .workouts-container .workout-container.left-animation .intro-ui-view.ng-enter {
+        transition: all 0.5s ease-in-out;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0; }
+      .app-workouts .workouts-container .workout-container.left-animation .intro-ui-view.ng-enter {
+        transform: translateX(580px);
+        opacity: 0; }
+      .app-workouts .workouts-container .workout-container.left-animation .intro-ui-view.ng-leave, .app-workouts .workouts-container .workout-container.left-animation .intro-ui-view.ng-enter-active {
+        transform: translateX(0);
+        opacity: 1; }
+      .app-workouts .workouts-container .workout-container.left-animation .intro-ui-view.ng-leave-active {
+        transform: translateX(-580px);
+        opacity: 0; }
+      .app-workouts .workouts-container .workout-container.right-animation .intro-ui-view.ng-leave, .app-workouts .workouts-container .workout-container.right-animation .intro-ui-view.ng-enter {
+        transition: all 0.5s ease-in-out;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0; }
+      .app-workouts .workouts-container .workout-container.right-animation .intro-ui-view.ng-enter {
+        transform: translateX(-580px);
+        opacity: 0; }
+      .app-workouts .workouts-container .workout-container.right-animation .intro-ui-view.ng-leave, .app-workouts .workouts-container .workout-container.right-animation .intro-ui-view.ng-enter-active {
+        transform: translateX(0);
+        opacity: 1; }
+      .app-workouts .workouts-container .workout-container.right-animation .intro-ui-view.ng-leave-active {
+        transform: translateX(580px);
+        opacity: 0; }
+  .app-workouts .app-workouts-diagnostic znk-exercise {
+    box-shadow: none; }
+  .app-workouts .app-workouts-diagnostic ui-view {
+    align-items: center;
+    justify-content: flex-start; }
+  .app-workouts .app-workouts-diagnostic .md-button {
+    margin-top: 20px;
+    margin-right: auto;
+    margin-left: auto; }
+    .app-workouts .app-workouts-diagnostic .md-button.md {
+      width: 180px; }
+    .app-workouts .app-workouts-diagnostic .md-button.primary {
+      text-transform: uppercase; }
+  .app-workouts .app-workouts-diagnostic .answer-index-wrapper {
+    cursor: pointer; }
+  .app-workouts .app-workouts-diagnostic .answer.answered .answer-index-wrapper {
+    transition: 0.6s; }
+  .app-workouts .app-workouts-diagnostic diagnostic-intro .diagnostic-intro-drv ng-switch .diagnostic-text {
+    margin-top: 15px;
+    margin-bottom: 30px; }
+  .app-workouts .base-border-radius {
+    border-radius: 15px; }
+
+.diagnostic-workout-pane {
+  width: 575px;
+  height: 523px;
+  background-color: #ffffff;
+  border: 1px solid #ebebeb;
+  position: relative;
+  margin: 15px auto;
+  text-align: center;
+  box-sizing: border-box; }
+  .diagnostic-workout-pane .diagnostic-workout-title {
+    margin-top: 25px;
+    font-size: 21px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 700; }
+
+@keyframes scaleIcon {
+  100% {
+    transform: scale(2); } }
+  .diagnostic-workout-pane .icon-settings {
+    margin: 80px auto 0;
+    max-width: 110px; }
+    .diagnostic-workout-pane .icon-settings.pre-summary {
+      width: 60px; }
+      .diagnostic-workout-pane .icon-settings.pre-summary.pre-summary-animate {
+        animation-name: scaleIcon;
+        animation-duration: 1s;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards; }
+  .diagnostic-workout-pane .complete-text {
+    margin-top: 52px;
+    font-size: 23px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 400; }
+  .diagnostic-workout-pane .results-text {
+    font-size: 21px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 400;
+    text-transform: capitalize;
+    margin-top: 55px; }
+  .diagnostic-workout-pane .total-score {
+    font-size: 20px;
+    color: #757a83;
+    font-family: Lato;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-top: 53px; }
+  .diagnostic-workout-pane .first-row, .diagnostic-workout-pane .second-row {
+    display: flex;
+    justify-content: center; }
+    .diagnostic-workout-pane .first-row .subject-score, .diagnostic-workout-pane .second-row .subject-score {
+      display: inline-block;
+      margin: 67.5px 37px auto;
+      width: 220px; }
+      .diagnostic-workout-pane .first-row .subject-score .icon-wrapper, .diagnostic-workout-pane .second-row .subject-score .icon-wrapper {
+        display: inline-block;
+        width: 45px;
+        vertical-align: middle;
+        float: left; }
+      .diagnostic-workout-pane .first-row .subject-score .score-wrapper, .diagnostic-workout-pane .second-row .subject-score .score-wrapper {
+        font-size: 26.5px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 200; }
+        .diagnostic-workout-pane .first-row .subject-score .score-wrapper .score, .diagnostic-workout-pane .second-row .subject-score .score-wrapper .score {
+          display: inline-block;
+          text-transform: capitalize;
+          float: left;
+          padding-left: 10px; }
+        .diagnostic-workout-pane .first-row .subject-score .score-wrapper .bold, .diagnostic-workout-pane .second-row .subject-score .score-wrapper .bold {
+          font-weight: 400;
+          float: right; }
+  .diagnostic-workout-pane diagnostic-intro .diagnostic-intro-drv ng-switch .diagnostic-text {
+    font-size: 15px; }

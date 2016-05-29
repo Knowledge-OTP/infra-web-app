@@ -1,19 +1,12 @@
-/* fonts size */
-/* general */
-/* paths */
-/* general */
 /*border color*/
 /*background*/
 /* box shadow */
 /* font color*/
-@import url(//fonts.googleapis.com/css?family=Lato:300);
-@import url(//fonts.googleapis.com/css?family=Lato:300italic);
-@import url(//fonts.googleapis.com/css?family=Lato:400);
-@import url(//fonts.googleapis.com/css?family=Lato:400italic);
-@import url(//fonts.googleapis.com/css?family=Quicksand);
-@import url(//fonts.googleapis.com/css?family=Quicksand:300);
-@import url(//fonts.googleapis.com/css?family=Quicksand:700);
-@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+@import url(http://fonts.googleapis.com/icon?family=Material+Icons);
 html, body {
   height: 100%;
   color: rgba(0, 0, 0, 0.87);
@@ -17398,426 +17391,340 @@ md-tooltip {
 
 /* full background image with retina */
 /* full background image with retina */
-a.md-button,
-.md-button {
-  font-size: 16px;
-  color: #161616;
-  font-family: Lato;
-  font-weight: 400;
-  text-transform: none;
-  width: 170px;
-  height: 42px;
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+purchase-btn form img {
+  display: block; }
+
+purchase-btn .flex-container {
+  padding: 0;
+  margin: 0 -15px;
+  list-style: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fafaff;
-  border-radius: 21px;
-  position: relative; }
-  a.md-button i,
-  .md-button i {
-    margin-left: 10px; }
-  a.md-button i.positioned,
-  .md-button i.positioned {
-    position: absolute;
-    left: 25px;
-    top: 10px;
-    margin-left: 0; }
-  a.md-button.default,
-  .md-button.default {
-    background-color: transparent;
-    color: #0a9bad;
-    border: none;
+  -webkit-flex-flow: row wrap;
+  justify-content: flex-start; }
+
+purchase-btn .flex-item {
+  padding: 0;
+  margin: auto; }
+
+purchase-btn .upgrade-btn-wrapper {
+  text-align: center; }
+  purchase-btn .upgrade-btn-wrapper .md-button {
     padding: 0; }
-    a.md-button.default:active,
-    .md-button.default:active {
-      background-color: transparent; }
-    a.md-button.default:hover,
-    .md-button.default:hover {
-      background-color: transparent; }
-  a.md-button.primary,
-  .md-button.primary {
+
+purchase-btn .upgraded .pending md-progress-circular {
+  margin-right: 20px;
+  float: left;
+  top: -10px; }
+  purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle,
+  purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
+    border-top-color: #87ca4d; }
+  purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle {
+    border-left-color: #87ca4d; }
+  purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
+    border-right-color: #87ca4d; }
+
+purchase-btn .upgraded .icon-wrapper {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: #87ca4d;
+  float: left;
+  margin-right: 20px; }
+  purchase-btn .upgraded .icon-wrapper svg-icon {
+    height: 100%; }
+  purchase-btn .upgraded .icon-wrapper svg-icon svg {
+    width: 75%;
+    height: 100%;
+    margin: auto;
+    display: block; }
+
+purchase-btn .upgraded .text {
+  line-height: 25px;
+  display: inline-block; }
+
+/* full background image with retina */
+/* full background image with retina */
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+.purchase-popup {
+  width: 585px;
+  overflow: visible;
+  background: none; }
+  .purchase-popup form {
+    overflow: visible; }
+  .purchase-popup .close-popup-wrap {
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    height: 24px;
+    width: 24px;
+    padding: 0;
+    margin: 10px;
+    cursor: pointer; }
+    .purchase-popup .close-popup-wrap svg line {
+      stroke: white; }
+  .purchase-popup .popup-header {
+    position: relative;
+    height: 40px;
     background-color: #0a9bad;
-    color: white; }
-    a.md-button.primary:active,
-    .md-button.primary:active {
-      background-color: #037684; }
-    a.md-button.primary:hover,
-    .md-button.primary:hover {
-      background-color: #0a8999; }
-  a.md-button.warn,
-  .md-button.warn {
-    background-color: #ff931e;
-    color: white; }
-    a.md-button.warn:active,
-    .md-button.warn:active {
-      background-color: #a65e10; }
-    a.md-button.warn:hover,
-    .md-button.warn:hover {
-      background-color: #d67914; }
-  a.md-button.success,
-  .md-button.success {
-    background-color: #87ca4d;
-    color: white; }
-    a.md-button.success:active,
-    .md-button.success:active {
-      background-color: #67a531; }
-    a.md-button.success:hover,
-    .md-button.success:hover {
-      background-color: #76b63e; }
-    a.md-button.success.drop-shadow,
-    .md-button.success.drop-shadow {
-      box-shadow: 0px 3px 0px 0px #72ab40; }
-  a.md-button.facebook,
-  .md-button.facebook {
-    background-color: #037684;
-    color: white; }
-    a.md-button.facebook:active,
-    .md-button.facebook:active {
-      background-color: #0a8999; }
-    a.md-button.facebook:hover, a.md-button.facebook:visited,
-    .md-button.facebook:hover,
-    .md-button.facebook:visited {
-      background-color: #a65e10; }
-  a.md-button.google,
-  .md-button.google {
-    background-color: #df4a31;
-    color: white; }
-    a.md-button.google:active,
-    .md-button.google:active {
-      background-color: #0a8999; }
-    a.md-button.google:hover, a.md-button.google:visited,
-    .md-button.google:hover,
-    .md-button.google:visited {
-      background-color: #D93418; }
-  a.md-button.outline-green,
-  .md-button.outline-green {
-    background: #ff931e;
-    border: 1px solid #87ca4d;
-    color: #87ca4d; }
-    a.md-button.outline-green:active,
-    .md-button.outline-green:active {
-      background-color: #E8E8E8; }
-  a.md-button.outline-blue,
-  .md-button.outline-blue {
-    background: #ff931e;
-    border: 1px solid #0a9bad;
-    color: #0a9bad; }
-    a.md-button.outline-blue:active,
-    .md-button.outline-blue:active {
-      background-color: #c7e0e3; }
-    a.md-button.outline-blue:hover,
-    .md-button.outline-blue:hover {
-      border-color: #037684;
-      color: #037684; }
-  a.md-button.lg,
-  .md-button.lg {
-    width: 340px; }
-  a.md-button.md,
-  .md-button.md {
-    width: 280px; }
-  a.md-button.md-sm,
-  .md-button.md-sm {
-    width: 220px; }
-  a.md-button.sm,
-  .md-button.sm {
-    width: 130px; }
-  a.md-button:not([disabled]).success,
-  .md-button:not([disabled]).success {
-    background-color: #c7e0e3; }
-  a.md-button:not([disabled]).primary,
-  .md-button:not([disabled]).primary {
-    background-color: #067f8e; }
-  a.md-button:not([disabled]).default,
-  .md-button:not([disabled]).default {
-    background-color: transparent; }
-  a.md-button.outline-green:not([disabled]):hover,
-  .md-button.outline-green:not([disabled]):hover {
-    background-color: rgba(255, 255, 255, 0.55); }
-
-md-progress-linear.znk-progress-linear-exercise-bar .md-bar {
-  background-color: #c5cae9;
-  transition: 0.4s; }
-
-md-progress-linear.green-state .md-bar {
-  background-color: #d67914; }
-
-md-progress-linear.orange-state .md-bar {
-  background-color: #ff931e; }
-
-md-progress-linear.red-state .md-bar {
-  background-color: #E8E8E8; }
-
-md-input-container.md-input-has-value [ng-messages] {
-  opacity: 0;
-  margin-top: -100px; }
-
-md-input-container:not(.md-input-invalid) .md-input {
-  border-color: #161616; }
-
-md-input-container:not(.md-input-invalid) label {
-  color: #161616; }
-
-md-tooltip {
-  opacity: 0;
-  width: auto;
-  height: 87px;
-  background: white;
-  padding: 0 5px; }
-  md-tooltip .md-content {
-    height: auto;
-    text-align: center;
-    background: white;
-    white-space: normal; }
-    md-tooltip .md-content.md-show {
-      opacity: 1;
-      transform: none;
-      transition: none;
-      pointer-events: auto;
-      will-change: auto; }
-    md-tooltip .md-content.md-show-remove {
-      transition: none; }
-      md-tooltip .md-content.md-show-remove.md-show-remove-active {
-        transform: none;
-        opacity: 0; }
-    md-tooltip .md-content .top-text {
-      margin-top: 22px;
-      margin-bottom: 12px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px; }
+    .purchase-popup .popup-header .raccoon {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      margin: 0 auto;
+      position: relative;
+      bottom: 17.5px;
+      background-color: #0a9bad;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
+        width: 45px;
+        height: 45px; }
+        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
+          fill: white; }
+  .purchase-popup .md-dialog-content {
+    padding: 20px 20px 60px;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px; }
+    .purchase-popup .md-dialog-content h2 {
+      font-size: 25px;
+      color: #161616;
+      font-family: Quicksand;
+      font-weight: 700;
+      text-align: center;
+      font-size: 25px;
+      color: #161616;
+      font-family: Quicksand;
+      font-weight: 700;
+      text-align: center;
+      margin: 15px 0 10px;
+      margin: 15px 0 10px; }
+      .purchase-popup .md-dialog-content h2 .pro {
+        font-size: 20px;
+        padding: 2px 7px; }
+    .purchase-popup .md-dialog-content p {
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
-      font-weight: 400; }
-    md-tooltip .md-content .bottom-text {
-      line-height: 12px;
-      font-size: 12px;
-      color: #4f4d4d;
+      font-weight: 200;
+      text-align: center; }
+    .purchase-popup .md-dialog-content .features-box {
+      width: 300px;
+      margin: 15px auto;
+      padding: 25px 40px;
+      background-color: #E4E0E0; }
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-4-icon svg,
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-5-icon svg {
+        width: 26px;
+        height: auto;
+        max-height: 50px; }
+      .purchase-popup .md-dialog-content .features-box ul {
+        padding: 0;
+        margin: 0;
+        list-style: none; }
+        .purchase-popup .md-dialog-content .features-box ul li {
+          font-size: 18px;
+          color: #4f4d4d;
+          font-family: Quicksand;
+          font-weight: normal;
+          font-size: 18px;
+          color: #4f4d4d;
+          font-family: Quicksand;
+          font-weight: normal;
+          line-height: 50px;
+          line-height: 50px; }
+          .purchase-popup .md-dialog-content .features-box ul li .bullet {
+            float: left;
+            margin-right: 30px;
+            top: 8px;
+            position: relative; }
+    .purchase-popup .md-dialog-content .price {
+      font-size: 16px;
+      color: #757a83;
       font-family: Lato;
-      font-weight: 300; }
-  md-tooltip.md-hide {
-    transition: opacity 0.4s;
-    opacity: 0; }
-  md-tooltip.md-show {
-    opacity: 1;
-    transition: opacity 0.4s;
-    pointer-events: auto;
-    will-change: opacity; }
-
-md-dialog .close-popup {
-  width: 16px; }
-
-.md-dialog-container {
-  overflow: visible; }
-
-on-boarding-bar {
-  position: absolute;
-  bottom: -70px;
-  width: 100%; }
-  on-boarding-bar .on-board-pager-wrap .on-board-pager {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    width: 30%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 40px;
-    padding: 5px; }
-    on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      border: 2px solid #87ca4d;
+      font-weight: lighter;
+      text-align: center;
+      margin-bottom: 15px; }
+      .purchase-popup .md-dialog-content .price b {
+        font-size: 20px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: normal;
+        margin: 0 10px 0 15px; }
+    .purchase-popup .md-dialog-content .action .md-button {
+      width: 300px;
+      margin: 0 auto;
+      font-size: 20px;
+      color: white;
+      font-family: Lato;
+      font-weight: normal; }
+    .purchase-popup .md-dialog-content .upgraded-container {
+      text-align: center;
+      font-size: 16px;
+      color: #757a83;
+      font-family: Lato;
+      font-weight: 400;
       display: flex;
-      display: -webkit-flex;
-      flex-direction: column;
-      -webkit-flex-direction: column;
       justify-content: center;
-      -webkit-justify-content: center; }
-      on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon {
-        width: 30px;
-        margin: 6px auto 0; }
-        on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon * {
-          fill: #87ca4d; }
-      on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected {
-        background-color: #87ca4d; }
-        on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected .icon *, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected .icon *, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected .icon * {
-          fill: white; }
-    on-boarding-bar .on-board-pager-wrap .on-board-pager .divider {
-      width: 21px;
-      border-top: 1px solid #87ca4d;
-      height: 1px;
-      margin-left: 20px;
-      margin-right: 20px; }
+      align-items: center;
+      text-align: center; }
+      .purchase-popup .md-dialog-content .upgraded-container svg-icon {
+        margin-right: 15px;
+        margin-top: 2px; }
+  .purchase-popup .pill {
+    background-color: #87ca4d;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px; }
 
-/**
-*  FONTS
-*/
-/* Lato fonts from google*/
-/* Quicksand fonts */
-/* Material+Icons */
-.on-board {
-  /**
-     *  SVG
-     */
-  position: relative; }
-  .on-board .svg-wrapper {
+.app-header {
+  background: white;
+  height: 57px;
+  border-bottom: 1px solid #f2f2f2;
+  font-family: Lato; }
+  .app-header .main-content-header {
+    margin: 0 auto;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center; }
-  .on-board .clearfix:after {
-    content: " ";
-    display: block;
-    height: 0;
-    clear: both; }
-  .on-board .main-title {
-    font-size: 32px;
-    color: #4f4d4d;
-    font-family: Quicksand;
-    font-weight: 600;
-    text-align: center;
-    margin-top: 20px; }
-  .on-board .inline-block {
-    display: inline-block; }
-  .on-board .base-border-radius {
-    border-radius: 15px; }
-  .on-board .base-box-shadow {
-    box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
-  .on-board .smile-raccoon {
-    /*CSS for basic styling and non-retina image path:*/
-    background-image: url("./assets/images/smile-raccoon.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    display: inline-block;
-    width: 293px;
-    height: 373px;
-    /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-    @media only screen and (min-resolution: 1.5dppx) {
-      .on-board .smile-raccoon {
-        background-image: url("./assets/images/smile-raccoon@2x.png");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        display: inline-block;
-        width: 293px;
-        height: 373px; } }
-  .on-board .thinking-raccoon {
-    /*CSS for basic styling and non-retina image path:*/
-    background-image: url("./assets/images/thinking-raccoon.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    display: inline-block;
-    width: 360px;
-    height: 217px;
-    /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-    @media only screen and (min-resolution: 1.5dppx) {
-      .on-board .thinking-raccoon {
-        background-image: url("./assets/images/thinking-raccoon@2x.png");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        display: inline-block;
-        width: 360px;
-        height: 217px; } }
-  .on-board .container {
-    min-height: 535px;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    position: relative; }
-    .on-board .container .step {
-      display: flex;
-      flex-direction: column;
-      justify-content: center; }
-      .on-board .container .step .welcome .main-title {
-        margin-bottom: 50px; }
-      .on-board .container .step .welcome .sub-title {
-        font-size: 22px;
-        color: #161616;
-        font-family: Lato;
-        font-weight: 300;
-        margin-bottom: 8px; }
-        .on-board .container .step .welcome .sub-title div {
-          display: inline-block; }
-        .on-board .container .step .welcome .sub-title span {
-          color: #0a9bad;
-          font-weight: 400;
-          margin-left: 4px; }
-      .on-board .container .step .welcome .btn-wrap {
-        margin-top: 105px;
-        text-align: center; }
-        .on-board .container .step .welcome .btn-wrap .continue-title {
-          vertical-align: top;
-          position: relative;
-          top: 3px; }
-        .on-board .container .step .welcome .btn-wrap .md-button {
-          width: 234px;
-          height: 50px;
-          border-radius: 30px;
-          font-size: 21px;
-          color: white;
-          font-family: Lato;
-          font-weight: 400; }
-          .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg {
-            width: 16px;
-            transform: rotate(-90deg); }
-            .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg polyline {
-              stroke: #ffffff; }
-      .on-board .container .step .goals .sub-title {
-        font-size: 24px;
-        color: #161616;
-        font-family: Quicksand;
-        font-weight: 400;
-        text-align: center;
-        margin-top: 32px;
-        margin-bottom: 10px; }
-      .on-board .container .step .goals .light-title {
-        font-size: 12px;
-        color: #757a83;
-        font-family: Lato;
-        font-weight: 200;
-        text-align: center;
-        margin-top: 15px;
-        cursor: pointer;
-        outline: none; }
-      .on-board .container .step .goals .select-schools-title {
+    width: 1060px; }
+    .app-header .main-content-header .raccoon-logo-icon svg {
+      height: 37.5px;
+      width: 57px;
+      margin-top: 10px;
+      cursor: pointer; }
+    .app-header .main-content-header .app-states-list {
+      margin-left: 20px; }
+      .app-header .main-content-header .app-states-list md-list {
+        padding-top: 5px;
+        padding-bottom: 0; }
+        .app-header .main-content-header .app-states-list md-list md-list-item {
+          cursor: pointer;
+          flex: initial; }
+          .app-header .main-content-header .app-states-list md-list md-list-item .title {
+            text-transform: capitalize;
+            align-self: stretch;
+            padding-top: 15px; }
+          .app-header .main-content-header .app-states-list md-list md-list-item:hover .title {
+            color: #0a9bad; }
+          .app-header .main-content-header .app-states-list md-list md-list-item.active .title {
+            color: #0a9bad; }
+    .app-header .main-content-header .app-user-area {
+      align-self: center;
+      margin-left: auto; }
+      .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
-        color: #161616;
-        font-family: Lato;
-        font-weight: 200;
-        margin-bottom: 20px;
-        text-align: center; }
-      .on-board .container .step .bg-wrap {
-        position: absolute;
-        bottom: 0;
-        left: calc(50% - 180px); }
-        .on-board .container .step .bg-wrap .thinking-raccoon {
-          display: block; }
-      .on-board .container .step.make-padding {
-        flex-direction: row;
-        padding-top: 61px;
-        padding-bottom: 61px; }
-      .on-board .container .step.diagnostic .diagnostic-title {
-        font-size: 32px;
-        color: #4f4d4d;
-        font-family: Quicksand;
-        font-weight: 600;
-        text-align: center;
-        margin-top: 20px; }
-      .on-board .container .step.diagnostic .diagnostic-sub-title {
-        font-size: 16px;
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 200;
-        text-align: center;
-        margin-top: 15px; }
-      .on-board .container .step.diagnostic .btn-wrap {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        margin-top: 52px;
-        margin-right: 20px; }
-        .on-board .container .step.diagnostic .btn-wrap button {
-          display: inline-block; }
-      .on-board .container .step.diagnostic diagnostic-intro .section-question {
-        margin-top: -25px; }
+        padding: 0 12px 0 0;
+        border-right: 1px solid #ebebeb;
+        cursor: pointer; }
+        .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper {
+          width: 16px;
+          height: 16px;
+          margin-right: 10px;
+          float: left; }
+      .app-header .main-content-header .app-user-area .profile-status:hover {
+        color: #0a9bad; }
+      .app-header .main-content-header .app-user-area .profile-open-modal-btn {
+        text-transform: none;
+        font-size: 16px; }
+      .app-header .main-content-header .app-user-area .profile-open-modal-btn:hover {
+        color: #0a9bad; }
+      .app-header .main-content-header .app-user-area .md-button {
+        width: auto;
+        display: flex !important;
+        justify-content: center;
+        align-items: center; }
+        .app-header .main-content-header .app-user-area .md-button div {
+          min-width: 40px; }
+
+.md-open-menu-container .header-modal-item {
+  font-family: Lato; }
+  .md-open-menu-container .header-modal-item a {
+    width: 100%;
+    text-decoration: none;
+    color: inherit; }
+  .md-open-menu-container .header-modal-item:not(.purchase-status) span {
+    width: 100%; }
+  .md-open-menu-container .header-modal-item.header-modal-item-profile {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 11px; }
+    .md-open-menu-container .header-modal-item.header-modal-item-profile .username {
+      margin-bottom: 5px; }
+    .md-open-menu-container .header-modal-item.header-modal-item-profile .email {
+      font-size: 14px;
+      color: #87ca4d;
+      font-family: Lato;
+      font-weight: 300;
+      border-bottom: 1px solid #0a9bad;
+      width: 100%;
+      padding-bottom: 15px; }
+  .md-open-menu-container .header-modal-item.header-modal-item-uppercase {
+    min-height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 300;
+    cursor: pointer; }
+    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
+      color: #161616; }
+    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
+      color: #ffffff; }
+  .md-open-menu-container .header-modal-item .check-mark-wrapper {
+    position: relative;
+    top: -2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #cfcfcf;
+    margin-left: 10px; }
+    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
+      height: 100%; }
+    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
+      width: 75%;
+      height: 100%;
+      margin: auto;
+      display: block; }
+  .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
+    background-color: #f8f8f8; }
+
+md-menu-content.md-menu-content-znk-header {
+  min-width: 270px;
+  max-height: none;
+  padding: 16px 0; }
+  md-menu-content.md-menu-content-znk-header md-list {
+    padding-top: 0;
+    padding-bottom: 0; }
+    md-menu-content.md-menu-content-znk-header md-list .divider {
+      height: 1px;
+      margin: 10px 16px;
+      border-top: 1px solid #ebebeb; }
+  md-menu-content.md-menu-content-znk-header .pending-purchase-icon-wrapper {
+    width: 16px;
+    height: auto;
+    margin-left: 10px;
+    position: relative;
+    top: 3px; }
+  md-menu-content.md-menu-content-znk-header [disabled="disabled"] {
+    opacity: 0.5;
+    cursor: default; }
+
+.link-full-item {
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; }

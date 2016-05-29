@@ -17607,217 +17607,107 @@ md-dialog .close-popup {
 .md-dialog-container {
   overflow: visible; }
 
-on-boarding-bar {
-  position: absolute;
-  bottom: -70px;
-  width: 100%; }
-  on-boarding-bar .on-board-pager-wrap .on-board-pager {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    width: 30%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 40px;
-    padding: 5px; }
-    on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      border: 2px solid #87ca4d;
-      display: flex;
-      display: -webkit-flex;
-      flex-direction: column;
-      -webkit-flex-direction: column;
-      justify-content: center;
-      -webkit-justify-content: center; }
-      on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon {
-        width: 30px;
-        margin: 6px auto 0; }
-        on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon * {
-          fill: #87ca4d; }
-      on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected {
-        background-color: #87ca4d; }
-        on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected .icon *, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected .icon *, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected .icon * {
-          fill: white; }
-    on-boarding-bar .on-board-pager-wrap .on-board-pager .divider {
-      width: 21px;
-      border-top: 1px solid #87ca4d;
-      height: 1px;
-      margin-left: 20px;
-      margin-right: 20px; }
-
 /**
 *  FONTS
 */
 /* Lato fonts from google*/
 /* Quicksand fonts */
 /* Material+Icons */
-.on-board {
-  /**
-     *  SVG
-     */
-  position: relative; }
-  .on-board .svg-wrapper {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center; }
-  .on-board .clearfix:after {
-    content: " ";
-    display: block;
-    height: 0;
-    clear: both; }
-  .on-board .main-title {
-    font-size: 32px;
+diagnostic-intro .diagnostic-intro-drv {
+  text-align: center; }
+  diagnostic-intro .diagnostic-intro-drv .diagnostic-text {
+    margin: 20px auto;
+    max-height: 45px;
+    font-size: 16px;
     color: #4f4d4d;
-    font-family: Quicksand;
-    font-weight: 600;
-    text-align: center;
-    margin-top: 20px; }
-  .on-board .inline-block {
-    display: inline-block; }
-  .on-board .base-border-radius {
-    border-radius: 15px; }
-  .on-board .base-box-shadow {
-    box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
-  .on-board .smile-raccoon {
-    /*CSS for basic styling and non-retina image path:*/
-    background-image: url("./assets/images/smile-raccoon.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    display: inline-block;
-    width: 293px;
-    height: 373px;
-    /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-    @media only screen and (min-resolution: 1.5dppx) {
-      .on-board .smile-raccoon {
-        background-image: url("./assets/images/smile-raccoon@2x.png");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        display: inline-block;
-        width: 293px;
-        height: 373px; } }
-  .on-board .thinking-raccoon {
-    /*CSS for basic styling and non-retina image path:*/
-    background-image: url("./assets/images/thinking-raccoon.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    display: inline-block;
-    width: 360px;
-    height: 217px;
-    /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-    @media only screen and (min-resolution: 1.5dppx) {
-      .on-board .thinking-raccoon {
-        background-image: url("./assets/images/thinking-raccoon@2x.png");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        display: inline-block;
-        width: 360px;
-        height: 217px; } }
-  .on-board .container {
-    min-height: 535px;
-    background-color: #ffffff;
-    box-sizing: border-box;
+    font-family: Lato;
+    font-weight: 200; }
+  diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
     position: relative; }
-    .on-board .container .step {
+    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+      position: relative;
+      top: -48px;
+      background-size: contain;
+      /*CSS for basic styling and non-retina image path:*/
+      background-image: url("./assets/images/diagnostic-raccoon.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      display: inline-block;
+      width: 160px;
+      height: 169px;
+      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+      @media only screen and (min-resolution: 1.5dppx) {
+        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+          background-image: url("./assets/images/diagnostic-raccoon@2x.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          display: inline-block;
+          width: 160px;
+          height: 169px; } }
+  diagnostic-intro .diagnostic-intro-drv .icons-section {
+    display: flex;
+    justify-content: space-around;
+    width: 40%;
+    margin: 0 auto;
+    min-height: 140px; }
+    diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 2px solid;
+      border-color: #cccccc;
+      position: relative; }
+      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle:nth-child(3n+1) {
+        align-self: flex-end; }
+      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete {
+        display: block; }
+      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: top; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon {
+          width: 45px; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete {
+          display: none;
+          width: 65%; }
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete svg line {
+            stroke: white;
+            stroke-width: 30px; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
+          display: none; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon .subject-icon {
+          display: inline-block; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon .subject-icon {
+          display: none; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
+          display: inline-block; }
+  diagnostic-intro .diagnostic-intro-drv .section-question {
+    font-size: 18px;
+    color: #757a83;
+    font-family: Lato;
+    font-weight: 400;
+    text-transform: uppercase; }
+    diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions {
+      margin-top: 40px;
+      text-transform: none;
       display: flex;
       flex-direction: column;
-      justify-content: center; }
-      .on-board .container .step .welcome .main-title {
-        margin-bottom: 50px; }
-      .on-board .container .step .welcome .sub-title {
-        font-size: 22px;
-        color: #161616;
-        font-family: Lato;
-        font-weight: 300;
-        margin-bottom: 8px; }
-        .on-board .container .step .welcome .sub-title div {
-          display: inline-block; }
-        .on-board .container .step .welcome .sub-title span {
-          color: #0a9bad;
-          font-weight: 400;
-          margin-left: 4px; }
-      .on-board .container .step .welcome .btn-wrap {
-        margin-top: 105px;
-        text-align: center; }
-        .on-board .container .step .welcome .btn-wrap .continue-title {
-          vertical-align: top;
-          position: relative;
-          top: 3px; }
-        .on-board .container .step .welcome .btn-wrap .md-button {
-          width: 234px;
-          height: 50px;
-          border-radius: 30px;
-          font-size: 21px;
-          color: white;
-          font-family: Lato;
-          font-weight: 400; }
-          .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg {
-            width: 16px;
-            transform: rotate(-90deg); }
-            .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg polyline {
-              stroke: #ffffff; }
-      .on-board .container .step .goals .sub-title {
-        font-size: 24px;
-        color: #161616;
-        font-family: Quicksand;
-        font-weight: 400;
-        text-align: center;
-        margin-top: 32px;
-        margin-bottom: 10px; }
-      .on-board .container .step .goals .light-title {
-        font-size: 12px;
-        color: #757a83;
-        font-family: Lato;
-        font-weight: 200;
-        text-align: center;
-        margin-top: 15px;
-        cursor: pointer;
-        outline: none; }
-      .on-board .container .step .goals .select-schools-title {
+      padding-right: 110px;
+      padding-left: 110px; }
+      diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title {
         font-size: 16px;
-        color: #161616;
-        font-family: Lato;
-        font-weight: 200;
-        margin-bottom: 20px;
-        text-align: center; }
-      .on-board .container .step .bg-wrap {
-        position: absolute;
-        bottom: 0;
-        left: calc(50% - 180px); }
-        .on-board .container .step .bg-wrap .thinking-raccoon {
-          display: block; }
-      .on-board .container .step.make-padding {
-        flex-direction: row;
-        padding-top: 61px;
-        padding-bottom: 61px; }
-      .on-board .container .step.diagnostic .diagnostic-title {
-        font-size: 32px;
         color: #4f4d4d;
-        font-family: Quicksand;
-        font-weight: 600;
-        text-align: center;
-        margin-top: 20px; }
-      .on-board .container .step.diagnostic .diagnostic-sub-title {
+        font-family: Lato;
+        font-weight: 400; }
+      diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-text {
         font-size: 16px;
         color: #4f4d4d;
         font-family: Lato;
         font-weight: 200;
-        text-align: center;
-        margin-top: 15px; }
-      .on-board .container .step.diagnostic .btn-wrap {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        margin-top: 52px;
-        margin-right: 20px; }
-        .on-board .container .step.diagnostic .btn-wrap button {
-          display: inline-block; }
-      .on-board .container .step.diagnostic diagnostic-intro .section-question {
-        margin-top: -25px; }
+        margin-top: 5px;
+        min-height: 38px; }
