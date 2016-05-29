@@ -1,19 +1,21 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.invitation').service('invitationManager',
+    angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
         function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv) {
             'ngInject';
 
            return {
-                templateUrl: 'app/components/invitation/directives/invitation-manager.template.html',
+                templateUrl: 'components/invitation/directives/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope, element) {
-                    if (!ENV.dashboardFeatureEnabled) {
-                        element.remove();
-                        return;
-                    }
+                    var t = element;
+                    t= 3;
+                    //if (!ENV.dashboardFeatureEnabled) {
+                    //    element.remove();
+                    //    return;
+                    //}
 
                     scope.translate = $filter('translate');
 

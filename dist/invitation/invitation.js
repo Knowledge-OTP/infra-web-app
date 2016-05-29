@@ -1,14 +1,20 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.invitation', []);
+    angular.module('znk.infra-web-app.invitation',
+        ['ngMaterial',
+        'znk.infra.svgIcon',
+        'znk.infra.popUp',
+        'pascalprecht.translate',
+        'znk.infra-web-app.purchase',
+        'znk.infra.user']);
 
 })(angular);
 
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.znkHeader').controller('invitationApproveModalCtrl',
+    angular.module('znk.infra-web-app.invitation').controller('invitationApproveModalCtrl',
 
         function (locals, $mdDialog, InvitationHelperService, $filter, PopUpSrv) {
             'ngInject';
@@ -57,27 +63,28 @@
             this.closeModal = function () {
                 $mdDialog.cancel();
             };
-
         }
     );
 })(angular);
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.invitation').provider('invitationManager',
+    angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
         function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv) {
             'ngInject';
 
            return {
-                templateUrl: 'app/components/invitation/directives/invitation-manager.template.html',
+                templateUrl: 'components/invitation/directives/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope, element) {
-                    if (!ENV.dashboardFeatureEnabled) {
-                        element.remove();
-                        return;
-                    }
+                    var t = element;
+                    t= 3;
+                    //if (!ENV.dashboardFeatureEnabled) {
+                    //    element.remove();
+                    //    return;
+                    //}
 
                     scope.translate = $filter('translate');
 
@@ -456,10 +463,11 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.invitation').service('invitationHelperService',
+    angular.module('znk.infra-web-app.invitation').service('InvitationHelperService',
 
         function (InvitationService, $filter, PopUpSrv, UserProfileService) {
             'ngInject';
+
             var self = this;
             self.translate = $filter('translate');
             self.translatedTitles = {

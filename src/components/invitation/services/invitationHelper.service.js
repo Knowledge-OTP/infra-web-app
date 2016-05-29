@@ -1,10 +1,11 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.invitation').service('invitationHelperService',
+    angular.module('znk.infra-web-app.invitation').service('InvitationHelperService',
 
         function (InvitationService, $filter, PopUpSrv, UserProfileService) {
             'ngInject';
+
             var self = this;
             self.translate = $filter('translate');
             self.translatedTitles = {

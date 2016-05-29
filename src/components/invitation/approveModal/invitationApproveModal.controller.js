@@ -1,7 +1,7 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.znkHeader').controller('invitationApproveModalCtrl',
+    angular.module('znk.infra-web-app.invitation').controller('invitationApproveModalCtrl',
 
         function (locals, $mdDialog, InvitationHelperService, $filter, PopUpSrv) {
             'ngInject';
