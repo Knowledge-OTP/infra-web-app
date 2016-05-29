@@ -2926,9 +2926,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -17473,7 +17473,7 @@ purchase-btn .upgraded .text {
   .purchase-popup .popup-header {
     position: relative;
     height: 40px;
-    background-color: #ffffff;
+    background-color: #0a9bad;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px; }
     .purchase-popup .popup-header .raccoon {
@@ -17483,14 +17483,14 @@ purchase-btn .upgraded .text {
       margin: 0 auto;
       position: relative;
       bottom: 17.5px;
-      background-color: #ffffff;
+      background-color: #0a9bad;
       display: flex;
       justify-content: center;
       align-items: center; }
-      .purchase-popup .popup-header .raccoon .raccoon-logo-icon svg {
+      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
         width: 45px;
         height: 45px; }
-        .purchase-popup .popup-header .raccoon .raccoon-logo-icon svg * {
+        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
           fill: white; }
   .purchase-popup .md-dialog-content {
     padding: 20px 20px 60px;

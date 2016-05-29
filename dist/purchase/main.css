@@ -80,7 +80,7 @@ purchase-btn .upgraded .text {
   .purchase-popup .popup-header {
     position: relative;
     height: 40px;
-    background-color: #ffffff;
+    background-color: #0a9bad;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px; }
     .purchase-popup .popup-header .raccoon {
@@ -90,14 +90,14 @@ purchase-btn .upgraded .text {
       margin: 0 auto;
       position: relative;
       bottom: 17.5px;
-      background-color: #ffffff;
+      background-color: #0a9bad;
       display: flex;
       justify-content: center;
       align-items: center; }
-      .purchase-popup .popup-header .raccoon .raccoon-logo-icon svg {
+      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
         width: 45px;
         height: 45px; }
-        .purchase-popup .popup-header .raccoon .raccoon-logo-icon svg * {
+        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
           fill: white; }
   .purchase-popup .md-dialog-content {
     padding: 20px 20px 60px;

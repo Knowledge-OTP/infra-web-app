@@ -26,7 +26,7 @@
     .popup-header {
         position: relative;
         height: 40px;
-        background-color: $bgColor3;
+        background-color: $bgColor5;
         border-top-left-radius: 15px;
         border-top-right-radius: 15px;
 
@@ -37,12 +37,12 @@
             margin:0 auto;
             position: relative;
             bottom: 17.5px;
-            background-color: $bgColor3;
+            background-color: $bgColor5;
             display: flex;
             justify-content: center;
             align-items: center;
 
-            .raccoon-logo-icon {
+            .purchase-raccoon-logo-icon {
                 svg {
                     width: 45px;
                     height: 45px;
