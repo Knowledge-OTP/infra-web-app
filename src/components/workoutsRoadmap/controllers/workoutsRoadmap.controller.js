@@ -13,10 +13,9 @@
 
             var search = $location.search();
             var DIAGNOSTIC_STATE = 'workoutsRoadmap.diagnostic';
-            var WORKOUT_STATE = 'app.workouts.roadmap.workout';
+            var WORKOUT_STATE = 'workoutsRoadmap.workout';
 
             function getActiveWorkout() {
-                return data.diagnostic;//todo
                 var i = 0;
                 for (; i < vm.workoutsProgress.length; i++) {
                     if (vm.workoutsProgress[i].status !== ExerciseStatusEnum.COMPLETED.enum) {
@@ -31,8 +30,7 @@
 
             function _isFirstWorkoutStarted() {
                 var firstWorkout = vm.workoutsProgress[0];
-                // return angular.isDefined(firstWorkout.subjectId);todo
-                return true;
+                return angular.isDefined(firstWorkout.subjectId);
             }
 
             // function _setActiveWorkout() {
@@ -104,9 +102,9 @@
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        //$state.go('app.workouts.roadmap.workout', {
-                        //     workout: newItem.workoutOrder
-                        // });
+                        $state.go('workoutsRoadmap.workout', {
+                            workout: newItem.workoutOrder
+                        });
                     }
                 }
             });

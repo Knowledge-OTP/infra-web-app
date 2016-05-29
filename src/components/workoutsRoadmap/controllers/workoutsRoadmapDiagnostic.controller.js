@@ -7,7 +7,7 @@
                 switch (data.diagnostic.status) {
                     case ExerciseStatusEnum.COMPLETED.enum:
                         var isFirstWorkoutStarted = angular.isDefined(data.workoutsProgress[0].subjectId);
-                        if (false) {//todo
+                        if (isFirstWorkoutStarted) {
                             $state.go('.summary');
                         } else {
                             $state.go('.preSummary');

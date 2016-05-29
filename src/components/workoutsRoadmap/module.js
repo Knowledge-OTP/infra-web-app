@@ -1,6 +1,7 @@
 /**
+ * karly@zinkerz.com
  * usage instructions:
- *      workout progress:
+ *      1) workout progress:
  *          - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
  *              .reading-bg{
  *                  background: red;
@@ -10,7 +11,7 @@
  *                   border-color: red;
  *              }
  *
- *      WorkoutsRoadmapSrv:
+ *      2) WorkoutsRoadmapSrv:
  *          setNewWorkoutGeneratorGetter: provide a function which return a new workout generator function. subjectsToIgnore
  *              will be passed as parameter.
  *              i.e:
@@ -44,7 +45,19 @@
  *               }
  *
  *
- *
+ *      3) workoutsRoadmap.diagnostic.summary
+ *          this state must set i.e
+ *              $stateProvider.state('workoutsRoadmap.diagnostic.summary', {
+ *                   template: '<div>Diagnostic </div>',
+ *                   controller: 'WorkoutsRoadMapBaseSummaryController',
+ *                   controllerAs: 'vm'
+ *               })
+ *      3) workoutsRoadmap.workout.inProgress
+ *          this state must set i.e
+ *              $stateProvider.state('workoutsRoadmap.workout.inProgress', {
+ *                  template: '<div>Workout in progress</div>',
+ *                  controller: function(){}
+ *             })
  */
 (function (angular) {
     'use strict';
