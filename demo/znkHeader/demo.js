@@ -8,7 +8,10 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
 
         var demoItem1 = {
             text: 'item 1',
-            handler: function () {
+            handler: function (purchaseService) {
+                if(angular.isUndefined(purchaseService)){
+                    alert('DI error');
+                }
                 alert('item 1 was clicked')
             }
         };

@@ -2,13 +2,17 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv, UserProfileService) {
+        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv, UserProfileService, $injector) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
+
+            self.invokeOnClickHandler = function(onClickHandlder){
+                $injector.invoke(onClickHandlder);
+            };
 
             this.showPurchaseDialog = function () {
                 purchaseService.showPurchaseDialog();
