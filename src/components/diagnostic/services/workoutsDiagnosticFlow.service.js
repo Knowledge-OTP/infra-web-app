@@ -91,8 +91,8 @@
             }
 
             function _getNextDifficulty(difficulty, type) {
-                var veryEasyNumLevel = WORKOUTS_DIAGNOSTIC_FLOW.levels.very_easy.num;
-                var veryHardNumLevel = WORKOUTS_DIAGNOSTIC_FLOW.levels.very_hard.num;
+                var veryEasyNumLevel = diagnosticSettings.levels.very_easy.num;
+                var veryHardNumLevel = diagnosticSettings.levels.very_hard.num;
                 var nextDifficulty;
                 if (type === 'increment') {
                     nextDifficulty = (difficulty + 1 > veryHardNumLevel) ? difficulty : difficulty + 1;
@@ -201,7 +201,7 @@
            workoutsDiagnosticFlowObjApi.getDifficulty = function (currentDifficulty, isAnswerCorrectly, startedTime) {
                 var newDifficulty;
                 $log.debug('WorkoutsDiagnosticFlow getDifficulty: initial func', arguments);
-                if (startedTime > WORKOUTS_DIAGNOSTIC_FLOW.timeLimit) {
+                if (startedTime > diagnosticSettings.timeLimit) {
                     newDifficulty = currentDifficulty;
                 } else if (isAnswerCorrectly) {
                     newDifficulty = _getNextDifficulty(currentDifficulty, 'increment');
@@ -210,10 +210,6 @@
                 }
                 $log.debug('WorkoutsDiagnosticFlow getDifficulty: newDifficulty returned value', newDifficulty);
                 return newDifficulty;
-            };
-
-           workoutsDiagnosticFlowObjApi.getLevels = function () {
-                return WORKOUTS_DIAGNOSTIC_FLOW.levels;
             };
 
            workoutsDiagnosticFlowObjApi.getDiagnostic = function () {

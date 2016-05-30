@@ -15,6 +15,7 @@
             var resultsData = exerciseData.resultsData;
             var numQuestionCounter = _getInitNumQuestion(exerciseData.resultsData.questionResults);
             var translateFilter = $filter('translate');
+            var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             _setNumSlideForNgModel(numQuestionCounter);
 
 
@@ -33,11 +34,11 @@
             }
 
             //  current slide data (should be initialize in every slide)
-            var currentDifficulty = WORKOUTS_DIAGNOSTIC_FLOW.levels.medium.num;
+            var currentDifficulty = diagnosticSettings.levels.medium.num;
             var nextQuestion;
 
             var initSlideIndex;
-            var mediumLevelNum = WorkoutsDiagnosticFlow.getLevels().medium.num;
+            var mediumLevelNum = diagnosticSettings.levels.medium.num;
 
             ZnkExerciseUtilitySrv.setQuestionsGroupData(exerciseData.questionsData.questions, exerciseData.questionsData.questionsGroupData, exerciseData.resultsData.playedAudioArticles);
 
@@ -191,7 +192,7 @@
             }
 
             function _isLastQuestion() {
-                return numQuestionCounter === WORKOUTS_DIAGNOSTIC_FLOW.questionsPerSubject;
+                return numQuestionCounter === diagnosticSettings.questionsPerSubject;
             }
 
             function _getCurrentIndex() {

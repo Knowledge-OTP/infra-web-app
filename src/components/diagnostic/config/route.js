@@ -29,8 +29,9 @@
                     controller: 'WorkoutsDiagnosticExerciseController',
                     controllerAs: 'vm',
                     resolve: {
-                        exerciseData: function exerciseData($q, ExamSrv, $stateParams, ExerciseTypeEnum, ExerciseResultSrv) {
+                        exerciseData: function exerciseData($q, ExamSrv, $stateParams, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
                             'ngInject';
+                            var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                             var examId = +$stateParams.id;
                             var sectionId = +$stateParams.sectionId;
                             var getExamProm = ExamSrv.getExam(examId);
@@ -43,10 +44,9 @@
                                 var getSectionResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, sectionId, examId, examObj.sections.length);
                                 return getSectionResultProm.then(function (sectionResult) {
                                     if (!sectionResult.questionResults.length) {
-                                        sectionResult.questionResults =  [];
-                                        //section.questions.map(function (question) {
-                                        //    return { questionId: question.id };
-                                        //});
+                                        sectionResult.questionResults = diagnosticSettings.isFixed ? section.questions.map(function (question) {
+                                            return { questionId: question.id };
+                                        }) : [];
                                         sectionResult.duration = 0;
                                     }
 
