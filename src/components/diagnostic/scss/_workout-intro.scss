@@ -1,7 +1,7 @@
 .workouts-intro-wrapper {
     @include dimension(575px, 523px);
     background-color: $bgColor1;
-    border: 1px solid $bgColor27;
+    border: 1px solid $bgColor33;
     position: relative;
     margin: {
         top: 23px;
@@ -169,7 +169,7 @@
             @include flex-middle;
             @include dimension(160px, 75px);
             position: relative;
-            border: 2px solid $bgColor28;
+            border: 2px solid $bgColor31;
             border-radius: 6px;
             cursor: pointer;
 
@@ -227,7 +227,7 @@
                         display: block;
 
                         path, line, circle {
-                            stroke: $bgColor28;
+                            stroke: $bgColor31;
                         }
                     }
 
@@ -237,7 +237,7 @@
 
                     &[name="mini-challenge"] {
                         path, .st1 {
-                            fill: $bgColor28;
+                            fill: $bgColor31;
                         }
                     }
                 }
@@ -246,7 +246,7 @@
             &[disabled="disabled"] {
                 opacity: .5;
                 &:hover {
-                    border-color: $bgColor28;
+                    border-color: $bgColor31;
                 }
                 cursor: inherit;
 
