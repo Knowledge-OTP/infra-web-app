@@ -3,6 +3,7 @@
 
     angular.module('znk.infra-web-app.estimatedScoreWidget', [
         'ngMaterial',
+        'pascalprecht.translate',
         'znk.infra.enum',
         'znk.infra.config',
         'znk.infra.storage',
@@ -17,7 +18,7 @@
         'znk.infra.estimatedScore',
         'znk.infra-web-app.userGoals'
     ]).config([
-        'SvgIconSrvProvider', 
+        'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
 

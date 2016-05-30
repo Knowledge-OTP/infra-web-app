@@ -1,6 +1,12 @@
 angular.module('demo', [
     'znk.infra-web-app.estimatedScoreWidget'
 ])
+    .config(function ($translateProvider) {
+        $translateProvider.useLoader('$translatePartialLoader', {
+            urlTemplate: '/{part}/locale/{lang}.json'
+        })
+            .preferredLanguage('en');
+    })
     .config(function (EstimatedScoreSrvProvider, EstimatedScoreEventsHandlerSrvProvider, exerciseTypeConst) {
         var shouldEventBeProcessed;
         var subjectsRawScoreEdges = {
@@ -46,7 +52,9 @@ angular.module('demo', [
             };
         });
     })
-    .run(function ($rootScope) {
-
+    .run(function ($rootScope, $translate) {
+        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
+            $translate.refresh();
+        })
     });
 

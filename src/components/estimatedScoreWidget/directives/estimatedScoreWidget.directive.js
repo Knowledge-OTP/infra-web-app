@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv) {
+        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader) {
             'ngInject';
             var previousValues;
 
@@ -18,6 +18,7 @@
                     isNavMenu: '@'
                 },
                 link: function (scope, element, attrs, ngModelCtrl) {
+                    $translatePartialLoader.addPart('estimatedScoreWidget');
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
@@ -59,14 +60,17 @@
                             angular.forEach(estimatedScore, function (estimatedScoreForSubject, subjectId) {
                                 var subjectIndex = subjectToIndexMap[subjectId];
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                                scope.d.widgetItems[subjectIndex] = {
+                                scope.d.widgetItems.push({
                                     subjectId: subjectId,
                                     estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
                                     estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
-                                    userGoal: userGoalForSubject,
-                                    userGoalPercentage: calcPercentage(userGoalForSubject),
-                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0
-                                };
+                                    // userGoal: userGoalForSubject,
+                                    userGoal: 25,
+                                    // userGoalPercentage: calcPercentage(userGoalForSubject),
+                                    userGoalPercentage: 60,
+                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
+                                    showScore: (+subjectId !== SubjectEnum.ESSAY.enum)
+                                });
                             });
 
                             if (!previousValues) {
