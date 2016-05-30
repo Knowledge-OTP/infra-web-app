@@ -1,0 +1,31 @@
+
+<svg version="1.1"
+     id="Layer_1"
+     xmlns="http://www.w3.org/2000/svg"
+     x="0px" y="0px"
+	 viewBox="0 0 86.4 71.6"
+     xml:space="preserve"
+     class="workouts-roadmap-change-subject-svg">
+
+<style type="text/css">
+    .workouts-roadmap-change-subject-svg{
+        width: 10px;
+    }
+
+    .workouts-roadmap-change-subject-svg .st0 {
+            fill: none;
+            stroke: #231F20;
+            stroke-width: 1.6864;
+            stroke-miterlimit: 10;
+        }
+</style>
+
+<g>
+	<path id="XMLID_70_" class="st0" d="M8.5,29.4C11.7,13.1,26,0.8,43.2,0.8c17.5,0,32,12.7,34.8,29.5"/>
+	<polyline id="XMLID_69_" class="st0" points="65.7,24 78.3,30.3 85.7,18.7 	"/>
+</g>
+<g>
+	<path id="XMLID_68_" class="st0" d="M77.9,42.2c-3.2,16.3-17.5,28.6-34.7,28.6c-17.5,0-32-12.7-34.8-29.5"/>
+	<polyline id="XMLID_67_" class="st0" points="20.7,47.6 8.1,41.3 0.7,52.9 	"/>
+</g>
+</svg>

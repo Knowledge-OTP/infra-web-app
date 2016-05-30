@@ -14,8 +14,6 @@
             function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
                 'ngInject';
 
-                'ngInject';
-
                 var config = {
                     focusAnimateDuration: 500,
                     focuseAnimationTimingFunction: 'ease-in-out',

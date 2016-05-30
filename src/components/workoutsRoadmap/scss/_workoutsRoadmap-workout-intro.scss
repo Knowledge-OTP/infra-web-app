@@ -1,0 +1,25 @@
+.workouts-roadmap-intro{
+    .title{
+        font:{
+            family: Quicksand;
+            weight: $boldFontWeight;
+            size: 21px;
+        }
+    }
+
+    .change-subject {
+        cursor: pointer;
+
+    }
+
+    .change-subject {
+        &.rotate {
+            svg-icon {
+                svg {
+                    animation: rotateAnimation 0.9s infinite linear;
+                }
+            }
+        }
+    }
+
+}

@@ -7,5 +7,12 @@
         "DIAGNOSTIC_TEST": "Diagnostic Test",
         "COMPLETE": "Completed!",
         "WORKOUT": "Workout"
+    },
+    "WORKOUTS_ROADMAP_WORKOUT_INTRO":{
+        "TITLE": "Workout {{workoutOrder}}",
+        "CHANGE_SUBJECT": "Change subject",
+        "HOW_MUCH_TIME": "How much time do you have?",
+        "WORKOUT_TIME": "WORKOUT_TIME",
+        "START": "START"
     }
 }

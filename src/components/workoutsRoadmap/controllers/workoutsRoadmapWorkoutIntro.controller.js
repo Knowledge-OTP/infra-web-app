@@ -1,10 +1,57 @@
 'use strict';
 
 (function () {
-    angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutController',
-        function () {
+    angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
+        function (data, $state, WorkoutsRoadmapSrv, $q, $scope) {
             'ngInject';
 
+            var vm = this;
+
+            var currWorkout = data.exercise;
+            var workoutOrder = currWorkout && +currWorkout.workoutOrder;
+            if (isNaN(workoutOrder)) {
+                $state.go('appWorkouts.roadmap', {}, {
+                    reload: true
+                });
+            }
+            vm.workoutOrder = workoutOrder;
+
+            WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function(workoutAvailTimes){
+                vm.workoutAvailTimes = workoutAvailTimes;
+            });
+
+            var getPersonalizedWorkoutsByTimeProm;
+            if(!currWorkout.personalizedTimes){
+                var FIRST_WORKOUT_ORDER = 1;
+                var prevWorkoutOrder = currWorkout.workoutOrder - 1;
+                var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder] : null;
+                getPersonalizedWorkoutsByTimeProm  = WorkoutsRoadmapSrv.generateNewExercise(prevWorkout.subjectId);
+            }else{
+                getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
+            }
+
+            getPersonalizedWorkoutsByTimeProm.then(function(workoutsByTime){
+                vm.workoutsByTime = workoutsByTime;
+                WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function(workoutAvailTimes){
+                    for(var i in workoutAvailTimes){
+                        var time = workoutAvailTimes[i];
+                        if(workoutsByTime[time]){
+                            vm.selectedTime = time;
+                            break;
+                        }
+                    }
+                });
+            });
+
+            $scope.$watch('vm.selectedTime', function(newSelectedTime){
+                if(angular.isUndefined(newSelectedTime)){
+                    return;
+                }
+                
+                getPersonalizedWorkoutsByTimeProm.then(function(workoutsByTime){
+                    vm.selectedWorkout = workoutsByTime[newSelectedTime];
+                });
+            });
 /*            var self = this;
             var subjectMap = SubjectEnum.getEnumMap();
             var currWorkout = data.exercise;

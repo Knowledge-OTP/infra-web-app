@@ -8,6 +8,12 @@
                 _newWorkoutGeneratorGetter = newWorkoutGeneratorGetter;
             };
 
+
+            var _workoutAvailTimesGetter;
+            this.setWorkoutAvailTimes = function(workoutAvailTimesGetter){
+                _workoutAvailTimesGetter = workoutAvailTimesGetter;
+            };
+
             this.$get = function($injector, $log, $q){
                 'ngInject';
 
@@ -15,11 +21,30 @@
 
                 WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily){
                     if(!_newWorkoutGeneratorGetter){
-                        $log.error('WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!');
+                        var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
                     return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily));
+                };
+
+                WorkoutsRoadmapSrv.getWorkoutAvailTimes = function(){
+                    if(!_workoutAvailTimesGetter){
+                        var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
+
+                    var workoutAvailTimes;
+                    if(angular.isFunction(_workoutAvailTimesGetter)){
+                        workoutAvailTimes = $injector.invoke(_workoutAvailTimesGetter);
+                    }else{
+                        workoutAvailTimes = _workoutAvailTimesGetter;
+                    }
+
+                    return $q.when(workoutAvailTimes);
                 };
 
                 return WorkoutsRoadmapSrv;
