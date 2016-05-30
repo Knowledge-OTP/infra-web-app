@@ -1,0 +1,13 @@
+<znk-exercise-header
+    subject-id="vm.subjectId"
+    side-text=".DIAGNOSTIC_TEXT"
+    options="{ showQuit: true, showNumSlide: true }"
+    on-clicked-quit="vm.onClickedQuit()"
+    ng-model="vm.numSlide"
+    total-slide-num="4"></znk-exercise-header>
+<znk-exercise
+    questions="vm.questions"
+    ng-model="vm.resultsData.questionResults"
+    settings="vm.settings"
+    actions="vm.actions">
+</znk-exercise>
