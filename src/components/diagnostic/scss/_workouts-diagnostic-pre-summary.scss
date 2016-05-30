@@ -27,13 +27,13 @@ md-tooltip.tooltip-for-diagnostic-summary {
     opacity: 0;
     width: auto;
     height: auto;
-    background: $bgColor2;
+    background: $bgColor1;
     padding:0 5px;
     .md-content {
         @include text-style(14px, $fontColor3, Lato, 400);
         height: auto;
         text-align: center;
-        background: $bgColor2;
+        background: $bgColor1;
         white-space: normal;
         // override and cancel .md-content transitions and transform
         &.md-show {

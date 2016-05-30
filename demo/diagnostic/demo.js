@@ -34,10 +34,11 @@ angular.module('demo', [
 
         $urlRouterProvider.otherwise('/diagnostic');
     })
-    .run(function ($rootScope, $translate) {
+    .run(function ($rootScope, $translate, $translatePartialLoader) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
-        })
+        });
+        $translatePartialLoader.addPart('demo');
     })
     .run(function ($rootScope) {
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {

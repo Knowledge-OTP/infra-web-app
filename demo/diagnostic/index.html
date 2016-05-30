@@ -11,10 +11,17 @@
         body{
             background: #E6E5E5;
         }
+        .main-content {
+            width: 1060px;
+            padding-top: 18px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body ng-app="demo">
-<ui-view></ui-view>
+<div class="main-content">
+    <ui-view></ui-view>
+</div>
 
 <script src="angular/angular.js"></script>
 <script src="angular-translate/angular-translate.js"></script>

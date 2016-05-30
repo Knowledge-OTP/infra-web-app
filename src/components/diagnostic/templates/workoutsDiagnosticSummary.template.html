@@ -8,7 +8,7 @@
     <div class="doughnuts-container">
         <div class="all-doughnuts-wrapper" ng-repeat="doughnut in vm.doughnutArray track by $index">
             <div class="doughnut-wrapper">
-                <p class="subject-name">{{::doughnut.subjectName}}</p>
+                <p class="subject-name" translate="{{doughnut.subjectName}}"></p>
                 <div class="znk-doughnut">
                     <div class="white-bg-doughnut-score">{{doughnut.score}}</div>
                     <div class="goal-point"
@@ -45,11 +45,11 @@
             </div>
 
         </div>
-        <p class="footer-text"> {{::vm.footerTranslatedTextArr}}</p>
-
-        <button autofocus tabindex="1"
-                class="start-button md-button primary md"
-                ui-sref="app.workouts.roadmap.diagnostic"
-                translate=".DONE">DONE</button>
     </div>
+    <div class="footer-text" translate="{{vm.footerTranslatedText}}"></div>
+    <button autofocus tabindex="1"
+            class="start-button md-button primary md"
+            ui-sref="app.workouts.roadmap.diagnostic"
+            translate=".DONE">DONE
+    </button>
 </div>

@@ -101,7 +101,13 @@
                         diagnosticSummaryData: ['EstimatedScoreSrv', 'UserGoalsService', '$q', 'WorkoutsDiagnosticFlow', 'ScoringService', '$log', 'SubjectEnum',
                             function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log, SubjectEnum) {
                                 'ngInject';
-                                var userStatsProm = EstimatedScoreSrv.getEstimatedScores();
+                                var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
+                                    var estimatedScores = {};
+                                    angular.forEach(latestScores, function (estimatedScore, subjectId) {
+                                        estimatedScores[subjectId] = Math.round(estimatedScore.score) || 0;
+                                    });
+                                    return estimatedScores;
+                                });
                                 var userGoalsProm = UserGoalsService.getGoals();
                                 var diagnosticResult = WorkoutsDiagnosticFlow.getDiagnostic();
                                 return $q.all([userGoalsProm, userStatsProm, diagnosticResult]).then(function (results) {

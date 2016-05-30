@@ -1,9 +1,27 @@
 @import 'src/scss/imports/variables',
         'src/scss/imports/colors',
-        'bower_components/infra/dist/mixins/mixins';
+        'bower_components/infra/dist/mixins/mixins',
+        'bower_components/angular-material/angular-material.scss',
+        'src/scss/imports/angular-material-override';
 
 
 @import 'scss/app-workouts',
         'scss/workout-intro',
         'scss/workouts-diagnostic-pre-summary',
         'scss/workouts-diagnostic-summary';
+
+
+/**
+*  FONTS
+*/
+/* Lato fonts from google*/
+@import url(#{$googleFontCDN}css?family=Lato:300);
+@import url(#{$googleFontCDN}css?family=Lato:300italic);
+@import url(#{$googleFontCDN}css?family=Lato:400);
+@import url(#{$googleFontCDN}css?family=Lato:400italic);
+/* Quicksand fonts */
+@import url(#{$googleFontCDN}css?family=Quicksand);
+@import url(#{$googleFontCDN}css?family=Quicksand:300);
+@import url(#{$googleFontCDN}css?family=Quicksand:700);
+/* Material+Icons */
+@import url(#{$googleFontCDN}icon?family=Material+Icons);
