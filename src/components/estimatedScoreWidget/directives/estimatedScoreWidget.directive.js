@@ -20,7 +20,10 @@
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
+                    var previousValues;
+
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
+                    var getSubjectToIndexMapProm = EstimatedScoreWidgetSrv.getSubjectToIndexMap();
                     // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
                     // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();todo implement once diagnostic service will be ready
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
@@ -30,11 +33,16 @@
                     function adjustWidgetData(userGoals) {
                         $q.all([
                             getLatestEstimatedScoreProm,
-                            $q.when(false)
+                            $q.when(false),
+                            getSubjectToIndexMapProm
+
                         ]).then(function (res) {
                             var estimatedScore = res[0];
                             var isDiagnosticCompleted = res[1];
+                            var subjectToIndexMap = res[2];
+
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted;
+
                             // scope.d.estimatedCompositeScore = isDiagnosticCompleted ? res[1].compositeScoreResults || '-' : '-';todo need to figure out what it do
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.compositeScore : '-';
                             scope.d.widgetItems = [];
@@ -78,7 +86,8 @@
                     }
 
                     function calcPercentage(correct) {
-                        return (correct / appConstants.MAX_ESTIMATED_SCORE) * 100;
+                        // return (correct / appConstants.MAX_ESTIMATED_SCORE) * 100;
+                        return (correct / 600) * 100;
                     }
 
                     // TODO: this should come from a service, duplicated from znk-header
