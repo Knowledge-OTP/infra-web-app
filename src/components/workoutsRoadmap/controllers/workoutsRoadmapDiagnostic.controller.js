@@ -1,4 +1,3 @@
-"use strict";
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticController',
         function ($state, ExerciseStatusEnum, data, $timeout) {
@@ -18,7 +17,7 @@
                         $state.go('.intro');
                 }
             });
-        });
+        })
 })();
 
 // export class WorkoutsRoadMapDiagnosticController {

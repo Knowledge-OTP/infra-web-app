@@ -3,6 +3,10 @@
 	 viewBox="-145 277 60 60"
 	 class="flag-svg">
     <style type="text/css">
+        .flag-svg{
+            width: 23px;
+        }
+
         .flag-svg .st0 {
             fill: #ffffff;
             stroke-width: 5;

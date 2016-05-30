@@ -1,0 +1,27 @@
+<svg
+    x="0px"
+    y="0px"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 117.5 141"
+    xmlns="http://www.w3.org/2000/svg"
+    class="purchase-popup-bullet-3-icon">
+    <style>
+
+        .purchase-popup-bullet-3-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
+        .purchase-popup-bullet-3-icon .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+        .purchase-popup-bullet-3-icon .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}
+
+    </style>
+<g>
+	<path class="st0" d="M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5
+		C115.5,135.3,111.8,139,107.2,139z"/>
+	<g>
+		<path class="st1" d="M39.6,54.6c4.4-5.7,11.7-9.2,19.7-8.2c9.7,1.2,17.4,9.1,18.4,18.7c1.2,11-5.9,20.6-15.9,23.1
+			c-3.1,0.8-5.3,3.7-5.3,6.9v8.6"/>
+		<circle cx="56.5" cy="116.7" r="2.8"/>
+	</g>
+	<line class="st2" x1="32.7" y1="34.2" x2="25.7" y2="21.6"/>
+	<line class="st2" x1="84.8" y1="34.2" x2="91.8" y2="21.6"/>
+	<line class="st2" x1="59.3" y1="29.5" x2="59.3" y2="18.5"/>
+</g>
+</svg>
