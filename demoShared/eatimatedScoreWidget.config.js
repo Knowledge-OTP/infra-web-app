@@ -3,14 +3,19 @@
 
     angular.module('demo').config(function (EstimatedScoreWidgetSrvProvider) {
 
-        function subjectToIndexMapGetter(SubjectEnum){
-            return  [
-                SubjectEnum.ENGLISH.enum,
-                SubjectEnum.MATH.enum, 
-                SubjectEnum.READING.enum,
-                SubjectEnum.SCIENCE.enum,
-                SubjectEnum.WRITING.enum
-            ];
+        function subjectToIndexMapGetter(SubjectEnum) {
+            var subjectsArr = [];
+            angular.forEach(SubjectEnum, function (subjectVal, subjectId) {
+                subjectsArr.push(subjectVal);
+            });
+            return subjectsArr;
+            // return  [
+            //     SubjectEnum.ENGLISH.enum,
+            //     SubjectEnum.MATH.enum,
+            //     SubjectEnum.READING.enum,
+            //     SubjectEnum.SCIENCE.enum,
+            //     SubjectEnum.WRITING.enum
+            // ];
             // return  {
             //     [SubjectEnum.ENGLISH.enum]: 0,
             //     [SubjectEnum.MATH.enum]: 1,
