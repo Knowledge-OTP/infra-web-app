@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnostic').controller('WorkoutsDiagnosticSummaryController',
-        function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst) {
+        function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow) {
         'ngInject';
 
             var self = this;
@@ -76,10 +76,11 @@
                     y: y
                 };
             }
-
+            var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var dataArray = [];
-            dataArray.push(new GaugeConfig(enumArrayMap[SubjectEnumConst.MATH].val, enumArrayMap[SubjectEnumConst.MATH].enum, ['#75cbe8', '#c9c9c9', '#f3f3f3']));
-            dataArray.push(new GaugeConfig(enumArrayMap[SubjectEnumConst.VERBAL].val, enumArrayMap[SubjectEnumConst.VERBAL].enum, ['#f9d628', '#c9c9c9', '#f3f3f3']));
+            angular.forEach(diagnosticSettings.summary.subjects, function(subject) {
+                dataArray.push(new GaugeConfig(subject.name, subject.id, subject.colors));
+            });
 
             this.doughnutArray = dataArray;
     });

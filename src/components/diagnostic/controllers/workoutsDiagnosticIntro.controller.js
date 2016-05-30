@@ -7,7 +7,7 @@
             var vm = this;
 
             this.params = $stateParams;
-            this.diagnosticId = WORKOUTS_DIAGNOSTIC_FLOW.diagnosticId;
+            this.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
 
             WorkoutsDiagnosticFlow.getDiagnostic().then(function (results) {
                 vm.buttonTitle = (angular.equals(results.sectionResults, {})) ? 'START' : 'CONTINUE';
@@ -28,7 +28,7 @@
                     }
                 });
                 znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.workouts.diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.id });
+                $state.go('diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.id });
             };
     });
 })(angular);

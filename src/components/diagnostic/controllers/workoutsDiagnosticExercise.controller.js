@@ -262,7 +262,6 @@
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
                 $state.go('app.workouts.roadmap');
             };
-
     });
 })(angular);
 

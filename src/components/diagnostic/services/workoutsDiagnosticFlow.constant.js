@@ -2,7 +2,6 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnostic').constant('WORKOUTS_DIAGNOSTIC_FLOW', {
-        diagnosticId: 14,
         timeLimit: 3 * 60 * 1000,
         questionsPerSubject: 4,
         levels: {

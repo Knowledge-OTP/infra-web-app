@@ -35,7 +35,9 @@
             justify-content: flex-start;
         }
         .md-button {
+            display: block;
             margin: 15px auto;
+            border-radius: 30px;
             &.md {
                 width: 180px;
             }

@@ -43,9 +43,10 @@
                                 var getSectionResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, sectionId, examId, examObj.sections.length);
                                 return getSectionResultProm.then(function (sectionResult) {
                                     if (!sectionResult.questionResults.length) {
-                                        sectionResult.questionResults = obj.isDiagnostic ? [] : section.questions.map(function (question) {
-                                            return { questionId: question.id };
-                                        });
+                                        sectionResult.questionResults =  [];
+                                        //section.questions.map(function (question) {
+                                        //    return { questionId: question.id };
+                                        //});
                                         sectionResult.duration = 0;
                                     }
 
@@ -64,12 +65,13 @@
                     },
                     onExit: function (exerciseData, WorkoutsDiagnosticFlow) {
                         'ngInject';
-                            var questionResults = exerciseData.resultsData.questionResults;
-                            var currentSection = WorkoutsDiagnosticFlow.getCurrentSection();
+                        var questionResults = exerciseData.resultsData.questionResults;
+                        var currentSection = WorkoutsDiagnosticFlow.getCurrentSection();
                             if (currentSection.done) {
                                 WorkoutsDiagnosticFlow.markSectionAsDoneToggle(false);
                             } else {
-                                if (questionResults[questionResults.length - 1].questionId === currentSection.currentQuestion.id) {
+                                if (currentSection.currentQuestion &&
+                                    questionResults[questionResults.length - 1].questionId === currentSection.currentQuestion.id) {
                                     if (questionResults[questionResults.length - 1].userAnswer) {
                                         delete questionResults[questionResults.length - 1].userAnswer;
                                     }
