@@ -1,13 +1,13 @@
+
 <div class="score-estimate-container base-border-radius base-box-shadow"
-     ng-class="{'estimated-score-animation': vm.enableEstimatedScoreChangeAnimation}"
+     ng-class="{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}"
      translate-namespace="ESTIMATED_SCORE_WIDGET_DIRECTIVE">
     <div class="title" translate=".TITLE"></div>
-    <div class="unfinished-diagnostic-title" ng-if="!vm.isDiagnosticComplete" translate=".UNFINISHED_DIAGNOSTIC_TITLE"></div>
-
+    <div class="unfinished-diagnostic-title" ng-if="!d.isDiagnosticComplete" translate=".UNFINISHED_DIAGNOSTIC_TITLE"></div>
     <div class="subjects-wrap">
-        <div ng-repeat="widgetItem in vm.subjectsScores track by widgetItem.subjectId"
-             ng-click="vm.onSubjectClick(widgetItem.subjectId)"
-             ng-class="{ 'selected': (vm.currentSubject === widgetItem.subjectId) }"
+        <div ng-repeat="widgetItem in d.subjectsScores track by widgetItem.subjectId"
+             ng-click="d.onSubjectClick(widgetItem.subjectId)"
+             ng-class="{ 'selected': (d.currentSubject === widgetItem.subjectId) }"
              class="subject"
              subject-id-to-attr-drv="{{widgetItem.subjectId}}"
              context-attr="class"
@@ -60,16 +60,16 @@
         <table class="score-summary">
             <tr class="composite">
                 <td translate=".COMPOSITE_SCORE"></td>
-                <td class="num">{{vm.estimatedCompositeScore}}</td>
+                <td class="num">{{d.estimatedCompositeScore}}</td>
             </tr>
             <tr class="goal">
                 <td translate=".GOAL_SCORE"></td>
-                <td class="num">{{vm.userCompositeGoal}}</td>
+                <td class="num">{{d.userCompositeGoal}}</td>
             </tr>
         </table>
         <span class="edit-my-goals ng-hide"
-              ng-show="vm.isDiagnosticComplete"
-              ng-click="vm.showGoalsEdit()"
+              ng-show="d.isDiagnosticComplete"
+              ng-click="d.showGoalsEdit()"
               translate=".EDIT_MY_GOALS"></span>
     </div>
 </div>

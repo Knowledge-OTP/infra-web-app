@@ -8,6 +8,7 @@
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
         function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv) {
             'ngInject';
+            var previousValues;
 
             return {
                 templateUrl: 'components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html',
@@ -20,7 +21,6 @@
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
-                    var previousValues;
 
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectToIndexMapProm = EstimatedScoreWidgetSrv.getSubjectToIndexMap();
