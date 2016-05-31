@@ -21,6 +21,7 @@
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
+        'znk.infra-web-app.znkExerciseHeader',
         'znk.infra.general'
     ]).config(function(SvgIconSrvProvider) {
         var svgMap = {

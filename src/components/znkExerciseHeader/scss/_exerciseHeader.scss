@@ -19,6 +19,7 @@
             .side-text {
                 padding-left: 25px;
                 flex-grow: 1;
+                text-transform: capitalize;
             }
 
             .no-math-icon-wrapper {
@@ -96,12 +97,6 @@
             background-size: contain;
             position: absolute;
             opacity: 0.8;
-            &.subject-background-math {
-                height: 134px;
-            }
-            &.subject-background-science {
-                height: 123px;
-            }
         }
 
         .right-area{
