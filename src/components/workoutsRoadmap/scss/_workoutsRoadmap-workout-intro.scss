@@ -1,24 +1,50 @@
 .workouts-roadmap-intro{
+    font:{
+        family: Quicksand;
+    }
     .title{
         font:{
-            family: Quicksand;
             weight: $boldFontWeight;
             size: 21px;
         }
     }
 
-    .change-subject {
-        cursor: pointer;
+    .subject-icon{
 
     }
 
-    .change-subject {
+    .subject-title{
+        font:{
+            weight: $regularFontWeight;
+            size: 18px;
+        }
+    }
+
+    .change-subject-container {
+        cursor: pointer;
+
         &.rotate {
             svg-icon {
                 svg {
                     animation: rotateAnimation 0.9s infinite linear;
                 }
             }
+        }
+
+        .change-subject-title{
+            font:{
+                family: Lato;
+                weight: $lightFontWeight;
+                size: 12px;
+            }
+        }
+    }
+
+    .how-much-time-title{
+        font:{
+            family: Lato;
+            weight: $regularFontWeight;
+            size: 18px;
         }
     }
 
