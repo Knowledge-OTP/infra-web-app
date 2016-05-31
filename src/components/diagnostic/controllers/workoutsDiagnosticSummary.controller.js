@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnostic').controller('WorkoutsDiagnosticSummaryController',
-        function(diagnosticSummaryData, $filter, SubjectEnum, SubjectEnumConst) {
+        function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow) {
         'ngInject';
 
-            var translateFilter = $filter('translate');
+            var self = this;
 
             var diagnosticScoresObj = diagnosticSummaryData.userStats;
             var goalScoreObj = diagnosticSummaryData.userGoals;
@@ -16,13 +16,9 @@
                 enumArrayMap[enumObj.enum] = enumObj;
             });
 
-            var MAX_SCORE = 36, GREAT_SCORE = 0, GOOD_SCORE = 1, BAD_SCORE = 2;
+            var MAX_SCORE = 36;
             var GOAL = 'Goal';
             var MAX = 'Max';
-
-            var footerTextArr = [translateFilter('WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START'),
-                translateFilter('WORKOUTS_DIAGNOSTIC_SUMMARY.GOOD_START'),
-                translateFilter('WORKOUTS_DIAGNOSTIC_SUMMARY.BAD_START')];
 
             if (!diagnosticResultObj.userStats) {
                 diagnosticResultObj.userStats = diagnosticScoresObj;
@@ -31,11 +27,11 @@
             }
 
             if (diagnosticResultObj.compositeScore > 24) {
-                this.footerTranslatedTextArr = footerTextArr[GREAT_SCORE];
+                self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';
             } else if (diagnosticResultObj.compositeScore > 20) {
-                this.footerTranslatedTextArr = footerTextArr[GOOD_SCORE];
+                self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GOOD_START';
             } else {
-                this.footerTranslatedTextArr = footerTextArr[BAD_SCORE];
+                self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.BAD_START';
             }
 
             this.compositeScore = diagnosticResultObj.compositeScore;
@@ -63,7 +59,7 @@
                 this.goalPoint = getGoalPoint(goalScoreObj[_subjectName]);
                 this.data = [doughnutValues[_subjectName], doughnutValues[_subjectName + GOAL], doughnutValues[_subjectName + MAX]];
                 this.colors = colorsArray;
-                this.subjectName = translateFilter('WORKOUTS_DIAGNOSTIC_SUMMARY.' + angular.uppercase(_subjectName));
+                this.subjectName  =  'WORKOUTS_DIAGNOSTIC_SUMMARY.' + angular.uppercase(_subjectName);
                 this.score = diagnosticResultObj.userStats[_subjectId];
                 this.scoreGoal = goalScoreObj[_subjectName];
             }
@@ -73,19 +69,19 @@
                 var radius = 52.5;
                 var x = Math.cos((degree * (Math.PI / 180))) * radius;
                 var y = Math.sin((degree * (Math.PI / 180))) * radius;
-                var xOffset = 105, yOffset = 49;
-                x += xOffset;
-                y += yOffset;
-                return { x, y };
+                x += 105;
+                y += 49;
+                return {
+                    x: x,
+                    y: y
+                };
             }
-
+            var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var dataArray = [];
-            dataArray.push(new GaugeConfig(enumArrayMap[SubjectEnumConst.ENGLISH].val, enumArrayMap[SubjectEnumConst.ENGLISH].enum, ['#af89d2', '#c9c9c9', '#f3f3f3']));
-            dataArray.push(new GaugeConfig(enumArrayMap[SubjectEnumConst.MATH].val, enumArrayMap[SubjectEnumConst.MATH].enum, ['#75cbe8', '#c9c9c9', '#f3f3f3']));
-            dataArray.push(new GaugeConfig(enumArrayMap[SubjectEnumConst.READING].val, enumArrayMap[SubjectEnumConst.READING].enum, ['#f9d628', '#c9c9c9', '#f3f3f3']));
-            dataArray.push(new GaugeConfig(enumArrayMap[SubjectEnumConst.SCIENCE].val, enumArrayMap[SubjectEnumConst.SCIENCE].enum, ['#51cdba', '#c9c9c9', '#f3f3f3']));
+            angular.forEach(diagnosticSettings.summary.subjects, function(subject) {
+                dataArray.push(new GaugeConfig(subject.name, subject.id, subject.colors));
+            });
 
-            this.getGoalPoint = getGoalPoint;
             this.doughnutArray = dataArray;
     });
 })(angular);

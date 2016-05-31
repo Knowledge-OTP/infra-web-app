@@ -29,8 +29,9 @@
                     controller: 'WorkoutsDiagnosticExerciseController',
                     controllerAs: 'vm',
                     resolve: {
-                        exerciseData: function exerciseData($q, ExamSrv, $stateParams, ExerciseTypeEnum, ExerciseResultSrv) {
+                        exerciseData: function exerciseData($q, ExamSrv, $stateParams, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
                             'ngInject';
+                            var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                             var examId = +$stateParams.id;
                             var sectionId = +$stateParams.sectionId;
                             var getExamProm = ExamSrv.getExam(examId);
@@ -42,10 +43,11 @@
                                 var examResultObj = resArr[2];
                                 var getSectionResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, sectionId, examId, examObj.sections.length);
                                 return getSectionResultProm.then(function (sectionResult) {
+
                                     if (!sectionResult.questionResults.length) {
-                                        sectionResult.questionResults = obj.isDiagnostic ? [] : section.questions.map(function (question) {
+                                        sectionResult.questionResults = diagnosticSettings.isFixed ? section.questions.map(function (question) {
                                             return { questionId: question.id };
-                                        });
+                                        }) : [];
                                         sectionResult.duration = 0;
                                     }
 
@@ -64,12 +66,13 @@
                     },
                     onExit: function (exerciseData, WorkoutsDiagnosticFlow) {
                         'ngInject';
-                            var questionResults = exerciseData.resultsData.questionResults;
-                            var currentSection = WorkoutsDiagnosticFlow.getCurrentSection();
+                        var questionResults = exerciseData.resultsData.questionResults;
+                        var currentSection = WorkoutsDiagnosticFlow.getCurrentSection();
                             if (currentSection.done) {
                                 WorkoutsDiagnosticFlow.markSectionAsDoneToggle(false);
                             } else {
-                                if (questionResults[questionResults.length - 1].questionId === currentSection.currentQuestion.id) {
+                                if (currentSection.currentQuestion &&
+                                    questionResults[questionResults.length - 1].questionId === currentSection.currentQuestion.id) {
                                     if (questionResults[questionResults.length - 1].userAnswer) {
                                         delete questionResults[questionResults.length - 1].userAnswer;
                                     }
@@ -101,7 +104,13 @@
                         diagnosticSummaryData: ['EstimatedScoreSrv', 'UserGoalsService', '$q', 'WorkoutsDiagnosticFlow', 'ScoringService', '$log', 'SubjectEnum',
                             function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log, SubjectEnum) {
                                 'ngInject';
-                                var userStatsProm = EstimatedScoreSrv.getEstimatedScores();
+                                var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
+                                    var estimatedScores = {};
+                                    angular.forEach(latestScores, function (estimatedScore, subjectId) {
+                                        estimatedScores[subjectId] = Math.round(estimatedScore.score) || 0;
+                                    });
+                                    return estimatedScores;
+                                });
                                 var userGoalsProm = UserGoalsService.getGoals();
                                 var diagnosticResult = WorkoutsDiagnosticFlow.getDiagnostic();
                                 return $q.all([userGoalsProm, userStatsProm, diagnosticResult]).then(function (results) {
@@ -114,7 +123,7 @@
                                     });
                                     return ScoringService.getTotalScoreResult(diagnosticScoresObjToArr).then(function (totalScore) {
                                         if (!totalScore) {
-                                            $log.error('diagnosticSummaryData resolve of route app.workouts.diagnostic.summary: totalScore is empty! result:', totalScore);
+                                            $log.error('diagnosticSummaryData resolve of route diagnostic.summary: totalScore is empty! result:', totalScore);
                                         }
                                         return {
                                             userGoals: results[0],

@@ -1,9 +1,9 @@
 .diagnostic-summary-wrapper {
-    padding-top: 20px;
+    padding-top: 50px;
 
     .title {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 52px;
         div {
             @include text-style(20px, $fontColor3, Quicksand, $regularFontWeight);
             margin-bottom: 35px;
@@ -15,11 +15,10 @@
     }
 
     .doughnuts-container {
-        @include dimension(810px, 250px);
-        margin: 0 auto;
-
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         .all-doughnuts-wrapper {
-            display: inline-block;
             margin: {
                 left: 9px;
                 right: 9px;
@@ -30,7 +29,6 @@
                 border-radius: 13px;
                 background-color: $bgColor32;
                 height: 250px;
-                width: 183px;
 
                 .subject-name {
                     @include text-style(15px, $fontColor4, Lato, $regularFontWeight);
@@ -112,17 +110,22 @@
         margin: {
             left: auto;
             right: auto;
+            top: 35px;
         }
         line-height: 25px;
     }
 
-    .start-button.md-button.primary {
-        margin: {
-            left: auto;
-            right: auto;
-            top: 35px;
+        .start-button.md-button.primary {
+            border-radius: 30px;
+            display: block;
+            margin: {
+                left: auto;
+                right: auto;
+                top: 35px;
+                bottom: 35px;
+            }
         }
-    }
+
 }
 
 

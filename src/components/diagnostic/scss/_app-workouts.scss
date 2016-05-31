@@ -1,89 +1,32 @@
-.app-workouts {
-    min-width: 100%;
+ .app-workouts-diagnostic {
 
-    ui-view {
-        width: 100%;
-        height: 100%;
-    }
+     .exercise-container {
+         width: 100%;
+         height: calc(100vh - 95px);
+         background-color: $bgColor1;
+         display: flex;
+         flex-direction: column;
+         position: relative;
 
-    .workouts-container, .score-estimate-container {
-        background: $bgColor1;
-        min-height: 675px;
-    }
+         znk-exercise {
+             flex-grow: 1;
+             width: 100%;
+           }
+         }
+         .inline-block {
+             display: inline-block;
+         }
 
-    .workouts-container {
-        margin: {
-            right: 30px;
-        }
+         .base-border-radius {
+             border: {
+                 radius: $baseBorderRadiusCorner;
+             }
+         }
 
-        width: 702px;
-        overflow: hidden;
-        height: 665px;
+         .base-box-shadow {
+             box-shadow: 0 3px 7px 0 $bsColor3;
+         }
 
-        workouts-progress {
-            height: 67px; //for some reason it occupies all content
-            padding: {
-                top: 20px;
-            };
-        }
-
-        .workout-container{
-            flex-grow: 1;
-            position: relative;
-
-            &.left-animation{
-                .intro-ui-view {
-                    &.ng-leave, &.ng-enter {
-                        transition: all 0.5s ease-in-out;
-                        @include absolute-full-cover;
-                    }
-
-                    &.ng-enter{
-                        transform:  translateX(580px);
-                        opacity: 0;
-                    }
-
-                    &.ng-leave, &.ng-enter-active{
-                        transform:  translateX(0);
-                        opacity: 1;
-                    }
-
-                    &.ng-leave-active {
-                        transform: translateX(-580px);
-                        opacity: 0;
-                    }
-
-                }
-            }
-
-            &.right-animation{
-                .intro-ui-view {
-                    &.ng-leave, &.ng-enter {
-                        transition: all 0.5s ease-in-out;
-                        @include absolute-full-cover;
-                    }
-
-                    &.ng-enter{
-                        transform:  translateX(-580px);
-                        opacity: 0;
-                    }
-
-                    &.ng-leave, &.ng-enter-active{
-                        transform:  translateX(0);
-                        opacity: 1;
-                    }
-
-                    &.ng-leave-active {
-                        transform: translateX(580px);
-                        opacity: 0;
-                    }
-
-                }
-            }
-        }
-    }
-
-    .app-workouts-diagnostic {
         znk-exercise {
             box-shadow: none;
         }
@@ -92,7 +35,9 @@
             justify-content: flex-start;
         }
         .md-button {
+            display: block;
             margin: 15px auto;
+            border-radius: 30px;
             &.md {
                 width: 180px;
             }
@@ -110,5 +55,5 @@
                 }
             }
         }
-    }
 }
+

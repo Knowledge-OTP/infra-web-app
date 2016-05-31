@@ -20,6 +20,14 @@
         'znk.infra.category',
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.diagnosticIntro',
         'znk.infra.general'
-    ]);
+    ]).config(function(SvgIconSrvProvider) {
+        var svgMap = {
+            'diagnostic-dropdown-arrow-icon': 'components/diagnostic/svg/dropdown-arrow.svg',
+            'diagnostic-check-mark': 'components/diagnostic/svg/check-mark-icon.svg',
+            'diagnostic-flag-icon': 'components/diagnostic/svg/flag-icon.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+    });
 })(angular);
