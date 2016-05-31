@@ -13,7 +13,7 @@
                 vm.buttonTitle = (angular.equals(results.sectionResults, {})) ? 'START' : 'CONTINUE';
             });
 
-            this.onClickedQuit = () => {
+            this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticIntroController: click on quit, go to roadmap');
                 $state.go('app.workouts.roadmap');
             };

@@ -259,7 +259,7 @@
                 return type;
             }
 
-            this.onClickedQuit = () => {
+            this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
                 $state.go('app.workouts.roadmap');
             };
