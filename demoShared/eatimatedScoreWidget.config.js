@@ -4,11 +4,12 @@
     angular.module('demo').config(function (EstimatedScoreWidgetSrvProvider) {
 
         function subjectToIndexMapGetter(SubjectEnum) {
-            var subjectsArr = [];
-            angular.forEach(SubjectEnum, function (subjectVal, subjectId) {
-                subjectsArr.push(subjectVal);
-            });
-            return subjectsArr;
+            return [
+                SubjectEnum.VERBAL.enum,
+                SubjectEnum.MATH.enum,
+                SubjectEnum.ESSAY.enum
+
+            ];
             // return  [
             //     SubjectEnum.ENGLISH.enum,
             //     SubjectEnum.MATH.enum,
@@ -25,6 +26,6 @@
             // };
         }
 
-        EstimatedScoreWidgetSrvProvider.setSubjectToIndexMapGetter(subjectToIndexMapGetter);
+        EstimatedScoreWidgetSrvProvider.setSubjectOrder(subjectToIndexMapGetter);
     });
 })(angular);

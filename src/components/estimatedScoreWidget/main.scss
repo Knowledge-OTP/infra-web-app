@@ -29,13 +29,13 @@ estimated-score-widget {
                     width: 2px;
                 }
                 //&.math {
-                //    border-left-color: $mathDone;
+                //    border-left-color: red;
                 //}
                 //&.verbal {
-                //    border-left-color: $verbalDone;
+                //    border-left-color: blue;
                 //}
                 //&.essay {
-                //    border-left-color: $essayDone;
+                //    border-left-color: yellow;
                 //}
 
                 &.selected {
@@ -64,6 +64,8 @@ estimated-score-widget {
     .score-estimate-container {
         width: 323px;
         position: relative;
+        border-radius: 15px;
+        box-shadow: 0 3px 7px 0 $bsColor3;
 
         .inner {
             padding: 18px 31px;

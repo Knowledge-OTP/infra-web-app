@@ -7,6 +7,7 @@
         'znk.infra.enum',
         'znk.infra.config',
         'znk.infra.storage',
+        'znk.infra.general',
         'znk.infra.exerciseResult',
         'znk.infra.utility',
         'znk.infra.contentAvail',

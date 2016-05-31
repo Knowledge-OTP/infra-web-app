@@ -24,7 +24,7 @@
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
 
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
-                    var getSubjectToIndexMapProm = EstimatedScoreWidgetSrv.getSubjectToIndexMap();
+                    var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
                     // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();todo implement once diagnostic service will be ready
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
@@ -35,43 +35,59 @@
                         $q.all([
                             getLatestEstimatedScoreProm,
                             $q.when(false),
-                            getSubjectToIndexMapProm
+                            getSubjectOrderProm
 
                         ]).then(function (res) {
                             var estimatedScore = res[0];
                             var isDiagnosticCompleted = res[1];
-                            var subjectToIndexMap = res[2];
+                            var subjectOrder = res[2];
 
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted;
 
                             // scope.d.estimatedCompositeScore = isDiagnosticCompleted ? res[1].compositeScoreResults || '-' : '-';todo need to figure out what it do
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.compositeScore : '-';
-                            scope.d.widgetItems = [];
-
-
-                            // var subjectToIndexMap = {
-                            //     [SubjectEnum.ENGLISH.enum]: 0,
-                            //     [SubjectEnum.MATH.enum]: 1,
-                            //     [SubjectEnum.READING.enum]: 2,
-                            //     [SubjectEnum.SCIENCE.enum]: 3,
-                            //     [SubjectEnum.WRITING.enum]: 4
-                            // };
-
-                            angular.forEach(estimatedScore, function (estimatedScoreForSubject, subjectId) {
-                                var subjectIndex = subjectToIndexMap[subjectId];
+                            scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                                scope.d.widgetItems.push({
+                                var estimatedScoreForSubject = estimatedScore[subjectId];
+                                return {
                                     subjectId: subjectId,
-                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
-                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
+                                    // estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
+                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 10,
+                                    // estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
+                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 30,
                                     // userGoal: userGoalForSubject,
                                     userGoal: 25,
                                     // userGoalPercentage: calcPercentage(userGoalForSubject),
                                     userGoalPercentage: 60,
                                     pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
                                     showScore: (+subjectId !== 9)
-                                });
+                                };
                             });
+
+
+                            // var subjectOrder = {
+                            //     [SubjectEnum.ENGLISH.enum]: 0,
+                            //     [SubjectEnum.MATH.enum]: 1,
+                            //     [SubjectEnum.READING.enum]: 2,
+                            //     [SubjectEnum.SCIENCE.enum]: 3,
+                            //     [SubjectEnum.WRITING.enum]: 4
+                            // };
+                            //
+                            // angular.forEach(estimatedScore, function (estimatedScoreForSubject, subjectId) {
+                            //     var subjectIndex = subjectOrder[subjectId];
+                            //     var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
+                            //     scope.d.widgetItems.push({
+                            //         subjectId: subjectId,
+                            //         estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
+                            //         estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
+                            //         // userGoal: userGoalForSubject,
+                            //         userGoal: 25,
+                            //         // userGoalPercentage: calcPercentage(userGoalForSubject),
+                            //         userGoalPercentage: 60,
+                            //         pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
+                            //         showScore: (+subjectId !== 9)
+                            //     });
+                            // });
 
                             if (!previousValues) {
                                 scope.d.subjectsScores = scope.d.widgetItems;

@@ -3,9 +3,9 @@
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').provider('EstimatedScoreWidgetSrv', [
         function () {
-            var _subjectToIndexMapGetter;
-            this.setSubjectToIndexMapGetter = function(subjectToIndexMapGetter){
-                _subjectToIndexMapGetter = subjectToIndexMapGetter;
+            var _subjectOrderGetter;
+            this.setSubjectOrder = function(subjectOrderGetter){
+                _subjectOrderGetter = subjectOrderGetter;
             };
 
             this.$get = function ($log, $injector, $q) {
@@ -13,14 +13,14 @@
 
                 var EstimatedScoreWidgetSrv = {};
 
-                EstimatedScoreWidgetSrv.getSubjectToIndexMap = function(){
-                    if(!_subjectToIndexMapGetter){
-                        var errMsg = 'EstimatedScoreWidgetSrv: subjectToIndexMapGetter was not set';
+                EstimatedScoreWidgetSrv.getSubjectOrder = function(){
+                    if(!_subjectOrderGetter){
+                        var errMsg = 'EstimatedScoreWidgetSrv: subjectOrderGetter was not set';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
                     }
 
-                    return $q.when($injector.invoke(_subjectToIndexMapGetter));
+                    return $q.when($injector.invoke(_subjectOrderGetter));
                 };
 
                 return EstimatedScoreWidgetSrv;

@@ -55,6 +55,10 @@ angular.module('demo', [
     .run(function ($rootScope, $translate) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
-        })
+        });
+        $rootScope.showNavMenu = false;
+        $rootScope.changeToNavView = function () {
+            $rootScope.showNavMenu = !$rootScope.showNavMenu;
+        }
     });
 

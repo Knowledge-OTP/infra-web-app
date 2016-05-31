@@ -1,0 +1,13 @@
+.view-btn{
+    height: 30px;
+}
+
+estimated-score-widget .score-estimate-container .subject .verbal-bg{
+    background-color: #F9D41B;
+}
+estimated-score-widget .score-estimate-container .subject .math-bg{
+    background-color: #AF89D2;
+}
+estimated-score-widget .score-estimate-container .subject .essay-bg{
+    background-color: #FF5895;
+}

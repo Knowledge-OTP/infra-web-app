@@ -28,3 +28,5 @@ The dist directory is the package content when used as a dependency used by othe
         }
 
 ## svg icon for all the subject should be set, i.e if one of the subejct is math then math-icon svg should be set
+
+## colors for subjects should be set for example, 'reading-bg'.

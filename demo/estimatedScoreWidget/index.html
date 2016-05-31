@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="infra/dist/svgIcon/main.css">
     <link rel="stylesheet" href="angular-material/angular-material.css">
     <link rel="stylesheet" href="uiTheme/main.css">
+    <link rel="stylesheet" href="demo.css">
 </head>
 <body ng-app="demo">
 <div style="display: flex;justify-content: center;">
-    <estimated-score-widget></estimated-score-widget>
+    <estimated-score-widget is-nav-menu="false"></estimated-score-widget>
+    <button class="view-btn" ng-click="changeToNavView()">Change to navView</button>
 
     <script src="angular/angular.js"></script>
     <script src="angular-animate/angular-animate.js"></script>
@@ -34,6 +36,7 @@
     <script src="infra/dist/znkExercise/znkExercise.js"></script>
     <script src="infra/dist/scroll/scroll.js"></script>
     <script src="infra/dist/autofocus/autofocus.js"></script>
+    <script src="infra/dist/general/general.js"></script>
 
     <script src="userGoals/userGoals.js"></script>
     <script src="userGoals/templates.js"></script>
