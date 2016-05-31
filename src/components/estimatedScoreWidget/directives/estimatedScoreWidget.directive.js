@@ -69,7 +69,7 @@
                                     // userGoalPercentage: calcPercentage(userGoalForSubject),
                                     userGoalPercentage: 60,
                                     pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
-                                    showScore: (+subjectId !== SubjectEnum.ESSAY.enum)
+                                    showScore: (+subjectId !== 9)
                                 });
                             });
 
