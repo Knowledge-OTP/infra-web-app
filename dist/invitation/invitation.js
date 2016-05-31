@@ -7,7 +7,16 @@
         'znk.infra.popUp',
         'pascalprecht.translate',
         'znk.infra-web-app.purchase',
-        'znk.infra.user']);
+        'znk.infra.user'])
+        .config([
+            'SvgIconSrvProvider',
+            function(SvgIconSrvProvider){
+
+                var svgMap = {
+                    'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
 
 })(angular);
 
@@ -79,12 +88,10 @@
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope, element) {
-                    var t = element;
-                    t= 3;
-                    //if (!ENV.dashboardFeatureEnabled) {
-                    //    element.remove();
-                    //    return;
-                    //}
+                    if (!ENV.dashboardFeatureEnabled) {
+                       element.remove();
+                       return;
+                    }
 
                     scope.translate = $filter('translate');
 
@@ -406,22 +413,22 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                 return UserProfileService.getProfile().then(function (profile) {
                     var authData = AuthService.getAuth();
                     var newInvitiation = [{
-                        receiverAppName: ENV.firebaseDashboardAppScopeName,
-                        receiverEmail: receiverEmail,
-                        receiverName: receiverName || receiverEmail,
-                        senderAppName: ENV.firebaseAppScopeName,
-                        senderEmail: profile.email,
-                        senderName: profile.nickname || profile.email,
-                        senderUid: authData.uid
+                       receiverAppName: ENV.firebaseDashboardAppScopeName,
+                       receiverEmail: receiverEmail,
+                       receiverName: receiverName || receiverEmail,
+                       senderAppName: ENV.firebaseAppScopeName,
+                       senderEmail: profile.email,
+                       senderName: profile.nickname || profile.email,
+                       senderUid: authData.uid
                     }];
                     return $http.post(invitationEndpoint, newInvitiation, httpConfig).then(function (response) {
-                        return {
-                            data: response.data[0]
-                        };
+                       return {
+                           data: response.data[0]
+                       };
                     }, function (error) {
-                        return {
-                            data: error.data
-                        };
+                       return {
+                           data: error.data
+                       };
                     });
                 });
             };
@@ -581,7 +588,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" aria-label=\"Open Invite menu\" ng-switch=\"hasItems(myTeachers)\">\n" +
     "        <div class=\"num-of-receive\" ng-if=\"hasItems(invitations)\">{{getItemsCount(invitations)}}</div>\n" +
     "        <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
-    "            <svg-icon name=\"teacher-icon\"></svg-icon>\n" +
+    "            <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
     "        </section>\n" +
     "        <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
     "            <svg-icon name=\"teacher-active-icon\"></svg-icon>\n" +
@@ -697,5 +704,38 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "        </div>\n" +
     "    </div>\n" +
     "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/teacher-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 196.7 145.2\" class=\"teacher-icon\">\n" +
+    "<path d=\"M76.7,114.2H16c-3.3,0-6-2.7-6-6V6c0-3.3,2.7-6,6-6h134c3.3,0,6,2.7,6,6l0,45.9c0,1.7-1.3,3-3,3c0,0,0,0,0,0\n" +
+    "	c-1.7,0-3-1.3-3-3L150,6L16,6v102.2h60.7c1.7,0,3,1.3,3,3S78.4,114.2,76.7,114.2z\"/>\n" +
+    "<path d=\"M129,24.2H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,24.2,129,24.2z\"/>\n" +
+    "<path d=\"M129,44.3H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,44.3,129,44.3z\"/>\n" +
+    "<path d=\"M114,64.5H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h46c1.7,0,3,1.3,3,3S115.7,64.5,114,64.5z\"/>\n" +
+    "<path d=\"M153,108.8c-1.6,0-2.9-1.2-3-2.8c-0.1-1.7,1.1-3.1,2.8-3.2c11-0.8,19.6-10.1,19.6-21.1c0-11-8.6-20.3-19.6-21.1\n" +
+    "	c-1.7-0.1-2.9-1.6-2.8-3.2c0.1-1.7,1.6-2.9,3.2-2.8c14.1,1.1,25.1,13,25.1,27.1c0,14.1-11,26-25.1,27.1\n" +
+    "	C153.1,108.8,153.1,108.8,153,108.8z\"/>\n" +
+    "<path d=\"M151.2,108.8c-15,0-27.2-12.2-27.2-27.2s12.2-27.2,27.2-27.2c0.7,0,1.4,0,2.1,0.1c1.7,0.1,2.9,1.6,2.8,3.2s-1.5,2.9-3.2,2.8\n" +
+    "	c-0.5,0-1.1-0.1-1.6-0.1c-11.7,0-21.2,9.5-21.2,21.2c0,12.2,10.4,22,22.8,21.1c1.7-0.1,3.1,1.1,3.2,2.8c0.1,1.7-1.1,3.1-2.8,3.2\n" +
+    "	C152.5,108.8,151.8,108.8,151.2,108.8z\"/>\n" +
+    "<path d=\"M115.6,113.8c-1.1,0-2.1-0.6-2.7-1.6c-0.8-1.5-0.2-3.3,1.3-4.1l20.1-10.6c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1\n" +
+    "	L117,113.5C116.5,113.7,116.1,113.8,115.6,113.8z\"/>\n" +
+    "<path d=\"M115,114.2c-1.1,0-2.1-0.6-2.7-1.6c-0.8-1.5-0.2-3.3,1.3-4.1l0.6-0.3c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1\n" +
+    "	l-0.6,0.3C115.9,114.1,115.4,114.2,115,114.2z\"/>\n" +
+    "<path d=\"M193.7,145.2H107c-1,0-1.9-0.5-2.4-1.2c-0.6-0.8-0.7-1.8-0.4-2.7l1.5-4.8l-3.7,1.2c-1.6,0.5-3.3,0.6-4.8,0.3\n" +
+    "	c-3.2-0.7-7.9-2.9-12.6-9.7c-5.2-7.6-13.9-20.9-17.4-26.2c-1-1.6-2.1-4.3-2.1-6.6c-0.1-3.5,1.4-6.7,3.9-8.6c2.6-2,6-2.5,9.6-1.4\n" +
+    "	c2.5,0.7,5.4,3,6.7,5.3l14.1,24.7c0.2,0.3,0.6,0.4,0.9,0.3l13.3-7c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1l-13.3,7\n" +
+    "	c-3.2,1.7-7.1,0.5-8.9-2.6L80,93.5c-0.5-1-2.1-2.2-3.2-2.5c-1.3-0.4-3-0.6-4.3,0.4c-1,0.8-1.6,2.2-1.6,3.8c0,0.9,0.6,2.6,1.1,3.4\n" +
+    "	c3.5,5.4,12.2,18.6,17.3,26.1c3.8,5.5,7.2,6.9,8.9,7.3c0.6,0.1,1.2,0.1,1.7-0.1l9.2-3c1.1-0.3,2.2-0.1,3,0.7s1.1,2,0.7,3l-2.1,6.4\n" +
+    "	h79.5c-1.3-24.4-26.2-33.4-27.3-33.8c-1.6-0.5-2.4-2.3-1.8-3.8c0.5-1.6,2.3-2.4,3.8-1.8c0.3,0.1,32.1,11.6,31.3,42.6\n" +
+    "	C196.6,143.9,195.3,145.2,193.7,145.2z\"/>\n" +
+    "<path d=\"M70.7,92.2c-0.9,0-1.8-0.4-2.4-1.2L41.3,53.7c-1-1.3-0.7-3.2,0.7-4.2c1.3-1,3.2-0.7,4.2,0.7l26.9,37.2\n" +
+    "	c1,1.3,0.7,3.2-0.7,4.2C71.9,92,71.3,92.2,70.7,92.2z\"/>\n" +
+    "<path d=\"M83,134.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,134.2,83,134.2z\"/>\n" +
+    "</svg>\n" +
     "");
 }]);

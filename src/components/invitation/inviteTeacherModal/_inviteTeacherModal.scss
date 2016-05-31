@@ -17,7 +17,7 @@ md-dialog.invite-teacher-modal-wrap {
         border-top-right-radius: 20px;
 
         &:not(.md-menu-toolbar){
-            //background-color: $bgColor23;
+            background-color: $bgColor5;
         }
 
         .close-popup-wrap {
@@ -34,7 +34,7 @@ md-dialog.invite-teacher-modal-wrap {
     }
 
     md-dialog-content.invite-teacher-content {
-        //background-color: $bgColor2;
+        background-color: $bgColor29;
         padding-top: 35px;
         height: 100%;
         @include border-bottom-radius(20px);
@@ -64,7 +64,7 @@ md-dialog.invite-teacher-modal-wrap {
                 margin-top: 40px;
                 text-align: center;
                 .invite-msg{
-                    //@include text-style(12px, $fcColor11, Lato, $lightFontWeight);
+                    @include text-style(12px, $fontColor4, Lato, $lightFontWeight);
                 }
             }
         }
@@ -75,7 +75,7 @@ md-dialog.invite-teacher-modal-wrap {
                 margin: 0 auto;
             }
             div{
-                //@include text-style(16px, $fcColor2, Lato, $regularFontWeight);
+                @include text-style(16px, $bgColor29$fontColor13, Lato, $regularFontWeight);
                 text-align: center;
                 margin-top: 20px;
             }
@@ -103,7 +103,7 @@ md-dialog.invite-teacher-modal-wrap {
                 width: 76px;
                 height: 76px;
                 border-radius: 38px;
-                //background-color: $bgColor23;
+                background-color: $bgColor5;
                 z-index: 9;
                 margin-top: -15px;
                 display: flex;
@@ -112,11 +112,11 @@ md-dialog.invite-teacher-modal-wrap {
 
                 svg-icon{
                     width: 35px;
-                    //stroke: $bgColor2;
+                    stroke: $bgColor29;
                 }
 
                 svg-icon *{
-                    //fill: $bgColor2;
+                    fill: $bgColor29;
                 }
             }
         }

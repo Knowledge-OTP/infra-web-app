@@ -1,5 +1,5 @@
-@import '../../../../bower_components/infra/dist/mixins/mixins';
-
+@import '../../../../bower_components/infra/dist/mixins/mixins',
+        '../../../../src/scss/imports/variables';
 
 invitation-manager {
     .invite-icon-btn {
@@ -12,7 +12,7 @@ invitation-manager {
             right: 4px;
             width: 14px;
             height: 14px;
-            //background: $bgColor18;
+            background: $bgColor25;
             font-size: 10px;
             color: white;
             border-radius: 7px;
@@ -32,20 +32,20 @@ invitation-manager {
     }
 
     .teacher-icon-wrap {
-        //background-color: $bgColor77;
+        background-color: $bgColor26;
         .teacher-icon {
             width: 24px;
         }
     }
 
     .teacher-active-icon-wrap {
-        //border: 1px solid $bgColor23;
+        border: 1px solid $bgColor5;
         .teacher-active-icon {
             width: 23px;
             height: 16px;
         }
         .teacher-active-icon * {
-            //fill: $bgColor23;
+            fill: $bgColor5;
         }
     }
 
@@ -64,7 +64,7 @@ md-menu-content.md-menu-content-invitation-manager {
 
         md-list-item {
             min-height: 20px;
-            //border-bottom: 1px solid $bcColor11;
+            border-bottom: 1px solid $borderColor7;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -72,21 +72,21 @@ md-menu-content.md-menu-content-invitation-manager {
             .received-invitations {
                 width: 14px;
                 height: 14px;
-                //stroke: $bgColor23;
+                stroke: $bgColor5;
             }
 
             .received-invitations * {
-                //stroke: $bgColor23;
+                stroke: $bgColor5;
             }
 
             .sent-invitations {
                 width: 14px;
                 height: 14px;
-                //stroke: $bgColor78;
+                stroke: $bgColor27;
             }
 
             .sent-invitations * {
-                //stroke: $bgColor78;
+                stroke: $bgColor27;
 
             }
         }
@@ -102,23 +102,23 @@ md-menu-content.md-menu-content-invitation-manager {
             flex-grow: 1;
 
             .teacher-name, .teacher-email {
-                //@include text-style(16px, $fcColor11, Lato, $regularFontWeight);
+                @include text-style(16px, $fontColor4, Lato, $regularFontWeight);
                 text-transform: capitalize;
                 flex-grow: 1;
                 margin-bottom: 3px;
             }
 
             .teacher-email {
-                //@include text-style(14px, $fcColor11, Lato, $regularFontWeight);
+                @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
 
             }
 
             .creation-time {
-                //@include text-style(10px, $fcColor11, Lato, $lightFontWeight);
+                @include text-style(10px, $fontColor4, Lato, $lightFontWeight);
             }
 
             .declined-your-invitation-text {
-                //@include text-style(14px, $fcColor11, Lato, $lightFontWeight);
+                @include text-style(14px, $fontColor4, Lato, $lightFontWeight);
                 margin-left: 3px;
             }
         }
@@ -131,15 +131,15 @@ md-menu-content.md-menu-content-invitation-manager {
         }
 
         .invite-sub-title {
-            //@include text-style(14px, $fcColor11, Lato, $regularFontWeight);
+            @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
             text-transform: uppercase;
-            //border-bottom: 1px solid $bcColor11;
+            border-bottom: 1px solid $borderColor7;
         }
 
         .decline-invite, .decline-conformation {
             width: 25px;
             height: 25px;
-            //border: 1px solid $bcColor23;
+            border: 1px solid $borderColor13;
             border-radius: 13px;
             display: flex;
             justify-content: center;
@@ -154,7 +154,7 @@ md-menu-content.md-menu-content-invitation-manager {
             }
 
             .decline-invite-btn *, .decline-conformation-btn * {
-                //stroke: $bgColor34;
+                stroke: $bgColor31;
             }
         }
 
@@ -168,7 +168,7 @@ md-menu-content.md-menu-content-invitation-manager {
         .approve-invite {
             width: 25px;
             height: 25px;
-            //border: 1px solid $bcColor9;
+            border: 1px solid $borderColor3;
             border-radius: 13px;
             display: flex;
             justify-content: center;
@@ -180,14 +180,14 @@ md-menu-content.md-menu-content-invitation-manager {
             }
 
             .v-icon-btn * {
-                //stroke: $bgColor12;
+                stroke: $bgColor7;
             }
         }
     }
 
     .empty-invite {
         .empty-msg {
-            //@include text-style(16px, $fcColor7, Lato, $regularFontWeight);
+            @include text-style(16px, $fontColor2, Lato, $regularFontWeight);
             text-align: center;
             display: flex;
             flex-grow: 1;
@@ -200,7 +200,7 @@ md-menu-content.md-menu-content-invitation-manager {
             display: flex;
             align-items: center;
             height: 60px;
-            //background: $bgColor64;
+            background: $bgColor28;
 
             .invite-btn {
                 margin: 10px auto;
@@ -209,9 +209,9 @@ md-menu-content.md-menu-content-invitation-manager {
     }
 
     .my-teacher-wrap {
-        //@include text-style(14px, $fcColor7, Lato, $regularFontWeight);
-        //background-color: $bgColor64;
-        //border-bottom: 1px solid $bcColor11;
+        @include text-style(14px, $fontColor2, Lato, $regularFontWeight);
+        background-color: $bgColor28;
+        border-bottom: 1px solid $borderColor7;
         padding: 15px;
         position: relative;
 
@@ -227,8 +227,8 @@ md-menu-content.md-menu-content-invitation-manager {
         }
 
         .teacher-email {
-            //font-weight: $lightFontWeight;
-            //color: $fcColor15;
+            font-weight: $lightFontWeight;
+            color: $bgColor31;
         }
 
         .delete-teacher {
@@ -242,7 +242,7 @@ md-menu-content.md-menu-content-invitation-manager {
         }
 
         .delete-teacher * {
-            //stroke: $bgColor34;
+            stroke: $bgColor31;
         }
     }
 }

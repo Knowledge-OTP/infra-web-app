@@ -35106,6 +35106,10 @@ md-tooltip {
 /* full background image with retina */
 /* full background image with retina */
 /* full background image with retina */
+/* fonts size */
+/* general */
+/* paths */
+/* general */
 md-dialog.invitation-confirm-modal {
   overflow: visible;
   width: 520px;
@@ -35123,6 +35127,8 @@ md-dialog.invitation-confirm-modal {
     min-height: 40px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px; }
+    md-dialog.invitation-confirm-modal md-toolbar:not(.md-menu-toolbar) {
+      background-color: #0a9bad; }
     md-dialog.invitation-confirm-modal md-toolbar .close-popup-wrap {
       position: absolute;
       top: -35px;
@@ -35139,6 +35145,10 @@ md-dialog.invitation-confirm-modal {
     md-dialog.invitation-confirm-modal md-dialog-content .main-title {
       margin-top: 20px; }
     md-dialog.invitation-confirm-modal md-dialog-content .teacher {
+      font-size: 16px;
+      color: #161616;
+      font-family: Lato;
+      font-weight: 400;
       text-align: center;
       margin: 35px 10px;
       padding: 0 25px; }
@@ -35150,6 +35160,8 @@ md-dialog.invitation-confirm-modal {
       justify-content: center; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
         margin: auto; }
+      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
+        color: #0a9bad; }
   md-dialog.invitation-confirm-modal .top-icon-wrap {
     position: absolute;
     top: 0;
@@ -35162,17 +35174,25 @@ md-dialog.invitation-confirm-modal {
         width: 76px;
         height: 76px;
         border-radius: 38px;
+        background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
         display: flex;
         justify-content: center;
         align-items: center; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
-          width: 14px; }
+          width: 14px;
+          stroke: #067f8e; }
+        md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon * {
+          fill: #067f8e; }
   md-dialog.invitation-confirm-modal .big-success-msg .completed-v-icon-wrap {
     width: 75px;
     margin: 8px auto; }
   md-dialog.invitation-confirm-modal .big-success-msg div {
+    font-size: 16px;
+    color: #7d7d7d;
+    font-family: Lato;
+    font-weight: 400;
     text-align: center;
     margin: 10px; }
   md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
@@ -35181,6 +35201,10 @@ md-dialog.invitation-confirm-modal {
 
 /* full background image with retina */
 /* full background image with retina */
+/* fonts size */
+/* general */
+/* paths */
+/* general */
 invitation-manager .invite-icon-btn {
   margin-right: 5px;
   position: relative; }
@@ -35190,6 +35214,7 @@ invitation-manager .invite-icon-btn {
     right: 4px;
     width: 14px;
     height: 14px;
+    background: #ff6766;
     font-size: 10px;
     color: white;
     border-radius: 7px;
@@ -35205,12 +35230,18 @@ invitation-manager .circle-invite-wrap {
   margin-right: 10px;
   cursor: pointer; }
 
-invitation-manager .teacher-icon-wrap .teacher-icon {
-  width: 24px; }
+invitation-manager .teacher-icon-wrap {
+  background-color: #f6f6f6; }
+  invitation-manager .teacher-icon-wrap .teacher-icon {
+    width: 24px; }
 
-invitation-manager .teacher-active-icon-wrap .teacher-active-icon {
-  width: 23px;
-  height: 16px; }
+invitation-manager .teacher-active-icon-wrap {
+  border: 1px solid #0a9bad; }
+  invitation-manager .teacher-active-icon-wrap .teacher-active-icon {
+    width: 23px;
+    height: 16px; }
+  invitation-manager .teacher-active-icon-wrap .teacher-active-icon * {
+    fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
   min-width: 280px;
@@ -35221,15 +35252,22 @@ md-menu-content.md-menu-content-invitation-manager {
     padding-bottom: 0; }
     md-menu-content.md-menu-content-invitation-manager md-list md-list-item {
       min-height: 20px;
+      border-bottom: 1px solid #ebebeb;
       display: flex;
       flex-direction: row;
       align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
         width: 14px;
-        height: 14px; }
+        height: 14px;
+        stroke: #0a9bad; }
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations * {
+        stroke: #0a9bad; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations {
         width: 14px;
-        height: 14px; }
+        height: 14px;
+        stroke: #92969d; }
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations * {
+        stroke: #92969d; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
       padding: 10px 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
@@ -35238,10 +35276,28 @@ md-menu-content.md-menu-content-invitation-manager {
       padding: 10px 20px;
       flex-grow: 1; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+        font-size: 16px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 400;
         text-transform: capitalize;
         flex-grow: 1;
         margin-bottom: 3px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+        font-size: 14px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 400; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .creation-time, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .creation-time {
+        font-size: 10px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 200; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .declined-your-invitation-text, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .declined-your-invitation-text {
+        font-size: 14px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 200;
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
@@ -35249,10 +35305,16 @@ md-menu-content.md-menu-content-invitation-manager {
       align-items: baseline;
       flex-grow: 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .invite-sub-title {
-      text-transform: uppercase; }
+      font-size: 14px;
+      color: #757a83;
+      font-family: Lato;
+      font-weight: 400;
+      text-transform: uppercase;
+      border-bottom: 1px solid #ebebeb; }
     md-menu-content.md-menu-content-invitation-manager md-list .decline-invite, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
       width: 25px;
       height: 25px;
+      border: 1px solid #acacac;
       border-radius: 13px;
       display: flex;
       justify-content: center;
@@ -35263,11 +35325,14 @@ md-menu-content.md-menu-content-invitation-manager {
         width: 12px;
         cursor: pointer;
         margin-top: -2px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn * {
+        stroke: #acacac; }
     md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
       border: none; }
     md-menu-content.md-menu-content-invitation-manager md-list .approve-invite {
       width: 25px;
       height: 25px;
+      border: 1px solid #87ca4d;
       border-radius: 13px;
       display: flex;
       justify-content: center;
@@ -35275,7 +35340,13 @@ md-menu-content.md-menu-content-invitation-manager {
       md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
         width: 14px;
         cursor: pointer; }
+      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn * {
+        stroke: #87ca4d; }
   md-menu-content.md-menu-content-invitation-manager .empty-invite .empty-msg {
+    font-size: 16px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400;
     text-align: center;
     display: flex;
     flex-grow: 1;
@@ -35285,10 +35356,17 @@ md-menu-content.md-menu-content-invitation-manager {
   md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action {
     display: flex;
     align-items: center;
-    height: 60px; }
+    height: 60px;
+    background: #fafafa; }
     md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
       margin: 10px auto; }
   md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap {
+    font-size: 14px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400;
+    background-color: #fafafa;
+    border-bottom: 1px solid #ebebeb;
     padding: 15px;
     position: relative; }
     md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .title {
@@ -35298,6 +35376,9 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-name {
       text-transform: capitalize;
       line-height: 25px; }
+    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-email {
+      font-weight: 200;
+      color: #acacac; }
     md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher {
       height: 12px;
       width: 12px;
@@ -35306,6 +35387,8 @@ md-menu-content.md-menu-content-invitation-manager {
       position: absolute;
       right: 10px;
       top: 50%; }
+    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher * {
+      stroke: #acacac; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -35324,6 +35407,8 @@ md-dialog.invite-teacher-modal-wrap {
     min-height: 40px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px; }
+    md-dialog.invite-teacher-modal-wrap md-toolbar:not(.md-menu-toolbar) {
+      background-color: #0a9bad; }
     md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap {
       position: absolute;
       top: -35px;
@@ -35335,6 +35420,7 @@ md-dialog.invite-teacher-modal-wrap {
       md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg-icon * {
         stroke: white; }
   md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content {
+    background-color: #085c66;
     padding-top: 35px;
     height: 100%;
     border-bottom-right-radius: 20px;
@@ -35355,10 +35441,19 @@ md-dialog.invite-teacher-modal-wrap {
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .invite-teacher-form .btn-wrap {
       margin-top: 40px;
       text-align: center; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .invite-teacher-form .btn-wrap .invite-msg {
+        font-size: 12px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 200; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
       width: 138px;
       margin: 0 auto; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
+      font-size: 16px;
+      color: #085c66 #7d7d7d;
+      font-family: Lato;
+      font-weight: 400;
       text-align: center;
       margin-top: 20px; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
@@ -35378,13 +35473,17 @@ md-dialog.invite-teacher-modal-wrap {
         width: 76px;
         height: 76px;
         border-radius: 38px;
+        background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
         display: flex;
         justify-content: center;
         align-items: center; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
-          width: 35px; }
+          width: 35px;
+          stroke: #085c66; }
+        md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon * {
+          fill: #085c66; }
 
 /* fonts size */
 /* general */
@@ -53552,7 +53651,7 @@ purchase-btn .upgraded .text {
   .md-button.znk.md-primary:active {
     background: #037684; }
   .md-button.znk.md-primary[disabled="disabled"] {
-    background: rgba(10, 155, 173, 0.6);
+    background: #f6f6f6;
     color: rgba(255, 255, 255, 0.6) !important; }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -71620,13 +71719,13 @@ workouts-progress {
             border: 1px solid #b7b7b7;
             border-radius: 50%; }
           workouts-progress .items-container .item-container .item.selected.pristine {
-            background: #b7b7b7;
+            background: #81649c;
             color: #ffffff; }
             workouts-progress .items-container .item-container .item.selected.pristine.selected:after {
               border: 1px solid #b7b7b7; }
         workouts-progress .items-container .item-container .item.pristine {
           background: #ffffff;
-          border: 1px solid #b7b7b7;
+          border: 1px solid #81649c;
           color: #b7b7b7; }
         workouts-progress .items-container .item-container .item .check-mark-icon {
           width: 1em; }
@@ -89393,7 +89492,7 @@ purchase-btn .upgraded .text {
 .app-header {
   background: white;
   height: 57px;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #fafafa;
   font-family: Lato; }
   .app-header .main-content-header {
     margin: 0 auto;
@@ -89497,7 +89596,7 @@ purchase-btn .upgraded .text {
       margin: auto;
       display: block; }
   .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
-    background-color: #f8f8f8; }
+    background-color: #085c66; }
 
 md-menu-content.md-menu-content-znk-header {
   min-width: 270px;

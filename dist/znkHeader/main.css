@@ -17594,7 +17594,7 @@ purchase-btn .upgraded .text {
 .app-header {
   background: white;
   height: 57px;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #fafafa;
   font-family: Lato; }
   .app-header .main-content-header {
     margin: 0 auto;
@@ -17698,7 +17698,7 @@ purchase-btn .upgraded .text {
       margin: auto;
       display: block; }
   .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
-    background-color: #f8f8f8; }
+    background-color: #085c66; }
 
 md-menu-content.md-menu-content-znk-header {
   min-width: 270px;

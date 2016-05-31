@@ -9,13 +9,11 @@
                 templateUrl: 'components/invitation/directives/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
-                link: function linkFn(scope, element) {
-                    var t = element;
-                    t= 3;
-                    //if (!ENV.dashboardFeatureEnabled) {
+                link: function linkFn(scope) {
+                    // if (!ENV.dashboardFeatureEnabled) {
                     //    element.remove();
                     //    return;
-                    //}
+                    // }
 
                     scope.translate = $filter('translate');
 

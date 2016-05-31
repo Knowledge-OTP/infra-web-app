@@ -69,11 +69,11 @@
             };
 
             this.updateInvitationStatus = function (invitation) {
-                //var authData = AuthService.getAuth();
-                //invitation.uid = authData.uid;
-                //invitation.senderAppName = ENV.firebaseDashboardAppScopeName;
-                //invitation.senderEmail = authData.password.email;
-                //return updateStatus(invitation);
+                var authData = AuthService.getAuth();
+                invitation.uid = authData.uid;
+                invitation.senderAppName = ENV.firebaseDashboardAppScopeName;
+                invitation.senderEmail = authData.password.email;
+                return updateStatus(invitation);
             };
 
             this.openInviteTeacherModal = function () {
@@ -88,36 +88,36 @@
 
             this.inviteTeacher = function (receiverEmail, receiverName) {
                 return UserProfileService.getProfile().then(function (profile) {
-                    //var authData = AuthService.getAuth();
-                    //var newInvitiation = [{
-                    //    receiverAppName: ENV.firebaseDashboardAppScopeName,
-                    //    receiverEmail: receiverEmail,
-                    //    receiverName: receiverName || receiverEmail,
-                    //    senderAppName: ENV.firebaseAppScopeName,
-                    //    senderEmail: profile.email,
-                    //    senderName: profile.nickname || profile.email,
-                    //    senderUid: authData.uid
-                    //}];
-                    //return $http.post(invitationEndpoint, newInvitiation, httpConfig).then(function (response) {
-                    //    return {
-                    //        data: response.data[0]
-                    //    };
-                    //}, function (error) {
-                    //    return {
-                    //        data: error.data
-                    //    };
-                    //});
+                    var authData = AuthService.getAuth();
+                    var newInvitiation = [{
+                       receiverAppName: ENV.firebaseDashboardAppScopeName,
+                       receiverEmail: receiverEmail,
+                       receiverName: receiverName || receiverEmail,
+                       senderAppName: ENV.firebaseAppScopeName,
+                       senderEmail: profile.email,
+                       senderName: profile.nickname || profile.email,
+                       senderUid: authData.uid
+                    }];
+                    return $http.post(invitationEndpoint, newInvitiation, httpConfig).then(function (response) {
+                       return {
+                           data: response.data[0]
+                       };
+                    }, function (error) {
+                       return {
+                           data: error.data
+                       };
+                    });
                 });
             };
 
             this.deletePendingConformations = function (invitation) {
-                //var authData = AuthService.getAuth();
-                //invitation.uid = authData.uid;
-                //invitation.status = this.invitationStatus.senderDelete;
-                //invitation.receiverAppName = ENV.firebaseDashboardAppScopeName;
-                //invitation.senderAppName = ENV.firebaseAppScopeName;
-                //invitation.senderEmail = authData.password.email;
-                //return updateStatus(invitation);
+                var authData = AuthService.getAuth();
+                invitation.uid = authData.uid;
+                invitation.status = this.invitationStatus.senderDelete;
+                invitation.receiverAppName = ENV.firebaseDashboardAppScopeName;
+                invitation.senderAppName = ENV.firebaseAppScopeName;
+                invitation.senderEmail = authData.password.email;
+                return updateStatus(invitation);
             };
 
             this.removeListeners = function () {
