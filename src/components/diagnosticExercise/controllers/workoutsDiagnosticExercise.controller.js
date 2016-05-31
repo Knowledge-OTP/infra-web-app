@@ -5,7 +5,7 @@
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         function(ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
-                  WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
+                 $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv) {
         'ngInject';
             var self = this;
@@ -84,7 +84,11 @@
                     $log.debug('WorkoutsDiagnosticExerciseController onQuestionAnswered: initial func');
                     self.actions.setSlideDirection(ZnkExerciseSlideDirectionEnum.LEFT.enum);
                     exerciseData.resultsData.$save();
-                    if (!_isLastQuestion()) {
+                    if (_isLastQuestion()) {
+                        self.actions.forceDoneBtnDisplay(true);
+                        return;
+                    }
+                    if (!diagnosticSettings.isFixed) {
                         var isAnswerCorrectly = _isAnswerCorrect();
                         var currentIndex = _getCurrentIndex();
                         var newDifficulty = WorkoutsDiagnosticFlow.getDifficulty(currentDifficulty, isAnswerCorrectly,
@@ -93,8 +97,6 @@
                         WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, self.resultsData.questionResults, newDifficulty, numQuestionCounter + 1, function (newQuestion) {
                             _handleNewSlide(newQuestion);
                         });
-                    } else {
-                        self.actions.forceDoneBtnDisplay(true);
                     }
                 },
                 onDone: function () {
@@ -261,7 +263,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
-                $state.go('app.workouts.roadmap');
+                $state.go('workoutsRoadmap');
             };
     });
 })(angular);

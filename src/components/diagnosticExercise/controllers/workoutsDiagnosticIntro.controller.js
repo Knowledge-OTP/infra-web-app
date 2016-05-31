@@ -15,7 +15,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticIntroController: click on quit, go to roadmap');
-                $state.go('app.workouts.roadmap');
+                $state.go('workoutsRoadmap');
             };
 
             this.goToExercise = function () {

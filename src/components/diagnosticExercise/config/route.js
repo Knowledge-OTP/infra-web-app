@@ -51,7 +51,7 @@
                                         sectionResult.duration = 0;
                                     }
 
-                                    examResultObj.$save();
+                                    sectionResult.$save();
 
                                     return {
                                         exerciseTypeId: sectionResult.exerciseTypeId,
@@ -90,7 +90,7 @@
                     controller: ['$timeout', '$state', function ($timeout, $state) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
-                            $state.go('app.workouts.diagnostic.summary');
+                            $state.go('diagnostic.summary');
                         }, VIDEO_DURATION);
                     }],
                     controllerAs: 'vm'

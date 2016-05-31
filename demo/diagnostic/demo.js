@@ -73,7 +73,7 @@ angular.module('demo', [
         }]);
 
         DiagnosticIntroSrvProvider.setActiveSubjectGetter(['ENV', function (ENV) {
-            return {id: ENV.VERBAL};
+            return { id: ENV.VERBAL };
         }]);
 
         WorkoutsDiagnosticFlowProvider.setDiagnosticSettings({
@@ -90,7 +90,9 @@ angular.module('demo', [
                         name: 'verbal',
                         colors: ['#f9d628', '#c9c9c9', '#f3f3f3']
                     }
-                ]
+                ],
+                greatStart: 24,
+                goodStart: 20
             }
         });
 

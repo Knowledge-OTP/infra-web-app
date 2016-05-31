@@ -11,6 +11,7 @@
             var goalScoreObj = diagnosticSummaryData.userGoals;
             var diagnosticResultObj = diagnosticSummaryData.diagnosticResult;
             var diagnosticCompositeScore = diagnosticSummaryData.compositeScore;
+            var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var enumArrayMap = {};
             angular.forEach(SubjectEnum, function (enumObj) {
                 enumArrayMap[enumObj.enum] = enumObj;
@@ -26,9 +27,9 @@
                 diagnosticResultObj.$save();
             }
 
-            if (diagnosticResultObj.compositeScore > 24) {
+            if (diagnosticResultObj.compositeScore > diagnosticSettings.greatStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';
-            } else if (diagnosticResultObj.compositeScore > 20) {
+            } else if (diagnosticResultObj.compositeScore > diagnosticSettings.goodStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GOOD_START';
             } else {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.BAD_START';
@@ -76,7 +77,6 @@
                     y: y
                 };
             }
-            var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var dataArray = [];
             angular.forEach(diagnosticSettings.summary.subjects, function(subject) {
                 dataArray.push(new GaugeConfig(subject.name, subject.id, subject.colors));
