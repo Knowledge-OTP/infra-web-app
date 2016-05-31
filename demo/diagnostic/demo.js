@@ -1,5 +1,5 @@
 angular.module('demo', [
-        'znk.infra-web-app.diagnostic',
+        'znk.infra-web-app.diagnosticExercise',
         'pascalprecht.translate'])
     .config(function ($translateProvider, StatsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider) {
 

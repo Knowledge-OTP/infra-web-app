@@ -3,7 +3,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnostic').controller('WorkoutsDiagnosticExerciseController',
+    angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         function(ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv) {
