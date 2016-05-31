@@ -11,3 +11,23 @@ estimated-score-widget .score-estimate-container .subject .math-bg{
 estimated-score-widget .score-estimate-container .subject .essay-bg{
     background-color: #FF5895;
 }
+
+estimated-score-widget .score-estimate-container .verbal .current-estimated-score .verbal-bc {
+    border-color: #F9D41B ;
+}
+estimated-score-widget .score-estimate-container .math .current-estimated-score .math-bc {
+    border-color: #AF89D2 ;
+}
+estimated-score-widget .score-estimate-container .essay .current-estimated-score .essay-bc {
+    border-color: #FF5895 ;
+}
+
+estimated-score-widget .score-estimate-container .verbal {
+    border-color: #F9D41B;
+}
+estimated-score-widget .score-estimate-container .math {
+    border-color: #AF89D2;
+}
+estimated-score-widget .score-estimate-container .essay {
+    border-color: #FF5895;
+}
