@@ -11,7 +11,7 @@
     "firebase": "^2.4.2",
     "angular-translate": "^2.11.0",
     "angular-translate-loader-partial": "^2.11.0",
-    "infra": "https://github.com/Knowledge-OTP/infra.git#zinkerz/version-5",
+    "infra": "https://github.com/Knowledge-OTP/infra.git#oded/add-examSrv",
     "angular-ui-router": "ui-router#^0.3.0",
     "angular-material": "^1.0.9",
     "angular-aria": "1.5.5",

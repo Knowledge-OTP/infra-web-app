@@ -72,6 +72,7 @@
         'znk.infra.exerciseUtility',
         'znk.infra.scroll',
         'znk.infra.general',
-        'znk.infra-web-app.purchase'
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.diagnostic'
     ]);
 })(angular);

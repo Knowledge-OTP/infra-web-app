@@ -8,15 +8,18 @@
                 .state('workoutsRoadmap', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
-                        data: function data(ExerciseStatusEnum, WorkoutsSrv, /*WorkoutsDiagnosticFlow,*/ $q) {
+                        data: function data(ExerciseStatusEnum, WorkoutsSrv, DiagnosticSrv, $q) {
                             'ngInject';
 
-                            // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();
+                            var isDiagnosticCompletedProm = DiagnosticSrv.isDiagnosticCompleted();
                             var workoutsProgressProm = WorkoutsSrv.getAllWorkouts();
 
-                            return $q.all([workoutsProgressProm, /*isDiagnosticCompletedProm, */]).then(function (res) {
-                                var workoutsProgress = res[0];
-                                var isDiagnosticCompleted = true;//!!res[1];
+                            return $q.all([
+                                isDiagnosticCompletedProm,
+                                workoutsProgressProm
+                            ]).then(function (res) {
+                                var isDiagnosticCompleted = res[0];
+                                var workoutsProgress = res[1];
 
                                 return {
                                     diagnostic: {
