@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnostic', [
+    angular.module('znk.infra-web-app.diagnosticExercise', [
         'pascalprecht.translate',
         'ngMaterial',
         'chart.js',
@@ -24,9 +24,9 @@
         'znk.infra.general'
     ]).config(function(SvgIconSrvProvider) {
         var svgMap = {
-            'diagnostic-dropdown-arrow-icon': 'components/diagnostic/svg/dropdown-arrow.svg',
-            'diagnostic-check-mark': 'components/diagnostic/svg/check-mark-icon.svg',
-            'diagnostic-flag-icon': 'components/diagnostic/svg/flag-icon.svg'
+            'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
+            'diagnostic-check-mark': 'components/diagnosticExercise/svg/check-mark-icon.svg',
+            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
     });

@@ -1,13 +1,13 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnostic').config([
+    angular.module('znk.infra-web-app.diagnosticExercise').config([
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
                 .state('diagnostic', {
                     url: '/diagnostic?skipIntro',
-                    templateUrl: 'components/diagnostic/templates/workoutsDiagnostic.template.html',
+                    templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnostic.template.html',
                     resolve: {
                         currentState: function currentState(WorkoutsDiagnosticFlow, $stateParams) {
                             'ngInject';
@@ -19,13 +19,13 @@
                 })
                 .state('diagnostic.intro', {
                     url: '/intro/:id/:subjectId/:order',
-                    templateUrl: 'components/diagnostic/templates/workoutsDiagnosticIntro.template.html',
+                    templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html',
                     controller: 'WorkoutsDiagnosticIntroController',
                     controllerAs: 'vm'
                 })
                 .state('diagnostic.exercise', {
                     url: '/exercise/:id/:sectionId',
-                    templateUrl: 'components/diagnostic/templates/workoutsDiagnosticExercise.template.html',
+                    templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html',
                     controller: 'WorkoutsDiagnosticExerciseController',
                     controllerAs: 'vm',
                     resolve: {
@@ -86,7 +86,7 @@
                 })
                 .state('diagnostic.preSummary', {
                     url: '/preSummary',
-                    templateUrl: 'components/diagnostic/templates/workoutsDiagnosticPreSummary.template.html',
+                    templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
                     controller: ['$timeout', '$state', function ($timeout, $state) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
@@ -97,7 +97,7 @@
                 })
                 .state('diagnostic.summary', {
                     url: '/summary',
-                    templateUrl: 'components/diagnostic/templates/workoutsDiagnosticSummary.template.html',
+                    templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html',
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',
                     resolve: {
