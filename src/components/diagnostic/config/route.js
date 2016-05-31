@@ -43,6 +43,7 @@
                                 var examResultObj = resArr[2];
                                 var getSectionResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, sectionId, examId, examObj.sections.length);
                                 return getSectionResultProm.then(function (sectionResult) {
+
                                     if (!sectionResult.questionResults.length) {
                                         sectionResult.questionResults = diagnosticSettings.isFixed ? section.questions.map(function (question) {
                                             return { questionId: question.id };
@@ -122,7 +123,7 @@
                                     });
                                     return ScoringService.getTotalScoreResult(diagnosticScoresObjToArr).then(function (totalScore) {
                                         if (!totalScore) {
-                                            $log.error('diagnosticSummaryData resolve of route app.workouts.diagnostic.summary: totalScore is empty! result:', totalScore);
+                                            $log.error('diagnosticSummaryData resolve of route diagnostic.summary: totalScore is empty! result:', totalScore);
                                         }
                                         return {
                                             userGoals: results[0],

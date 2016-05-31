@@ -14,10 +14,8 @@ angular.module('demo', [
             })
             .preferredLanguage('en');
 
-        var getCategoryFn = function (/*CategoryService*/) {
-            return {
-
-            };
+        var getCategoryFn = function ($q) {
+            return $q.when({});
         };
 
         StatsSrvProvider.setCategoryLookup(getCategoryFn);
