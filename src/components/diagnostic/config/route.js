@@ -112,13 +112,15 @@
                                     return estimatedScores;
                                 });
                                 var userGoalsProm = UserGoalsService.getGoals();
+                                var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                                 var diagnosticResult = WorkoutsDiagnosticFlow.getDiagnostic();
                                 return $q.all([userGoalsProm, userStatsProm, diagnosticResult]).then(function (results) {
                                     var diagnosticScoresObjToArr = [];
-                                    angular.forEach(results[1], function (value, key) {
-                                        // exclude writing in diagnostic
-                                        if (+key !== SubjectEnum.WRITING.enum) {
-                                            diagnosticScoresObjToArr.push(value);
+                                    var userStats = results[1];
+                                    angular.forEach(diagnosticSettings.summary.subjects, function (subject) {
+                                        var curStat = userStats[subject.id];
+                                        if (curStat) {
+                                            diagnosticScoresObjToArr.push(curStat);
                                         }
                                     });
                                     return ScoringService.getTotalScoreResult(diagnosticScoresObjToArr).then(function (totalScore) {
@@ -127,7 +129,7 @@
                                         }
                                         return {
                                             userGoals: results[0],
-                                            userStats: results[1],
+                                            userStats: userStats,
                                             diagnosticResult: results[2],
                                             compositeScore: totalScore
                                         };

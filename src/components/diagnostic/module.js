@@ -17,7 +17,6 @@
         'znk.infra.znkExercise',
         'znk.infra.scroll',
         'znk.infra.stats',
-        'znk.infra.category',
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
