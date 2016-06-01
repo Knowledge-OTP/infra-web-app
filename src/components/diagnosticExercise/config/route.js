@@ -101,8 +101,8 @@
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',
                     resolve: {
-                        diagnosticSummaryData: ['EstimatedScoreSrv', 'UserGoalsService', '$q', 'WorkoutsDiagnosticFlow', 'ScoringService', '$log', 'SubjectEnum',
-                            function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log, SubjectEnum) {
+                        diagnosticSummaryData: ['EstimatedScoreSrv', 'UserGoalsService', '$q', 'WorkoutsDiagnosticFlow', 'ScoringService', '$log',
+                            function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log) {
                                 'ngInject';
                                 var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
                                     var estimatedScores = {};
@@ -114,6 +114,7 @@
                                 var userGoalsProm = UserGoalsService.getGoals();
                                 var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                                 var diagnosticResult = WorkoutsDiagnosticFlow.getDiagnostic();
+                                var scoringSettings = ScoringService.getScoringSettings();
                                 return $q.all([userGoalsProm, userStatsProm, diagnosticResult]).then(function (results) {
                                     var diagnosticScoresObjToArr = [];
                                     var userStats = results[1];
@@ -131,7 +132,8 @@
                                             userGoals: results[0],
                                             userStats: userStats,
                                             diagnosticResult: results[2],
-                                            compositeScore: totalScore
+                                            compositeScore: totalScore,
+                                            scoringSettings: scoringSettings
                                         };
                                     });
                                 });

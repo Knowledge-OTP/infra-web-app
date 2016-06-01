@@ -5,7 +5,7 @@
  * */
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoals').directive('schoolSelect', ['UserSchoolsService', '$translate', 'UtilitySrv', '$timeout', '$q', '$translatePartialLoader',
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect', ['UserSchoolsService', '$translate', 'UtilitySrv', '$timeout', '$q', '$translatePartialLoader',
         function SchoolSelectDirective(UserSchoolsService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
             'ngInject';
 
@@ -13,13 +13,13 @@
 
             var directive = {
                 restrict: 'E',
-                templateUrl: 'components/userGoals/templates/schoolSelect.template.html',
+                templateUrl: 'components/userGoalsSelection/templates/schoolSelect.template.html',
                 scope: {
                     events: '=?',
                     getSelectedSchools: '&?'
                 },
                 link: function link(scope, element, attrs) {
-                    $translatePartialLoader.addPart('userGoals');
+                    $translatePartialLoader.addPart('userGoalsSelection');
 
                     var MIN_LENGTH_AUTO_COMPLETE = 3;
                     var MAX_SCHOOLS_SELECT = 3;

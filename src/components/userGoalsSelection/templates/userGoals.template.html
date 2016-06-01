@@ -35,8 +35,8 @@
                     </div>
                     <span class="subject-title" translate=".{{subject.name | uppercase}}"></span>
                     <goal-select
-                        min-score="goalsSettingsFromSrv.minGoalsScore"
-                        max-score="goalsSettingsFromSrv.maxGoalsScore"
+                        min-score="goalsSettingsFromSrv.subjectMinScore"
+                        max-score="goalsSettingsFromSrv.subjectMaxScore"
                         update-goal-num="goalsSettingsFromSrv.updateGoalNum"
                         ng-model="userGoals[subject.name]"
                         ng-change="calcTotal()">

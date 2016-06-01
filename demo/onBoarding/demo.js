@@ -1,5 +1,5 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding'])
-    .config(function ($translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider) {
+    .config(function ($translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -76,12 +76,15 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
             return { id: ENV.ENGLISH };
         }]);
 
+        ScoringServiceProvider.setScoringSettings({
+            examMinScore: 400,
+            examMaxScore: 1600,
+            subjectMinScore: 200,
+            subjectMaxScore: 800,
+            defaultSubjectScore: 600
+        });
+
         UserGoalsServiceProvider.settings = {
-            defaultSubjectScore: 600,
-            minSchoolScore: 400,
-            maxSchoolScore: 1600,
-            minGoalsScore: 200,
-            maxGoalsScore: 800,
             updateGoalNum: 10,
             subjects: [
                 { name: 'math', svgIcon: 'math-section-icon' },

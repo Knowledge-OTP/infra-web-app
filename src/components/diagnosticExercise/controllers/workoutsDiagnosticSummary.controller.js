@@ -17,7 +17,7 @@
                 enumArrayMap[enumObj.enum] = enumObj;
             });
 
-            var MAX_SCORE = 36;
+            var MAX_SCORE = diagnosticSummaryData.scoringSettings.subjectMaxScore;
             var GOAL = 'Goal';
             var MAX = 'Max';
 

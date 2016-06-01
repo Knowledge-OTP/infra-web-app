@@ -1,7 +1,7 @@
 angular.module('demo', [
         'znk.infra-web-app.diagnosticExercise',
         'pascalprecht.translate'])
-    .config(function ($translateProvider, StatsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider) {
+    .config(function ($translateProvider, StatsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -24,12 +24,15 @@ angular.module('demo', [
             return AuthService.getAuth();
         }]);
 
+        ScoringServiceProvider.setScoringSettings({
+            examMinScore: 400,
+            examMaxScore: 1600,
+            subjectMinScore: 200,
+            subjectMaxScore: 800,
+            defaultSubjectScore: 600
+        });
+
         UserGoalsServiceProvider.settings = {
-            defaultSubjectScore: 600,
-            minSchoolScore: 400,
-            maxSchoolScore: 1600,
-            minGoalsScore: 200,
-            maxGoalsScore: 800,
             updateGoalNum: 10,
             subjects: [
                 { name: 'math', svgIcon: 'math-section-icon' },

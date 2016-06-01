@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('znk.infra-web-app.userGoals').service('UserSchoolsService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q',
+angular.module('znk.infra-web-app.userGoalsSelection').service('UserSchoolsService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q',
     function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q) {
         var schoolsPath = StorageSrv.variables.appUserSpacePath + '/dreamSchools';
 

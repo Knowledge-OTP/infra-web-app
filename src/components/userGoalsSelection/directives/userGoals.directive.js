@@ -1,19 +1,21 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoals').directive('userGoals',['UserGoalsService', '$timeout', 'UserSchoolsService', '$q', '$translatePartialLoader',
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',['UserGoalsService', '$timeout', 'UserSchoolsService', '$q', '$translatePartialLoader',
         function UserGoalsDirective(UserGoalsService, $timeout, UserSchoolsService, $q, $translatePartialLoader) {
 
             var directive = {
                 restrict: 'E',
-                templateUrl: 'components/userGoals/templates/userGoals.template.html',
+                templateUrl: 'components/userGoalsSelection/templates/userGoals.template.html',
                 scope: {
                     onSave: '&?',
                     setting: '='
                 },
                 link: function link(scope) {
-                    $translatePartialLoader.addPart('userGoals');
+                    $translatePartialLoader.addPart('userGoalsSelection');
                     var userGoalRef;
-                    scope.goalsSettingsFromSrv = UserGoalsService.getGoalsSettings();
+                    var scoringSettings = UserGoalsService.getScoringSettings();
+                    var goalsSettings = UserGoalsService.getGoalsSettings();
+                    scope.goalsSettingsFromSrv = angular.extend({}, scoringSettings, goalsSettings);
                     var defaultTitle = scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
 
                     var initTotalScore = 0;

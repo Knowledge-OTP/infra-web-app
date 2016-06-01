@@ -1,10 +1,10 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoals').directive('goalSelect', function GoalSelectDirective() {
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('goalSelect', function GoalSelectDirective() {
 
         var directive = {
             restrict: 'E',
-            templateUrl: 'components/userGoals/templates/goalSelect.template.html',
+            templateUrl: 'components/userGoalsSelection/templates/goalSelect.template.html',
             require: 'ngModel',
             scope: {
                 minScore: '=',
