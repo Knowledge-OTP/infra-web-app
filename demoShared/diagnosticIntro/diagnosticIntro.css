@@ -1,0 +1,37 @@
+/*MATH DEFINE*/
+/* new */
+diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.math-color{
+    border-color: #AF89D2;
+}
+/* active */
+diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.active.math-color{
+    background: #AF89D2;
+}
+
+diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.active.math-color svg.math-section-svg path{
+    fill: white;
+}
+/* done */
+diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done.math-color{
+    background: #AF89D2;
+}
+/*END MATH DEFINE*/
+
+/*VERBAL DEFINE*/
+/* new */
+diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.verbal-color{
+    border-color: #F9D41B;
+}
+/* active */
+diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.active.verbal-color{
+    background: #F9D41B;
+}
+
+diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.active.verbal-color svg.verbal-svg path{
+    fill: white;
+}
+/* done */
+diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done.verbal-color{
+    background: #F9D41B;
+}
+/*END VERBAL DEFINE*/

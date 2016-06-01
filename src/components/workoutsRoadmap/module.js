@@ -73,6 +73,7 @@
         'znk.infra.scroll',
         'znk.infra.general',
         'znk.infra-web-app.purchase',
-        'znk.infra-web-app.diagnostic'
+        'znk.infra-web-app.diagnostic',
+        'znk.infra-web-app.diagnosticIntro'
     ]);
 })(angular);

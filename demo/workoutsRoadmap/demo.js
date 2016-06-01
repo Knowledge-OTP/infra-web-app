@@ -2,7 +2,7 @@
 
 angular.module('demo', [
     'znk.infra-web-app.workoutsRoadmap',
-    'pascalprecht.translate'
+    'znk.infra.exams'
 ])
     .run(function ($rootScope) {
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {

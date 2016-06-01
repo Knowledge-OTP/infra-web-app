@@ -25,5 +25,9 @@
             background: $bgColor26;
             color: $fontColor10 !important;
         }
+
+        &.md-focused{
+            background: $bgColor5;
+        }
     }
 }

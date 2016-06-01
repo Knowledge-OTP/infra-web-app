@@ -1,18 +1,13 @@
-(function () {
+(function (angular) {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticIntroController',
-        function (/*WorkoutsDiagnosticFlow*/) {
+        function (isDiagnosticStarted) {
             'ngInject';
 
             var vm = this;
 
-            vm.state = 'workouts roadmap diagnostic intro';
-
-            // WorkoutsDiagnosticFlow.getDiagnostic().then(function (results) {todo
-            //     vm.buttonTitle = (angular.equals(results.sectionResults, {})) ? 'START' : 'CONTINUE';
-            // });
-            vm.buttonTitle = 'START';
+            vm.buttonTitle = isDiagnosticStarted ? 'CONTINUE' : 'START' ;
         });
-})();
+})(angular);
 
 // export class WorkoutsRoadMapDiagnosticIntroController {
 //     constructor(WorkoutsDiagnosticFlow) {

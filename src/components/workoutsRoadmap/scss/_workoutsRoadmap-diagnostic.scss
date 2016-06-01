@@ -1,4 +1,4 @@
-.diagnostic-workout-pane {
+.workouts-roadmap-diagnostic-intro {
     width: 575px;
     height: 523px;
     background-color: $bgColor3;
@@ -14,14 +14,16 @@
     }
 
     @keyframes scaleIcon {
-        100%     {transform: scale(2);}
+        100% {
+            transform: scale(2);
+        }
     }
 
     .icon-settings {
         margin: 80px auto 0;
         max-width: 110px;
 
-        &.pre-summary{
+        &.pre-summary {
             width: 60px;
             &.pre-summary-animate {
                 animation-name: scaleIcon;
@@ -76,7 +78,7 @@
         }
     }
 
-    diagnostic-intro {
+    /*diagnostic-intro {
         .diagnostic-intro-drv {
             ng-switch {
                 .diagnostic-text {
@@ -86,5 +88,5 @@
                 }
             }
         }
-    }
+    }*/
 }
