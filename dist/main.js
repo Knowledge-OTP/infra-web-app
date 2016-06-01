@@ -235,7 +235,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     'use strict';
     angular.module('znk.infra-web-app.invitation').controller('invitationApproveModalCtrl',
 
-        ["locals", "$mdDialog", "InvitationHelperService", "$filter", "PopUpSrv", function (locals, $mdDialog, InvitationHelperService, $filter, PopUpSrv) {
+        function (locals, $mdDialog, InvitationHelperService, $filter, PopUpSrv) {
             'ngInject';
 
             var self = this;
@@ -282,7 +282,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
             this.closeModal = function () {
                 $mdDialog.cancel();
             };
-        }]
+        }
     );
 })(angular);
 
@@ -290,7 +290,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
+        function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
             'ngInject';
 
            return {
@@ -381,7 +381,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     });
                 }
             };
-        }]
+        }
     );
 })(angular);
 
@@ -390,7 +390,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     'use strict';
     angular.module('znk.infra-web-app.invitation').controller('inviteTeacherModalController',
 
-        ["$mdDialog", "InvitationService", "PopUpSrv", "$filter", "$timeout", function ($mdDialog, InvitationService, PopUpSrv, $filter, $timeout) {
+        function ($mdDialog, InvitationService, PopUpSrv, $filter, $timeout) {
             var self = this;
             self.translate = $filter('translate');
 
@@ -414,14 +414,14 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
             this.closeModal = function () {
                 $mdDialog.hide();
             };
-        }]
+        }
     );
 })(angular);
 
 'use strict';
 
 angular.module('znk.infra-web-app.invitation').service('InvitationListenerService',
-    ["ENV", "InfraConfigSrv", "AuthService", "$timeout", "$q", function (ENV, InfraConfigSrv, AuthService, $timeout, $q) {
+    function (ENV, InfraConfigSrv, AuthService, $timeout, $q) {
         'ngInject';
 
         var studentStorageProm = InfraConfigSrv.getStudentStorage();
@@ -531,14 +531,14 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
             return new Firebase(userFullPath);
         }
 
-    }]
+    }
 );
 
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InvitationListenerService", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService) {
+        function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService) {
             'ngInject';
 
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
@@ -676,7 +676,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
             }
 
             InvitationListenerService.addListeners();
-        }]
+        }
     );
 })(angular);
 
@@ -685,7 +685,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationHelperService',
 
-        ["InvitationService", "$filter", "PopUpSrv", "UserProfileService", function (InvitationService, $filter, PopUpSrv, UserProfileService) {
+        function (InvitationService, $filter, PopUpSrv, UserProfileService) {
             'ngInject';
 
             var self = this;
@@ -728,7 +728,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
             function updateStatus(invitation) {
                 return InvitationService.updateInvitationStatus(invitation);
             }
-        }]
+        }
     );
 })(angular);
 
@@ -1098,7 +1098,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     "</svg>\n" +
     "");
   $templateCache.put("components/loginForm/templates/loginForm.directive.html",
-    "<ng-form novalidate class=\"login-form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"vm.submit()\">\n" +
+    "<form novalidate class=\"login-form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"vm.submit()\">\n" +
     "    <div class=\"title\"\n" +
     "         translate=\".LOGIN\">\n" +
     "    </div>\n" +
@@ -1130,7 +1130,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth-title\" translate=\".CONNECT_WITH\"></div>\n" +
     "    </div>\n" +
-    "</ng-form>\n" +
+    "</form>\n" +
     "");
 }]);
 
@@ -1666,7 +1666,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
-        ["ENV", "$q", "$sce", "AuthService", "UserProfileService", "$location", "purchaseService", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
+        function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
             return {
                 templateUrl:  'components/purchase/templates/purchaseBtn.template.html',
                 restrict: 'E',
@@ -1769,7 +1769,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 }
 
             };
-        }]
+        }
     );
 })(angular);
 
@@ -1793,7 +1793,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
+        function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
             'ngInject';
 
             var self = this;
@@ -2008,7 +2008,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     controllerAs: 'vm'
                 });
             };
-        }]
+        }
     );
 })(angular);
 
@@ -3214,7 +3214,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
                 .state('workoutsRoadmap', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
-                        data: ["ExerciseStatusEnum", "WorkoutsSrv", "$q", function data(ExerciseStatusEnum, WorkoutsSrv, /*WorkoutsDiagnosticFlow,*/ $q) {
+                        data: function data(ExerciseStatusEnum, WorkoutsSrv, /*WorkoutsDiagnosticFlow,*/ $q) {
                             'ngInject';
 
                             // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();
@@ -3232,7 +3232,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
                                     workoutsProgress: workoutsProgress
                                 };
                             });
-                        }]
+                        }
                     },
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
@@ -3301,7 +3301,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
 "use strict";
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", "$translatePartialLoader", function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
+        function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
 
             $translatePartialLoader.addPart('workoutsRoadmap');
@@ -3411,14 +3411,14 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
                     }
                 }
             });
-        }]
+        }
     );
 })();
 
 "use strict";
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticController',
-        ["$state", "ExerciseStatusEnum", "data", "$timeout", function ($state, ExerciseStatusEnum, data, $timeout) {
+        function ($state, ExerciseStatusEnum, data, $timeout) {
             'ngInject';
             //  fixing page not rendered in the first app entrance issue
             $timeout(function () {
@@ -3435,7 +3435,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
                         $state.go('.intro');
                 }
             });
-        }]);
+        });
 })();
 
 // export class WorkoutsRoadMapDiagnosticController {
@@ -3504,7 +3504,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
             }
         ])
         .directive('workoutsProgress',
-            ["$timeout", "ExerciseStatusEnum", "$log", function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
+            function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
                 'ngInject';
 
                 var config = {
@@ -3633,7 +3633,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
                 };
 
                 return directive;
-            }]
+            }
         );
 })();
 
@@ -3928,7 +3928,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$mdDialog", "$window", "purchaseService", "znkHeaderSrv", "UserProfileService", "$injector", "PurchaseStateEnum", function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
+        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
                   UserProfileService, $injector, PurchaseStateEnum) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
@@ -3981,7 +3981,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
                 self.expandIcon = 'expand_more';
             });
 
-        }]);
+        });
 })(angular);
 
 
