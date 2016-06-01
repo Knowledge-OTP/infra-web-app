@@ -40,7 +40,7 @@
                     }
 
                     if(diagnosticExamResult.isComplete){
-                        return ExerciseStatusEnum.COMPLETED;
+                        return ExerciseStatusEnum.COMPLETED.enum;
                     }
 
                     var startedSectionsNum= Object.keys(diagnosticExamResult.sectionResults);

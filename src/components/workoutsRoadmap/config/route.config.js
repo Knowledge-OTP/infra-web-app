@@ -6,6 +6,7 @@
         function ($stateProvider) {
             $stateProvider
                 .state('workoutsRoadmap', {
+                    url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
                         data: function data(ExerciseStatusEnum, WorkoutsSrv, DiagnosticSrv, $q) {

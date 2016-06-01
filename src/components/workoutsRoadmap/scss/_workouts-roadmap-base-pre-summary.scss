@@ -1,0 +1,6 @@
+.workouts-roadmap-base-pre-summary{
+    .diagnostic-workout-title {
+        margin-top: 25px;
+        @include text-style(21px, $fontColor3, Quicksand, $boldFontWeight);
+    }
+}

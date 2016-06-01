@@ -1,12 +1,12 @@
 <div translate-namespace="WORKOUTS_ROADMAP_DIAGNOSTIC_INTRO"
-     class="workouts-roadmap-diagnostic-intro base-border-radius">
-    <div>
+     class="workouts-roadmap-diagnostic-intro base-border-radius base-workouts-wrapper">
+    <div class="base-workouts-inner-wrapper">
         <div class="diagnostic-workout-title" translate=".DIAGNOSTIC_TEST"></div>
         <diagnostic-intro></diagnostic-intro>
         <md-button  class="md-primary znk"
                     autofocus
                     tabindex="1"
-                    ui-sref="app.workouts.diagnostic({ skipIntro: true })"
+                    ui-sref="diagnostic({ skipIntro: true })"
                     aria-label="{{::vm.buttonTitle}}"
                     md-no-ink>{{::vm.buttonTitle | translate}}
         </md-button>

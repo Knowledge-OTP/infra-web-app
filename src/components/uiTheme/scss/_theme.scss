@@ -5,3 +5,7 @@
 .translate-cloak{
     display: none !important;
 }
+
+.base-border-radius{
+    border-radius: $baseBorderRadiusCorner;
+}

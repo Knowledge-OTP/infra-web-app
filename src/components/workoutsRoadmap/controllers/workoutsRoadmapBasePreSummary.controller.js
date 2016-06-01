@@ -6,7 +6,7 @@
 
             var DIAGNOSTIC_ORDER = 0;
 
-            var TIMOUT_BEFORE_GOING_TO_NEXT = 1500;
+            var TIMOUT_BEFORE_GOING_TO_NEXT = 15000000000;
 
             var translateFilter = $filter('translate');
             var vm = this;

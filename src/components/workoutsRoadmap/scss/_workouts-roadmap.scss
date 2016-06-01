@@ -1,0 +1,108 @@
+.workouts-roadmap-container {
+    display: flex;
+    justify-content: center;
+    min-height: 665px;
+
+    & > ui-view {
+        width: 100%;
+        height: 100%;
+    }
+
+    //.workouts-roadmap-wrapper, .score-estimate-container {
+    //    background: $bgColor3;
+    //}
+
+    .workouts-roadmap-wrapper {
+        background: $bgColor3;
+        margin: {
+            right: 30px;
+        }
+        width: 705px;
+        display: flex;
+        flex-direction: column;
+
+        workouts-progress {
+            height: 67px;
+            padding: {
+                top: 20px;
+            }
+        ;
+        }
+
+        .workouts-container {
+            flex-grow: 1;
+            position: relative;
+
+            &.left-animation {
+                .workouts-ui-view {
+                    &.ng-leave, &.ng-enter {
+                        transition: all 0.5s ease-in-out;
+                    }
+
+                    &.ng-enter {
+                        transform: translateX(580px);
+                        opacity: 0;
+                    }
+
+                    &.ng-leave, &.ng-enter-active {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+
+                    &.ng-leave-active {
+                        transform: translateX(-580px);
+                        opacity: 0;
+                    }
+
+                }
+            }
+
+            &.right-animation {
+                .workouts-ui-view {
+                    &.ng-leave, &.ng-enter {
+                        transition: all 0.5s ease-in-out;
+                        @include absolute-full-cover;
+                    }
+
+                    &.ng-enter {
+                        transform: translateX(-580px);
+                        opacity: 0;
+                    }
+
+                    &.ng-leave, &.ng-enter-active {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+
+                    &.ng-leave-active {
+                        transform: translateX(580px);
+                        opacity: 0;
+                    }
+
+                }
+            }
+
+            .workouts-ui-view {
+                @include absolute-full-cover;
+
+                & > ui-view {
+                    display: block;
+                    height: 100%;
+
+                    .base-workouts-wrapper {
+                        height: 100%;
+                        padding: 17px 0px 25px 0px;
+                        position: relative;
+
+                        &:after {
+                            content: '';
+                            border: 1px solid $borderColor7;
+                            border-radius: $baseBorderRadiusCorner;
+                            @include absolute-position(17px, 65px, 25px, 65px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
