@@ -8,8 +8,7 @@
             'znk.infra.popUp',
             'pascalprecht.translate',
             'znk.infra-web-app.purchase',
-            'znk.infra.user',
-            'znk.infra-web-app.invitation'])
+            'znk.infra.user'])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){
@@ -25,18 +24,13 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum) {
+        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv, UserProfileService) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
-
-            self.invokeOnClickHandler = function(onClickHandler){
-                $injector.invoke(onClickHandler);
-            };
 
             this.showPurchaseDialog = function () {
                 purchaseService.showPurchaseDialog();
@@ -56,26 +50,7 @@
                 //});
             };
 
-            function _checkIfHasProVersion() {
-                purchaseService.hasProVersion().then(function (hasProVersion) {
-                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
-                });
-            }
-
-            var pendingPurchaseProm = purchaseService.getPendingPurchase();
-            if (pendingPurchaseProm) {
-                self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
-                pendingPurchaseProm.then(function () {
-                    _checkIfHasProVersion();
-                });
-            } else {
-                _checkIfHasProVersion();
-            }
-
-
-
+            this.subscriptionStatus = '.PROFILE_STATUS_BASIC';  // mock
 
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
@@ -108,7 +83,7 @@
  *
  *   api:
  *     addAdditionalItems function - set items that will be clickable in the header. need to supply object (or array of
- *                                    objects) with the properties: text and onClickHandler
+ *                                    objects) with the properties: text and handler
  */
 
 (function (angular) {
@@ -119,7 +94,7 @@
             var additionalHeaderItems = [];
 
             this.addAdditionalItems = function (additionalItems) {
-                if (!angular.isArray(additionalItems)) {
+                if (!angular.isArray(additionalHeaderItems)) {
                     additionalHeaderItems.push(additionalItems);
                 } else {
                     additionalHeaderItems = additionalItems;
@@ -198,7 +173,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                    <a ui-sref=\"app.performance\" class=\"link-full-item\"></a>\n" +
     "                </md-list-item>\n" +
     "\n" +
-    "                <div ng-repeat=\"headerItem in vm.additionalItems\" ng-click=\"vm.invokeOnClickHandler(headerItem.onClickHandler)\">\n" +
+    "                <div ng-repeat=\"headerItem in vm.additionalItems\" ng-click=\"headerItem.handler()\">\n" +
     "                    <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +
     "                        <span class=\"title\">{{headerItem.text}}</span>\n" +
     "                    </md-list-item>\n" +
