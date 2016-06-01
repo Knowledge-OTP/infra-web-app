@@ -28,6 +28,7 @@
                     // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
                     // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();todo implement once diagnostic service will be ready
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
+                    var getGoals = UserGoalsService.getGoals();
 
                     if (isNavMenuFlag) angular.element.addClass(element[0], 'is-nav-menu');
 
@@ -36,6 +37,7 @@
                             getLatestEstimatedScoreProm,
                             $q.when(false),
                             getSubjectOrderProm
+                            // getGoals
 
                         ]).then(function (res) {
                             var estimatedScore = res[0];
@@ -51,43 +53,20 @@
                                 var estimatedScoreForSubject = estimatedScore[subjectId];
                                 return {
                                     subjectId: subjectId,
-                                    // estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
-                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 10,
-                                    // estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
-                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 30,
-                                    // userGoal: userGoalForSubject,
-                                    userGoal: 25,
-                                    // userGoalPercentage: calcPercentage(userGoalForSubject),
-                                    userGoalPercentage: 60,
+                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
+                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
+                                    userGoal: userGoalForSubject,
+                                    userGoalPercentage: calcPercentage(userGoalForSubject),
                                     pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
-                                    showScore: (+subjectId !== 9)
+                                    showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] != 'undefined')
                                 };
                             });
 
+                            function filterSubjects (widgetItem) {
+                                return !!('showScore' in widgetItem &&  (widgetItem.showScore) != false);
+                            }
 
-                            // var subjectOrder = {
-                            //     [SubjectEnum.ENGLISH.enum]: 0,
-                            //     [SubjectEnum.MATH.enum]: 1,
-                            //     [SubjectEnum.READING.enum]: 2,
-                            //     [SubjectEnum.SCIENCE.enum]: 3,
-                            //     [SubjectEnum.WRITING.enum]: 4
-                            // };
-                            //
-                            // angular.forEach(estimatedScore, function (estimatedScoreForSubject, subjectId) {
-                            //     var subjectIndex = subjectOrder[subjectId];
-                            //     var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                            //     scope.d.widgetItems.push({
-                            //         subjectId: subjectId,
-                            //         estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
-                            //         estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
-                            //         // userGoal: userGoalForSubject,
-                            //         userGoal: 25,
-                            //         // userGoalPercentage: calcPercentage(userGoalForSubject),
-                            //         userGoalPercentage: 60,
-                            //         pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
-                            //         showScore: (+subjectId !== 9)
-                            //     });
-                            // });
+                            scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
 
                             if (!previousValues) {
                                 scope.d.subjectsScores = scope.d.widgetItems;
