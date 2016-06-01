@@ -17486,7 +17486,24 @@ md-dialog.invitation-confirm-modal {
     justify-content: center; }
 
 .invite-teacher-icon {
-  background-image: url("icons/invite-teacher-icon.png"); }
+  /*CSS for basic styling and non-retina image path:*/
+  background-image: url("assets/icons/invite-teacher-icon.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: inline-block;
+  width: 45px;
+  height: 42px;
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  @media only screen and (min-resolution: 1.5dppx) {
+    .invite-teacher-icon {
+      background-image: url("assets/icons/invite-teacher-icon@2x.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      display: inline-block;
+      width: 45px;
+      height: 42px; } }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -17720,7 +17737,11 @@ md-dialog.invite-teacher-modal-wrap {
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .modal-main-title {
       margin-top: 20px;
       text-align: center;
-      margin-bottom: 20px; }
+      margin-bottom: 20px;
+      font-size: 25px;
+      color: #161616;
+      font-family: Quicksand;
+      font-weight: 600; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .invite-teacher-form .znk-input-group input {
       height: 40px;
       padding-left: 10px;

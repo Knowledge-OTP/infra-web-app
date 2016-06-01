@@ -51,14 +51,6 @@
                 _checkIfHasProVersion();
             }
 
-            function _checkIfHasProVersion() {
-                purchaseService.hasProVersion().then(function (hasProVersion) {
-                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
-                });
-            }
-
-
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
             });

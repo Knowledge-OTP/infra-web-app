@@ -77,13 +77,13 @@ workouts-progress {
             border: 1px solid #b7b7b7;
             border-radius: 50%; }
           workouts-progress .items-container .item-container .item.selected.pristine {
-            background: #b7b7b7;
+            background: #81649c;
             color: #ffffff; }
             workouts-progress .items-container .item-container .item.selected.pristine.selected:after {
               border: 1px solid #b7b7b7; }
         workouts-progress .items-container .item-container .item.pristine {
           background: #ffffff;
-          border: 1px solid #b7b7b7;
+          border: 1px solid #81649c;
           color: #b7b7b7; }
         workouts-progress .items-container .item-container .item .check-mark-icon {
           width: 1em; }
