@@ -80,20 +80,22 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv) {
+        function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
             'ngInject';
 
            return {
                 templateUrl: 'components/invitation/directives/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
-                link: function linkFn(scope, element) {
-                    if (!ENV.dashboardFeatureEnabled) {
-                       element.remove();
-                       return;
-                    }
+                link: function linkFn(scope) {
+                    // if (!ENV.dashboardFeatureEnabled) {
+                    //    element.remove();
+                    //    return;
+                    // }
 
                     scope.translate = $filter('translate');
+                    $translatePartialLoader.addPart('invitation');
+
 
                     scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
                     scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
@@ -312,7 +314,8 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
         }
 
         function firebaseListenerRef(userPath) {
-            var authData = AuthService.getAuth();
+            //var authData = AuthService.getAuth();
+            var authData = 'sadssad';
             var fullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + userPath;
             var userFullPath = fullPath.replace('$$uid', authData.uid);
             return new Firebase(userFullPath);
@@ -401,9 +404,9 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
 
             this.openInviteTeacherModal = function () {
                 return $mdDialog.show({
-                    controller: 'InviteTeacherModalController',
+                    controller: 'inviteTeacherModalController',
                     controllerAs: 'vm',
-                    templateUrl: 'app/components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html',
+                    templateUrl: 'components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html',
                     clickOutsideToClose: true,
                     escapeToClose: true
                 });
@@ -584,7 +587,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "</md-dialog>\n" +
     "");
   $templateCache.put("components/invitation/directives/invitation-manager.template.html",
-    "<md-menu md-offset=\"-225 51\" translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\" class=\"invitation-manager\">\n" +
+    "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\">\n" +
+    "<md-menu md-offset=\"-225 51\"  class=\"invitation-manager\">\n" +
     "    <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" aria-label=\"Open Invite menu\" ng-switch=\"hasItems(myTeachers)\">\n" +
     "        <div class=\"num-of-receive\" ng-if=\"hasItems(invitations)\">{{getItemsCount(invitations)}}</div>\n" +
     "        <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
@@ -648,6 +652,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "        </md-list>\n" +
     "    </md-menu-content>\n" +
     "</md-menu>\n" +
+    "</div>\n" +
     "");
   $templateCache.put("components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html",
     "<md-dialog class=\"invite-teacher-modal-wrap\" ng-cloak translate-namespace=\"INVITE_TEACHER_MODAL\">\n" +

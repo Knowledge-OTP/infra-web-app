@@ -34,7 +34,7 @@ md-dialog.invite-teacher-modal-wrap {
     }
 
     md-dialog-content.invite-teacher-content {
-        background-color: $bgColor29;
+        background-color: $bgColor3;
         padding-top: 35px;
         height: 100%;
         @include border-bottom-radius(20px);
@@ -46,7 +46,7 @@ md-dialog.invite-teacher-modal-wrap {
             margin-top: 20px;
             text-align: center;
             margin-bottom: 20px;
-            //@include text-style(25px, $fcColor6, Quicksand, $semiBoldFontWeight);
+            @include text-style(25px, $fontColor2, Quicksand, $semiBoldFontWeight);
         }
 
         .invite-teacher-form {

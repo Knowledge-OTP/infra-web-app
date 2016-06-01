@@ -4,6 +4,6 @@
         '../../../bower_components/infra/dist/mixins/mixins',
         './approveModal/invitationApproveModal.scss',
         './directives/invitation-manager.scss',
-        './inviteTeacherModal/inviteTeacherModal.scss';
+        './inviteTeacherModal/inviteTeacherModal.scss',
+        '../../scss/imports/angular-material-override';
 
-//colors from tfl 962;

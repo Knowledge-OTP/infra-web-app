@@ -78,9 +78,9 @@
 
             this.openInviteTeacherModal = function () {
                 return $mdDialog.show({
-                    controller: 'InviteTeacherModalController',
+                    controller: 'inviteTeacherModalController',
                     controllerAs: 'vm',
-                    templateUrl: 'app/components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html',
+                    templateUrl: 'components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html',
                     clickOutsideToClose: true,
                     escapeToClose: true
                 });

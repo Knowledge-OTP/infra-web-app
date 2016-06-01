@@ -17485,6 +17485,9 @@ md-dialog.invitation-confirm-modal {
     display: flex;
     justify-content: center; }
 
+.invite-teacher-icon {
+  background-image: url("icons/invite-teacher-icon.png"); }
+
 /* full background image with retina */
 /* full background image with retina */
 /* fonts size */
@@ -17706,7 +17709,7 @@ md-dialog.invite-teacher-modal-wrap {
       md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg-icon * {
         stroke: white; }
   md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content {
-    background-color: #085c66;
+    background-color: #ffffff;
     padding-top: 35px;
     height: 100%;
     border-bottom-right-radius: 20px;
@@ -17770,3 +17773,212 @@ md-dialog.invite-teacher-modal-wrap {
           stroke: #085c66; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon * {
           fill: #085c66; }
+
+a.md-button,
+.md-button {
+  font-size: 16px;
+  color: #161616;
+  font-family: Lato;
+  font-weight: 400;
+  text-transform: none;
+  width: 170px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafaff;
+  border-radius: 21px;
+  position: relative; }
+  a.md-button i,
+  .md-button i {
+    margin-left: 10px; }
+  a.md-button i.positioned,
+  .md-button i.positioned {
+    position: absolute;
+    left: 25px;
+    top: 10px;
+    margin-left: 0; }
+  a.md-button.default,
+  .md-button.default {
+    background-color: transparent;
+    color: #0a9bad;
+    border: none;
+    padding: 0; }
+    a.md-button.default:active,
+    .md-button.default:active {
+      background-color: transparent; }
+    a.md-button.default:hover,
+    .md-button.default:hover {
+      background-color: transparent; }
+  a.md-button.primary,
+  .md-button.primary {
+    background-color: #0a9bad;
+    color: white; }
+    a.md-button.primary:active,
+    .md-button.primary:active {
+      background-color: #037684; }
+    a.md-button.primary:hover,
+    .md-button.primary:hover {
+      background-color: #0a8999; }
+  a.md-button.warn,
+  .md-button.warn {
+    background-color: #ff931e;
+    color: white; }
+    a.md-button.warn:active,
+    .md-button.warn:active {
+      background-color: #a65e10; }
+    a.md-button.warn:hover,
+    .md-button.warn:hover {
+      background-color: #d67914; }
+  a.md-button.success,
+  .md-button.success {
+    background-color: #87ca4d;
+    color: white; }
+    a.md-button.success:active,
+    .md-button.success:active {
+      background-color: #67a531; }
+    a.md-button.success:hover,
+    .md-button.success:hover {
+      background-color: #76b63e; }
+    a.md-button.success.drop-shadow,
+    .md-button.success.drop-shadow {
+      box-shadow: 0px 3px 0px 0px #085c66; }
+  a.md-button.facebook,
+  .md-button.facebook {
+    background-color: #037684;
+    color: white; }
+    a.md-button.facebook:active,
+    .md-button.facebook:active {
+      background-color: #0a8999; }
+    a.md-button.facebook:hover, a.md-button.facebook:visited,
+    .md-button.facebook:hover,
+    .md-button.facebook:visited {
+      background-color: #a65e10; }
+  a.md-button.google,
+  .md-button.google {
+    background-color: #df4a31;
+    color: white; }
+    a.md-button.google:active,
+    .md-button.google:active {
+      background-color: #0a8999; }
+    a.md-button.google:hover, a.md-button.google:visited,
+    .md-button.google:hover,
+    .md-button.google:visited {
+      background-color: #D93418; }
+  a.md-button.outline-green,
+  .md-button.outline-green {
+    background: #ff931e;
+    border: 1px solid #87ca4d;
+    color: #87ca4d; }
+    a.md-button.outline-green:active,
+    .md-button.outline-green:active {
+      background-color: #E8E8E8; }
+  a.md-button.outline-blue,
+  .md-button.outline-blue {
+    background: #ffffff;
+    border: 1px solid #0a9bad;
+    color: #0a9bad; }
+    a.md-button.outline-blue:active,
+    .md-button.outline-blue:active {
+      background-color: #c7e0e3; }
+    a.md-button.outline-blue:hover,
+    .md-button.outline-blue:hover {
+      border-color: #037684;
+      color: #037684; }
+  a.md-button.lg,
+  .md-button.lg {
+    width: 340px; }
+  a.md-button.md,
+  .md-button.md {
+    width: 280px; }
+  a.md-button.md-sm,
+  .md-button.md-sm {
+    width: 220px; }
+  a.md-button.sm,
+  .md-button.sm {
+    width: 130px; }
+  a.md-button:not([disabled]).success,
+  .md-button:not([disabled]).success {
+    background-color: #76b63e; }
+  a.md-button:not([disabled]).primary,
+  .md-button:not([disabled]).primary {
+    background-color: #067f8e; }
+  a.md-button:not([disabled]).default,
+  .md-button:not([disabled]).default {
+    background-color: transparent; }
+  a.md-button.outline-green:not([disabled]):hover,
+  .md-button.outline-green:not([disabled]):hover {
+    background-color: rgba(255, 255, 255, 0.55); }
+
+md-progress-linear.znk-progress-linear-exercise-bar .md-bar {
+  background-color: #c5cae9;
+  transition: 0.4s; }
+
+md-progress-linear.green-state .md-bar {
+  background-color: #d67914; }
+
+md-progress-linear.orange-state .md-bar {
+  background-color: #ff931e; }
+
+md-progress-linear.red-state .md-bar {
+  background-color: #E8E8E8; }
+
+md-input-container.md-input-has-value [ng-messages] {
+  opacity: 0;
+  margin-top: -100px; }
+
+md-input-container:not(.md-input-invalid) .md-input {
+  border-color: #161616; }
+
+md-input-container:not(.md-input-invalid) label {
+  color: #161616; }
+
+md-tooltip {
+  opacity: 0;
+  width: auto;
+  height: 87px;
+  background: white;
+  padding: 0 5px; }
+  md-tooltip .md-content {
+    height: auto;
+    text-align: center;
+    background: white;
+    white-space: normal; }
+    md-tooltip .md-content.md-show {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      pointer-events: auto;
+      will-change: auto; }
+    md-tooltip .md-content.md-show-remove {
+      transition: none; }
+      md-tooltip .md-content.md-show-remove.md-show-remove-active {
+        transform: none;
+        opacity: 0; }
+    md-tooltip .md-content .top-text {
+      margin-top: 22px;
+      margin-bottom: 12px;
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400; }
+    md-tooltip .md-content .bottom-text {
+      line-height: 12px;
+      font-size: 12px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300; }
+  md-tooltip.md-hide {
+    transition: opacity 0.4s;
+    opacity: 0; }
+  md-tooltip.md-show {
+    opacity: 1;
+    transition: opacity 0.4s;
+    pointer-events: auto;
+    will-change: opacity; }
+
+md-dialog .close-popup {
+  width: 16px; }
+
+.md-dialog-container {
+  overflow: visible; }

@@ -66,7 +66,7 @@ a.md-button,
         }
 
         &.drop-shadow {
-            box-shadow: 0px 3px 0px 0px $bgColor15;
+            box-shadow: 0px 3px 0px 0px $bgColor29;
         }
     }
 
@@ -102,7 +102,7 @@ a.md-button,
     }
 
     &.outline-blue {
-        background: $bgColor2;
+        background: $bgColor3;
         border: 1px solid $borderColor4;
         color: $fontColor6;
         &:active {
@@ -131,7 +131,7 @@ a.md-button,
 
     &:not([disabled])/*.md-focused */{
         &.success {
-            background-color: $bgColor19;
+            background-color: $bgColor14;
         }
         &.primary {
             background-color: $bgColor20;

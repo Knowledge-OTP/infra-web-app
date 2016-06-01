@@ -17466,7 +17466,7 @@ a.md-button,
       background-color: #76b63e; }
     a.md-button.success.drop-shadow,
     .md-button.success.drop-shadow {
-      box-shadow: 0px 3px 0px 0px #72ab40; }
+      box-shadow: 0px 3px 0px 0px #085c66; }
   a.md-button.facebook,
   .md-button.facebook {
     background-color: #037684;
@@ -17499,7 +17499,7 @@ a.md-button,
       background-color: #E8E8E8; }
   a.md-button.outline-blue,
   .md-button.outline-blue {
-    background: #ff931e;
+    background: #ffffff;
     border: 1px solid #0a9bad;
     color: #0a9bad; }
     a.md-button.outline-blue:active,
@@ -17523,7 +17523,7 @@ a.md-button,
     width: 130px; }
   a.md-button:not([disabled]).success,
   .md-button:not([disabled]).success {
-    background-color: #c7e0e3; }
+    background-color: #76b63e; }
   a.md-button:not([disabled]).primary,
   .md-button:not([disabled]).primary {
     background-color: #067f8e; }
