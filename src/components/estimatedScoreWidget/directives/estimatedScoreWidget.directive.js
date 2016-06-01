@@ -28,7 +28,6 @@
                     // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
                     // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();todo implement once diagnostic service will be ready
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
-                    var getGoals = UserGoalsService.getGoals();
 
                     if (isNavMenuFlag) angular.element.addClass(element[0], 'is-nav-menu');
 
@@ -37,7 +36,6 @@
                             getLatestEstimatedScoreProm,
                             $q.when(false),
                             getSubjectOrderProm
-                            // getGoals
 
                         ]).then(function (res) {
                             var estimatedScore = res[0];
@@ -54,6 +52,7 @@
                                 return {
                                     subjectId: subjectId,
                                     estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
+                                    // estimatedScore: 30,
                                     estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
@@ -86,7 +85,7 @@
 
                     function calcPercentage(correct) {
                         // return (correct / appConstants.MAX_ESTIMATED_SCORE) * 100;
-                        return (correct / 600) * 100;
+                        return (correct / 800) * 100;
                     }
 
                     // TODO: this should come from a service, duplicated from znk-header
