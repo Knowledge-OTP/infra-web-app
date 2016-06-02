@@ -5,6 +5,10 @@
      viewBox="0 0 80 80"
      class="verbal-svg">
     <style>
+        .verbal-svg{
+            width: 45px;
+        }
+
         .verbal-svg path{
             fill: #F9D41B;
         }

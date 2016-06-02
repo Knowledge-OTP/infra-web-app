@@ -1,7 +1,7 @@
 <div class="workouts-roadmap-intro base-workouts-wrapper"
      translate-namespace="WORKOUTS_ROADMAP_WORKOUT_INTRO">
     <div class="workouts-roadmap-intro-wrapper">
-        <div class="title">
+        <div class="title-wrapper">
             <div translate=".TITLE" translate-values="{workoutOrder: vm.workoutOrder}"></div>
         </div>
         <svg-icon class="subject-icon"
@@ -26,10 +26,12 @@
              translate=".HOW_MUCH_TIME">
         </div>
         <div class="workout-time-selection-container">
-            <div class="avail-time-item"
-                 ng-repeat="workoutAvailTime in vm.workoutAvailTimes"
-                 ng-click="vm.selectedTime = workoutAvailTime;">
-                {{workoutAvailTime}}
+            <div class="avail-time-item-wrapper"
+                 ng-repeat="workoutAvailTime in vm.workoutAvailTimes">
+                <div class="avail-time-item"
+                     ng-click="vm.selectedTime = workoutAvailTime;">
+                    {{workoutAvailTime}}
+                </div>
             </div>
         </div>
         <div class="start-btn-wrapper">

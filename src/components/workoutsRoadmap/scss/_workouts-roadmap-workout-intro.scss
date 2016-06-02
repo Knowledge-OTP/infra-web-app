@@ -4,7 +4,10 @@
             family: Quicksand;
         }
 
-        .title{
+        .title-wrapper{
+            margin: {
+                top: 26px;
+            };
             font:{
                 weight: $boldFontWeight;
                 size: 21px;
@@ -58,9 +61,39 @@
         }
 
         .workout-time-selection-container{
-            .avail-time-item{
-                border-radius: 6px;
-                border: 1px solid
+            display: flex;
+            justify-content: center;
+            margin: {
+                top: 33px;
+            };
+
+            .avail-time-item-wrapper{
+                margin: {
+                    right: 15px;
+                };
+
+                &:last-child{
+                    margin: {
+                        right: 0;
+                    };
+                }
+
+                .avail-time-item{
+                    border-radius: 6px;
+                    border: 2px solid $borderColor13;
+                    box-sizing: border-box;
+                    @include dimension(160px, 80px);
+                    margin: {
+                        right: auto;
+                        left: auto;
+                    };
+                }
+            }
+        }
+
+        .start-btn-wrapper{
+            margin: {
+                top: 50px;
             }
         }
     }
