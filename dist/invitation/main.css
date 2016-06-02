@@ -17487,7 +17487,7 @@ md-dialog.invitation-confirm-modal {
 
 .invite-teacher-icon {
   /*CSS for basic styling and non-retina image path:*/
-  background-image: url("assets/icons/invite-teacher-icon.png");
+  background-image: url("znkHeader/assets/icons/invite-teacher-icon.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -17497,7 +17497,7 @@ md-dialog.invitation-confirm-modal {
   /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
   @media only screen and (min-resolution: 1.5dppx) {
     .invite-teacher-icon {
-      background-image: url("assets/icons/invite-teacher-icon@2x.png");
+      background-image: url("znkHeader/assets/icons/invite-teacher-icon@2x.png");
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
