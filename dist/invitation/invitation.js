@@ -13,7 +13,8 @@
             function(SvgIconSrvProvider){
 
                 var svgMap = {
-                    'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg'
+                    'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
+                    'invitation-close-popup': 'components/invitation/svg/close-popup.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -658,7 +659,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "<md-dialog class=\"invite-teacher-modal-wrap\" ng-cloak translate-namespace=\"INVITE_TEACHER_MODAL\">\n" +
     "    <md-toolbar>\n" +
     "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
-    "            <svg-icon name=\"close-popup\"></svg-icon>\n" +
+    "            <svg-icon name=\"invitation-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
     "    </md-toolbar>\n" +
     "    <md-dialog-content class=\"modal-content invite-teacher-content\" ng-switch=\"!!vm.showSuccess\">\n" +
@@ -709,6 +710,26 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "        </div>\n" +
     "    </div>\n" +
     "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/close-popup.svg",
+    "<svg\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\"\n" +
+    "    class=\"invitation-close-popup\">\n" +
+    "    <style>\n" +
+    "\n" +
+    "        .invitation-close-popup .st0{fill:none;}\n" +
+    "        .invitation-close-popup .st1{fill:none;stroke:$bgColor3;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
     "");
   $templateCache.put("components/invitation/svg/teacher-icon.svg",
     "<svg version=\"1.1\"\n" +

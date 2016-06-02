@@ -35433,12 +35433,13 @@ md-dialog.invite-teacher-modal-wrap {
       position: absolute;
       top: -35px;
       right: -35px;
-      height: 14px;
-      width: 14px;
       padding: 10px;
       cursor: pointer; }
-      md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg-icon * {
-        stroke: white; }
+      md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg {
+        height: 14px;
+        width: 14px; }
+        md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg line {
+          stroke: white; }
   md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content {
     background-color: #ffffff;
     padding-top: 35px;
@@ -107444,12 +107445,13 @@ md-dialog.invite-teacher-modal-wrap {
       position: absolute;
       top: -35px;
       right: -35px;
-      height: 14px;
-      width: 14px;
       padding: 10px;
       cursor: pointer; }
-      md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg-icon * {
-        stroke: white; }
+      md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg {
+        height: 14px;
+        width: 14px; }
+        md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg line {
+          stroke: white; }
   md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content {
     background-color: #ffffff;
     padding-top: 35px;
@@ -107803,7 +107805,7 @@ md-dialog .close-popup {
       margin-bottom: 5px; }
     .md-open-menu-container .header-modal-item.header-modal-item-profile .email {
       font-size: 14px;
-      color: #87ca4d;
+      color: #acacac;
       font-family: Lato;
       font-weight: 300;
       border-bottom: 1px solid #0a9bad;
@@ -107819,7 +107821,7 @@ md-dialog .close-popup {
     .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
       color: #161616; }
     .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
-      color: #ffffff; }
+      color: #898989; }
   .md-open-menu-container .header-modal-item .check-mark-wrapper {
     position: relative;
     top: -2px;

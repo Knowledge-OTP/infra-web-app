@@ -17719,12 +17719,13 @@ md-dialog.invite-teacher-modal-wrap {
       position: absolute;
       top: -35px;
       right: -35px;
-      height: 14px;
-      width: 14px;
       padding: 10px;
       cursor: pointer; }
-      md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg-icon * {
-        stroke: white; }
+      md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg {
+        height: 14px;
+        width: 14px; }
+        md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg line {
+          stroke: white; }
   md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content {
     background-color: #ffffff;
     padding-top: 35px;

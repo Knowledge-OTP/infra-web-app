@@ -117,7 +117,7 @@
                 margin-bottom: 5px;
             }
             .email {
-                @include text-style(14px, $fontColor7, Lato, 300);
+                @include text-style(14px, $fontColor14, Lato, 300);
                 border-bottom: 1px solid $borderColor4;
                 width: 100%;
                 padding-bottom: 15px;
@@ -134,7 +134,7 @@
                 color: $fontColor2;
             }
             &.logout {
-                color: $fontColor8;
+                color: $fontColor12;
             }
         }
         .check-mark-wrapper {

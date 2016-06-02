@@ -22,13 +22,15 @@ md-dialog.invite-teacher-modal-wrap {
 
         .close-popup-wrap {
             @include absolute-position(-35px, -35px);
-            height:14px;
-            width: 14px;
             padding: 10px;
             cursor: pointer;
 
-            svg-icon *{
-                stroke: white;
+            svg{
+                height:14px;
+                width: 14px;
+                line {
+                    stroke: white;
+                }
             }
         }
     }
