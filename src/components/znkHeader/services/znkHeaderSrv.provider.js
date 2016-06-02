@@ -10,13 +10,13 @@
     angular.module('znk.infra-web-app.znkHeader').provider('znkHeaderSrv',
 
         function () {
-            var additionalHeaderItems = [];
+            var additionalNavMenuItems = [];
 
-            this.addAdditionalItems = function (additionalItems) {
+            this.addAdditionalNavMenuItems = function (additionalItems) {
                 if (!angular.isArray(additionalItems)) {
-                    additionalHeaderItems.push(additionalItems);
+                    additionalNavMenuItems.push(additionalItems);
                 } else {
-                    additionalHeaderItems = additionalItems;
+                    additionalNavMenuItems = additionalItems;
                 }
             };
 
@@ -47,7 +47,7 @@
 
                 return {
                     getAdditionalItems: function () {
-                        return navItemsArray.concat(additionalHeaderItems);  // return array of default nav items with additional nav items
+                        return navItemsArray.concat(additionalNavMenuItems);  // return array of default nav items with additional nav items
                     }
                 };
             }];
