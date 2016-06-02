@@ -81,6 +81,8 @@
 
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
         function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
+            'ngInject';
+
             return {
                 templateUrl:  'components/purchase/templates/purchaseBtn.template.html',
                 restrict: 'E',

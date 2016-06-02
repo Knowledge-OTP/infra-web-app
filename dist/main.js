@@ -1688,6 +1688,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
         ["ENV", "$q", "$sce", "AuthService", "UserProfileService", "$location", "purchaseService", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
+            'ngInject';
+
             return {
                 templateUrl:  'components/purchase/templates/purchaseBtn.template.html',
                 restrict: 'E',
@@ -3931,6 +3933,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
             'znk.infra.svgIcon',
             'znk.infra.popUp',
             'pascalprecht.translate',
+            'ui.router',
             'znk.infra-web-app.purchase',
             'znk.infra.user',
             'znk.infra-web-app.invitation'])
@@ -4047,45 +4050,34 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
                 }
             };
 
-            this.$get = [function () {
-                return {
-                    getAdditionalItems: function () {
-                        return additionalHeaderItems;
-                    }
-                };
-            }];
+            this.$get = ['$state', function ($state) {
+                var navItemsArray = [];
 
-        }
-    );
-})(angular);
-
-
-/**
- *
- *   api:
- *     addAdditionalItems function - set items that will be clickable in the header. need to supply object (or array of
- *                                    objects) with the properties: text and onClickHandler
- */
-
-(function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.znkHeader').provider('znkHeaderSrv',
-
-        function () {
-            var additionalHeaderItems = [];
-
-            this.addAdditionalItems = function (additionalItems) {
-                if (!angular.isArray(additionalItems)) {
-                    additionalHeaderItems.push(additionalItems);
-                } else {
-                    additionalHeaderItems = additionalItems;
+                function addDefaultNavItem(_text, _onClickHandler){
+                    var navItem = {
+                        text: _text,
+                        onClickHandler: _onClickHandler
+                    };
+                    navItemsArray.push(navItem);
                 }
-            };
 
-            this.$get = [function () {
+                function _onClickHandler(stateAsString, stateParams, options){
+                    if(angular.isDefined(stateParams) || angular.isDefined(options)){
+                        $state.go(stateAsString, stateParams, options);
+                    }
+                    else {
+                        $state.go(stateAsString);
+                    }
+                }
+
+                addDefaultNavItem('ZNK_HEADER.WORKOUTS', _onClickHandler.bind(null, 'app.workouts.roadmap', {}, {reload:true}));
+                addDefaultNavItem('ZNK_HEADER.TESTS', _onClickHandler.bind(null, 'app.tests.roadmap'));
+                addDefaultNavItem('ZNK_HEADER.TUTORIALS', _onClickHandler.bind(null, 'app.tutorials.roadmap'));
+                addDefaultNavItem('ZNK_HEADER.PERFORMANCE', _onClickHandler.bind(null, 'app.performance'));
+
                 return {
                     getAdditionalItems: function () {
-                        return additionalHeaderItems;
+                        return navItemsArray.concat(additionalHeaderItems);  // return array of default nav items with additional nav items
                     }
                 };
             }];
@@ -4132,38 +4124,17 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                  ui-sref=\"app.workouts.roadmap\"\n" +
     "                  ui-sref-opts=\"{reload: true}\">\n" +
     "        </svg-icon>\n" +
+    "\n" +
     "        <div class=\"app-states-list\">\n" +
     "            <md-list flex=\"grow\" layout=\"row\" layout-align=\"start center\">\n" +
-    "                <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +
-    "                    <span class=\"title\" translate=\".WORKOUTS\"></span>\n" +
-    "                    <a ui-sref=\"app.workouts.roadmap\"\n" +
-    "                       ui-sref-opts=\"{reload: true}\"\n" +
-    "                       class=\"link-full-item\">\n" +
-    "                    </a>\n" +
-    "                </md-list-item>\n" +
-    "                <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +
-    "                    <span class=\"title\" translate=\".TESTS\"></span>\n" +
-    "                    <a ui-sref=\"app.tests.roadmap\" class=\"link-full-item\"></a>\n" +
-    "                </md-list-item>\n" +
-    "                <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +
-    "                    <span class=\"title\" translate=\".TUTORIALS\"></span>\n" +
-    "                    <a ui-sref=\"app.tutorials.roadmap\" class=\"link-full-item\"></a>\n" +
-    "                </md-list-item>\n" +
-    "                <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +
-    "                    <span class=\"title\" translate=\".PERFORMANCE\"></span>\n" +
-    "                    <a ui-sref=\"app.performance\" class=\"link-full-item\"></a>\n" +
-    "                </md-list-item>\n" +
-    "\n" +
     "                <div ng-repeat=\"headerItem in vm.additionalItems\" ng-click=\"vm.invokeOnClickHandler(headerItem.onClickHandler)\">\n" +
     "                    <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +
-    "                        <span class=\"title\">{{headerItem.text}}</span>\n" +
+    "                        <span class=\"title\" translate=\"{{headerItem.text}}\"></span>\n" +
     "                    </md-list-item>\n" +
     "                </div>\n" +
     "            </md-list>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
     "        </div>\n" +
+    "\n" +
     "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
     "            <invitation-manager></invitation-manager>\n" +
     "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +

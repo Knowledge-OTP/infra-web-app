@@ -17471,25 +17471,6 @@ md-dialog.invitation-confirm-modal {
           stroke: #067f8e; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon * {
           fill: #067f8e; }
-        md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
-          /*CSS for basic styling and non-retina image path:*/
-          background-image: url("assets/icons/invite-teacher-icon.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 45px;
-          height: 42px;
-          /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-          @media only screen and (min-resolution: 1.5dppx) {
-            md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
-              background-image: url("assets/icons/invite-teacher-icon@2x.png");
-              background-repeat: no-repeat;
-              background-position: center;
-              background-size: cover;
-              display: inline-block;
-              width: 45px;
-              height: 42px; } }
   md-dialog.invitation-confirm-modal .big-success-msg .completed-v-icon-wrap {
     width: 75px;
     margin: 8px auto; }
@@ -17797,6 +17778,25 @@ md-dialog.invite-teacher-modal-wrap {
           stroke: #085c66; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon * {
           fill: #085c66; }
+        md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
+          /*CSS for basic styling and non-retina image path:*/
+          background-image: url("assets/icons/invite-teacher-icon.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          display: inline-block;
+          width: 45px;
+          height: 42px;
+          /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+          @media only screen and (min-resolution: 1.5dppx) {
+            md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
+              background-image: url("assets/icons/invite-teacher-icon@2x.png");
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: cover;
+              display: inline-block;
+              width: 45px;
+              height: 42px; } }
 
 a.md-button,
 .md-button {
