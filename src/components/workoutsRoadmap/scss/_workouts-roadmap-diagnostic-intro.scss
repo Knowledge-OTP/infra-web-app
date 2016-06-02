@@ -7,28 +7,6 @@
         @include text-style(21px, $fontColor3, Quicksand, $boldFontWeight);
     }
 
-    @keyframes scaleIcon {
-        100% {
-            transform: scale(2);
-        }
-    }
-
-    .icon-settings {
-        margin: 80px auto 0;
-        max-width: 110px;
-
-        &.pre-summary {
-            width: 60px;
-            &.pre-summary-animate {
-                animation-name: scaleIcon;
-                animation-duration: 1s;
-                animation-iteration-count: 1;
-                animation-timing-function: ease-out;
-                animation-fill-mode: forwards;
-            }
-        }
-    }
-
     .complete-text {
         margin-top: 52px;
         @include text-style(23px, $fontColor3, Quicksand, $regularFontWeight);

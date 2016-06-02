@@ -1,5 +1,9 @@
 .md-button.znk{
     &.md-primary{
+        cursor: pointer;
+    }
+
+    &.md-primary{
         color: $fontColor8;
         background: $bgColor5;
         padding: {

@@ -8,6 +8,10 @@
 	style="enable-background:new -1040 834.9 220.4 220.4;"
     xml:space="preserve">
 <style type="text/css">
+    .complete-v-icon-svg{
+        width: 110px;
+    }
+
 	.complete-v-icon-svg .st0 {
         fill: none;
     }

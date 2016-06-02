@@ -5,6 +5,8 @@
         function (data, $state, WorkoutsRoadmapSrv, $q, $scope) {
             'ngInject';
 
+            var FIRST_WORKOUT_ORDER = 1;
+
             var vm = this;
 
             var currWorkout = data.exercise;
@@ -22,10 +24,13 @@
 
             var getPersonalizedWorkoutsByTimeProm;
             if(!currWorkout.personalizedTimes){
-                var FIRST_WORKOUT_ORDER = 1;
-                var prevWorkoutOrder = currWorkout.workoutOrder - 1;
-                var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder] : null;
-                getPersonalizedWorkoutsByTimeProm  = WorkoutsRoadmapSrv.generateNewExercise(prevWorkout.subjectId);
+                var subjectsToIgnore;
+                if(currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER){
+                    var prevWorkoutOrder = currWorkout.workoutOrder - 1;
+                    var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder] : null;
+                    subjectsToIgnore = prevWorkout.subjectId;
+                }
+                getPersonalizedWorkoutsByTimeProm  = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore);
             }else{
                 getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
             }
@@ -47,7 +52,7 @@
                 if(angular.isUndefined(newSelectedTime)){
                     return;
                 }
-                
+
                 getPersonalizedWorkoutsByTimeProm.then(function(workoutsByTime){
                     vm.selectedWorkout = workoutsByTime[newSelectedTime];
                 });
