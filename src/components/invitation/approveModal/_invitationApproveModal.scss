@@ -99,8 +99,9 @@ md-dialog.invitation-confirm-modal{
                     fill: $bgColor20;
                 }
 
-
-
+                .invite-teacher-icon{
+                    @include full-background-image-retina('assets/icons/invite-teacher-icon',45px, 42px);
+                }
             }
         }
     }
@@ -121,8 +122,4 @@ md-dialog.invitation-confirm-modal{
             justify-content: center;
         }
     }
-}
-
-.invite-teacher-icon{
-    @include full-background-image-retina('assets/icons/invite-teacher-icon',45px, 42px);
 }

@@ -35065,6 +35065,25 @@ md-dialog.invitation-confirm-modal {
           stroke: #067f8e; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon * {
           fill: #067f8e; }
+        md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
+          /*CSS for basic styling and non-retina image path:*/
+          background-image: url("assets/icons/invite-teacher-icon.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          display: inline-block;
+          width: 45px;
+          height: 42px;
+          /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+          @media only screen and (min-resolution: 1.5dppx) {
+            md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
+              background-image: url("assets/icons/invite-teacher-icon@2x.png");
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: cover;
+              display: inline-block;
+              width: 45px;
+              height: 42px; } }
   md-dialog.invitation-confirm-modal .big-success-msg .completed-v-icon-wrap {
     width: 75px;
     margin: 8px auto; }
@@ -35078,26 +35097,6 @@ md-dialog.invitation-confirm-modal {
   md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
     display: flex;
     justify-content: center; }
-
-.invite-teacher-icon {
-  /*CSS for basic styling and non-retina image path:*/
-  background-image: url("znkHeader/assets/icons/invite-teacher-icon.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  display: inline-block;
-  width: 45px;
-  height: 42px;
-  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-  @media only screen and (min-resolution: 1.5dppx) {
-    .invite-teacher-icon {
-      background-image: url("znkHeader/assets/icons/invite-teacher-icon@2x.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      display: inline-block;
-      width: 45px;
-      height: 42px; } }
 
 /* full background image with retina */
 /* full background image with retina */
