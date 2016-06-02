@@ -1,51 +1,67 @@
 .workouts-roadmap-intro{
-    font:{
-        family: Quicksand;
-    }
-    .title{
+    .workouts-roadmap-intro-wrapper{
         font:{
-            weight: $boldFontWeight;
-            size: 21px;
+            family: Quicksand;
         }
-    }
 
-    .subject-icon{
-
-    }
-
-    .subject-title{
-        font:{
-            weight: $regularFontWeight;
-            size: 18px;
+        .title{
+            font:{
+                weight: $boldFontWeight;
+                size: 21px;
+            }
         }
-    }
 
-    .change-subject-container {
-        cursor: pointer;
+        .subject-icon{
+            height: 105px;
+        }
 
-        &.rotate {
-            svg-icon {
-                svg {
-                    animation: rotateAnimation 0.9s infinite linear;
+        .subject-title{
+            font:{
+                weight: $regularFontWeight;
+                size: 18px;
+            }
+        }
+
+        .change-subject-container {
+            cursor: pointer;
+            margin: {
+                top: 5px;
+            }
+
+            &.rotate {
+                svg-icon {
+                    svg {
+                        animation: rotateAnimation 0.9s infinite linear;
+                    }
+                }
+            }
+
+            .change-subject-title{
+                font:{
+                    family: Lato;
+                    weight: $lightFontWeight;
+                    size: 12px;
                 }
             }
         }
 
-        .change-subject-title{
+        .how-much-time-title{
+            margin: {
+                top: 28px;
+            }
+
             font:{
                 family: Lato;
-                weight: $lightFontWeight;
-                size: 12px;
+                weight: $regularFontWeight;
+                size: 18px;
+            }
+        }
+
+        .workout-time-selection-container{
+            .avail-time-item{
+                border-radius: 6px;
+                border: 1px solid
             }
         }
     }
-
-    .how-much-time-title{
-        font:{
-            family: Lato;
-            weight: $regularFontWeight;
-            size: 18px;
-        }
-    }
-
 }

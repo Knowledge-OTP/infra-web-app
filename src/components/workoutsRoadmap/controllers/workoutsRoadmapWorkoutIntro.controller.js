@@ -2,7 +2,7 @@
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        function (data, $state, WorkoutsRoadmapSrv, $q, $scope) {
+        function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -22,31 +22,35 @@
                 vm.workoutAvailTimes = workoutAvailTimes;
             });
 
-            var getPersonalizedWorkoutsByTimeProm;
-            if(!currWorkout.personalizedTimes){
-                var subjectsToIgnore;
-                if(currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER){
-                    var prevWorkoutOrder = currWorkout.workoutOrder - 1;
-                    var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder] : null;
-                    subjectsToIgnore = prevWorkout.subjectId;
-                }
-                getPersonalizedWorkoutsByTimeProm  = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore);
-            }else{
-                getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
-            }
+            var prevWorkoutOrder = currWorkout.workoutOrder - 1;
+            var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder] : data.diagnostic;
 
-            getPersonalizedWorkoutsByTimeProm.then(function(workoutsByTime){
-                vm.workoutsByTime = workoutsByTime;
-                WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function(workoutAvailTimes){
-                    for(var i in workoutAvailTimes){
-                        var time = workoutAvailTimes[i];
-                        if(workoutsByTime[time]){
-                            vm.selectedTime = time;
-                            break;
-                        }
+            if(prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum){
+                var getPersonalizedWorkoutsByTimeProm;
+                if(!currWorkout.personalizedTimes){
+                    var subjectsToIgnore;
+                    if(currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER){
+
+                        subjectsToIgnore = prevWorkout.subjectId;
                     }
+                    getPersonalizedWorkoutsByTimeProm  = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore);
+                }else{
+                    getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
+                }
+
+                getPersonalizedWorkoutsByTimeProm.then(function(workoutsByTime){
+                    vm.workoutsByTime = workoutsByTime;
+                    WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function(workoutAvailTimes){
+                        for(var i in workoutAvailTimes){
+                            var time = workoutAvailTimes[i];
+                            if(workoutsByTime[time]){
+                                vm.selectedTime = time;
+                                break;
+                            }
+                        }
+                    });
                 });
-            });
+            }
 
             $scope.$watch('vm.selectedTime', function(newSelectedTime){
                 if(angular.isUndefined(newSelectedTime)){

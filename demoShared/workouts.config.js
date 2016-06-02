@@ -2,14 +2,14 @@
 
 angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvider){
     $stateProvider.state('workoutsRoadmap.diagnostic.summary', {
-        template: 
+        template:
             '<div>Diagnostic SUMMARY</div>' +
             '<button ui-sref="workoutsRoadmap.workout">Go To Workout</button>',
         controller: function(){
 
         }
     }).state('workoutsRoadmap.workout.inProgress', {
-        template: 
+        template:
             '<div>Diagnostic SUMMARY</div>' +
             '<button ng-click="vm.continue()">Continue work</button>',
         controller: function(){
@@ -29,11 +29,11 @@ angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvide
                 },
                 5: {
                     id: 2,
-                    subjectId: 1
+                    subjectId: 0
                 },
                 10:{
                     id: 3,
-                    subjectId: 2
+                    subjectId: 0
                 }
             });
         };

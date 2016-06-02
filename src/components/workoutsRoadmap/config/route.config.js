@@ -62,7 +62,7 @@
                 })
                 .state('workoutsRoadmap.workout', {
                     url: '/workout?workout',
-                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkout.template.html',
+                    template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapWorkoutController',
                     controllerAs: 'vm'
                 })

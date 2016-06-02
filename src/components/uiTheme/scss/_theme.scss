@@ -9,3 +9,7 @@
 .base-border-radius{
     border-radius: $baseBorderRadiusCorner;
 }
+
+.base-box-shadow {
+    box-shadow: 0 3px 7px 0 $bsColor3;
+}
