@@ -98,10 +98,6 @@ md-dialog.invitation-confirm-modal{
                 .exclamation-mark-icon *{
                     fill: $bgColor20;
                 }
-
-                .invite-teacher-icon{
-                    @include full-background-image-retina('assets/icons/invite-teacher-icon',45px, 42px);
-                }
             }
         }
     }

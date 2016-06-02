@@ -17466,7 +17466,7 @@ a.md-button,
       background-color: #76b63e; }
     a.md-button.success.drop-shadow,
     .md-button.success.drop-shadow {
-      box-shadow: 0px 3px 0px 0px #085c66; }
+      box-shadow: 0px 3px 0px 0px #f8f8f8; }
   a.md-button.facebook,
   .md-button.facebook {
     background-color: #037684;
@@ -35254,12 +35254,15 @@ invitation-manager .teacher-icon-wrap {
   invitation-manager .teacher-icon-wrap .teacher-icon {
     width: 24px; }
 
-invitation-manager .teacher-active-icon-wrap {
+invitation-manager +
+.teacher-active-icon-wrap {
   border: 1px solid #0a9bad; }
-  invitation-manager .teacher-active-icon-wrap .teacher-active-icon {
+  invitation-manager +
+.teacher-active-icon-wrap .teacher-active-icon {
     width: 23px;
     height: 16px; }
-  invitation-manager .teacher-active-icon-wrap .teacher-active-icon * {
+  invitation-manager +
+.teacher-active-icon-wrap .teacher-active-icon * {
     fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
@@ -35475,7 +35478,7 @@ md-dialog.invite-teacher-modal-wrap {
       margin: 0 auto; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
       font-size: 16px;
-      color: #085c66 #7d7d7d;
+      color: #7d7d7d;
       font-family: Lato;
       font-weight: 400;
       text-align: center;
@@ -35577,7 +35580,7 @@ a.md-button,
       background-color: #76b63e; }
     a.md-button.success.drop-shadow,
     .md-button.success.drop-shadow {
-      box-shadow: 0px 3px 0px 0px #085c66; }
+      box-shadow: 0px 3px 0px 0px #f8f8f8; }
   a.md-button.facebook,
   .md-button.facebook {
     background-color: #037684;
@@ -53304,7 +53307,7 @@ a.md-button,
       background-color: #76b63e; }
     a.md-button.success.drop-shadow,
     .md-button.success.drop-shadow {
-      box-shadow: 0px 3px 0px 0px #085c66; }
+      box-shadow: 0px 3px 0px 0px #f8f8f8; }
   a.md-button.facebook,
   .md-button.facebook {
     background-color: #037684;
@@ -53884,7 +53887,7 @@ purchase-btn .upgraded .text {
   .md-button.znk.md-primary:active {
     background: #037684; }
   .md-button.znk.md-primary[disabled="disabled"] {
-    background: #f6f6f6;
+    background: rgba(10, 155, 173, 0.6);
     color: rgba(255, 255, 255, 0.6) !important; }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -71358,7 +71361,7 @@ a.md-button,
       background-color: #76b63e; }
     a.md-button.success.drop-shadow,
     .md-button.success.drop-shadow {
-      box-shadow: 0px 3px 0px 0px #085c66; }
+      box-shadow: 0px 3px 0px 0px #f8f8f8; }
   a.md-button.facebook,
   .md-button.facebook {
     background-color: #037684;
@@ -71952,13 +71955,13 @@ workouts-progress {
             border: 1px solid #b7b7b7;
             border-radius: 50%; }
           workouts-progress .items-container .item-container .item.selected.pristine {
-            background: #81649c;
+            background: #b7b7b7;
             color: #ffffff; }
             workouts-progress .items-container .item-container .item.selected.pristine.selected:after {
               border: 1px solid #b7b7b7; }
         workouts-progress .items-container .item-container .item.pristine {
           background: #ffffff;
-          border: 1px solid #81649c;
+          border: 1px solid #b7b7b7;
           color: #b7b7b7; }
         workouts-progress .items-container .item-container .item .check-mark-icon {
           width: 1em; }
@@ -107265,12 +107268,15 @@ invitation-manager .teacher-icon-wrap {
   invitation-manager .teacher-icon-wrap .teacher-icon {
     width: 24px; }
 
-invitation-manager .teacher-active-icon-wrap {
+invitation-manager +
+.teacher-active-icon-wrap {
   border: 1px solid #0a9bad; }
-  invitation-manager .teacher-active-icon-wrap .teacher-active-icon {
+  invitation-manager +
+.teacher-active-icon-wrap .teacher-active-icon {
     width: 23px;
     height: 16px; }
-  invitation-manager .teacher-active-icon-wrap .teacher-active-icon * {
+  invitation-manager +
+.teacher-active-icon-wrap .teacher-active-icon * {
     fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
@@ -107486,7 +107492,7 @@ md-dialog.invite-teacher-modal-wrap {
       margin: 0 auto; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
       font-size: 16px;
-      color: #085c66 #7d7d7d;
+      color: #7d7d7d;
       font-family: Lato;
       font-weight: 400;
       text-align: center;
@@ -107588,7 +107594,7 @@ a.md-button,
       background-color: #76b63e; }
     a.md-button.success.drop-shadow,
     .md-button.success.drop-shadow {
-      box-shadow: 0px 3px 0px 0px #085c66; }
+      box-shadow: 0px 3px 0px 0px #f8f8f8; }
   a.md-button.facebook,
   .md-button.facebook {
     background-color: #037684;
@@ -107732,7 +107738,7 @@ md-dialog .close-popup {
 .app-header {
   background: white;
   height: 57px;
-  border-bottom: 1px solid #fafafa;
+  border-bottom: 1px solid #f2f2f2;
   font-family: Lato; }
   .app-header .main-content-header {
     margin: 0 auto;
@@ -107836,7 +107842,7 @@ md-dialog .close-popup {
       margin: auto;
       display: block; }
   .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
-    background-color: #085c66; }
+    background-color: #f8f8f8; }
 
 md-menu-content.md-menu-content-znk-header {
   min-width: 270px;

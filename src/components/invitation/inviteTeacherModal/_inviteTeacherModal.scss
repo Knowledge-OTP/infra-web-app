@@ -77,7 +77,7 @@ md-dialog.invite-teacher-modal-wrap {
                 margin: 0 auto;
             }
             div{
-                @include text-style(16px, $bgColor29$fontColor13, Lato, $regularFontWeight);
+                @include text-style(16px,$fontColor13, Lato, $regularFontWeight);
                 text-align: center;
                 margin-top: 20px;
             }
@@ -114,11 +114,15 @@ md-dialog.invite-teacher-modal-wrap {
 
                 svg-icon{
                     width: 35px;
-                    stroke: $bgColor29;
+                    stroke: $bgColor36;
                 }
 
                 svg-icon *{
-                    fill: $bgColor29;
+                    fill: $bgColor36;
+                }
+
+                .invite-teacher-icon{
+                    @include full-background-image-retina('assets/icons/invite-teacher-icon',45px, 42px);
                 }
             }
         }
