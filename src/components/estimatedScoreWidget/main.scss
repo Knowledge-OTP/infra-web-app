@@ -280,3 +280,79 @@ md-tooltip.tooltip-for-estimated-score-widget {
         will-change: opacity;
     }
 }
+
+
+md-dialog.setting-edit-goals{
+    overflow: visible;
+    width: 1100px;
+    max-width: 1100px;
+    height: 575px;
+    max-height: 575px;
+    background: none;
+
+    md-toolbar{
+        height: 40px;
+        max-height: 40px;
+        min-height: 40px;
+        @include border-top-radius(15px);
+
+        &:not(.md-menu-toolbar){
+            background-color: $bgColor23;
+        }
+    }
+    .top-icon-wrap{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 40px;
+        .top-icon{
+            display: flex;
+            justify-content: center;
+
+            .round-icon-wrap{
+                width: 76px;
+                height: 76px;
+                border-radius: 38px;
+                background-color: $bgColor23;
+                z-index: 9;
+                margin-top: -15px;
+
+                .goals-top-icon{
+                    margin: 15px;
+                    width: 46px;
+                }
+
+                .goals-top-icon *{
+                    fill: $bgColor2;
+                }
+            }
+        }
+    }
+    .main-title{
+        margin-top: 20px;
+    }
+    md-dialog-content{
+        height: 100%;
+        background-color: $bgColor2;
+        padding: {
+            top: 25px;
+            bottom: 25px;
+        }
+        @include border-bottom-radius(15px);
+
+    }
+    .close-popup-wrap {
+        @include absolute-position(-37px, -19px);
+        height:14px;
+        width: 14px;
+        padding: 10px;
+        cursor: pointer;
+
+
+    }
+    .close-popup{
+        width: 16px;
+    }
+}
+
+

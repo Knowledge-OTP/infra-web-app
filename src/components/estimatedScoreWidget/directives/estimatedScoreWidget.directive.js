@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader) {
+        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog) {
             'ngInject';
             var previousValues;
 
@@ -91,9 +91,9 @@
                     // TODO: this should come from a service, duplicated from znk-header
                     scope.d.showGoalsEdit = function () {
                         $mdDialog.show({
-                            controller: 'SettingsEditGoalsController',
+                            controller: 'EditGoals.controller',
                             controllerAs: 'vm',
-                            templateUrl: 'app/settings/templates/settingsEditGoals.template.html',
+                            templateUrl: 'components/estimatedScoreWidget/templates/editGoals.template.html',
                             clickOutsideToClose: false
                         });
                     };

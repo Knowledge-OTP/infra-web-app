@@ -1,0 +1,18 @@
+<md-dialog class="setting-edit-goals base-border-radius" translate-namespace="SETTING.EDIT_GOALS">
+    <md-toolbar>
+        <div class="close-popup-wrap" ng-click="vm.cancel()">
+            <svg-icon name="close-popup"></svg-icon>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="main-title md-subheader" translate=".MY_GOALS"></div>
+        <user-goals setting="vm.userGoalsSetting"></user-goals>
+    </md-dialog-content>
+    <div class="top-icon-wrap">
+        <div class="top-icon">
+            <div class="round-icon-wrap">
+                <svg-icon name="goals-top-icon"></svg-icon>
+            </div>
+        </div>
+    </div>
+</md-dialog>

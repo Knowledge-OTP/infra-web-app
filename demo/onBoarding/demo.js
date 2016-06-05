@@ -76,13 +76,20 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
             return { id: ENV.ENGLISH };
         }]);
 
+        ScoringServiceProvider.setScoringLimits({
+            exam: {
+                min: 400,
+                max: 1600
+            },
+            subjects: {
+                min: 200,
+                max: 800
+            }
+        });
+
         UserGoalsServiceProvider.settings = {
-            defaultSubjectScore: 600,
-            minSchoolScore: 400,
-            maxSchoolScore: 1600,
-            minGoalsScore: 200,
-            maxGoalsScore: 800,
             updateGoalNum: 10,
+            defaultSubjectScore: 600,
             subjects: [
                 { name: 'math', svgIcon: 'math-section-icon' },
                 { name: 'verbal', svgIcon: 'verbal-icon' }
