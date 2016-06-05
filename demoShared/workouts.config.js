@@ -20,20 +20,29 @@ angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvide
         controllerAs: 'vm'
     });
 
-    function newWorkoutGetter($q){
-        return function(){
+    function newWorkoutGetter($q, SubjectEnum){
+        return function(subjectToIgnore){
+            var keys = SubjectEnum.getEnumArr().map(function(item){
+                return item.enum;
+            });
+            var subjectId;
+            keys.forEach(function(key){
+                if(angular.isUndefined(subjectId) && subjectToIgnore.indexOf(key) === -1){
+                    subjectId = key;
+                }
+            });
             return $q.when({
                 2: {
                     id: 1,
-                    subjectId: 0
+                    subjectId: subjectId
                 },
                 5: {
                     id: 2,
-                    subjectId: 0
+                    subjectId: subjectId
                 },
                 10:{
                     id: 3,
-                    subjectId: 0
+                    subjectId: subjectId
                 }
             });
         };

@@ -23,6 +23,7 @@
                 weight: $regularFontWeight;
                 size: 18px;
             }
+            text-transform: capitalize;
         }
 
         .change-subject-container {
@@ -123,5 +124,14 @@
                 top: 50px;
             }
         }
+    }
+}
+
+@keyframes rotateAnimation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }
