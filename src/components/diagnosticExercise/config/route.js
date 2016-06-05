@@ -18,22 +18,20 @@
                     controllerAs: 'vm'
                 })
                 .state('diagnostic.intro', {
-                    url: '/intro/:id/:subjectId/:order',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html',
                     controller: 'WorkoutsDiagnosticIntroController',
                     controllerAs: 'vm'
                 })
                 .state('diagnostic.exercise', {
-                    url: '/exercise/:id/:sectionId',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html',
                     controller: 'WorkoutsDiagnosticExerciseController',
                     controllerAs: 'vm',
                     resolve: {
-                        exerciseData: function exerciseData($q, ExamSrv, $stateParams, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
+                        exerciseData: function exerciseData($q, ExamSrv, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
                             'ngInject';
                             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
-                            var examId = +$stateParams.id;
-                            var sectionId = +$stateParams.sectionId;
+                            var examId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
+                            var sectionId = WorkoutsDiagnosticFlow.getCurrentState().params.id;
                             var getExamProm = ExamSrv.getExam(examId);
                             var getSectionProm = ExamSrv.getExamSection(sectionId);
                             var getExamResultProm = ExerciseResultSrv.getExamResult(examId);
@@ -95,7 +93,6 @@
                     controllerAs: 'vm'
                 })
                 .state('diagnostic.summary', {
-                    url: '/summary',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html',
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',

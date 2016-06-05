@@ -2,12 +2,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        function($stateParams, WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv) {
+        function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv) {
         'ngInject';
             var vm = this;
 
-            this.params = $stateParams;
-            this.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
+            vm.params = WorkoutsDiagnosticFlow.getCurrentState().params;
+            vm.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
 
             WorkoutsDiagnosticFlow.getDiagnostic().then(function (results) {
                 vm.buttonTitle = (angular.equals(results.sectionResults, {})) ? 'START' : 'CONTINUE';
