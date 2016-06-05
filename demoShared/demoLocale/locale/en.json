@@ -2,7 +2,8 @@
     "SUBJECTS":{
         "0": "math",
         "1": "reading",
-        "2": "writing"
+        "2": "writing",
+        "8": "essay"
     },
     "DIAGNOSTIC_INTRO": {
         "DIAG_DESCRIPTION_MATH": "Math description",

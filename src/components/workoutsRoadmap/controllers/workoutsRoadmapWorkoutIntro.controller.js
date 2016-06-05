@@ -2,7 +2,7 @@
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum) {
+        function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -51,6 +51,15 @@
                     });
                 });
             }
+
+            vm.getWorkoutIcon = function(workoutLength){
+                if(vm.workoutsByTime){
+                    var exerciseTypeId = vm.workoutsByTime[workoutLength] && vm.workoutsByTime[workoutLength].exerciseTypeId;
+                    var exerciseTypeEnumVal = ExerciseTypeEnum.getValByEnum(exerciseTypeId);
+                    return exerciseTypeEnumVal ? exerciseTypeEnumVal.toLowerCase() + '-icon' : '';
+                }
+                return '';
+            };
 
             $scope.$watch('vm.selectedTime', function(newSelectedTime){
                 if(angular.isUndefined(newSelectedTime)){

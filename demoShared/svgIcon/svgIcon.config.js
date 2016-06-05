@@ -7,7 +7,9 @@ angular.module('demo')
             var svgMap = {
                 'math-icon': 'svgIcon/math-icon.svg',
                 'verbal-icon': 'svgIcon/verbal-icon.svg',
-                'essay-icon': 'svgIcon/essay-icon.svg'
+                'essay-icon': 'svgIcon/essay-icon.svg',
+                'tutorial-icon': 'svgIcon/tutorial-icon.svg',
+                'practice-icon': 'svgIcon/practice-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }

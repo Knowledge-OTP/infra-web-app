@@ -6,6 +6,10 @@
 	 viewBox="0 0 329.5 223.7"
 	 class="check-mark-svg">
     <style type="text/css">
+        .check-mark-svg{
+            width: 30px;
+        }
+
         .check-mark-svg .st0 {
             fill: none;
             stroke: #ffffff;

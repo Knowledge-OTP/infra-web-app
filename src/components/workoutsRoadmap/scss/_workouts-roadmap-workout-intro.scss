@@ -65,7 +65,7 @@
             justify-content: center;
             margin: {
                 top: 33px;
-            };
+            }
 
             .avail-time-item-wrapper{
                 margin: {
@@ -87,6 +87,33 @@
                         right: auto;
                         left: auto;
                     };
+                    font:{
+                        family: Lato;
+                        weight: $regularFontWeight;
+                    }
+                    color: $fontColor12;
+                    line-height: 73px;
+                    position: relative;
+
+                    .workout-icon{
+                        @include dimension(26px,26px);
+                        background: white;
+                        position: absolute;
+                        top: -13px;
+                        left: calc(50% - 13px);
+                    }
+
+                    .avail-time-text{
+                        font:{
+                            size: 26px;
+                        }
+                    }
+
+                    .minutes-text{
+                        font:{
+                            size: 18px;
+                        }
+                    }
                 }
             }
         }
