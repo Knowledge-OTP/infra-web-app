@@ -35651,6 +35651,7 @@ md-dialog .close-popup {
       .app-header .main-content-header .app-user-area .profile-open-modal-btn:hover {
         color: #0a9bad; }
       .app-header .main-content-header .app-user-area .md-button {
+        background: white;
         width: auto;
         display: flex !important;
         justify-content: center;
