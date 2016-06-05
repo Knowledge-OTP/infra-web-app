@@ -1,0 +1,67 @@
+.diagnostic-loading-wrapper {
+    flex-basis: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .loading-title {
+        @include text-style(32px, $fontColor3, Quicksand, $boldFontWeight);
+        text-align: center;
+        z-index: 1;
+        margin-bottom: 19px;
+    }
+
+    .video-wrapper {
+        flex-grow: 1;
+        position: relative;
+        display: flex;
+
+        video {
+            width: 610px;
+            align-self: flex-end;
+        }
+
+    }
+}
+
+md-tooltip.tooltip-for-diagnostic-summary {
+    opacity: 0;
+    width: auto;
+    height: auto;
+    background: $bgColor1;
+    padding:0 5px;
+    .md-content {
+        @include text-style(14px, $fontColor3, Lato, 400);
+        height: auto;
+        text-align: center;
+        background: $bgColor1;
+        white-space: normal;
+        // override and cancel .md-content transitions and transform
+        &.md-show {
+            opacity: 1;
+            transform: none;
+            transition: none;
+            pointer-events: auto;
+            will-change: auto;
+        }
+        &.md-show-remove {
+            transition: none;
+            &.md-show-remove-active {
+                transform: none;
+                opacity: 0;
+            }
+        }
+    }
+
+    &.md-hide {
+        transition: opacity 0.4s;
+        opacity: 0;
+    }
+
+    &.md-show {
+        opacity: 1;
+        transition: opacity 0.4s;
+        pointer-events: auto;
+        will-change: opacity;
+    }
+}
+

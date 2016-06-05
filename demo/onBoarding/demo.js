@@ -1,5 +1,5 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding'])
-    .config(function ($translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider) {
+    .config(function ($translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -86,6 +86,17 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
                 max: 800
             }
         });
+
+        ScoringServiceProvider.setExamScoreFnGetter(function () {
+             return function(scoresArr) {
+                 var totalScores = 0;
+                 angular.forEach(scoresArr, function (score) {
+                     totalScores += score;
+                 });
+                 return totalScores;
+             }
+        });
+
 
         UserGoalsServiceProvider.settings = {
             updateGoalNum: 10,

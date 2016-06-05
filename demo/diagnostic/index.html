@@ -3,26 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel=" stylesheet" href="diagnosticExercise/main.css">
+    <link rel=" stylesheet" href="znkExerciseHeader/main.css">
     <link rel="stylesheet" href="infra/dist/svgIcon/main.css">
-    <link rel=" stylesheet" href="infra/dist/scroll/main.css">
-    <link rel=" stylesheet" href="diagnostic/main.css">
+    <link rel="stylesheet" href="infra/dist/scroll/main.css">
+    <link rel="stylesheet" href="infra/dist/znkExercise/main.css">
+    <link rel="stylesheet" href="diagnosticIntro/main.css">
     <link rel="stylesheet" href="angular-material/angular-material.css">
+    <link rel="stylesheet" href="Swiper/dist/css/swiper.css">
+    <link rel="stylesheet" href="css/znk-exercise.css">
+    <link rel="stylesheet" href="css/diagnostic-intro-custom.css">
     <style>
         body{
             background: #E6E5E5;
         }
+        .main-content {
+            width: 1060px;
+            padding-top: 18px;
+            margin: 0 auto;
+        }
+        .math-bg {
+            background-color: #AF89D2;
+        }
+        .subject-background-math {
+            background-image: url("images/subject-background-math.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: inline-block;
+            width: 85px;
+            height: 134px;
+        }
+        znk-exercise-header {
+            width: 100%;
+        }
     </style>
 </head>
 <body ng-app="demo">
-<ui-view></ui-view>
+<div class="main-content" layout="column" flex="grow">
+    <ui-view></ui-view>
+</div>
 
 <script src="angular/angular.js"></script>
 <script src="angular-translate/angular-translate.js"></script>
 <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
-<script src="ng-tags-input/ng-tags-input.js"></script>
 <script src="angular-ui-router/release/angular-ui-router.js"></script>
 <script src="firebase/firebase-debug.js"></script>
 <script src="Chart.js/Chart.js"></script>
+<script src="Swiper/dist/js/swiper.js"></script>
 <script src="angular-chart.js/dist/angular-chart.js"></script>
 <script src="angular-animate/angular-animate.js"></script>
 <script src="angular-aria/angular-aria.js"></script>
@@ -43,14 +71,17 @@
 <script src="infra/dist/exams/exams.js"></script>
 <script src="infra/dist/contentAvail/contentAvail.js"></script>
 <script src="infra/dist/scroll/scroll.js"></script>
-<script src="infra/dist/category/category.js"></script>
 <script src="infra/dist/scoring/scoring.js"></script>
 <script src="infra/dist/estimatedScore/estimatedScore.js"></script>
 <script src="infra/dist/general/general.js"></script>
 
 <script src="userGoals/userGoals.js"></script>
-<script src="diagnostic/diagnostic.js"></script>
-<script src="diagnostic/templates.js"></script>
+<script src="znkExerciseHeader/znkExerciseHeader.js"></script>
+<script src="znkExerciseHeader/templates.js"></script>
+<script src="diagnosticIntro/diagnosticIntro.js"></script>
+<script src="diagnosticIntro/templates.js"></script>
+<script src="diagnosticExercise/diagnosticExercise.js"></script>
+<script src="diagnosticExercise/templates.js"></script>
 
 <script src="demo.js"></script>
 <script src="infra/demoShared/analyticsConfig.js"></script>

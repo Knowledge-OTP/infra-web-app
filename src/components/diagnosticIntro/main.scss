@@ -20,7 +20,10 @@
 @import url(#{$googleFontCDN}icon?family=Material+Icons);
 
 diagnostic-intro {
-
+    width: 100%;
+    svg-icon {
+        display:block;
+    }
     .diagnostic-intro-drv {
         text-align: center;
 
