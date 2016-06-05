@@ -17,6 +17,7 @@
         'znk.infra.autofocus',
         'znk.infra.exerciseUtility',
         'znk.infra.estimatedScore',
+        'znk.infra.scoring',
         'znk.infra-web-app.userGoals'
     ]).config([
         'SvgIconSrvProvider',

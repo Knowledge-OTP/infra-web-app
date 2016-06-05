@@ -84,9 +84,13 @@
                     }
 
                     function calcPercentage(correct) {
+                        var scoringLimits = UserGoalsService.getScoringLimits();
+                        var maxEstimatedScore = typeof scoringLimits.subjects != 'undefined' ? scoringLimits.subjects: scoringLimits.subjects
                         // return (correct / appConstants.MAX_ESTIMATED_SCORE) * 100;
                         return (correct / 800) * 100;
                     }
+
+                    var x = UserGoalsService.getScoringLimits();
 
                     // TODO: this should come from a service, duplicated from znk-header
                     scope.d.showGoalsEdit = function () {
