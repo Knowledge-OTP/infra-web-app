@@ -92,11 +92,11 @@ module.exports = function (grunt) {
         concat: {
             mainModule:{
                 files:[{
-                    src: ['<%= yeoman.src %>/core/module.js','<%= yeoman.src %>/*/**/*.js'],
-                    dest: '<%= yeoman.tmp %>/' + appConfig.appName + '.js'
+                    src: ['<%= yeoman.dist %>/**/*.js'],
+                    dest: '<%= yeoman.dist %>/main.js'
                 },{
                     src: ['<%= yeoman.tmp %>/**/*.css'],
-                    dest: '<%= yeoman.tmp %>/main.css'
+                    dest: '<%= yeoman.dist %>/main.css'
                 }]
             }
         },
@@ -322,7 +322,6 @@ module.exports = function (grunt) {
         'sass',
         'html2js',
         'concat:build',
-        'concat:mainModule',
         'copy:build',
         'ngAnnotate'
     ]);
@@ -333,6 +332,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'build',
         'copy:dist',
-        'concat:dist'
+        'concat:dist',
+        'concat:mainModule'
     ]);
 };
