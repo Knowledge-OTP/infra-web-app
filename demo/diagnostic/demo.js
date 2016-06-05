@@ -24,16 +24,30 @@ angular.module('demo', [
             return AuthService.getAuth();
         }]);
 
-        ScoringServiceProvider.setScoringSettings({
-            examMinScore: 400,
-            examMaxScore: 1600,
-            subjectMinScore: 200,
-            subjectMaxScore: 800,
-            defaultSubjectScore: 600
+        ScoringServiceProvider.setScoringLimits({
+            exam: {
+                min: 400,
+                max: 1600
+            },
+            subjects: {
+                min: 200,
+                max: 800
+            }
+        });
+
+        ScoringServiceProvider.setExamScoreFnGetter(function () {
+            return function(scoresArr) {
+                var totalScores = 0;
+                angular.forEach(scoresArr, function (score) {
+                    totalScores += score;
+                });
+                return totalScores;
+            }
         });
 
         UserGoalsServiceProvider.settings = {
             updateGoalNum: 10,
+            defaultSubjectScore: 600,
             subjects: [
                 { name: 'math', svgIcon: 'math-section-icon' },
                 { name: 'verbal', svgIcon: 'verbal-icon' }
@@ -127,7 +141,22 @@ angular.module('demo', [
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
             console.error(error.message);
         });
-    })// mock ENV
+    }) // mock AuthService
+    .factory('AuthService', function() {
+        return {
+            getAuth: function() {
+                return {
+                    uid: '666',
+                    auth: {
+                        name: 'oded'
+                    },
+                    password: {
+                        email: 'oded@zinkerz.com'
+                    }
+                }
+            }
+        }
+    }) // mock ENV
     .service('ENV', function () {
         this.MATH = 0; // mock subject id from enum
         this.VERBAL = 8;

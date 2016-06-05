@@ -13,14 +13,14 @@
                 link: function link(scope) {
                     $translatePartialLoader.addPart('userGoalsSelection');
                     var userGoalRef;
-                    var scoringSettings = UserGoalsService.getScoringSettings();
-                    var goalsSettings = UserGoalsService.getGoalsSettings();
-                    scope.goalsSettingsFromSrv = angular.extend({}, scoringSettings, goalsSettings);
+                    scope.scoringLimits = UserGoalsService.getScoringLimits();
+                    scope.goalsSettings = UserGoalsService.getGoalsSettings();
+
                     var defaultTitle = scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
 
                     var initTotalScore = 0;
-                    angular.forEach(scope.goalsSettingsFromSrv.subjects, function() {
-                        initTotalScore += scope.goalsSettingsFromSrv.defaultSubjectScore;
+                    angular.forEach(scope.goalsSettings.subjects, function() {
+                        initTotalScore += scope.goalsSettings.defaultSubjectScore;
                     });
                     scope.totalScore = initTotalScore;
 

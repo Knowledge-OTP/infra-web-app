@@ -76,16 +76,31 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
             return { id: ENV.ENGLISH };
         }]);
 
-        ScoringServiceProvider.setScoringSettings({
-            examMinScore: 400,
-            examMaxScore: 1600,
-            subjectMinScore: 200,
-            subjectMaxScore: 800,
-            defaultSubjectScore: 600
+        ScoringServiceProvider.setScoringLimits({
+            exam: {
+                min: 400,
+                max: 1600
+            },
+            subjects: {
+                min: 200,
+                max: 800
+            }
         });
+
+        ScoringServiceProvider.setExamScoreFnGetter(function () {
+             return function(scoresArr) {
+                 var totalScores = 0;
+                 angular.forEach(scoresArr, function (score) {
+                     totalScores += score;
+                 });
+                 return totalScores;
+             }
+        });
+
 
         UserGoalsServiceProvider.settings = {
             updateGoalNum: 10,
+            defaultSubjectScore: 600,
             subjects: [
                 { name: 'math', svgIcon: 'math-section-icon' },
                 { name: 'verbal', svgIcon: 'verbal-icon' }

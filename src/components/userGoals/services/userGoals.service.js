@@ -5,8 +5,8 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
         this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', 'ScoringService', function (InfraConfigSrv, StorageSrv, $q, ScoringService) {
             var self = this;
             var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
-            var scoringSettings = ScoringService.getScoringSettings();
-            var defaultSubjectScore = scoringSettings.defaultSubjectScore;
+            var scoringLimits = ScoringService.getScoringLimits();
+            var defaultSubjectScore = self.settings.defaultSubjectScore;
             var subjects = self.settings.subjects;
 
             var userGoalsServiceObj = {};
@@ -42,8 +42,8 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
                 // 2. Calc the average score for each school and set it for each subject goal
 
                 return userGoalsServiceObj.getGoals().then(function (userGoals) {
-                    var minSchoolScore = scoringSettings.examMinScore,
-                        maxSchoolScore = scoringSettings.examMaxScore,
+                    var minSchoolScore = scoringLimits.exam.min,
+                        maxSchoolScore = scoringLimits.exam.max,
                         avgScores = [];
 
                     angular.forEach(userSchools, function (school) {
@@ -79,14 +79,14 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
                  return self.settings;
             };
 
-            userGoalsServiceObj.getScoringSettings = function() {
-                return scoringSettings;
+            userGoalsServiceObj.getScoringLimits = function() {
+                return scoringLimits;
             };
 
             function _defaultUserGoals() {
                 var defaultUserGoals = {
                     isCompleted: false,
-                    totalScore: scoringSettings.examMaxScore
+                    totalScore: scoringLimits.exam.max
                 };
                 angular.forEach(subjects, function(subject) {
                     defaultUserGoals[subject.name] = defaultSubjectScore;

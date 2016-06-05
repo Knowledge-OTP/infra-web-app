@@ -12,12 +12,19 @@
             var diagnosticResultObj = diagnosticSummaryData.diagnosticResult;
             var diagnosticCompositeScore = diagnosticSummaryData.compositeScore;
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
+            var scoringLimits = diagnosticSummaryData.scoringLimits;
             var enumArrayMap = {};
             angular.forEach(SubjectEnum, function (enumObj) {
                 enumArrayMap[enumObj.enum] = enumObj;
             });
 
-            var MAX_SCORE = diagnosticSummaryData.scoringSettings.subjectMaxScore;
+            function getMaxScore(subjectId) {
+                if(scoringLimits.subjects && scoringLimits.subjects.max) {
+                    return scoringLimits.subjects.max;
+                }
+                return scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max;
+            }
+
             var GOAL = 'Goal';
             var MAX = 'Max';
 
@@ -43,7 +50,7 @@
                     var subjectName = enumArrayMap[subjectId].val;
                     doughnutValues[subjectName] = diagnosticResultObj.userStats[subjectId];
                     doughnutValues[subjectName + GOAL] = goalScoreObj[subjectName] > diagnosticResultObj.userStats[subjectId] ? (goalScoreObj[subjectName] - diagnosticResultObj.userStats[subjectId]) : 0;
-                    doughnutValues[subjectName + MAX] = MAX_SCORE - (doughnutValues[subjectName + GOAL] + diagnosticResultObj.userStats[subjectId]);
+                    doughnutValues[subjectName + MAX] = getMaxScore(subjectId) - (doughnutValues[subjectName + GOAL] + diagnosticResultObj.userStats[subjectId]);
                 }
             }
 
@@ -57,7 +64,7 @@
                     animationEasing: 'easeOutQuint',
                     showTooltips: false
                 };
-                this.goalPoint = getGoalPoint(goalScoreObj[_subjectName]);
+                this.goalPoint = getGoalPoint(goalScoreObj[_subjectName], _subjectId);
                 this.data = [doughnutValues[_subjectName], doughnutValues[_subjectName + GOAL], doughnutValues[_subjectName + MAX]];
                 this.colors = colorsArray;
                 this.subjectName  =  'WORKOUTS_DIAGNOSTIC_SUMMARY.' + angular.uppercase(_subjectName);
@@ -65,8 +72,8 @@
                 this.scoreGoal = goalScoreObj[_subjectName];
             }
 
-            function getGoalPoint(scoreGoal) {
-                var degree = (scoreGoal / MAX_SCORE) * 360 - 90;    // 90 - degree offset
+            function getGoalPoint(scoreGoal, subjectId) {
+                var degree = (scoreGoal / getMaxScore(subjectId)) * 360 - 90;    // 90 - degree offset
                 var radius = 52.5;
                 var x = Math.cos((degree * (Math.PI / 180))) * radius;
                 var y = Math.sin((degree * (Math.PI / 180))) * radius;

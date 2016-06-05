@@ -1,5 +1,5 @@
 <section translate-namespace="USER_GOALS">
-    <div class="goals-schools-wrapper" ng-if="setting.showSchools || goalsSettingsFromSrv.showSchools">
+    <div class="goals-schools-wrapper" ng-if="setting.showSchools || goalsSettings.showSchools">
         <div class="title-wrap">
             <div class="edit-title" translate=".DREAM_SCHOOLS"></div>
             <div class="edit-link" ng-click="showSchools()" ng-class="{'active' : showSchoolEdit}">
@@ -29,15 +29,15 @@
         </div>
         <div class="subject-goal-wrap">
             <div class="subjects-goal noselect">
-                <div class="subject" ng-repeat="subject in goalsSettingsFromSrv.subjects">
+                <div class="subject" ng-repeat="subject in goalsSettings.subjects">
                     <div class="icon-wrapper svg-wrapper" ng-class="subject.name+'-bg'">
                         <svg-icon name="{{subject.svgIcon}}"></svg-icon>
                     </div>
                     <span class="subject-title" translate=".{{subject.name | uppercase}}"></span>
                     <goal-select
-                        min-score="goalsSettingsFromSrv.subjectMinScore"
-                        max-score="goalsSettingsFromSrv.subjectMaxScore"
-                        update-goal-num="goalsSettingsFromSrv.updateGoalNum"
+                        min-score="scoringLimits.subjects.min || scoringLimits.subjects[subject.id].min"
+                        max-score="scoringLimits.subjects.max || scoringLimits.subjects[subject.id].max"
+                        update-goal-num="goalsSettings.updateGoalNum"
                         ng-model="userGoals[subject.name]"
                         ng-change="calcTotal()">
                     </goal-select>

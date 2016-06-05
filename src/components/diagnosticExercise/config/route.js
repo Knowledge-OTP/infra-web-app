@@ -85,7 +85,6 @@
                     }
                 })
                 .state('diagnostic.preSummary', {
-                    url: '/preSummary',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
                     controller: ['$timeout', '$state', function ($timeout, $state) {
                         var VIDEO_DURATION = 6000;
@@ -114,7 +113,7 @@
                                 var userGoalsProm = UserGoalsService.getGoals();
                                 var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                                 var diagnosticResult = WorkoutsDiagnosticFlow.getDiagnostic();
-                                var scoringSettings = ScoringService.getScoringSettings();
+                                var scoringLimits = ScoringService.getScoringLimits();
                                 return $q.all([userGoalsProm, userStatsProm, diagnosticResult]).then(function (results) {
                                     var diagnosticScoresObjToArr = [];
                                     var userStats = results[1];
@@ -124,7 +123,9 @@
                                             diagnosticScoresObjToArr.push(curStat);
                                         }
                                     });
-                                    return ScoringService.getTotalScoreResult(diagnosticScoresObjToArr).then(function (totalScore) {
+                                    var getExamScoreFnProm = ScoringService.getExamScoreFn(diagnosticScoresObjToArr);
+                                    return getExamScoreFnProm.then(function (examScoreFn) {
+                                        var totalScore = examScoreFn(diagnosticScoresObjToArr);
                                         if (!totalScore) {
                                             $log.error('diagnosticSummaryData resolve of route diagnostic.summary: totalScore is empty! result:', totalScore);
                                         }
@@ -133,7 +134,7 @@
                                             userStats: userStats,
                                             diagnosticResult: results[2],
                                             compositeScore: totalScore,
-                                            scoringSettings: scoringSettings
+                                            scoringLimits: scoringLimits
                                         };
                                     });
                                 });
