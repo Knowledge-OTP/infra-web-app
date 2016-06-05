@@ -97,15 +97,6 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
              }
         });
 
-
-        UserGoalsServiceProvider.settings = {
-            updateGoalNum: 10,
-            defaultSubjectScore: 600,
-            subjects: [
-                { name: 'math', svgIcon: 'math-section-icon' },
-                { name: 'verbal', svgIcon: 'verbal-icon' }
-            ]
-        };
     })
     .run(function ($rootScope, $translate, $translatePartialLoader) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {

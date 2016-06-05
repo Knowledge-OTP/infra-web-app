@@ -5,8 +5,8 @@
  * */
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect', ['UserSchoolsService', '$translate', 'UtilitySrv', '$timeout', '$q', '$translatePartialLoader',
-        function SchoolSelectDirective(UserSchoolsService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect', ['userGoalsSelectionService', '$translate', 'UtilitySrv', '$timeout', '$q', '$translatePartialLoader',
+        function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
             'ngInject';
 
             var schoolList = [];
@@ -62,7 +62,7 @@
                     if (attrs.getSelectedSchools) {
                         getSelectedSchoolsProm = $q.when(scope.getSelectedSchools());
                     } else {
-                        getSelectedSchoolsProm = UserSchoolsService.getDreamSchools();
+                        getSelectedSchoolsProm = userGoalsSelectionService.getDreamSchools();
                     }
                     getSelectedSchoolsProm.then(function (_userSchools) {
                         userSchools = _userSchools;
@@ -73,7 +73,7 @@
                         disableSearchOption();
                     });
 
-                    UserSchoolsService.getAppSchoolsList().then(function (schools) {
+                    userGoalsSelectionService.getAppSchoolsList().then(function (schools) {
                         schoolList = schools.data;
                     });
 

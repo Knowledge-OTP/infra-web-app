@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('znk.infra-web-app.userGoalsSelection').service('UserSchoolsService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q',
+angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q',
     function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q) {
         var schoolsPath = StorageSrv.variables.appUserSpacePath + '/dreamSchools';
 
@@ -45,13 +45,17 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('UserSchoolsServi
 
                 var saveUserGoalProm = $q.when();
                 if (updateUserGoals) {
-                    saveUserGoalProm = UserGoalsService.calcCompositeScore(newSchools, true);
+                    saveUserGoalProm = UserGoalsService.getCalcScoreFn();
                 }
 
                 return $q.all([
                     _setUserSchoolsData(userSchools),
                     saveUserGoalProm
                 ]).then(function (res) {
+                    var saveUserGoalFn = res[1];
+                    if (angular.isFunction(saveUserGoalFn)) {
+                        saveUserGoalFn(newSchools, true);
+                    }
                     return res[0];
                 });
             });

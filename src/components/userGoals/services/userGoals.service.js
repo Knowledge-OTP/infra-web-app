@@ -2,7 +2,13 @@
 
 angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [function() {
 
-        this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', 'ScoringService', function (InfraConfigSrv, StorageSrv, $q, ScoringService) {
+        var _calcScoreFn;
+
+        this.setCalcScoreFn = function(calcScoreFn) {
+            _calcScoreFn = calcScoreFn;
+        };
+
+        this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', 'ScoringService', '$injector', function (InfraConfigSrv, StorageSrv, $q, ScoringService, $injector) {
             var self = this;
             var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
             var scoringLimits = ScoringService.getScoringLimits();
@@ -36,51 +42,12 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
                 });
             };
 
-            userGoalsServiceObj.calcCompositeScore = function (userSchools, save) {
-                // The calculation for composite score in ACT:
-                // 1. For each school in US, we have min & max score
-                // 2. Calc the average score for each school and set it for each subject goal
-
-                return userGoalsServiceObj.getGoals().then(function (userGoals) {
-                    var minSchoolScore = scoringLimits.exam.min,
-                        maxSchoolScore = scoringLimits.exam.max,
-                        avgScores = [];
-
-                    angular.forEach(userSchools, function (school) {
-                        var school25th = isNaN(school.total25th) ? minSchoolScore : school.total25th;
-                        var school75th = isNaN(school.total75th) ? maxSchoolScore : school.total75th;
-                        avgScores.push((school25th * 0.25) + (school75th * 0.75));
-                    });
-
-                    var avgSchoolsScore;
-                    if (avgScores.length) {
-                        avgSchoolsScore = avgScores.reduce(function (a, b) {
-                            return a + b;
-                        });
-                        avgSchoolsScore = Math.round(avgSchoolsScore / avgScores.length);
-                    } else {
-                        avgSchoolsScore = defaultSubjectScore;
-                    }
-
-                    userGoals = {
-                        isCompleted: false
-                    };
-
-                    angular.forEach(subjects, function(subject) {
-                        userGoals[subject.name] = avgSchoolsScore || defaultSubjectScore;
-                    });
-
-                    userGoals.compositeScore = averageSubjectsGoal(userGoals);
-                    return save ? userGoalsServiceObj.setGoals(userGoals) : $q.when(userGoals);
-                });
+            userGoalsServiceObj.getCalcScoreFn = function() {
+                return $q.when($injector.invoke(_calcScoreFn, self));
             };
 
             userGoalsServiceObj.getGoalsSettings = function() {
                  return self.settings;
-            };
-
-            userGoalsServiceObj.getScoringLimits = function() {
-                return scoringLimits;
             };
 
             function _defaultUserGoals() {
@@ -105,6 +72,8 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
                 });
                 return Math.round(goalsSum / goalsLength);
             }
+
+            userGoalsServiceObj.averageSubjectsGoal = averageSubjectsGoal;
 
             return userGoalsServiceObj;
         }];
