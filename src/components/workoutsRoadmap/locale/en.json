@@ -15,5 +15,10 @@
         "WORKOUT_TIME": "WORKOUT_TIME",
         "START": "START",
         "MINUTES": "minutes"
+    },
+    "WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK":{
+        "TITLE": "Workout {{workoutOrder}}",
+        "DIAGNOSTIC_NOT_COMPLETED": "This workout will be available after you have <br>completed the diagnostic test",
+        "PREV_NOT_COMPLETED": "Complete the previous workout to unlock this workout"
     }
 }

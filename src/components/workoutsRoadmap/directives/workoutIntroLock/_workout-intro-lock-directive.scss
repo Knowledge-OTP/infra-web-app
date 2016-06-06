@@ -1,0 +1,61 @@
+workout-intro-lock {
+    //display: none;
+    //@include absolute-position(-30px, 0, -76px, 0);
+    //background: red;
+    //z-index: 1;
+    position: relative;
+    display: block;
+
+    &.lock {
+        .main-container{
+            opacity: 0.23;
+            filter: blur(7px);
+        }
+    }
+
+    &:not(.lock){
+        .lock-overlay-container{
+            display: none;
+        }
+    }
+
+    .lock-overlay-container{
+        font: {
+            family: Quicksand;
+        }
+        color: $fontColor3;
+        @include absolute-full-cover;
+        z-index: 1;
+
+        .description{
+            size: 18px;
+            font:{
+                weight: $regularFontWeight;
+            }
+        }
+
+        .diagnostic-not-completed{
+            .description{
+                margin: {
+                    top: 45px;
+                }
+            }
+        }
+
+        .prev-not-completed{
+            padding: {
+                top: 34px;
+            }
+
+            .description{
+                margin: {
+                    top: 35px;
+                }
+            }
+        }
+
+        .no-pro-social-sharing{
+
+        }
+    }
+}

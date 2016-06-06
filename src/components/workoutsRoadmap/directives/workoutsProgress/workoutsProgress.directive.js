@@ -13,7 +13,7 @@
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }
-        ])
+        ]) 
         .directive('workoutsProgress',
             function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
                 'ngInject';

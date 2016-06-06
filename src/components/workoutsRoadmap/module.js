@@ -74,6 +74,7 @@
         'znk.infra.general',
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.diagnostic',
-        'znk.infra-web-app.diagnosticIntro'
+        'znk.infra-web-app.diagnosticIntro',
+        'znk.infra-web-app.socialSharing' 
     ]);
 })(angular);

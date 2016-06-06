@@ -9,6 +9,8 @@
 
             var vm = this;
 
+            vm.workoutsProgress = data.workoutsProgress;
+
             var currWorkout = data.exercise;
             var currWorkoutOrder = currWorkout && +currWorkout.workoutOrder;
             if (isNaN(currWorkoutOrder)) {
@@ -38,7 +40,7 @@
             }
 
             var prevWorkoutOrder = currWorkout.workoutOrder - 1;
-            var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder] : data.diagnostic;
+            var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
             //set times workouts
             (function () {

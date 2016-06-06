@@ -96,7 +96,7 @@
                             content: '';
                             border: 1px solid $borderColor7;
                             border-radius: $baseBorderRadiusCorner;
-                            @include absolute-position(17px, 65px, 25px, 65px);
+                            @include absolute-position(17px, 25px, 25px, 25px);
                             z-index: 0;
                         }
 

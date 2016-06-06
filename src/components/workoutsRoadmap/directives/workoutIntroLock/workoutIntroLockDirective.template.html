@@ -1,0 +1,25 @@
+<div ng-transclude class="main-container"></div>
+<div translate-namespace="WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK"
+    class="lock-overlay-container">
+    <ng-switch on="vm.lockState">
+        <div class="diagnostic-not-completed"
+             ng-switch-when="1">
+            <div class="description"
+                 translate=".DIAGNOSTIC_NOT_COMPLETED">
+            </div>
+        </div>
+        <div ng-switch-when="2" class="prev-not-completed">
+            <svg-icon name="workouts-intro-lock-dotted-arrow"></svg-icon>
+            <div class="description"
+                 translate=".PREV_NOT_COMPLETED">
+            </div>
+        </div>
+        <div ng-switch-when="3" class="no-pro-social-sharing">
+            <svg-icon name="workouts-intro-lock-lock"></svg-icon>
+            <div class="text1"
+                 translate=".">
+            </div>
+            <div class="text2"></div>
+        </div>
+    </ng-switch>
+</div>

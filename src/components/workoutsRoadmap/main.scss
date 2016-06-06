@@ -5,7 +5,8 @@
         'src/scss/imports/colors',
         'bower_components/infra/dist/mixins/mixins';
 
-@import 'directives/workoutsProgress/workouts-progress-directive';
+@import 'directives/workoutsProgress/workouts-progress-directive',
+        'directives/workoutIntroLock/workout-intro-lock-directive';
 
 @import 'scss/workouts-roadmap',
         'scss/workouts-roadmap-diagnostic-intro',
