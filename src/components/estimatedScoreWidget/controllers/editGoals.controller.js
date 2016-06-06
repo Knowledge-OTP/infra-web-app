@@ -5,7 +5,6 @@
         function ($scope, $filter, $mdDialog) {
             'ngInject';
             var translateFilter = $filter('translate');
-            $scope.hello = 'hello';
             $scope.userGoalsSetting = {
                 recommendedGoalsTitle: false,
                 saveBtn: {
@@ -14,7 +13,7 @@
                     wrapperClassName: 'btn-sm'
                 }
             };
-
+            
             $scope.cancel = function () {
                 $mdDialog.cancel();
             };

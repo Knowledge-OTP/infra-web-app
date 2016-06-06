@@ -18,13 +18,15 @@
         'znk.infra.exerciseUtility',
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
+        'znk.infra.svgIcon',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.userGoalsSelection'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-
+                'goals-top-icon': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
+                'close-popup': 'components/estimatedScoreWidget/svg/close-popup.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }

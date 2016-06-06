@@ -12,5 +12,8 @@
         "SUBJECT_7": "Verbal",
         "SUBJECT_8": "Essay",
         "UNFINISHED_DIAGNOSTIC_TITLE": "Set your initial score by completing the diagnostic test."
+    },
+    "SETTING.EDIT_GOALS": {
+        "MY_GOALS": "My Goals"
     }
 }

@@ -45,12 +45,12 @@ estimated-score-widget {
                     }
                     border-top: {
                         style: solid;
-                        color: $borderColor13;
+                        color: $borderColor15;
                         width: 1px;
                     }
                     border-bottom: {
                         style: solid;
-                        color: $borderColor13;
+                        color: $borderColor15;
                         width: 1px;
                     }
                 }
@@ -129,7 +129,7 @@ estimated-score-widget {
                 }
                 hr.user-goal-fill {
                     width: 0;
-                    background: $bgColor27;
+                    background: $bgColor40;
                     border-bottom-left-radius: 10px;
                     border-top-left-radius: 10px;
                     &.bar-full {
@@ -297,7 +297,7 @@ md-dialog.setting-edit-goals{
         @include border-top-radius(15px);
 
         &:not(.md-menu-toolbar){
-            background-color: $bgColor23;
+            background-color: $bgColor5;
         }
     }
     .top-icon-wrap{
@@ -313,27 +313,29 @@ md-dialog.setting-edit-goals{
                 width: 76px;
                 height: 76px;
                 border-radius: 38px;
-                background-color: $bgColor23;
+                background-color: $bgColor5;
                 z-index: 9;
                 margin-top: -15px;
 
                 .goals-top-icon{
                     margin: 15px;
                     width: 46px;
+                    display: block;
                 }
 
                 .goals-top-icon *{
-                    fill: $bgColor2;
+                    fill: $bgColor3;
                 }
             }
         }
     }
     .main-title{
         margin-top: 20px;
+        text-align: center;
     }
     md-dialog-content{
         height: 100%;
-        background-color: $bgColor2;
+        background-color: $bgColor3;
         padding: {
             top: 25px;
             bottom: 25px;
@@ -352,6 +354,11 @@ md-dialog.setting-edit-goals{
     }
     .close-popup{
         width: 16px;
+        display: block;
+        * {
+            stroke: $fontColor8;
+            stroke-width: 6px;
+        }
     }
 }
 

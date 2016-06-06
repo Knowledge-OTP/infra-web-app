@@ -1,14 +1,21 @@
 angular.module('demo', [
     'znk.infra-web-app.estimatedScoreWidget'
 ])
-    .config(function ($translateProvider) {
+    .config(function ($translateProvider, SvgIconSrvProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: '/{part}/locale/{lang}.json'
         })
             .preferredLanguage('en');
+
+        var svgMap = {
+            'math-section-icon': 'svg/math-section-icon.svg',
+            'verbal-icon': 'svg/verbal-icon.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap)
     })
 
-    .config(function (ScoringServiceProvider, UserGoalsServiceProvider){
+
+    .config(function (ScoringServiceProvider, UserGoalsServiceProvider) {
         ScoringServiceProvider.setScoringLimits({
             exam: {
                 min: 400,
@@ -21,7 +28,7 @@ angular.module('demo', [
         });
 
         ScoringServiceProvider.setExamScoreFnGetter(function () {
-            return function(scoresArr) {
+            return function (scoresArr) {
                 var totalScores = 0;
                 angular.forEach(scoresArr, function (score) {
                     totalScores += score;
@@ -35,8 +42,8 @@ angular.module('demo', [
             updateGoalNum: 10,
             defaultSubjectScore: 600,
             subjects: [
-                { name: 'math', svgIcon: 'math-section-icon' },
-                { name: 'verbal', svgIcon: 'verbal-icon' }
+                {name: 'math', svgIcon: 'math-section-icon'},
+                {name: 'verbal', svgIcon: 'verbal-icon'}
             ]
         };
     })
@@ -86,10 +93,12 @@ angular.module('demo', [
             };
         });
     })
-    .run(function ($rootScope, $translate) {
+    .run(function ($rootScope, $translate, $translatePartialLoader) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         });
+        $translatePartialLoader.addPart('demo');
+
         $rootScope.showNavMenu = false;
         $rootScope.changeToNavView = function () {
             $rootScope.showNavMenu = !$rootScope.showNavMenu;
