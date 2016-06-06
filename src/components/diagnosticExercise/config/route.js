@@ -5,7 +5,7 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('diagnostic', {
+                .state('app.diagnostic', {
                     url: '/diagnostic?skipIntro',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnostic.template.html',
                     resolve: {
@@ -17,12 +17,12 @@
                     controller: 'WorkoutsDiagnosticController',
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.intro', {
+                .state('app.diagnostic.intro', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html',
                     controller: 'WorkoutsDiagnosticIntroController',
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.exercise', {
+                .state('app.diagnostic.exercise', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html',
                     controller: 'WorkoutsDiagnosticExerciseController',
                     controllerAs: 'vm',
@@ -82,7 +82,7 @@
                             }
                     }
                 })
-                .state('diagnostic.preSummary', {
+                .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
                     controller: ['$timeout', '$state', function ($timeout, $state) {
                         var VIDEO_DURATION = 6000;
@@ -92,7 +92,7 @@
                     }],
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.summary', {
+                .state('app.diagnostic.summary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html',
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',

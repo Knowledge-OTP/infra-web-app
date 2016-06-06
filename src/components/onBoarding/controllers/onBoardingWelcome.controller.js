@@ -12,10 +12,10 @@
                 znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingWelcomeStep' });
                 if (onBoardingSettings.showSchoolStep) {
                     nextStep = OnBoardingService.steps.SCHOOLS;
-                    nextState = 'onBoarding.schools';
+                    nextState = 'app.onBoarding.schools';
                 } else {
                     nextStep = OnBoardingService.steps.GOALS;
-                    nextState = 'onBoarding.goals';
+                    nextState = 'app.onBoarding.goals';
                 }
                 OnBoardingService.setOnBoardingStep(nextStep);
                 $state.go(nextState);

@@ -17659,6 +17659,8 @@ on-boarding-bar {
      *  SVG
      */
   position: relative; }
+  .on-board svg-icon {
+    display: block; }
   .on-board .svg-wrapper {
     height: 100%;
     display: flex;

@@ -17,7 +17,7 @@
                 userGoalsSelectionService.setDreamSchools(newUserSchools, true).then(function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.GOALS).then(function () {
                         $timeout(function () {
-                            $state.go('onBoarding.goals');
+                            $state.go('app.onBoarding.goals');
                         });
                     });
                 });

@@ -15,7 +15,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticIntroController: click on quit, go to roadmap');
-                $state.go('workoutsRoadmap');
+                $state.go('app.workoutsRoadmap');
             };
 
             this.goToExercise = function () {
@@ -28,7 +28,7 @@
                     }
                 });
                 znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.id });
+                $state.go('app.diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.id });
             };
     });
 })(angular);

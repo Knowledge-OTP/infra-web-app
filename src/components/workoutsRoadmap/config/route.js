@@ -5,7 +5,7 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('workoutsRoadmap', {
+                .state('app.workoutsRoadmap', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
                         data: function data(ExerciseStatusEnum, WorkoutsSrv, /*WorkoutsDiagnosticFlow,*/ $q) {
@@ -31,13 +31,13 @@
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.diagnostic', {
+                .state('app.workoutsRoadmap.diagnostic', {
                     url: '/diagnostic',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapDiagnosticController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.diagnostic.intro', {
+                .state('app.workoutsRoadmap.diagnostic.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticIntro.template.html',
                     controller: 'WorkoutsRoadMapDiagnosticIntroController',
                     controllerAs: 'vm'
