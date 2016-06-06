@@ -1,0 +1,64 @@
+<svg version="1.1"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     x="0px"
+     y="0px"
+     viewBox="0 0 127 147.8"
+     class="workouts-progress-game-svg">
+    <style>
+        .workouts-progress-game-svg {
+            width: 15px;
+        }
+
+        .workouts-progress-game-svg .st0 {
+            fill-rule: evenodd;
+            clip-rule: evenodd;
+            fill: none;
+            stroke: #acacac;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-miterlimit: 10;
+        }
+
+        .workouts-progress-game-svg .st1 {
+            fill-rule: evenodd;
+            clip-rule: evenodd;
+            stroke: #acacac;
+            stroke-miterlimit: 10;
+            fill: #acacac;
+        }
+
+        .workouts-progress-game-svg .st2 {
+            fill-rule: evenodd;
+            clip-rule: evenodd;
+            fill: #acacac;
+            stroke: #acacac;
+        }
+
+
+        /*.workouts-progress-game-svg circle {*/
+            /*stroke: #acacac;*/
+            /*fill: none;*/
+        /*}*/
+
+        /*.workouts-progress-game-svg circle.st1 {*/
+            /*fill: #acacac;*/
+        /*}*/
+
+        /*.workouts-progress-game-svg path {*/
+            /*fill: #acacac;*/
+        /*}*/
+    </style>
+    <g>
+        <circle class="st0" cx="63.5" cy="84.2" r="60.5"/>
+        <circle class="st1" cx="63.7" cy="84.2" r="6.2"/>
+        <path class="st1" d="M65.2,73.8h-2.5c-0.7,0-1.2-0.3-1.2-0.7V41.5c0-0.4,0.5-0.7,1.2-0.7h2.5c0.7,0,1.2,0.3,1.2,0.7V73
+		C66.4,73.4,65.9,73.8,65.2,73.8z"/>
+        <path class="st2" d="M73.7,80.9l-1.6-2.7c-0.3-0.6-0.3-1.2,0.1-1.4l11.6-6.9c0.4-0.2,1,0,1.3,0.6l1.6,2.7c0.3,0.6,0.3,1.2-0.1,1.4
+		L75,81.5C74.6,81.7,74,81.5,73.7,80.9z"/>
+        <path class="st1" d="M58,9.5v4.6c0,2.9,2.4,5.3,5.3,5.3c2.9,0,5.3-2.4,5.3-5.3V9.5H58z"/>
+        <path class="st1" d="M79.2,3.1c0,1.7-1.4,3.1-3.1,3.1H51.6c-1.7,0-3.1-1.4-3.1-3.1l0,0c0-1.7,1.4-3.1,3.1-3.1h24.5
+		C77.8,0,79.2,1.4,79.2,3.1L79.2,3.1z"/>
+    </g>
+</svg>

@@ -64,7 +64,7 @@
                 if (vm.workoutsByTime) {
                     var exerciseTypeId = vm.workoutsByTime[workoutLength] && vm.workoutsByTime[workoutLength].exerciseTypeId;
                     var exerciseTypeEnumVal = ExerciseTypeEnum.getValByEnum(exerciseTypeId);
-                    return exerciseTypeEnumVal ? exerciseTypeEnumVal.toLowerCase() + '-icon' : '';
+                    return exerciseTypeEnumVal ? 'workouts-progress-' + exerciseTypeEnumVal.toLowerCase() + '-icon' : '';
                 }
                 return '';
             };

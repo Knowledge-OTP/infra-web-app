@@ -4,13 +4,13 @@
      x="0px"
      y="0px"
 	 viewBox="0 0 255.2 169"
-     class="exercise-icon-svg">
+     class="practice-icon-svg">
 <style type="text/css">
-    .exercise-icon-svg{
+    .practice-icon-svg{
         width: 20px;
     }
 
-    .exercise-icon-svg .st0{
+    .practice-icon-svg .st0{
         fill:none;
         stroke:#acacac;
         stroke-width:12;
@@ -18,14 +18,14 @@
         stroke-linejoin:round;
     }
 
-    .exercise-icon-svg .st1{
+    .practice-icon-svg .st1{
         fill:none;
         stroke:#acacac;
         stroke-width:12;
         stroke-linecap:round;
     }
 
-	.exercise-icon-svg .st2{
+	.practice-icon-svg .st2{
         fill:none;
         stroke:#acacac;
         stroke-width:12;

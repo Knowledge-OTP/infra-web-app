@@ -20,7 +20,7 @@ angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvide
         controllerAs: 'vm'
     });
 
-    function newWorkoutGetter($q, SubjectEnum){
+    function newWorkoutGetter($q, SubjectEnum, ExerciseTypeEnum){
         return function(subjectToIgnore){
             var keys = SubjectEnum.getEnumArr().map(function(item){
                 return item.enum;
@@ -34,15 +34,18 @@ angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvide
             return $q.when({
                 2: {
                     id: 1,
-                    subjectId: subjectId
+                    subjectId: subjectId,
+                    exerciseTypeId: ExerciseTypeEnum.DRILL.enum
                 },
                 5: {
                     id: 2,
-                    subjectId: subjectId
+                    subjectId: subjectId,
+                    exerciseTypeId: ExerciseTypeEnum.GAME.enum
                 },
                 10:{
                     id: 3,
-                    subjectId: subjectId
+                    subjectId: subjectId,
+                    exerciseTypeId: ExerciseTypeEnum.PRACTICE.enum
                 }
             });
         };

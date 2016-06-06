@@ -1,25 +1,26 @@
-.workouts-roadmap-intro{
-    .workouts-roadmap-intro-wrapper{
-        font:{
+.workouts-roadmap-intro {
+    .workouts-roadmap-intro-wrapper {
+        font: {
             family: Quicksand;
         }
 
-        .title-wrapper{
+        .title-wrapper {
             margin: {
                 top: 26px;
-            };
-            font:{
+            }
+        ;
+            font: {
                 weight: $boldFontWeight;
                 size: 21px;
             }
         }
 
-        .subject-icon{
+        .subject-icon {
             height: 105px;
         }
 
-        .subject-title{
-            font:{
+        .subject-title {
+            font: {
                 weight: $regularFontWeight;
                 size: 18px;
             }
@@ -31,6 +32,7 @@
             margin: {
                 top: 5px;
             }
+            display: inline-block;
 
             &.rotate {
                 svg-icon {
@@ -40,8 +42,8 @@
                 }
             }
 
-            .change-subject-title{
-                font:{
+            .change-subject-title {
+                font: {
                     family: Lato;
                     weight: $lightFontWeight;
                     size: 12px;
@@ -49,37 +51,39 @@
             }
         }
 
-        .how-much-time-title{
+        .how-much-time-title {
             margin: {
                 top: 28px;
             }
 
-            font:{
+            font: {
                 family: Lato;
                 weight: $regularFontWeight;
                 size: 18px;
             }
         }
 
-        .workout-time-selection-container{
+        .workout-time-selection-container {
             display: flex;
             justify-content: center;
             margin: {
                 top: 33px;
             }
 
-            .avail-time-item-wrapper{
+            .avail-time-item-wrapper {
                 margin: {
                     right: 15px;
-                };
+                }
+            ;
 
-                &:last-child{
+                &:last-child {
                     margin: {
                         right: 0;
-                    };
+                    }
+                ;
                 }
 
-                .avail-time-item{
+                .avail-time-item {
                     border-radius: 6px;
                     border: 2px solid $borderColor13;
                     box-sizing: border-box;
@@ -87,31 +91,125 @@
                     margin: {
                         right: auto;
                         left: auto;
-                    };
-                    font:{
+                    }
+                ;
+                    font: {
                         family: Lato;
                         weight: $regularFontWeight;
                     }
                     color: $fontColor12;
                     line-height: 73px;
                     position: relative;
+                    cursor: pointer;
 
-                    .workout-icon{
-                        @include dimension(26px,26px);
+                    &.active, &:hover {
+                        border-color: $borderColor4;
+                        color: $fontColor6;
+
+                        svg-icon {
+                            &[name="workouts-progress-tutorial-icon"] {
+                                .tips-n-tricks-svg {
+                                    path {
+                                        fill: $bgColor5;
+                                    }
+
+                                    .st0 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st1 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st2 {
+                                        stroke: $bgColor5;
+                                    }
+                                }
+                            }
+
+                            &[name="workouts-progress-practice-icon"] {
+                                .practice-icon-svg {
+                                    .st0 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st1 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st2 {
+                                        stroke: $bgColor5;
+                                    }
+                                }
+                            }
+
+                            &[name="workouts-progress-game-icon"] {
+                                .workouts-progress-game-svg {
+                                    .st0 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st1 {
+                                        stroke: $bgColor5;
+                                        fill: $bgColor5;
+                                    }
+
+                                    .st2 {
+                                        fill: $bgColor5;
+                                        stroke: $bgColor5;
+                                    }
+                                }
+                            }
+
+                            &[name="workouts-progress-drill-icon"] {
+                                .workouts-progress-drill-svg {
+                                    .st0 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st1 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st2 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st3 {
+                                        stroke: $bgColor5;
+                                    }
+
+                                    .st4 {
+                                        stroke: $bgColor5;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .workout-icon {
+                        @include dimension(26px, 26px);
                         background: white;
                         position: absolute;
                         top: -13px;
                         left: calc(50% - 13px);
+
+                        &[name="workouts-progress-drill-icon"] {
+                            svg {
+                                position: relative;
+                                top: -1px;
+                            }
+                        }
                     }
 
-                    .avail-time-text{
-                        font:{
+                    .avail-time-text {
+                        font: {
                             size: 26px;
                         }
                     }
 
-                    .minutes-text{
-                        font:{
+                    .minutes-text {
+                        font: {
                             size: 18px;
                         }
                     }
@@ -119,7 +217,7 @@
             }
         }
 
-        .start-btn-wrapper{
+        .start-btn-wrapper {
             margin: {
                 top: 50px;
             }
