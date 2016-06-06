@@ -1,11 +1,12 @@
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.estimatedScoreWidget').controller('EditGoals.controller',
-        function ($filter, $mdDialog) {
+        function ($scope, $filter, $mdDialog) {
             'ngInject';
             var translateFilter = $filter('translate');
-            this.userGoalsSetting = {
+            $scope.hello = 'hello';
+            $scope.userGoalsSetting = {
                 recommendedGoalsTitle: false,
                 saveBtn: {
                     title: translateFilter('USER_GOALS.SAVE'),
@@ -14,7 +15,7 @@
                 }
             };
 
-            this.cancel = function () {
+            $scope.cancel = function () {
                 $mdDialog.cancel();
             };
         }
