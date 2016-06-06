@@ -24,7 +24,7 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
         };
         var additionalItems = [demoItem1, demoItem2];
 
-        znkHeaderSrvProvider.addAdditionalItems(additionalItems);
+        znkHeaderSrvProvider.addAdditionalNavMenuItems(additionalItems);
     })
     .run(function ($rootScope, $translate) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {

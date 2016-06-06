@@ -1,0 +1,61 @@
+<md-dialog ng-cloak class="invitation-confirm-modal" translate-namespace="INVITE_APPROVE_MODAL">
+    <md-toolbar>
+        <div class="close-popup-wrap" ng-click="vm.closeModal()">
+            <svg-icon name="close-popup"></svg-icon>
+        </div>
+    </md-toolbar>
+    <md-dialog-content ng-switch="vm.requestMessage">
+        <section ng-switch-when="false">
+            <div class="main-title md-subheader" translate=".YOU_HAVE_INVITE"></div>
+            <div class="teacher">
+                <span>{{::vm.invitation.senderName}}</span>
+                <span class="want-to-connect" translate=".WANT_TO_CONNECT"></span>
+            </div>
+            <div class="btn-wrap">
+                <button class="md-button md-sm outline-blue"
+                        ng-disabled="vm.btnDisable === true"
+                        ng-click="vm.decline()"
+                        element-loader
+                        fill-loader="vm.cancelFillLoader"
+                        show-loader="vm.cancelStartLoader"
+                        bg-loader="'#acacac'"
+                        precentage="50"
+                        font-color="'#0a9bad'"
+                        bg="'#FFFFFF'">
+                    <span translate=".DECLINE"></span>
+                </button>
+                <button class="md-button md-sm primary"
+                        ng-disabled="vm.btnDisable === true"
+                        ng-click="vm.approve()"
+                        element-loader
+                        fill-loader="vm.approveFillLoader"
+                        show-loader="vm.approveStartLoader"
+                        bg-loader="'#07434A'"
+                        precentage="50"
+                        font-color="'#FFFFFF'"
+                        bg="'#0a9bad'">
+                    <span translate=".ACCEPT"></span>
+                </button>
+            </div>
+        </section>
+
+        <div class="big-success-msg switch-animation" ng-switch-when="true">
+            <svg-icon class="completed-v-icon-wrap" name="completed-v-icon"></svg-icon>
+            <div ng-bind-html="vm.responseMessage"></div>
+            <div class="done-btn-wrap">
+                <md-button aria-label="{{'INVITE_APPROVE_MODAL.DONE' | translate}}"
+                           class="success lg drop-shadow" ng-click="vm.closeModal()">
+                    <span translate=".DONE"></span>
+                </md-button>
+            </div>
+        </div>
+
+    </md-dialog-content>
+    <div class="top-icon-wrap">
+        <div class="top-icon">
+            <div class="round-icon-wrap">
+                <svg-icon name="exclamation-mark-icon"></svg-icon>
+            </div>
+        </div>
+    </div>
+</md-dialog>

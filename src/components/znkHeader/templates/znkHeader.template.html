@@ -5,38 +5,17 @@
                   ui-sref="app.workouts.roadmap"
                   ui-sref-opts="{reload: true}">
         </svg-icon>
+
         <div class="app-states-list">
             <md-list flex="grow" layout="row" layout-align="start center">
-                <md-list-item md-ink-ripple ui-sref-active="active">
-                    <span class="title" translate=".WORKOUTS"></span>
-                    <a ui-sref="app.workouts.roadmap"
-                       ui-sref-opts="{reload: true}"
-                       class="link-full-item">
-                    </a>
-                </md-list-item>
-                <md-list-item md-ink-ripple ui-sref-active="active">
-                    <span class="title" translate=".TESTS"></span>
-                    <a ui-sref="app.tests.roadmap" class="link-full-item"></a>
-                </md-list-item>
-                <md-list-item md-ink-ripple ui-sref-active="active">
-                    <span class="title" translate=".TUTORIALS"></span>
-                    <a ui-sref="app.tutorials.roadmap" class="link-full-item"></a>
-                </md-list-item>
-                <md-list-item md-ink-ripple ui-sref-active="active">
-                    <span class="title" translate=".PERFORMANCE"></span>
-                    <a ui-sref="app.performance" class="link-full-item"></a>
-                </md-list-item>
-
                 <div ng-repeat="headerItem in vm.additionalItems" ng-click="vm.invokeOnClickHandler(headerItem.onClickHandler)">
                     <md-list-item md-ink-ripple ui-sref-active="active">
-                        <span class="title">{{headerItem.text}}</span>
+                        <span class="title" translate="{{headerItem.text}}"></span>
                     </md-list-item>
                 </div>
             </md-list>
-
-
-
         </div>
+
         <div class="app-user-area" layout="row" layout-align="center center">
             <invitation-manager></invitation-manager>
             <div class="profile-status" ng-click="vm.showPurchaseDialog()">
