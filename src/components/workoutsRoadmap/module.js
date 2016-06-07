@@ -1,5 +1,4 @@
 /**
- * karly@zinkerz.com
  * usage instructions:
  *      1) workout progress:
  *          - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
