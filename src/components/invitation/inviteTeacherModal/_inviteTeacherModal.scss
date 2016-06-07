@@ -1,0 +1,130 @@
+@import '../../../../bower_components/infra/dist/mixins/mixins';
+
+md-dialog.invite-teacher-modal-wrap {
+    overflow: visible;
+    @include dimension(533px,420px);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background:none;
+
+    md-toolbar{
+        height: 40px;
+        max-height: 40px;
+        min-height: 40px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+
+        &:not(.md-menu-toolbar){
+            background-color: $bgColor5;
+        }
+
+        .close-popup-wrap {
+            @include absolute-position(-35px, -35px);
+            padding: 10px;
+            cursor: pointer;
+
+            svg{
+                height:14px;
+                width: 14px;
+                line {
+                    stroke: white;
+                }
+            }
+        }
+    }
+
+    md-dialog-content.invite-teacher-content {
+        background-color: $bgColor3;
+        padding-top: 35px;
+        height: 100%;
+        @include border-bottom-radius(20px);
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+
+        .modal-main-title {
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            @include text-style(25px, $fontColor2, Quicksand, $semiBoldFontWeight);
+        }
+
+        .invite-teacher-form {
+            .znk-input-group {
+                input{
+                    height: 40px;
+                    padding-left: 10px;
+                    border-width: 1px 1px 1px 1px;
+                    border-radius: 0;
+                    width: 328px;
+                }
+
+            }
+            .btn-wrap {
+                margin-top: 40px;
+                text-align: center;
+                .invite-msg{
+                    @include text-style(12px, $fontColor4, Lato, $lightFontWeight);
+                }
+            }
+        }
+
+        .big-success-msg{
+            .completed-v-icon-wrap{
+                width: 138px;
+                margin: 0 auto;
+            }
+            div{
+                @include text-style(16px,$fontColor13, Lato, $regularFontWeight);
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .done-btn-wrap{
+                display: flex;
+                justify-content: center;
+                .md-button {
+                    margin: 0 auto 65px;
+                }
+            }
+        }
+    }
+
+    .top-icon-wrap{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 40px;
+        .top-icon{
+            display: flex;
+            justify-content: center;
+
+            .round-icon-wrap{
+                width: 76px;
+                height: 76px;
+                border-radius: 38px;
+                background-color: $bgColor5;
+                z-index: 9;
+                margin-top: -15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                svg-icon{
+                    width: 35px;
+                    stroke: $bgColor36;
+                }
+
+                svg-icon *{
+                    fill: $bgColor36;
+                }
+
+                .invite-teacher-icon{
+                    @include full-background-image-retina('assets/icons/invite-teacher-icon',45px, 42px);
+                }
+            }
+        }
+    }
+}

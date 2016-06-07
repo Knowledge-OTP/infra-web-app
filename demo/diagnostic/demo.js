@@ -1,7 +1,7 @@
 angular.module('demo', [
         'znk.infra-web-app.diagnosticExercise',
         'pascalprecht.translate'])
-    .config(function ($translateProvider, StatsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider) {
+    .config(function ($translateProvider, StatsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -24,13 +24,30 @@ angular.module('demo', [
             return AuthService.getAuth();
         }]);
 
+        ScoringServiceProvider.setScoringLimits({
+            exam: {
+                min: 400,
+                max: 1600
+            },
+            subjects: {
+                min: 200,
+                max: 800
+            }
+        });
+
+        ScoringServiceProvider.setExamScoreFnGetter(function () {
+            return function(scoresArr) {
+                var totalScores = 0;
+                angular.forEach(scoresArr, function (score) {
+                    totalScores += score;
+                });
+                return totalScores;
+            }
+        });
+
         UserGoalsServiceProvider.settings = {
-            defaultSubjectScore: 600,
-            minSchoolScore: 400,
-            maxSchoolScore: 1600,
-            minGoalsScore: 200,
-            maxGoalsScore: 800,
             updateGoalNum: 10,
+            defaultSubjectScore: 600,
             subjects: [
                 { name: 'math', svgIcon: 'math-section-icon' },
                 { name: 'verbal', svgIcon: 'verbal-icon' }
@@ -73,7 +90,7 @@ angular.module('demo', [
         }]);
 
         DiagnosticIntroSrvProvider.setActiveSubjectGetter(['ENV', function (ENV) {
-            return {id: ENV.VERBAL};
+            return { id: ENV.VERBAL };
         }]);
 
         WorkoutsDiagnosticFlowProvider.setDiagnosticSettings({
@@ -90,7 +107,9 @@ angular.module('demo', [
                         name: 'verbal',
                         colors: ['#f9d628', '#c9c9c9', '#f3f3f3']
                     }
-                ]
+                ],
+                greatStart: 24,
+                goodStart: 20
             }
         });
 
@@ -110,6 +129,11 @@ angular.module('demo', [
 
             QuestionTypesSrvProvider.setQuestionTypesHtmlTemplate(map);
 
+        $stateProvider.state('app', {
+            abstract: true,
+            template: '<ui-view></ui-view>'
+        });
+
         $urlRouterProvider.otherwise('/diagnostic');
     })
     .run(function ($rootScope, $translate, $translatePartialLoader) {
@@ -122,7 +146,22 @@ angular.module('demo', [
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
             console.error(error.message);
         });
-    })// mock ENV
+    }) // mock AuthService
+    .factory('AuthService', function() {
+        return {
+            getAuth: function() {
+                return {
+                    uid: '666',
+                    auth: {
+                        name: 'oded'
+                    },
+                    password: {
+                        email: 'oded@zinkerz.com'
+                    }
+                }
+            }
+        }
+    }) // mock ENV
     .service('ENV', function () {
         this.MATH = 0; // mock subject id from enum
         this.VERBAL = 8;

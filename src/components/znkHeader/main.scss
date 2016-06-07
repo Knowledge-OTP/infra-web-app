@@ -2,7 +2,8 @@
         '../../../src/scss/imports/variables',
         '../../../bower_components/angular-material/angular-material.scss',
         '../../../bower_components/infra/dist/mixins/mixins',
-        '../purchase/main.scss';
+        '../purchase/main.scss',
+        '../invitation/main.scss';
 
 @import url(http://fonts.googleapis.com/icon?family=Material+Icons);  // need to make it shared scss ?
 
@@ -84,7 +85,7 @@
                 color: $fontColor6;
             }
             .md-button {
-                //background: $bgColor1;
+                background: $bgColor1;
                 width: auto;
                 display: flex !important;             // shared style for buttons?
                 justify-content: center;
@@ -115,7 +116,7 @@
                 margin-bottom: 5px;
             }
             .email {
-                @include text-style(14px, $fontColor7, Lato, 300);
+                @include text-style(14px, $fontColor14, Lato, 300);
                 border-bottom: 1px solid $borderColor4;
                 width: 100%;
                 padding-bottom: 15px;
@@ -132,7 +133,7 @@
                 color: $fontColor2;
             }
             &.logout {
-                color: $fontColor8;
+                color: $fontColor12;
             }
         }
         .check-mark-wrapper {

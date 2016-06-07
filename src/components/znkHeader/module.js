@@ -7,8 +7,10 @@
             'znk.infra.svgIcon',
             'znk.infra.popUp',
             'pascalprecht.translate',
+            'ui.router',
             'znk.infra-web-app.purchase',
-            'znk.infra.user'])
+            'znk.infra.user',
+            'znk.infra-web-app.invitation'])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){

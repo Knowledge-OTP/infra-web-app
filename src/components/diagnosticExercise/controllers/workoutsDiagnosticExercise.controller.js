@@ -5,7 +5,7 @@
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         function(ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
-                  WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
+                 $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv) {
         'ngInject';
             var self = this;
@@ -84,7 +84,11 @@
                     $log.debug('WorkoutsDiagnosticExerciseController onQuestionAnswered: initial func');
                     self.actions.setSlideDirection(ZnkExerciseSlideDirectionEnum.LEFT.enum);
                     exerciseData.resultsData.$save();
-                    if (!_isLastQuestion()) {
+                    if (_isLastQuestion()) {
+                        self.actions.forceDoneBtnDisplay(true);
+                        return;
+                    }
+                    if (!diagnosticSettings.isFixed) {
                         var isAnswerCorrectly = _isAnswerCorrect();
                         var currentIndex = _getCurrentIndex();
                         var newDifficulty = WorkoutsDiagnosticFlow.getDifficulty(currentDifficulty, isAnswerCorrectly,
@@ -93,8 +97,6 @@
                         WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, self.resultsData.questionResults, newDifficulty, numQuestionCounter + 1, function (newQuestion) {
                             _handleNewSlide(newQuestion);
                         });
-                    } else {
-                        self.actions.forceDoneBtnDisplay(true);
                     }
                 },
                 onDone: function () {
@@ -164,31 +166,32 @@
             }
 
             function _isLastSubject() {
-                var isLastSubject = false;
-                var sectionResultsKeys = Object.keys(exerciseData.examResult.sectionResults);
-                if (sectionResultsKeys.length === exerciseData.exam.sections.length) {
-                    var sectionsByOrder = exerciseData.exam.sections.sort(function (a, b) {
-                        return a.order > b.order;
-                    });
-                    var lastSection = sectionsByOrder[sectionsByOrder.length - 1];
-                    var lastIdStr = lastSection.id.toString();
-                    var isMatchingLastSectionToResults = sectionResultsKeys.findIndex(function (element) { return element === lastIdStr; }) !== -1;
-                    if (!isMatchingLastSectionToResults) {
-                        $log.error('WorkoutsDiagnosticExerciseController _isLastSubject: can\'t find index of the last section that match one section results, that\'s not suppose to happen!');
-                        return $q.reject();
-                    }
-                    if (isMatchingLastSectionToResults) {
-                        var getSectionResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, lastSection.id, exerciseData.exam.id);
-                        return getSectionResultProm.then(function (result) {
-                            if (result.isComplete) {
-                                isLastSubject = true;
-                            }
-                            return isLastSubject;
+                return WorkoutsDiagnosticFlow.getDiagnostic().then(function (examResult) {
+                    var isLastSubject = false;
+                    var sectionResultsKeys = Object.keys(examResult.sectionResults);
+                    if (sectionResultsKeys.length === exerciseData.exam.sections.length) {
+                        var sectionsByOrder = exerciseData.exam.sections.sort(function (a, b) {
+                            return a.order > b.order;
                         });
+                        var lastSection = sectionsByOrder[sectionsByOrder.length - 1];
+                        var lastIdStr = lastSection.id.toString();
+                        var isMatchingLastSectionToResults = sectionResultsKeys.findIndex(function (element) { return element === lastIdStr; }) !== -1;
+                        if (!isMatchingLastSectionToResults) {
+                            $log.error('WorkoutsDiagnosticExerciseController _isLastSubject: can\'t find index of the last section that match one section results, that\'s not suppose to happen!');
+                            return $q.reject();
+                        }
+                        if (isMatchingLastSectionToResults) {
+                            var getSectionResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, lastSection.id, exerciseData.exam.id);
+                            return getSectionResultProm.then(function (result) {
+                                if (result.isComplete) {
+                                    isLastSubject = true;
+                                }
+                                return isLastSubject;
+                            });
+                        }
                     }
-                } else {
-                    return $q.when(false);
-                }
+                    return false;
+                });
             }
 
             function _isLastQuestion() {
@@ -261,7 +264,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
-                $state.go('app.workouts.roadmap');
+                $state.go('app.workoutsRoadmap');
             };
     });
 })(angular);

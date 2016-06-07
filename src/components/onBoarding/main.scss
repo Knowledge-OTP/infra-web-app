@@ -26,6 +26,9 @@
      /**
      *  SVG
      */
+    svg-icon {
+      display:block;
+    }
     .svg-wrapper {
         height: 100%;
         display: flex;
@@ -61,11 +64,11 @@
     }
 
     .smile-raccoon {
-        @include full-background-image-retina('./assets/images/smile-raccoon', 293px, 373px);
+        @include full-background-image-retina('./onBoarding/assets/images/smile-raccoon', 293px, 373px);
     }
 
     .thinking-raccoon {
-        @include full-background-image-retina('./assets/images/thinking-raccoon', 360px, 217px);
+        @include full-background-image-retina('./onBoarding/assets/images/thinking-raccoon', 360px, 217px);
     }
 
     position: relative;

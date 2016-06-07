@@ -4,7 +4,7 @@
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticController', function($state, currentState, $translatePartialLoader) {
         'ngInject';
 
-        var EXAM_STATE = 'diagnostic';
+        var EXAM_STATE = 'app.diagnostic';
 
         $translatePartialLoader.addPart('diagnosticExercise');
 

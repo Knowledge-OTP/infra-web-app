@@ -5,7 +5,7 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('diagnostic', {
+                .state('app.diagnostic', {
                     url: '/diagnostic?skipIntro',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnostic.template.html',
                     resolve: {
@@ -17,23 +17,21 @@
                     controller: 'WorkoutsDiagnosticController',
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.intro', {
-                    url: '/intro/:id/:subjectId/:order',
+                .state('app.diagnostic.intro', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html',
                     controller: 'WorkoutsDiagnosticIntroController',
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.exercise', {
-                    url: '/exercise/:id/:sectionId',
+                .state('app.diagnostic.exercise', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html',
                     controller: 'WorkoutsDiagnosticExerciseController',
                     controllerAs: 'vm',
                     resolve: {
-                        exerciseData: function exerciseData($q, ExamSrv, $stateParams, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
+                        exerciseData: function exerciseData($q, ExamSrv, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
                             'ngInject';
                             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
-                            var examId = +$stateParams.id;
-                            var sectionId = +$stateParams.sectionId;
+                            var examId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
+                            var sectionId = WorkoutsDiagnosticFlow.getCurrentState().params.id;
                             var getExamProm = ExamSrv.getExam(examId);
                             var getSectionProm = ExamSrv.getExamSection(sectionId);
                             var getExamResultProm = ExerciseResultSrv.getExamResult(examId);
@@ -51,7 +49,7 @@
                                         sectionResult.duration = 0;
                                     }
 
-                                    examResultObj.$save();
+                                    sectionResult.$save();
 
                                     return {
                                         exerciseTypeId: sectionResult.exerciseTypeId,
@@ -84,25 +82,23 @@
                             }
                     }
                 })
-                .state('diagnostic.preSummary', {
-                    url: '/preSummary',
+                .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
                     controller: ['$timeout', '$state', function ($timeout, $state) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
-                            $state.go('app.workouts.diagnostic.summary');
+                            $state.go('diagnostic.summary');
                         }, VIDEO_DURATION);
                     }],
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.summary', {
-                    url: '/summary',
+                .state('app.diagnostic.summary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html',
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',
                     resolve: {
-                        diagnosticSummaryData: ['EstimatedScoreSrv', 'UserGoalsService', '$q', 'WorkoutsDiagnosticFlow', 'ScoringService', '$log', 'SubjectEnum',
-                            function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log, SubjectEnum) {
+                        diagnosticSummaryData: ['EstimatedScoreSrv', 'UserGoalsService', '$q', 'WorkoutsDiagnosticFlow', 'ScoringService', '$log',
+                            function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log) {
                                 'ngInject';
                                 var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
                                     var estimatedScores = {};
@@ -114,6 +110,7 @@
                                 var userGoalsProm = UserGoalsService.getGoals();
                                 var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                                 var diagnosticResult = WorkoutsDiagnosticFlow.getDiagnostic();
+                                var scoringLimits = ScoringService.getScoringLimits();
                                 return $q.all([userGoalsProm, userStatsProm, diagnosticResult]).then(function (results) {
                                     var diagnosticScoresObjToArr = [];
                                     var userStats = results[1];
@@ -123,7 +120,9 @@
                                             diagnosticScoresObjToArr.push(curStat);
                                         }
                                     });
-                                    return ScoringService.getTotalScoreResult(diagnosticScoresObjToArr).then(function (totalScore) {
+                                    var getExamScoreFnProm = ScoringService.getExamScoreFn(diagnosticScoresObjToArr);
+                                    return getExamScoreFnProm.then(function (examScoreFn) {
+                                        var totalScore = examScoreFn(diagnosticScoresObjToArr);
                                         if (!totalScore) {
                                             $log.error('diagnosticSummaryData resolve of route diagnostic.summary: totalScore is empty! result:', totalScore);
                                         }
@@ -131,7 +130,8 @@
                                             userGoals: results[0],
                                             userStats: userStats,
                                             diagnosticResult: results[2],
-                                            compositeScore: totalScore
+                                            compositeScore: totalScore,
+                                            scoringLimits: scoringLimits
                                         };
                                     });
                                 });
