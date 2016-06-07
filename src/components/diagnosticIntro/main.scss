@@ -21,6 +21,9 @@
 
 diagnostic-intro {
     width: 100%;
+    svg-icon {
+        display:block;
+    }
     .diagnostic-intro-drv {
         text-align: center;
 
@@ -59,16 +62,14 @@ diagnostic-intro {
                     border-color: $borderColor8;
                     position: relative;
 
+                    &:nth-child(3n+1) {
+                        align-self: flex-end;
+                    }
+
                     &.done {
                         .icon-wrapper {
-                            svg-icon{
-                                &.subject-icon{
-                                    display: none;
-                                }
-
-                                &.section-complete {
-                                    display: block;
-                                }
+                            svg-icon.section-complete {
+                                display: block;
                             }
                         }
                     }
