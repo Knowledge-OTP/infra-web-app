@@ -196,18 +196,162 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        function(ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
-                 $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
+        function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+                  $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv) {
-        'ngInject';
+            'ngInject';
             var self = this;
             this.subjectId = exerciseData.questionsData.subjectId;
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
-            var numQuestionCounter = _getInitNumQuestion(exerciseData.resultsData.questionResults);
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
+            var nextQuestion;
+            
+            function _isUndefinedUserAnswer(questionResults) {
+                return questionResults.filter(function (val) {
+                    return angular.isUndefined(val.userAnswer);
+                });
+            }
+
+            function _getInitNumQuestion(questionResults) {
+                var num = 0;
+                if (questionResults.length > 0) {
+                    var isUndefinedUserAnswer = _isUndefinedUserAnswer(questionResults);
+                    if (isUndefinedUserAnswer.length === 0) {
+                        num = questionResults.length;
+                    } else {
+                        num = questionResults.length - 1;
+                    }
+                }
+                return num;
+            }
+
+            function _goToCurrentState(flagForPreSummery) {
+                WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(flagForPreSummery).then(function (currentState) {
+                    $state.go('^' + currentState.state, currentState.params);
+                });
+            }
+
+            function _setNumSlideForNgModel(num) {
+                self.numSlide = num;
+            }
+
+            function _onDoneSaveResultsData() {
+                exerciseData.resultsData.isComplete = true;
+                exerciseData.resultsData.endedTime = Date.now();
+                exerciseData.resultsData.subjectId = exerciseData.questionsData.subjectId;
+                exerciseData.resultsData.exerciseDescription = exerciseData.exam.name;
+                exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
+                exerciseData.resultsData.$save();
+                exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
+                $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData,
+                    exerciseData.resultsData, exerciseData.exam);
+                StatsEventsHandlerSrv.addNewExerciseResult(ExerciseTypeEnum.SECTION.enum, exerciseData.questionsData, exerciseData.resultsData);
+            }
+
+            function _isLastSubject() {
+                return WorkoutsDiagnosticFlow.getDiagnostic().then(function (examResult) {
+                    var isLastSubject = false;
+                    var sectionResultsKeys = Object.keys(examResult.sectionResults);
+                    if (sectionResultsKeys.length === exerciseData.exam.sections.length) {
+                        var sectionsByOrder = exerciseData.exam.sections.sort(function (a, b) {
+                            return a.order > b.order;
+                        });
+                        var lastSection = sectionsByOrder[sectionsByOrder.length - 1];
+                        var lastIdStr = lastSection.id.toString();
+                        var isMatchingLastSectionToResults = sectionResultsKeys.findIndex(function (element) {
+                                return element === lastIdStr;
+                            }) !== -1;
+                        if (!isMatchingLastSectionToResults) {
+                            $log.error('WorkoutsDiagnosticExerciseController _isLastSubject: can\'t find index of the last section that match one section results, that\'s not suppose to happen!');
+                            return $q.reject();
+                        }
+                        if (isMatchingLastSectionToResults) {
+                            var getSectionResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, lastSection.id, exerciseData.exam.id);
+                            return getSectionResultProm.then(function (result) {
+                                if (result.isComplete) {
+                                    isLastSubject = true;
+                                }
+                                return isLastSubject;
+                            });
+                        }
+                    }
+                    return false;
+                });
+            }
+
+            var numQuestionCounter = _getInitNumQuestion(exerciseData.resultsData.questionResults);
+
+            function _isLastQuestion() {
+                return numQuestionCounter === diagnosticSettings.questionsPerSubject;
+            }
+
+            function _getCurrentIndex() {
+                return self.actions.getCurrentIndex();
+            }
+
+            function _isAnswerCorrect() {
+                var currentIndex = _getCurrentIndex();
+                var result = self.resultsData.questionResults[currentIndex];
+                return result.isAnsweredCorrectly;
+            }
+
+            function pushSlide(newQuestion) {
+                self.resultsData.questionResults.push(newQuestion.result);
+                self.resultsData.questionResults = angular.copy(self.resultsData.questionResults);
+                self.questions.push(newQuestion.question);
+                $log.debug('WorkoutsDiagnosticExerciseController pushSlide: push data', self.questionResults, self.questions);
+            }
+
+            function _getNewSlideType(questionId) {
+                var type;
+                $log.debug('WorkoutsDiagnosticExerciseController _getNewSlideType: initial func', questionId);
+                if (!nextQuestion) {
+                    nextQuestion = questionId;
+                    type = 'push';
+                } else if (questionId === nextQuestion) {
+                    type = 'same';
+                } else if (questionId !== nextQuestion) {
+                    nextQuestion = questionId;
+                    type = 'pop_push';
+                }
+                $log.debug('WorkoutsDiagnosticExerciseController _getNewSlideType: type returned value', type);
+                return type;
+            }
+
+            function popSlide() {
+                self.resultsData.questionResults.pop();
+                self.resultsData.questionResults = angular.copy(self.resultsData.questionResults);
+                self.questions.pop();
+                $log.debug('WorkoutsDiagnosticExerciseController popSlide: pop data', self.questionResults, self.questions);
+            }
+
+            function _handleNewSlide(newQuestion) {
+                var type = _getNewSlideType(newQuestion.question.id);
+                switch (type) {
+                    case 'push':
+                        pushSlide(newQuestion);
+                        $log.debug('WorkoutsDiagnosticExerciseController _handleNewSlide: push question', newQuestion);
+                        break;
+                    case 'pop_push':
+                        $timeout(function () {
+                            popSlide();
+                        });
+                        $timeout(function () {
+                            pushSlide(newQuestion);
+                        });
+                        $log.debug('WorkoutsDiagnosticExerciseController _handleNewSlide: pop_push question', newQuestion);
+                        break;
+                    case 'same':
+                        $log.debug('WorkoutsDiagnosticExerciseController _handleNewSlide: same question');
+                        break;
+                    default:
+                        $log.error('WorkoutsDiagnosticExerciseController _handleNewSlide: should have a type of push, pop_push or same! type:', type);
+                }
+            }
+
             _setNumSlideForNgModel(numQuestionCounter);
 
 
@@ -227,7 +371,6 @@
 
             //  current slide data (should be initialize in every slide)
             var currentDifficulty = diagnosticSettings.levels.medium.num;
-            var nextQuestion;
 
             var initSlideIndex;
             var mediumLevelNum = diagnosticSettings.levels.medium.num;
@@ -242,7 +385,9 @@
                 });
             } else {
                 self.questions = resultsData.questionResults.reduce(function (prevValue, currentValue) {
-                    var question = questions.filter(function (element) { return currentValue.questionId === element.id; })[0];
+                    var question = questions.filter(function (element) {
+                        return currentValue.questionId === element.id;
+                    })[0];
                     prevValue.push(question);
                     return prevValue;
                 }, []);
@@ -270,7 +415,7 @@
                     nextQuestion = void(0);
                     numQuestionCounter = numQuestionCounter + 1;
                     _setNumSlideForNgModel(numQuestionCounter);
-                    znkAnalyticsSrv.pageTrack({ props: { url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '') } });
+                    znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
                 },
                 onQuestionAnswered: function () {
                     $log.debug('WorkoutsDiagnosticExerciseController onQuestionAnswered: initial func');
@@ -316,149 +461,11 @@
                 allowedTimeForExercise: 12 * 60 * 1000
             };
 
-            function _goToCurrentState(flagForPreSummery) {
-                WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(flagForPreSummery).then(function (currentState) {
-                    $state.go('^' + currentState.state, currentState.params);
-                });
-            }
-
-            function _setNumSlideForNgModel(num) {
-                self.numSlide = num;
-            }
-
-            function _onDoneSaveResultsData() {
-                exerciseData.resultsData.isComplete = true;
-                exerciseData.resultsData.endedTime = Date.now();
-                exerciseData.resultsData.subjectId = exerciseData.questionsData.subjectId;
-                exerciseData.resultsData.exerciseDescription = exerciseData.exam.name;
-                exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
-                exerciseData.resultsData.$save();
-                exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
-                $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData,
-                    exerciseData.resultsData, exerciseData.exam);
-                StatsEventsHandlerSrv.addNewExerciseResult(ExerciseTypeEnum.SECTION.enum, exerciseData.questionsData, exerciseData.resultsData);
-            }
-
-            function _isUndefinedUserAnswer(questionResults) {
-                return questionResults.filter(function (val) {
-                    return angular.isUndefined(val.userAnswer);
-                });
-            }
-            function _getInitNumQuestion(questionResults) {
-                var num = 0;
-                if (questionResults.length > 0) {
-                    var isUndefinedUserAnswer = _isUndefinedUserAnswer(questionResults);
-                    if (isUndefinedUserAnswer.length === 0) {
-                        num = questionResults.length;
-                    } else {
-                        num = questionResults.length - 1;
-                    }
-                }
-                return num;
-            }
-
-            function _isLastSubject() {
-                return WorkoutsDiagnosticFlow.getDiagnostic().then(function (examResult) {
-                    var isLastSubject = false;
-                    var sectionResultsKeys = Object.keys(examResult.sectionResults);
-                    if (sectionResultsKeys.length === exerciseData.exam.sections.length) {
-                        var sectionsByOrder = exerciseData.exam.sections.sort(function (a, b) {
-                            return a.order > b.order;
-                        });
-                        var lastSection = sectionsByOrder[sectionsByOrder.length - 1];
-                        var lastIdStr = lastSection.id.toString();
-                        var isMatchingLastSectionToResults = sectionResultsKeys.findIndex(function (element) { return element === lastIdStr; }) !== -1;
-                        if (!isMatchingLastSectionToResults) {
-                            $log.error('WorkoutsDiagnosticExerciseController _isLastSubject: can\'t find index of the last section that match one section results, that\'s not suppose to happen!');
-                            return $q.reject();
-                        }
-                        if (isMatchingLastSectionToResults) {
-                            var getSectionResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, lastSection.id, exerciseData.exam.id);
-                            return getSectionResultProm.then(function (result) {
-                                if (result.isComplete) {
-                                    isLastSubject = true;
-                                }
-                                return isLastSubject;
-                            });
-                        }
-                    }
-                    return false;
-                });
-            }
-
-            function _isLastQuestion() {
-                return numQuestionCounter === diagnosticSettings.questionsPerSubject;
-            }
-
-            function _getCurrentIndex() {
-                return self.actions.getCurrentIndex();
-            }
-
-            function _isAnswerCorrect() {
-                var currentIndex = _getCurrentIndex();
-                var result = self.resultsData.questionResults[currentIndex];
-                return result.isAnsweredCorrectly;
-            }
-
-            function _handleNewSlide(newQuestion) {
-                var type = _getNewSlideType(newQuestion.question.id);
-                switch (type) {
-                    case 'push':
-                        pushSlide(newQuestion);
-                        $log.debug('WorkoutsDiagnosticExerciseController _handleNewSlide: push question', newQuestion);
-                        break;
-                    case 'pop_push':
-                        $timeout(function () {
-                            popSlide();
-                        });
-                        $timeout(function () {
-                            pushSlide(newQuestion);
-                        });
-                        $log.debug('WorkoutsDiagnosticExerciseController _handleNewSlide: pop_push question', newQuestion);
-                        break;
-                    case 'same':
-                        $log.debug('WorkoutsDiagnosticExerciseController _handleNewSlide: same question');
-                        break;
-                    default:
-                        $log.error('WorkoutsDiagnosticExerciseController _handleNewSlide: should have a type of push, pop_push or same! type:', type);
-                }
-            }
-
-            function pushSlide(newQuestion) {
-                self.resultsData.questionResults.push(newQuestion.result);
-                self.resultsData.questionResults = angular.copy(self.resultsData.questionResults);
-                self.questions.push(newQuestion.question);
-                $log.debug('WorkoutsDiagnosticExerciseController pushSlide: push data', self.questionResults, self.questions);
-            }
-
-            function popSlide() {
-                self.resultsData.questionResults.pop();
-                self.resultsData.questionResults = angular.copy(self.resultsData.questionResults);
-                self.questions.pop();
-                $log.debug('WorkoutsDiagnosticExerciseController popSlide: pop data', self.questionResults, self.questions);
-            }
-
-            function _getNewSlideType(questionId) {
-                var type;
-                $log.debug('WorkoutsDiagnosticExerciseController _getNewSlideType: initial func', questionId);
-                if (!nextQuestion) {
-                    nextQuestion = questionId;
-                    type = 'push';
-                } else if (questionId === nextQuestion) {
-                    type = 'same';
-                } else if (questionId !== nextQuestion) {
-                    nextQuestion = questionId;
-                    type = 'pop_push';
-                }
-                $log.debug('WorkoutsDiagnosticExerciseController _getNewSlideType: type returned value', type);
-                return type;
-            }
-
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
                 $state.go('app.workoutsRoadmap');
             };
-    });
+        });
 })(angular);
 
 
@@ -865,7 +872,9 @@
                     var diagnosticExam = diagnostic[0];
                     var diagnosticResults = diagnostic[1];
 
-                    if (diagnosticResults.isComplete) return COMPLETED;
+                    if (diagnosticResults.isComplete) {
+                        return COMPLETED;
+                    }
 
                     var exerciseResultPromises = _getExerciseResultProms(diagnosticResults.sectionResults, diagnosticSettings.diagnosticId);
                     return $q.all(exerciseResultPromises).then(function (completedSections) {

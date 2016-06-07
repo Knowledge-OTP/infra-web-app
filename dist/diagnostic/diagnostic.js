@@ -1,5 +1,15 @@
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.diagnostic', [
+        'znk.infra.exerciseResult',
+        'znk.infra.exerciseUtility'
+        
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {
         var _diagnosticExamIdGetter;
         this.setDiagnosticExamIdGetter = function(diagnosticExamIdGetter){
@@ -52,3 +62,7 @@
         };
     });
 })(angular);
+
+angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($templateCache) {
+
+}]);

@@ -1,7 +1,9 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.znkExerciseHeader').directive('znkExerciseHeader', ['$timeout', function($timeout){
+    angular.module('znk.infra-web-app.znkExerciseHeader').directive('znkExerciseHeader',
+        function($timeout, SubjectEnum, $translatePartialLoader){
         'ngInject';
+
         return {
             scope: {
                 options: '=?',
@@ -20,8 +22,7 @@
             restrict: 'E',
             require: '?ngModel',
             templateUrl: 'components/znkExerciseHeader/templates/exerciseHeader.template.html',
-            controller: function (SubjectEnum, $translatePartialLoader) {
-                'ngInject';
+            controller: function () {
                 $translatePartialLoader.addPart('znkExerciseHeader');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
@@ -48,5 +49,5 @@
                 }
             }
         };
-    }]);
+    });
 })(angular);

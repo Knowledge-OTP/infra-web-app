@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+    
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config([
             'SvgIconSrvProvider',
@@ -13,7 +15,7 @@
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }
-        ]) 
+        ])
         .directive('workoutsProgress',
             function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
                 'ngInject';

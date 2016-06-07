@@ -27,7 +27,7 @@
                     scope: {
                         workoutsProgressGetter: '&workoutsProgress'
                     },
-                    link: function (scope, element, attrs) {
+                    link: function (scope, element) {
                         var currWorkoutOrder = +$stateParams.workout;
                         var workoutsProgress = scope.workoutsProgressGetter();
                         var currWorkout = workoutsProgress[currWorkoutOrder - 1];
