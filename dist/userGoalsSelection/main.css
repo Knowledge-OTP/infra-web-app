@@ -17829,10 +17829,7 @@ user-goals {
       font-weight: 700; }
       user-goals .composite-wrap .composite-score > div {
         display: inline-block; }
-      user-goals .composite-wrap .composite-score .score-title {
-        width: 170px; }
       user-goals .composite-wrap .composite-score .score {
-        width: 65px;
         margin-left: 10px; }
   user-goals .save-btn-wrap {
     margin-top: 72px;

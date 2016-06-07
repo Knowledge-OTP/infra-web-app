@@ -1,7 +1,7 @@
 angular.module('demo', [
         'znk.infra-web-app.diagnosticExercise',
         'pascalprecht.translate'])
-    .config(function ($translateProvider, StatsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
+    .config(function ($translateProvider, StatsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -128,6 +128,11 @@ angular.module('demo', [
             };
 
             QuestionTypesSrvProvider.setQuestionTypesHtmlTemplate(map);
+
+        $stateProvider.state('app', {
+            abstract: true,
+            template: '<ui-view></ui-view>'
+        });
 
         $urlRouterProvider.otherwise('/diagnostic');
     })

@@ -71366,7 +71366,7 @@ on-boarding-bar {
     box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
   .on-board .smile-raccoon {
     /*CSS for basic styling and non-retina image path:*/
-    background-image: url("./assets/images/smile-raccoon.png");
+    background-image: url("./onBoarding/assets/images/smile-raccoon.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -71376,7 +71376,7 @@ on-boarding-bar {
     /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
     @media only screen and (min-resolution: 1.5dppx) {
       .on-board .smile-raccoon {
-        background-image: url("./assets/images/smile-raccoon@2x.png");
+        background-image: url("./onBoarding/assets/images/smile-raccoon@2x.png");
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
@@ -71385,7 +71385,7 @@ on-boarding-bar {
         height: 373px; } }
   .on-board .thinking-raccoon {
     /*CSS for basic styling and non-retina image path:*/
-    background-image: url("./assets/images/thinking-raccoon.png");
+    background-image: url("./onBoarding/assets/images/thinking-raccoon.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -71395,7 +71395,7 @@ on-boarding-bar {
     /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
     @media only screen and (min-resolution: 1.5dppx) {
       .on-board .thinking-raccoon {
-        background-image: url("./assets/images/thinking-raccoon@2x.png");
+        background-image: url("./onBoarding/assets/images/thinking-raccoon@2x.png");
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
@@ -89565,10 +89565,7 @@ user-goals {
       font-weight: 700; }
       user-goals .composite-wrap .composite-score > div {
         display: inline-block; }
-      user-goals .composite-wrap .composite-score .score-title {
-        width: 170px; }
       user-goals .composite-wrap .composite-score .score {
-        width: 65px;
         margin-left: 10px; }
   user-goals .save-btn-wrap {
     margin-top: 72px;

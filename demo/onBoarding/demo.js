@@ -1,11 +1,16 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding'])
-    .config(function ($translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider, ScoringServiceProvider) {
+    .config(function ($stateProvider, $translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
             'verbal-icon': 'svg/verbal-icon.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
+
+        $stateProvider.state('app', {
+            abstract: true,
+            template: '<ui-view></ui-view>'
+        });
 
         $urlRouterProvider.otherwise('/onBoarding');
 
