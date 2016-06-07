@@ -8,16 +8,8 @@ angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvide
         controller: function(){
 
         }
-    }).state('workoutsRoadmap.workout.inProgress', {
-        template:
-            '<div>Diagnostic SUMMARY</div>' +
-            '<button ng-click="vm.continue()">Continue work</button>',
-        controller: function(){
-            this.continue = function(){
-                alert('continue workout');
-            };
-        },
-        controllerAs: 'vm'
+    }).state('workoutsRoadmap.workout.summary', {
+        template: '<div>Workout SUMMARY</div>'
     });
 
     function newWorkoutGetter($q, SubjectEnum, ExerciseTypeEnum){
@@ -27,7 +19,7 @@ angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvide
             });
             var subjectId;
             keys.forEach(function(key){
-                if(angular.isUndefined(subjectId) && subjectToIgnore.indexOf(key) === -1){
+                if(angular.isUndefined(subjectId) && (!angular.isArray(subjectToIgnore) || subjectToIgnore.indexOf(key) === -1)){
                     subjectId = key;
                 }
             });

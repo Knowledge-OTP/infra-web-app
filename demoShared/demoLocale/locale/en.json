@@ -8,8 +8,6 @@
         "DIAG_DESCRIPTION_MATH": "Math description",
         "DIAG_SUBJECT_TEXT_MATH": "Math subject text",
         "DIAG_SUBJECT_NAME_MATH": "Math subject name",
-
-
         "DIAG_DESCRIPTION_VERBAL": "This quick test will determine your initial estimated score and your training roadmap.",
         "DIAG_SUBJECT_TEXT_VERBAL": "Let’s do 4",
         "DIAG_SUBJECT_NAME_VERBAL": "English",
@@ -25,5 +23,8 @@
         "READING": "READING",
         "MATH": "MATH",
         "VERBAL": "VERBAL"
+    },
+    "WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK":{
+        "GET_ZINKERZ_PRO": "Get Zinkerz PRO to unlock all workouts and get<br>your speaking and writing questions evaluated"
     }
 }

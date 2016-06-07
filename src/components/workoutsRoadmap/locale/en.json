@@ -16,9 +16,20 @@
         "START": "START",
         "MINUTES": "minutes"
     },
+    "WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS":{
+        "TITLE": "Workout {{workoutOrder}}",
+        "KEEP_GOING": "Let's keep going!",
+        "ANSWERED": "Answered: {{answered}}/{{total}}",
+        "CONTINUE": "CONTINUE"
+    },
     "WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK":{
         "TITLE": "Workout {{workoutOrder}}",
         "DIAGNOSTIC_NOT_COMPLETED": "This workout will be available after you have <br>completed the diagnostic test",
-        "PREV_NOT_COMPLETED": "Complete the previous workout to unlock this workout"
+        "PREV_NOT_COMPLETED": "Complete the previous workout to unlock this workout",
+        "MORE_WORKOUTS": "Want to get one more workout for free?",
+        "TELL_FRIENDS": "Tell friends about us!",
+        "SHARE": "SHARE",
+        "UPGRADE": "Upgrade",
+        "MORE_PRACTICE": "Do you feel like you need more practice? Or do you <br>want to be 100% sure you’re ready for the test?"
     }
 }

@@ -11,7 +11,8 @@
 
             var svgMap = {
                 'workouts-intro-lock-dotted-arrow': 'components/workoutsRoadmap/svg/dotted-arrow.svg',
-                'workouts-intro-lock-lock': 'components/workoutsRoadmap/svg/lock-icon.svg'
+                'workouts-intro-lock-lock': 'components/workoutsRoadmap/svg/lock-icon.svg',
+                'workouts-intro-lock-share-arrow': 'components/workoutsRoadmap/svg/share-arrow-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })

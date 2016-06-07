@@ -71,6 +71,11 @@
                     controller: 'WorkoutsRoadMapWorkoutIntroController',
                     controllerAs: 'vm'
                 })
+                .state('workoutsRoadmap.workout.inProgress', {
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html',
+                    controller: 'WorkoutsRoadMapWorkoutInProgressController',
+                    controllerAs: 'vm'
+                })
                 .state('workoutsRoadmap.workout.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',

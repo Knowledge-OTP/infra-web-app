@@ -1,0 +1,29 @@
+<div class="workouts-roadmap-workout-in-progress base-workouts-wrapper"
+     translate-namespace="WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS">
+    <div class="workouts-roadmap-workout-in-progress-wrapper">
+        <div class="title-wrapper">
+            <div translate=".TITLE"
+                 translate-values="{workoutOrder: vm.workout.workoutOrder}">
+            </div>
+        </div>
+        <svg-icon class="subject-icon"
+                  subject-id-to-attr-drv="vm.workout.subjectId"
+                  context-attr="name"
+                  suffix="icon">
+        </svg-icon>
+        <div class="subject-title"
+             translate="SUBJECTS.{{vm.workout.subjectId}}">
+        </div>
+        <div class="keep-going-text" translate=".KEEP_GOING"></div>
+        <div class="answered-text"
+             translate=".ANSWERED"
+             translate-values="{
+                answered: vm.exerciseResult.totalAnsweredNum,
+                total: vm.exerciseResult.totalQuestionNum
+             }">
+        </div>
+        <md-button class="znk md-primary continue-btn">
+            <span translate=".CONTINUE"></span>
+        </md-button>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+.workouts-roadmap-workout-in-progress{
+    .workouts-roadmap-workout-in-progress-wrapper{
+        color: $fontColor3;
+        font: {
+            family: Quicksand;
+        }
+
+        .title-wrapper {
+            margin: {
+                top: 26px;
+            }
+            font: {
+                weight: $boldFontWeight;
+                size: 21px;
+            }
+        }
+
+        .subject-icon {
+            height: 105px;
+        }
+
+        .subject-title {
+            font: {
+                weight: $regularFontWeight;
+                size: 18px;
+            }
+            text-transform: capitalize;
+        }
+
+        .keep-going-text{
+            margin: {
+                top: 60px;
+            }
+            font:{
+                family: Lato;
+                weight: $regularFontWeight;
+                size: 18px;
+            }
+        }
+
+        .answered-text{
+            font:{
+                weight: $regularFontWeight;
+                size: 31px;
+            }
+            color: $fontColor4;
+            margin: {
+                top: 55px;
+            }
+        }
+
+        .continue-btn{
+            margin: {
+                top: 70px;
+            }
+        }
+    }
+}

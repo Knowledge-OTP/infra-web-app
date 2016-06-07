@@ -17,9 +17,30 @@
         <div ng-switch-when="3" class="no-pro-social-sharing">
             <svg-icon name="workouts-intro-lock-lock"></svg-icon>
             <div class="text1"
-                 translate=".">
+                 translate=".MORE_WORKOUTS">
             </div>
-            <div class="text2"></div>
+            <div class="text2"
+                 translate=".TELL_FRIENDS">
+            </div>
+            <md-button class="share-btn md-primary znk"
+                       md-no-ink>
+                <svg-icon name="workouts-intro-lock-share-arrow"></svg-icon>
+                <span translate=".SHARE"></span>
+            </md-button>
+            <div class="text3 get-zinkerz-pro-text"
+                 translate=".GET_ZINKERZ_PRO">
+            </div>
+            <md-button class="upgrade-btn znk outline">
+                <span translate=".UPGRADE"></span>
+            </md-button>
+        </div>
+        <div ng-switch-when="4" class="no-pro">
+            <svg-icon name="workouts-intro-lock-lock"></svg-icon>
+            <div class="description" translate=".MORE_PRACTICE"></div>
+            <div class="get-zinkerz-pro-text" translate=".GET_ZINKERZ_PRO"></div>
+            <md-button class="upgrade-btn znk md-primary">
+                <span translate=".UPGRADE"></span>
+            </md-button>
         </div>
     </ng-switch>
 </div>
