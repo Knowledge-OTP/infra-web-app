@@ -46,11 +46,11 @@
                     controller: 'WorkoutsRoadMapDiagnosticIntroController',
                     controllerAs: 'vm',
                     resolve: {
-                        isDiagnosticStarted: function(DiagnosticSrv, ExerciseStatusEnum){
+                        isDiagnosticStarted: function (DiagnosticSrv, ExerciseStatusEnum) {
                             'ngInject';
 
-                            return DiagnosticSrv.getDiagnosticStatus().then(function(status){
-                               return status === ExerciseStatusEnum.ACTIVE.enum;
+                            return DiagnosticSrv.getDiagnosticStatus().then(function (status) {
+                                return status === ExerciseStatusEnum.ACTIVE.enum;
                             });
                         }
                     }
@@ -80,22 +80,6 @@
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
-                })
-            /*  .state('app.workouts.roadmap.workout.intro', {
-             templateUrl: 'app/workouts/templates/workoutsRoadmapWorkoutIntro.template.html',
-             controller: 'WorkoutsRoadMapWorkoutIntroController',
-             controllerAs: 'vm'
-             })
-             .state('app.workouts.roadmap.workout.inProgress', {
-             templateUrl: 'app/workouts/templates/workoutsRoadmapWorkoutInProgress.template.html',
-             controller: 'WorkoutsRoadMapWorkoutInProgressController',
-             controllerAs: 'vm'
-             })
-
-             .state('app.workouts.roadmap.workout.summary', {
-             templateUrl: 'app/workouts/templates/workoutsRoadmapWorkoutSummary.template.html',
-             controller: 'WorkoutsRoadMapWorkoutSummaryController',
-             controllerAs: 'vm'
-             })*/;
+                });
         }]);
 })(angular);
