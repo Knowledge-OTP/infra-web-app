@@ -13,7 +13,7 @@
             this.saveGoals = function () {
                 znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingGoalsStep' });
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                $state.go('onBoarding.diagnostic');
+                $state.go('app.onBoarding.diagnostic');
             };
         }]);
 })(angular);

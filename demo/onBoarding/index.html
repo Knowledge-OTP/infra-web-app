@@ -4,188 +4,17 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="onBoarding/main.css">
-    <link rel="stylesheet" href="userGoals/main.css">
+    <link rel="stylesheet" href="userGoalsSelection/main.css">
     <link rel="stylesheet" href="diagnosticIntro/main.css">
     <link rel="stylesheet" href="infra/dist/svgIcon/main.css">
     <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css">
+    <link rel="stylesheet" href="css/diagnostic-intro-custom.css">
     <style>
         .main-content {
             width: 1060px;
             padding-top: 18px;
             margin: 0 auto;
         }
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-english {
-            /*CSS for basic styling and non-retina image path:*/
-            background-image: url("./images/diagnostic-raccoon-english.png");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            display: inline-block;
-            width: 289px;
-            height: 207px;
-            /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-        @media only screen and (min-resolution: 1.5dppx) {
-            diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-english {
-                background-image: url("./images/diagnostic-raccoon-english@2x.png");
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: cover;
-                display: inline-block;
-                width: 289px;
-                height: 207px; } }
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-math {
-            /*CSS for basic styling and non-retina image path:*/
-            background-image: url("./images/diagnostic-raccoon-math.png");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            display: inline-block;
-            width: 271px;
-            height: 179px;
-            /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-        @media only screen and (min-resolution: 1.5dppx) {
-            diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-math {
-                background-image: url("./images/diagnostic-raccoon-math@2x.png");
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: cover;
-                display: inline-block;
-                width: 271px;
-                height: 179px; } }
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-reading {
-            /*CSS for basic styling and non-retina image path:*/
-            background-image: url("./images/diagnostic-raccoon-reading.png");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            display: inline-block;
-            width: 212px;
-            height: 224px;
-            /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-        @media only screen and (min-resolution: 1.5dppx) {
-            diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-reading {
-                background-image: url("./images/diagnostic-raccoon-reading@2x.png");
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: cover;
-                display: inline-block;
-                width: 212px;
-                height: 224px; } }
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-science {
-            /*CSS for basic styling and non-retina image path:*/
-            background-image: url("./images/diagnostic-raccoon-science.png");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            display: inline-block;
-            width: 194px;
-            height: 186px;
-            /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-        @media only screen and (min-resolution: 1.5dppx) {
-            diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon-science {
-                background-image: url("./images/diagnostic-raccoon-science@2x.png");
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: cover;
-                display: inline-block;
-                width: 194px;
-                height: 186px; } }
-        diagnostic-intro .diagnostic-intro-drv .section-question .math {
-            color: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .section-question .verbal {
-            color: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .section-question .english {
-            color: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .section-question .reading {
-            color: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .section-question .science {
-            color: #51CDBA; }
-        .on-board .math-bc {
-            border-color: #AF89D2; }
-        .on-board .math-bg {
-            background-color: #AF89D2; }
-        .on-board .verbal-bc {
-            border-color: #F9D41B; }
-        .on-board .verbal-bg {
-            background-color: #F9D41B; }
-        .on-board .essay-bc {
-            border-color: #FF5895; }
-        .on-board .essay-bg {
-            background-color: #FF5895; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.math-color {
-            border-color: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.math-color svg-icon svg {
-            fill: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.math-color.active {
-            background-color: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.math-color.active svg-icon svg {
-            fill: white; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.math-color.done {
-            border-color: #AF89D2;
-            background-color: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.math-color.done .subject-icon {
-            display: none; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.verbal-color {
-            border-color: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.verbal-color svg-icon svg * {
-            fill: #F9D41B;
-            stroke: white; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.verbal-color.active {
-            border-color: #F9D41B;
-            background-color: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.verbal-color.active svg-icon svg * {
-            fill: white;
-            stroke: white; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.verbal-color.done {
-            border-color: #F9D41B;
-            background-color: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.verbal-color.done .subject-icon {
-            display: none; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.english-color {
-            border-color: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.english-color svg-icon svg {
-            fill: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.english-color.active {
-            border-color: #AF89D2;
-            background-color: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.english-color.active svg-icon svg * {
-            fill: white;
-            stroke: white; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.english-color.done {
-            border-color: #AF89D2;
-            background-color: #AF89D2; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.english-color.done .subject-icon {
-            display: none; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.reading-color {
-            border-color: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.reading-color svg-icon svg {
-            fill: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.reading-color.active {
-            border-color: #F9D41B;
-            background-color: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.reading-color.active svg-icon svg * {
-            fill: white;
-            stroke: white; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.reading-color.done {
-            border-color: #F9D41B;
-            background-color: #F9D41B; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.reading-color.done .subject-icon {
-            display: none; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.science-color {
-            border-color: #51CDBA; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.science-color svg-icon svg {
-            fill: #51CDBA; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.science-color.active {
-            border-color: #51CDBA;
-            background-color: #51CDBA; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.science-color.active svg-icon svg * {
-            fill: white;
-            stroke: white; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.science-color.done {
-            border-color: #51CDBA;
-            background-color: #51CDBA; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.science-color.done .subject-icon {
-            display: none; }
     </style>
 </head>
 <body style="height: 100%;background: rgba(43, 43, 191, 0.08);" ng-app="demo">
@@ -202,19 +31,29 @@
     <script src="angular-material/angular-material.js"></script>
     <script src="firebase/firebase-debug.js"></script>
     <script src="infra/dist/svgIcon/svgIcon.js"></script>
+    <script src="infra/dist/general/general.js"></script>
     <script src="infra/dist/utility/utility.js"></script>
+    <script src="infra/dist/enum/enum.js"></script>
+    <script src="infra/dist/exerciseResult/exerciseResult.js"></script>
+    <script src="infra/dist/contentAvail/contentAvail.js"></script>
+    <script src="infra/dist/content/content.js"></script>
+    <script src="infra/dist/exerciseUtility/exerciseUtility.js"></script>
+    <script src="infra/dist/scoring/scoring.js"></script>
     <script src="infra/dist/config/config.js"></script>
     <script src="infra/dist/analytics/analytics.js"></script>
     <script src="infra/dist/storage/storage.js"></script>
     <script src="infra/dist/user/user.js"></script>
 
     <script src="userGoals/userGoals.js"></script>
-    <script src="userGoals/templates.js"></script>
+    <script src="userGoalsSelection/userGoalsSelection.js"></script>
+    <script src="userGoalsSelection/templates.js"></script>
     <script src="diagnosticIntro/diagnosticIntro.js"></script>
     <script src="diagnosticIntro/templates.js"></script>
     <script src="onBoarding/onBoarding.js"></script>
     <script src="onBoarding/templates.js"></script>
 
     <script src="demo.js"></script>
+    <script src="infra/demoShared/analyticsConfig.js"></script>
+    <script src="userGoalsConfig.js"></script>
 </body>
 </html>

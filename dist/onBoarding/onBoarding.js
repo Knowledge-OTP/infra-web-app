@@ -11,7 +11,7 @@
         'znk.infra.user',
         'ui.router',
         'ngMaterial',
-        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.diagnosticIntro'
     ]).config([
         'SvgIconSrvProvider', '$stateProvider',
@@ -25,7 +25,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
 
             $stateProvider
-                .state('onBoarding', {
+                .state('app.onBoarding', {
                     url: '/onBoarding',
                     templateUrl: 'components/onBoarding/templates/onBoarding.template.html',
                     controller: 'OnBoardingController',
@@ -36,7 +36,7 @@
                         }]
                     }
                 })
-                .state('onBoarding.welcome', {
+                .state('app.onBoarding.welcome', {
                     templateUrl: 'components/onBoarding/templates/onBoardingWelcome.template.html',
                     controller: 'OnBoardingWelcomesController',
                     controllerAs: 'vm',
@@ -46,17 +46,17 @@
                         }]
                     }
                 })
-                .state('onBoarding.schools', {
+                .state('app.onBoarding.schools', {
                     templateUrl: 'components/onBoarding/templates/onBoardingSchools.template.html',
                     controller: 'OnBoardingSchoolsController',
                     controllerAs: 'vm'
                 })
-                .state('onBoarding.goals', {
+                .state('app.onBoarding.goals', {
                     templateUrl: 'components/onBoarding/templates/onBoardingGoals.template.html',
                     controller: 'OnBoardingGoalsController',
                     controllerAs: 'vm'
                 })
-                .state('onBoarding.diagnostic', {
+                .state('app.onBoarding.diagnostic', {
                     templateUrl: 'components/onBoarding/templates/onBoardingDiagnostic.template.html',
                     controller: 'OnBoardingDiagnosticController',
                     controllerAs: 'vm'
@@ -108,15 +108,15 @@
             this.saveGoals = function () {
                 znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingGoalsStep' });
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                $state.go('onBoarding.diagnostic');
+                $state.go('app.onBoarding.diagnostic');
             };
         }]);
 })(angular);
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'UserSchoolsService', 'znkAnalyticsSrv', '$timeout',
-        function($state, OnBoardingService, UserSchoolsService, znkAnalyticsSrv, $timeout) {
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
+        function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
 
             function _addEvent(clicked) {
                 znkAnalyticsSrv.eventTrack({
@@ -129,10 +129,10 @@
 
             function _goToGoalsState(newUserSchools, evtName) {
                 _addEvent(evtName);
-                UserSchoolsService.setDreamSchools(newUserSchools, true).then(function () {
+                userGoalsSelectionService.setDreamSchools(newUserSchools, true).then(function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.GOALS).then(function () {
                         $timeout(function () {
-                            $state.go('onBoarding.goals');
+                            $state.go('app.onBoarding.goals');
                         });
                     });
                 });
@@ -165,10 +165,10 @@
                 znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingWelcomeStep' });
                 if (onBoardingSettings.showSchoolStep) {
                     nextStep = OnBoardingService.steps.SCHOOLS;
-                    nextState = 'onBoarding.schools';
+                    nextState = 'app.onBoarding.schools';
                 } else {
                     nextStep = OnBoardingService.steps.GOALS;
-                    nextState = 'onBoarding.goals';
+                    nextState = 'app.onBoarding.goals';
                 }
                 OnBoardingService.setOnBoardingStep(nextStep);
                 $state.go(nextState);
@@ -203,11 +203,11 @@
             var onBoardingServiceObj = {};
 
             var onBoardingStates = {
-                1: 'onBoarding.welcome',
-                2: 'onBoarding.schools',
-                3: 'onBoarding.goals',
-                4: 'onBoarding.diagnostic',
-                5: 'workouts.roadmap'
+                1: 'app.onBoarding.welcome',
+                2: 'app.onBoarding.schools',
+                3: 'app.onBoarding.goals',
+                4: 'app.onBoarding.diagnostic',
+                5: 'app.workoutsRoadmap'
             };
 
             onBoardingServiceObj.steps = {
@@ -384,10 +384,10 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <diagnostic-intro></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
+    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
-    "        <md-button autofocus tabindex=\"1\" class=\"md-sm primary\" ng-click=\"vm.setOnboardingCompleted('app.workouts.diagnostic', 'Start Test')\">\n" +
+    "        <md-button autofocus tabindex=\"1\" class=\"md-sm primary\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +

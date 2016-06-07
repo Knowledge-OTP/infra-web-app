@@ -1,0 +1,55 @@
+<div class="diagnostic-summary-wrapper" translate-namespace="WORKOUTS_DIAGNOSTIC_SUMMARY">
+    <div class="title">
+        <div translate=".YOUR_INITIAL_SCORE_ESTIMATE"></div>
+        <span translate=".COMPOSITE_SCORE"></span>
+        <span> {{::vm.compositeScore}}</span>
+    </div>
+
+    <div class="doughnuts-container">
+        <div class="all-doughnuts-wrapper" ng-repeat="doughnut in vm.doughnutArray track by $index">
+            <div class="doughnut-wrapper">
+                <p class="subject-name" translate="{{doughnut.subjectName}}"></p>
+                <div class="znk-doughnut">
+                    <div class="white-bg-doughnut-score">{{doughnut.score}}</div>
+                    <div class="goal-point"
+                         ng-style="::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}">
+                        <div class="goal-point-bg">
+                            <div ng-style="::{'background': ''+ doughnut.colors[0]}"
+                                 class="goal-point-subject-color"></div>
+                        </div>
+                    </div>
+                    <canvas id="doughnut"
+                            class="chart chart-doughnut"
+                            chart-colours="doughnut.colors"
+                            chart-data="doughnut.data"
+                            chart-labels="doughnut.labels"
+                            chart-options="doughnut.options"
+                            chart-legend="false">
+                    </canvas>
+                    <md-tooltip
+                        ng-if="doughnut.scoreGoal > doughnut.score"
+                        class="tooltip-for-diagnostic-summary md-whiteframe-2dp"
+                        md-direction="top">
+                        <span
+                            translate=".GOAL_TOOLTIP"
+                            translate-values="{ ptsToGoal: {{doughnut.scoreGoal - doughnut.score}} }">
+                        </span>
+                    </md-tooltip>
+                </div>
+                <div class="your-goal-wrapper">
+                    <span class="score-goal" translate=".YOUR_GOAL"></span>
+                    <span class="score-value">
+                        {{::doughnut.scoreGoal}}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="footer-text" translate="{{vm.footerTranslatedText}}"></div>
+    <button autofocus tabindex="1"
+            class="start-button md-button primary md"
+            ui-sref="app.workoutsRoadmap.diagnostic"
+            translate=".DONE">DONE
+    </button>
+</div>

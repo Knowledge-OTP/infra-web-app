@@ -1,5 +1,5 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding'])
-    .config(function ($translateProvider, znkAnalyticsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider) {
+    .config(function ($stateProvider, $translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -7,22 +7,17 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
 
+        $stateProvider.state('app', {
+            abstract: true,
+            template: '<ui-view></ui-view>'
+        });
+
         $urlRouterProvider.otherwise('/onBoarding');
 
         $translateProvider.useLoader('$translatePartialLoader', {
                 urlTemplate: '/{part}/locale/{lang}.json'
             })
             .preferredLanguage('en');
-
-        znkAnalyticsSrvProvider.setEventsHandler(function () {
-            return {
-                eventTrack: angular.noop,
-                timeTrack: angular.noop,
-                pageTrack: angular.noop,
-                setUsername: angular.noop,
-                setUserProperties: angular.noop
-            };
-        });
 
         var storageFake = ['$q', function($q) {
             return {
@@ -86,18 +81,27 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
             return { id: ENV.ENGLISH };
         }]);
 
-        UserGoalsServiceProvider.settings = {
-            defaultSubjectScore: 600,
-            minSchoolScore: 400,
-            maxSchoolScore: 1600,
-            minGoalsScore: 200,
-            maxGoalsScore: 800,
-            updateGoalNum: 10,
-            subjects: [
-                { name: 'math', svgIcon: 'math-section-icon' },
-                { name: 'verbal', svgIcon: 'verbal-icon' }
-            ]
-        };
+        ScoringServiceProvider.setScoringLimits({
+            exam: {
+                min: 400,
+                max: 1600
+            },
+            subjects: {
+                min: 200,
+                max: 800
+            }
+        });
+
+        ScoringServiceProvider.setExamScoreFnGetter(function () {
+             return function(scoresArr) {
+                 var totalScores = 0;
+                 angular.forEach(scoresArr, function (score) {
+                     totalScores += score;
+                 });
+                 return totalScores;
+             }
+        });
+
     })
     .run(function ($rootScope, $translate, $translatePartialLoader) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {

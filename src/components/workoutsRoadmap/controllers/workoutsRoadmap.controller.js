@@ -13,8 +13,8 @@
             vm.diagnostic = data.diagnostic;
 
             var search = $location.search();
-            var DIAGNOSTIC_STATE = 'workoutsRoadmap.diagnostic';
-            var WORKOUT_STATE = 'app.workouts.roadmap.workout';
+            var DIAGNOSTIC_STATE = 'app.workoutsRoadmap.diagnostic';
+            var WORKOUT_STATE = 'app.workoutsRoadmap.workout';
 
             function getActiveWorkout() {
                 var i = 0;
