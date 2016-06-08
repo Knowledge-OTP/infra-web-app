@@ -4,78 +4,41 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="workoutsRoadmap/main.css">
+    <link rel="stylesheet" href="diagnosticIntro/main.css">
     <link rel="stylesheet" href="uiTheme/main.css">
+
+    <link rel="stylesheet" href="diagnosticIntro/diagnosticIntro.css">
+
     <link rel="stylesheet" href="infra/dist/svgIcon/main.css">
-    <link rel=" stylesheet" href="infra/dist/scroll/main.css">
+    <link rel="stylesheet" href="infra/dist/scroll/main.css">
     <link rel="stylesheet" href="angular-material/angular-material.css">
     <style>
-        body{
+        body {
             background: #E6E5E5;
         }
 
-        .reading-bg {
-            background: red;
-        }
-
-        .writing-bg {
-            background: #54ff23;
-        }
-
-        .listening-bg {
-            background: #32b7ff;
-        }
-
-        .speaking-bg {
-            background: #ef3fff;
-        }
-
-        .english-bg {
-            background: #ecff56;
-        }
-
-        .science-bg {
-            background: #d7dcff;
+        .math-bg{
+            background: #AF89D2;
         }
 
         .verbal-bg {
-            background: #5a49ff;
+            background: #F9D41B;
         }
 
         .essay-bg {
-            background: #ff6037;
+            background: #FF5895;
         }
 
-        workouts-progress .items-container .item-container .item.selected.reading-bg:after {
-            border-color: red;
+        workouts-progress .items-container .item-container .item.selected.math-bg:after {
+            border-color: #AF89D2;
         }
-
-        workouts-progress .items-container .item-container .item.selected.writing-bg:after {
-            border-color: #54ff23;
-        }
-
-        workouts-progress .items-container .item-container .item.selected.listening-bg:after {
-            border-color: #32b7ff;
-        }
-
-        workouts-progress .items-container .item-container .item.selected.speaking-bg:after {
-            border-color: #ef3fff;
-        }
-
-        workouts-progress .items-container .item-container .item.selected.english-bg:after {
-            border-color: #ecff56;
-        }
-
-        workouts-progress .items-container .item-container .item.selected.science-bg:after {
-            border-color: #d7dcff;
-        }
-
 
         workouts-progress .items-container .item-container .item.selected.verbal-bg:after {
-            border-color: #5a49ff;
+            border-color: #F9D41B;
         }
 
         workouts-progress .items-container .item-container .item.selected.essay-bg:after {
-            border-color: #ff6037;
+            border-color: #FF5895;
         }
     </style>
 </head>
@@ -103,12 +66,33 @@
 <script src="infra/dist/contentAvail/contentAvail.js"></script>
 <script src="infra/dist/scroll/scroll.js"></script>
 <script src="infra/dist/general/general.js"></script>
+<script src="infra/dist/popUp/popUp.js"></script>
+<script src="infra/dist/autofocus/autofocus.js"></script>
+<script src="infra/dist/auth/auth.js"></script>
+<script src="infra/dist/analytics/analytics.js"></script>
+<script src="infra/dist/exams/exams.js"></script>
 
+<script src="purchase/purchase.js"></script>
+<script src="purchase/templates.js"></script>
 <script src="workoutsRoadmap/workoutsRoadmap.js"></script>
 <script src="workoutsRoadmap/templates.js"></script>
+<script src="diagnostic/diagnostic.js"></script>
+<script src="diagnosticIntro/diagnosticIntro.js"></script>
+<script src="diagnosticIntro/templates.js"></script>
+<script src="socialSharing/socialSharing.js"></script>
 
 <script src="demo.js"></script>
 <script src="infra/demoShared/contentConfig.js"></script>
 <script src="infra/demoShared/storagesConfig.js"></script>
+<script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
+<script src="infra/demoShared/analyticsConfig.js"></script>
+<script src="env.service.js"></script>
+<script src="translate.config.js"></script>
+<script src="locale.run.js"></script>
+<script src="workouts.config.js"></script>
+<script src="subject.decorator.js"></script>
+<script src="svgIcon/svgIcon.config.js"></script>
+<script src="diagnostic.config.js"></script>
+<script src="diagnosticIntro/diagnosticIntro.config.js"></script>
 </body>
 </html>

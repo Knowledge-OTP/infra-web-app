@@ -1,0 +1,52 @@
+.workouts-roadmap-diagnostic-intro {
+    text-align: center;
+    box-sizing: border-box;
+
+    .diagnostic-workout-title {
+        margin-top: 25px;
+        @include text-style(21px, $fontColor3, Quicksand, $boldFontWeight);
+    }
+
+    .complete-text {
+        margin-top: 52px;
+        @include text-style(23px, $fontColor3, Quicksand, $regularFontWeight);
+    }
+    .results-text {
+        @include text-style(21px, $fontColor3, Quicksand, $regularFontWeight);
+        text-transform: capitalize;
+        margin-top: 55px;
+    }
+    .total-score {
+        @include text-style(20px, $fontColor4, Lato, $regularFontWeight);
+        text-transform: uppercase;
+        margin-top: 53px;
+    }
+    .first-row, .second-row {
+        display: flex;
+        justify-content: center;
+        .subject-score {
+            display: inline-block;
+            margin: 67.5px 37px auto;
+            width: 220px;
+            .icon-wrapper {
+                display: inline-block;
+                width: 45px;
+                vertical-align: middle;
+                float: left;
+            }
+            .score-wrapper {
+                @include text-style(26.5px, $fontColor3, Lato, $lightFontWeight);
+                .score {
+                    display: inline-block;
+                    text-transform: capitalize;
+                    float: left;
+                    padding-left: 10px;
+                }
+                .bold {
+                    font-weight: $regularFontWeight;
+                    float: right;
+                }
+            }
+        }
+    }
+}

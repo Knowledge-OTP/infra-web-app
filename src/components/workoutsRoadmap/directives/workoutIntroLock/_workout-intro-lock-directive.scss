@@ -1,0 +1,151 @@
+workout-intro-lock {
+    //display: none;
+    //@include absolute-position(-30px, 0, -76px, 0);
+    //background: red;
+    //z-index: 1;
+    position: relative;
+    display: block;
+
+    &.lock {
+        .main-container {
+            opacity: 0.23;
+            filter: blur(7px);
+        }
+    }
+
+    &:not(.lock) {
+        .lock-overlay-container {
+            display: none;
+        }
+    }
+
+    .lock-overlay-container {
+        font: {
+            family: Quicksand;
+        }
+        color: $fontColor3;
+        @include absolute-full-cover;
+        z-index: 1;
+
+        .description {
+            size: 18px;
+            font: {
+                weight: $regularFontWeight;
+                family: Quicksand;
+            }
+        }
+
+        .diagnostic-not-completed {
+            .description {
+                margin: {
+                    top: 45px;
+                }
+            }
+        }
+
+        .prev-not-completed {
+            padding: {
+                top: 34px;
+            }
+
+            .description {
+                margin: {
+                    top: 35px;
+                }
+            }
+        }
+
+        .no-pro-social-sharing {
+            .text1 {
+                font: {
+                    size: 19px;
+                    weight: $regularFontWeight;
+                }
+                margin:{
+                    top: 16px;
+                }
+            }
+
+            .text2 {
+                font: {
+                    size: 14px;
+                    weight: $lightFontWeight;
+                }
+                margin:{
+                    top: 12px;
+                }
+            }
+
+            .share-btn{
+                margin:{
+                    top: 15px;
+                }
+                text-align: left;
+                padding: {
+                    right: 47px;
+                    left: 13px;
+                }
+
+                svg-icon{
+                    margin: {
+                        right: 15px;
+                    }
+                }
+            }
+
+            .get-zinkerz-pro-text{
+                margin:{
+                    top: 30px;
+                }
+            }
+
+            .upgrade-btn{
+                margin: {
+                    top: 19px;
+                }
+            }
+        }
+
+        .no-pro{
+            .description{
+                line-height: 23px;
+                margin: {
+                    top: 45px;
+                };
+            }
+
+            .get-zinkerz-pro-text{
+                margin:{
+                    top: 40px;
+                }
+            }
+
+            .upgrade-btn{
+                margin: {
+                    top: 25px;
+                }
+            }
+        }
+
+        .no-pro-social-sharing, .no-pro{
+            font: {
+                family: Lato;
+            }
+            color: $fontColor3;
+
+            [name="workouts-intro-lock-lock"] {
+                margin: {
+                    top:30px
+                }
+            }
+
+            .get-zinkerz-pro-text{
+                font: {
+                    size: 16px;
+                    weight: $lightFontWeight;
+                }
+                line-height: 30px;
+            }
+        }
+    }
+}

@@ -22,7 +22,8 @@
 'use strict';
 
 angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro', ['DiagnosticIntroSrv', '$translatePartialLoader', '$log',
-    function DiagnosticIntroDirective(DiagnosticIntroSrv, $translatePartialLoader, $log) {
+    function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
+        'ngInject';
 
     var directive = {
         restrict: 'E',
@@ -36,11 +37,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
 
             scope.d = {};
 
-            DiagnosticIntroSrv.getActiveData().then(function(activeData) {
-                if (!activeData || !activeData.id) {
-                    $log.error('DiagnosticIntroDirective: activeData id must exist!');
-                }
-                scope.d.activeId = activeData.id;
+            DiagnosticIntroSrv.getActiveData().then(function(activeId) {
+                scope.d.activeId = activeId;
                 return DiagnosticIntroSrv.getConfigMap();
             }).then(function(mapData) {
                 if (!angular.isArray(mapData.subjects)) {
@@ -102,13 +100,17 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        $log.error('DiagnosticIntroSrv: no activeData!');
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
+                        $log.error(errorMsg);
+                        return $q.reject(errorMsg);
                     }
                     return $q.when($injector.invoke(_activeData));
                 },
                 getConfigMap: function() {
                     if (!_configMap) {
-                        $log.error('DiagnosticIntroSrv: no configMap!');
+                        var errorMsg = 'DiagnosticIntroSrv: no configMap!';
+                        $log.error(errorMsg);
+                        return $q.reject(errorMsg);
                     }
                     return $q.when($injector.invoke(_configMap));
                 }
@@ -120,7 +122,9 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
   $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
-    "        <div class=\"diagnostic-text\" translate=\".DIAG_DESCRIPTION_{{d.currMapData.subjectNameAlias | uppercase}}\"></div>\n" +
+    "        <div class=\"diagnostic-text\"\n" +
+    "             translate=\".DIAG_DESCRIPTION_{{d.currMapData.subjectNameAlias | uppercase}}\">\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"icons-section\" ng-class=\"{pristine: d.currMapIndex === -1}\">\n" +
     "        <div ng-repeat=\"subject in d.subjects\"\n" +
@@ -142,7 +146,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "    </div>\n" +
     "    <div class=\"section-question\" ng-if=\"!d.currMapData.hideSectionQuestion\">\n" +
     "            <div>\n" +
-    "                <span translate=\".DIAG_SUBJECT_TEXT_{{d.currMapData.subjectNameAlias | uppercase}}\"></span>\n" +
+    "                <span translate=\".DIAG_SUBJECT_TEXT_{{d.currMapData.subjectNameAlias | uppercase}}\" ng-cloak></span>\n" +
     "                <span\n" +
     "                    class=\"{{d.currMapData.subjectNameAlias}}\"\n" +
     "                    translate=\".DIAG_SUBJECT_NAME_{{d.currMapData.subjectNameAlias | uppercase}}\">\n" +

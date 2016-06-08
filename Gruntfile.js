@@ -185,7 +185,7 @@ module.exports = function (grunt) {
             },
             locale:{
                 files: ['<%= yeoman.src %>/**/locale/*.json'],
-                tasks:['copy:dist']
+                tasks:['copy:build']
             }
         },
         sass: {
@@ -237,8 +237,13 @@ module.exports = function (grunt) {
             options: {
                 browsers: ['last 2 versions']
             },
-            main: {
-                src: ['.tmp/**/*.css']
+            main:{
+                files:[{
+                    expand: true,
+                    cwd: '<%= yeoman.tmp %>/',
+                    src: '.tmp/**/*.css',
+                    dest: '<%= yeoman.dist %>/'
+                }]
             }
         }
     });

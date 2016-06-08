@@ -1,0 +1,36 @@
+<div class="exercise-header subject-repeat" subject-id-to-attr-drv="vm.subjectId"
+     context-attr="class" suffix="bg" translate-namespace="CONTAINER_HEADER">
+   <div class="pattern" subject-id-to-attr-drv="vm.subjectId" context-attr="class" prefix="subject-background"></div>
+
+    <div class="left-area">
+        <div class="side-text" translate="{{vm.sideText | cutString: 40}}" translate-values="{subjectName: vm.subjectName, exerciseNum: vm.exerciseNum}"></div>
+
+        <div ng-if="vm.showNoCalcIcon()" class="no-math-icon-wrapper">
+            <div class="math-no-calc"></div>
+            <svg-icon name="math-icon" class="icon-wrapper"></svg-icon>
+
+            <md-tooltip md-visible="vm.showToolTip" ng-if="vm.showToolTip" md-direction="bottom" class="no-calc-tooltip md-whiteframe-3dp">
+                <div class="arrow-up"></div>
+                <div translate=".NO_CALC_TOOLTIP" class="top-text"></div>
+                <div translate=".GOT_IT" class="md-button primary got-it-btn" ng-click="vm.showToolTip = false"></div>
+            </md-tooltip>
+        </div>
+    </div>
+
+
+    <div class="center-num-slide" ng-if="vm.options.showNumSlide">{{vm.currentSlideNum}}/{{::vm.totalSlideNum}}</div>
+    <div class="review-mode" ng-if="vm.options.reviewMode" ui-sref="^.summary">
+        <div class="background-opacity"></div>
+        <div class="summary-text" translate=".SUMMARY"></div>
+    </div>
+
+    <div class="right-area">
+        <svg-icon class="header-icon" ng-if="vm.iconName" name="{{vm.iconName}}" ng-click="vm.iconClickHandler(); vm.showToolTip = false"></svg-icon>
+
+        <div class="date-box" ng-if="vm.options.showDate">
+            <timer type="1" ng-model="vm.timerData.timeLeft" play="true" config="vm.timerData.config"></timer>
+        </div>
+    </div>
+
+    <div class="quit-back-button" translate=".QUIT_BTN_TEXT" ng-if="vm.options.showQuit" ng-click="vm.onClickedQuit()"></div>
+</div>

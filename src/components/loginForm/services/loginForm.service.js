@@ -5,7 +5,7 @@
         'ENV', '$http', '$window',
         function (ENV, $http, $window) {
             this.login = function(loginData){
-                var ref = new Firebase(ENV.fbGlobalEndPoint);
+                var ref = new Firebase(ENV.fbGlobalEndPoint, ENV.firebaseAppScopeName);
                 return ref.authWithPassword(loginData).then(function(authData){
                     var postUrl = ENV.backendEndpoint + 'firebase/token';
                     var postData = {
@@ -18,7 +18,7 @@
                     };
 
                     return $http.post(postUrl, postData).then(function (token) {
-                        var refDataDB = new Firebase(ENV.fbDataEndPoint);
+                        var refDataDB = new Firebase(ENV.fbDataEndPoint, ENV.firebaseAppScopeName);
                         refDataDB.authWithCustomToken(token.data).then(function(){
                             var appUrl = ENV.redirectLogin;
                             $window.location.replace(appUrl);

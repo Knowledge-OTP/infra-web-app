@@ -13,7 +13,8 @@
         "VERBAL": "Verbal",
         "MATH": "Math",
         "MATHEMATICS": "mathematics",
-        "TOTAL_SCORE": "Total Score:"
+        "TOTAL_SCORE": "Total Score:",
+        "RECOMMENDED_GOALS": "Recommended Goals"
     },
     "ON_BOARDING.WELCOME": {
         "ZINKERZ_APP_WELCOME_TEXT": "Zinkerz Prep for the ACT® Test."

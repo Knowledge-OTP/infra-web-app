@@ -7,11 +7,11 @@
             var onBoardingServiceObj = {};
 
             var onBoardingStates = {
-                1: 'onBoarding.welcome',
-                2: 'onBoarding.schools',
-                3: 'onBoarding.goals',
-                4: 'onBoarding.diagnostic',
-                5: 'workouts.roadmap'
+                1: 'app.onBoarding.welcome',
+                2: 'app.onBoarding.schools',
+                3: 'app.onBoarding.goals',
+                4: 'app.onBoarding.diagnostic',
+                5: 'app.workoutsRoadmap'
             };
 
             onBoardingServiceObj.steps = {

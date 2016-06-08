@@ -20,7 +20,7 @@
 @import url(#{$googleFontCDN}icon?family=Material+Icons);
 
 diagnostic-intro {
-
+    width: 100%;
     .diagnostic-intro-drv {
         text-align: center;
 
@@ -59,14 +59,16 @@ diagnostic-intro {
                     border-color: $borderColor8;
                     position: relative;
 
-                    &:nth-child(3n+1) {
-                        align-self: flex-end;
-                    }
-
                     &.done {
                         .icon-wrapper {
-                            svg-icon.section-complete {
-                                display: block;
+                            svg-icon{
+                                &.subject-icon{
+                                    display: none;
+                                }
+
+                                &.section-complete {
+                                    display: block;
+                                }
                             }
                         }
                     }
