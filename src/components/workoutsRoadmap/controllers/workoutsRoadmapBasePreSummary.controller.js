@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapBasePreSummaryController',
         function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
                   WorkoutsRoadmapSrv, purchaseService) {
@@ -39,13 +41,7 @@
                     data.roadmapCtrlActions.setCurrWorkout(nextWorkout.workoutOrder);
                 }, TIMOUT_BEFORE_GOING_TO_NEXT);
             }
-
-            if (data.exercise.workoutOrder === DIAGNOSTIC_ORDER) {
-                diagnosticPreSummary();
-            } else {
-                workoutPreSummary();
-            }
-
+            
             function diagnosticPreSummary() {
                 vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMARY.DIAGNOSTIC_TEST');
                 _getToNextWorkout();
@@ -55,6 +51,12 @@
                 vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMARY.WORKOUT') + ' ';
                 vm.text += +data.exercise.workoutOrder;
                 _getToNextWorkout();
+            }
+
+            if (data.exercise.workoutOrder === DIAGNOSTIC_ORDER) {
+                diagnosticPreSummary();
+            } else {
+                workoutPreSummary();
             }
         }
     );

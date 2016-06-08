@@ -25,7 +25,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
 
             $stateProvider
-                .state('onBoarding', {
+                .state('app.onBoarding', {
                     url: '/onBoarding',
                     templateUrl: 'components/onBoarding/templates/onBoarding.template.html',
                     controller: 'OnBoardingController',
@@ -36,7 +36,7 @@
                         }]
                     }
                 })
-                .state('onBoarding.welcome', {
+                .state('app.onBoarding.welcome', {
                     templateUrl: 'components/onBoarding/templates/onBoardingWelcome.template.html',
                     controller: 'OnBoardingWelcomesController',
                     controllerAs: 'vm',
@@ -46,17 +46,17 @@
                         }]
                     }
                 })
-                .state('onBoarding.schools', {
+                .state('app.onBoarding.schools', {
                     templateUrl: 'components/onBoarding/templates/onBoardingSchools.template.html',
                     controller: 'OnBoardingSchoolsController',
                     controllerAs: 'vm'
                 })
-                .state('onBoarding.goals', {
+                .state('app.onBoarding.goals', {
                     templateUrl: 'components/onBoarding/templates/onBoardingGoals.template.html',
                     controller: 'OnBoardingGoalsController',
                     controllerAs: 'vm'
                 })
-                .state('onBoarding.diagnostic', {
+                .state('app.onBoarding.diagnostic', {
                     templateUrl: 'components/onBoarding/templates/onBoardingDiagnostic.template.html',
                     controller: 'OnBoardingDiagnosticController',
                     controllerAs: 'vm'

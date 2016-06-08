@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+    
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
         function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
@@ -33,12 +35,6 @@
                 return angular.isDefined(firstWorkout.subjectId);
             }
 
-            // function _setActiveWorkout() {
-            //     activeWorkout = getActiveWorkout();
-            // }
-
-            // _setActiveWorkout();
-
             //set selected item
             switch ($state.current.name) {
                 case DIAGNOSTIC_STATE:
@@ -69,7 +65,6 @@
                 } else {
                     vm.selectedItem = vm.workoutsProgress[_workoutOrder - 1];
                 }
-                // _setActiveWorkout();
             };
             data.roadmapCtrlActions.freezeWorkoutProgressComponent = function (freeze) {
                 vm.freezeWorkoutProgressComponent = freeze;

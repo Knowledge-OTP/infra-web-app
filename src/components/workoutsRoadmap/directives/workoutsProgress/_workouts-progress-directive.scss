@@ -54,12 +54,6 @@ workouts-progress {
                     &.selected:after {
                         border-color: $borderColor3;
                     }
-
-                    .flag-icon {
-                        .sto {
-                            //stroke: $#bgColor2;
-                        }
-                    }
                 }
             }
 
@@ -74,7 +68,6 @@ workouts-progress {
                 transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1);
 
                 &.selected {
-                    //font-size: 28px;
                     transform: scale(1);
                     color: $fontColor8;
                     position: relative;
@@ -97,18 +90,6 @@ workouts-progress {
                             }
                         }
                     }
-
-                    //&.math-bg:after {
-                    //    border-color: $mathColor;
-                    //}
-                    //
-                    //&.verbal-bg:after {
-                    //    border-color: $verbalColor;
-                    //}
-                    //
-                    //&.essay-bg:after {
-                    //    border-color: $essayColor;
-                    //}
                 }
 
                 &.pristine {

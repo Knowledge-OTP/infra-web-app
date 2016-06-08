@@ -1,6 +1,8 @@
 <div class="diagnostic-intro-drv" translate-namespace="DIAGNOSTIC_INTRO">
     <div class="description">
-        <div class="diagnostic-text" translate=".DIAG_DESCRIPTION_{{d.currMapData.subjectNameAlias | uppercase}}"></div>
+        <div class="diagnostic-text"
+             translate=".DIAG_DESCRIPTION_{{d.currMapData.subjectNameAlias | uppercase}}">
+        </div>
     </div>
     <div class="icons-section" ng-class="{pristine: d.currMapIndex === -1}">
         <div ng-repeat="subject in d.subjects"
@@ -22,7 +24,7 @@
     </div>
     <div class="section-question" ng-if="!d.currMapData.hideSectionQuestion">
             <div>
-                <span translate=".DIAG_SUBJECT_TEXT_{{d.currMapData.subjectNameAlias | uppercase}}"></span>
+                <span translate=".DIAG_SUBJECT_TEXT_{{d.currMapData.subjectNameAlias | uppercase}}" ng-cloak></span>
                 <span
                     class="{{d.currMapData.subjectNameAlias}}"
                     translate=".DIAG_SUBJECT_NAME_{{d.currMapData.subjectNameAlias | uppercase}}">

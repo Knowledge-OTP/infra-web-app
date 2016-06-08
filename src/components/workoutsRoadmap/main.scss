@@ -5,8 +5,11 @@
         'src/scss/imports/colors',
         'bower_components/infra/dist/mixins/mixins';
 
-@import 'directives/workoutsProgress/workouts-progress-directive';
+@import 'directives/workoutsProgress/workouts-progress-directive',
+        'directives/workoutIntroLock/workout-intro-lock-directive';
 
-@import 'scss/workoutsRoadmap',
-        'scss/workoutsRoadmap-diagnostic',
-        'scss/_workoutsRoadmap-workout-intro';
+@import 'scss/workouts-roadmap',
+        'scss/workouts-roadmap-diagnostic-intro',
+        'scss/workouts-roadmap-workout-intro',
+        'scss/workouts-roadmap-workout-in-progress',
+        'scss/workouts-roadmap-base-pre-summary';

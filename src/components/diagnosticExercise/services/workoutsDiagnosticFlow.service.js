@@ -15,6 +15,7 @@
             var currentSectionData = {};
             var countDifficultySafeCheckErrors = 0;
             var countQuestionsByDifficultyAndOrderErrors = 0;
+            var currentState;
 
             workoutsDiagnosticFlowObjApi.getDiagnosticSettings = function() {
                 return angular.extend(_diagnosticSettings, WORKOUTS_DIAGNOSTIC_FLOW);
@@ -28,6 +29,10 @@
             };
             workoutsDiagnosticFlowObjApi.getCurrentSection = function () {
                 return currentSectionData;
+            };
+
+            workoutsDiagnosticFlowObjApi.getCurrentState = function () {
+                return currentState;
             };
 
             var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
@@ -118,7 +123,7 @@
 
            workoutsDiagnosticFlowObjApi.getDiagnosticFlowCurrentState = function (flagForPreSummery, skipIntroBool) {
                 $log.debug('WorkoutsDiagnosticFlow getDiagnosticFlowCurrentState: initial func', arguments);
-                var currentState = { state: '', params: '', subjectId: '' };
+                currentState = { state: '', params: '', subjectId: '' };
                 var getDataProm = _getDataProm();
                 return $q.all(getDataProm).then(function (results) {
                     if (!results[0]) {
@@ -230,7 +235,9 @@
                     var diagnosticExam = diagnostic[0];
                     var diagnosticResults = diagnostic[1];
 
-                    if (diagnosticResults.isComplete) return COMPLETED;
+                    if (diagnosticResults.isComplete) {
+                        return COMPLETED;
+                    }
 
                     var exerciseResultPromises = _getExerciseResultProms(diagnosticResults.sectionResults, diagnosticSettings.diagnosticId);
                     return $q.all(exerciseResultPromises).then(function (completedSections) {

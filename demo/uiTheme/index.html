@@ -16,16 +16,27 @@
     <div>
         <md-button class="md-primary znk"
                    md-no-ink
-                   ng-disabled="true"
-                   ng-cloak>Primary Flat
+                   ng-disabled="disable.primary"
+                   ng-cloak>md-primary
         </md-button>
+        <button ng-click="disable.primary = !disable.primary;">disable</button>
     </div>
     <div>
         <md-button class="md-primary znk"
                    href="localhost:9002"
                    md-no-ink
-                   ng-cloak>Primary Flat href
+                   ng-disabled="disable.primaryHref"
+                   ng-cloak>md-primary href
         </md-button>
+        <button ng-click="disable.primaryHref = !disable.primaryHref;">disable</button>
+    </div>
+    <div>
+        <md-button class="znk outline"
+                   md-no-ink
+                   ng-disabled="disable.outline"
+                   ng-cloak>outline
+        </md-button>
+        <button ng-click="disable.outline = !disable.outline;">disable</button>
     </div>
 </div>
 <script src="angular/angular.js"></script>

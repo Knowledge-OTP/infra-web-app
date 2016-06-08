@@ -19,13 +19,17 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        $log.error('DiagnosticIntroSrv: no activeData!');
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
+                        $log.error(errorMsg);
+                        return $q.reject(errorMsg);
                     }
                     return $q.when($injector.invoke(_activeData));
                 },
                 getConfigMap: function() {
                     if (!_configMap) {
-                        $log.error('DiagnosticIntroSrv: no configMap!');
+                        var errorMsg = 'DiagnosticIntroSrv: no configMap!';
+                        $log.error(errorMsg);
+                        return $q.reject(errorMsg);
                     }
                     return $q.when($injector.invoke(_configMap));
                 }

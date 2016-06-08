@@ -1,8 +1,7 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',['UserGoalsService', '$timeout', 'UserSchoolsService', '$q', '$translatePartialLoader',
-        function UserGoalsDirective(UserGoalsService, $timeout, UserSchoolsService, $q, $translatePartialLoader) {
-
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',['UserGoalsService', '$timeout', 'userGoalsSelectionService', '$q', '$translatePartialLoader', 'ScoringService',
+        function UserGoalsDirective(UserGoalsService, $timeout, userGoalsSelectionService, $q, $translatePartialLoader, ScoringService) {
             var directive = {
                 restrict: 'E',
                 templateUrl: 'components/userGoalsSelection/templates/userGoals.template.html',
@@ -13,7 +12,7 @@
                 link: function link(scope) {
                     $translatePartialLoader.addPart('userGoalsSelection');
                     var userGoalRef;
-                    scope.scoringLimits = UserGoalsService.getScoringLimits();
+                    scope.scoringLimits = ScoringService.getScoringLimits();
                     scope.goalsSettings = UserGoalsService.getGoalsSettings();
 
                     var defaultTitle = scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
@@ -29,7 +28,7 @@
                         scope.userGoals = angular.copy(userGoals);
                     });
 
-                    var getDreamSchoolsProm = UserSchoolsService.getDreamSchools().then(function (userSchools) {
+                    var getDreamSchoolsProm = userGoalsSelectionService.getDreamSchools().then(function (userSchools) {
                         scope.userSchools = angular.copy(userSchools);
                     });
                     scope.getSelectedSchools = function () {
@@ -55,7 +54,7 @@
                     };
 
                     scope.saveChanges = function () {
-                        var saveUserSchoolsProm = UserSchoolsService.setDreamSchools(scope.userSchools);
+                        var saveUserSchoolsProm = userGoalsSelectionService.setDreamSchools(scope.userSchools);
 
                         angular.extend(userGoalRef, scope.userGoals);
                         var saveUserGoalsProm = UserGoalsService.setGoals(userGoalRef);
@@ -84,7 +83,8 @@
                             scope.showSchoolEdit = false;
                             scope.userSchools = newUserDreamSchools;
 
-                            UserGoalsService.calcCompositeScore(newUserDreamSchools).then(function (newUserGoals) {
+                            var calcScoreFn = UserGoalsService.getCalcScoreFn();
+                            calcScoreFn(newUserDreamSchools).then(function(newUserGoals) {
                                 scope.userGoals = newUserGoals;
                             });
                         }

@@ -5,7 +5,7 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('diagnostic', {
+                .state('app.diagnostic', {
                     url: '/diagnostic?skipIntro',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnostic.template.html',
                     resolve: {
@@ -17,23 +17,21 @@
                     controller: 'WorkoutsDiagnosticController',
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.intro', {
-                    url: '/intro/:id/:subjectId/:order',
+                .state('app.diagnostic.intro', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html',
                     controller: 'WorkoutsDiagnosticIntroController',
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.exercise', {
-                    url: '/exercise/:id/:sectionId',
+                .state('app.diagnostic.exercise', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html',
                     controller: 'WorkoutsDiagnosticExerciseController',
                     controllerAs: 'vm',
                     resolve: {
-                        exerciseData: function exerciseData($q, ExamSrv, $stateParams, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
+                        exerciseData: function exerciseData($q, ExamSrv, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
                             'ngInject';
                             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
-                            var examId = +$stateParams.id;
-                            var sectionId = +$stateParams.sectionId;
+                            var examId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
+                            var sectionId = WorkoutsDiagnosticFlow.getCurrentState().params.id;
                             var getExamProm = ExamSrv.getExam(examId);
                             var getSectionProm = ExamSrv.getExamSection(sectionId);
                             var getExamResultProm = ExerciseResultSrv.getExamResult(examId);
@@ -84,7 +82,7 @@
                             }
                     }
                 })
-                .state('diagnostic.preSummary', {
+                .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
                     controller: ['$timeout', '$state', function ($timeout, $state) {
                         var VIDEO_DURATION = 6000;
@@ -94,8 +92,7 @@
                     }],
                     controllerAs: 'vm'
                 })
-                .state('diagnostic.summary', {
-                    url: '/summary',
+                .state('app.diagnostic.summary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html',
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',

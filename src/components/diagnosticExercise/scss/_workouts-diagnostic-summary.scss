@@ -27,7 +27,7 @@
                 @include flex-middle;
                 @include flex-direction(column);
                 border-radius: 13px;
-                background-color: $bgColor32;
+                background-color: $bgColor27;
                 height: 250px;
 
                 .subject-name {
@@ -45,7 +45,7 @@
                     .goal-point {
                         @include dimension(10px, 10px);
                         position: absolute;
-                        background-color: $bgColor33;
+                        background-color: $bgColor37;
                         border-radius: 50px;
                         -webkit-animation: goal-point 2s;
                     }
