@@ -32,10 +32,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
         },
         templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
         link: function link(scope) {
-            var PART_NAME = 'diagnosticIntro';
-            if(!$translatePartialLoader.isPartAvailable(PART_NAME)){
-                $translatePartialLoader.addPart(PART_NAME);
-            }
+
+            $translatePartialLoader.addPart('diagnosticIntro');
 
             scope.d = {};
 

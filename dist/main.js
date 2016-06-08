@@ -1209,10 +1209,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
         },
         templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
         link: function link(scope) {
-            var PART_NAME = 'diagnosticIntro';
-            if(!$translatePartialLoader.isPartAvailable(PART_NAME)){
-                $translatePartialLoader.addPart(PART_NAME);
-            }
+
+            $translatePartialLoader.addPart('diagnosticIntro');
 
             scope.d = {};
 
@@ -4551,15 +4549,9 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
         function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
 
-            var PART_NAME = 'workoutsRoadmap';
-            if(!$translatePartialLoader.isPartAvailable(PART_NAME)){
-                $translatePartialLoader.addPart(PART_NAME);
-            }
-
-
+            $translatePartialLoader.addPart('workoutsRoadmap');
 
             var vm = this;
-            //var activeWorkout;
 
             vm.workoutsProgress = data.workoutsProgress;
             vm.diagnostic = data.diagnostic;

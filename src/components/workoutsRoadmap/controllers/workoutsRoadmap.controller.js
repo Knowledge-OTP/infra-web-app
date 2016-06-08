@@ -5,6 +5,8 @@
         function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
 
+            $translatePartialLoader.addPart('workoutsRoadmap');
+
             var vm = this;
 
             vm.workoutsProgress = data.workoutsProgress;
