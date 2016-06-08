@@ -8,11 +8,8 @@
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-.md-button.znk[disabled="disabled"] {
-  opacity: 0.6; }
-
 .md-button.znk.md-primary {
-  color: #ffffff !important;
+  color: #ffffff;
   background: #0a9bad;
   padding-right: 90px;
   padding-left: 90px;
@@ -20,37 +17,13 @@
   font-family: Lato;
   font-weight: 400;
   font-size: 16px; }
-  .md-button.znk.md-primary:not([disabled="disabled"]):hover {
+  .md-button.znk.md-primary:hover {
     background: #0a8999; }
   .md-button.znk.md-primary:active {
     background: #037684; }
-  .md-button.znk.md-primary.md-focused {
-    background: #0a9bad; }
-
-.md-button.znk.outline {
-  border: 1px solid #0a9bad;
-  border-radius: 30px;
-  color: #0a9bad !important;
-  font-family: Lato;
-  font-weight: 400;
-  font-size: 18px;
-  padding-right: 100px;
-  padding-left: 100px;
-  min-height: 43px;
-  line-height: 43px; }
-  .md-button.znk.outline:not([disabled="disabled"]):hover {
-    background: #e2f0f2; }
-  .md-button.znk.outline:active {
-    background: #c7e0e3; }
+  .md-button.znk.md-primary[disabled="disabled"] {
+    background: rgba(10, 155, 173, 0.6);
+    color: rgba(255, 255, 255, 0.6) !important; }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important; }
-
-.translate-cloak {
-  display: none !important; }
-
-.base-border-radius {
-  border-radius: 15px; }
-
-.base-box-shadow {
-  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
