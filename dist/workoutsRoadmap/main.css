@@ -240,18 +240,7 @@ workout-intro-lock {
 
 .workouts-roadmap-diagnostic-intro {
   text-align: center;
-  box-sizing: border-box;
-  /*diagnostic-intro {
-        .diagnostic-intro-drv {
-            ng-switch {
-                .diagnostic-text {
-                    font: {
-                        size: 15px;
-                    }
-                }
-            }
-        }
-    }*/ }
+  box-sizing: border-box; }
   .workouts-roadmap-diagnostic-intro .diagnostic-workout-title {
     margin-top: 25px;
     font-size: 21px;

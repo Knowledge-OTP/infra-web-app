@@ -1,11 +1,16 @@
 (function () {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
         function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
 
-            $translatePartialLoader.addPart('workoutsRoadmap');
+            var PART_NAME = 'workoutsRoadmap';
+            if(!$translatePartialLoader.isPartAvailable(PART_NAME)){
+                $translatePartialLoader.addPart(PART_NAME);
+            }
+
+
 
             var vm = this;
             //var activeWorkout;

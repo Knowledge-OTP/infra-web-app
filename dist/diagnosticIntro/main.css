@@ -17626,8 +17626,6 @@ md-dialog .close-popup {
 /* Material+Icons */
 diagnostic-intro {
   width: 100%; }
-  diagnostic-intro svg-icon {
-    display: block; }
   diagnostic-intro .diagnostic-intro-drv {
     text-align: center; }
     diagnostic-intro .diagnostic-intro-drv .diagnostic-text {
@@ -17675,8 +17673,8 @@ diagnostic-intro {
         border: 2px solid;
         border-color: #cccccc;
         position: relative; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle:nth-child(3n+1) {
-          align-self: flex-end; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.subject-icon {
+          display: none; }
         diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete {
           display: block; }
         diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
