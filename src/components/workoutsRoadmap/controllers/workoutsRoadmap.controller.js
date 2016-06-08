@@ -5,15 +5,7 @@
         function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
 
-            var PART_NAME = 'workoutsRoadmap';
-            if(!$translatePartialLoader.isPartAvailable(PART_NAME)){
-                $translatePartialLoader.addPart(PART_NAME);
-            }
-
-
-
             var vm = this;
-            //var activeWorkout;
 
             vm.workoutsProgress = data.workoutsProgress;
             vm.diagnostic = data.diagnostic;
