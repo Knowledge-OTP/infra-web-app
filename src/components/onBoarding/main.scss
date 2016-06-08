@@ -112,7 +112,8 @@
                     }
 
                     .md-button {
-                        width: 234px;
+                        padding-left: 52px;
+                        padding-right: 52px;
                         height: 50px;
                         border-radius: 30px;
                         @include text-style(21px, $fontColor1, Lato, $regularFontWeight);
@@ -192,6 +193,19 @@
 
                     button{
                         display: inline-block;
+                        padding-right: 66px;
+                        padding-left: 66px;
+                        height: 42px;
+                        &.default {
+                            color: $fontColor6;
+                            border: none;
+                            padding: 0;
+                            width: 130px;
+                            text-transform: none;
+                            font-family: Lato;
+                            font-weight: 400;
+                            font-size: 16px;
+                        }
                     }
                 }
 

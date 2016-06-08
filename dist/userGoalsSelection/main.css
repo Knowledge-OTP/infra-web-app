@@ -2933,9 +2933,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -17849,6 +17849,10 @@ user-goals {
     user-goals .save-btn-wrap .v-icon {
       width: 17px;
       margin-right: 7px; }
+    user-goals .save-btn-wrap .md-button.znk.md-primary {
+      padding-right: 45px;
+      padding-left: 45px;
+      height: 40px; }
     user-goals .save-btn-wrap .dropdown-arrow-icon {
       margin-left: 10px;
       overflow: visible;
@@ -17859,8 +17863,6 @@ user-goals {
         transform: rotate(-90deg); }
         user-goals .save-btn-wrap .dropdown-arrow-icon svg polyline {
           stroke: white; }
-    user-goals .save-btn-wrap .btn-sm {
-      width: 165px; }
     user-goals .save-btn-wrap svg-icon {
       display: inline-block; }
       user-goals .save-btn-wrap svg-icon svg {

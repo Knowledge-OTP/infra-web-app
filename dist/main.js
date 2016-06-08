@@ -2697,7 +2697,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
-    "        <md-button autofocus tabindex=\"1\" class=\"md-sm primary\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap.diagnostic', 'Start Test')\">\n" +
+    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
@@ -2743,8 +2743,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        </div>\n" +
     "        <div class=\"sub-title\" translate=\".WE_ARE_HERE_TO_HELP\"></div>\n" +
     "        <div class=\"btn-wrap\">\n" +
-    "            <md-button autofocus tabindex=\"1\" class=\"md primary inline-block\"\n" +
-    "                       ng-click=\"vm.nextStep()\">\n" +
+    "            <md-button autofocus tabindex=\"1\" class=\"md-primary znk inline-block\"\n" +
+    "                       ng-click=\"vm.nextStep()\" ng-cloak>\n" +
     "                <span translate=\".CONTINUE\" class=\"continue-title\"></span>\n" +
     "                <svg-icon name=\"on-boarding-dropdown-arrow-icon\"\n" +
     "                          class=\"dropdown-arrow-icon inline-block\">\n" +
@@ -4341,7 +4341,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "    </div>\n" +
     "    <div class=\"save-btn-wrap\">\n" +
     "        <md-button autofocus tabindex=\"1\"\n" +
-    "                   class=\"md-sm primary inline-block\"\n" +
+    "                   class=\"md-primary znk inline-block\"\n" +
     "                   ng-click=\"saveChanges()\"\n" +
     "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
     "            <svg-icon name=\"user-goals-v-icon\" class=\"v-icon\" ng-show=\"showVIcon\"></svg-icon>\n" +

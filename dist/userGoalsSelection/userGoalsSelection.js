@@ -585,7 +585,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "    </div>\n" +
     "    <div class=\"save-btn-wrap\">\n" +
     "        <md-button autofocus tabindex=\"1\"\n" +
-    "                   class=\"md-sm primary inline-block\"\n" +
+    "                   class=\"md-primary znk inline-block\"\n" +
     "                   ng-click=\"saveChanges()\"\n" +
     "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
     "            <svg-icon name=\"user-goals-v-icon\" class=\"v-icon\" ng-show=\"showVIcon\"></svg-icon>\n" +

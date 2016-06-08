@@ -2935,9 +2935,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -20779,9 +20779,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -35488,7 +35488,7 @@ diagnostic-intro {
         top: -48px;
         background-size: contain;
         /*CSS for basic styling and non-retina image path:*/
-        background-image: url("./diagnosticIntro/assets/images/diagnostic-raccoon.png");
+        background-image: url("./assets/images/diagnostic-raccoon.png");
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
@@ -35498,7 +35498,7 @@ diagnostic-intro {
         /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
         @media only screen and (min-resolution: 1.5dppx) {
           diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
-            background-image: url("./diagnosticIntro/assets/images/diagnostic-raccoon@2x.png");
+            background-image: url("./assets/images/diagnostic-raccoon@2x.png");
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -38498,9 +38498,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -56644,9 +56644,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -71475,7 +71475,8 @@ on-boarding-bar {
           position: relative;
           top: 3px; }
         .on-board .container .step .welcome .btn-wrap .md-button {
-          width: 234px;
+          padding-left: 52px;
+          padding-right: 52px;
           height: 50px;
           border-radius: 30px;
           font-size: 21px;
@@ -71542,7 +71543,19 @@ on-boarding-bar {
         margin-top: 52px;
         margin-right: 20px; }
         .on-board .container .step.diagnostic .btn-wrap button {
-          display: inline-block; }
+          display: inline-block;
+          padding-right: 66px;
+          padding-left: 66px;
+          height: 42px; }
+          .on-board .container .step.diagnostic .btn-wrap button.default {
+            color: #0a9bad;
+            border: none;
+            padding: 0;
+            width: 130px;
+            text-transform: none;
+            font-family: Lato;
+            font-weight: 400;
+            font-size: 16px; }
       .on-board .container .step.diagnostic diagnostic-intro .section-question {
         margin-top: -25px; }
 
@@ -74738,9 +74751,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -89654,6 +89667,10 @@ user-goals {
     user-goals .save-btn-wrap .v-icon {
       width: 17px;
       margin-right: 7px; }
+    user-goals .save-btn-wrap .md-button.znk.md-primary {
+      padding-right: 45px;
+      padding-left: 45px;
+      height: 40px; }
     user-goals .save-btn-wrap .dropdown-arrow-icon {
       margin-left: 10px;
       overflow: visible;
@@ -89664,8 +89681,6 @@ user-goals {
         transform: rotate(-90deg); }
         user-goals .save-btn-wrap .dropdown-arrow-icon svg polyline {
           stroke: white; }
-    user-goals .save-btn-wrap .btn-sm {
-      width: 165px; }
     user-goals .save-btn-wrap svg-icon {
       display: inline-block; }
       user-goals .save-btn-wrap svg-icon svg {
@@ -93342,9 +93357,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
@@ -110934,9 +110949,9 @@ md-progress-linear {
     md-progress-linear .md-container.md-mode-determinate .md-bar1 {
       display: none; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar1 {
-      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-1 4s infinite, md-progress-linear-indeterminate-1 4s infinite; }
     md-progress-linear .md-container.md-mode-indeterminate .md-bar2 {
-      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
+      animation: md-progress-linear-indeterminate-scale-2 4s infinite, md-progress-linear-indeterminate-2 4s infinite; }
     md-progress-linear .md-container.ng-hide {
       animation: none; }
       md-progress-linear .md-container.ng-hide .md-bar1 {
