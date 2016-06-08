@@ -25,8 +25,8 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'goals-top-icon': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
-                'close-popup': 'components/estimatedScoreWidget/svg/close-popup.svg'
+                'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
+                'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/close-popup.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }

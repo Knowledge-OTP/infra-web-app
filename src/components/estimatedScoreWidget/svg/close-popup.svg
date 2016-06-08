@@ -1,7 +1,17 @@
 <svg
+    class="estimated-score-widget-close-popup-svg"
     x="0px"
     y="0px"
     viewBox="-596.6 492.3 133.2 133.5">
+
+    <style type="text/css">
+        .estimated-score-widget-close-popup-svg .st1{
+            fill:none;
+            stroke: white;
+            stroke-width: 6px;
+        }
+    </style>
+
 <path class="st0"/>
 <g>
 	<line class="st1" x1="-592.6" y1="496.5" x2="-467.4" y2="621.8"/>
