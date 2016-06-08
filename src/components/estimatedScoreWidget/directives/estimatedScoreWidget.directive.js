@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog) {
+        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout) {
             'ngInject';
             var previousValues;
 
@@ -29,7 +29,9 @@
                     // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();todo implement once diagnostic service will be ready
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
 
-                    if (isNavMenuFlag) angular.element.addClass(element[0], 'is-nav-menu');
+                    if (isNavMenuFlag) {
+                        angular.element.addClass(element[0], 'is-nav-menu');
+                    }
 
                     function adjustWidgetData(userGoals) {
                         $q.all([
@@ -57,12 +59,12 @@
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
                                     pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
-                                    showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] != 'undefined')
+                                    showScorez: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
 
-                            function filterSubjects (widgetItem) {
-                                return !!('showScore' in widgetItem &&  (widgetItem.showScore) != false);
+                            function filterSubjects(widgetItem) {
+                                return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
                             }
 
                             scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
@@ -85,10 +87,10 @@
 
                     function calcPercentage(correct) {
                         var scoringLimits = UserGoalsService.getScoringLimits();
-                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] != 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max: scoringLimits.subjects.max;
+                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max : scoringLimits.subjects.max;
                         return (correct / maxEstimatedScore) * 100;
                     }
-                    
+
                     // TODO: this should come from a service, duplicated from znk-header
                     scope.d.showGoalsEdit = function () {
                         $mdDialog.show({

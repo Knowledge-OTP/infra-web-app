@@ -1,0 +1,19 @@
+{
+    "ESTIMATED_SCORE_WIDGET_DIRECTIVE": {
+        "TITLE": "SAT Estimated Score",
+        "PTS_TO_GO": "{{pts}} pts to go",
+        "YOUR_GOAL": "Your Goal: {{goal}}",
+        "GOAL_REACHED": "you've reached your goal!",
+        "COMPOSITE_SCORE": "Total Score:",
+        "GOAL_SCORE": "Goal Score:",
+        "EDIT_MY_GOALS": "Edit my goals",
+        "SUBJECT_0": "Math",
+        "SUBJECT_1": "English",
+        "SUBJECT_7": "Verbal",
+        "SUBJECT_8": "Essay",
+        "UNFINISHED_DIAGNOSTIC_TITLE": "Set your initial score by completing the diagnostic test."
+    },
+    "SETTING.EDIT_GOALS": {
+        "MY_GOALS": "My Goals"
+    }
+}

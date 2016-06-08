@@ -24,7 +24,7 @@
                 };
 
                 return EstimatedScoreWidgetSrv;
-            }
+            };
         }
     ]);
 })(angular);
