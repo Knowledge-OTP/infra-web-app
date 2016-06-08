@@ -1,6 +1,10 @@
 .md-button.znk{
+    &[disabled="disabled"]{
+        opacity: 0.6;
+    }
+
     &.md-primary{
-        color: $fontColor8;
+        color: $fontColor8 !important;//disabled color set by important so it must be override
         background: $bgColor5;
         padding: {
             right: 90px;
@@ -13,7 +17,7 @@
             size: 16px;
         }
 
-        &:hover{
+        &:not([disabled="disabled"]):hover{
             background: $bgColor10;
         }
 
@@ -21,9 +25,34 @@
             background: $bgColor9;
         }
 
-        &[disabled="disabled"]{
-            background: $bgColor26;
-            color: $fontColor10 !important;
+        &.md-focused{
+            background: $bgColor5;
+        }
+    }
+
+    &.outline{
+        border: 1px solid $borderColor4;
+        border-radius: 30px;
+        color: $fontColor6 !important;//disabled color set by important so it must be override;
+        font:{
+            family: Lato;
+            weight: $regularFontWeight;
+            size: 18px;
+        }
+        padding:{
+            right: 100px;
+            left: 100px;
+        }
+        min-height: 43px;
+        line-height:43px;
+
+
+        &:not([disabled="disabled"]):hover{
+            background: $bgColor39;
+        }
+
+        &:active{
+            background: $bgColor19;
         }
     }
 }

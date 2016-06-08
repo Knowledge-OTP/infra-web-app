@@ -1,8 +1,15 @@
+@import url(//fonts.googleapis.com/css?family=Quicksand:400),
+        url(//fonts.googleapis.com/css?family=Quicksand:700);
+
 @import 'src/scss/imports/variables',
         'src/scss/imports/colors',
         'bower_components/infra/dist/mixins/mixins';
 
-@import 'directives/workoutsProgress/workouts-progress-directive';
+@import 'directives/workoutsProgress/workouts-progress-directive',
+        'directives/workoutIntroLock/workout-intro-lock-directive';
 
-@import 'scss/workoutsRoadmap',
-        'scss/workoutsRoadmap-diagnostic';
+@import 'scss/workouts-roadmap',
+        'scss/workouts-roadmap-diagnostic-intro',
+        'scss/workouts-roadmap-workout-intro',
+        'scss/workouts-roadmap-workout-in-progress',
+        'scss/workouts-roadmap-base-pre-summary';

@@ -19,4 +19,12 @@ The dist directory is the package content when used as a dependency used by othe
     and copy the locale files accrodingly.
     for more info about this translation feature (look for using partialLoader part): https://angular-translate.github.io/docs/#/guide/12_asynchronous-loading
      
+## You must provide locale for the following keys:
+    under "SUBJECTS" provide all subject ids translations, i.e:
+        "SUBJECTS":{
+            "0": "math",
+            "1": "reading",
+            "2": "writing"
+        }
 
+## svg icon for all the subject should be set, i.e if one of the subejct is math then math-icon svg should be set

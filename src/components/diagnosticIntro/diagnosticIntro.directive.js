@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro', ['DiagnosticIntroSrv', '$translatePartialLoader', '$log',
-    function DiagnosticIntroDirective(DiagnosticIntroSrv, $translatePartialLoader, $log) {
+    function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
+        'ngInject';
 
     var directive = {
         restrict: 'E',
@@ -15,11 +16,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
 
             scope.d = {};
 
-            DiagnosticIntroSrv.getActiveData().then(function(activeData) {
-                if (!activeData || !activeData.id) {
-                    $log.error('DiagnosticIntroDirective: activeData id must exist!');
-                }
-                scope.d.activeId = activeData.id;
+            DiagnosticIntroSrv.getActiveData().then(function(activeId) {
+                scope.d.activeId = activeId;
                 return DiagnosticIntroSrv.getConfigMap();
             }).then(function(mapData) {
                 if (!angular.isArray(mapData.subjects)) {

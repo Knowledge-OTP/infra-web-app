@@ -1,4 +1,4 @@
-a.md-button,
+/*a.md-button,
 .md-button {
     @include text-style(16px, $fontColor2, Lato, $regularFontWeight, null,none);
     @include dimension(170px, 42px);
@@ -76,7 +76,7 @@ a.md-button,
         &:active {
             background-color: $bgColor10;
         }
-        &:hover, &:visited/*, &:focus */{
+        &:hover, &:visited!*, &:focus *!{
             background-color: $bgColor11;
         }
     }
@@ -87,7 +87,7 @@ a.md-button,
         &:active {
             background-color: $bgColor10;
         }
-        &:hover, &:visited/*, &:focus */{
+        &:hover, &:visited!*, &:focus *!{
             background-color: $bgColor17;
         }
     }
@@ -129,7 +129,7 @@ a.md-button,
         width: 130px;
     }
 
-    &:not([disabled])/*.md-focused */{
+    &:not([disabled])!*.md-focused *!{
         &.success {
             background-color: $bgColor14;
         }
@@ -144,7 +144,7 @@ a.md-button,
     &.outline-green:not([disabled]):hover{
         background-color: $bgColor21;
     }
-}
+}*/
 
 md-progress-linear{
     &.znk-progress-linear-exercise-bar  {

@@ -235,7 +235,9 @@
                     var diagnosticExam = diagnostic[0];
                     var diagnosticResults = diagnostic[1];
 
-                    if (diagnosticResults.isComplete) return COMPLETED;
+                    if (diagnosticResults.isComplete) {
+                        return COMPLETED;
+                    }
 
                     var exerciseResultPromises = _getExerciseResultProms(diagnosticResults.sectionResults, diagnosticSettings.diagnosticId);
                     return $q.all(exerciseResultPromises).then(function (completedSections) {
