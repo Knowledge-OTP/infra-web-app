@@ -18,8 +18,8 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
             var userGoalsServiceObj = {};
 
             userGoalsServiceObj.getGoals = function () {
-                return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
-                    return studentStorage.get(goalsPath).then(function (userGoals) {
+                return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
+                    return globalStorage.get(goalsPath).then(function (userGoals) {
                         if (angular.equals(userGoals, {})) {
                             userGoals = _defaultUserGoals();
                         }
@@ -29,11 +29,11 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
             };
 
             userGoalsServiceObj.setGoals = function (newGoals) {
-                return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
                     if (arguments.length && angular.isDefined(newGoals)) {
-                        return studentStorage.set(goalsPath, newGoals);
+                        return globalStorage.set(goalsPath, newGoals);
                     }
-                    return studentStorage.get(goalsPath).then(function (userGoals) {
+                    return globalStorage.get(goalsPath).then(function (userGoals) {
                         if (!userGoals.goals) {
                             userGoals.goals = _defaultUserGoals();
                         }

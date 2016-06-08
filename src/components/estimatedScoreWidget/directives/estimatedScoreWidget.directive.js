@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout) {
+        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout, ScoringService) {
             'ngInject';
             var previousValues;
 
@@ -59,12 +59,12 @@
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
                                     pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
-                                    showScorez: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
+                                    showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
 
-                            function filterSubjects(widgetItem) {
-                                return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
+                            function filterSubjects (widgetItem) {
+                                return !!('showScore' in widgetItem &&  (widgetItem.showScore) !== false);
                             }
 
                             scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
@@ -86,8 +86,8 @@
                     }
 
                     function calcPercentage(correct) {
-                        var scoringLimits = UserGoalsService.getScoringLimits();
-                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max : scoringLimits.subjects.max;
+                        var scoringLimits = ScoringService.getScoringLimits();
+                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max: scoringLimits.subjects.max;
                         return (correct / maxEstimatedScore) * 100;
                     }
 
