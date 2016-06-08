@@ -35472,8 +35472,6 @@ md-dialog .close-popup {
 /* Material+Icons */
 diagnostic-intro {
   width: 100%; }
-  diagnostic-intro svg-icon {
-    display: block; }
   diagnostic-intro .diagnostic-intro-drv {
     text-align: center; }
     diagnostic-intro .diagnostic-intro-drv .diagnostic-text {
@@ -35521,8 +35519,8 @@ diagnostic-intro {
         border: 2px solid;
         border-color: #cccccc;
         position: relative; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle:nth-child(3n+1) {
-          align-self: flex-end; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.subject-icon {
+          display: none; }
         diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete {
           display: block; }
         diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
@@ -90038,18 +90036,7 @@ workout-intro-lock {
 
 .workouts-roadmap-diagnostic-intro {
   text-align: center;
-  box-sizing: border-box;
-  /*diagnostic-intro {
-        .diagnostic-intro-drv {
-            ng-switch {
-                .diagnostic-text {
-                    font: {
-                        size: 15px;
-                    }
-                }
-            }
-        }
-    }*/ }
+  box-sizing: border-box; }
   .workouts-roadmap-diagnostic-intro .diagnostic-workout-title {
     margin-top: 25px;
     font-size: 21px;
