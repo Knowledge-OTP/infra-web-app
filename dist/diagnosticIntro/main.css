@@ -17398,142 +17398,153 @@ md-tooltip {
 
 /* full background image with retina */
 /* full background image with retina */
-a.md-button,
+/*a.md-button,
 .md-button {
-  font-size: 16px;
-  color: #161616;
-  font-family: Lato;
-  font-weight: 400;
-  text-transform: none;
-  width: 170px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fafaff;
-  border-radius: 21px;
-  position: relative; }
-  a.md-button i,
-  .md-button i {
-    margin-left: 10px; }
-  a.md-button i.positioned,
-  .md-button i.positioned {
-    position: absolute;
-    left: 25px;
-    top: 10px;
-    margin-left: 0; }
-  a.md-button.default,
-  .md-button.default {
-    background-color: transparent;
-    color: #0a9bad;
-    border: none;
-    padding: 0; }
-    a.md-button.default:active,
-    .md-button.default:active {
-      background-color: transparent; }
-    a.md-button.default:hover,
-    .md-button.default:hover {
-      background-color: transparent; }
-  a.md-button.primary,
-  .md-button.primary {
-    background-color: #0a9bad;
-    color: white; }
-    a.md-button.primary:active,
-    .md-button.primary:active {
-      background-color: #037684; }
-    a.md-button.primary:hover,
-    .md-button.primary:hover {
-      background-color: #0a8999; }
-  a.md-button.warn,
-  .md-button.warn {
-    background-color: #ff931e;
-    color: white; }
-    a.md-button.warn:active,
-    .md-button.warn:active {
-      background-color: #a65e10; }
-    a.md-button.warn:hover,
-    .md-button.warn:hover {
-      background-color: #d67914; }
-  a.md-button.success,
-  .md-button.success {
-    background-color: #87ca4d;
-    color: white; }
-    a.md-button.success:active,
-    .md-button.success:active {
-      background-color: #67a531; }
-    a.md-button.success:hover,
-    .md-button.success:hover {
-      background-color: #76b63e; }
-    a.md-button.success.drop-shadow,
-    .md-button.success.drop-shadow {
-      box-shadow: 0px 3px 0px 0px #f8f8f8; }
-  a.md-button.facebook,
-  .md-button.facebook {
-    background-color: #037684;
-    color: white; }
-    a.md-button.facebook:active,
-    .md-button.facebook:active {
-      background-color: #0a8999; }
-    a.md-button.facebook:hover, a.md-button.facebook:visited,
-    .md-button.facebook:hover,
-    .md-button.facebook:visited {
-      background-color: #a65e10; }
-  a.md-button.google,
-  .md-button.google {
-    background-color: #df4a31;
-    color: white; }
-    a.md-button.google:active,
-    .md-button.google:active {
-      background-color: #0a8999; }
-    a.md-button.google:hover, a.md-button.google:visited,
-    .md-button.google:hover,
-    .md-button.google:visited {
-      background-color: #D93418; }
-  a.md-button.outline-green,
-  .md-button.outline-green {
-    background: #ff931e;
-    border: 1px solid #87ca4d;
-    color: #87ca4d; }
-    a.md-button.outline-green:active,
-    .md-button.outline-green:active {
-      background-color: #E8E8E8; }
-  a.md-button.outline-blue,
-  .md-button.outline-blue {
-    background: #ffffff;
-    border: 1px solid #0a9bad;
-    color: #0a9bad; }
-    a.md-button.outline-blue:active,
-    .md-button.outline-blue:active {
-      background-color: #c7e0e3; }
-    a.md-button.outline-blue:hover,
-    .md-button.outline-blue:hover {
-      border-color: #037684;
-      color: #037684; }
-  a.md-button.lg,
-  .md-button.lg {
-    width: 340px; }
-  a.md-button.md,
-  .md-button.md {
-    width: 280px; }
-  a.md-button.md-sm,
-  .md-button.md-sm {
-    width: 220px; }
-  a.md-button.sm,
-  .md-button.sm {
-    width: 130px; }
-  a.md-button:not([disabled]).success,
-  .md-button:not([disabled]).success {
-    background-color: #76b63e; }
-  a.md-button:not([disabled]).primary,
-  .md-button:not([disabled]).primary {
-    background-color: #067f8e; }
-  a.md-button:not([disabled]).default,
-  .md-button:not([disabled]).default {
-    background-color: transparent; }
-  a.md-button.outline-green:not([disabled]):hover,
-  .md-button.outline-green:not([disabled]):hover {
-    background-color: rgba(255, 255, 255, 0.55); }
+    @include text-style(16px, $fontColor2, Lato, $regularFontWeight, null,none);
+    @include dimension(170px, 42px);
+    @include display-flex;
+    @include align-items(center);
+    @include justify-content(center);
+    background: $bgColor8;
+    border-radius: 21px;
+    position: relative;
 
+    i {
+        margin-left: 10px;
+    }
+    i.positioned {
+        position: absolute;
+        left: 25px;
+        top: 10px;
+        margin-left: 0;
+    }
+
+    &.default{
+        background-color: $transparent;
+        color: $fontColor6;
+        border: none;
+        padding: 0;
+
+        &:active{
+            background-color: $transparent;
+        }
+        &:hover{
+            background-color: $transparent;
+        }
+    }
+
+    &.primary {
+        background-color: $bgColor5;
+        color: $fontColor1;
+        &:active {
+            background-color: $bgColor9;
+        }
+        &:hover {
+            background-color: $bgColor10;
+        }
+    }
+
+    &.warn {
+        background-color: $bgColor2;
+        color: $fontColor1;
+        &:active {
+            background-color: $bgColor11;
+        }
+        &:hover {
+            background-color: $bgColor12;
+        }
+    }
+
+    &.success {
+        background-color: $bgColor7;
+        color: $fontColor1;
+        &:active {
+            background-color: $bgColor13;
+        }
+        &:hover {
+            background-color: $bgColor14;
+        }
+
+        &.drop-shadow {
+            box-shadow: 0px 3px 0px 0px $bgColor29;
+        }
+    }
+
+    &.facebook {
+        background-color: $bgColor9;
+        color: $fontColor1;
+        &:active {
+            background-color: $bgColor10;
+        }
+        &:hover, &:visited!*, &:focus *!{
+            background-color: $bgColor11;
+        }
+    }
+
+    &.google {
+        background-color: $bgColor16;
+        color: $fontColor1;
+        &:active {
+            background-color: $bgColor10;
+        }
+        &:hover, &:visited!*, &:focus *!{
+            background-color: $bgColor17;
+        }
+    }
+
+    &.outline-green {
+        background: $bgColor2;
+        border: 1px solid $borderColor3;
+        color: $fontColor7;
+        &:active {
+            background-color: $bgColor18;
+        }
+    }
+
+    &.outline-blue {
+        background: $bgColor3;
+        border: 1px solid $borderColor4;
+        color: $fontColor6;
+        &:active {
+            background-color: $bgColor19;
+        }
+        &:hover {
+            border-color: $bgColor9;
+            color: $bgColor9;
+        }
+    }
+
+    &.lg {
+        width: 340px;
+    }
+
+    &.md {
+        width: 280px;
+    }
+    &.md-sm {
+        width: 220px;
+    }
+
+    &.sm {
+        width: 130px;
+    }
+
+    &:not([disabled])!*.md-focused *!{
+        &.success {
+            background-color: $bgColor14;
+        }
+        &.primary {
+            background-color: $bgColor20;
+        }
+        &.default{
+            background-color: $transparent;
+        }
+    }
+
+    &.outline-green:not([disabled]):hover{
+        background-color: $bgColor21;
+    }
+}*/
 md-progress-linear.znk-progress-linear-exercise-bar .md-bar {
   background-color: #c5cae9;
   transition: 0.4s; }
@@ -17613,101 +17624,103 @@ md-dialog .close-popup {
 /* Lato fonts from google*/
 /* Quicksand fonts */
 /* Material+Icons */
-diagnostic-intro .diagnostic-intro-drv {
-  text-align: center; }
-  diagnostic-intro .diagnostic-intro-drv .diagnostic-text {
-    margin: 20px auto;
-    max-height: 45px;
-    font-size: 16px;
-    color: #4f4d4d;
-    font-family: Lato;
-    font-weight: 200; }
-  diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
-    position: relative; }
-    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
-      position: relative;
-      top: -48px;
-      background-size: contain;
-      /*CSS for basic styling and non-retina image path:*/
-      background-image: url("./assets/images/diagnostic-raccoon.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      display: inline-block;
-      width: 160px;
-      height: 169px;
-      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-      @media only screen and (min-resolution: 1.5dppx) {
-        diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
-          background-image: url("./assets/images/diagnostic-raccoon@2x.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 160px;
-          height: 169px; } }
-  diagnostic-intro .diagnostic-intro-drv .icons-section {
-    display: flex;
-    justify-content: space-around;
-    width: 40%;
-    margin: 0 auto;
-    min-height: 140px; }
-    diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle {
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      display: inline-block;
-      border: 2px solid;
-      border-color: #cccccc;
+diagnostic-intro {
+  width: 100%; }
+  diagnostic-intro .diagnostic-intro-drv {
+    text-align: center; }
+    diagnostic-intro .diagnostic-intro-drv .diagnostic-text {
+      margin: 20px auto;
+      max-height: 45px;
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 200; }
+    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
       position: relative; }
-      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle:nth-child(3n+1) {
-        align-self: flex-end; }
-      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete {
-        display: block; }
-      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        vertical-align: top; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon {
-          width: 45px; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete {
-          display: none;
-          width: 65%; }
-          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete svg line {
-            stroke: white;
-            stroke-width: 30px; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
-          display: none; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon .subject-icon {
-          display: inline-block; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon .subject-icon {
-          display: none; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
-          display: inline-block; }
-  diagnostic-intro .diagnostic-intro-drv .section-question {
-    font-size: 18px;
-    color: #757a83;
-    font-family: Lato;
-    font-weight: 400;
-    text-transform: uppercase; }
-    diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions {
-      margin-top: 40px;
-      text-transform: none;
+      diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+        position: relative;
+        top: -48px;
+        background-size: contain;
+        /*CSS for basic styling and non-retina image path:*/
+        background-image: url("./assets/images/diagnostic-raccoon.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        display: inline-block;
+        width: 160px;
+        height: 169px;
+        /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+        @media only screen and (min-resolution: 1.5dppx) {
+          diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+            background-image: url("./assets/images/diagnostic-raccoon@2x.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: inline-block;
+            width: 160px;
+            height: 169px; } }
+    diagnostic-intro .diagnostic-intro-drv .icons-section {
       display: flex;
-      flex-direction: column;
-      padding-right: 110px;
-      padding-left: 110px; }
-      diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title {
-        font-size: 16px;
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 400; }
-      diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-text {
-        font-size: 16px;
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 200;
-        margin-top: 5px;
-        min-height: 38px; }
+      justify-content: space-around;
+      width: 40%;
+      margin: 0 auto;
+      min-height: 140px; }
+      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        display: inline-block;
+        border: 2px solid;
+        border-color: #cccccc;
+        position: relative; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.subject-icon {
+          display: none; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete {
+          display: block; }
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          vertical-align: top; }
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon {
+            width: 45px; }
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete {
+            display: none;
+            width: 65%; }
+            diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete svg line {
+              stroke: white;
+              stroke-width: 30px; }
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
+            display: none; }
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon .subject-icon {
+            display: inline-block; }
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon .subject-icon {
+            display: none; }
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
+            display: inline-block; }
+    diagnostic-intro .diagnostic-intro-drv .section-question {
+      font-size: 18px;
+      color: #757a83;
+      font-family: Lato;
+      font-weight: 400;
+      text-transform: uppercase; }
+      diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions {
+        margin-top: 40px;
+        text-transform: none;
+        display: flex;
+        flex-direction: column;
+        padding-right: 110px;
+        padding-left: 110px; }
+        diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title {
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400; }
+        diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-text {
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 200;
+          margin-top: 5px;
+          min-height: 38px; }
