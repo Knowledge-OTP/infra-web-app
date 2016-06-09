@@ -27,22 +27,6 @@
 
             <div class="main-content">
                 <div class="exercise-container base-border-radius">
-                    <znk-exercise-header subject-id="baseZnkExerciseCtrl.exercise.subjectId"
-                    options="{
-                    showQuit: true,
-                    showNumSlide: true,
-                    showDate: vm.showTimer,
-                    reviewMode: vm.isComplete
-                    }"
-                    total-slide-num="{{baseZnkExerciseCtrl.numberOfQuestions}}"
-                    ng-model="baseZnkExerciseCtrl.currentIndex"
-                    side-text="{{vm.headerTitle}}"
-                    timer-data="baseZnkExerciseCtrl.timerData"
-                    on-clicked-quit="vm.onHeaderQuit()"
-                    icon-name="{{vm.iconName}}"
-                    icon-click-handler="vm.iconClickHandler()">
-                    </znk-exercise-header>
-
                     <znk-exercise ng-model="results"
                                   questions="questions"
                                   settings="settings"
