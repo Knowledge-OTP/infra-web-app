@@ -21,9 +21,6 @@
 
 diagnostic-intro {
     width: 100%;
-    svg-icon {
-        display:block;
-    }
     .diagnostic-intro-drv {
         text-align: center;
 
@@ -41,7 +38,7 @@ diagnostic-intro {
                     position: relative;
                     top: -48px;
                     background-size: contain;
-                    @include full-background-image-retina('./diagnosticIntro/assets/images/diagnostic-raccoon', 160px, 169px);
+                    @include full-background-image-retina('./assets/images/diagnostic-raccoon', 160px, 169px);
                 }
             }
         }
@@ -62,14 +59,16 @@ diagnostic-intro {
                     border-color: $borderColor8;
                     position: relative;
 
-                    &:nth-child(3n+1) {
-                        align-self: flex-end;
-                    }
-
                     &.done {
                         .icon-wrapper {
-                            svg-icon.section-complete {
-                                display: block;
+                            svg-icon{
+                                &.subject-icon{
+                                    display: none;
+                                }
+
+                                &.section-complete {
+                                    display: block;
+                                }
                             }
                         }
                     }

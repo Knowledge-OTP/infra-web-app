@@ -181,7 +181,7 @@
 
 (function () {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
         function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
@@ -189,7 +189,6 @@
             $translatePartialLoader.addPart('workoutsRoadmap');
 
             var vm = this;
-            //var activeWorkout;
 
             vm.workoutsProgress = data.workoutsProgress;
             vm.diagnostic = data.diagnostic;

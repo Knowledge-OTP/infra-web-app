@@ -237,8 +237,13 @@ module.exports = function (grunt) {
             options: {
                 browsers: ['last 2 versions']
             },
-            main: {
-                src: ['.tmp/**/*.css']
+            main:{
+                files:[{
+                    expand: true,
+                    cwd: '<%= yeoman.tmp %>/',
+                    src: ['**/*.css'],
+                    dest: '<%= yeoman.tmp %>/'
+                }]
             }
         }
     });
@@ -331,6 +336,7 @@ module.exports = function (grunt) {
         'karma:build',
         'clean:dist',
         'build',
+        'autoprefixer:main',
         'copy:dist',
         'concat:dist',
         'concat:mainModule'
