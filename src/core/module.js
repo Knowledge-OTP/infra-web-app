@@ -2,6 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app', [
+        'znk.infra',
         'znk.infra-web-app.config',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticExercise',
