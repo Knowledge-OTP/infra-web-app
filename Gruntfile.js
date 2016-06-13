@@ -92,7 +92,7 @@ module.exports = function (grunt) {
         concat: {
             mainModule:{
                 files:[{
-                    src: ['<%= yeoman.dist %>/**/*.js'],
+                    src: ['<%= yeoman.src %>/core/module.js','<%= yeoman.dist %>/**/*.js'],
                     dest: '<%= yeoman.dist %>/main.js'
                 },{
                     src: ['<%= yeoman.tmp %>/**/*.css'],
@@ -210,7 +210,7 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/locale/*.*',
                     dest: '<%= yeoman.tmp %>'
-                },{
+                } ,{
                     expand: true,
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/assets/**/*.*',
@@ -325,6 +325,7 @@ module.exports = function (grunt) {
         'clean:server',
         'prepareConfiguration',
         'sass',
+        'autoprefixer:main',
         'html2js',
         'concat:build',
         'copy:build',
@@ -336,7 +337,6 @@ module.exports = function (grunt) {
         'karma:build',
         'clean:dist',
         'build',
-        'autoprefixer:main',
         'copy:dist',
         'concat:dist',
         'concat:mainModule'

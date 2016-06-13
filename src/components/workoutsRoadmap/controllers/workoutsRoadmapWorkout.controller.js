@@ -13,7 +13,7 @@
             }
 
             function _goToState(stateName) {
-                var EXPECTED_CURR_STATE = 'workoutsRoadmap.workout';
+                var EXPECTED_CURR_STATE = 'app.workoutsRoadmap.workout';
                 if ($state.current.name === EXPECTED_CURR_STATE) {
                     $state.go(stateName);
                 }

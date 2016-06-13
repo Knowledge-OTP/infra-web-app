@@ -46,14 +46,14 @@
  *
  *      3) workoutsRoadmap.diagnostic.summary
  *          this state must set i.e
- *              $stateProvider.state('workoutsRoadmap.diagnostic.summary', {
+ *              $stateProvider.state('app.workoutsRoadmap.diagnostic.summary', {
  *                   template: '<div>Diagnostic </div>',
  *                   controller: 'WorkoutsRoadMapBaseSummaryController',
  *                   controllerAs: 'vm'
  *               })
  *      4) workoutsRoadmap.workout.inProgress
  *          this state must set i.e
- *              $stateProvider.state('workoutsRoadmap.workout.inProgress', {
+ *              $stateProvider.state('app.workoutsRoadmap.workout.inProgress', {
  *                  template: '<div>Workout in progress</div>',
  *                  controller: function(){}
  *             })
@@ -85,7 +85,7 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('workoutsRoadmap', {
+                .state('app.workoutsRoadmap', {
                     url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
@@ -115,13 +115,13 @@
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.diagnostic', {
+                .state('app.workoutsRoadmap.diagnostic', {
                     url: '/diagnostic',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapDiagnosticController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.diagnostic.intro', {
+                .state('app.workoutsRoadmap.diagnostic.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticIntro.template.html',
                     controller: 'WorkoutsRoadMapDiagnosticIntroController',
                     controllerAs: 'vm',
@@ -135,28 +135,28 @@
                         }
                     }
                 })
-                .state('workoutsRoadmap.diagnostic.preSummary', {
+                .state('app.workoutsRoadmap.diagnostic.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.workout', {
+                .state('app.workoutsRoadmap.workout', {
                     url: '/workout?workout',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapWorkoutController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.workout.intro', {
+                .state('app.workoutsRoadmap.workout.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutIntro.template.html',
                     controller: 'WorkoutsRoadMapWorkoutIntroController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.workout.inProgress', {
+                .state('app.workoutsRoadmap.workout.inProgress', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html',
                     controller: 'WorkoutsRoadMapWorkoutInProgressController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.workout.preSummary', {
+                .state('app.workoutsRoadmap.workout.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
@@ -194,8 +194,8 @@
             vm.diagnostic = data.diagnostic;
 
             var search = $location.search();
-            var DIAGNOSTIC_STATE = 'workoutsRoadmap.diagnostic';
-            var WORKOUT_STATE = 'workoutsRoadmap.workout';
+            var DIAGNOSTIC_STATE = 'app.workoutsRoadmap.diagnostic';
+            var WORKOUT_STATE = 'app.workoutsRoadmap.workout';
 
             function getActiveWorkout() {
                 var i = 0;
@@ -277,7 +277,7 @@
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        $state.go('workoutsRoadmap.workout', {
+                        $state.go('app.workoutsRoadmap.workout', {
                             workout: newItem.workoutOrder
                         });
                     }
@@ -403,7 +403,7 @@
             }
 
             function _goToState(stateName) {
-                var EXPECTED_CURR_STATE = 'workoutsRoadmap.workout';
+                var EXPECTED_CURR_STATE = 'app.workoutsRoadmap.workout';
                 if ($state.current.name === EXPECTED_CURR_STATE) {
                     $state.go(stateName);
                 }

@@ -46,14 +46,14 @@
  *
  *      3) workoutsRoadmap.diagnostic.summary
  *          this state must set i.e
- *              $stateProvider.state('workoutsRoadmap.diagnostic.summary', {
+ *              $stateProvider.state('app.workoutsRoadmap.diagnostic.summary', {
  *                   template: '<div>Diagnostic </div>',
  *                   controller: 'WorkoutsRoadMapBaseSummaryController',
  *                   controllerAs: 'vm'
  *               })
  *      4) workoutsRoadmap.workout.inProgress
  *          this state must set i.e
- *              $stateProvider.state('workoutsRoadmap.workout.inProgress', {
+ *              $stateProvider.state('app.workoutsRoadmap.workout.inProgress', {
  *                  template: '<div>Workout in progress</div>',
  *                  controller: function(){}
  *             })
