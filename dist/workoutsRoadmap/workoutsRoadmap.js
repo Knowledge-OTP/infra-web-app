@@ -85,7 +85,7 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('workoutsRoadmap', {
+                .state('app.workoutsRoadmap', {
                     url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
@@ -115,13 +115,13 @@
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.diagnostic', {
+                .state('app.workoutsRoadmap.diagnostic', {
                     url: '/diagnostic',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapDiagnosticController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.diagnostic.intro', {
+                .state('app.workoutsRoadmap.diagnostic.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticIntro.template.html',
                     controller: 'WorkoutsRoadMapDiagnosticIntroController',
                     controllerAs: 'vm',
@@ -135,28 +135,28 @@
                         }
                     }
                 })
-                .state('workoutsRoadmap.diagnostic.preSummary', {
+                .state('app.workoutsRoadmap.diagnostic.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.workout', {
+                .state('app.workoutsRoadmap.workout', {
                     url: '/workout?workout',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapWorkoutController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.workout.intro', {
+                .state('app.workoutsRoadmap.workout.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutIntro.template.html',
                     controller: 'WorkoutsRoadMapWorkoutIntroController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.workout.inProgress', {
+                .state('app.workoutsRoadmap.workout.inProgress', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html',
                     controller: 'WorkoutsRoadMapWorkoutInProgressController',
                     controllerAs: 'vm'
                 })
-                .state('workoutsRoadmap.workout.preSummary', {
+                .state('app.workoutsRoadmap.workout.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
