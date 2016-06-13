@@ -20656,6 +20656,10 @@ user-goals {
     user-goals .save-btn-wrap .v-icon {
       width: 17px;
       margin-right: 7px; }
+    user-goals .save-btn-wrap .md-button.znk.md-primary {
+      padding-right: 45px;
+      padding-left: 45px;
+      height: 40px; }
     user-goals .save-btn-wrap .dropdown-arrow-icon {
       margin-left: 10px;
       overflow: visible;
@@ -20666,8 +20670,6 @@ user-goals {
         transform: rotate(-90deg); }
         user-goals .save-btn-wrap .dropdown-arrow-icon svg polyline {
           stroke: white; }
-    user-goals .save-btn-wrap .btn-sm {
-      width: 165px; }
     user-goals .save-btn-wrap svg-icon {
       display: inline-block; }
       user-goals .save-btn-wrap svg-icon svg {
