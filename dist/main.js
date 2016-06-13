@@ -2084,7 +2084,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    <style>\n" +
     "\n" +
     "        .invitation-close-popup .st0{fill:none;}\n" +
-    "        .invitation-close-popup .st1{fill:none;stroke:$bgColor3;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "        .invitation-close-popup .st1{fill:none;stroke: #ffffff;;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
     "\n" +
     "    </style>\n" +
     "<path class=\"st0\"/>\n" +
@@ -6106,6 +6106,16 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
     "    <div class=\"quit-back-button\" translate=\".QUIT_BTN_TEXT\" ng-if=\"vm.options.showQuit\" ng-click=\"vm.onClickedQuit()\"></div>\n" +
     "</div>\n" +
     "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkExerciseStyle', []);
+})(angular);
+
+angular.module('znk.infra-web-app.znkExerciseStyle').run(['$templateCache', function($templateCache) {
+
 }]);
 
 (function (angular) {
