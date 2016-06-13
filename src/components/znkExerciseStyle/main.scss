@@ -1,0 +1,75 @@
+@import '../../scss/imports/colors',
+        '../../../bower_components/infra/dist/mixins/mixins',
+        '../../../bower_components/infra/dist/znkExercise/main',
+        '../../../bower_components/infra/dist/svgIcon/main',
+        '../../../bower_components/Swiper/dist/css/swiper';
+
+.exercise-container {
+    width: 1060px;
+    height: calc(100vh - 95px);
+    background-color: $bgColor1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    znk-exercise {
+        flex-grow: 1;
+
+        znk-exercise-btn-section {
+            .btn-container {
+                svg-icon {
+                    display: block;
+                }
+            }
+        }
+
+        .swiper-container {
+            box-shadow: 0 3px 7px 0 $bsColor3;
+            border-bottom: {
+                left-radius: 15px;
+                right-radius: 15px;
+            }
+            overflow: hidden;
+            background-color: $bgColor1;
+        }
+
+        questions-carousel {
+            question-builder {
+                img {
+                    max-width: 400px !important;
+                    height: auto !important;
+                    vertical-align: middle;
+                }
+                height: 100%;
+            }
+        }
+
+        znk-exercise-btn-section {
+            .shadow-container {
+                background: $bgColor1;
+            }
+        }
+
+        .question-bottom-shadow {
+            border: {
+                bottom-left-radius: 15px;
+                bottom-right-radius: 15px;
+            }
+        }
+    }
+
+    //table style from admin
+    znk-exercise .question-wrapper, .tutorial-intro {
+        table {
+            border-collapse: collapse;
+            font-size: 1em;
+            width: 100%;
+
+            td {
+                padding: 5px;
+                border: 1px solid $borderColor15;
+                vertical-align: top;
+            }
+        }
+    }
+}
