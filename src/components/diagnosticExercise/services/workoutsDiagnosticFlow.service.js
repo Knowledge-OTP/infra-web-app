@@ -9,8 +9,8 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv) {
+        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector',
+            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector) {
             var workoutsDiagnosticFlowObjApi = {};
             var currentSectionData = {};
             var countDifficultySafeCheckErrors = 0;
@@ -18,7 +18,8 @@
             var currentState;
 
             workoutsDiagnosticFlowObjApi.getDiagnosticSettings = function() {
-                return angular.extend(_diagnosticSettings, WORKOUTS_DIAGNOSTIC_FLOW);
+                var diagnosticData = $injector.invoke(_diagnosticSettings);
+                return angular.extend(diagnosticData, WORKOUTS_DIAGNOSTIC_FLOW);
             };
 
             workoutsDiagnosticFlowObjApi.setCurrentQuestion = function (questionId, index)  {

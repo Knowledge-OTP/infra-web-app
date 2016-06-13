@@ -87,7 +87,7 @@
                     controller: ['$timeout', '$state', function ($timeout, $state) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
-                            $state.go('diagnostic.summary');
+                            $state.go('app.diagnostic.summary');
                         }, VIDEO_DURATION);
                     }],
                     controllerAs: 'vm'
