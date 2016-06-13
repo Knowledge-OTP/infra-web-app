@@ -13,8 +13,8 @@
             vm.diagnostic = data.diagnostic;
 
             var search = $location.search();
-            var DIAGNOSTIC_STATE = 'workoutsRoadmap.diagnostic';
-            var WORKOUT_STATE = 'workoutsRoadmap.workout';
+            var DIAGNOSTIC_STATE = 'app.workoutsRoadmap.diagnostic';
+            var WORKOUT_STATE = 'app.workoutsRoadmap.workout';
 
             function getActiveWorkout() {
                 var i = 0;
@@ -96,7 +96,7 @@
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        $state.go('workoutsRoadmap.workout', {
+                        $state.go('app.workoutsRoadmap.workout', {
                             workout: newItem.workoutOrder
                         });
                     }

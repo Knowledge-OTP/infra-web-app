@@ -302,8 +302,8 @@ free-text-answer .free-text-answer-wrapper .answer-status {
   display: -ms-flexbox;
   display: flex;
   -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center; }
+  -ms-flex-align: center;
+  align-items: center; }
 
 free-text-answer .free-text-answer-wrapper .answer-status .user-answer {
   font-size: 18px;
@@ -442,10 +442,10 @@ free-text-answer .free-text-answer-wrapper .input-wrapper input:focus {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   -webkit-justify-content: center;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -webkit-align-items: center;
   position: relative;
   z-index: 1;
@@ -555,15 +555,15 @@ select-answer .answer {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -webkit-align-items: center;
   margin-bottom: 20px; }
 
 select-answer .answer .correct-icon-drv,
 select-answer .answer .wrong-icon-drv {
   display: none;
+  -ms-flex-negative: 0;
   -webkit-flex-shrink: 0;
-      -ms-flex-negative: 0;
           flex-shrink: 0; }
 
 select-answer .answer.wrong .content-wrapper .answer-index-wrapper {
@@ -658,7 +658,7 @@ select-answer .answer .answer-solution-icon-wrapper {
   visibility: hidden;
   margin-right: 25px;
   -ms-flex-negative: 0;
-      flex-shrink: 0;
+  flex-shrink: 0;
   -webkit-flex-shrink: 0; }
 
 select-answer .answer .content-wrapper {
@@ -666,7 +666,7 @@ select-answer .answer .content-wrapper {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -webkit-align-items: center; }
 
 select-answer .answer .content-wrapper .answer-index-wrapper {
@@ -677,17 +677,17 @@ select-answer .answer .content-wrapper .answer-index-wrapper {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   -webkit-justify-content: center;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -webkit-align-items: center;
   width: 38px;
   height: 38px;
   border: 1px solid #888888;
   margin-right: 22.5px;
   -ms-flex-negative: 0;
-      flex-shrink: 0;
+  flex-shrink: 0;
   -webkit-flex-shrink: 0; }
 
 select-answer .answer .content-wrapper .answer-index-wrapper .inner-circle {
@@ -710,7 +710,7 @@ select-answer .answer .content-wrapper .ion-ios-close-empty {
   z-index: 1;
   display: none;
   -ms-flex-negative: 0;
-      flex-shrink: 0;
+  flex-shrink: 0;
   -webkit-flex-shrink: 0; }
 
 select-answer .answer .content-wrapper .ion-android-done {
@@ -731,8 +731,8 @@ znk-exercise.desktop .btn-section .btn-container {
   top: 0;
   bottom: 0;
   -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -754,7 +754,7 @@ znk-exercise.desktop .btn-section .btn-container.right-container button {
 
 znk-exercise.desktop .btn-section .btn-container.right-container button .chevron {
   -webkit-transform: rotate(-90deg);
-          transform: rotate(-90deg); }
+  transform: rotate(-90deg); }
 
 znk-exercise.desktop .btn-section .btn-container.right-container.ng-hide-add, znk-exercise.desktop .btn-section .btn-container.right-container.ng-hide-remove {
   transition: all linear 0.2s; }
@@ -772,7 +772,7 @@ znk-exercise.desktop .btn-section .btn-container.left-container button {
 
 znk-exercise.desktop .btn-section .btn-container.left-container button .chevron {
   -webkit-transform: rotate(90deg);
-          transform: rotate(90deg); }
+  transform: rotate(90deg); }
 
 znk-exercise.desktop .btn-section .btn-container.left-container.ng-hide-add, znk-exercise.desktop .btn-section .btn-container.left-container.ng-hide-remove {
   transition: all linear 0.2s; }
@@ -895,10 +895,10 @@ znk-exercise-pager znk-scroll .pager-items-wrapper .pager-item .question-status-
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   -webkit-justify-content: center;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -webkit-align-items: center;
   background: linear-gradient(to bottom right, #cfcfcf 0%, #cfcfcf 50%, #d7d7d7 51%, #d7d7d7 100%);
   position: relative; }
@@ -1276,11 +1276,11 @@ svg-icon {
   display: -ms-inline-flexbox;
   display: inline-flex;
   -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center; }
+  -ms-flex-pack: center;
+  justify-content: center; }
 
 svg-icon svg {
   display: block; }
