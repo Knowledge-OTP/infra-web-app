@@ -90,28 +90,30 @@ angular.module('demo', [
         }]);
 
         DiagnosticIntroSrvProvider.setActiveSubjectGetter(['ENV', function (ENV) {
-            return { id: ENV.VERBAL };
+            return ENV.VERBAL;
         }]);
 
-        WorkoutsDiagnosticFlowProvider.setDiagnosticSettings({
-            diagnosticId: 14,
-            summary: {
-                subjects: [
-                    {
-                        id: 0,
-                        name: 'math',
-                        colors: ['#75cbe8', '#c9c9c9', '#f3f3f3']
-                    },
-                    {
-                        id: 7,
-                        name: 'verbal',
-                        colors: ['#f9d628', '#c9c9c9', '#f3f3f3']
-                    }
-                ],
-                greatStart: 24,
-                goodStart: 20
-            }
-        });
+        WorkoutsDiagnosticFlowProvider.setDiagnosticSettings(['ENV', function (ENV) {
+            return {
+                diagnosticId: 14,
+                summary: {
+                    subjects: [
+                        {
+                            id: ENV.MATH,
+                            name: 'math',
+                            colors: ['#75cbe8', '#c9c9c9', '#f3f3f3']
+                        },
+                        {
+                            id: ENV.VERBAL,
+                            name: 'verbal',
+                            colors: ['#f9d628', '#c9c9c9', '#f3f3f3']
+                        }
+                    ],
+                    greatStart: 24,
+                    goodStart: 20
+                }
+            };
+        }]);
 
 
             function questionTypeGetter(question) {
