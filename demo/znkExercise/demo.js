@@ -2,8 +2,9 @@
     'use strict';
 
     angular.module('demo', [
-        'znk.infra-web-app.znkExercise',
-        'ngAnimate'
+        'znk.infra-web-app.infraWebAppZnkExercise',
+        'ngAnimate',
+        'pascalprecht.translate'
     ])
         .config(function (QuestionTypesSrvProvider, $sceProvider) {
             $sceProvider.enabled(false);
