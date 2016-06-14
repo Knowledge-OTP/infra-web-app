@@ -1,7 +1,9 @@
-(function(){
+(function (angular) {
+    'use strict';
+    
     angular.module('demo').service('ENV',
-        function(){
-            this.firebaseAppScopeName = "act_app";
+        function () {
+            this.firebaseAppScopeName = "sat_app";
         }
-    )
+    );
 })(angular);
