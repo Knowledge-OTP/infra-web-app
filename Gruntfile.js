@@ -183,8 +183,8 @@ module.exports = function (grunt) {
                 ],
                 tasks: ['sass', 'autoprefixer:main']
             },
-            locale:{
-                files: ['<%= yeoman.src %>/**/locale/*.json'],
+            assets:{
+                files: ['<%= yeoman.src %>/**/locale/*.json', '<%= yeoman.src %>/**/*.{png}'],
                 tasks:['copy:build']
             }
         },
@@ -215,6 +215,16 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/assets/**/*.*',
                     dest: '<%= yeoman.tmp %>'
+                },{
+                    expand: true,
+                    cwd: '<%= yeoman.src %>/components/',
+                    src: '*/assets/**/*.*',
+                    dest: '<%= yeoman.tmp %>/assets',
+                    rename:function(dest, src){
+                        var indexOfAssets = src.indexOf('assets');
+                        var destSuffix = src.substr(indexOfAssets + 7);
+                        return '.tmp/assets/' + destSuffix;
+                    }
                 }]
             },
             dist: {

@@ -4,4 +4,5 @@
 
 @import "scss/znk-exercise-style";
 
-@import "directives/answerExplantion/answer-explanation-directive";
+@import "directives/answerExplanation/answer-explanation-directive",
+        "directives/answerExplanation/answer-explanation-content-directive";

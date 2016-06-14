@@ -28,7 +28,7 @@
             $scope.d = {};
 
             $scope.d.settings = {
-                viewMode: 1,
+                viewMode: 3,
                 allowedTimeForExercise: 10000
             };
 
