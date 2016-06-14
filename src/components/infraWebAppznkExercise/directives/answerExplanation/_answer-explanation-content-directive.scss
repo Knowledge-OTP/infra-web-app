@@ -1,0 +1,51 @@
+answer-explanation-content {
+    display: block;
+
+    .title {
+        padding: 15px 20px 0;
+        text-align: center;
+        @include text-style(18px, $fontColor2, Quicksand, bold);
+    }
+
+    svg-icon[name="close-popup"] {
+        svg {
+            line {
+                stroke: $fontColor2;
+            }
+        }
+    }
+
+    .flex-wrap {
+        @include display-flex;
+        padding-top: 25px;
+
+        .video-wrap {
+            width: 50%;
+            padding: 0 20px;
+            position: relative;
+            video {
+                @include dimension(454px, 254px);
+            }
+            .question-quid-text {
+                color: $fontColor14;
+                font-size: 10px;
+                position: absolute;
+                top: 272px;
+            }
+        }
+
+        .written-solution-wrapper {
+            width: 50%;
+            padding: 0 20px;
+
+            p:first-child {
+                margin-top: 0;
+            }
+
+            .written-solution {
+                @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+            }
+        }
+    }
+}
+

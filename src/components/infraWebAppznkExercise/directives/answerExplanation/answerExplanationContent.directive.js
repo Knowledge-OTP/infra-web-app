@@ -6,45 +6,25 @@
     'use strict';
 
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('answerExplanationContent',
-        function (ENV, $sce, znkAnalyticsSrv) {
+        function (ENV, $sce, znkAnalyticsSrv, $animate) {
             'ngInject';
 
             return {
                 templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanationContent.template.html',
                 require: '^questionBuilder',
                 restrict: 'E',
-                scope: {},
-                link: function (scope, element, attrs, questionBuilderCtrl) {
+                scope: {
+                    onClose: '&'
+                },
+                link: function (scope, element, attrs, questionBuilderCtrl, transclude) {
                     var question = questionBuilderCtrl.question;
                     var isPlayFlag = false;
 
-                    function _getPropsForAnalytics() {
-                        return {
-                            subjectType: question.subjectId,
-                            questionId: question.id
-                        };
-                    }
+                    scope.d = {};
 
-                    function _saveAnalytics() {
-                        if (scope.d.toggleWrittenSln) {
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'writtenSolutionClicked',
-                                props: _getPropsForAnalytics()
-                            });
-                            znkAnalyticsSrv.timeTrack({eventName: 'writtenSolutionClosed'});
-                        } else {
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'writtenSolutionClosed',
-                                props: _getPropsForAnalytics()
-                            });
-                        }
-                    }
-                    
                     var writtenSlnContent = questionBuilderCtrl.question.writtenSln &&
                         questionBuilderCtrl.question.writtenSln.replace(/font\-family: \'Lato Regular\';/g, 'font-family: Lato;font-weight: 400;');
-                    scope.d = {
-                        writtenSlnContent: writtenSlnContent
-                    };
+                    scope.d.writtenSlnContent = writtenSlnContent;
 
                     scope.d.videoSrc = $sce.trustAsResourceUrl(ENV.videosEndPoint + '/videos/' + 'questions' + '/' + question.id + '.mp4');
 
@@ -69,8 +49,7 @@
                     };
 
                     scope.d.close = function () {
-                        scope.d.toggleWrittenSln = false;
-                        _saveAnalytics();
+                        scope.onClose();
                     };
                 }
             };

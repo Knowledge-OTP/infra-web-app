@@ -24,92 +24,70 @@
 
                         var questionBuilderCtrl = ctrls[0];
                         var ngModelCtrl = ctrls[1];
-
-                        scope.d = {};
                         var domElem = element[0];
                         var viewMode = questionBuilderCtrl.getViewMode();
                         var question = questionBuilderCtrl.question;
-                        var isPlayFlag = false;
 
-                        function addWrittenSolutionText() {
-                        //     var answerExplantionWrapperElem = angular.element(domElem.querySelector('.answer-explanation-wrapper'));
-                        //     var writtenSlnContent = questionBuilderCtrl.question.writtenSln;
-                        //     var answerExplantionElem = angular.element(
-                        //         '<div ng-if="d.toggleWrittenSln" class="answer-explanation-window znk-scrollbar">' +
-                        //         '<div class="title" translate="ANSWER_EXPLANATION.TITLE">' +
-                        //         '<div class="answer-explanation-close">' +
-                        //         '<svg-icon name="answer-explanation-close" ng-click="d.close()"></svg-icon>' +
-                        //         '</div>' +
-                        //         '</div>' +
-                        //         '<div class="flex-wrap">' +
-                        //         '<div class="video-wrap">' +
-                        //         '<video ' +
-                        //         'controls ' +
-                        //         'video-ctrl-drv ' +
-                        //         'on-play="d.onVideoPlay()" ' +
-                        //         'on-ended="d.onVideoEnded()" ' +
-                        //         'video-error-poster="assets/images/raccoon/video-is-not-available-img.png">' +
-                        //         '<source ng-src="{{::d.videoSrc}}" type="video/mp4">' +
-                        //         '</video>' +
-                        //         '<div class="question-quid-text">{{::d.quid}}</div>' +
-                        //         '</div>' +
-                        //         '<div class="written-solution-wrapper">' + writtenSlnContent + '</div>' +
-                        //         '</div>' +
-                        //         '</div>'
-                        //     );
-                        //     answerExplantionWrapperElem.prepend(answerExplantionElem);
-                        //     $compile(answerExplantionElem)(scope);
-                        }
+                        domElem.style.display = 'none';
 
-                        function _getPropsForAnalytics() {
-                            return {
-                                subjectType: question.subjectId,
-                                questionId: question.id
+                        scope.d = {};
+
+                        var init = (function () {
+                            var wasInit;
+
+                            return function () {
+                                if (wasInit) {
+                                    return;
+                                }
+
+                                domElem.style.display = 'block';
+                                
+                                var analyticsProps = {
+                                    subjectType: question.subjectId,
+                                    questionId: question.id
+                                };
+
+                                scope.$watch('d.showWrittenSln', function (isVisible) {
+                                    if (isVisible || isVisible === false) {
+                                        if (isVisible) {
+                                            znkAnalyticsSrv.eventTrack({
+                                                eventName: 'writtenSolutionClicked',
+                                                props: analyticsProps
+                                            });
+                                            znkAnalyticsSrv.timeTrack({eventName: 'writtenSolutionClosed'});
+                                        } else {
+                                            znkAnalyticsSrv.eventTrack({
+                                                eventName: 'writtenSolutionClosed',
+                                                props: analyticsProps
+                                            });
+                                        }
+                                    }
+                                });
+
+                                wasInit = true;
                             };
-                        }
-
-                        function _saveAnalytics() {
-                            if (scope.d.toggleWrittenSln) {
-                                znkAnalyticsSrv.eventTrack({
-                                    eventName: 'writtenSolutionClicked',
-                                    props: _getPropsForAnalytics()
-                                });
-                                znkAnalyticsSrv.timeTrack({eventName: 'writtenSolutionClosed'});
-                            } else {
-                                znkAnalyticsSrv.eventTrack({
-                                    eventName: 'writtenSolutionClosed',
-                                    props: _getPropsForAnalytics()
-                                });
-                            }
-                        }
+                        })();
 
                         function viewChangeListener() {
                             if (ngModelCtrl.$viewValue) {           // user already answered
-                                domElem.style.display = 'block';
-                                addWrittenSolutionText();
+                                init();
                             } else {
                                 ngModelCtrl.$viewChangeListeners.push(function () {
-                                    domElem.style.display = 'block';
-                                    addWrittenSolutionText();
+                                    init();
                                 });
                             }
                         }
 
                         switch (viewMode) {
                             case ZnkExerciseViewModeEnum.REVIEW.enum:
-                                addWrittenSolutionText();
+                                init();
                                 break;
                             case ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum:
-                                domElem.style.display = 'none';
                                 viewChangeListener();
                                 break;
                             default:
                                 domElem.style.display = 'none';
                         }
-
-                        scope.d.saveAnalytics = function() {
-                            _saveAnalytics();
-                        };
                     }
                 };
                 return directive;
