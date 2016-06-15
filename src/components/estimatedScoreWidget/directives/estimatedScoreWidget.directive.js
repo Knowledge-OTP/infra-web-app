@@ -26,7 +26,6 @@
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
-                    // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
 
@@ -50,7 +49,6 @@
 
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
-                            // scope.d.estimatedCompositeScore = isDiagnosticCompleted ? res[1].compositeScoreResults || '-' : '-';todo need to figure out what it do
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
@@ -65,13 +63,14 @@
                                     showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
-
+                            
                             var scoresArr = [];
                             for(var i = 0; i<scope.d.widgetItems.length; i++) {
                                 if(angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
                                     scoresArr.push(scope.d.widgetItems[i].estimatedScore);
                                 }
                             }
+
                             scope.d.estimatedCompositeScore = examScoresFn(scoresArr);
 
                             function filterSubjects (widgetItem) {
