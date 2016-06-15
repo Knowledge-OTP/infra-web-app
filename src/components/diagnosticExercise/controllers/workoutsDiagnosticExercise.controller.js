@@ -16,7 +16,7 @@
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
-            
+
             function _isUndefinedUserAnswer(questionResults) {
                 return questionResults.filter(function (val) {
                     return angular.isUndefined(val.userAnswer);
@@ -27,10 +27,14 @@
                 var num = 0;
                 if (questionResults.length > 0) {
                     var isUndefinedUserAnswer = _isUndefinedUserAnswer(questionResults);
-                    if (isUndefinedUserAnswer.length === 0) {
-                        num = questionResults.length;
+                    if (!diagnosticSettings.isFixed) {
+                        if (isUndefinedUserAnswer.length === 0) {
+                            num = questionResults.length;
+                        } else {
+                            num = questionResults.length - 1;
+                        }
                     } else {
-                        num = questionResults.length - 1;
+                        num = questionResults.length - isUndefinedUserAnswer.length;
                     }
                 }
                 return num;
@@ -186,28 +190,33 @@
             ZnkExerciseUtilitySrv.setQuestionsGroupData(exerciseData.questionsData.questions, exerciseData.questionsData.questionsGroupData, exerciseData.resultsData.playedAudioArticles);
 
             // init question and questionResults for znk-exercise
-            if (resultsData.questionResults.length === 0) {
-                WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, resultsData.questionResults, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
-                    self.questions = [diagnosticFlowResults.question];
-                    resultsData.questionResults = [diagnosticFlowResults.result];
-                });
-            } else {
-                self.questions = resultsData.questionResults.reduce(function (prevValue, currentValue) {
-                    var question = questions.filter(function (element) {
-                        return currentValue.questionId === element.id;
-                    })[0];
-                    prevValue.push(question);
-                    return prevValue;
-                }, []);
-                if (_isUndefinedUserAnswer(resultsData.questionResults).length === 0) {
+            if (!diagnosticSettings.isFixed) {
+                if (resultsData.questionResults.length === 0) {
                     WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, resultsData.questionResults, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
-                        self.questions.push(diagnosticFlowResults.question);
-                        resultsData.questionResults.push(diagnosticFlowResults.result);
+                        self.questions = [diagnosticFlowResults.question];
+                        resultsData.questionResults = [diagnosticFlowResults.result];
                     });
+                } else {
+                    self.questions = resultsData.questionResults.reduce(function (prevValue, currentValue) {
+                        var question = questions.filter(function (element) {
+                            return currentValue.questionId === element.id;
+                        })[0];
+                        prevValue.push(question);
+                        return prevValue;
+                    }, []);
+                    if (_isUndefinedUserAnswer(resultsData.questionResults).length === 0) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, resultsData.questionResults, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                            self.questions.push(diagnosticFlowResults.question);
+                            resultsData.questionResults.push(diagnosticFlowResults.result);
+                        });
+                    }
+                    initSlideIndex = resultsData.questionResults.length - 1;
+                    currentDifficulty = self.questions[self.questions.length - 1].difficulty;
                 }
-                initSlideIndex = resultsData.questionResults.length - 1;
-                currentDifficulty = self.questions[self.questions.length - 1].difficulty;
+            } else {
+                self.questions = questions;
             }
+
             self.resultsData = resultsData;
 
             // settings for znkExercise

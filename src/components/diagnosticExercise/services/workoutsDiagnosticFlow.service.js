@@ -19,7 +19,7 @@
 
             workoutsDiagnosticFlowObjApi.getDiagnosticSettings = function() {
                 var diagnosticData = $injector.invoke(_diagnosticSettings);
-                return angular.extend(diagnosticData, WORKOUTS_DIAGNOSTIC_FLOW);
+                return angular.extend(WORKOUTS_DIAGNOSTIC_FLOW, diagnosticData);
             };
 
             workoutsDiagnosticFlowObjApi.setCurrentQuestion = function (questionId, index)  {
