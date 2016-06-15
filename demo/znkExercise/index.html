@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
+    <link rel="stylesheet" href="infra/dist/main.css" />
+    <link rel="stylesheet" href="angular-material/angular-material.css" />
+    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css" />
+    <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
+    <!-- endbower -->
+
+    <link rel="stylesheet" href="infraWebAppZnkExercise/main.css">
+    <style>
+        body{
+            background-color: #f2f2f2;
+        }
+        .nav-bar{
+            width:100%;
+            height:57px;
+            background-color: #b8c1c1;
+            text-align: center
+        }
+
+        .main-content{
+            width:1060px;
+            margin: 18px auto;
+        }
+    </style>
+</head>
+    <body>
+        <div class="nav-bar"> znk nav bar</div>
+
+        <div ng-app="demo" ng-controller="MainCtrl">
+
+            <div class="main-content">
+                <div class="exercise-container base-border-radius">
+                    <znk-exercise ng-model="d.results"
+                                  questions="d.questions"
+                                  settings="d.settings"
+                                  actions="d.actions"
+                                  ng-if="!d.hideExercise && d.questions.length">
+                    </znk-exercise>
+
+                </div>
+
+                <!-- bower:js -->
+                <script src="angular/angular.js"></script>
+                <script src="angular-animate/angular-animate.js"></script>
+                <script src="Swiper/dist/js/swiper.js"></script>
+                <script src="firebase/firebase.js"></script>
+                <script src="angular-translate/angular-translate.js"></script>
+                <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+                <script src="infra/dist/main.js"></script>
+                <script src="angular-ui-router/release/angular-ui-router.js"></script>
+                <script src="angular-aria/angular-aria.js"></script>
+                <script src="angular-messages/angular-messages.js"></script>
+                <script src="angular-material/angular-material.js"></script>
+                <script src="ng-tags-input/ng-tags-input.js"></script>
+                <script src="Chart.js/Chart.js"></script>
+                <script src="angular-chart.js/dist/angular-chart.js"></script>
+                <!-- endbower -->
+
+                <script src="main.js"></script>
+
+                <script src="demo.js"></script>
+
+                <script src="infra/demoShared/contentConfig.js"></script>
+                <script src="infra/demoShared/analyticsConfig.js"></script>
+                <script src="infra/demoShared/storagesConfig.js"></script>
+
+                <script src="env.service.js"></script>
+                <script src="translate.config.js"></script>
+            </div>
+        </div>
+    </body>
+</html>

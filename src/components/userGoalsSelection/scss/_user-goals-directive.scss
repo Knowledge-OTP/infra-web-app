@@ -199,6 +199,14 @@ user-goals {
             margin-right: 7px;
         }
 
+        .md-button {
+            &.znk.md-primary {
+                padding-right: 45px;
+                padding-left: 45px;
+                height: 40px;
+            }
+        }
+
         .dropdown-arrow-icon {
             margin: {
                 left: 10px;
@@ -216,10 +224,6 @@ user-goals {
                 }
 
             }
-        }
-
-        .btn-sm {
-            width: 165px;
         }
 
         svg-icon {

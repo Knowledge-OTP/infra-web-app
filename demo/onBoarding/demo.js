@@ -78,7 +78,7 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
         }]);
 
         DiagnosticIntroSrvProvider.setActiveSubjectGetter(['ENV', function(ENV) {
-            return { id: ENV.ENGLISH };
+            return ENV.ENGLISH;
         }]);
 
         ScoringServiceProvider.setScoringLimits({
