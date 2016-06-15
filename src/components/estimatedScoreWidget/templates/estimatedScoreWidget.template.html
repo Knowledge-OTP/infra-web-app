@@ -12,7 +12,7 @@
              context-attr="class"
              tabindex="{{isNavMenu ? 0 : -1}}">
             <div class="subject-title">
-                <span class="capitalize" translate="{{'.SUBJECT_' + widgetItem.subjectId}}"></span>
+                <span class="capitalize" translate=".{{widgetItem.subjectId}}"></span>
                 <span class="to-go" ng-if="widgetItem.pointsLeftToMeetUserGoal > 0"
                       translate=".PTS_TO_GO"
                       translate-values="{pts: {{widgetItem.pointsLeftToMeetUserGoal}} }"></span>

@@ -74,6 +74,12 @@
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.socialSharing'
+        'znk.infra-web-app.socialSharing',
+        'znk.infra.znkExercise',
+        'znk.infra.estimatedScore',
+        'znk.infra.scoring',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.estimatedScoreWidget'
     ]);
 })(angular);

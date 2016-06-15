@@ -27,7 +27,6 @@
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
-                    // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted(); //todo implement once diagnostic service will be ready
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
 
                     if (isNavMenuFlag) {
@@ -46,18 +45,16 @@
                             var isDiagnosticCompleted = res[1];
                             var subjectOrder = res[3];
 
-                            scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2 ? true : false;
-                             // = isDiagnosticCompleted;
+                            scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
                             // scope.d.estimatedCompositeScore = isDiagnosticCompleted ? res[1].compositeScoreResults || '-' : '-';todo need to figure out what it do
-                            scope.d.userCompositeGoal = (userGoals) ? userGoals.compositeScore : '-';
+                            scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
                                 var estimatedScoreForSubject = estimatedScore[subjectId];
                                 return {
                                     subjectId: subjectId,
                                     estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject.score : 0,
-                                    // estimatedScore: 30,
                                     estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject.score) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
