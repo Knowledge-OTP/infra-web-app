@@ -25,6 +25,7 @@
 
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
+                    var getExamScoreProm = ScoringService.getExamScoreFn();
                     // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
@@ -38,12 +39,14 @@
                             getLatestEstimatedScoreProm,
                             isDiagnosticCompletedProm,
                             $q.when(false),
-                            getSubjectOrderProm
+                            getSubjectOrderProm,
+                            getExamScoreProm
 
                         ]).then(function (res) {
                             var estimatedScore = res[0];
                             var isDiagnosticCompleted = res[1];
                             var subjectOrder = res[3];
+                            var examScoresFn = res[4];
 
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
@@ -62,6 +65,14 @@
                                     showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
+
+                            var scoresArr = [];
+                            for(var i = 0; i<scope.d.widgetItems.length; i++) {
+                                if(angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
+                                    scoresArr.push(scope.d.widgetItems[i].estimatedScore);
+                                }
+                            }
+                            scope.d.estimatedCompositeScore = examScoresFn(scoresArr);
 
                             function filterSubjects (widgetItem) {
                                 return !!('showScore' in widgetItem &&  (widgetItem.showScore) !== false);
