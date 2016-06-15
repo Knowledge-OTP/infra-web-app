@@ -91,8 +91,8 @@
                 }
 
                 return {
-                    currentQuestionResults,
-                    currentSection
+                    currentQuestionResults: currentQuestionResults,
+                    currentSection: currentSection
                 };
             }
 

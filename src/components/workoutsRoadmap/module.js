@@ -71,6 +71,7 @@
         'znk.infra.exerciseUtility',
         'znk.infra.scroll',
         'znk.infra.general',
+        'znk.infra.exerciseDataGetters',
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticIntro',

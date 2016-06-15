@@ -1,0 +1,8 @@
+@import '../../scss/imports/colors',
+        '../../scss/imports/variables',
+        '../../../bower_components/infra/dist/mixins/mixins';
+
+@import "scss/znk-exercise-style";
+
+@import "directives/answerExplanation/answer-explanation-directive",
+        "directives/answerExplanation/answer-explanation-content-directive";

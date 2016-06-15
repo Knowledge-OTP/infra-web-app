@@ -1,0 +1,24 @@
+<div class="title">
+    <div translate="ANSWER_EXPLANATION.TITLE"></div>
+    <div class="answer-explanation-close">
+        <svg-icon name="answer-explanation-close"
+                  ng-click="d.close()">
+        </svg-icon>
+    </div>
+</div>
+<div class="flex-wrap">
+    <div class="video-wrap">
+        <video controls
+               video-ctrl-drv
+               on-play="d.onVideoPlay()"
+               on-ended="d.onVideoEnded()"
+               video-error-poster="assets/images/video-is-not-available-img.png">
+            <source ng-src="{{::d.videoSrc}}" type="video/mp4">
+        </video>
+        <div class="question-quid-text">{{::d.quid}}</div>
+    </div>
+    <div class="written-solution-wrapper"
+         ng-bind-html="d.writtenSlnContent">
+    </div>
+</div>
+
