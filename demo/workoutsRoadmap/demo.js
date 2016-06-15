@@ -37,7 +37,6 @@ angular.module('demo', [
             ]
         };
     })
-
     .config(function (EstimatedScoreSrvProvider, EstimatedScoreEventsHandlerSrvProvider, exerciseTypeConst) {
         var shouldEventBeProcessed;
         var subjectsRawScoreEdges = {
@@ -83,11 +82,17 @@ angular.module('demo', [
             };
         });
     })
+    .config(function ($urlRouterProvider) {
+        $urlRouterProvider.otherwise('/workoutsRoadmap');
+    })
+    .config(function ($stateProvider) {
+        $stateProvider.state('app', {
+            template: '<ui-view></ui-view>',
+            abstract: true,
+        })
+    })
     .run(function ($rootScope) {
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
             console.error(error.message);
         });
-    })
-    .run(function ($state) {
-        $state.go('workoutsRoadmap');
     });

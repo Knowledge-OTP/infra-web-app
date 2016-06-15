@@ -80,6 +80,7 @@
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
+        'znk.infra.exerciseDataGetters',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.estimatedScoreWidget'
     ]);
