@@ -9,7 +9,7 @@ estimated-score-widget {
             .subjects-wrap {
                 border: {
                     top: solid;
-                    color: $borderColor15;
+                    color: borderColor17;
                     width: 2px;
                 }
             }
@@ -21,7 +21,7 @@ estimated-score-widget {
                 transition: border 0.2s;
                 border-bottom: {
                     style: solid;
-                    color: $borderColor15;
+                    color: borderColor17;
                     width: 2px;
                 }
                 border-left: {
@@ -122,7 +122,7 @@ estimated-score-widget {
                 }
                 hr.user-goal-fill {
                     width: 0;
-                    background: $bgColor40;
+                    background: $bgColor41;
                     border-bottom-left-radius: 10px;
                     border-top-left-radius: 10px;
                     &.bar-full {
