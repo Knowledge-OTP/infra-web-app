@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('answerExplanationContent',
-        function (ENV, $sce, znkAnalyticsSrv, $animate) {
+        function (ENV, $sce, znkAnalyticsSrv) {
             'ngInject';
 
             return {
@@ -16,9 +16,13 @@
                 scope: {
                     onClose: '&'
                 },
-                link: function (scope, element, attrs, questionBuilderCtrl, transclude) {
+                link: function (scope, element, attrs, questionBuilderCtrl) {
                     var question = questionBuilderCtrl.question;
                     var isPlayFlag = false;
+                    var analyticsProps = {
+                        subjectType: question.subjectId,
+                        questionId: question.id
+                    };
 
                     scope.d = {};
 
@@ -33,7 +37,7 @@
                     scope.d.onVideoEnded = function () {
                         znkAnalyticsSrv.eventTrack({
                             eventName: 'videoClosed',
-                            props: _getPropsForAnalytics()
+                            props: analyticsProps
                         });
                     };
 
@@ -42,7 +46,7 @@
                             isPlayFlag = true;
                             znkAnalyticsSrv.eventTrack({
                                 eventName: 'videoClicked',
-                                props: _getPropsForAnalytics()
+                                props: analyticsProps
                             });
                             znkAnalyticsSrv.timeTrack({eventName: 'videoClosed'});
                         }

@@ -11,7 +11,7 @@
 
             $provide.decorator('questionBuilderDirective',
                 function ($delegate, ZnkExerciseUtilitySrv) {
-                    'ngInject';
+                    'ngInject';// jshint ignore:line
 
                     var directive = $delegate[0];
 
