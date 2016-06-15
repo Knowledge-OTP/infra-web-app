@@ -63,7 +63,7 @@
                                     showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
-                            
+
                             var scoresArr = [];
                             for(var i = 0; i<scope.d.widgetItems.length; i++) {
                                 if(angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
