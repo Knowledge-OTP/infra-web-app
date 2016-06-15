@@ -69,7 +69,26 @@ module.exports = function (grunt) {
 
         // Automatically inject Bower components into the app
         wiredep: {
+
             demo: {
+                options: {
+                    fileTypes:{
+                        html:{
+                            replace:{
+                                js: function(dest){
+                                    // debugger;
+                                    var path = dest.replace('../../bower_components/','');
+                                    return '<script src="' + path + '"></script>';
+                                },
+                                css: function(dest){
+                                    // debugger;
+                                    var path = dest.replace('../../bower_components/','');
+                                    return '<link rel="stylesheet" href="' + path + '" />';
+                                }
+                            }
+                        }
+                    }
+                },
                 src: 'demo/**/index.html'
             },
             test: {
@@ -90,13 +109,13 @@ module.exports = function (grunt) {
             }
         },
         concat: {
-            mainModule:{
-                files:[{
-                    src: ['<%= yeoman.src %>/core/module.js','<%= yeoman.dist %>/**/*.js'],
-                    dest: '<%= yeoman.dist %>/main.js'
-                },{
+            mainModule: {
+                files: [{
+                    src: ['<%= yeoman.src %>/core/module.js', '<%= yeoman.tmp %>/**/*.js'],
+                    dest: '<%= yeoman.tmp %>/main.js'
+                }, {
                     src: ['<%= yeoman.tmp %>/**/*.css'],
-                    dest: '<%= yeoman.dist %>/main.css'
+                    dest: '<%= yeoman.tmp %>/main.css'
                 }]
             }
         },
@@ -164,13 +183,13 @@ module.exports = function (grunt) {
                 files: [
                     'src/**/*.js'
                 ],
-                tasks: ['prepareConfiguration','concat:build']
+                tasks: ['prepareConfiguration', 'concat:build']
             },
-            html:{
-                files:[
+            html: {
+                files: [
                     'src/**/*.{html,svg}'
                 ],
-                tasks:['prepareConfiguration','html2js']
+                tasks: ['prepareConfiguration', 'html2js']
             },
             demo: {
                 files: [
@@ -183,14 +202,17 @@ module.exports = function (grunt) {
                 ],
                 tasks: ['sass', 'autoprefixer:main']
             },
-            assets:{
+            assets: {
                 files: ['<%= yeoman.src %>/**/locale/*.json', '<%= yeoman.src %>/**/*.{png}'],
-                tasks:['copy:build']
+                tasks: ['copy:build']
+            },
+            wiredep:{
+                files:['bower.json'],
+                tasks: ['wiredep']
             }
         },
         sass: {
             // options: {
-
             //     sourceMap: true
             // },
             allComponenets: {
@@ -204,23 +226,23 @@ module.exports = function (grunt) {
             }
         },
         copy: {
-            build:{
-                files:[{
+            build: {
+                files: [{
                     expand: true,
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/locale/*.*',
                     dest: '<%= yeoman.tmp %>'
-                } ,{
+                }, {
                     expand: true,
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/assets/**/*.*',
                     dest: '<%= yeoman.tmp %>'
-                },{
+                }, {
                     expand: true,
                     cwd: '<%= yeoman.src %>/components/',
                     src: '*/assets/**/*.*',
                     dest: '<%= yeoman.tmp %>/assets',
-                    rename:function(dest, src){
+                    rename: function (dest, src) {
                         var indexOfAssets = src.indexOf('assets');
                         var destSuffix = src.substr(indexOfAssets + 7);
                         return '.tmp/assets/' + destSuffix;
@@ -233,6 +255,9 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.tmp %>/',
                     src: ['**/*.*', '!**/*.js'],
                     dest: '<%= yeoman.dist %>/'
+                }, {
+                    '<%= yeoman.dist %>/main.js': '<%= yeoman.tmp %>/main.js',
+                    '<%= yeoman.dist %>/main.css': '<%= yeoman.tmp %>/main.css'
                 }]
             }
         },
@@ -247,8 +272,8 @@ module.exports = function (grunt) {
             options: {
                 browsers: ['last 2 versions']
             },
-            main:{
-                files:[{
+            main: {
+                files: [{
                     expand: true,
                     cwd: '<%= yeoman.tmp %>/',
                     src: ['**/*.css'],
@@ -285,6 +310,7 @@ module.exports = function (grunt) {
         console.log('serving from', grunt.config('connect').options.base);
         grunt.task.run([
             'build',
+            'wiredep',
             'connect:serve',
             'watch'
         ]);
@@ -322,7 +348,7 @@ module.exports = function (grunt) {
             });
             var componentPathInTmp = '.tmp/' + dirName + '/';
             concat.dist.files.push({
-                src: [ componentPathInTmp + dirName + '.js', componentPathInTmp + 'templates.js'],
+                src: [componentPathInTmp + dirName + '.js', componentPathInTmp + 'templates.js'],
                 dest: 'dist/' + dirName + '/' + dirName + '.js'
             });
         });
@@ -338,6 +364,7 @@ module.exports = function (grunt) {
         'autoprefixer:main',
         'html2js',
         'concat:build',
+        'concat:mainModule',
         'copy:build',
         'ngAnnotate'
     ]);
@@ -348,7 +375,6 @@ module.exports = function (grunt) {
         'clean:dist',
         'build',
         'copy:dist',
-        'concat:dist',
-        'concat:mainModule'
+        'concat:dist'
     ]);
 };
