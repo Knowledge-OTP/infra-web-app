@@ -4,7 +4,8 @@
     angular.module('demo', [
         'znk.infra-web-app.infraWebAppZnkExercise',
         'ngAnimate',
-        'pascalprecht.translate'
+        'pascalprecht.translate',
+        'znk.infra.exerciseDataGetters'
     ])
         .config(function (QuestionTypesSrvProvider, $sceProvider) {
             $sceProvider.enabled(false);
@@ -24,7 +25,7 @@
 
             QuestionTypesSrvProvider.setQuestionTypeGetter(questionTypeGetter);
         })
-        .controller('Main', function ($scope, $timeout, BaseExerciseGetterSrv, ExerciseTypeEnum) {
+        .controller('MainCtrl', function ($scope, $timeout, BaseExerciseGetterSrv) {
             $scope.d = {};
 
             $scope.d.settings = {

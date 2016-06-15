@@ -69,20 +69,19 @@ module.exports = function (grunt) {
 
         // Automatically inject Bower components into the app
         wiredep: {
-
             demo: {
                 options: {
-                    fileTypes:{
-                        html:{
-                            replace:{
-                                js: function(dest){
+                    fileTypes: {
+                        html: {
+                            replace: {
+                                js: function (dest) {
                                     // debugger;
-                                    var path = dest.replace('../../bower_components/','');
+                                    var path = dest.replace('../../bower_components/', '');
                                     return '<script src="' + path + '"></script>';
                                 },
-                                css: function(dest){
+                                css: function (dest) {
                                     // debugger;
-                                    var path = dest.replace('../../bower_components/','');
+                                    var path = dest.replace('../../bower_components/', '');
                                     return '<link rel="stylesheet" href="' + path + '" />';
                                 }
                             }
@@ -110,10 +109,8 @@ module.exports = function (grunt) {
         },
         concat: {
             mainModule: {
+                //js files configuration is generated in prepareConfiguration
                 files: [{
-                    src: ['<%= yeoman.src %>/core/module.js', '<%= yeoman.tmp %>/**/*.js'],
-                    dest: '<%= yeoman.tmp %>/main.js'
-                }, {
                     src: ['<%= yeoman.tmp %>/**/*.css'],
                     dest: '<%= yeoman.tmp %>/main.css'
                 }]
@@ -183,7 +180,7 @@ module.exports = function (grunt) {
                 files: [
                     'src/**/*.js'
                 ],
-                tasks: ['prepareConfiguration', 'concat:build']
+                tasks: ['prepareConfiguration', 'concat:build', 'concat:mainModule']
             },
             html: {
                 files: [
@@ -206,8 +203,8 @@ module.exports = function (grunt) {
                 files: ['<%= yeoman.src %>/**/locale/*.json', '<%= yeoman.src %>/**/*.{png}'],
                 tasks: ['copy:build']
             },
-            wiredep:{
-                files:['bower.json'],
+            wiredep: {
+                files: ['bower.json'],
                 tasks: ['wiredep']
             }
         },
@@ -318,6 +315,13 @@ module.exports = function (grunt) {
 
     grunt.registerTask('prepareConfiguration', 'preparing html2js and concat configuration for each component', function () {
         var concat = grunt.config.get('concat') || {};
+
+        var jsMainModuleFilesSrcArr = ['<%= yeoman.src %>/core/module.js'];
+        concat.mainModule.files.push({
+            src: jsMainModuleFilesSrcArr,
+            dest: '<%= yeoman.tmp %>/main.js'
+        });
+
         concat.build = {
             files: []
         };
@@ -346,11 +350,14 @@ module.exports = function (grunt) {
                 src: [dir + '/module.js', dir + '/**/*.js'],
                 dest: '.tmp/' + dirName + '/' + dirName + '.js'
             });
+
             var componentPathInTmp = '.tmp/' + dirName + '/';
             concat.dist.files.push({
                 src: [componentPathInTmp + dirName + '.js', componentPathInTmp + 'templates.js'],
                 dest: 'dist/' + dirName + '/' + dirName + '.js'
             });
+
+            jsMainModuleFilesSrcArr.push(componentPathInTmp + dirName + '.js', componentPathInTmp + 'templates.js');
         });
         // add module subtasks to the concat task in initConfig
         grunt.config.set('html2js', html2js);
