@@ -1,0 +1,9 @@
+{
+    "USER_GOALS": {
+        "GOALS_INFO": "The SAT test includes 2 section scores, each with a score range of 200-800. The range of the total score is 400-1600. You can change your target score at any time.",
+        "VERBAL": "Verbal",
+        "MATH": "Math",
+        "MATHEMATICS": "mathematics",
+        "TOTAL_SCORE": "Total Score:"
+    }
+}

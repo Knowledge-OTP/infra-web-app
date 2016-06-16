@@ -1,22 +1,18 @@
-'use strict';
-
 angular.module('demo', [
-    'znk.infra-web-app.workoutsRoadmap',
-    'znk.infra.exams'
+    'znk.infra-web-app.estimatedScoreWidget'
 ])
+    .config(function ($translateProvider, SvgIconSrvProvider, ScoringServiceProvider) {
+        $translateProvider.useLoader('$translatePartialLoader', {
+            urlTemplate: '/{part}/locale/{lang}.json'
+        })
+            .preferredLanguage('en');
 
-    .config(function (ScoringServiceProvider, UserGoalsServiceProvider) {
-        ScoringServiceProvider.setScoringLimits({
-            exam: {
-                min: 400,
-                max: 1600
-            },
-            subjects: {
-                min: 200,
-                max: 800
-            }
-        });
-
+        var svgMap = {
+            'math-section-icon': 'svg/math-section-icon.svg',
+            'verbal-icon': 'svg/verbal-icon.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+        
         ScoringServiceProvider.setExamScoreFnGetter(function () {
             return function (scoresArr) {
                 var totalScores = 0;
@@ -25,18 +21,44 @@ angular.module('demo', [
                 });
                 return totalScores;
             }
-        });
-
-
-        UserGoalsServiceProvider.settings = {
-            updateGoalNum: 10,
-            defaultSubjectScore: 600,
-            subjects: [
-                {name: 'math', svgIcon: 'math-section-icon'},
-                {name: 'verbal', svgIcon: 'verbal-icon'}
-            ]
-        };
+        })
     })
+
+
+
+.config(function (ScoringServiceProvider, UserGoalsServiceProvider) {
+    ScoringServiceProvider.setScoringLimits({
+        exam: {
+            min: 400,
+            max: 1600
+        },
+        subjects: {
+            min: 200,
+            max: 800
+        }
+    });
+
+    ScoringServiceProvider.setExamScoreFnGetter(function () {
+        return function (scoresArr) {
+            var totalScores = 0;
+            angular.forEach(scoresArr, function (score) {
+                totalScores += score;
+            });
+            return totalScores;
+        }
+    });
+
+
+    UserGoalsServiceProvider.settings = {
+        updateGoalNum: 10,
+        defaultSubjectScore: 600,
+        subjects: [
+            {name: 'math', svgIcon: 'math-section-icon'},
+            {name: 'verbal', svgIcon: 'verbal-icon'}
+        ]
+    };
+})
+
     .config(function (EstimatedScoreSrvProvider, EstimatedScoreEventsHandlerSrvProvider, exerciseTypeConst) {
         var shouldEventBeProcessed;
         var subjectsRawScoreEdges = {
@@ -82,17 +104,14 @@ angular.module('demo', [
             };
         });
     })
-    .config(function ($urlRouterProvider) {
-        $urlRouterProvider.otherwise('/workoutsRoadmap');
-    })
-    .config(function ($stateProvider) {
-        $stateProvider.state('app', {
-            template: '<ui-view></ui-view>',
-            abstract: true,
-        })
-    })
-    .run(function ($rootScope) {
-        $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-            console.error(error.message);
+    .run(function ($rootScope, $translate, $translatePartialLoader) {
+        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
+            $translate.refresh();
         });
+        $translatePartialLoader.addPart('demo');
+
+        $rootScope.showNavMenu = false;
+        $rootScope.changeToNavView = function () {
+            $rootScope.showNavMenu = !$rootScope.showNavMenu;
+        }
     });
