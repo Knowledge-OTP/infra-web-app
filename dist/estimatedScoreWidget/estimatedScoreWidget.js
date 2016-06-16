@@ -20,13 +20,14 @@
         'znk.infra.scoring',
         'znk.infra.svgIcon',
         'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.userGoalsSelection'
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.diagnostic'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'goals-top-icon': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
-                'close-popup': 'components/estimatedScoreWidget/svg/close-popup.svg'
+                'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
+                'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/close-popup.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -64,7 +65,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout) {
+        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -83,8 +84,8 @@
 
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
-                    // var getEstimatedScoreCompositeProm = EstimatedScoreSrv.getCompositeScore();
-                    // var isDiagnosticCompletedProm = WorkoutsDiagnosticFlow.isDiagnosticCompleted();todo implement once diagnostic service will be ready
+                    var getExamScoreProm = ScoringService.getExamScoreFn();
+                    var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
 
                     if (isNavMenuFlag) {
@@ -94,35 +95,45 @@
                     function adjustWidgetData(userGoals) {
                         $q.all([
                             getLatestEstimatedScoreProm,
+                            isDiagnosticCompletedProm,
                             $q.when(false),
-                            getSubjectOrderProm
+                            getSubjectOrderProm,
+                            getExamScoreProm
 
                         ]).then(function (res) {
                             var estimatedScore = res[0];
                             var isDiagnosticCompleted = res[1];
-                            var subjectOrder = res[2];
+                            var subjectOrder = res[3];
+                            var examScoresFn = res[4];
 
-                            scope.d.isDiagnosticComplete = isDiagnosticCompleted;
+                            scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
-                            // scope.d.estimatedCompositeScore = isDiagnosticCompleted ? res[1].compositeScoreResults || '-' : '-';todo need to figure out what it do
-                            scope.d.userCompositeGoal = (userGoals) ? userGoals.compositeScore : '-';
+                            scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
                                 var estimatedScoreForSubject = estimatedScore[subjectId];
                                 return {
                                     subjectId: subjectId,
-                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject : 0,
-                                    // estimatedScore: 30,
-                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject) : 0,
+                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject.score : 0,
+                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject.score) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
-                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject) : 0,
-                                    showScorez: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
+                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
+                                    showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
 
-                            function filterSubjects(widgetItem) {
-                                return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
+                            var scoresArr = [];
+                            for(var i = 0; i<scope.d.widgetItems.length; i++) {
+                                if(angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
+                                    scoresArr.push(scope.d.widgetItems[i].estimatedScore);
+                                }
+                            }
+
+                            scope.d.estimatedCompositeScore = examScoresFn(scoresArr);
+
+                            function filterSubjects (widgetItem) {
+                                return !!('showScore' in widgetItem &&  (widgetItem.showScore) !== false);
                             }
 
                             scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
@@ -144,8 +155,8 @@
                     }
 
                     function calcPercentage(correct) {
-                        var scoringLimits = UserGoalsService.getScoringLimits();
-                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max : scoringLimits.subjects.max;
+                        var scoringLimits = ScoringService.getScoringLimits();
+                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max: scoringLimits.subjects.max;
                         return (correct / maxEstimatedScore) * 100;
                     }
 
@@ -218,9 +229,19 @@
 angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/estimatedScoreWidget/svg/close-popup.svg",
     "<svg\n" +
+    "    class=\"estimated-score-widget-close-popup-svg\"\n" +
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
     "    viewBox=\"-596.6 492.3 133.2 133.5\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .estimated-score-widget-close-popup-svg .st1{\n" +
+    "            fill:none;\n" +
+    "            stroke: white;\n" +
+    "            stroke-width: 6px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
     "<path class=\"st0\"/>\n" +
     "<g>\n" +
     "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
@@ -229,25 +250,26 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "</svg>\n" +
     "");
   $templateCache.put("components/estimatedScoreWidget/svg/goals-top-icon.svg",
-    "<svg class=\"goals-top-icon-wrapper\" x=\"0px\" y=\"0px\" viewBox=\"-632.7 361.9 200 200\">\n" +
+    "<svg class=\"estimated-score-widget-goals-svg\" x=\"0px\" y=\"0px\" viewBox=\"-632.7 361.9 200 200\">\n" +
     "    <style type=\"text/css\">\n" +
-    "        .goals-top-icon-wrapper .st0{fill:none;}\n" +
+    "        .estimated-score-widget-goals-svg .st0{fill:none;}\n" +
+    "        .estimated-score-widget-goals-svg .st1{fill: white;}\n" +
     "    </style>\n" +
     "<path class=\"st0\"/>\n" +
     "<g>\n" +
-    "	<path d=\"M-632.7,473.9c7.1,0.1,14.2,0.4,21.4,0.4c3,0,4.1,0.9,4.9,4c7.8,30.3,26.9,49.5,57.3,57.3c3.2,0.8,4,2,3.9,4.9\n" +
+    "	<path class=\"st1\" d=\"M-632.7,473.9c7.1,0.1,14.2,0.4,21.4,0.4c3,0,4.1,0.9,4.9,4c7.8,30.3,26.9,49.5,57.3,57.3c3.2,0.8,4,2,3.9,4.9\n" +
     "		c-0.3,7.1-0.3,14.3-0.4,21.4c-1.3,0-5.4-0.8-6.2-1c-36.3-7.9-61.4-29.2-75.2-63.6C-629.5,491.3-632.7,475.5-632.7,473.9z\"/>\n" +
-    "	<path d=\"M-519.7,561.9c-0.1-7.6-0.4-15.2-0.3-22.9c0-1.1,1.7-2.7,2.8-3c31.2-7.9,50.7-27.4,58.6-58.6c0.3-1.3,2.6-2.8,4-2.9\n" +
+    "	<path class=\"st1\" d=\"M-519.7,561.9c-0.1-7.6-0.4-15.2-0.3-22.9c0-1.1,1.7-2.7,2.8-3c31.2-7.9,50.7-27.4,58.6-58.6c0.3-1.3,2.6-2.8,4-2.9\n" +
     "		c7.3-0.4,14.6-0.4,21.9-0.6c0,1.7-0.8,6.4-1,7.2c-8,36.5-29.4,61.7-64.1,75.4C-503.6,558.7-518.3,561.9-519.7,561.9z\"/>\n" +
-    "	<path d=\"M-545.7,361.9c0.1,7.5,0.4,15,0.3,22.4c0,1.2-1.7,3.1-2.9,3.4c-31.1,7.9-50.5,27.3-58.4,58.5c-0.3,1.2-1.9,2.9-3,2.9\n" +
+    "	<path class=\"st1\" d=\"M-545.7,361.9c0.1,7.5,0.4,15,0.3,22.4c0,1.2-1.7,3.1-2.9,3.4c-31.1,7.9-50.5,27.3-58.4,58.5c-0.3,1.2-1.9,2.9-3,2.9\n" +
     "		c-7.6,0.1-15.3-0.1-22.9-0.3c0-1.3,0.8-5.4,1-6.2c7.7-35.8,28.5-60.7,62.2-74.7C-563.1,365.4-547,361.9-545.7,361.9z\"/>\n" +
-    "	<path d=\"M-432.7,448.9c-7.6,0.1-15.3,0.4-22.9,0.2c-1.1,0-2.8-2.3-3.2-3.8c-7.3-27.7-24.3-46.4-51.5-55.6\n" +
+    "	<path class=\"st1\" d=\"M-432.7,448.9c-7.6,0.1-15.3,0.4-22.9,0.2c-1.1,0-2.8-2.3-3.2-3.8c-7.3-27.7-24.3-46.4-51.5-55.6\n" +
     "		c-9.8-3.3-9.9-3.1-9.8-13.4c0-4.8,0.3-9.6,0.4-14.4c1.3,0,5.4,0.8,6.2,1c36.6,7.9,61.7,29.4,75.4,64.1\n" +
     "		C-435.8,432.7-432.7,447.5-432.7,448.9z\"/>\n" +
-    "	<path d=\"M-581.2,474.6c12,0,23.6,0,35.5,0c0,12,0,23.7,0,35.4C-560.5,508.7-577.8,491.6-581.2,474.6z\"/>\n" +
-    "	<path d=\"M-519.8,474.6c12,0,23.7,0,35.4,0c-2.3,16-19.5,33.2-35.4,35.5C-519.8,498.4-519.8,486.7-519.8,474.6z\"/>\n" +
-    "	<path d=\"M-545.9,448.9c-11.9,0-23.5,0-35.7,0c5.6-18.4,17.2-30,35.7-35.9C-545.9,425.2-545.9,436.9-545.9,448.9z\"/>\n" +
-    "	<path d=\"M-519.8,413.5c16.2,2.7,32.7,19.2,35.5,35.4c-11.8,0-23.5,0-35.5,0C-519.8,437.1-519.8,425.5-519.8,413.5z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-581.2,474.6c12,0,23.6,0,35.5,0c0,12,0,23.7,0,35.4C-560.5,508.7-577.8,491.6-581.2,474.6z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-519.8,474.6c12,0,23.7,0,35.4,0c-2.3,16-19.5,33.2-35.4,35.5C-519.8,498.4-519.8,486.7-519.8,474.6z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-545.9,448.9c-11.9,0-23.5,0-35.7,0c5.6-18.4,17.2-30,35.7-35.9C-545.9,425.2-545.9,436.9-545.9,448.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-519.8,413.5c16.2,2.7,32.7,19.2,35.5,35.4c-11.8,0-23.5,0-35.5,0C-519.8,437.1-519.8,425.5-519.8,413.5z\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
     "");
@@ -255,7 +277,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "<md-dialog class=\"setting-edit-goals base-border-radius\" translate-namespace=\"SETTING.EDIT_GOALS\">\n" +
     "    <md-toolbar>\n" +
     "        <div class=\"close-popup-wrap\" ng-click=\"cancel()\">\n" +
-    "            <svg-icon name=\"close-popup\"></svg-icon>\n" +
+    "            <svg-icon name=\"estimated-score-widget-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
     "    </md-toolbar>\n" +
     "    <md-dialog-content>\n" +
@@ -265,7 +287,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "    <div class=\"top-icon-wrap\">\n" +
     "        <div class=\"top-icon\">\n" +
     "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"goals-top-icon\"></svg-icon>\n" +
+    "                <svg-icon name=\"estimated-score-widget-goals\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -286,7 +308,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "             context-attr=\"class\"\n" +
     "             tabindex=\"{{isNavMenu ? 0 : -1}}\">\n" +
     "            <div class=\"subject-title\">\n" +
-    "                <span class=\"capitalize\" translate=\"{{'.SUBJECT_' + widgetItem.subjectId}}\"></span>\n" +
+    "                <span class=\"capitalize\" translate=\".{{widgetItem.subjectId}}\"></span>\n" +
     "                <span class=\"to-go\" ng-if=\"widgetItem.pointsLeftToMeetUserGoal > 0\"\n" +
     "                      translate=\".PTS_TO_GO\"\n" +
     "                      translate-values=\"{pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
