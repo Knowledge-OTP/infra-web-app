@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bower:css -->
+    <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
+    <link rel="stylesheet" href="infra/dist/main.css" />
+    <link rel="stylesheet" href="angular-material/angular-material.css" />
+    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css" />
+    <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
+    <!-- endBower -->
+
+    <link rel="stylesheet" href="main.css">
+
+</head>
+<body ng-app="demo">
+
+<navigation-pane
+    active-exam="vm.activeExamId"
+    exams="vm.exams"
+    exams-results="vm.examsResults"
+    on-exam-click="vm.onExamClick(exam, prevExam)"
+    title=".TESTS_TITLE">
+</navigation-pane>
+
+<div style="display: flex;justify-content: center;">
+
+    <!-- Bower:js -->
+    <script src="angular/angular.js"></script>
+    <script src="angular-animate/angular-animate.js"></script>
+    <script src="Swiper/dist/js/swiper.js"></script>
+    <script src="firebase/firebase.js"></script>
+    <script src="angular-translate/angular-translate.js"></script>
+    <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+    <script src="infra/dist/main.js"></script>
+    <script src="angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="angular-aria/angular-aria.js"></script>
+    <script src="angular-messages/angular-messages.js"></script>
+    <script src="angular-material/angular-material.js"></script>
+    <script src="ng-tags-input/ng-tags-input.js"></script>
+    <script src="Chart.js/Chart.js"></script>
+    <script src="angular-chart.js/dist/angular-chart.js"></script>
+    <!-- endBower -->
+
+    <script src="main.js"></script>
+    <script src="demo.js"></script>
+
+</div>
+</body>
+</html>

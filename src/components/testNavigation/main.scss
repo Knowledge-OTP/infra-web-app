@@ -1,0 +1,98 @@
+@import '../../scss/imports/variables',
+'../../scss/imports/colors',
+'../../../bower_components/infra/dist/mixins/mixins';
+
+.app-tests-navigationPane {
+    .tests-navigation-title-header {
+        color: $fontColor3;
+        height:65px;
+        border-bottom:1px solid $borderColor17;
+        text-align: center;
+        line-height: 65px;
+        font-size: 17px;
+        font-family: Quicksand;
+        font-weight: $boldFontWeight;
+    }
+
+    md-list {
+        padding: 0;
+        &.md-list-second-list {
+            padding-top: 20px;
+            md-list-item {
+                border-top:1px solid $borderColor17;
+            }
+        }
+        md-list-item {
+            position: relative;
+            width: 100%;
+            height:52.5px;
+            border-bottom:1px solid $borderColor17;
+            border-left: 2px solid $borderColor4;
+            transition: 0.1s;
+            button {
+                display: flex;
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+                margin: 0;
+                background-color: inherit;
+                justify-content: space-between;
+                color: $bgColor5;
+                span {
+                    margin-left: 25px;
+                }
+                &.md-button:not([disabled]):hover {
+                    background-color: $bgColor42;
+                }
+            }
+            &.done {
+                border-left: 2px solid $borderColor3;
+                button {
+                    color: $fontColor3;
+                }
+            }
+            &.active {
+                background-color: $borderColor17;
+                button {
+                    &.md-button:not([disabled]):hover/*, &.md-button:not([disabled]):focus */{
+                        background-color: $borderColor17;
+                    }
+                }
+            }
+            &.active:after {
+                content: "\A";
+                border-left: 7.5px solid $borderColor4;
+                left: 0;
+                position: absolute;
+                top: 0;
+                height: 100%;
+            }
+            &.active:before {
+                content: "\A";
+                border-style: solid;
+                border-width: 10px 0 10px 10px;
+                border-color: transparent transparent transparent $borderColor17;
+                filter: drop-shadow(0 1px 2px $bsColor5);
+                position: absolute;
+                right: -9px;
+                top: 18px;
+            }
+            .status-icon-wrapper {
+                position: relative;
+                color: $fontColor1;
+                background: $bgColor7;
+                @include border-radius(100%);
+                margin-right: 5px;
+                width: 22.5px;
+                height: 22.5px;
+                i {
+                    font-size: 17px;
+                    margin: 0;
+                    position: absolute;
+                    top: 3px;
+                    left: 3px;
+                }
+            }
+        }
+    }
+}

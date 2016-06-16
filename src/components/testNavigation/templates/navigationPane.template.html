@@ -1,0 +1,25 @@
+<div class="app-tests-navigationPane">
+   <div class="tests-navigation-title-header" translate="{{::vm.title}}"></div>
+    <md-list flex="grow" layout="column" layout-align="start center">
+        <md-list-item ng-repeat="miniExam in vm.exams.miniExams"
+                      ng-class="{ 'done': miniExam.isCompleted, 'active': vm.activeId === miniExam.id }">
+            <md-button md-no-ink ng-click="vm.onExamClick({exam: miniExam, prevExam: vm.exams.miniExams[$index - 1]}); vm.changeActive(miniExam.id)">
+                {{::miniExam.name}}
+                <div class="status-icon-wrapper" ng-if="miniExam.isCompleted">
+                    <i class="material-icons">check</i>
+                </div>
+            </md-button>
+        </md-list-item>
+    </md-list>
+    <md-list class="md-list-second-list" flex="grow" layout="column" layout-align="start center">
+        <md-list-item ng-repeat="fullExam in vm.exams.fullExams"
+                      ng-class="{ 'done': fullExam.isCompleted, 'active': vm.activeId === fullExam.id }">
+            <md-button md-no-ink ng-click="vm.onExamClick({exam: fullExam, prevExam: vm.exams.fullExams[$index - 1]}); vm.changeActive(fullExam.id)">
+                {{::fullExam.name}}
+                <div class="status-icon-wrapper" ng-if="fullExam.isCompleted">
+                    <i class="material-icons">check</i>
+                </div>
+            </md-button>
+        </md-list-item>
+    </md-list>
+</div>
