@@ -17,15 +17,10 @@
 </head>
 <body ng-app="demo">
 
-<navigation-pane
-    active-exam="vm.activeExamId"
-    exams="vm.exams"
-    exams-results="vm.examsResults"
-    on-exam-click="vm.onExamClick(exam, prevExam)"
-    title=".TESTS_TITLE">
-</navigation-pane>
-
 <div style="display: flex;justify-content: center;">
+
+    <button ui-sref="app.tests.roadmap">njdklsfb</button>
+    <ui-view></ui-view>
 
     <!-- Bower:js -->
     <script src="angular/angular.js"></script>
@@ -49,6 +44,14 @@
 
     <script src="tests/tests.js"></script>
     <script src="tests/templates.js"></script>
+
+    <navigation-pane
+        active-exam="vm.activeExamId"
+        exams="vm.exams"
+        exams-results="vm.examsResults"
+        on-exam-click="vm.onExamClick(exam, prevExam)"
+        title=".TESTS_TITLE">
+    </navigation-pane>
 </div>
 </body>
 </html>
