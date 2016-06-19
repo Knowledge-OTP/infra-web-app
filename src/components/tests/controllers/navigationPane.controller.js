@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.testNavigation').controller('NavigationPane.controller',
+    angular.module('znk.infra-web-app.tests').controller('NavigationPane.controller',
         function (ExamTypeEnum, $log) {
         'ngInject';
             var self = this;

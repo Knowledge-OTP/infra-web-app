@@ -5,7 +5,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.testNavigation').directive('navigationPane', 
+    angular.module('znk.infra-web-app.tests').directive('navigationPane', 
         function () {
             'ngInject';
             return {
@@ -17,7 +17,7 @@
                     examsResults: '='
                 },
                 restrict: 'E',
-                templateUrl: 'components/testNavigation/templates/navigationPane.template.html',
+                templateUrl: 'components/tests/templates/navigationPane.template.html',
                 controller: 'NavigationPane.controller',
                 bindToController: true,
                 controllerAs: 'navigationPane.controller',

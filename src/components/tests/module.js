@@ -1,11 +1,13 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.testNavigation', [
+    angular.module('znk.infra-web-app.tests', [
         'znk.infra.svgIcon',
         'pascalprecht.translate',
         'znk.infra.scoring',
-        'znk.infra.exerciseUtility'
+        'znk.infra.exams',
+        'znk.infra.exerciseUtility',
+        'ui.router'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {

@@ -1,5 +1,5 @@
 angular.module('demo', [
-    'znk.infra-web-app.testNavigation'
+    'znk.infra-web-app.tests'
 ])
     .config(function ($translateProvider, SvgIconSrvProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
