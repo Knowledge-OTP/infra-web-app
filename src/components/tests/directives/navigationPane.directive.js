@@ -18,9 +18,9 @@
                 },
                 restrict: 'E',
                 templateUrl: 'components/tests/templates/navigationPane.template.html',
-                controller: 'NavigationPane.controller',
+                controller: 'NavigationPaneController',
                 bindToController: true,
-                controllerAs: 'navigationPane.controller',
+                controllerAs: 'vm',
                 link: function (scope, element, attrs) {
                 }
             };

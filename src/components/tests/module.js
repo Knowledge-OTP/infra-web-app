@@ -6,6 +6,7 @@
         'pascalprecht.translate',
         'znk.infra.scoring',
         'znk.infra.exams',
+        'znk.infra-web-app.diagnostic',
         'znk.infra.exerciseUtility',
         'ui.router'
     ]).config([
@@ -15,5 +16,6 @@
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
+
     ]);
 })(angular);

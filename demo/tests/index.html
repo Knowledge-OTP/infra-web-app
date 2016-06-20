@@ -19,7 +19,7 @@
 
 <div style="display: flex;justify-content: center;">
 
-    <button ui-sref="app.tests.roadmap">njdklsfb</button>
+    <button ng-click="openTests()">njdklsfb</button>
     <ui-view></ui-view>
 
     <!-- Bower:js -->
@@ -42,16 +42,17 @@
     <script src="main.js"></script>
     <script src="demo.js"></script>
 
-    <script src="tests/tests.js"></script>
-    <script src="tests/templates.js"></script>
+    <!--<script src="diagnostic/diagnostic.js"></script>-->
+    <!--<script src="diagnostic/templates.js"></script>-->
 
-    <navigation-pane
-        active-exam="vm.activeExamId"
-        exams="vm.exams"
-        exams-results="vm.examsResults"
-        on-exam-click="vm.onExamClick(exam, prevExam)"
-        title=".TESTS_TITLE">
-    </navigation-pane>
+    <script src="infra/demoShared/env.service.js"></script>
+    <script src="infra/demoShared/contentConfig.js"></script>
+    <script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
+    <script src="estimatedScoreWidget.config.js"></script>
+    <script src="diagnostic.config.js"></script>
+    <script src="translate.config.js"></script>
+    <script src="infra/demoShared/storagesConfig.js"></script>
+
 </div>
 </body>
 </html>

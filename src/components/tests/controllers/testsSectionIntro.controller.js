@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.tests').controller('TestsSectionIntro.controller',
+    angular.module('znk.infra-web-app.tests').controller('TestsSectionIntroController',
         function (exerciseData, $state, ExamTypeEnum, SubjectEnum, $stateParams, znkAnalyticsSrv, TestScoreCategoryEnum, $filter) {
         'ngInject';
 

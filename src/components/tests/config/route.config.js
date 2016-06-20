@@ -14,6 +14,7 @@
                     templateUrl: 'components/tests/templates/testsRoadmap.template.html',
                     resolve: {
                         testsData: function (ExamSrv, ExerciseResultSrv, $q) {
+                            debugger;
                             return ExamSrv.getAllExams(true).then(function (exams) {
                                 var examResultsProms = [];
                                 angular.forEach(exams, function (exam) {
@@ -27,13 +28,17 @@
                                 });
                             });
                         },
-                        diagnosticData: function (WorkoutsDiagnosticFlow) {
-                            return WorkoutsDiagnosticFlow.getDiagnostic().then(function (result) {
-                                return (result.isComplete) ? result.isComplete : false;
+                        diagnosticData: function (DiagnosticSrv) {
+                             DiagnosticSrv.getDiagnosticStatus().then(function (result) {
+                                 var isDiagnosticsComplete = result === 2;
+                                return (isDiagnosticsComplete) ? isDiagnosticsComplete : false;
                             });
+                            // return DiagnosticSrv.getDiagnosticStatus().then(function (result) {
+                            //     return (result.isComplete) ? result.isComplete : false;
+                            // });
                         }
                     },
-                    controller: 'TestsRoadMapController',
+                    controller: 'TestsRoadmapController',
                     controllerAs: 'vm'
                 })
                 .state('app.tests.section', {

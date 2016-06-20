@@ -1,14 +1,20 @@
 angular.module('demo', [
     'znk.infra-web-app.tests'
 ])
-    .config(function ($translateProvider, SvgIconSrvProvider) {
+    .config(function ($translateProvider, SvgIconSrvProvider, $stateProvider) {
+
+        $stateProvider.state('app', {
+            abstract: true,
+            template: '<ui-view></ui-view>'
+        });
+
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: '/{part}/locale/{lang}.json'
         })
             .preferredLanguage('en');
 
         var svgMap = {
-            
+
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
     })
@@ -37,8 +43,12 @@ angular.module('demo', [
         }
     });
 })
-    
-    .run(function ($rootScope, $translate) {
+
+    .run(function ($rootScope, $translate, $state) {
+
+        $rootScope.openTests = function() {
+            $state.go('app.tests.roadmap', {exam: '14'})
+        };
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         });

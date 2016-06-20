@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.tests').controller('NavigationPane.controller',
+    angular.module('znk.infra-web-app.tests').controller('NavigationPaneController',
         function (ExamTypeEnum, $log) {
         'ngInject';
             var self = this;
@@ -70,7 +70,7 @@
                 }
             };
 
-            this.exams = _filterExams();
+           // this.exams = _filterExams();
         }
     );
 })(angular);
