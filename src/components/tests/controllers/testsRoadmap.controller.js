@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').controller('TestsRoadmapController',
-        function (testsData, diagnosticData, testsRoadMapSrv, $log, SubjectEnum, TestScoreCategoryEnum, $state, purchaseService, $stateParams, $q) {
+        function (testsData, diagnosticData, testsRoadmapSrv, $log, SubjectEnum, $state, purchaseService, $stateParams, $q, EstimatedScoreWidgetSrv) {
         'ngInject';
 
             var vm = this;
@@ -26,31 +26,38 @@
                 purchaseService.showPurchaseDialog();
             };
 
-            vm.getTestIconName = function (id) {
-                var name;
-                switch (id) {
-                    case TestScoreCategoryEnum.MATH.enum:
-                        name = 'math-icon';
-                        break;
-                    case TestScoreCategoryEnum.READING.enum:
-                        name = 'reading-icon';
-                        break;
-                    case TestScoreCategoryEnum.WRITING.enum:
-                        name = 'writing-icon';
-                        break;
-                    case TestScoreCategoryEnum.ESSAY.enum:
-                        name = 'essay-icon';
-                        break;
-                    default:
-                        $log.error('TestsRoadMapController getTestIconName: can\'t find any matching categoryId! categoryId: ' + id);
-                }
-                return name;
-            };
+
+            var subjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
+            debugger;
+            $q.when(subjectOrderProm).then(function (res){
+                debugger;
+                console.log(res);
+            })
+            // vm.getTestIconName = function (id) {
+            //     var name;
+            //     switch (id) {
+            //         case TestScoreCategoryEnum.MATH.enum:
+            //             name = 'math-icon';
+            //             break;
+            //         case TestScoreCategoryEnum.READING.enum:
+            //             name = 'reading-icon';
+            //             break;
+            //         case TestScoreCategoryEnum.WRITING.enum:
+            //             name = 'writing-icon';
+            //             break;
+            //         case TestScoreCategoryEnum.ESSAY.enum:
+            //             name = 'essay-icon';
+            //             break;
+            //         default:
+            //             $log.error('TestsRoadMapController getTestIconName: can\'t find any matching categoryId! categoryId: ' + id);
+            //     }
+            //     return name;
+            // };
 
             function _extendSection(exerciseResults, sections, exam, examResult) {
                 angular.forEach(exerciseResults, function (exercise) {
                     if (angular.isDefined(exercise.startedTime) && exercise.questionResults.length > 0) {
-                        var examSection = testsRoadMapSrv.getExamSection(exam, +exercise.exerciseId);
+                        var examSection = testsRoadmapSrv.getExamSection(exam, +exercise.exerciseId);
                         var correctQuestionsNumber = exercise.correctAnswersNum;
                         var answersNumber = exercise.correctAnswersNum + exercise.wrongAnswersNum;
                         var avgTimePerQuestion = exercise.avgTimePerQuestion;
@@ -70,10 +77,10 @@
 
                 vm.loading = false;
 
-                if (testsRoadMapSrv.isTypeFull(exam.typeId) && exam.isComplete) {
+                if (testsRoadmapSrv.isTypeFull(exam.typeId) && exam.isComplete) {
                     var subScoreAndCrossScoresProm = $q.when(false);
                     if (!examResult.scores.subScores) {
-                        subScoreAndCrossScoresProm = testsRoadMapSrv.getFullExamSubAndCrossScores(sections, exerciseResults);
+                        subScoreAndCrossScoresProm = testsRoadmapSrv.getFullExamSubAndCrossScores(sections, exerciseResults);
                     }
                     subScoreAndCrossScoresProm.then(function (scores) {
                         vm.subScoreReady = true;
@@ -83,7 +90,7 @@
                             if (!examResult.scores) {
                                 examResult.scores = {};
                             }
-                            examResult.scores.subScores = testsRoadMapSrv.groupBySubjectId(scores.subScores);
+                            examResult.scores.subScores = testsRoadmapSrv.groupBySubjectId(scores.subScores);
                             examResult.scores.crossTestScores = scores.crossTestScores;
                             examResult.$save();
                         }
@@ -105,7 +112,7 @@
                     vm.overlayType = OVERLAY_TYPE_DIAGNOSTIC;
                     return;
                 }
-                isAllSubjectLocked = testsRoadMapSrv.isAllSubjectLocked(examCopy);
+                isAllSubjectLocked = testsRoadmapSrv.isAllSubjectLocked(examCopy);
                 // if all subject are locked, show the upgrade overlay
                 if (isAllSubjectLocked) {
                     vm.currentExam = examCopy;
@@ -114,7 +121,7 @@
                     return;
                 }
                 // if there are exam results, set things in motion
-                examResults = testsRoadMapSrv.getExamResult(vm.examsResults, examCopy.id);
+                examResults = testsRoadmapSrv.getExamResult(vm.examsResults, examCopy.id);
                 if (examResults && examResults[0]) {
                     vm.scores = examResults[0].scores;
                     if (examResults[0].isComplete) {
@@ -123,7 +130,7 @@
                     if (examResults[0].sectionResults) {
                         vm.currentExam = examCopy;
                         vm.testsReady = true;
-                        testsRoadMapSrv.getExamsAndExerciseResults(examCopy, examResults).then(function (results) {
+                        testsRoadmapSrv.getExamsAndExerciseResults(examCopy, examResults).then(function (results) {
                             _extendSection(results.exerciseResults, results.examSection, examCopy, examResults[0]);
                         });
                     }
@@ -133,8 +140,8 @@
                     vm.testsReady = true;
                 }
                 // if prev exam is not complete show the complete section overlay
-                prevExamResults = (prevExam) ? testsRoadMapSrv.getExamResult(vm.examsResults, prevExam.id) : false;
-                testsRoadMapSrv.isSectionInPrevExamCompleted(prevExamResults).then(function (isSectionCompleteExist) {
+                prevExamResults = (prevExam) ? testsRoadmapSrv.getExamResult(vm.examsResults, prevExam.id) : false;
+                testsRoadmapSrv.isSectionInPrevExamCompleted(prevExamResults).then(function (isSectionCompleteExist) {
                     if (!isSectionCompleteExist) {
                         vm.overlayType = OVERLAY_TYPE_COMPLETE;
                     }
