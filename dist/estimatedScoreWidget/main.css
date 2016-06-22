@@ -39,6 +39,8 @@ estimated-score-widget.is-nav-menu .score-estimate-container .divider {
 
 estimated-score-widget .score-estimate-container {
   width: 323px;
+  height: 665px;
+  background-color: #ffffff;
   position: relative;
   border-radius: 15px;
   box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
@@ -246,8 +248,10 @@ md-dialog.setting-edit-goals {
     width: 100%;
     height: 40px; }
     md-dialog.setting-edit-goals .top-icon-wrap .top-icon {
+      display: -ms-flexbox;
       display: flex;
-      justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -255,12 +259,10 @@ md-dialog.setting-edit-goals {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px; }
-        md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap .goals-top-icon {
+        md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap .estimated-score-widget-goals {
           margin: 15px;
           width: 46px;
           display: block; }
-        md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap .goals-top-icon * {
-          fill: #ffffff; }
   md-dialog.setting-edit-goals .main-title {
     margin-top: 20px;
     text-align: center; }
@@ -279,9 +281,6 @@ md-dialog.setting-edit-goals {
     width: 14px;
     padding: 10px;
     cursor: pointer; }
-  md-dialog.setting-edit-goals .close-popup {
+  md-dialog.setting-edit-goals .estimated-score-widget-close-popup {
     width: 16px;
     display: block; }
-    md-dialog.setting-edit-goals .close-popup * {
-      stroke: #ffffff;
-      stroke-width: 6px; }

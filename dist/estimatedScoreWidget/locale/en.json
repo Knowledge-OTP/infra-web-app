@@ -7,10 +7,10 @@
         "COMPOSITE_SCORE": "Total Score:",
         "GOAL_SCORE": "Goal Score:",
         "EDIT_MY_GOALS": "Edit my goals",
-        "SUBJECT_0": "Math",
-        "SUBJECT_1": "English",
-        "SUBJECT_7": "Verbal",
-        "SUBJECT_8": "Essay",
+        "0": "Math",
+        "1": "English",
+        "7": "Verbal",
+        "8": "Essay",
         "UNFINISHED_DIAGNOSTIC_TITLE": "Set your initial score by completing the diagnostic test."
     },
     "SETTING.EDIT_GOALS": {

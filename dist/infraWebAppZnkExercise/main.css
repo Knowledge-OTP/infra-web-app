@@ -1,0 +1,150 @@
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+.exercise-container {
+  width: 1060px;
+  height: calc(100vh - 95px);
+  background-color: white;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  position: relative; }
+  .exercise-container znk-exercise {
+    -ms-flex-positive: 1;
+        flex-grow: 1; }
+    .exercise-container znk-exercise znk-exercise-btn-section .btn-container svg-icon {
+      display: block; }
+    .exercise-container znk-exercise .swiper-container {
+      box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+      overflow: hidden;
+      background-color: white; }
+    .exercise-container znk-exercise questions-carousel question-builder {
+      height: 100%; }
+      .exercise-container znk-exercise questions-carousel question-builder img {
+        max-width: 400px !important;
+        height: auto !important;
+        vertical-align: middle; }
+    .exercise-container znk-exercise znk-exercise-btn-section .shadow-container {
+      background: white; }
+    .exercise-container znk-exercise .question-bottom-shadow {
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px; }
+  .exercise-container znk-exercise .question-wrapper table, .exercise-container .tutorial-intro table {
+    border-collapse: collapse;
+    font-size: 1em;
+    width: 100%; }
+    .exercise-container znk-exercise .question-wrapper table td, .exercise-container .tutorial-intro table td {
+      padding: 5px;
+      border: 1px solid #dddddd;
+      vertical-align: top; }
+
+answer-explanation {
+  display: block; }
+  answer-explanation .answer-explanation-wrapper {
+    background: #fdfdfd; }
+    answer-explanation .answer-explanation-wrapper .answer-explanation-close {
+      height: 14px;
+      width: 14px;
+      cursor: pointer;
+      float: right; }
+    answer-explanation .answer-explanation-wrapper .answer-explanation-header {
+      height: 5px;
+      box-shadow: 0px 1px 1px 0.1px rgba(190, 190, 190, 0.75);
+      z-index: 3;
+      background-color: #0a9bad; }
+      answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn {
+        width: 185px;
+        height: 28px;
+        box-shadow: 0px 4px 1px -2px rgba(190, 190, 190, 0.75);
+        cursor: pointer;
+        position: relative;
+        background-color: #0a9bad;
+        margin: 0 auto;
+        border-radius: 0px 0px 10px 10px; }
+        answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .right-corner {
+          transform: rotate(25deg);
+          border-radius: 50px 0px 50px 1px;
+          right: -14px;
+          box-shadow: -7px -2px #0a9bad; }
+        answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .left-corner {
+          transform: rotate(-25deg);
+          border-radius: 0 50px 1px 50px;
+          left: -14px;
+          box-shadow: 7px -2px #0a9bad; }
+        answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .corner {
+          width: 12px;
+          height: 28px;
+          display: inline-block;
+          position: absolute;
+          bottom: -3px; }
+        answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .main-content-wrapper {
+          line-height: 26px; }
+          answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .main-content-wrapper .lamp-icon {
+            margin-top: 3px;
+            margin-left: 7px; }
+          answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .main-content-wrapper .text {
+            vertical-align: top;
+            font-size: 14px;
+            color: #ffffff;
+            font-family: Quicksand;
+            font-weight: 400;
+            margin-left: 5px; }
+    answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper {
+      transition: height ease 1s;
+      border-top: 5px solid #0a9bad;
+      height: 360px;
+      overflow: auto; }
+      answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper.ng-enter, answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper.ng-leave.ng-leave-active {
+        overflow: hidden;
+        height: 0; }
+      answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper.ng-enter.ng-enter-active, answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper.ng-leave {
+        overflow: hidden;
+        height: 360px; }
+
+answer-explanation-content {
+  display: block; }
+  answer-explanation-content .title {
+    padding: 15px 20px 0;
+    text-align: center;
+    font-size: 18px;
+    color: #161616;
+    font-family: Quicksand;
+    font-weight: bold; }
+  answer-explanation-content svg-icon[name="close-popup"] svg line {
+    stroke: #161616; }
+  answer-explanation-content .flex-wrap {
+    display: -ms-flexbox;
+    display: flex;
+    padding-top: 25px; }
+    answer-explanation-content .flex-wrap .video-wrap {
+      width: 50%;
+      padding: 0 20px;
+      position: relative; }
+      answer-explanation-content .flex-wrap .video-wrap video {
+        width: 454px;
+        height: 254px; }
+      answer-explanation-content .flex-wrap .video-wrap .question-quid-text {
+        color: #acacac;
+        font-size: 10px;
+        position: absolute;
+        top: 272px; }
+    answer-explanation-content .flex-wrap .written-solution-wrapper {
+      width: 50%;
+      padding: 0 20px; }
+      answer-explanation-content .flex-wrap .written-solution-wrapper p:first-child {
+        margin-top: 0; }
+      answer-explanation-content .flex-wrap .written-solution-wrapper .written-solution {
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 200; }
