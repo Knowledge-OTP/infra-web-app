@@ -3,15 +3,17 @@ angular.module('demo', [
 ])
     .config(function ($translateProvider, SvgIconSrvProvider, $stateProvider) {
 
+        $translateProvider.useLoader('$translatePartialLoader', {
+            urlTemplate: '/{part}/locale/{lang}.json'
+
+        })
+            .preferredLanguage('en');
+
         $stateProvider.state('app', {
             abstract: true,
             template: '<ui-view></ui-view>'
         });
 
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: '/{part}/locale/{lang}.json'
-        })
-            .preferredLanguage('en');
 
         var svgMap = {
         };
@@ -91,11 +93,12 @@ angular.module('demo', [
 
     .run(function ($rootScope, $translate, $state) {
 
-        $rootScope.openTests = function() {
-            $state.go('app.tests.roadmap', {exam: '17'})
-        };
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         });
+
+        $rootScope.openTests = function() {
+            $state.go('app.tests.roadmap', {exam: '17'})
+        };
         // $translatePartialLoader.addPart('demo');
     });

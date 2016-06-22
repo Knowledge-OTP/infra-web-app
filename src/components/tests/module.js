@@ -15,6 +15,7 @@
         'ui.router'
     ]).config([
         'SvgIconSrvProvider',
+        
         function (SvgIconSrvProvider) {
             var svgMap = {
                 'tests-check-mark-icon': 'components/tests/svg/check-mark-icon.svg',
