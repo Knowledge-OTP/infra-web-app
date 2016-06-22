@@ -15,9 +15,9 @@
                     var examResults = self.examsResults[currentIndex];
                     currentValue.isCompleted = (examResults && examResults.isComplete) ? examResults.isComplete : false;
 
-                    if (currentValue.typeId === ExamTypeEnum.FULL_TEST) {
+                    if (currentValue.typeId === ExamTypeEnum.FULL_TEST.enum) {
                         prevContent.fullExams.push(currentValue);
-                    } else if (currentValue.typeId === ExamTypeEnum.MINI_TEST) {
+                    } else if (currentValue.typeId === ExamTypeEnum.MINI_TEST.enum) {
                         prevContent.miniExams.push(currentValue);
                     } else {
                         $log.error('NavigationPaneController _filterExams: typeId is undefined or wrong type id!');
@@ -70,7 +70,7 @@
                 }
             };
 
-           // this.exams = _filterExams();
+           this.exams = _filterExams();
         }
     );
 })(angular);

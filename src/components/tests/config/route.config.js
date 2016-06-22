@@ -14,7 +14,6 @@
                     templateUrl: 'components/tests/templates/testsRoadmap.template.html',
                     resolve: {
                         testsData: function (ExamSrv, ExerciseResultSrv, $q) {
-                            debugger;
                             return ExamSrv.getAllExams(true).then(function (exams) {
                                 var examResultsProms = [];
                                 angular.forEach(exams, function (exam) {

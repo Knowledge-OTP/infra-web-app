@@ -100,9 +100,8 @@
 
 
 .app-tests-roadmap {
-
     .app-tests-test-container {
-        background: $bgColor2;
+        background: $bgColor3;
         height: auto;
         width: 810px;
         margin-left: 20px;
@@ -110,7 +109,7 @@
     }
     .main-title {
         font-size: 20px;
-        color: $fcColor5;
+        color: $fontColor6;
         line-height: 65px;
         text-align: center;
         font-family: Quicksand;
@@ -138,7 +137,7 @@
 
         .inner {
             position: relative;
-            border: 1px solid $bcColor11;
+            border: 1px solid $borderColor7;
             margin: 0 30px 10px;
 
             &.blurred {
@@ -151,8 +150,8 @@
             .exam-composite-score {
                 width: 100%;
                 text-align: center;
-                background-color: $bgColor77;
-                @include text-style(21px, $fcColor7, Lato, $normalFontWeight);
+                background-color: $bgColor33;
+                @include text-style(21px, $fontColor16, Lato, $normalFontWeight);
                 border-top-left-radius: $baseBorderRadiusCorner;
                 border-top-right-radius: $baseBorderRadiusCorner;
                 padding: 10px 0 10px;
@@ -169,7 +168,7 @@
                 &.math {
                     margin-right: 35px;
                     .subject-box-container {
-                        background-color: $bgColor35;
+                        background-color: $bgColor27;
                         border-radius: $baseBorderRadiusCorner;
                         .subject-box {
                             background-color: transparent;
@@ -209,13 +208,13 @@
                                                 svg {
                                                     g {
                                                         line {
-                                                            stroke: $fcColor8;
+                                                            stroke: $fontColor7;
                                                         }
                                                     }
                                                 }
                                             }
                                             .completed-text {
-                                                @include text-style(15px, $fcColor11, Quicksand, $regularFontWeight);
+                                                @include text-style(15px, $fontColor4, Quicksand, $regularFontWeight);
                                             }
                                         }
                                     }
@@ -229,30 +228,30 @@
                 }
 
                 .subject-name {
-                    @include text-style(23px, $fcColor7, Quicksand, $boldFontWeight);
+                    @include text-style(23px, $fontColor3, Quicksand, $boldFontWeight);
                     text-transform: capitalize;
                     text-align: center;
                 }
                 .section-test-score {
                     margin: 10px 0 20px;
-                    @include text-style(15px, $fcColor7, Lato, $regularFontWeight);
+                    @include text-style(15px, $fontColor3, Lato, $regularFontWeight);
                     text-align: center;
                 }
             }
             .subject-box-container {
                 .subject-box {
-                    background-color: $bgColor35;
+                    background-color: $bgColor27;
                     height: 215px;
                     width: 226px;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     .subject-box-test-score {
-                        @include text-style(15px, $fcColor7, Quicksand, $boldFontWeight);
+                        @include text-style(15px, $fontColor3, Quicksand, $boldFontWeight);
                         padding: 10px 0 10px;
                     }
                     .subject-box-inner {
-                        background-color: $bgColor2;
+                        background-color: $bgColor3;
                         width:184px;
                         height: 163px;
                         box-sizing: border-box;
@@ -261,12 +260,12 @@
                         cursor: pointer;
 
                         &:not(.done):not(.lock) {
-                            box-shadow: 0 0 8px 0 $bsColor4;
+                            box-shadow: 0 0 8px 0 $bsColor5;
                         }
 
                         &.lock,
                         &.done {
-                            border: 1px solid $bcColor1;
+                            border: 1px solid $borderColor15;
                         }
                         .section-correct,
                         .section-avg-time,
@@ -288,7 +287,7 @@
                             content {
                                 line-height:normal;
                                 padding-top:18px;
-                                @include text-style(12px, $fcColor7, Lato, $normalFontWeight);
+                                @include text-style(12px, $fontColor3, Lato, $normalFontWeight);
 
                                 .question-count {
                                     margin-top: 0;
@@ -301,7 +300,7 @@
                                         width: 125px;
                                         height:4px;
                                         margin:0 auto;
-                                        background-color: $bgColor49;
+                                        background-color: $bgColor43;
                                         overflow: hidden;
 
                                         .progress-bar-inner {
@@ -310,7 +309,7 @@
                                             max-width: 100%;
                                             height: 100%;
                                             text-align: center;
-                                            background-color: $bgColor23;
+                                            background-color: $bgColor5;
                                             transition: width .6s ease;
                                         }
 
@@ -318,7 +317,7 @@
                                             position: absolute;
                                             right:9px;
                                             top: 47px;
-                                            color: $bgColor23;
+                                            color: $fontColor6;
                                             font-size: 14px;
 
                                         }
@@ -331,7 +330,7 @@
                         }
 
                         &.done {
-                            background-color: $bgColor50;
+                            background-color: $bgColor44;
 
                             content {
                                 line-height: normal;
@@ -348,7 +347,7 @@
                             .section-correct {
                                 font-size: 18px;
                                 font-family: Quicksand;
-                                color: $fcColor11;
+                                color: $fontColor4;
                                 font-weight: $regularFontWeight;
                                 margin: 0 auto;
                                 padding-top: 8px;
@@ -357,7 +356,7 @@
                             .section-avg-time {
                                 display: block;
                                 line-height: 56px;
-                                @include text-style(10px, $fcColor11, Lato, $lightFontWeight);
+                                @include text-style(10px, $fontColor4, Lato, $lightFontWeight);
                             }
 
                         }
@@ -370,17 +369,17 @@
                             border-top-right-radius: $baseBorderRadiusCorner;
                             border-top-left-radius: $baseBorderRadiusCorner;
 
-                            .subject-background-math {
-                                @include background-image-retina('#{$bgPath}/subject-background-math');
-                            }
-
-                            .subject-background-reading, .subject-background-verbal{
-                                @include background-image-retina('#{$bgPath}/subject-background-reading');
-                            }
-
-                            .subject-background-writing {
-                                @include background-image-retina('#{$bgPath}/subject-background-writing');
-                            }
+                            //.subject-background-math {
+                            //    @include background-image-retina('#{$bgPath}/subject-background-math');
+                            //}
+                            //
+                            //.subject-background-reading, .subject-background-verbal{
+                            //    @include background-image-retina('#{$bgPath}/subject-background-reading');
+                            //}
+                            //
+                            //.subject-background-writing {
+                            //    @include background-image-retina('#{$bgPath}/subject-background-writing');
+                            //}
 
                             .subject-background-math,
                             .subject-background-reading,
@@ -408,15 +407,15 @@
                                 width: 100%;
                                 height: 2px;
                                 transform: rotate(50deg);
-                                background-color: $fcColor1;
+                                background-color: $bgColor3;
                                 z-index: 1;
                             }
 
                             &.math-bg .icon-wrapper {
-                                background-color: $bgColor44;
+                                background-color: #9674b5;
                             }
                             &.verbal-bg .icon-wrapper {
-                                background-color: $bgColor46;
+                                background-color: #dbb910;
                                 &.reading-icon {
                                     svg {
                                         margin-left: -2px;
@@ -424,7 +423,7 @@
                                 }
                             }
                             &.essay-bg .icon-wrapper {
-                                background-color: $bgColor48;
+                                background-color: #d5457a;
                                 &.essay-icon {
                                     svg {
                                         width: 55%;
@@ -446,7 +445,7 @@
                                     height: 65%;
                                     margin-top: 5px;
                                     * {
-                                        fill: $bgColor2;
+                                        fill: $bgColor3;
                                     }
                                 }
 
@@ -460,7 +459,7 @@
                                 top:8px;
 
                                 path.st0 {
-                                    fill: $bgColor2;
+                                    fill: $bgColor3;
                                 }
 
                             }
@@ -472,7 +471,7 @@
                             height: 115px;
                             line-height: 95px;
                             box-sizing: border-box;
-                            @include text-style(16px, $fcColor7, Lato, $normalFontWeight);
+                            @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
                             .completed-box {
                                 display: none;
                             }
@@ -484,7 +483,7 @@
                             bottom: 0;
                             line-height: 15px;
                             padding-bottom:12px;
-                            @include text-style(12px, $fcColor11, Lato, $normalFontWeight);
+                            @include text-style(12px, $fontColor4, Lato, $normalFontWeight);
 
                             .icon-wrapper {
                                 height:15px;
@@ -492,7 +491,7 @@
                                 display:inline-block;
                                 position: relative;
                                 margin-right:5px;
-                                color: $fcColor11;
+                                color: $fontColor4;
                                 top: 2px;
                             }
 
@@ -508,7 +507,7 @@
                 width: 100%;
                 height: 100%;
                 .tests-inner-popup-upgrade {
-                    color: $fcColor7;
+                    color: $fontColor3;
                     display: flex;
                     width: 100%;
                     height: 45%;
@@ -521,10 +520,10 @@
                         margin-top: 25px;
                         svg {
                             .st0, .st1 {
-                                stroke: $fcColor7;
+                                stroke: $fontColor3;
                             }
                             .st1 {
-                                fill: $fcColor7;
+                                fill: $fontColor3;
                             }
                         }
                     }
@@ -550,7 +549,7 @@
 
                 .tests-inner-popup-blurred {
                     filter: blur(20px);
-                    background-color: $bgColor2;
+                    background-color: $bgColor3;
                     position: absolute;
                     top: 0;
                     left: 0;
@@ -568,7 +567,7 @@
                     span {
                         font-size: 18px;
                         font-family: Quicksand;
-                        color: $fcColor11;
+                        color: $fontColor4;
                         line-height: 40px;
                         text-align: center;
                         z-index: 2;
@@ -582,7 +581,7 @@
 
         .tests-sub-score {
             position: relative;
-            background-color: $bgColor83;
+            background-color: $bgColor33;
             display: flex;
             justify-content: flex-start;
             flex-direction: column;
@@ -595,7 +594,7 @@
                 justify-content: center;
                 padding-top: 17.5px;
                 .sub-score-title {
-                    @include text-style(16px, $fcColor7, Lato);
+                    @include text-style(16px, $fontColor3, Lato);
                 }
                 .info-icon {
                     margin-left: 5px;
@@ -610,13 +609,13 @@
                 margin-top: 22.5px;
                 margin-bottom: 22.5px;
                 .sub-score-column {
-                    border-right: 1px dashed $bgColor34;
+                    border-right: 1px dashed $borderColor13;
                     width: 50%;
                     &:nth-child(2) {
                         border-right:none;
                     }
                     .sub-score-column-title {
-                        @include text-style(14px, $fcColor7, Lato, $regularFontWeight);
+                        @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
                         padding-left: 45px;
                     }
                     .sub-score-section {
@@ -634,7 +633,7 @@
                         }
                         div {
                             padding-right: 20px;
-                            @include text-style(14px, $fcColor7, Lato, $lightFontWeight);
+                            @include text-style(14px, $fontColor3, Lato, $lightFontWeight);
                         }
                     }
                 }
@@ -663,17 +662,17 @@
 .tooltip-for-tests {
     width: 300px;
     height: 190px;
-    @include box-shadow(0px 2px 3px 2px rgba(190, 190, 190, 0.75));
+    @include box-shadow(0px 2px 3px 2px $bsColor7);
     .md-content {
         width: 95%;
         height: 100%;
-        background: $bgColor2;
+        background: $bgColor3;
         white-space: normal;
         div {
             width: 100%;
             height: 100%;
             padding-top: 20px;
-            @include text-style(14px, $fcColor7, Lato);
+            @include text-style(14px, $fontColor3, Lato);
         }
     }
 }
@@ -693,19 +692,19 @@
         }
     }
     .test-section-intro-title {
-        @include text-style(24px, $fcColor7, Quicksand, $boldFontWeight);
+        @include text-style(24px, $fontColor3, Quicksand, $boldFontWeight);
         margin: 20px 0;
     }
     .test-section-intro-subject-name {
         text-transform: capitalize;
         margin-top: 24px;
-        @include text-style(20.5px, $fcColor7, Quicksand, $regularFontWeight);
+        @include text-style(20.5px, $fontColor3, Quicksand, $regularFontWeight);
     }
     .test-section-intro-subject-info {
-        @include text-style(18px, $fcColor11, Quicksand, $regularFontWeight);
+        @include text-style(18px, $fontColor4, Quicksand, $regularFontWeight);
         margin-top: 50px;
         padding-bottom: 25px;
-        border-bottom: 1px solid $bcColor11;
+        border-bottom: 1px solid $fontColor4;
         .test-section-intro-subject-info-time {
             margin-left: 20px;
         }
@@ -717,29 +716,29 @@
         margin-top: 20px;
         width: 100%;
         .test-section-intro-instructions-title {
-            @include text-style(16px, $fcColor11, Lato, $regularFontWeight);
+            @include text-style(16px, $fontColor4, Lato, $regularFontWeight);
         }
         .test-section-intro-instructions-text {
             margin-top: 25px;
             width: 55%;
             text-align: center;
             line-height: 23px;
-            @include text-style(16px, $fcColor11, Lato, $lightFontWeight);
+            @include text-style(16px, $fontColor4, Lato, $lightFontWeight);
         }
     }
     &.test-intro-math {
         svg * {
-            fill: $mathColor;
+            fill: #AF89D2;
         }
     }
     &.test-intro-verbal {
         svg * {
-            fill: $verbalColor;
+            fill: #F9D41B;
         }
     }
     &.test-intro-essay {
         svg * {
-            fill: $essayColor;
+            fill: #FF5895;
         }
     }
 
