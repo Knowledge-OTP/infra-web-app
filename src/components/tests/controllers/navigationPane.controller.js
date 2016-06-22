@@ -2,10 +2,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').controller('NavigationPaneController',
-        function (ExamTypeEnum, $log) {
+        function (ExamTypeEnum, $log, $translatePartialLoader) {
         'ngInject';
             var self = this;
 
+            $translatePartialLoader.addPart('tests');
+            
             self.activeId = void(0);
 
             function _filterExams() {

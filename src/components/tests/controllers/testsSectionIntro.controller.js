@@ -2,8 +2,11 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').controller('TestsSectionIntroController',
-        function (exerciseData, $state, ExamTypeEnum, SubjectEnum, $stateParams, znkAnalyticsSrv, TestScoreCategoryEnum, $filter) {
+        function (exerciseData, $state, ExamTypeEnum, SubjectEnum, $stateParams, znkAnalyticsSrv, TestScoreCategoryEnum, $filter, $translatePartialLoader) {
         'ngInject';
+
+
+            $translatePartialLoader.addPart('tests');
 
             var typeFull = (exerciseData.examData.typeId === ExamTypeEnum['FULL TEST'].enum);
             var translateFilter = $filter('translate');

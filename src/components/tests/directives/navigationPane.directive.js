@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').directive('navigationPane', 
-        function () {
+        function ($translatePartialLoader) {
             'ngInject';
             return {
                 scope: {
@@ -22,6 +22,7 @@
                 bindToController: true,
                 controllerAs: 'vm',
                 link: function (scope, element, attrs) {
+                    $translatePartialLoader.addPart('tests');
                 }
             };
         }

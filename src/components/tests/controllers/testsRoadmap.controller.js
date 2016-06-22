@@ -2,9 +2,11 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').controller('TestsRoadmapController',
-        function (testsData, diagnosticData, testsRoadmapSrv, $log, SubjectEnum, $state, purchaseService, $stateParams, $q, EstimatedScoreWidgetSrv) {
+        function (testsData, diagnosticData, testsRoadmapSrv, $log, SubjectEnum, $state, purchaseService, $stateParams, $q, EstimatedScoreWidgetSrv, $translatePartialLoader) {
         'ngInject';
 
+            $translatePartialLoader.addPart('tests');
+            
             var vm = this;
             var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
             var OVERLAY_TYPE_UPGRADE = 'upgrade';
