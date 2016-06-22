@@ -93,7 +93,7 @@ angular.module('demo', [
     .run(function ($rootScope, $translate, $state) {
 
         $rootScope.openTests = function() {
-            $state.go('app.tests.roadmap', {exam: '14'})
+            $state.go('app.tests.roadmap', {exam: '17'})
         };
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();

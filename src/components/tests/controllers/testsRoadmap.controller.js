@@ -6,6 +6,7 @@
         'ngInject';
 
             var vm = this;
+            var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
             var OVERLAY_TYPE_UPGRADE = 'upgrade';
             var OVERLAY_TYPE_DIAGNOSTIC = 'diagnostic';
             var OVERLAY_TYPE_COMPLETE = 'completeSection';
@@ -27,32 +28,27 @@
             };
 
 
-            var subjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
-            debugger;
             $q.when(subjectOrderProm).then(function (res){
-                debugger;
-                console.log(res);
-            })
-            // vm.getTestIconName = function (id) {
-            //     var name;
-            //     switch (id) {
-            //         case TestScoreCategoryEnum.MATH.enum:
-            //             name = 'math-icon';
-            //             break;
-            //         case TestScoreCategoryEnum.READING.enum:
-            //             name = 'reading-icon';
-            //             break;
-            //         case TestScoreCategoryEnum.WRITING.enum:
-            //             name = 'writing-icon';
-            //             break;
-            //         case TestScoreCategoryEnum.ESSAY.enum:
-            //             name = 'essay-icon';
-            //             break;
-            //         default:
-            //             $log.error('TestsRoadMapController getTestIconName: can\'t find any matching categoryId! categoryId: ' + id);
-            //     }
-            //     return name;
-            // };
+                var subjectsObj = res.subjects;
+                vm.getTestIconName = function (id) {
+                    var name;
+                    switch (id) {
+                        case subjectsObj.math.id:
+                            name = subjectsObj.math.subjectIconName;
+                            break;
+                        case subjectsObj.verbal.id:
+                            name = subjectsObj.verbal.subjectIconName;
+                            break;
+                        case subjectsObj.essay.id:
+                            name = subjectsObj.essay.subjectIconName;
+                            break;
+                        default:
+                            $log.error('TestsRoadMapController getTestIconName: can\'t find any matching categoryId! categoryId: ' + id);
+                    }
+                    return name;
+                };
+            });
+
 
             function _extendSection(exerciseResults, sections, exam, examResult) {
                 angular.forEach(exerciseResults, function (exercise) {
