@@ -14,7 +14,9 @@ angular.module('demo', [
             .preferredLanguage('en');
 
         var svgMap = {
-
+            // 'tests-check-mark-icon': 'svg/check-mark-icon.svg',
+            // 'tests-locked-icon': 'svg/locked-icon.svg',
+            // 'tests-subject-locked-icon': 'svg/subject-locked-icon.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
     })

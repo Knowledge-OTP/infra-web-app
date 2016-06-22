@@ -17,6 +17,9 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
+                'tests-check-mark-icon': 'components/tests/svg/check-mark-icon.svg',
+                'tests-locked-icon': 'components/tests/svg/locked-icon.svg',
+                'tests-subject-locked-icon': 'components/tests/svg/subject-locked-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
