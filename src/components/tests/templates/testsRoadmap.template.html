@@ -17,12 +17,12 @@
             <div class="flex-container">
                 <div class="subject-container"
                      ng-repeat="subjectEnum in vm.subjectEnum"
-                     ng-class="{'math': subjectEnum.enum === vm.subjectEnum.MATH.enum, 'essay': subjectEnum.enum === vm.subjectEnum.ESSAY.enum }">
-                    <div class="subject-name">{{subjectEnum.val}}</div>
-                    <div class="section-test-score" translate=".TESTS_SECTION_SCORE" translate-values="{score: vm.scores.sectionsScore[subjectEnum.enum] || '-' }"></div>
+                     ng-class="subjectEnum.name">
+                    <div class="subject-name">{{subjectEnum.name}}</div>
+                    <div class="section-test-score" translate=".TESTS_SECTION_SCORE" translate-values="{score: vm.scores.sectionsScore[subjectEnum.id] || '-' }"></div>
                     <div class="subject-box-container">
                         <div class="subject-box flex-item base-border-radius"
-                             ng-repeat="subjectBox in vm.currentExam.sections | filter : {'subjectId': subjectEnum.enum} track by subjectBox.id">
+                             ng-repeat="subjectBox in vm.currentExam.sections | filter : {'subjectId': subjectEnum.id} track by subjectBox.id">
                             <div class="subject-box-test-score" translate=".TESTS_SECTION_TEST_SCORE"
                                  translate-values="{score: vm.scores.testsScore[subjectBox.categoryId] || '-' }"></div>
                             <div class="subject-box-inner base-border-radius" ng-click="vm.onSubjectClick(subjectBox)"
@@ -37,7 +37,7 @@
                                     </div>
 
                                     <div class="icon-wrapper-round">
-                                        <div class="math-no-calc" ng-if="!subjectBox.calculator && subjectBox.subjectId === vm.subjectEnum.MATH.enum"></div>
+                                        <!--<div class="math-no-calc" ng-if="!subjectBox.calculator && subjectBox.subjectId === vm.subjectEnum.MATH.enum"></div>-->
                                         <svg-icon name="{{vm.getTestIconName(subjectBox.categoryId)}}"
                                                   class="icon-wrapper">
                                         </svg-icon>

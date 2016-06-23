@@ -10,7 +10,7 @@
                 SubjectEnum.ESSAY.enum
             ];
         }
-        
+
         EstimatedScoreWidgetSrvProvider.setSubjectOrder(subjectToIndexMapGetter);
     });
 })(angular);

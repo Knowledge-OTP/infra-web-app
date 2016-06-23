@@ -222,16 +222,22 @@
 
             var vm = this;
             var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
+            var subjectsObj;
             var OVERLAY_TYPE_UPGRADE = 'upgrade';
             var OVERLAY_TYPE_DIAGNOSTIC = 'diagnostic';
             var OVERLAY_TYPE_COMPLETE = 'completeSection';
             var OVERLAY_TYPE_NONE = false;
+
+            $q.when(subjectOrderProm).then(function (res){
+                subjectsObj = res.subjects;
+            });
 
             vm.exams = testsData.exams;
             vm.examsResults = testsData.examsResults;
             vm.overlayType = OVERLAY_TYPE_NONE;
             vm.currentExam = void(0);
             vm.subjectEnum = SubjectEnum;
+            vm.hello = subjectsObj;
             vm.activeExamId = $stateParams.exam;
 
             vm.sectionTitle = function (subjectId) {
@@ -243,8 +249,6 @@
             };
 
 
-            $q.when(subjectOrderProm).then(function (res){
-                var subjectsObj = res.subjects;
                  vm.getTestIconName = function (id) {
                      var name;
                      for (var i = 0; i < subjectsObj.length; i++) {
@@ -254,7 +258,6 @@
                      }
                      return name;
                  };
-            });
 
 
             function _extendSection(exerciseResults, sections, exam, examResult) {
