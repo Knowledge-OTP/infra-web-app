@@ -234,7 +234,7 @@
         border: 1px solid #dddddd; }
       .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner .section-correct,
       .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner .section-avg-time,
-      .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner:not(.lock) .subject-locked-icon,
+      .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner:not(.lock) .tests-subject-locked-icon,
       .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner:not(.progress) .progress-bar-wrap {
         display: none; }
       .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner.lock {
@@ -351,13 +351,13 @@
             margin-top: 5px; }
             .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner header .icon-wrapper svg * {
               fill: #ffffff; }
-        .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner header .subject-locked-icon {
+        .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner header .tests-subject-locked-icon {
           width: 14px;
           height: 22px;
           position: absolute;
           right: 13px;
           top: 8px; }
-          .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner header .subject-locked-icon path.st0 {
+          .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner header .tests-subject-locked-icon path.st0 {
             fill: #ffffff; }
       .app-tests-roadmap .app-tests-test-container .inner .subject-box-container .subject-box .subject-box-inner content {
         display: block;

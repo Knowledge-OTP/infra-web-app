@@ -272,7 +272,7 @@
                         }
                         .section-correct,
                         .section-avg-time,
-                        &:not(.lock) .subject-locked-icon,
+                        &:not(.lock) .tests-subject-locked-icon,
                         &:not(.progress) .progress-bar-wrap {
                             display: none;
                         }
@@ -454,7 +454,7 @@
 
                             }
 
-                            .subject-locked-icon {
+                            .tests-subject-locked-icon {
                                 width:14px;
                                 height:22px;
                                 position: absolute;
