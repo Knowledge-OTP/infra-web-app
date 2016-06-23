@@ -216,172 +216,170 @@
 
     angular.module('znk.infra-web-app.tests').controller('TestsRoadmapController',
         function (testsData, diagnosticData, testsRoadmapSrv, $log, SubjectEnum, $state, purchaseService, $stateParams, $q, EstimatedScoreWidgetSrv, $translatePartialLoader) {
-        'ngInject';
+            'ngInject';
 
             $translatePartialLoader.addPart('tests');
 
             var vm = this;
             var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
-            var subjectsObj;
-            var OVERLAY_TYPE_UPGRADE = 'upgrade';
-            var OVERLAY_TYPE_DIAGNOSTIC = 'diagnostic';
-            var OVERLAY_TYPE_COMPLETE = 'completeSection';
-            var OVERLAY_TYPE_NONE = false;
+            $q.when(subjectOrderProm).then(function (res) {
+                    var OVERLAY_TYPE_UPGRADE = 'upgrade';
+                    var OVERLAY_TYPE_DIAGNOSTIC = 'diagnostic';
+                    var OVERLAY_TYPE_COMPLETE = 'completeSection';
+                    var OVERLAY_TYPE_NONE = false;
+                    var currentAppSubjectsArr = res.subjects;
 
-            $q.when(subjectOrderProm).then(function (res){
-                subjectsObj = res.subjects;
-            });
+                    vm.exams = testsData.exams;
+                    vm.examsResults = testsData.examsResults;
+                    vm.overlayType = OVERLAY_TYPE_NONE;
+                    vm.currentExam = void(0);
+                    vm.subjectEnum = currentAppSubjectsArr;
+                    vm.activeExamId = $stateParams.exam;
 
-            vm.exams = testsData.exams;
-            vm.examsResults = testsData.examsResults;
-            vm.overlayType = OVERLAY_TYPE_NONE;
-            vm.currentExam = void(0);
-            vm.subjectEnum = SubjectEnum;
-            vm.hello = subjectsObj;
-            vm.activeExamId = $stateParams.exam;
+                    vm.sectionTitle = function (subjectId) {
+                        return SubjectEnum.getValByEnum(subjectId);
+                    };
 
-            vm.sectionTitle = function (subjectId) {
-                return SubjectEnum.getValByEnum(subjectId);
-            };
-
-            vm.showPurchaseDialog = function () {
-                purchaseService.showPurchaseDialog();
-            };
+                    vm.showPurchaseDialog = function () {
+                        purchaseService.showPurchaseDialog();
+                    };
 
 
-                 vm.getTestIconName = function (id) {
-                     var name;
-                     for (var i = 0; i < subjectsObj.length; i++) {
-                         if (subjectsObj[i].id === id) {
-                             name = subjectsObj[i].subjectIconName;
-                         }
-                     }
-                     return name;
-                 };
-
-
-            function _extendSection(exerciseResults, sections, exam, examResult) {
-                angular.forEach(exerciseResults, function (exercise) {
-                    if (angular.isDefined(exercise.startedTime) && exercise.questionResults.length > 0) {
-                        var examSection = testsRoadmapSrv.getExamSection(exam, +exercise.exerciseId);
-                        var correctQuestionsNumber = exercise.correctAnswersNum;
-                        var answersNumber = exercise.correctAnswersNum + exercise.wrongAnswersNum;
-                        var avgTimePerQuestion = exercise.avgTimePerQuestion;
-                        var avgTimePerQuestionFormat = (avgTimePerQuestion < 1000) ? Math.ceil(avgTimePerQuestion / 1000) : Math.floor(avgTimePerQuestion / 1000);
-
-                        angular.extend(examSection, {
-                            duration: exercise.duration,
-                            startedTime: exercise.startedTime,
-                            endedTime: exercise.endedTime || false,
-                            correctQuestionsNumber: correctQuestionsNumber,
-                            answersNumber: answersNumber,
-                            isComplete: exercise.isComplete || false,
-                            avgTimePerQuestion: avgTimePerQuestionFormat
-                        });
-                    }
-                });
-
-                vm.loading = false;
-
-                if (testsRoadmapSrv.isTypeFull(exam.typeId) && exam.isComplete) {
-                    var subScoreAndCrossScoresProm = $q.when(false);
-                    if (!examResult.scores.subScores) {
-                        subScoreAndCrossScoresProm = testsRoadmapSrv.getFullExamSubAndCrossScores(sections, exerciseResults);
-                    }
-                    subScoreAndCrossScoresProm.then(function (scores) {
-                        vm.subScoreReady = true;
-                        vm.crossTestScoreReady = true;
-                        // save scores to examResult
-                        if (scores) {
-                            if (!examResult.scores) {
-                                examResult.scores = {};
+                    var subjectsObj = currentAppSubjectsArr;
+                    vm.getTestIconName = function (id) {
+                        var name;
+                        for (var i = 0; i < subjectsObj.length; i++) {
+                            if (subjectsObj[i].id === id) {
+                                name = subjectsObj[i].subjectIconName;
                             }
-                            examResult.scores.subScores = testsRoadmapSrv.groupBySubjectId(scores.subScores);
-                            examResult.scores.crossTestScores = scores.crossTestScores;
-                            examResult.$save();
                         }
-                    });
-                }
+                        return name;
+                    };
 
-                return exam;
-            }
 
-            function _setCurrentExam(exam, prevExam) {
-                var examCopy = angular.copy(exam);
-                var examResults;
-                var prevExamResults;
-                var isAllSubjectLocked;
-                // if diagnostic has not done yet, show the diagnostic overlay
-                if (!diagnosticData) {
-                    vm.currentExam = examCopy;
-                    vm.testsReady = true;
-                    vm.overlayType = OVERLAY_TYPE_DIAGNOSTIC;
-                    return;
-                }
-                isAllSubjectLocked = testsRoadmapSrv.isAllSubjectLocked(examCopy);
-                // if all subject are locked, show the upgrade overlay
-                if (isAllSubjectLocked) {
-                    vm.currentExam = examCopy;
-                    vm.testsReady = true;
-                    vm.overlayType = OVERLAY_TYPE_UPGRADE;
-                    return;
-                }
-                // if there are exam results, set things in motion
-                examResults = testsRoadmapSrv.getExamResult(vm.examsResults, examCopy.id);
-                if (examResults && examResults[0]) {
-                    vm.scores = examResults[0].scores;
-                    if (examResults[0].isComplete) {
-                        examCopy.isComplete = true;
+                    function _extendSection(exerciseResults, sections, exam, examResult) {
+                        angular.forEach(exerciseResults, function (exercise) {
+                            if (angular.isDefined(exercise.startedTime) && exercise.questionResults.length > 0) {
+                                var examSection = testsRoadmapSrv.getExamSection(exam, +exercise.exerciseId);
+                                var correctQuestionsNumber = exercise.correctAnswersNum;
+                                var answersNumber = exercise.correctAnswersNum + exercise.wrongAnswersNum;
+                                var avgTimePerQuestion = exercise.avgTimePerQuestion;
+                                var avgTimePerQuestionFormat = (avgTimePerQuestion < 1000) ? Math.ceil(avgTimePerQuestion / 1000) : Math.floor(avgTimePerQuestion / 1000);
+
+                                angular.extend(examSection, {
+                                    duration: exercise.duration,
+                                    startedTime: exercise.startedTime,
+                                    endedTime: exercise.endedTime || false,
+                                    correctQuestionsNumber: correctQuestionsNumber,
+                                    answersNumber: answersNumber,
+                                    isComplete: exercise.isComplete || false,
+                                    avgTimePerQuestion: avgTimePerQuestionFormat
+                                });
+                            }
+                        });
+
+                        vm.loading = false;
+
+                        if (testsRoadmapSrv.isTypeFull(exam.typeId) && exam.isComplete) {
+                            var subScoreAndCrossScoresProm = $q.when(false);
+                            if (!examResult.scores.subScores) {
+                                subScoreAndCrossScoresProm = testsRoadmapSrv.getFullExamSubAndCrossScores(sections, exerciseResults);
+                            }
+                            subScoreAndCrossScoresProm.then(function (scores) {
+                                vm.subScoreReady = true;
+                                vm.crossTestScoreReady = true;
+                                // save scores to examResult
+                                if (scores) {
+                                    if (!examResult.scores) {
+                                        examResult.scores = {};
+                                    }
+                                    examResult.scores.subScores = testsRoadmapSrv.groupBySubjectId(scores.subScores);
+                                    examResult.scores.crossTestScores = scores.crossTestScores;
+                                    examResult.$save();
+                                }
+                            });
+                        }
+
+                        return exam;
                     }
-                    if (examResults[0].sectionResults) {
-                        vm.currentExam = examCopy;
-                        vm.testsReady = true;
-                        testsRoadmapSrv.getExamsAndExerciseResults(examCopy, examResults).then(function (results) {
-                            _extendSection(results.exerciseResults, results.examSection, examCopy, examResults[0]);
+
+                    function _setCurrentExam(exam, prevExam) {
+                        var examCopy = angular.copy(exam);
+                        var examResults;
+                        var prevExamResults;
+                        var isAllSubjectLocked;
+                        // if diagnostic has not done yet, show the diagnostic overlay
+                        if (!diagnosticData) {
+                            vm.currentExam = examCopy;
+                            vm.testsReady = true;
+                            vm.overlayType = OVERLAY_TYPE_DIAGNOSTIC;
+                            return;
+                        }
+                        isAllSubjectLocked = testsRoadmapSrv.isAllSubjectLocked(examCopy);
+                        // if all subject are locked, show the upgrade overlay
+                        if (isAllSubjectLocked) {
+                            vm.currentExam = examCopy;
+                            vm.testsReady = true;
+                            vm.overlayType = OVERLAY_TYPE_UPGRADE;
+                            return;
+                        }
+                        // if there are exam results, set things in motion
+                        examResults = testsRoadmapSrv.getExamResult(vm.examsResults, examCopy.id);
+                        if (examResults && examResults[0]) {
+                            vm.scores = examResults[0].scores;
+                            if (examResults[0].isComplete) {
+                                examCopy.isComplete = true;
+                            }
+                            if (examResults[0].sectionResults) {
+                                vm.currentExam = examCopy;
+                                vm.testsReady = true;
+                                testsRoadmapSrv.getExamsAndExerciseResults(examCopy, examResults).then(function (results) {
+                                    _extendSection(results.exerciseResults, results.examSection, examCopy, examResults[0]);
+                                });
+                            }
+                        } else {
+                            vm.loading = false;
+                            vm.currentExam = examCopy;
+                            vm.testsReady = true;
+                        }
+                        // if prev exam is not complete show the complete section overlay
+                        prevExamResults = (prevExam) ? testsRoadmapSrv.getExamResult(vm.examsResults, prevExam.id) : false;
+                        testsRoadmapSrv.isSectionInPrevExamCompleted(prevExamResults).then(function (isSectionCompleteExist) {
+                            if (!isSectionCompleteExist) {
+                                vm.overlayType = OVERLAY_TYPE_COMPLETE;
+                            }
                         });
                     }
-                } else {
-                    vm.loading = false;
-                    vm.currentExam = examCopy;
-                    vm.testsReady = true;
-                }
-                // if prev exam is not complete show the complete section overlay
-                prevExamResults = (prevExam) ? testsRoadmapSrv.getExamResult(vm.examsResults, prevExam.id) : false;
-                testsRoadmapSrv.isSectionInPrevExamCompleted(prevExamResults).then(function (isSectionCompleteExist) {
-                    if (!isSectionCompleteExist) {
-                        vm.overlayType = OVERLAY_TYPE_COMPLETE;
+
+                    function _setInitialTestVars() {
+                        vm.subScoreReady = false;
+                        vm.crossTestScoreReady = false;
+                        vm.testsReady = false;
+                        vm.loading = true;
+                        vm.overlayType = OVERLAY_TYPE_NONE;
+                        vm.compositeScore = false;
                     }
-                });
-            }
 
-            function _setInitialTestVars() {
-                vm.subScoreReady = false;
-                vm.crossTestScoreReady = false;
-                vm.testsReady = false;
-                vm.loading = true;
-                vm.overlayType = OVERLAY_TYPE_NONE;
-                vm.compositeScore = false;
-            }
+                    vm.onExamClick = function (exam, prevExam) {
+                        $log.debug('TestsRoadMapController onExamClick active exam:', exam);
+                        $log.debug('TestsRoadMapController onExamClick prev exam:', prevExam);
+                        _setInitialTestVars();
+                        _setCurrentExam(exam, prevExam);
+                    };
 
-            vm.onExamClick = function (exam, prevExam) {
-                $log.debug('TestsRoadMapController onExamClick active exam:', exam);
-                $log.debug('TestsRoadMapController onExamClick prev exam:', prevExam);
-                _setInitialTestVars();
-                _setCurrentExam(exam, prevExam);
-            };
-
-            vm.onSubjectClick = function (subjectBox) {
-                if (subjectBox.isAvail) {
-                    $state.go('app.tests.section', {
-                        examId: vm.currentExam.id,
-                        sectionId: subjectBox.id
-                    });
-                } else {
-                    vm.showPurchaseDialog();
+                    vm.onSubjectClick = function (subjectBox) {
+                        if (subjectBox.isAvail) {
+                            $state.go('app.tests.section', {
+                                examId: vm.currentExam.id,
+                                sectionId: subjectBox.id
+                            });
+                        } else {
+                            vm.showPurchaseDialog();
+                        }
+                    };
                 }
-            };
-        }
-    );
+            );
+        });
 })(angular);
 
 (function (angular) {
@@ -1054,12 +1052,12 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "            <div class=\"flex-container\">\n" +
     "                <div class=\"subject-container\"\n" +
     "                     ng-repeat=\"subjectEnum in vm.subjectEnum\"\n" +
-    "                     ng-class=\"{'math': subjectEnum.enum === vm.subjectEnum.MATH.enum, 'essay': subjectEnum.enum === vm.subjectEnum.ESSAY.enum }\">\n" +
-    "                    <div class=\"subject-name\">{{subjectEnum.val}}</div>\n" +
-    "                    <div class=\"section-test-score\" translate=\".TESTS_SECTION_SCORE\" translate-values=\"{score: vm.scores.sectionsScore[subjectEnum.enum] || '-' }\"></div>\n" +
+    "                     ng-class=\"subjectEnum.name\">\n" +
+    "                    <div class=\"subject-name\">{{subjectEnum.name}}</div>\n" +
+    "                    <div class=\"section-test-score\" translate=\".TESTS_SECTION_SCORE\" translate-values=\"{score: vm.scores.sectionsScore[subjectEnum.id] || '-' }\"></div>\n" +
     "                    <div class=\"subject-box-container\">\n" +
     "                        <div class=\"subject-box flex-item base-border-radius\"\n" +
-    "                             ng-repeat=\"subjectBox in vm.currentExam.sections | filter : {'subjectId': subjectEnum.enum} track by subjectBox.id\">\n" +
+    "                             ng-repeat=\"subjectBox in vm.currentExam.sections | filter : {'subjectId': subjectEnum.id} track by subjectBox.id\">\n" +
     "                            <div class=\"subject-box-test-score\" translate=\".TESTS_SECTION_TEST_SCORE\"\n" +
     "                                 translate-values=\"{score: vm.scores.testsScore[subjectBox.categoryId] || '-' }\"></div>\n" +
     "                            <div class=\"subject-box-inner base-border-radius\" ng-click=\"vm.onSubjectClick(subjectBox)\"\n" +
@@ -1074,7 +1072,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                                    </div>\n" +
     "\n" +
     "                                    <div class=\"icon-wrapper-round\">\n" +
-    "                                        <div class=\"math-no-calc\" ng-if=\"!subjectBox.calculator && subjectBox.subjectId === vm.subjectEnum.MATH.enum\"></div>\n" +
+    "                                        <!--<div class=\"math-no-calc\" ng-if=\"!subjectBox.calculator && subjectBox.subjectId === vm.subjectEnum.MATH.enum\"></div>-->\n" +
     "                                        <svg-icon name=\"{{vm.getTestIconName(subjectBox.categoryId)}}\"\n" +
     "                                                  class=\"icon-wrapper\">\n" +
     "                                        </svg-icon>\n" +
