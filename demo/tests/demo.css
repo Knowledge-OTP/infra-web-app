@@ -1,0 +1,10 @@
+.app-tests-roadmap {
+    margin: 20px auto;
+}
+
+.open-tests-btn {
+    height: 35px;
+    width: 160px;
+    position: absolute;
+    left: 30px;
+}

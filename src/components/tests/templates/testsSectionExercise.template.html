@@ -1,0 +1,23 @@
+<znk-exercise-header
+    subject-id="vm.subjectId"
+    side-text="{{::vm.sideTextByExamType}}"
+    options="{ showQuit: true, showNumSlide: true, showDate: (vm.isSectionComplete) ? false : true }"
+    exercise-num="{{::vm.exerciseNum}}"
+    on-clicked-quit="vm.onClickedQuit()"
+    timer-data="baseZnkExerciseCtrl.timerData"
+    ng-model="baseZnkExerciseCtrl.currentIndex"
+    total-slide-num="{{::baseZnkExerciseCtrl.numberOfQuestions}}">
+</znk-exercise-header>
+<znk-progress-linear-exercise
+    ng-if="!vm.isSectionComplete"
+    start-time="baseZnkExerciseCtrl.startTime"
+    max-time="baseZnkExerciseCtrl.maxTime"
+    on-finish-time="baseZnkExerciseCtrl.onFinishTime()"
+    on-change-time="baseZnkExerciseCtrl.onChangeTime(passedTime)">
+</znk-progress-linear-exercise>
+<znk-exercise
+    questions="baseZnkExerciseCtrl.exercise.questions"
+    ng-model="baseZnkExerciseCtrl.resultsData.questionResults"
+    settings="baseZnkExerciseCtrl.settings"
+    actions="baseZnkExerciseCtrl.actions">
+</znk-exercise>

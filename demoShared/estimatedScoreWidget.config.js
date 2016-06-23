@@ -8,7 +8,6 @@
                 SubjectEnum.VERBAL.enum,
                 SubjectEnum.MATH.enum,
                 SubjectEnum.ESSAY.enum
-
             ];
         }
 
