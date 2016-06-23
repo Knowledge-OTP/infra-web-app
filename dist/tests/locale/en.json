@@ -1,0 +1,24 @@
+{
+    "TESTS_ROADMAP": {
+        "TESTS_TITLE": "Tests",
+        "TESTS_POPUP_UPGRADE_TEXT_1": "Practice with full SAT® exams to make sure you’re ready for test day.",
+        "TESTS_POPUP_UPGRADE_TEXT_2": "Get Zinkerz PRO to unlock all tests",
+        "TESTS_POPUP_COMPLETE_SECTION_TEXT": "Complete a section <br> of the previous test to unlock",
+        "TESTS_POPUP_DIAGNOSTIC_TEXT": "Complete the diagnostic test first",
+        "TESTS_QUESTIONS": "Questions: {{questionCount}}",
+        "TESTS_MIN": "min",
+        "TESTS_COMPLETED": "Completed",
+        "VERBAL": "Verbal",
+        "MATH": "Math",
+        "TESTS_SCORE": "Score: {{score}}",
+        "TESTS_CORRECT": "{{correct}}/{{questionsNum}} correct",
+        "TESTS_TOTAL_SCORE": "TOTAL SCORE:  {{score}}",
+        "TESTS_SECTION_SCORE": "SECTION SCORE:  {{score}}",
+        "TESTS_SECTION_TEST_SCORE": "Test Score:  {{score}}",
+        "AVG_TIME_FOR_COMPLETED_SUBJECT": "Avg. time: {{avgTimeForCompletedSubject}} sec",
+        "TESTS_SUB_SCORE": "SUBSCORE",
+        "TESTS_CROSS_TEST_SCORES": "CROSS-TEST SCORES",
+        "TESTS_SUB_SCORE_TOOLTIP": "The subscores represent your strengths and weaknesses in seven specific areas. There is no direct, arithmetic relationship between your subscores and your test scores—this means your subscores do not necessarily add up to your test score. Subscores range from 1 (low) to 18 (high).",
+        "TESTS_CROSS_TEST_SCORES_TOOLTIP": "The subscores represent your strengths and weaknesses in seven specific areas. There is no direct, arithmetic relationship between your subscores and your test scores—this means your subscores do not necessarily add up to your test score. Subscores range from 1 (low) to 18 (high)."
+    }
+}
