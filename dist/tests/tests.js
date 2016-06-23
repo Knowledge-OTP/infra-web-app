@@ -219,7 +219,7 @@
         'ngInject';
 
             $translatePartialLoader.addPart('tests');
-            
+
             var vm = this;
             var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
             var OVERLAY_TYPE_UPGRADE = 'upgrade';
@@ -254,23 +254,6 @@
                      }
                      return name;
                  };
-                // vm.getTestIconName = function (id) {
-                //     var name;
-                //     switch (id) {
-                //         case subjectsObj.math.id:
-                //             name = subjectsObj.math.subjectIconName;
-                //             break;
-                //         case subjectsObj.verbal.id:
-                //             name = subjectsObj.verbal.subjectIconName;
-                //             break;
-                //         case subjectsObj.essay.id:
-                //             name = subjectsObj.essay.subjectIconName;
-                //             break;
-                //         default:
-                //             $log.error('TestsRoadMapController getTestIconName: can\'t find any matching categoryId! categoryId: ' + id);
-                //     }
-                //     return name;
-                // };
             });
 
 
@@ -558,21 +541,22 @@
         function () {
             var _subjectsMapGetter;
 
-            this.setSubjectsMap = function(subjectsMapGetter) {
+            this.setSubjectsMap = function (subjectsMapGetter) {
                 _subjectsMapGetter = subjectsMapGetter;
             };
 
 
-            this.$get = function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum, TestScoreCategoryEnum) {
+            this.$get = function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum) {
                 'ngInject';
+
                 var testsRoadmapSrv = {};
 
                 testsRoadmapSrv.getSubjectsMap = function () {
-                  if(!_subjectsMapGetter) {
-                      var errMsg = 'TestsRoadmapSrv: subjectsMapGetter was not set.';
-                      $log.error(errMsg);
-                      return $q.reject(errMsg);
-                  }
+                    if (!_subjectsMapGetter) {
+                        var errMsg = 'TestsRoadmapSrv: subjectsMapGetter was not set.';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
                     return $q.when($injector.invoke(_subjectsMapGetter));
                 };
 
@@ -643,13 +627,24 @@
                     });
                 };
 
+                var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
+
                 testsRoadmapSrv.getFullExamSubAndCrossScores = function (sections, sectionsResults) {
-                    var essayExerciseId = this.getExerciseIdByCategoryId(sections, TestScoreCategoryEnum.ESSAY.enum);
-                    var newSections = this.filterArrByCategoryId(sections, TestScoreCategoryEnum.ESSAY.enum);
-                    var newSectionsResults = sectionsResults.filter(function (sectionResult) {
-                        return +sectionResult.exerciseId !== essayExerciseId;
+                    $q.when(subjectOrderProm).then(function (res) {
+                        var subjectsOrder = res;
+                        var essayEnum;
+                        for (var i = 0; i < subjectsOrder.subjects.length; i++) {
+                            if (subjectsOrder.subjects[i].id === 8) {
+                                essayEnum = subjectsOrder.subjects[i].id;
+                            }
+                        }
+                        var essayExerciseId = testsRoadmapSrv.getExerciseIdByCategoryId(sections, essayEnum);
+                        var newSections = testsRoadmapSrv.filterArrByCategoryId(sections, essayEnum);
+                        var newSectionsResults = sectionsResults.filter(function (sectionResult) {
+                            return +sectionResult.exerciseId !== essayExerciseId;
+                        });
+                        return ScoringService.getFullExamSubAndCrossScores(newSections, newSectionsResults);
                     });
-                    return ScoringService.getFullExamSubAndCrossScores(newSections, newSectionsResults);
                 };
 
                 testsRoadmapSrv.isTypeFull = function (typeId) {

@@ -6,7 +6,7 @@
         'ngInject';
 
             $translatePartialLoader.addPart('tests');
-            
+
             var vm = this;
             var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
             var OVERLAY_TYPE_UPGRADE = 'upgrade';

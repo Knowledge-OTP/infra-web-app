@@ -3,7 +3,6 @@
 
     angular.module('znk.infra-web-app.tests').provider('testsRoadmapSrv', [
         function () {
-            'ngInject';
             var _subjectsMapGetter;
 
             this.setSubjectsMap = function (subjectsMapGetter) {
@@ -94,22 +93,23 @@
 
                 var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
 
-                $q.when(subjectOrderProm).then(function (res) {
-                    var subjectsOrder = res;
-                    testsRoadmapSrv.getFullExamSubAndCrossScores = function (sections, sectionsResults) {
+                testsRoadmapSrv.getFullExamSubAndCrossScores = function (sections, sectionsResults) {
+                    $q.when(subjectOrderProm).then(function (res) {
+                        var subjectsOrder = res;
+                        var essayEnum;
                         for (var i = 0; i < subjectsOrder.subjects.length; i++) {
                             if (subjectsOrder.subjects[i].id === 8) {
-                                var essayEnum = subjectsOrder.subjects[i].id;
+                                essayEnum = subjectsOrder.subjects[i].id;
                             }
                         }
-                             var essayExerciseId = this.getExerciseIdByCategoryId(sections, essayEnum);
-                        var newSections = this.filterArrByCategoryId(sections, essayEnum);
+                        var essayExerciseId = testsRoadmapSrv.getExerciseIdByCategoryId(sections, essayEnum);
+                        var newSections = testsRoadmapSrv.filterArrByCategoryId(sections, essayEnum);
                         var newSectionsResults = sectionsResults.filter(function (sectionResult) {
                             return +sectionResult.exerciseId !== essayExerciseId;
                         });
                         return ScoringService.getFullExamSubAndCrossScores(newSections, newSectionsResults);
-                    };
-                });
+                    });
+                };
 
                 testsRoadmapSrv.isTypeFull = function (typeId) {
                     return ScoringService.isTypeFull(typeId);
