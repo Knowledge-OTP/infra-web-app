@@ -11,7 +11,9 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {
+        
         var _diagnosticExamIdGetter;
+        
         this.setDiagnosticExamIdGetter = function(diagnosticExamIdGetter){
             _diagnosticExamIdGetter = diagnosticExamIdGetter;
         };
