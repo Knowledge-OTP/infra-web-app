@@ -41,23 +41,6 @@
                      }
                      return name;
                  };
-                // vm.getTestIconName = function (id) {
-                //     var name;
-                //     switch (id) {
-                //         case subjectsObj.math.id:
-                //             name = subjectsObj.math.subjectIconName;
-                //             break;
-                //         case subjectsObj.verbal.id:
-                //             name = subjectsObj.verbal.subjectIconName;
-                //             break;
-                //         case subjectsObj.essay.id:
-                //             name = subjectsObj.essay.subjectIconName;
-                //             break;
-                //         default:
-                //             $log.error('TestsRoadMapController getTestIconName: can\'t find any matching categoryId! categoryId: ' + id);
-                //     }
-                //     return name;
-                // };
             });
 
 

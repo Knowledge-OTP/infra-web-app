@@ -16,6 +16,8 @@
         'znk.infra-web-app.workoutsRoadmap',
         'znk.infra-web-app.znkExerciseHeader',
         'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.znkHeader'
+        'znk.infra-web-app.znkHeader',
+        'znk.infra-web-app.tests',
+        'znk.infra-web-app.estimatedScoreWidget'
     ]);
 })(angular);

@@ -3,23 +3,25 @@
 
     angular.module('znk.infra-web-app.tests').provider('testsRoadmapSrv', [
         function () {
+            'ngInject';
             var _subjectsMapGetter;
 
-            this.setSubjectsMap = function(subjectsMapGetter) {
+            this.setSubjectsMap = function (subjectsMapGetter) {
                 _subjectsMapGetter = subjectsMapGetter;
             };
 
 
-            this.$get = function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum, TestScoreCategoryEnum) {
+            this.$get = function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum) {
                 'ngInject';
+
                 var testsRoadmapSrv = {};
 
                 testsRoadmapSrv.getSubjectsMap = function () {
-                  if(!_subjectsMapGetter) {
-                      var errMsg = 'TestsRoadmapSrv: subjectsMapGetter was not set.';
-                      $log.error(errMsg);
-                      return $q.reject(errMsg);
-                  }
+                    if (!_subjectsMapGetter) {
+                        var errMsg = 'TestsRoadmapSrv: subjectsMapGetter was not set.';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
                     return $q.when($injector.invoke(_subjectsMapGetter));
                 };
 
@@ -90,14 +92,24 @@
                     });
                 };
 
-                testsRoadmapSrv.getFullExamSubAndCrossScores = function (sections, sectionsResults) {
-                    var essayExerciseId = this.getExerciseIdByCategoryId(sections, TestScoreCategoryEnum.ESSAY.enum);
-                    var newSections = this.filterArrByCategoryId(sections, TestScoreCategoryEnum.ESSAY.enum);
-                    var newSectionsResults = sectionsResults.filter(function (sectionResult) {
-                        return +sectionResult.exerciseId !== essayExerciseId;
-                    });
-                    return ScoringService.getFullExamSubAndCrossScores(newSections, newSectionsResults);
-                };
+                var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
+
+                $q.when(subjectOrderProm).then(function (res) {
+                    var subjectsOrder = res;
+                    testsRoadmapSrv.getFullExamSubAndCrossScores = function (sections, sectionsResults) {
+                        for (var i = 0; i < subjectsOrder.subjects.length; i++) {
+                            if (subjectsOrder.subjects[i].id === 8) {
+                                var essayEnum = subjectsOrder.subjects[i].id;
+                            }
+                        }
+                             var essayExerciseId = this.getExerciseIdByCategoryId(sections, essayEnum);
+                        var newSections = this.filterArrByCategoryId(sections, essayEnum);
+                        var newSectionsResults = sectionsResults.filter(function (sectionResult) {
+                            return +sectionResult.exerciseId !== essayExerciseId;
+                        });
+                        return ScoringService.getFullExamSubAndCrossScores(newSections, newSectionsResults);
+                    };
+                });
 
                 testsRoadmapSrv.isTypeFull = function (typeId) {
                     return ScoringService.isTypeFull(typeId);
