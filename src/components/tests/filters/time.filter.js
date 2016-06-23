@@ -8,7 +8,7 @@
                 timeFormat = timeFormat || 'mm';
                 var newInput;
                 if (timeFormat === 'customMin') {
-                    newInput = (input / 1000 / 60) << 0;
+                    newInput = (input / 1000 / 60) << 0; //
                 } else {
                     newInput = $filter('date')(input, timeFormat);
                 }

@@ -21,7 +21,7 @@
                 controller: 'NavigationPaneController',
                 bindToController: true,
                 controllerAs: 'vm',
-                link: function (scope, element, attrs) {
+                link: function () {
                     $translatePartialLoader.addPart('tests');
                 }
             };

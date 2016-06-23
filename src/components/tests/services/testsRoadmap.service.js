@@ -2,8 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').provider('testsRoadmapSrv', [
-        function ($q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum, TestScoreCategoryEnum) {
-            'ngInject';
+        function () {
             var _subjectsMapGetter;
 
             this.setSubjectsMap = function(subjectsMapGetter) {
@@ -11,9 +10,8 @@
             };
 
 
-            this.$get = function ($log, $injector, $q) {
+            this.$get = function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum, TestScoreCategoryEnum) {
                 'ngInject';
-
                 var testsRoadmapSrv = {};
 
                 testsRoadmapSrv.getSubjectsMap = function () {

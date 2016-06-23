@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.tests').controller('TestsSectionIntroController',
         function (exerciseData, $state, ExamTypeEnum, SubjectEnum, $stateParams, znkAnalyticsSrv, TestScoreCategoryEnum, $filter, $translatePartialLoader) {
-        'ngInject';
+            'ngInject';
 
 
             $translatePartialLoader.addPart('tests');
@@ -32,7 +32,7 @@
             this.testScoreInstructions = translateFilter('TEST_SECTION_INTRO.INSTRUCTIONS_' + translateSuffix);
 
             this.onClickedQuit = function () {
-                $state.go('app.tests.roadmap', { exam: $stateParams.examId });
+                $state.go('app.tests.roadmap', {exam: $stateParams.examId});
             };
 
             this.goToExercise = () => {
@@ -46,12 +46,13 @@
                         testName: exerciseData.examData.name
                     }
                 });
-                znkAnalyticsSrv.timeTrack({ eventName: 'sectionCompleted' });
+                znkAnalyticsSrv.timeTrack({eventName: 'sectionCompleted'});
                 exerciseData.exerciseResult.seenIntro = true;
                 exerciseData.exerciseResult.$save();
                 $state.go('^.exercise');
-            };        var typeFull = (exerciseData.examData.typeId === ExamTypeEnum['FULL TEST'].enum);
-            var translateFilter = $filter('translate');
+            };
+            typeFull = (exerciseData.examData.typeId === ExamTypeEnum['FULL TEST'].enum);
+            translateFilter = $filter('translate');
 
             this.sideTextByExamType = typeFull ? '.FULL_TEST_TEXT' : '.MINI_TEST_TEXT';
             this.exerciseNum = exerciseData.examData.name.match(/\d+/)[0];
@@ -64,7 +65,6 @@
             this.categoryName = exerciseData.exercise.categoryId;
             this.TestScoreCategoryEnum = TestScoreCategoryEnum;
 
-            var translateSuffix;
             translateSuffix = TestScoreCategoryEnum.getValByEnum(this.categoryId);
             translateSuffix = angular.uppercase(translateSuffix);
             if (this.categoryId === TestScoreCategoryEnum.MATH.enum) {
@@ -74,7 +74,7 @@
             this.testScoreInstructions = translateFilter('TEST_SECTION_INTRO.INSTRUCTIONS_' + translateSuffix);
 
             this.onClickedQuit = function () {
-                $state.go('app.tests.roadmap', { exam: $stateParams.examId });
+                $state.go('app.tests.roadmap', {exam: $stateParams.examId});
             };
 
             this.goToExercise = () => {
@@ -88,7 +88,7 @@
                         testName: exerciseData.examData.name
                     }
                 });
-                znkAnalyticsSrv.timeTrack({ eventName: 'sectionCompleted' });
+                znkAnalyticsSrv.timeTrack({eventName: 'sectionCompleted'});
                 exerciseData.exerciseResult.seenIntro = true;
                 exerciseData.exerciseResult.$save();
                 $state.go('^.exercise');
