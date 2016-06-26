@@ -38,7 +38,7 @@ diagnostic-intro {
                     position: relative;
                     top: -48px;
                     background-size: contain;
-                    @include full-background-image-retina('./diagnosticIntro/assets/images/diagnostic-raccoon', 160px, 169px);
+                    @include full-background-image-retina('./assets/images/diagnostic-raccoon', 160px, 169px);
                 }
             }
         }
