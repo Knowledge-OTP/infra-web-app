@@ -91,7 +91,7 @@ angular.module('demo', [
     });
 })
 
-    .run(function ($rootScope, $translate, $state) {
+    .run(function ($rootScope, $translate, $state, $translatePartialLoader) {
 
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
