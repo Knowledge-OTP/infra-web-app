@@ -1,6 +1,6 @@
 @import './src/scss/imports/variables',
         './src/scss/imports/colors',
-        './bower_components/angular-material/angular-material.scss',
+        './bower_components/angular-material/angular-material',
         './bower_components/infra/dist/mixins/mixins',
         './src/scss/imports/angular-material-override',
         './scss/onboarding-bar-directive';
@@ -64,11 +64,11 @@
     }
 
     .smile-raccoon {
-        @include full-background-image-retina('./onBoarding/assets/images/smile-raccoon', 293px, 373px);
+        @include full-background-image-retina('./assets/images/smile-raccoon', 293px, 373px);
     }
 
     .thinking-raccoon {
-        @include full-background-image-retina('./onBoarding/assets/images/thinking-raccoon', 360px, 217px);
+        @include full-background-image-retina('./assets/images/thinking-raccoon', 360px, 217px);
     }
 
     position: relative;
