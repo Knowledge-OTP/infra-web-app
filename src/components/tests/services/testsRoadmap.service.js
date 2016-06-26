@@ -85,8 +85,8 @@
                         var exerciseResults = res[0];
                         var examSection = res[1];
                         return {
-                            exerciseResults,
-                            examSection
+                            exerciseResults: exerciseResults,
+                            examSection: examSection
                         };
                     });
                 };
