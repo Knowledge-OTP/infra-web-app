@@ -35,7 +35,7 @@ module.exports = function (config) {
             'bower_components/angular-aria/angular-aria.js',
             'bower_components/angular-messages/angular-messages.js',
             'bower_components/angular-material/angular-material.js',
-            'bower_components/ng-tags-input/ng-tags-input.min.js',
+            'bower_components/ng-tags-input/ng-tags-input.js',
             'bower_components/Chart.js/Chart.js',
             'bower_components/angular-chart.js/dist/angular-chart.js',
             'bower_components/angular-mocks/angular-mocks.js',
