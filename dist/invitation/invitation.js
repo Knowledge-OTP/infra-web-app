@@ -182,6 +182,7 @@
     angular.module('znk.infra-web-app.invitation').controller('inviteTeacherModalController',
 
         function ($mdDialog, InvitationService, PopUpSrv, $filter, $timeout) {
+            'ngInject';
             var self = this;
             self.translate = $filter('translate');
 
