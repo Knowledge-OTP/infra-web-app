@@ -98,22 +98,32 @@
                     },
                     onExit: function (exerciseData, WorkoutsDiagnosticFlow) {
                         'ngInject';
-                        var questionResults = exerciseData.resultsData.questionResults;
                         var currentSection = WorkoutsDiagnosticFlow.getCurrentSection();
-                            if (currentSection.done) {
-                                WorkoutsDiagnosticFlow.markSectionAsDoneToggle(false);
-                            } else {
-                                if (currentSection.currentQuestion &&
-                                    questionResults[questionResults.length - 1].questionId === currentSection.currentQuestion.id) {
-                                    if (questionResults[questionResults.length - 1].userAnswer) {
-                                        delete questionResults[questionResults.length - 1].userAnswer;
-                                    }
+
+                        if (currentSection.done) {
+                            WorkoutsDiagnosticFlow.markSectionAsDoneToggle(false);
+                            return;
+                        }
+
+                        var questionResults = exerciseData.resultsData.questionResults;
+                        var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
+                        var lastQuestion = questionResults[questionResults.length - 1];
+                        var isLastQuestion = function() {
+                            return lastQuestion.questionId === currentSection.currentQuestion.id;
+                        };
+
+                        if (currentSection.currentQuestion) {
+                            if(!diagnosticSettings.isFixed) {
+                                if(isLastQuestion()) {
+                                    delete lastQuestion.userAnswer;
                                 } else {
                                     questionResults.pop();
-                                    delete questionResults[questionResults.length - 1].userAnswer;
+                                    delete lastQuestion.userAnswer;
                                 }
-                                exerciseData.resultsData.$save();
                             }
+                        }
+
+                        exerciseData.resultsData.$save();
                     }
                 })
                 .state('app.diagnostic.preSummary', {
