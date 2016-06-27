@@ -2278,6 +2278,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     angular.module('znk.infra-web-app.invitation').controller('inviteTeacherModalController',
 
         function ($mdDialog, InvitationService, PopUpSrv, $filter, $timeout) {
+            'ngInject';
             var self = this;
             self.translate = $filter('translate');
 
@@ -4562,7 +4563,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
  * */
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect', ['userGoalsSelectionService', '$translate', 'UtilitySrv', '$timeout', '$q', '$translatePartialLoader',
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect',
         function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
             'ngInject';
 
@@ -4692,7 +4693,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
             };
 
             return directive;
-        }]);
+        });
 })(angular);
 
 (function (angular) {
