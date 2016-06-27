@@ -73,7 +73,7 @@
  * */
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect', ['userGoalsSelectionService', '$translate', 'UtilitySrv', '$timeout', '$q', '$translatePartialLoader',
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect',
         function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
             'ngInject';
 
@@ -203,7 +203,7 @@
             };
 
             return directive;
-        }]);
+        });
 })(angular);
 
 (function (angular) {

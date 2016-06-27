@@ -17,7 +17,6 @@
         'znk.infra-web-app.znkExerciseHeader',
         'znk.infra-web-app.infraWebAppZnkExercise',
         'znk.infra-web-app.znkHeader',
-        'znk.infra-web-app.tests',
-        'znk.infra-web-app.estimatedScoreWidget'
+        'znk.infra-web-app.angularMaterialOverride'
     ]);
 })(angular);
