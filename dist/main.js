@@ -1131,7 +1131,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    options=\"{ showQuit: true, showNumSlide: true }\"\n" +
     "    on-clicked-quit=\"vm.onClickedQuit()\"\n" +
     "    ng-model=\"vm.numSlide\"\n" +
-    "    total-slide-num=\"vm.questionsPerSubject\"></znk-exercise-header>\n" +
+    "    total-slide-num=\"{{vm.questionsPerSubject}}\"></znk-exercise-header>\n" +
     "<znk-exercise\n" +
     "    questions=\"vm.questions\"\n" +
     "    ng-model=\"vm.resultsData.questionResults\"\n" +
