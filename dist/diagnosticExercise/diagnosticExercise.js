@@ -22,7 +22,7 @@
         'znk.infra-web-app.diagnosticIntro',
         'znk.infra-web-app.znkExerciseHeader',
         'znk.infra.general'
-    ]).config(function(SvgIconSrvProvider) {
+    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
         'ngInject';
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
@@ -30,24 +30,25 @@
             'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
-    });
+    }]);
 })(angular);
 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise').config([
-        '$stateProvider',
-        function ($stateProvider) {
+    angular.module('znk.infra-web-app.diagnosticExercise').config(
+        ["$stateProvider", function ($stateProvider) {
+            'ngInject';
+
             $stateProvider
                 .state('app.diagnostic', {
                     url: '/diagnostic?skipIntro',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnostic.template.html',
                     resolve: {
-                        currentState: function currentState(WorkoutsDiagnosticFlow, $stateParams) {
-                            'ngInject';
+                        currentState: ["WorkoutsDiagnosticFlow", "$stateParams", function currentState(WorkoutsDiagnosticFlow, $stateParams) {
+                            'ngInject';// jshint ignore:line
                             return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro);
-                        }
+                        }]
                     },
                     controller: 'WorkoutsDiagnosticController',
                     controllerAs: 'vm'
@@ -62,8 +63,8 @@
                     controller: 'WorkoutsDiagnosticExerciseController',
                     controllerAs: 'vm',
                     resolve: {
-                        exerciseData: function exerciseData($q, ExamSrv, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
-                            'ngInject';
+                        exerciseData: ["$q", "ExamSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "WorkoutsDiagnosticFlow", function exerciseData($q, ExamSrv, ExerciseTypeEnum, ExerciseResultSrv, WorkoutsDiagnosticFlow) {
+                            'ngInject';// jshint ignore:line
                             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                             var examId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
                             var sectionId = WorkoutsDiagnosticFlow.getCurrentState().params.id;
@@ -79,7 +80,7 @@
 
                                     if (!sectionResult.questionResults.length) {
                                         sectionResult.questionResults = diagnosticSettings.isFixed ? section.questions.map(function (question) {
-                                            return { questionId: question.id };
+                                            return {questionId: question.id};
                                         }) : [];
                                         sectionResult.duration = 0;
                                     }
@@ -95,27 +96,27 @@
                                     };
                                 });
                             });
-                        }
+                        }]
                     },
-                    onExit: function (exerciseData, WorkoutsDiagnosticFlow) {
-                        'ngInject';
+                    onExit: ["exerciseData", "WorkoutsDiagnosticFlow", function (exerciseData, WorkoutsDiagnosticFlow) {
+                        'ngInject';// jshint ignore:line
                         var questionResults = exerciseData.resultsData.questionResults;
                         var currentSection = WorkoutsDiagnosticFlow.getCurrentSection();
-                            if (currentSection.done) {
-                                WorkoutsDiagnosticFlow.markSectionAsDoneToggle(false);
-                            } else {
-                                if (currentSection.currentQuestion &&
-                                    questionResults[questionResults.length - 1].questionId === currentSection.currentQuestion.id) {
-                                    if (questionResults[questionResults.length - 1].userAnswer) {
-                                        delete questionResults[questionResults.length - 1].userAnswer;
-                                    }
-                                } else {
-                                    questionResults.pop();
+                        if (currentSection.done) {
+                            WorkoutsDiagnosticFlow.markSectionAsDoneToggle(false);
+                        } else {
+                            if (currentSection.currentQuestion &&
+                                questionResults[questionResults.length - 1].questionId === currentSection.currentQuestion.id) {
+                                if (questionResults[questionResults.length - 1].userAnswer) {
                                     delete questionResults[questionResults.length - 1].userAnswer;
                                 }
-                                exerciseData.resultsData.$save();
+                            } else {
+                                questionResults.pop();
+                                delete questionResults[questionResults.length - 1].userAnswer;
                             }
-                    }
+                            exerciseData.resultsData.$save();
+                        }
+                    }]
                 })
                 .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
@@ -132,44 +133,44 @@
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',
                     resolve: {
-                        diagnosticSummaryData: function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log) {
-                                'ngInject';
-                                var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
-                                    var estimatedScores = {};
-                                    angular.forEach(latestScores, function (estimatedScore, subjectId) {
-                                        estimatedScores[subjectId] = Math.round(estimatedScore.score) || 0;
-                                    });
-                                    return estimatedScores;
+                        diagnosticSummaryData: ["EstimatedScoreSrv", "UserGoalsService", "$q", "WorkoutsDiagnosticFlow", "ScoringService", "$log", function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log) {
+                            'ngInject';// jshint ignore:line
+                            var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
+                                var estimatedScores = {};
+                                angular.forEach(latestScores, function (estimatedScore, subjectId) {
+                                    estimatedScores[subjectId] = Math.round(estimatedScore.score) || 0;
                                 });
-                                var userGoalsProm = UserGoalsService.getGoals();
-                                var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
-                                var diagnosticResult = WorkoutsDiagnosticFlow.getDiagnostic();
-                                var scoringLimits = ScoringService.getScoringLimits();
-                                return $q.all([userGoalsProm, userStatsProm, diagnosticResult]).then(function (results) {
-                                    var diagnosticScoresObjToArr = [];
-                                    var userStats = results[1];
-                                    angular.forEach(diagnosticSettings.summary.subjects, function (subject) {
-                                        var curStat = userStats[subject.id];
-                                        if (curStat) {
-                                            diagnosticScoresObjToArr.push(curStat);
-                                        }
-                                    });
-                                    var getExamScoreFnProm = ScoringService.getExamScoreFn(diagnosticScoresObjToArr);
-                                    return getExamScoreFnProm.then(function (examScoreFn) {
-                                        var totalScore = examScoreFn(diagnosticScoresObjToArr);
-                                        if (!totalScore) {
-                                            $log.error('diagnosticSummaryData resolve of route diagnostic.summary: totalScore is empty! result:', totalScore);
-                                        }
-                                        return {
-                                            userGoals: results[0],
-                                            userStats: userStats,
-                                            diagnosticResult: results[2],
-                                            compositeScore: totalScore,
-                                            scoringLimits: scoringLimits
-                                        };
-                                    });
+                                return estimatedScores;
+                            });
+                            var userGoalsProm = UserGoalsService.getGoals();
+                            var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
+                            var diagnosticResult = WorkoutsDiagnosticFlow.getDiagnostic();
+                            var scoringLimits = ScoringService.getScoringLimits();
+                            return $q.all([userGoalsProm, userStatsProm, diagnosticResult]).then(function (results) {
+                                var diagnosticScoresObjToArr = [];
+                                var userStats = results[1];
+                                angular.forEach(diagnosticSettings.summary.subjects, function (subject) {
+                                    var curStat = userStats[subject.id];
+                                    if (curStat) {
+                                        diagnosticScoresObjToArr.push(curStat);
+                                    }
                                 });
-                            }
+                                var getExamScoreFnProm = ScoringService.getExamScoreFn(diagnosticScoresObjToArr);
+                                return getExamScoreFnProm.then(function (examScoreFn) {
+                                    var totalScore = examScoreFn(diagnosticScoresObjToArr);
+                                    if (!totalScore) {
+                                        $log.error('diagnosticSummaryData resolve of route diagnostic.summary: totalScore is empty! result:', totalScore);
+                                    }
+                                    return {
+                                        userGoals: results[0],
+                                        userStats: userStats,
+                                        diagnosticResult: results[2],
+                                        compositeScore: totalScore,
+                                        scoringLimits: scoringLimits
+                                    };
+                                });
+                            });
+                        }]
                     }
                 });
         }]);
@@ -178,7 +179,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticController', function($state, currentState, $translatePartialLoader) {
+    angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticController', ["$state", "currentState", "$translatePartialLoader", function($state, currentState, $translatePartialLoader) {
         'ngInject';
 
         var EXAM_STATE = 'app.diagnostic';
@@ -186,7 +187,7 @@
         $translatePartialLoader.addPart('diagnosticExercise');
 
         $state.go(EXAM_STATE + currentState.state, currentState.params);
-    });
+    }]);
 })(angular);
 
 
@@ -196,7 +197,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv) {
             'ngInject';
@@ -474,7 +475,7 @@
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
                 $state.go('app.workoutsRoadmap');
             };
-        });
+        }]);
 })(angular);
 
 
@@ -482,7 +483,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv) {
+        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv) {
         'ngInject';
             var vm = this;
 
@@ -510,14 +511,14 @@
                 znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
                 $state.go('app.diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.id });
             };
-    });
+    }]);
 })(angular);
 
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow) {
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow) {
         'ngInject';
 
             var self = this;
@@ -605,7 +606,7 @@
             });
 
             this.doughnutArray = dataArray;
-    });
+    }]);
 })(angular);
 
 (function (angular) {

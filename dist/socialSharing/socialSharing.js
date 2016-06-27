@@ -11,7 +11,7 @@
     
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
-            function (StorageSrv, InfraConfigSrv, $q) {
+            ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
                 'ngInject';
 
                 var SOCIAL_SHARING_PATH = StorageSrv.variables.appUserSpacePath + '/socialSharing';
@@ -36,7 +36,7 @@
                         return studentStorage.set(SOCIAL_SHARING_PATH, socialSharing);
                     });
                 };
-            }
+            }]
         );
 })(angular);
 

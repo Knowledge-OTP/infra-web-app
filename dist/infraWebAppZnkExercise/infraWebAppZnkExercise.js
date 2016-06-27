@@ -16,11 +16,11 @@
     'use strict';
 
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').config(
-        function ($provide) {
+        ["$provide", function ($provide) {
             'ngInject';
 
             $provide.decorator('questionBuilderDirective',
-                function ($delegate, ZnkExerciseUtilitySrv) {
+                ["$delegate", "ZnkExerciseUtilitySrv", function ($delegate, ZnkExerciseUtilitySrv) {
                     'ngInject';// jshint ignore:line
 
                     var directive = $delegate[0];
@@ -36,9 +36,9 @@
                     };
 
                     return $delegate;
-                }
+                }]
             );
-        }
+        }]
     );
 })(angular);
 
@@ -47,7 +47,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.infraWebAppZnkExercise')
-        .config(function (SvgIconSrvProvider) {
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
 
             var svgMap = {
@@ -55,9 +55,9 @@
                 'answer-explanation-close': 'components/infraWebAppZnkExercise/svg/close.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        })
+        }])
         .directive('answerExplanation',
-            function ($translatePartialLoader, ZnkExerciseViewModeEnum, $compile, $filter, $sce, ENV, znkAnalyticsSrv) {
+            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "$compile", "$filter", "$sce", "ENV", "znkAnalyticsSrv", function ($translatePartialLoader, ZnkExerciseViewModeEnum, $compile, $filter, $sce, ENV, znkAnalyticsSrv) {
                 'ngInject';
 
                 var directive = {
@@ -136,7 +136,7 @@
                     }
                 };
                 return directive;
-            }
+            }]
         );
 })(angular);
 
@@ -148,7 +148,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('answerExplanationContent',
-        function (ENV, $sce, znkAnalyticsSrv) {
+        ["ENV", "$sce", "znkAnalyticsSrv", function (ENV, $sce, znkAnalyticsSrv) {
             'ngInject';
 
             return {
@@ -199,7 +199,7 @@
                     };
                 }
             };
-        }
+        }]
     );
 })(angular);
 
