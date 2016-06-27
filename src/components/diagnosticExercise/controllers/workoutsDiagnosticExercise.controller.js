@@ -215,6 +215,7 @@
                 }
             } else {
                 self.questions = questions;
+                initSlideIndex = numQuestionCounter;
             }
 
             self.resultsData = resultsData;

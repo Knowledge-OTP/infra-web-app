@@ -548,6 +548,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 }
             } else {
                 self.questions = questions;
+                initSlideIndex = numQuestionCounter;
             }
 
             self.resultsData = resultsData;
