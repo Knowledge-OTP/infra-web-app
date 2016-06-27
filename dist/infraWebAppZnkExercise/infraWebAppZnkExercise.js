@@ -172,7 +172,7 @@
                         questionBuilderCtrl.question.writtenSln.replace(/font\-family: \'Lato Regular\';/g, 'font-family: Lato;font-weight: 400;');
                     scope.d.writtenSlnContent = writtenSlnContent;
 
-                    scope.d.videoSrc = $sce.trustAsResourceUrl(ENV.videosEndPoint + '/videos/' + 'questions' + '/' + question.id + '.mp4');
+                    scope.d.videoSrc = $sce.trustAsResourceUrl(ENV.mediaEndPoint + ENV.firebaseAppScopeName + '/videos/questions' + '/' + question.id + '.mp4');
 
                     scope.d.quid = question.quid || question.id;
 
