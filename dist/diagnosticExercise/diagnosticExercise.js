@@ -23,6 +23,7 @@
         'znk.infra-web-app.znkExerciseHeader',
         'znk.infra.general'
     ]).config(function(SvgIconSrvProvider) {
+        'ngInject';
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
             'diagnostic-check-mark': 'components/diagnosticExercise/svg/check-mark-icon.svg',
@@ -131,8 +132,7 @@
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',
                     resolve: {
-                        diagnosticSummaryData: ['EstimatedScoreSrv', 'UserGoalsService', '$q', 'WorkoutsDiagnosticFlow', 'ScoringService', '$log',
-                            function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log) {
+                        diagnosticSummaryData: function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log) {
                                 'ngInject';
                                 var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
                                     var estimatedScores = {};
@@ -169,7 +169,7 @@
                                         };
                                     });
                                 });
-                            }]
+                            }
                     }
                 });
         }]);

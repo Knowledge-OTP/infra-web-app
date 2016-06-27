@@ -23,6 +23,7 @@
         'znk.infra-web-app.znkExerciseHeader',
         'znk.infra.general'
     ]).config(function(SvgIconSrvProvider) {
+        'ngInject';
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
             'diagnostic-check-mark': 'components/diagnosticExercise/svg/check-mark-icon.svg',
