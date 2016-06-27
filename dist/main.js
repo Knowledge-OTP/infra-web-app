@@ -20,6 +20,11 @@
     ]);
 })(angular);
 
+
+angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function($templateCache) {
+
+}]);
+
 (function (angular) {
     'use strict';
 
