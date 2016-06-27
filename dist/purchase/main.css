@@ -9,13 +9,11 @@ purchase-btn .flex-container {
   padding: 0;
   margin: 0 -15px;
   list-style: none;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-flex-flow: row wrap;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start; }
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
 
 purchase-btn .flex-item {
   padding: 0;
@@ -95,15 +93,12 @@ purchase-btn .upgraded .text {
       position: relative;
       bottom: 17.5px;
       background-color: #0a9bad;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
         width: 45px;
         height: 45px; }
@@ -195,15 +190,12 @@ purchase-btn .upgraded .text {
       color: #757a83;
       font-family: Lato;
       font-weight: 400;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       text-align: center; }
       .purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;

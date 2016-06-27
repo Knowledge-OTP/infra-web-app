@@ -196,16 +196,14 @@ md-tooltip.tooltip-for-estimated-score-widget {
     white-space: normal; }
     md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show {
       opacity: 1;
-      -webkit-transform: none;
-              transform: none;
+      transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove {
       transition: none; }
       md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove.md-show-remove-active {
-        -webkit-transform: none;
-                transform: none;
+        transform: none;
         opacity: 0; }
     md-tooltip.tooltip-for-estimated-score-widget .md-content .top-text {
       margin-top: 22px;
@@ -250,12 +248,10 @@ md-dialog.setting-edit-goals {
     width: 100%;
     height: 40px; }
     md-dialog.setting-edit-goals .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;

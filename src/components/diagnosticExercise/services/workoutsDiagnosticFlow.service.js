@@ -159,7 +159,7 @@
                         if (angular.isUndefined(currentQuestionResults) && !skipIntroBool) {
                             currentState.state = '.intro';
                             currentState.subjectId = currentSection.subjectId;
-                            currentState.params = { id: currentSection.id, subjectId: currentSection.subjectId, order: currentSection.order };
+                            currentState.params = { id: exam.id, sectionId: currentSection.id, subjectId: currentSection.subjectId, order: currentSection.order };
                         } else {
                             currentState.state = '.exercise';
                             currentState.subjectId = currentSection.subjectId;

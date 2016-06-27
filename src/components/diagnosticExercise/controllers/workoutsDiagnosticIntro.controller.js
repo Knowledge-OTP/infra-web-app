@@ -22,13 +22,13 @@
                 znkAnalyticsSrv.eventTrack({
                     eventName: 'diagnosticSectionStarted',
                     props: {
-                        sectionId: vm.params.id,
+                        sectionId: vm.params.sectionId,
                         order: vm.params.order,
                         subjectId: vm.params.subjectId
                     }
                 });
                 znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.id });
+                $state.go('app.diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.sectionId });
             };
     });
 })(angular);

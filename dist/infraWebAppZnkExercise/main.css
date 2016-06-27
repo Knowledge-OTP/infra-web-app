@@ -12,17 +12,14 @@
   width: 1060px;
   height: calc(100vh - 95px);
   background-color: white;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   position: relative; }
   .exercise-container znk-exercise {
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1; }
+    -ms-flex-positive: 1;
+        flex-grow: 1; }
     .exercise-container znk-exercise znk-exercise-btn-section .btn-container svg-icon {
       display: block; }
     .exercise-container znk-exercise .swiper-container {
@@ -75,14 +72,12 @@ answer-explanation {
         margin: 0 auto;
         border-radius: 0px 0px 10px 10px; }
         answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .right-corner {
-          -webkit-transform: rotate(25deg);
-                  transform: rotate(25deg);
+          transform: rotate(25deg);
           border-radius: 50px 0px 50px 1px;
           right: -14px;
           box-shadow: -7px -2px #0a9bad; }
         answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .left-corner {
-          -webkit-transform: rotate(-25deg);
-                  transform: rotate(-25deg);
+          transform: rotate(-25deg);
           border-radius: 0 50px 1px 50px;
           left: -14px;
           box-shadow: 7px -2px #0a9bad; }
@@ -128,7 +123,6 @@ answer-explanation-content {
   answer-explanation-content svg-icon[name="close-popup"] svg line {
     stroke: #161616; }
   answer-explanation-content .flex-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     padding-top: 25px; }
