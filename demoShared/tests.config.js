@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('demo').config(function (testsRoadmapSrvProvider) {
+    angular.module('demo').config(function (testsSrvProvider) {
 
         function subjectsMapGetter(SubjectEnum) {
             return {
@@ -14,7 +14,7 @@
                     {
                         id: SubjectEnum.MATH.enum,
                         name: SubjectEnum.MATH.val,
-                        subjectIconName: SubjectEnum.MATH.val + '-icon'   
+                        subjectIconName: SubjectEnum.MATH.val + '-icon'
                     },
                     {
                         id: SubjectEnum.ESSAY.enum,
@@ -25,6 +25,6 @@
             };
         }
 
-        testsRoadmapSrvProvider.setSubjectsMap(subjectsMapGetter);
+        testsSrvProvider.setSubjectsMap(subjectsMapGetter);
     });
 })(angular);

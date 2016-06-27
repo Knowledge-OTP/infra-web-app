@@ -5,7 +5,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.tests').directive('navigationPane', 
+    angular.module('znk.infra-web-app.tests').directive('navigationPane',
         function ($translatePartialLoader) {
             'ngInject';
             return {
@@ -21,7 +21,7 @@
                 controller: 'NavigationPaneController',
                 bindToController: true,
                 controllerAs: 'vm',
-                link: function () {
+                link: function (element, scope) {
                     $translatePartialLoader.addPart('tests');
                 }
             };

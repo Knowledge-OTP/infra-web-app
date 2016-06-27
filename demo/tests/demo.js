@@ -15,12 +15,9 @@ angular.module('demo', [
         });
 
 
-        var svgMap = {
-        };
+        var svgMap = {};
         SvgIconSrvProvider.registerSvgSources(svgMap);
     })
-
-
     .config(function (EstimatedScoreSrvProvider, EstimatedScoreEventsHandlerSrvProvider, exerciseTypeConst) {
         var shouldEventBeProcessed;
         var subjectsRawScoreEdges = {
@@ -66,39 +63,41 @@ angular.module('demo', [
             };
         });
     })
+    .config(function (ScoringServiceProvider) {
+        ScoringServiceProvider.setScoringLimits({
+            exam: {
+                min: 400,
+                max: 1600
+            },
+            subjects: {
+                min: 200,
+                max: 800
+            }
+        });
 
-
-.config(function (ScoringServiceProvider) {
-    ScoringServiceProvider.setScoringLimits({
-        exam: {
-            min: 400,
-            max: 1600
-        },
-        subjects: {
-            min: 200,
-            max: 800
-        }
-    });
-
-    ScoringServiceProvider.setExamScoreFnGetter(function () {
-        return function (scoresArr) {
-            var totalScores = 0;
-            angular.forEach(scoresArr, function (score) {
-                totalScores += score;
-            });
-            return totalScores;
-        }
-    });
-})
-
+        ScoringServiceProvider.setExamScoreFnGetter(function () {
+            return function (scoresArr) {
+                var totalScores = 0;
+                angular.forEach(scoresArr, function (score) {
+                    totalScores += score;
+                });
+                return totalScores;
+            }
+        });
+    })
     .run(function ($rootScope, $translate, $state, $translatePartialLoader) {
 
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         });
 
-        $rootScope.openTests = function() {
-            $state.go('app.tests.roadmap', {exam: '17'})
+        $rootScope.openTests = function () {
+            $state.go('app.tests.roadmap.testCards', {exam: '17'})
         };
         // $translatePartialLoader.addPart('demo');
+    })
+    .run(function ($rootScope) {
+        $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+            console.error(error.message);
+        });
     });

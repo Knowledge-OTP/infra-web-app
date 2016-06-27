@@ -1,0 +1,101 @@
+Hello
+
+
+
+
+<!--<div class="exam-composite-score" translate=".TESTS_TOTAL_SCORE"-->
+     <!--translate-values="{score: vm.scores.totalScore || '-'}"></div>-->
+<!--<div class="flex-container">-->
+    <!--<div class="subject-container"-->
+         <!--ng-repeat="subjectEnum in vm.subjectEnum"-->
+         <!--ng-class="subjectEnum.name">-->
+        <!--<div class="subject-name" translate="SUBJECTS.{{subjectEnum.id}}"></div>-->
+        <!--<div class="section-test-score" translate=".TESTS_SECTION_SCORE"-->
+             <!--translate-values="{score: vm.scores.sectionsScore[subjectEnum.id] || '-' }"></div>-->
+        <!--<div class="subject-box-container">-->
+            <!--<div class="subject-box flex-item base-border-radius"-->
+                 <!--ng-repeat="subjectBox in vm.currentExam.sections | filter : {'subjectId': subjectEnum.id} track by subjectBox.id">-->
+                <!--<div class="subject-box-test-score" translate=".TESTS_SECTION_TEST_SCORE"-->
+                     <!--translate-values="{score: vm.scores.testsScore[subjectBox.categoryId] || '-' }"></div>-->
+                <!--<div class="subject-box-inner base-border-radius" ng-click="vm.onSubjectClick(subjectBox)"-->
+                     <!--ng-class="{ 'loading': vm.loading, 'done': subjectBox.isComplete, 'lock': !subjectBox.isAvail,-->
+<!--'progress': !subjectBox.isComplete && subjectBox.startedTime }">-->
+                    <!--<header subject-id-to-class-drv="subjectBox.subjectId" class-suffix="-bg">-->
+
+                        <!--<div class="pattern"-->
+                             <!--subject-id-to-attr-drv="subjectBox.subjectId"-->
+                             <!--context-attr="class"-->
+                             <!--prefix="subject-background">-->
+                        <!--</div>-->
+
+                        <!--<div class="icon-wrapper-round">-->
+                            <!--<div class="math-no-calc"-->
+                                 <!--ng-if="!subjectBox.calculator && subjectBox.subjectId === vm.subjectEnum.MATH.enum"></div>-->
+                            <!--<svg-icon name="{{vm.getTestIconName(subjectBox.categoryId)}}"-->
+                                      <!--class="icon-wrapper">-->
+                            <!--</svg-icon>-->
+                        <!--</div>-->
+
+                        <!--<svg-icon name="tests-subject-locked-icon"></svg-icon>-->
+                    <!--</header>-->
+
+                    <!--<content>-->
+
+                        <!--<div class="question-count" translate=".TESTS_QUESTIONS"-->
+                             <!--translate-values="{questionCount: subjectBox.questionCount}"></div>-->
+                        <!--<div class="section-correct" translate=".TESTS_CORRECT"-->
+                             <!--translate-values="{correct: subjectBox.correctQuestionsNumber, questionsNum: subjectBox.questionCount }">-->
+                        <!--</div>-->
+
+
+                        <!--<div class="progress-bar-wrap">-->
+                            <!--<div class="progress-bar base-border-radius">-->
+                                <!--<div class="progress-bar-inner"-->
+                                     <!--role="progressbar"-->
+                                     <!--ng-style="{'width': (subjectBox.answersNumber / subjectBox.questionCount) * 100 + '%'}"></div>-->
+                                <!--<span class="answered-count">{{subjectBox.answersNumber}}</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<div class="completed-box">-->
+                            <!--<svg-icon class="tests-check-mark-icon" name="tests-check-mark-icon"></svg-icon>-->
+                            <!--<span class="completed-text" translate=".TESTS_COMPLETED"></span>-->
+                        <!--</div>-->
+
+                    <!--</content>-->
+
+                    <!--<footer>-->
+                        <!--<div class="section-time">-->
+                            <!--<svg-icon class="icon-wrapper" name="clock-icon"></svg-icon>-->
+                            <!--{{subjectBox.time - subjectBox.duration | timeFilter:'customMin'}}-->
+                            <!--<span translate=".TESTS_MIN"></span>-->
+                        <!--</div>-->
+                        <!--<div ng-if="subjectBox.avgTimePerQuestion" class="section-avg-time"-->
+                             <!--translate=".AVG_TIME_FOR_COMPLETED_SUBJECT"-->
+                             <!--translate-values="{avgTimeForCompletedSubject: subjectBox.avgTimePerQuestion}"></div>-->
+                    <!--</footer>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--<div class="tests-inner-popup base-border-radius" ng-if="vm.overlayType" ng-switch="vm.overlayType">-->
+    <!--<div class="tests-inner-popup-blurred"></div>-->
+    <!--<div class="tests-inner-popup-upgrade" ng-switch-when="upgrade">-->
+        <!--<svg-icon name="tests-locked-icon" class="tests-locked-icon"></svg-icon>-->
+        <!--<div class="tests-upgrade-text-up" translate=".TESTS_POPUP_UPGRADE_TEXT_1"></div>-->
+        <!--<div class="tests-upgrade-text-down" translate=".TESTS_POPUP_UPGRADE_TEXT_2"></div>-->
+        <!--<div class="btn-wrap">-->
+            <!--<md-button class="md primary" translate="UPGRADE" aria-label="UPGRADE" ng-click="vm.showPurchaseDialog()">-->
+                <!--<svg-icon name="dropdown-arrow-icon"></svg-icon>-->
+            <!--</md-button>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="tests-inner-popup-complete-section" ng-switch-when="completeSection">-->
+        <!--<span translate=".TESTS_POPUP_COMPLETE_SECTION_TEXT"></span>-->
+    <!--</div>-->
+    <!--<div class="tests-inner-popup-complete-section" ng-switch-when="diagnostic">-->
+        <!--<span translate=".TESTS_POPUP_DIAGNOSTIC_TEXT"></span>-->
+    <!--</div>-->
+<!--</div>-->

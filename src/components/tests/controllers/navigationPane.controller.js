@@ -7,7 +7,7 @@
             var self = this;
 
             $translatePartialLoader.addPart('tests');
-            
+
             self.activeId = void(0);
 
             function _filterExams() {

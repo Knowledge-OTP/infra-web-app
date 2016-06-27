@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.tests').provider('testsRoadmapSrv', [
+    angular.module('znk.infra-web-app.tests').provider('testsSrv', [
         function () {
             var _subjectsMapGetter;
 
@@ -9,28 +9,27 @@
                 _subjectsMapGetter = subjectsMapGetter;
             };
 
-
             this.$get = function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum) {
                 'ngInject';
 
-                var testsRoadmapSrv = {};
+                var testsSrv = {};
 
-                testsRoadmapSrv.getSubjectsMap = function () {
+                testsSrv.getSubjectsMap = function () {
                     if (!_subjectsMapGetter) {
-                        var errMsg = 'TestsRoadmapSrv: subjectsMapGetter was not set.';
+                        var errMsg = 'testsSrv: subjectsMapGetter was not set.';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
                     }
                     return $q.when($injector.invoke(_subjectsMapGetter));
                 };
 
-                testsRoadmapSrv.getExamResult = function (examsResults, examId) {
+                testsSrv.getExamResult = function (examsResults, examId) {
                     return examsResults.filter(function (examsResult) {
                         return examsResult && +examsResult.examId === +examId;
                     });
                 };
 
-                testsRoadmapSrv.getExamSection = function (exam, sectionId) {
+                testsSrv.getExamSection = function (exam, sectionId) {
                     var examSection;
                     for (var i = 0, ii = exam.sections.length; i < ii; i++) {
                         if (exam.sections[i].id === sectionId) {
@@ -41,7 +40,7 @@
                     return examSection;
                 };
 
-                testsRoadmapSrv.isAllSubjectLocked = function (exam) {
+                testsSrv.isAllSubjectLocked = function (exam) {
                     var isAvail = true;
                     for (var i = 0, ii = exam.sections.length; i < ii; i++) {
                         if (exam.sections[i].isAvail) {
@@ -52,13 +51,13 @@
                     return isAvail;
                 };
 
-                testsRoadmapSrv.filterArrByCategoryId = function (arr, id) {
+                testsSrv.filterArrByCategoryId = function (arr, id) {
                     return arr.filter(function (result) {
                         return +result.categoryId !== id;
                     });
                 };
 
-                testsRoadmapSrv.getExerciseIdByCategoryId = function (arr, id) {
+                testsSrv.getExerciseIdByCategoryId = function (arr, id) {
                     var exerciseId;
                     for (var i = 0, ii = arr.length; i < ii; i++) {
                         if (arr[i].categoryId === id) {
@@ -69,7 +68,7 @@
                     return exerciseId;
                 };
 
-                testsRoadmapSrv.getExamsAndExerciseResults = function (examCopy, examResults) {
+                testsSrv.getExamsAndExerciseResults = function (examCopy, examResults) {
                     var examResult = examResults[0];
                     var sectionResults = Object.keys(examResult.sectionResults);
                     var exerciseResultsProms = [];
@@ -77,7 +76,7 @@
                     angular.forEach(sectionResults, function (sectionId) {
                         sectionId = +sectionId;
                         exerciseResultsProms.push(ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, sectionId, examCopy.id, null, true));
-                        examSectionProms.push(testsRoadmapSrv.getExamSection(examCopy, sectionId));
+                        examSectionProms.push(testsSrv.getExamSection(examCopy, sectionId));
                     });
                     var getAllExerciseResultsProm = $q.all(exerciseResultsProms);
                     var getAllExamSectionsProm = $q.all(examSectionProms);
@@ -91,9 +90,9 @@
                     });
                 };
 
-                var subjectOrderProm = testsRoadmapSrv.getSubjectsMap();
+                var subjectOrderProm = testsSrv.getSubjectsMap();
 
-                testsRoadmapSrv.getFullExamSubAndCrossScores = function (sections, sectionsResults) {
+                testsSrv.getFullExamSubAndCrossScores = function (sections, sectionsResults) {
                     $q.when(subjectOrderProm).then(function (res) {
                         var subjectsOrder = res;
                         var essayEnum;
@@ -102,8 +101,8 @@
                                 essayEnum = subjectsOrder.subjects[i].id;
                             }
                         }
-                        var essayExerciseId = testsRoadmapSrv.getExerciseIdByCategoryId(sections, essayEnum);
-                        var newSections = testsRoadmapSrv.filterArrByCategoryId(sections, essayEnum);
+                        var essayExerciseId = testsSrv.getExerciseIdByCategoryId(sections, essayEnum);
+                        var newSections = testsSrv.filterArrByCategoryId(sections, essayEnum);
                         var newSectionsResults = sectionsResults.filter(function (sectionResult) {
                             return +sectionResult.exerciseId !== essayExerciseId;
                         });
@@ -111,11 +110,11 @@
                     });
                 };
 
-                testsRoadmapSrv.isTypeFull = function (typeId) {
+                testsSrv.isTypeFull = function (typeId) {
                     return ScoringService.isTypeFull(typeId);
                 };
 
-                testsRoadmapSrv.groupBySubjectId = function (obj) {
+                testsSrv.groupBySubjectId = function (obj) {
                     var newObj = {};
                     angular.forEach(obj, function (value) {
                         if (!newObj[value.subjectId]) {
@@ -126,7 +125,7 @@
                     return newObj;
                 };
 
-                testsRoadmapSrv.isSectionInPrevExamCompleted = function (prevExam) {
+                testsSrv.isSectionInPrevExamCompleted = function (prevExam) {
                     var exerciseResultsProms = [];
                     var sectionResults;
                     if (angular.isArray(prevExam) && prevExam.length === 0) {
@@ -150,7 +149,7 @@
                         return isSectionCompleteExist;
                     });
                 };
-                return testsRoadmapSrv;
+                return testsSrv;
             };
         }
     ]);
