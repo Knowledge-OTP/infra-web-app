@@ -4,7 +4,7 @@
     options="{ showQuit: true, showNumSlide: true }"
     on-clicked-quit="vm.onClickedQuit()"
     ng-model="vm.numSlide"
-    total-slide-num="4"></znk-exercise-header>
+    total-slide-num="vm.questionsPerSubject"></znk-exercise-header>
 <znk-exercise
     questions="vm.questions"
     ng-model="vm.resultsData.questionResults"

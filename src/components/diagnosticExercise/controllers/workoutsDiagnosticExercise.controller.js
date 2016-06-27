@@ -278,6 +278,8 @@
                 allowedTimeForExercise: 12 * 60 * 1000
             };
 
+            self.questionsPerSubject = diagnosticSettings.questionsPerSubject;
+
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
                 $state.go('app.workoutsRoadmap');
