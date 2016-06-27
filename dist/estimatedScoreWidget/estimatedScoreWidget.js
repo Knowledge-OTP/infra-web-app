@@ -308,7 +308,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "             context-attr=\"class\"\n" +
     "             tabindex=\"{{isNavMenu ? 0 : -1}}\">\n" +
     "            <div class=\"subject-title\">\n" +
-    "                <span class=\"capitalize\" translate=\".{{widgetItem.subjectId}}\"></span>\n" +
+    "                <span class=\"capitalize\" translate=\"SUBJECTS.{{widgetItem.subjectId}}\"></span>\n" +
     "                <span class=\"to-go\" ng-if=\"widgetItem.pointsLeftToMeetUserGoal > 0\"\n" +
     "                      translate=\".PTS_TO_GO\"\n" +
     "                      translate-values=\"{pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
