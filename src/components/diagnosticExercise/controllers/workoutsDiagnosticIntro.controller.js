@@ -28,7 +28,7 @@
                     }
                 });
                 znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.sectionId });
+                $state.go('app.diagnostic.exercise');
             };
     });
 })(angular);

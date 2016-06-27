@@ -196,7 +196,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                             'ngInject';
                             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                             var examId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
-                            var sectionId = WorkoutsDiagnosticFlow.getCurrentState().params.id;
+                            var sectionId = WorkoutsDiagnosticFlow.getCurrentState().params.sectionId;
                             var getExamProm = ExamSrv.getExam(examId);
                             var getSectionProm = ExamSrv.getExamSection(sectionId);
                             var getExamResultProm = ExerciseResultSrv.getExamResult(examId);
@@ -639,7 +639,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                     }
                 });
                 znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.diagnostic.exercise', { id: vm.diagnosticId, sectionId: vm.params.sectionId });
+                $state.go('app.diagnostic.exercise');
             };
     });
 })(angular);
