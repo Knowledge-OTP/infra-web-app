@@ -142,6 +142,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
         'znk.infra-web-app.znkExerciseHeader',
         'znk.infra.general'
     ]).config(function(SvgIconSrvProvider) {
+        'ngInject';
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
             'diagnostic-check-mark': 'components/diagnosticExercise/svg/check-mark-icon.svg',
@@ -250,8 +251,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                     controller: 'WorkoutsDiagnosticSummaryController',
                     controllerAs: 'vm',
                     resolve: {
-                        diagnosticSummaryData: ['EstimatedScoreSrv', 'UserGoalsService', '$q', 'WorkoutsDiagnosticFlow', 'ScoringService', '$log',
-                            function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log) {
+                        diagnosticSummaryData: function (EstimatedScoreSrv, UserGoalsService, $q, WorkoutsDiagnosticFlow, ScoringService, $log) {
                                 'ngInject';
                                 var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
                                     var estimatedScores = {};
@@ -288,7 +288,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                                         };
                                     });
                                 });
-                            }]
+                            }
                     }
                 });
         }]);
@@ -1223,8 +1223,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
 
 'use strict';
 
-angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro', ['DiagnosticIntroSrv', '$translatePartialLoader', '$log',
-    function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
+angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro', function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
         'ngInject';
 
     var directive = {
@@ -1279,7 +1278,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
     };
 
     return directive;
-}]);
+});
 
 'use strict';
 

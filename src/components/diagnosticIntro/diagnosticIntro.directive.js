@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro', ['DiagnosticIntroSrv', '$translatePartialLoader', '$log',
-    function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
+angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro', function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
         'ngInject';
 
     var directive = {
@@ -56,4 +55,4 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
     };
 
     return directive;
-}]);
+});
