@@ -122,7 +122,7 @@ md-dialog.invite-teacher-modal-wrap {
                 }
 
                 .invite-teacher-icon{
-                    @include full-background-image-retina('assets/icons/invite-teacher-icon',45px, 42px);
+                    @include full-background-image-retina('/assets/icons/invite-teacher-icon',45px, 42px);
                 }
             }
         }
