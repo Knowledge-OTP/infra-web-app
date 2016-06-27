@@ -16,14 +16,10 @@
         'znk.infra-web-app.workoutsRoadmap',
         'znk.infra-web-app.znkExerciseHeader',
         'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.znkHeader'
+        'znk.infra-web-app.znkHeader',
+        'znk.infra-web-app.angularMaterialOverride'
     ]);
 })(angular);
-
-
-angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function($templateCache) {
-
-}]);
 
 (function (angular) {
     'use strict';
