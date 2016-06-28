@@ -38,7 +38,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').controller('EditGoals.controller',
-        function ($scope, $filter, $mdDialog) {
+        ["$scope", "$filter", "$mdDialog", function ($scope, $filter, $mdDialog) {
             'ngInject';
             var translateFilter = $filter('translate');
             $scope.userGoalsSetting = {
@@ -53,7 +53,7 @@
             $scope.cancel = function () {
                 $mdDialog.cancel();
             };
-        }
+        }]
     );
 })(angular);
 
@@ -65,7 +65,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "$mdDialog", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -190,7 +190,7 @@
                     });
                 }
             };
-        }
+        }]
     );
 })(angular);
 
@@ -205,7 +205,7 @@
                 _subjectOrderGetter = subjectOrderGetter;
             };
 
-            this.$get = function ($log, $injector, $q) {
+            this.$get = ["$log", "$injector", "$q", function ($log, $injector, $q) {
                 'ngInject';
 
                 var EstimatedScoreWidgetSrv = {};
@@ -221,7 +221,7 @@
                 };
 
                 return EstimatedScoreWidgetSrv;
-            };
+            }];
         }
     ]);
 })(angular);

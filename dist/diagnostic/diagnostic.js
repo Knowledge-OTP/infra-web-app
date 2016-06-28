@@ -10,13 +10,13 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {
+    angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {        
         var _diagnosticExamIdGetter;
         this.setDiagnosticExamIdGetter = function(diagnosticExamIdGetter){
             _diagnosticExamIdGetter = diagnosticExamIdGetter;
         };
 
-        this.$get = function($log, $q, ExerciseResultSrv, ExerciseStatusEnum, $injector){
+        this.$get = ["$log", "$q", "ExerciseResultSrv", "ExerciseStatusEnum", "$injector", function($log, $q, ExerciseResultSrv, ExerciseStatusEnum, $injector){
             'ngInject';
 
             var DiagnosticSrv = {};
@@ -59,7 +59,7 @@
             };
 
             return DiagnosticSrv;
-        };
+        }];
     });
 })(angular);
 

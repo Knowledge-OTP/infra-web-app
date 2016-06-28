@@ -80,7 +80,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
-        function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
+        ["ENV", "$q", "$sce", "AuthService", "UserProfileService", "$location", "purchaseService", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
             'ngInject';
 
             return {
@@ -185,7 +185,7 @@
                 }
 
             };
-        }
+        }]
     );
 })(angular);
 
@@ -209,7 +209,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
+        ["$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
             'ngInject';
 
             var self = this;
@@ -424,7 +424,7 @@
                     controllerAs: 'vm'
                 });
             };
-        }
+        }]
     );
 })(angular);
 

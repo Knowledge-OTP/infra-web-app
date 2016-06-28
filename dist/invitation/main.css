@@ -442,7 +442,7 @@ md-dialog.invite-teacher-modal-wrap {
           fill: #085c66; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
           /*CSS for basic styling and non-retina image path:*/
-          background-image: url("assets/icons/invite-teacher-icon.png");
+          background-image: url("/assets/icons/invite-teacher-icon.png");
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover;
@@ -452,7 +452,7 @@ md-dialog.invite-teacher-modal-wrap {
           /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
           @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
             md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
-              background-image: url("assets/icons/invite-teacher-icon@2x.png");
+              background-image: url("/assets/icons/invite-teacher-icon@2x.png");
               background-repeat: no-repeat;
               background-position: center;
               background-size: cover;

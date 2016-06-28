@@ -97,7 +97,7 @@
                     url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
-                        data: function data(ExerciseStatusEnum, WorkoutsSrv, DiagnosticSrv, $q) {
+                        data: ["ExerciseStatusEnum", "WorkoutsSrv", "DiagnosticSrv", "$q", function data(ExerciseStatusEnum, WorkoutsSrv, DiagnosticSrv, $q) {
                             'ngInject';
 
                             var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -118,7 +118,7 @@
                                     workoutsProgress: workoutsProgress
                                 };
                             });
-                        }
+                        }]
                     },
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
@@ -134,13 +134,13 @@
                     controller: 'WorkoutsRoadMapDiagnosticIntroController',
                     controllerAs: 'vm',
                     resolve: {
-                        isDiagnosticStarted: function (DiagnosticSrv, ExerciseStatusEnum) {
+                        isDiagnosticStarted: ["DiagnosticSrv", "ExerciseStatusEnum", function (DiagnosticSrv, ExerciseStatusEnum) {
                             'ngInject';
 
                             return DiagnosticSrv.getDiagnosticStatus().then(function (status) {
                                 return status === ExerciseStatusEnum.ACTIVE.enum;
                             });
-                        }
+                        }]
                     }
                 })
                 .state('app.workoutsRoadmap.diagnostic.preSummary', {
@@ -176,7 +176,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap')
-        .config(function (SvgIconSrvProvider) {
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
             
             var svgMap = {
@@ -184,14 +184,14 @@
                 'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        });
+        }]);
 })(angular);
 
 (function () {
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
+        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", "$translatePartialLoader", function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
             'ngInject';
 
             $translatePartialLoader.addPart('workoutsRoadmap');
@@ -291,7 +291,7 @@
                     }
                 }
             });
-        }
+        }]
     );
 })();
 
@@ -299,7 +299,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapBasePreSummaryController',
-        function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
+        ["$timeout", "WorkoutsSrv", "SubjectEnum", "data", "ExerciseStatusEnum", "$filter", "WorkoutsRoadmapSrv", "purchaseService", function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
                   WorkoutsRoadmapSrv, purchaseService) {
             'ngInject';
 
@@ -355,7 +355,7 @@
             } else {
                 workoutPreSummary();
             }
-        }
+        }]
     );
 })();
 
@@ -363,7 +363,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticController',
-        function ($state, ExerciseStatusEnum, data, $timeout) {
+        ["$state", "ExerciseStatusEnum", "data", "$timeout", function ($state, ExerciseStatusEnum, data, $timeout) {
             'ngInject';
             //  fixing page not rendered in the first app entrance issue
             $timeout(function () {
@@ -380,27 +380,27 @@
                         $state.go('.intro');
                 }
             });
-        });
+        }]);
 })();
 
 (function (angular) {
     'use strict';
     
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticIntroController',
-        function (isDiagnosticStarted) {
+        ["isDiagnosticStarted", function (isDiagnosticStarted) {
             'ngInject';
 
             var vm = this;
 
             vm.buttonTitle = isDiagnosticStarted ? 'CONTINUE' : 'START' ;
-        });
+        }]);
 })(angular);
 
 'use strict';
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutController',
-        function ($state, data, ExerciseStatusEnum, ExerciseResultSrv) {
+        ["$state", "data", "ExerciseStatusEnum", "ExerciseResultSrv", function ($state, data, ExerciseStatusEnum, ExerciseResultSrv) {
             'ngInject';
 
             function _setExerciseResultOnDataObject() {
@@ -439,7 +439,7 @@
                 default:
                     _goToState('.intro');
             }
-        }
+        }]
     );
 })();
 
@@ -447,7 +447,7 @@
     'use strict';
     
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
-        function (data, ExerciseResultSrv) {
+        ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
 
             var vm = this;
@@ -459,7 +459,7 @@
                 exerciseResult.totalQuestionNum = exerciseResult.totalQuestionNum || 0;
                 exerciseResult.totalAnsweredNum = exerciseResult.totalAnsweredNum || 0;
             });
-        }
+        }]
     );
 })(angular);
 
@@ -467,7 +467,7 @@
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout) {
+        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -572,7 +572,7 @@
                     currWorkout.subjectId = vm.selectedWorkout.subjectId;
                 }
             });
-        }
+        }]
     );
 })();
 
@@ -584,7 +584,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap')
-        .config(function (SvgIconSrvProvider) {
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
 
             var svgMap = {
@@ -593,9 +593,9 @@
                 'workouts-intro-lock-share-arrow': 'components/workoutsRoadmap/svg/share-arrow-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        })
+        }])
         .directive('workoutIntroLock',
-            function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv) {
+            ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv) {
                 'ngInject';
 
                 return {
@@ -663,7 +663,7 @@
                         });
                     }
                 };
-            }
+            }]
         );
 })(angular);
 
@@ -687,7 +687,7 @@
             }
         ])
         .directive('workoutsProgress',
-            function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
+            ["$timeout", "ExerciseStatusEnum", "$log", function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
                 'ngInject';
 
                 var config = {
@@ -816,7 +816,7 @@
                 };
 
                 return directive;
-            }
+            }]
         );
 })();
 
@@ -836,7 +836,7 @@
                 _workoutAvailTimesGetter = workoutAvailTimesGetter;
             };
 
-            this.$get = function($injector, $log, $q){
+            this.$get = ["$injector", "$log", "$q", function($injector, $log, $q){
                 'ngInject';
 
                 var WorkoutsRoadmapSrv = {};
@@ -870,7 +870,7 @@
                 };
 
                 return WorkoutsRoadmapSrv;
-            };
+            }];
         }
     ]);
 })(angular);

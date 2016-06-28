@@ -26,7 +26,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').controller('invitationApproveModalCtrl',
 
-        function (locals, $mdDialog, InvitationHelperService, $filter, PopUpSrv) {
+        ["locals", "$mdDialog", "InvitationHelperService", "$filter", "PopUpSrv", function (locals, $mdDialog, InvitationHelperService, $filter, PopUpSrv) {
             'ngInject';
 
             var self = this;
@@ -73,7 +73,7 @@
             this.closeModal = function () {
                 $mdDialog.cancel();
             };
-        }
+        }]
     );
 })(angular);
 
@@ -81,7 +81,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
+        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
             'ngInject';
 
            return {
@@ -172,7 +172,7 @@
                     });
                 }
             };
-        }
+        }]
     );
 })(angular);
 
@@ -181,7 +181,8 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').controller('inviteTeacherModalController',
 
-        function ($mdDialog, InvitationService, PopUpSrv, $filter, $timeout) {
+        ["$mdDialog", "InvitationService", "PopUpSrv", "$filter", "$timeout", function ($mdDialog, InvitationService, PopUpSrv, $filter, $timeout) {
+            'ngInject';
             var self = this;
             self.translate = $filter('translate');
 
@@ -205,14 +206,14 @@
             this.closeModal = function () {
                 $mdDialog.hide();
             };
-        }
+        }]
     );
 })(angular);
 
 'use strict';
 
 angular.module('znk.infra-web-app.invitation').service('InvitationListenerService',
-    function (ENV, InfraConfigSrv, AuthService, $timeout, $q) {
+    ["ENV", "InfraConfigSrv", "AuthService", "$timeout", "$q", function (ENV, InfraConfigSrv, AuthService, $timeout, $q) {
         'ngInject';
 
         var studentStorageProm = InfraConfigSrv.getStudentStorage();
@@ -322,14 +323,14 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
             return new Firebase(userFullPath);
         }
 
-    }
+    }]
 );
 
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService) {
+        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InvitationListenerService", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService) {
             'ngInject';
 
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
@@ -467,7 +468,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
             }
 
             InvitationListenerService.addListeners();
-        }
+        }]
     );
 })(angular);
 
@@ -476,7 +477,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationHelperService',
 
-        function (InvitationService, $filter, PopUpSrv, UserProfileService) {
+        ["InvitationService", "$filter", "PopUpSrv", "UserProfileService", function (InvitationService, $filter, PopUpSrv, UserProfileService) {
             'ngInject';
 
             var self = this;
@@ -519,7 +520,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
             function updateStatus(invitation) {
                 return InvitationService.updateInvitationStatus(invitation);
             }
-        }
+        }]
     );
 })(angular);
 
