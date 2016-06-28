@@ -74,8 +74,12 @@
                         var questionResults = exerciseData.resultsData.questionResults;
                         var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                         var lastQuestion = questionResults[questionResults.length - 1];
+
+                        var isCurrentQuestion = function(question) {
+                            return question.questionId === currentSection.currentQuestion.id;
+                        };
                         var isLastQuestion = function() {
-                            return lastQuestion.questionId === currentSection.currentQuestion.id;
+                            return isCurrentQuestion(lastQuestion);
                         };
 
                         if (currentSection.currentQuestion) {
@@ -86,10 +90,14 @@
                                     questionResults.pop();
                                     delete lastQuestion.userAnswer;
                                 }
+                            } else {
+                                var answersArr = questionResults.filter(isCurrentQuestion);
+                                if(answersArr.length > 0) {
+                                    delete answersArr[0].userAnswer;
+                                }
                             }
+                            exerciseData.resultsData.$save();
                         }
-
-                        exerciseData.resultsData.$save();
                     }
                 })
                 .state('app.diagnostic.preSummary', {
