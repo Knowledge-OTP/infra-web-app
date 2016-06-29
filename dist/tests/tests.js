@@ -136,7 +136,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').controller('NavigationPaneController',
-        function (ExamTypeEnum, $log, $translatePartialLoader) {
+        ["ExamTypeEnum", "$log", "$translatePartialLoader", function (ExamTypeEnum, $log, $translatePartialLoader) {
         'ngInject';
             var self = this;
 
@@ -207,7 +207,7 @@
             };
 
            this.exams = _filterExams();
-        }
+        }]
     );
 })(angular);
 
@@ -219,7 +219,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').directive('navigationPane',
-        function ($translatePartialLoader) {
+        ["$translatePartialLoader", function ($translatePartialLoader) {
             'ngInject';
             return {
                 scope: {
@@ -238,7 +238,7 @@
                     $translatePartialLoader.addPart('tests');
                 }
             };
-        }
+        }]
     );
 })(angular);
 
@@ -247,7 +247,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').filter('timeFilter',
-        function ($filter) {
+        ["$filter", function ($filter) {
             'ngInject';
             return function (input, timeFormat) {
                 timeFormat = timeFormat || 'mm';
@@ -261,7 +261,7 @@
                 }
                 return newInput;
             };
-        }
+        }]
     );
 })(angular);
 
@@ -276,7 +276,7 @@
                 _subjectsMapGetter = subjectsMapGetter;
             };
 
-            this.$get = function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum) {
+            this.$get = ["$log", "$injector", "$q", "ExerciseResultSrv", "ExamSrv", "ScoringService", "ExerciseTypeEnum", function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum) {
                 'ngInject';
 
                 var TestsSrv = {};
@@ -417,7 +417,7 @@
                     });
                 };
                 return TestsSrv;
-            };
+            }];
         }
     ]);
 })(angular);
