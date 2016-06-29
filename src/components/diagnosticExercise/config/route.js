@@ -32,7 +32,7 @@
                             'ngInject';// jshint ignore:line
                             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                             var examId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
-                            var sectionId = WorkoutsDiagnosticFlow.getCurrentState().params.id;
+                            var sectionId = WorkoutsDiagnosticFlow.getCurrentState().params.sectionId;
                             var getExamProm = ExamSrv.getExam(examId);
                             var getSectionProm = ExamSrv.getExamSection(sectionId);
                             var getExamResultProm = ExerciseResultSrv.getExamResult(examId);
@@ -64,20 +64,38 @@
                         }
                     },
                     onExit: function (exerciseData, WorkoutsDiagnosticFlow) {
-                        'ngInject';// jshint ignore:line
-                        var questionResults = exerciseData.resultsData.questionResults;
+                        'ngInject'; // jshint ignore:line
                         var currentSection = WorkoutsDiagnosticFlow.getCurrentSection();
+
                         if (currentSection.done) {
                             WorkoutsDiagnosticFlow.markSectionAsDoneToggle(false);
-                        } else {
-                            if (currentSection.currentQuestion &&
-                                questionResults[questionResults.length - 1].questionId === currentSection.currentQuestion.id) {
-                                if (questionResults[questionResults.length - 1].userAnswer) {
-                                    delete questionResults[questionResults.length - 1].userAnswer;
+                            return;
+                        }
+
+                        var questionResults = exerciseData.resultsData.questionResults;
+                        var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
+                        var lastQuestion = questionResults[questionResults.length - 1];
+
+                        var isCurrentQuestion = function(question) {
+                            return question.questionId === currentSection.currentQuestion.id;
+                        };
+                        var isLastQuestion = function() {
+                            return isCurrentQuestion(lastQuestion);
+                        };
+
+                        if (currentSection.currentQuestion) {
+                            if(!diagnosticSettings.isFixed) {
+                                if(isLastQuestion()) {
+                                    delete lastQuestion.userAnswer;
+                                } else {
+                                    questionResults.pop();
+                                    delete lastQuestion.userAnswer;
                                 }
                             } else {
-                                questionResults.pop();
-                                delete questionResults[questionResults.length - 1].userAnswer;
+                                var answersArr = questionResults.filter(isCurrentQuestion);
+                                if(answersArr.length > 0) {
+                                    delete answersArr[0].userAnswer;
+                                }
                             }
                             exerciseData.resultsData.$save();
                         }
