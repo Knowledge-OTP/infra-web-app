@@ -74,7 +74,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect',
-        function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
+        ["userGoalsSelectionService", "$translate", "UtilitySrv", "$timeout", "$q", "$translatePartialLoader", function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
             'ngInject';
 
             var schoolList = [];
@@ -203,7 +203,7 @@
             };
 
             return directive;
-        });
+        }]);
 })(angular);
 
 (function (angular) {

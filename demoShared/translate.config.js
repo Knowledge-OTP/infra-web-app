@@ -10,5 +10,8 @@
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         });
+    })
+    .run(function ($translatePartialLoader) {
+        $translatePartialLoader.addPart('demoLocale');
     });
 })(angular);

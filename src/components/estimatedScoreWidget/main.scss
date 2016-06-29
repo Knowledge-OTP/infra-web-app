@@ -96,6 +96,11 @@ estimated-score-widget {
             .subject-title {
                 text-align: left;
                 @include text-style(16px, $fontColor3, Lato, 400);
+
+                .capitalize{
+                    text-transform: capitalize;
+                }
+
                 .to-go {
                     float: right;
                     @include text-style(13px, $fontColor3, Lato, 300);

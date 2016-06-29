@@ -13,7 +13,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.znkExerciseHeader').directive('znkExerciseHeader',
-        function($timeout, SubjectEnum, $translatePartialLoader){
+        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
         'ngInject';
 
         return {
@@ -61,7 +61,7 @@
                 }
             }
         };
-    });
+    }]);
 })(angular);
 
 angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', function($templateCache) {

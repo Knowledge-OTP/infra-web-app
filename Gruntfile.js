@@ -130,7 +130,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.dist %>',
-                    src: '*.js',
+                    src: '**/*.js',
                     dest: '<%= yeoman.dist %>'
                 }]
             }
@@ -381,6 +381,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'build',
         'copy:dist',
-        'concat:dist'
+        'concat:dist',
+        'ngAnnotate'
     ]);
 };

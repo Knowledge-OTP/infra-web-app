@@ -215,6 +215,7 @@
                 }
             } else {
                 self.questions = questions;
+                initSlideIndex = numQuestionCounter;
             }
 
             self.resultsData = resultsData;
@@ -277,6 +278,8 @@
                 initSlideIndex: initSlideIndex || 0,
                 allowedTimeForExercise: 12 * 60 * 1000
             };
+
+            self.questionsPerSubject = diagnosticSettings.questionsPerSubject;
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
