@@ -591,6 +591,8 @@ estimated-score-widget .score-estimate-container {
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 400; }
+      estimated-score-widget .score-estimate-container .subject .subject-title .capitalize {
+        text-transform: capitalize; }
       estimated-score-widget .score-estimate-container .subject .subject-title .to-go {
         float: right;
         font-size: 13px;
