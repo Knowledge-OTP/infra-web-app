@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%;background: rgba(43, 43, 191, 0.08);">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
-    <!-- Bower:css -->
+    <!-- bower:css -->
     <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
     <link rel="stylesheet" href="infra/dist/main.css" />
     <link rel="stylesheet" href="angular-material/angular-material.css" />
     <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css" />
     <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
-    <!-- endBower -->
+    <!-- endbower-->
 
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="demo.css">
-
+    <link rel="stylesheet" href="main.css" />
 </head>
-<body ng-app="demo">
-
-<div style="display: flex;justify-content: center;">
-
-    <estimated-score-widget is-nav-menu="true" ng-model="currentSubjectId"></estimated-score-widget>
-
-
-    <!-- Bower:js -->
+<body ng-app="demo" ng-controller="Main">
+    <div>
+        <label>Message body</label>
+        <input ng-model="msgBody">
+        <div style="margin-top: 10px">
+            <button ng-click="showRaccoonIapMsg('HINT',msgBody)">show HINT type raccoon message</button>
+        </div>
+    </div>
+    <!-- bower:js -->
     <script src="angular/angular.js"></script>
     <script src="angular-animate/angular-animate.js"></script>
     <script src="Swiper/dist/js/swiper.js"></script>
@@ -40,21 +38,9 @@
     <script src="Chart.js/Chart.js"></script>
     <script src="angular-chart.js/dist/angular-chart.js"></script>
     <script src="angular-sanitize/angular-sanitize.js"></script>
-    <!-- endBower -->
+    <!-- endbower-->
 
     <script src="main.js"></script>
     <script src="demo.js"></script>
-
-    <script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
-    <script src="infra/demoShared/storagesConfig.js"></script>
-    <script src="env.service.js"></script>
-    <script src="subject.decorator.js"></script>
-    <script src="estimatedScoreWidget.config.js"></script>
-    <script src="env.service.js"></script>
-    <script src="userGoals.config.js"></script>
-    <script src="translate.config.js"></script>
-    <script src="diagnostic.config.js"></script>
-
-</div>
 </body>
 </html>
