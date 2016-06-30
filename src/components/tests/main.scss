@@ -40,6 +40,7 @@
                 justify-content: space-between;
                 span {
                     margin-left: 25px;
+                    text-transform: capitalize;
                 }
                 &.md-button:not([disabled]):hover {
                     background-color: $bgColor42;

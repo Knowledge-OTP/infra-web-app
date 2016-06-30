@@ -5,7 +5,7 @@
                       ng-class="{ 'done': miniExam.isCompleted, 'active': vm.activeId === miniExam.id }">
             <md-button md-no-ink ng-click="vm.onExamClick({exam: miniExam, prevExam: vm.exams.miniExams[$index - 1]}); vm.changeActive(miniExam.id)">
                 <!--{{::miniExam.name}}-->
-                <span translate=".TEST" translate-values="{testNumber: $index+1}"></span>
+                <span class="" translate=".TEST" translate-values="{testNumber: $index+1}"></span>
                 <div class="status-icon-wrapper" ng-if="miniExam.isCompleted">
                     <i class="material-icons">check</i>
                 </div>

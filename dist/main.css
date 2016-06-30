@@ -2015,7 +2015,8 @@ purchase-btn .upgraded .text {
       -ms-flex-pack: justify;
           justify-content: space-between; }
       .app-tests-navigationPane md-list md-list-item button span {
-        margin-left: 25px; }
+        margin-left: 25px;
+        text-transform: capitalize; }
       .app-tests-navigationPane md-list md-list-item button.md-button:not([disabled]):hover {
         background-color: #FCFCFC; }
     .app-tests-navigationPane md-list md-list-item.done {
