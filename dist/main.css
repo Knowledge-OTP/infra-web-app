@@ -1989,10 +1989,8 @@ purchase-btn .upgraded .text {
 
 .app-tests-navigationPane md-list {
   padding: 0; }
-  .app-tests-navigationPane md-list.md-list-second-list {
-    padding-top: 20px; }
-    .app-tests-navigationPane md-list.md-list-second-list md-list-item {
-      border-top: 1px solid #f2f2f2; }
+  .app-tests-navigationPane md-list.md-list-second-list md-list-item {
+    border-top: 1px solid #f2f2f2; }
   .app-tests-navigationPane md-list md-list-item {
     position: relative;
     width: 100%;
