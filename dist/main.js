@@ -4913,7 +4913,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                      ng-class=\"{ 'done': miniExam.isCompleted, 'active': vm.activeId === miniExam.id }\">\n" +
     "            <md-button md-no-ink ng-click=\"vm.onExamClick({exam: miniExam, prevExam: vm.exams.miniExams[$index - 1]}); vm.changeActive(miniExam.id)\">\n" +
     "                <!--{{::miniExam.name}}-->\n" +
-    "                <span translate=\".TEST\"></span>\n" +
+    "                <span translate=\".TEST\" translate-values=\"{testNumber: $index+1}\"></span>\n" +
     "                <div class=\"status-icon-wrapper\" ng-if=\"miniExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +
     "                </div>\n" +
@@ -4926,7 +4926,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                      ng-class=\"{ 'done': fullExam.isCompleted, 'active': vm.activeId === fullExam.id }\">\n" +
     "            <md-button md-no-ink ng-click=\"vm.onExamClick({exam: fullExam, prevExam: vm.exams.fullExams[$index - 1]}); vm.changeActive(fullExam.id)\">\n" +
     "                <!--{{::fullExam.name}}-->\n" +
-    "                <span translate=\".TEST\"></span>\n" +
+    "                <span translate=\".TEST\" translate-values=\"{testNumber: $index+1}\"></span>\n" +
     "                <div class=\"status-icon-wrapper\" ng-if=\"fullExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +
     "                </div>\n" +
