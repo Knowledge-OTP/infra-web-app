@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
         function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum) {
+                  UserProfileService, $injector, PurchaseStateEnum, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
@@ -31,6 +31,12 @@
                 //OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
                 //    self.isOnBoardingCompleted = isCompleted;
                 //});
+            };
+
+            this.logout = function () {
+                debugger;
+                AuthService.logout();
+                $window.location.replace(ENV.redirectLogout);
             };
 
             function _checkIfHasProVersion() {
