@@ -4647,6 +4647,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                     exams: '=',
                     onExamClick: '&',
                     title: '@',
+                    secondTitle: '@',
                     examsResults: '='
                 },
                 restrict: 'E',
@@ -4905,24 +4906,27 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "</svg>\n" +
     "");
   $templateCache.put("components/tests/templates/navigationPane.template.html",
-    "<div class=\"app-tests-navigationPane\">\n" +
+    "<div class=\"app-tests-navigationPane\" translate-namespace=\"NAVIGATION_PANE\">\n" +
     "   <div class=\"tests-navigation-title-header\" translate=\"{{::vm.title}}\"></div>\n" +
     "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
     "        <md-list-item ng-repeat=\"miniExam in vm.exams.miniExams\"\n" +
     "                      ng-class=\"{ 'done': miniExam.isCompleted, 'active': vm.activeId === miniExam.id }\">\n" +
     "            <md-button md-no-ink ng-click=\"vm.onExamClick({exam: miniExam, prevExam: vm.exams.miniExams[$index - 1]}); vm.changeActive(miniExam.id)\">\n" +
-    "                {{::miniExam.name}}\n" +
+    "                <!--{{::miniExam.name}}-->\n" +
+    "                <span translate=\".TEST\"></span>\n" +
     "                <div class=\"status-icon-wrapper\" ng-if=\"miniExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +
     "                </div>\n" +
     "            </md-button>\n" +
     "        </md-list-item>\n" +
     "    </md-list>\n" +
+    "    <div class=\"tests-navigation-title-header\" translate=\"{{::vm.secondTitle}}\"></div>\n" +
     "    <md-list class=\"md-list-second-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
     "        <md-list-item ng-repeat=\"fullExam in vm.exams.fullExams\"\n" +
     "                      ng-class=\"{ 'done': fullExam.isCompleted, 'active': vm.activeId === fullExam.id }\">\n" +
     "            <md-button md-no-ink ng-click=\"vm.onExamClick({exam: fullExam, prevExam: vm.exams.fullExams[$index - 1]}); vm.changeActive(fullExam.id)\">\n" +
-    "                {{::fullExam.name}}\n" +
+    "                <!--{{::fullExam.name}}-->\n" +
+    "                <span translate=\".TEST\"></span>\n" +
     "                <div class=\"status-icon-wrapper\" ng-if=\"fullExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +
     "                </div>\n" +

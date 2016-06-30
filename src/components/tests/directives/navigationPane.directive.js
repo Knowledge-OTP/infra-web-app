@@ -14,6 +14,7 @@
                     exams: '=',
                     onExamClick: '&',
                     title: '@',
+                    secondTitle: '@',
                     examsResults: '='
                 },
                 restrict: 'E',
