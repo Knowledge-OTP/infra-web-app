@@ -4906,7 +4906,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "</svg>\n" +
     "");
   $templateCache.put("components/tests/templates/navigationPane.template.html",
-    "<div class=\"app-tests-navigationPane\" translate-namespace=\"NAVIGATION_PANE\">\n" +
+    "<div class=\"app-tests-navigationPane\">\n" +
     "   <div class=\"tests-navigation-title-header\" translate=\"{{::vm.title}}\"></div>\n" +
     "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
     "        <md-list-item ng-repeat=\"miniExam in vm.exams.miniExams\"\n" +
