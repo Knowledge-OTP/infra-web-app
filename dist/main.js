@@ -6914,8 +6914,8 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$mdDialog", "$window", "purchaseService", "znkHeaderSrv", "UserProfileService", "$injector", "PurchaseStateEnum", function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum) {
+        ["$scope", "$translatePartialLoader", "$mdDialog", "$window", "purchaseService", "znkHeaderSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "AuthService", "ENV", function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
+                  UserProfileService, $injector, PurchaseStateEnum, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
@@ -6943,6 +6943,11 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
                 //OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
                 //    self.isOnBoardingCompleted = isCompleted;
                 //});
+            };
+
+            this.logout = function () {
+                AuthService.logout();
+                $window.location.replace(ENV.redirectLogout);
             };
 
             function _checkIfHasProVersion() {

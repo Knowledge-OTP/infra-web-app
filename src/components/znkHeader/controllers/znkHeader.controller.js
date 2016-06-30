@@ -34,7 +34,6 @@
             };
 
             this.logout = function () {
-                debugger;
                 AuthService.logout();
                 $window.location.replace(ENV.redirectLogout);
             };
