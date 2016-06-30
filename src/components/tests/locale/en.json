@@ -13,7 +13,6 @@
         "TESTS_SCORE": "Score: {{score}}",
         "TESTS_CORRECT": "{{correct}}/{{questionsNum}} correct",
         "TESTS_TOTAL_SCORE": "TOTAL SCORE:  {{score}}",
-        "TESTS_SECTION_SCORE": "SECTION SCORE:  {{score}}",
         "TESTS_SECTION_TEST_SCORE": "Test Score:  {{score}}",
         "AVG_TIME_FOR_COMPLETED_SUBJECT": "Avg. time: {{avgTimeForCompletedSubject}} sec",
         "TESTS_SUB_SCORE": "SUBSCORE",
