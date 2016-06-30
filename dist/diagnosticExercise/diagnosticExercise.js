@@ -307,8 +307,12 @@
 
             var numQuestionCounter = _getInitNumQuestion(exerciseData.resultsData.questionResults);
 
+            function _getNumberOfQuestions() {
+                return diagnosticSettings.isFixed ? questions.length : diagnosticSettings.questionsPerSubject;
+            }
+
             function _isLastQuestion() {
-                return numQuestionCounter === diagnosticSettings.questionsPerSubject;
+                return numQuestionCounter === _getNumberOfQuestions();
             }
 
             function _getCurrentIndex() {
@@ -490,7 +494,7 @@
                 allowedTimeForExercise: 12 * 60 * 1000
             };
 
-            self.questionsPerSubject = diagnosticSettings.questionsPerSubject;
+            self.questionsPerSubject = _getNumberOfQuestions();
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
