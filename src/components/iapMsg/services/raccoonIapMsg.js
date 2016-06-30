@@ -8,12 +8,12 @@
             var template =
                 '<div class="raccoon-in-app show-hide-animation" ng-class="raccoonTypeClass">' +
                     '<div class="svg-wrap">' +
-                        '<svg-icon name="close-popup" ng-click="close()"></svg-icon>' +
+                        '<svg-icon name="iap-msg-close-msg" ng-click="close()"></svg-icon>' +
                     '</div>' +
                     '<div class="bubble-wrap">' +
                         '<div class="msg-wrap">' +
                             '<div class="msg" ng-bind-html="message"></div>' +
-                            '<svg-icon name="hint-bubble" class="hint-bubble-svg"></svg-icon>' +
+                            '<svg-icon name="iap-msg-hint-bubble" class="hint-bubble-svg"></svg-icon>' +
                         '</div>' +
                     '</div>' +
                     '<div class="raccoon">' +
