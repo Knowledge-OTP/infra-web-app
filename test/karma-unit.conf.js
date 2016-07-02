@@ -30,7 +30,6 @@ module.exports = function (config) {
             'bower_components/firebase/firebase.js',
             'bower_components/angular-translate/angular-translate.js',
             'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-            'bower_components/angularfire/dist/angularfire.js',
             'bower_components/angular-svg-round-progressbar/build/roundProgress.min.js',
             'bower_components/infra/dist/main.js',
             'bower_components/angular-ui-router/release/angular-ui-router.js',
