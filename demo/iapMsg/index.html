@@ -15,10 +15,19 @@
 </head>
 <body ng-app="demo" ng-controller="Main">
     <div>
+        <div>HINT raccoon message</div>
         <label>Message body</label>
         <input ng-model="msgBody">
         <div style="margin-top: 10px">
             <button ng-click="showRaccoonIapMsg(msgBody,'HINT')">show HINT type raccoon message</button>
+        </div>
+    </div>
+    <div style="margin-top: 100px;">
+        <div>PRACTICE_HINT raccoon message</div>
+        <label>Message body</label>
+        <input ng-model="practiceHintMsgBody">
+        <div style="margin-top: 10px">
+            <button ng-click="showRaccoonIapMsg(practiceHintMsgBody,'PRACTICE_HINT')">show HINT type raccoon message</button>
         </div>
     </div>
     <!-- bower:js -->

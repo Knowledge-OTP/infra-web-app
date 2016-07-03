@@ -3,10 +3,11 @@
 
     angular.module('znk.infra-web-app.iapMsg',[
         'ngSanitize',
-        'znk.infra.svgIcon'
+        'znk.infra.svgIcon',
+        'ngAnimate'
     ])
         .config(function(SvgIconSrvProvider){
-            'ngInject';
+            'ngInject'; 
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
