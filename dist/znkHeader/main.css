@@ -20,13 +20,11 @@ purchase-btn .flex-container {
   padding: 0;
   margin: 0 -15px;
   list-style: none;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-flex-flow: row wrap;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start; }
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
 
 purchase-btn .flex-item {
   padding: 0;
@@ -106,15 +104,12 @@ purchase-btn .upgraded .text {
       position: relative;
       bottom: 17.5px;
       background-color: #0a9bad;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
         width: 45px;
         height: 45px; }
@@ -206,15 +201,12 @@ purchase-btn .upgraded .text {
       color: #757a83;
       font-family: Lato;
       font-weight: 400;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       text-align: center; }
       .purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;
@@ -286,15 +278,12 @@ md-dialog.invitation-confirm-modal {
       md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
         padding-left: 1px; }
     md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
         margin: auto; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
@@ -305,12 +294,10 @@ md-dialog.invitation-confirm-modal {
     width: 100%;
     height: 40px; }
     md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -318,15 +305,12 @@ md-dialog.invitation-confirm-modal {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
           width: 14px;
           stroke: #067f8e; }
@@ -343,12 +327,10 @@ md-dialog.invitation-confirm-modal {
     text-align: center;
     margin: 10px; }
   md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -375,15 +357,12 @@ invitation-manager .circle-invite-wrap {
   width: 33px;
   height: 33px;
   border-radius: 17px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
   margin-right: 10px;
   cursor: pointer; }
 
@@ -413,15 +392,12 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list md-list-item {
       min-height: 20px;
       border-bottom: 1px solid #ebebeb;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
         width: 14px;
         height: 14px;
@@ -437,25 +413,21 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
       padding: 10px 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: column;
-          -ms-flex-direction: column;
-              flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
       padding: 10px 20px;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1; }
+      -ms-flex-positive: 1;
+          flex-grow: 1; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 16px;
         color: #757a83;
         font-family: Lato;
         font-weight: 400;
         text-transform: capitalize;
-        -webkit-flex-grow: 1;
-            -ms-flex-positive: 1;
-                flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
         margin-bottom: 3px; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 14px;
@@ -475,15 +447,12 @@ md-menu-content.md-menu-content-invitation-manager {
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: baseline;
-          -ms-flex-align: baseline;
-              align-items: baseline;
-      -webkit-flex-grow: 0;
-          -ms-flex-positive: 0;
-              flex-grow: 0; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+      -ms-flex-positive: 0;
+          flex-grow: 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .invite-sub-title {
       font-size: 14px;
       color: #757a83;
@@ -496,15 +465,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #acacac;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       margin-right: 6px; }
       md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn {
         height: 12px;
@@ -520,15 +486,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #87ca4d;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
         width: 14px;
         cursor: pointer; }
@@ -540,26 +503,20 @@ md-menu-content.md-menu-content-invitation-manager {
     font-family: Lato;
     font-weight: 400;
     text-align: center;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     min-height: 80px; }
   md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     height: 60px;
     background: #fafafa; }
     md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
@@ -630,12 +587,10 @@ md-dialog.invite-teacher-modal-wrap {
     height: 100%;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     overflow: hidden; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .modal-main-title {
       margin-top: 20px;
@@ -670,12 +625,10 @@ md-dialog.invite-teacher-modal-wrap {
       text-align: center;
       margin-top: 20px; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
         margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
@@ -684,12 +637,10 @@ md-dialog.invite-teacher-modal-wrap {
     width: 100%;
     height: 40px; }
     md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -697,15 +648,12 @@ md-dialog.invite-teacher-modal-wrap {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
           width: 35px;
           stroke: #085c66; }
@@ -752,23 +700,20 @@ md-dialog.invite-teacher-modal-wrap {
         padding-bottom: 0; }
         .app-header .main-content-header .app-states-list md-list md-list-item {
           cursor: pointer;
-          -webkit-flex: initial;
-              -ms-flex: initial;
-                  flex: initial; }
+          -ms-flex: initial;
+              flex: initial; }
           .app-header .main-content-header .app-states-list md-list md-list-item .title {
             text-transform: capitalize;
-            -webkit-align-self: stretch;
-                -ms-flex-item-align: stretch;
-                    align-self: stretch;
+            -ms-flex-item-align: stretch;
+                align-self: stretch;
             padding-top: 15px; }
           .app-header .main-content-header .app-states-list md-list md-list-item:hover .title {
             color: #0a9bad; }
           .app-header .main-content-header .app-states-list md-list md-list-item.active .title {
             color: #0a9bad; }
     .app-header .main-content-header .app-user-area {
-      -webkit-align-self: center;
-          -ms-flex-item-align: center;
-              align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center;
       margin-left: auto; }
       .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
@@ -780,6 +725,11 @@ md-dialog.invite-teacher-modal-wrap {
           height: 16px;
           margin-right: 10px;
           float: left; }
+          .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper + span {
+            font-size: 16px;
+            font-family: Lato;
+            font-weight: Light;
+            font-style: italic; }
       .app-header .main-content-header .app-user-area .profile-status:hover {
         color: #0a9bad; }
       .app-header .main-content-header .app-user-area .profile-open-modal-btn {
@@ -790,37 +740,32 @@ md-dialog.invite-teacher-modal-wrap {
       .app-header .main-content-header .app-user-area .md-button {
         background: white;
         width: auto;
-        display: -webkit-flex !important;
         display: -ms-flexbox !important;
         display: flex !important;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         .app-header .main-content-header .app-user-area .md-button div {
           min-width: 40px; }
 
-.md-open-menu-container .header-modal-item {
+._md-open-menu-container .header-modal-item {
   font-family: Lato; }
-  .md-open-menu-container .header-modal-item a {
+  ._md-open-menu-container .header-modal-item a {
     width: 100%;
     text-decoration: none;
     color: inherit; }
-  .md-open-menu-container .header-modal-item:not(.purchase-status) span {
+  ._md-open-menu-container .header-modal-item:not(.purchase-status) span {
     width: 100%; }
-  .md-open-menu-container .header-modal-item.header-modal-item-profile {
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-align-items: flex-start;
-        -ms-flex-align: start;
-            align-items: flex-start;
+  ._md-open-menu-container .header-modal-item.header-modal-item-profile {
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: start;
+        align-items: flex-start;
     margin-bottom: 11px; }
-    .md-open-menu-container .header-modal-item.header-modal-item-profile .username {
+    ._md-open-menu-container .header-modal-item.header-modal-item-profile .username {
       margin-bottom: 5px; }
-    .md-open-menu-container .header-modal-item.header-modal-item-profile .email {
+    ._md-open-menu-container .header-modal-item.header-modal-item-profile .email {
       font-size: 14px;
       color: #acacac;
       font-family: Lato;
@@ -828,18 +773,18 @@ md-dialog.invite-teacher-modal-wrap {
       border-bottom: 1px solid #0a9bad;
       width: 100%;
       padding-bottom: 15px; }
-  .md-open-menu-container .header-modal-item.header-modal-item-uppercase {
+  ._md-open-menu-container .header-modal-item.header-modal-item-uppercase {
     min-height: 35px;
     line-height: 35px;
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 300;
     cursor: pointer; }
-    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
+    ._md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
       color: #161616; }
-    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
+    ._md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
       color: #898989; }
-  .md-open-menu-container .header-modal-item .check-mark-wrapper {
+  ._md-open-menu-container .header-modal-item .check-mark-wrapper {
     position: relative;
     top: -2px;
     width: 16px;
@@ -847,14 +792,14 @@ md-dialog.invite-teacher-modal-wrap {
     border-radius: 50%;
     background-color: #cfcfcf;
     margin-left: 10px; }
-    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
+    ._md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
       height: 100%; }
-    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
+    ._md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
       width: 75%;
       height: 100%;
       margin: auto;
       display: block; }
-  .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
+  ._md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
     background-color: #f8f8f8; }
 
 md-menu-content.md-menu-content-znk-header {

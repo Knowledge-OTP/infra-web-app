@@ -44,16 +44,14 @@ md-tooltip {
     white-space: normal; }
     md-tooltip .md-content.md-show {
       opacity: 1;
-      -webkit-transform: none;
-              transform: none;
+      transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip .md-content.md-show-remove {
       transition: none; }
       md-tooltip .md-content.md-show-remove.md-show-remove-active {
-        -webkit-transform: none;
-                transform: none;
+        transform: none;
         opacity: 0; }
     md-tooltip .md-content .top-text {
       margin-top: 22px;
@@ -105,17 +103,14 @@ md-dialog .close-popup {
   width: 100%;
   height: calc(100vh - 95px);
   background-color: white;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   position: relative; }
   .app-workouts-diagnostic .exercise-container znk-exercise {
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
     width: 100%; }
 
 .app-workouts-diagnostic .inline-block {
@@ -131,12 +126,10 @@ md-dialog .close-popup {
   box-shadow: none; }
 
 .app-workouts-diagnostic ui-view {
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start; }
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
 
 .app-workouts-diagnostic .md-button {
   display: block;
@@ -154,15 +147,12 @@ md-dialog .close-popup {
   transition: 0.6s; }
 
 .diagnostic-loading-wrapper {
-  -webkit-flex-basis: 100%;
-      -ms-flex-preferred-size: 100%;
-          flex-basis: 100%;
-  display: -webkit-flex;
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column; }
+  -ms-flex-direction: column;
+      flex-direction: column; }
   .diagnostic-loading-wrapper .loading-title {
     font-size: 32px;
     color: #4f4d4d;
@@ -172,18 +162,15 @@ md-dialog .close-popup {
     z-index: 1;
     margin-bottom: 19px; }
   .diagnostic-loading-wrapper .video-wrapper {
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
     position: relative;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex; }
     .diagnostic-loading-wrapper .video-wrapper video {
       width: 610px;
-      -webkit-align-self: flex-end;
-          -ms-flex-item-align: end;
-              align-self: flex-end; }
+      -ms-flex-item-align: end;
+          align-self: flex-end; }
 
 md-tooltip.tooltip-for-diagnostic-summary {
   opacity: 0;
@@ -202,16 +189,14 @@ md-tooltip.tooltip-for-diagnostic-summary {
     white-space: normal; }
     md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show {
       opacity: 1;
-      -webkit-transform: none;
-              transform: none;
+      transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show-remove {
       transition: none; }
       md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show-remove.md-show-remove-active {
-        -webkit-transform: none;
-                transform: none;
+        transform: none;
         opacity: 0; }
   md-tooltip.tooltip-for-diagnostic-summary.md-hide {
     transition: opacity 0.4s;
@@ -239,33 +224,26 @@ md-tooltip.tooltip-for-diagnostic-summary {
       font-family: Quicksand;
       font-weight: 800; }
   .diagnostic-summary-wrapper .doughnuts-container {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -ms-flex-pack: center;
+        justify-content: center; }
     .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper {
       margin-left: 9px;
       margin-right: 9px; }
       .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         text-align: center;
         display: flex;
-        -webkit-flex-direction: column;
-            -ms-flex-direction: column;
-                flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
         border-radius: 13px;
         background-color: #f9f9f9;
         height: 250px; }
@@ -288,12 +266,6 @@ md-tooltip.tooltip-for-diagnostic-summary {
             background-color: #c9c9c9;
             border-radius: 50px;
             -webkit-animation: goal-point 2s; }
-
-@-webkit-keyframes goal-point {
-  from {
-    opacity: 0; }
-  to {
-    opacity: 1; } }
           .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .goal-point-bg {
             width: 6px;
             height: 6px;
@@ -312,15 +284,12 @@ md-tooltip.tooltip-for-diagnostic-summary {
           .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .white-bg-doughnut-score {
             width: 100px;
             height: 100px;
-            display: -webkit-flex;
             display: -ms-flexbox;
             display: flex;
-            -webkit-justify-content: center;
-                -ms-flex-pack: center;
-                    justify-content: center;
-            -webkit-align-items: center;
-                -ms-flex-align: center;
-                    align-items: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+            -ms-flex-align: center;
+                align-items: center;
             text-align: center;
             font-size: 24px;
             color: #4f4d4d;
@@ -431,12 +400,10 @@ diagnostic-intro {
             width: 160px;
             height: 169px; } }
     diagnostic-intro .diagnostic-intro-drv .icons-section {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: space-around;
-          -ms-flex-pack: distribute;
-              justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
       width: 40%;
       margin: 0 auto;
       min-height: 140px; }
@@ -454,15 +421,12 @@ diagnostic-intro {
           display: block; }
         diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
           height: 100%;
-          display: -webkit-flex;
           display: -ms-flexbox;
           display: flex;
-          -webkit-align-items: center;
-              -ms-flex-align: center;
-                  align-items: center;
-          -webkit-justify-content: center;
-              -ms-flex-pack: center;
-                  justify-content: center;
+          -ms-flex-align: center;
+              align-items: center;
+          -ms-flex-pack: center;
+              justify-content: center;
           vertical-align: top; }
           diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon {
             width: 45px; }
@@ -489,12 +453,10 @@ diagnostic-intro {
       diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions {
         margin-top: 40px;
         text-transform: none;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-flex-direction: column;
-            -ms-flex-direction: column;
-                flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
         padding-right: 110px;
         padding-left: 110px; }
         diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title {
@@ -710,16 +672,14 @@ md-tooltip.tooltip-for-estimated-score-widget {
     white-space: normal; }
     md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show {
       opacity: 1;
-      -webkit-transform: none;
-              transform: none;
+      transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove {
       transition: none; }
       md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove.md-show-remove-active {
-        -webkit-transform: none;
-                transform: none;
+        transform: none;
         opacity: 0; }
     md-tooltip.tooltip-for-estimated-score-widget .md-content .top-text {
       margin-top: 22px;
@@ -764,12 +724,10 @@ md-dialog.setting-edit-goals {
     width: 100%;
     height: 40px; }
     md-dialog.setting-edit-goals .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -803,102 +761,6 @@ md-dialog.setting-edit-goals {
     width: 16px;
     display: block; }
 
-/* fonts size */
-/* general */
-/* paths */
-/* general */
-/*border color*/
-/*background*/
-/* box shadow */
-/* font color*/
-/* full background image with retina */
-/* full background image with retina */
-.raccoon-in-app {
-  position: fixed;
-  bottom: 20px;
-  right: 40px;
-  z-index: 999;
-  width: 528px;
-  height: 380px; }
-  .raccoon-in-app .svg-wrap {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
-    background-color: #cacaca;
-    border-radius: 3px;
-    box-sizing: border-box;
-    cursor: pointer; }
-  .raccoon-in-app .bubble-wrap {
-    position: absolute;
-    left: 0;
-    top: 0; }
-    .raccoon-in-app .bubble-wrap .msg-wrap {
-      position: relative; }
-      .raccoon-in-app .bubble-wrap .msg-wrap .msg {
-        font-size: 18px;
-        color: #4f4d4d;
-        font-family: Quicksand;
-        font-weight: 600;
-        text-align: center;
-        position: absolute;
-        top: 38px;
-        left: 59px;
-        width: 291px;
-        height: 90px; }
-      .raccoon-in-app .bubble-wrap .msg-wrap .hint-bubble-svg {
-        width: 400px; }
-  .raccoon-in-app.hint-raccoon .raccoon {
-    position: absolute;
-    right: 0;
-    bottom: 0; }
-    .raccoon-in-app.hint-raccoon .raccoon div {
-      /*CSS for basic styling and non-retina image path:*/
-      background-image: url("/assets/images/hint-raccoon.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      display: inline-block;
-      width: 194px;
-      height: 278px;
-      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-      @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-        .raccoon-in-app.hint-raccoon .raccoon div {
-          background-image: url("/assets/images/hint-raccoon@2x.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 194px;
-          height: 278px; } }
-  .raccoon-in-app.hint-raccoon-for-practice .raccoon {
-    position: absolute;
-    right: -15px;
-    bottom: 0;
-    text-align: right; }
-    .raccoon-in-app.hint-raccoon-for-practice .raccoon div {
-      /*CSS for basic styling and non-retina image path:*/
-      background-image: url("/assets/images/hint-raccoon-practice-more.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      display: inline-block;
-      width: 253px;
-      height: 290px;
-      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-      @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-        .raccoon-in-app.hint-raccoon-for-practice .raccoon div {
-          background-image: url("/assets/images/hint-raccoon-practice-more@2x.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 253px;
-          height: 290px; } }
-
 /*border color*/
 /*background*/
 /* box shadow */
@@ -913,17 +775,14 @@ md-dialog.setting-edit-goals {
   width: 1060px;
   height: calc(100vh - 95px);
   background-color: white;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   position: relative; }
   .exercise-container znk-exercise {
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1; }
+    -ms-flex-positive: 1;
+        flex-grow: 1; }
     .exercise-container znk-exercise znk-exercise-btn-section .btn-container svg-icon {
       display: block; }
     .exercise-container znk-exercise .swiper-container {
@@ -976,14 +835,12 @@ answer-explanation {
         margin: 0 auto;
         border-radius: 0px 0px 10px 10px; }
         answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .right-corner {
-          -webkit-transform: rotate(25deg);
-                  transform: rotate(25deg);
+          transform: rotate(25deg);
           border-radius: 50px 0px 50px 1px;
           right: -14px;
           box-shadow: -7px -2px #0a9bad; }
         answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .left-corner {
-          -webkit-transform: rotate(-25deg);
-                  transform: rotate(-25deg);
+          transform: rotate(-25deg);
           border-radius: 0 50px 1px 50px;
           left: -14px;
           box-shadow: 7px -2px #0a9bad; }
@@ -1029,7 +886,6 @@ answer-explanation-content {
   answer-explanation-content svg-icon[name="close-popup"] svg line {
     stroke: #161616; }
   answer-explanation-content .flex-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     padding-top: 25px; }
@@ -1117,15 +973,12 @@ md-dialog.invitation-confirm-modal {
       md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
         padding-left: 1px; }
     md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
         margin: auto; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
@@ -1136,12 +989,10 @@ md-dialog.invitation-confirm-modal {
     width: 100%;
     height: 40px; }
     md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -1149,15 +1000,12 @@ md-dialog.invitation-confirm-modal {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
           width: 14px;
           stroke: #067f8e; }
@@ -1174,12 +1022,10 @@ md-dialog.invitation-confirm-modal {
     text-align: center;
     margin: 10px; }
   md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -1206,15 +1052,12 @@ invitation-manager .circle-invite-wrap {
   width: 33px;
   height: 33px;
   border-radius: 17px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
   margin-right: 10px;
   cursor: pointer; }
 
@@ -1244,15 +1087,12 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list md-list-item {
       min-height: 20px;
       border-bottom: 1px solid #ebebeb;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
         width: 14px;
         height: 14px;
@@ -1268,25 +1108,21 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
       padding: 10px 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: column;
-          -ms-flex-direction: column;
-              flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
       padding: 10px 20px;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1; }
+      -ms-flex-positive: 1;
+          flex-grow: 1; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 16px;
         color: #757a83;
         font-family: Lato;
         font-weight: 400;
         text-transform: capitalize;
-        -webkit-flex-grow: 1;
-            -ms-flex-positive: 1;
-                flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
         margin-bottom: 3px; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 14px;
@@ -1306,15 +1142,12 @@ md-menu-content.md-menu-content-invitation-manager {
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: baseline;
-          -ms-flex-align: baseline;
-              align-items: baseline;
-      -webkit-flex-grow: 0;
-          -ms-flex-positive: 0;
-              flex-grow: 0; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+      -ms-flex-positive: 0;
+          flex-grow: 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .invite-sub-title {
       font-size: 14px;
       color: #757a83;
@@ -1327,15 +1160,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #acacac;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       margin-right: 6px; }
       md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn {
         height: 12px;
@@ -1351,15 +1181,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #87ca4d;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
         width: 14px;
         cursor: pointer; }
@@ -1371,26 +1198,20 @@ md-menu-content.md-menu-content-invitation-manager {
     font-family: Lato;
     font-weight: 400;
     text-align: center;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     min-height: 80px; }
   md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     height: 60px;
     background: #fafafa; }
     md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
@@ -1461,12 +1282,10 @@ md-dialog.invite-teacher-modal-wrap {
     height: 100%;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     overflow: hidden; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .modal-main-title {
       margin-top: 20px;
@@ -1501,12 +1320,10 @@ md-dialog.invite-teacher-modal-wrap {
       text-align: center;
       margin-top: 20px; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
         margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
@@ -1515,12 +1332,10 @@ md-dialog.invite-teacher-modal-wrap {
     width: 100%;
     height: 40px; }
     md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -1528,15 +1343,12 @@ md-dialog.invite-teacher-modal-wrap {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
           width: 35px;
           stroke: #085c66; }
@@ -1599,12 +1411,10 @@ login-form {
     margin-left: auto;
     padding-right: 21px;
     padding-left: 21px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center; }
+    -ms-flex-align: center;
+        align-items: center; }
     login-form .login-form-container .inputs-container .input-wrapper:last-child {
       margin-bottom: 35px; }
     login-form .login-form-container .inputs-container .input-wrapper svg-icon {
@@ -1612,9 +1422,8 @@ login-form {
     login-form .login-form-container .inputs-container .input-wrapper input {
       height: 41px;
       border: none;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
       padding: 0;
       outline: none;
       font-weight: 400;
@@ -1709,15 +1518,12 @@ on-boarding-bar {
   bottom: -70px;
   width: 100%; }
   on-boarding-bar .on-board-pager-wrap .on-board-pager {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     background-color: white;
     width: 30%;
     margin-left: auto;
@@ -1769,15 +1575,12 @@ on-boarding-bar {
     display: block; }
   .on-board .svg-wrapper {
     height: 100%;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center; }
   .on-board .clearfix:after {
     content: " ";
     display: block;
@@ -1840,15 +1643,12 @@ on-boarding-bar {
     box-sizing: border-box;
     position: relative; }
     .on-board .container .step {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: column;
-          -ms-flex-direction: column;
-              flex-direction: column;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center; }
       .on-board .container .step .welcome .main-title {
         margin-bottom: 50px; }
       .on-board .container .step .welcome .sub-title {
@@ -1881,8 +1681,7 @@ on-boarding-bar {
           font-weight: 400; }
           .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg {
             width: 16px;
-            -webkit-transform: rotate(-90deg);
-                    transform: rotate(-90deg); }
+            transform: rotate(-90deg); }
             .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg polyline {
               stroke: #ffffff; }
       .on-board .container .step .goals .sub-title {
@@ -1916,9 +1715,8 @@ on-boarding-bar {
         .on-board .container .step .bg-wrap .thinking-raccoon {
           display: block; }
       .on-board .container .step.make-padding {
-        -webkit-flex-direction: row;
-            -ms-flex-direction: row;
-                flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
         padding-top: 61px;
         padding-bottom: 61px; }
       .on-board .container .step.diagnostic .diagnostic-title {
@@ -1936,15 +1734,12 @@ on-boarding-bar {
         text-align: center;
         margin-top: 15px; }
       .on-board .container .step.diagnostic .btn-wrap {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-flex-direction: row;
-            -ms-flex-direction: row;
-                flex-direction: row;
-        -webkit-justify-content: flex-end;
-            -ms-flex-pack: end;
-                justify-content: flex-end;
+        -ms-flex-direction: row;
+            flex-direction: row;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
         margin-top: 52px;
         margin-right: 20px; }
         .on-board .container .step.diagnostic .btn-wrap button {
@@ -1975,13 +1770,11 @@ purchase-btn .flex-container {
   padding: 0;
   margin: 0 -15px;
   list-style: none;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-flex-flow: row wrap;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start; }
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
 
 purchase-btn .flex-item {
   padding: 0;
@@ -2061,15 +1854,12 @@ purchase-btn .upgraded .text {
       position: relative;
       bottom: 17.5px;
       background-color: #0a9bad;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
         width: 45px;
         height: 45px; }
@@ -2161,15 +1951,12 @@ purchase-btn .upgraded .text {
       color: #757a83;
       font-family: Lato;
       font-weight: 400;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       text-align: center; }
       .purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;
@@ -2349,18 +2136,14 @@ user-goals {
     user-goals > section .selected-schools-container {
       height: 19px; }
   user-goals .title-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-            flex-direction: row;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: flex-end;
-        -ms-flex-align: end;
-            align-items: flex-end;
+    -ms-flex-direction: row;
+        flex-direction: row;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: end;
+        align-items: flex-end;
     margin-top: 41px; }
     user-goals .title-wrap .edit-title {
       font-size: 18px;
@@ -2405,27 +2188,21 @@ user-goals {
     user-goals .selected-schools .school:not(:last-child):after {
       content: ','; }
   user-goals .subject-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-pack: center;
+        justify-content: center;
     position: relative;
     margin-top: 50px; }
   user-goals .goals-title {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     font-size: 20px;
     color: #4f4d4d;
     font-family: Quicksand;
@@ -2433,54 +2210,42 @@ user-goals {
     text-transform: uppercase;
     text-align: center; }
     user-goals .goals-title .recommended-title {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       margin-right: 12px; }
     user-goals .goals-title .info-wrap .info-icon {
       cursor: pointer;
       margin-top: 2px;
       width: 15px; }
   user-goals .subject-goal-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
     user-goals .subject-goal-wrap .subjects-goal {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-justify-content: flex-start;
-          -ms-flex-pack: start;
-              justify-content: flex-start;
-      -webkit-flex-wrap: wrap;
-          -ms-flex-wrap: wrap;
-              flex-wrap: wrap;
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
       margin-top: 70px;
       margin-right: 0;
       margin-bottom: 70px;
       margin-left: 0; }
       user-goals .subject-goal-wrap .subjects-goal .subject {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-flex-direction: row;
-            -ms-flex-direction: row;
-                flex-direction: row;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-direction: row;
+            flex-direction: row;
+        -ms-flex-align: center;
+            align-items: center;
         width: 284px; }
         user-goals .subject-goal-wrap .subjects-goal .subject .icon-wrapper {
           width: 50px;
@@ -2541,8 +2306,7 @@ user-goals {
       top: -2px; }
       user-goals .save-btn-wrap .dropdown-arrow-icon svg {
         width: 15px;
-        -webkit-transform: rotate(-90deg);
-                transform: rotate(-90deg); }
+        transform: rotate(-90deg); }
         user-goals .save-btn-wrap .dropdown-arrow-icon svg polyline {
           stroke: white; }
     user-goals .save-btn-wrap svg-icon {
@@ -2567,16 +2331,13 @@ goal-select {
   color: #4f4d4d;
   font-family: Quicksand;
   font-weight: 400;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   display: flex;
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center; }
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-align: center;
+      align-items: center; }
   goal-select .goal {
     width: 45px;
     text-align: center; }
@@ -2586,12 +2347,10 @@ goal-select {
     font-size: 120%;
     text-align: center;
     cursor: pointer;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center; }
+    -ms-flex-align: center;
+        align-items: center; }
     goal-select .action-btn svg {
       margin: 0 auto;
       width: 35%; }
@@ -2703,12 +2462,10 @@ workouts-progress {
   workouts-progress .items-container {
     height: 67px;
     white-space: nowrap;
-    display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     padding-right: 90px;
     padding-left: 300px; }
     workouts-progress .items-container .dotted-lines-container {
@@ -2717,30 +2474,24 @@ workouts-progress {
       right: 0;
       bottom: 0;
       left: 0;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: center;
+          align-items: center; }
       workouts-progress .items-container .dotted-lines-container .dotted-line {
         border-top: 2px dotted #0a9bad;
         display: inline-block; }
         workouts-progress .items-container .dotted-lines-container .dotted-line.future {
-          -webkit-flex-grow: 1;
-              -ms-flex-positive: 1;
-                  flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
           border-top-color: #cfcfcf; }
     workouts-progress .items-container .item-container {
-      display: -webkit-inline-flex;
       display: -ms-inline-flexbox;
       display: inline-flex;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
       height: 100%;
       cursor: pointer;
       padding-left: 17.5px;
@@ -2750,8 +2501,7 @@ workouts-progress {
         workouts-progress .items-container .item-container.diagnostic .item.selected:after {
           border-color: #87ca4d; }
       workouts-progress .items-container .item-container .item {
-        -webkit-transform: scale(0.6);
-                transform: scale(0.6);
+        transform: scale(0.6);
         box-sizing: border-box;
         display: inline-block;
         width: 50px;
@@ -2760,20 +2510,15 @@ workouts-progress {
         font-size: 28px;
         color: #ffffff;
         font-family: Quicksand;
-        display: -webkit-inline-flex;
         display: -ms-inline-flexbox;
         display: inline-flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
-        transition: -webkit-transform 0.3s cubic-bezier(0, 1.18, 0.58, 1);
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1); }
         workouts-progress .items-container .item-container .item.selected {
-          -webkit-transform: scale(1);
-                  transform: scale(1);
+          transform: scale(1);
           color: #ffffff;
           position: relative;
           border: none; }
@@ -2876,12 +2621,10 @@ workout-intro-lock {
         line-height: 30px; }
 
 .workouts-roadmap-container {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
   min-height: 665px; }
   .workouts-roadmap-container > ui-view {
     width: 100%;
@@ -2890,33 +2633,27 @@ workout-intro-lock {
     background: #ffffff;
     margin-right: 30px;
     width: 705px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column; }
+    -ms-flex-direction: column;
+        flex-direction: column; }
     .workouts-roadmap-container .workouts-roadmap-wrapper workouts-progress {
       height: 67px;
       padding-top: 20px; }
     .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container {
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
       position: relative; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
-        -webkit-transform: translateX(580px);
-                transform: translateX(580px);
+        transform: translateX(580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter-active {
-        -webkit-transform: translateX(0);
-                transform: translateX(0);
+        transform: translateX(0);
         opacity: 1; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave-active {
-        -webkit-transform: translateX(-580px);
-                transform: translateX(-580px);
+        transform: translateX(-580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out;
@@ -2926,16 +2663,13 @@ workout-intro-lock {
         bottom: 0;
         left: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter {
-        -webkit-transform: translateX(-580px);
-                transform: translateX(-580px);
+        transform: translateX(-580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter-active {
-        -webkit-transform: translateX(0);
-                transform: translateX(0);
+        transform: translateX(0);
         opacity: 1; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave-active {
-        -webkit-transform: translateX(580px);
-                transform: translateX(580px);
+        transform: translateX(580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container .workouts-ui-view {
         position: absolute;
@@ -2995,12 +2729,10 @@ workout-intro-lock {
     text-transform: uppercase;
     margin-top: 53px; }
   .workouts-roadmap-diagnostic-intro .first-row, .workouts-roadmap-diagnostic-intro .second-row {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
     .workouts-roadmap-diagnostic-intro .first-row .subject-score, .workouts-roadmap-diagnostic-intro .second-row .subject-score {
       display: inline-block;
       margin: 67.5px 37px auto;
@@ -3041,8 +2773,7 @@ workout-intro-lock {
     margin-top: 5px;
     display: inline-block; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .change-subject-container.rotate svg-icon svg {
-      -webkit-animation: rotateAnimation 0.9s infinite linear;
-              animation: rotateAnimation 0.9s infinite linear; }
+      animation: rotateAnimation 0.9s infinite linear; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .change-subject-container .change-subject-title {
       font-family: Lato;
       font-weight: 200;
@@ -3053,12 +2784,10 @@ workout-intro-lock {
     font-weight: 400;
     font-size: 18px; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+        justify-content: center;
     margin-top: 33px; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper {
       margin-right: 15px; }
@@ -3130,21 +2859,11 @@ workout-intro-lock {
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .start-btn-wrapper {
     margin-top: 50px; }
 
-@-webkit-keyframes rotateAnimation {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
-
 @keyframes rotateAnimation {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
+    transform: rotate(0deg); }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
+    transform: rotate(360deg); } }
 
 .workouts-roadmap-workout-in-progress .workouts-roadmap-workout-in-progress-wrapper {
   color: #4f4d4d;
@@ -3181,36 +2900,21 @@ workout-intro-lock {
     font-weight: 700; }
   .workouts-roadmap-base-pre-summary .checkmark-icon {
     margin-top: 52px;
-    -webkit-animation-name: scale-icon;
-            animation-name: scale-icon;
-    -webkit-animation-duration: 0.3s;
-            animation-duration: 0.3s;
-    -webkit-animation-iteration-count: 1;
-            animation-iteration-count: 1;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out;
-    -webkit-animation-fill-mode: forwards;
-            animation-fill-mode: forwards; }
+    animation-name: scale-icon;
+    animation-duration: 0.3s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards; }
   .workouts-roadmap-base-pre-summary .complete-text {
     margin-top: 23px;
     font-size: 23px;
     font-weight: 400; }
 
-@-webkit-keyframes scale-icon {
-  0% {
-    -webkit-transform: scale(0);
-            transform: scale(0); }
-  100% {
-    -webkit-transform: scale(1);
-            transform: scale(1); } }
-
 @keyframes scale-icon {
   0% {
-    -webkit-transform: scale(0);
-            transform: scale(0); }
+    transform: scale(0); }
   100% {
-    -webkit-transform: scale(1);
-            transform: scale(1); } }
+    transform: scale(1); } }
 
 /* fonts size */
 /* general */
@@ -3228,48 +2932,38 @@ workout-intro-lock {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   height: 47px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
   color: white;
   font-family: Lato;
   font-size: 16px; }
   .exercise-header .left-area {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center; }
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
     .exercise-header .left-area .side-text {
       padding-left: 25px;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
       text-transform: capitalize; }
     .exercise-header .left-area .no-math-icon-wrapper {
       width: 32px;
       height: 32px;
       margin-left: 30px;
       position: relative;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       border: 1px solid #81649c;
       border-radius: 100%; }
       .exercise-header .left-area .no-math-icon-wrapper svg {
@@ -3284,8 +2978,7 @@ workout-intro-lock {
         left: 0;
         width: 100%;
         height: 1px;
-        -webkit-transform: rotate(30deg);
-                transform: rotate(30deg);
+        transform: rotate(30deg);
         background-color: #81649c;
         z-index: 1; }
   .exercise-header .quit-back-button {
@@ -3320,8 +3013,7 @@ workout-intro-lock {
     position: absolute;
     top: 14px;
     left: 50%;
-    -webkit-transform: translate(-50%);
-            transform: translate(-50%); }
+    transform: translate(-50%); }
   .exercise-header .pattern {
     background-repeat: repeat-x;
     width: 100%;
@@ -3348,12 +3040,10 @@ workout-intro-lock {
     .exercise-header .right-area .date-box {
       float: right;
       position: relative;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-align-items: baseline;
-          -ms-flex-align: baseline;
-              align-items: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
       border-right: 1px solid #ffffff; }
       .exercise-header .right-area .date-box .timer-view {
         margin-right: 25px;
@@ -3427,13 +3117,11 @@ purchase-btn .flex-container {
   padding: 0;
   margin: 0 -15px;
   list-style: none;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-flex-flow: row wrap;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start; }
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
 
 purchase-btn .flex-item {
   padding: 0;
@@ -3513,15 +3201,12 @@ purchase-btn .upgraded .text {
       position: relative;
       bottom: 17.5px;
       background-color: #0a9bad;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
         width: 45px;
         height: 45px; }
@@ -3613,15 +3298,12 @@ purchase-btn .upgraded .text {
       color: #757a83;
       font-family: Lato;
       font-weight: 400;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       text-align: center; }
       .purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;
@@ -3693,15 +3375,12 @@ md-dialog.invitation-confirm-modal {
       md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
         padding-left: 1px; }
     md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
         margin: auto; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
@@ -3712,12 +3391,10 @@ md-dialog.invitation-confirm-modal {
     width: 100%;
     height: 40px; }
     md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -3725,15 +3402,12 @@ md-dialog.invitation-confirm-modal {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
           width: 14px;
           stroke: #067f8e; }
@@ -3750,12 +3424,10 @@ md-dialog.invitation-confirm-modal {
     text-align: center;
     margin: 10px; }
   md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -3782,15 +3454,12 @@ invitation-manager .circle-invite-wrap {
   width: 33px;
   height: 33px;
   border-radius: 17px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
   margin-right: 10px;
   cursor: pointer; }
 
@@ -3820,15 +3489,12 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list md-list-item {
       min-height: 20px;
       border-bottom: 1px solid #ebebeb;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
         width: 14px;
         height: 14px;
@@ -3844,25 +3510,21 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
       padding: 10px 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: column;
-          -ms-flex-direction: column;
-              flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
       padding: 10px 20px;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1; }
+      -ms-flex-positive: 1;
+          flex-grow: 1; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 16px;
         color: #757a83;
         font-family: Lato;
         font-weight: 400;
         text-transform: capitalize;
-        -webkit-flex-grow: 1;
-            -ms-flex-positive: 1;
-                flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
         margin-bottom: 3px; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 14px;
@@ -3882,15 +3544,12 @@ md-menu-content.md-menu-content-invitation-manager {
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: baseline;
-          -ms-flex-align: baseline;
-              align-items: baseline;
-      -webkit-flex-grow: 0;
-          -ms-flex-positive: 0;
-              flex-grow: 0; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+      -ms-flex-positive: 0;
+          flex-grow: 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .invite-sub-title {
       font-size: 14px;
       color: #757a83;
@@ -3903,15 +3562,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #acacac;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       margin-right: 6px; }
       md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn {
         height: 12px;
@@ -3927,15 +3583,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #87ca4d;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
         width: 14px;
         cursor: pointer; }
@@ -3947,26 +3600,20 @@ md-menu-content.md-menu-content-invitation-manager {
     font-family: Lato;
     font-weight: 400;
     text-align: center;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     min-height: 80px; }
   md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     height: 60px;
     background: #fafafa; }
     md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
@@ -4037,12 +3684,10 @@ md-dialog.invite-teacher-modal-wrap {
     height: 100%;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     overflow: hidden; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .modal-main-title {
       margin-top: 20px;
@@ -4077,12 +3722,10 @@ md-dialog.invite-teacher-modal-wrap {
       text-align: center;
       margin-top: 20px; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
         margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
@@ -4091,12 +3734,10 @@ md-dialog.invite-teacher-modal-wrap {
     width: 100%;
     height: 40px; }
     md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -4104,15 +3745,12 @@ md-dialog.invite-teacher-modal-wrap {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
           width: 35px;
           stroke: #085c66; }
@@ -4159,23 +3797,20 @@ md-dialog.invite-teacher-modal-wrap {
         padding-bottom: 0; }
         .app-header .main-content-header .app-states-list md-list md-list-item {
           cursor: pointer;
-          -webkit-flex: initial;
-              -ms-flex: initial;
-                  flex: initial; }
+          -ms-flex: initial;
+              flex: initial; }
           .app-header .main-content-header .app-states-list md-list md-list-item .title {
             text-transform: capitalize;
-            -webkit-align-self: stretch;
-                -ms-flex-item-align: stretch;
-                    align-self: stretch;
+            -ms-flex-item-align: stretch;
+                align-self: stretch;
             padding-top: 15px; }
           .app-header .main-content-header .app-states-list md-list md-list-item:hover .title {
             color: #0a9bad; }
           .app-header .main-content-header .app-states-list md-list md-list-item.active .title {
             color: #0a9bad; }
     .app-header .main-content-header .app-user-area {
-      -webkit-align-self: center;
-          -ms-flex-item-align: center;
-              align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center;
       margin-left: auto; }
       .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
@@ -4187,6 +3822,11 @@ md-dialog.invite-teacher-modal-wrap {
           height: 16px;
           margin-right: 10px;
           float: left; }
+          .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper + span {
+            font-size: 16px;
+            font-family: Lato;
+            font-weight: Light;
+            font-style: italic; }
       .app-header .main-content-header .app-user-area .profile-status:hover {
         color: #0a9bad; }
       .app-header .main-content-header .app-user-area .profile-open-modal-btn {
@@ -4197,37 +3837,32 @@ md-dialog.invite-teacher-modal-wrap {
       .app-header .main-content-header .app-user-area .md-button {
         background: white;
         width: auto;
-        display: -webkit-flex !important;
         display: -ms-flexbox !important;
         display: flex !important;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         .app-header .main-content-header .app-user-area .md-button div {
           min-width: 40px; }
 
-.md-open-menu-container .header-modal-item {
+._md-open-menu-container .header-modal-item {
   font-family: Lato; }
-  .md-open-menu-container .header-modal-item a {
+  ._md-open-menu-container .header-modal-item a {
     width: 100%;
     text-decoration: none;
     color: inherit; }
-  .md-open-menu-container .header-modal-item:not(.purchase-status) span {
+  ._md-open-menu-container .header-modal-item:not(.purchase-status) span {
     width: 100%; }
-  .md-open-menu-container .header-modal-item.header-modal-item-profile {
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-align-items: flex-start;
-        -ms-flex-align: start;
-            align-items: flex-start;
+  ._md-open-menu-container .header-modal-item.header-modal-item-profile {
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: start;
+        align-items: flex-start;
     margin-bottom: 11px; }
-    .md-open-menu-container .header-modal-item.header-modal-item-profile .username {
+    ._md-open-menu-container .header-modal-item.header-modal-item-profile .username {
       margin-bottom: 5px; }
-    .md-open-menu-container .header-modal-item.header-modal-item-profile .email {
+    ._md-open-menu-container .header-modal-item.header-modal-item-profile .email {
       font-size: 14px;
       color: #acacac;
       font-family: Lato;
@@ -4235,18 +3870,18 @@ md-dialog.invite-teacher-modal-wrap {
       border-bottom: 1px solid #0a9bad;
       width: 100%;
       padding-bottom: 15px; }
-  .md-open-menu-container .header-modal-item.header-modal-item-uppercase {
+  ._md-open-menu-container .header-modal-item.header-modal-item-uppercase {
     min-height: 35px;
     line-height: 35px;
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 300;
     cursor: pointer; }
-    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
+    ._md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
       color: #161616; }
-    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
+    ._md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
       color: #898989; }
-  .md-open-menu-container .header-modal-item .check-mark-wrapper {
+  ._md-open-menu-container .header-modal-item .check-mark-wrapper {
     position: relative;
     top: -2px;
     width: 16px;
@@ -4254,14 +3889,14 @@ md-dialog.invite-teacher-modal-wrap {
     border-radius: 50%;
     background-color: #cfcfcf;
     margin-left: 10px; }
-    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
+    ._md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
       height: 100%; }
-    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
+    ._md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
       width: 75%;
       height: 100%;
       margin: auto;
       display: block; }
-  .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
+  ._md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
     background-color: #f8f8f8; }
 
 md-menu-content.md-menu-content-znk-header {

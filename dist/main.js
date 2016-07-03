@@ -439,8 +439,12 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
             var numQuestionCounter = _getInitNumQuestion(exerciseData.resultsData.questionResults);
 
+            function _getNumberOfQuestions() {
+                return diagnosticSettings.isFixed ? questions.length : diagnosticSettings.questionsPerSubject;
+            }
+
             function _isLastQuestion() {
-                return numQuestionCounter === diagnosticSettings.questionsPerSubject;
+                return numQuestionCounter === _getNumberOfQuestions();
             }
 
             function _getCurrentIndex() {
@@ -622,7 +626,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 allowedTimeForExercise: 12 * 60 * 1000
             };
 
-            self.questionsPerSubject = diagnosticSettings.questionsPerSubject;
+            self.questionsPerSubject = _getNumberOfQuestions();
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
@@ -7104,8 +7108,8 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$mdDialog", "$window", "purchaseService", "znkHeaderSrv", "UserProfileService", "$injector", "PurchaseStateEnum", function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum) {
+        ["$scope", "$translatePartialLoader", "$mdDialog", "$window", "purchaseService", "znkHeaderSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "AuthService", "ENV", function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
+                  UserProfileService, $injector, PurchaseStateEnum, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
@@ -7133,6 +7137,11 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
                 //OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
                 //    self.isOnBoardingCompleted = isCompleted;
                 //});
+            };
+
+            this.logout = function () {
+                AuthService.logout();
+                $window.location.replace(ENV.redirectLogout);
             };
 
             function _checkIfHasProVersion() {
