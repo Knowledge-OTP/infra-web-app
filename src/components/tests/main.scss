@@ -66,6 +66,9 @@
                 position: absolute;
                 top: 0;
                 height: 100%;
+                &.done:after {
+                    border-left: 7.5px solid $borderColor3;
+                }
             }
             &.active:before {
                 content: "\A";

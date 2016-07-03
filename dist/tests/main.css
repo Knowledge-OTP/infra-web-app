@@ -63,6 +63,8 @@
       position: absolute;
       top: 0;
       height: 100%; }
+      .app-tests-navigationPane md-list md-list-item.active:after.done:after {
+        border-left: 7.5px solid #87ca4d; }
     .app-tests-navigationPane md-list md-list-item.active:before {
       content: "\A";
       border-style: solid;
