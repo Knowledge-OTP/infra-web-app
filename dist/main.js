@@ -1174,8 +1174,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"video-wrapper\">\n" +
     "        <video loop autoplay\n" +
     "               preload=\"auto\"\n" +
-    "               poster=\"diagnosticExercise/assets/images/poster/diagnostic-pre-summary.png\">\n" +
-    "            <source src=\"diagnosticExercise/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
+    "               poster=\"/assets/images/poster/diagnostic-pre-summary.png\">\n" +
+    "            <source src=\"/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1231,7 +1231,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
-    "            class=\"start-button md-button primary md\"\n" +
+    "            class=\"start-button md-button znk-primary md\"\n" +
     "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
