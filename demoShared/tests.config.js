@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('demo').config(function (testsSrvProvider) {
+    angular.module('demo').config(function (TestsSrvProvider) {
 
         function subjectsMapGetter(SubjectEnum) {
             return {
@@ -25,6 +25,6 @@
             };
         }
 
-        testsSrvProvider.setSubjectsMap(subjectsMapGetter);
+        TestsSrvProvider.setSubjectsMap(subjectsMapGetter);
     });
 })(angular);
