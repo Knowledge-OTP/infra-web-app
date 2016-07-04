@@ -4,7 +4,7 @@
     angular.module('znk.infra-web-app.onBoarding').run(function ($rootScope, OnBoardingService, $state) {
         'ngInject';
         var isOnBoardingCompleted = false;
-        $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState, fromParams) {//eslint-disable-line
+        $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
             if (isOnBoardingCompleted) {
                 return;
             }
