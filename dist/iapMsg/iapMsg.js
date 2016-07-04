@@ -73,10 +73,9 @@
             };
             this.raccoonTypes = raccoonTypes;
 
-            var racccoonTypeToClassMap = {
-                [this.raccoonTypes.HINT_RACCOON]: 'hint-raccoon',
-                [this.raccoonTypes.PRACTICE_RACCOON]: 'hint-raccoon-for-practice'
-            };
+            var racccoonTypeToClassMap = {};
+            racccoonTypeToClassMap[this.raccoonTypes.HINT_RACCOON] = 'hint-raccoon';
+            racccoonTypeToClassMap[this.raccoonTypes.PRACTICE_RACCOON] = 'hint-raccoon-for-practice';
 
             function addPlaceHolderElement() {
                 var wrapper = angular.element('<div class="raccoon-wrap"></div>');
