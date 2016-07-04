@@ -6176,7 +6176,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
                 var WorkoutsRoadmapSrv = {};
 
-                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily){
+                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder){
                     if(!_newWorkoutGeneratorGetter){
                         var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
                         $log.error(errMsg);
@@ -6184,7 +6184,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
-                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily));
+                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder));
                 };
 
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes = function(){
