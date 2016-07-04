@@ -331,14 +331,14 @@
                 }
 
                 data.personalizedWorkoutTimesProm =
-                    WorkoutsRoadmapSrv.generateNewExercise(subjectToIgnoreForNextDaily);
+                    WorkoutsRoadmapSrv.generateNewExercise(subjectToIgnoreForNextDaily, nextWorkout.workoutOrder);
 
                 $timeout(function () {
                     data.roadmapCtrlActions.freezeWorkoutProgressComponent(false);
                     data.roadmapCtrlActions.setCurrWorkout(nextWorkout.workoutOrder);
                 }, TIMOUT_BEFORE_GOING_TO_NEXT);
             }
-            
+
             function diagnosticPreSummary() {
                 vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMARY.DIAGNOSTIC_TEST');
                 _getToNextWorkout();
@@ -517,7 +517,7 @@
                         if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
                             subjectsToIgnore = prevWorkout.subjectId;
                         }
-                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore);
+                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
                     } else {
                         getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
                     }
@@ -550,7 +550,7 @@
                     delete vm.selectedTime;
 
                     $timeout(function(){
-                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects);
+                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
                             vm.rotate = false;

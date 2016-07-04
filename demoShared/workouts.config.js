@@ -44,5 +44,5 @@ angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvide
     }
     WorkoutsRoadmapSrvProvider.setNewWorkoutGeneratorGetter(newWorkoutGetter);
 
-    WorkoutsRoadmapSrvProvider.setWorkoutAvailTimes([2,5,10]);
+    WorkoutsRoadmapSrvProvider.setWorkoutAvailTimes([5,10,15]);
 });

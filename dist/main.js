@@ -5666,14 +5666,14 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                 }
 
                 data.personalizedWorkoutTimesProm =
-                    WorkoutsRoadmapSrv.generateNewExercise(subjectToIgnoreForNextDaily);
+                    WorkoutsRoadmapSrv.generateNewExercise(subjectToIgnoreForNextDaily, nextWorkout.workoutOrder);
 
                 $timeout(function () {
                     data.roadmapCtrlActions.freezeWorkoutProgressComponent(false);
                     data.roadmapCtrlActions.setCurrWorkout(nextWorkout.workoutOrder);
                 }, TIMOUT_BEFORE_GOING_TO_NEXT);
             }
-            
+
             function diagnosticPreSummary() {
                 vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMARY.DIAGNOSTIC_TEST');
                 _getToNextWorkout();
@@ -5852,7 +5852,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                         if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
                             subjectsToIgnore = prevWorkout.subjectId;
                         }
-                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore);
+                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
                     } else {
                         getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
                     }
@@ -5885,7 +5885,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                     delete vm.selectedTime;
 
                     $timeout(function(){
-                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects);
+                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
                             vm.rotate = false;
