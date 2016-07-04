@@ -1061,7 +1061,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            <div class=\"doughnut-wrapper\">\n" +
     "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
     "                <div class=\"znk-doughnut\">\n" +
-    "                    <div class=\"white-bg-doughnut-score\">{{doughnut.score}}</div>\n" +
+    "                    <div class=\"white-bg-doughnut-score\">{{doughnut.score === 0 ? '-' : doughnut.score }}</div>\n" +
     "                    <div class=\"goal-point\"\n" +
     "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +
     "                        <div class=\"goal-point-bg\">\n" +
