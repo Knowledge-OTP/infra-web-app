@@ -10,7 +10,9 @@
             <div class="doughnut-wrapper">
                 <p class="subject-name" translate="{{doughnut.subjectName}}"></p>
                 <div class="znk-doughnut">
-                    <div class="white-bg-doughnut-score">{{doughnut.score}}</div>
+                    <div class="white-bg-doughnut-score">
+                        {{doughnut.score === 0 ? '-' : doughnut.score }}
+                    </div>
                     <div class="goal-point"
                          ng-style="::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}">
                         <div class="goal-point-bg">
@@ -48,7 +50,7 @@
     </div>
     <div class="footer-text" translate="{{vm.footerTranslatedText}}"></div>
     <button autofocus tabindex="1"
-            class="start-button md-button primary md"
+            class="start-button md-button znk md-primary"
             ui-sref="app.workoutsRoadmap.diagnostic"
             translate=".DONE">DONE
     </button>

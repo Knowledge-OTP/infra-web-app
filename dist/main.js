@@ -1183,8 +1183,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"video-wrapper\">\n" +
     "        <video loop autoplay\n" +
     "               preload=\"auto\"\n" +
-    "               poster=\"diagnosticExercise/assets/images/poster/diagnostic-pre-summary.png\">\n" +
-    "            <source src=\"diagnosticExercise/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
+    "               poster=\"/assets/images/poster/diagnostic-pre-summary.png\">\n" +
+    "            <source src=\"/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1202,7 +1202,9 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            <div class=\"doughnut-wrapper\">\n" +
     "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
     "                <div class=\"znk-doughnut\">\n" +
-    "                    <div class=\"white-bg-doughnut-score\">{{doughnut.score}}</div>\n" +
+    "                    <div class=\"white-bg-doughnut-score\">\n" +
+    "                        {{doughnut.score === 0 ? '-' : doughnut.score }}\n" +
+    "                    </div>\n" +
     "                    <div class=\"goal-point\"\n" +
     "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +
     "                        <div class=\"goal-point-bg\">\n" +
@@ -1240,7 +1242,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
-    "            class=\"start-button md-button primary md\"\n" +
+    "            class=\"start-button md-button znk md-primary\"\n" +
     "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
