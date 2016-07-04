@@ -22,15 +22,12 @@ module.exports = function (config) {
         files: [
             'test/crossBrowserSupport/*',
             // bower:js
-            'bower_components/jquery/dist/jquery.js',
-            'bower_components/es5-shim/es5-shim.js',
             'bower_components/angular/angular.js',
             'bower_components/angular-animate/angular-animate.js',
             'bower_components/Swiper/dist/js/swiper.js',
             'bower_components/firebase/firebase.js',
             'bower_components/angular-translate/angular-translate.js',
             'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-            'bower_components/angular-svg-round-progressbar/build/roundProgress.min.js',
             'bower_components/infra/dist/main.js',
             'bower_components/angular-ui-router/release/angular-ui-router.js',
             'bower_components/angular-aria/angular-aria.js',
@@ -39,9 +36,12 @@ module.exports = function (config) {
             'bower_components/ng-tags-input/ng-tags-input.js',
             'bower_components/Chart.js/Chart.js',
             'bower_components/angular-chart.js/dist/angular-chart.js',
+            'bower_components/angular-sanitize/angular-sanitize.js',
+            'bower_components/es5-shim/es5-shim.js',
             'bower_components/angular-mocks/angular-mocks.js',
             'bower_components/mockfirebase/browser/mockfirebase.js',
             'bower_components/jasmine/lib/jasmine-core/jasmine.js',
+            'bower_components/jquery/dist/jquery.js',
             'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
             // endbower
 

@@ -227,6 +227,7 @@ md-tooltip.tooltip-for-estimated-score-widget {
     height: 87px;
     background: $bgColor3;
     padding: 0 5px;
+    z-index: 100;
     .md-content {
         height: auto;
         text-align: center;

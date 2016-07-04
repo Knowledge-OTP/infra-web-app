@@ -40,7 +40,8 @@
                               <md-tooltip md-visible=""
                                           md-direction="top"
                                           class="tooltip-for-estimated-score-widget md-whiteframe-2dp">
-                                  <div translate=".YOUR_GOAL" translate-values="{ goal: {{widgetItem.userGoal}} }" class="top-text"></div>
+                                  mdklscmkldsamcl/ds;ammfkds'am
+                                  <!--<div translate=".YOUR_GOAL" translate-values="{ goal: {{widgetItem.userGoal}} }" class="top-text"></div>-->
                                   <div ng-switch="widgetItem.estimatedScore >= widgetItem.userGoal" class="bottom-text">
                                       <span ng-switch-when="true" translate=".GOAL_REACHED"></span>
                                       <span ng-switch-default translate=".PTS_TO_GO" translate-values="{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }"></span>
@@ -66,8 +67,8 @@
                 <td class="num">{{d.userCompositeGoal}}</td>
             </tr>
         </table>
-        <span class="edit-my-goals ng-hide"
-              ng-show="d.isDiagnosticComplete"
+        <span class="edit-my-goals"
+              ng-if="d.userGoals"
               ng-click="d.showGoalsEdit()"
               translate=".EDIT_MY_GOALS"></span>
     </div>
