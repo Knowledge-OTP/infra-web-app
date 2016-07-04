@@ -1231,7 +1231,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
-    "            class=\"start-button md-button znk-primary md\"\n" +
+    "            class=\"start-button md-button znk md-primary\"\n" +
     "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
