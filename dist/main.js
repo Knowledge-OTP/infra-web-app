@@ -76,7 +76,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {        
+    angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {
         var _diagnosticExamIdGetter;
         this.setDiagnosticExamIdGetter = function(diagnosticExamIdGetter){
             _diagnosticExamIdGetter = diagnosticExamIdGetter;
@@ -121,6 +121,12 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 
                     var startedSectionsNum= Object.keys(diagnosticExamResult.sectionResults);
                     return startedSectionsNum ? ExerciseStatusEnum.ACTIVE.enum : ExerciseStatusEnum.NEW.enum;
+                });
+            };
+
+            DiagnosticSrv.isDiagnosticCompleted = function(){
+                return DiagnosticSrv.getDiagnosticStatus().then(function(diagnosticStatus){
+                    return diagnosticStatus === ExerciseStatusEnum.COMPLETED.enum;
                 });
             };
 
