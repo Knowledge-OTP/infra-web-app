@@ -288,7 +288,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
         });
 })(angular);

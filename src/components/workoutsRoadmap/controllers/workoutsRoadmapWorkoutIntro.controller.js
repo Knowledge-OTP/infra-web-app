@@ -2,7 +2,7 @@
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout) {
+        function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -43,7 +43,7 @@
             var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
             //set times workouts
-            (function () {
+            function setWorkoutsTimes(){
                 var getPersonalizedWorkoutsByTimeProm;
                 var subjectsToIgnore;
 
@@ -59,8 +59,8 @@
 
                     setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                 }
-            })();
-
+            }
+            setWorkoutsTimes();
 
             vm.getWorkoutIcon = function (workoutLength) {
                 if (vm.workoutsByTime) {
@@ -96,6 +96,45 @@
                 };
 
             })();
+
+            vm.startExercise = function(){
+                var selectedWorkout = angular.copy(vm.selectedWorkout);
+                var isWorkoutGenerated = selectedWorkout && angular.isDefined(selectedWorkout.subjectId)
+                    && angular.isDefined(selectedWorkout.exerciseTypeId)
+                    && angular.isDefined(selectedWorkout.exerciseId);
+                if (!isWorkoutGenerated) {
+                    return;
+                }
+                var propTosCopy = ['subjectId', 'exerciseTypeId', 'exerciseId', 'categoryId'];
+                angular.forEach(propTosCopy, function (prop) {
+                    currWorkout[prop] = selectedWorkout[prop];
+                });
+                currWorkout.status = ExerciseStatusEnum.ACTIVE.enum;
+                delete currWorkout.personalizedTimes;
+                delete currWorkout.$$hashKey;
+                delete currWorkout.isAvail;
+
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'workoutStarted',
+                //     props: {
+                //         timeBundle: self.userTimePreference,
+                //         workoutOrderId: currWorkout.workoutOrder,
+                //         exerciseType: currWorkout.exerciseTypeId,
+                //         subjectType: currWorkout.subjectId,
+                //         exerciseId: currWorkout.exerciseId
+                //     }
+                // });
+                //
+                // znkAnalyticsSrv.timeTrack({
+                //     eventName: 'workoutCompleted'
+                // });
+
+                WorkoutsSrv.setWorkout(currWorkout.workoutOrder, currWorkout).then(function () {
+                    $state.go('app.workouts.workout', {
+                        workout: currWorkout.workoutOrder
+                    });
+                });
+            };
 
             $scope.$watch('vm.selectedTime', function (newSelectedTime) {
                 if (angular.isUndefined(newSelectedTime)) {
