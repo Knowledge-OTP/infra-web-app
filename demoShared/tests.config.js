@@ -3,7 +3,7 @@
 
     angular.module('demo').config(function (TestsSrvProvider) {
 
-        function subjectsMapGetter(SubjectEnum) {
+        function subjectsOrderGetter(SubjectEnum) {
             return {
                 subjects: [
                     {
@@ -25,6 +25,6 @@
             };
         }
 
-        TestsSrvProvider.setSubjectsMap(subjectsMapGetter);
+        TestsSrvProvider.setSubjectsOrder(subjectsOrderGetter);
     });
 })(angular);

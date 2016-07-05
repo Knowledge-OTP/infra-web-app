@@ -3,10 +3,10 @@
 
     angular.module('znk.infra-web-app.tests').provider('TestsSrv', [
         function () {
-            var _subjectsMapGetter;
+            var _subjectsOrderGetter;
 
-            this.setSubjectsMap = function (subjectsMapGetter) {
-                _subjectsMapGetter = subjectsMapGetter;
+            this.setSubjectsOrder = function (subjectsOrderGetter) {
+                _subjectsOrderGetter = subjectsOrderGetter;
             };
 
             this.$get = function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum) {
@@ -14,7 +14,7 @@
 
                 var TestsSrv = {};
 
-                TestsSrv.getSubjectsMap = function () {
+                TestsSrv.getSubjectsOrder = function () {
                     if (!_subjectsMapGetter) {
                         var errMsg = 'TestsSrv: subjectsMapGetter was not set.';
                         $log.error(errMsg);
@@ -40,7 +40,7 @@
                     return examSection;
                 };
 
-                TestsSrv.isAllSubjectLocked = function (exam) {
+                TestsSrv.areAllSubjectsLocked = function (exam) {
                     var isAvail = true;
                     for (var i = 0, ii = exam.sections.length; i < ii; i++) {
                         if (exam.sections[i].isAvail) {
@@ -114,9 +114,9 @@
                     return ScoringService.isTypeFull(typeId);
                 };
 
-                TestsSrv.groupBySubjectId = function (obj) {
+                TestsSrv.groupBySubjectId = function (subject) {
                     var newObj = {};
-                    angular.forEach(obj, function (value) {
+                    angular.forEach(subject, function (value) {
                         if (!newObj[value.subjectId]) {
                             newObj[value.subjectId] = [];
                         }
