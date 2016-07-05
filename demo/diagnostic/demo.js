@@ -1,7 +1,7 @@
 angular.module('demo', [
         'znk.infra-web-app.diagnosticExercise',
         'pascalprecht.translate'])
-    .config(function ($translateProvider, StatsSrvProvider, $urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
+    .config(function ($translateProvider, $urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -13,12 +13,6 @@ angular.module('demo', [
                 urlTemplate: '/{part}/locale/{lang}.json'
             })
             .preferredLanguage('en');
-
-        var getCategoryFn = function ($q) {
-            return $q.when({});
-        };
-
-        StatsSrvProvider.setCategoryLookup(getCategoryFn);
 
         InfraConfigSrvProvider.setUserDataFn(['AuthService', function (AuthService) {
             return AuthService.getAuth();

@@ -1183,8 +1183,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"video-wrapper\">\n" +
     "        <video loop autoplay\n" +
     "               preload=\"auto\"\n" +
-    "               poster=\"diagnosticExercise/assets/images/poster/diagnostic-pre-summary.png\">\n" +
-    "            <source src=\"diagnosticExercise/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
+    "               poster=\"/assets/images/poster/diagnostic-pre-summary.png\">\n" +
+    "            <source src=\"/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1202,7 +1202,9 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            <div class=\"doughnut-wrapper\">\n" +
     "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
     "                <div class=\"znk-doughnut\">\n" +
-    "                    <div class=\"white-bg-doughnut-score\">{{doughnut.score}}</div>\n" +
+    "                    <div class=\"white-bg-doughnut-score\">\n" +
+    "                        {{doughnut.score === 0 ? '-' : doughnut.score }}\n" +
+    "                    </div>\n" +
     "                    <div class=\"goal-point\"\n" +
     "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +
     "                        <div class=\"goal-point-bg\">\n" +
@@ -1240,7 +1242,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
-    "            class=\"start-button md-button primary md\"\n" +
+    "            class=\"start-button md-button znk md-primary\"\n" +
     "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
@@ -3478,6 +3480,44 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", function ($rootScope, OnBoardingService, $state) {
+        'ngInject';
+        var isOnBoardingCompleted = false;
+        $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
+            if (isOnBoardingCompleted) {
+                return;
+            }
+
+            var APP_WORKOUTS_STATE = 'app.workoutsRoadmap';
+            var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
+
+            if (isGoingToWorkoutsState) {
+                evt.preventDefault();
+
+                OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
+                    isOnBoardingCompleted = _isOnBoardingCompleted;
+
+                    if (!isOnBoardingCompleted) {
+                        var ON_BOARDING_STATE_NAME = 'app.onBoarding';
+                        var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
+                        if (isNotFromOnBoardingState) {
+                            $state.go(ON_BOARDING_STATE_NAME);
+                        }
+                    } else {
+                        $state.go(toState, toParams, {
+                            reload: true
+                        });
+                    }
+                });
+            }
+        });
+    }]);
+
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function() {
         this.$get = ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
             var self = this;
@@ -3534,7 +3574,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
 
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
-                    return onBoardingProgress.step === self.steps.ROADMAP;
+                    return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
                 });
             };
 
