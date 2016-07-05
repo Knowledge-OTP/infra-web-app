@@ -224,6 +224,7 @@
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
+            self.resultsForAudioManager = resultsData;
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
@@ -1019,7 +1020,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    questions=\"vm.questions\"\n" +
     "    ng-model=\"vm.resultsData.questionResults\"\n" +
     "    settings=\"vm.settings\"\n" +
-    "    actions=\"vm.actions\">\n" +
+    "    actions=\"vm.actions\"\n" +
+    "    audio-manager=\"resultsForAudioManager\">\n" +
     "</znk-exercise>\n" +
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html",
