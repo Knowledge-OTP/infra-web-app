@@ -10,8 +10,30 @@ angular.module('demo', [
             .preferredLanguage('en');
 
         $stateProvider.state('app', {
-            abstract: true,
-            template: '<ui-view></ui-view>'
+            resolve: {
+                testsData: function (ExamSrv, ExerciseResultSrv, $q) {
+                    return ExamSrv.getAllExams(true).then(function (exams) {
+                        var examResultsProms = [];
+                        angular.forEach(exams, function (exam) {
+                            examResultsProms.push(ExerciseResultSrv.getExamResult(exam.id, true));
+                        });
+                        return $q.all(examResultsProms).then(function (examsResults) {
+                            return {
+                                exams: exams,
+                                examsResults: examsResults
+                            };
+                        });
+                    });
+                },
+                diagnosticData: function (DiagnosticSrv) {
+                    return DiagnosticSrv.getDiagnosticStatus().then(function (result) {
+                        var isDiagnosticsComplete = result === 2;
+                        return (isDiagnosticsComplete) ? isDiagnosticsComplete : false;
+                    });
+                }
+            },
+            controller: 'DemoController',
+            controllerAs: 'vm'
         });
 
 
@@ -92,9 +114,9 @@ angular.module('demo', [
         });
 
         $rootScope.openTests = function () {
-            $state.go('app.tests.roadmap.testCards', {exam: '17'})
+            $state.go('app');
         };
-        // $translatePartialLoader.addPart('demo');
+        $translatePartialLoader.addPart('demo');
     })
     .run(function ($rootScope) {
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {

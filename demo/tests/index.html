@@ -20,15 +20,21 @@
 
 <div style="display: flex;justify-content: center;">
 
-    <!--<button class="open-tests-btn" ng-click="openTests()">Open tests</button>-->
-        <navigation-pane
-            active-exam="activeExamId"
-            exams="exams"
-            exams-results="examsResults"
-            on-exam-click="onExamClick(exam, prevExam)"
-            title=".TESTS_TITLE">
-        </navigation-pane>
+    <button class="open-tests-btn" ng-click="openTests()">Open tests</button>
+
     <ui-view>
+
+        <div class="app-navigation-container" translate-namespace="DEMO">
+            <navigation-pane
+                active-exam="activeExamId"
+                exams="vm.exams"
+                exams-results="vm.examsResults"
+                on-exam-click="onExamClick(exam, prevExam)"
+                title=".MINI_TEST_TITLE"
+                second-title=".FULL_TEST_TITLE">
+            </navigation-pane>
+        </div>
+
     </ui-view>
 
     <!-- Bower:js -->
@@ -51,6 +57,7 @@
 
     <script src="main.js"></script>
     <script src="demo.js"></script>
+    <script src="demo/demo.controller.js"></script>
 
     <script src="infra/demoShared/env.service.js"></script>
     <script src="infra/demoShared/analyticsConfig.js"></script>
