@@ -99,9 +99,10 @@
 
             vm.startExercise = function(){
                 var selectedWorkout = angular.copy(vm.selectedWorkout);
-                var isWorkoutGenerated = selectedWorkout && angular.isDefined(selectedWorkout.subjectId)
-                    && angular.isDefined(selectedWorkout.exerciseTypeId)
-                    && angular.isDefined(selectedWorkout.exerciseId);
+                var isWorkoutGenerated = selectedWorkout &&
+                    angular.isDefined(selectedWorkout.subjectId) &&
+                    angular.isDefined(selectedWorkout.exerciseTypeId) &&
+                    angular.isDefined(selectedWorkout.exerciseId);
                 if (!isWorkoutGenerated) {
                     return;
                 }

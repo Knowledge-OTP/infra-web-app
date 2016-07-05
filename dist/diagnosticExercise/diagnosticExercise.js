@@ -499,7 +499,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
         }]);
 })(angular);
@@ -522,7 +522,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticIntroController: click on quit, go to roadmap');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
 
             this.goToExercise = function () {
@@ -1021,7 +1021,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    ng-model=\"vm.resultsData.questionResults\"\n" +
     "    settings=\"vm.settings\"\n" +
     "    actions=\"vm.actions\"\n" +
-    "    audio-manager=\"resultsForAudioManager\">\n" +
+    "    audio-manager=\"vm.resultsForAudioManager\">\n" +
     "</znk-exercise>\n" +
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html",
@@ -1104,7 +1104,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
     "            class=\"start-button md-button znk md-primary\"\n" +
-    "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
+    "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
     "</div>\n" +

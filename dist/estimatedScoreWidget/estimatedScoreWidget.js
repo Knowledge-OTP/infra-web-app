@@ -330,7 +330,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                    suffix=\"bg\"\n" +
     "                    ng-style=\"{ width: widgetItem.estimatedScorePercentage + '%' }\">\n" +
     "                <div class=\"current-estimated-score\">\n" +
-    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\" id=\"span1\"\n" +
+    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
     "                              context-attr=\"class\"\n" +
     "                              suffix=\"bc\"\n" +
     "                              ng-style=\"{ left: widgetItem.estimatedScorePercentage + '%' }\">\n" +
@@ -369,13 +369,5 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "              translate=\".EDIT_MY_GOALS\"></span>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "\n" +
-    "\n" +
-    "<md-button class=\"md-icon-button\" aria-label=\"refresh\">\n" +
-    "    button\n" +
-    "    <md-tooltip md-visible=\"true\" md-direction=\"left\">\n" +
-    "        Refresh\n" +
-    "    </md-tooltip>\n" +
-    "</md-button>\n" +
     "");
 }]);
