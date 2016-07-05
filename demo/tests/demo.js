@@ -112,10 +112,12 @@ angular.module('demo', [
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         });
-
+        
         $rootScope.openTests = function () {
             $state.go('app');
+            $rootScope.waitForProm = true;
         };
+
         $translatePartialLoader.addPart('demo');
     })
     .run(function ($rootScope) {

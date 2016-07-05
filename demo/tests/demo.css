@@ -5,8 +5,8 @@
 .open-tests-btn {
     height: 35px;
     width: 160px;
-    position: absolute;
-    left: 30px;
+    position: relative;
+    left: 0;
 }
 
 .app-navigation-container {
@@ -14,4 +14,11 @@
     background-color: #fff;
     box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
     border-radius: 15px;
+}
+.promMsg {
+    color: #0a9bad;
+    position: relative;
+    top: 35px;
+    left: -162px;
+    font-size: 16px;
 }

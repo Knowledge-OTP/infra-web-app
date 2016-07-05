@@ -5,11 +5,11 @@
     <title>Tests Demo</title>
 
     <!-- Bower:css -->
-    <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
-    <link rel="stylesheet" href="infra/dist/main.css" />
-    <link rel="stylesheet" href="angular-material/angular-material.css" />
-    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css" />
-    <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
+    <link rel="stylesheet" href="Swiper/dist/css/swiper.css"/>
+    <link rel="stylesheet" href="infra/dist/main.css"/>
+    <link rel="stylesheet" href="angular-material/angular-material.css"/>
+    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css"/>
+    <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css"/>
     <!-- endBower -->
 
     <link rel="stylesheet" href="main.css">
@@ -21,7 +21,7 @@
 <div style="display: flex;justify-content: center;">
 
     <button class="open-tests-btn" ng-click="openTests()">Open tests</button>
-
+    <span class="promMsg" ng-if="waitForProm">Please wait for the promise to come back</span>
     <ui-view>
 
         <div class="app-navigation-container" translate-namespace="DEMO">
