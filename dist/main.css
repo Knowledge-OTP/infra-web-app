@@ -580,7 +580,7 @@ estimated-score-widget .score-estimate-container {
       estimated-score-widget .score-estimate-container .subject .score hr.user-goal-fill {
         width: 0;
         background: #dfdede;
-        border-bottod-left-radius: 10px;
+        border-bottom-left-radius: 10px;
         border-top-left-radius: 10px; }
         estimated-score-widget .score-estimate-container .subject .score hr.user-goal-fill.bar-full {
           border-bottom-right-radius: 10px;
@@ -617,8 +617,6 @@ estimated-score-widget .score-estimate-container {
           content: '';
           z-index: 4;
           cursor: default; }
-        estimated-score-widget .score-estimate-container .subject .score div.current-estimated-score span.verbal-bc:hover md-tooltip {
-          opacity: 1; }
   estimated-score-widget .score-estimate-container table.score-summary {
     border-spacing: 15px;
     margin-top: 0;
@@ -660,6 +658,50 @@ estimated-score-widget .estimated-score-animation hr.current-estimated-score-fil
 
 estimated-score-widget .estimated-score-animation .current-estimated-score span {
   transition: left 0.4s; }
+
+md-tooltip.tooltip-for-estimated-score-widget {
+  opacity: 0;
+  width: 150px;
+  height: 87px;
+  background: #ffffff;
+  padding: 0 5px; }
+  md-tooltip.tooltip-for-estimated-score-widget .md-content {
+    height: auto;
+    text-align: center;
+    background: #ffffff;
+    white-space: normal; }
+    md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      pointer-events: auto;
+      will-change: auto; }
+    md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove {
+      transition: none; }
+      md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove.md-show-remove-active {
+        transform: none;
+        opacity: 0; }
+    md-tooltip.tooltip-for-estimated-score-widget .md-content .top-text {
+      margin-top: 22px;
+      margin-bottom: 12px;
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400; }
+    md-tooltip.tooltip-for-estimated-score-widget .md-content .bottom-text {
+      line-height: 12px;
+      font-size: 12px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300; }
+  md-tooltip.tooltip-for-estimated-score-widget.md-hide {
+    transition: opacity 0.4s;
+    opacity: 0; }
+  md-tooltip.tooltip-for-estimated-score-widget.md-show {
+    opacity: 1;
+    transition: opacity 0.4s;
+    pointer-events: auto;
+    will-change: opacity; }
 
 md-dialog.setting-edit-goals {
   overflow: visible;

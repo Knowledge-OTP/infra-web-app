@@ -3,21 +3,24 @@
 
     angular.module('znk.infra-web-app', [
         'znk.infra',
+        'znk.infra-web-app.angularMaterialOverride',
         'znk.infra-web-app.config',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticExercise',
         'znk.infra-web-app.diagnosticIntro',
+        'znk.infra-web-app.estimatedScoreWidget',
+        'znk.infra-web-app.iapMsg',
+        'znk.infra-web-app.infraWebAppZnkExercise',
         'znk.infra-web-app.invitation',
         'znk.infra-web-app.onBoarding',
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.socialSharing',
+        'znk.infra-web-app.uiTheme',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.workoutsRoadmap',
         'znk.infra-web-app.znkExerciseHeader',
-        'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.znkHeader',
-        'znk.infra-web-app.angularMaterialOverride'
+        'znk.infra-web-app.znkHeader'
     ]);
 })(angular);
 
@@ -73,7 +76,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {        
+    angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {
         var _diagnosticExamIdGetter;
         this.setDiagnosticExamIdGetter = function(diagnosticExamIdGetter){
             _diagnosticExamIdGetter = diagnosticExamIdGetter;
@@ -118,6 +121,12 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 
                     var startedSectionsNum= Object.keys(diagnosticExamResult.sectionResults);
                     return startedSectionsNum ? ExerciseStatusEnum.ACTIVE.enum : ExerciseStatusEnum.NEW.enum;
+                });
+            };
+
+            DiagnosticSrv.isDiagnosticCompleted = function(){
+                return DiagnosticSrv.getDiagnosticStatus().then(function(diagnosticStatus){
+                    return diagnosticStatus === ExerciseStatusEnum.COMPLETED.enum;
                 });
             };
 
@@ -1174,8 +1183,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"video-wrapper\">\n" +
     "        <video loop autoplay\n" +
     "               preload=\"auto\"\n" +
-    "               poster=\"diagnosticExercise/assets/images/poster/diagnostic-pre-summary.png\">\n" +
-    "            <source src=\"diagnosticExercise/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
+    "               poster=\"/assets/images/poster/diagnostic-pre-summary.png\">\n" +
+    "            <source src=\"/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1193,7 +1202,9 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            <div class=\"doughnut-wrapper\">\n" +
     "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
     "                <div class=\"znk-doughnut\">\n" +
-    "                    <div class=\"white-bg-doughnut-score\">{{doughnut.score}}</div>\n" +
+    "                    <div class=\"white-bg-doughnut-score\">\n" +
+    "                        {{doughnut.score === 0 ? '-' : doughnut.score }}\n" +
+    "                    </div>\n" +
     "                    <div class=\"goal-point\"\n" +
     "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +
     "                        <div class=\"goal-point-bg\">\n" +
@@ -1231,7 +1242,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
-    "            class=\"start-button md-button primary md\"\n" +
+    "            class=\"start-button md-button znk md-primary\"\n" +
     "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
@@ -1882,10 +1893,9 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             };
             this.raccoonTypes = raccoonTypes;
 
-            var racccoonTypeToClassMap = {
-                [this.raccoonTypes.HINT_RACCOON]: 'hint-raccoon',
-                [this.raccoonTypes.PRACTICE_RACCOON]: 'hint-raccoon-for-practice'
-            };
+            var racccoonTypeToClassMap = {};
+            racccoonTypeToClassMap[this.raccoonTypes.HINT_RACCOON] = 'hint-raccoon';
+            racccoonTypeToClassMap[this.raccoonTypes.PRACTICE_RACCOON] = 'hint-raccoon-for-practice';
 
             function addPlaceHolderElement() {
                 var wrapper = angular.element('<div class="raccoon-wrap"></div>');
@@ -3479,6 +3489,44 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", function ($rootScope, OnBoardingService, $state) {
+        'ngInject';
+        var isOnBoardingCompleted = false;
+        $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
+            if (isOnBoardingCompleted) {
+                return;
+            }
+
+            var APP_WORKOUTS_STATE = 'app.workoutsRoadmap';
+            var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
+
+            if (isGoingToWorkoutsState) {
+                evt.preventDefault();
+
+                OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
+                    isOnBoardingCompleted = _isOnBoardingCompleted;
+
+                    if (!isOnBoardingCompleted) {
+                        var ON_BOARDING_STATE_NAME = 'app.onBoarding';
+                        var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
+                        if (isNotFromOnBoardingState) {
+                            $state.go(ON_BOARDING_STATE_NAME);
+                        }
+                    } else {
+                        $state.go(toState, toParams, {
+                            reload: true
+                        });
+                    }
+                });
+            }
+        });
+    }]);
+
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function() {
         this.$get = ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
             var self = this;
@@ -3535,7 +3583,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
 
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
-                    return onBoardingProgress.step === self.steps.ROADMAP;
+                    return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
                 });
             };
 
@@ -5667,14 +5715,14 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                 }
 
                 data.personalizedWorkoutTimesProm =
-                    WorkoutsRoadmapSrv.generateNewExercise(subjectToIgnoreForNextDaily);
+                    WorkoutsRoadmapSrv.generateNewExercise(subjectToIgnoreForNextDaily, nextWorkout.workoutOrder);
 
                 $timeout(function () {
                     data.roadmapCtrlActions.freezeWorkoutProgressComponent(false);
                     data.roadmapCtrlActions.setCurrWorkout(nextWorkout.workoutOrder);
                 }, TIMOUT_BEFORE_GOING_TO_NEXT);
             }
-            
+
             function diagnosticPreSummary() {
                 vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMARY.DIAGNOSTIC_TEST');
                 _getToNextWorkout();
@@ -5853,7 +5901,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                         if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
                             subjectsToIgnore = prevWorkout.subjectId;
                         }
-                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore);
+                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
                     } else {
                         getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
                     }
@@ -5886,7 +5934,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                     delete vm.selectedTime;
 
                     $timeout(function(){
-                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects);
+                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
                             vm.rotate = false;
@@ -6177,7 +6225,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
                 var WorkoutsRoadmapSrv = {};
 
-                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily){
+                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder){
                     if(!_newWorkoutGeneratorGetter){
                         var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
                         $log.error(errMsg);
@@ -6185,7 +6233,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
-                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily));
+                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder));
                 };
 
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes = function(){
