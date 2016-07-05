@@ -9,7 +9,7 @@
                 return;
             }
 
-            var APP_WORKOUTS_STATE = 'app.workoutsRoadmap';
+            var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
             var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
 
             if (isGoingToWorkoutsState) {

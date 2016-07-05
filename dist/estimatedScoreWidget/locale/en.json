@@ -1,7 +1,7 @@
 {
     "ESTIMATED_SCORE_WIDGET_DIRECTIVE": {
         "TITLE": "SAT Estimated Score",
-        "PTS_TO_GO": "{{pts}} pts to go",
+        "PTS_TO_GO": "You are {{pts}}pt away",
         "YOUR_GOAL": "Your Goal: {{goal}}",
         "GOAL_REACHED": "you've reached your goal!",
         "COMPOSITE_SCORE": "Total Score:",
