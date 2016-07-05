@@ -66,8 +66,8 @@
                 <td class="num">{{d.userCompositeGoal}}</td>
             </tr>
         </table>
-        <span class="edit-my-goals ng-hide"
-              ng-show="d.isDiagnosticComplete"
+        <span class="edit-my-goals"
+              ng-if="d.userGoals"
               ng-click="d.showGoalsEdit()"
               translate=".EDIT_MY_GOALS"></span>
     </div>

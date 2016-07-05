@@ -2,7 +2,6 @@
     'use strict';
 
     angular.module('znk.infra-web-app', [
-        'znk.infra',
         'znk.infra-web-app.angularMaterialOverride',
         'znk.infra-web-app.config',
         'znk.infra-web-app.diagnostic',
@@ -1548,6 +1547,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
+                            scope.d.userGoals = userGoals;
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
@@ -1769,7 +1769,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                    suffix=\"bg\"\n" +
     "                    ng-style=\"{ width: widgetItem.estimatedScorePercentage + '%' }\">\n" +
     "                <div class=\"current-estimated-score\">\n" +
-    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
+    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\" id=\"span1\"\n" +
     "                              context-attr=\"class\"\n" +
     "                              suffix=\"bc\"\n" +
     "                              ng-style=\"{ left: widgetItem.estimatedScorePercentage + '%' }\">\n" +
@@ -1802,12 +1802,20 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                <td class=\"num\">{{d.userCompositeGoal}}</td>\n" +
     "            </tr>\n" +
     "        </table>\n" +
-    "        <span class=\"edit-my-goals ng-hide\"\n" +
-    "              ng-show=\"d.isDiagnosticComplete\"\n" +
+    "        <span class=\"edit-my-goals\"\n" +
+    "              ng-if=\"d.userGoals\"\n" +
     "              ng-click=\"d.showGoalsEdit()\"\n" +
     "              translate=\".EDIT_MY_GOALS\"></span>\n" +
     "    </div>\n" +
     "</div>\n" +
+    "\n" +
+    "\n" +
+    "<md-button class=\"md-icon-button\" aria-label=\"refresh\">\n" +
+    "    button\n" +
+    "    <md-tooltip md-visible=\"true\" md-direction=\"left\">\n" +
+    "        Refresh\n" +
+    "    </md-tooltip>\n" +
+    "</md-button>\n" +
     "");
 }]);
 
@@ -3482,6 +3490,44 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", function ($rootScope, OnBoardingService, $state) {
+        'ngInject';
+        var isOnBoardingCompleted = false;
+        $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
+            if (isOnBoardingCompleted) {
+                return;
+            }
+
+            var APP_WORKOUTS_STATE = 'app.workoutsRoadmap';
+            var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
+
+            if (isGoingToWorkoutsState) {
+                evt.preventDefault();
+
+                OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
+                    isOnBoardingCompleted = _isOnBoardingCompleted;
+
+                    if (!isOnBoardingCompleted) {
+                        var ON_BOARDING_STATE_NAME = 'app.onBoarding';
+                        var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
+                        if (isNotFromOnBoardingState) {
+                            $state.go(ON_BOARDING_STATE_NAME);
+                        }
+                    } else {
+                        $state.go(toState, toParams, {
+                            reload: true
+                        });
+                    }
+                });
+            }
+        });
+    }]);
+
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function() {
         this.$get = ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
             var self = this;
@@ -3538,7 +3584,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
 
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
-                    return onBoardingProgress.step === self.steps.ROADMAP;
+                    return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
                 });
             };
 

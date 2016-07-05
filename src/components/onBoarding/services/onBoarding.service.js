@@ -56,7 +56,7 @@
 
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
-                    return onBoardingProgress.step === self.steps.ROADMAP;
+                    return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
                 });
             };
 
