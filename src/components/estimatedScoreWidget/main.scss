@@ -155,9 +155,9 @@ estimated-score-widget {
                     span {
                         @include text-style(15px, $fontColor3, Lato, 400);
                         position: absolute;
-                        width: 28px;
-                        height: 28px;
-                        line-height: 29px;
+                        width: 35px;
+                        height: 22px;
+                        line-height: 21px;
                         border-radius: 13px;
                         border: {
                             width: 1px;
@@ -169,6 +169,7 @@ estimated-score-widget {
                         padding: 0 3px;
                         content: '';
                         z-index: 4;
+                        top: 2px;
                         cursor: default;
                     }
                 }
@@ -222,28 +223,28 @@ estimated-score-widget {
 }
 
 md-tooltip.tooltip-for-estimated-score-widget {
-    opacity: 0;
+    opacity: 1;
     width: 150px;
     height: 87px;
     background: $bgColor3;
     padding: 0 5px;
     z-index: 100;
-    .md-content {
+    ._md-content {
         height: auto;
         text-align: center;
         background: $bgColor3;
         white-space: normal;
         // override and cancel .md-content transitions and transform
-        &.md-show {
+        &._md-show {
             opacity: 1;
             transform: none;
             transition: none;
             pointer-events: auto;
             will-change: auto;
         }
-        &.md-show-remove {
+        &._md-show-remove {
             transition: none;
-            &.md-show-remove-active {
+            &._md-show-remove-active {
                 transform: none;
                 opacity: 0;
             }
@@ -261,12 +262,12 @@ md-tooltip.tooltip-for-estimated-score-widget {
         }
     }
 
-    &.md-hide {
+    &._md-hide {
         transition: opacity 0.4s;
         opacity: 0;
     }
 
-    &.md-show {
+    &._md-show {
         opacity: 1;
         transition: opacity 0.4s;
         pointer-events: auto;
