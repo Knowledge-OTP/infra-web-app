@@ -159,7 +159,7 @@
                     }
                 }
 
-                addDefaultNavItem('ZNK_HEADER.WORKOUTS', _onClickHandler.bind(null, 'app.workoutsRoadmap', {}, {reload:true}));
+                addDefaultNavItem('ZNK_HEADER.WORKOUTS', _onClickHandler.bind(null, 'app.workouts.roadmap', {}, {reload:true}));
                 addDefaultNavItem('ZNK_HEADER.TESTS', _onClickHandler.bind(null, 'app.tests.roadmap'));
                 addDefaultNavItem('ZNK_HEADER.TUTORIALS', _onClickHandler.bind(null, 'app.tutorials.roadmap'));
                 addDefaultNavItem('ZNK_HEADER.PERFORMANCE', _onClickHandler.bind(null, 'app.performance'));
@@ -210,7 +210,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
     "        <svg-icon class=\"raccoon-logo-icon\"\n" +
     "                  name=\"znkHeader-raccoon-logo-icon\"\n" +
-    "                  ui-sref=\"app.workoutsRoadmap\"\n" +
+    "                  ui-sref=\"app.workouts.roadmap\"\n" +
     "                  ui-sref-opts=\"{reload: true}\">\n" +
     "        </svg-icon>\n" +
     "\n" +

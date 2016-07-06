@@ -46,14 +46,14 @@
  *
  *      3) workoutsRoadmap.diagnostic.summary
  *          this state must set i.e
- *              $stateProvider.state('app.workoutsRoadmap.diagnostic.summary', {
+ *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
  *                   template: '<div>Diagnostic </div>',
  *                   controller: 'WorkoutsRoadMapBaseSummaryController',
  *                   controllerAs: 'vm'
  *               })
  *      4) workoutsRoadmap.workout.inProgress
  *          this state must set i.e
- *              $stateProvider.state('app.workoutsRoadmap.workout.inProgress', {
+ *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
  *                  template: '<div>Workout in progress</div>',
  *                  controller: function(){}
  *             })
@@ -93,7 +93,7 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('app.workoutsRoadmap', {
+                .state('app.workouts.roadmap', {
                     url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
@@ -123,13 +123,13 @@
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.diagnostic', {
+                .state('app.workouts.roadmap.diagnostic', {
                     url: '/diagnostic',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapDiagnosticController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.diagnostic.intro', {
+                .state('app.workouts.roadmap.diagnostic.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticIntro.template.html',
                     controller: 'WorkoutsRoadMapDiagnosticIntroController',
                     controllerAs: 'vm',
@@ -143,28 +143,28 @@
                         }]
                     }
                 })
-                .state('app.workoutsRoadmap.diagnostic.preSummary', {
+                .state('app.workouts.roadmap.diagnostic.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.workout', {
+                .state('app.workouts.roadmap.workout', {
                     url: '/workout?workout',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapWorkoutController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.workout.intro', {
+                .state('app.workouts.roadmap.workout.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutIntro.template.html',
                     controller: 'WorkoutsRoadMapWorkoutIntroController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.workout.inProgress', {
+                .state('app.workouts.roadmap.workout.inProgress', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html',
                     controller: 'WorkoutsRoadMapWorkoutInProgressController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.workout.preSummary', {
+                .state('app.workouts.roadmap.workout.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
@@ -202,8 +202,8 @@
             vm.diagnostic = data.diagnostic;
 
             var search = $location.search();
-            var DIAGNOSTIC_STATE = 'app.workoutsRoadmap.diagnostic';
-            var WORKOUT_STATE = 'app.workoutsRoadmap.workout';
+            var DIAGNOSTIC_STATE = 'app.workouts.roadmap.diagnostic';
+            var WORKOUT_STATE = 'app.workouts.roadmap.workout';
 
             function getActiveWorkout() {
                 var i = 0;
@@ -285,7 +285,7 @@
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        $state.go('app.workoutsRoadmap.workout', {
+                        $state.go('app.workouts.roadmap.workout', {
                             workout: newItem.workoutOrder
                         });
                     }
@@ -411,7 +411,7 @@
             }
 
             function _goToState(stateName) {
-                var EXPECTED_CURR_STATE = 'app.workoutsRoadmap.workout';
+                var EXPECTED_CURR_STATE = 'app.workouts.roadmap.workout';
                 if ($state.current.name === EXPECTED_CURR_STATE) {
                     $state.go(stateName);
                 }
@@ -467,7 +467,7 @@
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout) {
+        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", "WorkoutsSrv", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -508,7 +508,7 @@
             var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
             //set times workouts
-            (function () {
+            function setWorkoutsTimes(){
                 var getPersonalizedWorkoutsByTimeProm;
                 var subjectsToIgnore;
 
@@ -524,8 +524,8 @@
 
                     setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                 }
-            })();
-
+            }
+            setWorkoutsTimes();
 
             vm.getWorkoutIcon = function (workoutLength) {
                 if (vm.workoutsByTime) {
@@ -561,6 +561,46 @@
                 };
 
             })();
+
+            vm.startExercise = function(){
+                var selectedWorkout = angular.copy(vm.selectedWorkout);
+                var isWorkoutGenerated = selectedWorkout &&
+                    angular.isDefined(selectedWorkout.subjectId) &&
+                    angular.isDefined(selectedWorkout.exerciseTypeId) &&
+                    angular.isDefined(selectedWorkout.exerciseId);
+                if (!isWorkoutGenerated) {
+                    return;
+                }
+                var propTosCopy = ['subjectId', 'exerciseTypeId', 'exerciseId', 'categoryId'];
+                angular.forEach(propTosCopy, function (prop) {
+                    currWorkout[prop] = selectedWorkout[prop];
+                });
+                currWorkout.status = ExerciseStatusEnum.ACTIVE.enum;
+                delete currWorkout.personalizedTimes;
+                delete currWorkout.$$hashKey;
+                delete currWorkout.isAvail;
+
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'workoutStarted',
+                //     props: {
+                //         timeBundle: self.userTimePreference,
+                //         workoutOrderId: currWorkout.workoutOrder,
+                //         exerciseType: currWorkout.exerciseTypeId,
+                //         subjectType: currWorkout.subjectId,
+                //         exerciseId: currWorkout.exerciseId
+                //     }
+                // });
+                //
+                // znkAnalyticsSrv.timeTrack({
+                //     eventName: 'workoutCompleted'
+                // });
+
+                WorkoutsSrv.setWorkout(currWorkout.workoutOrder, currWorkout).then(function () {
+                    $state.go('app.workouts.workout', {
+                        workout: currWorkout.workoutOrder
+                    });
+                });
+            };
 
             $scope.$watch('vm.selectedTime', function (newSelectedTime) {
                 if (angular.isUndefined(newSelectedTime)) {
@@ -1636,6 +1676,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            </div>\n" +
     "            <div class=\"start-btn-wrapper\">\n" +
     "                <md-button class=\"md-primary znk\"\n" +
+    "                           ng-click=\"vm.startExercise()\"\n" +
     "                           md-no-ink>\n" +
     "                    <span translate=\".START\"></span>\n" +
     "                </md-button>\n" +
