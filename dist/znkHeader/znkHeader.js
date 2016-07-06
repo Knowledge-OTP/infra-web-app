@@ -9,7 +9,9 @@
             'pascalprecht.translate',
             'ui.router',
             'znk.infra-web-app.purchase',
+            'znk.infra-web-app.userGoalsSelection',
             'znk.infra.user',
+            'znk.infra.general',
             'znk.infra-web-app.invitation'])
         .config([
             'SvgIconSrvProvider',
@@ -26,14 +28,21 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$mdDialog", "$window", "purchaseService", "znkHeaderSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "AuthService", "ENV", function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum, AuthService, ENV) {
+        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "UserGoalsService", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, UserGoalsService,
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
+            self.enableUserGoalsClick = false;
+
+            UserGoalsService.getGoals().then(function(userGoals) {
+                if(userGoals && !angular.equals({}, userGoals)) {
+                    self.enableUserGoalsClick = true;
+                }
+            });
 
             self.invokeOnClickHandler = function(onClickHandler){
                 $injector.invoke(onClickHandler);
@@ -41,6 +50,12 @@
 
             this.showPurchaseDialog = function () {
                 purchaseService.showPurchaseDialog();
+            };
+
+            this.showGoalsEdit = function () {
+                userGoalsSelectionService.openEditGoalsDialog({
+                    clickOutsideToCloseFlag: true
+                });
             };
 
             UserProfileService.getProfile().then(function (profile) {
@@ -250,7 +265,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                        <md-list-item\n" +
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <span ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
+    "                            <span ng-disabled=\"!vm.enableUserGoalsClick\"\n" +
+    "                                  disable-click-drv\n" +
     "                                  ng-click=\"vm.showGoalsEdit()\"\n" +
     "                                  translate=\".PROFILE_GOALS\"></span>\n" +
     "                        </md-list-item>\n" +

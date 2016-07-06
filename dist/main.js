@@ -1471,29 +1471,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     ]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.estimatedScoreWidget').controller('EditGoals.controller',
-        ["$scope", "$filter", "$mdDialog", function ($scope, $filter, $mdDialog) {
-            'ngInject';
-            var translateFilter = $filter('translate');
-            $scope.userGoalsSetting = {
-                recommendedGoalsTitle: false,
-                saveBtn: {
-                    title: translateFilter('USER_GOALS.SAVE'),
-                    afterSaveTitle: translateFilter('USER_GOALS.SAVED'),
-                    wrapperClassName: 'btn-sm'
-                }
-            };
-            
-            $scope.cancel = function () {
-                $mdDialog.cancel();
-            };
-        }]
-    );
-})(angular);
-
 /**
  * attrs:
  */
@@ -1502,7 +1479,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "$mdDialog", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -1598,14 +1575,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                         return (correct / maxEstimatedScore) * 100;
                     }
 
-                    // TODO: this should come from a service, duplicated from znk-header
                     scope.d.showGoalsEdit = function () {
-                        $mdDialog.show({
-                            controller: 'EditGoals.controller',
-                            controllerAs: 'vm',
-                            templateUrl: 'components/estimatedScoreWidget/templates/editGoals.template.html',
-                            clickOutsideToClose: false
-                        });
+                        userGoalsSelectionService.openEditGoalsDialog();
                     };
 
                     if (isNavMenuFlag) {
@@ -1711,26 +1682,6 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/estimatedScoreWidget/templates/editGoals.template.html",
-    "<md-dialog class=\"setting-edit-goals base-border-radius\" translate-namespace=\"SETTING.EDIT_GOALS\">\n" +
-    "    <md-toolbar>\n" +
-    "        <div class=\"close-popup-wrap\" ng-click=\"cancel()\">\n" +
-    "            <svg-icon name=\"estimated-score-widget-close-popup\"></svg-icon>\n" +
-    "        </div>\n" +
-    "    </md-toolbar>\n" +
-    "    <md-dialog-content>\n" +
-    "        <div class=\"main-title md-subheader\" translate=\".MY_GOALS\"></div>\n" +
-    "        <user-goals setting=\"userGoalsSetting\"></user-goals>\n" +
-    "    </md-dialog-content>\n" +
-    "    <div class=\"top-icon-wrap\">\n" +
-    "        <div class=\"top-icon\">\n" +
-    "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"estimated-score-widget-goals\"></svg-icon>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</md-dialog>\n" +
-    "");
   $templateCache.put("components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html",
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
@@ -1767,7 +1718,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                    suffix=\"bg\"\n" +
     "                    ng-style=\"{ width: widgetItem.estimatedScorePercentage + '%' }\">\n" +
     "                <div class=\"current-estimated-score\">\n" +
-    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\" id=\"span1\"\n" +
+    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
     "                              context-attr=\"class\"\n" +
     "                              suffix=\"bc\"\n" +
     "                              ng-style=\"{ left: widgetItem.estimatedScorePercentage + '%' }\">\n" +
@@ -1806,14 +1757,6 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "              translate=\".EDIT_MY_GOALS\"></span>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "\n" +
-    "\n" +
-    "<md-button class=\"md-icon-button\" aria-label=\"refresh\">\n" +
-    "    button\n" +
-    "    <md-tooltip md-visible=\"true\" md-direction=\"left\">\n" +
-    "        Refresh\n" +
-    "    </md-tooltip>\n" +
-    "</md-button>\n" +
     "");
 }]);
 
@@ -4805,6 +4748,29 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.userGoalsSelection').controller('EditGoalsController',
+        ["$scope", "$filter", "$mdDialog", function ($scope, $filter, $mdDialog) {
+            'ngInject';
+            var translateFilter = $filter('translate');
+            $scope.userGoalsSetting = {
+                recommendedGoalsTitle: false,
+                saveBtn: {
+                    title: translateFilter('USER_GOALS.SAVE'),
+                    afterSaveTitle: translateFilter('USER_GOALS.SAVED'),
+                    wrapperClassName: 'btn-sm'
+                }
+            };
+
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.userGoalsSelection').directive('goalSelect', function GoalSelectDirective() {
 
         var directive = {
@@ -5082,8 +5048,8 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
 
 'use strict';
 
-angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q',
-    function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q) {
+angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q', '$mdDialog',
+    function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q, $mdDialog) {
         var schoolsPath = StorageSrv.variables.appUserSpacePath + '/dreamSchools';
 
         this.getAppSchoolsList = function () {
@@ -5111,6 +5077,18 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
         this.getDreamSchools = function () {
             return _getUserSchoolsData().then(function (userSchools) {
                 return userSchools.selectedSchools;
+            });
+        };
+
+        this.openEditGoalsDialog = function (options) {
+            options = angular.extend({}, {
+                clickOutsideToCloseFlag: false
+            }, options);
+            $mdDialog.show({
+                controller: 'EditGoalsController',
+                controllerAs: 'vm',
+                templateUrl: 'components/userGoalsSelection/templates/editGoals.template.html',
+                clickOutsideToClose: options.clickOutsideToCloseFlag
             });
         };
 
@@ -5236,6 +5214,26 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/templates/editGoals.template.html",
+    "<md-dialog class=\"setting-edit-goals base-border-radius\" translate-namespace=\"SETTING.EDIT_GOALS\">\n" +
+    "    <md-toolbar>\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"cancel()\">\n" +
+    "            <svg-icon name=\"estimated-score-widget-close-popup\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </md-toolbar>\n" +
+    "    <md-dialog-content>\n" +
+    "        <div class=\"main-title md-subheader\" translate=\".MY_GOALS\"></div>\n" +
+    "        <user-goals setting=\"userGoalsSetting\"></user-goals>\n" +
+    "    </md-dialog-content>\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"estimated-score-widget-goals\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
     "");
   $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
     "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-show=\"target > minScore\">\n" +
@@ -7147,7 +7145,9 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
             'pascalprecht.translate',
             'ui.router',
             'znk.infra-web-app.purchase',
+            'znk.infra-web-app.userGoalsSelection',
             'znk.infra.user',
+            'znk.infra.general',
             'znk.infra-web-app.invitation'])
         .config([
             'SvgIconSrvProvider',
@@ -7164,14 +7164,21 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$mdDialog", "$window", "purchaseService", "znkHeaderSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "AuthService", "ENV", function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum, AuthService, ENV) {
+        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "UserGoalsService", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, UserGoalsService,
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
+            self.enableUserGoalsClick = false;
+
+            UserGoalsService.getGoals().then(function(userGoals) {
+                if(userGoals && !angular.equals({}, userGoals)) {
+                    self.enableUserGoalsClick = true;
+                }
+            });
 
             self.invokeOnClickHandler = function(onClickHandler){
                 $injector.invoke(onClickHandler);
@@ -7179,6 +7186,12 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
 
             this.showPurchaseDialog = function () {
                 purchaseService.showPurchaseDialog();
+            };
+
+            this.showGoalsEdit = function () {
+                userGoalsSelectionService.openEditGoalsDialog({
+                    clickOutsideToCloseFlag: true
+                });
             };
 
             UserProfileService.getProfile().then(function (profile) {
@@ -7388,7 +7401,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                        <md-list-item\n" +
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <span ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
+    "                            <span ng-disabled=\"!vm.enableUserGoalsClick\"\n" +
+    "                                  disable-click-drv\n" +
     "                                  ng-click=\"vm.showGoalsEdit()\"\n" +
     "                                  translate=\".PROFILE_GOALS\"></span>\n" +
     "                        </md-list-item>\n" +
