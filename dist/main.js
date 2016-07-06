@@ -5553,6 +5553,29 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
+                })
+                .state('app.workouts.roadmap.diagnostic.summary', {
+                    resolve: {
+                        diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", "$q", function (DiagnosticSrv, DiagnosticIntroSrv, $q) {
+                            'ngInject';
+                            var summaryProms = [
+                                DiagnosticSrv.getDiagnosticExamResult(),
+                                DiagnosticIntroSrv.getConfigMap()
+                            ];
+                            return $q.all(summaryProms).then(function (results) {
+                                var diagnosticResult = results[0];
+                                var diagnosticConfigMap = results[1];
+                                return {
+                                    userStats: diagnosticResult.userStats,
+                                    compositeScore: diagnosticResult.compositeScore,
+                                    diagnosticSubjects: diagnosticConfigMap.subjects
+                                };
+                            });
+                        }]
+                    },
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
+                    controller: 'WorkoutsRoadMapDiagnosticSummaryController',
+                    controllerAs: 'vm'
                 });
         }]);
 })(angular);
@@ -5778,6 +5801,23 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             var vm = this;
 
             vm.buttonTitle = isDiagnosticStarted ? 'CONTINUE' : 'START' ;
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticSummaryController',
+        ["diagnosticData", function (diagnosticData) {
+            'ngInject';
+
+            var vm = this;
+
+            vm.diagnosticSubjects = diagnosticData.diagnosticSubjects;
+
+            vm.compositeScore = diagnosticData.compositeScore;
+
+            vm.userStats = diagnosticData.userStats;
         }]);
 })(angular);
 
@@ -6977,6 +7017,27 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "        </md-button>\n" +
     "    </div>\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html",
+    "<div class=\"workouts-roadmap-diagnostic-summary base-workouts-wrapper\"\n" +
+    "     translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY\">\n" +
+    "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
+    "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
+    "    <div class=\"total-score\" translate=\".DIAG_COMPOS_SCORE\" translate-values=\"{total: vm.compositeScore }\"></div>\n" +
+    "\n" +
+    "    <div class=\"first-row\">\n" +
+    "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
+    "            ng-class=\"subject.subjectNameAlias\"\n" +
+    "            class=\"subject-score\">\n" +
+    "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
+    "            <div class=\"score-wrapper\">\n" +
+    "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
+    "                <span class=\"bold\">{{::vm.userStats[subject.id]}}</span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
     "");
   $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html",
     "<div class=\"workouts-roadmap-workout-in-progress base-workouts-wrapper\"\n" +
