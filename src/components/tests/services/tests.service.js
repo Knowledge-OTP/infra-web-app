@@ -15,12 +15,12 @@
                 var TestsSrv = {};
 
                 TestsSrv.getSubjectsOrder = function () {
-                    if (!_subjectsMapGetter) {
+                    if (!_subjectsOrderGetter) {
                         var errMsg = 'TestsSrv: subjectsMapGetter was not set.';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
                     }
-                    return $q.when($injector.invoke(_subjectsMapGetter));
+                    return $q.when($injector.invoke(_subjectsOrderGetter));
                 };
 
                 TestsSrv.getExamResult = function (examsResults, examId) {
