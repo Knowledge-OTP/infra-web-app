@@ -1,3 +1,7 @@
+@import "../../scss/imports/colors",
+        "../../scss/imports/variables",
+        "../../scss/imports/mixins";
+
 .app-performance {
 
     .score-estimate-container {
@@ -147,7 +151,7 @@
 
                 .category-short-name {
                     @include dimension(30px, 30px);
-                    @include text-style(14px, $fcColor1, Lato, $regularFontWeight);
+                    @include text-style(14px, $fontColor8, Lato, $regularFontWeight);
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -158,25 +162,25 @@
 
                 &.math {
                     .category-short-name {
-                        background-color: $mathColor;
+                        background-color: red;
                     }
                 }
 
                 &.verbal{
                     .category-short-name {
-                        background-color: $verbalColor;
+                        background-color: blue;
                     }
                 }
 
                 &.essay{
                     .category-short-name {
-                        background-color: $essayColor;
+                        background-color: yellow;
                     }
                 }
 
                 .category-name {
                     @include dimension(250px, auto);
-                    @include text-style(18px, $fcColor7, Lato, $regularFontWeight);
+                    @include text-style(18px, $fontColor3, Lato, $regularFontWeight);
                     display: inline-block;
                     text-align: left;
                     padding-top: 5px;
@@ -193,8 +197,8 @@
 
                         .progress-wrap {
                             @include dimension(250px, 7px);
-                            background-color: $bgColor2;
-                            border: 1px solid $bcColor23;
+                            background-color: $bgColor3;
+                            border: 1px solid $borderColor13;
 
                             .progress{
                                 transition: 0.5s;
@@ -203,7 +207,7 @@
 
                         .level-white-line {
                             @include dimension(1px, 7px);
-                            background-color: $bgColor2;
+                            background-color: $bgColor3;
                             display: inline-block;
                             position: absolute;
                             bottom: 1px;
@@ -226,7 +230,7 @@
                     .level-status-wrapper {
                         span{
                             text-align: center;
-                            @include text-style(12px, $fcColor7, Quicksand, $regularFontWeight);
+                            @include text-style(12px, $fontColor3, Quicksand, $regularFontWeight);
                             margin-bottom: 3px;
                         }
 
@@ -250,7 +254,7 @@
                         }
 
                         span {
-                            @include text-style(13px, $fcColor11, Quicksand, $regularFontWeight);
+                            @include text-style(13px, $fontColor4, Quicksand, $regularFontWeight);
                             line-height: 13px;
                             float: left;
                         }
@@ -258,7 +262,7 @@
                 }
 
                 .no-data-title{
-                    @include text-style(14px, $fcColor7, Lato, $lightFontWeight);
+                    @include text-style(14px, $fontColor3, Lato, $lightFontWeight);
                     width: 152px;
                     margin-top: 20px;
                 }
@@ -270,7 +274,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            background-color: $bgColor2;
+            background-color: $bgColor3;
             border-radius: 15px;
 
             .performance-main-container-overlay {
@@ -278,7 +282,7 @@
                 top: 0;
                 width: 100%;
                 left: 0;
-                background-color: $bgColor2;
+                background-color: $bgColor3;
                 z-index: 2;
                 display: flex;
                 justify-content: center;
@@ -287,7 +291,7 @@
                     width: 60%;
                     line-height: 40px;
                     margin-top: 280px;
-                    @include text-style(18px, $fcColor7, Quicksand);
+                    @include text-style(18px, $fontColor3, Quicksand);
                 }
             }
         }
