@@ -9,6 +9,7 @@
             'pascalprecht.translate',
             'ui.router',
             'znk.infra-web-app.purchase',
+            'znk.infra-web-app.onBoarding',
             'znk.infra-web-app.userGoalsSelection',
             'znk.infra.user',
             'znk.infra.general',
@@ -28,7 +29,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "UserGoalsService", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, UserGoalsService,
+        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
@@ -36,12 +37,9 @@
             var self = this;
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
-            self.enableUserGoalsClick = false;
 
-            UserGoalsService.getGoals().then(function(userGoals) {
-                if(userGoals && !angular.equals({}, userGoals)) {
-                    self.enableUserGoalsClick = true;
-                }
+            OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
+                self.isOnBoardingCompleted = isCompleted;
             });
 
             self.invokeOnClickHandler = function(onClickHandler){
@@ -66,10 +64,7 @@
             });
 
             this.znkOpenModal = function () {
-                this.expandIcon = 'expand_less';
-                //OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
-                //    self.isOnBoardingCompleted = isCompleted;
-                //});
+                self.expandIcon = 'expand_less';
             };
 
             this.logout = function () {
@@ -265,7 +260,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                        <md-list-item\n" +
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <span ng-disabled=\"!vm.enableUserGoalsClick\"\n" +
+    "                            <span ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
     "                                  disable-click-drv\n" +
     "                                  ng-click=\"vm.showGoalsEdit()\"\n" +
     "                                  translate=\".PROFILE_GOALS\"></span>\n" +
