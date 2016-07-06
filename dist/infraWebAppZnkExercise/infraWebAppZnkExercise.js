@@ -4,7 +4,11 @@
     angular.module('znk.infra-web-app.infraWebAppZnkExercise', [
         'znk.infra.znkExercise',
         'znk.infra.analytics',
-        'znk.infra.general'
+        'znk.infra.general',
+        'pascalprecht.translate',
+        'ngMaterial',
+        'ngAnimate',
+        'znk.infra.svgIcon'
     ]);
 })(angular);
 
@@ -204,6 +208,60 @@
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
+        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
+        'ngInject';
+
+        return {
+            scope: {
+                options: '=?',
+                onClickedQuit: '&?',
+                timerData: '=?',
+                subjectId: '=',
+                categoryId: '&',
+                sideText: '@',
+                totalSlideNum: '@',
+                exerciseNum: '@',
+                iconName: '@',
+                iconClickHandler: '&',
+                showNoCalcIcon: '&',
+                showNoCalcTooltip: '&'
+            },
+            restrict: 'E',
+            require: '?ngModel',
+            templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
+            controller: function () {
+                $translatePartialLoader.addPart('infraWebAppZnkExercise');
+                // required: subjectId
+                if (angular.isUndefined(this.subjectId)) {
+                    throw new Error('Error: exerciseHeaderController: subjectId is required!');
+                }
+                this.subjectId = +this.subjectId;
+                this.categoryId = this.categoryId();
+                var categoryId = angular.isDefined(this.categoryId) ? this.categoryId : this.subjectId;
+                this.subjectName = SubjectEnum.getValByEnum(categoryId);
+            },
+            bindToController: true,
+            controllerAs: 'vm',
+            link: function (scope, element, attrs, ngModel) {
+                if (ngModel) {
+                    ngModel.$render = function () {
+                        scope.vm.currentSlideNum = ngModel.$viewValue;
+                    };
+                }
+
+                if (scope.vm.showNoCalcIcon()) {
+                    $timeout(function () {    // timeout fixing md-tooltip visibility issues
+                        scope.vm.showToolTip = scope.vm.showNoCalcTooltip();
+                    });
+                }
+            }
+        };
+    }]);
+})(angular);
+
 angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
@@ -250,6 +308,35 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "    </div>\n" +
     "</div>\n" +
     "\n" +
+    "");
+  $templateCache.put("components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html",
+    "<div class=\"exercise-header subject-repeat\" subject-id-to-attr-drv=\"vm.subjectId\"\n" +
+    "     context-attr=\"class\" suffix=\"bg\" translate-namespace=\"CONTAINER_HEADER\">\n" +
+    "   <div class=\"pattern\" subject-id-to-attr-drv=\"vm.subjectId\" context-attr=\"class\" prefix=\"subject-background\"></div>\n" +
+    "\n" +
+    "    <div class=\"left-area\">\n" +
+    "        <div class=\"side-text\">\n" +
+    "            {{vm.sideText | cutString: 40}}\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"center-num-slide\" ng-if=\"vm.options.showNumSlide\">{{vm.currentSlideNum}}/{{::vm.totalSlideNum}}</div>\n" +
+    "    <div class=\"review-mode\" ng-if=\"vm.options.reviewMode\" ui-sref=\"^.summary\">\n" +
+    "        <div class=\"background-opacity\"></div>\n" +
+    "        <div class=\"summary-text\" translate=\".SUMMARY\"></div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"right-area\">\n" +
+    "        <svg-icon class=\"header-icon\" ng-if=\"vm.iconName\" name=\"{{vm.iconName}}\" ng-click=\"vm.iconClickHandler(); vm.showToolTip = false\"></svg-icon>\n" +
+    "\n" +
+    "        <div class=\"date-box\" ng-if=\"vm.options.showDate\">\n" +
+    "            <timer type=\"1\" ng-model=\"vm.timerData.timeLeft\" play=\"true\" config=\"vm.timerData.config\"></timer>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"quit-back-button\" translate=\".QUIT_BTN_TEXT\" ng-if=\"vm.options.showQuit\" ng-click=\"vm.onClickedQuit()\"></div>\n" +
+    "</div>\n" +
     "");
   $templateCache.put("components/infraWebAppZnkExercise/svg/close.svg",
     "<svg version=\"1.1\"\n" +

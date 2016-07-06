@@ -11,7 +11,7 @@
                 $scope.vm = this;
 
                 var isSection = exerciseData.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
-                var isPractice = exerciseData.exerciseTypeId === ExerciseTypeEnum.PRACTICE.enum;
+                // var isPractice = exerciseData.exerciseTypeId === ExerciseTypeEnum.PRACTICE.enum;
                 var isExerciseComplete = exerciseData.exerciseResult.isComplete;
                 this.iconClickHandler = exerciseData.iconClickHandler;
                 this.iconName = exerciseData.iconName;
