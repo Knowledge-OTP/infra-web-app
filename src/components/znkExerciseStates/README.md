@@ -1,8 +1,11 @@
-Usage Instructions for InfraWebAppExerciseStateCtrl:
-- exercise data
- injected as resolve.
- should contain the following objects:
-     * exerciseResult
-     * exercise
-     * headerTitle - title which appear on the left side of the header
-     * headerExitAction - function which invoked once clicking on the header exit button   
+Usage Instructions:
+exercise state:
+    exposing :
+        * exercsie controller: InfraWebAppExerciseStateCtrl
+        * exercise template: components/znkExerciseStates/templates/exercise.template.html
+    InfraWebAppExerciseStateCtrl expected exerciseDate object to be injected.
+    exerciseDate should contain the following objects:
+         * exerciseResult
+         * exercise
+         * headerTitle - title which appear on the left side of the header
+         * headerExitAction - function which invoked once clicking on the header exit button   
