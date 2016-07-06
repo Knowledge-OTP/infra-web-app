@@ -89,9 +89,6 @@ angular.module('demo', [
         $stateProvider.state('app', {
             template: '<ui-view></ui-view>',
             abstract: true,
-        }).state('app.workouts', {
-            template: '<ui-view></ui-view>',
-            abstract: true,
         });
     })
     .run(function ($rootScope) {

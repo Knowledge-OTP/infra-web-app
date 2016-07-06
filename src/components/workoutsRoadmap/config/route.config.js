@@ -5,6 +5,10 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
+                .state('app.workouts', {
+                    template: '<ui-view></ui-view>',
+                    abstract: true
+                })
                 .state('app.workouts.roadmap', {
                     url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
