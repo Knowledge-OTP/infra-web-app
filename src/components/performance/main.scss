@@ -1,7 +1,7 @@
 .app-performance {
 
     .score-estimate-container {
-        background: $bgColor2;
+        background: $bgColor3;
         min-height: 900px;
         .subjects-wrap {
             .subject {
@@ -14,11 +14,11 @@
         @include dimension(705px, auto);
         min-height: 900px;
         margin-left: 30px;
-        background-color: $bgColor2;
+        background-color: $bgColor3;
         text-align: center;
         position: relative;
         .time-line-title{
-            @include text-style(17px, $fcColor7, Quicksand, $boldFontWeight);
+            @include text-style(17px, $fontColor3, Quicksand, $boldFontWeight);
             text-transform: capitalize;
             margin-top: 10px;
         }
@@ -29,12 +29,12 @@
         }
 
         .subject-overall-performance {
-            background-color: $bgColor64;
+            background-color: $bgColor35;
             height: 207px;
             margin-bottom: 75px;
 
             .subject-title {
-                @include text-style(17px, $fcColor7, Quicksand, $boldFontWeight);
+                @include text-style(17px, $fontColor3, Quicksand, $boldFontWeight);
                 padding-top: 20px;
                 text-transform: capitalize;
             }
@@ -44,7 +44,7 @@
                 display: inline-block;
                 margin-top: 25px;
                 .progress-wrap {
-                    background-color: $bgColor49;
+                    background-color: $bgColor42;
                     .progress {
                         transition: 0.5s ease-in;
                     }
@@ -58,13 +58,13 @@
                     }
 
                     .progress-bubble{
-                        border: 1px solid $bcColor22;
+                        border: 1px solid $borderColor18;
                     }
                 }
             }
 
             .avg-time {
-                @include text-style(14px, $fcColor11, Lato, $regularFontWeight);
+                @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
                 margin-top: 38px;
                 svg-icon {
                     &.time-icon {
@@ -73,7 +73,7 @@
                         padding-right: 8px;
                         vertical-align: middle;
                         * {
-                            stroke: $fcColor11;
+                            stroke: $fontColor4;
                         }
                     }
                 }
@@ -92,7 +92,7 @@
                     margin: 35px auto 0 auto;
 
                     .progress-wrapper-reading, .progress-wrapper-writing {
-                        @include text-style(14px, $fcColor11, Quicksand, $boldFontWeight);
+                        @include text-style(14px, $fontColor4, Quicksand, $boldFontWeight);
                         display: inline-block;
 
                         .progress-wrapper {

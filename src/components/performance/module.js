@@ -3,7 +3,9 @@
 
     angular.module('znk.infra-web-app.performance', [
         'ngMaterial',
-        'pascalprecht.translate'
+        'pascalprecht.translate',
+        'znk.infra-web-app.estimatedScoreWidget'
+        
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
