@@ -108,6 +108,7 @@
 
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
+                            scope.d.userGoals = userGoals;
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
@@ -362,8 +363,8 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                <td class=\"num\">{{d.userCompositeGoal}}</td>\n" +
     "            </tr>\n" +
     "        </table>\n" +
-    "        <span class=\"edit-my-goals ng-hide\"\n" +
-    "              ng-show=\"d.isDiagnosticComplete\"\n" +
+    "        <span class=\"edit-my-goals\"\n" +
+    "              ng-if=\"d.userGoals\"\n" +
     "              ng-click=\"d.showGoalsEdit()\"\n" +
     "              translate=\".EDIT_MY_GOALS\"></span>\n" +
     "    </div>\n" +

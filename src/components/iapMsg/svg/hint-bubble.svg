@@ -1,0 +1,22 @@
+<svg version="1.1"
+     xmlns="http://www.w3.org/2000/svg"
+     x="0px"
+     y="0px"
+     viewBox="0 0 2006.4 737.2"
+     class="iap-msg-hint-bubble-svg">
+    <style type="text/css">
+        .iap-msg-hint-bubble-svg{
+            width: 400px;
+        }
+
+        .iap-msg-hint-bubble-svg .st0 {
+            fill: #FFFFFF;
+            stroke: #8A8484;
+            stroke-width: 5;
+            stroke-miterlimit: 10;
+        }
+    </style>
+    <path class="st0" d="M2003.9,348.5c0-191.1-448-346-1000.7-346S2.5,157.4,2.5,348.5s448,346,1000.7,346
+	c163.9,0,318.6-13.6,455.2-37.8c26.1,18.2,69.5,38.4,153,61.7c83.6,23.3,154.7,14.8,154.7,14.8s-87.6-50.2-134.5-115.4
+	C1858.7,554.4,2003.9,457.3,2003.9,348.5z"/>
+</svg>

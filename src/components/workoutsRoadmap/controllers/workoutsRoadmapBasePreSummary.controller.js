@@ -34,14 +34,14 @@
                 }
 
                 data.personalizedWorkoutTimesProm =
-                    WorkoutsRoadmapSrv.generateNewExercise(subjectToIgnoreForNextDaily);
+                    WorkoutsRoadmapSrv.generateNewExercise(subjectToIgnoreForNextDaily, nextWorkout.workoutOrder);
 
                 $timeout(function () {
                     data.roadmapCtrlActions.freezeWorkoutProgressComponent(false);
                     data.roadmapCtrlActions.setCurrWorkout(nextWorkout.workoutOrder);
                 }, TIMOUT_BEFORE_GOING_TO_NEXT);
             }
-            
+
             function diagnosticPreSummary() {
                 vm.text = translateFilter('ROADMAP_BASE_PRE_SUMMARY.DIAGNOSTIC_TEST');
                 _getToNextWorkout();

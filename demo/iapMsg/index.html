@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;background: rgba(43, 43, 191, 0.08);">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
+    <link rel="stylesheet" href="infra/dist/main.css" />
+    <link rel="stylesheet" href="angular-material/angular-material.css" />
+    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css" />
+    <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
+    <!-- endbower-->
+
+    <link rel="stylesheet" href="main.css" />
+</head>
+<body ng-app="demo" ng-controller="Main">
+    <div>
+        <div>HINT raccoon message</div>
+        <label>Message body</label>
+        <input ng-model="msgBody">
+        <div style="margin-top: 10px">
+            <button ng-click="showRaccoonIapMsg(msgBody,'HINT')">show HINT type raccoon message</button>
+        </div>
+    </div>
+    <div style="margin-top: 100px;">
+        <div>PRACTICE_HINT raccoon message</div>
+        <label>Message body</label>
+        <input ng-model="practiceHintMsgBody">
+        <div style="margin-top: 10px">
+            <button ng-click="showRaccoonIapMsg(practiceHintMsgBody,'PRACTICE_HINT')">show HINT type raccoon message</button>
+        </div>
+    </div>
+    <!-- bower:js -->
+    <script src="angular/angular.js"></script>
+    <script src="angular-animate/angular-animate.js"></script>
+    <script src="Swiper/dist/js/swiper.js"></script>
+    <script src="firebase/firebase.js"></script>
+    <script src="angular-translate/angular-translate.js"></script>
+    <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+    <script src="angular-svg-round-progressbar/build/roundProgress.min.js"></script>
+    <script src="infra/dist/main.js"></script>
+    <script src="angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="angular-aria/angular-aria.js"></script>
+    <script src="angular-messages/angular-messages.js"></script>
+    <script src="angular-material/angular-material.js"></script>
+    <script src="ng-tags-input/ng-tags-input.js"></script>
+    <script src="Chart.js/Chart.js"></script>
+    <script src="angular-chart.js/dist/angular-chart.js"></script>
+    <script src="angular-sanitize/angular-sanitize.js"></script>
+    <!-- endbower-->
+
+    <script src="main.js"></script>
+    <script src="demo.js"></script>
+</body>
+</html>

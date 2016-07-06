@@ -130,9 +130,9 @@ estimated-score-widget .score-estimate-container {
           font-family: Lato;
           font-weight: 400;
           position: absolute;
-          width: 28px;
-          height: 28px;
-          line-height: 29px;
+          width: 35px;
+          height: 22px;
+          line-height: 21px;
           border-radius: 13px;
           border-width: 1px;
           border-style: solid;
@@ -142,6 +142,7 @@ estimated-score-widget .score-estimate-container {
           padding: 0 3px;
           content: '';
           z-index: 4;
+          top: 2px;
           cursor: default; }
   estimated-score-widget .score-estimate-container table.score-summary {
     border-spacing: 15px;
@@ -190,40 +191,41 @@ md-tooltip.tooltip-for-estimated-score-widget {
   width: 150px;
   height: 87px;
   background: #ffffff;
-  padding: 0 5px; }
-  md-tooltip.tooltip-for-estimated-score-widget .md-content {
+  padding: 0 5px;
+  z-index: 100; }
+  md-tooltip.tooltip-for-estimated-score-widget ._md-content {
     height: auto;
     text-align: center;
     background: #ffffff;
     white-space: normal; }
-    md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show {
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show {
       opacity: 1;
       transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
-    md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove {
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show-remove {
       transition: none; }
-      md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove.md-show-remove-active {
+      md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show-remove._md-show-remove-active {
         transform: none;
         opacity: 0; }
-    md-tooltip.tooltip-for-estimated-score-widget .md-content .top-text {
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content .top-text {
       margin-top: 22px;
       margin-bottom: 12px;
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 400; }
-    md-tooltip.tooltip-for-estimated-score-widget .md-content .bottom-text {
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content .bottom-text {
       line-height: 12px;
       font-size: 12px;
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 300; }
-  md-tooltip.tooltip-for-estimated-score-widget.md-hide {
+  md-tooltip.tooltip-for-estimated-score-widget._md-hide {
     transition: opacity 0.4s;
     opacity: 0; }
-  md-tooltip.tooltip-for-estimated-score-widget.md-show {
+  md-tooltip.tooltip-for-estimated-score-widget._md-show {
     opacity: 1;
     transition: opacity 0.4s;
     pointer-events: auto;

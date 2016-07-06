@@ -224,6 +224,7 @@
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
+            self.resultsForAudioManager = resultsData;
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
@@ -307,8 +308,12 @@
 
             var numQuestionCounter = _getInitNumQuestion(exerciseData.resultsData.questionResults);
 
+            function _getNumberOfQuestions() {
+                return diagnosticSettings.isFixed ? questions.length : diagnosticSettings.questionsPerSubject;
+            }
+
             function _isLastQuestion() {
-                return numQuestionCounter === diagnosticSettings.questionsPerSubject;
+                return numQuestionCounter === _getNumberOfQuestions();
             }
 
             function _getCurrentIndex() {
@@ -490,11 +495,11 @@
                 allowedTimeForExercise: 12 * 60 * 1000
             };
 
-            self.questionsPerSubject = diagnosticSettings.questionsPerSubject;
+            self.questionsPerSubject = _getNumberOfQuestions();
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
         }]);
 })(angular);
@@ -517,7 +522,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticIntroController: click on quit, go to roadmap');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
 
             this.goToExercise = function () {
@@ -1015,7 +1020,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    questions=\"vm.questions\"\n" +
     "    ng-model=\"vm.resultsData.questionResults\"\n" +
     "    settings=\"vm.settings\"\n" +
-    "    actions=\"vm.actions\">\n" +
+    "    actions=\"vm.actions\"\n" +
+    "    audio-manager=\"vm.resultsForAudioManager\">\n" +
     "</znk-exercise>\n" +
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html",
@@ -1038,8 +1044,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"video-wrapper\">\n" +
     "        <video loop autoplay\n" +
     "               preload=\"auto\"\n" +
-    "               poster=\"diagnosticExercise/assets/images/poster/diagnostic-pre-summary.png\">\n" +
-    "            <source src=\"diagnosticExercise/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
+    "               poster=\"/assets/images/poster/diagnostic-pre-summary.png\">\n" +
+    "            <source src=\"/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1057,7 +1063,9 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            <div class=\"doughnut-wrapper\">\n" +
     "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
     "                <div class=\"znk-doughnut\">\n" +
-    "                    <div class=\"white-bg-doughnut-score\">{{doughnut.score}}</div>\n" +
+    "                    <div class=\"white-bg-doughnut-score\">\n" +
+    "                        {{doughnut.score === 0 ? '-' : doughnut.score }}\n" +
+    "                    </div>\n" +
     "                    <div class=\"goal-point\"\n" +
     "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +
     "                        <div class=\"goal-point-bg\">\n" +
@@ -1095,8 +1103,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
-    "            class=\"start-button md-button primary md\"\n" +
-    "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
+    "            class=\"start-button md-button znk md-primary\"\n" +
+    "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
     "</div>\n" +

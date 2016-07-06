@@ -11,7 +11,7 @@
                 2: 'app.onBoarding.schools',
                 3: 'app.onBoarding.goals',
                 4: 'app.onBoarding.diagnostic',
-                5: 'app.workoutsRoadmap'
+                5: 'app.workouts.roadmap'
             };
 
             onBoardingServiceObj.steps = {
@@ -56,7 +56,7 @@
 
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
-                    return onBoardingProgress.step === self.steps.ROADMAP;
+                    return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
                 });
             };
 

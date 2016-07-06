@@ -1,0 +1,66 @@
+.raccoon-in-app{
+    position: fixed;
+    bottom: 20px;
+    right: 40px;
+    z-index: 999;
+    width: 528px;
+    height: 380px;
+
+    .svg-wrap {
+        position: absolute;
+        top:0;
+        right: 0;
+        width:20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        background-color: $bgColor30;
+        border-radius: 3px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .bubble-wrap{
+        position: absolute;
+        left:0;
+        top:0;
+        .msg-wrap{
+            position: relative;
+            .msg{
+                @include text-style(18px, $fontColor3, Quicksand, $semiBoldFontWeight, null, null, null, center);
+                position: absolute;
+                top: 38px;
+                left: 59px;
+                width: 291px;
+                height: 90px;
+            }
+            .hint-bubble-svg{
+                width: 400px;
+
+            }
+        }
+    }
+
+    &.hint-raccoon{
+        .raccoon{
+            position: absolute;
+            right: 0;
+            bottom:0;
+            div{
+                @include full-background-image-retina('#{$imagePath}/hint-raccoon',194px, 278px);
+            }
+        }
+    }
+
+    &.hint-raccoon-for-practice{
+        .raccoon{
+            position: absolute;
+            right: -15px;
+            bottom:0;
+            text-align: right;
+            div{
+                @include full-background-image-retina('#{$imagePath}/hint-raccoon-practice-more',  253px, 290px);
+            }
+        }
+    }
+}

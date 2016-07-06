@@ -196,6 +196,44 @@
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", function ($rootScope, OnBoardingService, $state) {
+        'ngInject';
+        var isOnBoardingCompleted = false;
+        $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
+            if (isOnBoardingCompleted) {
+                return;
+            }
+
+            var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
+            var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
+
+            if (isGoingToWorkoutsState) {
+                evt.preventDefault();
+
+                OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
+                    isOnBoardingCompleted = _isOnBoardingCompleted;
+
+                    if (!isOnBoardingCompleted) {
+                        var ON_BOARDING_STATE_NAME = 'app.onBoarding';
+                        var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
+                        if (isNotFromOnBoardingState) {
+                            $state.go(ON_BOARDING_STATE_NAME);
+                        }
+                    } else {
+                        $state.go(toState, toParams, {
+                            reload: true
+                        });
+                    }
+                });
+            }
+        });
+    }]);
+
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function() {
         this.$get = ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
             var self = this;
@@ -207,7 +245,7 @@
                 2: 'app.onBoarding.schools',
                 3: 'app.onBoarding.goals',
                 4: 'app.onBoarding.diagnostic',
-                5: 'app.workoutsRoadmap'
+                5: 'app.workouts.roadmap'
             };
 
             onBoardingServiceObj.steps = {
@@ -252,7 +290,7 @@
 
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
-                    return onBoardingProgress.step === self.steps.ROADMAP;
+                    return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
                 });
             };
 
@@ -384,10 +422,10 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <diagnostic-intro></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap', 'Take It Later')\">\n" +
+    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
-    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap.diagnostic', 'Start Test')\">\n" +
+    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +

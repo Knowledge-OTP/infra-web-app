@@ -13,6 +13,7 @@
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
+            self.resultsForAudioManager = resultsData;
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
@@ -96,8 +97,12 @@
 
             var numQuestionCounter = _getInitNumQuestion(exerciseData.resultsData.questionResults);
 
+            function _getNumberOfQuestions() {
+                return diagnosticSettings.isFixed ? questions.length : diagnosticSettings.questionsPerSubject;
+            }
+
             function _isLastQuestion() {
-                return numQuestionCounter === diagnosticSettings.questionsPerSubject;
+                return numQuestionCounter === _getNumberOfQuestions();
             }
 
             function _getCurrentIndex() {
@@ -279,11 +284,11 @@
                 allowedTimeForExercise: 12 * 60 * 1000
             };
 
-            self.questionsPerSubject = diagnosticSettings.questionsPerSubject;
+            self.questionsPerSubject = _getNumberOfQuestions();
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
         });
 })(angular);
