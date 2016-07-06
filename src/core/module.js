@@ -18,7 +18,6 @@
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.workoutsRoadmap',
-        'znk.infra-web-app.znkExerciseHeader',
         'znk.infra-web-app.znkHeader'
     ]);
 })(angular);
