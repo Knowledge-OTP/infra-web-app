@@ -7090,7 +7090,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "             }\">\n" +
     "        </div>\n" +
     "        <md-button class=\"znk md-primary continue-btn\"\n" +
-    "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder)\">\n" +
+    "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
     "            <span translate=\".CONTINUE\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
