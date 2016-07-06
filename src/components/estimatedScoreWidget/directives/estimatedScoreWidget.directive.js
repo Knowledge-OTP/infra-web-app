@@ -49,7 +49,6 @@
 
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
-                            scope.d.userGoals = userGoals;
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;

@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, UserGoalsService,
+        function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
@@ -10,12 +10,9 @@
             var self = this;
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
-            self.enableUserGoalsClick = false;
 
-            UserGoalsService.getGoals().then(function(userGoals) {
-                if(userGoals && !angular.equals({}, userGoals)) {
-                    self.enableUserGoalsClick = true;
-                }
+            OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
+                self.isOnBoardingCompleted = isCompleted;
             });
 
             self.invokeOnClickHandler = function(onClickHandler){
@@ -40,10 +37,7 @@
             });
 
             this.znkOpenModal = function () {
-                this.expandIcon = 'expand_less';
-                //OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
-                //    self.isOnBoardingCompleted = isCompleted;
-                //});
+                self.expandIcon = 'expand_less';
             };
 
             this.logout = function () {
