@@ -11,11 +11,9 @@
             return {
                 scope: {
                     activeExam: '=?',
-                    exams: '=',
                     onExamClick: '&',
                     title: '@',
-                    secondTitle: '@',
-                    examsResults: '='
+                    secondTitle: '@'
                 },
                 restrict: 'E',
                 templateUrl: 'components/tests/templates/navigationPane.template.html',

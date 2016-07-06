@@ -10,30 +10,30 @@ angular.module('demo', [
             .preferredLanguage('en');
 
         $stateProvider.state('app', {
-            resolve: {
-                testsData: function (ExamSrv, ExerciseResultSrv, $q) {
-                    return ExamSrv.getAllExams(true).then(function (exams) {
-                        var examResultsProms = [];
-                        angular.forEach(exams, function (exam) {
-                            examResultsProms.push(ExerciseResultSrv.getExamResult(exam.id, true));
-                        });
-                        return $q.all(examResultsProms).then(function (examsResults) {
-                            return {
-                                exams: exams,
-                                examsResults: examsResults
-                            };
-                        });
-                    });
-                },
-                diagnosticData: function (DiagnosticSrv) {
-                    return DiagnosticSrv.getDiagnosticStatus().then(function (result) {
-                        var isDiagnosticsComplete = result === 2;
-                        return (isDiagnosticsComplete) ? isDiagnosticsComplete : false;
-                    });
-                }
-            },
-            controller: 'DemoController',
-            controllerAs: 'vm'
+            // resolve: {
+            //     testsData: function (ExamSrv, ExerciseResultSrv, $q) {
+            //         return ExamSrv.getAllExams(true).then(function (exams) {
+            //             var examResultsProms = [];
+            //             angular.forEach(exams, function (exam) {
+            //                 examResultsProms.push(ExerciseResultSrv.getExamResult(exam.id, true));
+            //             });
+            //             return $q.all(examResultsProms).then(function (examsResults) {
+            //                 return {
+            //                     exams: exams,
+            //                     examsResults: examsResults
+            //                 };
+            //             });
+            //         });
+            //     },
+            //     diagnosticData: function (DiagnosticSrv) {
+            //         return DiagnosticSrv.getDiagnosticStatus().then(function (result) {
+            //             var isDiagnosticsComplete = result === 2;
+            //             return (isDiagnosticsComplete) ? isDiagnosticsComplete : false;
+            //         });
+            //     }
+            // },
+            // controller: 'DemoController',
+            // controllerAs: 'vm'
         });
 
 
@@ -112,7 +112,7 @@ angular.module('demo', [
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         });
-        
+
         $rootScope.openTests = function () {
             $state.go('app');
             $rootScope.waitForProm = true;
