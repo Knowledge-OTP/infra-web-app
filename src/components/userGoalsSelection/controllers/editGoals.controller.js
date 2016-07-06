@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.estimatedScoreWidget').controller('EditGoals.controller',
+    angular.module('znk.infra-web-app.userGoalsSelection').controller('EditGoalsController',
         function ($scope, $filter, $mdDialog) {
             'ngInject';
             var translateFilter = $filter('translate');
@@ -13,7 +13,7 @@
                     wrapperClassName: 'btn-sm'
                 }
             };
-            
+
             $scope.cancel = function () {
                 $mdDialog.cancel();
             };
