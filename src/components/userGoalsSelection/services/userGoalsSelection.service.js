@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q',
-    function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q) {
+angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q', '$mdDialog',
+    function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q, $mdDialog) {
         var schoolsPath = StorageSrv.variables.appUserSpacePath + '/dreamSchools';
 
         this.getAppSchoolsList = function () {
@@ -29,6 +29,18 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
         this.getDreamSchools = function () {
             return _getUserSchoolsData().then(function (userSchools) {
                 return userSchools.selectedSchools;
+            });
+        };
+
+        this.openEditGoalsDialog = function (options) {
+            options = angular.extend({}, {
+                clickOutsideToCloseFlag: false
+            }, options);
+            $mdDialog.show({
+                controller: 'EditGoalsController',
+                controllerAs: 'vm',
+                templateUrl: 'components/userGoalsSelection/templates/editGoals.template.html',
+                clickOutsideToClose: options.clickOutsideToCloseFlag
             });
         };
 

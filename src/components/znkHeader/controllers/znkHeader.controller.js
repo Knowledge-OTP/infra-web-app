@@ -2,14 +2,21 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum, AuthService, ENV) {
+        function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, UserGoalsService,
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
+            self.enableUserGoalsClick = false;
+
+            UserGoalsService.getGoals().then(function(userGoals) {
+                if(userGoals && !angular.equals({}, userGoals)) {
+                    self.enableUserGoalsClick = true;
+                }
+            });
 
             self.invokeOnClickHandler = function(onClickHandler){
                 $injector.invoke(onClickHandler);
@@ -17,6 +24,12 @@
 
             this.showPurchaseDialog = function () {
                 purchaseService.showPurchaseDialog();
+            };
+
+            this.showGoalsEdit = function () {
+                userGoalsSelectionService.openEditGoalsDialog({
+                    clickOutsideToCloseFlag: true
+                });
             };
 
             UserProfileService.getProfile().then(function (profile) {

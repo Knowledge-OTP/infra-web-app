@@ -35,9 +35,10 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
         this.firebaseAppScopeName = "act_app";
         this.redirectLogout = "http://localhost:9002";
     })
-    .run(function ($rootScope, $translate) {
+    .run(function ($rootScope, $translate, $translatePartialLoader) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
-        })
+        });
+        $translatePartialLoader.addPart('demo');
     });
 
