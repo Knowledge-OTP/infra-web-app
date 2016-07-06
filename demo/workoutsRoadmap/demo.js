@@ -88,11 +88,12 @@ angular.module('demo', [
     .config(function ($stateProvider) {
         $stateProvider.state('app', {
             template: '<ui-view></ui-view>',
-            abstract: true,
+            abstract: true
         });
     })
-    .run(function ($rootScope) {
+    .run(function ($rootScope, $translatePartialLoader) {
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
             console.error(error.message);
         });
+        $translatePartialLoader.addPart('demo');
     });
