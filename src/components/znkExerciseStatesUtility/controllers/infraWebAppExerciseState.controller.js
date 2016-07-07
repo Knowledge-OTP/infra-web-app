@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkExerciseStates')
+    angular.module('znk.infra-web-app.znkExerciseStatesUtility')
         .controller('InfraWebAppExerciseStateCtrl',
             function ($controller, $scope, exerciseData, $filter, ExerciseTypeEnum, $sce, ENV, SubjectEnum) {
                 'ngInject';

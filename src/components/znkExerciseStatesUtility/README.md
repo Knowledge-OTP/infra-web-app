@@ -1,7 +1,7 @@
 Usage Instructions:
 exercise state:
     exposing :
-        * exercsie controller: InfraWebAppExerciseStateCtrl
+        * exercise controller: InfraWebAppExerciseStateCtrl
         * exercise template: components/znkExerciseStates/templates/exercise.template.html
     InfraWebAppExerciseStateCtrl expected exerciseDate object to be injected.
     exerciseDate should contain the following objects:
