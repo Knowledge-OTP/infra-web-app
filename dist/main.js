@@ -6044,6 +6044,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             };
 
             vm.changeSubject = (function () {
+                vm.rotate = true;
+
                 var usedSubjects = [];
                 var subjectNum = SubjectEnum.getEnumArr().length;
 
@@ -6107,6 +6109,14 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                         workout: currWorkout.workoutOrder
                     });
                 });
+            };
+
+            vm.selectTime = function(workoutTime){
+                if(!vm.workoutsByTime[workoutTime]){
+                    return;
+                }
+
+                vm.selectedTime = workoutTime;
             };
 
             $scope.$watch('vm.selectedTime', function (newSelectedTime) {
@@ -7190,12 +7200,13 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            </div>\n" +
     "            <div class=\"workout-time-selection-container\">\n" +
     "                <div class=\"avail-time-item-wrapper\"\n" +
+    "                     ng-disabled=\"!vm.workoutsByTime[workoutAvailTime]\"\n" +
     "                     ng-repeat=\"workoutAvailTime in vm.workoutAvailTimes\">\n" +
     "                    <div class=\"avail-time-item\"\n" +
     "                         ng-class=\"{\n" +
     "                        active: vm.selectedTime === workoutAvailTime\n" +
     "                     }\"\n" +
-    "                         ng-click=\"vm.selectedTime = workoutAvailTime;\">\n" +
+    "                         ng-click=\"vm.selectTime(workoutAvailTime)\">\n" +
     "                        <svg-icon class=\"workout-icon\"\n" +
     "                                  name=\"{{vm.getWorkoutIcon(workoutAvailTime);}}\">\n" +
     "\n" +

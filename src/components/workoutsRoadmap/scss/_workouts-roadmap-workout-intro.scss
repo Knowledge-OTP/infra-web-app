@@ -78,13 +78,13 @@
                 margin: {
                     right: 15px;
                 }
-            ;
+
 
                 &:last-child {
                     margin: {
                         right: 0;
                     }
-                ;
+
                 }
 
                 .avail-time-item {
@@ -96,7 +96,6 @@
                         right: auto;
                         left: auto;
                     }
-                ;
                     font: {
                         family: Lato;
                         weight: $regularFontWeight;
@@ -104,6 +103,38 @@
                     color: $fontColor12;
                     line-height: 73px;
                     position: relative;
+
+                    .workout-icon {
+                        @include dimension(26px, 26px);
+                        background: white;
+                        position: absolute;
+                        top: -13px;
+                        left: calc(50% - 13px);
+
+                        &[name="workouts-progress-drill-icon"] {
+                            svg {
+                                position: relative;
+                                top: -1px;
+                            }
+                        }
+                    }
+
+                    .avail-time-text {
+                        font: {
+                            size: 26px;
+                        }
+                    }
+
+                    .minutes-text {
+                        font: {
+                            size: 18px;
+                        }
+                    }
+                }
+            }
+
+            .avail-time-item-wrapper:not([disabled="disabled"]){
+                .avail-time-item{
                     cursor: pointer;
 
                     &.active, &:hover {
@@ -188,33 +219,6 @@
                                     }
                                 }
                             }
-                        }
-                    }
-
-                    .workout-icon {
-                        @include dimension(26px, 26px);
-                        background: white;
-                        position: absolute;
-                        top: -13px;
-                        left: calc(50% - 13px);
-
-                        &[name="workouts-progress-drill-icon"] {
-                            svg {
-                                position: relative;
-                                top: -1px;
-                            }
-                        }
-                    }
-
-                    .avail-time-text {
-                        font: {
-                            size: 26px;
-                        }
-                    }
-
-                    .minutes-text {
-                        font: {
-                            size: 18px;
                         }
                     }
                 }

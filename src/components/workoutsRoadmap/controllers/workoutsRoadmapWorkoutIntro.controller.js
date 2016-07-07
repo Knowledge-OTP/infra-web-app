@@ -72,6 +72,8 @@
             };
 
             vm.changeSubject = (function () {
+                vm.rotate = true;
+
                 var usedSubjects = [];
                 var subjectNum = SubjectEnum.getEnumArr().length;
 
@@ -135,6 +137,14 @@
                         workout: currWorkout.workoutOrder
                     });
                 });
+            };
+
+            vm.selectTime = function(workoutTime){
+                if(!vm.workoutsByTime[workoutTime]){
+                    return;
+                }
+
+                vm.selectedTime = workoutTime;
             };
 
             $scope.$watch('vm.selectedTime', function (newSelectedTime) {
