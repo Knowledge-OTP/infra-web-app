@@ -5539,7 +5539,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
         'znk.infra.exerciseUtility',
         'znk.infra.scroll',
         'znk.infra.general',
-        'znk.infra.exerciseDataGetters',
+        'znk.infra.contentGetters',
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticIntro',
@@ -5548,7 +5548,6 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
-        'znk.infra.exerciseDataGetters',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.estimatedScoreWidget'
     ]);
@@ -7247,8 +7246,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkExerciseStates').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/znkExerciseStates/templates/exercise.template.html",
+angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
     "<div class=\"exercise-container base-border-radius\">\n" +
     "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
     "                         options=\"{\n" +
