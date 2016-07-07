@@ -3,6 +3,10 @@
         "DIAGNOSTIC_TEST": "Diagnostic Test",
         "START_TEST": "START TEST"
     },
+    "WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY": {
+        "DIAGNOSTIC_TEST": "Diagnostic Test",
+        "DIAG_RES_TEXT": "Your Results"
+    },
     "ROADMAP_BASE_PRE_SUMMARY": {
         "DIAGNOSTIC_TEST": "Diagnostic Test",
         "COMPLETE": "Completed!",
