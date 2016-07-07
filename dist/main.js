@@ -5556,21 +5556,12 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                 })
                 .state('app.workouts.roadmap.diagnostic.summary', {
                     resolve: {
-                        diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", "$q", function (DiagnosticSrv, DiagnosticIntroSrv, $q) {
+                        diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", function (DiagnosticSrv, DiagnosticIntroSrv) {
                             'ngInject';
-                            var summaryProms = [
-                                DiagnosticSrv.getDiagnosticExamResult(),
-                                DiagnosticIntroSrv.getConfigMap()
-                            ];
-                            return $q.all(summaryProms).then(function (results) {
-                                var diagnosticResult = results[0];
-                                var diagnosticConfigMap = results[1];
                                 return {
-                                    userStats: diagnosticResult.userStats,
-                                    compositeScore: diagnosticResult.compositeScore,
-                                    diagnosticSubjects: diagnosticConfigMap.subjects
+                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
                                 };
-                            });
                         }]
                     },
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
@@ -5813,11 +5804,15 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
             var vm = this;
 
-            vm.diagnosticSubjects = diagnosticData.diagnosticSubjects;
+            diagnosticData.diagnosticResultProm.then(function (diagnosticResult) {
+                vm.compositeScore = diagnosticResult.compositeScore;
+                vm.userStats = diagnosticResult.userStats;
+            });
 
-            vm.compositeScore = diagnosticData.compositeScore;
+            diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
+                vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+            });
 
-            vm.userStats = diagnosticData.userStats;
         }]);
 })(angular);
 
