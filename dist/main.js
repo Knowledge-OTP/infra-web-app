@@ -7246,11 +7246,9 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
 
     angular.module('znk.infra-web-app.znkExerciseStatesUtility')
         .controller('InfraWebAppExerciseStateCtrl',
-            ["$controller", "$scope", "exerciseData", "$filter", "ExerciseTypeEnum", "$sce", "ENV", "SubjectEnum", function ($controller, $scope, exerciseData, $filter, ExerciseTypeEnum, $sce, ENV, SubjectEnum) {
+            ["$controller", "$scope", "exerciseData", "$filter", "ExerciseTypeEnum", function ($controller, $scope, exerciseData, $filter, ExerciseTypeEnum) {
                 'ngInject';
 
-                var vm = this;
-                
                 $scope.vm = this;
 
                 var isSection = exerciseData.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
@@ -7258,15 +7256,6 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
                 var isExerciseComplete = exerciseData.exerciseResult.isComplete;
                 this.iconClickHandler = exerciseData.iconClickHandler;
                 this.iconName = exerciseData.iconName;
-                // no calculator icon and tooltip in the exercise header
-                if (exerciseData.exercise.subjectId === SubjectEnum.MATH.enum && !exerciseData.exercise.calculator) {
-                    vm.showNoCalcIcon = true;
-                    if (!exerciseData.exerciseResult.seenNoCalcTooltip) {
-                        vm.showNoCalcTooltip = true;
-                        exerciseData.exerciseResult.seenNoCalcTooltip = true;
-                    }
-                }
-
 
                 var exerciseSettings = {
                     initPagerDisplay: isExerciseComplete || isSection
