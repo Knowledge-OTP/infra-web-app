@@ -926,6 +926,10 @@
                         return $q.reject(errMsg);
                     }
 
+                    if(!angular.isArray(subjectToIgnoreForNextDaily)){
+                        subjectToIgnoreForNextDaily = subjectToIgnoreForNextDaily ? [subjectToIgnoreForNextDaily] : [];
+                    }
+
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
                     return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder));
                 };
