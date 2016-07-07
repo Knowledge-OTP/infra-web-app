@@ -84,6 +84,20 @@
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
+                })
+                .state('app.workouts.roadmap.diagnostic.summary', {
+                    resolve: {
+                        diagnosticData: function (DiagnosticSrv, DiagnosticIntroSrv) {
+                            'ngInject';
+                                return {
+                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                                };
+                        }
+                    },
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
+                    controller: 'WorkoutsRoadMapDiagnosticSummaryController',
+                    controllerAs: 'vm'
                 });
         }]);
 })(angular);

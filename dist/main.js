@@ -5640,6 +5640,20 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
+                })
+                .state('app.workouts.roadmap.diagnostic.summary', {
+                    resolve: {
+                        diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", function (DiagnosticSrv, DiagnosticIntroSrv) {
+                            'ngInject';
+                                return {
+                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                                };
+                        }]
+                    },
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
+                    controller: 'WorkoutsRoadMapDiagnosticSummaryController',
+                    controllerAs: 'vm'
                 });
         }]);
 })(angular);
@@ -5865,6 +5879,27 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             var vm = this;
 
             vm.buttonTitle = isDiagnosticStarted ? 'CONTINUE' : 'START' ;
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticSummaryController',
+        ["diagnosticData", function (diagnosticData) {
+            'ngInject';
+
+            var vm = this;
+
+            diagnosticData.diagnosticResultProm.then(function (diagnosticResult) {
+                vm.compositeScore = diagnosticResult.compositeScore;
+                vm.userStats = diagnosticResult.userStats;
+            });
+
+            diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
+                vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+            });
+
         }]);
 })(angular);
 
@@ -7064,6 +7099,27 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "        </md-button>\n" +
     "    </div>\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html",
+    "<div class=\"workouts-roadmap-diagnostic-summary base-workouts-wrapper\"\n" +
+    "     translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY\">\n" +
+    "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
+    "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
+    "    <div class=\"total-score\" translate=\".DIAG_COMPOS_SCORE\" translate-values=\"{total: vm.compositeScore }\"></div>\n" +
+    "\n" +
+    "    <div class=\"first-row\">\n" +
+    "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
+    "            ng-class=\"subject.subjectNameAlias\"\n" +
+    "            class=\"subject-score\">\n" +
+    "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
+    "            <div class=\"score-wrapper\">\n" +
+    "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
+    "                <span class=\"bold\">{{::vm.userStats[subject.id]}}</span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
     "");
   $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html",
     "<div class=\"workouts-roadmap-workout-in-progress base-workouts-wrapper\"\n" +
