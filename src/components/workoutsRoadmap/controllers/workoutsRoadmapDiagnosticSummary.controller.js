@@ -7,10 +7,14 @@
 
             var vm = this;
 
-            vm.diagnosticSubjects = diagnosticData.diagnosticSubjects;
+            diagnosticData.diagnosticResultProm.then(function (diagnosticResult) {
+                vm.compositeScore = diagnosticResult.compositeScore;
+                vm.userStats = diagnosticResult.userStats;
+            });
 
-            vm.compositeScore = diagnosticData.compositeScore;
+            diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
+                vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+            });
 
-            vm.userStats = diagnosticData.userStats;
         });
 })(angular);

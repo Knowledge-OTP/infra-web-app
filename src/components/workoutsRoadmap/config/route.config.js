@@ -87,21 +87,12 @@
                 })
                 .state('app.workouts.roadmap.diagnostic.summary', {
                     resolve: {
-                        diagnosticData: function (DiagnosticSrv, DiagnosticIntroSrv, $q) {
+                        diagnosticData: function (DiagnosticSrv, DiagnosticIntroSrv) {
                             'ngInject';
-                            var summaryProms = [
-                                DiagnosticSrv.getDiagnosticExamResult(),
-                                DiagnosticIntroSrv.getConfigMap()
-                            ];
-                            return $q.all(summaryProms).then(function (results) {
-                                var diagnosticResult = results[0];
-                                var diagnosticConfigMap = results[1];
                                 return {
-                                    userStats: diagnosticResult.userStats,
-                                    compositeScore: diagnosticResult.compositeScore,
-                                    diagnosticSubjects: diagnosticConfigMap.subjects
+                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
                                 };
-                            });
                         }
                     },
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
