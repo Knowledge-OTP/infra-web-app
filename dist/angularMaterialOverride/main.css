@@ -44,14 +44,16 @@ md-tooltip {
     white-space: normal; }
     md-tooltip .md-content.md-show {
       opacity: 1;
-      transform: none;
+      -webkit-transform: none;
+              transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip .md-content.md-show-remove {
       transition: none; }
       md-tooltip .md-content.md-show-remove.md-show-remove-active {
-        transform: none;
+        -webkit-transform: none;
+                transform: none;
         opacity: 0; }
     md-tooltip .md-content .top-text {
       margin-top: 22px;

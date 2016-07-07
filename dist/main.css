@@ -3112,62 +3112,62 @@ workout-intro-lock {
             .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container .workouts-ui-view > ui-view .base-workouts-wrapper > * {
               position: relative; }
 
-.workouts-roadmap-diagnostic-intro {
+.workouts-roadmap-diagnostic-intro, .workouts-roadmap-diagnostic-summary {
   text-align: center;
   box-sizing: border-box; }
-  .workouts-roadmap-diagnostic-intro .diagnostic-workout-title {
+  .workouts-roadmap-diagnostic-intro .diagnostic-workout-title, .workouts-roadmap-diagnostic-summary .diagnostic-workout-title {
     margin-top: 25px;
     font-size: 21px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 700; }
-  .workouts-roadmap-diagnostic-intro .complete-text {
+  .workouts-roadmap-diagnostic-intro .complete-text, .workouts-roadmap-diagnostic-summary .complete-text {
     margin-top: 52px;
     font-size: 23px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 400; }
-  .workouts-roadmap-diagnostic-intro .results-text {
+  .workouts-roadmap-diagnostic-intro .results-text, .workouts-roadmap-diagnostic-summary .results-text {
     font-size: 21px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 400;
     text-transform: capitalize;
     margin-top: 55px; }
-  .workouts-roadmap-diagnostic-intro .total-score {
+  .workouts-roadmap-diagnostic-intro .total-score, .workouts-roadmap-diagnostic-summary .total-score {
     font-size: 20px;
     color: #757a83;
     font-family: Lato;
     font-weight: 400;
     text-transform: uppercase;
     margin-top: 53px; }
-  .workouts-roadmap-diagnostic-intro .first-row, .workouts-roadmap-diagnostic-intro .second-row {
+  .workouts-roadmap-diagnostic-intro .first-row, .workouts-roadmap-diagnostic-intro .second-row, .workouts-roadmap-diagnostic-summary .first-row, .workouts-roadmap-diagnostic-summary .second-row {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     -webkit-justify-content: center;
         -ms-flex-pack: center;
             justify-content: center; }
-    .workouts-roadmap-diagnostic-intro .first-row .subject-score, .workouts-roadmap-diagnostic-intro .second-row .subject-score {
+    .workouts-roadmap-diagnostic-intro .first-row .subject-score, .workouts-roadmap-diagnostic-intro .second-row .subject-score, .workouts-roadmap-diagnostic-summary .first-row .subject-score, .workouts-roadmap-diagnostic-summary .second-row .subject-score {
       display: inline-block;
       margin: 67.5px 37px auto;
       width: 220px; }
-      .workouts-roadmap-diagnostic-intro .first-row .subject-score .icon-wrapper, .workouts-roadmap-diagnostic-intro .second-row .subject-score .icon-wrapper {
+      .workouts-roadmap-diagnostic-intro .first-row .subject-score .icon-wrapper, .workouts-roadmap-diagnostic-intro .second-row .subject-score .icon-wrapper, .workouts-roadmap-diagnostic-summary .first-row .subject-score .icon-wrapper, .workouts-roadmap-diagnostic-summary .second-row .subject-score .icon-wrapper {
         display: inline-block;
         width: 45px;
         vertical-align: middle;
         float: left; }
-      .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper {
+      .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper {
         font-size: 26.5px;
         color: #4f4d4d;
         font-family: Lato;
         font-weight: 200; }
-        .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .score {
+        .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper .score {
           display: inline-block;
           text-transform: capitalize;
           float: left;
           padding-left: 10px; }
-        .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .bold {
+        .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper .bold {
           font-weight: 400;
           float: right; }
 
