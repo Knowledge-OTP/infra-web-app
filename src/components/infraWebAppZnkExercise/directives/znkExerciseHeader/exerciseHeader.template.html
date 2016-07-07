@@ -3,17 +3,8 @@
    <div class="pattern" subject-id-to-attr-drv="vm.subjectId" context-attr="class" prefix="subject-background"></div>
 
     <div class="left-area">
-        <div class="side-text" translate="{{vm.sideText | cutString: 40}}" translate-values="{subjectName: vm.subjectName, exerciseNum: vm.exerciseNum}"></div>
-
-        <div ng-if="vm.showNoCalcIcon()" class="no-math-icon-wrapper">
-            <div class="math-no-calc"></div>
-            <svg-icon name="math-icon" class="icon-wrapper"></svg-icon>
-
-            <md-tooltip md-visible="vm.showToolTip" ng-if="vm.showToolTip" md-direction="bottom" class="no-calc-tooltip md-whiteframe-3dp">
-                <div class="arrow-up"></div>
-                <div translate=".NO_CALC_TOOLTIP" class="top-text"></div>
-                <div translate=".GOT_IT" class="md-button primary got-it-btn" ng-click="vm.showToolTip = false"></div>
-            </md-tooltip>
+        <div class="side-text">
+            {{vm.sideText | cutString: 40}}
         </div>
     </div>
 

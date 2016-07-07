@@ -3,80 +3,80 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!-- bower:css -->
-    <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
-    <link rel="stylesheet" href="infra/dist/main.css" />
-    <link rel="stylesheet" href="angular-material/angular-material.css" />
-    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css" />
-    <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
+    <link rel="stylesheet" href="Swiper/dist/css/swiper.css"/>
+    <link rel="stylesheet" href="infra/dist/main.css"/>
+    <link rel="stylesheet" href="angular-material/angular-material.css"/>
+    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css"/>
+    <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css"/>
     <!-- endbower -->
 
-    <link rel="stylesheet" href="infraWebAppZnkExercise/main.css">
+    <link rel="stylesheet" href="main.css">
     <style>
-        body{
+        body {
             background-color: #f2f2f2;
         }
-        .nav-bar{
-            width:100%;
-            height:57px;
+
+        .nav-bar {
+            width: 100%;
+            height: 57px;
             background-color: #b8c1c1;
             text-align: center
         }
 
-        .main-content{
-            width:1060px;
-            margin: 18px auto;
+        znk-exercise-header {
+            background: #578eff;
         }
     </style>
 </head>
-    <body>
-        <div class="nav-bar"> znk nav bar</div>
+<body>
+<div class="nav-bar"> znk nav bar</div>
 
-        <div ng-app="demo" ng-controller="MainCtrl">
+<div ng-app="demo" ng-controller="MainCtrl">
+    <ui-view></ui-view>
+    <!--<div class="main-content">-->
+    <!--<div class="exercise-container base-border-radius">-->
+    <!--<znk-exercise ng-model="d.results"-->
+    <!--questions="d.questions"-->
+    <!--settings="d.settings"-->
+    <!--actions="d.actions"-->
+    <!--ng-if="!d.hideExercise && d.questions.length">-->
+    <!--</znk-exercise>-->
+    <!--</div>-->
+    <!--</div>-->
+</div>
 
-            <div class="main-content">
-                <div class="exercise-container base-border-radius">
-                    <znk-exercise ng-model="d.results"
-                                  questions="d.questions"
-                                  settings="d.settings"
-                                  actions="d.actions"
-                                  ng-if="!d.hideExercise && d.questions.length">
-                    </znk-exercise>
+<!-- bower:js -->
+<script src="angular/angular.js"></script>
+<script src="angular-animate/angular-animate.js"></script>
+<script src="Swiper/dist/js/swiper.js"></script>
+<script src="firebase/firebase.js"></script>
+<script src="angular-translate/angular-translate.js"></script>
+<script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+<script src="ng-idle/angular-idle.js"></script>
+<script src="SHA-1/sha1.js"></script>
+<script src="angulartics/src/angulartics.js"></script>
+<script src="angular-svg-round-progressbar/build/roundProgress.min.js"></script>
+<script src="angular-ui-router/release/angular-ui-router.js"></script>
+<script src="infra/dist/main.js"></script>
+<script src="angular-aria/angular-aria.js"></script>
+<script src="angular-messages/angular-messages.js"></script>
+<script src="angular-material/angular-material.js"></script>
+<script src="ng-tags-input/ng-tags-input.js"></script>
+<script src="Chart.js/Chart.js"></script>
+<script src="angular-chart.js/dist/angular-chart.js"></script>
+<script src="angular-sanitize/angular-sanitize.js"></script>
+<!-- endbower -->
 
-                </div>
+<script src="main.js"></script>
 
-                <!-- bower:js -->
-                <script src="angular/angular.js"></script>
-                <script src="angular-animate/angular-animate.js"></script>
-                <script src="Swiper/dist/js/swiper.js"></script>
-                <script src="firebase/firebase.js"></script>
-                <script src="angular-translate/angular-translate.js"></script>
-                <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
-                <script src="ng-idle/angular-idle.js"></script>
-                <script src="SHA-1/sha1.js"></script>
-                <script src="angulartics/src/angulartics.js"></script>
-                <script src="angular-svg-round-progressbar/build/roundProgress.min.js"></script>
-                <script src="angular-ui-router/release/angular-ui-router.js"></script>
-                <script src="infra/dist/main.js"></script>
-                <script src="angular-aria/angular-aria.js"></script>
-                <script src="angular-messages/angular-messages.js"></script>
-                <script src="angular-material/angular-material.js"></script>
-                <script src="ng-tags-input/ng-tags-input.js"></script>
-                <script src="Chart.js/Chart.js"></script>
-                <script src="angular-chart.js/dist/angular-chart.js"></script>
-                <script src="angular-sanitize/angular-sanitize.js"></script>
-                <!-- endbower -->
+<script src="demo.js"></script>
 
-                <script src="main.js"></script>
+<script src="infra/demoShared/contentConfig.js"></script>
+<script src="infra/demoShared/analyticsConfig.js"></script>
+<script src="infra/demoShared/storagesConfig.js"></script>
+<script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
 
-                <script src="demo.js"></script>
-
-                <script src="infra/demoShared/contentConfig.js"></script>
-                <script src="infra/demoShared/analyticsConfig.js"></script>
-                <script src="infra/demoShared/storagesConfig.js"></script>
-
-                <script src="env.service.js"></script>
-                <script src="translate.config.js"></script>
-            </div>
-        </div>
-    </body>
+<script src="env.service.js"></script>
+<script src="translate.config.js"></script>
+</body>
 </html>

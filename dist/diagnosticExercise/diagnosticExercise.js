@@ -20,7 +20,7 @@
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.znkExerciseHeader',
+        'znk.infra-web-app.infraWebAppZnkExercise',
         'znk.infra.general'
     ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
         'ngInject';

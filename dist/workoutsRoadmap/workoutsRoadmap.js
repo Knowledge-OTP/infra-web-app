@@ -71,7 +71,7 @@
         'znk.infra.exerciseUtility',
         'znk.infra.scroll',
         'znk.infra.general',
-        'znk.infra.exerciseDataGetters',
+        'znk.infra.contentGetters',
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticIntro',
@@ -80,7 +80,6 @@
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
-        'znk.infra.exerciseDataGetters',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.estimatedScoreWidget'
     ]);
@@ -1678,7 +1677,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                total: vm.exerciseResult.totalQuestionNum\n" +
     "             }\">\n" +
     "        </div>\n" +
-    "        <md-button class=\"znk md-primary continue-btn\">\n" +
+    "        <md-button class=\"znk md-primary continue-btn\"\n" +
+    "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
     "            <span translate=\".CONTINUE\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
