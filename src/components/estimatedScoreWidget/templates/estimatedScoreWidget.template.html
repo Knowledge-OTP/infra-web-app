@@ -1,7 +1,7 @@
 <div class="score-estimate-container base-border-radius base-box-shadow"
      ng-class="{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}"
      translate-namespace="ESTIMATED_SCORE_WIDGET_DIRECTIVE">
-    <div class="title" translate=".TITLE"></div>
+    <div class="title" translate="{{::widgetTitle}}"></div>
     <div class="unfinished-diagnostic-title" ng-if="!d.isDiagnosticComplete" translate=".UNFINISHED_DIAGNOSTIC_TITLE"></div>
     <div class="subjects-wrap">
         <div ng-repeat="widgetItem in d.subjectsScores"

@@ -15,7 +15,8 @@
                 require: '?ngModel',
                 restrict: 'E',
                 scope: {
-                    isNavMenu: '@'
+                    isNavMenu: '@',
+                    widgetTitle: '@'
                 },
                 link: function (scope, element, attrs, ngModelCtrl) {
                     $translatePartialLoader.addPart('estimatedScoreWidget');
