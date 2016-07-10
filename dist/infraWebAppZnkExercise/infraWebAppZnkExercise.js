@@ -221,7 +221,7 @@
                 timerData: '=?',
                 subjectId: '=',
                 categoryId: '&',
-                sideText: '@',
+                sideText: '=',
                 totalSlideNum: '@',
                 exerciseNum: '@',
                 iconName: '@',

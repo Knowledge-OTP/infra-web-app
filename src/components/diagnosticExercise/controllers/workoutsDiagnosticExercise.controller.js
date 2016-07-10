@@ -6,7 +6,8 @@
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv) {
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $translate) {
             'ngInject';
             var self = this;
             this.subjectId = exerciseData.questionsData.subjectId;
@@ -169,8 +170,19 @@
                 }
             }
 
-            _setNumSlideForNgModel(numQuestionCounter);
+            function _setHeaderTitle(){
+                var subjectTranslateKey = 'SUBJECTS.' + exerciseData.questionsData.subjectId;
+                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                    var translateFilter = $filter('translate');
+                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE',{
+                        subject: $filter('capitalize')(subjectTranslation)
+                    });
+                },function(err){
+                    $log.error('WorkoutsDiagnosticIntroController: ' + err);
+                });
+            }
 
+            _setNumSlideForNgModel(numQuestionCounter);
 
             if (exerciseData.questionsData.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
                 var groupDataTypeTitle = {};
@@ -285,6 +297,12 @@
             };
 
             self.questionsPerSubject = _getNumberOfQuestions();
+
+            _setHeaderTitle();
+
+            $rootScope.$on('$translateChangeSuccess', function () {
+                _setHeaderTitle();
+            });
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
