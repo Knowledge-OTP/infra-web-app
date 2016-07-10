@@ -1,0 +1,7 @@
+{
+    "DEMO": {
+        "FULL_TEST_TITLE": "Full test",
+        "MINI_TEST_TITLE": "Mini test",
+        "TEST": "Test {{testNumber}}"
+    }
+}
