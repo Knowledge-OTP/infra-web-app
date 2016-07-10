@@ -1,24 +1,43 @@
-<div class="app-tests-navigationPane">
-   <div class="tests-navigation-title-header" translate=".MINI_TEST_TITLE"></div>
-    <div>{{vm.activeId}}</div>
+<div class="app-tests-navigationPane"
+     translate-namespace="NAVIGATION_PANE">
+   <div class="tests-navigation-title-header"
+        translate=".MINI_TEST_TITLE"></div>
     <md-list flex="grow" layout="column" layout-align="start center">
-        <md-list-item ng-repeat="miniExam in vm.exams.miniExams"
-                      ng-class="{ 'done': miniExam.isCompleted, 'active': vm.activeId === miniExam.id }">
-            <md-button md-no-ink ng-click="vm.onExamClick({exam: miniExam, prevExam: vm.exams.miniExams[$index - 1]}); vm.changeActive(miniExam.id)">
-                <span class="" translate=".TEST" translate-values="{testNumber: $index+1}"></span>
-                <div class="status-icon-wrapper" ng-if="miniExam.isCompleted">
+        <md-list-item ng-repeat="miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum}"
+                      ng-class="{
+                        'done': miniExam.isCompleted,
+                        'active': vm.activeId === miniExam.id
+                      }">
+            <md-button md-no-ink
+                       ng-click="vm.changeActive(miniExam.id)">
+                <span translate=".TEST"
+                      translate-values="{testNumber: $index+1}">
+                </span>
+                <div class="status-icon-wrapper"
+                     ng-if="miniExam.isCompleted">
                     <i class="material-icons">check</i>
                 </div>
             </md-button>
         </md-list-item>
     </md-list>
-    <div class="tests-navigation-title-header" translate=".FULL_TEST_TITLE"></div>
-    <md-list class="md-list-second-list" flex="grow" layout="column" layout-align="start center">
-        <md-list-item ng-repeat="fullExam in vm.exams.fullExams"
-                      ng-class="{ 'done': fullExam.isCompleted, 'active': vm.activeId === fullExam.id }">
-            <md-button md-no-ink ng-click="vm.onExamClick({exam: fullExam, prevExam: vm.exams.fullExams[$index - 1]}); vm.changeActive(fullExam.id)">
-                <span translate=".TEST" translate-values="{testNumber: $index+1}"></span>
-                <div class="status-icon-wrapper" ng-if="fullExam.isCompleted">
+    <div class="tests-navigation-title-header"
+         translate=".FULL_TEST_TITLE"></div>
+    <md-list class="md-list-second-list"
+             flex="grow"
+             layout="column"
+             layout-align="start center">
+        <md-list-item ng-repeat="fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum}"
+                      ng-class="{
+                        'done': fullExam.isCompleted,
+                        'active': vm.activeId === fullExam.id
+                      }">
+            <md-button md-no-ink
+                       ng-click="vm.changeActive(fullExam.id)">
+                <span translate=".TEST"
+                      translate-values="{testNumber: $index+1}">
+                </span>
+                <div class="status-icon-wrapper"
+                     ng-if="fullExam.isCompleted">
                     <i class="material-icons">check</i>
                 </div>
             </md-button>

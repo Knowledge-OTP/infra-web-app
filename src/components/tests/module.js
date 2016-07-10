@@ -13,17 +13,15 @@
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]).config([
-        'SvgIconSrvProvider',
-        
-        function (SvgIconSrvProvider) {
+    ])
+        .config(function (SvgIconSrvProvider) {
+            'ngInject';
+
             var svgMap = {
                 'tests-check-mark-icon': 'components/tests/svg/check-mark-icon.svg',
                 'tests-locked-icon': 'components/tests/svg/locked-icon.svg',
                 'tests-subject-locked-icon': 'components/tests/svg/subject-locked-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-
-    ]);
+        });
 })(angular);

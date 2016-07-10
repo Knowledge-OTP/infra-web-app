@@ -13,202 +13,17 @@
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]).config([
-        'SvgIconSrvProvider',
-        
-        function (SvgIconSrvProvider) {
+    ])
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
+
             var svgMap = {
                 'tests-check-mark-icon': 'components/tests/svg/check-mark-icon.svg',
                 'tests-locked-icon': 'components/tests/svg/locked-icon.svg',
                 'tests-subject-locked-icon': 'components/tests/svg/subject-locked-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-
-    ]);
-})(angular);
-
-// (function (angular) {
-//     'use strict';
-//
-//     angular.module('znk.infra-web-app.tests').config([
-//         '$stateProvider',
-//         function ($stateProvider) {
-//             $stateProvider
-//                 .state('app.tests', {
-//                     url: '/tests',
-//                     template: '<ui-view></ui-view>'
-//                 })
-//                 .state('app.tests.roadmap', {
-//                     url: '/roadmap?exam',
-//                     templateUrl: 'components/tests/templates/testsRoadmap.template.html',
-//                     resolve: {
-//                         testsData: function (ExamSrv, ExerciseResultSrv, $q) {
-//                             return ExamSrv.getAllExams(true).then(function (exams) {
-//                                 var examResultsProms = [];
-//                                 angular.forEach(exams, function (exam) {
-//                                     examResultsProms.push(ExerciseResultSrv.getExamResult(exam.id, true));
-//                                 });
-//                                 return $q.all(examResultsProms).then(function (examsResults) {
-//                                     return {
-//                                         exams: exams,
-//                                         examsResults: examsResults
-//                                     };
-//                                 });
-//                             });
-//                         },
-//                         diagnosticData: function (DiagnosticSrv) {
-//                              DiagnosticSrv.getDiagnosticStatus().then(function (result) {
-//                                  var isDiagnosticsComplete = result === 2;
-//                                 return (isDiagnosticsComplete) ? isDiagnosticsComplete : false;
-//                             });
-//                             // return DiagnosticSrv.getDiagnosticStatus().then(function (result) {
-//                             //     return (result.isComplete) ? result.isComplete : false;
-//                             // });
-//                         }
-//                     },
-//                     controller: 'TestsRoadmapController',
-//                     controllerAs: 'vm'
-//                 })
-//                 .state('app.tests.section', {
-//                     url: '/section/:examId/:sectionId',
-//                     template: '<ui-view></ui-view>',
-//                     controller: 'WorkoutsWorkoutController',
-//                     resolve: {
-//                         exerciseData: function exerciseData($q, ExamSrv, $stateParams, ExerciseTypeEnum, ExerciseResultSrv, $state, $filter) {
-//                             var examId = +$stateParams.examId;
-//                             var sectionId = +$stateParams.sectionId;
-//                             var getSectionProm = ExamSrv.getExamSection(sectionId);
-//                             var getExam = ExamSrv.getExam(examId);
-//                             var getExamResultProm = ExerciseResultSrv.getExamResult(examId);
-//                             return $q.all([getExam, getExamResultProm]).then(function (results) {
-//                                 var examExercise = results[0];
-//                                 var examResultsExercise = results[1];
-//                                 var getExerciseResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, sectionId, examId, examExercise.sections.length);
-//                                 return {
-//                                     headerTitlePrefix: $filter('translate')('TEST_TEST.SECTION'),
-//                                     exerciseProm: getSectionProm,
-//                                     exerciseResultProm: getExerciseResultProm,
-//                                     exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
-//                                     examData: examExercise,
-//                                     examResult: examResultsExercise,
-//                                     headerExitAction: function () {
-//                                         $state.go('app.tests.roadmap', {exam: $stateParams.examId});
-//                                     }
-//                                 };
-//                             });
-//                         }
-//                     },
-//                     controllerAs: 'vm'
-//                 })
-//                 .state('app.tests.section.intro', {
-//                     templateUrl: 'components/tests/templates/testsSectionIntro.template.html',
-//                     controller: 'TestsSectionIntroController',
-//                     controllerAs: 'vm'
-//                 });
-//                 /*.state('app.tests.section.exercise', {
-//                     views: {
-//                         '@app': {
-//                             templateUrl: 'app/workouts/templates/workoutsWorkoutExercise.template.html',
-//                             controller: 'WorkoutsWorkoutExerciseController',
-//                             controllerAs: 'vm'
-//                         }
-//                     },
-//                     onExit: function (exerciseData) {
-//                         if (angular.isDefined(exerciseData.resultsData)) {
-//                             exerciseData.resultsData.$save();
-//                         }
-//                     }
-//                 })
-//                 .state('app.tests.section.summary', {
-//                     views: {
-//                         '@app': {
-//                             templateUrl: 'app/workouts/templates/workoutsWorkoutSummary.template.html',
-//                             controller: 'WorkoutsWorkoutSummaryController',
-//                             controllerAs: 'vm'
-//                         }
-//                     }
-//                 });*/
-//         }]);
-// })(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tests').controller('NavigationPaneController',
-        ["ExamTypeEnum", "$log", "$translatePartialLoader", function (ExamTypeEnum, $log, $translatePartialLoader) {
-        'ngInject';
-            var self = this;
-
-            $translatePartialLoader.addPart('tests');
-
-            self.activeId = void(0);
-
-            function _filterExams() {
-                var alreadySetActive = false;
-                self.exams = angular.copy(self.exams);
-                var examsReduce = self.exams.reduce(function (prevContent, currentValue, currentIndex) {
-                    var examResults = self.examsResults[currentIndex];
-                    currentValue.isCompleted = (examResults && examResults.isComplete) ? examResults.isComplete : false;
-
-                    if (currentValue.typeId === ExamTypeEnum.FULL_TEST.enum) {
-                        prevContent.fullExams.push(currentValue);
-                    } else if (currentValue.typeId === ExamTypeEnum.MINI_TEST.enum) {
-                        prevContent.miniExams.push(currentValue);
-                    } else {
-                        $log.error('NavigationPaneController _filterExams: typeId is undefined or wrong type id!');
-                    }
-
-                    if (self.activeExam && currentValue.id === +self.activeExam) {
-                        alreadySetActive = true;
-                        self.activeId = currentValue.id;
-                        self.onExamClick({ exam: currentValue, prevExam: prevContent[currentIndex - 1] });
-                    }
-
-                    return prevContent;
-                }, {
-                    fullExams: [],
-                    miniExams: []
-                });
-
-                if (!alreadySetActive) {
-                    _setActiveExam(examsReduce, examsReduce.miniExams);
-                }
-
-                return examsReduce;
-            }
-
-            function _setActiveExam(exams, examsType, last) {
-                var isActive = false;
-                for (var i = 0, ii = examsType.length; i < ii; i++) {
-                    if (!examsType[i].isCompleted) {
-                        self.activeId = examsType[i].id;
-                        isActive = true;
-                        self.onExamClick({ exam: examsType[i], prevExam: examsType[i - 1] });
-                        break;
-                    }
-                }
-                if (isActive) {
-                    return;
-                }
-                if (!isActive && !last) {
-                    _setActiveExam(exams, exams.fullExams, true);
-                }
-                if (last) {
-                    self.activeId = exams.miniExams[0].id;
-                    self.onExamClick({ exam: exams.miniExams[0], prevExam: void(0) });
-                }
-            }
-
-            self.changeActive = function (id) {
-                if (id !== self.activeId) {
-                    self.activeId = id;
-                }
-            };
-
-           this.exams = _filterExams();
-        }]
-    );
+        }]);
 })(angular);
 
 /**
@@ -219,24 +34,42 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').directive('navigationPane',
-        ["$translatePartialLoader", function ($translatePartialLoader) {
+        ["$translatePartialLoader", "ExamTypeEnum", "ExamSrv", "ExerciseResultSrv", function ($translatePartialLoader, ExamTypeEnum, ExamSrv, ExerciseResultSrv) {
             'ngInject';
             return {
                 scope: {
                     activeExam: '=?',
-                    exams: '=',
-                    onExamClick: '&',
-                    title: '@',
-                    secondTitle: '@',
-                    examsResults: '='
+                    onExamClick: '&'
                 },
                 restrict: 'E',
                 templateUrl: 'components/tests/templates/navigationPane.template.html',
-                controller: 'NavigationPaneController',
-                bindToController: true,
-                controllerAs: 'vm',
-                link: function () {
+                require: '?ngModel',
+                link: function (scope, element, attributes, ngModelCtrl) {
                     $translatePartialLoader.addPart('tests');
+
+                    scope.vm = {};
+
+                    scope.vm.ExamTypeEnum = ExamTypeEnum;
+
+                    ExamSrv.getAllExams().then(function(examsArr){
+                        var examArr = [];
+
+                        angular.forEach(examsArr, function (exam) {
+                            var examCopy = angular.copy(exam);
+                            examArr.push(examCopy);
+
+                            ExerciseResultSrv.getExamResult(exam.id, true).then(function(examResult){
+                                examCopy.isCompleted = !!(examResult && examResult.isCompleted);
+                            });
+                        });
+
+                        scope.vm.examArr = examArr;
+                    });
+
+                    scope.vm.changeActive = function(newActiveId){
+                        scope.vm.activeId = newActiveId;
+                        ngModelCtrl.$setViewValue(newActiveId);
+                    };
                 }
             };
         }]
@@ -271,10 +104,10 @@
 
     angular.module('znk.infra-web-app.tests').provider('TestsSrv', [
         function () {
-            var _subjectsMapGetter;
+            var _subjectsOrderGetter;
 
-            this.setSubjectsMap = function (subjectsMapGetter) {
-                _subjectsMapGetter = subjectsMapGetter;
+            this.setSubjectsOrder = function (subjectsOrderGetter) {
+                _subjectsOrderGetter = subjectsOrderGetter;
             };
 
             this.$get = ["$log", "$injector", "$q", "ExerciseResultSrv", "ExamSrv", "ScoringService", "ExerciseTypeEnum", function ($log, $injector, $q, ExerciseResultSrv, ExamSrv, ScoringService, ExerciseTypeEnum) {
@@ -282,13 +115,13 @@
 
                 var TestsSrv = {};
 
-                TestsSrv.getSubjectsMap = function () {
-                    if (!_subjectsMapGetter) {
+                TestsSrv.getSubjectsOrder = function () {
+                    if (!_subjectsOrderGetter) {
                         var errMsg = 'TestsSrv: subjectsMapGetter was not set.';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
                     }
-                    return $q.when($injector.invoke(_subjectsMapGetter));
+                    return $q.when($injector.invoke(_subjectsOrderGetter));
                 };
 
                 TestsSrv.getExamResult = function (examsResults, examId) {
@@ -308,7 +141,7 @@
                     return examSection;
                 };
 
-                TestsSrv.isAllSubjectLocked = function (exam) {
+                TestsSrv.areAllSubjectsLocked = function (exam) {
                     var isAvail = true;
                     for (var i = 0, ii = exam.sections.length; i < ii; i++) {
                         if (exam.sections[i].isAvail) {
@@ -382,9 +215,9 @@
                     return ScoringService.isTypeFull(typeId);
                 };
 
-                TestsSrv.groupBySubjectId = function (obj) {
+                TestsSrv.groupBySubjectId = function (subject) {
                     var newObj = {};
-                    angular.forEach(obj, function (value) {
+                    angular.forEach(subject, function (value) {
                         if (!newObj[value.subjectId]) {
                             newObj[value.subjectId] = [];
                         }
@@ -486,28 +319,46 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "</svg>\n" +
     "");
   $templateCache.put("components/tests/templates/navigationPane.template.html",
-    "<div class=\"app-tests-navigationPane\">\n" +
-    "   <div class=\"tests-navigation-title-header\" translate=\"{{::vm.title}}\"></div>\n" +
+    "<div class=\"app-tests-navigationPane\"\n" +
+    "     translate-namespace=\"NAVIGATION_PANE\">\n" +
+    "   <div class=\"tests-navigation-title-header\"\n" +
+    "        translate=\".MINI_TEST_TITLE\"></div>\n" +
     "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-    "        <md-list-item ng-repeat=\"miniExam in vm.exams.miniExams\"\n" +
-    "                      ng-class=\"{ 'done': miniExam.isCompleted, 'active': vm.activeId === miniExam.id }\">\n" +
-    "            <md-button md-no-ink ng-click=\"vm.onExamClick({exam: miniExam, prevExam: vm.exams.miniExams[$index - 1]}); vm.changeActive(miniExam.id)\">\n" +
-    "                <!--{{::miniExam.name}}-->\n" +
-    "                <span class=\"\" translate=\".TEST\" translate-values=\"{testNumber: $index+1}\"></span>\n" +
-    "                <div class=\"status-icon-wrapper\" ng-if=\"miniExam.isCompleted\">\n" +
+    "        <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum}\"\n" +
+    "                      ng-class=\"{\n" +
+    "                        'done': miniExam.isCompleted,\n" +
+    "                        'active': vm.activeId === miniExam.id\n" +
+    "                      }\">\n" +
+    "            <md-button md-no-ink\n" +
+    "                       ng-click=\"vm.changeActive(miniExam.id)\">\n" +
+    "                <span translate=\".TEST\"\n" +
+    "                      translate-values=\"{testNumber: $index+1}\">\n" +
+    "                </span>\n" +
+    "                <div class=\"status-icon-wrapper\"\n" +
+    "                     ng-if=\"miniExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +
     "                </div>\n" +
     "            </md-button>\n" +
     "        </md-list-item>\n" +
     "    </md-list>\n" +
-    "    <div class=\"tests-navigation-title-header\" translate=\"{{::vm.secondTitle}}\"></div>\n" +
-    "    <md-list class=\"md-list-second-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-    "        <md-list-item ng-repeat=\"fullExam in vm.exams.fullExams\"\n" +
-    "                      ng-class=\"{ 'done': fullExam.isCompleted, 'active': vm.activeId === fullExam.id }\">\n" +
-    "            <md-button md-no-ink ng-click=\"vm.onExamClick({exam: fullExam, prevExam: vm.exams.fullExams[$index - 1]}); vm.changeActive(fullExam.id)\">\n" +
-    "                <!--{{::fullExam.name}}-->\n" +
-    "                <span translate=\".TEST\" translate-values=\"{testNumber: $index+1}\"></span>\n" +
-    "                <div class=\"status-icon-wrapper\" ng-if=\"fullExam.isCompleted\">\n" +
+    "    <div class=\"tests-navigation-title-header\"\n" +
+    "         translate=\".FULL_TEST_TITLE\"></div>\n" +
+    "    <md-list class=\"md-list-second-list\"\n" +
+    "             flex=\"grow\"\n" +
+    "             layout=\"column\"\n" +
+    "             layout-align=\"start center\">\n" +
+    "        <md-list-item ng-repeat=\"fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum}\"\n" +
+    "                      ng-class=\"{\n" +
+    "                        'done': fullExam.isCompleted,\n" +
+    "                        'active': vm.activeId === fullExam.id\n" +
+    "                      }\">\n" +
+    "            <md-button md-no-ink\n" +
+    "                       ng-click=\"vm.changeActive(fullExam.id)\">\n" +
+    "                <span translate=\".TEST\"\n" +
+    "                      translate-values=\"{testNumber: $index+1}\">\n" +
+    "                </span>\n" +
+    "                <div class=\"status-icon-wrapper\"\n" +
+    "                     ng-if=\"fullExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +
     "                </div>\n" +
     "            </md-button>\n" +

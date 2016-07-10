@@ -1,5 +1,7 @@
 {
     "NAVIGATION_PANE": {
-        "TEST": "Test {{testNumber}}"
+        "TEST": "Test {{testNumber}}",
+        "FULL_TEST_TITLE": "Full test",
+        "MINI_TEST_TITLE": "Mini test"
     }
 }
