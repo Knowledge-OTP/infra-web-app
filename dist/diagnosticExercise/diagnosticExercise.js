@@ -521,11 +521,6 @@
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
                 $state.go('app.workouts.roadmap');
             };
-
-            var subjectLocalized = translateFilter('SUBJECTS.' + exerciseData.subjectId);
-            this.headerTitle = $filter('translate')('WORKOUTS_DIAGNOSTIC_EXERCISE.EXERCISE_TITLE',{
-                subject: subjectLocalized
-            });
         }]);
 })(angular);
 
