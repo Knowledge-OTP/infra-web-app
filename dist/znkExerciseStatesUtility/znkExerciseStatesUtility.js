@@ -86,7 +86,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     "                         }\"\n" +
     "                         total-slide-num=\"{{baseZnkExerciseCtrl.numberOfQuestions}}\"\n" +
     "                         ng-model=\"baseZnkExerciseCtrl.currentIndex\"\n" +
-    "                         side-text=\"{{vm.headerTitle}}\"\n" +
+    "                         side-text=\"vm.headerTitle\"\n" +
     "                         timer-data=\"baseZnkExerciseCtrl.timerData\"\n" +
     "                         on-clicked-quit=\"vm.onHeaderQuit()\"\n" +
     "                         icon-name=\"{{vm.iconName}}\"\n" +
