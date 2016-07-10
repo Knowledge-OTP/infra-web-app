@@ -255,60 +255,60 @@ workout-intro-lock {
             .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container .workouts-ui-view > ui-view .base-workouts-wrapper > * {
               position: relative; }
 
-.workouts-roadmap-diagnostic-intro {
+.workouts-roadmap-diagnostic-intro, .workouts-roadmap-diagnostic-summary {
   text-align: center;
   box-sizing: border-box; }
-  .workouts-roadmap-diagnostic-intro .diagnostic-workout-title {
+  .workouts-roadmap-diagnostic-intro .diagnostic-workout-title, .workouts-roadmap-diagnostic-summary .diagnostic-workout-title {
     margin-top: 25px;
     font-size: 21px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 700; }
-  .workouts-roadmap-diagnostic-intro .complete-text {
+  .workouts-roadmap-diagnostic-intro .complete-text, .workouts-roadmap-diagnostic-summary .complete-text {
     margin-top: 52px;
     font-size: 23px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 400; }
-  .workouts-roadmap-diagnostic-intro .results-text {
+  .workouts-roadmap-diagnostic-intro .results-text, .workouts-roadmap-diagnostic-summary .results-text {
     font-size: 21px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 400;
     text-transform: capitalize;
     margin-top: 55px; }
-  .workouts-roadmap-diagnostic-intro .total-score {
+  .workouts-roadmap-diagnostic-intro .total-score, .workouts-roadmap-diagnostic-summary .total-score {
     font-size: 20px;
     color: #757a83;
     font-family: Lato;
     font-weight: 400;
     text-transform: uppercase;
     margin-top: 53px; }
-  .workouts-roadmap-diagnostic-intro .first-row, .workouts-roadmap-diagnostic-intro .second-row {
+  .workouts-roadmap-diagnostic-intro .first-row, .workouts-roadmap-diagnostic-intro .second-row, .workouts-roadmap-diagnostic-summary .first-row, .workouts-roadmap-diagnostic-summary .second-row {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: center;
         justify-content: center; }
-    .workouts-roadmap-diagnostic-intro .first-row .subject-score, .workouts-roadmap-diagnostic-intro .second-row .subject-score {
+    .workouts-roadmap-diagnostic-intro .first-row .subject-score, .workouts-roadmap-diagnostic-intro .second-row .subject-score, .workouts-roadmap-diagnostic-summary .first-row .subject-score, .workouts-roadmap-diagnostic-summary .second-row .subject-score {
       display: inline-block;
       margin: 67.5px 37px auto;
       width: 220px; }
-      .workouts-roadmap-diagnostic-intro .first-row .subject-score .icon-wrapper, .workouts-roadmap-diagnostic-intro .second-row .subject-score .icon-wrapper {
+      .workouts-roadmap-diagnostic-intro .first-row .subject-score .icon-wrapper, .workouts-roadmap-diagnostic-intro .second-row .subject-score .icon-wrapper, .workouts-roadmap-diagnostic-summary .first-row .subject-score .icon-wrapper, .workouts-roadmap-diagnostic-summary .second-row .subject-score .icon-wrapper {
         display: inline-block;
         width: 45px;
         vertical-align: middle;
         float: left; }
-      .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper {
+      .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper {
         font-size: 26.5px;
         color: #4f4d4d;
         font-family: Lato;
         font-weight: 200; }
-        .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .score {
+        .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper .score {
           display: inline-block;
           text-transform: capitalize;
           float: left;
           padding-left: 10px; }
-        .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .bold {
+        .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper .bold {
           font-weight: 400;
           float: right; }
 
@@ -320,6 +320,9 @@ workout-intro-lock {
     font-size: 21px; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .subject-icon {
     height: 105px; }
+    .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .subject-icon svg {
+      width: auto;
+      height: 73px; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .subject-title {
     font-weight: 400;
     font-size: 18px;
@@ -361,43 +364,7 @@ workout-intro-lock {
         font-weight: 400;
         color: #898989;
         line-height: 73px;
-        position: relative;
-        cursor: pointer; }
-        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover {
-          border-color: #0a9bad;
-          color: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg path, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg path {
-            fill: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st0, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st0 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st1, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st1 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st2, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st2 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st0, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st0 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st1, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st1 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st2, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st2 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st0, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st0 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st1, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st1 {
-            stroke: #0a9bad;
-            fill: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st2, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st2 {
-            fill: #0a9bad;
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st0, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st0 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st1, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st1 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st2, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st2 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st3, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st3 {
-            stroke: #0a9bad; }
-          .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st4, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st4 {
-            stroke: #0a9bad; }
+        position: relative; }
         .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item .workout-icon {
           width: 26px;
           height: 26px;
@@ -412,6 +379,43 @@ workout-intro-lock {
           font-size: 26px; }
         .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper .avail-time-item .minutes-text {
           font-size: 18px; }
+    .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item {
+      cursor: pointer; }
+      .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover {
+        border-color: #0a9bad;
+        color: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg path, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg path {
+          fill: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st0, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st0 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st1, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st1 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st2, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-tutorial-icon"] .tips-n-tricks-svg .st2 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st0, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st0 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st1, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st1 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st2, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-practice-icon"] .practice-icon-svg .st2 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st0, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st0 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st1, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st1 {
+          stroke: #0a9bad;
+          fill: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st2, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-game-icon"] .workouts-progress-game-svg .st2 {
+          fill: #0a9bad;
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st0, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st0 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st1, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st1 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st2, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st2 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st3, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st3 {
+          stroke: #0a9bad; }
+        .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st4, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st4 {
+          stroke: #0a9bad; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .start-btn-wrapper {
     margin-top: 50px; }
 

@@ -29,11 +29,6 @@ angular.module('demo').config(function(WorkoutsRoadmapSrvProvider, $stateProvide
                     subjectId: subjectId,
                     exerciseTypeId: ExerciseTypeEnum.DRILL.enum
                 },
-                5: {
-                    id: 2,
-                    subjectId: subjectId,
-                    exerciseTypeId: ExerciseTypeEnum.GAME.enum
-                },
                 10:{
                     id: 3,
                     subjectId: subjectId,

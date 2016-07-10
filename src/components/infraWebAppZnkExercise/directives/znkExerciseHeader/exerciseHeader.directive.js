@@ -1,6 +1,6 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.znkExerciseHeader').directive('znkExerciseHeader',
+    angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
         function($timeout, SubjectEnum, $translatePartialLoader){
         'ngInject';
 
@@ -11,7 +11,7 @@
                 timerData: '=?',
                 subjectId: '=',
                 categoryId: '&',
-                sideText: '@',
+                sideText: '=',
                 totalSlideNum: '@',
                 exerciseNum: '@',
                 iconName: '@',
@@ -21,9 +21,9 @@
             },
             restrict: 'E',
             require: '?ngModel',
-            templateUrl: 'components/znkExerciseHeader/templates/exerciseHeader.template.html',
+            templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
             controller: function () {
-                $translatePartialLoader.addPart('znkExerciseHeader');
+                $translatePartialLoader.addPart('infraWebAppZnkExercise');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
                     throw new Error('Error: exerciseHeaderController: subjectId is required!');

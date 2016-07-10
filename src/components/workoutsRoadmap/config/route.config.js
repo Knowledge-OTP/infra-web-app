@@ -5,6 +5,10 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
+                .state('app.workouts', {
+                    template: '<ui-view></ui-view>',
+                    abstract: true
+                })
                 .state('app.workouts.roadmap', {
                     url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
@@ -79,6 +83,20 @@
                 .state('app.workouts.roadmap.workout.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
+                    controllerAs: 'vm'
+                })
+                .state('app.workouts.roadmap.diagnostic.summary', {
+                    resolve: {
+                        diagnosticData: function (DiagnosticSrv, DiagnosticIntroSrv) {
+                            'ngInject';
+                                return {
+                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                                };
+                        }
+                    },
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
+                    controller: 'WorkoutsRoadMapDiagnosticSummaryController',
                     controllerAs: 'vm'
                 });
         }]);

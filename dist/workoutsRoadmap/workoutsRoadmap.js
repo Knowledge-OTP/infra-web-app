@@ -71,7 +71,7 @@
         'znk.infra.exerciseUtility',
         'znk.infra.scroll',
         'znk.infra.general',
-        'znk.infra.exerciseDataGetters',
+        'znk.infra.contentGetters',
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticIntro',
@@ -80,7 +80,6 @@
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
-        'znk.infra.exerciseDataGetters',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.estimatedScoreWidget'
     ]);
@@ -93,6 +92,10 @@
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
+                .state('app.workouts', {
+                    template: '<ui-view></ui-view>',
+                    abstract: true
+                })
                 .state('app.workouts.roadmap', {
                     url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
@@ -167,6 +170,20 @@
                 .state('app.workouts.roadmap.workout.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
+                    controllerAs: 'vm'
+                })
+                .state('app.workouts.roadmap.diagnostic.summary', {
+                    resolve: {
+                        diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", function (DiagnosticSrv, DiagnosticIntroSrv) {
+                            'ngInject';
+                                return {
+                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                                };
+                        }]
+                    },
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
+                    controller: 'WorkoutsRoadMapDiagnosticSummaryController',
                     controllerAs: 'vm'
                 });
         }]);
@@ -396,6 +413,27 @@
         }]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticSummaryController',
+        ["diagnosticData", function (diagnosticData) {
+            'ngInject';
+
+            var vm = this;
+
+            diagnosticData.diagnosticResultProm.then(function (diagnosticResult) {
+                vm.compositeScore = diagnosticResult.compositeScore;
+                vm.userStats = diagnosticResult.userStats;
+            });
+
+            diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
+                vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+            });
+
+        }]);
+})(angular);
+
 'use strict';
 
 (function () {
@@ -537,6 +575,8 @@
             };
 
             vm.changeSubject = (function () {
+                vm.rotate = true;
+
                 var usedSubjects = [];
                 var subjectNum = SubjectEnum.getEnumArr().length;
 
@@ -600,6 +640,14 @@
                         workout: currWorkout.workoutOrder
                     });
                 });
+            };
+
+            vm.selectTime = function(workoutTime){
+                if(!vm.workoutsByTime[workoutTime]){
+                    return;
+                }
+
+                vm.selectedTime = workoutTime;
             };
 
             $scope.$watch('vm.selectedTime', function (newSelectedTime) {
@@ -886,6 +934,10 @@
                         var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
+                    }
+
+                    if(!angular.isArray(subjectToIgnoreForNextDaily)){
+                        subjectToIgnoreForNextDaily = subjectToIgnoreForNextDaily ? [subjectToIgnoreForNextDaily] : [];
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
@@ -1593,6 +1645,27 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "    </div>\n" +
     "</div>\n" +
     "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html",
+    "<div class=\"workouts-roadmap-diagnostic-summary base-workouts-wrapper\"\n" +
+    "     translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY\">\n" +
+    "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
+    "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
+    "    <div class=\"total-score\" translate=\".DIAG_COMPOS_SCORE\" translate-values=\"{total: vm.compositeScore }\"></div>\n" +
+    "\n" +
+    "    <div class=\"first-row\">\n" +
+    "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
+    "            ng-class=\"subject.subjectNameAlias\"\n" +
+    "            class=\"subject-score\">\n" +
+    "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
+    "            <div class=\"score-wrapper\">\n" +
+    "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
+    "                <span class=\"bold\">{{::vm.userStats[subject.id]}}</span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
   $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html",
     "<div class=\"workouts-roadmap-workout-in-progress base-workouts-wrapper\"\n" +
     "     translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS\">\n" +
@@ -1618,7 +1691,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                total: vm.exerciseResult.totalQuestionNum\n" +
     "             }\">\n" +
     "        </div>\n" +
-    "        <md-button class=\"znk md-primary continue-btn\">\n" +
+    "        <md-button class=\"znk md-primary continue-btn\"\n" +
+    "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
     "            <span translate=\".CONTINUE\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
@@ -1657,12 +1731,13 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            </div>\n" +
     "            <div class=\"workout-time-selection-container\">\n" +
     "                <div class=\"avail-time-item-wrapper\"\n" +
+    "                     ng-disabled=\"!vm.workoutsByTime[workoutAvailTime]\"\n" +
     "                     ng-repeat=\"workoutAvailTime in vm.workoutAvailTimes\">\n" +
     "                    <div class=\"avail-time-item\"\n" +
     "                         ng-class=\"{\n" +
     "                        active: vm.selectedTime === workoutAvailTime\n" +
     "                     }\"\n" +
-    "                         ng-click=\"vm.selectedTime = workoutAvailTime;\">\n" +
+    "                         ng-click=\"vm.selectTime(workoutAvailTime)\">\n" +
     "                        <svg-icon class=\"workout-icon\"\n" +
     "                                  name=\"{{vm.getWorkoutIcon(workoutAvailTime);}}\">\n" +
     "\n" +

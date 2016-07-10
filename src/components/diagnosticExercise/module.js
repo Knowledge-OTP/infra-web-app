@@ -18,10 +18,12 @@
         'znk.infra.scroll',
         'znk.infra.stats',
         'znk.infra.scoring',
+        'znk.infra.general',
+        'znk.infra.filters',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.znkExerciseHeader',
-        'znk.infra.general'
+        'znk.infra-web-app.infraWebAppZnkExercise',
+        'znk.infra-web-app.workoutsRoadmap'
     ]).config(function(SvgIconSrvProvider) {
         'ngInject';
         var svgMap = {
