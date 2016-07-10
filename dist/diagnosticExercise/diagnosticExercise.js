@@ -387,7 +387,7 @@
                 var subjectTranslateKey = 'SUBJECTS.' + exerciseData.questionsData.subjectId;
                 $translate(subjectTranslateKey).then(function(subjectTranslation){
                     var translateFilter = $filter('translate');
-                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.EXERCISE_TITLE',{
+                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE',{
                         subject: $filter('capitalize')(subjectTranslation)
                     });
                 },function(err){
@@ -545,7 +545,7 @@
                 var subjectTranslateKey = 'SUBJECTS.' + vm.params.subjectId;
                 $translate(subjectTranslateKey).then(function(subjectTranslation){
                     var translateFilter = $filter('translate');
-                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.EXERCISE_TITLE',{
+                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE',{
                         subject: $filter('capitalize')(subjectTranslation)
                     });
                 },function(err){
