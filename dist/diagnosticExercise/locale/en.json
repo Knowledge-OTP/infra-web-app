@@ -1,4 +1,10 @@
 {
+    "WORKOUTS_DIAGNOSTIC_INTRO":{
+        "EXERCISE_TITLE": "Diagnostic Test: {{subject}}"
+    },
+    "WORKOUTS_DIAGNOSTIC_EXERCISE":{
+        "EXERCISE_TITLE": "Diagnostic Test: {{subject}}"
+    },
     "WORKOUTS_DIAGNOSTIC_SUMMARY": {
         "YOUR_INITIAL_SCORE_ESTIMATE": "YOUR INITIAL ESTIMATED SCORE",
         "YOUR_GOAL": "Your Goal:",
