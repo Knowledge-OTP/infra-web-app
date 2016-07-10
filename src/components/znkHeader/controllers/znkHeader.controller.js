@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum, AuthService, ENV) {
+        function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService,
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
@@ -11,12 +11,22 @@
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
 
+            OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
+                self.isOnBoardingCompleted = isCompleted;
+            });
+
             self.invokeOnClickHandler = function(onClickHandler){
                 $injector.invoke(onClickHandler);
             };
 
             this.showPurchaseDialog = function () {
                 purchaseService.showPurchaseDialog();
+            };
+
+            this.showGoalsEdit = function () {
+                userGoalsSelectionService.openEditGoalsDialog({
+                    clickOutsideToCloseFlag: true
+                });
             };
 
             UserProfileService.getProfile().then(function (profile) {
@@ -27,10 +37,7 @@
             });
 
             this.znkOpenModal = function () {
-                this.expandIcon = 'expand_less';
-                //OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
-                //    self.isOnBoardingCompleted = isCompleted;
-                //});
+                self.expandIcon = 'expand_less';
             };
 
             this.logout = function () {

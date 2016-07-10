@@ -34,29 +34,6 @@
     ]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.estimatedScoreWidget').controller('EditGoals.controller',
-        ["$scope", "$filter", "$mdDialog", function ($scope, $filter, $mdDialog) {
-            'ngInject';
-            var translateFilter = $filter('translate');
-            $scope.userGoalsSetting = {
-                recommendedGoalsTitle: false,
-                saveBtn: {
-                    title: translateFilter('USER_GOALS.SAVE'),
-                    afterSaveTitle: translateFilter('USER_GOALS.SAVED'),
-                    wrapperClassName: 'btn-sm'
-                }
-            };
-            
-            $scope.cancel = function () {
-                $mdDialog.cancel();
-            };
-        }]
-    );
-})(angular);
-
 /**
  * attrs:
  */
@@ -65,7 +42,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "$mdDialog", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -108,7 +85,6 @@
 
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
-                            scope.d.userGoals = userGoals;
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
@@ -161,14 +137,8 @@
                         return (correct / maxEstimatedScore) * 100;
                     }
 
-                    // TODO: this should come from a service, duplicated from znk-header
                     scope.d.showGoalsEdit = function () {
-                        $mdDialog.show({
-                            controller: 'EditGoals.controller',
-                            controllerAs: 'vm',
-                            templateUrl: 'components/estimatedScoreWidget/templates/editGoals.template.html',
-                            clickOutsideToClose: false
-                        });
+                        userGoalsSelectionService.openEditGoalsDialog();
                     };
 
                     if (isNavMenuFlag) {
@@ -274,26 +244,6 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/estimatedScoreWidget/templates/editGoals.template.html",
-    "<md-dialog class=\"setting-edit-goals base-border-radius\" translate-namespace=\"SETTING.EDIT_GOALS\">\n" +
-    "    <md-toolbar>\n" +
-    "        <div class=\"close-popup-wrap\" ng-click=\"cancel()\">\n" +
-    "            <svg-icon name=\"estimated-score-widget-close-popup\"></svg-icon>\n" +
-    "        </div>\n" +
-    "    </md-toolbar>\n" +
-    "    <md-dialog-content>\n" +
-    "        <div class=\"main-title md-subheader\" translate=\".MY_GOALS\"></div>\n" +
-    "        <user-goals setting=\"userGoalsSetting\"></user-goals>\n" +
-    "    </md-dialog-content>\n" +
-    "    <div class=\"top-icon-wrap\">\n" +
-    "        <div class=\"top-icon\">\n" +
-    "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"estimated-score-widget-goals\"></svg-icon>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</md-dialog>\n" +
-    "");
   $templateCache.put("components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html",
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
@@ -330,7 +280,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                    suffix=\"bg\"\n" +
     "                    ng-style=\"{ width: widgetItem.estimatedScorePercentage + '%' }\">\n" +
     "                <div class=\"current-estimated-score\">\n" +
-    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\" id=\"span1\"\n" +
+    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
     "                              context-attr=\"class\"\n" +
     "                              suffix=\"bc\"\n" +
     "                              ng-style=\"{ left: widgetItem.estimatedScorePercentage + '%' }\">\n" +
@@ -364,18 +314,9 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "            </tr>\n" +
     "        </table>\n" +
     "        <span class=\"edit-my-goals\"\n" +
-    "              ng-if=\"d.userGoals\"\n" +
     "              ng-click=\"d.showGoalsEdit()\"\n" +
     "              translate=\".EDIT_MY_GOALS\"></span>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "\n" +
-    "\n" +
-    "<md-button class=\"md-icon-button\" aria-label=\"refresh\">\n" +
-    "    button\n" +
-    "    <md-tooltip md-visible=\"true\" md-direction=\"left\">\n" +
-    "        Refresh\n" +
-    "    </md-tooltip>\n" +
-    "</md-button>\n" +
     "");
 }]);

@@ -40,7 +40,7 @@
                     }
                 }
 
-                addDefaultNavItem('ZNK_HEADER.WORKOUTS', _onClickHandler.bind(null, 'app.workoutsRoadmap', {}, {reload:true}));
+                addDefaultNavItem('ZNK_HEADER.WORKOUTS', _onClickHandler.bind(null, 'app.workouts.roadmap', {}, {reload:true}));
                 addDefaultNavItem('ZNK_HEADER.TESTS', _onClickHandler.bind(null, 'app.tests.roadmap'));
                 addDefaultNavItem('ZNK_HEADER.TUTORIALS', _onClickHandler.bind(null, 'app.tutorials.roadmap'));
                 addDefaultNavItem('ZNK_HEADER.PERFORMANCE', _onClickHandler.bind(null, 'app.performance'));

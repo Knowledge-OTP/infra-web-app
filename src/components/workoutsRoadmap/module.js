@@ -46,14 +46,14 @@
  *
  *      3) workoutsRoadmap.diagnostic.summary
  *          this state must set i.e
- *              $stateProvider.state('app.workoutsRoadmap.diagnostic.summary', {
+ *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
  *                   template: '<div>Diagnostic </div>',
  *                   controller: 'WorkoutsRoadMapBaseSummaryController',
  *                   controllerAs: 'vm'
  *               })
  *      4) workoutsRoadmap.workout.inProgress
  *          this state must set i.e
- *              $stateProvider.state('app.workoutsRoadmap.workout.inProgress', {
+ *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
  *                  template: '<div>Workout in progress</div>',
  *                  controller: function(){}
  *             })
@@ -71,7 +71,7 @@
         'znk.infra.exerciseUtility',
         'znk.infra.scroll',
         'znk.infra.general',
-        'znk.infra.exerciseDataGetters',
+        'znk.infra.contentGetters',
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticIntro',
@@ -80,7 +80,6 @@
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
-        'znk.infra.exerciseDataGetters',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.estimatedScoreWidget'
     ]);

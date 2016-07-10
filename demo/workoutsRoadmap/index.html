@@ -41,10 +41,19 @@
         workouts-progress .items-container .item-container .item.selected.essay-bg:after {
             border-color: #FF5895;
         }
+
+        .workouts-roadmap-diagnostic-summary .first-row .math .icon-wrapper {
+            margin-top: -2px;
+        }
+
+        .workouts-roadmap-diagnostic-summary .first-row .math .icon-wrapper svg {
+            height: auto;
+            width: 45px;
+        }
     </style>
 </head>
 <body ng-app="demo">
-<button ui-sref="app.workoutsRoadmap">Go To Roadmap</button>
+<button ui-sref="app.workouts.roadmap">Go To Roadmap</button>
 <ui-view></ui-view>
 
 <!-- bower:js -->
@@ -54,9 +63,12 @@
 <script src="firebase/firebase.js"></script>
 <script src="angular-translate/angular-translate.js"></script>
 <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+<script src="ng-idle/angular-idle.js"></script>
+<script src="SHA-1/sha1.js"></script>
+<script src="angulartics/src/angulartics.js"></script>
 <script src="angular-svg-round-progressbar/build/roundProgress.min.js"></script>
-<script src="infra/dist/main.js"></script>
 <script src="angular-ui-router/release/angular-ui-router.js"></script>
+<script src="infra/dist/main.js"></script>
 <script src="angular-aria/angular-aria.js"></script>
 <script src="angular-messages/angular-messages.js"></script>
 <script src="angular-material/angular-material.js"></script>

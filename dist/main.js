@@ -2,24 +2,25 @@
     'use strict';
 
     angular.module('znk.infra-web-app', [
-        'znk.infra-web-app.angularMaterialOverride',
-        'znk.infra-web-app.config',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra-web-app.diagnosticExercise',
-        'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.estimatedScoreWidget',
-        'znk.infra-web-app.iapMsg',
-        'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.invitation',
-        'znk.infra-web-app.onBoarding',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.socialSharing',
-        'znk.infra-web-app.uiTheme',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.userGoalsSelection',
-        'znk.infra-web-app.workoutsRoadmap',
-        'znk.infra-web-app.znkExerciseHeader',
-        'znk.infra-web-app.znkHeader'
+        "znk.infra-web-app.angularMaterialOverride",
+"znk.infra-web-app.config",
+"znk.infra-web-app.diagnostic",
+"znk.infra-web-app.diagnosticExercise",
+"znk.infra-web-app.diagnosticIntro",
+"znk.infra-web-app.estimatedScoreWidget",
+"znk.infra-web-app.iapMsg",
+"znk.infra-web-app.infraWebAppZnkExercise",
+"znk.infra-web-app.invitation",
+"znk.infra-web-app.loginForm",
+"znk.infra-web-app.onBoarding",
+"znk.infra-web-app.purchase",
+"znk.infra-web-app.socialSharing",
+"znk.infra-web-app.uiTheme",
+"znk.infra-web-app.userGoals",
+"znk.infra-web-app.userGoalsSelection",
+"znk.infra-web-app.workoutsRoadmap",
+"znk.infra-web-app.znkExerciseStatesUtility",
+"znk.infra-web-app.znkHeader"
     ]);
 })(angular);
 
@@ -158,10 +159,12 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
         'znk.infra.scroll',
         'znk.infra.stats',
         'znk.infra.scoring',
+        'znk.infra.general',
+        'znk.infra.filters',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.znkExerciseHeader',
-        'znk.infra.general'
+        'znk.infra-web-app.infraWebAppZnkExercise',
+        'znk.infra-web-app.workoutsRoadmap'
     ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
         'ngInject';
         var svgMap = {
@@ -355,15 +358,17 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv) {
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $translate) {
             'ngInject';
             var self = this;
             this.subjectId = exerciseData.questionsData.subjectId;
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
+            self.resultsForAudioManager = resultsData;
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
@@ -519,8 +524,19 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 }
             }
 
-            _setNumSlideForNgModel(numQuestionCounter);
+            function _setHeaderTitle(){
+                var subjectTranslateKey = 'SUBJECTS.' + exerciseData.questionsData.subjectId;
+                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                    var translateFilter = $filter('translate');
+                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE',{
+                        subject: $filter('capitalize')(subjectTranslation)
+                    });
+                },function(err){
+                    $log.error('WorkoutsDiagnosticIntroController: ' + err);
+                });
+            }
 
+            _setNumSlideForNgModel(numQuestionCounter);
 
             if (exerciseData.questionsData.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
                 var groupDataTypeTitle = {};
@@ -636,9 +652,15 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
             self.questionsPerSubject = _getNumberOfQuestions();
 
+            _setHeaderTitle();
+
+            $rootScope.$on('$translateChangeSuccess', function () {
+                _setHeaderTitle();
+            });
+
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
         }]);
 })(angular);
@@ -648,12 +670,26 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv) {
+        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv, $translate, $filter, $rootScope) {
         'ngInject';
             var vm = this;
 
             vm.params = WorkoutsDiagnosticFlow.getCurrentState().params;
             vm.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
+
+            function _setHeaderTitle(){
+                var subjectTranslateKey = 'SUBJECTS.' + vm.params.subjectId;
+                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                    var translateFilter = $filter('translate');
+                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE',{
+                        subject: $filter('capitalize')(subjectTranslation)
+                    });
+                },function(err){
+                    $log.error('WorkoutsDiagnosticIntroController: ' + err);
+                });
+            }
+
+            _setHeaderTitle();
 
             WorkoutsDiagnosticFlow.getDiagnostic().then(function (results) {
                 vm.buttonTitle = (angular.equals(results.sectionResults, {})) ? 'START' : 'CONTINUE';
@@ -661,7 +697,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticIntroController: click on quit, go to roadmap');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
 
             this.goToExercise = function () {
@@ -676,6 +712,10 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
                 $state.go('app.diagnostic.exercise');
             };
+
+            $rootScope.$on('$translateChangeSuccess', function () {
+                _setHeaderTitle();
+            });
     }]);
 })(angular);
 
@@ -1150,7 +1190,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html",
     "<znk-exercise-header\n" +
     "    subject-id=\"vm.subjectId\"\n" +
-    "    side-text=\".DIAGNOSTIC_TEXT\"\n" +
+    "    side-text=\"vm.headerTitle\"\n" +
     "    options=\"{ showQuit: true, showNumSlide: true }\"\n" +
     "    on-clicked-quit=\"vm.onClickedQuit()\"\n" +
     "    ng-model=\"vm.numSlide\"\n" +
@@ -1159,13 +1199,14 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    questions=\"vm.questions\"\n" +
     "    ng-model=\"vm.resultsData.questionResults\"\n" +
     "    settings=\"vm.settings\"\n" +
-    "    actions=\"vm.actions\">\n" +
+    "    actions=\"vm.actions\"\n" +
+    "    audio-manager=\"vm.resultsForAudioManager\">\n" +
     "</znk-exercise>\n" +
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html",
     "<znk-exercise-header\n" +
     "    subject-id=\"vm.params.subjectId\"\n" +
-    "    side-text=\".DIAGNOSTIC_TEXT\"\n" +
+    "    side-text=\"vm.headerTitle\"\n" +
     "    options=\"{ showQuit: true }\"\n" +
     "    on-clicked-quit=\"vm.onClickedQuit()\">\n" +
     "</znk-exercise-header>\n" +
@@ -1242,7 +1283,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
     "            class=\"start-button md-button znk md-primary\"\n" +
-    "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
+    "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
     "</div>\n" +
@@ -1471,29 +1512,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     ]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.estimatedScoreWidget').controller('EditGoals.controller',
-        ["$scope", "$filter", "$mdDialog", function ($scope, $filter, $mdDialog) {
-            'ngInject';
-            var translateFilter = $filter('translate');
-            $scope.userGoalsSetting = {
-                recommendedGoalsTitle: false,
-                saveBtn: {
-                    title: translateFilter('USER_GOALS.SAVE'),
-                    afterSaveTitle: translateFilter('USER_GOALS.SAVED'),
-                    wrapperClassName: 'btn-sm'
-                }
-            };
-            
-            $scope.cancel = function () {
-                $mdDialog.cancel();
-            };
-        }]
-    );
-})(angular);
-
 /**
  * attrs:
  */
@@ -1502,7 +1520,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "$mdDialog", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, $mdDialog, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -1545,7 +1563,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 
                             scope.d.isDiagnosticComplete = isDiagnosticCompleted === 2;
 
-                            scope.d.userGoals = userGoals;
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
@@ -1598,14 +1615,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                         return (correct / maxEstimatedScore) * 100;
                     }
 
-                    // TODO: this should come from a service, duplicated from znk-header
                     scope.d.showGoalsEdit = function () {
-                        $mdDialog.show({
-                            controller: 'EditGoals.controller',
-                            controllerAs: 'vm',
-                            templateUrl: 'components/estimatedScoreWidget/templates/editGoals.template.html',
-                            clickOutsideToClose: false
-                        });
+                        userGoalsSelectionService.openEditGoalsDialog();
                     };
 
                     if (isNavMenuFlag) {
@@ -1711,26 +1722,6 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/estimatedScoreWidget/templates/editGoals.template.html",
-    "<md-dialog class=\"setting-edit-goals base-border-radius\" translate-namespace=\"SETTING.EDIT_GOALS\">\n" +
-    "    <md-toolbar>\n" +
-    "        <div class=\"close-popup-wrap\" ng-click=\"cancel()\">\n" +
-    "            <svg-icon name=\"estimated-score-widget-close-popup\"></svg-icon>\n" +
-    "        </div>\n" +
-    "    </md-toolbar>\n" +
-    "    <md-dialog-content>\n" +
-    "        <div class=\"main-title md-subheader\" translate=\".MY_GOALS\"></div>\n" +
-    "        <user-goals setting=\"userGoalsSetting\"></user-goals>\n" +
-    "    </md-dialog-content>\n" +
-    "    <div class=\"top-icon-wrap\">\n" +
-    "        <div class=\"top-icon\">\n" +
-    "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"estimated-score-widget-goals\"></svg-icon>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</md-dialog>\n" +
-    "");
   $templateCache.put("components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html",
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
@@ -1767,7 +1758,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                    suffix=\"bg\"\n" +
     "                    ng-style=\"{ width: widgetItem.estimatedScorePercentage + '%' }\">\n" +
     "                <div class=\"current-estimated-score\">\n" +
-    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\" id=\"span1\"\n" +
+    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
     "                              context-attr=\"class\"\n" +
     "                              suffix=\"bc\"\n" +
     "                              ng-style=\"{ left: widgetItem.estimatedScorePercentage + '%' }\">\n" +
@@ -1801,19 +1792,10 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "            </tr>\n" +
     "        </table>\n" +
     "        <span class=\"edit-my-goals\"\n" +
-    "              ng-if=\"d.userGoals\"\n" +
     "              ng-click=\"d.showGoalsEdit()\"\n" +
     "              translate=\".EDIT_MY_GOALS\"></span>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "\n" +
-    "\n" +
-    "<md-button class=\"md-icon-button\" aria-label=\"refresh\">\n" +
-    "    button\n" +
-    "    <md-tooltip md-visible=\"true\" md-direction=\"left\">\n" +
-    "        Refresh\n" +
-    "    </md-tooltip>\n" +
-    "</md-button>\n" +
     "");
 }]);
 
@@ -2012,7 +1994,11 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.infraWebAppZnkExercise', [
         'znk.infra.znkExercise',
         'znk.infra.analytics',
-        'znk.infra.general'
+        'znk.infra.general',
+        'pascalprecht.translate',
+        'ngMaterial',
+        'ngAnimate',
+        'znk.infra.svgIcon'
     ]);
 })(angular);
 
@@ -2212,6 +2198,60 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
+        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
+        'ngInject';
+
+        return {
+            scope: {
+                options: '=?',
+                onClickedQuit: '&?',
+                timerData: '=?',
+                subjectId: '=',
+                categoryId: '&',
+                sideText: '=',
+                totalSlideNum: '@',
+                exerciseNum: '@',
+                iconName: '@',
+                iconClickHandler: '&',
+                showNoCalcIcon: '&',
+                showNoCalcTooltip: '&'
+            },
+            restrict: 'E',
+            require: '?ngModel',
+            templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
+            controller: function () {
+                $translatePartialLoader.addPart('infraWebAppZnkExercise');
+                // required: subjectId
+                if (angular.isUndefined(this.subjectId)) {
+                    throw new Error('Error: exerciseHeaderController: subjectId is required!');
+                }
+                this.subjectId = +this.subjectId;
+                this.categoryId = this.categoryId();
+                var categoryId = angular.isDefined(this.categoryId) ? this.categoryId : this.subjectId;
+                this.subjectName = SubjectEnum.getValByEnum(categoryId);
+            },
+            bindToController: true,
+            controllerAs: 'vm',
+            link: function (scope, element, attrs, ngModel) {
+                if (ngModel) {
+                    ngModel.$render = function () {
+                        scope.vm.currentSlideNum = ngModel.$viewValue;
+                    };
+                }
+
+                if (scope.vm.showNoCalcIcon()) {
+                    $timeout(function () {    // timeout fixing md-tooltip visibility issues
+                        scope.vm.showToolTip = scope.vm.showNoCalcTooltip();
+                    });
+                }
+            }
+        };
+    }]);
+})(angular);
+
 angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
@@ -2258,6 +2298,35 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "    </div>\n" +
     "</div>\n" +
     "\n" +
+    "");
+  $templateCache.put("components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html",
+    "<div class=\"exercise-header subject-repeat\" subject-id-to-attr-drv=\"vm.subjectId\"\n" +
+    "     context-attr=\"class\" suffix=\"bg\" translate-namespace=\"CONTAINER_HEADER\">\n" +
+    "   <div class=\"pattern\" subject-id-to-attr-drv=\"vm.subjectId\" context-attr=\"class\" prefix=\"subject-background\"></div>\n" +
+    "\n" +
+    "    <div class=\"left-area\">\n" +
+    "        <div class=\"side-text\">\n" +
+    "            {{vm.sideText | cutString: 40}}\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"center-num-slide\" ng-if=\"vm.options.showNumSlide\">{{vm.currentSlideNum}}/{{::vm.totalSlideNum}}</div>\n" +
+    "    <div class=\"review-mode\" ng-if=\"vm.options.reviewMode\" ui-sref=\"^.summary\">\n" +
+    "        <div class=\"background-opacity\"></div>\n" +
+    "        <div class=\"summary-text\" translate=\".SUMMARY\"></div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"right-area\">\n" +
+    "        <svg-icon class=\"header-icon\" ng-if=\"vm.iconName\" name=\"{{vm.iconName}}\" ng-click=\"vm.iconClickHandler(); vm.showToolTip = false\"></svg-icon>\n" +
+    "\n" +
+    "        <div class=\"date-box\" ng-if=\"vm.options.showDate\">\n" +
+    "            <timer type=\"1\" ng-model=\"vm.timerData.timeLeft\" play=\"true\" config=\"vm.timerData.config\"></timer>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"quit-back-button\" translate=\".QUIT_BTN_TEXT\" ng-if=\"vm.options.showQuit\" ng-click=\"vm.onClickedQuit()\"></div>\n" +
+    "</div>\n" +
     "");
   $templateCache.put("components/infraWebAppZnkExercise/svg/close.svg",
     "<svg version=\"1.1\"\n" +
@@ -3497,7 +3566,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
                 return;
             }
 
-            var APP_WORKOUTS_STATE = 'app.workoutsRoadmap';
+            var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
             var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
 
             if (isGoingToWorkoutsState) {
@@ -3537,7 +3606,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
                 2: 'app.onBoarding.schools',
                 3: 'app.onBoarding.goals',
                 4: 'app.onBoarding.diagnostic',
-                5: 'app.workoutsRoadmap'
+                5: 'app.workouts.roadmap'
             };
 
             onBoardingServiceObj.steps = {
@@ -3714,10 +3783,10 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <diagnostic-intro></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap', 'Take It Later')\">\n" +
+    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
-    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap.diagnostic', 'Start Test')\">\n" +
+    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
@@ -4805,6 +4874,29 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.userGoalsSelection').controller('EditGoalsController',
+        ["$scope", "$filter", "$mdDialog", function ($scope, $filter, $mdDialog) {
+            'ngInject';
+            var translateFilter = $filter('translate');
+            $scope.userGoalsSetting = {
+                recommendedGoalsTitle: false,
+                saveBtn: {
+                    title: translateFilter('USER_GOALS.SAVE'),
+                    afterSaveTitle: translateFilter('USER_GOALS.SAVED'),
+                    wrapperClassName: 'btn-sm'
+                }
+            };
+
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.userGoalsSelection').directive('goalSelect', function GoalSelectDirective() {
 
         var directive = {
@@ -5082,8 +5174,8 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
 
 'use strict';
 
-angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q',
-    function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q) {
+angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q', '$mdDialog',
+    function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q, $mdDialog) {
         var schoolsPath = StorageSrv.variables.appUserSpacePath + '/dreamSchools';
 
         this.getAppSchoolsList = function () {
@@ -5111,6 +5203,18 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
         this.getDreamSchools = function () {
             return _getUserSchoolsData().then(function (userSchools) {
                 return userSchools.selectedSchools;
+            });
+        };
+
+        this.openEditGoalsDialog = function (options) {
+            options = angular.extend({}, {
+                clickOutsideToCloseFlag: false
+            }, options);
+            $mdDialog.show({
+                controller: 'EditGoalsController',
+                controllerAs: 'vm',
+                templateUrl: 'components/userGoalsSelection/templates/editGoals.template.html',
+                clickOutsideToClose: options.clickOutsideToCloseFlag
             });
         };
 
@@ -5236,6 +5340,26 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/templates/editGoals.template.html",
+    "<md-dialog class=\"setting-edit-goals base-border-radius\" translate-namespace=\"SETTING.EDIT_GOALS\">\n" +
+    "    <md-toolbar>\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"cancel()\">\n" +
+    "            <svg-icon name=\"estimated-score-widget-close-popup\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </md-toolbar>\n" +
+    "    <md-dialog-content>\n" +
+    "        <div class=\"main-title md-subheader\" translate=\".MY_GOALS\"></div>\n" +
+    "        <user-goals setting=\"userGoalsSetting\"></user-goals>\n" +
+    "    </md-dialog-content>\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"estimated-score-widget-goals\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
     "");
   $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
     "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-show=\"target > minScore\">\n" +
@@ -5429,14 +5553,14 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
  *
  *      3) workoutsRoadmap.diagnostic.summary
  *          this state must set i.e
- *              $stateProvider.state('app.workoutsRoadmap.diagnostic.summary', {
+ *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
  *                   template: '<div>Diagnostic </div>',
  *                   controller: 'WorkoutsRoadMapBaseSummaryController',
  *                   controllerAs: 'vm'
  *               })
  *      4) workoutsRoadmap.workout.inProgress
  *          this state must set i.e
- *              $stateProvider.state('app.workoutsRoadmap.workout.inProgress', {
+ *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
  *                  template: '<div>Workout in progress</div>',
  *                  controller: function(){}
  *             })
@@ -5454,7 +5578,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
         'znk.infra.exerciseUtility',
         'znk.infra.scroll',
         'znk.infra.general',
-        'znk.infra.exerciseDataGetters',
+        'znk.infra.contentGetters',
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.diagnosticIntro',
@@ -5463,7 +5587,6 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
-        'znk.infra.exerciseDataGetters',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.estimatedScoreWidget'
     ]);
@@ -5476,7 +5599,11 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
         '$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('app.workoutsRoadmap', {
+                .state('app.workouts', {
+                    template: '<ui-view></ui-view>',
+                    abstract: true
+                })
+                .state('app.workouts.roadmap', {
                     url: '/workoutsRoadmap',
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
@@ -5506,13 +5633,13 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                     controller: 'WorkoutsRoadMapController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.diagnostic', {
+                .state('app.workouts.roadmap.diagnostic', {
                     url: '/diagnostic',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapDiagnosticController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.diagnostic.intro', {
+                .state('app.workouts.roadmap.diagnostic.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticIntro.template.html',
                     controller: 'WorkoutsRoadMapDiagnosticIntroController',
                     controllerAs: 'vm',
@@ -5526,30 +5653,44 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                         }]
                     }
                 })
-                .state('app.workoutsRoadmap.diagnostic.preSummary', {
+                .state('app.workouts.roadmap.diagnostic.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.workout', {
+                .state('app.workouts.roadmap.workout', {
                     url: '/workout?workout',
                     template: '<ui-view></ui-view>',
                     controller: 'WorkoutsRoadMapWorkoutController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.workout.intro', {
+                .state('app.workouts.roadmap.workout.intro', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutIntro.template.html',
                     controller: 'WorkoutsRoadMapWorkoutIntroController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.workout.inProgress', {
+                .state('app.workouts.roadmap.workout.inProgress', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html',
                     controller: 'WorkoutsRoadMapWorkoutInProgressController',
                     controllerAs: 'vm'
                 })
-                .state('app.workoutsRoadmap.workout.preSummary', {
+                .state('app.workouts.roadmap.workout.preSummary', {
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html',
                     controller: 'WorkoutsRoadMapBasePreSummaryController',
+                    controllerAs: 'vm'
+                })
+                .state('app.workouts.roadmap.diagnostic.summary', {
+                    resolve: {
+                        diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", function (DiagnosticSrv, DiagnosticIntroSrv) {
+                            'ngInject';
+                                return {
+                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                                };
+                        }]
+                    },
+                    templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
+                    controller: 'WorkoutsRoadMapDiagnosticSummaryController',
                     controllerAs: 'vm'
                 });
         }]);
@@ -5585,8 +5726,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             vm.diagnostic = data.diagnostic;
 
             var search = $location.search();
-            var DIAGNOSTIC_STATE = 'app.workoutsRoadmap.diagnostic';
-            var WORKOUT_STATE = 'app.workoutsRoadmap.workout';
+            var DIAGNOSTIC_STATE = 'app.workouts.roadmap.diagnostic';
+            var WORKOUT_STATE = 'app.workouts.roadmap.workout';
 
             function getActiveWorkout() {
                 var i = 0;
@@ -5668,7 +5809,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        $state.go('app.workoutsRoadmap.workout', {
+                        $state.go('app.workouts.roadmap.workout', {
                             workout: newItem.workoutOrder
                         });
                     }
@@ -5779,6 +5920,27 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
         }]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticSummaryController',
+        ["diagnosticData", function (diagnosticData) {
+            'ngInject';
+
+            var vm = this;
+
+            diagnosticData.diagnosticResultProm.then(function (diagnosticResult) {
+                vm.compositeScore = diagnosticResult.compositeScore;
+                vm.userStats = diagnosticResult.userStats;
+            });
+
+            diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
+                vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+            });
+
+        }]);
+})(angular);
+
 'use strict';
 
 (function () {
@@ -5794,7 +5956,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             }
 
             function _goToState(stateName) {
-                var EXPECTED_CURR_STATE = 'app.workoutsRoadmap.workout';
+                var EXPECTED_CURR_STATE = 'app.workouts.roadmap.workout';
                 if ($state.current.name === EXPECTED_CURR_STATE) {
                     $state.go(stateName);
                 }
@@ -5850,7 +6012,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout) {
+        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", "WorkoutsSrv", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -5891,7 +6053,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
             //set times workouts
-            (function () {
+            function setWorkoutsTimes(){
                 var getPersonalizedWorkoutsByTimeProm;
                 var subjectsToIgnore;
 
@@ -5907,8 +6069,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
                     setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                 }
-            })();
-
+            }
+            setWorkoutsTimes();
 
             vm.getWorkoutIcon = function (workoutLength) {
                 if (vm.workoutsByTime) {
@@ -5920,6 +6082,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             };
 
             vm.changeSubject = (function () {
+                vm.rotate = true;
+
                 var usedSubjects = [];
                 var subjectNum = SubjectEnum.getEnumArr().length;
 
@@ -5944,6 +6108,54 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                 };
 
             })();
+
+            vm.startExercise = function(){
+                var selectedWorkout = angular.copy(vm.selectedWorkout);
+                var isWorkoutGenerated = selectedWorkout &&
+                    angular.isDefined(selectedWorkout.subjectId) &&
+                    angular.isDefined(selectedWorkout.exerciseTypeId) &&
+                    angular.isDefined(selectedWorkout.exerciseId);
+                if (!isWorkoutGenerated) {
+                    return;
+                }
+                var propTosCopy = ['subjectId', 'exerciseTypeId', 'exerciseId', 'categoryId'];
+                angular.forEach(propTosCopy, function (prop) {
+                    currWorkout[prop] = selectedWorkout[prop];
+                });
+                currWorkout.status = ExerciseStatusEnum.ACTIVE.enum;
+                delete currWorkout.personalizedTimes;
+                delete currWorkout.$$hashKey;
+                delete currWorkout.isAvail;
+
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'workoutStarted',
+                //     props: {
+                //         timeBundle: self.userTimePreference,
+                //         workoutOrderId: currWorkout.workoutOrder,
+                //         exerciseType: currWorkout.exerciseTypeId,
+                //         subjectType: currWorkout.subjectId,
+                //         exerciseId: currWorkout.exerciseId
+                //     }
+                // });
+                //
+                // znkAnalyticsSrv.timeTrack({
+                //     eventName: 'workoutCompleted'
+                // });
+
+                WorkoutsSrv.setWorkout(currWorkout.workoutOrder, currWorkout).then(function () {
+                    $state.go('app.workouts.workout', {
+                        workout: currWorkout.workoutOrder
+                    });
+                });
+            };
+
+            vm.selectTime = function(workoutTime){
+                if(!vm.workoutsByTime[workoutTime]){
+                    return;
+                }
+
+                vm.selectedTime = workoutTime;
+            };
 
             $scope.$watch('vm.selectedTime', function (newSelectedTime) {
                 if (angular.isUndefined(newSelectedTime)) {
@@ -6229,6 +6441,10 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
                         var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
+                    }
+
+                    if(!angular.isArray(subjectToIgnoreForNextDaily)){
+                        subjectToIgnoreForNextDaily = subjectToIgnoreForNextDaily ? [subjectToIgnoreForNextDaily] : [];
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
@@ -6936,6 +7152,27 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "    </div>\n" +
     "</div>\n" +
     "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html",
+    "<div class=\"workouts-roadmap-diagnostic-summary base-workouts-wrapper\"\n" +
+    "     translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY\">\n" +
+    "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
+    "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
+    "    <div class=\"total-score\" translate=\".DIAG_COMPOS_SCORE\" translate-values=\"{total: vm.compositeScore }\"></div>\n" +
+    "\n" +
+    "    <div class=\"first-row\">\n" +
+    "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
+    "            ng-class=\"subject.subjectNameAlias\"\n" +
+    "            class=\"subject-score\">\n" +
+    "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
+    "            <div class=\"score-wrapper\">\n" +
+    "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
+    "                <span class=\"bold\">{{::vm.userStats[subject.id]}}</span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
   $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html",
     "<div class=\"workouts-roadmap-workout-in-progress base-workouts-wrapper\"\n" +
     "     translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS\">\n" +
@@ -6961,7 +7198,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                total: vm.exerciseResult.totalQuestionNum\n" +
     "             }\">\n" +
     "        </div>\n" +
-    "        <md-button class=\"znk md-primary continue-btn\">\n" +
+    "        <md-button class=\"znk md-primary continue-btn\"\n" +
+    "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
     "            <span translate=\".CONTINUE\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
@@ -7000,12 +7238,13 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            </div>\n" +
     "            <div class=\"workout-time-selection-container\">\n" +
     "                <div class=\"avail-time-item-wrapper\"\n" +
+    "                     ng-disabled=\"!vm.workoutsByTime[workoutAvailTime]\"\n" +
     "                     ng-repeat=\"workoutAvailTime in vm.workoutAvailTimes\">\n" +
     "                    <div class=\"avail-time-item\"\n" +
     "                         ng-class=\"{\n" +
     "                        active: vm.selectedTime === workoutAvailTime\n" +
     "                     }\"\n" +
-    "                         ng-click=\"vm.selectedTime = workoutAvailTime;\">\n" +
+    "                         ng-click=\"vm.selectTime(workoutAvailTime)\">\n" +
     "                        <svg-icon class=\"workout-icon\"\n" +
     "                                  name=\"{{vm.getWorkoutIcon(workoutAvailTime);}}\">\n" +
     "\n" +
@@ -7019,6 +7258,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            </div>\n" +
     "            <div class=\"start-btn-wrapper\">\n" +
     "                <md-button class=\"md-primary znk\"\n" +
+    "                           ng-click=\"vm.startExercise()\"\n" +
     "                           md-no-ink>\n" +
     "                    <span translate=\".START\"></span>\n" +
     "                </md-button>\n" +
@@ -7032,106 +7272,112 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkExerciseHeader', [
-        'pascalprecht.translate',
-        'ngMaterial',
-        'ngAnimate',
-        'znk.infra.svgIcon',
-        'znk.infra.general'
+    angular.module('znk.infra-web-app.znkExerciseStatesUtility', [
+        'ui.router',
+        'znk.infra.znkExercise',
+        'znk.infra-web-app.infraWebAppZnkExercise'
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.znkExerciseHeader').directive('znkExerciseHeader',
-        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
-        'ngInject';
 
-        return {
-            scope: {
-                options: '=?',
-                onClickedQuit: '&?',
-                timerData: '=?',
-                subjectId: '=',
-                categoryId: '&',
-                sideText: '@',
-                totalSlideNum: '@',
-                exerciseNum: '@',
-                iconName: '@',
-                iconClickHandler: '&',
-                showNoCalcIcon: '&',
-                showNoCalcTooltip: '&'
-            },
-            restrict: 'E',
-            require: '?ngModel',
-            templateUrl: 'components/znkExerciseHeader/templates/exerciseHeader.template.html',
-            controller: function () {
-                $translatePartialLoader.addPart('znkExerciseHeader');
-                // required: subjectId
-                if (angular.isUndefined(this.subjectId)) {
-                    throw new Error('Error: exerciseHeaderController: subjectId is required!');
-                }
-                this.subjectId = +this.subjectId;
-                this.categoryId = this.categoryId();
-                var categoryId = angular.isDefined(this.categoryId) ? this.categoryId : this.subjectId;
-                this.subjectName = SubjectEnum.getValByEnum(categoryId);
-            },
-            bindToController: true,
-            controllerAs: 'vm',
-            link: function (scope, element, attrs, ngModel) {
-                if (ngModel) {
-                    ngModel.$render = function () {
-                        scope.vm.currentSlideNum = ngModel.$viewValue;
-                    };
-                }
+    angular.module('znk.infra-web-app.znkExerciseStatesUtility')
+        .controller('InfraWebAppExerciseStateCtrl',
+            ["$controller", "$scope", "exerciseData", "$filter", "ExerciseTypeEnum", function ($controller, $scope, exerciseData, $filter, ExerciseTypeEnum) {
+                'ngInject';
 
-                if (scope.vm.showNoCalcIcon()) {
-                    $timeout(function () {    // timeout fixing md-tooltip visibility issues
-                        scope.vm.showToolTip = scope.vm.showNoCalcTooltip();
-                    });
-                }
-            }
-        };
-    }]);
+                $scope.vm = this;
+
+                var isSection = exerciseData.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
+                // var isPractice = exerciseData.exerciseTypeId === ExerciseTypeEnum.PRACTICE.enum;
+                var isExerciseComplete = exerciseData.exerciseResult.isComplete;
+                this.iconClickHandler = exerciseData.iconClickHandler;
+                this.iconName = exerciseData.iconName;
+
+                var exerciseSettings = {
+                    initPagerDisplay: isExerciseComplete || isSection
+                };
+
+                this.onHeaderQuit = function () {
+                    exerciseData.headerExitAction();
+                };
+
+                $controller('BaseZnkExerciseController', {
+                    $scope: $scope,
+                    exerciseData: exerciseData,
+                    exerciseSettings: exerciseSettings
+                });
+
+
+                this.headerTitle = exerciseData.headerTitle;
+
+                // this.showTimer = (isExerciseComplete) ? false : (isPractice || isSection);
+
+                this.isComplete = isExerciseComplete;
+                // tutorial intro
+                // if (exerciseData.exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum) {
+                //     if (angular.isArray(exerciseData.exercise.content)) {
+                //         angular.forEach(exerciseData.exercise.content, function (content) {
+                //             content.title = content.title.replace(/font\-family: \'Lato Regular\';/g, 'font-family: Lato;font-weight: 400;');
+                //             content.body = content.body.replace(/font\-family: \'Lato Regular\';/g, 'font-family: Lato;font-weight: 400;');
+                //         });
+                //     }
+                //
+                //     this.subjectId = exerciseData.exercise.subjectId;
+                //     this.tutorialContent = exerciseData.exercise.content;
+                //     var videoSrc = ENV.videosEndPoint + 'videos/tutorials/' + exerciseData.exercise.id + '.mp4';
+                //     this.videoSrc = $sce.trustAsResourceUrl(videoSrc);
+                //     this.iconName = 'book-icon';
+                //     this.iconClickHandler = function () {
+                //         vm.showIntro = true;
+                //     };
+                //
+                //     this.goToQuestions = function () {
+                //         vm.showIntro = false;
+                //     };
+                //
+                //     this.trustAsHtml = function (html) {
+                //         return $sce.trustAsHtml(html);
+                //     };
+                // }
+            }]
+        );
 })(angular);
 
-angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/znkExerciseHeader/templates/exerciseHeader.template.html",
-    "<div class=\"exercise-header subject-repeat\" subject-id-to-attr-drv=\"vm.subjectId\"\n" +
-    "     context-attr=\"class\" suffix=\"bg\" translate-namespace=\"CONTAINER_HEADER\">\n" +
-    "   <div class=\"pattern\" subject-id-to-attr-drv=\"vm.subjectId\" context-attr=\"class\" prefix=\"subject-background\"></div>\n" +
-    "\n" +
-    "    <div class=\"left-area\">\n" +
-    "        <div class=\"side-text\" translate=\"{{vm.sideText | cutString: 40}}\" translate-values=\"{subjectName: vm.subjectName, exerciseNum: vm.exerciseNum}\"></div>\n" +
-    "\n" +
-    "        <div ng-if=\"vm.showNoCalcIcon()\" class=\"no-math-icon-wrapper\">\n" +
-    "            <div class=\"math-no-calc\"></div>\n" +
-    "            <svg-icon name=\"math-icon\" class=\"icon-wrapper\"></svg-icon>\n" +
-    "\n" +
-    "            <md-tooltip md-visible=\"vm.showToolTip\" ng-if=\"vm.showToolTip\" md-direction=\"bottom\" class=\"no-calc-tooltip md-whiteframe-3dp\">\n" +
-    "                <div class=\"arrow-up\"></div>\n" +
-    "                <div translate=\".NO_CALC_TOOLTIP\" class=\"top-text\"></div>\n" +
-    "                <div translate=\".GOT_IT\" class=\"md-button primary got-it-btn\" ng-click=\"vm.showToolTip = false\"></div>\n" +
-    "            </md-tooltip>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "\n" +
-    "    <div class=\"center-num-slide\" ng-if=\"vm.options.showNumSlide\">{{vm.currentSlideNum}}/{{::vm.totalSlideNum}}</div>\n" +
-    "    <div class=\"review-mode\" ng-if=\"vm.options.reviewMode\" ui-sref=\"^.summary\">\n" +
-    "        <div class=\"background-opacity\"></div>\n" +
-    "        <div class=\"summary-text\" translate=\".SUMMARY\"></div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"right-area\">\n" +
-    "        <svg-icon class=\"header-icon\" ng-if=\"vm.iconName\" name=\"{{vm.iconName}}\" ng-click=\"vm.iconClickHandler(); vm.showToolTip = false\"></svg-icon>\n" +
-    "\n" +
-    "        <div class=\"date-box\" ng-if=\"vm.options.showDate\">\n" +
-    "            <timer type=\"1\" ng-model=\"vm.timerData.timeLeft\" play=\"true\" config=\"vm.timerData.config\"></timer>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"quit-back-button\" translate=\".QUIT_BTN_TEXT\" ng-if=\"vm.options.showQuit\" ng-click=\"vm.onClickedQuit()\"></div>\n" +
+angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
+    "<div class=\"exercise-container base-border-radius\">\n" +
+    "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
+    "                         options=\"{\n" +
+    "                            showQuit: true,\n" +
+    "                            showNumSlide: true,\n" +
+    "                            showDate: vm.showTimer,\n" +
+    "                            reviewMode: vm.isComplete\n" +
+    "                         }\"\n" +
+    "                         total-slide-num=\"{{baseZnkExerciseCtrl.numberOfQuestions}}\"\n" +
+    "                         ng-model=\"baseZnkExerciseCtrl.currentIndex\"\n" +
+    "                         side-text=\"vm.headerTitle\"\n" +
+    "                         timer-data=\"baseZnkExerciseCtrl.timerData\"\n" +
+    "                         on-clicked-quit=\"vm.onHeaderQuit()\"\n" +
+    "                         icon-name=\"{{vm.iconName}}\"\n" +
+    "                         icon-click-handler=\"vm.iconClickHandler()\">\n" +
+    "    </znk-exercise-header>\n" +
+    "<!--    <znk-progress-linear-exercise ng-if=\"vm.showTimer\"\n" +
+    "                                  start-time=\"baseZnkExerciseCtrl.startTime\"\n" +
+    "                                  max-time=\"baseZnkExerciseCtrl.maxTime\"\n" +
+    "                                  on-finish-time=\"baseZnkExerciseCtrl.onFinishTime()\"\n" +
+    "                                  on-change-time=\"baseZnkExerciseCtrl.onChangeTime(passedTime)\">\n" +
+    "    </znk-progress-linear-exercise>-->\n" +
+    "    <znk-exercise questions=\"baseZnkExerciseCtrl.exercise.questions\"\n" +
+    "                  ng-model=\"baseZnkExerciseCtrl.resultsData.questionResults\"\n" +
+    "                  settings=\"baseZnkExerciseCtrl.settings\"\n" +
+    "                  actions=\"baseZnkExerciseCtrl.actions\">\n" +
+    "    </znk-exercise>\n" +
+    "    <!--<div ng-if=\"vm.showIntro\" class=\"workout-roadmap-tutorial-intro\"-->\n" +
+    "         <!--ng-include-->\n" +
+    "         <!--src=\"'app/tutorials/templates/tutorialIntro.template.html'\">-->\n" +
+    "    <!--</div>-->\n" +
     "</div>\n" +
     "");
 }]);
@@ -7147,7 +7393,10 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
             'pascalprecht.translate',
             'ui.router',
             'znk.infra-web-app.purchase',
+            'znk.infra-web-app.onBoarding',
+            'znk.infra-web-app.userGoalsSelection',
             'znk.infra.user',
+            'znk.infra.general',
             'znk.infra-web-app.invitation'])
         .config([
             'SvgIconSrvProvider',
@@ -7164,8 +7413,8 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$mdDialog", "$window", "purchaseService", "znkHeaderSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "AuthService", "ENV", function ($scope, $translatePartialLoader, $mdDialog, $window, purchaseService, znkHeaderSrv,
-                  UserProfileService, $injector, PurchaseStateEnum, AuthService, ENV) {
+        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService,
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
@@ -7173,12 +7422,22 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
 
+            OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
+                self.isOnBoardingCompleted = isCompleted;
+            });
+
             self.invokeOnClickHandler = function(onClickHandler){
                 $injector.invoke(onClickHandler);
             };
 
             this.showPurchaseDialog = function () {
                 purchaseService.showPurchaseDialog();
+            };
+
+            this.showGoalsEdit = function () {
+                userGoalsSelectionService.openEditGoalsDialog({
+                    clickOutsideToCloseFlag: true
+                });
             };
 
             UserProfileService.getProfile().then(function (profile) {
@@ -7189,10 +7448,7 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
             });
 
             this.znkOpenModal = function () {
-                this.expandIcon = 'expand_less';
-                //OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
-                //    self.isOnBoardingCompleted = isCompleted;
-                //});
+                self.expandIcon = 'expand_less';
             };
 
             this.logout = function () {
@@ -7287,7 +7543,7 @@ angular.module('znk.infra-web-app.znkExerciseHeader').run(['$templateCache', fun
                     }
                 }
 
-                addDefaultNavItem('ZNK_HEADER.WORKOUTS', _onClickHandler.bind(null, 'app.workoutsRoadmap', {}, {reload:true}));
+                addDefaultNavItem('ZNK_HEADER.WORKOUTS', _onClickHandler.bind(null, 'app.workouts.roadmap', {}, {reload:true}));
                 addDefaultNavItem('ZNK_HEADER.TESTS', _onClickHandler.bind(null, 'app.tests.roadmap'));
                 addDefaultNavItem('ZNK_HEADER.TUTORIALS', _onClickHandler.bind(null, 'app.tutorials.roadmap'));
                 addDefaultNavItem('ZNK_HEADER.PERFORMANCE', _onClickHandler.bind(null, 'app.performance'));
@@ -7338,7 +7594,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
     "        <svg-icon class=\"raccoon-logo-icon\"\n" +
     "                  name=\"znkHeader-raccoon-logo-icon\"\n" +
-    "                  ui-sref=\"app.workoutsRoadmap\"\n" +
+    "                  ui-sref=\"app.workouts.roadmap\"\n" +
     "                  ui-sref-opts=\"{reload: true}\">\n" +
     "        </svg-icon>\n" +
     "\n" +
@@ -7389,6 +7645,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
     "                            <span ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
+    "                                  disable-click-drv\n" +
     "                                  ng-click=\"vm.showGoalsEdit()\"\n" +
     "                                  translate=\".PROFILE_GOALS\"></span>\n" +
     "                        </md-list-item>\n" +

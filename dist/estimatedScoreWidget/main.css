@@ -130,9 +130,9 @@ estimated-score-widget .score-estimate-container {
           font-family: Lato;
           font-weight: 400;
           position: absolute;
-          width: 28px;
-          height: 28px;
-          line-height: 29px;
+          width: 35px;
+          height: 22px;
+          line-height: 21px;
           border-radius: 13px;
           border-width: 1px;
           border-style: solid;
@@ -142,6 +142,7 @@ estimated-score-widget .score-estimate-container {
           padding: 0 3px;
           content: '';
           z-index: 4;
+          top: 2px;
           cursor: default; }
   estimated-score-widget .score-estimate-container table.score-summary {
     border-spacing: 15px;
@@ -190,103 +191,42 @@ md-tooltip.tooltip-for-estimated-score-widget {
   width: 150px;
   height: 87px;
   background: #ffffff;
-  padding: 0 5px; }
-  md-tooltip.tooltip-for-estimated-score-widget .md-content {
+  padding: 0 5px;
+  z-index: 100; }
+  md-tooltip.tooltip-for-estimated-score-widget ._md-content {
     height: auto;
     text-align: center;
     background: #ffffff;
     white-space: normal; }
-    md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show {
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show {
       opacity: 1;
-      -webkit-transform: none;
-              transform: none;
+      transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
-    md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove {
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show-remove {
       transition: none; }
-      md-tooltip.tooltip-for-estimated-score-widget .md-content.md-show-remove.md-show-remove-active {
-        -webkit-transform: none;
-                transform: none;
+      md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show-remove._md-show-remove-active {
+        transform: none;
         opacity: 0; }
-    md-tooltip.tooltip-for-estimated-score-widget .md-content .top-text {
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content .top-text {
       margin-top: 22px;
       margin-bottom: 12px;
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 400; }
-    md-tooltip.tooltip-for-estimated-score-widget .md-content .bottom-text {
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content .bottom-text {
       line-height: 12px;
       font-size: 12px;
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 300; }
-  md-tooltip.tooltip-for-estimated-score-widget.md-hide {
+  md-tooltip.tooltip-for-estimated-score-widget._md-hide {
     transition: opacity 0.4s;
     opacity: 0; }
-  md-tooltip.tooltip-for-estimated-score-widget.md-show {
+  md-tooltip.tooltip-for-estimated-score-widget._md-show {
     opacity: 1;
     transition: opacity 0.4s;
     pointer-events: auto;
     will-change: opacity; }
-
-md-dialog.setting-edit-goals {
-  overflow: visible;
-  width: 1100px;
-  max-width: 1100px;
-  height: 575px;
-  max-height: 575px;
-  background: none; }
-  md-dialog.setting-edit-goals md-toolbar {
-    height: 40px;
-    max-height: 40px;
-    min-height: 40px;
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px; }
-    md-dialog.setting-edit-goals md-toolbar:not(.md-menu-toolbar) {
-      background-color: #0a9bad; }
-  md-dialog.setting-edit-goals .top-icon-wrap {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 40px; }
-    md-dialog.setting-edit-goals .top-icon-wrap .top-icon {
-      display: -webkit-flex;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
-      md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap {
-        width: 76px;
-        height: 76px;
-        border-radius: 38px;
-        background-color: #0a9bad;
-        z-index: 9;
-        margin-top: -15px; }
-        md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap .estimated-score-widget-goals {
-          margin: 15px;
-          width: 46px;
-          display: block; }
-  md-dialog.setting-edit-goals .main-title {
-    margin-top: 20px;
-    text-align: center; }
-  md-dialog.setting-edit-goals md-dialog-content {
-    height: 100%;
-    background-color: #ffffff;
-    padding-top: 25px;
-    padding-bottom: 25px;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px; }
-  md-dialog.setting-edit-goals .close-popup-wrap {
-    position: absolute;
-    top: -37px;
-    right: -19px;
-    height: 14px;
-    width: 14px;
-    padding: 10px;
-    cursor: pointer; }
-  md-dialog.setting-edit-goals .estimated-score-widget-close-popup {
-    width: 16px;
-    display: block; }

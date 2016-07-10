@@ -9,7 +9,10 @@
             'pascalprecht.translate',
             'ui.router',
             'znk.infra-web-app.purchase',
+            'znk.infra-web-app.onBoarding',
+            'znk.infra-web-app.userGoalsSelection',
             'znk.infra.user',
+            'znk.infra.general',
             'znk.infra-web-app.invitation'])
         .config([
             'SvgIconSrvProvider',

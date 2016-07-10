@@ -1,0 +1,19 @@
+<div class="workouts-roadmap-diagnostic-summary base-workouts-wrapper"
+     translate-namespace="WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY">
+    <div class="diagnostic-workout-title" translate=".DIAGNOSTIC_TEST"></div>
+    <div class="results-text" translate=".DIAG_RES_TEXT"></div>
+    <div class="total-score" translate=".DIAG_COMPOS_SCORE" translate-values="{total: vm.compositeScore }"></div>
+
+    <div class="first-row">
+        <div ng-repeat="subject in vm.diagnosticSubjects"
+            ng-class="subject.subjectNameAlias"
+            class="subject-score">
+            <svg-icon class="icon-wrapper" name="{{subject.subjectIconName}}"></svg-icon>
+            <div class="score-wrapper">
+                <div class="score" translate=".{{subject.subjectNameAlias | uppercase}}"></div>
+                <span class="bold">{{::vm.userStats[subject.id]}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+

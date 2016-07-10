@@ -1,18 +1,13 @@
 angular.module('demo', [
         'znk.infra-web-app.diagnosticExercise',
         'pascalprecht.translate'])
-    .config(function ($translateProvider, $urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
+    .config(function ($urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
             'verbal-icon': 'svg/verbal-icon.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
-
-        $translateProvider.useLoader('$translatePartialLoader', {
-                urlTemplate: '/{part}/locale/{lang}.json'
-            })
-            .preferredLanguage('en');
 
         InfraConfigSrvProvider.setUserDataFn(['AuthService', function (AuthService) {
             return AuthService.getAuth();
@@ -131,12 +126,6 @@ angular.module('demo', [
         });
 
         $urlRouterProvider.otherwise('/diagnostic');
-    })
-    .run(function ($rootScope, $translate, $translatePartialLoader) {
-        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-            $translate.refresh();
-        });
-        $translatePartialLoader.addPart('demo');
     })
     .run(function ($rootScope) {
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {

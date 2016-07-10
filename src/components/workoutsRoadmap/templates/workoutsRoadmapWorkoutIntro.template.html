@@ -30,12 +30,13 @@
             </div>
             <div class="workout-time-selection-container">
                 <div class="avail-time-item-wrapper"
+                     ng-disabled="!vm.workoutsByTime[workoutAvailTime]"
                      ng-repeat="workoutAvailTime in vm.workoutAvailTimes">
                     <div class="avail-time-item"
                          ng-class="{
                         active: vm.selectedTime === workoutAvailTime
                      }"
-                         ng-click="vm.selectedTime = workoutAvailTime;">
+                         ng-click="vm.selectTime(workoutAvailTime)">
                         <svg-icon class="workout-icon"
                                   name="{{vm.getWorkoutIcon(workoutAvailTime);}}">
 
@@ -49,6 +50,7 @@
             </div>
             <div class="start-btn-wrapper">
                 <md-button class="md-primary znk"
+                           ng-click="vm.startExercise()"
                            md-no-ink>
                     <span translate=".START"></span>
                 </md-button>

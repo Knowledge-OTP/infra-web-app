@@ -1,10 +1,22 @@
 .exercise-container {
     width: 1060px;
-    height: calc(100vh - 95px);
+    height: calc(100vh - 125px);
     background-color: $bgColor1;
     display: flex;
     flex-direction: column;
     position: relative;
+    margin: {
+        top: 17px;
+        right: auto;
+        left: auto;
+    }
+
+    znk-exercise-header{
+        border:{
+            top-right-radius: $baseBorderRadiusCorner;
+            top-left-radius: $baseBorderRadiusCorner;
+        }
+    }
 
     znk-exercise {
         flex-grow: 1;

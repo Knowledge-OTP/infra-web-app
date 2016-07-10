@@ -18,10 +18,12 @@
         'znk.infra.scroll',
         'znk.infra.stats',
         'znk.infra.scoring',
+        'znk.infra.general',
+        'znk.infra.filters',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.znkExerciseHeader',
-        'znk.infra.general'
+        'znk.infra-web-app.infraWebAppZnkExercise',
+        'znk.infra-web-app.workoutsRoadmap'
     ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
         'ngInject';
         var svgMap = {
@@ -215,15 +217,17 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv) {
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $translate) {
             'ngInject';
             var self = this;
             this.subjectId = exerciseData.questionsData.subjectId;
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
+            self.resultsForAudioManager = resultsData;
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
@@ -379,8 +383,19 @@
                 }
             }
 
-            _setNumSlideForNgModel(numQuestionCounter);
+            function _setHeaderTitle(){
+                var subjectTranslateKey = 'SUBJECTS.' + exerciseData.questionsData.subjectId;
+                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                    var translateFilter = $filter('translate');
+                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE',{
+                        subject: $filter('capitalize')(subjectTranslation)
+                    });
+                },function(err){
+                    $log.error('WorkoutsDiagnosticIntroController: ' + err);
+                });
+            }
 
+            _setNumSlideForNgModel(numQuestionCounter);
 
             if (exerciseData.questionsData.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
                 var groupDataTypeTitle = {};
@@ -496,9 +511,15 @@
 
             self.questionsPerSubject = _getNumberOfQuestions();
 
+            _setHeaderTitle();
+
+            $rootScope.$on('$translateChangeSuccess', function () {
+                _setHeaderTitle();
+            });
+
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticExerciseController: click on quit');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
         }]);
 })(angular);
@@ -508,12 +529,26 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv) {
+        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv, $translate, $filter, $rootScope) {
         'ngInject';
             var vm = this;
 
             vm.params = WorkoutsDiagnosticFlow.getCurrentState().params;
             vm.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
+
+            function _setHeaderTitle(){
+                var subjectTranslateKey = 'SUBJECTS.' + vm.params.subjectId;
+                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                    var translateFilter = $filter('translate');
+                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE',{
+                        subject: $filter('capitalize')(subjectTranslation)
+                    });
+                },function(err){
+                    $log.error('WorkoutsDiagnosticIntroController: ' + err);
+                });
+            }
+
+            _setHeaderTitle();
 
             WorkoutsDiagnosticFlow.getDiagnostic().then(function (results) {
                 vm.buttonTitle = (angular.equals(results.sectionResults, {})) ? 'START' : 'CONTINUE';
@@ -521,7 +556,7 @@
 
             this.onClickedQuit = function () {
                 $log.debug('WorkoutsDiagnosticIntroController: click on quit, go to roadmap');
-                $state.go('app.workoutsRoadmap');
+                $state.go('app.workouts.roadmap');
             };
 
             this.goToExercise = function () {
@@ -536,6 +571,10 @@
                 znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
                 $state.go('app.diagnostic.exercise');
             };
+
+            $rootScope.$on('$translateChangeSuccess', function () {
+                _setHeaderTitle();
+            });
     }]);
 })(angular);
 
@@ -1010,7 +1049,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html",
     "<znk-exercise-header\n" +
     "    subject-id=\"vm.subjectId\"\n" +
-    "    side-text=\".DIAGNOSTIC_TEXT\"\n" +
+    "    side-text=\"vm.headerTitle\"\n" +
     "    options=\"{ showQuit: true, showNumSlide: true }\"\n" +
     "    on-clicked-quit=\"vm.onClickedQuit()\"\n" +
     "    ng-model=\"vm.numSlide\"\n" +
@@ -1019,13 +1058,14 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    questions=\"vm.questions\"\n" +
     "    ng-model=\"vm.resultsData.questionResults\"\n" +
     "    settings=\"vm.settings\"\n" +
-    "    actions=\"vm.actions\">\n" +
+    "    actions=\"vm.actions\"\n" +
+    "    audio-manager=\"vm.resultsForAudioManager\">\n" +
     "</znk-exercise>\n" +
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html",
     "<znk-exercise-header\n" +
     "    subject-id=\"vm.params.subjectId\"\n" +
-    "    side-text=\".DIAGNOSTIC_TEXT\"\n" +
+    "    side-text=\"vm.headerTitle\"\n" +
     "    options=\"{ showQuit: true }\"\n" +
     "    on-clicked-quit=\"vm.onClickedQuit()\">\n" +
     "</znk-exercise-header>\n" +
@@ -1102,7 +1142,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
     "            class=\"start-button md-button znk md-primary\"\n" +
-    "            ui-sref=\"app.workoutsRoadmap.diagnostic\"\n" +
+    "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
     "    </button>\n" +
     "</div>\n" +

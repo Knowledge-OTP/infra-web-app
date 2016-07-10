@@ -11,7 +11,7 @@
                 2: 'app.onBoarding.schools',
                 3: 'app.onBoarding.goals',
                 4: 'app.onBoarding.diagnostic',
-                5: 'app.workoutsRoadmap'
+                5: 'app.workouts.roadmap'
             };
 
             onBoardingServiceObj.steps = {

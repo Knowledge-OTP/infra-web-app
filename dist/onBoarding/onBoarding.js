@@ -205,7 +205,7 @@
                 return;
             }
 
-            var APP_WORKOUTS_STATE = 'app.workoutsRoadmap';
+            var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
             var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
 
             if (isGoingToWorkoutsState) {
@@ -245,7 +245,7 @@
                 2: 'app.onBoarding.schools',
                 3: 'app.onBoarding.goals',
                 4: 'app.onBoarding.diagnostic',
-                5: 'app.workoutsRoadmap'
+                5: 'app.workouts.roadmap'
             };
 
             onBoardingServiceObj.steps = {
@@ -422,10 +422,10 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <diagnostic-intro></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap', 'Take It Later')\">\n" +
+    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
-    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workoutsRoadmap.diagnostic', 'Start Test')\">\n" +
+    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
