@@ -15,6 +15,39 @@ angular.module('demo', [
 
     })
 
+    .config(function (ScoringServiceProvider, UserGoalsServiceProvider) {
+        ScoringServiceProvider.setScoringLimits({
+            exam: {
+                min: 400,
+                max: 1600
+            },
+            subjects: {
+                min: 200,
+                max: 800
+            }
+        });
+
+        ScoringServiceProvider.setExamScoreFnGetter(function () {
+            return function (scoresArr) {
+                var totalScores = 0;
+                angular.forEach(scoresArr, function (score) {
+                    totalScores += score;
+                });
+                return totalScores;
+            }
+        });
+
+
+        UserGoalsServiceProvider.settings = {
+            updateGoalNum: 10,
+            defaultSubjectScore: 600,
+            subjects: [
+                {name: 'math', svgIcon: 'math-section-icon'},
+                {name: 'verbal', svgIcon: 'verbal-icon'}
+            ]
+        };
+    })
+
     .config(function (EstimatedScoreSrvProvider, EstimatedScoreEventsHandlerSrvProvider, exerciseTypeConst) {
         var shouldEventBeProcessed;
         var subjectsRawScoreEdges = {

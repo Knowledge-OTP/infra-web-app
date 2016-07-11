@@ -7,6 +7,8 @@
 
         <performance-timeline subject-id="{{vm.currentSubjectId}}"> </performance-timeline>
 
+        <div>{{vm.subjectsMap[vm.currentSubjectId].name}}</div>
+
         <div class="subject-overall-performance"  ng-switch="vm.currentSubjectId === vm.subjectEnum.VERBAL.enum">
             <div class="subject-title" translate=".OVERALL_PERFORMANCE" translate-values="{subjectName: vm.subjectEnum.getValByEnum(vm.currentSubjectId)}"></div>
 

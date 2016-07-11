@@ -5,6 +5,7 @@
         'ngMaterial',
         'pascalprecht.translate',
         'ui.router',
+        'znk.infra.scoring',
         'znk.infra-web-app.estimatedScoreWidget'
 
     ]).config([
