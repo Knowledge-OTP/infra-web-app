@@ -59,7 +59,11 @@
 
                             for(var i=0; i<examArr.length; i++){
                                 var exam = examArr[i];
-
+                                
+                                if(exam.isCompleted){
+                                    continue;
+                                }
+                                
                                 if(exam.typeId === ExamTypeEnum.MINI_TEST.enum){
                                     activeExamId = exam.id;
                                     break;
