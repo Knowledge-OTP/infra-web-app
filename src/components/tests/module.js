@@ -14,5 +14,5 @@
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ])  
+    ]);  
 })(angular);
