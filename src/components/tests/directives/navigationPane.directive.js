@@ -19,7 +19,7 @@
                     scope.vm = {};
 
                     scope.vm.ExamTypeEnum = ExamTypeEnum;
-
+                    //init
                     ExamSrv.getAllExams().then(function(examsArr){
                         var examArr = [];
                         var getExamResultPromArr = [];
