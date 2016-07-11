@@ -80,6 +80,10 @@
 
                             scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
 
+                            if(typeof scope.d.currentSubject !== "number") {
+                                scope.d.onSubjectClick(scope.d.widgetItems[0].subjectId);
+                            }
+
                             if (!previousValues) {
                                 scope.d.subjectsScores = scope.d.widgetItems;
                             } else {

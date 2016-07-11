@@ -8,6 +8,7 @@
             var vm = this;
             PerformanceSrv.getSubjectsMap().then(function (subjectsMap) {
                 vm.subjectsMap = subjectsMap;
+                vm.subjectId = vm.currentSubjectId;
             });
         }
     );

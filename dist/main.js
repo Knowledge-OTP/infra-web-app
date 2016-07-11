@@ -13,6 +13,7 @@
 "znk.infra-web-app.invitation",
 "znk.infra-web-app.loginForm",
 "znk.infra-web-app.onBoarding",
+"znk.infra-web-app.performance",
 "znk.infra-web-app.purchase",
 "znk.infra-web-app.socialSharing",
 "znk.infra-web-app.uiTheme",
@@ -1529,7 +1530,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                 require: '?ngModel',
                 restrict: 'E',
                 scope: {
-                    isNavMenu: '@'
+                    isNavMenu: '@',
+                    widgetTitle: '@'
                 },
                 link: function (scope, element, attrs, ngModelCtrl) {
                     $translatePartialLoader.addPart('estimatedScoreWidget');
@@ -1592,6 +1594,10 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             }
 
                             scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
+
+                            if(typeof scope.d.currentSubject !== "number") {
+                                scope.d.onSubjectClick(scope.d.widgetItems[0].subjectId);
+                            }
 
                             if (!previousValues) {
                                 scope.d.subjectsScores = scope.d.widgetItems;
@@ -1726,7 +1732,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
     "     translate-namespace=\"ESTIMATED_SCORE_WIDGET_DIRECTIVE\">\n" +
-    "    <div class=\"title\" translate=\".TITLE\"></div>\n" +
+    "    <div class=\"title\" translate=\"{{::widgetTitle}}\"></div>\n" +
     "    <div class=\"unfinished-diagnostic-title\" ng-if=\"!d.isDiagnosticComplete\" translate=\".UNFINISHED_DIAGNOSTIC_TITLE\"></div>\n" +
     "    <div class=\"subjects-wrap\">\n" +
     "        <div ng-repeat=\"widgetItem in d.subjectsScores\"\n" +
@@ -3844,6 +3850,109 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"smile-raccoon\"></div>\n" +
     "</section>\n" +
     "<on-boarding-bar step=\"welcome\"></on-boarding-bar>\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.performance', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'ui.router',
+        'znk.infra.scoring',
+        'znk.infra-web-app.estimatedScoreWidget'
+
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.performance').config(
+        ["$stateProvider", function ($stateProvider) {
+            'ngInject';
+            $stateProvider
+                .state('app.performance', {
+                    url: '/performance',
+                    templateUrl: 'components/performance/templates/performance.template.html',
+                    controller: 'PerformanceController',
+                    controllerAs: 'vm'
+                });
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.performance').controller('PerformanceController',
+        ["$translatePartialLoader", "PerformanceSrv", function ($translatePartialLoader, PerformanceSrv) {
+            'ngInject';
+            $translatePartialLoader.addPart('performance');
+            var vm = this;
+            PerformanceSrv.getSubjectsMap().then(function (subjectsMap) {
+                vm.subjectsMap = subjectsMap;
+                vm.subjectId = vm.currentSubjectId;
+            });
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.performance').provider('PerformanceSrv', [
+        function () {
+            var _subjectMapGetter;
+
+            this.setSubjectsMap = function (subjectsMapGetter) {
+                _subjectMapGetter = subjectsMapGetter;
+            };
+
+            this.$get = ["$q", "$log", "$injector", function ($q, $log, $injector) {
+                'ngInject';
+                var PerformanceSrv = {};
+
+                PerformanceSrv.getSubjectsMap = function () {
+                    if (!_subjectMapGetter) {
+                        var errMsg = 'PerformanceSrv: _subjectMapGetter was not set.';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
+
+                    return $q.when($injector.invoke(_subjectMapGetter));
+                };
+
+                return PerformanceSrv;
+            }];
+        }
+    ]);
+})(angular);
+
+angular.module('znk.infra-web-app.performance').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/performance/templates/performance.template.html",
+    "<div class=\"app-performance\" layout=\"vertical\" layout-fill translate-namespace=\"PERFORMANCE\">\n" +
+    "\n" +
+    "    <estimated-score-widget widget-title=\".TITLE\" is-nav-menu=\"{{true}}\"\n" +
+    "                            ng-model=\"vm.currentSubjectId\"></estimated-score-widget>\n" +
+    "\n" +
+    "    <div class=\"performance-main-container base-border-radius base-box-shadow\"\n" +
+    "         subject-id-to-attr-drv=\"vm.currentSubjectId\">\n" +
+    "        <div class=\"time-line-title\" translate=\"SUBJECTS.{{vm.currentSubjectId}}\"\n" +
+    "             translate-values=\"{subjectName: vm.subjectEnum.getValByEnum(vm.currentSubjectId)}\"></div>\n" +
+    "\n" +
+    "        <!--<performance-timeline subject-id=\"{{vm.currentSubjectId}}\"></performance-timeline>-->\n" +
+    "\n" +
+    "        <!--<div>{{vm.subjectsMap[vm.currentSubjectId].name}}</div>-->\n" +
+    "    </div>\n" +
+    "\n" +
+    "</div>\n" +
     "");
 }]);
 

@@ -51,7 +51,8 @@
                 require: '?ngModel',
                 restrict: 'E',
                 scope: {
-                    isNavMenu: '@'
+                    isNavMenu: '@',
+                    widgetTitle: '@'
                 },
                 link: function (scope, element, attrs, ngModelCtrl) {
                     $translatePartialLoader.addPart('estimatedScoreWidget');
@@ -114,6 +115,10 @@
                             }
 
                             scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
+
+                            if(typeof scope.d.currentSubject !== "number") {
+                                scope.d.onSubjectClick(scope.d.widgetItems[0].subjectId);
+                            }
 
                             if (!previousValues) {
                                 scope.d.subjectsScores = scope.d.widgetItems;
@@ -248,7 +253,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
     "     translate-namespace=\"ESTIMATED_SCORE_WIDGET_DIRECTIVE\">\n" +
-    "    <div class=\"title\" translate=\".TITLE\"></div>\n" +
+    "    <div class=\"title\" translate=\"{{::widgetTitle}}\"></div>\n" +
     "    <div class=\"unfinished-diagnostic-title\" ng-if=\"!d.isDiagnosticComplete\" translate=\".UNFINISHED_DIAGNOSTIC_TITLE\"></div>\n" +
     "    <div class=\"subjects-wrap\">\n" +
     "        <div ng-repeat=\"widgetItem in d.subjectsScores\"\n" +
