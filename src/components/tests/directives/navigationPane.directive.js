@@ -9,10 +9,7 @@
         function ($translatePartialLoader, ExamTypeEnum, ExamSrv, ExerciseResultSrv, $q) {
             'ngInject';
             return {
-                scope: {
-                    activeExam: '=?',
-                    onExamClick: '&'
-                },
+                scope: {},
                 restrict: 'E',
                 templateUrl: 'components/tests/templates/navigationPane.template.html',
                 require: '?ngModel',
