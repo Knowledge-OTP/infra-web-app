@@ -9,7 +9,6 @@
                     templateUrl: 'components/performance/templates/performance.template.html',
                     controller: 'PerformanceController',
                     controllerAs: 'vm'
-                })
-
+                });
         });
 })(angular);

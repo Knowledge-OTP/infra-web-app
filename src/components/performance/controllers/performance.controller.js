@@ -7,7 +7,6 @@
             $translatePartialLoader.addPart('performance');
             var vm = this;
             PerformanceSrv.getSubjectsMap().then(function (subjectsMap) {
-                debugger;
                 vm.subjectsMap = subjectsMap;
             });
         }
