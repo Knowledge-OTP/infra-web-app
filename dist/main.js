@@ -4779,12 +4779,12 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                     scope.vm.ExamTypeEnum = ExamTypeEnum;
                     //init
                     ExamSrv.getAllExams().then(function(examArr){
-                        var _examArr = [];
+                        var examsWithIsCompletedStatusArr = [];
                         var getExamResultPromArr = [];
 
                         angular.forEach(examArr, function (exam) {
                             var examCopy = angular.copy(exam);
-                            _examArr.push(examCopy);
+                            examsWithIsCompletedStatusArr.push(examCopy);
 
                             var getExamResultProm = ExerciseResultSrv.getExamResult(exam.id, true).then(function(examResult){
                                 examCopy.isCompleted = !!(examResult && examResult.isCompleted);
@@ -4796,8 +4796,8 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                         $q.all(getExamResultPromArr).then(function(){
                             var activeExamId;
 
-                            for(var i=0; i<_examArr.length; i++){
-                                var exam = _examArr[i];
+                            for(var i=0; i<examsWithIsCompletedStatusArr.length; i++){
+                                var exam = examsWithIsCompletedStatusArr[i];
 
                                 if(exam.isCompleted){
                                     continue;
@@ -4816,13 +4816,13 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                             }
                             //all exams are completed
                             if(angular.isUndefined(activeExamId)){
-                                activeExamId = _examArr[0].id;
+                                activeExamId = examsWithIsCompletedStatusArr[0].id;
                             }
 
                             scope.vm.changeActive(activeExamId);
                         });
 
-                        scope.vm.examArr = _examArr;
+                        scope.vm.examArr = examsWithIsCompletedStatusArr;
                     });
 
                     scope.vm.changeActive = function(newActiveId){
