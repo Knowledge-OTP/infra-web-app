@@ -3875,37 +3875,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.performance').config(
-        ["$stateProvider", function ($stateProvider) {
-            'ngInject';
-            $stateProvider
-                .state('app.performance', {
-                    url: '/performance',
-                    templateUrl: 'components/performance/templates/performance.template.html',
-                    controller: 'PerformanceController',
-                    controllerAs: 'vm'
-                });
-        }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.performance').controller('PerformanceController',
-        ["$translatePartialLoader", "PerformanceSrv", function ($translatePartialLoader, PerformanceSrv) {
-            'ngInject';
-            $translatePartialLoader.addPart('performance');
-            var vm = this;
-            PerformanceSrv.getSubjectsMap().then(function (subjectsMap) {
-                vm.subjectsMap = subjectsMap;
-                vm.subjectId = vm.currentSubjectId;
-            });
-        }]
-    );
-})(angular);
-
-(function (angular) {
-    'use strict';
 
     angular.module('znk.infra-web-app.performance').provider('PerformanceSrv', [
         function () {
