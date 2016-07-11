@@ -20,13 +20,13 @@
 
                     scope.vm.ExamTypeEnum = ExamTypeEnum;
                     //init
-                    ExamSrv.getAllExams().then(function(examsArr){
-                        var examArr = [];
+                    ExamSrv.getAllExams().then(function(examArr){
+                        var _examArr = [];
                         var getExamResultPromArr = [];
 
-                        angular.forEach(examsArr, function (exam) {
+                        angular.forEach(examArr, function (exam) {
                             var examCopy = angular.copy(exam);
-                            examArr.push(examCopy);
+                            _examArr.push(examCopy);
 
                             var getExamResultProm = ExerciseResultSrv.getExamResult(exam.id, true).then(function(examResult){
                                 examCopy.isCompleted = !!(examResult && examResult.isCompleted);
@@ -38,13 +38,13 @@
                         $q.all(getExamResultPromArr).then(function(){
                             var activeExamId;
 
-                            for(var i=0; i<examArr.length; i++){
-                                var exam = examArr[i];
-                                
+                            for(var i=0; i<_examArr.length; i++){
+                                var exam = _examArr[i];
+
                                 if(exam.isCompleted){
                                     continue;
                                 }
-                                
+
                                 if(exam.typeId === ExamTypeEnum.MINI_TEST.enum){
                                     activeExamId = exam.id;
                                     break;
@@ -58,13 +58,13 @@
                             }
                             //all exams are completed
                             if(angular.isUndefined(activeExamId)){
-                                activeExamId = examArr[0].id;
+                                activeExamId = _examArr[0].id;
                             }
 
                             scope.vm.changeActive(activeExamId);
                         });
 
-                        scope.vm.examArr = examArr;
+                        scope.vm.examArr = _examArr;
                     });
 
                     scope.vm.changeActive = function(newActiveId){
