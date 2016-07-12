@@ -1916,10 +1916,10 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     "     y=\"0px\"\n" +
     "	 viewBox=\"-328 58.7 133.4 127.3\"\n" +
     "     xml:space=\"preserve\"\n" +
-    "     class=\"evaluate-star-half-svg\">\n" +
+    "     class=\"evaluate-star-svg\">\n" +
     ">\n" +
     "<style type=\"text/css\">\n" +
-    "	.evaluate-star-half-svg .st0{fill:#231F20;}\n" +
+    "	.evaluate-star-svg .st0{fill:#231F20;}\n" +
     "</style>\n" +
     "<path class=\"firstPath st0\" d=\"M-261.3,58.7c-1.3,0-2.6,0.7-3.3,2l-17.8,36.1c-0.5,1.1-1.5,1.8-2.7,2l-39.8,5.8c-3,0.4-4.2,4.1-2,6.2l28.8,28\n" +
     "	c0.8,0.8,1.2,2,1,3.2l-6.8,39.6c-0.5,2.9,2.6,5.2,5.3,3.8l35.6-18.7c0.5-0.3,1.1-0.5,1.7-0.5V58.7z\"/>\n" +
