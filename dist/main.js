@@ -1580,22 +1580,24 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             });
 
                             var scoresArr = [];
-                            for(var i = 0; i<scope.d.widgetItems.length; i++) {
-                                if(angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
+                            for (var i = 0; i < scope.d.widgetItems.length; i++) {
+                                if (angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
                                     scoresArr.push(scope.d.widgetItems[i].estimatedScore);
                                 }
                             }
 
                             scope.d.estimatedCompositeScore = examScoresFn(scoresArr);
 
-                            function filterSubjects (widgetItem) {
-                                return !!('showScore' in widgetItem &&  (widgetItem.showScore) !== false);
+                            function filterSubjects(widgetItem) {
+                                return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
                             }
 
                             scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
 
-                            if(typeof scope.d.currentSubject !== "number") {
-                                scope.d.onSubjectClick(scope.d.widgetItems[0].subjectId);
+                            if (isNavMenuFlag) {
+                                if (angular.isUndefined(scope.d.currentSubject)) {
+                                    scope.d.onSubjectClick(scope.d.widgetItems[0].subjectId);
+                                }
                             }
 
                             if (!previousValues) {
@@ -1616,7 +1618,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 
                     function calcPercentage(correct) {
                         var scoringLimits = ScoringService.getScoringLimits();
-                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max: scoringLimits.subjects.max;
+                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max : scoringLimits.subjects.max;
                         return (correct / maxEstimatedScore) * 100;
                     }
 
