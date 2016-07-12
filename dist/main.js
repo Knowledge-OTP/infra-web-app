@@ -1633,7 +1633,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                         };
 
                         ngModelCtrl.$render = function () {
-                            scope.d.currentSubject = '' + ngModelCtrl.$viewValue;
+                            scope.d.currentSubject = ngModelCtrl.$viewValue;
                         };
                     }
 

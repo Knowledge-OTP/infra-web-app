@@ -119,7 +119,7 @@
                         };
 
                         ngModelCtrl.$render = function () {
-                            scope.d.currentSubject = '' + ngModelCtrl.$viewValue;
+                            scope.d.currentSubject = ngModelCtrl.$viewValue;
                         };
                     }
 
