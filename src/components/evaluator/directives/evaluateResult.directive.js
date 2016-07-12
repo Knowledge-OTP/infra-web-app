@@ -55,8 +55,9 @@
                 scope.starStatusMap = starStatusMap;
                 scope.stars = [];
 
+                var isAllReadySetText = false;
+
                 for (var i = 0, ii = evaluatePointsArr.length; i < ii; i++) {
-                    var isAllReadySetText = false;
                     var curEvaluatePoint = evaluatePointsArr[i];
                     var prevEvaluatePoint = evaluatePointsArr[i - 1];
                     var prevMaxPoints = prevEvaluatePoint ? prevEvaluatePoint.maxPoints : 0;
