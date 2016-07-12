@@ -4,7 +4,7 @@
     <div class="title" translate="{{::widgetTitle}}"></div>
     <div class="unfinished-diagnostic-title" ng-if="!d.isDiagnosticComplete" translate=".UNFINISHED_DIAGNOSTIC_TITLE"></div>
     <div class="subjects-wrap">
-        <div ng-repeat="widgetItem in d.subjectsScores track by d.widgetItems.subjectId"
+        <div ng-repeat="widgetItem in d.subjectsScores track by widgetItem.subjectId"
              ng-click="d.onSubjectClick(widgetItem.subjectId)"
              ng-class="{ 'selected': (d.currentSubject === widgetItem.subjectId) }"
              class="subject"
