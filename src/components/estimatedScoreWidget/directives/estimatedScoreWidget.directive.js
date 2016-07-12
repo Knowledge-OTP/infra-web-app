@@ -86,17 +86,28 @@
                                 }
                             }
 
-                            if (!previousValues) {
-                                scope.d.subjectsScores = scope.d.widgetItems;
-                            } else {
+                            if (previousValues) {
                                 scope.d.subjectsScores = previousValues;
-                                $timeout(function () {
-                                    scope.d.enableEstimatedScoreChangeAnimation = true;
-                                    $timeout(function () {
-                                        scope.d.subjectsScores = scope.d.widgetItems;
-                                    }, 1200);
-                                });
                             }
+
+                            $timeout(function () {
+                                scope.d.enableEstimatedScoreChangeAnimation = true;
+                                $timeout(function () {
+                                    scope.d.subjectsScores = scope.d.widgetItems;
+                                }, 1200);
+                            });
+
+                            // if (!previousValues) {
+                            //     scope.d.subjectsScores = scope.d.widgetItems;
+                            // } else {
+                            //     scope.d.subjectsScores = previousValues;
+                            //     $timeout(function () {
+                            //         scope.d.enableEstimatedScoreChangeAnimation = true;
+                            //         $timeout(function () {
+                            //             scope.d.subjectsScores = scope.d.widgetItems;
+                            //         }, 1200);
+                            //     });
+                            // }
 
                             previousValues = scope.d.widgetItems;
                         });

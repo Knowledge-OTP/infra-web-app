@@ -1600,17 +1600,28 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                                 }
                             }
 
-                            if (!previousValues) {
-                                scope.d.subjectsScores = scope.d.widgetItems;
-                            } else {
+                            if (previousValues) {
                                 scope.d.subjectsScores = previousValues;
-                                $timeout(function () {
-                                    scope.d.enableEstimatedScoreChangeAnimation = true;
-                                    $timeout(function () {
-                                        scope.d.subjectsScores = scope.d.widgetItems;
-                                    }, 1200);
-                                });
                             }
+
+                            $timeout(function () {
+                                scope.d.enableEstimatedScoreChangeAnimation = true;
+                                $timeout(function () {
+                                    scope.d.subjectsScores = scope.d.widgetItems;
+                                }, 1200);
+                            });
+
+                            // if (!previousValues) {
+                            //     scope.d.subjectsScores = scope.d.widgetItems;
+                            // } else {
+                            //     scope.d.subjectsScores = previousValues;
+                            //     $timeout(function () {
+                            //         scope.d.enableEstimatedScoreChangeAnimation = true;
+                            //         $timeout(function () {
+                            //             scope.d.subjectsScores = scope.d.widgetItems;
+                            //         }, 1200);
+                            //     });
+                            // }
 
                             previousValues = scope.d.widgetItems;
                         });
@@ -1736,7 +1747,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "    <div class=\"title\" translate=\"{{::widgetTitle}}\"></div>\n" +
     "    <div class=\"unfinished-diagnostic-title\" ng-if=\"!d.isDiagnosticComplete\" translate=\".UNFINISHED_DIAGNOSTIC_TITLE\"></div>\n" +
     "    <div class=\"subjects-wrap\">\n" +
-    "        <div ng-repeat=\"widgetItem in d.subjectsScores\"\n" +
+    "        <div ng-repeat=\"widgetItem in d.subjectsScores track by d.widgetItems.subjectId\"\n" +
     "             ng-click=\"d.onSubjectClick(widgetItem.subjectId)\"\n" +
     "             ng-class=\"{ 'selected': (d.currentSubject === widgetItem.subjectId) }\"\n" +
     "             class=\"subject\"\n" +
