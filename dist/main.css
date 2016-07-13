@@ -715,6 +715,48 @@ md-tooltip.tooltip-for-estimated-score-widget {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg {
+  width: 12px; }
+  .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg * {
+    fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starEmpty svg * {
+  fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starHalf svg .firstPath {
+  fill: #edc811; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starHalf svg .secondPath {
+  fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starFull svg * {
+  fill: #edc811; }
+
+/**
+*  FONTS
+*/
+/* Lato fonts from google*/
+/* Quicksand fonts */
+/* Material+Icons */
+
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
 .raccoon-in-app {
   position: fixed;
   bottom: 20px;

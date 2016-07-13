@@ -8,6 +8,7 @@
 "znk.infra-web-app.diagnosticExercise",
 "znk.infra-web-app.diagnosticIntro",
 "znk.infra-web-app.estimatedScoreWidget",
+"znk.infra-web-app.evaluator",
 "znk.infra-web-app.iapMsg",
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
@@ -1795,6 +1796,158 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "        <span class=\"edit-my-goals\"\n" +
     "              ng-click=\"d.showGoalsEdit()\"\n" +
     "              translate=\".EDIT_MY_GOALS\"></span>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.evaluator', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.evaluator').config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'evaluator-star': 'components/evaluator/svg/star.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+
+})(angular);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.evaluator').directive('evaluateResult',
+        ["$translatePartialLoader", function($translatePartialLoader){
+        'ngInject';
+        return {
+            scope: {
+                pointsGetter: '&points'
+            },
+            restrict: 'E',
+            templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
+            link: function (scope) {
+
+                $translatePartialLoader.addPart('evaluator');
+
+                var evaluatePointsArr = [
+                    {
+                        evaluateText: "WEAK",
+                        maxPoints: 1
+                    },
+                    {
+                        evaluateText: "LIMITED",
+                        maxPoints: 2
+                    },
+                    {
+                        evaluateText: "FAIR",
+                        maxPoints: 3
+                    },
+                    {
+                        evaluateText: "GOOD",
+                        maxPoints: 4
+                    }
+                ];
+
+                var starStatusMap = {
+                    empty: 1,
+                    half: 2,
+                    full: 3
+                };
+
+                var points = scope.points = scope.pointsGetter();
+
+                function _getStarStatus(curMaxPoints, prevMaxPoints) {
+                    var starStatus = starStatusMap.empty;
+                    if (points >= curMaxPoints) {
+                        starStatus = starStatusMap.full;
+                    } else if(
+                        points > prevMaxPoints &&
+                        curMaxPoints > points) {
+                        starStatus = starStatusMap.half;
+                    }
+                    return starStatus;
+                }
+
+                scope.starStatusMap = starStatusMap;
+                scope.stars = [];
+
+                var isAllReadySetText = false;
+
+                for (var i = 0, ii = evaluatePointsArr.length; i < ii; i++) {
+                    var curEvaluatePoint = evaluatePointsArr[i];
+                    var prevEvaluatePoint = evaluatePointsArr[i - 1];
+                    var prevMaxPoints = prevEvaluatePoint ? prevEvaluatePoint.maxPoints : 0;
+                    var starStatus = {
+                       status: _getStarStatus(curEvaluatePoint.maxPoints, prevMaxPoints)
+                    };
+
+                    scope.stars.push(starStatus);
+
+                    if (isAllReadySetText) {
+                      continue;
+                    }
+
+                    if (curEvaluatePoint.maxPoints >= points) {
+                        scope.evaluateText = curEvaluatePoint.evaluateText;
+                        isAllReadySetText = true;
+                    }
+                }
+
+            }
+        };
+    }]);
+})(angular);
+
+angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/evaluator/svg/star.svg",
+    "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"-328 58.7 133.4 127.3\"\n" +
+    "     xml:space=\"preserve\"\n" +
+    "     class=\"evaluate-star-svg\">\n" +
+    ">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.evaluate-star-svg .st0{fill:#231F20;}\n" +
+    "</style>\n" +
+    "<path class=\"firstPath st0\" d=\"M-261.3,58.7c-1.3,0-2.6,0.7-3.3,2l-17.8,36.1c-0.5,1.1-1.5,1.8-2.7,2l-39.8,5.8c-3,0.4-4.2,4.1-2,6.2l28.8,28\n" +
+    "	c0.8,0.8,1.2,2,1,3.2l-6.8,39.6c-0.5,2.9,2.6,5.2,5.3,3.8l35.6-18.7c0.5-0.3,1.1-0.5,1.7-0.5V58.7z\"/>\n" +
+    "<path class=\"secondPath st0\" d=\"M-261.3,58.7c1.3,0,2.6,0.7,3.3,2l17.8,36.1c0.5,1.1,1.5,1.8,2.7,2l39.8,5.8c3,0.4,4.2,4.1,2,6.2l-28.8,28\n" +
+    "	c-0.8,0.8-1.2,2-1,3.2l6.8,39.6c0.5,2.9-2.6,5.2-5.3,3.8l-35.6-18.7c-0.5-0.3-1.1-0.5-1.7-0.5V58.7z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/evaluator/templates/evaluateResult.template.html",
+    "<div class=\"evaluate-result-wrapper\"\n" +
+    "     translate-namespace=\"EVALUATE_RESULT_DRV\">\n" +
+    "    <div class=\"evaluate-text\"\n" +
+    "        translate=\".{{evaluateText}}\">\n" +
+    "    </div>\n" +
+    "    <div\n" +
+    "        class=\"evaluate-points\"\n" +
+    "        translate=\".POINTS\"\n" +
+    "        translate-values=\"{ pts: '{{points}}' }\">\n" +
+    "    </div>\n" +
+    "    <div class=\"evaluate-stars-wrapper\">\n" +
+    "        <svg-icon\n" +
+    "            ng-repeat=\"star in stars\"\n" +
+    "            ng-class=\"{\n" +
+    "              'starEmpty': star.status === starStatusMap.empty,\n" +
+    "              'starHalf': star.status === starStatusMap.half,\n" +
+    "              'starFull': star.status === starStatusMap.full\n" +
+    "            }\"\n" +
+    "            name=\"evaluator-star\">\n" +
+    "        </svg-icon>\n" +
     "    </div>\n" +
     "</div>\n" +
     "");

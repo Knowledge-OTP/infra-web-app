@@ -1,0 +1,9 @@
+{
+    "EVALUATE_RESULT_DRV": {
+       "WEAK": "Weak",
+       "LIMITED": "Limited",
+       "FAIR": "Fair",
+       "GOOD": "Good",
+       "POINTS": "{{pts}} pts"
+    }
+}
