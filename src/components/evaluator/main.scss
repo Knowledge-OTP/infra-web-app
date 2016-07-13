@@ -2,7 +2,8 @@
         './src/scss/imports/colors',
         './bower_components/infra/dist/mixins/mixins';
 
-@import 'scss/evaluate-result';
+@import 'scss/evaluate-result',
+        'scss/evaluate-review-states';
 
 /**
 *  FONTS

@@ -79,6 +79,32 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.purchase').directive('openPurchaseDialogOnClick',
+        ["purchaseService", function (purchaseService) {
+            'ngInject';
+            return {
+                restrict: 'A',
+                controller: ["$element", function($element) {
+                    $element.on('click', function() {
+                        purchaseService.showPurchaseDialog();
+                    });
+
+                    $element.on('$destroy', function(){
+                        $element.off('click');
+                    });
+                }]
+            };
+        }]
+    );
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
         ["ENV", "$q", "$sce", "AuthService", "UserProfileService", "$location", "purchaseService", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
             'ngInject';

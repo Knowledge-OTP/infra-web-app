@@ -1806,7 +1806,10 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 
     angular.module('znk.infra-web-app.evaluator', [
         'pascalprecht.translate',
-        'znk.infra.svgIcon'
+        'znk.infra.svgIcon',
+        'znk.infra.enum',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.purchase'
     ]);
 })(angular);
 
@@ -1825,22 +1828,153 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 
 })(angular);
 
+/**
+ * evaluateQuestionReviewStates
+ *  ng-model: gets an object with activeState:Number(from EvaluatorStatesEnum)
+ *  and for evaluated state add points and type props for evaluate-result drv like:
+ *  {
+        activeState: EvaluatorStatesEnum.EVALUATED.enum,
+        points: 2.5,
+        type: 2
+    }
+ */
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.evaluator').directive('evaluateResult',
-        ["$translatePartialLoader", function($translatePartialLoader){
-        'ngInject';
-        return {
-            scope: {
-                pointsGetter: '&points'
+    angular.module('znk.infra-web-app.evaluator').component('evaluateQuestionReviewStates', {
+            require: {
+                parent: '?^ngModel'
             },
-            restrict: 'E',
+            templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
+            controllerAs: 'vm',
+            controller: function () {
+                var vm = this;
+
+                vm.$onInit = function() {
+                    var ngModelCtrl = vm.parent;
+                    if (ngModelCtrl) {
+                        ngModelCtrl.$render = function() {
+                            vm.stateData = ngModelCtrl.$modelValue;
+                        };
+                    }
+                };
+
+            }
+        }
+    );
+})(angular);
+
+/**
+ * evaluateResult
+ *   pointsGetter - get user current points
+ *   typeGetter - can be a subjectId or other type of id
+ */
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
+            bindings: {
+                pointsGetter: '&points',
+                typeGetter: '&type' // can be a subjectId or other type of id
+            },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
-            link: function (scope) {
+            controllerAs: 'vm',
+            controller: ["$translatePartialLoader", "EvaluateSrv", function ($translatePartialLoader, EvaluateSrv) {
+                'ngInject';
+
+                var vm = this;
 
                 $translatePartialLoader.addPart('evaluator');
 
-                var evaluatePointsArr = [
+                var starStatusMap = {
+                    empty: 1,
+                    half: 2,
+                    full: 3
+                };
+
+                var points = vm.points = vm.pointsGetter();
+
+                var type =  vm.typeGetter();
+
+                vm.starStatusMap = starStatusMap;
+
+                vm.stars = [];
+
+                function _getStarStatus(curPoints, prevPoints) {
+                    var starStatus = starStatusMap.empty;
+                    if (points >= curPoints) {
+                        starStatus = starStatusMap.full;
+                    } else if(
+                        curPoints > points &&
+                        points > prevPoints) {
+                        starStatus = starStatusMap.half;
+                    }
+                    return starStatus;
+                }
+
+                function addStars(evaluateResultByType) {
+                    var starsNum = evaluateResultByType.starsNum;
+                    var pointsPerStar = evaluateResultByType.pointsPerStar;
+                    var curPoints = 0;
+                    for (var i = 0, ii = starsNum; i < ii; i++) {
+                        curPoints += pointsPerStar;
+                        var starStatus = {
+                            status: _getStarStatus(curPoints, curPoints - pointsPerStar)
+                        };
+                        vm.stars.push(starStatus);
+                    }
+                }
+
+                function addEvaluateText(evaluateResultByType) {
+                    var evaluatePointsArr = evaluateResultByType.evaluatePointsArr;
+                    var curEvaluatePoint;
+                    for (var i = 0, ii = evaluatePointsArr.length; i < ii; i++) {
+                        curEvaluatePoint = evaluatePointsArr[i];
+                        if (curEvaluatePoint.maxPoints >= points) {
+                            vm.evaluateText = curEvaluatePoint.evaluateText;
+                            break;
+                        }
+                    }
+                }
+
+                function addStarsAndText(evaluateResultType) {
+                    var evaluateResultByType = evaluateResultType[type];
+                    addStars(evaluateResultByType);
+                    addEvaluateText(evaluateResultByType);
+                }
+
+                EvaluateSrv.getEvaluateResultByType().then(function(evaluateResultType) {
+                    addStarsAndText(evaluateResultType);
+                });
+            }]
+        }
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.evaluator').service('EvaluatorStatesEnum', ['EnumSrv',
+        function(EnumSrv) {
+
+            var EvaluatorStatesEnum = new EnumSrv.BaseEnum([
+                ['NOT_PURCHASE', 1, 'not purchase'],
+                ['PENDING', 2, 'pending'],
+                ['EVALUATED', 3, 'evaluated']
+            ]);
+
+            return EvaluatorStatesEnum;
+        }]);
+})(angular);
+
+/**
+ * EvaluateSrv
+ *
+ *  setEvaluateResultByType: get an fn function that returns object of types(like subjects) with configuration
+ *  like:  {
+ *           0: {
+                starsNum: 4, // number of stars to display
+                pointsPerStar: 1, // points that should calc per star
+                evaluatePointsArr: [ // array of evaluate statuses and each max points
                     {
                         evaluateText: "WEAK",
                         maxPoints: 1
@@ -1857,56 +1991,45 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                         evaluateText: "GOOD",
                         maxPoints: 4
                     }
-                ];
-
-                var starStatusMap = {
-                    empty: 1,
-                    half: 2,
-                    full: 3
-                };
-
-                var points = scope.points = scope.pointsGetter();
-
-                function _getStarStatus(curMaxPoints, prevMaxPoints) {
-                    var starStatus = starStatusMap.empty;
-                    if (points >= curMaxPoints) {
-                        starStatus = starStatusMap.full;
-                    } else if(
-                        points > prevMaxPoints &&
-                        curMaxPoints > points) {
-                        starStatus = starStatusMap.half;
-                    }
-                    return starStatus;
-                }
-
-                scope.starStatusMap = starStatusMap;
-                scope.stars = [];
-
-                var isAllReadySetText = false;
-
-                for (var i = 0, ii = evaluatePointsArr.length; i < ii; i++) {
-                    var curEvaluatePoint = evaluatePointsArr[i];
-                    var prevEvaluatePoint = evaluatePointsArr[i - 1];
-                    var prevMaxPoints = prevEvaluatePoint ? prevEvaluatePoint.maxPoints : 0;
-                    var starStatus = {
-                       status: _getStarStatus(curEvaluatePoint.maxPoints, prevMaxPoints)
-                    };
-
-                    scope.stars.push(starStatus);
-
-                    if (isAllReadySetText) {
-                      continue;
-                    }
-
-                    if (curEvaluatePoint.maxPoints >= points) {
-                        scope.evaluateText = curEvaluatePoint.evaluateText;
-                        isAllReadySetText = true;
-                    }
-                }
-
+                ]
             }
+            1: {
+               ...
+            }
+         }
+ */
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.evaluator').provider('EvaluateSrv',
+        function() {
+
+        var _evaluateResultByType;
+
+        this.setEvaluateResultByType = function(evaluateResultByType) {
+            _evaluateResultByType = evaluateResultByType;
         };
-    }]);
+
+        this.$get = ["$q", "$injector", "$log", function($q, $injector, $log) {
+            'ngInject';
+
+            var evaluateSrvApi = {};
+
+            evaluateSrvApi.getEvaluateResultByType = function() {
+
+                if(!_evaluateResultByType) {
+                    var errMsg = 'EvaluateSrv: evaluateResultByType was not set';
+                    $log.error(errMsg);
+                    return $q.reject(errMsg);
+                }
+
+                return $q.when($injector.invoke(_evaluateResultByType));
+            };
+
+            return evaluateSrvApi;
+
+        }];
+    });
 })(angular);
 
 angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($templateCache) {
@@ -1927,24 +2050,61 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     "	c-0.8,0.8-1.2,2-1,3.2l6.8,39.6c0.5,2.9-2.6,5.2-5.3,3.8l-35.6-18.7c-0.5-0.3-1.1-0.5-1.7-0.5V58.7z\"/>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/evaluator/templates/evaluateQuestionReviewStates.template.html",
+    "<div class=\"evaluate-review-states-wrapper\"\n" +
+    "     translate-namespace=\"EVALUATE_REVIEW_STATES_DRV\">\n" +
+    "     <div class=\"evaluate-review-states-switch\"\n" +
+    "          ng-switch=\"vm.stateData.activeState\">\n" +
+    "          <div class=\"evaluate-review-not-purchase\"\n" +
+    "               ng-switch-when=\"1\">\n" +
+    "              <div class=\"upgrade-text\"\n" +
+    "                   translate=\".UPGRADE_TEXT\">\n" +
+    "              </div>\n" +
+    "              <button class=\"upgrade-btn\"\n" +
+    "                      open-purchase-dialog-on-click\n" +
+    "                      translate=\".UPGRADE_BTN\">\n" +
+    "              </button>\n" +
+    "          </div>\n" +
+    "          <div class=\"evaluate-review-pending\"\n" +
+    "              ng-switch-when=\"2\">\n" +
+    "              <div class=\"pending-title\"\n" +
+    "                   translate=\".PENDING_TITLE\">\n" +
+    "              </div>\n" +
+    "              <div class=\"pending-desc\"\n" +
+    "                   translate=\".PENDING_DESC\">\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "          <div class=\"evaluate-review-evaluated\"\n" +
+    "              ng-switch-when=\"3\">\n" +
+    "              <div class=\"evaluated-answer-title\"\n" +
+    "                   translate=\".EVALUATED_ANSWER_TITLE\">\n" +
+    "              </div>\n" +
+    "              <evaluate-result\n" +
+    "                  points=\"vm.stateData.points\"\n" +
+    "                  type=\"vm.stateData.type\">\n" +
+    "              </evaluate-result>\n" +
+    "          </div>\n" +
+    "     </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/evaluator/templates/evaluateResult.template.html",
     "<div class=\"evaluate-result-wrapper\"\n" +
     "     translate-namespace=\"EVALUATE_RESULT_DRV\">\n" +
     "    <div class=\"evaluate-text\"\n" +
-    "        translate=\".{{evaluateText}}\">\n" +
+    "        translate=\".{{vm.evaluateText}}\">\n" +
     "    </div>\n" +
     "    <div\n" +
     "        class=\"evaluate-points\"\n" +
     "        translate=\".POINTS\"\n" +
-    "        translate-values=\"{ pts: '{{points}}' }\">\n" +
+    "        translate-values=\"{ pts: '{{vm.points}}' }\">\n" +
     "    </div>\n" +
     "    <div class=\"evaluate-stars-wrapper\">\n" +
     "        <svg-icon\n" +
-    "            ng-repeat=\"star in stars\"\n" +
+    "            ng-repeat=\"star in vm.stars\"\n" +
     "            ng-class=\"{\n" +
-    "              'starEmpty': star.status === starStatusMap.empty,\n" +
-    "              'starHalf': star.status === starStatusMap.half,\n" +
-    "              'starFull': star.status === starStatusMap.full\n" +
+    "              'starEmpty': star.status === vm.starStatusMap.empty,\n" +
+    "              'starHalf': star.status === vm.starStatusMap.half,\n" +
+    "              'starFull': star.status === vm.starStatusMap.full\n" +
     "            }\"\n" +
     "            name=\"evaluator-star\">\n" +
     "        </svg-icon>\n" +
@@ -4073,6 +4233,32 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 $mdDialog.hide();
             };
         }]);
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.purchase').directive('openPurchaseDialogOnClick',
+        ["purchaseService", function (purchaseService) {
+            'ngInject';
+            return {
+                restrict: 'A',
+                controller: ["$element", function($element) {
+                    $element.on('click', function() {
+                        purchaseService.showPurchaseDialog();
+                    });
+
+                    $element.on('$destroy', function(){
+                        $element.off('click');
+                    });
+                }]
+            };
+        }]
+    );
 })(angular);
 
 /**
