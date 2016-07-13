@@ -6,17 +6,17 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').directive('evaluateResult',
-        function($translatePartialLoader, EvaluateSrv) {
-        'ngInject';
-        return {
-            scope: {
+    angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
+            bindings: {
                 pointsGetter: '&points',
                 typeGetter: '&type' // can be a subjectId or other type of id
             },
-            restrict: 'E',
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
-            link: function (scope) {
+            controllerAs: 'vm',
+            controller: function ($translatePartialLoader, EvaluateSrv) {
+                'ngInject';
+
+                var vm = this;
 
                 $translatePartialLoader.addPart('evaluator');
 
@@ -26,13 +26,13 @@
                     full: 3
                 };
 
-                var points = scope.points = scope.pointsGetter();
+                var points = vm.points = vm.pointsGetter();
 
-                var type =  scope.typeGetter();
+                var type =  vm.typeGetter();
 
-                scope.starStatusMap = starStatusMap;
+                vm.starStatusMap = starStatusMap;
 
-                scope.stars = [];
+                vm.stars = [];
 
                 function _getStarStatus(curPoints, prevPoints) {
                     var starStatus = starStatusMap.empty;
@@ -55,7 +55,7 @@
                         var starStatus = {
                             status: _getStarStatus(curPoints, curPoints - pointsPerStar)
                         };
-                        scope.stars.push(starStatus);
+                        vm.stars.push(starStatus);
                     }
                 }
 
@@ -65,7 +65,7 @@
                     for (var i = 0, ii = evaluatePointsArr.length; i < ii; i++) {
                         curEvaluatePoint = evaluatePointsArr[i];
                         if (curEvaluatePoint.maxPoints >= points) {
-                            scope.evaluateText = curEvaluatePoint.evaluateText;
+                            vm.evaluateText = curEvaluatePoint.evaluateText;
                             break;
                         }
                     }
@@ -81,6 +81,6 @@
                     addStarsAndText(evaluateResultType);
                 });
             }
-        };
-    });
+        }
+    );
 })(angular);

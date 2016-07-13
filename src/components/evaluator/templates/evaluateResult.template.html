@@ -1,20 +1,20 @@
 <div class="evaluate-result-wrapper"
      translate-namespace="EVALUATE_RESULT_DRV">
     <div class="evaluate-text"
-        translate=".{{evaluateText}}">
+        translate=".{{vm.evaluateText}}">
     </div>
     <div
         class="evaluate-points"
         translate=".POINTS"
-        translate-values="{ pts: '{{points}}' }">
+        translate-values="{ pts: '{{vm.points}}' }">
     </div>
     <div class="evaluate-stars-wrapper">
         <svg-icon
-            ng-repeat="star in stars"
+            ng-repeat="star in vm.stars"
             ng-class="{
-              'starEmpty': star.status === starStatusMap.empty,
-              'starHalf': star.status === starStatusMap.half,
-              'starFull': star.status === starStatusMap.full
+              'starEmpty': star.status === vm.starStatusMap.empty,
+              'starHalf': star.status === vm.starStatusMap.half,
+              'starFull': star.status === vm.starStatusMap.full
             }"
             name="evaluator-star">
         </svg-icon>

@@ -1,14 +1,14 @@
 <div class="evaluate-review-states-wrapper"
      translate-namespace="EVALUATE_REVIEW_STATES_DRV">
      <div class="evaluate-review-states-switch"
-          ng-switch="stateData.activeState">
+          ng-switch="vm.stateData.activeState">
           <div class="evaluate-review-not-purchase"
                ng-switch-when="1">
               <div class="upgrade-text"
                    translate=".UPGRADE_TEXT">
               </div>
               <button class="upgrade-btn"
-                      purchase-open-modal
+                      open-purchase-dialog-on-click
                       translate=".UPGRADE_BTN">
               </button>
           </div>
@@ -27,8 +27,8 @@
                    translate=".EVALUATED_ANSWER_TITLE">
               </div>
               <evaluate-result
-                  points="stateData.points"
-                  type="stateData.type">
+                  points="vm.stateData.points"
+                  type="vm.stateData.type">
               </evaluate-result>
           </div>
      </div>

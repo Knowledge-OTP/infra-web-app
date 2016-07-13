@@ -1829,6 +1829,41 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 })(angular);
 
 /**
+ * evaluateQuestionReviewStates
+ *  ng-model: gets an object with activeState:Number(from EvaluatorStatesEnum)
+ *  and for evaluated state add points and type props for evaluate-result drv like:
+ *  {
+        activeState: EvaluatorStatesEnum.EVALUATED.enum,
+        points: 2.5,
+        type: 2
+    }
+ */
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.evaluator').component('evaluateQuestionReviewStates', {
+            require: {
+                parent: '?^ngModel'
+            },
+            templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
+            controllerAs: 'vm',
+            controller: function () {
+                var vm = this;
+
+                vm.$onInit = function() {
+                    var ngModelCtrl = vm.parent;
+                    if (ngModelCtrl) {
+                        ngModelCtrl.$render = function() {
+                            vm.stateData = ngModelCtrl.$modelValue;
+                        };
+                    }
+                };
+
+            }
+        }
+    );
+})(angular);
+
+/**
  * evaluateResult
  *   pointsGetter - get user current points
  *   typeGetter - can be a subjectId or other type of id
@@ -1836,17 +1871,17 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').directive('evaluateResult',
-        ["$translatePartialLoader", "EvaluateSrv", function($translatePartialLoader, EvaluateSrv) {
-        'ngInject';
-        return {
-            scope: {
+    angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
+            bindings: {
                 pointsGetter: '&points',
                 typeGetter: '&type' // can be a subjectId or other type of id
             },
-            restrict: 'E',
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
-            link: function (scope) {
+            controllerAs: 'vm',
+            controller: ["$translatePartialLoader", "EvaluateSrv", function ($translatePartialLoader, EvaluateSrv) {
+                'ngInject';
+
+                var vm = this;
 
                 $translatePartialLoader.addPart('evaluator');
 
@@ -1856,13 +1891,13 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                     full: 3
                 };
 
-                var points = scope.points = scope.pointsGetter();
+                var points = vm.points = vm.pointsGetter();
 
-                var type =  scope.typeGetter();
+                var type =  vm.typeGetter();
 
-                scope.starStatusMap = starStatusMap;
+                vm.starStatusMap = starStatusMap;
 
-                scope.stars = [];
+                vm.stars = [];
 
                 function _getStarStatus(curPoints, prevPoints) {
                     var starStatus = starStatusMap.empty;
@@ -1885,7 +1920,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                         var starStatus = {
                             status: _getStarStatus(curPoints, curPoints - pointsPerStar)
                         };
-                        scope.stars.push(starStatus);
+                        vm.stars.push(starStatus);
                     }
                 }
 
@@ -1895,7 +1930,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                     for (var i = 0, ii = evaluatePointsArr.length; i < ii; i++) {
                         curEvaluatePoint = evaluatePointsArr[i];
                         if (curEvaluatePoint.maxPoints >= points) {
-                            scope.evaluateText = curEvaluatePoint.evaluateText;
+                            vm.evaluateText = curEvaluatePoint.evaluateText;
                             break;
                         }
                     }
@@ -1910,40 +1945,9 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                 EvaluateSrv.getEvaluateResultByType().then(function(evaluateResultType) {
                     addStarsAndText(evaluateResultType);
                 });
-            }
-        };
-    }]);
-})(angular);
-
-/**
- * evaluateReviewStates
- *  ng-model: gets an object with activeState:Number(from EvaluatorStatesEnum)
- *  and for evaluated state add points and type props for evaluate-result drv like:
- *  {
-        activeState: EvaluatorStatesEnum.EVALUATED.enum,
-        points: 2.5,
-        type: 2
-    }
- */
-(function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.evaluator').directive('evaluateReviewStates',
-        function() {
-        'ngInject';
-        return {
-            scope: {},
-            restrict: 'E',
-            require: '?ngModel',
-            templateUrl: 'components/evaluator/templates/evaluateReviewStates.template.html',
-            link: function (scope, element, attr, ngModelCtrl) {
-                if (ngModelCtrl) {
-                    ngModelCtrl.$render = function() {
-                        scope.stateData = ngModelCtrl.$modelValue;
-                    };
-                }
-            }
-        };
-    });
+            }]
+        }
+    );
 })(angular);
 
 (function (angular) {
@@ -2046,42 +2050,18 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     "	c-0.8,0.8-1.2,2-1,3.2l6.8,39.6c0.5,2.9-2.6,5.2-5.3,3.8l-35.6-18.7c-0.5-0.3-1.1-0.5-1.7-0.5V58.7z\"/>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/evaluator/templates/evaluateResult.template.html",
-    "<div class=\"evaluate-result-wrapper\"\n" +
-    "     translate-namespace=\"EVALUATE_RESULT_DRV\">\n" +
-    "    <div class=\"evaluate-text\"\n" +
-    "        translate=\".{{evaluateText}}\">\n" +
-    "    </div>\n" +
-    "    <div\n" +
-    "        class=\"evaluate-points\"\n" +
-    "        translate=\".POINTS\"\n" +
-    "        translate-values=\"{ pts: '{{points}}' }\">\n" +
-    "    </div>\n" +
-    "    <div class=\"evaluate-stars-wrapper\">\n" +
-    "        <svg-icon\n" +
-    "            ng-repeat=\"star in stars\"\n" +
-    "            ng-class=\"{\n" +
-    "              'starEmpty': star.status === starStatusMap.empty,\n" +
-    "              'starHalf': star.status === starStatusMap.half,\n" +
-    "              'starFull': star.status === starStatusMap.full\n" +
-    "            }\"\n" +
-    "            name=\"evaluator-star\">\n" +
-    "        </svg-icon>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/evaluator/templates/evaluateReviewStates.template.html",
+  $templateCache.put("components/evaluator/templates/evaluateQuestionReviewStates.template.html",
     "<div class=\"evaluate-review-states-wrapper\"\n" +
     "     translate-namespace=\"EVALUATE_REVIEW_STATES_DRV\">\n" +
     "     <div class=\"evaluate-review-states-switch\"\n" +
-    "          ng-switch=\"stateData.activeState\">\n" +
+    "          ng-switch=\"vm.stateData.activeState\">\n" +
     "          <div class=\"evaluate-review-not-purchase\"\n" +
     "               ng-switch-when=\"1\">\n" +
     "              <div class=\"upgrade-text\"\n" +
     "                   translate=\".UPGRADE_TEXT\">\n" +
     "              </div>\n" +
     "              <button class=\"upgrade-btn\"\n" +
-    "                      purchase-open-modal\n" +
+    "                      open-purchase-dialog-on-click\n" +
     "                      translate=\".UPGRADE_BTN\">\n" +
     "              </button>\n" +
     "          </div>\n" +
@@ -2100,11 +2080,35 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     "                   translate=\".EVALUATED_ANSWER_TITLE\">\n" +
     "              </div>\n" +
     "              <evaluate-result\n" +
-    "                  points=\"stateData.points\"\n" +
-    "                  type=\"stateData.type\">\n" +
+    "                  points=\"vm.stateData.points\"\n" +
+    "                  type=\"vm.stateData.type\">\n" +
     "              </evaluate-result>\n" +
     "          </div>\n" +
     "     </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/evaluator/templates/evaluateResult.template.html",
+    "<div class=\"evaluate-result-wrapper\"\n" +
+    "     translate-namespace=\"EVALUATE_RESULT_DRV\">\n" +
+    "    <div class=\"evaluate-text\"\n" +
+    "        translate=\".{{vm.evaluateText}}\">\n" +
+    "    </div>\n" +
+    "    <div\n" +
+    "        class=\"evaluate-points\"\n" +
+    "        translate=\".POINTS\"\n" +
+    "        translate-values=\"{ pts: '{{vm.points}}' }\">\n" +
+    "    </div>\n" +
+    "    <div class=\"evaluate-stars-wrapper\">\n" +
+    "        <svg-icon\n" +
+    "            ng-repeat=\"star in vm.stars\"\n" +
+    "            ng-class=\"{\n" +
+    "              'starEmpty': star.status === vm.starStatusMap.empty,\n" +
+    "              'starHalf': star.status === vm.starStatusMap.half,\n" +
+    "              'starFull': star.status === vm.starStatusMap.full\n" +
+    "            }\"\n" +
+    "            name=\"evaluator-star\">\n" +
+    "        </svg-icon>\n" +
+    "    </div>\n" +
     "</div>\n" +
     "");
 }]);
@@ -4238,6 +4242,32 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.purchase').directive('openPurchaseDialogOnClick',
+        ["purchaseService", function (purchaseService) {
+            'ngInject';
+            return {
+                restrict: 'A',
+                controller: ["$element", function($element) {
+                    $element.on('click', function() {
+                        purchaseService.showPurchaseDialog();
+                    });
+
+                    $element.on('$destroy', function(){
+                        $element.off('click');
+                    });
+                }]
+            };
+        }]
+    );
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
         ["ENV", "$q", "$sce", "AuthService", "UserProfileService", "$location", "purchaseService", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
             'ngInject';
@@ -4343,33 +4373,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     }
                 }
 
-            };
-        }]
-    );
-})(angular);
-
-/**
- * attrs:
- */
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.purchase').directive('purchaseOpenModal',
-        ["purchaseService", function (purchaseService) {
-            'ngInject';
-
-            return {
-                restrict: 'A',
-                controller: ["$element", function($element) {
-                    $element.bind('click', function() {
-                        purchaseService.showPurchaseDialog();
-                    });
-
-                    $element.on('$destroy', function(){
-                        $element.unbind('click');
-                    });
-                }]
             };
         }]
     );
