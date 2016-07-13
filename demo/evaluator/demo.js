@@ -60,6 +60,30 @@ angular.module('demo', ['znk.infra-web-app.evaluator']).config(function($transla
         $translate.refresh();
     });
 })
-.controller('Main', function () {
+.controller('Main', function ($scope, EvaluatorStatesEnum) {
+
+    var evaluated = {
+        activeState: EvaluatorStatesEnum.EVALUATED.enum,
+        points: 2.5,
+        type: 2
+    };
+
+    $scope.stateData = evaluated;
+
+    $scope.changeToPending = function() {
+        $scope.stateData = {
+            activeState: EvaluatorStatesEnum.PENDING.enum
+        };
+    };
+
+    $scope.changeToNotPurchase = function() {
+        $scope.stateData = {
+            activeState: EvaluatorStatesEnum.NOT_PURCHASE.enum
+        };
+    };
+
+    $scope.changeToEvaluated = function() {
+        $scope.stateData = evaluated;
+    };
 
 });

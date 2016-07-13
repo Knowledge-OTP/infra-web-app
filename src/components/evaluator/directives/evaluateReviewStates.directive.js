@@ -1,19 +1,29 @@
+/**
+ * evaluateReviewStates
+ *  ng-model: gets an object with activeState:Number(from EvaluatorStatesEnum)
+ *  and for evaluated state add points and type props for evaluate-result drv like:
+ *  {
+        activeState: EvaluatorStatesEnum.EVALUATED.enum,
+        points: 2.5,
+        type: 2
+    }
+ */
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.evaluator').directive('evaluateReviewStates',
-        function(){
+        function() {
         'ngInject';
         return {
             scope: {},
             restrict: 'E',
+            require: '?ngModel',
             templateUrl: 'components/evaluator/templates/evaluateReviewStates.template.html',
-            link: function (scope) {
-                var stateStatusEnum = {
-                   notPurchase: 1,
-                   pending: 2,
-                   evaluated: 3
-                };
-                scope.stateStatus = stateStatusEnum.evaluated;
+            link: function (scope, element, attr, ngModelCtrl) {
+                if (ngModelCtrl) {
+                    ngModelCtrl.$render = function() {
+                        scope.stateData = ngModelCtrl.$modelValue;
+                    };
+                }
             }
         };
     });

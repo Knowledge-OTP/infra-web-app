@@ -1,3 +1,8 @@
+/**
+ * evaluateResult
+ *   pointsGetter - get user current points
+ *   typeGetter - can be a subjectId or other type of id
+ */
 (function (angular) {
     'use strict';
 

@@ -25,7 +25,10 @@
 
    <div class="demo-wrap">
        <div style="width:1060px; margin-bottom: 50px;">
-           <evaluate-review-states></evaluate-review-states>
+           <button ng-click="changeToPending()">change to pending</button>
+           <button ng-click="changeToNotPurchase()">change to not purchase</button>
+           <button ng-click="changeToEvaluated()">change to evaluated</button>
+           <evaluate-review-states ng-model="stateData"></evaluate-review-states>
        </div>
        <div style="display: flex; justify-content: space-around; width: 50%;">
            <div style="display: flex; flex-direction: column;">

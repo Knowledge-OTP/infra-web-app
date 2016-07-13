@@ -1,3 +1,31 @@
+/**
+ * EvaluateSrv
+ *
+ *  setEvaluateResultByType: get an fn function that returns object
+ *  like:  {
+                starsNum: 4, // number of stars to display
+                pointsPerStar: 1, // points that should calc per star
+                evaluatePointsArr: [ // array of evaluate statuses and each max points
+                    {
+                        evaluateText: "WEAK",
+                        maxPoints: 1
+                    },
+                    {
+                        evaluateText: "LIMITED",
+                        maxPoints: 2
+                    },
+                    {
+                        evaluateText: "FAIR",
+                        maxPoints: 3
+                    },
+                    {
+                        evaluateText: "GOOD",
+                        maxPoints: 4
+                    }
+                ]
+            }
+ */
+
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.evaluator').provider('EvaluateSrv',
