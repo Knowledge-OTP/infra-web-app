@@ -1,0 +1,74 @@
+.evaluate-review-states-wrapper {
+   background-color: $bgColor47;
+   min-height: 80px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   box-shadow: 0 1px 5px 0 $bsColor2;
+   .evaluate-review-states-switch {
+       .evaluate-review-not-purchase {
+           display: flex;
+           margin-top: 15px;
+           .upgrade-btn {
+               background: transparent;
+               border: none;
+               margin: {
+                   left: 10px;
+               }
+               @include text-style(16px, $fontColor6, Lato, $regularFontWeight);
+           }
+           .upgrade-text {
+               @include text-style(18px, $fontColor3, Quicksand, $regularFontWeight);
+           }
+       }
+       .evaluate-review-pending {
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           .pending-title {
+               @include text-style(18px, $fontColor3, Quicksand, $regularFontWeight);
+               margin: {
+                   top: 20px;
+                   bottom: 3px;
+               }
+           }
+           .pending-desc {
+               @include text-style(12px, $fontColor4, Lato, $lightFontWeight);
+           }
+       }
+       .evaluate-review-evaluated {
+           display: flex;
+           @include text-style(20px, $fontColor3, Quicksand, $regularFontWeight);
+           .evaluated-answer-title {
+              margin: {
+                  right: 8px;
+              }
+           }
+           // evaluate-result drv styling
+           .evaluate-result-wrapper {
+               display: flex;
+               .evaluate-text {
+                   font-weight: $boldFontWeight;
+                   margin: {
+                       right: 5px;
+                   }
+               }
+               .evaluate-stars-wrapper {
+                   margin: {
+                       left: 15px;
+                   }
+                   svg-icon {
+                       margin: {
+                           left: 5px;
+                       }
+                       svg {
+                           width: 15px;
+                       }
+                   }
+               }
+           }
+       }
+   }
+}

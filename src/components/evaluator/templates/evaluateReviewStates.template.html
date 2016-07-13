@@ -1,0 +1,35 @@
+<div class="evaluate-review-states-wrapper"
+     translate-namespace="EVALUATE_REVIEW_STATES_DRV">
+     <div class="evaluate-review-states-switch"
+          ng-switch="stateStatus">
+          <div class="evaluate-review-not-purchase"
+               ng-switch-when="1">
+              <div class="upgrade-text"
+                   translate=".UPGRADE_TEXT">
+              </div>
+              <button class="upgrade-btn"
+                      purchase-open-modal
+                      translate=".UPGRADE_BTN">
+              </button>
+          </div>
+          <div class="evaluate-review-pending"
+              ng-switch-when="2">
+              <div class="pending-title"
+                   translate=".PENDING_TITLE">
+              </div>
+              <div class="pending-desc"
+                   translate=".PENDING_DESC">
+              </div>
+          </div>
+          <div class="evaluate-review-evaluated"
+              ng-switch-when="3">
+              <div class="evaluated-answer-title"
+                   translate=".EVALUATED_ANSWER_TITLE">
+              </div>
+              <evaluate-result
+                  points="2.5"
+                  type="2">
+              </evaluate-result>
+          </div>
+     </div>
+</div>

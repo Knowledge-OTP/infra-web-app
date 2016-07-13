@@ -13,21 +13,67 @@
 
     <link rel="stylesheet" href="main.css" />
     <style>
-        .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg {
-            width: 30px;
+        .demo-wrap {
+            display: flex;
+            align-content: center;
+            align-items: center;
+            flex-direction: column;
         }
     </style>
 </head>
 <body ng-app="demo" ng-controller="Main">
 
-    <evaluate-result points="0.5"></evaluate-result>
-    <evaluate-result points="1"></evaluate-result>
-    <evaluate-result points="1.5"></evaluate-result>
-    <evaluate-result points="2"></evaluate-result>
-    <evaluate-result points="2.5"></evaluate-result>
-    <evaluate-result points="3"></evaluate-result>
-    <evaluate-result points="3.5"></evaluate-result>
-    <evaluate-result points="4"></evaluate-result>
+   <div class="demo-wrap">
+       <div style="width:1060px; margin-bottom: 50px;">
+           <evaluate-review-states></evaluate-review-states>
+       </div>
+       <div style="display: flex; justify-content: space-around; width: 50%;">
+           <div style="display: flex; flex-direction: column;">
+                   <span><b>Speaking</b></span>
+                   <br>
+                   <span>weak - 0 - 1</span>
+                   <br>
+                   <span>limited - 1.5 - 2</span>
+                   <br>
+                   <span>fair - 2.5 - 3</span>
+                   <br>
+                   <span>good - 3.5 - 4</span>
+                   <br>
+                   <span><b>Writing</b></span>
+                   <br>
+                   <span>limited - 1 - 2</span>
+                   <br>
+                   <span>fair - 2.5 - 3.5</span>
+                   <br>
+                   <span>good - 4 - 5</span>
+           </div>
+           <div>
+               <div><b>Writing</b></div>
+               <br>
+               <evaluate-result points="1" type="2"></evaluate-result>
+               <evaluate-result points="1.5" type="2"></evaluate-result>
+               <evaluate-result points="2" type="2"></evaluate-result>
+               <evaluate-result points="2.5" type="2"></evaluate-result>
+               <evaluate-result points="3" type="2"></evaluate-result>
+               <evaluate-result points="3.5" type="2"></evaluate-result>
+               <evaluate-result points="4" type="2"></evaluate-result>
+               <evaluate-result points="4.5" type="2"></evaluate-result>
+               <evaluate-result points="5" type="2"></evaluate-result>
+           </div>
+           <div>
+               <div><b>Speaking</b></div>
+               <br>
+               <evaluate-result points="0.5" type="4"></evaluate-result>
+               <evaluate-result points="1" type="4"></evaluate-result>
+               <evaluate-result points="1.5" type="4"></evaluate-result>
+               <evaluate-result points="2" type="4"></evaluate-result>
+               <evaluate-result points="2.5" type="4"></evaluate-result>
+               <evaluate-result points="3" type="4"></evaluate-result>
+               <evaluate-result points="3.5" type="4"></evaluate-result>
+               <evaluate-result points="4" type="4"></evaluate-result>
+           </div>
+       </div>
+   </div>
 
     <!-- bower:js -->
     <script src="angular/angular.js"></script>
@@ -53,5 +99,7 @@
 
     <script src="main.js"></script>
     <script src="demo.js"></script>
+    <script src="infra/demoShared/analyticsConfig.js"></script>
+    <script src="env.service.js"></script>
 </body>
 </html>

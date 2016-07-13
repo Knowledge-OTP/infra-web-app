@@ -3,6 +3,8 @@
 
     angular.module('znk.infra-web-app.evaluator', [
         'pascalprecht.translate',
-        'znk.infra.svgIcon'
+        'znk.infra.svgIcon',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.purchase'
     ]);
 })(angular);

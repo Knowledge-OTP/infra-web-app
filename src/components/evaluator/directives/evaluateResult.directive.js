@@ -1,36 +1,19 @@
 (function (angular) {
     'use strict';
+
     angular.module('znk.infra-web-app.evaluator').directive('evaluateResult',
-        function($translatePartialLoader){
+        function($translatePartialLoader, EvaluateSrv) {
         'ngInject';
         return {
             scope: {
-                pointsGetter: '&points'
+                pointsGetter: '&points',
+                typeGetter: '&type' // can be a subjectId or other type of id
             },
             restrict: 'E',
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             link: function (scope) {
 
                 $translatePartialLoader.addPart('evaluator');
-
-                var evaluatePointsArr = [
-                    {
-                        evaluateText: "WEAK",
-                        maxPoints: 1
-                    },
-                    {
-                        evaluateText: "LIMITED",
-                        maxPoints: 2
-                    },
-                    {
-                        evaluateText: "FAIR",
-                        maxPoints: 3
-                    },
-                    {
-                        evaluateText: "GOOD",
-                        maxPoints: 4
-                    }
-                ];
 
                 var starStatusMap = {
                     empty: 1,
@@ -40,43 +23,58 @@
 
                 var points = scope.points = scope.pointsGetter();
 
-                function _getStarStatus(curMaxPoints, prevMaxPoints) {
+                var type =  scope.typeGetter();
+
+                scope.starStatusMap = starStatusMap;
+
+                scope.stars = [];
+
+                function _getStarStatus(curPoints, prevPoints) {
                     var starStatus = starStatusMap.empty;
-                    if (points >= curMaxPoints) {
+                    if (points >= curPoints) {
                         starStatus = starStatusMap.full;
                     } else if(
-                        points > prevMaxPoints &&
-                        curMaxPoints > points) {
+                        curPoints > points &&
+                        points > prevPoints) {
                         starStatus = starStatusMap.half;
                     }
                     return starStatus;
                 }
 
-                scope.starStatusMap = starStatusMap;
-                scope.stars = [];
-
-                var isAllReadySetText = false;
-
-                for (var i = 0, ii = evaluatePointsArr.length; i < ii; i++) {
-                    var curEvaluatePoint = evaluatePointsArr[i];
-                    var prevEvaluatePoint = evaluatePointsArr[i - 1];
-                    var prevMaxPoints = prevEvaluatePoint ? prevEvaluatePoint.maxPoints : 0;
-                    var starStatus = {
-                       status: _getStarStatus(curEvaluatePoint.maxPoints, prevMaxPoints)
-                    };
-
-                    scope.stars.push(starStatus);
-
-                    if (isAllReadySetText) {
-                      continue;
-                    }
-
-                    if (curEvaluatePoint.maxPoints >= points) {
-                        scope.evaluateText = curEvaluatePoint.evaluateText;
-                        isAllReadySetText = true;
+                function addStars(evaluateResultByType) {
+                    var starsNum = evaluateResultByType.starsNum;
+                    var pointsPerStar = evaluateResultByType.pointsPerStar;
+                    var curPoints = 0;
+                    for (var i = 0, ii = starsNum; i < ii; i++) {
+                        curPoints += pointsPerStar;
+                        var starStatus = {
+                            status: _getStarStatus(curPoints, curPoints - pointsPerStar)
+                        };
+                        scope.stars.push(starStatus);
                     }
                 }
 
+                function addEvaluateText(evaluateResultByType) {
+                    var evaluatePointsArr = evaluateResultByType.evaluatePointsArr;
+                    var curEvaluatePoint;
+                    for (var i = 0, ii = evaluatePointsArr.length; i < ii; i++) {
+                        curEvaluatePoint = evaluatePointsArr[i];
+                        if (curEvaluatePoint.maxPoints >= points) {
+                            scope.evaluateText = curEvaluatePoint.evaluateText;
+                            break;
+                        }
+                    }
+                }
+
+                function addStarsAndText(evaluateResultType) {
+                    var evaluateResultByType = evaluateResultType[type];
+                    addStars(evaluateResultByType);
+                    addEvaluateText(evaluateResultByType);
+                }
+
+                EvaluateSrv.getEvaluateResultByType().then(function(evaluateResultType) {
+                    addStarsAndText(evaluateResultType);
+                });
             }
         };
     });
