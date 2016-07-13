@@ -1,8 +1,9 @@
 /**
  * EvaluateSrv
  *
- *  setEvaluateResultByType: get an fn function that returns object
+ *  setEvaluateResultByType: get an fn function that returns object of types(like subjects) with configuration
  *  like:  {
+ *           0: {
                 starsNum: 4, // number of stars to display
                 pointsPerStar: 1, // points that should calc per star
                 evaluatePointsArr: [ // array of evaluate statuses and each max points
@@ -24,6 +25,10 @@
                     }
                 ]
             }
+            1: {
+               ...
+            }
+         }
  */
 
 (function (angular) {

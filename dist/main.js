@@ -1965,8 +1965,9 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 /**
  * EvaluateSrv
  *
- *  setEvaluateResultByType: get an fn function that returns object
+ *  setEvaluateResultByType: get an fn function that returns object of types(like subjects) with configuration
  *  like:  {
+ *           0: {
                 starsNum: 4, // number of stars to display
                 pointsPerStar: 1, // points that should calc per star
                 evaluatePointsArr: [ // array of evaluate statuses and each max points
@@ -1988,6 +1989,10 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                     }
                 ]
             }
+            1: {
+               ...
+            }
+         }
  */
 
 (function (angular) {
