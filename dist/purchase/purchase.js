@@ -189,6 +189,33 @@
     );
 })(angular);
 
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.purchase').directive('purchaseOpenModal',
+        ["purchaseService", function (purchaseService) {
+            'ngInject';
+
+            return {
+                restrict: 'A',
+                controller: ["$element", function($element) {
+                    $element.bind('click', function() {
+                        purchaseService.showPurchaseDialog();
+                    });
+
+                    $element.on('$destroy', function(){
+                        $element.unbind('click');
+                    });
+                }]
+            };
+        }]
+    );
+})(angular);
+
 (function (angular) {
     'use strict';
 
