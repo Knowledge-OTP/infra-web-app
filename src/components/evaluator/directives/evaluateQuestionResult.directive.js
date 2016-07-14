@@ -34,7 +34,7 @@
 
                 var questionResult = vm.questionResultGetter();
                 var exerciseType = vm.exerciseTypeGetter();
-                var evaluatorData = vm.evaluatorDataGetter ? vm.evaluatorDataGetter() : false;
+                var evaluatorData = vm.evaluatorDataGetter ? vm.evaluatorDataGetter() : {};
 
                 var evaluateQuestionResultStates = {
                     completed: 1,
