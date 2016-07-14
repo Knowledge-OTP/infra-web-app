@@ -8,9 +8,12 @@
     },
     "EVALUATE_REVIEW_STATES_DRV": {
        "UPGRADE_BTN": "Upgrade to Pro",
-       "UPGRADE_TEXT": "Want to get your written answer evaluated by our writing experts?",
        "PENDING_TITLE": "Your answer is pending evaluation.",
        "PENDING_DESC": "This may take a few days. We will notify you when the evaluation is ready.",
        "EVALUATED_ANSWER_TITLE": "Answer evaluation:"
+    },
+    "EVALUATE_QUESTION_RESULT_DRV": {
+       "COMPLETED": "Completed",
+       "SKIPPED": "Skipped"
     }
 }

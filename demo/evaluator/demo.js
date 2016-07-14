@@ -1,15 +1,15 @@
-angular.module('demo', ['znk.infra-web-app.evaluator']).config(function($translateProvider, EvaluateSrvProvider) {
+angular.module('demo', ['znk.infra-web-app.evaluator']).config(function($translateProvider, ZnkEvaluateResultSrvProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
                 urlTemplate: '/{part}/locale/{lang}.json'
             })
             .preferredLanguage('en');
 
-        EvaluateSrvProvider.setEvaluateResultByType(function (SubjectEnum) {
+        ZnkEvaluateResultSrvProvider.setEvaluateResultByType(function (SubjectEnum) {
             'ngInject';
 
-            var evaluateResult = {};
+            var evaluateResultTypes = {};
 
-            evaluateResult[SubjectEnum.SPEAKING.enum] = {
+            evaluateResultTypes[SubjectEnum.SPEAKING.enum] = {
                 starsNum: 4,
                 pointsPerStar: 1,
                 evaluatePointsArr: [
@@ -32,7 +32,7 @@ angular.module('demo', ['znk.infra-web-app.evaluator']).config(function($transla
                 ]
             };
 
-            evaluateResult[SubjectEnum.WRITING.enum] = {
+            evaluateResultTypes[SubjectEnum.WRITING.enum] = {
                 starsNum: 5,
                 pointsPerStar: 1,
                 evaluatePointsArr: [
@@ -51,7 +51,22 @@ angular.module('demo', ['znk.infra-web-app.evaluator']).config(function($transla
                 ]
             };
 
-            return evaluateResult;
+            return evaluateResultTypes;
+        });
+
+        ZnkEvaluateResultSrvProvider.setEvaluateTypes(function(SubjectEnum) {
+            'ngInject';
+
+            var evaluateTypes = {};
+
+            evaluateTypes[SubjectEnum.SPEAKING.enum] = {
+                aliasName: 'speaking'
+            };
+            evaluateTypes[SubjectEnum.WRITING.enum] = {
+                aliasName: 'writing'
+            };
+
+            return evaluateTypes;
         });
 
 })
@@ -60,30 +75,36 @@ angular.module('demo', ['znk.infra-web-app.evaluator']).config(function($transla
         $translate.refresh();
     });
 })
-.controller('Main', function ($scope, EvaluatorStatesEnum) {
+.controller('Main', function ($scope, EvaluatorStatesEnum, $translatePartialLoader) {
 
-    var evaluated = {
-        activeState: EvaluatorStatesEnum.EVALUATED.enum,
-        points: 2.5,
-        type: 2
-    };
+    $translatePartialLoader.addPart('demo');
 
-    $scope.stateData = evaluated;
+    function getRandom() {
+       return Math.floor(Math.random()*(2-1+1)+1);
+    }
 
     $scope.changeToPending = function() {
         $scope.stateData = {
-            activeState: EvaluatorStatesEnum.PENDING.enum
+            activeState: EvaluatorStatesEnum.PENDING.enum,
+            type: getRandom() === 1 ? 2 : 4
         };
     };
 
     $scope.changeToNotPurchase = function() {
         $scope.stateData = {
-            activeState: EvaluatorStatesEnum.NOT_PURCHASE.enum
+            activeState: EvaluatorStatesEnum.NOT_PURCHASE.enum,
+            type: getRandom() === 1 ? 2 : 4
         };
     };
 
     $scope.changeToEvaluated = function() {
-        $scope.stateData = evaluated;
+        $scope.stateData = {
+            activeState: EvaluatorStatesEnum.EVALUATED.enum,
+            points: 2.5,
+            type: getRandom() === 1 ? 2 : 4
+        };
     };
+
+    $scope.changeToEvaluated();
 
 });

@@ -1,5 +1,4 @@
 .evaluate-review-states-wrapper {
-   background-color: $bgColor47;
    min-height: 80px;
    display: flex;
    align-items: center;
@@ -49,10 +48,13 @@
            // evaluate-result drv styling
            .evaluate-result-wrapper {
                display: flex;
-               .evaluate-text {
-                   font-weight: $boldFontWeight;
-                   margin: {
-                       right: 5px;
+               .evaluate-status-wrapper {
+                   display: flex;
+                   .evaluate-text {
+                       font-weight: $boldFontWeight;
+                       margin: {
+                           right: 5px;
+                       }
                    }
                }
                .evaluate-stars-wrapper {

@@ -19,6 +19,18 @@
             align-items: center;
             flex-direction: column;
         }
+        .evaluate-review-states-wrapper.speaking {
+            background-color: #f0ebf5;
+        }
+        .evaluate-review-states-wrapper.writing {
+            background-color: #f7f2f4;
+        }
+        .question-index.speaking {
+            background-color: #af89d2;
+        }
+        .question-index.writing {
+            background-color: #ff5895;
+        }
     </style>
 </head>
 <body ng-app="demo" ng-controller="Main">
@@ -77,6 +89,44 @@
                <evaluate-result points="3.5" type="4"></evaluate-result>
                <evaluate-result points="4" type="4"></evaluate-result>
            </div>
+       </div>
+       <div style="margin-top:50px; display: flex; align-items: center;">
+           <!--evaluated-->
+           <evaluate-question-result
+               question-result="{
+                      index: 1,
+                      userAnswer: 'text'
+                   }" evaluator-data="{
+                      score: 2.5,
+                      exerciseType: 2
+                   }">
+           </evaluate-question-result>
+           <!--skipped-->
+           <evaluate-question-result
+               question-result="{
+                      index: 2,
+                      userAnswer: true
+                   }" evaluator-data="{
+                        exerciseType: 4
+                   }">
+           </evaluate-question-result>
+           <!--skipped-->
+           <evaluate-question-result
+               question-result="{
+                      index: 3
+                   }" evaluator-data="{
+                        exerciseType: 2
+                   }">
+           </evaluate-question-result>
+           <!--completed-->
+           <evaluate-question-result
+               question-result="{
+                      index: 4,
+                      userAnswer: 'text'
+                   }" evaluator-data="{
+                        exerciseType: 4
+                   }">
+           </evaluate-question-result>
        </div>
    </div>
 

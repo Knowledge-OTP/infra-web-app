@@ -1,0 +1,34 @@
+<div class="evaluate-question-result-wrapper"
+     ng-class="{
+         'completed': vm.evaluateQuestionResultStates.completed === vm.activeState,
+         'skipped': vm.evaluateQuestionResultStates.skipped === vm.activeState,
+         'evaluated': vm.evaluateQuestionResultStates.evaluated === vm.activeState
+     }"
+     translate-namespace="EVALUATE_QUESTION_RESULT_DRV">
+    <div class="question-index"
+         ng-class="vm.aliasName">
+        {{::vm.index}}
+    </div>
+     <div class="evaluate-question-result-states-switch"
+          ng-switch="vm.activeState">
+          <div class="evaluate-question-result-text"
+               ng-switch-when="1">
+              <div class="completed"
+                   translate=".COMPLETED">
+              </div>
+          </div>
+          <div class="evaluate-question-result-text"
+              ng-switch-when="2">
+              <div class="skipped"
+                   translate=".SKIPPED">
+              </div>
+          </div>
+          <div class="evaluate-question-result-evaluated"
+              ng-switch-when="3">
+              <evaluate-result
+                  points="vm.points"
+                  type="vm.type">
+              </evaluate-result>
+          </div>
+     </div>
+</div>
