@@ -1829,6 +1829,73 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 })(angular);
 
 /**
+ * evaluateQuestionResult
+ *   questionResultGetter - get question result
+ *   exerciseTypeGetter - exercise type
+ *   evaluatorDataGetter - evaluator data (optional)
+ *   like: {
+ *        questionResultGetter: {
+ *           index: 1,
+ *           userAnswer: 'text'
+ *        },
+ *        evaluatorDataGetter: {
+ *           score: 2.5
+ *        },
+ *        exerciseTypeGetter: 2
+ *   }
+ */
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.evaluator').component('evaluateQuestionResult', {
+            bindings: {
+                questionResultGetter: '&questionResult',
+                exerciseTypeGetter: '&exerciseType',
+                evaluatorDataGetter: '&?evaluatorData'
+            },
+            templateUrl: 'components/evaluator/templates/evaluateQuestionResult.template.html',
+            controllerAs: 'vm',
+            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+                'ngInject';
+
+                $translatePartialLoader.addPart('evaluator');
+
+                var vm = this;
+
+                var questionResult = vm.questionResultGetter();
+                var exerciseType = vm.exerciseTypeGetter();
+                var evaluatorData = vm.evaluatorDataGetter ? vm.evaluatorDataGetter() : false;
+
+                var evaluateQuestionResultStates = {
+                    completed: 1,
+                    skipped: 2,
+                    evaluated: 3
+                };
+
+                vm.evaluateQuestionResultStates = evaluateQuestionResultStates;
+                vm.index = questionResult.index;
+
+                vm.type = exerciseType;
+
+                ZnkEvaluateResultSrv.getEvaluateTypes().then(function (types) {
+                    vm.aliasName = types[exerciseType].aliasName;
+                });
+
+                // set state of component
+                if (evaluatorData.score) {
+                    vm.activeState = evaluateQuestionResultStates.evaluated;
+                    vm.points = evaluatorData.score;
+                } else if (questionResult.userAnswer && questionResult.userAnswer !== true) {
+                    vm.activeState = evaluateQuestionResultStates.completed;
+                } else {
+                    vm.activeState = evaluateQuestionResultStates.skipped;
+                }
+            }]
+        }
+    );
+})(angular);
+
+/**
  * evaluateQuestionReviewStates
  *  ng-model: gets an object with activeState:Number(from EvaluatorStatesEnum)
  *  and for evaluated state add points and type props for evaluate-result drv like:
@@ -1846,19 +1913,27 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: function () {
+            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
                 var vm = this;
+
+                $translatePartialLoader.addPart('evaluator');
 
                 vm.$onInit = function() {
                     var ngModelCtrl = vm.parent;
+
                     if (ngModelCtrl) {
+
                         ngModelCtrl.$render = function() {
                             vm.stateData = ngModelCtrl.$modelValue;
                         };
+
+                        ZnkEvaluateResultSrv.getEvaluateTypes().then(function (types) {
+                             vm.evaluateTypes = types;
+                        });
                     }
                 };
 
-            }
+            }]
         }
     );
 })(angular);
@@ -1878,7 +1953,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "EvaluateSrv", function ($translatePartialLoader, EvaluateSrv) {
+            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -1942,7 +2017,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                     addEvaluateText(evaluateResultByType);
                 }
 
-                EvaluateSrv.getEvaluateResultByType().then(function(evaluateResultType) {
+                ZnkEvaluateResultSrv.getEvaluateResultByType().then(function(evaluateResultType) {
                     addStarsAndText(evaluateResultType);
                 });
             }]
@@ -1973,7 +2048,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
  *  like:  {
  *           0: {
                 starsNum: 4, // number of stars to display
-                pointsPerStar: 1, // points that should calc per star
+                pointsPerStar: 1, // points that should calc per star,
                 evaluatePointsArr: [ // array of evaluate statuses and each max points
                     {
                         evaluateText: "WEAK",
@@ -1997,17 +2072,30 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                ...
             }
          }
+ *
+ * setEvaluateTypes: get types meta data like aliasName
+ * like: 0: {
+ *       aliasName: 'speaking', for class name and etc
+ *   },
+ *   1: {
+ *     ...
+ *   }
  */
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.evaluator').provider('EvaluateSrv',
+    angular.module('znk.infra-web-app.evaluator').provider('ZnkEvaluateResultSrv',
         function() {
 
         var _evaluateResultByType;
+        var _evaluateTypes;
 
         this.setEvaluateResultByType = function(evaluateResultByType) {
             _evaluateResultByType = evaluateResultByType;
+        };
+
+        this.setEvaluateTypes = function(evaluateTypes) {
+            _evaluateTypes = evaluateTypes;
         };
 
         this.$get = ["$q", "$injector", "$log", function($q, $injector, $log) {
@@ -2015,16 +2103,19 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 
             var evaluateSrvApi = {};
 
-            evaluateSrvApi.getEvaluateResultByType = function() {
-
-                if(!_evaluateResultByType) {
-                    var errMsg = 'EvaluateSrv: evaluateResultByType was not set';
+            function invokeEvaluateFn(evaluateFn, evaluateFnName) {
+                if(!evaluateFn) {
+                    var errMsg = 'ZnkEvaluateResultSrv: '+ evaluateFnName +' was not set';
                     $log.error(errMsg);
                     return $q.reject(errMsg);
                 }
 
-                return $q.when($injector.invoke(_evaluateResultByType));
-            };
+                return $q.when($injector.invoke(evaluateFn));
+            }
+
+            evaluateSrvApi.getEvaluateResultByType = invokeEvaluateFn.bind(null, _evaluateResultByType, 'evaluateResultByType');
+
+            evaluateSrvApi.getEvaluateTypes = invokeEvaluateFn.bind(null, _evaluateTypes, 'evaluateTypes');
 
             return evaluateSrvApi;
 
@@ -2050,15 +2141,52 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     "	c-0.8,0.8-1.2,2-1,3.2l6.8,39.6c0.5,2.9-2.6,5.2-5.3,3.8l-35.6-18.7c-0.5-0.3-1.1-0.5-1.7-0.5V58.7z\"/>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/evaluator/templates/evaluateQuestionResult.template.html",
+    "<div class=\"evaluate-question-result-wrapper\"\n" +
+    "     ng-class=\"{\n" +
+    "         'completed': vm.evaluateQuestionResultStates.completed === vm.activeState,\n" +
+    "         'skipped': vm.evaluateQuestionResultStates.skipped === vm.activeState,\n" +
+    "         'evaluated': vm.evaluateQuestionResultStates.evaluated === vm.activeState\n" +
+    "     }\"\n" +
+    "     translate-namespace=\"EVALUATE_QUESTION_RESULT_DRV\">\n" +
+    "    <div class=\"question-index\"\n" +
+    "         ng-class=\"vm.aliasName\">\n" +
+    "        {{::vm.index}}\n" +
+    "    </div>\n" +
+    "     <div class=\"evaluate-question-result-states-switch\"\n" +
+    "          ng-switch=\"vm.activeState\">\n" +
+    "          <div class=\"evaluate-question-result-text\"\n" +
+    "               ng-switch-when=\"1\">\n" +
+    "              <div class=\"completed\"\n" +
+    "                   translate=\".COMPLETED\">\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "          <div class=\"evaluate-question-result-text\"\n" +
+    "              ng-switch-when=\"2\">\n" +
+    "              <div class=\"skipped\"\n" +
+    "                   translate=\".SKIPPED\">\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "          <div class=\"evaluate-question-result-evaluated\"\n" +
+    "              ng-switch-when=\"3\">\n" +
+    "              <evaluate-result\n" +
+    "                  points=\"vm.points\"\n" +
+    "                  type=\"vm.type\">\n" +
+    "              </evaluate-result>\n" +
+    "          </div>\n" +
+    "     </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/evaluator/templates/evaluateQuestionReviewStates.template.html",
     "<div class=\"evaluate-review-states-wrapper\"\n" +
+    "     ng-class=\"vm.evaluateTypes[vm.stateData.type].aliasName\"\n" +
     "     translate-namespace=\"EVALUATE_REVIEW_STATES_DRV\">\n" +
     "     <div class=\"evaluate-review-states-switch\"\n" +
     "          ng-switch=\"vm.stateData.activeState\">\n" +
     "          <div class=\"evaluate-review-not-purchase\"\n" +
     "               ng-switch-when=\"1\">\n" +
     "              <div class=\"upgrade-text\"\n" +
-    "                   translate=\".UPGRADE_TEXT\">\n" +
+    "                   translate=\".UPGRADE_TEXT_{{vm.evaluateTypes[vm.stateData.type].aliasName | uppercase}}\">\n" +
     "              </div>\n" +
     "              <button class=\"upgrade-btn\"\n" +
     "                      open-purchase-dialog-on-click\n" +
@@ -2090,13 +2218,15 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
   $templateCache.put("components/evaluator/templates/evaluateResult.template.html",
     "<div class=\"evaluate-result-wrapper\"\n" +
     "     translate-namespace=\"EVALUATE_RESULT_DRV\">\n" +
-    "    <div class=\"evaluate-text\"\n" +
-    "        translate=\".{{vm.evaluateText}}\">\n" +
-    "    </div>\n" +
-    "    <div\n" +
-    "        class=\"evaluate-points\"\n" +
-    "        translate=\".POINTS\"\n" +
-    "        translate-values=\"{ pts: '{{vm.points}}' }\">\n" +
+    "    <div class=\"evaluate-status-wrapper\">\n" +
+    "        <div class=\"evaluate-text\"\n" +
+    "             translate=\".{{vm.evaluateText}}\">\n" +
+    "        </div>\n" +
+    "        <div\n" +
+    "            class=\"evaluate-points\"\n" +
+    "            translate=\".POINTS\"\n" +
+    "            translate-values=\"{ pts: '{{vm.points}}' }\">\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"evaluate-stars-wrapper\">\n" +
     "        <svg-icon\n" +

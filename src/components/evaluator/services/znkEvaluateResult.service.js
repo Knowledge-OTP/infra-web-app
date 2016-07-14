@@ -6,7 +6,6 @@
  *           0: {
                 starsNum: 4, // number of stars to display
                 pointsPerStar: 1, // points that should calc per star,
-                aliasName: 'speaking', for class name and etc
                 evaluatePointsArr: [ // array of evaluate statuses and each max points
                     {
                         evaluateText: "WEAK",
@@ -30,6 +29,14 @@
                ...
             }
          }
+ *
+ * setEvaluateTypes: get types meta data like aliasName
+ * like: 0: {
+ *       aliasName: 'speaking', for class name and etc
+ *   },
+ *   1: {
+ *     ...
+ *   }
  */
 
 (function (angular) {
