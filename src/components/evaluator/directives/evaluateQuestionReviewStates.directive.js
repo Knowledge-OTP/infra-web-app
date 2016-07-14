@@ -16,15 +16,23 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: function () {
+            controller: function ($translatePartialLoader, ZnkEvaluateResultSrv) {
                 var vm = this;
+
+                $translatePartialLoader.addPart('evaluator');
 
                 vm.$onInit = function() {
                     var ngModelCtrl = vm.parent;
+
                     if (ngModelCtrl) {
+
                         ngModelCtrl.$render = function() {
                             vm.stateData = ngModelCtrl.$modelValue;
                         };
+
+                        ZnkEvaluateResultSrv.getEvaluateTypes().then(function (types) {
+                             vm.evaluateTypes = types;
+                        });
                     }
                 };
 

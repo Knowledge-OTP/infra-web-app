@@ -13,7 +13,7 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             controllerAs: 'vm',
-            controller: function ($translatePartialLoader, EvaluateSrv) {
+            controller: function ($translatePartialLoader, ZnkEvaluateResultSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -77,7 +77,7 @@
                     addEvaluateText(evaluateResultByType);
                 }
 
-                EvaluateSrv.getEvaluateResultByType().then(function(evaluateResultType) {
+                ZnkEvaluateResultSrv.getEvaluateResultByType().then(function(evaluateResultType) {
                     addStarsAndText(evaluateResultType);
                 });
             }
