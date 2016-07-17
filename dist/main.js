@@ -2626,10 +2626,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 'use strict';
 
 angular.module('znk.infra-web-app.invitation').service('InvitationListenerService',
-    ["ENV", "InfraConfigSrv", "AuthService", "$timeout", "$q", function (ENV, InfraConfigSrv, AuthService, $timeout, $q) {
+    ["ENV", "InfraConfigSrv", "AuthService", "$timeout", "$q", "StorageSrv", function (ENV, InfraConfigSrv, AuthService, $timeout, $q, StorageSrv) {
         'ngInject';
-
-        var studentStorageProm = InfraConfigSrv.getStudentStorage();
 
         var NEW_INVITATION_PATH, SENT_INVITATION_PATH, MY_TEACHER_PATH;
 
@@ -2640,8 +2638,8 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
         self.myTeacher = {};
 
 
-        var pathsProm = $q.when(studentStorageProm).then(function (studentStorage) {
-            var STUDENT_INVITATION_PATH = studentStorage.variables.appUserSpacePath + '/invitations';
+        var pathsProm = $q.when().then(function () {
+            var STUDENT_INVITATION_PATH = StorageSrv.variables.appUserSpacePath + '/invitations';
             NEW_INVITATION_PATH = STUDENT_INVITATION_PATH + '/received';
             SENT_INVITATION_PATH = STUDENT_INVITATION_PATH + '/sent';
             MY_TEACHER_PATH = STUDENT_INVITATION_PATH + '/approved/';
@@ -4058,7 +4056,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
+        ["$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv, StorageSrv) {
             'ngInject';
 
             var self = this;
@@ -4078,7 +4076,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
             self.getUpgradeData = function () {
                 $q.when(studentStorageProm).then(function (StudentStorageSrv) {
-                    var PURCHASE_PATH = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                    var PURCHASE_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
                     return StudentStorageSrv.get(PURCHASE_PATH);
                 });
             };
