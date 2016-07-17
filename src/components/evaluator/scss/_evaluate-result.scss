@@ -1,0 +1,36 @@
+.evaluate-result-wrapper {
+    .evaluate-stars-wrapper {
+            svg-icon {
+                svg {
+                    width: 12px;
+                    * {
+                        fill: $bgColor45;
+                    }
+                }
+                &.starEmpty {
+                    svg {
+                        * {
+                            fill: $bgColor45;
+                        }
+                    }
+                }
+                &.starHalf {
+                    svg {
+                        .firstPath {
+                            fill: $bgColor46;
+                        }
+                        .secondPath {
+                            fill: $bgColor45
+                        }
+                    }
+                }
+                &.starFull {
+                    svg {
+                        * {
+                            fill: $bgColor46;
+                        }
+                    }
+                }
+            }
+    }
+}

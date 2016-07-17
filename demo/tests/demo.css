@@ -1,0 +1,24 @@
+.app-tests-roadmap {
+    margin: 20px auto;
+}
+
+.open-tests-btn {
+    height: 35px;
+    width: 160px;
+    position: relative;
+    left: 0;
+}
+
+.app-navigation-container {
+    width: 225px;
+    background-color: #fff;
+    box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
+    border-radius: 15px;
+}
+.promMsg {
+    color: #0a9bad;
+    position: relative;
+    top: 35px;
+    left: -162px;
+    font-size: 16px;
+}

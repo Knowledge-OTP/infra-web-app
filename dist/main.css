@@ -715,6 +715,171 @@ md-tooltip.tooltip-for-estimated-score-widget {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg {
+  width: 12px; }
+  .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg * {
+    fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starEmpty svg * {
+  fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starHalf svg .firstPath {
+  fill: #edc811; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starHalf svg .secondPath {
+  fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starFull svg * {
+  fill: #edc811; }
+
+.evaluate-review-states-wrapper {
+  min-height: 80px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  width: 100%;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23); }
+  .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase {
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 15px; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase .upgrade-btn {
+      background: transparent;
+      border: none;
+      margin-left: 10px;
+      font-size: 16px;
+      color: #0a9bad;
+      font-family: Lato;
+      font-weight: 400; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase .upgrade-text {
+      font-size: 18px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400; }
+  .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending .pending-title {
+      font-size: 18px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400;
+      margin-top: 20px;
+      margin-bottom: 3px; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending .pending-desc {
+      font-size: 12px;
+      color: #757a83;
+      font-family: Lato;
+      font-weight: 200; }
+  .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated {
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 20px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 400; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluated-answer-title {
+      margin-right: 8px; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper {
+      display: -ms-flexbox;
+      display: flex; }
+      .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-status-wrapper {
+        display: -ms-flexbox;
+        display: flex; }
+        .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-status-wrapper .evaluate-text {
+          font-weight: 700;
+          margin-right: 5px; }
+      .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper {
+        margin-left: 15px; }
+        .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon {
+          margin-left: 5px; }
+          .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg {
+            width: 15px; }
+
+.evaluate-question-result-wrapper {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center; }
+  .evaluate-question-result-wrapper .question-index {
+    width: 30px;
+    height: 30px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+    font-size: 16px;
+    color: white;
+    font-family: Lato;
+    font-weight: 400;
+    border-radius: 100%; }
+  .evaluate-question-result-wrapper.skipped .question-index {
+    background-color: #c2c2c2; }
+  .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-text {
+    font-size: 14px;
+    color: #757a83;
+    font-family: Quicksand;
+    font-weight: 400; }
+    .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-text div {
+      margin-left: 10px; }
+  .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    font-size: 18px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 400; }
+    .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-status-wrapper {
+      display: -ms-flexbox;
+      display: flex; }
+      .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-status-wrapper .evaluate-text {
+        margin-right: 5px;
+        margin-left: 10px; }
+    .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper {
+      margin-left: 5px; }
+      .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon {
+        margin-left: 5px; }
+        .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg {
+          width: 10px; }
+
+/**
+*  FONTS
+*/
+/* Lato fonts from google*/
+/* Quicksand fonts */
+/* Material+Icons */
+
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
 .raccoon-in-app {
   position: fixed;
   bottom: 20px;
@@ -2135,6 +2300,98 @@ purchase-btn .upgraded .text {
     color: white;
     padding: 5px 15px;
     border-radius: 20px; }
+
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+.app-tests-navigationPane .tests-navigation-title-header {
+  color: #4f4d4d;
+  height: 65px;
+  border-bottom: 1px solid #f2f2f2;
+  text-align: center;
+  line-height: 65px;
+  font-size: 17px;
+  font-family: Quicksand;
+  font-weight: 700; }
+
+.app-tests-navigationPane md-list {
+  padding: 0; }
+  .app-tests-navigationPane md-list.md-list-second-list md-list-item {
+    border-top: 1px solid #f2f2f2; }
+  .app-tests-navigationPane md-list md-list-item {
+    position: relative;
+    width: 100%;
+    height: 52.5px;
+    border-bottom: 1px solid #f2f2f2;
+    border-left: 2px solid #0a9bad;
+    transition: 0.1s; }
+    .app-tests-navigationPane md-list md-list-item button {
+      display: -ms-flexbox;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+      color: #0a9bad;
+      font-family: Lato;
+      font-weight: 400;
+      border-radius: 0;
+      margin: 0;
+      background-color: inherit;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
+      .app-tests-navigationPane md-list md-list-item button span {
+        margin-left: 25px;
+        text-transform: capitalize; }
+      .app-tests-navigationPane md-list md-list-item button.md-button:not([disabled]):hover {
+        background-color: #FCFCFC; }
+    .app-tests-navigationPane md-list md-list-item.done {
+      border-left: 2px solid #87ca4d; }
+      .app-tests-navigationPane md-list md-list-item.done button {
+        color: #4f4d4d; }
+    .app-tests-navigationPane md-list md-list-item.active {
+      background-color: #f2f2f2; }
+      .app-tests-navigationPane md-list md-list-item.active button.md-button:not([disabled]):hover {
+        background-color: #f2f2f2; }
+    .app-tests-navigationPane md-list md-list-item.active:after {
+      content: "\A";
+      border-left: 7.5px solid #0a9bad;
+      left: 0;
+      position: absolute;
+      top: 0;
+      height: 100%; }
+    .app-tests-navigationPane md-list md-list-item.active.done:after {
+      border-left: 7.5px solid #87ca4d; }
+    .app-tests-navigationPane md-list md-list-item.active:before {
+      content: "\A";
+      border-style: solid;
+      border-width: 10px 0 10px 10px;
+      border-color: transparent transparent transparent #f2f2f2;
+      -webkit-filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+              filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+      position: absolute;
+      right: -9px;
+      top: 18px; }
+    .app-tests-navigationPane md-list md-list-item .status-icon-wrapper {
+      position: relative;
+      color: white;
+      background: #87ca4d;
+      border-radius: 100%;
+      margin-right: 5px;
+      width: 22.5px;
+      height: 22.5px; }
+      .app-tests-navigationPane md-list md-list-item .status-icon-wrapper i {
+        font-size: 17px;
+        margin: 0;
+        position: absolute;
+        top: 3px;
+        left: 3px; }
 
 /* fonts size */
 /* general */

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Tests Demo</title>
 
     <!-- Bower:css -->
     <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
@@ -17,12 +17,12 @@
 
 </head>
 <body ng-app="demo">
-
-<div style="display: flex;justify-content: center;">
-
-    <estimated-score-widget is-nav-menu="true" ng-model="currentSubjectId"></estimated-score-widget>
-
-
+    <div style="display: flex;justify-content: center;">
+        <div class="app-navigation-container">
+            <navigation-pane ng-model="vm.currentSubject">
+            </navigation-pane>
+        </div>
+    </div>
     <!-- Bower:js -->
     <script src="angular/angular.js"></script>
     <script src="angular-animate/angular-animate.js"></script>
@@ -48,17 +48,13 @@
     <script src="main.js"></script>
     <script src="demo.js"></script>
 
+    <script src="infra/demoShared/env.service.js"></script>
+    <script src="infra/demoShared/analyticsConfig.js"></script>
+    <script src="infra/demoShared/contentConfig.js"></script>
     <script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
+    <script src="infra/demoShared/estimatedScoreConfig.js"></script>
     <script src="infra/demoShared/storagesConfig.js"></script>
-    <script src="env.service.js"></script>
-    <script src="subject.decorator.js"></script>
-    <script src="estimatedScoreWidget.config.js"></script>
-    <script src="env.service.js"></script>
-    <script src="userGoals.config.js"></script>
-    <script src="locale.run.js"></script>
     <script src="translate.config.js"></script>
-    <script src="diagnostic.config.js"></script>
-
-</div>
+    <script src="locale.run.js"></script>
 </body>
 </html>
