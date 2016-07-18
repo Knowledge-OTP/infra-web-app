@@ -34,8 +34,6 @@
                             return EvaluatorStatesEnum.NOT_PURCHASE.enum;
                         } else if (evaluatorData.points) {
                             return EvaluatorStatesEnum.EVALUATED.enum;
-                        } else if (!evaluatorData.userAnswer) {
-                            return EvaluatorStatesEnum.HIDE.enum;
                         } else {
                             return EvaluatorStatesEnum.PENDING.enum;
                         }

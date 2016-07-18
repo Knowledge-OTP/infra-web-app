@@ -7,8 +7,7 @@
             var EvaluatorStatesEnum = new EnumSrv.BaseEnum([
                 ['NOT_PURCHASE', 1, 'not purchase'],
                 ['PENDING', 2, 'pending'],
-                ['EVALUATED', 3, 'evaluated'],
-                ['HIDE', 4, 'hide']
+                ['EVALUATED', 3, 'evaluated']
             ]);
 
             return EvaluatorStatesEnum;
