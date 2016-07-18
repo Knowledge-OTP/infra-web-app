@@ -1,12 +1,12 @@
 <div class="evaluate-review-states-wrapper"
-     ng-class="vm.evaluateTypes[vm.stateData.type].aliasName"
+     ng-class="vm.evaluateTypes[vm.stateData.typeId].aliasName"
      translate-namespace="EVALUATE_REVIEW_STATES_DRV">
      <div class="evaluate-review-states-switch"
-          ng-switch="vm.stateData.activeState">
+          ng-switch="vm.evaluateStatus">
           <div class="evaluate-review-not-purchase"
                ng-switch-when="1">
               <div class="upgrade-text"
-                   translate=".UPGRADE_TEXT_{{vm.evaluateTypes[vm.stateData.type].aliasName | uppercase}}">
+                   translate=".UPGRADE_TEXT_{{vm.evaluateTypes[vm.stateData.typeId].aliasName | uppercase}}">
               </div>
               <button class="upgrade-btn"
                       open-purchase-dialog-on-click
@@ -29,7 +29,7 @@
               </div>
               <evaluate-result
                   points="vm.stateData.points"
-                  type="vm.stateData.type">
+                  type="vm.stateData.typeId">
               </evaluate-result>
           </div>
      </div>
