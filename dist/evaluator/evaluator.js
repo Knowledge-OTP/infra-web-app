@@ -45,7 +45,7 @@
                     return purchaseService.hasProVersion().then(function(isPro) {
                         if (!isPro) {
                             return EvaluatorStatesEnum.NOT_PURCHASE.enum;
-                        } else if(evaluatorData.points) {
+                        } else if (evaluatorData.points) {
                             return EvaluatorStatesEnum.EVALUATED.enum;
                         } else {
                             return EvaluatorStatesEnum.PENDING.enum;
@@ -142,12 +142,11 @@
 
 /**
  * evaluateQuestionReviewStates
- *  ng-model: gets an object with userAnswer and typeId
+ *  ng-model: gets an object with typeId
  *  and for evaluated state add points prop for evaluate-result drv like:
  *  {
         points: 2.5,
         typeId: 2,
-        userAnswer: 1
     }
  */
 (function (angular) {
