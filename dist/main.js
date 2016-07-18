@@ -1806,11 +1806,59 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 
     angular.module('znk.infra-web-app.evaluator', [
         'pascalprecht.translate',
+        'znk.infra.evaluator',
         'znk.infra.svgIcon',
         'znk.infra.enum',
         'znk.infra.exerciseUtility',
         'znk.infra-web-app.purchase'
     ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.evaluator').config([
+        'ZnkEvaluatorSrvProvider',
+        function (ZnkEvaluatorSrvProvider) {
+
+            ZnkEvaluatorSrvProvider.shouldEvaluateQuestionFnGetter(["purchaseService", function (purchaseService) {
+                'ngInject';
+                return function(question) {
+                    return purchaseService.hasProVersion().then(function(isPro) {
+                        return isPro &&
+                            question.manualEvaluation &&
+                            question.__questionStatus.userAnswer &&
+                            question.__questionStatus.userAnswer !== true;
+                    });
+                };
+            }]);
+
+            ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
+                'ngInject';
+                return function(question) {
+                   return question.manualEvaluation &&
+                       question.__questionStatus.userAnswer &&
+                       question.__questionStatus.userAnswer !== true;
+                };
+            });
+
+            ZnkEvaluatorSrvProvider.getEvaluateStatusFnGetter(["EvaluatorStatesEnum", "purchaseService", function (EvaluatorStatesEnum, purchaseService) {
+                'ngInject';
+                return function(evaluatorData) {
+                    return purchaseService.hasProVersion().then(function(isPro) {
+                        if (!isPro) {
+                            return EvaluatorStatesEnum.NOT_PURCHASE.enum;
+                        } else if(evaluatorData.points) {
+                            return EvaluatorStatesEnum.EVALUATED.enum;
+                        } else {
+                            return EvaluatorStatesEnum.PENDING.enum;
+                        }
+                    });
+                };
+            }]);
+        }
+    ]);
+
 })(angular);
 
 (function (angular) {
@@ -1897,12 +1945,12 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 
 /**
  * evaluateQuestionReviewStates
- *  ng-model: gets an object with activeState:Number(from EvaluatorStatesEnum)
- *  and for evaluated state add points and type props for evaluate-result drv like:
+ *  ng-model: gets an object with userAnswer and typeId
+ *  and for evaluated state add points prop for evaluate-result drv like:
  *  {
-        activeState: EvaluatorStatesEnum.EVALUATED.enum,
         points: 2.5,
-        type: 2
+        typeId: 2,
+        userAnswer: 1
     }
  */
 (function (angular) {
@@ -1913,10 +1961,17 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["$translatePartialLoader", "ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
                 var vm = this;
 
                 $translatePartialLoader.addPart('evaluator');
+
+                function _changeEvaluateStatus(stateData) {
+                    var evaluateStatusFnProm = ZnkEvaluatorSrv.getEvaluateStatusFn();
+                    evaluateStatusFnProm(stateData).then(function(state) {
+                        vm.evaluateStatus = state;
+                    });
+                }
 
                 vm.$onInit = function() {
                     var ngModelCtrl = vm.parent;
@@ -1925,6 +1980,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 
                         ngModelCtrl.$render = function() {
                             vm.stateData = ngModelCtrl.$modelValue;
+                            _changeEvaluateStatus(vm.stateData);
                         };
 
                         ZnkEvaluateResultSrv.getEvaluateTypes().then(function (types) {
@@ -2179,14 +2235,14 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     "");
   $templateCache.put("components/evaluator/templates/evaluateQuestionReviewStates.template.html",
     "<div class=\"evaluate-review-states-wrapper\"\n" +
-    "     ng-class=\"vm.evaluateTypes[vm.stateData.type].aliasName\"\n" +
+    "     ng-class=\"vm.evaluateTypes[vm.stateData.typeId].aliasName\"\n" +
     "     translate-namespace=\"EVALUATE_REVIEW_STATES_DRV\">\n" +
     "     <div class=\"evaluate-review-states-switch\"\n" +
-    "          ng-switch=\"vm.stateData.activeState\">\n" +
+    "          ng-switch=\"vm.evaluateStatus\">\n" +
     "          <div class=\"evaluate-review-not-purchase\"\n" +
     "               ng-switch-when=\"1\">\n" +
     "              <div class=\"upgrade-text\"\n" +
-    "                   translate=\".UPGRADE_TEXT_{{vm.evaluateTypes[vm.stateData.type].aliasName | uppercase}}\">\n" +
+    "                   translate=\".UPGRADE_TEXT_{{vm.evaluateTypes[vm.stateData.typeId].aliasName | uppercase}}\">\n" +
     "              </div>\n" +
     "              <button class=\"upgrade-btn\"\n" +
     "                      open-purchase-dialog-on-click\n" +
@@ -2209,7 +2265,7 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     "              </div>\n" +
     "              <evaluate-result\n" +
     "                  points=\"vm.stateData.points\"\n" +
-    "                  type=\"vm.stateData.type\">\n" +
+    "                  type=\"vm.stateData.typeId\">\n" +
     "              </evaluate-result>\n" +
     "          </div>\n" +
     "     </div>\n" +

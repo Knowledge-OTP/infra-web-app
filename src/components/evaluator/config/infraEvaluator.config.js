@@ -14,7 +14,7 @@
                             question.__questionStatus.userAnswer &&
                             question.__questionStatus.userAnswer !== true;
                     });
-                }
+                };
             });
 
             ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
@@ -23,7 +23,7 @@
                    return question.manualEvaluation &&
                        question.__questionStatus.userAnswer &&
                        question.__questionStatus.userAnswer !== true;
-                }
+                };
             });
 
             ZnkEvaluatorSrvProvider.getEvaluateStatusFnGetter(function (EvaluatorStatesEnum, purchaseService) {
@@ -38,7 +38,7 @@
                             return EvaluatorStatesEnum.PENDING.enum;
                         }
                     });
-                }
+                };
             });
         }
     ]);
