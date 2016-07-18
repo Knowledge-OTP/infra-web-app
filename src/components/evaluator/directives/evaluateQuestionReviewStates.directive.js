@@ -1,11 +1,11 @@
 /**
  * evaluateQuestionReviewStates
- *  ng-model: gets an object with activeState:Number(from EvaluatorStatesEnum)
- *  and for evaluated state add points and type props for evaluate-result drv like:
+ *  ng-model: gets an object with userAnswer and typeId
+ *  and for evaluated state add points prop for evaluate-result drv like:
  *  {
-        activeState: EvaluatorStatesEnum.EVALUATED.enum,
         points: 2.5,
-        type: 2
+        typeId: 2,
+        userAnswer: 1
     }
  */
 (function (angular) {
@@ -16,10 +16,17 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: function ($translatePartialLoader, ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
                 var vm = this;
 
                 $translatePartialLoader.addPart('evaluator');
+
+                function _changeEvaluateStatus(stateData) {
+                    var evaluateStatusFnProm = ZnkEvaluatorSrv.getEvaluateStatusFn();
+                    evaluateStatusFnProm(stateData).then(function(state) {
+                        vm.evaluateStatus = state;
+                    });
+                }
 
                 vm.$onInit = function() {
                     var ngModelCtrl = vm.parent;
@@ -28,6 +35,7 @@
 
                         ngModelCtrl.$render = function() {
                             vm.stateData = ngModelCtrl.$modelValue;
+                            _changeEvaluateStatus(vm.stateData);
                         };
 
                         ZnkEvaluateResultSrv.getEvaluateTypes().then(function (types) {
