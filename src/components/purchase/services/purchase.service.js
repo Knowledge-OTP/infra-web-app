@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
+        function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv, StorageSrv) {
             'ngInject';
 
             var self = this;
@@ -22,7 +22,7 @@
 
             self.getUpgradeData = function () {
                 $q.when(studentStorageProm).then(function (StudentStorageSrv) {
-                    var PURCHASE_PATH = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                    var PURCHASE_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
                     return StudentStorageSrv.get(PURCHASE_PATH);
                 });
             };

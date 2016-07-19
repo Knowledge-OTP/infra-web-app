@@ -79,6 +79,32 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.purchase').directive('openPurchaseDialogOnClick',
+        ["purchaseService", function (purchaseService) {
+            'ngInject';
+            return {
+                restrict: 'A',
+                controller: ["$element", function($element) {
+                    $element.on('click', function() {
+                        purchaseService.showPurchaseDialog();
+                    });
+
+                    $element.on('$destroy', function(){
+                        $element.off('click');
+                    });
+                }]
+            };
+        }]
+    );
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
         ["ENV", "$q", "$sce", "AuthService", "UserProfileService", "$location", "purchaseService", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
             'ngInject';
@@ -209,7 +235,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv) {
+        ["$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", function ($q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv, StorageSrv) {
             'ngInject';
 
             var self = this;
@@ -229,7 +255,7 @@
 
             self.getUpgradeData = function () {
                 $q.when(studentStorageProm).then(function (StudentStorageSrv) {
-                    var PURCHASE_PATH = StudentStorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                    var PURCHASE_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
                     return StudentStorageSrv.get(PURCHASE_PATH);
                 });
             };

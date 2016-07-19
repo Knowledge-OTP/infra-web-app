@@ -213,10 +213,8 @@
 'use strict';
 
 angular.module('znk.infra-web-app.invitation').service('InvitationListenerService',
-    ["ENV", "InfraConfigSrv", "AuthService", "$timeout", "$q", function (ENV, InfraConfigSrv, AuthService, $timeout, $q) {
+    ["ENV", "InfraConfigSrv", "AuthService", "$timeout", "$q", "StorageSrv", function (ENV, InfraConfigSrv, AuthService, $timeout, $q, StorageSrv) {
         'ngInject';
-
-        var studentStorageProm = InfraConfigSrv.getStudentStorage();
 
         var NEW_INVITATION_PATH, SENT_INVITATION_PATH, MY_TEACHER_PATH;
 
@@ -227,8 +225,8 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
         self.myTeacher = {};
 
 
-        var pathsProm = $q.when(studentStorageProm).then(function (studentStorage) {
-            var STUDENT_INVITATION_PATH = studentStorage.variables.appUserSpacePath + '/invitations';
+        var pathsProm = $q.when().then(function () {
+            var STUDENT_INVITATION_PATH = StorageSrv.variables.appUserSpacePath + '/invitations';
             NEW_INVITATION_PATH = STUDENT_INVITATION_PATH + '/received';
             SENT_INVITATION_PATH = STUDENT_INVITATION_PATH + '/sent';
             MY_TEACHER_PATH = STUDENT_INVITATION_PATH + '/approved/';
