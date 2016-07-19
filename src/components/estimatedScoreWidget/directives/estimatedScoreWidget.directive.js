@@ -15,7 +15,8 @@
                 require: '?ngModel',
                 restrict: 'E',
                 scope: {
-                    isNavMenu: '@'
+                    isNavMenu: '@',
+                    widgetTitle: '@'
                 },
                 link: function (scope, element, attrs, ngModelCtrl) {
                     $translatePartialLoader.addPart('estimatedScoreWidget');
@@ -65,31 +66,48 @@
                             });
 
                             var scoresArr = [];
-                            for(var i = 0; i<scope.d.widgetItems.length; i++) {
-                                if(angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
+                            for (var i = 0; i < scope.d.widgetItems.length; i++) {
+                                if (angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
                                     scoresArr.push(scope.d.widgetItems[i].estimatedScore);
                                 }
                             }
 
                             scope.d.estimatedCompositeScore = examScoresFn(scoresArr);
 
-                            function filterSubjects (widgetItem) {
-                                return !!('showScore' in widgetItem &&  (widgetItem.showScore) !== false);
+                            function filterSubjects(widgetItem) {
+                                return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
                             }
 
                             scope.d.widgetItems = scope.d.widgetItems.filter(filterSubjects);
 
-                            if (!previousValues) {
-                                scope.d.subjectsScores = scope.d.widgetItems;
-                            } else {
-                                scope.d.subjectsScores = previousValues;
-                                $timeout(function () {
-                                    scope.d.enableEstimatedScoreChangeAnimation = true;
-                                    $timeout(function () {
-                                        scope.d.subjectsScores = scope.d.widgetItems;
-                                    }, 1200);
-                                });
+                            if (isNavMenuFlag) {
+                                if (angular.isUndefined(scope.d.currentSubject)) {
+                                    scope.d.onSubjectClick(scope.d.widgetItems[0].subjectId);
+                                }
                             }
+
+                            if (previousValues) {
+                                scope.d.subjectsScores = previousValues;
+                            }
+
+                            $timeout(function () {
+                                scope.d.enableEstimatedScoreChangeAnimation = true;
+                                $timeout(function () {
+                                    scope.d.subjectsScores = scope.d.widgetItems;
+                                }, 1200);
+                            });
+
+                            // if (!previousValues) {
+                            //     scope.d.subjectsScores = scope.d.widgetItems;
+                            // } else {
+                            //     scope.d.subjectsScores = previousValues;
+                            //     $timeout(function () {
+                            //         scope.d.enableEstimatedScoreChangeAnimation = true;
+                            //         $timeout(function () {
+                            //             scope.d.subjectsScores = scope.d.widgetItems;
+                            //         }, 1200);
+                            //     });
+                            // }
 
                             previousValues = scope.d.widgetItems;
                         });
@@ -97,7 +115,7 @@
 
                     function calcPercentage(correct) {
                         var scoringLimits = ScoringService.getScoringLimits();
-                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max: scoringLimits.subjects.max;
+                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max : scoringLimits.subjects.max;
                         return (correct / maxEstimatedScore) * 100;
                     }
 
@@ -112,7 +130,7 @@
                         };
 
                         ngModelCtrl.$render = function () {
-                            scope.d.currentSubject = '' + ngModelCtrl.$viewValue;
+                            scope.d.currentSubject = ngModelCtrl.$viewValue;
                         };
                     }
 

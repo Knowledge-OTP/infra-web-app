@@ -1,36 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" style="height: 100%;background: rgba(43, 43, 191, 0.08);">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <!-- bower:css -->
+
+    <!-- Bower:css -->
     <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
     <link rel="stylesheet" href="infra/dist/main.css" />
     <link rel="stylesheet" href="angular-material/angular-material.css" />
     <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css" />
     <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
-    <!-- endbower-->
+    <!-- endBower -->
 
-    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="main.css">
+    <!--<link rel="stylesheet" href="demo.css">-->
+
 </head>
-<body ng-app="demo" ng-controller="Main">
-    <div>
-        <div>HINT raccoon message</div>
-        <label>Message body</label>
-        <input ng-model="msgBody">
-        <div style="margin-top: 10px">
-            <button ng-click="showRaccoonIapMsg(msgBody,'HINT')">show HINT type raccoon message</button>
-        </div>
-    </div>
-    <div style="margin-top: 100px;">
-        <div>PRACTICE_HINT raccoon message</div>
-        <label>Message body</label>
-        <input ng-model="practiceHintMsgBody">
-        <div style="margin-top: 10px">
-            <button ng-click="showRaccoonIapMsg(practiceHintMsgBody,'PRACTICE_HINT')">show HINT type raccoon message</button>
-        </div>
-    </div>
-    <!-- bower:js -->
+<body ng-app="demo">
+<ui-view style="display: flex;"></ui-view>
+
+<div style="display: flex;justify-content: center;">
+
+    <!-- Bower:js -->
     <script src="angular/angular.js"></script>
     <script src="angular-animate/angular-animate.js"></script>
     <script src="Swiper/dist/js/swiper.js"></script>
@@ -47,9 +38,22 @@
     <script src="Chart.js/Chart.js"></script>
     <script src="angular-chart.js/dist/angular-chart.js"></script>
     <script src="angular-sanitize/angular-sanitize.js"></script>
-    <!-- endbower-->
+    <!-- endBower -->
 
     <script src="main.js"></script>
     <script src="demo.js"></script>
+
+    <script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
+    <script src="infra/demoShared/storagesConfig.js"></script>
+    <script src="env.service.js"></script>
+    <script src="subject.decorator.js"></script>
+    <script src="estimatedScoreWidget.config.js"></script>
+    <script src="env.service.js"></script>
+    <script src="userGoals.config.js"></script>
+    <script src="translate.config.js"></script>
+    <script src="diagnostic.config.js"></script>
+    <script src="performance.config.js"></script>
+
+</div>
 </body>
 </html>
