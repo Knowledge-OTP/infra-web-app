@@ -1640,7 +1640,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                    tabindex=\"1\"\n" +
     "                    ui-sref=\"app.diagnostic({ skipIntro: true })\"\n" +
     "                    aria-label=\"{{::vm.buttonTitle}}\"\n" +
-    "                    translate=\"{{::vm.buttonTitle}}\"\n" +
+    "                    translate=\"{{vm.buttonTitle}}\"\n" +
     "                    md-no-ink>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
