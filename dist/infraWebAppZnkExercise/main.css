@@ -196,6 +196,7 @@ answer-explanation-content {
     position: absolute;
     top: 14px;
     left: 50%;
+    font-size: 20px;
     transform: translate(-50%); }
   .exercise-header .pattern {
     background-repeat: repeat-x;
