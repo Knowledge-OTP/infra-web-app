@@ -321,7 +321,10 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "    </div>\n" +
     "\n" +
     "\n" +
-    "    <div class=\"center-num-slide\" ng-if=\"vm.options.showNumSlide\">{{vm.currentSlideNum}}/{{::vm.totalSlideNum}}</div>\n" +
+    "    <div class=\"center-num-slide\"\n" +
+    "         ng-if=\"vm.options.showNumSlide\">\n" +
+    "        {{vm.currentSlideNum}}/{{::vm.totalSlideNum}}\n" +
+    "    </div>\n" +
     "    <div class=\"review-mode\" ng-if=\"vm.options.reviewMode\" ui-sref=\"^.summary\">\n" +
     "        <div class=\"background-opacity\"></div>\n" +
     "        <div class=\"summary-text\" translate=\".SUMMARY\"></div>\n" +

@@ -9,7 +9,10 @@
     </div>
 
 
-    <div class="center-num-slide" ng-if="vm.options.showNumSlide">{{vm.currentSlideNum}}/{{::vm.totalSlideNum}}</div>
+    <div class="center-num-slide"
+         ng-if="vm.options.showNumSlide">
+        {{vm.currentSlideNum}}/{{::vm.totalSlideNum}}
+    </div>
     <div class="review-mode" ng-if="vm.options.reviewMode" ui-sref="^.summary">
         <div class="background-opacity"></div>
         <div class="summary-text" translate=".SUMMARY"></div>
