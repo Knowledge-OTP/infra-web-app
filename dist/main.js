@@ -1420,12 +1420,13 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "             translate=\".DIAG_DESCRIPTION_{{d.currMapData.subjectNameAlias | uppercase}}\">\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"icons-section\" ng-class=\"{pristine: d.currMapIndex === -1}\">\n" +
+    "    <div class=\"icons-section\">\n" +
     "        <div ng-repeat=\"subject in d.subjects\"\n" +
     "             class=\"icon-circle {{subject.subjectNameAlias}}-color\"\n" +
     "             ng-class=\"{\n" +
     "                    active: subject.mapId === d.currMapIndex,\n" +
-    "                    done: subject.mapId < d.currMapIndex\n" +
+    "                    done: subject.mapId < d.currMapIndex,\n" +
+    "                    pristine: d.currMapIndex === -1\n" +
     "            }\">\n" +
     "            <div class=\"icon-wrapper\">\n" +
     "                <svg-icon class=\"subject-icon\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +

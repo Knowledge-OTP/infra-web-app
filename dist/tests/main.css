@@ -47,7 +47,7 @@
         margin-left: 25px;
         text-transform: capitalize; }
       .app-tests-navigationPane md-list md-list-item button.md-button:not([disabled]):hover {
-        background-color: #FCFCFC; }
+        background-color: #ebebeb; }
     .app-tests-navigationPane md-list md-list-item.done {
       border-left: 2px solid #87ca4d; }
       .app-tests-navigationPane md-list md-list-item.done button {
