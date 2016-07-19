@@ -5463,10 +5463,9 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
             _calcScoreFn = calcScoreFn;
         };
 
-        this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', 'ScoringService', '$injector', function (InfraConfigSrv, StorageSrv, $q, ScoringService, $injector) {
+        this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', '$injector', function (InfraConfigSrv, StorageSrv, $q, $injector) {
             var self = this;
             var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
-            var scoringLimits = ScoringService.getScoringLimits();
             var defaultSubjectScore = self.settings.defaultSubjectScore;
             var subjects = self.settings.subjects;
 
@@ -5505,10 +5504,18 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
                  return self.settings;
             };
 
+            function getInitTotalScore() {
+                var initTotalScore = 0;
+                angular.forEach(subjects, function() {
+                    initTotalScore += defaultSubjectScore;
+                });
+                return initTotalScore;
+            }
+
             function _defaultUserGoals() {
                 var defaultUserGoals = {
                     isCompleted: false,
-                    totalScore: scoringLimits.exam.max
+                    totalScore: getInitTotalScore()
                 };
                 angular.forEach(subjects, function(subject) {
                     defaultUserGoals[subject.name] = defaultSubjectScore;
@@ -5787,12 +5794,6 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
                     scope.goalsSettings = UserGoalsService.getGoalsSettings();
 
                     var defaultTitle = scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
-
-                    var initTotalScore = 0;
-                    angular.forEach(scope.goalsSettings.subjects, function() {
-                        initTotalScore += scope.goalsSettings.defaultSubjectScore;
-                    });
-                    scope.totalScore = initTotalScore;
 
                     UserGoalsService.getGoals().then(function (userGoals) {
                         userGoalRef = userGoals;
@@ -6174,7 +6175,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "        <div class=\"composite-wrap\">\n" +
     "            <div class=\"composite-score\">\n" +
     "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
-    "                <div class=\"score\">{{totalScore}}</div>\n" +
+    "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
