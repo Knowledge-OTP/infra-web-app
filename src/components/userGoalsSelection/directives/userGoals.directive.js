@@ -17,12 +17,6 @@
 
                     var defaultTitle = scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
 
-                    var initTotalScore = 0;
-                    angular.forEach(scope.goalsSettings.subjects, function() {
-                        initTotalScore += scope.goalsSettings.defaultSubjectScore;
-                    });
-                    scope.totalScore = initTotalScore;
-
                     UserGoalsService.getGoals().then(function (userGoals) {
                         userGoalRef = userGoals;
                         scope.userGoals = angular.copy(userGoals);
