@@ -1162,7 +1162,7 @@ answer-explanation-content {
       line-height: 30px; }
   .exercise-header .center-num-slide {
     position: absolute;
-    top: 14px;
+    top: 12px;
     left: 50%;
     font-size: 20px;
     transform: translate(-50%); }
