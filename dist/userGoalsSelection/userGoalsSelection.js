@@ -248,12 +248,6 @@
 
                     var defaultTitle = scope.saveTitle = scope.setting.saveBtn.title || '.SAVE';
 
-                    var initTotalScore = 0;
-                    angular.forEach(scope.goalsSettings.subjects, function() {
-                        initTotalScore += scope.goalsSettings.defaultSubjectScore;
-                    });
-                    scope.totalScore = initTotalScore;
-
                     UserGoalsService.getGoals().then(function (userGoals) {
                         userGoalRef = userGoals;
                         scope.userGoals = angular.copy(userGoals);
@@ -634,7 +628,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "        <div class=\"composite-wrap\">\n" +
     "            <div class=\"composite-score\">\n" +
     "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
-    "                <div class=\"score\">{{totalScore}}</div>\n" +
+    "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +

@@ -8,10 +8,9 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
             _calcScoreFn = calcScoreFn;
         };
 
-        this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', 'ScoringService', '$injector', function (InfraConfigSrv, StorageSrv, $q, ScoringService, $injector) {
+        this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', '$injector', function (InfraConfigSrv, StorageSrv, $q, $injector) {
             var self = this;
             var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
-            var scoringLimits = ScoringService.getScoringLimits();
             var defaultSubjectScore = self.settings.defaultSubjectScore;
             var subjects = self.settings.subjects;
 
@@ -50,10 +49,18 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
                  return self.settings;
             };
 
+            function getInitTotalScore() {
+                var initTotalScore = 0;
+                angular.forEach(subjects, function() {
+                    initTotalScore += defaultSubjectScore;
+                });
+                return initTotalScore;
+            }
+
             function _defaultUserGoals() {
                 var defaultUserGoals = {
                     isCompleted: false,
-                    totalScore: scoringLimits.exam.max
+                    totalScore: getInitTotalScore()
                 };
                 angular.forEach(subjects, function(subject) {
                     defaultUserGoals[subject.name] = defaultSubjectScore;

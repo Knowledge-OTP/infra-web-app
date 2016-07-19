@@ -431,7 +431,6 @@ md-dialog.setting-edit-goals {
     height: 100%;
     background-color: #ffffff;
     padding-top: 25px;
-    padding-bottom: 25px;
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px; }
   md-dialog.setting-edit-goals .close-popup-wrap {
