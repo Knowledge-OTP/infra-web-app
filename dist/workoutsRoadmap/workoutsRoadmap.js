@@ -402,14 +402,14 @@
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticIntroController',
         ["isDiagnosticStarted", function (isDiagnosticStarted) {
             'ngInject';
 
             var vm = this;
 
-            vm.buttonTitle = isDiagnosticStarted ? 'CONTINUE' : 'START' ;
+            vm.buttonTitle = isDiagnosticStarted ? '.CONTINUE_TEST' : '.START_TEST' ;
         }]);
 })(angular);
 
@@ -1640,7 +1640,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                    tabindex=\"1\"\n" +
     "                    ui-sref=\"app.diagnostic({ skipIntro: true })\"\n" +
     "                    aria-label=\"{{::vm.buttonTitle}}\"\n" +
-    "                    md-no-ink>{{::vm.buttonTitle | translate}}\n" +
+    "                    translate=\"{{::vm.buttonTitle}}\"\n" +
+    "                    md-no-ink>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
     "</div>\n" +

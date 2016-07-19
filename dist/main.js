@@ -4304,7 +4304,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
-    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap.diagnostic', 'Start Test')\">\n" +
+    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
@@ -6603,14 +6603,14 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticIntroController',
         ["isDiagnosticStarted", function (isDiagnosticStarted) {
             'ngInject';
 
             var vm = this;
 
-            vm.buttonTitle = isDiagnosticStarted ? 'CONTINUE' : 'START' ;
+            vm.buttonTitle = isDiagnosticStarted ? '.CONTINUE_TEST' : '.START_TEST' ;
         }]);
 })(angular);
 
@@ -7841,7 +7841,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                    tabindex=\"1\"\n" +
     "                    ui-sref=\"app.diagnostic({ skipIntro: true })\"\n" +
     "                    aria-label=\"{{::vm.buttonTitle}}\"\n" +
-    "                    md-no-ink>{{::vm.buttonTitle | translate}}\n" +
+    "                    translate=\"{{::vm.buttonTitle}}\"\n" +
+    "                    md-no-ink>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
     "</div>\n" +

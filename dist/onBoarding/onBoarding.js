@@ -425,7 +425,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
-    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap.diagnostic', 'Start Test')\">\n" +
+    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
