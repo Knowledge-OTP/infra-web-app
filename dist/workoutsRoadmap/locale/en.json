@@ -1,7 +1,8 @@
 {
     "WORKOUTS_ROADMAP_DIAGNOSTIC_INTRO":{
         "DIAGNOSTIC_TEST": "Diagnostic Test",
-        "START_TEST": "START TEST"
+        "START_TEST": "START TEST",
+        "CONTINUE_TEST": "CONTINUE TEST"
     },
     "WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY": {
         "DIAGNOSTIC_TEST": "Diagnostic Test",
