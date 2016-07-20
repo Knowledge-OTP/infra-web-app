@@ -3367,6 +3367,9 @@ workout-intro-lock {
     font-size: 21px; }
   .workouts-roadmap-workout-in-progress .workouts-roadmap-workout-in-progress-wrapper .subject-icon {
     height: 105px; }
+    .workouts-roadmap-workout-in-progress .workouts-roadmap-workout-in-progress-wrapper .subject-icon svg {
+      width: auto;
+      height: 73px; }
   .workouts-roadmap-workout-in-progress .workouts-roadmap-workout-in-progress-wrapper .subject-title {
     font-weight: 400;
     font-size: 18px;
