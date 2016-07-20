@@ -978,12 +978,9 @@ md-tooltip.tooltip-for-estimated-score-widget {
 /* full background image with retina */
 answer-explanation {
   visibility: hidden;
-  will-change: visibility;
-  transition: 0.2s;
-  opacity: 0; }
+  will-change: visibility; }
   answer-explanation.answer-explanation-visible {
-    visibility: visible;
-    opacity: 1; }
+    visibility: visible; }
   answer-explanation .answer-explanation-wrapper {
     background: #fdfdfd; }
     answer-explanation .answer-explanation-wrapper .answer-explanation-close {

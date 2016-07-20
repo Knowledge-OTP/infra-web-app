@@ -1,13 +1,9 @@
 answer-explanation{
     visibility: hidden;
     will-change: visibility;
-    transition: 0.2s;
-    opacity: 0;
     &.answer-explanation-visible {
         visibility: visible;
-        opacity: 1;
     }
-
     .answer-explanation-wrapper {
         background: $bgColor40;
 
