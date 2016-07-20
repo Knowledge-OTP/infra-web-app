@@ -9,7 +9,13 @@
 /* full background image with retina */
 /* full background image with retina */
 answer-explanation {
-  display: block; }
+  visibility: hidden;
+  will-change: visibility;
+  transition: 0.2s;
+  opacity: 0; }
+  answer-explanation.answer-explanation-visible {
+    visibility: visible;
+    opacity: 1; }
   answer-explanation .answer-explanation-wrapper {
     background: #fdfdfd; }
     answer-explanation .answer-explanation-wrapper .answer-explanation-close {
