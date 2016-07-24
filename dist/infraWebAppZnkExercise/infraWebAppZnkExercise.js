@@ -61,7 +61,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "$compile", "$filter", "$sce", "ENV", "znkAnalyticsSrv", function ($translatePartialLoader, ZnkExerciseViewModeEnum, $compile, $filter, $sce, ENV, znkAnalyticsSrv) {
+            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function ($translatePartialLoader, ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
                 'ngInject';
 
                 var directive = {
@@ -73,11 +73,8 @@
 
                         var questionBuilderCtrl = ctrls[0];
                         var ngModelCtrl = ctrls[1];
-                        var domElem = element[0];
                         var viewMode = questionBuilderCtrl.getViewMode();
                         var question = questionBuilderCtrl.question;
-
-                        domElem.style.display = 'none';
 
                         scope.d = {};
 
@@ -89,8 +86,13 @@
                                     return;
                                 }
 
-                                domElem.style.display = 'block';
-                                
+                                // add timeout to prevent showing visible answer explanation for a
+                                // second before it's hidden on slide that is not the current slide
+                                // (because the slider shifts from first slide to current)
+                                $timeout(function () {
+                                    element.addClass('answer-explanation-visible');
+                                }, 0, false);
+
                                 var analyticsProps = {
                                     subjectType: question.subjectId,
                                     questionId: question.id
@@ -134,8 +136,6 @@
                             case ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum:
                                 viewChangeListener();
                                 break;
-                            default:
-                                domElem.style.display = 'none';
                         }
                     }
                 };

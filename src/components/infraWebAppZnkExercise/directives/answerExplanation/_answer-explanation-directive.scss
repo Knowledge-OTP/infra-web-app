@@ -1,6 +1,9 @@
 answer-explanation{
-    display: block;
-
+    visibility: hidden;
+    will-change: visibility;
+    &.answer-explanation-visible {
+        visibility: visible;
+    }
     .answer-explanation-wrapper {
         background: $bgColor40;
 
