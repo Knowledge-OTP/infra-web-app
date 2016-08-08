@@ -7897,7 +7897,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
     "            <div class=\"score-wrapper\">\n" +
     "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
-    "                <span class=\"bold\">{{::vm.userStats[subject.id]}}</span>\n" +
+    "                <span class=\"bold\">{{::vm.userStats[subject.id] || '-'}}</span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
