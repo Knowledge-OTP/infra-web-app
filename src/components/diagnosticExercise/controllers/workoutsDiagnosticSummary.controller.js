@@ -34,18 +34,18 @@
                 diagnosticResultObj.$save();
             }
 
-            self.isEvaluateAllSubjects = false;
+            self.isSubjectsWaitToBeEvaluated = false;
 
             for (var i in diagnosticScoresObj) {
                 if (diagnosticScoresObj.hasOwnProperty(i)) {
                     if (diagnosticScoresObj[i] === null) {
-                        self.isEvaluateAllSubjects = true;
+                        self.isSubjectsWaitToBeEvaluated = true;
                         break;
                     }
                 }
             }
 
-            if(self.isEvaluateAllSubjects) {
+            if(self.isSubjectsWaitToBeEvaluated) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.EVALUATE_START';
             } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.greatStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';

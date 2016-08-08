@@ -2,7 +2,11 @@
      translate-namespace="WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY">
     <div class="diagnostic-workout-title" translate=".DIAGNOSTIC_TEST"></div>
     <div class="results-text" translate=".DIAG_RES_TEXT"></div>
-    <div class="total-score" translate=".DIAG_COMPOS_SCORE" translate-values="{total: vm.compositeScore }"></div>
+    <div class="total-score"
+         ng-if="!vm.isSubjectsWaitToBeEvaluated"
+         translate=".DIAG_COMPOS_SCORE"
+         translate-values="{total: vm.compositeScore }">
+    </div>
 
     <div class="first-row">
         <div ng-repeat="subject in vm.diagnosticSubjects"
