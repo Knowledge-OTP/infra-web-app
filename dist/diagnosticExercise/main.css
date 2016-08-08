@@ -89,41 +89,6 @@
       -ms-flex-item-align: end;
           align-self: flex-end; }
 
-md-tooltip.tooltip-for-diagnostic-summary {
-  opacity: 0;
-  width: auto;
-  height: auto;
-  background: white;
-  padding: 0 5px; }
-  md-tooltip.tooltip-for-diagnostic-summary ._md-content {
-    font-size: 14px;
-    color: #4f4d4d;
-    font-family: Lato;
-    font-weight: 400;
-    height: auto;
-    text-align: center;
-    background: white;
-    white-space: normal; }
-    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
-      opacity: 1;
-      transform: none;
-      transition: none;
-      pointer-events: auto;
-      will-change: auto; }
-    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
-      transition: none; }
-      md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
-        transform: none;
-        opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary._md-hide {
-    transition: opacity 0.4s;
-    opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary._md-show {
-    opacity: 1;
-    transition: opacity 0.4s;
-    pointer-events: auto;
-    will-change: opacity; }
-
 .diagnostic-summary-wrapper {
   padding-top: 50px; }
   .diagnostic-summary-wrapper .title {
@@ -251,15 +216,18 @@ md-tooltip.tooltip-for-diagnostic-summary {
 
 md-tooltip.tooltip-for-diagnostic-summary {
   opacity: 0;
-  width: 150px;
-  height: 87px;
-  background: #ffffff;
-  padding: 0 5px;
-  z-index: 100; }
+  width: auto;
+  height: auto;
+  background: white;
+  padding: 0 5px; }
   md-tooltip.tooltip-for-diagnostic-summary ._md-content {
+    font-size: 14px;
+    color: #4f4d4d;
+    font-family: Lato;
+    font-weight: 400;
     height: auto;
     text-align: center;
-    background: #ffffff;
+    background: white;
     white-space: normal; }
     md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
       opacity: 1;
@@ -272,19 +240,6 @@ md-tooltip.tooltip-for-diagnostic-summary {
       md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
         transform: none;
         opacity: 0; }
-    md-tooltip.tooltip-for-diagnostic-summary ._md-content .top-text {
-      margin-top: 22px;
-      margin-bottom: 12px;
-      font-size: 16px;
-      color: #4f4d4d;
-      font-family: Lato;
-      font-weight: 400; }
-    md-tooltip.tooltip-for-diagnostic-summary ._md-content .bottom-text {
-      line-height: 12px;
-      font-size: 12px;
-      color: #4f4d4d;
-      font-family: Lato;
-      font-weight: 300; }
   md-tooltip.tooltip-for-diagnostic-summary._md-hide {
     transition: opacity 0.4s;
     opacity: 0; }
