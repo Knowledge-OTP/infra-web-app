@@ -18,7 +18,7 @@
                 for (var i=0, ii = diagnosticSubjects.length; i < ii; i++) {
                     var subjectId = diagnosticSubjects[i].id;
 
-                    if (angular.isUndefined(diagnosticScoresObj[subjectId])) {
+                    if (!diagnosticScoresObj[subjectId]) {
                         vm.isSubjectsWaitToBeEvaluated = true;
                         break;
                     }
