@@ -757,18 +757,18 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 diagnosticResultObj.$save();
             }
 
-            self.isEvaluateAllSubjects = false;
+            self.isSubjectsWaitToBeEvaluated = false;
 
             for (var i in diagnosticScoresObj) {
                 if (diagnosticScoresObj.hasOwnProperty(i)) {
                     if (diagnosticScoresObj[i] === null) {
-                        self.isEvaluateAllSubjects = true;
+                        self.isSubjectsWaitToBeEvaluated = true;
                         break;
                     }
                 }
             }
 
-            if(self.isEvaluateAllSubjects) {
+            if(self.isSubjectsWaitToBeEvaluated) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.EVALUATE_START';
             } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.greatStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';
@@ -1246,7 +1246,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html",
     "<div class=\"diagnostic-summary-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_SUMMARY\">\n" +
-    "    <div class=\"title\" ng-switch on=\"vm.isEvaluateAllSubjects\">\n" +
+    "    <div class=\"title\" ng-switch on=\"vm.isSubjectsWaitToBeEvaluated\">\n" +
     "        <div ng-switch-when=\"false\">\n" +
     "            <div translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
     "            <span translate=\".COMPOSITE_SCORE\"></span>\n" +
@@ -1263,7 +1263,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
     "                <div class=\"znk-doughnut\">\n" +
     "                    <div class=\"white-bg-doughnut-score\">\n" +
-    "                        {{doughnut.score === 0 ? '-' : doughnut.score }}\n" +
+    "                        {{!doughnut.score ? '-' : doughnut.score }}\n" +
     "                    </div>\n" +
     "                    <div class=\"goal-point\"\n" +
     "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +
@@ -6642,14 +6642,26 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             'ngInject';
 
             var vm = this;
-
-            diagnosticData.diagnosticResultProm.then(function (diagnosticResult) {
-                vm.compositeScore = diagnosticResult.compositeScore;
-                vm.userStats = diagnosticResult.userStats;
-            });
+            var diagnosticSubjects;
 
             diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
-                vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+                diagnosticSubjects = vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+                return diagnosticData.diagnosticResultProm;
+            }).then(function (diagnosticResult) {
+                var diagnosticScoresObj = diagnosticResult.userStats;
+                vm.isSubjectsWaitToBeEvaluated = false;
+
+                for (var i=0, ii = diagnosticSubjects.length; i < ii; i++) {
+                    var subjectId = diagnosticSubjects[i].id;
+
+                    if (angular.isUndefined(diagnosticScoresObj[subjectId])) {
+                        vm.isSubjectsWaitToBeEvaluated = true;
+                        break;
+                    }
+                }
+
+                vm.compositeScore = diagnosticResult.compositeScore;
+                vm.userStats = diagnosticScoresObj;
             });
 
         }]);
@@ -7872,7 +7884,11 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "     translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY\">\n" +
     "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
-    "    <div class=\"total-score\" translate=\".DIAG_COMPOS_SCORE\" translate-values=\"{total: vm.compositeScore }\"></div>\n" +
+    "    <div class=\"total-score\"\n" +
+    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated\"\n" +
+    "         translate=\".DIAG_COMPOS_SCORE\"\n" +
+    "         translate-values=\"{total: vm.compositeScore }\">\n" +
+    "    </div>\n" +
     "\n" +
     "    <div class=\"first-row\">\n" +
     "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +

@@ -614,18 +614,18 @@
                 diagnosticResultObj.$save();
             }
 
-            self.isEvaluateAllSubjects = false;
+            self.isSubjectsWaitToBeEvaluated = false;
 
             for (var i in diagnosticScoresObj) {
                 if (diagnosticScoresObj.hasOwnProperty(i)) {
                     if (diagnosticScoresObj[i] === null) {
-                        self.isEvaluateAllSubjects = true;
+                        self.isSubjectsWaitToBeEvaluated = true;
                         break;
                     }
                 }
             }
 
-            if(self.isEvaluateAllSubjects) {
+            if(self.isSubjectsWaitToBeEvaluated) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.EVALUATE_START';
             } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.greatStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';
@@ -1103,7 +1103,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html",
     "<div class=\"diagnostic-summary-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_SUMMARY\">\n" +
-    "    <div class=\"title\" ng-switch on=\"vm.isEvaluateAllSubjects\">\n" +
+    "    <div class=\"title\" ng-switch on=\"vm.isSubjectsWaitToBeEvaluated\">\n" +
     "        <div ng-switch-when=\"false\">\n" +
     "            <div translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
     "            <span translate=\".COMPOSITE_SCORE\"></span>\n" +
@@ -1120,7 +1120,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
     "                <div class=\"znk-doughnut\">\n" +
     "                    <div class=\"white-bg-doughnut-score\">\n" +
-    "                        {{doughnut.score === 0 ? '-' : doughnut.score }}\n" +
+    "                        {{!doughnut.score ? '-' : doughnut.score }}\n" +
     "                    </div>\n" +
     "                    <div class=\"goal-point\"\n" +
     "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +

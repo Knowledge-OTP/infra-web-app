@@ -421,14 +421,26 @@
             'ngInject';
 
             var vm = this;
-
-            diagnosticData.diagnosticResultProm.then(function (diagnosticResult) {
-                vm.compositeScore = diagnosticResult.compositeScore;
-                vm.userStats = diagnosticResult.userStats;
-            });
+            var diagnosticSubjects;
 
             diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
-                vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+                diagnosticSubjects = vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+                return diagnosticData.diagnosticResultProm;
+            }).then(function (diagnosticResult) {
+                var diagnosticScoresObj = diagnosticResult.userStats;
+                vm.isSubjectsWaitToBeEvaluated = false;
+
+                for (var i=0, ii = diagnosticSubjects.length; i < ii; i++) {
+                    var subjectId = diagnosticSubjects[i].id;
+
+                    if (angular.isUndefined(diagnosticScoresObj[subjectId])) {
+                        vm.isSubjectsWaitToBeEvaluated = true;
+                        break;
+                    }
+                }
+
+                vm.compositeScore = diagnosticResult.compositeScore;
+                vm.userStats = diagnosticScoresObj;
             });
 
         }]);
@@ -1651,7 +1663,11 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "     translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY\">\n" +
     "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
-    "    <div class=\"total-score\" translate=\".DIAG_COMPOS_SCORE\" translate-values=\"{total: vm.compositeScore }\"></div>\n" +
+    "    <div class=\"total-score\"\n" +
+    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated\"\n" +
+    "         translate=\".DIAG_COMPOS_SCORE\"\n" +
+    "         translate-values=\"{total: vm.compositeScore }\">\n" +
+    "    </div>\n" +
     "\n" +
     "    <div class=\"first-row\">\n" +
     "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
