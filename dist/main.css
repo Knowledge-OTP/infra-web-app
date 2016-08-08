@@ -3245,7 +3245,8 @@ workout-intro-lock {
           padding-left: 10px; }
         .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper .bold {
           font-weight: 400;
-          float: right; }
+          float: right;
+          width: 32px; }
 
 .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper {
   font-family: Quicksand; }
