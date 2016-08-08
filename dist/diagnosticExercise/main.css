@@ -95,7 +95,7 @@ md-tooltip.tooltip-for-diagnostic-summary {
   height: auto;
   background: white;
   padding: 0 5px; }
-  md-tooltip.tooltip-for-diagnostic-summary .md-content {
+  md-tooltip.tooltip-for-diagnostic-summary ._md-content {
     font-size: 14px;
     color: #4f4d4d;
     font-family: Lato;
@@ -104,21 +104,21 @@ md-tooltip.tooltip-for-diagnostic-summary {
     text-align: center;
     background: white;
     white-space: normal; }
-    md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show {
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
       opacity: 1;
       transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
-    md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show-remove {
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
       transition: none; }
-      md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show-remove.md-show-remove-active {
+      md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
         transform: none;
         opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary.md-hide {
+  md-tooltip.tooltip-for-diagnostic-summary._md-hide {
     transition: opacity 0.4s;
     opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary.md-show {
+  md-tooltip.tooltip-for-diagnostic-summary._md-show {
     opacity: 1;
     transition: opacity 0.4s;
     pointer-events: auto;

@@ -29,35 +29,35 @@ md-tooltip.tooltip-for-diagnostic-summary {
     height: auto;
     background: $bgColor1;
     padding:0 5px;
-    .md-content {
+    ._md-content {
         @include text-style(14px, $fontColor3, Lato, 400);
         height: auto;
         text-align: center;
         background: $bgColor1;
         white-space: normal;
         // override and cancel .md-content transitions and transform
-        &.md-show {
+        &._md-show {
             opacity: 1;
             transform: none;
             transition: none;
             pointer-events: auto;
             will-change: auto;
         }
-        &.md-show-remove {
+        &._md-show-remove {
             transition: none;
-            &.md-show-remove-active {
+            &._md-show-remove-active {
                 transform: none;
                 opacity: 0;
             }
         }
     }
 
-    &.md-hide {
+    &._md-hide {
         transition: opacity 0.4s;
         opacity: 0;
     }
 
-    &.md-show {
+    &._md-show {
         opacity: 1;
         transition: opacity 0.4s;
         pointer-events: auto;
