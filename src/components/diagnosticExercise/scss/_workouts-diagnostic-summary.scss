@@ -106,7 +106,6 @@
     .footer-text {
         @include text-style(18px, $fontColor3, Lato, $lightFontWeight);
         text-align: center;
-        width: 630px;
         margin: {
             left: auto;
             right: auto;
