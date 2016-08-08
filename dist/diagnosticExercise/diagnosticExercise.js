@@ -158,7 +158,7 @@
                             var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
                                 var estimatedScores = {};
                                 angular.forEach(latestScores, function (estimatedScore, subjectId) {
-                                    estimatedScores[subjectId] = Math.round(estimatedScore.score) || 0;
+                                    estimatedScores[subjectId] = estimatedScore.score ? Math.round(estimatedScore.score) : null;
                                 });
                                 return estimatedScores;
                             });
@@ -614,9 +614,22 @@
                 diagnosticResultObj.$save();
             }
 
-            if (diagnosticResultObj.compositeScore > diagnosticSettings.greatStart) {
+            self.isEvaluateAllSubjects = false;
+
+            for (var i in diagnosticScoresObj) {
+                if (diagnosticScoresObj.hasOwnProperty(i)) {
+                    if (diagnosticScoresObj[i] === null) {
+                        self.isEvaluateAllSubjects = true;
+                        break;
+                    }
+                }
+            }
+
+            if(self.isEvaluateAllSubjects) {
+                self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.EVALUATE_START';
+            } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.greatStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';
-            } else if (diagnosticResultObj.compositeScore > diagnosticSettings.goodStart) {
+            } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.goodStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GOOD_START';
             } else {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.BAD_START';
@@ -1090,10 +1103,15 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html",
     "<div class=\"diagnostic-summary-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_SUMMARY\">\n" +
-    "    <div class=\"title\">\n" +
-    "        <div translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
-    "        <span translate=\".COMPOSITE_SCORE\"></span>\n" +
-    "        <span> {{::vm.compositeScore}}</span>\n" +
+    "    <div class=\"title\" ng-switch on=\"vm.isEvaluateAllSubjects\">\n" +
+    "        <div ng-switch-when=\"false\">\n" +
+    "            <div translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
+    "            <span translate=\".COMPOSITE_SCORE\"></span>\n" +
+    "            <span> {{::vm.compositeScore}}</span>\n" +
+    "        </div>\n" +
+    "        <div ng-switch-when=\"true\">\n" +
+    "            <span translate=\".ESTIMATED_SCORE\"></span>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"doughnuts-container\">\n" +
