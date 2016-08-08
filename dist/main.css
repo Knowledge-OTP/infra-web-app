@@ -81,8 +81,6 @@ md-dialog .close-popup {
 .md-dialog-container {
   overflow: visible; }
 
-/* full background image with retina */
-/* full background image with retina */
 /* fonts size */
 /* general */
 /* paths */
@@ -91,6 +89,8 @@ md-dialog .close-popup {
 /*background*/
 /* box shadow */
 /* font color*/
+/* full background image with retina */
+/* full background image with retina */
 @import url(//fonts.googleapis.com/css?family=Lato:300);
 @import url(//fonts.googleapis.com/css?family=Lato:300italic);
 @import url(//fonts.googleapis.com/css?family=Lato:400);
@@ -99,51 +99,6 @@ md-dialog .close-popup {
 @import url(//fonts.googleapis.com/css?family=Quicksand:300);
 @import url(//fonts.googleapis.com/css?family=Quicksand:700);
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
-md-tooltip {
-  opacity: 0;
-  width: 150px;
-  height: 87px;
-  background: #ffffff;
-  padding: 0 5px;
-  z-index: 100; }
-  md-tooltip ._md-content {
-    height: auto;
-    text-align: center;
-    background: #ffffff;
-    white-space: normal; }
-    md-tooltip ._md-content._md-show {
-      opacity: 1;
-      transform: none;
-      transition: none;
-      pointer-events: auto;
-      will-change: auto; }
-    md-tooltip ._md-content._md-show-remove {
-      transition: none; }
-      md-tooltip ._md-content._md-show-remove._md-show-remove-active {
-        transform: none;
-        opacity: 0; }
-    md-tooltip ._md-content .top-text {
-      margin-top: 22px;
-      margin-bottom: 12px;
-      font-size: 16px;
-      color: #4f4d4d;
-      font-family: Lato;
-      font-weight: 400; }
-    md-tooltip ._md-content .bottom-text {
-      line-height: 12px;
-      font-size: 12px;
-      color: #4f4d4d;
-      font-family: Lato;
-      font-weight: 300; }
-  md-tooltip._md-hide {
-    transition: opacity 0.4s;
-    opacity: 0; }
-  md-tooltip._md-show {
-    opacity: 1;
-    transition: opacity 0.4s;
-    pointer-events: auto;
-    will-change: opacity; }
-
 .app-workouts-diagnostic .exercise-container {
   width: 100%;
   height: calc(100vh - 95px);
@@ -376,6 +331,51 @@ md-tooltip.tooltip-for-diagnostic-summary {
     margin-right: auto;
     margin-top: 35px;
     margin-bottom: 35px; }
+
+md-tooltip.tooltip-for-diagnostic-summary {
+  opacity: 0;
+  width: 150px;
+  height: 87px;
+  background: #ffffff;
+  padding: 0 5px;
+  z-index: 100; }
+  md-tooltip.tooltip-for-diagnostic-summary ._md-content {
+    height: auto;
+    text-align: center;
+    background: #ffffff;
+    white-space: normal; }
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      pointer-events: auto;
+      will-change: auto; }
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
+      transition: none; }
+      md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
+        transform: none;
+        opacity: 0; }
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content .top-text {
+      margin-top: 22px;
+      margin-bottom: 12px;
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400; }
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content .bottom-text {
+      line-height: 12px;
+      font-size: 12px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300; }
+  md-tooltip.tooltip-for-diagnostic-summary._md-hide {
+    transition: opacity 0.4s;
+    opacity: 0; }
+  md-tooltip.tooltip-for-diagnostic-summary._md-show {
+    opacity: 1;
+    transition: opacity 0.4s;
+    pointer-events: auto;
+    will-change: opacity; }
 
 /**
 *  FONTS

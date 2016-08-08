@@ -1,7 +1,6 @@
-@import 'bower_components/infra/dist/mixins/mixins',
-        'src/scss/imports/variables',
+@import 'src/scss/imports/variables',
         'src/scss/imports/colors',
-        'src/scss/imports/material-underscore-extend';
+        'bower_components/infra/dist/mixins/mixins';
 
 
 @import 'scss/app-workouts',

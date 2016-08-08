@@ -127,4 +127,56 @@
 
 }
 
+md-tooltip.tooltip-for-diagnostic-summary {
+    opacity: 0;
+    width: 150px;
+    height: 87px;
+    background: $bgColor3;
+    padding: 0 5px;
+    z-index: 100;
+    ._md-content {
+        height: auto;
+        text-align: center;
+        background: $bgColor3;
+        white-space: normal;
+        // override and cancel .md-content transitions and transform
+        &._md-show {
+            opacity: 1;
+            transform: none;
+            transition: none;
+            pointer-events: auto;
+            will-change: auto;
+        }
+        &._md-show-remove {
+            transition: none;
+            &._md-show-remove-active {
+                transform: none;
+                opacity: 0;
+            }
+        }
+        .top-text {
+            margin: {
+                top: 22px;
+                bottom: 12px;
+            }
+            @include text-style(16px, $fontColor3, Lato, 400);
+        }
+        .bottom-text {
+            line-height: 12px;
+            @include text-style(12px, $fontColor3, Lato, 300);
+        }
+    }
+
+    &._md-hide {
+        transition: opacity 0.4s;
+        opacity: 0;
+    }
+
+    &._md-show {
+        opacity: 1;
+        transition: opacity 0.4s;
+        pointer-events: auto;
+        will-change: opacity;
+    }
+}
 
