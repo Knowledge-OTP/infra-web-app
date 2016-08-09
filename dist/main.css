@@ -172,41 +172,6 @@ md-dialog .close-popup {
       -ms-flex-item-align: end;
           align-self: flex-end; }
 
-md-tooltip.tooltip-for-diagnostic-summary {
-  opacity: 0;
-  width: auto;
-  height: auto;
-  background: white;
-  padding: 0 5px; }
-  md-tooltip.tooltip-for-diagnostic-summary .md-content {
-    font-size: 14px;
-    color: #4f4d4d;
-    font-family: Lato;
-    font-weight: 400;
-    height: auto;
-    text-align: center;
-    background: white;
-    white-space: normal; }
-    md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show {
-      opacity: 1;
-      transform: none;
-      transition: none;
-      pointer-events: auto;
-      will-change: auto; }
-    md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show-remove {
-      transition: none; }
-      md-tooltip.tooltip-for-diagnostic-summary .md-content.md-show-remove.md-show-remove-active {
-        transform: none;
-        opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary.md-hide {
-    transition: opacity 0.4s;
-    opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary.md-show {
-    opacity: 1;
-    transition: opacity 0.4s;
-    pointer-events: auto;
-    will-change: opacity; }
-
 .diagnostic-summary-wrapper {
   padding-top: 50px; }
   .diagnostic-summary-wrapper .title {
@@ -320,7 +285,6 @@ md-tooltip.tooltip-for-diagnostic-summary {
     font-family: Lato;
     font-weight: 200;
     text-align: center;
-    width: 630px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 35px;
@@ -332,6 +296,41 @@ md-tooltip.tooltip-for-diagnostic-summary {
     margin-right: auto;
     margin-top: 35px;
     margin-bottom: 35px; }
+
+md-tooltip.tooltip-for-diagnostic-summary {
+  opacity: 0;
+  width: auto;
+  height: auto;
+  background: white;
+  padding: 0 5px; }
+  md-tooltip.tooltip-for-diagnostic-summary ._md-content {
+    font-size: 14px;
+    color: #4f4d4d;
+    font-family: Lato;
+    font-weight: 400;
+    height: auto;
+    text-align: center;
+    background: white;
+    white-space: normal; }
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      pointer-events: auto;
+      will-change: auto; }
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
+      transition: none; }
+      md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
+        transform: none;
+        opacity: 0; }
+  md-tooltip.tooltip-for-diagnostic-summary._md-hide {
+    transition: opacity 0.4s;
+    opacity: 0; }
+  md-tooltip.tooltip-for-diagnostic-summary._md-show {
+    opacity: 1;
+    transition: opacity 0.4s;
+    pointer-events: auto;
+    will-change: opacity; }
 
 /**
 *  FONTS
@@ -3246,7 +3245,8 @@ workout-intro-lock {
           padding-left: 10px; }
         .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper .bold, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper .bold {
           font-weight: 400;
-          float: right; }
+          float: right;
+          width: 32px; }
 
 .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper {
   font-family: Quicksand; }

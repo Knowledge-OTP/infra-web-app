@@ -1,8 +1,13 @@
 <div class="diagnostic-summary-wrapper" translate-namespace="WORKOUTS_DIAGNOSTIC_SUMMARY">
-    <div class="title">
-        <div translate=".YOUR_INITIAL_SCORE_ESTIMATE"></div>
-        <span translate=".COMPOSITE_SCORE"></span>
-        <span> {{::vm.compositeScore}}</span>
+    <div class="title" ng-switch on="vm.isSubjectsWaitToBeEvaluated">
+        <div ng-switch-when="false">
+            <div translate=".YOUR_INITIAL_SCORE_ESTIMATE"></div>
+            <span translate=".COMPOSITE_SCORE"></span>
+            <span> {{::vm.compositeScore}}</span>
+        </div>
+        <div ng-switch-when="true">
+            <span translate=".ESTIMATED_SCORE"></span>
+        </div>
     </div>
 
     <div class="doughnuts-container">
@@ -11,7 +16,7 @@
                 <p class="subject-name" translate="{{doughnut.subjectName}}"></p>
                 <div class="znk-doughnut">
                     <div class="white-bg-doughnut-score">
-                        {{doughnut.score === 0 ? '-' : doughnut.score }}
+                        {{!doughnut.score ? '-' : doughnut.score }}
                     </div>
                     <div class="goal-point"
                          ng-style="::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}">

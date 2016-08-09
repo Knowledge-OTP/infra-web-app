@@ -121,7 +121,7 @@
                             var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
                                 var estimatedScores = {};
                                 angular.forEach(latestScores, function (estimatedScore, subjectId) {
-                                    estimatedScores[subjectId] = Math.round(estimatedScore.score) || 0;
+                                    estimatedScores[subjectId] = estimatedScore.score ? Math.round(estimatedScore.score) : null;
                                 });
                                 return estimatedScores;
                             });

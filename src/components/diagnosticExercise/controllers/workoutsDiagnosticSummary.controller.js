@@ -34,9 +34,22 @@
                 diagnosticResultObj.$save();
             }
 
-            if (diagnosticResultObj.compositeScore > diagnosticSettings.greatStart) {
+            self.isSubjectsWaitToBeEvaluated = false;
+
+            for (var i in diagnosticScoresObj) {
+                if (diagnosticScoresObj.hasOwnProperty(i)) {
+                    if (diagnosticScoresObj[i] === null) {
+                        self.isSubjectsWaitToBeEvaluated = true;
+                        break;
+                    }
+                }
+            }
+
+            if(self.isSubjectsWaitToBeEvaluated) {
+                self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.EVALUATE_START';
+            } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.greatStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';
-            } else if (diagnosticResultObj.compositeScore > diagnosticSettings.goodStart) {
+            } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.goodStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GOOD_START';
             } else {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.BAD_START';

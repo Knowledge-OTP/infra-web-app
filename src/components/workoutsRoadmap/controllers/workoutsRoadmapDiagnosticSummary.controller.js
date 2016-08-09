@@ -6,14 +6,26 @@
             'ngInject';
 
             var vm = this;
-
-            diagnosticData.diagnosticResultProm.then(function (diagnosticResult) {
-                vm.compositeScore = diagnosticResult.compositeScore;
-                vm.userStats = diagnosticResult.userStats;
-            });
+            var diagnosticSubjects;
 
             diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
-                vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+                diagnosticSubjects = vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
+                return diagnosticData.diagnosticResultProm;
+            }).then(function (diagnosticResult) {
+                var diagnosticScoresObj = diagnosticResult.userStats;
+                vm.isSubjectsWaitToBeEvaluated = false;
+
+                for (var i=0, ii = diagnosticSubjects.length; i < ii; i++) {
+                    var subjectId = diagnosticSubjects[i].id;
+
+                    if (!diagnosticScoresObj[subjectId]) {
+                        vm.isSubjectsWaitToBeEvaluated = true;
+                        break;
+                    }
+                }
+
+                vm.compositeScore = diagnosticResult.compositeScore;
+                vm.userStats = diagnosticScoresObj;
             });
 
         });
