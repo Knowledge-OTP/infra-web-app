@@ -72,8 +72,6 @@
             };
 
             vm.changeSubject = (function () {
-                vm.rotate = true;
-
                 var usedSubjects = [];
                 var subjectNum = SubjectEnum.getEnumArr().length;
 

@@ -6808,8 +6808,6 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
             };
 
             vm.changeSubject = (function () {
-                vm.rotate = true;
-
                 var usedSubjects = [];
                 var subjectNum = SubjectEnum.getEnumArr().length;
 
