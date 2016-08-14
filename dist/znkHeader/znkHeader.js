@@ -213,10 +213,12 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "            <md-list flex=\"grow\" layout=\"row\" layout-align=\"start center\">\n" +
     "                <div ng-repeat=\"headerItem in vm.additionalItems\">\n" +
     "                    <md-list-item md-ink-ripple\n" +
-    "                                  ui-sref-active=\"active\"\n" +
-    "                                  ui-sref=\"{{headerItem.goToState}}\"\n" +
-    "                                  ui-sref-opts=\"{{headerItem.stateOpt}}\">\n" +
+    "                                  ui-sref-active=\"active\">\n" +
     "                        <span class=\"title\" translate=\"{{headerItem.text}}\"></span>\n" +
+    "                        <a ui-sref=\"{{headerItem.goToState}}\"\n" +
+    "                           ui-sref-opts=\"{{headerItem.stateOpt}}\"\n" +
+    "                           class=\"link-full-item\">\n" +
+    "                        </a>\n" +
     "                    </md-list-item>\n" +
     "                </div>\n" +
     "            </md-list>\n" +
