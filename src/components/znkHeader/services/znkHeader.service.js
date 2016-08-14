@@ -20,37 +20,32 @@
                 }
             };
 
-            this.$get = ['$state', function ($state) {
+            this.$get = function () {
+                'ngInject';
                 var navItemsArray = [];
 
-                function addDefaultNavItem(_text, _onClickHandler){
+                function addDefaultNavItem(_text, _goToState, _stateOpt) {
+
                     var navItem = {
                         text: _text,
-                        onClickHandler: _onClickHandler
+                        goToState: _goToState,
+                        stateOpt: _stateOpt
                     };
+
                     navItemsArray.push(navItem);
                 }
 
-                function _onClickHandler(stateAsString, stateParams, options){
-                    if(angular.isDefined(stateParams) || angular.isDefined(options)){
-                        $state.go(stateAsString, stateParams, options);
-                    }
-                    else {
-                        $state.go(stateAsString);
-                    }
-                }
-
-                addDefaultNavItem('ZNK_HEADER.WORKOUTS', _onClickHandler.bind(null, 'app.workouts.roadmap', {}, {reload:true}));
-                addDefaultNavItem('ZNK_HEADER.TESTS', _onClickHandler.bind(null, 'app.tests.roadmap'));
-                addDefaultNavItem('ZNK_HEADER.TUTORIALS', _onClickHandler.bind(null, 'app.tutorials.roadmap'));
-                addDefaultNavItem('ZNK_HEADER.PERFORMANCE', _onClickHandler.bind(null, 'app.performance'));
+                addDefaultNavItem('ZNK_HEADER.WORKOUTS', 'app.workouts.roadmap', { reload: true });
+                addDefaultNavItem('ZNK_HEADER.TESTS', 'app.tests.roadmap');
+                addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials.roadmap');
+                addDefaultNavItem('ZNK_HEADER.PERFORMANCE', 'app.performance');
 
                 return {
                     getAdditionalItems: function () {
                         return navItemsArray.concat(additionalNavMenuItems);  // return array of default nav items with additional nav items
                     }
                 };
-            }];
+            };
 
         }
     );
