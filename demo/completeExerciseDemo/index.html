@@ -11,40 +11,23 @@
     <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
     <!-- endbower-->
 
-    <link rel="stylesheet" href="css/znk-exercise.css">
-    <link rel="stylesheet" href="css/diagnostic-intro-custom.css">
     <link rel="stylesheet" href="main.css">
-    <style>
-        body{
-            background: #E6E5E5;
-        }
-        .main-content {
-            width: 1060px;
-            padding-top: 18px;
-            margin: 0 auto;
-        }
-        .math-bg {
-            background-color: #AF89D2;
-        }
-        .subject-background-math {
-            background-image: url("images/subject-background-math.png");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            display: inline-block;
-            width: 85px;
-            height: 134px;
-        }
-        znk-exercise-header {
-            width: 100%;
-        }
-    </style>
 </head>
 <body ng-app="demo">
-<div class="main-content" layout="column" flex="grow">
-    <ui-view></ui-view>
-</div>
-
+    <div style="margin-top: 20px">
+        <label>Exercise type</label>
+        <select ng-model="data.exerciseType"
+                ng-options="exerciseType.val for exerciseType in exerciseTypeEnumArr">
+        </select>
+    </div>
+    <div style="margin-top: 20px">
+        <label>Exercise parent</label>
+        <select ng-model="data.exerciseParent"
+                ng-options="exerciseParent.val for exerciseParent in exerciseParentEnumArr">
+        </select>
+    </div>
+    <complete-exercise exercise-data="exerciseData">
+    </complete-exercise>
 <!-- Bower:js -->
 <script src="angular/angular.js"></script>
 <script src="angular-animate/angular-animate.js"></script>
@@ -71,14 +54,15 @@
 <script src="main.js"></script>
 <script src="demo.js"></script>
 
-<script src="infra/demoShared/analyticsConfig.js"></script>
 <script src="infra/demoShared/contentConfig.js"></script>
 <script src="infra/demoShared/storagesConfig.js"></script>
-<script src="infra/demoShared/estimatedScoreConfig.js"></script>
+<script src="infra/demoShared/env.service.js"></script>
+<script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
+<!--<script src="infra/demoShared/estimatedScoreConfig.js"></script>-->
 
 <!--infra web demo shared-->
-<script src="diagnostic.config.js"></script>
-<script src="translate.config.js"></script>
+<!--<script src="diagnostic.config.js"></script>-->
+<!--<script src="translate.config.js"></script>-->
 
 </body>
 </html>
