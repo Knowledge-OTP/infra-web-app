@@ -1,0 +1,13 @@
+.base-complete-exercise-container{
+    width: 1060px;
+    height: calc(100vh - 75px);
+    background: $bgColor1;
+    display: block;
+    margin: {
+        top: 15px;
+        right: auto;
+        left: auto;
+    }
+    box-shadow: 0 3px 7px 0 $bsColor3;
+    border-radius: 15px;
+}

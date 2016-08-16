@@ -1,0 +1,50 @@
+complete-exercise-header{
+    display: block;
+    overflow: hidden;
+    border:{
+        top-right-radius: 15px;
+        top-left-radius: 15px;
+    }
+
+    .header-container{
+        $externalPartWidth: 400px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        padding: {
+            right: 28px;
+            left: 28px;
+        }
+        color: $fontColor1;
+        font:{
+            family: Lato;
+            weight: $regularFontWeight;
+            size: 16px;
+        }
+
+        .left-part{
+            width: $externalPartWidth;
+            overflow: hidden;
+
+            .left-title{
+                width: 300px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .center-part{
+            flex-grow: 1;
+        }
+
+        .right-part{
+            width: $externalPartWidth;
+            text-align: right;
+
+            .exit{
+                cursor: pointer;
+            }
+        }
+    }
+}

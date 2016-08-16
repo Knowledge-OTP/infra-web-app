@@ -4,4 +4,9 @@
 
 @import "directives/completeExercise/complete-exercise",
         "directives/completeExerciseIntro/complete-exercise-intro",
-        "directives/compeleteExerciseExercise/complete-exercise-exercise";
+        "directives/compeleteExerciseExercise/complete-exercise-exercise",
+        "directives/completeExerciseHeader/complete-exercise-header",
+        "directives/completeExerciseIntroTutorial/complete-exercise-intro-tutorial";
+
+@import "scss/theme",
+        "scss/subject-pattern";

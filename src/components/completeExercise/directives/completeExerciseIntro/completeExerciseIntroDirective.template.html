@@ -1,1 +1,17 @@
-<div ng-include="$ctrl.viewTemplateUrl">
+<div class="base-complete-exercise-container">
+    <complete-exercise-header></complete-exercise-header>
+    <ng-switch on="$ctrl.exerciseTypeId" class="intro-container">
+        <complete-exercise-intro-tutorial ng-switch-when="1">
+        </complete-exercise-intro-tutorial>
+        <div ng-switch-when="4">
+            Section
+        </div>
+    </ng-switch>
+    <div class="btn-section">
+        <md-button class="md-primary znk go-to-questions-btn"
+                   md-no-ink
+                   translate=".GO_QST"
+                   ng-click="$ctrl.completeExerciseCtrl.changeViewState($ctrl.VIEW_STATES.EXERCISE)">
+        </md-button>
+    </div>
+</div>

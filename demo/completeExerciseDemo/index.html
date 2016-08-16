@@ -12,21 +12,25 @@
     <!-- endbower-->
 
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="cssConfig/subjects-colors.css">
 </head>
 <body ng-app="demo">
-    <div style="margin-top: 20px">
-        <label>Exercise type</label>
-        <select ng-model="data.exerciseType"
-                ng-options="exerciseType.val for exerciseType in exerciseTypeEnumArr">
-        </select>
+    <div style="display: flex">
+        <div style="margin-top: 20px;margin-right: 10px;">
+            <label>Exercise type</label>
+            <select ng-model="data.exerciseType"
+                    ng-options="exerciseType.val for exerciseType in exerciseTypeEnumArr">
+            </select>
+        </div>
+        <div style="margin-top: 20px">
+            <label>Exercise parent</label>
+            <select ng-model="data.exerciseParent"
+                    ng-options="exerciseParent.val for exerciseParent in exerciseParentEnumArr">
+            </select>
+        </div>
     </div>
-    <div style="margin-top: 20px">
-        <label>Exercise parent</label>
-        <select ng-model="data.exerciseParent"
-                ng-options="exerciseParent.val for exerciseParent in exerciseParentEnumArr">
-        </select>
-    </div>
-    <complete-exercise exercise-data="exerciseData">
+    <complete-exercise exercise-details="exerciseData"
+                        settings="settings">
     </complete-exercise>
 <!-- Bower:js -->
 <script src="angular/angular.js"></script>
@@ -40,10 +44,10 @@
 <script src="angular-translate/angular-translate.js"></script>
 <script src="angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
 <script src="angular-svg-round-progressbar/build/roundProgress.min.js"></script>
-<script src="angular-ui-router/release/angular-ui-router.js"></script>
 <script src="plivo/dist/plivo.min.js"></script>
 <script src="angular-messages/angular-messages.js"></script>
 <script src="angular-material/angular-material.js"></script>
+<script src="angular-ui-router/release/angular-ui-router.js"></script>
 <script src="infra/dist/main.js"></script>
 <script src="ng-tags-input/ng-tags-input.js"></script>
 <script src="Chart.js/Chart.js"></script>
@@ -58,6 +62,7 @@
 <script src="infra/demoShared/storagesConfig.js"></script>
 <script src="infra/demoShared/env.service.js"></script>
 <script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
+<script src="infra/demoShared/translate.config.js"></script>
 <!--<script src="infra/demoShared/estimatedScoreConfig.js"></script>-->
 
 <!--infra web demo shared-->

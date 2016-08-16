@@ -1,3 +1,26 @@
 complete-exercise-intro{
+    .base-complete-exercise-container{
+        position: relative;
 
+        .intro-container{
+            img{
+                max-width: 400px !important;
+                height: auto !important;
+                vertical-align: middle;
+            }
+        }
+
+        .btn-section{
+            position: absolute;
+            right: 15px;
+            bottom: 10px;
+
+            .go-to-questions-btn{
+                padding: {
+                    right: 45px;
+                    left: 45px;
+                }
+            }
+        }
+    }
 }

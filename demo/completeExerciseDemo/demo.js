@@ -14,6 +14,11 @@
         $rootScope.exerciseParentEnumArr = ExerciseParentEnum.getEnumArr();
         $rootScope.data.exerciseParent = ExerciseParentEnum.WORKOUT;
 
+        $rootScope.settings = {
+            exitAction: function(){
+                alert('exit');
+            }
+        };
         $rootScope.$watch('data',function(data){
             if(!data){
                 return;
@@ -22,7 +27,7 @@
             var exerciseId;
             var parentId;
 
-            switch ($rootScope.data.exerciseType.enum){
+            switch (data.exerciseType.enum){
                 case ExerciseTypeEnum.TUTORIAL.enum:
                     exerciseId = 100;
                     break;
@@ -33,7 +38,7 @@
                     alert('no game exercise available');
                     return;
                 case ExerciseTypeEnum.SECTION.enum:
-                    exerciseId = 1137;
+                    exerciseId = 1162;
                     break;
                 case ExerciseTypeEnum.DRILL.enum:
                     alert('no drill exercise available');
@@ -43,11 +48,23 @@
                     break;
             }
 
+            switch (data.exerciseParent.enum){
+                case ExerciseParentEnum.WORKOUT.enum:
+                    parentId = 10;
+                    break;
+                case ExerciseParentEnum.EXAM.enum:
+                    parentId = 17;
+                    break;
+                case ExerciseParentEnum.MODULE.enum:
+                    parentId = 100;
+                    break;
+            }
+
             $rootScope.exerciseData = {
                 exerciseTypeId: data.exerciseType.enum,
-                exerciseParentId: data.exerciseParent.enum,
+                exerciseParentTypeId: data.exerciseParent.enum,
                 exerciseId: exerciseId,
-                parentId: parentId
+                exerciseParentId: parentId
             };
         },true);
     });
