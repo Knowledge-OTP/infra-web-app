@@ -16,7 +16,7 @@
                 };
 
                 this.$onInit = function () {
-                    var exerciseContent = this.completeExerciseIntroCtrl.exerciseContent;
+                    var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
 
                     this.exerciseContent = exerciseContent;
 

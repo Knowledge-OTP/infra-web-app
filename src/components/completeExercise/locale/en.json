@@ -1,9 +1,9 @@
 {
     "COMPLETE_EXERCISE":{
         "EXERCISE_PARENT": {
-            "TYPE_1": "Workout {{exerciseDetails.exerciseParentId}}: {{exerciseData.exerciseContent.name}}",
+            "TYPE_1": "Workout {{exerciseParentId}}: {{exerciseContent.name}}",
             "TYPE_2": "Tutorial",
-            "TYPE_3": "Exam {{exerciseData.exerciseParentContent.name}}: {{exerciseData.exerciseContent.name}}",
+            "TYPE_3": "Exam {{exerciseParentContent.name}}: {{exerciseContent.name}}",
             "4": "MODULE"
         },
         "EXIT": "Exit",

@@ -11,11 +11,22 @@
             controller: function (CompleteExerciseSrv) {
                 'ngInject';
 
+                var $ctrl = this;
+
+                this.goToQuestions = function(){
+                    var exerciseResult = this.completeExerciseCtrl.exerciseData.exerciseResult;
+                    exerciseResult.seenIntro = true;
+                    exerciseResult.$save().then(function(){
+                        $ctrl .completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.EXERCISE);
+                    });
+                };
+
+                this.getExerciseContent = function(){
+                    return this.completeExerciseCtrl.getExerciseContent();
+                };
 
                 this.$onInit = function () {
-                    this.exerciseContent = this.completeExerciseCtrl.exerciseData.exerciseContent;
                     this.exerciseTypeId = this.completeExerciseCtrl.exerciseDetails.exerciseTypeId;
-                    this.VIEW_STATES = CompleteExerciseSrv.VIEW_STATES;
                 };
             }
         });

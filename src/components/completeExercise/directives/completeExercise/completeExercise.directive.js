@@ -61,7 +61,34 @@
                     $ctrl.currViewState = newViewState;
                 };
 
+                function _getGetterFnName(propName){
+                    return 'get' + propName[0].toUpperCase() + propName.substr(1);
+                }
+
+                function _createPropGetters(propArray, contextObjectName){
+                    propArray.forEach(function(propName){
+                        var getterFnName = _getGetterFnName(propName);
+                        $ctrl[getterFnName] = function(){
+                            return $ctrl[contextObjectName][propName];
+                        };
+                    });
+                }
+
+                var exerciseDetailsPropsToCreateGetters = [
+                    'exerciseParentTypeId',
+                    'exerciseParentId'
+                ];
+                _createPropGetters(exerciseDetailsPropsToCreateGetters, 'exerciseDetails');
+
+                var exerciseDataPropsToCreateGetters = [
+                    'exerciseContent',
+                    'exerciseParentContent'
+                ];
+                _createPropGetters(exerciseDataPropsToCreateGetters , 'exerciseData');
+
+
                 this.$onInit = function () {
+
                 };
 
                 this.$onChanges = function (changesObj) {
