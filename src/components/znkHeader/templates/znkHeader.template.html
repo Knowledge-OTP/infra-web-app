@@ -8,9 +8,14 @@
 
         <div class="app-states-list">
             <md-list flex="grow" layout="row" layout-align="start center">
-                <div ng-repeat="headerItem in vm.additionalItems" ng-click="vm.invokeOnClickHandler(headerItem.onClickHandler)">
-                    <md-list-item md-ink-ripple ui-sref-active="active">
+                <div ng-repeat="headerItem in vm.additionalItems">
+                    <md-list-item md-ink-ripple
+                                  ui-sref-active="active">
                         <span class="title" translate="{{headerItem.text}}"></span>
+                        <a ui-sref="{{headerItem.goToState}}"
+                           ui-sref-opts="{{headerItem.stateOpt}}"
+                           class="link-full-item">
+                        </a>
                     </md-list-item>
                 </div>
             </md-list>
