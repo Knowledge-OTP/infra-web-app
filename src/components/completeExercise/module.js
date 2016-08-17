@@ -9,6 +9,7 @@
         'znk.infra.userContext',
         'znk.infra.user',
         'znk.infra.general',
-        'znk.infra.filters'
+        'znk.infra.filters',
+        'znk.infra.znkExercise'
     ]);
 })();

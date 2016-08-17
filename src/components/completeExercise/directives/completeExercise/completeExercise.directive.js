@@ -59,13 +59,16 @@
                                 $ctrl.changeViewState(VIEW_STATES.INTRO);
                                 return;
                             }
+
+                            var isExerciseCompleted = data.exerciseResult.isComplete;
+                            if(isExerciseCompleted){
+                                $ctrl.changeViewState(VIEW_STATES.SUMMARY);
+                            }else{
+                                $ctrl.changeViewState(VIEW_STATES.EXERCISE);
+                            }
                         });
                     });
                 }
-
-                this.changeViewState = function (newViewState) {
-                    $ctrl.currViewState = newViewState;
-                };
 
                 function _getGetterFnName(propName) {
                     return 'get' + propName[0].toUpperCase() + propName.substr(1);
@@ -80,21 +83,24 @@
                     });
                 }
 
-                var exerciseDetailsPropsToCreateGetters = [
-                    'exerciseParentTypeId',
-                    'exerciseParentId'
-                ];
-                _createPropGetters(exerciseDetailsPropsToCreateGetters, 'exerciseDetails');
-
-                var exerciseDataPropsToCreateGetters = [
-                    'exerciseContent',
-                    'exerciseParentContent'
-                ];
-                _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
-
+                this.changeViewState = function (newViewState) {
+                    $ctrl.currViewState = newViewState;
+                };
 
                 this.$onInit = function () {
+                    var exerciseDetailsPropsToCreateGetters = [
+                        'exerciseParentTypeId',
+                        'exerciseParentId',
+                        'exerciseTypeId'
+                    ];
+                    _createPropGetters(exerciseDetailsPropsToCreateGetters, 'exerciseDetails');
 
+                    var exerciseDataPropsToCreateGetters = [
+                        'exerciseContent',
+                        'exerciseParentContent',
+                        'exerciseResult'
+                    ];
+                    _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
                 };
 
                 this.$onChanges = function (changesObj) {
@@ -115,8 +121,6 @@
 
                     _rebuildExercise();
                 };
-
-                $ctrl.changeViewState(VIEW_STATES.NONE);
 
                 $translatePartialLoader.addPart('completeExercise');
             }

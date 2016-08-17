@@ -264,6 +264,11 @@ module.exports = function (grunt) {
                     cwd: '<%= yeoman.src %>/components',
                     src: ['*/locale/*.json'],
                     dest: 'tmpLocalization/'
+                },{
+                    expand: true,
+                    cwd: 'bower_components/infra/dist',
+                    src: ['*/locale/*.json'],
+                    dest: 'tmpLocalization/'
                 }]
             },
             dist: {

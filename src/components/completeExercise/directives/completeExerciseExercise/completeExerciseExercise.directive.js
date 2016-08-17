@@ -8,10 +8,24 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: function () {
+            controller: function ($controller) {
                 'ngInject';
 
+                var $ctrl = this;
+
+                function _invokeExerciseCtrl(){
+                    var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var exerciseTypeId = $ctrl.completeExerciseCtrl.getExerciseTypeId();
+
+                    $controller('CompleteExerciseBaseZnkExerciseCtrl',{
+                        exerciseContent: exerciseContent,
+                        exerciseResult: exerciseResult
+                    });
+                }
+
                 this.$onInit = function () {
+                    _invokeExerciseCtrl();
 
                 };
             }
