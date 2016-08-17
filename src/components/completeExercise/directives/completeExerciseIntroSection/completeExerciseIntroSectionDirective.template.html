@@ -1,0 +1,33 @@
+<div class="intro-container"
+     translate-namespace="COMPLETE_EXERCISE">
+    <div class="title" ng-bind="$ctrl.exerciseParentContent.name"></div>
+    <svg-icon subject-id-to-attr-drv="$ctrl.exerciseContent.subjectId"
+              context-attr="name"
+              suffix="icon"
+              class="subject-icon">
+    </svg-icon>
+    <div class="subject-text"
+         translate="SUBJECTS.{{$ctrl.exerciseContent.subjectId}}">
+    </div>
+    <div class="section-data">
+        <span translate=".QUESTIONS"
+              translate-values="{num: $ctrl.exerciseContent.questions.length}">
+        </span>
+        <span translate=".TIME"
+              translate-values="$ctrl.timeTranslateValue">
+        </span>
+    </div>
+    <div class="instructions-title"
+         translate=".INSTRUCTIONS">
+    </div>
+    <p class="instructions-text"
+       translate="SECTION_INSTRUCTION.{{$ctrl.exerciseContent.subjectId}}">
+    </p>
+    <div class="btn-section">
+        <md-button class="md-primary znk"
+                   md-no-ink
+                   translate=".START"
+                   ng-click="$ctrl.start()">
+        </md-button>
+    </div>
+</div>

@@ -172,7 +172,7 @@ module.exports = function (grunt) {
         },
         connect: {
             options: {
-                base: ['.tmp', 'bower_components', 'demoShared', 'tmpLocalization'],
+                base: ['.tmp', 'bower_components', 'demoShared', 'tmpLocalization', 'bower_components/infra/demoShared'],
                 open: true,
                 livereload: 35731
             },

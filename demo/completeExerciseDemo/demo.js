@@ -1,10 +1,6 @@
 (function(angular){
     angular.module('demo', [
         'znk.infra-web-app.completeExercise',
-        // 'znk.infra.content',
-        // 'znk.infra.config',
-        // 'znk.infra.storage',
-        // 'znk.infra.contentGetters'
     ]).run(function($rootScope, BaseExerciseGetterSrv, ExerciseTypeEnum, ExerciseParentEnum){
         $rootScope.data = {};
 
@@ -12,7 +8,7 @@
         $rootScope.data.exerciseType = ExerciseTypeEnum.TUTORIAL;
 
         $rootScope.exerciseParentEnumArr = ExerciseParentEnum.getEnumArr();
-        $rootScope.data.exerciseParent = ExerciseParentEnum.WORKOUT;
+        $rootScope.data.exerciseParent = ExerciseParentEnum.TUTORIAL;
 
         $rootScope.settings = {
             exitAction: function(){

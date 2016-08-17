@@ -3,15 +3,7 @@
     <ng-switch on="$ctrl.exerciseTypeId" class="intro-container">
         <complete-exercise-intro-tutorial ng-switch-when="1">
         </complete-exercise-intro-tutorial>
-        <div ng-switch-when="4">
-            Section
-        </div>
+        <complete-exercise-intro-section ng-switch-when="4">
+        </complete-exercise-intro-section>
     </ng-switch>
-    <div class="btn-section">
-        <md-button class="md-primary znk go-to-questions-btn"
-                   md-no-ink
-                   translate=".GO_QST"
-                   ng-click="$ctrl.goToQuestions()">
-        </md-button>
-    </div>
 </div>

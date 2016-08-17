@@ -8,6 +8,7 @@
         'znk.infra.contentGetters',
         'znk.infra.userContext',
         'znk.infra.user',
-        'znk.infra.general'
+        'znk.infra.general',
+        'znk.infra.filters'
     ]);
 })();

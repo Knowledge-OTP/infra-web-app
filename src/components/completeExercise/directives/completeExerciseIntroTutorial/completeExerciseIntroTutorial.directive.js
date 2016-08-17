@@ -11,16 +11,20 @@
             controller: function (ENV, ExerciseTypeEnum, $sce) {
                 'ngInject';
 
-                this.trustAsHtml = function (html) {
-                    return $sce.trustAsHtml(html);
-                };
-
                 this.$onInit = function () {
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
 
                     this.exerciseContent = exerciseContent;
 
                     this.videoSrc = $sce.trustAsResourceUrl(ENV.videosEndPoint + 'videos/' + 'tutorials' + '/' + exerciseContent.id + '.mp4');
+
+                    this.trustAsHtml = function (html) {
+                        return $sce.trustAsHtml(html);
+                    };
+
+                    this.goToQuestions = function(){
+                        this.completeExerciseIntroCtrl.goToQuestions();
+                    };
                 };
             }
         });

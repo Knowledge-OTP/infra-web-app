@@ -8,9 +8,15 @@
      *   exerciseParentTypeId
      *   exerciseParentId
      *
-     *
+     * ########
      * settings:
      *   exitAction
+     *
+     * ########
+     *   translations:
+     *      SECTION_INSTRUCTION:{
+     *          subjectId: instructions for subject
+     *      }
      * */
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExercise', {
@@ -61,14 +67,14 @@
                     $ctrl.currViewState = newViewState;
                 };
 
-                function _getGetterFnName(propName){
+                function _getGetterFnName(propName) {
                     return 'get' + propName[0].toUpperCase() + propName.substr(1);
                 }
 
-                function _createPropGetters(propArray, contextObjectName){
-                    propArray.forEach(function(propName){
+                function _createPropGetters(propArray, contextObjectName) {
+                    propArray.forEach(function (propName) {
                         var getterFnName = _getGetterFnName(propName);
-                        $ctrl[getterFnName] = function(){
+                        $ctrl[getterFnName] = function () {
                             return $ctrl[contextObjectName][propName];
                         };
                     });
@@ -84,7 +90,7 @@
                     'exerciseContent',
                     'exerciseParentContent'
                 ];
-                _createPropGetters(exerciseDataPropsToCreateGetters , 'exerciseData');
+                _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
 
                 this.$onInit = function () {

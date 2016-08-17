@@ -1,12 +1,21 @@
 {
-    "COMPLETE_EXERCISE":{
+    "COMPLETE_EXERCISE": {
         "EXERCISE_PARENT": {
             "TYPE_1": "Workout {{exerciseParentId}}: {{exerciseContent.name}}",
-            "TYPE_2": "Tutorial",
+            "TYPE_2": "Tips & Tricks: {{exerciseContent.name}}",
             "TYPE_3": "Exam {{exerciseParentContent.name}}: {{exerciseContent.name}}",
-            "4": "MODULE"
+            "TYPE_4": "{{exerciseContent.name}}"
         },
         "EXIT": "Exit",
-        "GO_QST": "Go To Questions"
+        "GO_QST": "Go To Questions",
+        "QUESTIONS": "Questions: {{num}}",
+        "TIME": "Time: {{min}} min {{sec}} sec",
+        "INSTRUCTIONS": "Instructions",
+        "START": "START"
+    },
+    "SECTION_INSTRUCTION": {
+        "0": "Math Instructions Content",
+        "7": "Verbal Instructions",
+        "8": "essay Instructions"
     }
 }
