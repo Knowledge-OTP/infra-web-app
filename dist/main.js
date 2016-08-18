@@ -22,7 +22,9 @@
 "znk.infra-web-app.userGoalsSelection",
 "znk.infra-web-app.workoutsRoadmap",
 "znk.infra-web-app.znkExerciseStatesUtility",
-"znk.infra-web-app.znkHeader"
+"znk.infra-web-app.znkHeader",
+"znk.infra-web-app.znkSummary",
+"znk.infra-web-app.znkTimelineWebWrapper"
     ]);
 })(angular);
 
@@ -8407,6 +8409,375 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
     "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkSummary', [
+        'pascalprecht.translate',
+        'chart.js',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.znkTimelineWebWrapper'
+    ]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkSummary').component('znkSummaryResults', {
+        templateUrl: 'components/znkSummary/templates/znkSummaryResults.template.html',
+        bindings: {
+            exerciseResult: '<'
+        },
+        controller: ["$translatePartialLoader", function($translatePartialLoader) {
+            'ngInject';
+            $translatePartialLoader.addPart('znkSummary');
+
+            var PERCENTAGE = 100;
+
+            var vm = this;
+
+            var questionsLength = vm.exerciseResult.correctAnswersNum + vm.exerciseResult.wrongAnswersNum + vm.exerciseResult.skippedAnswersNum;
+
+            vm.avgTime = {
+                correctAvgTime: Math.round(vm.exerciseResult.correctAvgTime / 1000),
+                wrongAvgTime: Math.round(vm.exerciseResult.wrongAvgTime / 1000),
+                skippedAvgTime: Math.round(vm.exerciseResult.skippedAvgTime / 1000)
+            };
+
+            vm.gaugeSuccessRate = questionsLength > 0 ? Math.round((vm.exerciseResult.correctAnswersNum * PERCENTAGE) / questionsLength) : 0;
+
+            vm.performenceChart = {
+                labels: ['Correct', 'Wrong', 'Unanswered'],
+                data: [vm.exerciseResult.correctAnswersNum, vm.exerciseResult.wrongAnswersNum, vm.exerciseResult.skippedAnswersNum],
+                colours: ['#87ca4d', '#ff6766', '#ebebeb'],
+                options: {
+                    segmentShowStroke: false,
+                    percentageInnerCutout: 85,
+                    showTooltips: false,
+                    animation: false
+                }
+            };
+        }],
+        controllerAs: 'vm'
+    });
+})(angular);
+
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkSummary').component('znkSummaryTimeline', {
+        templateUrl: 'components/znkSummary/templates/znkSummaryTimeline.template.html',
+        bindings: {
+            exerciseData: '<'
+        },
+        controller: ["$translatePartialLoader", "SubjectEnum", function($translatePartialLoader, SubjectEnum) {
+            'ngInject';
+            $translatePartialLoader.addPart('znkSummary');
+
+            var vm = this;
+
+            vm.seenSummary = vm.exerciseData.exerciseResult.seenSummary;
+            vm.currentSubjectId = vm.exerciseData.exercise.subjectId;
+            vm.activeExerciseId = vm.exerciseData.exercise.id;
+
+            vm.subjectName = SubjectEnum.getValByEnum(vm.currentSubjectId);
+        }],
+        controllerAs: 'vm'
+    });
+})(angular);
+
+
+angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/znkSummary/templates/znkSummaryResults.template.html",
+    "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
+    "    <div class=\"overflowWrap\">\n" +
+    "        <div class=\"gauge-wrap\">\n" +
+    "            <div class=\"gauge-inner-text\">{{::vm.gaugeSuccessRate}}%\n" +
+    "                <div class=\"success-title\" translate=\".SUCCESS\"></div>\n" +
+    "            </div>\n" +
+    "            <canvas\n" +
+    "                id=\"doughnut\"\n" +
+    "                class=\"chart chart-doughnut\"\n" +
+    "                chart-options=\"vm.performenceChart.options\"\n" +
+    "                chart-colours=\"vm.performenceChart.colours\"\n" +
+    "                chart-data=\"vm.performenceChart.data\"\n" +
+    "                chart-labels=\"vm.performenceChart.labels\"\n" +
+    "                chart-legend=\"false\">\n" +
+    "            </canvas>\n" +
+    "        </div>\n" +
+    "        <div class=\"statistics\">\n" +
+    "            <div class=\"stat-row\">\n" +
+    "                <div class=\"stat-val correct\">{{::vm.exerciseResult.correctAnswersNum}}</div>\n" +
+    "                <div class=\"title\" translate=\".CORRECT\"></div>\n" +
+    "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.correctAvgTime}} <span translate=\".SEC\"></span> </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"stat-row\">\n" +
+    "                <div class=\"stat-val wrong\">{{::vm.exerciseResult.wrongAnswersNum}}</div>\n" +
+    "                <div class=\"title\" translate=\".WRONG\"></div>\n" +
+    "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.wrongAvgTime}} <span translate=\".SEC\"></span></div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"stat-row\">\n" +
+    "                <div class=\"stat-val skipped\">{{::vm.exerciseResult.skippedAnswersNum}}</div>\n" +
+    "                <div class=\"title\" translate=\".SKIPPED\"></div>\n" +
+    "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.skippedAvgTime}}  <span translate=\".SEC\"></span></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/znkSummary/templates/znkSummaryTimeline.template.html",
+    "<div class=\"time-line-wrapper\" translate-namespace=\"ZNK_SUMMARY\"\n" +
+    "     ng-class=\"{'seen-summary': vm.seenSummary}\">\n" +
+    "    <div class=\"estimated-score-title\">\n" +
+    "        <span translate=\".ESTIMATED_SCORE\"\n" +
+    "              translate-values=\"{ subjectName: vm.subjectName  }\">\n" +
+    "        </span>\n" +
+    "    </div>\n" +
+    "    <znk-timeline-web-wrapper\n" +
+    "        subject-id=\"{{::vm.currentSubjectId}}\"\n" +
+    "        active-exercise-id=\"::vm.activeExerciseId\">\n" +
+    "    </znk-timeline-web-wrapper>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
+        'znk.infra.znkTimeline',
+        'znk.infra.estimatedScore',
+        'znk.infra-web-app.userGoals'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkTimelineWebWrapper')
+        .config(["TimelineSrvProvider", function (TimelineSrvProvider) {
+            'ngInject';
+            TimelineSrvProvider.setImages({
+                drill: 'components/znkTimeline/svg/icons/timeline-drills-icon.svg',
+                game: 'components/znkTimeline/svg/icons/timeline-mini-challenge-icon.svg',
+                tutorial: 'components/znkTimeline/svg/icons/timeline-tips-tricks-icon.svg',
+                diagnostic: 'components/znkTimeline/svg/icons/timeline-diagnostic-test-icon.svg',
+                section: 'components/znkTimeline/svg/icons/timeline-test-icon.svg'
+            });
+        }]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
+        templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
+        bindings: {
+            activeExerciseId: '=?'
+        },
+        controllerAs: 'vm',
+        controller: ["EstimatedScoreSrv", "UserGoalsService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", "$translatePartialLoader", function (EstimatedScoreSrv, UserGoalsService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum, $translatePartialLoader) {
+            'ngInject';
+
+            $translatePartialLoader.addPart('znkTimelineWebWrapper');
+
+            var vm = this;
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
+            var getGoalsProm = UserGoalsService.getGoals();
+            var inProgressProm = false;
+            var subjectEnumToValMap = SubjectEnum.getEnumMap();
+            var currentSubjectId;
+
+            // options
+            var optionsPerDevice = {
+                width: 705,
+                height: 150,
+                distance: 90,
+                upOrDown: 100,
+                yUp: 30,
+                yDown: 100
+            };
+
+            var subjectIdToIndexMap = {
+                [ExerciseTypeEnum.TUTORIAL.enum]: 'tutorial',
+                [ExerciseTypeEnum.GAME.enum]: 'game',
+                [ExerciseTypeEnum.SECTION.enum]: 'section',
+                [ExerciseTypeEnum.DRILL.enum]: 'drill',
+                diagnostic: 'diagnostic'
+            };
+
+            vm.options = {
+                colors: ['#75cbe8', '#f9d41b', '#ff5895', '', '', '#AF89D2', '#51CDBA'],
+                colorId: vm.currentSubjectId,
+                isMobile: false,
+                width: optionsPerDevice.width,
+                height: optionsPerDevice.height,
+                isSummery: (vm.activeExerciseId) ? vm.activeExerciseId : false,
+                type: 'multi',
+                isMax: true,
+                max: 29,
+                min: 0,
+                subPoint: 35,
+                distance: optionsPerDevice.distance,
+                lineWidth: 2,
+                numbers: {
+                    font: '200 12px Lato',
+                    fillStyle: '#4a4a4a'
+                },
+                onFinish: function (obj) {
+                    var summeryScore = obj.data.summeryScore;
+                    var scoreData;
+
+                    if (summeryScore) {
+                        scoreData = _getSummaryData(summeryScore);
+                    } else {
+                        scoreData = _getRegularData(obj.data.lastLine);
+                    }
+
+                    vm.timelineMinMaxStyle = { 'top': scoreData.y + 'px', 'left': scoreData.x + 'px' };
+
+                    _getPromsOrValue().then(function (results) {
+                        var userGoals = results[1];
+                        var points = userGoals[subjectEnumToValMap[currentSubjectId]] - scoreData.score;
+                        vm.goalPerSubject = scoreData.score;
+                        vm.points = (points > 0) ? points : false;
+                    });
+
+                    if (scoreData.score && scoreData.prevScore) {
+                        if (scoreData.score > scoreData.prevScore) {
+                            vm.timelineLinePlus = '+' + (scoreData.score - scoreData.prevScore);
+                            vm.isRed = false;
+                        } else if (scoreData.score < scoreData.prevScore) {
+                            vm.timelineLinePlus = '-' + (scoreData.prevScore - scoreData.score);
+                            vm.isRed = true;
+                        }
+                    }
+
+                    _scrolling();
+                }
+            };
+
+            function _getSummaryData(summeryScore) {
+                var x = summeryScore.lineTo.x;
+                var y = (summeryScore.lineTo.y < optionsPerDevice.upOrDown) ? summeryScore.lineTo.y + optionsPerDevice.yDown : summeryScore.lineTo.y - optionsPerDevice.yUp;
+                var angleDeg;
+                if (summeryScore.next) {
+                    angleDeg = Math.atan2(summeryScore.lineTo.y - summeryScore.next.y, summeryScore.lineTo.x - summeryScore.next.x) * 180 / Math.PI;
+                }
+
+                if (angleDeg && angleDeg < -optionsPerDevice.upOrDown && summeryScore.lineTo.y < optionsPerDevice.upOrDown) {
+                    x -= 30;
+                }
+
+                return {
+                    x, y,
+                    score: summeryScore.score,
+                    prevScore: summeryScore.prev.score
+                };
+            }
+
+            function _getRegularData(lastLineObj) {
+                var lastLine = lastLineObj[lastLineObj.length - 1];
+                var beforeLast = lastLineObj[lastLineObj.length - 2];
+                var x = lastLine.lineTo.x - 13;
+                var y = (lastLine.lineTo.y < optionsPerDevice.upOrDown) ? lastLine.lineTo.y + optionsPerDevice.yDown : lastLine.lineTo.y - optionsPerDevice.yUp;
+                var angleDeg = Math.atan2(lastLine.lineTo.y - beforeLast.lineTo.y, lastLine.lineTo.x - beforeLast.lineTo.x) * 180 / Math.PI;
+
+                if (angleDeg < -40 || angleDeg > 40) {
+                    x += 20;
+                }
+
+                return {
+                    x, y,
+                    score: lastLine.score,
+                    prevScore: beforeLast.score
+                };
+            }
+
+
+            function _scrolling() {
+                var domElement = $element.children()[0];
+                if (domElement.scrollWidth > domElement.clientWidth) {
+                    domElement.scrollLeft += domElement.scrollWidth - domElement.clientWidth;
+                }
+            }
+
+            function _getPromsOrValue() {
+                if (!inProgressProm) {
+                    inProgressProm = $q.all([estimatedScoresDataProm, getGoalsProm]);
+                }
+                return (angular.isFunction(inProgressProm)) ? inProgressProm : $q.when(inProgressProm);
+            }
+
+            function addIconKey(dataPerSubject) {
+                var newDataArr = [];
+                angular.forEach(dataPerSubject, function (value, index) {
+                    var type = subjectIdToIndexMap[value.exerciseType];
+                    if (index === 0 && type === 'section') {
+                        type = 'diagnostic';
+                    }
+                    value.iconKey = type || false;
+                    newDataArr.push(value);
+                });
+                return newDataArr;
+            }
+
+            $attrs.$observe('subjectId', function (newVal, oldVal) {
+                if (newVal === oldVal) {
+                    return;
+                }
+                currentSubjectId = vm.currentSubjectId = newVal;
+                _getPromsOrValue().then(function (results) {
+                    inProgressProm = results;
+                    var estimatedScoresData = results[0];
+                    vm.animation = true;
+                    vm.timelineLinePlus = false;
+                    vm.timeLineData = {
+                        data: addIconKey(estimatedScoresData[currentSubjectId]),
+                        id: currentSubjectId
+                    };
+                    vm.points = 0;
+                });
+            });
+        }]
+    });
+})(angular);
+
+angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html",
+    "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
+    "    <div class=\"time-line-wrapper\">\n" +
+    "        <div class=\"progress-val\"\n" +
+    "             ng-style=\"vm.timelineMinMaxStyle\"\n" +
+    "             ng-if=\"vm.timeLineData.data.length\">\n" +
+    "            <div class=\"goal-wrapper\">{{vm.goalPerSubject}}\n" +
+    "                <div class=\"timeline-plus\"\n" +
+    "                     ng-if=\"vm.timelineLinePlus\"\n" +
+    "                     ng-class=\"{ 'red-point': vm.isRed, 'green-point': !vm.isRed }\">\n" +
+    "                    {{vm.timelineLinePlus}}\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"progress-title\"\n" +
+    "                 ng-style=\"{ visibility: (vm.points) ? 'visiable' : 'hidden' }\"\n" +
+    "                 translate=\".POINTS_LEFT\"\n" +
+    "                 translate-values=\"{points: {{vm.points}} }\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <canvas znk-timeline\n" +
+    "                timeline-data=\"vm.timeLineData\"\n" +
+    "                timeline-settings=\"vm.options\">\n" +
+    "        </canvas>\n" +
     "    </div>\n" +
     "</div>\n" +
     "");
