@@ -8,6 +8,10 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
+            transclude:{
+                'centerPart': '?centerPart',
+                'preRightPart': '?preRightPart'
+            },
             controller: function ($translate, $q, ExerciseParentEnum) {
                 'ngInject';
 

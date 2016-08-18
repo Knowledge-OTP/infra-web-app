@@ -22,6 +22,12 @@ complete-exercise-header{
             size: 16px;
         }
 
+
+        .left-part, .center-part, .right-part{
+            display: flex;
+            align-items: center;
+        }
+
         .left-part{
             width: $externalPartWidth;
             overflow: hidden;
@@ -36,11 +42,13 @@ complete-exercise-header{
 
         .center-part{
             flex-grow: 1;
+            justify-content: center;
         }
 
         .right-part{
             width: $externalPartWidth;
             text-align: right;
+            justify-content: flex-end;
 
             .exit{
                 cursor: pointer;

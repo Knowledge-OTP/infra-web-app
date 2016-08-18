@@ -13,6 +13,20 @@
 
                 var $ctrl = this;
 
+                function _initTimersVitalData(){
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
+
+                    if(angular.isUndefined(exerciseResult.duration)){
+                        exerciseResult.duration = 0;
+                    }
+
+                    $ctrl.timerConfig = {
+                        countDown: true,
+                        max: exerciseContent.time
+                    };
+                }
+
                 function _invokeExerciseCtrl(){
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
@@ -33,6 +47,8 @@
                 }
 
                 this.$onInit = function () {
+                    _initTimersVitalData();
+
                     _invokeExerciseCtrl();
                 };
             }
