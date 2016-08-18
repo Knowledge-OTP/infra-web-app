@@ -23,9 +23,11 @@
 
    <div class="demo-wrap">
        <znk-summary-results
-           exercise-result="exerciseResult"
-           questions-length="questionsLength">
+           exercise-result="exerciseResult">
        </znk-summary-results>
+       <znk-summary-timeline
+           exercise-data="exerciseData">
+       </znk-summary-timeline>
    </div>
 
     <!-- bower:js -->
@@ -52,5 +54,13 @@
 
     <script src="main.js"></script>
     <script src="demo.js"></script>
+
+   <script src="infra/demoShared/analyticsConfig.js"></script>
+   <script src="env.service.js"></script>
+   <script src="scoringConfig.js"></script>
+   <script src="userGoalsConfig.js"></script>
+   <script src="infra/demoShared/storagesConfig.js"></script>
+   <script src="infra/demoShared/estimatedScoreConfig.js"></script>
+   <script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
 </body>
 </html>

@@ -1,0 +1,43 @@
+.znk-timeline-web-wrapper {
+    height: 280px;
+    overflow-x: auto;
+    position: relative;
+    &::-webkit-scrollbar {
+        height: 10px;
+    }
+    .time-line-wrapper {
+        margin-top: 75px;
+    }
+    .progress-val {
+        position: absolute;
+        color: $fontColor3;
+        font-size: 21px;
+        font-family: Quicksand;
+        .goal-wrapper {
+            display: inline;
+            position: relative;
+        }
+        .progress-title {
+          color: $fontColor4;
+          font-size: 12px;
+          font-family: Lato;
+          font-weight: $lightFontWeight;
+          margin-top: 10px;
+          min-width: 100px;
+        }
+        .timeline-plus {
+            position: absolute;
+            top: -7px;
+            right: -25px;
+            font-size: 12px;
+            font-family: Lato;
+            font-weight: $regularFontWeight;
+            &.red-point {
+                color: $fontColor17;
+            }
+            &.green-point {
+                color: $fontColor7;
+            }
+        }
+    }
+}

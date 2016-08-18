@@ -7,7 +7,7 @@
         "WRONG": "Missed",
         "SKIPPED": "Skipped",
         "CATEGORY": "Category",
-        "ESTIMATED_SCORE": "Estimated Score",
+        "ESTIMATED_SCORE": "{{subjectName}} Estimated Score",
         "MASTERY_LEVEL": "Mastery Level",
         "MASTERY": "mastery",
         "REVIEW": "REVIEW",

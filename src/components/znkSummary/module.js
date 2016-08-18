@@ -3,6 +3,8 @@
 
     angular.module('znk.infra-web-app.znkSummary', [
         'pascalprecht.translate',
-        'chart.js'
+        'chart.js',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.znkTimelineWebWrapper'
     ]);
 })(angular);
