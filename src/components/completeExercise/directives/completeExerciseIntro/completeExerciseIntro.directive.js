@@ -18,18 +18,17 @@
                         'getExerciseContent',
                         'getExerciseParentContent'
                     ];
-                    fnToCopyFromCompleteExerciseCtrl.forEach(function(fnName){
+                    fnToCopyFromCompleteExerciseCtrl.forEach(function (fnName) {
                         $ctrl[fnName] = $ctrl.completeExerciseCtrl[fnName].bind($ctrl.completeExerciseCtrl);
                     });
 
                     this.exerciseTypeId = this.completeExerciseCtrl.exerciseDetails.exerciseTypeId;
 
-                    this.goToQuestions = function(){
+                    this.goToQuestions = function () {
                         var exerciseResult = this.completeExerciseCtrl.getExerciseResult();
                         exerciseResult.seenIntro = true;
-                        exerciseResult.$save().then(function(){
-                            $ctrl .completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.EXERCISE);
-                        });
+                        exerciseResult.$save();
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.EXERCISE);
                     };
                 };
             }

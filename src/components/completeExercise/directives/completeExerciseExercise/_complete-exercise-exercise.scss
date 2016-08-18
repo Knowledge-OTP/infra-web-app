@@ -1,5 +1,22 @@
 complete-exercise-exercise{
     .base-complete-exercise-container{
+        display: flex;
+        flex-direction: column;
+        box-shadow: none;
 
+        znk-exercise{
+            flex-grow: 1;
+
+            questions-carousel{
+                box-shadow: 0 3px 7px 0 $bsColor3;
+            }
+
+            questions-carousel, .question-bottom-shadow{
+                border-bottom:{
+                    right-radius: 15px;
+                    left-radius: 15px;
+                }
+            }
+        }
     }
 }

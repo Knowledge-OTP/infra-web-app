@@ -16,7 +16,7 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv, $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location) {
+        function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv, $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -27,15 +27,6 @@
 
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
-
-            function _getAllowedTimeForExercise() {
-                if (exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
-                    return exerciseContent.time;
-                }
-
-                var allowedTimeForQuestion = ZnkExerciseSrv.getAllowedTimeForQuestion(exerciseTypeId);
-                return allowedTimeForQuestion * exerciseContent.questions.length;
-            }
 
             function _setExerciseResult() {
                 if (!angular.isArray(exerciseResult.questionResults) || exerciseResult.questionResults.length === 0) {
@@ -93,6 +84,15 @@
                     });
                 }
 
+                function _getAllowedTimeForExercise() {
+                    if (exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
+                        return exerciseContent.time;
+                    }
+
+                    var allowedTimeForQuestion = ZnkExerciseSrv.getAllowedTimeForQuestion(exerciseTypeId);
+                    return allowedTimeForQuestion * exerciseContent.questions.length;
+                }
+
                 return function () {
                     var viewMode;
 
@@ -132,7 +132,7 @@
                                 });
                             }
                             areAllQuestionsAnsweredProm.then(function () {
-                                _finishExercise(exerciseResult);
+                                _finishExercise();
                             });
                         },
                         onQuestionAnswered: function onQuestionAnswered() {
@@ -148,7 +148,13 @@
                         },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
-                        allowedTimeForExercise: _getAllowedTimeForExercise()
+                        allowedTimeForExercise: _getAllowedTimeForExercise(),
+                        toolBox:{
+                            drawing:{
+                                exerciseDrawingPathPrefix: 'complete-exercise-demo',
+                                toucheColorId: ENV.appContext === 'student' ? 1 : 2
+                            }
+                        }
                     };
 
                     $ctrl.settings = defExerciseSettings;

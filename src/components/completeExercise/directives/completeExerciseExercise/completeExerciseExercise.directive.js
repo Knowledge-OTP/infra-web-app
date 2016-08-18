@@ -34,7 +34,6 @@
 
                 this.$onInit = function () {
                     _invokeExerciseCtrl();
-
                 };
             }
         });

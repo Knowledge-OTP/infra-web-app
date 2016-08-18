@@ -1,13 +1,12 @@
 <div translate-namespace="COMPLETE_EXERCISE">
     <ng-switch on="$ctrl.currViewState"
                class="main-container">
-        <complete-exercise-intro ng-switch-when="1">
-        </complete-exercise-intro>
-    </ng-switch>
-    <ng-switch on="$ctrl.currViewState"
-               class="main-container">
-        <complete-exercise-exercise ng-switch-when="2">
-        </complete-exercise-exercise>
+        <div ng-switch-when="1" class="animate-view-state">
+            <complete-exercise-intro></complete-exercise-intro>
+        </div>
+        <div ng-switch-when="2" class="animate-view-state">
+            <complete-exercise-exercise></complete-exercise-exercise>
+        </div>
     </ng-switch>
 </div>
 
