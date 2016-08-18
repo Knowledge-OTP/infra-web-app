@@ -11,11 +11,10 @@
         "QUESTIONS": "Questions: {{num}}",
         "TIME": "Time: {{min}} min {{sec}} sec",
         "INSTRUCTIONS": "Instructions",
-        "START": "START"
-    },
-    "SECTION_INSTRUCTION": {
-        "0": "Math Instructions Content",
-        "7": "Verbal Instructions",
-        "8": "essay Instructions"
+        "START": "START",
+        "SOME_ANSWER_LEFT_CONTENT": "You’ve left some questions unanswered…",
+        "FINISH_TITLE": "Finished?",
+        "GO_TO_SUMMARY_BTN": "GO TO SUMMARY",
+        "STAY_BTN": "STAY"
     }
 }

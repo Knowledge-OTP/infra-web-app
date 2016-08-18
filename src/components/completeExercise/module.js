@@ -10,6 +10,7 @@
         'znk.infra.user',
         'znk.infra.general',
         'znk.infra.filters',
-        'znk.infra.znkExercise'
+        'znk.infra.znkExercise',
+        'znk.infra.stats'
     ]);
 })();

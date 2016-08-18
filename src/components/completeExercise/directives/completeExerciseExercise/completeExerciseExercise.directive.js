@@ -8,7 +8,7 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: function ($controller) {
+            controller: function ($controller, CompleteExerciseSrv) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -16,11 +16,19 @@
                 function _invokeExerciseCtrl(){
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
-                    var exerciseTypeId = $ctrl.completeExerciseCtrl.getExerciseTypeId();
 
-                    $controller('CompleteExerciseBaseZnkExerciseCtrl',{
+                    var settings = {
                         exerciseContent: exerciseContent,
-                        exerciseResult: exerciseResult
+                        exerciseResult: exerciseResult,
+                        actions:{
+                            done: function(){
+                                $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                            }
+                        }
+                    };
+
+                    $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl',{
+                        settings: settings
                     });
                 }
 

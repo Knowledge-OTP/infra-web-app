@@ -1,4 +1,8 @@
 <div class="base-complete-exercise-container">
     <complete-exercise-header></complete-exercise-header>
-    <div>EXercise</div>
+    <znk-exercise questions="$ctrl.znkExercise.exerciseContent.questions"
+                  ng-model="$ctrl.znkExercise.exerciseResult.questionsResult"
+                  settings="$ctrl.znkExercise.settings"
+                  actions="$ctrl.znkExercise.actions">
+    </znk-exercise>
 </div>
