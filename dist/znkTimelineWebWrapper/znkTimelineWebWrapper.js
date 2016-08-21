@@ -4,26 +4,10 @@
     angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
         'znk.infra.znkTimeline',
         'znk.infra.estimatedScore',
-        'znk.infra-web-app.userGoals'
+        'znk.infra-web-app.userGoals',
+        'znk.infra.scoring'
     ]);
 })(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkTimelineWebWrapper')
-        .config(["TimelineSrvProvider", function (TimelineSrvProvider) {
-            'ngInject';
-            TimelineSrvProvider.setImages({
-                drill: 'components/znkTimeline/svg/icons/timeline-drills-icon.svg',
-                game: 'components/znkTimeline/svg/icons/timeline-mini-challenge-icon.svg',
-                tutorial: 'components/znkTimeline/svg/icons/timeline-tips-tricks-icon.svg',
-                diagnostic: 'components/znkTimeline/svg/icons/timeline-diagnostic-test-icon.svg',
-                section: 'components/znkTimeline/svg/icons/timeline-test-icon.svg'
-            });
-        }]);
-})(angular);
-
 
 (function (angular) {
     'use strict';
@@ -34,16 +18,19 @@
             activeExerciseId: '=?'
         },
         controllerAs: 'vm',
-        controller: ["EstimatedScoreSrv", "UserGoalsService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", "$translatePartialLoader", function (EstimatedScoreSrv, UserGoalsService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum, $translatePartialLoader) {
+        controller: ["EstimatedScoreSrv", "UserGoalsService", "ScoringService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", "$translatePartialLoader", function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum, $translatePartialLoader) {
             'ngInject';
 
             $translatePartialLoader.addPart('znkTimelineWebWrapper');
 
             var vm = this;
-            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();
             var getGoalsProm = UserGoalsService.getGoals();
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
+            var scoringLimits = ScoringService.getScoringLimits();
+            var maxScore = (scoringLimits.subjects && scoringLimits.subjects.max) ? scoringLimits.subjects.max : 0;
+            var minScore = (scoringLimits.subjects && scoringLimits.subjects.min) ? scoringLimits.subjects.min : 0;
             var currentSubjectId;
 
             // options
@@ -58,6 +45,7 @@
 
             var subjectIdToIndexMap = {
                 [ExerciseTypeEnum.TUTORIAL.enum]: 'tutorial',
+                [ExerciseTypeEnum.PRACTICE.enum]: 'practice',
                 [ExerciseTypeEnum.GAME.enum]: 'game',
                 [ExerciseTypeEnum.SECTION.enum]: 'section',
                 [ExerciseTypeEnum.DRILL.enum]: 'drill',
@@ -65,7 +53,6 @@
             };
 
             vm.options = {
-                colors: ['#75cbe8', '#f9d41b', '#ff5895', '', '', '#AF89D2', '#51CDBA'],
                 colorId: vm.currentSubjectId,
                 isMobile: false,
                 width: optionsPerDevice.width,
@@ -73,8 +60,8 @@
                 isSummery: (vm.activeExerciseId) ? vm.activeExerciseId : false,
                 type: 'multi',
                 isMax: true,
-                max: 29,
-                min: 0,
+                max: maxScore,
+                min: minScore,
                 subPoint: 35,
                 distance: optionsPerDevice.distance,
                 lineWidth: 2,

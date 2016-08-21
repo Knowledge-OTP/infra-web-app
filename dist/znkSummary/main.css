@@ -109,7 +109,6 @@ znk-summary-results {
         font-weight: 200; }
 
 znk-summary-timeline .time-line-wrapper {
-  padding: 30px 0;
   background-color: #fafafa; }
   znk-summary-timeline .time-line-wrapper.seen-summary {
     border-radius: 0 0 15px 15px; }
@@ -119,6 +118,7 @@ znk-summary-timeline .time-line-wrapper {
     font-family: Quicksand;
     font-weight: 700;
     text-transform: capitalize;
-    text-align: center; }
+    text-align: center;
+    padding-top: 30px; }
   znk-summary-timeline .time-line-wrapper .znk-timeline-web-wrapper .progress-val {
     text-align: center; }

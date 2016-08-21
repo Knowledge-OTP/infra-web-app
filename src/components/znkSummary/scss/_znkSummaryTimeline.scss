@@ -1,6 +1,5 @@
 znk-summary-timeline {
     .time-line-wrapper {
-        padding: 30px 0;
         background-color: $bgColor35;
 
         &.seen-summary{
@@ -9,6 +8,9 @@ znk-summary-timeline {
 
         .estimated-score-title {
             @include text-style(18px, $fontColor4, Quicksand, $boldFontWeight, null, capitalize, null, center);
+            padding: {
+                top: 30px;
+            }
         }
 
         .znk-timeline-web-wrapper {

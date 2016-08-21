@@ -31,5 +31,25 @@
                 }
             };
 
-        });
+        }).decorator('EstimatedScoreSrv', function($delegate) {
+            var decoratedEstimatedScoreSrv = $delegate;
+
+            var getEstimatedScoresFn = $delegate.getEstimatedScores;
+
+            decoratedEstimatedScoreSrv.getEstimatedScoresData = function () {
+                return getEstimatedScoresFn.apply($delegate).then(function (estimatedScoresData) {
+                    var estimatedScores = {};
+                    angular.forEach(estimatedScoresData, function (estimatedScore, subjectId) {
+                        estimatedScores[subjectId] = [];
+                        angular.forEach(estimatedScore, function (value) {
+                            value.score = Math.round(value.score) || 0;
+                            estimatedScores[subjectId].push(value);
+                        });
+                    });
+                    return estimatedScores;
+                });
+            };
+
+            return decoratedEstimatedScoreSrv;
+         });
 })(angular);
