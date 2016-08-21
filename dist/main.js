@@ -8577,7 +8577,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             $translatePartialLoader.addPart('znkTimelineWebWrapper');
 
             var vm = this;
-            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
             var getGoalsProm = UserGoalsService.getGoals();
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
@@ -8596,14 +8596,14 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 yDown: 100
             };
 
-            var subjectIdToIndexMap = {
-                [ExerciseTypeEnum.TUTORIAL.enum]: 'tutorial',
-                [ExerciseTypeEnum.PRACTICE.enum]: 'practice',
-                [ExerciseTypeEnum.GAME.enum]: 'game',
-                [ExerciseTypeEnum.SECTION.enum]: 'section',
-                [ExerciseTypeEnum.DRILL.enum]: 'drill',
-                diagnostic: 'diagnostic'
-            };
+            var subjectIdToIndexMap = {};
+            subjectIdToIndexMap[ExerciseTypeEnum.TUTORIAL.enum] = 'tutorial';
+            subjectIdToIndexMap[ExerciseTypeEnum.PRACTICE.enum] = 'practice';
+            subjectIdToIndexMap[ExerciseTypeEnum.GAME.enum] = 'game';
+            subjectIdToIndexMap[ExerciseTypeEnum.SECTION.enum] = 'section';
+            subjectIdToIndexMap[ExerciseTypeEnum.DRILL.enum] = 'drill';
+            subjectIdToIndexMap.diagnostic = 'diagnostic';
+
 
             vm.options = {
                 colorId: vm.currentSubjectId,
@@ -8668,7 +8668,8 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 }
 
                 return {
-                    x, y,
+                    x: x,
+                    y: y,
                     score: summeryScore.score,
                     prevScore: summeryScore.prev.score
                 };
@@ -8686,7 +8687,8 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 }
 
                 return {
-                    x, y,
+                    x: x,
+                    y: y,
                     score: lastLine.score,
                     prevScore: beforeLast.score
                 };
@@ -8720,6 +8722,13 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 return newDataArr;
             }
 
+            function _getRoundScore(estimatedScoresDatePerSubject) {
+                return estimatedScoresDatePerSubject.map(function(scoreData) {
+                    scoreData.score = Math.round(scoreData.score) || 0;
+                    return scoreData;
+                });
+            }
+
             $attrs.$observe('subjectId', function (newVal, oldVal) {
                 if (newVal === oldVal) {
                     return;
@@ -8728,10 +8737,11 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 _getPromsOrValue().then(function (results) {
                     inProgressProm = results;
                     var estimatedScoresData = results[0];
+                    var estimatedScoresDatePerSubject = _getRoundScore(estimatedScoresData[currentSubjectId]);
                     vm.animation = true;
                     vm.timelineLinePlus = false;
                     vm.timeLineData = {
-                        data: addIconKey(estimatedScoresData[currentSubjectId]),
+                        data: addIconKey(estimatedScoresDatePerSubject),
                         id: currentSubjectId
                     };
                     vm.points = 0;
