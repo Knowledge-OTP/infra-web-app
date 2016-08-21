@@ -54,6 +54,23 @@
                 );
             }
 
+            function _finishExercise() {
+                exerciseResult.isComplete = true;
+                exerciseResult.endedTime = Date.now();
+                exerciseResult.$save();
+
+                //  stats exercise data
+                StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
+                    $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
+
+                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult);
+
+                    settings.actions.done();
+                });
+            }
+
             var _setZnkExerciseSettings = (function () {
                 function getNumOfUnansweredQuestions(questionsResults) {
                     var numOfUnansweredQuestions = questionsResults.length;
@@ -65,23 +82,6 @@
                         }
                     });
                     return numOfUnansweredQuestions;
-                }
-
-                function _finishExercise() {
-                    exerciseResult.isComplete = true;
-                    exerciseResult.endedTime = Date.now();
-                    exerciseResult.$save();
-
-                    //  stats exercise data
-                    StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
-                        $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
-
-                        var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                        var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                        $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult);
-
-                        settings.actions.done();
-                    });
                 }
 
                 function _getAllowedTimeForExercise() {
@@ -170,6 +170,7 @@
 
                 $ctrl.exerciseContent = exerciseContent;
                 $ctrl.exerciseResult = exerciseResult;
+                $ctrl._finishExercise = _finishExercise;
             }
 
             _init();

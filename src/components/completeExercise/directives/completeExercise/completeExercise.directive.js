@@ -50,7 +50,6 @@
                         };
                         $q.all(getDataPromMap).then(function (data) {
                             $ctrl.exerciseData = data;
-
                             var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                             var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;

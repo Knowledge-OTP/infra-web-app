@@ -12,6 +12,7 @@
         'znk.infra.general',
         'znk.infra.filters',
         'znk.infra.znkExercise',
-        'znk.infra.stats'
+        'znk.infra.stats',
+        'znk.infra.popUp'
     ]);
 })();

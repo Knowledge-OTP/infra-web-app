@@ -15,6 +15,10 @@
         "SOME_ANSWER_LEFT_CONTENT": "You’ve left some questions unanswered…",
         "FINISH_TITLE": "Finished?",
         "GO_TO_SUMMARY_BTN": "GO TO SUMMARY",
-        "STAY_BTN": "STAY"
+        "STAY_BTN": "STAY",
+        "TIME_UP_CONTENT": "To best simulate the conditions of a real exam, we recommend you stop taking this practice test now. However, if you prefer to continue and complete all remaining questions, you may do so.",
+        "TIME_UP_TITLE": "Time’s Up",
+        "STOP": "STOP",
+        "CONTINUE_BTN": "CONTINUE"
     }
 }
