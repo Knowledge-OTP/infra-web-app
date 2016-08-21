@@ -17,6 +17,12 @@
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
+                    if(!exerciseContent.time){
+                        return;
+                    }
+
+                    $ctrl.timeEnabled = true;
+
                     if(angular.isUndefined(exerciseResult.duration)){
                         exerciseResult.duration = 0;
                     }
