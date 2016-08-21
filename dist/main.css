@@ -4528,3 +4528,173 @@ md-menu-content.md-menu-content-znk-header {
   top: 0;
   width: 100%;
   height: 100%; }
+
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+znk-summary-results {
+  padding: 30px 0;
+  background: #ffffff; }
+  znk-summary-results .gauge-row-wrapper .overflowWrap {
+    overflow: hidden; }
+  znk-summary-results .gauge-row-wrapper .test-score-title {
+    font-size: 18px;
+    color: #ffffff;
+    font-family: Quicksand;
+    font-weight: 700;
+    margin-top: 22px;
+    text-align: center; }
+  znk-summary-results .gauge-row-wrapper .gauge-wrap {
+    display: inline-block;
+    margin-left: 230px;
+    float: left; }
+    znk-summary-results .gauge-row-wrapper .gauge-wrap .gauge-inner-text {
+      width: 62px;
+      height: 32px;
+      font-size: 30px;
+      color: #626060;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      position: relative;
+      top: 77px;
+      left: 41px; }
+      znk-summary-results .gauge-row-wrapper .gauge-wrap .gauge-inner-text .success-title {
+        font-size: 14px;
+        color: #626060;
+        font-family: Lato;
+        font-weight: 200;
+        position: relative;
+        bottom: 2px; }
+    znk-summary-results .gauge-row-wrapper .gauge-wrap .chart {
+      width: 134px !important;
+      height: 134px !important; }
+  znk-summary-results .gauge-row-wrapper .statistics {
+    width: 320px;
+    height: 110px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+    position: relative;
+    top: 40px;
+    left: 44px; }
+    znk-summary-results .gauge-row-wrapper .statistics .stat-row:nth-child(1):after, znk-summary-results .gauge-row-wrapper .statistics .stat-row:nth-child(2):after {
+      content: "";
+      position: absolute;
+      top: 7px;
+      left: 83px;
+      width: 1px;
+      height: 96px;
+      background-color: #e7e7e7; }
+    znk-summary-results .gauge-row-wrapper .statistics .stat-row {
+      display: -ms-flexbox;
+      display: flex;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+      position: relative; }
+      znk-summary-results .gauge-row-wrapper .statistics .stat-row .stat-val {
+        width: 40px;
+        height: 40px;
+        display: -ms-flexbox;
+        display: flex;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
+        text-align: center;
+        font-size: 28px;
+        color: #ffffff;
+        font-family: Quicksand;
+        font-weight: 700;
+        margin: 0 auto;
+        border-radius: 50px; }
+        znk-summary-results .gauge-row-wrapper .statistics .stat-row .stat-val.correct {
+          background-color: #87ca4d; }
+        znk-summary-results .gauge-row-wrapper .statistics .stat-row .stat-val.wrong {
+          background-color: #ff6766; }
+        znk-summary-results .gauge-row-wrapper .statistics .stat-row .stat-val.skipped {
+          background-color: #c2c2c2; }
+      znk-summary-results .gauge-row-wrapper .statistics .stat-row .title {
+        font-size: 16px;
+        color: #757a83;
+        font-family: Quicksand;
+        font-weight: 400; }
+      znk-summary-results .gauge-row-wrapper .statistics .stat-row .avg-score {
+        font-size: 10px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 200; }
+
+znk-summary-timeline .time-line-wrapper {
+  background-color: #fafafa; }
+  znk-summary-timeline .time-line-wrapper.seen-summary {
+    border-radius: 0 0 15px 15px; }
+  znk-summary-timeline .time-line-wrapper .estimated-score-title {
+    font-size: 18px;
+    color: #757a83;
+    font-family: Quicksand;
+    font-weight: 700;
+    text-transform: capitalize;
+    text-align: center;
+    padding-top: 30px; }
+  znk-summary-timeline .time-line-wrapper .znk-timeline-web-wrapper .progress-val {
+    text-align: center; }
+
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+.znk-timeline-web-wrapper {
+  height: 280px;
+  overflow-x: auto;
+  position: relative; }
+  .znk-timeline-web-wrapper::-webkit-scrollbar {
+    height: 10px; }
+  .znk-timeline-web-wrapper .time-line-wrapper {
+    margin-top: 75px; }
+  .znk-timeline-web-wrapper .progress-val {
+    position: absolute;
+    color: #4f4d4d;
+    font-size: 21px;
+    font-family: Quicksand; }
+    .znk-timeline-web-wrapper .progress-val .goal-wrapper {
+      display: inline;
+      position: relative; }
+    .znk-timeline-web-wrapper .progress-val .progress-title {
+      color: #757a83;
+      font-size: 12px;
+      font-family: Lato;
+      font-weight: 200;
+      margin-top: 10px;
+      min-width: 100px; }
+    .znk-timeline-web-wrapper .progress-val .timeline-plus {
+      position: absolute;
+      top: -7px;
+      right: -25px;
+      font-size: 12px;
+      font-family: Lato;
+      font-weight: 400; }
+      .znk-timeline-web-wrapper .progress-val .timeline-plus.red-point {
+        color: #ff6766; }
+      .znk-timeline-web-wrapper .progress-val .timeline-plus.green-point {
+        color: #87ca4d; }

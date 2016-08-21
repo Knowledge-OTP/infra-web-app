@@ -1,0 +1,24 @@
+<div class="znk-timeline-web-wrapper znk-scrollbar" translate-namespace="TIMELINE_WEB_WRAPPER">
+    <div class="time-line-wrapper">
+        <div class="progress-val"
+             ng-style="vm.timelineMinMaxStyle"
+             ng-if="vm.timeLineData.data.length">
+            <div class="goal-wrapper">{{vm.goalPerSubject}}
+                <div class="timeline-plus"
+                     ng-if="vm.timelineLinePlus"
+                     ng-class="{ 'red-point': vm.isRed, 'green-point': !vm.isRed }">
+                    {{vm.timelineLinePlus}}
+                </div>
+            </div>
+            <div class="progress-title"
+                 ng-style="{ visibility: (vm.points) ? 'visiable' : 'hidden' }"
+                 translate=".POINTS_LEFT"
+                 translate-values="{points: {{vm.points}} }">
+            </div>
+        </div>
+        <canvas znk-timeline
+                timeline-data="vm.timeLineData"
+                timeline-settings="vm.options">
+        </canvas>
+    </div>
+</div>

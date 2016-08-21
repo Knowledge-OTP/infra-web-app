@@ -1,0 +1,37 @@
+<div class="gauge-row-wrapper" translate-namespace="ZNK_SUMMARY">
+    <div class="overflowWrap">
+        <div class="gauge-wrap">
+            <div class="gauge-inner-text">{{::vm.gaugeSuccessRate}}%
+                <div class="success-title" translate=".SUCCESS"></div>
+            </div>
+            <canvas
+                id="doughnut"
+                class="chart chart-doughnut"
+                chart-options="vm.performenceChart.options"
+                chart-colours="vm.performenceChart.colours"
+                chart-data="vm.performenceChart.data"
+                chart-labels="vm.performenceChart.labels"
+                chart-legend="false">
+            </canvas>
+        </div>
+        <div class="statistics">
+            <div class="stat-row">
+                <div class="stat-val correct">{{::vm.exerciseResult.correctAnswersNum}}</div>
+                <div class="title" translate=".CORRECT"></div>
+                <div class="avg-score"><span translate=".AVG"></span>. {{::vm.avgTime.correctAvgTime}} <span translate=".SEC"></span> </div>
+            </div>
+
+            <div class="stat-row">
+                <div class="stat-val wrong">{{::vm.exerciseResult.wrongAnswersNum}}</div>
+                <div class="title" translate=".WRONG"></div>
+                <div class="avg-score"><span translate=".AVG"></span>. {{::vm.avgTime.wrongAvgTime}} <span translate=".SEC"></span></div>
+            </div>
+
+            <div class="stat-row">
+                <div class="stat-val skipped">{{::vm.exerciseResult.skippedAnswersNum}}</div>
+                <div class="title" translate=".SKIPPED"></div>
+                <div class="avg-score"><span translate=".AVG"></span>. {{::vm.avgTime.skippedAvgTime}}  <span translate=".SEC"></span></div>
+            </div>
+        </div>
+    </div>
+</div>
