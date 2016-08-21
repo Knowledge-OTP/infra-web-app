@@ -12,7 +12,7 @@
                 'centerPart': '?centerPart',
                 'preRightPart': '?preRightPart'
             },
-            controller: function ($translate, $q, ExerciseParentEnum) {
+            controller: function ($translate, $q) {
                 'ngInject';
 
                 var $ctrl = this;

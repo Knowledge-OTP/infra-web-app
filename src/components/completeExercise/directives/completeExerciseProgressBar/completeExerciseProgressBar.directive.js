@@ -1,4 +1,6 @@
 (function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.completeExercise')
         .directive('completeExerciseProgressBar',
             function ($animate, $timeout) {
