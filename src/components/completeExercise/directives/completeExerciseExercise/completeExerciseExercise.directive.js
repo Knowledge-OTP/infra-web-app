@@ -70,7 +70,6 @@
 
                                 timeOverPopupPromise.then(function () {
                                     $ctrl.znkExercise._finishExercise();
-                                    // _finishExercise(exerciseResult);
                                 });
                             });
                         }
