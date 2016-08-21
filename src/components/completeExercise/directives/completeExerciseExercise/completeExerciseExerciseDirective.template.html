@@ -1,0 +1,22 @@
+<div class="base-complete-exercise-container">
+    <complete-exercise-header>
+        <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>
+        <pre-right-part>
+            <timer ng-model="$ctrl.znkExercise.exerciseResult.duration"
+                   complete-exercise-timer-parser
+                   type="1"
+                   play="true"
+                   config="$ctrl.timerConfig"
+                   ng-change="$ctrl.durationChanged()">
+            </timer>
+        </pre-right-part>
+    </complete-exercise-header>
+    <complete-exercise-progress-bar total-time="{{$ctrl.znkExercise.exerciseContent.time}}"
+                                    duration="$ctrl.znkExercise.exerciseResult.duration">
+    </complete-exercise-progress-bar>
+    <znk-exercise questions="$ctrl.znkExercise.exerciseContent.questions"
+                  ng-model="$ctrl.znkExercise.exerciseResult.questionsResult"
+                  settings="$ctrl.znkExercise.settings"
+                  actions="$ctrl.znkExercise.actions">
+    </znk-exercise>
+</div>

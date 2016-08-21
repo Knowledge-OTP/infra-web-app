@@ -5,20 +5,9 @@
     "Zinkerz"
   ],
   "dependencies": {
-    "angular": "1.5.5",
-    "angular-animate": "1.5.5",
-    "Swiper": "swiper#~3.2.7",
-    "firebase": "^2.4.2",
-    "angular-translate": "^2.11.0",
-    "angular-translate-loader-partial": "^2.11.0",
-    "infra": "https://github.com/Knowledge-OTP/infra.git#zinkerz/dev",
-    "angular-ui-router": "ui-router#^0.3.1",
-    "angular-material": "^1.1.0-rc.5",
-    "angular-aria": "1.5.5",
-    "angular-messages": "1.5.5",
+    "infra": "https://github.com/Knowledge-OTP/infra.git#igor/complete-exercise",
     "ng-tags-input": "^3.0.0",
-    "angular-chart.js": "^0.10.2",
-    "angular-sanitize": "^1.5.5"
+    "angular-chart.js": "^0.10.2"
   },
   "ignore": [
     ".*",
@@ -32,12 +21,7 @@
   ],
   "devDependencies": {
     "es5-shim": "~4.4.1",
-    "angular-mocks": "~1.5.5",
     "mockfirebase": "~0.11.0",
     "jasmine-jquery": "^2.1.1"
-  },
-  "resolutions": {
-    "firebase": "^2.4.2",
-    "angular": "1.5.5"
   }
 }

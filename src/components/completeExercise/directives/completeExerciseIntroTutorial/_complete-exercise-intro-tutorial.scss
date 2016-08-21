@@ -1,0 +1,44 @@
+complete-exercise-intro-tutorial {
+    display: block;
+    @include absolute-position(50px, 0, 0, 0);
+
+    .intro-container {
+        padding: {
+            right: 180px;
+            left: 180px;
+        }
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        & > *:not(.content-wrapper){
+            flex-shrink: 0;
+        }
+
+        .video-wrapper {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .content-wrapper {
+            margin: {
+                top: 40px;
+                bottom: 100px;
+            }
+            overflow: auto;
+        }
+
+        .btn-section {
+            position: absolute;
+            right: 15px;
+            bottom: 10px;
+
+            .md-button {
+                padding: {
+                    right: 45px;
+                    left: 45px;
+                }
+            }
+        }
+    }
+}

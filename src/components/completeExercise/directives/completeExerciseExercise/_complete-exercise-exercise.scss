@@ -1,0 +1,43 @@
+complete-exercise-exercise{
+    .base-complete-exercise-container{
+        display: flex;
+        flex-direction: column;
+        box-shadow: none;
+
+        complete-exercise-header{
+            pre-right-part{
+                border-right: 1px solid $borderColor11;
+                display: block;
+                padding: {
+                    right: 25px;
+                }
+                margin:{
+                    right: 25px;
+                }
+
+                .timer-type1{
+                    .clock-icon-svg{
+                        *{
+                            stroke: $bgColor1;
+                        }
+                    }
+                }
+            }
+        }
+
+        znk-exercise{
+            flex-grow: 1;
+
+            questions-carousel{
+                box-shadow: 0 3px 7px 0 $bsColor3;
+            }
+
+            questions-carousel, .question-bottom-shadow{
+                border-bottom:{
+                    right-radius: 15px;
+                    left-radius: 15px;
+                }
+            }
+        }
+    }
+}

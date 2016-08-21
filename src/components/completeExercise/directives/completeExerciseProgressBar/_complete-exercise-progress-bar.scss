@@ -1,0 +1,27 @@
+complete-exercise-progress-bar {
+    display: block;
+    background: $bgColor49;
+    overflow: hidden;
+
+    &.green-state{
+        .progress-bar{
+            background: $bgColor7;
+        }
+    }
+
+    &.yellow-state{
+        .progress-bar{
+            background: $bgColor2;
+        }
+    }
+
+    &.red-state{
+        .progress-bar{
+            background: $bgColor32;
+        }
+    }
+
+    .progress-bar{
+        height: 5px;
+    }
+}

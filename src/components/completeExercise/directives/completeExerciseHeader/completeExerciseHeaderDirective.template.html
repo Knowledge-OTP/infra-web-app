@@ -1,0 +1,19 @@
+<div class="header-container"
+     translate-namespace="COMPLETE_EXERCISE"
+     subject-id-to-attr-drv="$ctrl.exerciseContent.subjectId"
+     context-attr="class,class"
+     suffix="bg,subject-pattern">
+    <div class="left-part">
+        <div class="left-title" ng-bind="$ctrl.leftTitle" title="{{$ctrl.leftTitle}}"></div>
+    </div>
+    <div class="center-part">
+        <div ng-transclude="centerPart"></div>
+    </div>
+    <div class="right-part">
+        <div ng-transclude="preRightPart"></div>
+        <div class="exit"
+             translate=".EXIT"
+             ng-click="$ctrl.completeExerciseCtrl.settings.exitAction()">
+        </div>
+    </div>
+</div>
