@@ -786,7 +786,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "        <div ng-switch-when=\"2\" class=\"animate-view-state\">\n" +
     "            <complete-exercise-exercise></complete-exercise-exercise>\n" +
     "        </div>\n" +
-    "        <div ng-switch-when=\"2\" class=\"animate-view-state\">\n" +
+    "        <div ng-switch-when=\"3\" class=\"animate-view-state\">\n" +
     "            <complete-exercise-summary></complete-exercise-summary>\n" +
     "        </div>\n" +
     "    </ng-switch>\n" +
