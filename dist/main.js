@@ -420,7 +420,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
                         toolBox:{
                             drawing:{
-                                exerciseDrawingPathPrefix: 'complete-exercise-demo',
+                                exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
                         }
