@@ -1,0 +1,11 @@
+[class*="-subject-pattern"]{
+    background-repeat: repeat;
+}
+
+.reading-subject-pattern{
+    @include background-image-url-retina('assets/images/reading-background-pattern');
+}
+
+.verbal-subject-pattern{
+    @extend .reading-subject-pattern;
+}

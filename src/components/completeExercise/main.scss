@@ -1,0 +1,14 @@
+@import './src/scss/imports/variables',
+        './src/scss/imports/colors',
+        './bower_components/infra/dist/mixins/mixins';
+
+@import "directives/completeExercise/complete-exercise",
+        "directives/completeExerciseIntro/complete-exercise-intro",
+        "directives/completeExerciseExercise/complete-exercise-exercise",
+        "directives/completeExerciseHeader/complete-exercise-header",
+        "directives/completeExerciseIntroTutorial/complete-exercise-intro-tutorial",
+        "directives/completeExerciseIntroSection/complete-exercise-intro-section",
+        "directives/completeExerciseProgressBar/complete-exercise-progress-bar";
+
+@import "scss/theme",
+        "scss/subject-pattern";

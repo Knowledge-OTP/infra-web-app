@@ -1,0 +1,13 @@
+complete-exercise-intro{
+    .base-complete-exercise-container{
+        position: relative;
+
+        .intro-container{
+            img{
+                max-width: 400px !important;
+                height: auto !important;
+                vertical-align: middle;
+            }
+        }
+    }
+}
