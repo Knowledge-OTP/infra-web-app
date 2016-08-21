@@ -7,8 +7,7 @@
   "dependencies": {
     "infra": "https://github.com/Knowledge-OTP/infra.git#igor/complete-exercise",
     "ng-tags-input": "^3.0.0",
-    "angular-chart.js": "^0.10.2",
-    "angular-sanitize": "^1.5.8"
+    "angular-chart.js": "^0.10.2"
   },
   "ignore": [
     ".*",

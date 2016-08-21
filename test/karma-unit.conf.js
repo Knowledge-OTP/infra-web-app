@@ -41,7 +41,6 @@ module.exports = function (config) {
             'bower_components/ng-tags-input/ng-tags-input.js',
             'bower_components/Chart.js/Chart.js',
             'bower_components/angular-chart.js/dist/angular-chart.js',
-            'bower_components/angular-sanitize/angular-sanitize.js',
             'bower_components/es5-shim/es5-shim.js',
             'bower_components/mockfirebase/browser/mockfirebase.js',
             'bower_components/jasmine/lib/jasmine-core/jasmine.js',
