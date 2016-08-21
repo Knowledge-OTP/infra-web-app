@@ -772,7 +772,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                                    duration=\"$ctrl.znkExercise.exerciseResult.duration\">\n" +
     "    </complete-exercise-progress-bar>\n" +
     "    <znk-exercise questions=\"$ctrl.znkExercise.exerciseContent.questions\"\n" +
-    "                  ng-model=\"$ctrl.znkExercise.exerciseResult.questionsResult\"\n" +
+    "                  ng-model=\"$ctrl.znkExercise.exerciseResult.questionResults\"\n" +
     "                  settings=\"$ctrl.znkExercise.settings\"\n" +
     "                  actions=\"$ctrl.znkExercise.actions\">\n" +
     "    </znk-exercise>\n" +
