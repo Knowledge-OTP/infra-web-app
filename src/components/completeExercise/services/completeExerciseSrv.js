@@ -12,6 +12,11 @@
                 SUMMARY: 3
             };
 
+            this.MODE_STATES = {
+                SHARER: 1,
+                VIEWER: 2
+            };
+
             this.getContextUid = function () {
                 var isStudentApp = ENV.appContext === 'student';
                 if (isStudentApp) {

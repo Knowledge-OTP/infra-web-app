@@ -1,8 +1,9 @@
 (function (angular) {
     angular.module('demo', [
         'znk.infra-web-app.completeExercise',
+        'znk.infra-web-app.webAppScreenSharing'
     ])
-        .run(function ($rootScope, BaseExerciseGetterSrv, ExerciseTypeEnum, ExerciseParentEnum) {
+        .run(function ($rootScope, BaseExerciseGetterSrv, ExerciseTypeEnum, ExerciseParentEnum, ScreenSharingSrv) {
             $rootScope.data = {};
 
             $rootScope.exerciseTypeEnumArr = ExerciseTypeEnum.getEnumArr();
@@ -16,6 +17,24 @@
                     alert('exit');
                 }
             };
+
+            $rootScope.uidToShareScreenWith = '7fdcdac0-ea4a-4295-9cd6-374cfed5944b';
+
+            $rootScope.shareMyScreen = function (uid) {
+                ScreenSharingSrv.shareMyScreen({
+                    uid: uid,
+                    isTeacher: false
+                });
+            };
+
+            $rootScope.viewOtherUserScreen = function (uid) {
+                ScreenSharingSrv.viewOtherUserScreen({
+                    uid: uid,
+                    isTeacher: false
+                });
+            };
+
+
             $rootScope.$watch('data', function (data) {
                 if (!data) {
                     return;
@@ -66,8 +85,11 @@
             }, true);
         })
         .run(function ($timeout, $translatePartialLoader) {
-            $timeout(function(){
+            $timeout(function () {
                 $translatePartialLoader.addPart('completeExerciseDemoLocale');
             });
+        })
+        .component('completeExerciseSummary',{
+            template: '<div>Summary</div>'
         });
 })(angular);
