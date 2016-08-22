@@ -206,6 +206,12 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
+                    if(!exerciseContent.time){
+                        return;
+                    }
+
+                    $ctrl.timeEnabled = true;
+
                     if(angular.isUndefined(exerciseResult.duration)){
                         exerciseResult.duration = 0;
                     }
@@ -782,6 +788,9 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "        <div ng-switch-when=\"2\" class=\"animate-view-state\">\n" +
     "            <complete-exercise-exercise></complete-exercise-exercise>\n" +
     "        </div>\n" +
+    "        <div ng-switch-when=\"3\" class=\"animate-view-state\">\n" +
+    "            <complete-exercise-summary></complete-exercise-summary>\n" +
+    "        </div>\n" +
     "    </ng-switch>\n" +
     "</div>\n" +
     "\n" +
@@ -791,7 +800,8 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    <complete-exercise-header>\n" +
     "        <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>\n" +
     "        <pre-right-part>\n" +
-    "            <timer ng-model=\"$ctrl.znkExercise.exerciseResult.duration\"\n" +
+    "            <timer ng-if=\"$ctrl.timeEnabled\"\n" +
+    "                   ng-model=\"$ctrl.znkExercise.exerciseResult.duration\"\n" +
     "                   complete-exercise-timer-parser\n" +
     "                   type=\"1\"\n" +
     "                   play=\"true\"\n" +
@@ -800,11 +810,12 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "            </timer>\n" +
     "        </pre-right-part>\n" +
     "    </complete-exercise-header>\n" +
-    "    <complete-exercise-progress-bar total-time=\"{{$ctrl.znkExercise.exerciseContent.time}}\"\n" +
+    "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled\"\n" +
+    "                                    total-time=\"{{$ctrl.znkExercise.exerciseContent.time}}\"\n" +
     "                                    duration=\"$ctrl.znkExercise.exerciseResult.duration\">\n" +
     "    </complete-exercise-progress-bar>\n" +
     "    <znk-exercise questions=\"$ctrl.znkExercise.exerciseContent.questions\"\n" +
-    "                  ng-model=\"$ctrl.znkExercise.exerciseResult.questionsResult\"\n" +
+    "                  ng-model=\"$ctrl.znkExercise.exerciseResult.questionResults\"\n" +
     "                  settings=\"$ctrl.znkExercise.settings\"\n" +
     "                  actions=\"$ctrl.znkExercise.actions\">\n" +
     "    </znk-exercise>\n" +
