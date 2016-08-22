@@ -1,0 +1,95 @@
+znk-summary-results {
+    padding: 30px 0;
+    background: $bgColor3;
+    .gauge-row-wrapper {
+
+        .overflowWrap {
+            overflow: hidden;
+        }
+
+        .test-score-title {
+            @include text-style(18px, $fontColor8, Quicksand, $boldFontWeight);
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .gauge-wrap {
+            display: inline-block;
+            margin-left: 230px;
+            float: left;
+
+            .gauge-inner-text {
+                @include dimension(62px, 32px);
+                @include text-style(30px, $fontColor16, Lato, $regularFontWeight);
+                text-align: center;
+                position: relative;
+                top: 77px;
+                left: 41px;
+
+                .success-title {
+                    @include text-style(14px, $fontColor16, Lato, $lightFontWeight);
+                    position: relative;
+                    bottom: 2px;
+                }
+            }
+
+            .chart {
+                width: 134px !important;
+                height: 134px !important;
+            }
+        }
+
+        .statistics {
+            @include dimension(320px, 110px);
+            @include display-flex;
+            @include justify-content(space-around);
+            position: relative;
+            top: 40px;
+            left: 44px;
+
+            .stat-row:nth-child(1):after, .stat-row:nth-child(2):after {
+                content: "";
+                position: absolute;
+                top: 7px;
+                left: 83px;
+                width: 1px;
+                height: 96px;
+                background-color: $borderColor19;
+            }
+
+            .stat-row {
+                @include display-flex;
+                @include flex-direction(column);
+                @include align-items(center);
+                @include justify-content(space-around);
+                position: relative;
+                .stat-val {
+                    @include dimension(40px, 40px);
+                    @include display-flex;
+                    @include flex-middle;
+                    @include text-style(28px, $fontColor8, Quicksand, $boldFontWeight);
+                    margin: 0 auto;
+                    border-radius: 50px;
+
+                    &.correct {
+                        background-color: $bgColor7;
+                    }
+                    &.wrong {
+                        background-color: $bgColor32;
+                    }
+                    &.skipped {
+                        background-color: $bgColor48;
+                    }
+                }
+
+                .title {
+                    @include text-style(16px, $fontColor4, Quicksand, $regularFontWeight);
+                }
+
+                .avg-score {
+                    @include text-style(10px, $fontColor4, Lato, $lightFontWeight);
+                }
+            }
+        }
+    }
+}

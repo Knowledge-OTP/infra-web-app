@@ -1,0 +1,22 @@
+znk-summary-timeline {
+    .time-line-wrapper {
+        background-color: $bgColor35;
+
+        &.seen-summary{
+            border-radius: 0 0 15px 15px;
+        }
+
+        .estimated-score-title {
+            @include text-style(18px, $fontColor4, Quicksand, $boldFontWeight, null, capitalize, null, center);
+            padding: {
+                top: 30px;
+            }
+        }
+
+        .znk-timeline-web-wrapper {
+            .progress-val {
+                text-align: center;
+            }
+        }
+    }
+}

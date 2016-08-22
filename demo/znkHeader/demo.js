@@ -1,26 +1,30 @@
 angular.module('demo', ['znk.infra-web-app.znkHeader'])
-    .config(function ($translateProvider, znkHeaderSrvProvider) {
+    .config(function ($translateProvider, znkHeaderSrvProvider, $stateProvider) {
 
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: '/{part}/locale/{lang}.json'
         })
             .preferredLanguage('en');
 
+        $stateProvider
+            .state('item1', {
+                url: '/item1',
+                template: '<div>item1</div>'
+            })
+            .state('item2', {
+                url: '/item2',
+                template: '<div>item2</div>'
+            });
+
         var demoItem1 = {
             text: 'item 1',
-            onClickHandler: function (purchaseService) {
-                if(angular.isUndefined(purchaseService)){
-                    alert('DI error');
-                }
-                alert('item 1 was clicked')
-            }
+            goToState: 'item1',
+            stateOpt: { reload: true }
         };
 
         var demoItem2 = {
             text: 'item 2',
-            onClickHandler: function () {
-                alert('item 2 was clicked')
-            }
+            goToState: 'item2'
         };
         var additionalItems = [demoItem1, demoItem2];
 
