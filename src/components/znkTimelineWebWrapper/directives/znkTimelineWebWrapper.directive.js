@@ -166,7 +166,7 @@
             }
 
             $attrs.$observe('subjectId', function (newVal, oldVal) {
-                if (newVal === oldVal) {
+                if (newVal === oldVal || newVal === '') {
                     return;
                 }
                 currentSubjectId = vm.currentSubjectId = newVal;
