@@ -1,0 +1,23 @@
+<div class="app-workouts" layout="row" flex="grow">
+    <div id="faq-container" class="workouts-container base-border-radius" translate-namespace="FAQ">
+
+        <h1 class="main-title" translate=".MAIN_TITLE"></h1>
+
+        <div id="faq-inner">
+            <v-accordion class="vAccordion--default">
+
+                <v-pane ng-repeat="faqitem in ::vm.questionsAndAnswers" expanded="$first">
+                    <v-pane-header>
+                        <svg-icon class="faq-icon" name="circle-arrow-icon"></svg-icon> <span ng-bind-html="::faqitem.question"></span>
+                    </v-pane-header>
+
+                    <v-pane-content>
+                        <div ng-bind-html="::faqitem.answer"></div>
+                    </v-pane-content>
+                </v-pane>
+
+            </v-accordion>
+        </div>
+
+    </div>
+</div>
