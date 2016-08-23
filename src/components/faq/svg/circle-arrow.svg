@@ -9,10 +9,10 @@
             width: 100%;
             height: auto;
         }
-        svg.circle-arrow-icon.st0 {
+        svg.circle-arrow-icon .st0 {
             fill: #88C54F;
         }
-        svg.circle-arrow-icon.st1 {
+        svg.circle-arrow-icon .st1 {
             fill: #ffffff;
         }
     </style>

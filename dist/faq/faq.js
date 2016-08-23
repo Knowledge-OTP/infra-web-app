@@ -104,10 +104,10 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
     "            width: 100%;\n" +
     "            height: auto;\n" +
     "        }\n" +
-    "        svg.circle-arrow-icon.st0 {\n" +
+    "        svg.circle-arrow-icon .st0 {\n" +
     "            fill: #88C54F;\n" +
     "        }\n" +
-    "        svg.circle-arrow-icon.st1 {\n" +
+    "        svg.circle-arrow-icon .st1 {\n" +
     "            fill: #ffffff;\n" +
     "        }\n" +
     "    </style>\n" +
