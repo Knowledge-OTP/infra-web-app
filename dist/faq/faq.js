@@ -70,6 +70,7 @@
                 return lengthQuestion;
             };
 
+            return faqSrvApi;
         };
     });
 })(angular);

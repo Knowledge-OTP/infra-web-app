@@ -3290,6 +3290,7 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
                 return lengthQuestion;
             };
 
+            return faqSrvApi;
         };
     });
 })(angular);
