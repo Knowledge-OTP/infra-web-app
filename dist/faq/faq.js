@@ -30,7 +30,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'faq-circle-arrow-icon': 'components/svg/circle-arrow.svg'
+                'faq-circle-arrow-icon': 'components/faq/svg/circle-arrow.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
