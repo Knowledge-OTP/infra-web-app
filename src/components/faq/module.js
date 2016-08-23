@@ -2,6 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.faq', [
-        'vAccordion'
+        'vAccordion',
+        'znk.infra.svgIcon'
     ]);
 })(angular);
