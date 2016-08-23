@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv) {
+        function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q) {
             'ngInject';
 
             this.VIEW_STATES = {
@@ -26,7 +26,17 @@
                 }
             };
 
-            this.getExerciseResult = function (exerciseDetails) {
+            this.getExerciseResult = function (exerciseDetails, shMode) {
+                if(shMode === this.MODE_STATES.VIEWER){
+                    if(!exerciseDetails.resultGuid){
+                        var errMsg = 'completeExerciseSrv: exercise details is missing guid property';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
+
+                    return ExerciseResultSrv.getExerciseResultByGuid(exerciseDetails.resultGuid);
+                }
+
                 switch (exerciseDetails.exerciseTypeId) {
                     case ExerciseTypeEnum.LECTURE.enum:
                         return this.getContextUid().then(function (uid) {

@@ -5,7 +5,7 @@
     "Zinkerz"
   ],
   "dependencies": {
-    "infra": "https://github.com/Knowledge-OTP/infra.git#zinkerz/dev",
+    "infra": "https://github.com/Knowledge-OTP/infra.git#igor/complete-exercise-sh",
     "ng-tags-input": "^3.0.0",
     "angular-chart.js": "^0.10.2"
   },

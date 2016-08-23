@@ -32,7 +32,7 @@
             },
             controller: function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
                                   $translatePartialLoader, ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
-                                  UserProfileService) {
+                                  EventManagerSrv) {
                 'ngInject';
 
                 $translatePartialLoader.addPart('completeExercise');
@@ -42,15 +42,17 @@
                 var VIEW_STATES = CompleteExerciseSrv.VIEW_STATES;
                 var SH_MODE_STATES = CompleteExerciseSrv.MODE_STATES;
 
-                var currUserShState = UserScreenSharingStateEnum.NONE.enum;
-                var shMode,
+                var currUserShState = UserScreenSharingStateEnum.NONE.enum,
+                    shMode,
                     isSharerMode = false,
-                    isViewerMode = false;
+                    isViewerMode = false,
+                    shModeEventManager = new EventManagerSrv(),
+                    shDataEventManager = new EventManagerSrv();
 
                 function _clearState() {
                     $ctrl.exerciseDetails = null;
 
-                    $ctrl.changeViewState(VIEW_STATES.NONE);
+                    $ctrl.changeViewState(VIEW_STATES.NONE, true);
                 }
 
                 function _rebuildExercise(exerciseDetails) {
@@ -71,26 +73,27 @@
                         var exerciseParentContent = isExam ? BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) : null;
 
                         var getDataPromMap = {
-                            exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails),
+                            exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
                             exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
                             exerciseParentContent: exerciseParentContent
                         };
                         $q.all(getDataPromMap).then(function (data) {
                             $ctrl.exerciseData = data;
+                            var newViewState;
+
                             var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                             var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
+                            var isExerciseCompleted = data.exerciseResult.isComplete;
                             if ((isSection || isTutorial) && !data.exerciseResult.seenIntro) {
-                                $ctrl.changeViewState(VIEW_STATES.INTRO);
-                                return;
+                                newViewState = VIEW_STATES.INTRO;
+                            }else if (!isExerciseCompleted) {
+                                newViewState = VIEW_STATES.EXERCISE;
+                            } else {
+                                newViewState = VIEW_STATES.SUMMARY;
                             }
 
-                            var isExerciseCompleted = data.exerciseResult.isComplete;
-                            if (isExerciseCompleted) {
-                                $ctrl.changeViewState(VIEW_STATES.SUMMARY);
-                            } else {
-                                $ctrl.changeViewState(VIEW_STATES.EXERCISE);
-                            }
+                            $ctrl.changeViewState(newViewState, true);
                         });
                     });
                 }
@@ -121,6 +124,7 @@
                             activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
                         });
 
+                        activeShData.activeExercise.resultGuid = $ctrl.exerciseData.exerciseResult.guid;
                         activeShData.activeExercise.activeScreen = $ctrl.currViewState;
 
                         activeShData.$save();
@@ -138,10 +142,28 @@
                     });
                 }
 
-                function _activeShDataChangeHandler(newShData) {
-                    var activeExercise = newShData.activeExercise;
+                function _updateMode() {
+                    var settingsMode = ($ctrl.settings && $ctrl.settings.mode) || SH_MODE_STATES.SHARER;
 
-                    if (!activeExercise && isSharerMode) {
+                    isSharerMode = settingsMode === SH_MODE_STATES.SHARER && currUserShState === UserScreenSharingStateEnum.SHARER.enum;
+                    isViewerMode = settingsMode === SH_MODE_STATES.VIEWER && currUserShState === UserScreenSharingStateEnum.VIEWER.enum;
+                    if (isSharerMode) {
+                        shMode = SH_MODE_STATES.SHARER;
+                    }else if(isViewerMode){
+                        shMode = SH_MODE_STATES.VIEWER;
+                    }else{
+                        shMode = null;
+                    }
+
+                    shModeEventManager.updateValue(shMode);
+                }
+
+                function _activeShDataChangeHandler(newShData) {
+                    shDataEventManager.updateValue(newShData);
+
+                    var activeExercise = newShData.activeExercise || {};
+
+                    if (isSharerMode && !activeExercise.activeScreen) {
                         _setShDataToCurrentExercise();
                         return;
                     }
@@ -154,6 +176,10 @@
                     var isSameExerciseId = $ctrl.exerciseDetails && activeExercise.exerciseId === $ctrl.exerciseDetails.exerciseId;
                     var isSameExerciseType = $ctrl.exerciseDetails && activeExercise.exerciseTypeId === $ctrl.exerciseDetails.exerciseTypeId;
                     if (isSameExerciseId && isSameExerciseType) {
+                        //active screen should never be empty if in sharer mode
+                        if(shMode === SH_MODE_STATES.SHARER && !activeExercise.activeScreen){
+                            return;
+                        }
                         $ctrl.changeViewState(activeExercise.activeScreen || VIEW_STATES.NONE);
                     } else {
                         if (isSharerMode) {
@@ -170,24 +196,6 @@
 
                 function _unregisterFromActiveShDataEvents() {
                     ScreenSharingSrv.unregisterFromActiveScreenSharingDataChanges(_activeShDataChangeHandler);
-                }
-
-                function _updateMode() {
-                    var settingsMode = ($ctrl.settings && $ctrl.settings.mode) || SH_MODE_STATES.SHARER;
-
-                    isSharerMode = settingsMode === SH_MODE_STATES.SHARER && currUserShState === UserScreenSharingStateEnum.SHARER.enum;
-                    if (isSharerMode) {
-                        shMode = SH_MODE_STATES.SHARER;
-                        return;
-                    }
-
-                    isViewerMode = settingsMode === SH_MODE_STATES.VIEWER && currUserShState === UserScreenSharingStateEnum.VIEWER.enum;
-                    if (isViewerMode) {
-                        shMode = SH_MODE_STATES.SHARER;
-                        return;
-                    }
-
-                    shMode = null;
                 }
 
                 function _userShStateChangeHandler(newUserShState) {
@@ -213,10 +221,10 @@
                     ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(_userShStateChangeHandler);
                 }
 
-                this.changeViewState = function (newViewState) {
+                this.changeViewState = function (newViewState, skipActiveScreenUpdate) {
                     $ctrl.currViewState = newViewState;
 
-                    if (shMode) {
+                    if (shMode && !skipActiveScreenUpdate) {
                         _updateActiveShDataActiveScreen();
                     }
                 };
@@ -237,6 +245,10 @@
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
                     _registerToUserShEvents();
+
+                    this.shModeEventManager = shModeEventManager;
+
+                    this.shDataEventManager = shDataEventManager;
                 };
 
                 this.$onChanges = function (changesObj) {

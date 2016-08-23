@@ -157,7 +157,7 @@
                         }
                     };
 
-                    $ctrl.settings = defExerciseSettings;
+                    $ctrl.settings = angular.extend(defExerciseSettings, settings.znkExerciseSettings || {});
                 };
             })();
 

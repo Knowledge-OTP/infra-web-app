@@ -34,7 +34,6 @@
                 });
             };
 
-
             $rootScope.$watch('data', function (data) {
                 if (!data) {
                     return;
@@ -91,5 +90,13 @@
         })
         .component('completeExerciseSummary',{
             template: '<div>Summary</div>'
+        })
+        .component('selectAnswer', {
+            template: '<div>{{$ctrl.ngModel.$viewValue || "empty"}}</div><div ng-click="$ctrl.ngModel.$setViewValue(1)">Set</div>',
+            require: {
+                ngModel: '^ngModel'
+            },
+            controller: function(){
+            }
         });
 })(angular);

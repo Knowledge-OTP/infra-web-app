@@ -14,6 +14,7 @@
         'znk.infra.znkExercise',
         'znk.infra.stats',
         'znk.infra.popUp',
-        'znk.infra.screenSharing'
+        'znk.infra.screenSharing',
+        'znk.infra.eventManager'
     ]);
 })();
