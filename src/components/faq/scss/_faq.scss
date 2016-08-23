@@ -1,7 +1,14 @@
 #faq-container {
     width: 100%;
+    min-height: 675px;
+    background: $bgColor3;
+    margin: {
+        right: 30px;
+    }
 
     .main-title {
+        @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
+        text-align: center;
         margin-top:40px;
     }
 

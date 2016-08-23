@@ -1,0 +1,22 @@
+<svg version="1.1"
+     xmlns="http://www.w3.org/2000/svg"
+     class="circle-arrow-icon"
+     x="0px"
+     y="0px"
+	 viewBox="0 0 39 39">
+    <style type="text/css">
+        svg.circle-arrow-icon {
+            width: 100%;
+            height: auto;
+        }
+        svg.circle-arrow-icon.st0 {
+            fill: #88C54F;
+        }
+        svg.circle-arrow-icon.st1 {
+            fill: #ffffff;
+        }
+    </style>
+<circle class="st0" cx="19.5" cy="19.5" r="19.5"/>
+<path class="st1" d="M19.7,27.2c-0.2,0-0.4-0.1-0.6-0.2L8.1,18c-0.4-0.3-0.5-1-0.1-1.4c0.3-0.4,1-0.5,1.4-0.1l10.4,8.4l10-8.4
+	c0.4-0.4,1-0.3,1.4,0.1c0.4,0.4,0.3,1-0.1,1.4l-10.6,9C20.2,27.1,20,27.2,19.7,27.2z"/>
+</svg>

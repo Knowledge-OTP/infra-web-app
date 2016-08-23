@@ -1107,8 +1107,16 @@ md-tooltip.tooltip-for-estimated-score-widget {
 /* full background image with retina */
 #faq-container {
   width: 100%;
+  min-height: 675px;
+  background: #ffffff;
+  margin-right: 30px;
   /** v-accordion overrides */ }
   #faq-container .main-title {
+    font-size: 32px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 600;
+    text-align: center;
     margin-top: 40px; }
   #faq-container #faq-inner {
     padding: 40px 55px 20px; }
