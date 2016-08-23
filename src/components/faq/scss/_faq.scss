@@ -1,0 +1,62 @@
+#faq-container {
+    width: 100%;
+    min-height: 675px;
+    background: $bgColor3;
+    margin: {
+        right: 30px;
+    }
+
+    .main-title {
+        @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
+        text-align: center;
+        margin-top:40px;
+    }
+
+    #faq-inner {
+        padding: 40px 55px 20px;
+    }
+
+    /** v-accordion overrides */
+    v-accordion {
+
+        v-pane {
+            &:not(.is-expanded) > v-pane-header .faq-icon {
+                transform: rotate(-90deg);
+            }
+
+            v-pane-header {
+                @include text-style(18px, $fontColor6, Quicksand, $regularFontWeight);
+                border: none;
+                padding-left:40px;
+
+                /** Hide the default v-accordion open/close indicator */
+                &::after,
+                &::before {
+                    display:none;
+                }
+
+                .faq-icon {
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    left: 0;
+                    transition: transform 0.5s;
+                }
+
+            }
+
+            v-pane-content {
+                @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+                line-height: 24px;
+                padding-left: 40px;
+            }
+
+            // when expanded
+            v-pane.is-expanded v-pane-header {
+                @include text-style(18px, $fontColor2, Quicksand, $regularFontWeight);
+            }
+        }
+
+    }
+
+}
