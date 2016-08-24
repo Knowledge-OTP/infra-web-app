@@ -1,0 +1,51 @@
+.znk-input-group{
+    @include format-input-placeholder($borderColor20,1);
+    position: relative;
+    min-height: 70px;
+    input {
+        @include text-style(14px, $fontColor19, Lato, $regularFontWeight);
+        outline: none;
+        width: 290px;
+        height: 40px;
+        border: 1px solid $borderColor20;
+        border-radius: 21px;
+        margin:{
+            top: 8px;
+            bottom: 8px;
+        };
+        padding: {
+            left: 45px;
+        };
+    }
+
+    i{
+        position: absolute;
+        left: 20px;
+        top: 21px;
+    }
+
+    .error-msg{
+       display: none;
+
+    }
+
+    &.invalid-input{
+        input{
+            border: 1px solid $bgColor32;
+        }
+
+        .error-msg{
+            @include text-style(12px, $fontColor17,Lato,$regularFontWeight);
+            text-align: left;
+            margin-top: -4px;
+            padding-left: 20px;
+            display: block;
+        }
+
+        svg-icon{
+            svg *{
+                stroke: $bgColor32 !important;
+            }
+        }
+    }
+}
