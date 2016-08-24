@@ -6498,7 +6498,7 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     "            <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
     "            <div translate=\".SAVE_SUCCESS\"></div>\n" +
     "            <div class=\"done-btn-wrap\">\n" +
-    "                <md-button class=\"success drop-shadow\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                    <span translate=\".DONE\"></span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
