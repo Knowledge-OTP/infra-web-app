@@ -94,6 +94,12 @@
                             }
 
                             $ctrl.changeViewState(newViewState, true);
+
+                            if(isSharerMode){
+                                $ctrl.exerciseData.exerciseResult.$save().then(function(){
+                                    _setShDataToCurrentExercise();
+                                });
+                            }
                         });
                     });
                 }
@@ -127,7 +133,10 @@
                         activeShData.activeExercise.resultGuid = $ctrl.exerciseData.exerciseResult.guid;
                         activeShData.activeExercise.activeScreen = $ctrl.currViewState;
 
-                        activeShData.$save();
+                        var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
+                        saveExerciseResultProm.then(function(){
+                            activeShData.$save();
+                        });
                     });
                 }
 
@@ -265,6 +274,11 @@
                 this.$onDestroy = function () {
                     _unregisterFromUserShEvents();
                     _unregisterFromActiveShDataEvents();
+
+                    ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
+                        activeShData.activeExercise = null;
+                        activeShData.$save();
+                    });
                 };
             }
         });

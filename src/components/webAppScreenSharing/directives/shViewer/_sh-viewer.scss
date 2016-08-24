@@ -1,0 +1,121 @@
+sh-viewer{
+    .header{
+        width: 1060px;
+        margin:{
+            top: 15px;
+            right: auto;
+            left: auto;
+        }
+
+        .you-are-viewing-text{
+            color: $fontColor8;
+            font:{
+                family: Quicksand;
+                weight: $regularFontWeight;
+                size: 14px;
+            }
+            margin: {
+                right: 7px;
+            }
+        }
+
+        .user-connectivity-status{
+            @include dimension(10px);
+            background-color: $bgColor7;
+            border: 1px solid $borderColor20;
+            display: inline-block;
+            border-radius: 50%;
+            margin: {
+                right: 15px;
+            }
+        }
+
+        .user-name{
+            color: $fontColor8;
+            font:{
+                family: Quicksand;
+                weight: $boldFontWeight;
+                size: 16px;
+            }
+        }
+    }
+
+    .sh-viewer-main-container{
+        display: flex;
+        justify-content: center;
+        margin: {
+            top: 25px;
+        }
+
+        .none{
+            @include background-image-retina("/assets/images/bg/etutoring-empty-sharing", 1060px, 657px);
+            @include dimension(1060px, 657px);
+            text-align: center;
+            .texts-container{
+                color: $fontColor3;
+                margin: {
+                    top: 245px;
+                }
+
+                .text1{
+                    font:{
+                        family: Quicksand;
+                        weight: $regularFontWeight;
+                        size: 20px;
+                    }
+                }
+
+                .text2{
+                    font:{
+                        family: Lato;
+                        weight: $lightFontWeight;
+                        size: 17px;
+                    }
+                    margin:{
+                        top: 25px;
+                    }
+                }
+            }
+        }
+
+        znk-exercise{
+            znk-exercise-tool-box{
+                background: $$bgColor90;
+
+                znk-exercise-draw-tool{
+                    & > svg-icon{
+                        &:not(.active) {
+                            .znk-exercise-touche-svg {
+                                .st0, .st1{
+                                    stroke: $$bgColor2;
+                                }
+                            }
+
+                            .znk-exercise-pencil{
+                                path{
+                                    fill: $$bgColor2;
+                                }
+                            }
+
+                            .znk-exercise-eraser{
+                                path, rect, .st1{
+                                    fill: $$bgColor2;
+                                }
+                            }
+                        }
+
+                        .znk-exercise-remove{
+                            path{
+                                fill: $$bgColor2;
+                            }
+                        }
+
+                        &[name="znk-exercise-touche"]{
+                            border-bottom-color: $$bcColor28;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

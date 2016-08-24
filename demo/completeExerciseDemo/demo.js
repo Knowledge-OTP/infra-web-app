@@ -7,10 +7,10 @@
             $rootScope.data = {};
 
             $rootScope.exerciseTypeEnumArr = ExerciseTypeEnum.getEnumArr();
-            $rootScope.data.exerciseType = ExerciseTypeEnum.SECTION;
+            $rootScope.data.exerciseType = ExerciseTypeEnum.LECTURE;
 
             $rootScope.exerciseParentEnumArr = ExerciseParentEnum.getEnumArr();
-            $rootScope.data.exerciseParent = ExerciseParentEnum.EXAM;
+            $rootScope.data.exerciseParent = ExerciseParentEnum.MODULE;
 
             $rootScope.settings = {
                 exitAction: function () {
@@ -71,7 +71,7 @@
                         parentId = 17;
                         break;
                     case ExerciseParentEnum.MODULE.enum:
-                        parentId = 100;
+                        parentId = 6;
                         break;
                 }
 

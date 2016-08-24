@@ -8,7 +8,7 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv) {
+            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -62,22 +62,25 @@
                 }
 
                 function _resultChangeHandler(newResult) {
-                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
-                    var updatedQuestionsResults = exerciseResult.questionResults;
-                    var newQuestionsResults = newResult.questionResults;
-
-                    if (!newQuestionsResults) {
+                    if(!newResult || !newResult.questionResults){
                         return;
                     }
 
-                    angular.forEach(updatedQuestionsResults, function (questionResult, index) {
-                        var newQuestionResult = newQuestionsResults[index];
-                        angular.extend(questionResult, newQuestionResult);
-                    });
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var updatedQuestionsResults = exerciseResult.questionResults;
+                    var newQuestionsResults = newResult.questionResults;
+                    var isNotLecture = exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
                     angular.extend(exerciseResult, newResult);
 
-                    exerciseResult.questionResults = updatedQuestionsResults;
+                    if(isNotLecture){
+                        angular.forEach(updatedQuestionsResults, function (questionResult, index) {
+                            var newQuestionResult = newQuestionsResults[index];
+                            angular.extend(questionResult, newQuestionResult);
+                        });
+                        exerciseResult.questionResults = updatedQuestionsResults;
+                    }
+
                 }
 
                 function _registerToResultChanges() {
