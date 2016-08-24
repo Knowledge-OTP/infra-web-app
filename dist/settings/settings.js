@@ -19,7 +19,8 @@
             var svgMap = {
                 'settings-change-password-icon': 'components/settings/svg/change-password-icon.svg',
                 'settings-danger-red-icon': 'components/settings/svg/error-icon.svg',
-                'settings-close-popup': 'components/settings/svg/close-popup.svg'
+                'settings-close-popup': 'components/settings/svg/close-popup.svg',
+                'settings-completed-v-icon': 'components/settings/svg/completed-v.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -137,6 +138,51 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     "</g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/settings/svg/completed-v.svg",
+    "<svg\n" +
+    "	class=\"complete-v-icon-svg\"\n" +
+    "	xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "	xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "    x=\"0px\"\n" +
+    "	y=\"0px\"\n" +
+    "	viewBox=\"-1040 834.9 220.4 220.4\"\n" +
+    "	style=\"enable-background:new -1040 834.9 220.4 220.4; width: 100%; height: auto;\"\n" +
+    "    xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.complete-v-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st1 {\n" +
+    "        fill: #CACBCC;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st2 {\n" +
+    "        display: none;\n" +
+    "        fill: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st3 {\n" +
+    "        fill: #D1D2D2;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st4 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #FFFFFF;\n" +
+    "        stroke-width: 11.9321;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/settings/svg/error-icon.svg",
     "<svg\n" +
     "    class=\"settings-error-icon\"\n" +
@@ -211,7 +257,7 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     "            </div>\n" +
     "        </form>\n" +
     "        <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
-    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
+    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"settings-completed-v-icon\"></svg-icon>\n" +
     "            <div translate=\".SAVE_SUCCESS\"></div>\n" +
     "            <div class=\"done-btn-wrap\">\n" +
     "                <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
