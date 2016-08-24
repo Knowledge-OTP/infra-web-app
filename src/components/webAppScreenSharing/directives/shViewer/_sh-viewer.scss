@@ -78,43 +78,49 @@ sh-viewer{
             }
         }
 
-        znk-exercise{
-            znk-exercise-tool-box{
-                background: $$bgColor90;
+        complete-exercise{
+            znk-exercise{
+                znk-exercise-tool-box{
+                    background: $bgColor50;
 
-                znk-exercise-draw-tool{
-                    & > svg-icon{
-                        &:not(.active) {
-                            .znk-exercise-touche-svg {
-                                .st0, .st1{
-                                    stroke: $$bgColor2;
+                    znk-exercise-draw-tool{
+                        & > svg-icon{
+                            &:not(.active) {
+                                .znk-exercise-touche-svg {
+                                    .st0, .st1{
+                                        stroke: $bgColor3;
+                                    }
+                                }
+
+                                .znk-exercise-pencil{
+                                    path{
+                                        fill: $bgColor3;
+                                    }
+                                }
+
+                                .znk-exercise-eraser{
+                                    path, rect, .st1{
+                                        fill: $bgColor3;
+                                    }
                                 }
                             }
 
-                            .znk-exercise-pencil{
+                            .znk-exercise-remove{
                                 path{
-                                    fill: $$bgColor2;
+                                    fill: $bgColor3;
                                 }
                             }
 
-                            .znk-exercise-eraser{
-                                path, rect, .st1{
-                                    fill: $$bgColor2;
-                                }
+                            &[name="znk-exercise-touche"]{
+                                border-bottom-color: $bgColor51;
                             }
-                        }
-
-                        .znk-exercise-remove{
-                            path{
-                                fill: $$bgColor2;
-                            }
-                        }
-
-                        &[name="znk-exercise-touche"]{
-                            border-bottom-color: $$bcColor28;
                         }
                     }
                 }
+            }
+
+            .base-complete-exercise-container{
+                height: calc(100vh - 110px);
             }
         }
     }

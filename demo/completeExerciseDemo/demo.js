@@ -7,10 +7,10 @@
             $rootScope.data = {};
 
             $rootScope.exerciseTypeEnumArr = ExerciseTypeEnum.getEnumArr();
-            $rootScope.data.exerciseType = ExerciseTypeEnum.LECTURE;
+            $rootScope.data.exerciseType = ExerciseTypeEnum.TUTORIAL;
 
             $rootScope.exerciseParentEnumArr = ExerciseParentEnum.getEnumArr();
-            $rootScope.data.exerciseParent = ExerciseParentEnum.MODULE;
+            $rootScope.data.exerciseParent = ExerciseParentEnum.TUTORIAL;
 
             $rootScope.settings = {
                 exitAction: function () {

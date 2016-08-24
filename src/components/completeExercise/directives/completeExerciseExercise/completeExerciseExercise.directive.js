@@ -122,23 +122,6 @@
                 function _bindExerciseToShData() {
                     _registerToResultChanges();
                     _registerToShDataChanges();
-                }
-
-                function _unbindExerciseFromShData() {
-                    _unregisterFromResultChanges();
-                    _unregisterFromShDataChanges();
-                }
-
-                function _shModeChangedHandler(shMode) {
-                    if (shMode) {
-                        _bindExerciseToShData();
-                    } else {
-                        _unbindExerciseFromShData();
-                    }
-                }
-
-                function _registerToShModeChanges() {
-                    $ctrl.completeExerciseCtrl.shModeEventManager.registerCb(_shModeChangedHandler);
                     exerciseViewBindWatchDestroyer = $scope.$watch(function () {
                         return exerciseViewBinding;
                     }, (function () {
@@ -160,9 +143,27 @@
                     })(), true);
                 }
 
+                function _unbindExerciseFromShData() {
+                    _unregisterFromResultChanges();
+                    _unregisterFromShDataChanges();
+                    exerciseViewBindWatchDestroyer();
+                }
+
+                function _shModeChangedHandler(shMode) {
+                    if (shMode) {
+                        _bindExerciseToShData();
+                    } else {
+                        _unbindExerciseFromShData();
+                    }
+                }
+
+                function _registerToShModeChanges() {
+                    $ctrl.completeExerciseCtrl.shModeEventManager.registerCb(_shModeChangedHandler);
+                }
+
                 function _unregisterFromShModeChanges() {
                     $ctrl.completeExerciseCtrl.shModeEventManager.unregisterCb(_shModeChangedHandler);
-                    exerciseViewBindWatchDestroyer();
+
                 }
 
                 this.$onInit = function () {
