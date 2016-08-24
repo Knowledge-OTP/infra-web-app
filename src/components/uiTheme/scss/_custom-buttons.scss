@@ -17,6 +17,21 @@
             size: 16px;
         }
 
+        &.green {
+             background-color: $bgColor7;
+            &:not([disabled="disabled"]):hover{
+                background: $bgColor14;
+            }
+
+            &:active{
+                background: $bgColor14;
+            }
+
+            &.md-focused{
+                background: $bgColor14;
+            }
+        }
+
         &:not([disabled="disabled"]):hover{
             background: $bgColor10;
         }
