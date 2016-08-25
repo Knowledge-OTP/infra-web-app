@@ -530,7 +530,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     }, (function () {
                         var syncProm = $q.when();
 
-                        return (newExerciseView) => {
+                        return function(newExerciseView) {
                             if (!lastShDataReceived || angular.equals(exerciseViewBinding, lastShDataReceived.activeExercise)) {
                                 return null;
                             }

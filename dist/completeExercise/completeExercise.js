@@ -484,7 +484,7 @@
                     }, (function () {
                         var syncProm = $q.when();
 
-                        return (newExerciseView) => {
+                        return function(newExerciseView) {
                             if (!lastShDataReceived || angular.equals(exerciseViewBinding, lastShDataReceived.activeExercise)) {
                                 return null;
                             }
