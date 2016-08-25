@@ -128,7 +128,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     syncUpdatesProm = syncUpdatesProm
                         .then(function () {
                             var promMap = {
-                                exerciseRebuildProm,
+                                exerciseRebuildProm: exerciseRebuildProm,
                                 activeShData: ScreenSharingSrv.getActiveScreenSharingData()
                             };
                             return $q.all(promMap).then(function (data) {
@@ -465,7 +465,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 }
 
                 function _resultChangeHandler(newResult) {
-                    if(!newResult || !newResult.questionResults){
+                    if (!newResult || !newResult.questionResults) {
                         return;
                     }
 
@@ -476,7 +476,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     angular.extend(exerciseResult, newResult);
 
-                    if(isNotLecture){
+                    if (isNotLecture) {
                         angular.forEach(updatedQuestionsResults, function (questionResult, index) {
                             var newQuestionResult = newQuestionsResults[index];
                             angular.extend(questionResult, newQuestionResult);
@@ -507,7 +507,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         return;
                     }
 
-                    UserProfileService.getCurrUserId().then((currUid) => {
+                    UserProfileService.getCurrUserId().then(function (currUid) {
                         if (newScreenSharingData.updatedBy !== currUid) {
                             angular.extend(exerciseViewBinding, newScreenSharingData.activeExercise);
                         }

@@ -61,7 +61,7 @@
                     syncUpdatesProm = syncUpdatesProm
                         .then(function () {
                             var promMap = {
-                                exerciseRebuildProm,
+                                exerciseRebuildProm: exerciseRebuildProm,
                                 activeShData: ScreenSharingSrv.getActiveScreenSharingData()
                             };
                             return $q.all(promMap).then(function (data) {

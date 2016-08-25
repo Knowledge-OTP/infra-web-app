@@ -62,7 +62,7 @@
                 }
 
                 function _resultChangeHandler(newResult) {
-                    if(!newResult || !newResult.questionResults){
+                    if (!newResult || !newResult.questionResults) {
                         return;
                     }
 
@@ -73,7 +73,7 @@
 
                     angular.extend(exerciseResult, newResult);
 
-                    if(isNotLecture){
+                    if (isNotLecture) {
                         angular.forEach(updatedQuestionsResults, function (questionResult, index) {
                             var newQuestionResult = newQuestionsResults[index];
                             angular.extend(questionResult, newQuestionResult);
@@ -104,7 +104,7 @@
                         return;
                     }
 
-                    UserProfileService.getCurrUserId().then((currUid) => {
+                    UserProfileService.getCurrUserId().then(function (currUid) {
                         if (newScreenSharingData.updatedBy !== currUid) {
                             angular.extend(exerciseViewBinding, newScreenSharingData.activeExercise);
                         }
