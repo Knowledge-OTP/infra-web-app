@@ -226,8 +226,6 @@
                             }
                         }
 
-                        console.log('_activeShDataChangeHandler', newShData);
-
 
                         var activeExercise = newShData.activeExercise;
 
@@ -290,8 +288,6 @@
                 }
 
                 this.changeViewState = function (newViewState, skipActiveScreenUpdate) {
-                    console.log('changeViewState', newViewState);
-
                     if ($ctrl.currViewState === newViewState) {
                         return;
                     }
