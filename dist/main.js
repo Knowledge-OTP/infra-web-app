@@ -192,13 +192,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                             var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                            var isExerciseCompleted = data.exerciseResult.isComplete;
                             if ((isSection || isTutorial) && !data.exerciseResult.seenIntro) {
                                 newViewState = VIEW_STATES.INTRO;
-                            } else if (!isExerciseCompleted) {
-                                newViewState = VIEW_STATES.EXERCISE;
                             } else {
-                                newViewState = VIEW_STATES.SUMMARY;
+                                newViewState = VIEW_STATES.EXERCISE;
                             }
 
                             $ctrl.changeViewState(newViewState, true);
