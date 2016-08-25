@@ -22,7 +22,7 @@ sh-viewer{
         .user-connectivity-status{
             @include dimension(10px);
             background-color: $bgColor7;
-            border: 1px solid $borderColor20;
+            border: 1px solid $borderColor21;
             display: inline-block;
             border-radius: 50%;
             margin: {
@@ -81,7 +81,7 @@ sh-viewer{
         complete-exercise{
             znk-exercise{
                 znk-exercise-tool-box{
-                    background: $bgColor50;
+                    background: $bgColor52;
 
                     znk-exercise-draw-tool{
                         & > svg-icon{
@@ -112,7 +112,7 @@ sh-viewer{
                             }
 
                             &[name="znk-exercise-touche"]{
-                                border-bottom-color: $bgColor51;
+                                border-bottom-color: $bgColor53;
                             }
                         }
                     }
