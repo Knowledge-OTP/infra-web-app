@@ -376,7 +376,7 @@
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time) {
+                    if (!exerciseContent.time || exerciseResult.isComplete) {
                         return;
                     }
 
@@ -554,6 +554,10 @@
                                 });
                             });
                         }
+                    };
+
+                    this.goToSummary = function(){
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                     };
                 };
 
@@ -1148,6 +1152,9 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                   config=\"$ctrl.timerConfig\"\n" +
     "                   ng-change=\"$ctrl.durationChanged()\">\n" +
     "            </timer>\n" +
+    "            <div class=\"summary\" ng-click=\"$ctrl.goToSummary()\">\n" +
+    "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
+    "            </div>\n" +
     "        </pre-right-part>\n" +
     "    </complete-exercise-header>\n" +
     "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled\"\n" +

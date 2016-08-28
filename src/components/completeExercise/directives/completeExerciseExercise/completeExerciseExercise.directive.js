@@ -21,7 +21,7 @@
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time) {
+                    if (!exerciseContent.time || exerciseResult.isComplete) {
                         return;
                     }
 
@@ -199,6 +199,10 @@
                                 });
                             });
                         }
+                    };
+
+                    this.goToSummary = function(){
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                     };
                 };
 

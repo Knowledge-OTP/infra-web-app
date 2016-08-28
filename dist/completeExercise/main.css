@@ -37,9 +37,24 @@ complete-exercise-exercise .base-complete-exercise-container {
     border-right: 1px solid #ffffff;
     display: block;
     padding-right: 25px;
-    margin-right: 25px; }
+    margin-right: 25px;
+    display: -ms-flexbox;
+    display: flex; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .timer-type1 .clock-icon-svg * {
       stroke: white; }
+    complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary {
+      cursor: pointer;
+      width: 85px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.2);
+      text-align: center;
+      border-radius: 15px;
+      line-height: 30px; }
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .summary-text {
+        font-size: 16px;
+        color: #ffffff;
+        font-family: Lato;
+        font-weight: 200; }
   complete-exercise-exercise .base-complete-exercise-container znk-exercise {
     -ms-flex-positive: 1;
         flex-grow: 1; }

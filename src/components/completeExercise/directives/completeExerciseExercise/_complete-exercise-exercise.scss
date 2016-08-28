@@ -14,12 +14,27 @@ complete-exercise-exercise{
                 margin:{
                     right: 25px;
                 }
+                display: flex;
 
                 .timer-type1{
                     .clock-icon-svg{
                         *{
                             stroke: $bgColor1;
                         }
+                    }
+                }
+
+                .summary{
+                    cursor: pointer;
+                    width: 85px;
+                    height: 30px;
+                    background: $bgColor54;
+                    text-align: center;
+                    border-radius: 15px;
+                    line-height: 30px;
+
+                    .summary-text{
+                        @include text-style(16px, $fontColor8, Lato, $lightFontWeight);
                     }
                 }
             }
