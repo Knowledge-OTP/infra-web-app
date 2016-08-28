@@ -14,7 +14,8 @@
      *   mode:{
      *      1: default, sensitive to sharer screen sharing state
      *      2: sensitive to viewer screen sharing state
-     *   }
+     *   },
+     *   znkExerciseSettings: znk exercise settings
      *
      * ########
      *   translations:

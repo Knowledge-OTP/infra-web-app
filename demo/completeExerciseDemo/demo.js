@@ -15,6 +15,9 @@
             $rootScope.settings = {
                 exitAction: function () {
                     alert('exit');
+                },
+                znkExerciseSettings:{
+                    initSlideIndex: 1
                 }
             };
 

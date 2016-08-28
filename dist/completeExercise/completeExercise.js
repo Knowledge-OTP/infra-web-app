@@ -35,7 +35,8 @@
      *   mode:{
      *      1: default, sensitive to sharer screen sharing state
      *      2: sensitive to viewer screen sharing state
-     *   }
+     *   },
+     *   znkExerciseSettings: znk exercise settings
      *
      * ########
      *   translations:
@@ -402,13 +403,17 @@
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                             }
-                        },
-                        znkExerciseSettings: {
-                            onExerciseReady: function () {
-                                $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
-                            }
                         }
                     };
+
+                    var defaultZnkExerciseSettings = {
+                        onExerciseReady: function () {
+                            $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
+                        }
+                    };
+                    var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
+                    var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings,providedZnkExerciseSettings );
+                    settings.znkExerciseSettings = znkExerciseSettings;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
