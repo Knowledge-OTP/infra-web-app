@@ -1215,7 +1215,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "            </timer>\n" +
     "            <div class=\"summary\"\n" +
     "                 ng-click=\"$ctrl.goToSummary()\"\n" +
-    "                 ng-if=\"$ctrl.exerciseContent.isComplete\">\n" +
+    "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete\">\n" +
     "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
     "            </div>\n" +
     "        </pre-right-part>\n" +
