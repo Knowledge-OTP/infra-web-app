@@ -149,7 +149,7 @@
                             var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                             var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                            if ((isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                            if (!data.exerciseResult.seenIntro.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
                                 newViewState = VIEW_STATES.INTRO;
                             } else {
                                 newViewState = VIEW_STATES.EXERCISE;
