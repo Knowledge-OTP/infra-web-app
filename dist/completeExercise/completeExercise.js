@@ -407,13 +407,19 @@
                         actions: {
                             done: function () {
                                 //  stats exercise data
-                                StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
+                                var promMap = {};
+
+                                promMap.statsAndEstimatedScore = StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
                                     var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                                     var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
                                     $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentContent);
-                                    $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                                 });
 
+                                promMap.exerciseSave = exerciseResult.$save();
+
+                                $q.all(promMap).then(function(){
+                                    $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                                });
                             }
                         }
                     };
