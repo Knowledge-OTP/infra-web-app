@@ -8,7 +8,8 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum) {
+            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum,
+                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -40,13 +41,22 @@
                 function _invokeExerciseCtrl() {
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var exerciseTypeId = $ctrl.completeExerciseCtrl.getExerciseTypeId();
+                    var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
 
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
                         actions: {
                             done: function () {
-                                $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                                //  stats exercise data
+                                StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
+                                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentContent);
+                                    $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                                });
+
                             }
                         }
                     };
@@ -57,7 +67,7 @@
                         }
                     };
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
-                    var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings,providedZnkExerciseSettings );
+                    var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
@@ -131,7 +141,7 @@
                     }, (function () {
                         var syncProm = $q.when();
 
-                        return function(newExerciseView) {
+                        return function (newExerciseView) {
                             if (!lastShDataReceived || angular.equals(exerciseViewBinding, lastShDataReceived.activeExercise)) {
                                 return null;
                             }
@@ -201,7 +211,7 @@
                         }
                     };
 
-                    this.goToSummary = function(){
+                    this.goToSummary = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                     };
                 };

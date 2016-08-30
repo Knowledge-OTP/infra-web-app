@@ -17,7 +17,8 @@
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV) {
+                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+                  UtilitySrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -48,7 +49,7 @@
             }
 
             function _setExerciseContentQuestions() {
-                if(isNotLecture){
+                if (isNotLecture) {
                     exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
                         return a.order - b.order;
                     });
@@ -57,8 +58,8 @@
                         exerciseContent.questions,
                         exerciseContent.questionsGroupData
                     );
-                }else{
-                    exerciseContent.content.sort(function(item1, item2){
+                } else {
+                    exerciseContent.content.sort(function (item1, item2) {
                         return item1.order - item2.order;
                     });
                     for (var i = 0; i < exerciseContent.content.length; i++) {
@@ -100,7 +101,7 @@
                 }
 
                 function _getAllowedTimeForExercise() {
-                    if(!isNotLecture){
+                    if (!isNotLecture) {
                         return null;
                     }
 
@@ -122,15 +123,17 @@
                         viewMode = isSection ? ZnkExerciseViewModeEnum.ONLY_ANSWER.enum : ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
                     }
 
-                    if(isNotLecture){
-                        initSlideIndex = exerciseResult.questionResults.findIndex(function (question) {
-                            return !question.userAnswer;
+                    if (isNotLecture) {
+                        var questionResultsMap = UtilitySrv.array.convertToMap(exerciseResult.questionResults, 'questionId');
+                        initSlideIndex = exerciseContent.questions.findIndex(function (question) {
+                            var questionResult = questionResultsMap[question.id];
+                            return angular.isUndefined(questionResult.userAnswer);
                         });
 
                         if (initSlideIndex === -1) {
                             initSlideIndex = 0;
                         }
-                    }else{
+                    } else {
                         initSlideIndex = 0;
                     }
 
@@ -173,8 +176,8 @@
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
-                        toolBox:{
-                            drawing:{
+                        toolBox: {
+                            drawing: {
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }

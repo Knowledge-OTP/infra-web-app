@@ -16,33 +16,33 @@
     <link rel="stylesheet" href="cssConfig/subjects-colors.css">
 </head>
 <body ng-app="demo" style="background: rgb(232, 231, 231);">
-    <div style="display: flex;margin-top: 20px;">
-        <div style="margin-right: 10px;">
-            <label>Exercise type</label>
-            <select ng-model="data.exerciseType"
-                    ng-options="exerciseType.val for exerciseType in exerciseTypeEnumArr">
-            </select>
-        </div>
-        <div style="margin-right: 20px">
-            <label>Exercise parent</label>
-            <select ng-model="data.exerciseParent"
-                    ng-options="exerciseParent.val for exerciseParent in exerciseParentEnumArr">
-            </select>
-        </div>
-        <div style="margin-right: 20px">
-            <input type="text" ng-model="uidToShareScreenWith" placeholder="uid">
-            <button ng-click="shareMyScreen(uidToShareScreenWith)">Share Screen</button>
-            <button ng-click="viewOtherUserScreen(uidToShareScreenWith)">View Screen</button>
-        </div>
-        <div>
-            <label>Kill complete exercise</label>
-            <input type="checkbox" ng-model="destroyCompleteExercise">
-        </div>
+<div style="display: flex;margin-top: 20px;">
+    <div style="margin-right: 10px;">
+        <label>Exercise type</label>
+        <select ng-model="data.exerciseType"
+                ng-options="exerciseType.val for exerciseType in exerciseTypeEnumArr">
+        </select>
     </div>
-    <complete-exercise exercise-details="exerciseData"
-                       settings="settings"
-                       ng-if="!destroyCompleteExercise">
-    </complete-exercise>
+    <div style="margin-right: 20px">
+        <label>Exercise parent</label>
+        <select ng-model="data.exerciseParent"
+                ng-options="exerciseParent.val for exerciseParent in exerciseParentEnumArr">
+        </select>
+    </div>
+    <div style="margin-right: 20px">
+        <input type="text" ng-model="uidToShareScreenWith" placeholder="uid">
+        <button ng-click="shareMyScreen(uidToShareScreenWith)">Share Screen</button>
+        <button ng-click="viewOtherUserScreen(uidToShareScreenWith)">View Screen</button>
+    </div>
+    <div>
+        <label>Kill complete exercise</label>
+        <input type="checkbox" ng-model="destroyCompleteExercise">
+    </div>
+</div>
+<complete-exercise exercise-details="exerciseData"
+                   settings="settings"
+                   ng-if="!destroyCompleteExercise">
+</complete-exercise>
 <!-- Bower:js -->
 <script src="angular/angular.js"></script>
 <script src="angular-animate/angular-animate.js"></script>
@@ -78,6 +78,6 @@
 <script src="svgIcon/svgIcon.config.js"></script>
 <script src="znkExerciseConfig.js"></script>
 <script src="analyticsConfig.js"></script>
-
+<script src="estimatedScoreConfig.js"></script>
 </body>
 </html>

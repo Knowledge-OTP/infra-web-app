@@ -7,17 +7,14 @@
             $rootScope.data = {};
 
             $rootScope.exerciseTypeEnumArr = ExerciseTypeEnum.getEnumArr();
-            $rootScope.data.exerciseType = ExerciseTypeEnum.TUTORIAL;
+            $rootScope.data.exerciseType = ExerciseTypeEnum.SECTION;
 
             $rootScope.exerciseParentEnumArr = ExerciseParentEnum.getEnumArr();
-            $rootScope.data.exerciseParent = ExerciseParentEnum.TUTORIAL;
+            $rootScope.data.exerciseParent = ExerciseParentEnum.EXAM;
 
             $rootScope.settings = {
                 exitAction: function () {
                     alert('exit');
-                },
-                znkExerciseSettings:{
-                    initSlideIndex: 1
                 }
             };
 
