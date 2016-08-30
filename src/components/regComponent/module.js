@@ -1,15 +1,15 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginForm', [
+    angular.module('znk.infra-web-app.regComponent', [
         'pascalprecht.translate',
         'znk.infra.svgIcon'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'login-form-envelope': 'components/loginForm/svg/login-form-envelope.svg',
-                'login-form-lock': 'components/loginForm/svg/login-form-lock.svg'
+                'form-envelope': 'components/regComponent/svg/form-envelope.svg',
+                'form-lock': 'components/regComponent/svg/form-lock.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
