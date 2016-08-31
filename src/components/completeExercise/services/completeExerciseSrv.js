@@ -22,7 +22,7 @@
                 if (isStudentApp) {
                     return UserProfileService.getCurrUserId();
                 } else {
-                    return TeacherContextSrv.getCurrUid();
+                    return $q.when(TeacherContextSrv.getCurrUid());
                 }
             };
 
