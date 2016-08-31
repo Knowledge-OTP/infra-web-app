@@ -16,8 +16,11 @@
 
                     scope.vm = {};
 
-                    scope.vm.submit = function(){
-                        regComponentSrv.login(scope.vm.formData).catch(function(err){
+                    scope.loginSubmit = function(){
+                        if (!scope.vm.loginFormData) {
+                            return;
+                        }
+                        regComponentSrv.login(scope.vm.loginFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });

@@ -1,4 +1,6 @@
-<form novalidate class="form-container" translate-namespace="SIGNUP_FORM" ng-submit="vm.submit()">
+<form novalidate class="form-container"
+      translate-namespace="SIGNUP_FORM"
+      ng-submit="signupSubmit()">
     <div class="title"
          translate=".SIGNUP">
     </div>
@@ -13,28 +15,28 @@
             <svg-icon name="form-envelope"></svg-icon>
             <input type="text"
                    placeholder="{{'SIGNUP_FORM.NAME' | translate}}"
-                   name="nickname"
-                   ng-model="vm.formData.nickname">
+                   name="signupNickname"
+                   ng-model="vm.signupFormData.signupNickname">
         </div>
         <div class="input-wrapper">
             <svg-icon name="form-envelope"></svg-icon>
             <input type="text"
                    placeholder="{{'SIGNUP_FORM.EMAIL' | translate}}"
-                   name="email"
-                   ng-model="vm.formData.email">
+                   name="signupEmail"
+                   ng-model="vm.signupFormData.signupEmail">
         </div>
         <div class="input-wrapper">
             <svg-icon name="form-lock"></svg-icon>
             <input type="password"
                    placeholder="{{'SIGNUP_FORM.PASSWORD' | translate}}"
-                   name="password"
-                   ng-model="vm.formData.password">
+                   name="signupPassword"
+                   ng-model="vm.signupFormData.signupPassword">
         </div>
     </div>
     <div class="submit-btn-wrapper">
         <button type="submit" translate=".SIGNUP"></button>
     </div>
-    <div class="forgot-pwd-wrapper">
-        <span translate=".FORGOT_PWD"></span>
-    </div>
+    <!--<div class="forgot-pwd-wrapper">-->
+        <!--<span translate=".FORGOT_PWD"></span>-->
+    <!--</div>-->
 </form>

@@ -1,12 +1,10 @@
 <header>
     <select name="appSelect"
             id="appSelect"
-            ng-model="data.appSelect">
-        <option ng-repeat="app in availableApps"
-                value="{{app.id}}">{{app.name}}</option>
+            ng-options="app.name for app in d.availableApps track by app.id"
+            ng-model="d.selectedApp">
     </select>
-    <br/>Selected App - {{data.appSelect}}
-    <!--<br/>appContext - {{contextObj.appContext}}-->
+    <br/>Selected App - {{d.selectedApp}}
 </header>
 <login-form class="ng-hide" ng-show="showLogin"></login-form>
 <signup-form class="ng-hide" ng-show="showSignup"></signup-form>

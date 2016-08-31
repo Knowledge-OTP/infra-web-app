@@ -14,9 +14,9 @@
 "znk.infra-web-app.iapMsg",
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
-"znk.infra-web-app.loginForm",
 "znk.infra-web-app.onBoarding",
 "znk.infra-web-app.purchase",
+"znk.infra-web-app.regComponent",
 "znk.infra-web-app.settings",
 "znk.infra-web-app.socialSharing",
 "znk.infra-web-app.tests",
@@ -4749,185 +4749,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginForm', [
-        'pascalprecht.translate',
-        'znk.infra.svgIcon'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'login-form-envelope': 'components/loginForm/svg/login-form-envelope.svg',
-                'login-form-lock': 'components/loginForm/svg/login-form-lock.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
-
-})(angular);
-
-/**
- * attrs:
- */
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.loginForm').directive('loginForm', [
-        '$translatePartialLoader', 'LoginFormSrv',
-        function ($translatePartialLoader, LoginFormSrv) {
-            return {
-                templateUrl: 'components/loginForm/templates/loginForm.directive.html',
-                restrict: 'E',
-                link: function (scope) {
-                    $translatePartialLoader.addPart('loginForm');
-
-                    scope.vm = {};
-
-                    scope.vm.submit = function(){
-                        LoginFormSrv.login(scope.vm.formData).catch(function(err){
-                            console.error(err);
-                            window.alert(err);
-                        });
-                    };
-                }
-            };
-        }
-    ]);
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.loginForm').service('LoginFormSrv', [
-        'ENV', '$http', '$window',
-        function (ENV, $http, $window) {
-            this.login = function(loginData){
-                var ref = new Firebase(ENV.fbGlobalEndPoint, ENV.firebaseAppScopeName);
-                return ref.authWithPassword(loginData).then(function(authData){
-                    var postUrl = ENV.backendEndpoint + 'firebase/token';
-                    var postData = {
-                        email: authData.password ? authData.password.email : '',
-                        uid: authData.uid,
-                        fbDataEndPoint: ENV.fbDataEndPoint,
-                        fbEndpoint: ENV.fbGlobalEndPoint,
-                        auth: ENV.dataAuthSecret,
-                        token: authData.token
-                    };
-
-                    return $http.post(postUrl, postData).then(function (token) {
-                        var refDataDB = new Firebase(ENV.fbDataEndPoint, ENV.firebaseAppScopeName);
-                        refDataDB.authWithCustomToken(token.data).then(function(){
-                            var appUrl = ENV.redirectLogin;
-                            $window.location.replace(appUrl);
-                        });
-                    });
-                });
-            };
-        }
-    ]);
-})(angular);
-
-angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/loginForm/svg/login-form-envelope.svg",
-    "<svg\n" +
-    "    class=\"login-form-envelope-svg\"\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"0 0 190.2 143.7\">\n" +
-    "    <style>\n" +
-    "        .login-form-envelope-svg{\n" +
-    "            width: 20px;\n" +
-    "            stroke: #CACACA;\n" +
-    "            fill: none;\n" +
-    "            stroke-width: 10;\n" +
-    "            stroke-miterlimit: 10;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "<g>\n" +
-    "	<path class=\"st0\" d=\"M174.7,141.2H15.4c-7.1,0-12.9-5.8-12.9-12.9V15.4c0-7.1,5.8-12.9,12.9-12.9h159.3c7.1,0,12.9,5.8,12.9,12.9\n" +
-    "		v112.8C187.7,135.3,181.9,141.2,174.7,141.2z\"/>\n" +
-    "	<path class=\"st0\" d=\"M4.1,7.3l77.3,75.1c7.6,7.4,19.8,7.4,27.4,0l77.3-75.1\"/>\n" +
-    "	<line class=\"st0\" x1=\"77\" y1=\"78\" x2=\"7.7\" y2=\"135.5\"/>\n" +
-    "	<line class=\"st0\" x1=\"112.8\" y1=\"78\" x2=\"182.1\" y2=\"135.5\"/>\n" +
-    "</g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/loginForm/svg/login-form-lock.svg",
-    "<svg class=\"locked-svg\"\n" +
-    "     x=\"0px\"\n" +
-    "     y=\"0px\"\n" +
-    "     viewBox=\"0 0 106 165.2\"\n" +
-    "     version=\"1.1\"\n" +
-    "     xmlns=\"http://www.w3.org/2000/svg\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .locked-svg{\n" +
-    "            width: 15px;\n" +
-    "        }\n" +
-    "\n" +
-    "        .locked-svg .st0 {\n" +
-    "            fill: none;\n" +
-    "            stroke: #CACACA;\n" +
-    "            stroke-width: 6;\n" +
-    "            stroke-miterlimit: 10;\n" +
-    "        }\n" +
-    "\n" +
-    "        .locked-svg .st1 {\n" +
-    "            fill: none;\n" +
-    "            stroke: #CACACA;\n" +
-    "            stroke-width: 4;\n" +
-    "            stroke-miterlimit: 10;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "    <g>\n" +
-    "        <path class=\"st0\" d=\"M93.4,162.2H12.6c-5.3,0-9.6-4.3-9.6-9.6V71.8c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
-    "		C103,157.9,98.7,162.2,93.4,162.2z\"/>\n" +
-    "        <path class=\"st0\" d=\"M23.2,59.4V33.2C23.2,16.6,36.6,3,53,3h0c16.4,0,29.8,13.6,29.8,30.2v26.1\"/>\n" +
-    "        <path class=\"st1\" d=\"M53.2,91.5c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
-    "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,96.6,47.1,91.5,53.2,91.5\"/>\n" +
-    "    </g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/loginForm/templates/loginForm.directive.html",
-    "<form novalidate class=\"login-form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"vm.submit()\">\n" +
-    "    <div class=\"title\"\n" +
-    "         translate=\".LOGIN\">\n" +
-    "    </div>\n" +
-    "    <div class=\"inputs-container\">\n" +
-    "        <div class=\"input-wrapper\">\n" +
-    "            <svg-icon name=\"login-form-envelope\"></svg-icon>\n" +
-    "            <input type=\"text\"\n" +
-    "                   placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
-    "                   name=\"email\"\n" +
-    "                   ng-model=\"vm.formData.email\">\n" +
-    "        </div>\n" +
-    "        <div class=\"input-wrapper\">\n" +
-    "            <svg-icon name=\"login-form-lock\"></svg-icon>\n" +
-    "            <input type=\"password\"\n" +
-    "                   placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
-    "                   name=\"password\"\n" +
-    "                   ng-model=\"vm.formData.password\">\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"submit-btn-wrapper\">\n" +
-    "        <button type=\"submit\" translate=\".LOGIN_IN\"></button>\n" +
-    "    </div>\n" +
-    "    <div class=\"forgot-pwd-wrapper\">\n" +
-    "        <span translate=\".FORGOT_PWD\"></span>\n" +
-    "    </div>\n" +
-    "    <div class=\"divider\">\n" +
-    "        <div translate=\".OR\" class=\"text\"></div>\n" +
-    "    </div>\n" +
-    "    <div class=\"social-auth-container\">\n" +
-    "        <div class=\"social-auth-title\" translate=\".CONNECT_WITH\"></div>\n" +
-    "    </div>\n" +
-    "</form>\n" +
-    "");
-}]);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.onBoarding', [
         'pascalprecht.translate',
         'znk.infra.svgIcon',
@@ -6279,6 +6100,570 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "        </md-dialog-content>\n" +
     "    </div>\n" +
     "</md-dialog>\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.regComponent', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'form-envelope': 'components/regComponent/svg/form-envelope.svg',
+                'form-lock': 'components/regComponent/svg/form-lock.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.regComponent').directive('loginForm', [
+        '$translatePartialLoader', 'regComponentSrv',
+        function ($translatePartialLoader, regComponentSrv) {
+            return {
+                templateUrl: 'components/regComponent/templates/loginForm.directive.html',
+                restrict: 'E',
+                link: function (scope) {
+                    $translatePartialLoader.addPart('loginForm');
+
+                    scope.vm = {};
+
+                    scope.loginSubmit = function(){
+                        if (!scope.vm.loginFormData) {
+                            return;
+                        }
+                        regComponentSrv.login(scope.vm.loginFormData).catch(function(err){
+                            console.error(err);
+                            window.alert(err);
+                        });
+                    };
+                }
+            };
+        }
+    ]);
+})(angular);
+
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.regComponent').directive('regComponent', [
+        '$translatePartialLoader', 'regComponentContextSrv',
+        function ($translatePartialLoader, regComponentContextSrv) {
+            return {
+                templateUrl: 'components/regComponent/templates/regComponent.directive.html',
+                restrict: 'E',
+                link: function (scope) {
+                    $translatePartialLoader.addPart('regComponent');
+
+                    scope.d = {
+                        availableApps: regComponentContextSrv.getAvailableApps(),
+                        selectedApp: regComponentContextSrv.getDefaultApp()
+                    };
+
+                    scope.showLogin = true;
+                    scope.showSignup = true;
+                }
+            };
+        }
+    ]);
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.regComponent').directive('signupForm', [
+        '$translatePartialLoader', 'regComponentSrv',
+        function ($translatePartialLoader, regComponentSrv) {
+            return {
+                templateUrl: 'components/regComponent/templates/signupForm.directive.html',
+                restrict: 'E',
+                link: function (scope) {
+                    $translatePartialLoader.addPart('signupForm');
+
+                    scope.vm = {};
+
+                    scope.signupSubmit = function(){
+                        if (!scope.vm.signupFormData) {
+                            return;
+                        }
+                        regComponentSrv.signup(scope.vm.signupFormData).catch(function(err){
+                            console.error(err);
+                            window.alert(err);
+                        });
+                    };
+                }
+            };
+        }
+    ]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.regComponent').service('regComponentSrv', [
+        "$window", "$firebaseAuth", "ENV", "$q", "$timeout", "$rootScope", "$http", "$log", "$injector", "UserProfileService",
+        function ($window, $firebaseAuth, ENV, $q, $timeout, $rootScope, $http, $log, $injector, UserProfileService) {
+            var self = this;
+
+            var refAuthDB = new $window.Firebase(ENV.fbGlobalEndPoint, ENV.firebaseAppScopeName);
+            var refDataDB = new $window.Firebase(ENV.fbDataEndPoint, ENV.firebaseAppScopeName);
+            var fbAuth = $firebaseAuth(refAuthDB);
+
+            this.login = function(loginData){
+                var ref = new Firebase(ENV.fbGlobalEndPoint, ENV.firebaseAppScopeName);
+                return ref.authWithPassword(loginData).then(function(authData){
+                    var postUrl = ENV.backendEndpoint + 'firebase/token';
+                    var postData = {
+                        email: authData.password ? authData.password.email : '',
+                        uid: authData.uid,
+                        fbDataEndPoint: ENV.fbDataEndPoint,
+                        fbEndpoint: ENV.fbGlobalEndPoint,
+                        auth: ENV.dataAuthSecret,
+                        token: authData.token
+                    };
+
+                    return $http.post(postUrl, postData).then(function (token) {
+                        var refDataDB = new Firebase(ENV.fbDataEndPoint, ENV.firebaseAppScopeName);
+                        refDataDB.authWithCustomToken(token.data).then(function(){
+                            var appUrl = ENV.redirectLogin;
+                            $window.location.replace(appUrl);
+                        });
+                    });
+                });
+            };
+
+            this.signup = function (signupData) {
+                var self = this;
+
+                $log.debug(signupData);
+                // if (AuthHelperService.isDomainExclude(this.registration.email)) {
+                //     alert('invalid email!');
+                //     return;
+                // }
+
+                self.saveRegistration(this.registration, true)
+                    .then(function () {
+                        UserProfileService.getProfile().then(function (userProfile) {
+                            userProfile.email = self.registration.email;
+                            userProfile.nickname = self.registration.nickname;
+
+                            // UserProfileService.setProfile(userProfile).then(function () {
+                            //     InvitationKeyService.navigateWithInvitationKey();
+                            // });
+                        });
+                    })
+                    .catch(function (err) {
+                        $log.error(err);
+                        // if (err.code === 'NETWORK_ERROR') {
+                        //     self.signup_error = AuthHelperService.errorMessages.NO_INTERNET_CONNECTION_ERR;
+                        // } else if (err.code === 'EMAIL_TAKEN') {
+                        //     self.email_error = AuthHelperService.errorMessages.EMAIL_EXIST;
+                        // } else {
+                        //     self.email_error = AuthHelperService.errorMessages.INVALID_EMAIL;
+                        // }
+                    });
+            };
+
+
+            // From AuthService
+
+            this.saveRegistration = function (registration, login) {
+                var registerInProgress = true;
+                var dfd = $q.defer();
+                this.logout(true);
+
+                var timeoutPromise = $timeout(function () {
+                    if (registerInProgress) {
+                        dfd.reject('timeout');
+                    }
+                }, ENV.promiseTimeOut);
+
+                registration.profile = {};
+
+                fbAuth.$createUser(registration).then(function () {
+                    registerInProgress = false;
+                    $timeout.cancel(timeoutPromise);
+
+                    if (login) {
+                        self.login({
+                            email: registration.email,
+                            password: registration.password
+                        }).then(function (loginData) {
+                            self.registerFirstLogin();
+                            dfd.resolve(loginData);
+                        }, function (err) {
+                            dfd.reject(err);
+                        });
+                    } else {
+                        dfd.resolve();
+                    }
+                }, function (error) {
+                    $timeout.cancel(timeoutPromise);
+                    dfd.reject(error);
+                });
+                return dfd.promise;
+            };
+
+            this.login = function (loginData) {
+                var deferred = $q.defer();
+
+                fbAuth.$unauth();
+
+                fbAuth.$authWithPassword(loginData).then(function (authData) {
+                    $log.debug('authSrv::login(): uid=' + authData.uid);
+                    _$onAuth(authData).then(function () {
+                        deferred.resolve(authData);
+                    });
+                }).catch(function (err) {
+                    self.logout();
+                    deferred.reject(err);
+                });
+
+                return deferred.promise;
+            };
+
+            this.logout = function () {
+                $rootScope.$broadcast('auth:beforeLogout');
+                fbAuth.$unauth();
+
+                var actAuth = $firebaseAuth(refDataDB);
+                actAuth.$unauth();
+            };
+
+            this.forgotPassword = function (forgotPasswordData) {
+                return fbAuth.$resetPassword(forgotPasswordData);
+            };
+
+            this.changePassword = function (changePasswordData) {
+                var authData = this.getAuth();
+                if (authData && authData.password) {
+                    changePasswordData.email = authData.password.email;
+                    return fbAuth.$changePassword(changePasswordData);
+                }
+                return $q.reject();
+            };
+
+            this.getAuth = function () {
+                return refAuthDB.getAuth();
+            };
+
+            this.createAuthWithCustomToken = function (refDB, token) {
+                var deferred = $q.defer();
+                refDB.authWithCustomToken(token, function (error, userData) {
+                    if (error) {
+                        deferred.reject(error);
+                    }
+                    $log.debug('createAuthWithCustomToken: uid=' + userData.uid);
+                    deferred.resolve(userData);
+                });
+                return deferred.promise;
+            };
+
+            this.userDataForAuthAndDataFb = function (data) {
+                var proms = [
+                    this.createAuthWithCustomToken(refAuthDB, data.authToken),
+                    this.createAuthWithCustomToken(refDataDB, data.dataToken)
+                ];
+                return $q.all(proms);
+            };
+
+            function _$onAuth(data) {
+                var _loginAuthData = data;
+
+                if (_loginAuthData) {
+                    return _dataLogin(_loginAuthData).then(function () {
+                        $rootScope.$broadcast('auth:login', _loginAuthData);
+                    });
+                }
+                $rootScope.$broadcast('auth:logout');
+                return $q.when();
+            }
+
+            function _dataLogin() {
+                var postUrl = ENV.backendEndpoint + 'firebase/token';
+                var authData = refAuthDB.getAuth();
+                var postData = {
+                    email: authData.password ? authData.password.email : '',
+                    uid: authData.uid,
+                    fbDataEndPoint: ENV.fbDataEndPoint,
+                    fbEndpoint: ENV.fbGlobalEndPoint,
+                    auth: ENV.dataAuthSecret,
+                    token: authData.token
+                };
+
+                return $http.post(postUrl, postData).then(function (token) {
+                    var defer = $q.defer();
+                    refDataDB.authWithCustomToken(token.data, function (error, userAuthData) {
+                        if (error) {
+                            defer.reject(error);
+                        }
+                        $log.debug('authSrv::login(): uid=' + userAuthData.uid);
+                        defer.resolve(userAuthData);
+                    });
+                    return defer.promise;
+                });
+            }
+
+            this.registerFirstLogin = function () {
+                var ActStorageSrv = $injector.get('ActStorageSrv');
+                var StorageSrv = $injector.get('StorageSrv');
+                var firstLoginPath = 'firstLogin/' + StorageSrv.variables.uid;
+                return ActStorageSrv.get(firstLoginPath).then(function (userFirstLoginTime) {
+                    if (angular.equals(userFirstLoginTime, {})) {
+                        ActStorageSrv.set(firstLoginPath, Date.now());
+                    }
+                });
+            };
+
+        }
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.regComponent').service('regComponentContextSrv', [
+        function () {
+            var self = this;
+
+            this.contextObj = {
+                appContext: '',
+                userContext: ''
+            };
+
+            this.availableApps = {
+                SAT: {
+                    id: 'SAT',
+                    name: 'SAT'
+                },
+                ACT: {
+                    id: 'ACT',
+                    name: 'ACT'
+                }
+            };
+
+            /**
+             * Sets the app for teacher / student mode
+             * @param userContext
+             */
+            this.setUserContext = function (userContext) {
+                self.contextObj = userContext;
+            };
+
+
+            /**
+             * Sets which login app to use
+             * @param appContext
+             */
+            this.setAppContext = function (appContext) {
+                self.contextObj = appContext;
+            };
+
+            /**
+             * Get the app for teacher / student mode
+             * @param userContext
+             */
+            this.getUserContext = function () {
+                return self.contextObj.userContext;
+            };
+
+
+            /**
+             * Get the currenty appContext
+             */
+            this.getAppContext = function () {
+                return self.contextObj.appContext;
+            };
+
+            /**
+             * Get an object map of the available apps to log in to
+             */
+            this.getAvailableApps = function () {
+                return self.availableApps;
+            };
+
+            /**
+             * Get the default app to login to
+             */
+            this.getDefaultApp = function () {
+                return self.availableApps.SAT;
+            };
+        }
+    ]);
+})(angular);
+
+angular.module('znk.infra-web-app.regComponent').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/regComponent/svg/form-envelope.svg",
+    "<svg\n" +
+    "    class=\"login-form-envelope-svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 190.2 143.7\">\n" +
+    "    <style>\n" +
+    "        .login-form-envelope-svg{\n" +
+    "            width: 20px;\n" +
+    "            stroke: #CACACA;\n" +
+    "            fill: none;\n" +
+    "            stroke-width: 10;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M174.7,141.2H15.4c-7.1,0-12.9-5.8-12.9-12.9V15.4c0-7.1,5.8-12.9,12.9-12.9h159.3c7.1,0,12.9,5.8,12.9,12.9\n" +
+    "		v112.8C187.7,135.3,181.9,141.2,174.7,141.2z\"/>\n" +
+    "	<path class=\"st0\" d=\"M4.1,7.3l77.3,75.1c7.6,7.4,19.8,7.4,27.4,0l77.3-75.1\"/>\n" +
+    "	<line class=\"st0\" x1=\"77\" y1=\"78\" x2=\"7.7\" y2=\"135.5\"/>\n" +
+    "	<line class=\"st0\" x1=\"112.8\" y1=\"78\" x2=\"182.1\" y2=\"135.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/regComponent/svg/form-lock.svg",
+    "<svg class=\"locked-svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 106 165.2\"\n" +
+    "     version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .locked-svg{\n" +
+    "            width: 15px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .locked-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #CACACA;\n" +
+    "            stroke-width: 6;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .locked-svg .st1 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #CACACA;\n" +
+    "            stroke-width: 4;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path class=\"st0\" d=\"M93.4,162.2H12.6c-5.3,0-9.6-4.3-9.6-9.6V71.8c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
+    "		C103,157.9,98.7,162.2,93.4,162.2z\"/>\n" +
+    "        <path class=\"st0\" d=\"M23.2,59.4V33.2C23.2,16.6,36.6,3,53,3h0c16.4,0,29.8,13.6,29.8,30.2v26.1\"/>\n" +
+    "        <path class=\"st1\" d=\"M53.2,91.5c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
+    "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,96.6,47.1,91.5,53.2,91.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/regComponent/templates/loginForm.directive.html",
+    "<form novalidate class=\"form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"loginSubmit()\">\n" +
+    "    <div class=\"title\"\n" +
+    "         translate=\".LOGIN\">\n" +
+    "    </div>\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"inputs-container\">\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "            <input type=\"text\"\n" +
+    "                   placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
+    "                   name=\"email\"\n" +
+    "                   ng-model=\"vm.loginFormData.email\">\n" +
+    "        </div>\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "            <input type=\"password\"\n" +
+    "                   placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
+    "                   name=\"password\"\n" +
+    "                   ng-model=\"vm.loginFormData.password\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"submit-btn-wrapper\">\n" +
+    "        <button type=\"submit\" translate=\".LOGIN_IN\"></button>\n" +
+    "    </div>\n" +
+    "    <!--<div class=\"forgot-pwd-wrapper\">-->\n" +
+    "        <!--<span translate=\".FORGOT_PWD\"></span>-->\n" +
+    "    <!--</div>-->\n" +
+    "</form>\n" +
+    "");
+  $templateCache.put("components/regComponent/templates/regComponent.directive.html",
+    "<header>\n" +
+    "    <select name=\"appSelect\"\n" +
+    "            id=\"appSelect\"\n" +
+    "            ng-options=\"app.name for app in d.availableApps track by app.id\"\n" +
+    "            ng-model=\"d.selectedApp\">\n" +
+    "    </select>\n" +
+    "    <br/>Selected App - {{d.selectedApp}}\n" +
+    "</header>\n" +
+    "<login-form class=\"ng-hide\" ng-show=\"showLogin\"></login-form>\n" +
+    "<signup-form class=\"ng-hide\" ng-show=\"showSignup\"></signup-form>\n" +
+    "");
+  $templateCache.put("components/regComponent/templates/signupForm.directive.html",
+    "<form novalidate class=\"form-container\"\n" +
+    "      translate-namespace=\"SIGNUP_FORM\"\n" +
+    "      ng-submit=\"signupSubmit()\">\n" +
+    "    <div class=\"title\"\n" +
+    "         translate=\".SIGNUP\">\n" +
+    "    </div>\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"inputs-container\">\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "            <input type=\"text\"\n" +
+    "                   placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
+    "                   name=\"signupNickname\"\n" +
+    "                   ng-model=\"vm.signupFormData.signupNickname\">\n" +
+    "        </div>\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "            <input type=\"text\"\n" +
+    "                   placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
+    "                   name=\"signupEmail\"\n" +
+    "                   ng-model=\"vm.signupFormData.signupEmail\">\n" +
+    "        </div>\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "            <input type=\"password\"\n" +
+    "                   placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
+    "                   name=\"signupPassword\"\n" +
+    "                   ng-model=\"vm.signupFormData.signupPassword\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"submit-btn-wrapper\">\n" +
+    "        <button type=\"submit\" translate=\".SIGNUP\"></button>\n" +
+    "    </div>\n" +
+    "    <!--<div class=\"forgot-pwd-wrapper\">-->\n" +
+    "        <!--<span translate=\".FORGOT_PWD\"></span>-->\n" +
+    "    <!--</div>-->\n" +
+    "</form>\n" +
     "");
 }]);
 

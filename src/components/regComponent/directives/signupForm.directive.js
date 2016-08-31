@@ -16,8 +16,11 @@
 
                     scope.vm = {};
 
-                    scope.vm.submit = function(){
-                        regComponentSrv.signup(scope.vm.formData).catch(function(err){
+                    scope.signupSubmit = function(){
+                        if (!scope.vm.signupFormData) {
+                            return;
+                        }
+                        regComponentSrv.signup(scope.vm.signupFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });
