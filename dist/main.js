@@ -762,7 +762,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         var questionResultsMap = UtilitySrv.array.convertToMap(exerciseResult.questionResults, 'questionId');
                         initSlideIndex = exerciseContent.questions.findIndex(function (question) {
                             var questionResult = questionResultsMap[question.id];
-                            return angular.isUndefined(questionResult.userAnswer);
+                            return !questionResult || angular.isUndefined(questionResult.userAnswer);
                         });
 
                         if (initSlideIndex === -1) {
