@@ -6,8 +6,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.regComponent').directive('signupForm', [
-        '$translatePartialLoader', 'regComponentSrv',
-        function ($translatePartialLoader, regComponentSrv) {
+        '$translatePartialLoader', 'LoginAppSrv',
+        function ($translatePartialLoader, LoginAppSrv) {
             return {
                 templateUrl: 'components/regComponent/templates/signupForm.directive.html',
                 restrict: 'E',

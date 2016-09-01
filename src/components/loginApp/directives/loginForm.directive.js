@@ -5,11 +5,11 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.regComponent').directive('loginForm', [
-        '$translatePartialLoader', 'regComponentSrv',
-        function ($translatePartialLoader, regComponentSrv) {
+    angular.module('znk.infra-web-app.loginApp').directive('loginForm', [
+        '$translatePartialLoader', 'LoginAppSrv',
+        function ($translatePartialLoader, LoginAppSrv) {
             return {
-                templateUrl: 'components/regComponent/templates/loginForm.directive.html',
+                templateUrl: 'components/loginApp/templates/loginForm.directive.html',
                 restrict: 'E',
                 link: function (scope) {
                     $translatePartialLoader.addPart('loginForm');

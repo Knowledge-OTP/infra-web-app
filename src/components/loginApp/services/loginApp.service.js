@@ -1,18 +1,17 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.regComponent').service('regComponentSrv', [
-        "$window", "$firebaseAuth", "ENV", "$q", "$timeout", "$rootScope", "$http", "$log", "$injector", "UserProfileService",
-        function ($window, $firebaseAuth, ENV, $q, $timeout, $rootScope, $http, $log, $injector, UserProfileService) {
+    angular.module('znk.infra-web-app.regComponent').service('LoginAppSrv',
+        function (/*$window, $firebaseAuth, ENV, $q, $timeout, $rootScope, $http, $log, $injector, UserProfileService*/) {
             var self = this;
 
             var refAuthDB = new $window.Firebase(ENV.fbGlobalEndPoint, ENV.firebaseAppScopeName);
             var refDataDB = new $window.Firebase(ENV.fbDataEndPoint, ENV.firebaseAppScopeName);
             var fbAuth = $firebaseAuth(refAuthDB);
 
-            this.login = function(loginData){
+            this.login = function (loginData) {
                 var ref = new Firebase(ENV.fbGlobalEndPoint, ENV.firebaseAppScopeName);
-                return ref.authWithPassword(loginData).then(function(authData){
+                return ref.authWithPassword(loginData).then(function (authData) {
                     var postUrl = ENV.backendEndpoint + 'firebase/token';
                     var postData = {
                         email: authData.password ? authData.password.email : '',
@@ -25,7 +24,7 @@
 
                     return $http.post(postUrl, postData).then(function (token) {
                         var refDataDB = new Firebase(ENV.fbDataEndPoint, ENV.firebaseAppScopeName);
-                        refDataDB.authWithCustomToken(token.data).then(function(){
+                        refDataDB.authWithCustomToken(token.data).then(function () {
                             var appUrl = ENV.redirectLogin;
                             $window.location.replace(appUrl);
                         });
@@ -217,5 +216,5 @@
             };
 
         }
-    ]);
+    );
 })(angular);

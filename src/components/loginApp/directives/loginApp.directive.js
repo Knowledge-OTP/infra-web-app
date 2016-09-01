@@ -5,7 +5,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.regComponent').directive('regComponent', [
+    angular.module('znk.infra-web-app.loginApp').directive('regComponent', [
         '$translatePartialLoader', 'regComponentContextSrv',
         function ($translatePartialLoader, regComponentContextSrv) {
             return {
