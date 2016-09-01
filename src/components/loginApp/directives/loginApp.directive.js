@@ -12,7 +12,7 @@
                 templateUrl: 'components/loginApp/templates/regComponent.directive.html',
                 restrict: 'E',
                 link: function (scope) {
-                    $translatePartialLoader.addPart('regComponent');
+                    $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {
                         availableApps: regComponentContextSrv.getAvailableApps(),
