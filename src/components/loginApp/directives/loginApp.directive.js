@@ -21,6 +21,13 @@
 
                     scope.showLogin = true;
                     scope.showSignup = true;
+
+                    // App select menu
+                    var originatorEv;
+                    scope.openMenu = function($mdOpenMenu, ev) {
+                        originatorEv = ev;
+                        $mdOpenMenu(ev);
+                    };
                 }
             };
         }

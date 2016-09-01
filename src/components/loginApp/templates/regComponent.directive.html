@@ -1,10 +1,32 @@
-<header>
-    <select name="appSelect"
-            id="appSelect"
-            ng-options="app.name for app in d.availableApps track by app.id"
-            ng-model="d.selectedApp">
-    </select>
-    <br/>Selected App - {{d.selectedApp}}
-</header>
-<!--<login-form class="ng-hide" ng-show="showLogin"></login-form>-->
-<!--<signup-form class="ng-hide" ng-show="showSignup"></signup-form>-->
+<div class="login-app" ng-class="{student: true, educator: false}">
+    <header>
+        <div class="logo"></div>
+        <!--<select name="appSelect"-->
+        <!--id="appSelect"-->
+        <!--ng-options="app.name for app in d.availableApps track by app.id"-->
+        <!--ng-model="d.selectedApp">-->
+        <!--</select>-->
+
+        <div class="app-select" ng-cloak>
+            <md-menu ng-model="d.selectedApp">
+                <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+                    {{d.selectedApp.name}}
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item ng-repeat="app in d.availableApps track by app.id" ng-click="d.selectedApp = app">
+                        <md-button>{{app.name}}</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+
+    </header>
+    <div class="main">
+        <!--<login-form class="ng-hide" ng-show="showLogin"></login-form>-->
+        <!--<signup-form class="ng-hide" ng-show="showSignup"></signup-form>-->
+    </div>
+    <footer>
+
+    </footer>
+    <div>Selected App - {{d.selectedApp}}</div>
+</div>
