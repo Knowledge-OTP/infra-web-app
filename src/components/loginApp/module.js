@@ -3,7 +3,8 @@
 
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
-        'znk.infra.svgIcon'
+        'znk.infra.svgIcon',
+        'ngMaterial'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
