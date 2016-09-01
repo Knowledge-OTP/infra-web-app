@@ -9,7 +9,7 @@
         '$translatePartialLoader', 'regComponentContextSrv',
         function ($translatePartialLoader, regComponentContextSrv) {
             return {
-                templateUrl: 'components/regComponent/templates/regComponent.directive.html',
+                templateUrl: 'components/loginApp/templates/regComponent.directive.html',
                 restrict: 'E',
                 link: function (scope) {
                     $translatePartialLoader.addPart('regComponent');

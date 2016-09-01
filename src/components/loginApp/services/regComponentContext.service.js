@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.regComponent').service('regComponentContextSrv', [
+    angular.module('znk.infra-web-app.loginApp').service('regComponentContextSrv', [
         function () {
             var self = this;
 

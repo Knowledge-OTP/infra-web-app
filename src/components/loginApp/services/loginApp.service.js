@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.regComponent').service('LoginAppSrv',
+    angular.module('znk.infra-web-app.loginApp').service('LoginAppSrv',
         function (/*$window, $firebaseAuth, ENV, $q, $timeout, $rootScope, $http, $log, $injector, UserProfileService*/) {
             var self = this;
 
