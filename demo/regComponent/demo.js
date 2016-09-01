@@ -1,8 +1,8 @@
 angular.module('demo', ['znk.infra-web-app.loginApp'])
     .config(function ($translateProvider) {
         $translateProvider.useLoader('$translatePartialLoader', {
-                urlTemplate: '/{part}/locale/{lang}.json'
-            })
+            urlTemplate: '/{part}/locale/{lang}.json'
+        })
             .preferredLanguage('en');
     })
     .run(function ($rootScope, $translate) {

@@ -40,7 +40,7 @@
         this.$get = function ($q, $http, $log) {
             'ngInject';
 
-            var LoginAppSrv = this;
+            var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
                 return ALL_ENV_CONFIG[env][appContext];
@@ -72,11 +72,11 @@
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            this.APPS = APPS;
+            LoginAppSrv.APPS = APPS;
 
-            this.USER_CONTEXT = USER_CONTEXT;
+            LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
-            this.logout = function (appContext) {
+            LoginAppSrv.logout = function (appContext) {
                 var globalRef = _getGlobalRef(appContext);
                 var appRef = _getAppRef(appContext);
                 globalRef.unauth();
@@ -88,7 +88,7 @@
              *  userContext: 1,2 (USER_CONTEXT constant)
              *  formData: email & password
              */
-            this.login = (function () {
+            LoginAppSrv.login = (function () {
                 var isLoginInProgress;
 
                 return function (appContext, userContext, formData) {
@@ -98,7 +98,7 @@
                         return $q.reject(errMsg);
                     }
 
-                    this.logout(appContext);
+                    LoginAppSrv.logout(appContext);
 
                     isLoginInProgress = true;
 
@@ -134,7 +134,7 @@
              *  userContext: 1,2 (USER_CONTEXT constant)
              *  formData: email & password
              */
-            this.signup = (function () {
+            LoginAppSrv.signup = (function () {
                 var isSignUpInProgress;
 
                 return function (appContext, userContext, formData) {
@@ -159,6 +159,8 @@
                     });
                 };
             })();
+
+            return LoginAppSrv;
         };
     });
 })(angular);

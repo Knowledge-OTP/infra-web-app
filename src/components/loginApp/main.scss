@@ -2,7 +2,7 @@
 'src/scss/imports/colors',
 'bower_components/infra/dist/mixins/mixins';
 
-reg-component {
+login-app {
     .login-app {
         position: fixed;
         width: 100%;
@@ -36,9 +36,22 @@ reg-component {
                     }
                     & > button {
                         width: 175px;
+                        height: auto;
+                        padding: 8px 15px;
                         background-color: #fbfcfc;
-                        border-radius: 20px;
+                        border-radius: 30px;
                     }
+                }
+                .app-img-holder {
+                    width: calc(175px / 2);
+                    height: calc(55px / 2);
+                    background-image: url('assets/images/sat-name@2x.png');
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    float:left;
+                }
+                .expand-menu {
+                    float: right;
                 }
             }
         }

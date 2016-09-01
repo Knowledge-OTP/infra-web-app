@@ -5,18 +5,18 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('regComponent', [
-        '$translatePartialLoader', 'regComponentContextSrv',
-        function ($translatePartialLoader, regComponentContextSrv) {
+    angular.module('znk.infra-web-app.loginApp').directive('loginApp', [
+        '$translatePartialLoader', 'LoginAppSrv',
+        function ($translatePartialLoader, LoginAppSrv) {
             return {
-                templateUrl: 'components/loginApp/templates/regComponent.directive.html',
+                templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
                 link: function (scope) {
                     $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {
-                        availableApps: regComponentContextSrv.getAvailableApps(),
-                        selectedApp: regComponentContextSrv.getDefaultApp()
+                        availableApps: LoginAppSrv.APPS,
+                        selectedApp: LoginAppSrv.APPS.SAT
                     };
 
                     scope.showLogin = true;

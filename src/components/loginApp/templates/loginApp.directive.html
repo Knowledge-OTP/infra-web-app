@@ -8,9 +8,11 @@
         <!--</select>-->
 
         <div class="app-select" ng-cloak>
-            <md-menu ng-model="d.selectedApp">
+            <md-menu ng-model="d.selectedApp" md-offset="0 60" md-no-ink>
                 <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-                    {{d.selectedApp.name}}
+                    <!--{{d.selectedApp.name}}-->
+                    <div class="app-img-holder"></div>
+                    <md-icon class="material-icons expand-menu">expand_more</md-icon>
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item ng-repeat="app in d.availableApps track by app.id" ng-click="d.selectedApp = app">
@@ -22,8 +24,8 @@
 
     </header>
     <div class="main">
-        <!--<login-form class="ng-hide" ng-show="showLogin"></login-form>-->
-        <!--<signup-form class="ng-hide" ng-show="showSignup"></signup-form>-->
+        <login-form class="ng-hide" ng-show="showLogin"></login-form>
+        <signup-form class="ng-hide" ng-show="showSignup"></signup-form>
     </div>
     <footer>
 
