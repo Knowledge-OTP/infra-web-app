@@ -56,9 +56,31 @@ login-app {
             }
         }
         .main {
-            // height: 1027px;
-            background-size: contain;
+            width: 1366px;
+            height: 513px;
+            margin: 0 auto;
+            position: relative;
+            background-size: auto 100%;
             background-repeat: no-repeat;
+            background-position: center center;
+
+            .login-container,
+            .signup-container {
+                position: absolute;
+                top: 15px;
+                right: 135px;
+            }
+
+            .go-to-login,
+            .go-to-signup {
+                text-align: center;
+                color: #fff;
+            }
+
+            signup-form,
+            login-form {
+
+            }
         }
         &.educator {
             .main {
@@ -220,6 +242,9 @@ login-app {
                 };
                 text-align: center;
             }
+        }
+        footer {
+            text-align: center;
         }
     }
 }

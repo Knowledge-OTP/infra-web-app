@@ -27,6 +27,10 @@
                         scope.d.appContext = app;
                     };
 
+                    scope.changeCurrentForm = function (currentForm) {
+                      scope.currentForm = currentForm;
+                    };
+
                     scope.changeUserContext = function (context) {
                         scope.d.userContext = context;
                         if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {

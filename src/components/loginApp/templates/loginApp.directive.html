@@ -14,25 +14,26 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-            {{d.appContext.name}}
         </div>
 
     </header>
     <div class="main">
         <ng-switch on="currentForm">
-            <div ng-switch-when="login">
+            <div class="login-container" ng-switch-when="login">
                 <login-form app-context="d.appContext"
                             user-context="d.userContext">
                 </login-form>
+                <div class="go-to-signup" ng-click="changeCurrentForm('signup')">Sign Up</div>
             </div>
-            <div ng-switch-when="signup">
+            <div class="signup-container" ng-switch-when="signup">
                 <signup-form app-context="d.appContext"
                              user-context="d.userContext">
                 </signup-form>
+                <div class="go-to-login" ng-click="changeCurrentForm('login')">Log In</div>
             </div>
-            <div ng-click="currentForm = 'signup'">Sign Up</div>
-            <div ng-click="currentForm = 'login'">Log In</div>
         </ng-switch>
+        <!--<div ng-show="currentForm === 'login'" class="go-to-signup ng-hide" ng-click="currentForm = 'signup'">Sign Up</div>-->
+        <!--<div ng-show="currentForm === 'signup'" class="go-to-login ng-hide" ng-click="currentForm = 'login'">Log In</div>-->
     </div>
     <footer>
         <ng-switch on="currentUserContext">
