@@ -16,12 +16,16 @@
 
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
-                        selectedApp: LoginAppSrv.APPS.SAT
+                        appContext: LoginAppSrv.APPS.SAT,
+                        userContext: LoginAppSrv.USER_CONTEXT.STUDENT
                     };
+
+                    // LoginAppSrv.USER_CONTEXT
 
                     scope.currentForm = 'signup';
                     scope.selectApp = function(app) {
-                        scope.d.selectedApp = app;
+                        debugger;
+                        scope.d.appContext = app;
                     };
 
                     // App select menu

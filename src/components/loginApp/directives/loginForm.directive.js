@@ -11,7 +11,11 @@
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
                 restrict: 'E',
-                link: function (scope) {
+                scope: {
+                    appContext: '<',
+                    userContext: '<'
+                },
+                link: function (scope, element, attrs) {
                     $translatePartialLoader.addPart('loginForm');
 
                     scope.d = {};
@@ -20,7 +24,7 @@
                         if (!scope.d.loginFormData) {
                             return;
                         }
-                        LoginAppSrv.login('SAT', 1, scope.d.loginFormData).catch(function(err){
+                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });
@@ -30,4 +34,3 @@
         }
     ]);
 })(angular);
-

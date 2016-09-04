@@ -11,7 +11,11 @@
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
                 restrict: 'E',
-                link: function (scope) {
+                scope: {
+                    appContext: '<',
+                    userContext: '<'
+                },
+                link: function (scope, element, attrs) {
                     $translatePartialLoader.addPart('signupForm');
 
                     scope.d = {};
@@ -20,7 +24,7 @@
                         if (!scope.d.signupFormData) {
                             return;
                         }
-                        LoginAppSrv.signup('SAT', 1, scope.d.signupFormData).catch(function(err){
+                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });

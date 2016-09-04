@@ -3,7 +3,7 @@
         <div class="logo"></div>
 
         <div class="app-select" ng-cloak>
-            <md-menu ng-model="d.selectedApp" md-offset="0 60" md-no-ink>
+            <md-menu md-offset="0 60" md-no-ink>
                 <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
                     <div class="app-img-holder"></div>
                     <md-icon class="material-icons expand-menu">expand_more</md-icon>
@@ -14,21 +14,36 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-            {{d.selectedApp.name}}
+            {{d.appContext.name}}
         </div>
 
     </header>
     <div class="main">
         <ng-switch on="currentForm">
             <div ng-switch-when="login">
-                <login-form></login-form>
+                <login-form app-context="d.appContext"
+                            user-context="d.userContext">
+                </login-form>
             </div>
             <div ng-switch-when="signup">
-                <signup-form></signup-form>
+                <signup-form app-context="d.appContext"
+                             user-context="d.userContext">
+                </signup-form>
             </div>
             <div ng-click="currentForm = 'signup'">Sign Up</div>
             <div ng-click="currentForm = 'login'">Log In</div>
         </ng-switch>
     </div>
-    <footer></footer>
+    <footer>
+        <ng-switch on="d.studentContext">
+            <div>
+                <h2>Check out our App for Students</h2>
+                <a href="" ng-click="changeUserContext()">Check out Zinkerz tools for teachers</a>
+            </div>
+            <div>
+                <h2>Are you an educator?</h2>
+                <a href="" ng-click="changeUserContext()">Check out Zinkerz tools for teachers</a>
+            </div>
+        </ng-switch>
+    </footer>
 </div>
