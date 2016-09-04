@@ -73,6 +73,7 @@ login-app {
 
             .go-to-login,
             .go-to-signup {
+                margin-top: 15px;
                 text-align: center;
                 color: #fff;
             }
@@ -102,19 +103,19 @@ login-app {
             padding: {
                 right: 33px;
                 left: 33px;
+                bottom: 40px;
+                top: 25px;
             };
             box-shadow: 0 3px 9px 0 $bsColor2;
             .title {
+                text-align: center;
                 padding: {
-                    top: 33px;
                     bottom: 22px;
                 }
-                text-align: center;
-                font-size: 39px;
                 color: $fontColor2;
                 font:{
                     weight: $lightFontWeight;
-                    size: 39px;
+                    size: 25px;
                 }
             }
 
@@ -171,9 +172,6 @@ login-app {
             }
 
             .submit-btn-wrapper{
-                margin: {
-                    bottom: 15px;
-                };
                 text-align: center;
 
                 button{
@@ -204,9 +202,13 @@ login-app {
                 }
             }
 
-            .divider{
+            .divider {
                 position: relative;
                 text-align: center;
+                margin: {
+                    top: 24px;
+                    bottom: 24px;
+                }
 
                 &:before{
                     content: '';

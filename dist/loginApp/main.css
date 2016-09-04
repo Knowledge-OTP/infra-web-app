@@ -59,6 +59,7 @@ login-app .login-app {
       right: 135px; }
     login-app .login-app .main .go-to-login,
     login-app .login-app .main .go-to-signup {
+      margin-top: 15px;
       text-align: center;
       color: #fff; }
   login-app .login-app.educator .main {
@@ -72,15 +73,15 @@ login-app .login-app {
     font-family: Lato;
     padding-right: 33px;
     padding-left: 33px;
+    padding-bottom: 40px;
+    padding-top: 25px;
     box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.23); }
     login-app .login-app .form-container .title {
-      padding-top: 33px;
-      padding-bottom: 22px;
       text-align: center;
-      font-size: 39px;
+      padding-bottom: 22px;
       color: #161616;
       font-weight: 200;
-      font-size: 39px; }
+      font-size: 25px; }
     login-app .login-app .form-container .inputs-container .input-wrapper {
       box-sizing: border-box;
       width: 340px;
@@ -130,7 +131,6 @@ login-app .login-app {
           font-weight: 200;
           font-size: 14px; }
     login-app .login-app .form-container .submit-btn-wrapper {
-      margin-bottom: 15px;
       text-align: center; }
       login-app .login-app .form-container .submit-btn-wrapper button {
         box-sizing: border-box;
@@ -151,7 +151,9 @@ login-app .login-app {
       font-size: 14px; }
     login-app .login-app .form-container .divider {
       position: relative;
-      text-align: center; }
+      text-align: center;
+      margin-top: 24px;
+      margin-bottom: 24px; }
       login-app .login-app .form-container .divider:before {
         content: '';
         position: absolute;

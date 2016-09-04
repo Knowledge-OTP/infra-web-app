@@ -37,7 +37,7 @@
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'act_app',
         studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboar'
+        dashboardAppName: 'act_dashboard'
     };
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
@@ -46,7 +46,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, UserProfileService) {
+        this.$get = function ($q, $http, $log) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -81,12 +81,16 @@
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _writeUserProfile(formData){
-                return UserProfileService.getProfile().then(function (userProfile) {
-                    userProfile.email = formData.email;
-                    userProfile.nickname = formData.email;
-
-                    return UserProfileService.setProfile(userProfile);
+            function _writeUserProfile(formData, appContext){
+                var appRef = _getAppRef(appContext);
+                var auth = appRef.getAuth();
+                var userProfileRef = appRef.child('users/' + auth.uid);
+                var profile = {
+                    email: formData.email,
+                    nickname: formData.nickname
+                };
+                return userProfileRef.set(profile).catch(function(err){
+                    $log.error(err);
                 });
             }
 
@@ -164,14 +168,10 @@
 
                     var globalRef = _getGlobalRef(appContext);
                     return globalRef.createUser(formData).then(function () {
-                        return LoginAppSrv.login(appContext, userContext, formData).then(function (res) {
+                        return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
-
                             _addFirstRegistrationRecord(appContext, userContext);
-
-                            return _writeUserProfile(formData).then(function () {
-                                return res;
-                            });
+                            return _writeUserProfile(formData, appContext, userContext);
                         });
                     }).catch(function (err) {
                         isSignUpInProgress = false;
