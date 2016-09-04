@@ -17,14 +17,23 @@
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
                         appContext: LoginAppSrv.APPS.SAT,
+                        userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: LoginAppSrv.USER_CONTEXT.STUDENT
                     };
 
-                    // LoginAppSrv.USER_CONTEXT
-
+                    scope.currentUserContext =  'student';
                     scope.currentForm = 'signup';
                     scope.selectApp = function(app) {
                         scope.d.appContext = app;
+                    };
+
+                    scope.changeUserContext = function (context) {
+                        scope.d.userContext = context;
+                        if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
+                            scope.currentUserContext =  'student';
+                        } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
+                            scope.currentUserContext =  'teacher';
+                        }
                     };
 
                     // App select menu

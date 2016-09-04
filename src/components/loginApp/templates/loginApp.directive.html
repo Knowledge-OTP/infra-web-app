@@ -1,4 +1,4 @@
-<div class="login-app" ng-class="{student: true, educator: false}">
+<div class="login-app" ng-class="{student: d.userContext === d.userContextObj.STUDENT, educator: d.userContext === d.userContextObj.TEACHER}">
     <header>
         <div class="logo"></div>
 
@@ -35,14 +35,14 @@
         </ng-switch>
     </div>
     <footer>
-        <ng-switch on="d.studentContext">
-            <div>
+        <ng-switch on="currentUserContext">
+            <div ng-switch-when="teacher">
                 <h2>Check out our App for Students</h2>
-                <a href="" ng-click="changeUserContext()">Check out Zinkerz tools for teachers</a>
+                <a href="" ng-click="changeUserContext(d.userContextObj.STUDENT)">Check out Zinkerz tools for teachers</a>
             </div>
-            <div>
+            <div ng-switch-when="student">
                 <h2>Are you an educator?</h2>
-                <a href="" ng-click="changeUserContext()">Check out Zinkerz tools for teachers</a>
+                <a href="" ng-click="changeUserContext(d.userContextObj.TEACHER)">Check out Zinkerz tools for teachers</a>
             </div>
         </ng-switch>
     </footer>
