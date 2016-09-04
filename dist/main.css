@@ -2003,116 +2003,159 @@ md-dialog.invite-teacher-modal-wrap {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-login-form {
-  width: 413px;
-  background: white;
-  border-radius: 30px;
-  font-family: Lato;
-  padding-right: 33px;
-  padding-left: 33px;
-  box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.23);
-  display: block; }
-  login-form .login-form-container .title {
-    padding-top: 33px;
-    padding-bottom: 22px;
-    text-align: center;
-    font-size: 39px;
-    color: #161616;
-    font-weight: 200;
-    font-size: 39px; }
-  login-form .login-form-container .inputs-container .input-wrapper {
-    box-sizing: border-box;
-    width: 340px;
-    border: 1px #9a9797 solid;
+login-app .login-app {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #f7f7f7;
+  background-image: url("assets/images/logo-pattern-bg.png"); }
+  login-app .login-app > header {
+    margin: 20px auto;
+    width: 1317px; }
+    login-app .login-app > header .logo {
+      width: 76px;
+      height: 36px;
+      background-image: url("assets/images/zinkerz_logo.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      float: left; }
+    login-app .login-app > header .app-select {
+      text-align: center; }
+      login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
+      login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
+        background-color: #fbfcfc; }
+      login-app .login-app > header .app-select md-menu > button {
+        width: 175px;
+        height: auto;
+        padding: 8px 15px;
+        background-color: #fbfcfc;
+        border-radius: 30px; }
+      login-app .login-app > header .app-select .app-img-holder {
+        width: calc(175px / 2);
+        height: calc(55px / 2);
+        background-image: url("assets/images/sat-name@2x.png");
+        background-repeat: no-repeat;
+        background-size: contain;
+        float: left; }
+      login-app .login-app > header .app-select .expand-menu {
+        float: right; }
+  login-app .login-app .main {
+    height: 1027px;
+    background-size: contain;
+    background-repeat: no-repeat; }
+  login-app .login-app.educator .main {
+    background-image: url("assets/images/login-student-bg@2x.jpg"); }
+  login-app .login-app.student .main {
+    background-image: url("assets/images/login-teacher-bg@2x.jpg"); }
+  login-app .login-app .form-container {
+    width: 413px;
+    background: white;
     border-radius: 30px;
-    margin-right: auto;
-    margin-bottom: 11px;
-    margin-left: auto;
-    padding-right: 21px;
-    padding-left: 21px;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-        align-items: center; }
-    login-form .login-form-container .inputs-container .input-wrapper:last-child {
-      margin-bottom: 35px; }
-    login-form .login-form-container .inputs-container .input-wrapper svg-icon {
-      width: 36px; }
-    login-form .login-form-container .inputs-container .input-wrapper input {
-      height: 41px;
-      border: none;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-      padding: 0;
-      outline: none;
-      font-weight: 400;
-      font-size: 14px;
-      color: #161616; }
-      login-form .login-form-container .inputs-container .input-wrapper input ::-webkit-input-placeholder {
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 200;
-        font-size: 14px; }
-      login-form .login-form-container .inputs-container .input-wrapper input :-moz-placeholder {
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 200;
-        font-size: 14px; }
-      login-form .login-form-container .inputs-container .input-wrapper input ::-moz-placeholder {
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 200;
-        font-size: 14px; }
-      login-form .login-form-container .inputs-container .input-wrapper input :-ms-input-placeholder {
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 200;
-        font-size: 14px; }
-  login-form .login-form-container .submit-btn-wrapper {
-    margin-bottom: 15px;
-    text-align: center; }
-    login-form .login-form-container .submit-btn-wrapper button {
+    font-family: Lato;
+    padding-right: 33px;
+    padding-left: 33px;
+    box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.23); }
+    login-app .login-app .form-container .title {
+      padding-top: 33px;
+      padding-bottom: 22px;
+      text-align: center;
+      font-size: 39px;
+      color: #161616;
+      font-weight: 200;
+      font-size: 39px; }
+    login-app .login-app .form-container .inputs-container .input-wrapper {
       box-sizing: border-box;
-      height: 43px;
       width: 340px;
-      color: white;
+      border: 1px #9a9797 solid;
       border-radius: 30px;
-      border: none;
-      background: #ff931e;
-      font-size: 18px;
-      font-weight: 400;
-      box-shadow: 0px 3px 0px 0px #ec881c; }
-  login-form .login-form-container .forgot-pwd-wrapper {
-    margin-bottom: 26px;
-    text-align: right;
-    color: #757a83;
-    font-weight: 200;
-    font-size: 14px; }
-  login-form .login-form-container .divider {
-    position: relative;
-    text-align: center; }
-    login-form .login-form-container .divider:before {
-      content: '';
-      position: absolute;
-      top: 11px;
-      right: 0;
-      left: 0;
-      border: 1px #e5e2e2 solid; }
-    login-form .login-form-container .divider .text {
-      display: inline-block;
-      background: white;
-      position: relative;
-      z-index: 1;
-      padding-right: 15px;
-      padding-left: 15px;
-      color: #c2c2c2;
+      margin-right: auto;
+      margin-bottom: 11px;
+      margin-left: auto;
+      padding-right: 21px;
+      padding-left: 21px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center; }
+      login-app .login-app .form-container .inputs-container .input-wrapper:last-child {
+        margin-bottom: 35px; }
+      login-app .login-app .form-container .inputs-container .input-wrapper svg-icon {
+        width: 36px; }
+      login-app .login-app .form-container .inputs-container .input-wrapper input {
+        height: 41px;
+        border: none;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+        padding: 0;
+        outline: none;
+        font-weight: 400;
+        font-size: 14px;
+        color: #161616; }
+        login-app .login-app .form-container .inputs-container .input-wrapper input ::-webkit-input-placeholder {
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 200;
+          font-size: 14px; }
+        login-app .login-app .form-container .inputs-container .input-wrapper input :-moz-placeholder {
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 200;
+          font-size: 14px; }
+        login-app .login-app .form-container .inputs-container .input-wrapper input ::-moz-placeholder {
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 200;
+          font-size: 14px; }
+        login-app .login-app .form-container .inputs-container .input-wrapper input :-ms-input-placeholder {
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 200;
+          font-size: 14px; }
+    login-app .login-app .form-container .submit-btn-wrapper {
+      margin-bottom: 15px;
+      text-align: center; }
+      login-app .login-app .form-container .submit-btn-wrapper button {
+        box-sizing: border-box;
+        height: 43px;
+        width: 340px;
+        color: white;
+        border-radius: 30px;
+        border: none;
+        background: #ff931e;
+        font-size: 18px;
+        font-weight: 400;
+        box-shadow: 0px 3px 0px 0px #ec881c; }
+    login-app .login-app .form-container .forgot-pwd-wrapper {
+      margin-bottom: 26px;
+      text-align: right;
+      color: #757a83;
       font-weight: 200;
       font-size: 14px; }
-  login-form .login-form-container .social-auth-container {
-    margin-top: 28px;
-    margin-right: 44px;
-    margin-left: 44px;
-    text-align: center; }
+    login-app .login-app .form-container .divider {
+      position: relative;
+      text-align: center; }
+      login-app .login-app .form-container .divider:before {
+        content: '';
+        position: absolute;
+        top: 11px;
+        right: 0;
+        left: 0;
+        border: 1px #e5e2e2 solid; }
+      login-app .login-app .form-container .divider .text {
+        display: inline-block;
+        background: white;
+        position: relative;
+        z-index: 1;
+        padding-right: 15px;
+        padding-left: 15px;
+        color: #c2c2c2;
+        font-weight: 200;
+        font-size: 14px; }
+    login-app .login-app .form-container .social-auth-container {
+      margin-top: 28px;
+      margin-right: 44px;
+      margin-left: 44px;
+      text-align: center; }
 
 /* fonts size */
 /* general */

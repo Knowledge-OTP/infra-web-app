@@ -14,7 +14,7 @@
 "znk.infra-web-app.iapMsg",
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
-"znk.infra-web-app.loginForm",
+"znk.infra-web-app.loginApp",
 "znk.infra-web-app.onBoarding",
 "znk.infra-web-app.purchase",
 "znk.infra-web-app.settings",
@@ -5139,15 +5139,16 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginForm', [
+    angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
-        'znk.infra.svgIcon'
+        'znk.infra.svgIcon',
+        'ngMaterial'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'login-form-envelope': 'components/loginForm/svg/login-form-envelope.svg',
-                'login-form-lock': 'components/loginForm/svg/login-form-lock.svg'
+                'form-envelope': 'components/loginApp/svg/form-envelope.svg',
+                'form-lock': 'components/loginApp/svg/form-lock.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -5162,19 +5163,104 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginForm').directive('loginForm', [
-        '$translatePartialLoader', 'LoginFormSrv',
-        function ($translatePartialLoader, LoginFormSrv) {
+    angular.module('znk.infra-web-app.loginApp').directive('loginApp', [
+        '$translatePartialLoader', 'LoginAppSrv',
+        function ($translatePartialLoader, LoginAppSrv) {
             return {
-                templateUrl: 'components/loginForm/templates/loginForm.directive.html',
+                templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
+                link: function (scope) {
+                    $translatePartialLoader.addPart('loginApp');
+
+                    scope.d = {
+                        availableApps: LoginAppSrv.APPS,
+                        appContext: LoginAppSrv.APPS.SAT,
+                        userContext: LoginAppSrv.USER_CONTEXT.STUDENT
+                    };
+
+                    // LoginAppSrv.USER_CONTEXT
+
+                    scope.currentForm = 'signup';
+                    scope.selectApp = function(app) {
+                        scope.d.appContext = app;
+                    };
+
+                    // App select menu
+                    var originatorEv;
+                    scope.openMenu = function($mdOpenMenu, ev) {
+                        originatorEv = ev;
+                        $mdOpenMenu(ev);
+                    };
+                }
+            };
+        }
+    ]);
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp').directive('loginForm', [
+        '$translatePartialLoader', 'LoginAppSrv',
+        function ($translatePartialLoader, LoginAppSrv) {
+            return {
+                templateUrl: 'components/loginApp/templates/loginForm.directive.html',
+                restrict: 'E',
+                scope: {
+                    appContext: '<',
+                    userContext: '<'
+                },
                 link: function (scope) {
                     $translatePartialLoader.addPart('loginForm');
 
-                    scope.vm = {};
+                    scope.d = {};
 
-                    scope.vm.submit = function(){
-                        LoginFormSrv.login(scope.vm.formData).catch(function(err){
+                    scope.loginSubmit = function(){
+                        if (!scope.d.loginFormData) {
+                            return;
+                        }
+                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
+                            console.error(err);
+                            window.alert(err);
+                        });
+                    };
+                }
+            };
+        }
+    ]);
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp').directive('signupForm', [
+        '$translatePartialLoader', 'LoginAppSrv',
+        function ($translatePartialLoader, LoginAppSrv) {
+            return {
+                templateUrl: 'components/loginApp/templates/signupForm.directive.html',
+                restrict: 'E',
+                scope: {
+                    appContext: '<',
+                    userContext: '<'
+                },
+                link: function (scope) {
+                    $translatePartialLoader.addPart('signupForm');
+
+                    scope.d = {};
+
+                    scope.signupSubmit = function(){
+                        if (!scope.d.signupFormData) {
+                            return;
+                        }
+                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });
@@ -5189,37 +5275,181 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginForm').service('LoginFormSrv', [
-        'ENV', '$http', '$window',
-        function (ENV, $http, $window) {
-            this.login = function(loginData){
-                var ref = new Firebase(ENV.fbGlobalEndPoint, ENV.firebaseAppScopeName);
-                return ref.authWithPassword(loginData).then(function(authData){
-                    var postUrl = ENV.backendEndpoint + 'firebase/token';
-                    var postData = {
-                        email: authData.password ? authData.password.email : '',
-                        uid: authData.uid,
-                        fbDataEndPoint: ENV.fbDataEndPoint,
-                        fbEndpoint: ENV.fbGlobalEndPoint,
-                        auth: ENV.dataAuthSecret,
-                        token: authData.token
-                    };
-
-                    return $http.post(postUrl, postData).then(function (token) {
-                        var refDataDB = new Firebase(ENV.fbDataEndPoint, ENV.firebaseAppScopeName);
-                        refDataDB.authWithCustomToken(token.data).then(function(){
-                            var appUrl = ENV.redirectLogin;
-                            $window.location.replace(appUrl);
-                        });
-                    });
-                });
-            };
+    var APPS = {
+        SAT: {
+            id: 'SAT',
+            name: 'SAT'
+        },
+        ACT: {
+            id: 'ACT',
+            name: 'ACT'
         }
-    ]);
+    };
+
+    var USER_CONTEXT = {
+        TEACHER: 1,
+        STUDENT: 2
+    };
+
+    var ALL_ENV_CONFIG = {
+        'dev': {},
+        'prod': {}
+    };
+    ALL_ENV_CONFIG.dev[APPS.SAT.id] = {
+        fbDataEndPoint: 'https://sat-dev.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'sat_app',
+        studentAppName: "sat_app",
+        dashboardAppName: "sat_dashboard"
+    };
+    ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
+        fbDataEndPoint: 'https://act-dev.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'act_app',
+        studentAppName: 'act_app',
+        dashboardAppName: 'act_dashboar'
+    };
+
+    angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
+        var env = 'dev';
+        this.setEnv = function (newEnv) {
+            env = newEnv;
+        };
+
+        this.$get = ["$q", "$http", "$log", function ($q, $http, $log) {
+            'ngInject';
+
+            var LoginAppSrv = {};
+
+            function _getAppEnvConfig(appContext) {
+                return ALL_ENV_CONFIG[env][appContext];
+            }
+
+            function _getGlobalRef(appContext) {
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, appEnvConfig.firebaseAppScopeName);
+            }
+
+            function _getAppRef(appContext) {
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                return new Firebase(appEnvConfig.fbDataEndPoint, appEnvConfig.firebaseAppScopeName);
+            }
+
+            function _getUserContextRef(appContext, userContext) {
+                var appRef = _getAppRef(appContext);
+
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
+
+                return appRef.child(prefix);
+            }
+
+            function _addFirstRegistrationRecord(appContext, userContext) {
+                var userContextAppRef = _getUserContextRef(appContext, userContext);
+                var auth = userContextAppRef.getAuth();
+                var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
+                return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
+            }
+
+            LoginAppSrv.APPS = APPS;
+
+            LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
+
+            LoginAppSrv.logout = function (appContext) {
+                var globalRef = _getGlobalRef(appContext);
+                var appRef = _getAppRef(appContext);
+                globalRef.unauth();
+                appRef.unauth();
+            };
+            /**
+             * params:
+             *  appContext: ACT/SAT etc (APPS constant)
+             *  userContext: 1,2 (USER_CONTEXT constant)
+             *  formData: email & password
+             */
+            LoginAppSrv.login = (function () {
+                var isLoginInProgress;
+
+                return function (appContext, userContext, formData) {
+                    if (isLoginInProgress) {
+                        var errMsg = 'login already in progress';
+                        $log.debug(errMsg);
+                        return $q.reject(errMsg);
+                    }
+
+                    LoginAppSrv.logout(appContext);
+
+                    isLoginInProgress = true;
+
+                    var globalRef = _getGlobalRef(appContext);
+                    return globalRef.authWithPassword(formData).then(function (authData) {
+                        var appEnvConfig = _getAppEnvConfig(appContext);
+                        var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
+                        var postData = {
+                            email: authData.password ? authData.password.email : '',
+                            uid: authData.uid,
+                            fbDataEndPoint: appEnvConfig.fbDataEndPoint,
+                            fbEndpoint: appEnvConfig.fbGlobalEndPoint,
+                            auth: appEnvConfig.dataAuthSecret,
+                            token: authData.token
+                        };
+
+                        return $http.post(postUrl, postData).then(function (token) {
+                            var appRef = _getAppRef(appContext);
+                            return appRef.authWithCustomToken(token.data).then(function (res) {
+                                isLoginInProgress = false;
+                                return res;
+                            });
+                        });
+                    }).catch(function (err) {
+                        isLoginInProgress = false;
+                        return $q.reject(err);
+                    });
+                };
+            })();
+            /**
+             * params:
+             *  appContext: ACT/SAT etc (APPS constant)
+             *  userContext: 1,2 (USER_CONTEXT constant)
+             *  formData: email & password
+             */
+            LoginAppSrv.signup = (function () {
+                var isSignUpInProgress;
+
+                return function (appContext, userContext, formData) {
+                    if (isSignUpInProgress) {
+                        var errMsg = 'sign up already in progress';
+                        $log.debug(errMsg);
+                        return $q.reject(errMsg);
+                    }
+
+                    var globalRef = _getGlobalRef(appContext);
+                    return globalRef.createUser(formData).then(function () {
+                        return LoginAppSrv.login(appContext, userContext, formData).then(function (res) {
+                            isSignUpInProgress = false;
+
+                            _addFirstRegistrationRecord(appContext, userContext);
+
+                            return res;
+                        });
+                    }).catch(function (err) {
+                        isSignUpInProgress = false;
+                        return $q.reject(err);
+                    });
+                };
+            })();
+
+            return LoginAppSrv;
+        }];
+    });
 })(angular);
 
-angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/loginForm/svg/login-form-envelope.svg",
+angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/loginApp/svg/form-envelope.svg",
     "<svg\n" +
     "    class=\"login-form-envelope-svg\"\n" +
     "    x=\"0px\"\n" +
@@ -5243,7 +5473,7 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/loginForm/svg/login-form-lock.svg",
+  $templateCache.put("components/loginApp/svg/form-lock.svg",
     "<svg class=\"locked-svg\"\n" +
     "     x=\"0px\"\n" +
     "     y=\"0px\"\n" +
@@ -5278,39 +5508,134 @@ angular.module('znk.infra-web-app.loginForm').run(['$templateCache', function($t
     "    </g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/loginForm/templates/loginForm.directive.html",
-    "<form novalidate class=\"login-form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"vm.submit()\">\n" +
+  $templateCache.put("components/loginApp/templates/loginApp.directive.html",
+    "<div class=\"login-app\" ng-class=\"{student: true, educator: false}\">\n" +
+    "    <header>\n" +
+    "        <div class=\"logo\"></div>\n" +
+    "\n" +
+    "        <div class=\"app-select\" ng-cloak>\n" +
+    "            <md-menu md-offset=\"0 60\" md-no-ink>\n" +
+    "                <md-button aria-label=\"Open App Select Menu\" class=\"md-icon-button\" ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
+    "                    <div class=\"app-img-holder\"></div>\n" +
+    "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
+    "                </md-button>\n" +
+    "                <md-menu-content width=\"4\">\n" +
+    "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\" ng-click=\"selectApp(app)\">\n" +
+    "                        <md-button>{{app.name}}</md-button>\n" +
+    "                    </md-menu-item>\n" +
+    "                </md-menu-content>\n" +
+    "            </md-menu>\n" +
+    "            {{d.appContext.name}}\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </header>\n" +
+    "    <div class=\"main\">\n" +
+    "        <ng-switch on=\"currentForm\">\n" +
+    "            <div ng-switch-when=\"login\">\n" +
+    "                <login-form app-context=\"d.appContext\"\n" +
+    "                            user-context=\"d.userContext\">\n" +
+    "                </login-form>\n" +
+    "            </div>\n" +
+    "            <div ng-switch-when=\"signup\">\n" +
+    "                <signup-form app-context=\"d.appContext\"\n" +
+    "                             user-context=\"d.userContext\">\n" +
+    "                </signup-form>\n" +
+    "            </div>\n" +
+    "            <div ng-click=\"currentForm = 'signup'\">Sign Up</div>\n" +
+    "            <div ng-click=\"currentForm = 'login'\">Log In</div>\n" +
+    "        </ng-switch>\n" +
+    "    </div>\n" +
+    "    <footer>\n" +
+    "        <ng-switch on=\"d.studentContext\">\n" +
+    "            <div>\n" +
+    "                <h2>Check out our App for Students</h2>\n" +
+    "                <a href=\"\" ng-click=\"changeUserContext()\">Check out Zinkerz tools for teachers</a>\n" +
+    "            </div>\n" +
+    "            <div>\n" +
+    "                <h2>Are you an educator?</h2>\n" +
+    "                <a href=\"\" ng-click=\"changeUserContext()\">Check out Zinkerz tools for teachers</a>\n" +
+    "            </div>\n" +
+    "        </ng-switch>\n" +
+    "    </footer>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/templates/loginForm.directive.html",
+    "<form novalidate class=\"form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"loginSubmit()\">\n" +
     "    <div class=\"title\"\n" +
     "         translate=\".LOGIN\">\n" +
     "    </div>\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
     "    <div class=\"inputs-container\">\n" +
     "        <div class=\"input-wrapper\">\n" +
-    "            <svg-icon name=\"login-form-envelope\"></svg-icon>\n" +
+    "            <svg-icon name=\"form-envelope\"></svg-icon>\n" +
     "            <input type=\"text\"\n" +
     "                   placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
     "                   name=\"email\"\n" +
-    "                   ng-model=\"vm.formData.email\">\n" +
+    "                   ng-model=\"d.loginFormData.email\">\n" +
     "        </div>\n" +
     "        <div class=\"input-wrapper\">\n" +
-    "            <svg-icon name=\"login-form-lock\"></svg-icon>\n" +
+    "            <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "            <input type=\"password\"\n" +
     "                   placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
     "                   name=\"password\"\n" +
-    "                   ng-model=\"vm.formData.password\">\n" +
+    "                   ng-model=\"d.loginFormData.password\">\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"submit-btn-wrapper\">\n" +
     "        <button type=\"submit\" translate=\".LOGIN_IN\"></button>\n" +
     "    </div>\n" +
-    "    <div class=\"forgot-pwd-wrapper\">\n" +
-    "        <span translate=\".FORGOT_PWD\"></span>\n" +
+    "    <!--<div class=\"forgot-pwd-wrapper\">-->\n" +
+    "        <!--<span translate=\".FORGOT_PWD\"></span>-->\n" +
+    "    <!--</div>-->\n" +
+    "</form>\n" +
+    "");
+  $templateCache.put("components/loginApp/templates/signupForm.directive.html",
+    "<form novalidate class=\"form-container\"\n" +
+    "      translate-namespace=\"SIGNUP_FORM\"\n" +
+    "      ng-submit=\"signupSubmit()\">\n" +
+    "    <div class=\"title\"\n" +
+    "         translate=\".SIGNUP\">\n" +
+    "    </div>\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"divider\">\n" +
     "        <div translate=\".OR\" class=\"text\"></div>\n" +
     "    </div>\n" +
-    "    <div class=\"social-auth-container\">\n" +
-    "        <div class=\"social-auth-title\" translate=\".CONNECT_WITH\"></div>\n" +
+    "    <div class=\"inputs-container\">\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "            <input type=\"text\"\n" +
+    "                   placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
+    "                   name=\"nickname\"\n" +
+    "                   ng-model=\"d.signupFormData.nickname\">\n" +
+    "        </div>\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "            <input type=\"text\"\n" +
+    "                   placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
+    "                   name=\"email\"\n" +
+    "                   ng-model=\"d.signupFormData.email\">\n" +
+    "        </div>\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "            <input type=\"password\"\n" +
+    "                   placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
+    "                   name=\"password\"\n" +
+    "                   ng-model=\"d.signupFormData.password\">\n" +
+    "        </div>\n" +
     "    </div>\n" +
+    "    <div class=\"submit-btn-wrapper\">\n" +
+    "        <button type=\"submit\" translate=\".SIGNUP\"></button>\n" +
+    "    </div>\n" +
+    "    <!--<div class=\"forgot-pwd-wrapper\">-->\n" +
+    "        <!--<span translate=\".FORGOT_PWD\"></span>-->\n" +
+    "    <!--</div>-->\n" +
     "</form>\n" +
     "");
 }]);

@@ -4,7 +4,14 @@
         "LOGIN_IN": "Log In",
         "FORGOT_PWD": "Forgot password?",
         "OR": "or",
-        "CONNECT_WITH": "Connect with",
+        "EMAIL": "Email",
+        "PASSWORD": "Password"
+    },
+    "SIGNUP_FORM": {
+        "SIGNUP": "Signup",
+        "FORGOT_PWD": "Forgot password?",
+        "OR": "or",
+        "NAME": "Name",
         "EMAIL": "Email",
         "PASSWORD": "Password"
     }
