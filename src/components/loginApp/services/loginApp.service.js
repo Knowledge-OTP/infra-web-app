@@ -27,8 +27,17 @@
         backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'sat_app',
-        studentAppName: "sat_app",
-        dashboardAppName: "sat_dashboard"
+        studentAppName: 'sat_app',
+        dashboardAppName: 'sat_dashboard'
+    };
+    ALL_ENV_CONFIG.prod[APPS.SAT.id] = {
+        fbDataEndPoint: 'https://sat2-prod.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'sat_app',
+        studentAppName: 'sat_app',
+        dashboardAppName: 'sat_dashboard'
     };
     ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
         fbDataEndPoint: 'https://act-dev.firebaseio.com/',
@@ -37,7 +46,16 @@
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'act_app',
         studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboar'
+        dashboardAppName: 'act_dashboard'
+    };
+    ALL_ENV_CONFIG.prod[APPS.ACT.id] = {
+        fbDataEndPoint: 'https://act-prod.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'act_app',
+        studentAppName: 'act_app',
+        dashboardAppName: 'act_dashboard'
     };
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
