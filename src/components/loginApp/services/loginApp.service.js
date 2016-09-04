@@ -64,7 +64,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log) {
+        this.$get = function ($q, $http, $log, UserProfileService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -97,6 +97,15 @@
                 var auth = userContextAppRef.getAuth();
                 var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
+            }
+
+            function _writeUserProfile(formData){
+                return UserProfileService.getProfile().then(function (userProfile) {
+                    userProfile.email = formData.email;
+                    userProfile.nickname = formData.email;
+
+                    return UserProfileService.setProfile(userProfile);
+                });
             }
 
             LoginAppSrv.APPS = APPS;
@@ -178,7 +187,9 @@
 
                             _addFirstRegistrationRecord(appContext, userContext);
 
-                            return res;
+                            return _writeUserProfile(formData).then(function () {
+                                return res;
+                            });
                         });
                     }).catch(function (err) {
                         isSignUpInProgress = false;

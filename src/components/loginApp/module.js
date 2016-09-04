@@ -4,7 +4,8 @@
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
         'znk.infra.svgIcon',
-        'ngMaterial'
+        'ngMaterial',
+        'znk.infra.user'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -13,6 +14,17 @@
                 'form-lock': 'components/loginApp/svg/form-lock.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]).config([
+        'InfraConfigSrvProvider',
+        function (InfraConfigSrvProvider) {
+
+            function globalStorage(GlobalStorageSrv) {
+                'ngInject';
+                return GlobalStorageSrv;
+            }
+
+            InfraConfigSrvProvider.setStorages(globalStorage);
         }
     ]);
 
