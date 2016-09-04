@@ -64,7 +64,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, $window, $location) {
+        this.$get = function ($q, $http, $log, $window) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -113,9 +113,7 @@
             }
 
             function _redirectToPage() {
-                //$window.location.href = appEnvConfig.fbDataEndPoint;
-                //$window.location.href = '';
-                $location.path('/sat-web-app');
+                $window.location.href = 'https://www.zinkerz.com/sat/web-app';
             }
 
             LoginAppSrv.APPS = APPS;
