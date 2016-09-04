@@ -1,0 +1,225 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+complete-exercise .animate-view-state.ng-animate {
+  transition: opacity 0.5s linear 0.5s; }
+
+complete-exercise .animate-view-state.ng-leave {
+  display: none; }
+
+complete-exercise .animate-view-state.ng-enter {
+  opacity: 0; }
+
+complete-exercise .animate-view-state.ng-enter.ng-enter-active {
+  opacity: 1; }
+
+complete-exercise-intro .base-complete-exercise-container {
+  position: relative; }
+  complete-exercise-intro .base-complete-exercise-container .intro-container img {
+    max-width: 400px !important;
+    height: auto !important;
+    vertical-align: middle; }
+
+complete-exercise-exercise .base-complete-exercise-container {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  box-shadow: none; }
+  complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part {
+    border-right: 1px solid #ffffff;
+    display: block;
+    padding-right: 25px;
+    margin-right: 25px; }
+    complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .timer-type1 .clock-icon-svg * {
+      stroke: white; }
+  complete-exercise-exercise .base-complete-exercise-container znk-exercise {
+    -ms-flex-positive: 1;
+        flex-grow: 1; }
+    complete-exercise-exercise .base-complete-exercise-container znk-exercise questions-carousel {
+      box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
+    complete-exercise-exercise .base-complete-exercise-container znk-exercise questions-carousel, complete-exercise-exercise .base-complete-exercise-container znk-exercise .question-bottom-shadow {
+      border-bottom-right-radius: 15px;
+      border-bottom-left-radius: 15px; }
+
+complete-exercise-header {
+  display: block;
+  overflow: hidden;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px; }
+  complete-exercise-header .header-container {
+    height: 50px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    padding-right: 28px;
+    padding-left: 28px;
+    color: white;
+    font-family: Lato;
+    font-weight: 400;
+    font-size: 16px; }
+    complete-exercise-header .header-container .left-part, complete-exercise-header .header-container .center-part, complete-exercise-header .header-container .right-part {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center; }
+    complete-exercise-header .header-container .left-part {
+      width: 400px;
+      overflow: hidden; }
+      complete-exercise-header .header-container .left-part .left-title {
+        width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; }
+    complete-exercise-header .header-container .center-part {
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+      -ms-flex-pack: center;
+          justify-content: center; }
+    complete-exercise-header .header-container .right-part {
+      width: 400px;
+      text-align: right;
+      -ms-flex-pack: end;
+          justify-content: flex-end; }
+      complete-exercise-header .header-container .right-part .exit {
+        cursor: pointer; }
+
+complete-exercise-intro-tutorial {
+  display: block;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0; }
+  complete-exercise-intro-tutorial .intro-container {
+    padding-right: 180px;
+    padding-left: 180px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    height: 100%; }
+    complete-exercise-intro-tutorial .intro-container > *:not(.content-wrapper) {
+      -ms-flex-negative: 0;
+          flex-shrink: 0; }
+    complete-exercise-intro-tutorial .intro-container .video-wrapper {
+      margin-top: 35px;
+      text-align: center; }
+    complete-exercise-intro-tutorial .intro-container .content-wrapper {
+      margin-top: 40px;
+      margin-bottom: 100px;
+      overflow: auto; }
+    complete-exercise-intro-tutorial .intro-container .btn-section {
+      position: absolute;
+      right: 15px;
+      bottom: 10px; }
+      complete-exercise-intro-tutorial .intro-container .btn-section .md-button {
+        padding-right: 45px;
+        padding-left: 45px; }
+
+complete-exercise-intro-section {
+  display: block;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0; }
+  complete-exercise-intro-section .intro-container {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: center;
+        align-items: center;
+    height: 100%; }
+    complete-exercise-intro-section .intro-container > *:not(.instructions-text) {
+      -ms-flex-negative: 0;
+          flex-shrink: 0; }
+    complete-exercise-intro-section .intro-container .title {
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 700;
+      font-size: 24px;
+      margin-top: 30px; }
+    complete-exercise-intro-section .intro-container .subject-icon {
+      margin-top: 20px; }
+    complete-exercise-intro-section .intro-container .subject-text {
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400;
+      font-size: 20px;
+      margin-top: 10px; }
+    complete-exercise-intro-section .intro-container .section-data {
+      display: inline-block;
+      color: #757a83;
+      font-family: Quicksand;
+      font-weight: 400;
+      font-size: 18px;
+      border-bottom: 1px solid #ebebeb;
+      margin-top: 15px;
+      padding-bottom: 40px; }
+    complete-exercise-intro-section .intro-container .instructions-title {
+      color: #757a83;
+      font-family: Lato;
+      font-weight: 400;
+      font-size: 16px;
+      margin-top: 20px; }
+    complete-exercise-intro-section .intro-container .instructions-text {
+      margin-top: 20px;
+      margin-right: auto;
+      margin-bottom: 100px;
+      margin-left: auto;
+      width: 550px;
+      overflow: auto; }
+    complete-exercise-intro-section .intro-container .btn-section {
+      position: absolute;
+      right: 0;
+      bottom: 36px;
+      left: 0;
+      text-align: center; }
+      complete-exercise-intro-section .intro-container .btn-section .md-button {
+        padding-right: 45px;
+        padding-left: 45px; }
+
+complete-exercise-progress-bar {
+  display: block;
+  background: #c5cae9;
+  overflow: hidden; }
+  complete-exercise-progress-bar.green-state .progress-bar {
+    background: #87ca4d; }
+  complete-exercise-progress-bar.yellow-state .progress-bar {
+    background: #ff931e; }
+  complete-exercise-progress-bar.red-state .progress-bar {
+    background: #ff6766; }
+  complete-exercise-progress-bar .progress-bar {
+    height: 5px; }
+
+.base-complete-exercise-container {
+  width: 1060px;
+  height: calc(100vh - 75px);
+  background: white;
+  display: block;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
+  border-radius: 15px; }
+
+[class*="-subject-pattern"] {
+  background-repeat: repeat; }
+
+.reading-subject-pattern, .verbal-subject-pattern {
+  /*CSS for basic styling and non-retina image path:*/
+  background-image: url("/assets/images/reading-background-pattern.png");
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+    .reading-subject-pattern, .verbal-subject-pattern {
+      background-image: url("/assets/images/reading-background-pattern@2x.png"); } }
