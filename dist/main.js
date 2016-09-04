@@ -5547,6 +5547,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             var appRef = _getAppRef(appContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
+                                _redirectToPage();
                                 return res;
                             });
                         });
