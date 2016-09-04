@@ -14,13 +14,13 @@
                 link: function (scope) {
                     $translatePartialLoader.addPart('signupForm');
 
-                    scope.vm = {};
+                    scope.d = {};
 
                     scope.signupSubmit = function(){
-                        if (!scope.vm.signupFormData) {
+                        if (!scope.d.signupFormData) {
                             return;
                         }
-                        regComponentSrv.signup(scope.vm.signupFormData).catch(function(err){
+                        LoginAppSrv.signup('SAT', 1, scope.d.signupFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });

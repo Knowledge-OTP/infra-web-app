@@ -1,34 +1,34 @@
 <div class="login-app" ng-class="{student: true, educator: false}">
     <header>
         <div class="logo"></div>
-        <!--<select name="appSelect"-->
-        <!--id="appSelect"-->
-        <!--ng-options="app.name for app in d.availableApps track by app.id"-->
-        <!--ng-model="d.selectedApp">-->
-        <!--</select>-->
 
         <div class="app-select" ng-cloak>
             <md-menu ng-model="d.selectedApp" md-offset="0 60" md-no-ink>
                 <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-                    <!--{{d.selectedApp.name}}-->
                     <div class="app-img-holder"></div>
                     <md-icon class="material-icons expand-menu">expand_more</md-icon>
                 </md-button>
                 <md-menu-content width="4">
-                    <md-menu-item ng-repeat="app in d.availableApps track by app.id" ng-click="d.selectedApp = app">
+                    <md-menu-item ng-repeat="app in d.availableApps track by app.id" ng-click="selectApp(app)">
                         <md-button>{{app.name}}</md-button>
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
+            {{d.selectedApp.name}}
         </div>
 
     </header>
     <div class="main">
-        <login-form class="ng-hide" ng-show="showLogin"></login-form>
-        <signup-form class="ng-hide" ng-show="showSignup"></signup-form>
+        <ng-switch on="currentForm">
+            <div ng-switch-when="login">
+                <login-form></login-form>
+            </div>
+            <div ng-switch-when="signup">
+                <signup-form></signup-form>
+            </div>
+            <div ng-click="currentForm = 'signup'">Sign Up</div>
+            <div ng-click="currentForm = 'login'">Log In</div>
+        </ng-switch>
     </div>
-    <footer>
-
-    </footer>
-    <div>Selected App - {{d.selectedApp}}</div>
+    <footer></footer>
 </div>

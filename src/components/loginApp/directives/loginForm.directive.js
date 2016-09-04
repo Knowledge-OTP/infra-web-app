@@ -14,13 +14,13 @@
                 link: function (scope) {
                     $translatePartialLoader.addPart('loginForm');
 
-                    scope.vm = {};
+                    scope.d = {};
 
                     scope.loginSubmit = function(){
-                        if (!scope.vm.loginFormData) {
+                        if (!scope.d.loginFormData) {
                             return;
                         }
-                        regComponentSrv.login(scope.vm.loginFormData).catch(function(err){
+                        LoginAppSrv.login('SAT', 1, scope.d.loginFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });

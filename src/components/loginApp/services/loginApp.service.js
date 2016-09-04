@@ -30,6 +30,15 @@
         studentAppName: "sat_app",
         dashboardAppName: "sat_dashboard"
     };
+    ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
+        fbDataEndPoint: 'https://act-dev.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'act_app',
+        studentAppName: 'act_app',
+        dashboardAppName: 'act_dashboar'
+    };
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';

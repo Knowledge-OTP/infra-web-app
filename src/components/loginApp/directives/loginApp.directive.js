@@ -19,8 +19,10 @@
                         selectedApp: LoginAppSrv.APPS.SAT
                     };
 
-                    scope.showLogin = true;
-                    scope.showSignup = true;
+                    scope.currentForm = 'signup';
+                    scope.selectApp = function(app) {
+                        scope.d.selectedApp = app;
+                    };
 
                     // App select menu
                     var originatorEv;
