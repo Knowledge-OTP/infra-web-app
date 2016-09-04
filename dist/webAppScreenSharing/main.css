@@ -1,0 +1,78 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+sh-viewer .header {
+  width: 1060px;
+  margin-top: 15px;
+  margin-right: auto;
+  margin-left: auto; }
+  sh-viewer .header .you-are-viewing-text {
+    color: #ffffff;
+    font-family: Quicksand;
+    font-weight: 400;
+    font-size: 14px;
+    margin-right: 7px; }
+  sh-viewer .header .user-connectivity-status {
+    width: 10px;
+    height: 10px;
+    background-color: #87ca4d;
+    border: 1px solid #e1e1e1;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 15px; }
+  sh-viewer .header .user-name {
+    color: #ffffff;
+    font-family: Quicksand;
+    font-weight: 700;
+    font-size: 16px; }
+
+sh-viewer .sh-viewer-main-container {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  margin-top: 25px; }
+  sh-viewer .sh-viewer-main-container .none {
+    /*CSS for basic styling and non-retina image path:*/
+    background-image: url("/assets/images/bg/etutoring-empty-sharing.png");
+    /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+    background-size: 1060px 657px;
+    width: 1060px;
+    height: 657px;
+    text-align: center; }
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+      sh-viewer .sh-viewer-main-container .none {
+        background-image: url("/assets/images/bg/etutoring-empty-sharing@2x.png"); } }
+    sh-viewer .sh-viewer-main-container .none .texts-container {
+      color: #4f4d4d;
+      margin-top: 245px; }
+      sh-viewer .sh-viewer-main-container .none .texts-container .text1 {
+        font-family: Quicksand;
+        font-weight: 400;
+        font-size: 20px; }
+      sh-viewer .sh-viewer-main-container .none .texts-container .text2 {
+        font-family: Lato;
+        font-weight: 200;
+        font-size: 17px;
+        margin-top: 25px; }
+  sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box {
+    background: #252525; }
+    sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box znk-exercise-draw-tool > svg-icon:not(.active) .znk-exercise-touche-svg .st0, sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box znk-exercise-draw-tool > svg-icon:not(.active) .znk-exercise-touche-svg .st1 {
+      stroke: #ffffff; }
+    sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box znk-exercise-draw-tool > svg-icon:not(.active) .znk-exercise-pencil path {
+      fill: #ffffff; }
+    sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box znk-exercise-draw-tool > svg-icon:not(.active) .znk-exercise-eraser path, sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box znk-exercise-draw-tool > svg-icon:not(.active) .znk-exercise-eraser rect, sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box znk-exercise-draw-tool > svg-icon:not(.active) .znk-exercise-eraser .st1 {
+      fill: #ffffff; }
+    sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box znk-exercise-draw-tool > svg-icon .znk-exercise-remove path {
+      fill: #ffffff; }
+    sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box znk-exercise-draw-tool > svg-icon[name="znk-exercise-touche"] {
+      border-bottom-color: #464646; }
+  sh-viewer .sh-viewer-main-container complete-exercise .base-complete-exercise-container {
+    height: calc(100vh - 110px); }
