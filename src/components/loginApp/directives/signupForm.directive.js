@@ -15,7 +15,7 @@
                     appContext: '<',
                     userContext: '<'
                 },
-                link: function (scope, element, attrs) {
+                link: function (scope) {
                     $translatePartialLoader.addPart('signupForm');
 
                     scope.d = {};

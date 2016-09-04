@@ -36,12 +36,15 @@
 
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
-                        selectedApp: LoginAppSrv.APPS.SAT
+                        appContext: LoginAppSrv.APPS.SAT,
+                        userContext: LoginAppSrv.USER_CONTEXT.STUDENT
                     };
+
+                    // LoginAppSrv.USER_CONTEXT
 
                     scope.currentForm = 'signup';
                     scope.selectApp = function(app) {
-                        scope.d.selectedApp = app;
+                        scope.d.appContext = app;
                     };
 
                     // App select menu
@@ -69,6 +72,10 @@
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
                 restrict: 'E',
+                scope: {
+                    appContext: '<',
+                    userContext: '<'
+                },
                 link: function (scope) {
                     $translatePartialLoader.addPart('loginForm');
 
@@ -78,7 +85,7 @@
                         if (!scope.d.loginFormData) {
                             return;
                         }
-                        LoginAppSrv.login('SAT', 1, scope.d.loginFormData).catch(function(err){
+                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });
@@ -88,7 +95,6 @@
         }
     ]);
 })(angular);
-
 
 /**
  * attrs:
@@ -103,6 +109,10 @@
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
                 restrict: 'E',
+                scope: {
+                    appContext: '<',
+                    userContext: '<'
+                },
                 link: function (scope) {
                     $translatePartialLoader.addPart('signupForm');
 
@@ -112,7 +122,7 @@
                         if (!scope.d.signupFormData) {
                             return;
                         }
-                        LoginAppSrv.signup('SAT', 1, scope.d.signupFormData).catch(function(err){
+                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
                             console.error(err);
                             window.alert(err);
                         });
@@ -366,7 +376,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div class=\"logo\"></div>\n" +
     "\n" +
     "        <div class=\"app-select\" ng-cloak>\n" +
-    "            <md-menu ng-model=\"d.selectedApp\" md-offset=\"0 60\" md-no-ink>\n" +
+    "            <md-menu md-offset=\"0 60\" md-no-ink>\n" +
     "                <md-button aria-label=\"Open App Select Menu\" class=\"md-icon-button\" ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
     "                    <div class=\"app-img-holder\"></div>\n" +
     "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
@@ -377,23 +387,38 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
-    "            {{d.selectedApp.name}}\n" +
+    "            {{d.appContext.name}}\n" +
     "        </div>\n" +
     "\n" +
     "    </header>\n" +
     "    <div class=\"main\">\n" +
     "        <ng-switch on=\"currentForm\">\n" +
     "            <div ng-switch-when=\"login\">\n" +
-    "                <login-form></login-form>\n" +
+    "                <login-form app-context=\"d.appContext\"\n" +
+    "                            user-context=\"d.userContext\">\n" +
+    "                </login-form>\n" +
     "            </div>\n" +
     "            <div ng-switch-when=\"signup\">\n" +
-    "                <signup-form></signup-form>\n" +
+    "                <signup-form app-context=\"d.appContext\"\n" +
+    "                             user-context=\"d.userContext\">\n" +
+    "                </signup-form>\n" +
     "            </div>\n" +
     "            <div ng-click=\"currentForm = 'signup'\">Sign Up</div>\n" +
     "            <div ng-click=\"currentForm = 'login'\">Log In</div>\n" +
     "        </ng-switch>\n" +
     "    </div>\n" +
-    "    <footer></footer>\n" +
+    "    <footer>\n" +
+    "        <ng-switch on=\"d.studentContext\">\n" +
+    "            <div>\n" +
+    "                <h2>Check out our App for Students</h2>\n" +
+    "                <a href=\"\" ng-click=\"changeUserContext()\">Check out Zinkerz tools for teachers</a>\n" +
+    "            </div>\n" +
+    "            <div>\n" +
+    "                <h2>Are you an educator?</h2>\n" +
+    "                <a href=\"\" ng-click=\"changeUserContext()\">Check out Zinkerz tools for teachers</a>\n" +
+    "            </div>\n" +
+    "        </ng-switch>\n" +
+    "    </footer>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/loginApp/templates/loginForm.directive.html",

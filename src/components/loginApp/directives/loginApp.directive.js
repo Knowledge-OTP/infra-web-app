@@ -24,7 +24,6 @@
 
                     scope.currentForm = 'signup';
                     scope.selectApp = function(app) {
-                        debugger;
                         scope.d.appContext = app;
                     };
 
