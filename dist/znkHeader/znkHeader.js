@@ -279,7 +279,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
     "                            <a ui-sref=\"app.faq\">\n" +
-    "                                <span translate=\".WHAT_IS_THE_ACT_TEST\"></span>\n" +
+    "                                <span translate=\".WHAT_IS_THE_THIS_TEST\"></span>\n" +
     "                            </a>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item\n" +

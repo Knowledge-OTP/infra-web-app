@@ -5142,8 +5142,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
         'znk.infra.svgIcon',
-        'ngMaterial',
-        'znk.infra.user'
+        'ngMaterial'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -5152,18 +5151,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 'form-lock': 'components/loginApp/svg/form-lock.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]).config([
-        'InfraConfigSrvProvider',
-        function (InfraConfigSrvProvider) {
-
-            globalStorage.$inject = ["GlobalStorageSrv"];
-            function globalStorage(GlobalStorageSrv) {
-                'ngInject';
-                return GlobalStorageSrv;
-            }
-
-            InfraConfigSrvProvider.setStorages(globalStorage);
         }
     ]);
 
@@ -5188,27 +5175,14 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
                         appContext: LoginAppSrv.APPS.SAT,
-                        userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: LoginAppSrv.USER_CONTEXT.STUDENT
                     };
 
-                    scope.currentUserContext =  'student';
+                    // LoginAppSrv.USER_CONTEXT
+
                     scope.currentForm = 'signup';
                     scope.selectApp = function(app) {
                         scope.d.appContext = app;
-                    };
-
-                    scope.changeCurrentForm = function (currentForm) {
-                      scope.currentForm = currentForm;
-                    };
-
-                    scope.changeUserContext = function (context) {
-                        scope.d.userContext = context;
-                        if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
-                            scope.currentUserContext =  'student';
-                        } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
-                            scope.currentUserContext =  'teacher';
-                        }
                     };
 
                     // App select menu
@@ -5301,88 +5275,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        ["$window", "$log", "$auth", "AuthService", "UserProfileService", "ENV", "AnalyticsLoginSrv", "$timeout", "PopUpSrv", "$filter", function($window, $log, $auth, AuthService, UserProfileService, ENV, AnalyticsLoginSrv, $timeout, PopUpSrv, $filter) {
-            'ngInject';
-
-            var vm = this;
-
-            this.socialAuth = function (provider) {
-                vm.loading = {};
-                var loadingProvider = vm.loading[provider] = {};
-                loadingProvider.startLoader = true;
-                $auth.authenticate(provider).then(function (response) {
-                    return AuthService.userDataForAuthAndDataFb(response.data);
-                }).then(function (results) {
-                    var userDataAuth = results[0].auth;
-                    AnalyticsLoginSrv.save(results[0], provider, 'socialLogin');
-                    UserProfileService.getProfile().then(function (userProfile) {
-                        var location = ENV.redirectLogin;
-                        var updateProfile = false;
-
-                        if (!userProfile.email && userDataAuth.email) {
-                            userProfile.email = userDataAuth.email;
-                            updateProfile = true;
-                        }
-                        if (!userProfile.nickname && userDataAuth.nickname) {
-                            userProfile.nickname = userDataAuth.nickname;
-                            updateProfile = true;
-                        }
-                        if (!userProfile.provider && userDataAuth.provider) {
-                            userProfile.provider = userDataAuth.provider;
-                            updateProfile = true;
-                        }
-                        // adding timeout to make sure AnalyticsLoginSrv.save
-                        // works before redirect
-                        AuthService.registerFirstLogin().then(function () {
-                            loadingProvider.fillLoader = true;
-                            $timeout(function () {
-                                loadingProvider.startLoader = loadingProvider.fillLoader = false;
-                                if (updateProfile) {
-                                    location = ENV.redirectSignup;
-                                    UserProfileService.setProfile(userProfile).then(function () {
-                                        $window.location.replace(location);
-                                    });
-                                } else {
-                                    $window.location.replace(location);
-                                }
-                            });
-                        });
-                    });
-                }).catch(function (error) {
-                    var title = $filter('translate')('OATH_SOCIAL.ERROR_TITLE', { provider: provider });
-                    var content = $filter('translate')('OATH_SOCIAL.ERROR_CONTENT', { provider: provider });
-                    $log.error('OathLoginDrvController socialAuth', error);
-                    PopUpSrv.error(title, content).promise.then(function () {
-                        loadingProvider.startLoader = loadingProvider.fillLoader = false;
-                    });
-                });
-            };
-
-        }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.loginApp').directive('oathLoginDrv', function() {
-        'ngInject';
-        return {
-            scope: {
-                providers: '='
-            },
-            restrict: 'E',
-            templateUrl: 'components/loginApp/templates/oathLogin.template.html',
-            controller: 'OathLoginDrvController',
-            bindToController: true,
-            controllerAs: 'vm'
-        };
-    });
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     var APPS = {
         SAT: {
             id: 'SAT',
@@ -5409,13 +5301,31 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'sat_app',
-        studentAppName: "sat_app",
-        dashboardAppName: "sat_dashboard"
+        studentAppName: 'sat_app',
+        dashboardAppName: 'sat_dashboard'
+    };
+    ALL_ENV_CONFIG.prod[APPS.SAT.id] = {
+        fbDataEndPoint: 'https://sat2-prod.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'sat_app',
+        studentAppName: 'sat_app',
+        dashboardAppName: 'sat_dashboard'
     };
     ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
         fbDataEndPoint: 'https://act-dev.firebaseio.com/',
         fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
         backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'act_app',
+        studentAppName: 'act_app',
+        dashboardAppName: 'act_dashboard'
+    };
+    ALL_ENV_CONFIG.prod[APPS.ACT.id] = {
+        fbDataEndPoint: 'https://act-prod.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'act_app',
         studentAppName: 'act_app',
@@ -5461,19 +5371,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 var auth = userContextAppRef.getAuth();
                 var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
-            }
-
-            function _writeUserProfile(formData, appContext){
-                var appRef = _getAppRef(appContext);
-                var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid);
-                var profile = {
-                    email: formData.email,
-                    nickname: formData.nickname
-                };
-                return userProfileRef.set(profile).catch(function(err){
-                    $log.error(err);
-                });
             }
 
             LoginAppSrv.APPS = APPS;
@@ -5550,10 +5447,12 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
                     var globalRef = _getGlobalRef(appContext);
                     return globalRef.createUser(formData).then(function () {
-                        return LoginAppSrv.login(appContext, userContext, formData).then(function () {
+                        return LoginAppSrv.login(appContext, userContext, formData).then(function (res) {
                             isSignUpInProgress = false;
+
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext, userContext);
+
+                            return res;
                         });
                     }).catch(function (err) {
                         isSignUpInProgress = false;
@@ -5628,7 +5527,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "</svg>\n" +
     "");
   $templateCache.put("components/loginApp/templates/loginApp.directive.html",
-    "<div class=\"login-app\" ng-class=\"{student: d.userContext === d.userContextObj.STUDENT, educator: d.userContext === d.userContextObj.TEACHER}\">\n" +
+    "<div class=\"login-app\" ng-class=\"{student: true, educator: false}\">\n" +
     "    <header>\n" +
     "        <div class=\"logo\"></div>\n" +
     "\n" +
@@ -5644,36 +5543,35 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
+    "            {{d.appContext.name}}\n" +
     "        </div>\n" +
     "\n" +
     "    </header>\n" +
     "    <div class=\"main\">\n" +
     "        <ng-switch on=\"currentForm\">\n" +
-    "            <div class=\"login-container\" ng-switch-when=\"login\">\n" +
+    "            <div ng-switch-when=\"login\">\n" +
     "                <login-form app-context=\"d.appContext\"\n" +
     "                            user-context=\"d.userContext\">\n" +
     "                </login-form>\n" +
-    "                <div class=\"go-to-signup\" ng-click=\"changeCurrentForm('signup')\">Sign Up</div>\n" +
     "            </div>\n" +
-    "            <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
+    "            <div ng-switch-when=\"signup\">\n" +
     "                <signup-form app-context=\"d.appContext\"\n" +
     "                             user-context=\"d.userContext\">\n" +
     "                </signup-form>\n" +
-    "                <div class=\"go-to-login\" ng-click=\"changeCurrentForm('login')\">Log In</div>\n" +
     "            </div>\n" +
+    "            <div ng-click=\"currentForm = 'signup'\">Sign Up</div>\n" +
+    "            <div ng-click=\"currentForm = 'login'\">Log In</div>\n" +
     "        </ng-switch>\n" +
-    "        <!--<div ng-show=\"currentForm === 'login'\" class=\"go-to-signup ng-hide\" ng-click=\"currentForm = 'signup'\">Sign Up</div>-->\n" +
-    "        <!--<div ng-show=\"currentForm === 'signup'\" class=\"go-to-login ng-hide\" ng-click=\"currentForm = 'login'\">Log In</div>-->\n" +
     "    </div>\n" +
     "    <footer>\n" +
-    "        <ng-switch on=\"currentUserContext\">\n" +
-    "            <div ng-switch-when=\"teacher\">\n" +
+    "        <ng-switch on=\"d.studentContext\">\n" +
+    "            <div>\n" +
     "                <h2>Check out our App for Students</h2>\n" +
-    "                <a href=\"\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\">Check out Zinkerz tools for teachers</a>\n" +
+    "                <a href=\"\" ng-click=\"changeUserContext()\">Check out Zinkerz tools for teachers</a>\n" +
     "            </div>\n" +
-    "            <div ng-switch-when=\"student\">\n" +
+    "            <div>\n" +
     "                <h2>Are you an educator?</h2>\n" +
-    "                <a href=\"\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\">Check out Zinkerz tools for teachers</a>\n" +
+    "                <a href=\"\" ng-click=\"changeUserContext()\">Check out Zinkerz tools for teachers</a>\n" +
     "            </div>\n" +
     "        </ng-switch>\n" +
     "    </footer>\n" +
@@ -5684,14 +5582,12 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"title\"\n" +
     "         translate=\".LOGIN\">\n" +
     "    </div>\n" +
-    "    <!--<div class=\"social-auth-container\">-->\n" +
-    "        <!--<div class=\"social-auth\">-->\n" +
-    "            <!--<oath-login-drv providers=\"{facebook:true,google:true}\"></oath-login-drv>-->\n" +
-    "        <!--</div>-->\n" +
-    "    <!--</div>-->\n" +
-    "    <!--<div class=\"divider\">-->\n" +
-    "        <!--<div translate=\".OR\" class=\"text\"></div>-->\n" +
-    "    <!--</div>-->\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
     "    <div class=\"inputs-container\">\n" +
     "        <div class=\"input-wrapper\">\n" +
     "            <svg-icon name=\"form-envelope\"></svg-icon>\n" +
@@ -5716,36 +5612,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <!--</div>-->\n" +
     "</form>\n" +
     "");
-  $templateCache.put("components/loginApp/templates/oathLogin.template.html",
-    "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
-    "    <button class=\"btn facebook-btn\"\n" +
-    "            ng-click=\"vm.socialAuth('facebook')\"\n" +
-    "            ng-if=\"vm.providers.facebook\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.facebook.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.facebook.startLoader\"\n" +
-    "            bg-loader=\"'#315880'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#369'\">\n" +
-    "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
-    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
-    "    </button>\n" +
-    "    <button class=\"btn gplus-btn\"\n" +
-    "            ng-click=\"vm.socialAuth('google')\"\n" +
-    "            ng-if=\"vm.providers.google\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.google.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.google.startLoader\"\n" +
-    "            bg-loader=\"'#BD3922'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#df4a31'\">\n" +
-    "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
-    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
-    "    </button>\n" +
-    "</div>\n" +
-    "");
   $templateCache.put("components/loginApp/templates/signupForm.directive.html",
     "<form novalidate class=\"form-container\"\n" +
     "      translate-namespace=\"SIGNUP_FORM\"\n" +
@@ -5753,14 +5619,12 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"title\"\n" +
     "         translate=\".SIGNUP\">\n" +
     "    </div>\n" +
-    "    <!--<div class=\"social-auth-container\">-->\n" +
-    "        <!--<div class=\"social-auth\">-->\n" +
-    "            <!--<oath-login-drv providers=\"{facebook:true,google:true}\"></oath-login-drv>-->\n" +
-    "        <!--</div>-->\n" +
-    "    <!--</div>-->\n" +
-    "    <!--<div class=\"divider\">-->\n" +
-    "        <!--<div translate=\".OR\" class=\"text\"></div>-->\n" +
-    "    <!--</div>-->\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
     "    <div class=\"inputs-container\">\n" +
     "        <div class=\"input-wrapper\">\n" +
     "            <svg-icon name=\"form-envelope\"></svg-icon>\n" +
@@ -5788,7 +5652,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <button type=\"submit\" translate=\".SIGNUP\"></button>\n" +
     "    </div>\n" +
     "    <!--<div class=\"forgot-pwd-wrapper\">-->\n" +
-    "    <!--<span translate=\".FORGOT_PWD\"></span>-->\n" +
+    "        <!--<span translate=\".FORGOT_PWD\"></span>-->\n" +
     "    <!--</div>-->\n" +
     "</form>\n" +
     "");
@@ -10671,7 +10535,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
     "                            <a ui-sref=\"app.faq\">\n" +
-    "                                <span translate=\".WHAT_IS_THE_ACT_TEST\"></span>\n" +
+    "                                <span translate=\".WHAT_IS_THE_THIS_TEST\"></span>\n" +
     "                            </a>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item\n" +
