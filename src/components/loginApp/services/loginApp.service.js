@@ -56,7 +56,6 @@
         firebaseAppScopeName: 'act_app',
         studentAppName: 'act_app',
         dashboardAppName: 'act_dashboard'
-        dashboardAppName: 'act_dashboard'
     };
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
@@ -65,7 +64,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log) {
+        this.$get = function ($q, $http, $log, $window, $location) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -111,6 +110,12 @@
                 return userProfileRef.set(profile).catch(function(err){
                     $log.error(err);
                 });
+            }
+
+            function _redirectToPage() {
+                //$window.location.href = appEnvConfig.fbDataEndPoint;
+                //$window.location.href = '';
+                $location.path('/sat-web-app');
             }
 
             LoginAppSrv.APPS = APPS;
@@ -190,7 +195,9 @@
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext, userContext);
+                            return _writeUserProfile(formData, appContext, userContext).then(function(){
+                                _redirectToPage();
+                            });
                         });
                     }).catch(function (err) {
                         isSignUpInProgress = false;

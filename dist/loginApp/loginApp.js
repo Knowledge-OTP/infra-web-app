@@ -271,13 +271,31 @@
         backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'sat_app',
-        studentAppName: "sat_app",
-        dashboardAppName: "sat_dashboard"
+        studentAppName: 'sat_app',
+        dashboardAppName: 'sat_dashboard'
+    };
+    ALL_ENV_CONFIG.prod[APPS.SAT.id] = {
+        fbDataEndPoint: 'https://sat2-prod.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'sat_app',
+        studentAppName: 'sat_app',
+        dashboardAppName: 'sat_dashboard'
     };
     ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
         fbDataEndPoint: 'https://act-dev.firebaseio.com/',
         fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
         backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'act_app',
+        studentAppName: 'act_app',
+        dashboardAppName: 'act_dashboard'
+    };
+    ALL_ENV_CONFIG.prod[APPS.ACT.id] = {
+        fbDataEndPoint: 'https://act-prod.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
+        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'act_app',
         studentAppName: 'act_app',
@@ -290,7 +308,7 @@
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", function ($q, $http, $log) {
+        this.$get = ["$q", "$http", "$log", "$window", "$location", function ($q, $http, $log, $window, $location) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -336,6 +354,12 @@
                 return userProfileRef.set(profile).catch(function(err){
                     $log.error(err);
                 });
+            }
+
+            function _redirectToPage() {
+                //$window.location.href = appEnvConfig.fbDataEndPoint;
+                //$window.location.href = '';
+                $location.path('/sat-web-app');
             }
 
             LoginAppSrv.APPS = APPS;
@@ -415,7 +439,9 @@
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext, userContext);
+                            return _writeUserProfile(formData, appContext, userContext).then(function(){
+                                _redirectToPage();
+                            });
                         });
                     }).catch(function (err) {
                         isSignUpInProgress = false;
