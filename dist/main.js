@@ -23,6 +23,7 @@
 "znk.infra-web-app.uiTheme",
 "znk.infra-web-app.userGoals",
 "znk.infra-web-app.userGoalsSelection",
+"znk.infra-web-app.webAppScreenSharing",
 "znk.infra-web-app.workoutsRoadmap",
 "znk.infra-web-app.znkExerciseStatesUtility",
 "znk.infra-web-app.znkHeader",
@@ -58,7 +59,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         'znk.infra.filters',
         'znk.infra.znkExercise',
         'znk.infra.stats',
-        'znk.infra.popUp'
+        'znk.infra.popUp',
+        'znk.infra.screenSharing',
+        'znk.infra.eventManager'
     ]);
 })();
 
@@ -75,6 +78,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
      * ########
      * settings:
      *   exitAction
+     *   mode:{
+     *      1: default, sensitive to sharer screen sharing state
+     *      2: sensitive to viewer screen sharing state
+     *   }
      *
      * ########
      *   translations:
@@ -90,43 +97,116 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "$translatePartialLoader", "ExerciseParentEnum", "$timeout", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv, $translatePartialLoader, ExerciseParentEnum, $timeout) {
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "$translatePartialLoader", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                                  $translatePartialLoader, ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
+                                  EventManagerSrv) {
                 'ngInject';
+
+                $translatePartialLoader.addPart('completeExercise');
 
                 var $ctrl = this;
 
                 var VIEW_STATES = CompleteExerciseSrv.VIEW_STATES;
+                var SH_MODE_STATES = CompleteExerciseSrv.MODE_STATES;
 
-                function _rebuildExercise() {
+                var currUserShState = UserScreenSharingStateEnum.NONE.enum,
+                    shMode,
+                    exerciseRebuildProm = $q.when(),
+                    syncUpdatesProm = $q.when(),
+                    isSharerMode = false,
+                    isViewerMode = false,
+                    shModeEventManager = new EventManagerSrv(),
+                    shDataEventManager = new EventManagerSrv();
 
-                    $ctrl.changeViewState(VIEW_STATES.NONE);
+                function _clearState() {
+                    $ctrl.exerciseDetails = null;
 
-                    $timeout(function () {
-                        var exerciseDetails = $ctrl.exerciseDetails;
+                    $ctrl.changeViewState(VIEW_STATES.NONE, true);
+                }
 
+                function _setShDataToCurrentExercise() {
+                    syncUpdatesProm = syncUpdatesProm
+                        .then(function () {
+                            var promMap = {
+                                exerciseRebuildProm: exerciseRebuildProm,
+                                activeShData: ScreenSharingSrv.getActiveScreenSharingData()
+                            };
+                            return $q.all(promMap).then(function (data) {
+                                var activeShData = data.activeShData;
+
+                                activeShData.activeExercise = {};
+                                var propsToCopyFromCurrExerciseDetails = [
+                                    'exerciseId',
+                                    'exerciseTypeId',
+                                    'exerciseParentId',
+                                    'exerciseParentTypeId'
+                                ];
+                                angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
+                                    activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
+                                });
+
+                                activeShData.activeExercise.resultGuid = $ctrl.exerciseData.exerciseResult.guid;
+                                activeShData.activeExercise.activeScreen = $ctrl.currViewState;
+                                shDataEventManager.updateValue(activeShData);
+                                var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
+                                return saveExerciseResultProm.then(function () {
+                                    return activeShData.$save();
+                                });
+                            });
+                        })
+                        .catch(function (err) {
+                            $log.error(err);
+                        });
+                }
+
+                function _rebuildExercise(exerciseDetails) {
+                    if (!exerciseDetails) {
+                        return;
+                    }
+
+                    var isExerciseParentTypeIdNotProvided = angular.isUndefined(exerciseDetails.exerciseParentTypeId);
+                    var isExerciseTypeIdNotProvided = angular.isUndefined(exerciseDetails.exerciseTypeId);
+                    var isExerciseIdNotProvided = angular.isUndefined(exerciseDetails.exerciseId);
+                    if (isExerciseParentTypeIdNotProvided || isExerciseTypeIdNotProvided || isExerciseIdNotProvided) {
+                        $log.error('completeExercise: new exerciseDetails is missing data');
+                        return;
+                    }
+
+                    _clearState();
+
+                    $ctrl.exerciseDetails = exerciseDetails;
+
+                    exerciseRebuildProm = $timeout(function () {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
                         var exerciseParentContent = isExam ? BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) : null;
 
                         var getDataPromMap = {
-                            exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails),
+                            exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
                             exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
                             exerciseParentContent: exerciseParentContent
                         };
-                        $q.all(getDataPromMap).then(function (data) {
+                        return $q.all(getDataPromMap).then(function (data) {
                             $ctrl.exerciseData = data;
+                            var newViewState;
+
                             var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                             var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
+                            var isExerciseCompleted = data.exerciseResult.isComplete;
                             if ((isSection || isTutorial) && !data.exerciseResult.seenIntro) {
-                                $ctrl.changeViewState(VIEW_STATES.INTRO);
-                                return;
+                                newViewState = VIEW_STATES.INTRO;
+                            } else if (!isExerciseCompleted) {
+                                newViewState = VIEW_STATES.EXERCISE;
+                            } else {
+                                newViewState = VIEW_STATES.SUMMARY;
                             }
 
-                            var isExerciseCompleted = data.exerciseResult.isComplete;
-                            if(isExerciseCompleted){
-                                $ctrl.changeViewState(VIEW_STATES.SUMMARY);
-                            }else{
-                                $ctrl.changeViewState(VIEW_STATES.EXERCISE);
+                            $ctrl.changeViewState(newViewState, true);
+
+                            if (isSharerMode) {
+                                $ctrl.exerciseData.exerciseResult.$save().then(function () {
+                                    _setShDataToCurrentExercise();
+                                });
                             }
                         });
                     });
@@ -145,8 +225,124 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     });
                 }
 
-                this.changeViewState = function (newViewState) {
-                    $ctrl.currViewState = newViewState;
+                function _updateActiveShDataActiveScreen(newViewState) {
+                    syncUpdatesProm = syncUpdatesProm.then(function () {
+                        return ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
+                            var activeExercise = activeShData.activeExercise;
+
+                            if(!activeExercise){
+                                return;
+                            }
+
+                            activeShData.activeExercise.activeScreen = newViewState;
+                            shDataEventManager.updateValue(activeShData);
+                            return activeShData.$save();
+                        });
+                    }).catch(function (err) {
+                        $log.error(err);
+                    });
+                    return syncUpdatesProm;
+                }
+
+                function _updateMode() {
+                    var settingsMode = ($ctrl.settings && $ctrl.settings.mode) || SH_MODE_STATES.SHARER;
+
+                    isSharerMode = settingsMode === SH_MODE_STATES.SHARER && currUserShState === UserScreenSharingStateEnum.SHARER.enum;
+                    isViewerMode = settingsMode === SH_MODE_STATES.VIEWER && currUserShState === UserScreenSharingStateEnum.VIEWER.enum;
+                    if (isSharerMode) {
+                        shMode = SH_MODE_STATES.SHARER;
+                    } else if (isViewerMode) {
+                        shMode = SH_MODE_STATES.VIEWER;
+                    } else {
+                        shMode = null;
+                    }
+
+                    shModeEventManager.updateValue(shMode);
+                }
+
+                var _activeShDataChangeHandler = (function(){
+                    var firstTrigger = true;
+                    return function (newShData) {
+                        shDataEventManager.updateValue(newShData);
+
+                        if(firstTrigger){
+                            firstTrigger = false;
+                            if(isSharerMode){
+                                return;
+                            }
+                        }
+
+
+                        var activeExercise = newShData.activeExercise;
+
+                        if (!activeExercise) {
+                            if(isViewerMode){
+                                _clearState();
+                            }
+                            return;
+                        }
+
+                        var isSameExerciseId = $ctrl.exerciseDetails && activeExercise.exerciseId === $ctrl.exerciseDetails.exerciseId;
+                        var isSameExerciseType = $ctrl.exerciseDetails && activeExercise.exerciseTypeId === $ctrl.exerciseDetails.exerciseTypeId;
+                        var isDiffActiveScreen = $ctrl.currViewState !== activeExercise.activeScreen;
+                        if (isSameExerciseId && isSameExerciseType) {
+                            if(isDiffActiveScreen){
+                                var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
+                                //active screen should never be none if in sharer mode
+                                if(!(newViewState === VIEW_STATES.NONE && isSharerMode)){
+                                    $ctrl.changeViewState(newViewState, true);
+                                }
+                            }
+                        } else {
+                            if(isViewerMode){
+                                _rebuildExercise(activeExercise);
+                            }
+                        }
+                    };
+                })();
+
+                function _registerToActiveShDataEvents() {
+                    ScreenSharingSrv.registerToActiveScreenSharingDataChanges(_activeShDataChangeHandler);
+                }
+
+                function _unregisterFromActiveShDataEvents() {
+                    ScreenSharingSrv.unregisterFromActiveScreenSharingDataChanges(_activeShDataChangeHandler);
+                }
+
+                function _userShStateChangeHandler(newUserShState) {
+                    currUserShState = newUserShState;
+
+                    _updateMode();
+
+                    if (shMode) {
+                        _registerToActiveShDataEvents();
+                    } else {
+                        _unregisterFromActiveShDataEvents();
+                    }
+
+                    if (isSharerMode) {
+                        _setShDataToCurrentExercise();
+                    }
+                }
+
+                function _registerToUserShEvents() {
+                    ScreenSharingSrv.registerToCurrUserScreenSharingStateChanges(_userShStateChangeHandler);
+                }
+
+                function _unregisterFromUserShEvents() {
+                    ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(_userShStateChangeHandler);
+                }
+
+                this.changeViewState = function (newViewState, skipActiveScreenUpdate) {
+                    if ($ctrl.currViewState === newViewState) {
+                        return;
+                    }
+
+                    if(shMode && !skipActiveScreenUpdate ){
+                        _updateActiveShDataActiveScreen(newViewState);
+                    }else{
+                        $ctrl.currViewState = newViewState;
+                    }
                 };
 
                 this.$onInit = function () {
@@ -163,28 +359,44 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         'exerciseResult'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
+
+                    _registerToUserShEvents();
+
+                    this.shModeEventManager = shModeEventManager;
+
+                    this.shDataEventManager = shDataEventManager;
                 };
 
                 this.$onChanges = function (changesObj) {
+                    if(isViewerMode){
+                        return;
+                    }
+
                     if (!changesObj.exerciseDetails.currentValue) {
-                        $ctrl.changeViewState(VIEW_STATES.NONE);
+                        $ctrl.changeViewState(VIEW_STATES.NONE, !isSharerMode);
                         return;
                     }
 
                     var newExerciseDetails = changesObj.exerciseDetails.currentValue;
 
-                    var isExerciseParentTypeIdNotProvided = angular.isUndefined(newExerciseDetails.exerciseParentTypeId);
-                    var isExerciseTypeIdNotProvided = angular.isUndefined(newExerciseDetails.exerciseTypeId);
-                    var isExerciseIdNotProvided = angular.isUndefined(newExerciseDetails.exerciseId);
-                    if (isExerciseParentTypeIdNotProvided || isExerciseTypeIdNotProvided || isExerciseIdNotProvided) {
-                        $log.error('completeExercise: new exerciseDetails is missing data');
-                        return;
-                    }
-
-                    _rebuildExercise();
+                    _rebuildExercise(newExerciseDetails);
                 };
 
-                $translatePartialLoader.addPart('completeExercise');
+                this.$onDestroy = function () {
+                    _unregisterFromUserShEvents();
+                    _unregisterFromActiveShDataEvents();
+
+                    if(isSharerMode){
+                        ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
+                            if (!activeShData) {
+                                return;
+                            }
+
+                            activeShData.activeExercise = null;
+                            activeShData.$save();
+                        });
+                    }
+                };
             }]
         });
 })(angular);
@@ -199,22 +411,26 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv) {
+            controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", "InfraConfigSrv", "$scope", "UserProfileService", "ScreenSharingSrv", "ExerciseTypeEnum", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
 
-                function _initTimersVitalData(){
+                var exerciseViewBinding = {},
+                    exerciseViewBindWatchDestroyer = angular.noop,
+                    lastShDataReceived;
+
+                function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if(!exerciseContent.time){
+                    if (!exerciseContent.time) {
                         return;
                     }
 
                     $ctrl.timeEnabled = true;
 
-                    if(angular.isUndefined(exerciseResult.duration)){
+                    if (angular.isUndefined(exerciseResult.duration)) {
                         exerciseResult.duration = 0;
                     }
 
@@ -224,23 +440,133 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     };
                 }
 
-                function _invokeExerciseCtrl(){
+                function _invokeExerciseCtrl() {
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
 
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
-                        actions:{
-                            done: function(){
+                        actions: {
+                            done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                            }
+                        },
+                        znkExerciseSettings: {
+                            onExerciseReady: function () {
+                                $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                             }
                         }
                     };
 
-                    $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl',{
+                    $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
                     });
+                }
+
+                function _resultChangeHandler(newResult) {
+                    if (!newResult || !newResult.questionResults) {
+                        return;
+                    }
+
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var updatedQuestionsResults = exerciseResult.questionResults;
+                    var newQuestionsResults = newResult.questionResults;
+                    var isNotLecture = exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
+
+                    angular.extend(exerciseResult, newResult);
+
+                    if (isNotLecture) {
+                        angular.forEach(updatedQuestionsResults, function (questionResult, index) {
+                            var newQuestionResult = newQuestionsResults[index];
+                            angular.extend(questionResult, newQuestionResult);
+                        });
+                        exerciseResult.questionResults = updatedQuestionsResults;
+                    }
+
+                }
+
+                function _registerToResultChanges() {
+                    InfraConfigSrv.getStudentStorage().then(function (storage) {
+                        var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                        storage.onEvent('value', exerciseResult.$$path, _resultChangeHandler);
+                    });
+                }
+
+                function _unregisterFromResultChanges() {
+                    InfraConfigSrv.getStudentStorage().then(function (storage) {
+                        var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                        storage.offEvent('value', exerciseResult.$$path, _resultChangeHandler);
+                    });
+                }
+
+                function _shDataChangeHandler(newScreenSharingData) {
+                    lastShDataReceived = newScreenSharingData;
+
+                    if (!newScreenSharingData) {
+                        return;
+                    }
+
+                    UserProfileService.getCurrUserId().then(function (currUid) {
+                        if (newScreenSharingData.updatedBy !== currUid) {
+                            angular.extend(exerciseViewBinding, newScreenSharingData.activeExercise);
+                        }
+                    });
+                }
+
+                function _registerToShDataChanges() {
+                    $ctrl.completeExerciseCtrl.shDataEventManager.registerCb(_shDataChangeHandler);
+                }
+
+                function _unregisterFromShDataChanges() {
+                    $ctrl.completeExerciseCtrl.shDataEventManager.unregisterCb(_shDataChangeHandler);
+                }
+
+                function _bindExerciseToShData() {
+                    _registerToResultChanges();
+                    _registerToShDataChanges();
+                    exerciseViewBindWatchDestroyer = $scope.$watch(function () {
+                        return exerciseViewBinding;
+                    }, (function () {
+                        var syncProm = $q.when();
+
+                        return function(newExerciseView) {
+                            if (!lastShDataReceived || angular.equals(exerciseViewBinding, lastShDataReceived.activeExercise)) {
+                                return null;
+                            }
+                            syncProm = syncProm.then(function () {
+                                return ScreenSharingSrv.getActiveScreenSharingData().then(function (screenSharingData) {
+                                    if (screenSharingData.activeExercise) {
+                                        angular.extend(screenSharingData.activeExercise, newExerciseView);
+                                        return screenSharingData.$save();
+                                    }
+                                });
+                            });
+                        };
+                    })(), true);
+                }
+
+                function _unbindExerciseFromShData() {
+                    _unregisterFromResultChanges();
+                    _unregisterFromShDataChanges();
+                    exerciseViewBindWatchDestroyer();
+                }
+
+                function _shModeChangedHandler(shMode) {
+                    if (shMode) {
+                        _bindExerciseToShData();
+                    } else {
+                        _unbindExerciseFromShData();
+                    }
+                }
+
+                function _registerToShModeChanges() {
+                    $ctrl.completeExerciseCtrl.shModeEventManager.registerCb(_shModeChangedHandler);
+                }
+
+                function _unregisterFromShModeChanges() {
+                    $ctrl.completeExerciseCtrl.shModeEventManager.unregisterCb(_shModeChangedHandler);
+
                 }
 
                 this.$onInit = function () {
@@ -248,11 +574,13 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     _invokeExerciseCtrl();
 
-                    this.durationChanged = function(){
+                    _registerToShModeChanges();
+
+                    this.durationChanged = function () {
                         var exerciseResult = this.completeExerciseCtrl.getExerciseResult();
                         var exerciseContent = this.completeExerciseCtrl.getExerciseContent();
 
-                        if(exerciseResult.duration >= exerciseContent.time){
+                        if (exerciseResult.duration >= exerciseContent.time) {
                             var contentProm = $translate('COMPLETE_EXERCISE.TIME_UP_CONTENT');
                             var titleProm = $translate('COMPLETE_EXERCISE.TIME_UP_TITLE');
                             var buttonFinishProm = $translate('COMPLETE_EXERCISE.STOP');
@@ -271,6 +599,11 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             });
                         }
                     };
+                };
+
+                this.$onDestroy = function () {
+                    _unregisterFromShModeChanges();
+                    _unbindExerciseFromShData();
                 };
             }]
         });
@@ -294,12 +627,15 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv, $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV) {
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
             var exerciseResult = settings.exerciseResult;
             var exerciseTypeId = exerciseResult.exerciseTypeId;
+
+            var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
             var $ctrl = this;
 
@@ -307,7 +643,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             var initSlideIndex;
 
             function _setExerciseResult() {
-                if (!angular.isArray(exerciseResult.questionResults) || exerciseResult.questionResults.length === 0) {
+                var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
+                if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
                         return {
                             questionId: question.id,
@@ -322,14 +659,25 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             }
 
             function _setExerciseContentQuestions() {
-                exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
-                    return a.order - b.order;
-                });
+                if(isNotLecture){
+                    exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
+                        return a.order - b.order;
+                    });
 
-                ZnkExerciseUtilitySrv.setQuestionsGroupData(
-                    exerciseContent.questions,
-                    exerciseContent.questionsGroupData
-                );
+                    ZnkExerciseUtilitySrv.setQuestionsGroupData(
+                        exerciseContent.questions,
+                        exerciseContent.questionsGroupData
+                    );
+                }else{
+                    exerciseContent.content.sort(function(item1, item2){
+                        return item1.order - item2.order;
+                    });
+                    for (var i = 0; i < exerciseContent.content.length; i++) {
+                        exerciseContent.content[i].exerciseTypeId = exerciseTypeId;
+                        exerciseContent.content[i].id = exerciseTypeId + '_' + exerciseContent.id + '_' + exerciseContent.content[i].order;// mandatory for drawing tool
+                    }
+                    exerciseContent.questions = exerciseContent.content;  // lecture question type has content property instead of questions.
+                }
             }
 
             function _finishExercise() {
@@ -363,7 +711,11 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 }
 
                 function _getAllowedTimeForExercise() {
-                    if (exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
+                    if(!isNotLecture){
+                        return null;
+                    }
+
+                    if (isSection) {
                         return exerciseContent.time;
                     }
 
@@ -379,6 +731,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         initSlideIndex = 0;
                     } else {
                         viewMode = isSection ? ZnkExerciseViewModeEnum.ONLY_ANSWER.enum : ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
+                    }
+
+                    if(isNotLecture){
                         initSlideIndex = exerciseResult.questionResults.findIndex(function (question) {
                             return !question.userAnswer;
                         });
@@ -386,6 +741,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         if (initSlideIndex === -1) {
                             initSlideIndex = 0;
                         }
+                    }else{
+                        initSlideIndex = 0;
                     }
 
                     var defExerciseSettings = {
@@ -435,7 +792,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         }
                     };
 
-                    $ctrl.settings = defExerciseSettings;
+                    $ctrl.settings = angular.extend(defExerciseSettings, settings.znkExerciseSettings || {});
                 };
             })();
 
@@ -737,7 +1094,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv) {
+        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
             'ngInject';
 
             this.VIEW_STATES = {
@@ -745,6 +1102,11 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 INTRO: 1,
                 EXERCISE: 2,
                 SUMMARY: 3
+            };
+
+            this.MODE_STATES = {
+                SHARER: 1,
+                VIEWER: 2
             };
 
             this.getContextUid = function () {
@@ -756,13 +1118,33 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 }
             };
 
-            this.getExerciseResult = function (exerciseDetails) {
-                switch (exerciseDetails.exerciseTypeId) {
-                    case ExerciseTypeEnum.LECTURE.enum:
+            this.getExerciseResult = function (exerciseDetails, shMode) {
+                var isLecture = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.LECTURE.enum;
+
+                if(shMode === this.MODE_STATES.VIEWER){
+                    if(!exerciseDetails.resultGuid){
+                        var errMsg = 'completeExerciseSrv: exercise details is missing guid property';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
+
+                    return ExerciseResultSrv.getExerciseResultByGuid(exerciseDetails.resultGuid);
+                }
+
+                switch (exerciseDetails.exerciseParentTypeId) {
+                    case ExerciseParentEnum.MODULE.enum:
+                        if(isLecture){
+                            return ExerciseResultSrv.getExerciseResult(
+                                exerciseDetails.exerciseTypeId,
+                                exerciseDetails.exerciseId,
+                                exerciseDetails.exerciseParentId
+                            );
+                        }
+
                         return this.getContextUid().then(function (uid) {
                             return ExerciseResultSrv.getModuleExerciseResult(
                                 uid,
-                                exerciseDetails.parentId,
+                                exerciseDetails.exerciseParentId,
                                 exerciseDetails.exerciseTypeId,
                                 exerciseDetails.exerciseId
                             );
@@ -7530,6 +7912,102 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "</section>\n" +
     "\n" +
     "\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.webAppScreenSharing', [
+        'znk.infra.screenSharing',
+        'znk.infra-web-app.completeExercise'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.webAppScreenSharing')
+        .config(["ScreenSharingUiSrvProvider", function (ScreenSharingUiSrvProvider) {
+            'ngInject';
+
+            ScreenSharingUiSrvProvider.setScreenSharingViewerTemplate('<sh-viewer></sh-viewer>');
+        }]);
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.webAppScreenSharing').component('shViewer', {
+        templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html',
+        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", "$translatePartialLoader", function (CompleteExerciseSrv, ENV, ScreenSharingSrv, $translatePartialLoader) {
+            'ngInject';
+
+            $translatePartialLoader.addPart('webAppScreenSharing');
+
+            var $ctrl= this;
+
+            function _shDataChangeHandler(newShData){
+                $ctrl.activeScreen = newShData.activeExercise && newShData.activeExercise.activeScreen;
+            }
+
+            function _registerToShDataChanges(){
+                ScreenSharingSrv.registerToActiveScreenSharingDataChanges(_shDataChangeHandler);
+            }
+
+            function _unregisterFromShDataChanges(){
+                ScreenSharingSrv.unregisterFromActiveScreenSharingDataChanges(_shDataChangeHandler);
+            }
+
+            this.$onInit = function(){
+                _registerToShDataChanges();
+                this.appContext = ENV.appContext.toUpperCase();
+
+                this.ceSettings = {
+                    mode: CompleteExerciseSrv.MODE_STATES.VIEWER
+                };
+            };
+
+            this.$onDestroy = function(){
+                _unregisterFromShDataChanges();
+            };
+
+        }]
+    });
+})(angular);
+
+
+angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html",
+    "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
+    "    <div class=\"header\">\n" +
+    "            <span class=\"you-are-viewing-text\"\n" +
+    "                  translate=\".YOU_ARE_VIEWING\">\n" +
+    "            </span>\n" +
+    "        <div class=\"user-connectivity-status\"></div>\n" +
+    "        <span class=\"user-name\">{{$ctrl.sharerName}}</span>\n" +
+    "    </div>\n" +
+    "    <ng-switch on=\"!!$ctrl.activeScreen\" class=\"sh-viewer-main-container\">\n" +
+    "        <div ng-switch-when=\"false\" class=\"none\">\n" +
+    "            <div class=\"texts-container\">\n" +
+    "                <div class=\"text1\"\n" +
+    "                     translate=\".NO_OPENED_EXERCISES\">\n" +
+    "                </div>\n" +
+    "                <div class=\"text2\"\n" +
+    "                     translate=\".ONCE_OPEN\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div ng-switch-default>\n" +
+    "            <complete-exercise settings=\"$ctrl.ceSettings\">\n" +
+    "            </complete-exercise>\n" +
+    "        </div>\n" +
+    "    </ng-switch>\n" +
+    "</div>\n" +
     "");
 }]);
 
