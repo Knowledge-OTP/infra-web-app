@@ -1,16 +1,22 @@
-<div class="login-app" ng-class="{student: d.userContext === d.userContextObj.STUDENT, educator: d.userContext === d.userContextObj.TEACHER}">
+<div class="login-app" ng-class="{
+        student: d.userContext === d.userContextObj.STUDENT,
+        educator: d.userContext === d.userContextObj.TEACHER,
+        sat: d.appContext === d.availableApps.SAT,
+        act: d.appContext === d.availableApps.ACT,
+        toefl: d.appContext === d.availableApps.TOEFL,
+    }">
     <header>
         <div class="logo"></div>
 
         <div class="app-select" ng-cloak>
-            <md-menu md-offset="0 60" md-no-ink>
+            <md-menu md-offset="-100 80" md-no-ink>
                 <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-                    <div class="app-img-holder"></div>
                     <md-icon class="material-icons expand-menu">expand_more</md-icon>
+                    <div class="app-img-holder {{d.appContext.className}}"></div>
                 </md-button>
-                <md-menu-content width="4">
+                <md-menu-content width="4" class="app-select-menu">
                     <md-menu-item ng-repeat="app in d.availableApps track by app.id" ng-click="selectApp(app)">
-                        <md-button>{{app.name}}</md-button>
+                        <div class="app-img-holder {{app.className}}"></div>
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>

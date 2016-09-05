@@ -13,6 +13,12 @@
         "OR": "or",
         "NAME": "Name",
         "EMAIL": "Email",
-        "PASSWORD": "Password"
+        "PASSWORD": "Password",
+        "STUDENT": {
+            "CREATE_ACCOUNT": "Create a Student Account"
+        },
+        "EDUCATOR": {
+            "CREATE_ACCOUNT": "Create an Educator Account"
+        }
     }
 }

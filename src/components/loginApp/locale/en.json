@@ -13,7 +13,13 @@
         "OR": "or",
         "NAME": "Name",
         "EMAIL": "Email",
-        "PASSWORD": "Password"
+        "PASSWORD": "Password",
+        "STUDENT": {
+            "CREATE_ACCOUNT": "Create a Student Account"
+        },
+        "EDUCATOR": {
+            "CREATE_ACCOUNT": "Create an Educator Account"
+        }
     },
     "OATH_SOCIAL": {
         "CONNECT_WITH_FB": "Facebook",

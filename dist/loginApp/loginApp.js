@@ -5,7 +5,6 @@
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'satellizer',
         'znk.infra.user'
     ]).config([
         'SvgIconSrvProvider',
@@ -104,7 +103,7 @@
                     userContext: '<'
                 },
                 link: function (scope) {
-                    $translatePartialLoader.addPart('loginForm');
+                    //$translatePartialLoader.addPart('loginForm');
 
                     scope.d = {};
 
@@ -131,8 +130,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm', [
-        '$translatePartialLoader', 'LoginAppSrv',
-        function ($translatePartialLoader, LoginAppSrv) {
+        '$translatePartialLoader', 'LoginAppSrv', '$timeout', '$translate', '$log',
+        function ($translatePartialLoader, LoginAppSrv, $timeout, $translate, $log) {
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
                 restrict: 'E',
@@ -141,9 +140,29 @@
                     userContext: '<'
                 },
                 link: function (scope) {
-                    $translatePartialLoader.addPart('signupForm');
+                    $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {};
+
+                    var translateNamespace = 'SIGNUP_FORM';
+
+                    function userContextString() {
+                        var str;
+                        if (scope.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
+                            str = 'student';
+                        } else if (scope.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
+                            str = 'teacher';
+                        }
+                        return str.toUpperCase();
+                    }
+
+                    $translate([translateNamespace + '.' + userContextString() + '.CREATE_ACCOUNT'])
+                        .then(function (translations) {
+                            scope.d.createAccount = translations[translateNamespace + '.' + userContextString() + '.CREATE_ACCOUNT'];
+                        })
+                        .catch(function (translationIds) {
+                            $log.error('failed to fetch the following translation ids: ', translationIds);
+                        });
 
                     scope.signupSubmit = function(){
                         if (!scope.d.signupFormData) {
@@ -248,11 +267,18 @@
     var APPS = {
         SAT: {
             id: 'SAT',
-            name: 'SAT'
+            name: 'SAT',
+            className: 'sat'
         },
         ACT: {
             id: 'ACT',
-            name: 'ACT'
+            name: 'ACT',
+            className: 'act'
+        },
+        TOEFL: {
+            id: 'TOEFL',
+            name: 'TOEFL',
+            className: 'toefl'
         }
     };
 
@@ -301,6 +327,9 @@
         studentAppName: 'act_app',
         dashboardAppName: 'act_dashboard'
     };
+    /**
+     * TODO: add toefl dev and prod vars
+     */
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
@@ -346,7 +375,7 @@
             function _writeUserProfile(formData, appContext){
                 var appRef = _getAppRef(appContext);
                 var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid);
+                var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var profile = {
                     email: formData.email,
                     nickname: formData.nickname
@@ -356,8 +385,10 @@
                 });
             }
 
-            function _redirectToPage() {
-                $window.location.href = "//" + $window.location.host + '/sat-web-app';
+            function _redirectToPage(appContext) {
+                var appConfig = _getAppEnvConfig(appContext);
+                var appName = appConfig.firebaseAppScopeName.substr(0, appConfig.firebaseAppScopeName.indexOf('_'));
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -427,7 +458,7 @@
                             var appRef = _getAppRef(appContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage();
+                                _redirectToPage(appContext);
                                 return res;
                             });
                         });
@@ -459,7 +490,7 @@
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext, userContext).then(function(){
-                                _redirectToPage();
+                                _redirectToPage(appContext);
                             });
                         });
                     }).catch(function (err) {
@@ -535,19 +566,25 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "</svg>\n" +
     "");
   $templateCache.put("components/loginApp/templates/loginApp.directive.html",
-    "<div class=\"login-app\" ng-class=\"{student: d.userContext === d.userContextObj.STUDENT, educator: d.userContext === d.userContextObj.TEACHER}\">\n" +
+    "<div class=\"login-app\" ng-class=\"{\n" +
+    "        student: d.userContext === d.userContextObj.STUDENT,\n" +
+    "        educator: d.userContext === d.userContextObj.TEACHER,\n" +
+    "        sat: d.appContext === d.availableApps.SAT,\n" +
+    "        act: d.appContext === d.availableApps.ACT,\n" +
+    "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
+    "    }\">\n" +
     "    <header>\n" +
     "        <div class=\"logo\"></div>\n" +
     "\n" +
     "        <div class=\"app-select\" ng-cloak>\n" +
-    "            <md-menu md-offset=\"0 60\" md-no-ink>\n" +
+    "            <md-menu md-offset=\"-100 80\" md-no-ink>\n" +
     "                <md-button aria-label=\"Open App Select Menu\" class=\"md-icon-button\" ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
-    "                    <div class=\"app-img-holder\"></div>\n" +
     "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
+    "                    <div class=\"app-img-holder {{d.appContext.className}}\"></div>\n" +
     "                </md-button>\n" +
-    "                <md-menu-content width=\"4\">\n" +
+    "                <md-menu-content width=\"4\" class=\"app-select-menu\">\n" +
     "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\" ng-click=\"selectApp(app)\">\n" +
-    "                        <md-button>{{app.name}}</md-button>\n" +
+    "                        <div class=\"app-img-holder {{app.className}}\"></div>\n" +
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
@@ -589,7 +626,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
   $templateCache.put("components/loginApp/templates/loginForm.directive.html",
     "<form novalidate class=\"form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"loginSubmit()\">\n" +
     "    <div class=\"title\"\n" +
-    "         translate=\".LOGIN\">\n" +
+    "         translate=\".CREATE_A_STUDENT_ACCOUNT\">\n" +
     "    </div>\n" +
     "    <!--<div class=\"social-auth-container\">-->\n" +
     "        <!--<div class=\"social-auth\">-->\n" +
@@ -657,16 +694,14 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<form novalidate class=\"form-container\"\n" +
     "      translate-namespace=\"SIGNUP_FORM\"\n" +
     "      ng-submit=\"signupSubmit()\">\n" +
-    "    <div class=\"title\"\n" +
-    "         translate=\".SIGNUP\">\n" +
-    "    </div>\n" +
+    "    <div class=\"title\">{{d.createAccount}}</div>\n" +
     "    <!--<div class=\"social-auth-container\">-->\n" +
-    "        <!--<div class=\"social-auth\">-->\n" +
-    "            <!--<oath-login-drv providers=\"{facebook:true,google:true}\"></oath-login-drv>-->\n" +
-    "        <!--</div>-->\n" +
+    "    <!--<div class=\"social-auth\">-->\n" +
+    "    <!--<oath-login-drv providers=\"{facebook:true,google:true}\"></oath-login-drv>-->\n" +
+    "    <!--</div>-->\n" +
     "    <!--</div>-->\n" +
     "    <!--<div class=\"divider\">-->\n" +
-    "        <!--<div translate=\".OR\" class=\"text\"></div>-->\n" +
+    "    <!--<div translate=\".OR\" class=\"text\"></div>-->\n" +
     "    <!--</div>-->\n" +
     "    <div class=\"inputs-container\">\n" +
     "        <div class=\"input-wrapper\">\n" +

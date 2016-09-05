@@ -1,16 +1,15 @@
 <form novalidate class="form-container"
-      translate-namespace="SIGNUP_FORM"
-      ng-submit="signupSubmit()">
-    <div class="title"
-         translate=".SIGNUP">
-    </div>
+      ng-submit="signupSubmit()"
+      translate-namespace="SIGNUP_FORM">
+    <div class="title" translate=".STUDENT.CREATE_ACCOUNT" ng-if="userContext===d.userContext.STUDENT"></div>
+    <div class="title" translate=".EDUCATOR.CREATE_ACCOUNT" ng-if="userContext===d.userContext.TEACHER"></div>
     <!--<div class="social-auth-container">-->
-        <!--<div class="social-auth">-->
-            <!--<oath-login-drv providers="{facebook:true,google:true}"></oath-login-drv>-->
-        <!--</div>-->
+    <!--<div class="social-auth">-->
+    <!--<oath-login-drv providers="{facebook:true,google:true}"></oath-login-drv>-->
+    <!--</div>-->
     <!--</div>-->
     <!--<div class="divider">-->
-        <!--<div translate=".OR" class="text"></div>-->
+    <!--<div translate=".OR" class="text"></div>-->
     <!--</div>-->
     <div class="inputs-container">
         <div class="input-wrapper">

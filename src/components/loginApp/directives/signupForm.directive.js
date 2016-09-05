@@ -6,8 +6,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm', [
-        '$translatePartialLoader', 'LoginAppSrv',
-        function ($translatePartialLoader, LoginAppSrv) {
+        '$translatePartialLoader', 'LoginAppSrv', '$timeout', '$translate', '$log',
+        function ($translatePartialLoader, LoginAppSrv, $timeout, $translate, $log) {
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
                 restrict: 'E',
@@ -16,9 +16,11 @@
                     userContext: '<'
                 },
                 link: function (scope) {
-                    $translatePartialLoader.addPart('signupForm');
+                    $translatePartialLoader.addPart('loginApp');
 
-                    scope.d = {};
+                    scope.d = {
+                       userContext: LoginAppSrv.USER_CONTEXT
+                    };
 
                     scope.signupSubmit = function(){
                         if (!scope.d.signupFormData) {
