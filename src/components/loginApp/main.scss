@@ -12,6 +12,34 @@
     font-style:normal;
 }
 
+.md-open-menu-container {
+    md-menu-content.app-select-menu {
+        flex-direction: row;
+        md-menu-item {
+            align-items: center;
+            cursor: pointer;
+            border-right: 1px solid #fff;
+            .app-img-holder {
+                width: calc(175px / 2);
+                height: calc(55px / 2);
+                background-repeat: no-repeat;
+                background-size: contain;
+                padding: 0;
+                margin: 0 20px;
+                &.sat {
+                    background-image: url('assets/images/sat-name@2x.png');
+                }
+                &.act {
+                    background-image: url('assets/images/act-name@2x.png');
+                }
+                &.toefl {
+                    background-image: url('assets/images/toefl-name@2x.png');
+                }
+            }
+        }
+    }
+}
+
 login-app {
     .login-app {
         position: fixed;

@@ -11,6 +11,11 @@
             id: 'ACT',
             name: 'ACT',
             className: 'act'
+        },
+        TOEFL: {
+            id: 'TOEFL',
+            name: 'TOEFL',
+            className: 'toefl'
         }
     };
 
@@ -59,6 +64,9 @@
         studentAppName: 'act_app',
         dashboardAppName: 'act_dashboard'
     };
+    /**
+     * TODO: add toefl dev and prod vars
+     */
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';

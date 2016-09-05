@@ -1,7 +1,6 @@
 {
     "LOGIN_FORM": {
         "LOGIN": "Login",
-        "CREATE_A_STUDENT_ACCOUNT": "Create a Student Account",
         "LOGIN_IN": "Log In",
         "FORGOT_PWD": "Forgot password?",
         "OR": "or",
@@ -14,6 +13,12 @@
         "OR": "or",
         "NAME": "Name",
         "EMAIL": "Email",
-        "PASSWORD": "Password"
+        "PASSWORD": "Password",
+        "STUDENT": {
+            "CREATE_ACCOUNT": "Create a Student Account"
+        },
+        "EDUCATOR": {
+            "CREATE_ACCOUNT": "Create an Educator Account"
+        }
     }
 }
