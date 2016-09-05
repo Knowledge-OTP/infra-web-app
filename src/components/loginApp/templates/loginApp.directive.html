@@ -26,12 +26,22 @@
     <div class="main">
         <ng-switch on="currentForm">
             <div class="login-container" ng-switch-when="login">
+                <oath-login-drv
+                    app-context="d.appContext"
+                    user-context="d.userContext"
+                    providers="{facebook:true,google:true}">
+                </oath-login-drv>
                 <login-form app-context="d.appContext"
                             user-context="d.userContext">
                 </login-form>
                 <div class="go-to-signup" ng-click="changeCurrentForm('signup')">Sign Up</div>
             </div>
             <div class="signup-container" ng-switch-when="signup">
+                <oath-login-drv
+                    app-context="d.appContext"
+                    user-context="d.userContext"
+                    providers="{facebook:true,google:true}">
+                </oath-login-drv>
                 <signup-form app-context="d.appContext"
                              user-context="d.userContext">
                 </signup-form>

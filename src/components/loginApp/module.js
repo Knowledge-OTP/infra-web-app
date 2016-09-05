@@ -1,11 +1,12 @@
-(function (angular) {
+(function (window, angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'znk.infra.user'
+        'znk.infra.user',
+        'satellizer'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -15,17 +16,6 @@
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ]).config([
-        'InfraConfigSrvProvider',
-        function (InfraConfigSrvProvider) {
-
-            function globalStorage(GlobalStorageSrv) {
-                'ngInject';
-                return GlobalStorageSrv;
-            }
-
-            InfraConfigSrvProvider.setStorages(globalStorage);
-        }
     ]);
 
-})(angular);
+})(window, angular);
