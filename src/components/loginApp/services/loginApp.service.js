@@ -113,8 +113,28 @@
             }
 
             function _redirectToPage() {
-                $window.location.href = 'https://www.zinkerz.com/sat/web-app';
+                $window.location.href = "//" + $window.location.host + '/sat-web-app';
             }
+
+            LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
+                var deferred = $q.defer();
+                refDB.authWithCustomToken(token, function (error, userData) {
+                    if (error) {
+                        deferred.reject(error);
+                    }
+                    $log.debug('createAuthWithCustomToken: uid=' + userData.uid);
+                    deferred.resolve(userData);
+                });
+                return deferred.promise;
+            };
+
+            // LoginAppSrv.userDataForAuthAndDataFb = function (data)  {
+            //     var proms = [
+            //         this.createAuthWithCustomToken(refAuthDB, data.authToken),
+            //         this.createAuthWithCustomToken(refDataDB, data.dataToken)
+            //     ];
+            //     return $q.all(proms);
+            // };
 
             LoginAppSrv.APPS = APPS;
 

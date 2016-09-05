@@ -5,6 +5,7 @@
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'ngMaterial',
+        'satellizer',
         'znk.infra.user'
     ]).config([
         'SvgIconSrvProvider',
@@ -160,11 +161,12 @@
 })(angular);
 
 
+/* jshint ignore:start */
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        ["$window", "$log", "$auth", "AuthService", "UserProfileService", "ENV", "AnalyticsLoginSrv", "$timeout", "PopUpSrv", "$filter", function($window, $log, $auth, AuthService, UserProfileService, ENV, AnalyticsLoginSrv, $timeout, PopUpSrv, $filter) {
+        ["$window", "$log", "$auth", "$timeout", "$filter", function($window, $log, $auth /* AnalyticsLoginSrv */, $timeout, $filter) {
             'ngInject';
 
             var vm = this;
@@ -177,7 +179,7 @@
                     return AuthService.userDataForAuthAndDataFb(response.data);
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
-                    AnalyticsLoginSrv.save(results[0], provider, 'socialLogin');
+                   // AnalyticsLoginSrv.save(results[0], provider, 'socialLogin');
                     UserProfileService.getProfile().then(function (userProfile) {
                         var location = ENV.redirectLogin;
                         var updateProfile = false;
@@ -215,14 +217,12 @@
                     var title = $filter('translate')('OATH_SOCIAL.ERROR_TITLE', { provider: provider });
                     var content = $filter('translate')('OATH_SOCIAL.ERROR_CONTENT', { provider: provider });
                     $log.error('OathLoginDrvController socialAuth', error);
-                    PopUpSrv.error(title, content).promise.then(function () {
-                        loadingProvider.startLoader = loadingProvider.fillLoader = false;
-                    });
                 });
             };
 
         }]);
 })(angular);
+/* jshint ignore:end */
 
 (function (angular) {
     'use strict';
@@ -357,8 +357,28 @@
             }
 
             function _redirectToPage() {
-                $window.location.href = 'https://www.zinkerz.com/sat/web-app';
+                $window.location.href = "//" + $window.location.host + '/sat-web-app';
             }
+
+            LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
+                var deferred = $q.defer();
+                refDB.authWithCustomToken(token, function (error, userData) {
+                    if (error) {
+                        deferred.reject(error);
+                    }
+                    $log.debug('createAuthWithCustomToken: uid=' + userData.uid);
+                    deferred.resolve(userData);
+                });
+                return deferred.promise;
+            };
+
+            // LoginAppSrv.userDataForAuthAndDataFb = function (data)  {
+            //     var proms = [
+            //         this.createAuthWithCustomToken(refAuthDB, data.authToken),
+            //         this.createAuthWithCustomToken(refDataDB, data.dataToken)
+            //     ];
+            //     return $q.all(proms);
+            // };
 
             LoginAppSrv.APPS = APPS;
 

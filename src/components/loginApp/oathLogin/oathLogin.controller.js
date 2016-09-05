@@ -1,8 +1,9 @@
+/* jshint ignore:start */
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        function($window, $log, $auth, AuthService, UserProfileService, ENV, AnalyticsLoginSrv, $timeout, PopUpSrv, $filter) {
+        function($window, $log, $auth /* AnalyticsLoginSrv */, $timeout, $filter) {
             'ngInject';
 
             var vm = this;
@@ -15,7 +16,7 @@
                     return AuthService.userDataForAuthAndDataFb(response.data);
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
-                    AnalyticsLoginSrv.save(results[0], provider, 'socialLogin');
+                   // AnalyticsLoginSrv.save(results[0], provider, 'socialLogin');
                     UserProfileService.getProfile().then(function (userProfile) {
                         var location = ENV.redirectLogin;
                         var updateProfile = false;
@@ -53,11 +54,9 @@
                     var title = $filter('translate')('OATH_SOCIAL.ERROR_TITLE', { provider: provider });
                     var content = $filter('translate')('OATH_SOCIAL.ERROR_CONTENT', { provider: provider });
                     $log.error('OathLoginDrvController socialAuth', error);
-                    PopUpSrv.error(title, content).promise.then(function () {
-                        loadingProvider.startLoader = loadingProvider.fillLoader = false;
-                    });
                 });
             };
 
         });
 })(angular);
+/* jshint ignore:end */

@@ -2,6 +2,16 @@
 'src/scss/imports/colors',
 'bower_components/infra/dist/mixins/mixins';
 
+// social auth login
+@import 'oathLogin/main.scss';
+
+@font-face {
+    font-family:"SourceSansPro";
+    src:url("assets/fonts/SourceSansPro-Regular.otf");
+    font-weight:normal;
+    font-style:normal;
+}
+
 login-app {
     .login-app {
         position: fixed;
@@ -95,7 +105,7 @@ login-app {
         }
         .form-container {
             width: 413px;
-            background: $bgColor1;
+            background: $bgColor40;
             border-radius: 30px;
             font:{
                 family: Lato;
@@ -108,6 +118,7 @@ login-app {
             };
             box-shadow: 0 3px 9px 0 $bsColor2;
             .title {
+                font-family: 'SourceSansPro', sans-serif;
                 text-align: center;
                 padding: {
                     bottom: 22px;
@@ -125,6 +136,7 @@ login-app {
                     width: 340px;
                     border: 1px $borderColor1 solid;
                     border-radius: 30px;
+                    background-color: $bgColor1;
                     margin: {
                         right: auto;
                         bottom: 11px;
@@ -153,6 +165,7 @@ login-app {
                         border: none;
                         flex-grow: 1;
                         padding: 0;
+                        background-color: transparent;
                         @include placeholder(){
                             color: $fontColor3;
                             font:{
