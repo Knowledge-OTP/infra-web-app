@@ -1,6 +1,7 @@
 {
     "LOGIN_FORM": {
         "LOGIN": "Login",
+        "CREATE_A_STUDENT_ACCOUNT": "Create a Student Account",
         "LOGIN_IN": "Log In",
         "FORGOT_PWD": "Forgot password?",
         "OR": "or",

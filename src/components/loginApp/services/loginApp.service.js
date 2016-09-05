@@ -4,11 +4,13 @@
     var APPS = {
         SAT: {
             id: 'SAT',
-            name: 'SAT'
+            name: 'SAT',
+            className: 'sat'
         },
         ACT: {
             id: 'ACT',
-            name: 'ACT'
+            name: 'ACT',
+            className: 'act'
         }
     };
 
@@ -112,8 +114,10 @@
                 });
             }
 
-            function _redirectToPage() {
-                $window.location.href = "//" + $window.location.host + '/sat-web-app';
+            function _redirectToPage(appContext) {
+                var appConfig = _getAppEnvConfig(appContext);
+                var appName = appConfig.firebaseAppScopeName.substr(0, appConfig.firebaseAppScopeName.indexOf('_'));
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -183,7 +187,7 @@
                             var appRef = _getAppRef(appContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage();
+                                _redirectToPage(appContext);
                                 return res;
                             });
                         });
@@ -215,7 +219,7 @@
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext, userContext).then(function(){
-                                _redirectToPage();
+                                _redirectToPage(appContext);
                             });
                         });
                     }).catch(function (err) {

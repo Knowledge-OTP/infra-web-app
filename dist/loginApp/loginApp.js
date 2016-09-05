@@ -247,11 +247,13 @@
     var APPS = {
         SAT: {
             id: 'SAT',
-            name: 'SAT'
+            name: 'SAT',
+            className: 'sat'
         },
         ACT: {
             id: 'ACT',
-            name: 'ACT'
+            name: 'ACT',
+            className: 'act'
         }
     };
 
@@ -355,8 +357,10 @@
                 });
             }
 
-            function _redirectToPage() {
-                $window.location.href = "//" + $window.location.host + '/sat-web-app';
+            function _redirectToPage(appContext) {
+                var appConfig = _getAppEnvConfig(appContext);
+                var appName = appConfig.firebaseAppScopeName.substr(0, appConfig.firebaseAppScopeName.indexOf('_'));
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -426,7 +430,7 @@
                             var appRef = _getAppRef(appContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage();
+                                _redirectToPage(appContext);
                                 return res;
                             });
                         });
@@ -458,7 +462,7 @@
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext, userContext).then(function(){
-                                _redirectToPage();
+                                _redirectToPage(appContext);
                             });
                         });
                     }).catch(function (err) {
@@ -541,12 +545,13 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div class=\"app-select\" ng-cloak>\n" +
     "            <md-menu md-offset=\"0 60\" md-no-ink>\n" +
     "                <md-button aria-label=\"Open App Select Menu\" class=\"md-icon-button\" ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
-    "                    <div class=\"app-img-holder\"></div>\n" +
     "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
+    "                    <div class=\"app-img-holder {{d.appContext.className}}\"></div>\n" +
     "                </md-button>\n" +
     "                <md-menu-content width=\"4\">\n" +
     "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\" ng-click=\"selectApp(app)\">\n" +
-    "                        <md-button>{{app.name}}</md-button>\n" +
+    "                        <md-button>{{app.className}}</md-button>\n" +
+    "                        <div class=\"app-img-holder {{app.className}}\"></div>\n" +
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
@@ -588,7 +593,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
   $templateCache.put("components/loginApp/templates/loginForm.directive.html",
     "<form novalidate class=\"form-container\" translate-namespace=\"LOGIN_FORM\" ng-submit=\"loginSubmit()\">\n" +
     "    <div class=\"title\"\n" +
-    "         translate=\".LOGIN\">\n" +
+    "         translate=\".CREATE_A_STUDENT_ACCOUNT\">\n" +
     "    </div>\n" +
     "    <!--<div class=\"social-auth-container\">-->\n" +
     "        <!--<div class=\"social-auth\">-->\n" +

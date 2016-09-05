@@ -5,12 +5,13 @@
         <div class="app-select" ng-cloak>
             <md-menu md-offset="0 60" md-no-ink>
                 <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-                    <div class="app-img-holder"></div>
                     <md-icon class="material-icons expand-menu">expand_more</md-icon>
+                    <div class="app-img-holder {{d.appContext.className}}"></div>
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item ng-repeat="app in d.availableApps track by app.id" ng-click="selectApp(app)">
-                        <md-button>{{app.name}}</md-button>
+                        <md-button>{{app.className}}</md-button>
+                        <div class="app-img-holder {{app.className}}"></div>
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>

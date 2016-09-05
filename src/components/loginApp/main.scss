@@ -55,10 +55,15 @@ login-app {
                 .app-img-holder {
                     width: calc(175px / 2);
                     height: calc(55px / 2);
-                    background-image: url('assets/images/sat-name@2x.png');
                     background-repeat: no-repeat;
                     background-size: contain;
                     float:left;
+                    &.sat {
+                        background-image: url('assets/images/sat-name@2x.png');
+                    }
+                    &.act {
+                        background-image: url('assets/images/act-name@2x.png');
+                    }
                 }
                 .expand-menu {
                     float: right;
@@ -95,12 +100,12 @@ login-app {
         }
         &.educator {
             .main {
-                background-image: url('assets/images/login-student-bg@2x.jpg');
+                background-image: url('assets/images/login-teacher-bg@2x.jpg');
             }
         }
         &.student {
             .main {
-                background-image: url('assets/images/login-teacher-bg@2x.jpg');
+                background-image: url('assets/images/login-student-bg@2x.jpg');
             }
         }
         .form-container {
