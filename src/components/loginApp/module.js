@@ -1,4 +1,4 @@
-(function (angular) {
+(function (window, angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp', [
@@ -16,17 +16,6 @@
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ]).config([
-        'InfraConfigSrvProvider',
-        function (InfraConfigSrvProvider) {
-
-            function globalStorage(GlobalStorageSrv) {
-                'ngInject';
-                return GlobalStorageSrv;
-            }
-
-            InfraConfigSrvProvider.setStorages(globalStorage);
-        }
     ]);
 
-})(angular);
+})(window, angular);

@@ -21,10 +21,16 @@
                         userContext: LoginAppSrv.USER_CONTEXT.STUDENT
                     };
 
+                    var socialProvidersArr = ['facebook', 'google'];
+
+                    LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
+
                     scope.currentUserContext =  'student';
                     scope.currentForm = 'signup';
+
                     scope.selectApp = function(app) {
                         scope.d.appContext = app;
+                        LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
                     };
 
                     scope.changeCurrentForm = function (currentForm) {

@@ -5,7 +5,9 @@
         'ngInject';
         return {
             scope: {
-                providers: '='
+                providers: '=',
+                appContext: '<',
+                userContext: '<'
             },
             restrict: 'E',
             templateUrl: 'components/loginApp/templates/oathLogin.template.html',

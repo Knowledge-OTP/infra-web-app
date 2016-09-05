@@ -3,7 +3,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        function($window, $log, $auth /* AnalyticsLoginSrv */, $timeout, $filter) {
+        function(LoginAppSrv, $window, $log, $auth) {
             'ngInject';
 
             var vm = this;
@@ -13,46 +13,40 @@
                 var loadingProvider = vm.loading[provider] = {};
                 loadingProvider.startLoader = true;
                 $auth.authenticate(provider).then(function (response) {
-                    return AuthService.userDataForAuthAndDataFb(response.data);
+                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id);
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
-                   // AnalyticsLoginSrv.save(results[0], provider, 'socialLogin');
-                    UserProfileService.getProfile().then(function (userProfile) {
-                        var location = ENV.redirectLogin;
+
+                    LoginAppSrv.getUserProfile(vm.appContext.id).then(function (userProfile) {
                         var updateProfile = false;
 
                         if (!userProfile.email && userDataAuth.email) {
                             userProfile.email = userDataAuth.email;
                             updateProfile = true;
                         }
-                        if (!userProfile.nickname && userDataAuth.nickname) {
-                            userProfile.nickname = userDataAuth.nickname;
+                        if (!userProfile.nickname && (userDataAuth.nickname || userDataAuth.name)) {
+                            userProfile.nickname = userDataAuth.nickname || userDataAuth.name;
                             updateProfile = true;
                         }
-                        if (!userProfile.provider && userDataAuth.provider) {
-                            userProfile.provider = userDataAuth.provider;
+                        if (!userProfile.provider) {
+                            userProfile.provider = provider;
                             updateProfile = true;
                         }
-                        // adding timeout to make sure AnalyticsLoginSrv.save
-                        // works before redirect
-                        AuthService.registerFirstLogin().then(function () {
-                            loadingProvider.fillLoader = true;
-                            $timeout(function () {
-                                loadingProvider.startLoader = loadingProvider.fillLoader = false;
-                                if (updateProfile) {
-                                    location = ENV.redirectSignup;
-                                    UserProfileService.setProfile(userProfile).then(function () {
-                                        $window.location.replace(location);
-                                    });
-                                } else {
-                                    $window.location.replace(location);
-                                }
+
+                        LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
+
+                        loadingProvider.fillLoader = true;
+                        loadingProvider.startLoader = loadingProvider.fillLoader = false;
+
+                        if (updateProfile) {
+                            LoginAppSrv.writeUserProfile({ profile: userProfile }, vm.appContext.id, true).then(function () {
+                                LoginAppSrv.redirectToPage();
                             });
-                        });
+                        } else {
+                            LoginAppSrv.redirectToPage();
+                        }
                     });
                 }).catch(function (error) {
-                    var title = $filter('translate')('OATH_SOCIAL.ERROR_TITLE', { provider: provider });
-                    var content = $filter('translate')('OATH_SOCIAL.ERROR_CONTENT', { provider: provider });
                     $log.error('OathLoginDrvController socialAuth', error);
                 });
             };
