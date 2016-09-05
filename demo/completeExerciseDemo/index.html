@@ -16,22 +16,32 @@
     <link rel="stylesheet" href="cssConfig/subjects-colors.css">
 </head>
 <body ng-app="demo" style="background: rgb(232, 231, 231);">
-    <div style="display: flex">
-        <div style="margin-top: 20px;margin-right: 10px;">
+    <div style="display: flex;margin-top: 20px;">
+        <div style="margin-right: 10px;">
             <label>Exercise type</label>
             <select ng-model="data.exerciseType"
                     ng-options="exerciseType.val for exerciseType in exerciseTypeEnumArr">
             </select>
         </div>
-        <div style="margin-top: 20px">
+        <div style="margin-right: 20px">
             <label>Exercise parent</label>
             <select ng-model="data.exerciseParent"
                     ng-options="exerciseParent.val for exerciseParent in exerciseParentEnumArr">
             </select>
         </div>
+        <div style="margin-right: 20px">
+            <input type="text" ng-model="uidToShareScreenWith" placeholder="uid">
+            <button ng-click="shareMyScreen(uidToShareScreenWith)">Share Screen</button>
+            <button ng-click="viewOtherUserScreen(uidToShareScreenWith)">View Screen</button>
+        </div>
+        <div>
+            <label>Kill complete exercise</label>
+            <input type="checkbox" ng-model="destroyCompleteExercise">
+        </div>
     </div>
     <complete-exercise exercise-details="exerciseData"
-                       settings="settings">
+                       settings="settings"
+                       ng-if="!destroyCompleteExercise">
     </complete-exercise>
 <!-- Bower:js -->
 <script src="angular/angular.js"></script>
@@ -55,6 +65,7 @@
 <script src="Chart.js/Chart.js"></script>
 <script src="angular-chart.js/dist/angular-chart.js"></script>
 <script src="v-accordion/dist/v-accordion.js"></script>
+<script src="satellizer/satellizer.js"></script>
 <!-- endBower -->
 
 <script src="main.js"></script>

@@ -1,0 +1,72 @@
+<div class="login-app" ng-class="{
+        student: d.userContext === d.userContextObj.STUDENT,
+        educator: d.userContext === d.userContextObj.TEACHER,
+        sat: d.appContext === d.availableApps.SAT,
+        act: d.appContext === d.availableApps.ACT,
+        toefl: d.appContext === d.availableApps.TOEFL,
+    }">
+    <header>
+        <div class="logo"></div>
+
+        <div class="app-select" ng-cloak>
+            <md-menu md-offset="-100 80" md-no-ink>
+                <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+                    <md-icon class="material-icons expand-menu">expand_more</md-icon>
+                    <div class="app-img-holder {{d.appContext.className}}"></div>
+                </md-button>
+                <md-menu-content width="4" class="app-select-menu">
+                    <md-menu-item ng-repeat="app in d.availableApps track by app.id" ng-click="selectApp(app)">
+                        <div class="app-img-holder {{app.className}}"></div>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+
+    </header>
+    <div class="main">
+        <ng-switch on="currentForm">
+            <div class="login-container" ng-switch-when="login">
+                <!--<oath-login-drv-->
+                    <!--app-context="d.appContext"-->
+                    <!--user-context="d.userContext"-->
+                    <!--providers="{facebook:true,google:true}">-->
+                <!--</oath-login-drv>-->
+                <login-form app-context="d.appContext"
+                            user-context="d.userContext">
+                </login-form>
+                <p class="go-to-signup">
+                    <span translate="SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT" ng-if="d.userContext===d.userContextObj.STUDENT"></span>
+                    <span translate="SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
+                    <a ng-click="changeCurrentForm('signup')">Sign Up</a>
+                </p>
+            </div>
+            <div class="signup-container" ng-switch-when="signup">
+                <!--<oath-login-drv-->
+                    <!--app-context="d.appContext"-->
+                    <!--user-context="d.userContext"-->
+                    <!--providers="{facebook:true,google:true}">-->
+                <!--</oath-login-drv>-->
+                <signup-form app-context="d.appContext"
+                             user-context="d.userContext">
+                </signup-form>
+                <p class="go-to-login">
+                    <span translate="LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.STUDENT"></span>
+                    <span translate="LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
+                    <a ng-click="changeCurrentForm('login')">Log In</a>
+                </p>
+            </div>
+        </ng-switch>
+    </div>
+    <footer>
+        <ng-switch on="currentUserContext">
+            <div ng-switch-when="teacher" class="switch-student-educator">
+                <h2>Check out our App for Students</h2>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.STUDENT)">Check out Zinkerz tools for teachers</a>
+            </div>
+            <div ng-switch-when="student" class="switch-student-educator">
+                <h2>Are you an educator?</h2>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.TEACHER)">Check out Zinkerz tools for teachers</a>
+            </div>
+        </ng-switch>
+    </footer>
+</div>

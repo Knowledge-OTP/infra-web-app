@@ -3,7 +3,7 @@
 }
 
 .reading-subject-pattern{
-    @include background-image-url-retina('assets/images/reading-background-pattern');
+    @include background-image-url-retina('/assets/images/reading-background-pattern');
 }
 
 .verbal-subject-pattern{

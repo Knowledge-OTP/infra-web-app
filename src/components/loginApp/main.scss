@@ -1,0 +1,388 @@
+@import 'src/scss/imports/variables',
+'src/scss/imports/colors',
+'bower_components/infra/dist/mixins/mixins';
+
+// social auth login
+@import 'oathLogin/main.scss';
+
+@font-face {
+    font-family:"SourceSansPro";
+    src:url("assets/fonts/SourceSansPro-Regular.otf");
+    font-weight:normal;
+    font-style:normal;
+}
+
+.md-open-menu-container {
+    md-menu-content.app-select-menu {
+        flex-direction: row;
+        md-menu-item {
+            align-items: center;
+            cursor: pointer;
+            border-right: 1px solid $borderColor8;
+            &:last-child {
+                border-right: none;
+            }
+            .app-img-holder {
+                width: calc(175px / 2);
+                height: calc(55px / 2);
+                background-repeat: no-repeat;
+                background-size: contain;
+                padding: 0;
+                margin: 0 20px;
+                &.sat {
+                    background-image: url('assets/images/sat-name@2x.png');
+                }
+                &.act {
+                    background-image: url('assets/images/act-name@2x.png');
+                }
+                &.toefl {
+                    background-image: url('assets/images/toefl-name@2x.png');
+                }
+            }
+        }
+    }
+}
+
+login-app {
+    .login-app {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: #f7f7f7;
+        background-image: url('assets/images/logo-pattern-bg.png');
+        font: {
+            family: 'SourceSansPro', sans-serif;
+            weight: $regularFontWeight;
+        }
+        & > header {
+            margin: 20px auto;
+            width: 1317px;
+            //md-menu {
+            //    .md-button {
+            //        &.md-icon-button {
+            //            width: auto;
+            //        }
+            //    }
+            //}
+            .logo {
+                width: 76px;
+                height: 36px;
+                background-image: url('assets/images/zinkerz_logo.png');
+                background-repeat: no-repeat;
+                background-size: contain;
+                float:left;
+            }
+            .app-select {
+                text-align: center;
+                md-menu {
+                    .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
+                    .md-button:not([disabled]).md-icon-button:hover {
+                        background-color: #fbfcfc;
+                    }
+                    & > button {
+                        width: 175px;
+                        height: auto;
+                        padding: 8px 15px;
+                        background-color: #fbfcfc;
+                        border-radius: 30px;
+                    }
+                }
+                .app-img-holder {
+                    width: calc(175px / 2);
+                    height: calc(55px / 2);
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    float:left;
+                    &.sat {
+                        background-image: url('assets/images/sat-name@2x.png');
+                    }
+                    &.act {
+                        background-image: url('assets/images/act-name@2x.png');
+                    }
+                    &.toefl {
+                        background-image: url('assets/images/toefl-name@2x.png');
+                    }
+                }
+                .expand-menu {
+                    float: right;
+                }
+            }
+        }
+        .main {
+            width: 1366px;
+            height: 513px;
+            margin: 0 auto;
+            position: relative;
+            background-size: auto 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+
+            .login-container,
+            .signup-container {
+                position: absolute;
+                top: 15px;
+                right: 135px;
+            }
+
+            .go-to-login,
+            .go-to-signup {
+                margin-top: 15px;
+                text-align: center;
+                color: #fff;
+                a {
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+            }
+
+            signup-form,
+            login-form {
+
+            }
+        }
+        &.educator {
+            .main {
+                background-image: url('assets/images/login-teacher-bg@2x.jpg');
+            }
+        }
+        &.student {
+            .main {
+                background-image: url('assets/images/login-student-bg@2x.jpg');
+            }
+        }
+        &.sat {
+            .app-bg {  background: $bgColor5;  }
+            .app-color {  color: $bgColor5;  }
+        }
+        &.act {
+            .app-bg {  background: $bgColor7;  }
+            .app-color {  color: $bgColor7;  }
+        }
+        &.toefl {
+            .app-bg {  background: $bgColor2;  }
+            .app-color {  color: $bgColor2;  }
+        }
+        .form-container {
+            width: 413px;
+            background: $bgColor40;
+            border-radius: 30px;
+            padding: {
+                right: 33px;
+                left: 33px;
+                bottom: 20px;
+                top: 25px;
+            };
+            box-shadow: 0 3px 9px 0 $bsColor2;
+            .title {
+                text-align: center;
+                padding: {
+                    bottom: 15px;
+                }
+                color: $fontColor2;
+                font:{
+                    weight: $lightFontWeight;
+                    size: 25px;
+                }
+            }
+
+            .inputs-container{
+                .input-wrapper{
+                    box-sizing: border-box;
+                    width: 340px;
+                    border: 1px $borderColor1 solid;
+                    border-radius: 30px;
+                    background-color: $bgColor1;
+                    margin: {
+                        right: auto;
+                        bottom: 11px;
+                        left: auto;
+                    }
+                    padding:{
+                        right: 21px;
+                        left: 21px;
+                    }
+                    display: flex;
+                    align-items: center;
+
+                    &:last-child{
+                        margin: {
+                            bottom: 20px;
+                        };
+                    }
+
+                    svg-icon {
+                        width: 36px;
+                    }
+
+                    input {
+                        height: 41px;
+                        border: none;
+                        flex-grow: 1;
+                        padding: 0;
+                        background-color: transparent;
+                        @include placeholder(){
+                            color: $fontColor3;
+                            font:{
+                                weight: $lightFontWeight;
+                                size: 14px;
+                            }
+                        }
+                        outline: none;
+                        font:{
+                            weight: $regularFontWeight;
+                            size: 14px;
+                        }
+                        color: $fontColor2;
+                    }
+                }
+            }
+
+            .submit-btn-wrapper{
+                text-align: center;
+                button {
+                    box-sizing: border-box;
+                    height: 43px;
+                    width: 340px;
+                    color: $fontColor1;
+                    border-radius: 30px;
+                    border: none;
+                    font:{
+                        size: 18px;
+                        weight: $regularFontWeight;
+                    }
+                }
+            }
+
+            .forgot-pwd-wrapper {
+                margin: {
+                    bottom: 26px;
+                };
+                text-align: right;
+                color: $fontColor4;
+                font:{
+                    weight: $lightFontWeight;
+                    size: 14px;
+                }
+            }
+
+            .divider {
+                position: relative;
+                text-align: center;
+                margin: {
+                    top: 20px;
+                    bottom: 20px;
+                }
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    top: 11px;
+                    right: 0;
+                    left: 0;
+                    border: 1px $borderColor2 solid;
+                }
+
+                .text {
+                    display: inline-block;
+                    background: $bgColor40;
+                    position: relative;
+                    z-index: 1;
+                    padding: {
+                        right: 15px;
+                        left: 15px;
+                    };
+                    color: $fontColor5;
+                    font:{
+                        weight: $lightFontWeight;
+                        size: 14px;
+                    }
+                }
+            }
+
+            .social-auth-container {
+                margin: {
+                    // top: 28px;
+                    right: 44px;
+                    left: 44px;
+                };
+                text-align: center;
+                oath-login-drv {
+                    .btn-wrap {
+                        border-radius: 25px;
+                        overflow: hidden;
+                        height: 42px;
+
+                        .facebook-btn,
+                        .gplus-btn {
+                            width:50%;
+                            height:100%;
+                            color: $bgColor3;
+                            float:left;
+                            padding-left: 25px;
+                            cursor: pointer;
+                            border: none;
+                            span {
+                                display: block;
+                                text-indent: -25px;
+                            }
+                        }
+
+                        .facebook-btn {
+                            background-color: $facebookColor;
+                            line-height: 42px;
+                            svg-icon[name="facebook-icon"] {
+                                float:left;
+                                margin-top: 5px;
+                                svg {
+                                    width: 10px;
+                                    fill: $bgColor3;
+                                }
+                            }
+                        }
+
+                        .gplus-btn {
+                            background-color: $gplusColor;
+                            line-height: 42px;
+                            svg-icon[name="google-icon"] {
+                                float:left;
+                                margin-top: 5px;
+                                svg {
+                                    width: 21px;
+                                    fill: $bgColor3;
+                                }
+                            }
+                        }
+
+                        &.reset-btn{
+                            margin-top: 20px;
+                        }
+                    }
+                }
+            }
+            &.signup {
+                .signup-disclaimer {
+                    text-align: center;
+                    font-size: 10px;
+                    color: $fontColor9;
+                    a {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+        footer {
+            text-align: center;
+            .switch-student-educator {
+                font-weight:normal;
+                h2 {
+                    font-size: 20px;
+                    color: $fontColor3;
+                }
+                a {
+                    text-decoration: none;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
