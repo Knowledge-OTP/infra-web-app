@@ -8,7 +8,8 @@
         "infra": "https://github.com/Knowledge-OTP/infra.git#igor/complete-exercise-sh",
         "ng-tags-input": "^3.0.0",
         "angular-chart.js": "^0.10.2",
-        "v-accordion": "1.4.1"
+        "v-accordion": "1.4.1",
+        "satellizer": "0.13.4"
     },
     "ignore": [
         ".*",

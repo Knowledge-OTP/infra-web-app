@@ -40,10 +40,10 @@
 
                         if (updateProfile) {
                             LoginAppSrv.writeUserProfile({ profile: userProfile }, vm.appContext.id, true).then(function () {
-                                LoginAppSrv.redirectToPage();
+                                LoginAppSrv.redirectToPage(vm.appContext.id);
                             });
                         } else {
-                            LoginAppSrv.redirectToPage();
+                            LoginAppSrv.redirectToPage(vm.appContext.id);
                         }
                     });
                 }).catch(function (error) {

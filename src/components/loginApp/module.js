@@ -5,7 +5,8 @@
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'znk.infra.user'
+        'znk.infra.user',
+        'satellizer'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
