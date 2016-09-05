@@ -18,27 +18,9 @@
                 link: function (scope) {
                     $translatePartialLoader.addPart('loginApp');
 
-                    scope.d = {};
-
-                    var translateNamespace = 'SIGNUP_FORM';
-
-                    function userContextString() {
-                        var str;
-                        if (scope.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
-                            str = 'student';
-                        } else if (scope.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
-                            str = 'teacher';
-                        }
-                        return str.toUpperCase();
-                    }
-
-                    $translate([translateNamespace + '.' + userContextString() + '.CREATE_ACCOUNT'])
-                        .then(function (translations) {
-                            scope.d.createAccount = translations[translateNamespace + '.' + userContextString() + '.CREATE_ACCOUNT'];
-                        })
-                        .catch(function (translationIds) {
-                            $log.error('failed to fetch the following translation ids: ', translationIds);
-                        });
+                    scope.d = {
+                       userContext: LoginAppSrv.USER_CONTEXT
+                    };
 
                     scope.signupSubmit = function(){
                         if (!scope.d.signupFormData) {
