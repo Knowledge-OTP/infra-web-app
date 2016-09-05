@@ -2,6 +2,47 @@
 'src/scss/imports/colors',
 'bower_components/infra/dist/mixins/mixins';
 
+// social auth login
+@import 'oathLogin/main.scss';
+
+@font-face {
+    font-family:"SourceSansPro";
+    src:url("assets/fonts/SourceSansPro-Regular.otf");
+    font-weight:normal;
+    font-style:normal;
+}
+
+.md-open-menu-container {
+    md-menu-content.app-select-menu {
+        flex-direction: row;
+        md-menu-item {
+            align-items: center;
+            cursor: pointer;
+            border-right: 1px solid $borderColor8;
+            &:last-child {
+                border-right: none;
+            }
+            .app-img-holder {
+                width: calc(175px / 2);
+                height: calc(55px / 2);
+                background-repeat: no-repeat;
+                background-size: contain;
+                padding: 0;
+                margin: 0 20px;
+                &.sat {
+                    background-image: url('assets/images/sat-name@2x.png');
+                }
+                &.act {
+                    background-image: url('assets/images/act-name@2x.png');
+                }
+                &.toefl {
+                    background-image: url('assets/images/toefl-name@2x.png');
+                }
+            }
+        }
+    }
+}
+
 login-app {
     .login-app {
         position: fixed;
@@ -9,6 +50,10 @@ login-app {
         height: 100%;
         background-color: #f7f7f7;
         background-image: url('assets/images/logo-pattern-bg.png');
+        font: {
+            family: 'SourceSansPro', sans-serif;
+            weight: $regularFontWeight;
+        }
         & > header {
             margin: 20px auto;
             width: 1317px;
@@ -45,10 +90,18 @@ login-app {
                 .app-img-holder {
                     width: calc(175px / 2);
                     height: calc(55px / 2);
-                    background-image: url('assets/images/sat-name@2x.png');
                     background-repeat: no-repeat;
                     background-size: contain;
                     float:left;
+                    &.sat {
+                        background-image: url('assets/images/sat-name@2x.png');
+                    }
+                    &.act {
+                        background-image: url('assets/images/act-name@2x.png');
+                    }
+                    &.toefl {
+                        background-image: url('assets/images/toefl-name@2x.png');
+                    }
                 }
                 .expand-menu {
                     float: right;
@@ -56,43 +109,79 @@ login-app {
             }
         }
         .main {
-            height: 1027px;
-            background-size: contain;
+            width: 1366px;
+            height: 513px;
+            margin: 0 auto;
+            position: relative;
+            background-size: auto 100%;
             background-repeat: no-repeat;
-        }
-        &.educator {
-            .main {
-                background-image: url('assets/images/login-student-bg@2x.jpg');
+            background-position: center center;
+
+            .login-container,
+            .signup-container {
+                position: absolute;
+                top: 15px;
+                right: 135px;
+            }
+
+            .go-to-login,
+            .go-to-signup {
+                margin-top: 15px;
+                text-align: center;
+                color: #fff;
+                a {
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+            }
+
+            signup-form,
+            login-form {
+
             }
         }
-        &.student {
+        &.educator {
             .main {
                 background-image: url('assets/images/login-teacher-bg@2x.jpg');
             }
         }
+        &.student {
+            .main {
+                background-image: url('assets/images/login-student-bg@2x.jpg');
+            }
+        }
+        &.sat {
+            .app-bg {  background: $bgColor5;  }
+            .app-color {  color: $bgColor5;  }
+        }
+        &.act {
+            .app-bg {  background: $bgColor7;  }
+            .app-color {  color: $bgColor7;  }
+        }
+        &.toefl {
+            .app-bg {  background: $bgColor2;  }
+            .app-color {  color: $bgColor2;  }
+        }
         .form-container {
             width: 413px;
-            background: $bgColor1;
+            background: $bgColor40;
             border-radius: 30px;
-            font:{
-                family: Lato;
-            }
             padding: {
                 right: 33px;
                 left: 33px;
+                bottom: 20px;
+                top: 25px;
             };
             box-shadow: 0 3px 9px 0 $bsColor2;
             .title {
-                padding: {
-                    top: 33px;
-                    bottom: 22px;
-                }
                 text-align: center;
-                font-size: 39px;
+                padding: {
+                    bottom: 15px;
+                }
                 color: $fontColor2;
                 font:{
                     weight: $lightFontWeight;
-                    size: 39px;
+                    size: 25px;
                 }
             }
 
@@ -102,6 +191,7 @@ login-app {
                     width: 340px;
                     border: 1px $borderColor1 solid;
                     border-radius: 30px;
+                    background-color: $bgColor1;
                     margin: {
                         right: auto;
                         bottom: 11px;
@@ -114,26 +204,25 @@ login-app {
                     display: flex;
                     align-items: center;
 
-
                     &:last-child{
                         margin: {
-                            bottom: 35px;
+                            bottom: 20px;
                         };
                     }
 
-                    svg-icon{
+                    svg-icon {
                         width: 36px;
                     }
 
-                    input{
+                    input {
                         height: 41px;
                         border: none;
                         flex-grow: 1;
                         padding: 0;
+                        background-color: transparent;
                         @include placeholder(){
                             color: $fontColor3;
                             font:{
-                                family: Lato;
                                 weight: $lightFontWeight;
                                 size: 14px;
                             }
@@ -149,28 +238,22 @@ login-app {
             }
 
             .submit-btn-wrapper{
-                margin: {
-                    bottom: 15px;
-                };
                 text-align: center;
-
-                button{
+                button {
                     box-sizing: border-box;
                     height: 43px;
                     width: 340px;
                     color: $fontColor1;
                     border-radius: 30px;
                     border: none;
-                    background: $bgColor2;
                     font:{
                         size: 18px;
                         weight: $regularFontWeight;
                     }
-                    box-shadow: 0px 3px 0px 0px $bsColor1;
                 }
             }
 
-            .forgot-pwd-wrapper{
+            .forgot-pwd-wrapper {
                 margin: {
                     bottom: 26px;
                 };
@@ -182,11 +265,15 @@ login-app {
                 }
             }
 
-            .divider{
+            .divider {
                 position: relative;
                 text-align: center;
+                margin: {
+                    top: 20px;
+                    bottom: 20px;
+                }
 
-                &:before{
+                &:before {
                     content: '';
                     position: absolute;
                     top: 11px;
@@ -195,9 +282,9 @@ login-app {
                     border: 1px $borderColor2 solid;
                 }
 
-                .text{
+                .text {
                     display: inline-block;
-                    background: $bgColor1;
+                    background: $bgColor40;
                     position: relative;
                     z-index: 1;
                     padding: {
@@ -212,13 +299,89 @@ login-app {
                 }
             }
 
-            .social-auth-container{
+            .social-auth-container {
                 margin: {
-                    top: 28px;
+                    // top: 28px;
                     right: 44px;
                     left: 44px;
                 };
                 text-align: center;
+                oath-login-drv {
+                    .btn-wrap {
+                        border-radius: 25px;
+                        overflow: hidden;
+                        height: 42px;
+
+                        .facebook-btn,
+                        .gplus-btn {
+                            width:50%;
+                            height:100%;
+                            color: $bgColor3;
+                            float:left;
+                            padding-left: 25px;
+                            cursor: pointer;
+                            border: none;
+                            span {
+                                display: block;
+                                text-indent: -25px;
+                            }
+                        }
+
+                        .facebook-btn {
+                            background-color: $facebookColor;
+                            line-height: 42px;
+                            svg-icon[name="facebook-icon"] {
+                                float:left;
+                                margin-top: 5px;
+                                svg {
+                                    width: 10px;
+                                    fill: $bgColor3;
+                                }
+                            }
+                        }
+
+                        .gplus-btn {
+                            background-color: $gplusColor;
+                            line-height: 42px;
+                            svg-icon[name="google-icon"] {
+                                float:left;
+                                margin-top: 5px;
+                                svg {
+                                    width: 21px;
+                                    fill: $bgColor3;
+                                }
+                            }
+                        }
+
+                        &.reset-btn{
+                            margin-top: 20px;
+                        }
+                    }
+                }
+            }
+            &.signup {
+                .signup-disclaimer {
+                    text-align: center;
+                    font-size: 10px;
+                    color: $fontColor9;
+                    a {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+        footer {
+            text-align: center;
+            .switch-student-educator {
+                font-weight:normal;
+                h2 {
+                    font-size: 20px;
+                    color: $fontColor3;
+                }
+                a {
+                    text-decoration: none;
+                    font-size: 16px;
+                }
             }
         }
     }

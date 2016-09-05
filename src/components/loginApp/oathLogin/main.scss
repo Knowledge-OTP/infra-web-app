@@ -1,0 +1,65 @@
+$facebookColor : #369;
+$gplusColor : #df4a31;
+
+oath-login-drv {
+    .btn-wrap {
+        border-radius: 25px;
+        overflow: hidden;
+        height: 42px;
+
+        .facebook-btn,
+        .gplus-btn {
+            width:50%;
+            height:100%;
+            color: $bgColor2;
+            float:left;
+            padding-left: 25px;
+            cursor: pointer;
+            border: none;
+            span {
+                display: block;
+                text-indent: -25px;
+            }
+        }
+
+        .facebook-btn {
+            background-color: $facebookColor;
+            line-height: 42px;
+
+            &:hover{
+                background-color: $bgColor10;
+            }
+
+            svg-icon[name="facebook-icon"] {
+                float:left;
+                margin-top: 5px;
+                svg {
+                    width: 10px;
+                    fill: $bgColor2;
+                }
+            }
+        }
+
+        .gplus-btn {
+            background-color: $gplusColor;
+            line-height: 42px;
+
+            &:hover{
+                background-color: $bgColor54;
+            }
+
+            svg-icon[name="google-icon"] {
+                float:left;
+                margin-top: 5px;
+                svg {
+                    width: 21px;
+                    fill: $bgColor2;
+                }
+            }
+        }
+
+        &.reset-btn{
+            margin-top: 20px;
+        }
+    }
+}

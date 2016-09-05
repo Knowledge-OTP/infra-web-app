@@ -16,9 +16,12 @@
                     userContext: '<'
                 },
                 link: function (scope) {
-                    $translatePartialLoader.addPart('loginForm');
+                    //$translatePartialLoader.addPart('loginForm');
 
-                    scope.d = {};
+                    scope.d = {
+                        appContext: LoginAppSrv.APPS.SAT,
+                        userContextObj: LoginAppSrv.USER_CONTEXT,
+                    };
 
                     scope.loginSubmit = function(){
                         if (!scope.d.loginFormData) {

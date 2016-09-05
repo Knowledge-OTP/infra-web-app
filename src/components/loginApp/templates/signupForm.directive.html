@@ -1,11 +1,16 @@
-<form novalidate class="form-container"
-      translate-namespace="SIGNUP_FORM"
-      ng-submit="signupSubmit()">
-    <div class="title"
-         translate=".SIGNUP">
-    </div>
+<form novalidate class="form-container signup"
+      ng-submit="signupSubmit()"
+      translate-namespace="SIGNUP_FORM">
+    <div class="title" translate=".STUDENT.CREATE_ACCOUNT" ng-if="userContext===d.userContextObj.STUDENT"></div>
+    <div class="title" translate=".EDUCATOR.CREATE_ACCOUNT" ng-if="userContext===d.userContextObj.TEACHER"></div>
     <div class="social-auth-container">
-        <div class="social-auth"></div>
+        <div class="social-auth">
+            <oath-login-drv
+                app-context="d.appContext"
+                user-context="d.userContext"
+                providers="{facebook:true,google:true}">
+            </oath-login-drv>
+        </div>
     </div>
     <div class="divider">
         <div translate=".OR" class="text"></div>
@@ -34,9 +39,10 @@
         </div>
     </div>
     <div class="submit-btn-wrapper">
-        <button type="submit" translate=".SIGNUP"></button>
+        <button type="submit" translate=".SIGN_UP" class="app-bg"></button>
     </div>
+    <p class="signup-disclaimer" translate-values="{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}" translate=".DISCLAIMER"></p>
     <!--<div class="forgot-pwd-wrapper">-->
-        <!--<span translate=".FORGOT_PWD"></span>-->
+    <!--<span translate=".FORGOT_PWD"></span>-->
     <!--</div>-->
 </form>
