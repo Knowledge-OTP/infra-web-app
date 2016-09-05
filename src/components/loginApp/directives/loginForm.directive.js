@@ -25,6 +25,7 @@
 
                     scope.loginSubmit = function(){
                         if (!scope.d.loginFormData) {
+                            window.alert('form is empty!');
                             return;
                         }
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
