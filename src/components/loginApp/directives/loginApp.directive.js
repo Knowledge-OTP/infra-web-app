@@ -6,8 +6,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp', [
-        '$translatePartialLoader', 'LoginAppSrv',
-        function ($translatePartialLoader, LoginAppSrv) {
+        '$translatePartialLoader', 'LoginAppSrv', '$location',
+        function ($translatePartialLoader, LoginAppSrv, $location) {
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
@@ -34,7 +34,7 @@
                     };
 
                     scope.changeCurrentForm = function (currentForm) {
-                      scope.currentForm = currentForm;
+                        scope.currentForm = currentForm;
                     };
 
                     scope.changeUserContext = function (context) {
@@ -52,6 +52,22 @@
                         originatorEv = ev;
                         $mdOpenMenu(ev);
                     };
+
+                    var search = $location.search();
+                    if (!angular.equals(search, {}) && (search.app || search.state)) {
+                        if (search.app) {
+                            angular.forEach(LoginAppSrv.APPS, function(app, index){
+                                if (index.toLowerCase() === search.app.toLowerCase()) {
+                                    scope.selectApp(app);
+                                }
+                            });
+                        }
+                        if (search.state) {
+                            scope.changeCurrentForm(search.state);
+                        }
+                        $location.search('app', null);
+                        $location.search('state', null);
+                    }
                 }
             };
         }
