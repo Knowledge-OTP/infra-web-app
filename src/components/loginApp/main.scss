@@ -19,6 +19,9 @@
             align-items: center;
             cursor: pointer;
             border-right: 1px solid $borderColor8;
+            &:last-child {
+                border-right: none;
+            }
             .app-img-holder {
                 width: calc(175px / 2);
                 height: calc(55px / 2);
@@ -47,6 +50,10 @@ login-app {
         height: 100%;
         background-color: #f7f7f7;
         background-image: url('assets/images/logo-pattern-bg.png');
+        font: {
+            family: 'SourceSansPro', sans-serif;
+            weight: $regularFontWeight;
+        }
         & > header {
             margin: 20px auto;
             width: 1317px;
@@ -122,6 +129,10 @@ login-app {
                 margin-top: 15px;
                 text-align: center;
                 color: #fff;
+                a {
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
             }
 
             signup-form,
@@ -155,21 +166,17 @@ login-app {
             width: 413px;
             background: $bgColor40;
             border-radius: 30px;
-            font:{
-                family: Lato;
-            }
             padding: {
                 right: 33px;
                 left: 33px;
-                bottom: 40px;
+                bottom: 20px;
                 top: 25px;
             };
             box-shadow: 0 3px 9px 0 $bsColor2;
             .title {
-                font-family: 'SourceSansPro', sans-serif;
                 text-align: center;
                 padding: {
-                    bottom: 22px;
+                    bottom: 15px;
                 }
                 color: $fontColor2;
                 font:{
@@ -197,18 +204,17 @@ login-app {
                     display: flex;
                     align-items: center;
 
-
                     &:last-child{
                         margin: {
-                            bottom: 35px;
+                            bottom: 20px;
                         };
                     }
 
-                    svg-icon{
+                    svg-icon {
                         width: 36px;
                     }
 
-                    input{
+                    input {
                         height: 41px;
                         border: none;
                         flex-grow: 1;
@@ -217,7 +223,6 @@ login-app {
                         @include placeholder(){
                             color: $fontColor3;
                             font:{
-                                family: Lato;
                                 weight: $lightFontWeight;
                                 size: 14px;
                             }
@@ -242,14 +247,13 @@ login-app {
                     border-radius: 30px;
                     border: none;
                     font:{
-                        family: 'SourceSansPro', sans-serif;
                         size: 18px;
                         weight: $regularFontWeight;
                     }
                 }
             }
 
-            .forgot-pwd-wrapper{
+            .forgot-pwd-wrapper {
                 margin: {
                     bottom: 26px;
                 };
@@ -265,11 +269,11 @@ login-app {
                 position: relative;
                 text-align: center;
                 margin: {
-                    top: 24px;
-                    bottom: 24px;
+                    top: 20px;
+                    bottom: 20px;
                 }
 
-                &:before{
+                &:before {
                     content: '';
                     position: absolute;
                     top: 11px;
@@ -278,9 +282,9 @@ login-app {
                     border: 1px $borderColor2 solid;
                 }
 
-                .text{
+                .text {
                     display: inline-block;
-                    background: $bgColor1;
+                    background: $bgColor40;
                     position: relative;
                     z-index: 1;
                     padding: {
@@ -295,9 +299,9 @@ login-app {
                 }
             }
 
-            .social-auth-container{
+            .social-auth-container {
                 margin: {
-                    top: 28px;
+                    // top: 28px;
                     right: 44px;
                     left: 44px;
                 };
@@ -317,7 +321,6 @@ login-app {
         footer {
             text-align: center;
             .switch-student-educator {
-                font-family: 'SourceSansPro', sans-serif;
                 font-weight:normal;
                 h2 {
                     font-size: 20px;

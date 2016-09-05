@@ -2058,7 +2058,9 @@ oath-login-drv .btn-wrap {
     -ms-flex-align: center;
         align-items: center;
     cursor: pointer;
-    border-right: 1px solid #fff; }
+    border-right: 1px solid #cccccc; }
+    .md-open-menu-container md-menu-content.app-select-menu md-menu-item:last-child {
+      border-right: none; }
     .md-open-menu-container md-menu-content.app-select-menu md-menu-item .app-img-holder {
       width: calc(175px / 2);
       height: calc(55px / 2);
@@ -2078,7 +2080,9 @@ login-app .login-app {
   width: 100%;
   height: 100%;
   background-color: #f7f7f7;
-  background-image: url("assets/images/logo-pattern-bg.png"); }
+  background-image: url("assets/images/logo-pattern-bg.png");
+  font-family: 'SourceSansPro', sans-serif;
+  font-weight: 400; }
   login-app .login-app > header {
     margin: 20px auto;
     width: 1317px; }
@@ -2110,6 +2114,8 @@ login-app .login-app {
           background-image: url("assets/images/sat-name@2x.png"); }
         login-app .login-app > header .app-select .app-img-holder.act {
           background-image: url("assets/images/act-name@2x.png"); }
+        login-app .login-app > header .app-select .app-img-holder.toefl {
+          background-image: url("assets/images/toefl-name@2x.png"); }
       login-app .login-app > header .app-select .expand-menu {
         float: right; }
   login-app .login-app .main {
@@ -2130,24 +2136,38 @@ login-app .login-app {
       margin-top: 15px;
       text-align: center;
       color: #fff; }
+      login-app .login-app .main .go-to-login a,
+      login-app .login-app .main .go-to-signup a {
+        text-decoration: underline;
+        cursor: pointer; }
   login-app .login-app.educator .main {
     background-image: url("assets/images/login-teacher-bg@2x.jpg"); }
   login-app .login-app.student .main {
     background-image: url("assets/images/login-student-bg@2x.jpg"); }
+  login-app .login-app.sat .app-bg {
+    background: #0a9bad; }
+  login-app .login-app.sat .app-color {
+    color: #0a9bad; }
+  login-app .login-app.act .app-bg {
+    background: #87ca4d; }
+  login-app .login-app.act .app-color {
+    color: #87ca4d; }
+  login-app .login-app.toefl .app-bg {
+    background: #ff931e; }
+  login-app .login-app.toefl .app-color {
+    color: #ff931e; }
   login-app .login-app .form-container {
     width: 413px;
     background: #fdfdfd;
     border-radius: 30px;
-    font-family: Lato;
     padding-right: 33px;
     padding-left: 33px;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
     padding-top: 25px;
     box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.23); }
     login-app .login-app .form-container .title {
-      font-family: 'SourceSansPro', sans-serif;
       text-align: center;
-      padding-bottom: 22px;
+      padding-bottom: 15px;
       color: #161616;
       font-weight: 200;
       font-size: 25px; }
@@ -2167,7 +2187,7 @@ login-app .login-app {
       -ms-flex-align: center;
           align-items: center; }
       login-app .login-app .form-container .inputs-container .input-wrapper:last-child {
-        margin-bottom: 35px; }
+        margin-bottom: 20px; }
       login-app .login-app .form-container .inputs-container .input-wrapper svg-icon {
         width: 36px; }
       login-app .login-app .form-container .inputs-container .input-wrapper input {
@@ -2183,22 +2203,18 @@ login-app .login-app {
         color: #161616; }
         login-app .login-app .form-container .inputs-container .input-wrapper input ::-webkit-input-placeholder {
           color: #4f4d4d;
-          font-family: Lato;
           font-weight: 200;
           font-size: 14px; }
         login-app .login-app .form-container .inputs-container .input-wrapper input :-moz-placeholder {
           color: #4f4d4d;
-          font-family: Lato;
           font-weight: 200;
           font-size: 14px; }
         login-app .login-app .form-container .inputs-container .input-wrapper input ::-moz-placeholder {
           color: #4f4d4d;
-          font-family: Lato;
           font-weight: 200;
           font-size: 14px; }
         login-app .login-app .form-container .inputs-container .input-wrapper input :-ms-input-placeholder {
           color: #4f4d4d;
-          font-family: Lato;
           font-weight: 200;
           font-size: 14px; }
     login-app .login-app .form-container .submit-btn-wrapper {
@@ -2210,10 +2226,8 @@ login-app .login-app {
         color: white;
         border-radius: 30px;
         border: none;
-        background: #ff931e;
         font-size: 18px;
-        font-weight: 400;
-        box-shadow: 0px 3px 0px 0px #ec881c; }
+        font-weight: 400; }
     login-app .login-app .form-container .forgot-pwd-wrapper {
       margin-bottom: 26px;
       text-align: right;
@@ -2223,8 +2237,8 @@ login-app .login-app {
     login-app .login-app .form-container .divider {
       position: relative;
       text-align: center;
-      margin-top: 24px;
-      margin-bottom: 24px; }
+      margin-top: 20px;
+      margin-bottom: 20px; }
       login-app .login-app .form-container .divider:before {
         content: '';
         position: absolute;
@@ -2234,7 +2248,7 @@ login-app .login-app {
         border: 1px #e5e2e2 solid; }
       login-app .login-app .form-container .divider .text {
         display: inline-block;
-        background: white;
+        background: #fdfdfd;
         position: relative;
         z-index: 1;
         padding-right: 15px;
@@ -2243,12 +2257,25 @@ login-app .login-app {
         font-weight: 200;
         font-size: 14px; }
     login-app .login-app .form-container .social-auth-container {
-      margin-top: 28px;
       margin-right: 44px;
       margin-left: 44px;
       text-align: center; }
+    login-app .login-app .form-container.signup .signup-disclaimer {
+      text-align: center;
+      font-size: 10px;
+      color: #b7b7b7; }
+      login-app .login-app .form-container.signup .signup-disclaimer a {
+        text-decoration: none; }
   login-app .login-app footer {
     text-align: center; }
+    login-app .login-app footer .switch-student-educator {
+      font-weight: normal; }
+      login-app .login-app footer .switch-student-educator h2 {
+        font-size: 20px;
+        color: #4f4d4d; }
+      login-app .login-app footer .switch-student-educator a {
+        text-decoration: none;
+        font-size: 16px; }
 
 /* fonts size */
 /* general */

@@ -39,7 +39,7 @@
                         loadingProvider.startLoader = loadingProvider.fillLoader = false;
 
                         if (updateProfile) {
-                            LoginAppSrv.writeUserProfile({ profile: userProfile }, vm.appContext.id, true).then(function () {
+                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, true).then(function () {
                                 LoginAppSrv.redirectToPage(vm.appContext.id);
                             });
                         } else {

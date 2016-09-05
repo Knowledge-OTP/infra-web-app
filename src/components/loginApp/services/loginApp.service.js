@@ -122,14 +122,10 @@
             function _getUserProfile(appContext){
                 var appRef = _getAppRef(appContext);
                 var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid);
+                var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
                 userProfileRef.on('value', function(snapshot) {
-                    var userProfile = {};
-                    var snapshotVal = snapshot.val();
-                    if (snapshotVal && !angular.equals(snapshotVal, {})) {
-                        userProfile = snapshotVal.profile;
-                    }
+                    var userProfile = snapshot.val() || {};
                     deferred.resolve(userProfile);
                 }, function(err) {
                     $log.error('LoginAppSrv _getUserProfile: err=' + err);
@@ -141,16 +137,14 @@
             function _writeUserProfile(formData, appContext, customProfileFlag){
                 var appRef = _getAppRef(appContext);
                 var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid);
+                var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var profile;
                 if (customProfileFlag) {
                     profile = formData;
                 } else {
                     profile =  {
-                        profile: {
-                            email: formData.email,
-                            nickname: formData.nickname
-                        }
+                        email: formData.email,
+                        nickname: formData.nickname
                     };
                 }
                 return userProfileRef.update(profile).catch(function(err){
@@ -170,15 +164,15 @@
                 });
             };
 
-             LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext) {
-                 var refAuthDB = _getGlobalRef(appContext);
-                 var refDataDB = _getAppRef(appContext);
-                 var proms = [
-                     LoginAppSrv.createAuthWithCustomToken(refAuthDB, data.authToken),
-                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
-                 ];
-                 return $q.all(proms);
-             };
+            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext) {
+                var refAuthDB = _getGlobalRef(appContext);
+                var refDataDB = _getAppRef(appContext);
+                var proms = [
+                    LoginAppSrv.createAuthWithCustomToken(refAuthDB, data.authToken),
+                    LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
+                ];
+                return $q.all(proms);
+            };
 
             LoginAppSrv.APPS = APPS;
 
@@ -202,10 +196,10 @@
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
                     if (providerConfig) {
                         providerConfig.clientId = env[provider + 'AppId'];
-                        providerConfig.url = env.backendEndpoint + provider + '/code'
+                        providerConfig.url = env.backendEndpoint + provider + '/code';
                     }
                     if (provider === 'facebook') {
-                        providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/'
+                        providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
                     }
                 });
             };

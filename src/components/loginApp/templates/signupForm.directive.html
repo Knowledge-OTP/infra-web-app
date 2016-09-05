@@ -1,16 +1,20 @@
 <form novalidate class="form-container signup"
       ng-submit="signupSubmit()"
       translate-namespace="SIGNUP_FORM">
-    <div class="title" translate=".STUDENT.CREATE_ACCOUNT" ng-if="userContext===d.userContext.STUDENT"></div>
-    <div class="title" translate=".EDUCATOR.CREATE_ACCOUNT" ng-if="userContext===d.userContext.TEACHER"></div>
-    <!--<div class="social-auth-container">-->
-    <!--<div class="social-auth">-->
-    <!--<oath-login-drv providers="{facebook:true,google:true}"></oath-login-drv>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="divider">-->
-    <!--<div translate=".OR" class="text"></div>-->
-    <!--</div>-->
+    <div class="title" translate=".STUDENT.CREATE_ACCOUNT" ng-if="userContext===d.userContextObj.STUDENT"></div>
+    <div class="title" translate=".EDUCATOR.CREATE_ACCOUNT" ng-if="userContext===d.userContextObj.TEACHER"></div>
+    <div class="social-auth-container">
+        <div class="social-auth">
+            <oath-login-drv
+                app-context="d.appContext"
+                user-context="d.userContext"
+                providers="{facebook:true,google:true}">
+            </oath-login-drv>
+        </div>
+    </div>
+    <div class="divider">
+        <div translate=".OR" class="text"></div>
+    </div>
     <div class="inputs-container">
         <div class="input-wrapper">
             <svg-icon name="form-envelope"></svg-icon>
