@@ -102,7 +102,7 @@
             function _writeUserProfile(formData, appContext){
                 var appRef = _getAppRef(appContext);
                 var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid);
+                var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var profile = {
                     email: formData.email,
                     nickname: formData.nickname
