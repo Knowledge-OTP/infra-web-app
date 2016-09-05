@@ -5143,7 +5143,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'satellizer',
         'znk.infra.user'
     ]).config([
         'SvgIconSrvProvider',

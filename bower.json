@@ -1,29 +1,28 @@
 {
-  "name": "infra-web-app",
-  "version": "v1.0.0",
-  "authors": [
-    "Zinkerz"
-  ],
-  "dependencies": {
-    "infra": "https://github.com/Knowledge-OTP/infra.git#igor/complete-exercise-sh",
-    "ng-tags-input": "^3.0.0",
-    "angular-chart.js": "^0.10.2",
-    "v-accordion": "1.4.1",
-    "satellizer": "0.13.4"
-  },
-  "ignore": [
-    ".*",
-    "src",
-    "test",
-    "demo"
-  ],
-  "main": [
-    "dist/main.js",
-    "dist/main.css"
-  ],
-  "devDependencies": {
-    "es5-shim": "~4.4.1",
-    "mockfirebase": "~0.11.0",
-    "jasmine-jquery": "^2.1.1"
-  }
+    "name": "infra-web-app",
+    "version": "v1.0.0",
+    "authors": [
+        "Zinkerz"
+    ],
+    "dependencies": {
+        "infra": "https://github.com/Knowledge-OTP/infra.git#igor/complete-exercise-sh",
+        "ng-tags-input": "^3.0.0",
+        "angular-chart.js": "^0.10.2",
+        "v-accordion": "1.4.1"
+    },
+    "ignore": [
+        ".*",
+        "src",
+        "test",
+        "demo"
+    ],
+    "main": [
+        "dist/main.js",
+        "dist/main.css"
+    ],
+    "devDependencies": {
+        "es5-shim": "~4.4.1",
+        "mockfirebase": "~0.11.0",
+        "jasmine-jquery": "^2.1.1"
+    }
 }
