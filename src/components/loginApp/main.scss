@@ -92,6 +92,9 @@ login-app {
                     &.act {
                         background-image: url('assets/images/act-name@2x.png');
                     }
+                    &.toefl {
+                        background-image: url('assets/images/toefl-name@2x.png');
+                    }
                 }
                 .expand-menu {
                     float: right;
@@ -137,13 +140,16 @@ login-app {
             }
         }
         &.sat {
-            .app-color {  background: $bgColor5;  }
+            .app-bg {  background: $bgColor5;  }
+            .app-color {  color: $bgColor5;  }
         }
         &.act {
-            .app-color {  background: $bgColor7;  }
+            .app-bg {  background: $bgColor7;  }
+            .app-color {  color: $bgColor7;  }
         }
         &.toefl {
-            .app-color {  background: $bgColor2;  }
+            .app-bg {  background: $bgColor2;  }
+            .app-color {  color: $bgColor2;  }
         }
         .form-container {
             width: 413px;
@@ -228,7 +234,7 @@ login-app {
 
             .submit-btn-wrapper{
                 text-align: center;
-                button{
+                button {
                     box-sizing: border-box;
                     height: 43px;
                     width: 340px;
@@ -236,6 +242,7 @@ login-app {
                     border-radius: 30px;
                     border: none;
                     font:{
+                        family: 'SourceSansPro', sans-serif;
                         size: 18px;
                         weight: $regularFontWeight;
                     }
@@ -296,9 +303,31 @@ login-app {
                 };
                 text-align: center;
             }
+            &.signup {
+                .signup-disclaimer {
+                    text-align: center;
+                    font-size: 10px;
+                    color: $fontColor9;
+                    a {
+                        text-decoration: none;
+                    }
+                }
+            }
         }
         footer {
             text-align: center;
+            .switch-student-educator {
+                font-family: 'SourceSansPro', sans-serif;
+                font-weight:normal;
+                h2 {
+                    font-size: 20px;
+                    color: $fontColor3;
+                }
+                a {
+                    text-decoration: none;
+                    font-size: 16px;
+                }
+            }
         }
     }
 }

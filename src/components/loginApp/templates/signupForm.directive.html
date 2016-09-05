@@ -1,4 +1,4 @@
-<form novalidate class="form-container"
+<form novalidate class="form-container signup"
       ng-submit="signupSubmit()"
       translate-namespace="SIGNUP_FORM">
     <div class="title" translate=".STUDENT.CREATE_ACCOUNT" ng-if="userContext===d.userContext.STUDENT"></div>
@@ -35,8 +35,9 @@
         </div>
     </div>
     <div class="submit-btn-wrapper">
-        <button type="submit" translate=".SIGNUP" class="app-color"></button>
+        <button type="submit" translate=".SIGN_UP" class="app-bg"></button>
     </div>
+    <p class="signup-disclaimer" translate-values="{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}" translate=".DISCLAIMER"></p>
     <!--<div class="forgot-pwd-wrapper">-->
     <!--<span translate=".FORGOT_PWD"></span>-->
     <!--</div>-->

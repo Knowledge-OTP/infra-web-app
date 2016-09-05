@@ -36,6 +36,7 @@
                              user-context="d.userContext">
                 </signup-form>
                 <div class="go-to-login" ng-click="changeCurrentForm('login')">Log In</div>
+                <!--ALREADY_HAVE_ACCOUNT-->
             </div>
         </ng-switch>
         <!--<div ng-show="currentForm === 'login'" class="go-to-signup ng-hide" ng-click="currentForm = 'signup'">Sign Up</div>-->
@@ -43,13 +44,13 @@
     </div>
     <footer>
         <ng-switch on="currentUserContext">
-            <div ng-switch-when="teacher">
+            <div ng-switch-when="teacher" class="switch-student-educator">
                 <h2>Check out our App for Students</h2>
-                <a href="" ng-click="changeUserContext(d.userContextObj.STUDENT)">Check out Zinkerz tools for teachers</a>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.STUDENT)">Check out Zinkerz tools for teachers</a>
             </div>
-            <div ng-switch-when="student">
+            <div ng-switch-when="student" class="switch-student-educator">
                 <h2>Are you an educator?</h2>
-                <a href="" ng-click="changeUserContext(d.userContextObj.TEACHER)">Check out Zinkerz tools for teachers</a>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.TEACHER)">Check out Zinkerz tools for teachers</a>
             </div>
         </ng-switch>
     </footer>
