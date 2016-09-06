@@ -11,6 +11,17 @@
             'znk.infra.general',
             'znk.infra.user',
             'znk.infra.svgIcon'
+        ])
+        .config([
+            'SvgIconSrvProvider',
+            function (SvgIconSrvProvider) {
+                var svgMap = {
+                    'close-popup': 'components/feedback/svg/close-popup.svg',
+                    'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
+                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }
         ]);
 })(angular);
 
@@ -115,7 +126,7 @@
 
 
 angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/feedback/assets/svg/close-popup.svg",
+  $templateCache.put("components/feedback/svg/close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
     "<style type=\"text/css\">\n" +
@@ -130,7 +141,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/feedback/assets/svg/completed-v-feedback.svg",
+  $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
     "<style type=\"text/css\">\n" +
@@ -149,7 +160,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/feedback/assets/svg/feedback-icon.svg",
+  $templateCache.put("components/feedback/svg/feedback-icon.svg",
     "<svg version=\"1.1\"\n" +
     "	 xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"0 0 116.4 115.7\"\n" +

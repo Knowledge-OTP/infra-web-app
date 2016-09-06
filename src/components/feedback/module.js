@@ -11,5 +11,16 @@
             'znk.infra.general',
             'znk.infra.user',
             'znk.infra.svgIcon'
+        ])
+        .config([
+            'SvgIconSrvProvider',
+            function (SvgIconSrvProvider) {
+                var svgMap = {
+                    'close-popup': 'components/feedback/svg/close-popup.svg',
+                    'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
+                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }
         ]);
 })(angular);
