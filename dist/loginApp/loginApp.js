@@ -332,6 +332,29 @@
         studentAppName: 'act_app',
         dashboardAppName: 'act_dashboard'
     };
+    ALL_ENV_CONFIG.dev[APPS.TOEFL.id] = {
+        fbDataEndPoint: 'https://znk-toefl-dev.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
+        facebookAppId: '1801767253393534',
+        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
+        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'toefl_app',
+        studentAppName: 'toefl_app',
+        dashboardAppName: 'toefl_dashboard'
+    };
+    ALL_ENV_CONFIG.prod[APPS.TOEFL.id] = {
+        fbDataEndPoint: 'https://znk-toefl-prod.firebaseio.com/',
+        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
+        facebookAppId: '1658075334429394',
+        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
+        redirectFacebook: '//www.zinkerz.com/toefl-test-prep/',
+        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
+        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
+        firebaseAppScopeName: 'toefl_app',
+        studentAppName: 'toefl_app',
+        dashboardAppName: 'toefl_dashboard'
+    };
     /**
      * TODO: add toefl dev and prod vars
      */
