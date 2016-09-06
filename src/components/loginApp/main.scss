@@ -48,29 +48,27 @@ login-app {
         position: fixed;
         width: 100%;
         height: 100%;
-        background-color: #f7f7f7;
-        background-image: url('assets/images/logo-pattern-bg.png');
+        background: {
+            color: #f7f7f7;
+            image: url('assets/images/logo-pattern-bg.png');
+        };
         font: {
             family: 'SourceSansPro', sans-serif;
             weight: $regularFontWeight;
         }
         & > header {
+            width: 1366px;
             margin: 20px auto;
-            width: 1317px;
-            //md-menu {
-            //    .md-button {
-            //        &.md-icon-button {
-            //            width: auto;
-            //        }
-            //    }
-            //}
             .logo {
                 width: 76px;
                 height: 36px;
-                background-image: url('assets/images/zinkerz_logo.png');
-                background-repeat: no-repeat;
-                background-size: contain;
+                margin-left: 27px;
                 float:left;
+                background: {
+                    image: url('assets/images/zinkerz_logo.png');
+                    repeat: no-repeat;
+                    size: contain;
+                };
             }
             .app-select {
                 text-align: center;
@@ -113,9 +111,11 @@ login-app {
             height: 513px;
             margin: 0 auto;
             position: relative;
-            background-size: auto 100%;
-            background-repeat: no-repeat;
-            background-position: center center;
+            background: {
+                size: auto 100%;
+                repeat: no-repeat;
+                position: center center;
+            };
 
             .login-container,
             .signup-container {
@@ -161,6 +161,66 @@ login-app {
         &.toefl {
             .app-bg {  background: $bgColor2;  }
             .app-color {  color: $bgColor2;  }
+        }
+        .social-auth-container {
+            margin: {
+                // top: 28px;
+                right: 44px;
+                left: 44px;
+            };
+            text-align: center;
+            oath-login-drv {
+                .btn-wrap {
+                    border-radius: 25px;
+                    overflow: hidden;
+                    height: 42px;
+
+                    .facebook-btn,
+                    .gplus-btn {
+                        width:50%;
+                        height:100%;
+                        color: $bgColor3;
+                        float:left;
+                        padding-left: 25px;
+                        cursor: pointer;
+                        border: none;
+                        span {
+                            display: block;
+                            text-indent: -25px;
+                        }
+                    }
+
+                    .facebook-btn {
+                        background-color: $facebookColor;
+                        line-height: 42px;
+                        svg-icon[name="facebook-icon"] {
+                            float:left;
+                            margin-top: 5px;
+                            svg {
+                                width: 10px;
+                                fill: $bgColor3;
+                            }
+                        }
+                    }
+
+                    .gplus-btn {
+                        background-color: $gplusColor;
+                        line-height: 42px;
+                        svg-icon[name="google-icon"] {
+                            float:left;
+                            margin-top: 5px;
+                            svg {
+                                width: 21px;
+                                fill: $bgColor3;
+                            }
+                        }
+                    }
+
+                    &.reset-btn{
+                        margin-top: 20px;
+                    }
+                }
+            }
         }
         .form-container {
             width: 413px;
@@ -250,6 +310,9 @@ login-app {
                         size: 18px;
                         weight: $regularFontWeight;
                     }
+                    &:focus {
+                        outline: none;
+                    }
                 }
             }
 
@@ -299,66 +362,6 @@ login-app {
                 }
             }
 
-            .social-auth-container {
-                margin: {
-                    // top: 28px;
-                    right: 44px;
-                    left: 44px;
-                };
-                text-align: center;
-                oath-login-drv {
-                    .btn-wrap {
-                        border-radius: 25px;
-                        overflow: hidden;
-                        height: 42px;
-
-                        .facebook-btn,
-                        .gplus-btn {
-                            width:50%;
-                            height:100%;
-                            color: $bgColor3;
-                            float:left;
-                            padding-left: 25px;
-                            cursor: pointer;
-                            border: none;
-                            span {
-                                display: block;
-                                text-indent: -25px;
-                            }
-                        }
-
-                        .facebook-btn {
-                            background-color: $facebookColor;
-                            line-height: 42px;
-                            svg-icon[name="facebook-icon"] {
-                                float:left;
-                                margin-top: 5px;
-                                svg {
-                                    width: 10px;
-                                    fill: $bgColor3;
-                                }
-                            }
-                        }
-
-                        .gplus-btn {
-                            background-color: $gplusColor;
-                            line-height: 42px;
-                            svg-icon[name="google-icon"] {
-                                float:left;
-                                margin-top: 5px;
-                                svg {
-                                    width: 21px;
-                                    fill: $bgColor3;
-                                }
-                            }
-                        }
-
-                        &.reset-btn{
-                            margin-top: 20px;
-                        }
-                    }
-                }
-            }
             &.signup {
                 .signup-disclaimer {
                     text-align: center;

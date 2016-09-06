@@ -89,15 +89,16 @@ login-app .login-app {
   font-family: 'SourceSansPro', sans-serif;
   font-weight: 400; }
   login-app .login-app > header {
-    margin: 20px auto;
-    width: 1317px; }
+    width: 1366px;
+    margin: 20px auto; }
     login-app .login-app > header .logo {
       width: 76px;
       height: 36px;
+      margin-left: 27px;
+      float: left;
       background-image: url("assets/images/zinkerz_logo.png");
       background-repeat: no-repeat;
-      background-size: contain;
-      float: left; }
+      background-size: contain; }
     login-app .login-app > header .app-select {
       text-align: center; }
       login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
@@ -161,6 +162,47 @@ login-app .login-app {
     background: #ff931e; }
   login-app .login-app.toefl .app-color {
     color: #ff931e; }
+  login-app .login-app .social-auth-container {
+    margin-right: 44px;
+    margin-left: 44px;
+    text-align: center; }
+    login-app .login-app .social-auth-container oath-login-drv .btn-wrap {
+      border-radius: 25px;
+      overflow: hidden;
+      height: 42px; }
+      login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn,
+      login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn {
+        width: 50%;
+        height: 100%;
+        color: #ffffff;
+        float: left;
+        padding-left: 25px;
+        cursor: pointer;
+        border: none; }
+        login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn span,
+        login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn span {
+          display: block;
+          text-indent: -25px; }
+      login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn {
+        background-color: #369;
+        line-height: 42px; }
+        login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
+          float: left;
+          margin-top: 5px; }
+          login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] svg {
+            width: 10px;
+            fill: #ffffff; }
+      login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn {
+        background-color: #df4a31;
+        line-height: 42px; }
+        login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
+          float: left;
+          margin-top: 5px; }
+          login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] svg {
+            width: 21px;
+            fill: #ffffff; }
+      login-app .login-app .social-auth-container oath-login-drv .btn-wrap.reset-btn {
+        margin-top: 20px; }
   login-app .login-app .form-container {
     width: 413px;
     background: #fdfdfd;
@@ -233,6 +275,8 @@ login-app .login-app {
         border: none;
         font-size: 18px;
         font-weight: 400; }
+        login-app .login-app .form-container .submit-btn-wrapper button:focus {
+          outline: none; }
     login-app .login-app .form-container .forgot-pwd-wrapper {
       margin-bottom: 26px;
       text-align: right;
@@ -261,47 +305,6 @@ login-app .login-app {
         color: #c2c2c2;
         font-weight: 200;
         font-size: 14px; }
-    login-app .login-app .form-container .social-auth-container {
-      margin-right: 44px;
-      margin-left: 44px;
-      text-align: center; }
-      login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap {
-        border-radius: 25px;
-        overflow: hidden;
-        height: 42px; }
-        login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .facebook-btn,
-        login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .gplus-btn {
-          width: 50%;
-          height: 100%;
-          color: #ffffff;
-          float: left;
-          padding-left: 25px;
-          cursor: pointer;
-          border: none; }
-          login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .facebook-btn span,
-          login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .gplus-btn span {
-            display: block;
-            text-indent: -25px; }
-        login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .facebook-btn {
-          background-color: #369;
-          line-height: 42px; }
-          login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
-            float: left;
-            margin-top: 5px; }
-            login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] svg {
-              width: 10px;
-              fill: #ffffff; }
-        login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .gplus-btn {
-          background-color: #df4a31;
-          line-height: 42px; }
-          login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
-            float: left;
-            margin-top: 5px; }
-            login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] svg {
-              width: 21px;
-              fill: #ffffff; }
-        login-app .login-app .form-container .social-auth-container oath-login-drv .btn-wrap.reset-btn {
-          margin-top: 20px; }
     login-app .login-app .form-container.signup .signup-disclaimer {
       text-align: center;
       font-size: 10px;

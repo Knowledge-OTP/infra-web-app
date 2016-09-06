@@ -1,4 +1,4 @@
-<form novalidate class="form-container login" translate-namespace="LOGIN_FORM" ng-submit="loginSubmit()">
+<div class="form-container login" translate-namespace="LOGIN_FORM">
     <div class="title" translate="LOGIN_FORM.STUDENT.LOGIN" ng-if="userContext===d.userContextObj.STUDENT"></div>
     <div class="title" translate="LOGIN_FORM.EDUCATOR.LOGIN" ng-if="userContext===d.userContextObj.TEACHER"></div>
     <div class="social-auth-container">
@@ -13,26 +13,29 @@
     <div class="divider">
         <div translate=".OR" class="text"></div>
     </div>
-    <div class="inputs-container">
-        <div class="input-wrapper">
-            <svg-icon name="form-envelope"></svg-icon>
-            <input type="text"
-                   placeholder="{{'LOGIN_FORM.EMAIL' | translate}}"
-                   name="email"
-                   ng-model="d.loginFormData.email">
+    <form novalidate ng-submit="loginSubmit()">
+        <div class="inputs-container">
+            <div class="input-wrapper">
+                <svg-icon name="form-envelope"></svg-icon>
+                <input type="text"
+                       placeholder="{{'LOGIN_FORM.EMAIL' | translate}}"
+                       name="email"
+                       ng-model="d.loginFormData.email">
+            </div>
+            <div class="input-wrapper">
+                <svg-icon name="form-lock"></svg-icon>
+                <input type="password"
+                       placeholder="{{'LOGIN_FORM.PASSWORD' | translate}}"
+                       name="password"
+                       ng-model="d.loginFormData.password">
+            </div>
         </div>
-        <div class="input-wrapper">
-            <svg-icon name="form-lock"></svg-icon>
-            <input type="password"
-                   placeholder="{{'LOGIN_FORM.PASSWORD' | translate}}"
-                   name="password"
-                   ng-model="d.loginFormData.password">
+        <div class="submit-btn-wrapper">
+            <button type="submit" translate=".LOGIN_IN" class="app-bg" autofocus></button>
         </div>
-    </div>
-    <div class="submit-btn-wrapper">
-        <button type="submit" translate=".LOGIN_IN" class="app-bg"></button>
-    </div>
-    <!--<div class="forgot-pwd-wrapper">-->
+        <!--<div class="forgot-pwd-wrapper">-->
         <!--<span translate=".FORGOT_PWD"></span>-->
-    <!--</div>-->
-</form>
+        <!--</div>-->
+    </form>
+
+</div>
