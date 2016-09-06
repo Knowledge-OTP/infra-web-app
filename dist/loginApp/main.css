@@ -52,7 +52,7 @@ oath-login-drv .btn-wrap {
 
 @font-face {
   font-family: "SourceSansPro";
-  src: url("assets/fonts/SourceSansPro-Regular.otf");
+  src: url("/assets/fonts/SourceSansPro-Regular.otf");
   font-weight: normal;
   font-style: normal; }
 
@@ -74,18 +74,18 @@ oath-login-drv .btn-wrap {
       padding: 0;
       margin: 0 20px; }
       .md-open-menu-container md-menu-content.app-select-menu md-menu-item .app-img-holder.sat {
-        background-image: url("assets/images/sat-name@2x.png"); }
+        background-image: url("/assets/images/sat-name@2x.png"); }
       .md-open-menu-container md-menu-content.app-select-menu md-menu-item .app-img-holder.act {
-        background-image: url("assets/images/act-name@2x.png"); }
+        background-image: url("/assets/images/act-name@2x.png"); }
       .md-open-menu-container md-menu-content.app-select-menu md-menu-item .app-img-holder.toefl {
-        background-image: url("assets/images/toefl-name@2x.png"); }
+        background-image: url("/assets/images/toefl-name@2x.png"); }
 
 login-app .login-app {
   position: fixed;
   width: 100%;
   height: 100%;
   background-color: #f7f7f7;
-  background-image: url("assets/images/logo-pattern-bg.png");
+  background-image: url("/assets/images/logo-pattern-bg.png");
   font-family: 'SourceSansPro', sans-serif;
   font-weight: 400; }
   login-app .login-app > header {
@@ -96,7 +96,7 @@ login-app .login-app {
       height: 36px;
       margin-left: 27px;
       float: left;
-      background-image: url("assets/images/zinkerz_logo.png");
+      background-image: url("/assets/images/zinkerz_logo.png");
       background-repeat: no-repeat;
       background-size: contain; }
     login-app .login-app > header .app-select {
@@ -117,11 +117,11 @@ login-app .login-app {
         background-size: contain;
         float: left; }
         login-app .login-app > header .app-select .app-img-holder.sat {
-          background-image: url("assets/images/sat-name@2x.png"); }
+          background-image: url("/assets/images/sat-name@2x.png"); }
         login-app .login-app > header .app-select .app-img-holder.act {
-          background-image: url("assets/images/act-name@2x.png"); }
+          background-image: url("/assets/images/act-name@2x.png"); }
         login-app .login-app > header .app-select .app-img-holder.toefl {
-          background-image: url("assets/images/toefl-name@2x.png"); }
+          background-image: url("/assets/images/toefl-name@2x.png"); }
       login-app .login-app > header .app-select .expand-menu {
         float: right; }
   login-app .login-app .main {
@@ -147,9 +147,9 @@ login-app .login-app {
         text-decoration: underline;
         cursor: pointer; }
   login-app .login-app.educator .main {
-    background-image: url("assets/images/login-teacher-bg@2x.jpg"); }
+    background-image: url("/assets/images/login-teacher-bg@2x.jpg"); }
   login-app .login-app.student .main {
-    background-image: url("assets/images/login-student-bg@2x.jpg"); }
+    background-image: url("/assets/images/login-student-bg@2x.jpg"); }
   login-app .login-app.sat .app-bg {
     background: #0a9bad; }
   login-app .login-app.sat .app-color {
