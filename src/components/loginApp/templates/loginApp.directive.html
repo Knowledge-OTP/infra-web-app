@@ -6,7 +6,7 @@
         toefl: d.appContext === d.availableApps.TOEFL,
     }">
     <header>
-        <div class="logo"></div>
+        <a class="logo" href="//www.zinkerz.com"></a>
 
         <div class="app-select" ng-cloak>
             <md-menu md-offset="-100 80" md-no-ink>
@@ -26,11 +26,6 @@
     <div class="main">
         <ng-switch on="currentForm">
             <div class="login-container" ng-switch-when="login">
-                <!--<oath-login-drv-->
-                    <!--app-context="d.appContext"-->
-                    <!--user-context="d.userContext"-->
-                    <!--providers="{facebook:true,google:true}">-->
-                <!--</oath-login-drv>-->
                 <login-form app-context="d.appContext"
                             user-context="d.userContext">
                 </login-form>
@@ -41,11 +36,6 @@
                 </p>
             </div>
             <div class="signup-container" ng-switch-when="signup">
-                <!--<oath-login-drv-->
-                    <!--app-context="d.appContext"-->
-                    <!--user-context="d.userContext"-->
-                    <!--providers="{facebook:true,google:true}">-->
-                <!--</oath-login-drv>-->
                 <signup-form app-context="d.appContext"
                              user-context="d.userContext">
                 </signup-form>
@@ -65,7 +55,7 @@
             </div>
             <div ng-switch-when="student" class="switch-student-educator">
                 <h2>Are you an educator?</h2>
-                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.TEACHER)">Check out Zinkerz tools for teachers</a>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.TEACHER)">Sign Up for Zinkerz Test Prep</a>
             </div>
         </ng-switch>
     </footer>
