@@ -7,7 +7,7 @@
 
 @font-face {
     font-family:"SourceSansPro";
-    src:url("assets/fonts/SourceSansPro-Regular.otf");
+    src:url("/assets/fonts/SourceSansPro-Regular.otf");
     font-weight:normal;
     font-style:normal;
 }
@@ -30,13 +30,13 @@
                 padding: 0;
                 margin: 0 20px;
                 &.sat {
-                    background-image: url('assets/images/sat-name@2x.png');
+                    background-image: url('/assets/images/sat-name@2x.png');
                 }
                 &.act {
-                    background-image: url('assets/images/act-name@2x.png');
+                    background-image: url('/assets/images/act-name@2x.png');
                 }
                 &.toefl {
-                    background-image: url('assets/images/toefl-name@2x.png');
+                    background-image: url('/assets/images/toefl-name@2x.png');
                 }
             }
         }
@@ -50,7 +50,7 @@ login-app {
         height: 100%;
         background: {
             color: #f7f7f7;
-            image: url('assets/images/logo-pattern-bg.png');
+            image: url('/assets/images/logo-pattern-bg.png');
         };
         font: {
             family: 'SourceSansPro', sans-serif;
@@ -65,7 +65,7 @@ login-app {
                 margin-left: 27px;
                 float:left;
                 background: {
-                    image: url('assets/images/zinkerz_logo.png');
+                    image: url('/assets/images/zinkerz_logo.png');
                     repeat: no-repeat;
                     size: contain;
                 };
@@ -92,13 +92,13 @@ login-app {
                     background-size: contain;
                     float:left;
                     &.sat {
-                        background-image: url('assets/images/sat-name@2x.png');
+                        background-image: url('/assets/images/sat-name@2x.png');
                     }
                     &.act {
-                        background-image: url('assets/images/act-name@2x.png');
+                        background-image: url('/assets/images/act-name@2x.png');
                     }
                     &.toefl {
-                        background-image: url('assets/images/toefl-name@2x.png');
+                        background-image: url('/assets/images/toefl-name@2x.png');
                     }
                 }
                 .expand-menu {
@@ -142,12 +142,12 @@ login-app {
         }
         &.educator {
             .main {
-                background-image: url('assets/images/login-teacher-bg@2x.jpg');
+                background-image: url('/assets/images/login-teacher-bg@2x.jpg');
             }
         }
         &.student {
             .main {
-                background-image: url('assets/images/login-student-bg@2x.jpg');
+                background-image: url('/assets/images/login-student-bg@2x.jpg');
             }
         }
         &.sat {
