@@ -5553,17 +5553,19 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return deferred.promise;
             }
 
-            function _writeUserProfile(formData, appContext, customProfileFlag){
+            function _writeUserProfile(formData, appContext, customProfileFlag) {
                 var appRef = _getAppRef(appContext);
                 var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
+                var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
                 if (customProfileFlag) {
-                    profile = formData;
+                    profile = { profile: formData };
                 } else {
                     profile =  {
-                        email: formData.email,
-                        nickname: formData.nickname
+                        profile: {
+                            email: formData.email,
+                            nickname: formData.nickname
+                        }
                     };
                 }
                 return userProfileRef.update(profile).catch(function(err){
@@ -5572,6 +5574,10 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             }
 
             function _redirectToPage(appContext) {
+                if (!appContext) {
+                    $log.error('appContext is not defined!', appContext);
+                    return;
+                }
                 var appConfig = _getAppEnvConfig(appContext);
                 var appName = appConfig.firebaseAppScopeName.substr(0, appConfig.firebaseAppScopeName.indexOf('_'));
                 $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
@@ -5692,7 +5698,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext).then(function(){
-                                _redirectToPage();
+                                _redirectToPage(appContext);
                             });
                         });
                     }).catch(function (err) {
