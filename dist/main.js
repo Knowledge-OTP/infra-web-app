@@ -3344,7 +3344,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
+        angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
             bindings: {
                 pointsGetter: '&points',
                 typeGetter: '&type' // can be a subjectId or other type of id
