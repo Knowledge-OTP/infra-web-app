@@ -14,7 +14,8 @@
                 'form-envelope': 'components/loginApp/svg/form-envelope.svg',
                 'form-lock': 'components/loginApp/svg/form-lock.svg',
                 'facebook-icon': 'components/loginApp/svg/facebook-icon.svg',
-                'google-icon': 'components/loginApp/svg/google-icon.svg'
+                'google-icon': 'components/loginApp/svg/google-icon.svg',
+                'login-username-icon': 'components/loginApp/svg/login-username-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }

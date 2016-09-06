@@ -1,17 +1,20 @@
+$oathLoginDrvHeight: 37px;
 $facebookColor : #369;
+$facebookHoverColor : #2a547f;
 $gplusColor : #df4a31;
+$gplusHoverColor : #c5402a;
 
 oath-login-drv {
     .btn-wrap {
         border-radius: 25px;
         overflow: hidden;
-        height: 42px;
+        height: $oathLoginDrvHeight;
 
         .facebook-btn,
         .gplus-btn {
             width:50%;
             height:100%;
-            color: $bgColor2;
+            color: $bgColor3;
             float:left;
             padding-left: 25px;
             cursor: pointer;
@@ -19,41 +22,38 @@ oath-login-drv {
             span {
                 display: block;
                 text-indent: -25px;
+                font-size: 14px;
             }
         }
 
         .facebook-btn {
             background-color: $facebookColor;
-            line-height: 42px;
-
-            &:hover{
-                background-color: $bgColor10;
+            line-height: $oathLoginDrvHeight;
+            &:hover {
+                background-color: $facebookHoverColor;
             }
-
             svg-icon[name="facebook-icon"] {
                 float:left;
-                margin-top: 5px;
+                margin-top: 9px;
                 svg {
-                    width: 10px;
-                    fill: $bgColor2;
+                    width: 8px;
+                    fill: $bgColor3;
                 }
             }
         }
 
         .gplus-btn {
             background-color: $gplusColor;
-            line-height: 42px;
-
-            &:hover{
-                background-color: $bgColor54;
+            line-height: $oathLoginDrvHeight;
+            &:hover {
+                background-color: $gplusHoverColor;
             }
-
             svg-icon[name="google-icon"] {
                 float:left;
-                margin-top: 5px;
+                margin-top: 9px;
                 svg {
-                    width: 21px;
-                    fill: $bgColor2;
+                    width: 18px;
+                    fill: $bgColor3;
                 }
             }
         }

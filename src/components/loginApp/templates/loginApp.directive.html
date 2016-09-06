@@ -6,16 +6,20 @@
         toefl: d.appContext === d.availableApps.TOEFL,
     }">
     <header>
-        <a class="logo" href="//www.zinkerz.com"></a>
+        <div class="logo-wrapper">
+            <a class="logo" href="//www.zinkerz.com"></a>
+        </div>
 
         <div class="app-select" ng-cloak>
-            <md-menu md-offset="-100 80" md-no-ink>
+            <md-menu md-offset="-50 80" md-no-ink>
                 <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
                     <md-icon class="material-icons expand-menu">expand_more</md-icon>
                     <div class="app-img-holder {{d.appContext.className}}"></div>
                 </md-button>
                 <md-menu-content width="4" class="app-select-menu">
-                    <md-menu-item ng-repeat="app in d.availableApps track by app.id" ng-click="selectApp(app)">
+                    <md-menu-item ng-repeat="app in d.availableApps track by app.id"
+                                  ng-if="app.id!= 'TOEFL'"
+                                  ng-click="selectApp(app)">
                         <div class="app-img-holder {{app.className}}"></div>
                     </md-menu-item>
                 </md-menu-content>
@@ -30,8 +34,8 @@
                             user-context="d.userContext">
                 </login-form>
                 <p class="go-to-signup">
-                    <span translate="SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT" ng-if="d.userContext===d.userContextObj.STUDENT"></span>
-                    <span translate="SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
+                    <span translate="LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.STUDENT"></span>
+                    <span translate="LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
                     <a ng-click="changeCurrentForm('signup')">Sign Up</a>
                 </p>
             </div>
@@ -40,22 +44,36 @@
                              user-context="d.userContext">
                 </signup-form>
                 <p class="go-to-login">
-                    <span translate="LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.STUDENT"></span>
-                    <span translate="LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
+                    <span translate="SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT" ng-if="d.userContext===d.userContextObj.STUDENT"></span>
+                    <span translate="SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
                     <a ng-click="changeCurrentForm('login')">Log In</a>
                 </p>
             </div>
         </ng-switch>
+        <h2 class="banner-text">
+            <ng-switch on="currentUserContext">
+                <div ng-switch-when="teacher" class="switch-student-educator">
+                    <span translate="LOGIN_APP.SAT_EDUCATOR_TAGLINE" ng-if="d.appContext===d.availableApps.SAT"></span>
+                    <span translate="LOGIN_APP.ACT_EDUCATOR_TAGLINE" ng-if="d.appContext===d.availableApps.ACT"></span>
+                    <span translate="LOGIN_APP.TOEFL_EDUCATOR_TAGLINE" ng-if="d.appContext===d.availableApps.TOEFL"></span>
+                </div>
+                <div ng-switch-when="student" class="switch-student-educator">
+                    <span translate="LOGIN_APP.SAT_STUDENT_TAGLINE" ng-if="d.appContext===d.availableApps.SAT"></span>
+                    <span translate="LOGIN_APP.ACT_STUDENT_TAGLINE" ng-if="d.appContext===d.availableApps.ACT"></span>
+                    <span translate="LOGIN_APP.TOEFL_STUDENT_TAGLINE" ng-if="d.appContext===d.availableApps.TOEFL"></span>
+                </div>
+            </ng-switch>
+        </h2>
     </div>
     <footer>
         <ng-switch on="currentUserContext">
             <div ng-switch-when="teacher" class="switch-student-educator">
                 <h2>Check out our App for Students</h2>
-                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.STUDENT)">Check out Zinkerz tools for teachers</a>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.STUDENT)" translate="LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP"></a>
             </div>
             <div ng-switch-when="student" class="switch-student-educator">
                 <h2>Are you an educator?</h2>
-                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.TEACHER)">Sign Up for Zinkerz Test Prep</a>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.TEACHER)" translate="LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS"></a>
             </div>
         </ng-switch>
     </footer>
