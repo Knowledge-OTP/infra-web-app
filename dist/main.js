@@ -5254,7 +5254,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     userContext: '<'
                 },
                 link: function (scope) {
-                    //$translatePartialLoader.addPart('loginForm');
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,
@@ -5295,7 +5294,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     userContext: '<'
                 },
                 link: function (scope) {
-                    // $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,

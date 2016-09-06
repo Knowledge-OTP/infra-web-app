@@ -48,29 +48,27 @@ login-app {
         position: fixed;
         width: 100%;
         height: 100%;
-        background-color: #f7f7f7;
-        background-image: url('assets/images/logo-pattern-bg.png');
+        background: {
+            color: #f7f7f7;
+            image: url('assets/images/logo-pattern-bg.png');
+        };
         font: {
             family: 'SourceSansPro', sans-serif;
             weight: $regularFontWeight;
         }
         & > header {
+            width: 1366px;
             margin: 20px auto;
-            width: 1317px;
-            //md-menu {
-            //    .md-button {
-            //        &.md-icon-button {
-            //            width: auto;
-            //        }
-            //    }
-            //}
             .logo {
                 width: 76px;
                 height: 36px;
-                background-image: url('assets/images/zinkerz_logo.png');
-                background-repeat: no-repeat;
-                background-size: contain;
+                margin-left: 27px;
                 float:left;
+                background: {
+                    image: url('assets/images/zinkerz_logo.png');
+                    repeat: no-repeat;
+                    size: contain;
+                };
             }
             .app-select {
                 text-align: center;
@@ -113,9 +111,11 @@ login-app {
             height: 513px;
             margin: 0 auto;
             position: relative;
-            background-size: auto 100%;
-            background-repeat: no-repeat;
-            background-position: center center;
+            background: {
+                size: auto 100%;
+                repeat: no-repeat;
+                position: center center;
+            };
 
             .login-container,
             .signup-container {
@@ -309,6 +309,9 @@ login-app {
                     font:{
                         size: 18px;
                         weight: $regularFontWeight;
+                    }
+                    &:focus {
+                        outline: none;
                     }
                 }
             }

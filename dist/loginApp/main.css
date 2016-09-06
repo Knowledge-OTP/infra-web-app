@@ -89,15 +89,16 @@ login-app .login-app {
   font-family: 'SourceSansPro', sans-serif;
   font-weight: 400; }
   login-app .login-app > header {
-    margin: 20px auto;
-    width: 1317px; }
+    width: 1366px;
+    margin: 20px auto; }
     login-app .login-app > header .logo {
       width: 76px;
       height: 36px;
+      margin-left: 27px;
+      float: left;
       background-image: url("assets/images/zinkerz_logo.png");
       background-repeat: no-repeat;
-      background-size: contain;
-      float: left; }
+      background-size: contain; }
     login-app .login-app > header .app-select {
       text-align: center; }
       login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
@@ -274,6 +275,8 @@ login-app .login-app {
         border: none;
         font-size: 18px;
         font-weight: 400; }
+        login-app .login-app .form-container .submit-btn-wrapper button:focus {
+          outline: none; }
     login-app .login-app .form-container .forgot-pwd-wrapper {
       margin-bottom: 26px;
       text-align: right;

@@ -16,7 +16,6 @@
                     userContext: '<'
                 },
                 link: function (scope) {
-                    // $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,
