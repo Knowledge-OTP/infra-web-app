@@ -3766,7 +3766,8 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
             'znk.infra.auth',
             'znk.infra.analytics',
             'znk.infra.general',
-            'znk.infra.user'
+            'znk.infra.user',
+            'znk.infra.svgIcon'
         ]);
 })(angular);
 
@@ -3855,6 +3856,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 
         ["$mdDialog", function($mdDialog) {
             'ngInject';
+
             this.showFeedbackDialog = function () {
                 $mdDialog.show({
                     controller: 'feedbackCtrl',
