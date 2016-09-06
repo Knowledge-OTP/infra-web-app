@@ -3872,6 +3872,58 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 
 
 angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/feedback/assets/svg/close-popup.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#231F20;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/assets/svg/completed-v-feedback.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.completed-v-feedback-svg {width: 100%; height: auto;}\n" +
+    "	.completed-v-feedback-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.completed-v-feedback-svg .st1{fill:#CACBCC;}\n" +
+    "	.completed-v-feedback-svg .st2{display:none;fill:none;}\n" +
+    "	.completed-v-feedback-svg .st3{fill:#D1D2D2;}\n" +
+    "	.completed-v-feedback-svg .st4{fill:none;stroke:#FFFFFF;stroke-width:11.9321;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/assets/svg/feedback-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "	 xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 116.4 115.7\"\n" +
+    "	 xml:space=\"preserve\" class=\"feedback-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.feedback-icon-svg {width: 100%; height: auto;}\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<path d=\"M116.4,92.8C97.8,76.9,76.5,69.3,51.6,71.4c0-16.4,0-33,0-51C75.3,20.6,97.4,15,116.4,0C116.4,30.9,116.4,61.9,116.4,92.8z\n" +
+    "		\"/>\n" +
+    "	<path d=\"M0,32.7C5.4,22.9,13.6,19,24.7,20.2c5.7,0.6,11.4,0.1,17.9,0.1c0,16.7,0,33.1,0,50.4C27.8,68.7,11,77.1,0,60\n" +
+    "		C0,50.9,0,41.8,0,32.7z\"/>\n" +
+    "	<path d=\"M23.3,115.7c-9.8-8.4-6.8-19.7-6.8-30.3c0-1,19.8-3.1,26.1-1.3c3,0.8,1.2,24.5,0.6,31.6C36.6,115.7,30,115.7,23.3,115.7z\"\n" +
+    "		/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/feedback/templates/feedback.template.html",
     "<div class=\"feedback-dialog\">\n" +
     "    <md-dialog class=\"base base-border-radius feedback-container\" translate-namespace=\"FEEDBACK_POPUP\">\n" +
