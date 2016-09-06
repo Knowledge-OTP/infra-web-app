@@ -3832,8 +3832,9 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
     'use strict';
 
     angular.module('znk.infra-web-app.feedback').directive('feedback',
-        ["feedbackSrv", function(feedbackSrv) {
+        ["feedbackSrv", "$translatePartialLoader", function(feedbackSrv, $translatePartialLoader) {
             'ngInject';
+            $translatePartialLoader.addPart('feedback');
 
             var directive = {
                 restrict: 'E',

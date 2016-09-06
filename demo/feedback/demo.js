@@ -1,9 +1,6 @@
 (function(angular) {
     'use strict';
     angular.module('demo', ['znk.infra-web-app.feedback'])
-        .run(function ($translatePartialLoader) {
-            $translatePartialLoader.addPart('feedback');
-        })
         .constant('ENV', {
             firebaseAppScopeName: "demo_app",
             fbDataEndPoint: "https://sat-dev.firebaseio.com/",
