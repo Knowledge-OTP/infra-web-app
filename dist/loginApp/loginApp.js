@@ -105,9 +105,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('loginForm', [
-        '$translatePartialLoader', 'LoginAppSrv',
-        function ($translatePartialLoader, LoginAppSrv) {
+    angular.module('znk.infra-web-app.loginApp').directive('loginForm',
+        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+            'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
                 restrict: 'E',
@@ -124,18 +124,18 @@
 
                     scope.loginSubmit = function(){
                         if (!scope.d.loginFormData) {
-                            window.alert('form is empty!');
+                            $window.alert('form is empty!');
                             return;
                         }
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
                             console.error(err);
-                            window.alert(err);
+                            $window.alert(err);
                         });
                     };
                 }
             };
-        }
-    ]);
+        }]
+    );
 })(angular);
 
 /**
@@ -145,9 +145,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('signupForm', [
-        '$translatePartialLoader', 'LoginAppSrv', '$timeout', '$translate', '$log',
-        function ($translatePartialLoader, LoginAppSrv) {
+    angular.module('znk.infra-web-app.loginApp').directive('signupForm',
+        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+            'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
                 restrict: 'E',
@@ -164,18 +164,18 @@
 
                     scope.signupSubmit = function(){
                         if (!scope.d.signupFormData) {
-                            window.alert('form is empty!');
+                            $window.alert('form is empty!');
                             return;
                         }
                         LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
                             console.error(err);
-                            window.alert(err);
+                            $window.alert(err);
                         });
                     };
                 }
             };
-        }
-    ]);
+        }]
+    );
 })(angular);
 
 
@@ -641,7 +641,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
     "    }\">\n" +
     "    <header>\n" +
-    "        <a class=\"logo\" href=\"http://www.zinkerz.com\"></a>\n" +
+    "        <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
     "\n" +
     "        <div class=\"app-select\" ng-cloak>\n" +
     "            <md-menu md-offset=\"-100 80\" md-no-ink>\n" +
