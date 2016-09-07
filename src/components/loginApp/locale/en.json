@@ -7,7 +7,9 @@
         "ACT_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>ACT® desktop app for educators.",
         "TOEFL_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>TOEFL® desktop app for educators.",
         "SIGN_UP_FOR_ZINKERZ_TEST_PREP": "Sign Up for Zinkerz Test Prep",
-        "CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS": "Check out Zinkerz tools for teachers"
+        "CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS": "Check out Zinkerz tools for teachers",
+        "ARE_YOU_AN_EDUCATOR": "Are you an educator?",
+        "CHECK_OUT_OUR_APP_FOR_STUDENTS": "Check out our App for Students"
     },
     "LOGIN_FORM": {
         "LOGIN": "Login",

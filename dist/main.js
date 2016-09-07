@@ -5152,7 +5152,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 'form-envelope': 'components/loginApp/svg/form-envelope.svg',
                 'form-lock': 'components/loginApp/svg/form-lock.svg',
                 'facebook-icon': 'components/loginApp/svg/facebook-icon.svg',
-                'google-icon': 'components/loginApp/svg/google-icon.svg'
+                'google-icon': 'components/loginApp/svg/google-icon.svg',
+                'login-username-icon': 'components/loginApp/svg/login-username-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -5167,9 +5168,9 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('loginApp', [
-        '$translatePartialLoader', 'LoginAppSrv', '$location',
-        function ($translatePartialLoader, LoginAppSrv, $location) {
+    angular.module('znk.infra-web-app.loginApp').directive('loginApp',
+        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document) {
+            'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
@@ -5230,10 +5231,20 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         $location.search('app', null);
                         $location.search('state', null);
                     }
+
+                    //catching $mdMenuOpen event emitted from angular-material.js
+                    scope.$on('$mdMenuOpen', function() {
+                        $timeout(function () {
+                            //getting menu content container by tag id from html
+                            var menuContentContainer = angular.element($document[0].getElementById('app-select-menu'));
+                            // Using parent() method to get parent warper with .md-open-menu-container class and adding custom class.
+                            menuContentContainer.parent().addClass('app-select-menu-open');
+                        });
+                    });
                 }
             };
-        }
-    ]);
+        }]
+    );
 })(angular);
 
 /**
@@ -5257,12 +5268,12 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,
-                        userContextObj: LoginAppSrv.USER_CONTEXT,
+                        userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.loginSubmit = function(){
+                    scope.loginSubmit = function(loginForm){
                         if (!scope.d.loginFormData) {
-                            $window.alert('form is empty!');
+                            $window.alert('form is empty!', loginForm);
                             return;
                         }
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
@@ -5300,9 +5311,9 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.signupSubmit = function(){
+                    scope.signupSubmit = function(signupForm){
                         if (!scope.d.signupFormData) {
-                            $window.alert('form is empty!');
+                            $window.alert('form is empty!', signupForm);
                             return;
                         }
                         LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
@@ -5573,13 +5584,19 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 });
             }
 
-            function _redirectToPage(appContext) {
+            function _redirectToPage(appContext, userContext) {
                 if (!appContext) {
+                    /**
+                     * TODO: remove this check and write a new function appContextGetter that will do this check every time its called
+                     */
                     $log.error('appContext is not defined!', appContext);
                     return;
                 }
                 var appConfig = _getAppEnvConfig(appContext);
                 var appName = appConfig.firebaseAppScopeName.substr(0, appConfig.firebaseAppScopeName.indexOf('_'));
+                if (userContext === USER_CONTEXT.TEACHER) {
+                    appName = appName + '-educator';
+                }
                 $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
             }
 
@@ -5807,6 +5824,29 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "</g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/loginApp/svg/login-username-icon.svg",
+    "<svg\n" +
+    "    class=\"login-username-icon-svg\"\n" +
+    "    x=\"0px\" y=\"0px\"\n" +
+    "    viewBox=\"0 0 155.5 155.1\"\n" +
+    "    style=\"enable-background:new 0 0 155.5 155.1;\">\n" +
+    "    <style>\n" +
+    "        .login-username-icon-svg{\n" +
+    "        width: 20px;\n" +
+    "        stroke: #CACACA;\n" +
+    "        fill: none;\n" +
+    "        stroke-width: 10;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <circle class=\"st0\" cx=\"77.7\" cy=\"40.3\" r=\"37.8\"/>\n" +
+    "        <path class=\"st0\" d=\"M77.7,152.6h68.5c4,0,7.2-3.5,6.7-7.5c-0.7-6.2-2.3-14.2-3.7-18.2c-8.5-23.7-28.7-30.4-36.3-32.1\n" +
+    "		c-1.8-0.4-3.6,0-5.1,0.9c-15.9,10.1-44.2,10.1-60,0c-1.5-1-3.4-1.3-5.1-0.9c-7.6,1.7-27.8,8.3-36.3,32.1c-1.5,4.1-3,12-3.7,18.2\n" +
+    "		c-0.5,4,2.7,7.5,6.7,7.5H77.7z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/loginApp/templates/loginApp.directive.html",
     "<div class=\"login-app\" ng-class=\"{\n" +
     "        student: d.userContext === d.userContextObj.STUDENT,\n" +
@@ -5816,16 +5856,23 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
     "    }\">\n" +
     "    <header>\n" +
-    "        <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
+    "        <div class=\"logo-wrapper\">\n" +
+    "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
+    "        </div>\n" +
     "\n" +
     "        <div class=\"app-select\" ng-cloak>\n" +
-    "            <md-menu md-offset=\"-100 80\" md-no-ink>\n" +
-    "                <md-button aria-label=\"Open App Select Menu\" class=\"md-icon-button\" ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
+    "            <md-menu md-offset=\"-50 80\" md-no-ink>\n" +
+    "                <md-button aria-label=\"Open App Select Menu\"\n" +
+    "                           aria-owns=\"custom-class\"\n" +
+    "                           class=\"md-icon-button\"\n" +
+    "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
     "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
     "                    <div class=\"app-img-holder {{d.appContext.className}}\"></div>\n" +
     "                </md-button>\n" +
-    "                <md-menu-content width=\"4\" class=\"app-select-menu\">\n" +
-    "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\" ng-click=\"selectApp(app)\">\n" +
+    "                <md-menu-content id=\"app-select-menu\">\n" +
+    "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
+    "                                  ng-if=\"app.id!= 'TOEFL'\"\n" +
+    "                                  ng-click=\"selectApp(app)\">\n" +
     "                        <div class=\"app-img-holder {{app.className}}\"></div>\n" +
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
@@ -5840,9 +5887,9 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                            user-context=\"d.userContext\">\n" +
     "                </login-form>\n" +
     "                <p class=\"go-to-signup\">\n" +
-    "                    <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('signup')\">Sign Up</a>\n" +
+    "                    <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                    <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                    <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
     "                </p>\n" +
     "            </div>\n" +
     "            <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
@@ -5850,22 +5897,36 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                             user-context=\"d.userContext\">\n" +
     "                </signup-form>\n" +
     "                <p class=\"go-to-login\">\n" +
-    "                    <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('login')\">Log In</a>\n" +
+    "                    <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                    <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                    <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
     "                </p>\n" +
     "            </div>\n" +
     "        </ng-switch>\n" +
+    "        <h2 class=\"banner-text\">\n" +
+    "            <ng-switch on=\"currentUserContext\">\n" +
+    "                <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                    <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                    <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                    <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                </div>\n" +
+    "                <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                    <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                    <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                    <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                </div>\n" +
+    "            </ng-switch>\n" +
+    "        </h2>\n" +
     "    </div>\n" +
     "    <footer>\n" +
     "        <ng-switch on=\"currentUserContext\">\n" +
     "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                <h2>Check out our App for Students</h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\">Check out Zinkerz tools for teachers</a>\n" +
+    "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\" translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
     "            </div>\n" +
     "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                <h2>Are you an educator?</h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\">Sign Up for Zinkerz Test Prep</a>\n" +
+    "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\" translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
     "            </div>\n" +
     "        </ng-switch>\n" +
     "    </footer>\n" +
@@ -5887,7 +5948,9 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"divider\">\n" +
     "        <div translate=\".OR\" class=\"text\"></div>\n" +
     "    </div>\n" +
-    "    <form novalidate ng-submit=\"loginSubmit()\">\n" +
+    "    <form novalidate\n" +
+    "          name=\"loginform\"\n" +
+    "          ng-submit=\"loginSubmit(loginform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
     "            <div class=\"input-wrapper\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
@@ -5901,15 +5964,19 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
     "                       name=\"password\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       ng-required=\"true\"\n" +
     "                       ng-model=\"d.loginFormData.password\">\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
     "            <button type=\"submit\" translate=\".LOGIN_IN\" class=\"app-bg\" autofocus></button>\n" +
     "        </div>\n" +
-    "        <!--<div class=\"forgot-pwd-wrapper\">-->\n" +
-    "        <!--<span translate=\".FORGOT_PWD\"></span>-->\n" +
-    "        <!--</div>-->\n" +
+    "        <div class=\"forgot-pwd-wrapper\">\n" +
+    "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
+    "        </div>\n" +
     "    </form>\n" +
     "\n" +
     "</div>\n" +
@@ -5961,10 +6028,11 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div translate=\".OR\" class=\"text\"></div>\n" +
     "    </div>\n" +
     "    <form novalidate\n" +
-    "          ng-submit=\"signupSubmit()\">\n" +
+    "          name=\"signupform\"\n" +
+    "          ng-submit=\"signupSubmit(signupform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
     "            <div class=\"input-wrapper\">\n" +
-    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
     "                <input type=\"text\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
     "                       name=\"nickname\"\n" +
@@ -5989,9 +6057,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            <button type=\"submit\" translate=\".SIGN_UP\" class=\"app-bg\" autofocus></button>\n" +
     "        </div>\n" +
     "        <p class=\"signup-disclaimer\" translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\" translate=\".DISCLAIMER\"></p>\n" +
-    "        <!--<div class=\"forgot-pwd-wrapper\">-->\n" +
-    "        <!--<span translate=\".FORGOT_PWD\"></span>-->\n" +
-    "        <!--</div>-->\n" +
     "    </form>\n" +
     "</div>\n" +
     "");

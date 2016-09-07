@@ -14,7 +14,8 @@
         <div translate=".OR" class="text"></div>
     </div>
     <form novalidate
-          ng-submit="signupSubmit()">
+          name="signupform"
+          ng-submit="signupSubmit(signupform)">
         <div class="inputs-container">
             <div class="input-wrapper">
                 <svg-icon name="login-username-icon"></svg-icon>
@@ -39,7 +40,7 @@
             </div>
         </div>
         <div class="submit-btn-wrapper">
-            <button type="submit" translate=".SIGN_UP" class="app-bg" autofocus ng-disabled="true"></button>
+            <button type="submit" translate=".SIGN_UP" class="app-bg" autofocus></button>
         </div>
         <p class="signup-disclaimer" translate-values="{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}" translate=".DISCLAIMER"></p>
     </form>

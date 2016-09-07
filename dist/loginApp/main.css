@@ -11,12 +11,12 @@
 oath-login-drv .btn-wrap {
   border-radius: 25px;
   overflow: hidden;
-  height: 42px; }
+  height: 37px; }
   oath-login-drv .btn-wrap .facebook-btn,
   oath-login-drv .btn-wrap .gplus-btn {
     width: 50%;
     height: 100%;
-    color: #ff931e;
+    color: #ffffff;
     float: left;
     padding-left: 25px;
     cursor: pointer;
@@ -24,29 +24,30 @@ oath-login-drv .btn-wrap {
     oath-login-drv .btn-wrap .facebook-btn span,
     oath-login-drv .btn-wrap .gplus-btn span {
       display: block;
-      text-indent: -25px; }
+      text-indent: -25px;
+      font-size: 14px; }
   oath-login-drv .btn-wrap .facebook-btn {
     background-color: #369;
-    line-height: 42px; }
+    line-height: 37px; }
     oath-login-drv .btn-wrap .facebook-btn:hover {
-      background-color: #0a8999; }
+      background-color: #2a547f; }
     oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
       float: left;
-      margin-top: 5px; }
+      margin-top: 9px; }
       oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] svg {
-        width: 10px;
-        fill: #ff931e; }
+        width: 8px;
+        fill: #ffffff; }
   oath-login-drv .btn-wrap .gplus-btn {
     background-color: #df4a31;
-    line-height: 42px; }
+    line-height: 37px; }
     oath-login-drv .btn-wrap .gplus-btn:hover {
-      background-color: #B33520; }
+      background-color: #c5402a; }
     oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
       float: left;
-      margin-top: 5px; }
+      margin-top: 9px; }
       oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] svg {
-        width: 21px;
-        fill: #ff931e; }
+        width: 18px;
+        fill: #ffffff; }
   oath-login-drv .btn-wrap.reset-btn {
     margin-top: 20px; }
 
@@ -56,28 +57,42 @@ oath-login-drv .btn-wrap {
   font-weight: normal;
   font-style: normal; }
 
-.md-open-menu-container md-menu-content.app-select-menu {
+@font-face {
+  font-family: "SourceSansPro-Light";
+  src: url("assets/fonts/SourceSansPro-Light.otf");
+  font-weight: normal;
+  font-style: normal; }
+
+.md-open-menu-container.app-select-menu-open {
+  border-radius: 20px;
+  overflow: hidden; }
+
+.md-open-menu-container md-menu-content#app-select-menu {
   -ms-flex-direction: row;
-      flex-direction: row; }
-  .md-open-menu-container md-menu-content.app-select-menu md-menu-item {
+      flex-direction: row;
+  padding: 8px 20px; }
+  .md-open-menu-container md-menu-content#app-select-menu md-menu-item {
     -ms-flex-align: center;
         align-items: center;
     cursor: pointer;
+    padding-right: 15px;
+    margin-right: 15px;
     border-right: 1px solid #cccccc; }
-    .md-open-menu-container md-menu-content.app-select-menu md-menu-item:last-child {
-      border-right: none; }
-    .md-open-menu-container md-menu-content.app-select-menu md-menu-item .app-img-holder {
+    .md-open-menu-container md-menu-content#app-select-menu md-menu-item:last-child {
+      border-right: none;
+      margin-right: 0;
+      padding-right: 0; }
+    .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder {
       width: calc(175px / 2);
       height: calc(55px / 2);
       background-repeat: no-repeat;
       background-size: contain;
-      padding: 0;
-      margin: 0 20px; }
-      .md-open-menu-container md-menu-content.app-select-menu md-menu-item .app-img-holder.sat {
+      padding: 0; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
         background-image: url("assets/images/sat-name@2x.png"); }
-      .md-open-menu-container md-menu-content.app-select-menu md-menu-item .app-img-holder.act {
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
         background-image: url("assets/images/act-name@2x.png"); }
-      .md-open-menu-container md-menu-content.app-select-menu md-menu-item .app-img-holder.toefl {
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
         background-image: url("assets/images/toefl-name@2x.png"); }
 
 login-app .login-app {
@@ -91,14 +106,15 @@ login-app .login-app {
   login-app .login-app > header {
     width: 1366px;
     margin: 20px auto; }
-    login-app .login-app > header .logo {
-      width: 76px;
-      height: 36px;
-      margin-left: 27px;
-      float: left;
-      background-image: url("assets/images/zinkerz_logo.png");
-      background-repeat: no-repeat;
-      background-size: contain; }
+    login-app .login-app > header .logo-wrapper {
+      margin-left: 27px; }
+      login-app .login-app > header .logo-wrapper .logo {
+        width: 76px;
+        height: 36px;
+        float: left;
+        background-image: url("assets/images/zinkerz_logo.png");
+        background-repeat: no-repeat;
+        background-size: contain; }
     login-app .login-app > header .app-select {
       text-align: center; }
       login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
@@ -110,6 +126,8 @@ login-app .login-app {
         padding: 8px 15px;
         background-color: #fbfcfc;
         border-radius: 30px; }
+        login-app .login-app > header .app-select md-menu > button:hover {
+          box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35); }
       login-app .login-app > header .app-select .app-img-holder {
         width: calc(175px / 2);
         height: calc(55px / 2);
@@ -132,16 +150,26 @@ login-app .login-app {
     background-size: auto 100%;
     background-repeat: no-repeat;
     background-position: center center; }
+    login-app .login-app .main h2.banner-text {
+      font-size: 32px;
+      font-family: 'SourceSansPro-Light';
+      font-weight: 100;
+      color: white;
+      margin: 0;
+      padding: 25px 30px;
+      bottom: 0;
+      position: absolute; }
     login-app .login-app .main .login-container,
     login-app .login-app .main .signup-container {
       position: absolute;
-      top: 15px;
+      top: 35px;
       right: 135px; }
     login-app .login-app .main .go-to-login,
     login-app .login-app .main .go-to-signup {
       margin-top: 15px;
       text-align: center;
-      color: #fff; }
+      color: #fff;
+      font-family: 'SourceSansPro-Light'; }
       login-app .login-app .main .go-to-login a,
       login-app .login-app .main .go-to-signup a {
         text-decoration: underline;
@@ -152,66 +180,33 @@ login-app .login-app {
     background-image: url("assets/images/login-student-bg@2x.jpg"); }
   login-app .login-app.sat .app-bg {
     background: #0a9bad; }
+    login-app .login-app.sat .app-bg:hover {
+      background: #088E9E; }
   login-app .login-app.sat .app-color {
     color: #0a9bad; }
+    login-app .login-app.sat .app-color:hover {
+      color: #087d8b; }
   login-app .login-app.act .app-bg {
     background: #87ca4d; }
   login-app .login-app.act .app-color {
     color: #87ca4d; }
   login-app .login-app.toefl .app-bg {
     background: #ff931e; }
+    login-app .login-app.toefl .app-bg:hover {
+      background: #e4841d; }
   login-app .login-app.toefl .app-color {
     color: #ff931e; }
-  login-app .login-app .social-auth-container {
-    margin-right: 44px;
-    margin-left: 44px;
-    text-align: center; }
-    login-app .login-app .social-auth-container oath-login-drv .btn-wrap {
-      border-radius: 25px;
-      overflow: hidden;
-      height: 42px; }
-      login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn,
-      login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn {
-        width: 50%;
-        height: 100%;
-        color: #ffffff;
-        float: left;
-        padding-left: 25px;
-        cursor: pointer;
-        border: none; }
-        login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn span,
-        login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn span {
-          display: block;
-          text-indent: -25px; }
-      login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn {
-        background-color: #369;
-        line-height: 42px; }
-        login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
-          float: left;
-          margin-top: 5px; }
-          login-app .login-app .social-auth-container oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] svg {
-            width: 10px;
-            fill: #ffffff; }
-      login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn {
-        background-color: #df4a31;
-        line-height: 42px; }
-        login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
-          float: left;
-          margin-top: 5px; }
-          login-app .login-app .social-auth-container oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] svg {
-            width: 21px;
-            fill: #ffffff; }
-      login-app .login-app .social-auth-container oath-login-drv .btn-wrap.reset-btn {
-        margin-top: 20px; }
+    login-app .login-app.toefl .app-color:hover {
+      color: #e4841d; }
   login-app .login-app .form-container {
-    width: 413px;
+    width: 340px;
     background: #fdfdfd;
-    border-radius: 30px;
-    padding-right: 33px;
-    padding-left: 33px;
+    border-radius: 15px;
+    opacity: 0.95;
+    padding-right: 30px;
+    padding-left: 30px;
     padding-bottom: 20px;
-    padding-top: 25px;
-    box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.23); }
+    padding-top: 25px; }
     login-app .login-app .form-container .title {
       text-align: center;
       padding-bottom: 15px;
@@ -227,8 +222,8 @@ login-app .login-app {
       margin-right: auto;
       margin-bottom: 11px;
       margin-left: auto;
-      padding-right: 21px;
-      padding-left: 21px;
+      padding-right: 9px;
+      padding-left: 9px;
       display: -ms-flexbox;
       display: flex;
       -ms-flex-align: center;
@@ -238,11 +233,14 @@ login-app .login-app {
       login-app .login-app .form-container .inputs-container .input-wrapper svg-icon {
         width: 36px; }
       login-app .login-app .form-container .inputs-container .input-wrapper input {
-        height: 41px;
+        height: 37px;
         border: none;
         -ms-flex-positive: 1;
             flex-grow: 1;
-        padding: 0;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0;
+        padding-bottom: 0;
         background-color: transparent;
         outline: none;
         font-weight: 400;
@@ -267,8 +265,9 @@ login-app .login-app {
     login-app .login-app .form-container .submit-btn-wrapper {
       text-align: center; }
       login-app .login-app .form-container .submit-btn-wrapper button {
+        cursor: pointer;
         box-sizing: border-box;
-        height: 43px;
+        height: 37px;
         width: 340px;
         color: white;
         border-radius: 30px;
@@ -278,16 +277,18 @@ login-app .login-app {
         login-app .login-app .form-container .submit-btn-wrapper button:focus {
           outline: none; }
     login-app .login-app .form-container .forgot-pwd-wrapper {
-      margin-bottom: 26px;
+      margin-top: 10px;
+      margin-bottom: 5px;
       text-align: right;
       color: #757a83;
       font-weight: 200;
-      font-size: 14px; }
+      font-size: 14px;
+      font-family: 'SourceSansPro-Light'; }
     login-app .login-app .form-container .divider {
+      width: 340px;
       position: relative;
       text-align: center;
-      margin-top: 20px;
-      margin-bottom: 20px; }
+      margin: 15px auto; }
       login-app .login-app .form-container .divider:before {
         content: '';
         position: absolute;
@@ -316,8 +317,9 @@ login-app .login-app {
     login-app .login-app footer .switch-student-educator {
       font-weight: normal; }
       login-app .login-app footer .switch-student-educator h2 {
-        font-size: 20px;
-        color: #4f4d4d; }
+        font-size: 23px;
+        color: #4f4d4d;
+        margin-bottom: 5px; }
       login-app .login-app footer .switch-student-educator a {
         text-decoration: none;
         font-size: 16px; }
