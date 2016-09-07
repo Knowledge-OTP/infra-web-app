@@ -13,7 +13,9 @@
     <div class="divider">
         <div translate=".OR" class="text"></div>
     </div>
-    <form novalidate ng-submit="loginSubmit()">
+    <form novalidate
+          name="loginform"
+          ng-submit="loginSubmit(loginform)">
         <div class="inputs-container">
             <div class="input-wrapper">
                 <svg-icon name="form-envelope"></svg-icon>
@@ -27,15 +29,19 @@
                 <input type="password"
                        placeholder="{{'LOGIN_FORM.PASSWORD' | translate}}"
                        name="password"
+                       autocomplete="off"
+                       ng-minlength="6"
+                       ng-maxlength="25"
+                       ng-required="true"
                        ng-model="d.loginFormData.password">
             </div>
         </div>
         <div class="submit-btn-wrapper">
             <button type="submit" translate=".LOGIN_IN" class="app-bg" autofocus></button>
         </div>
-        <!--<div class="forgot-pwd-wrapper">-->
-        <!--<span translate=".FORGOT_PWD"></span>-->
-        <!--</div>-->
+        <div class="forgot-pwd-wrapper">
+            <span class="app-color" translate=".FORGOT_PWD"></span>
+        </div>
     </form>
 
 </div>

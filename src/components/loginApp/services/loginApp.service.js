@@ -177,13 +177,19 @@
                 });
             }
 
-            function _redirectToPage(appContext) {
+            function _redirectToPage(appContext, userContext) {
                 if (!appContext) {
+                    /**
+                     * TODO: remove this check and write a new function appContextGetter that will do this check every time its called
+                     */
                     $log.error('appContext is not defined!', appContext);
                     return;
                 }
                 var appConfig = _getAppEnvConfig(appContext);
                 var appName = appConfig.firebaseAppScopeName.substr(0, appConfig.firebaseAppScopeName.indexOf('_'));
+                if (userContext === USER_CONTEXT.TEACHER) {
+                    appName = appName + '-educator';
+                }
                 $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
             }
 
@@ -270,7 +276,7 @@
                             var appRef = _getAppRef(appContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage(appContext);
+                                _redirectToPage(appContext, userContext);
                                 return res;
                             });
                         });
@@ -302,7 +308,7 @@
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext).then(function(){
-                                _redirectToPage(appContext);
+                                _redirectToPage(appContext, userContext);
                             });
                         });
                     }).catch(function (err) {

@@ -19,12 +19,12 @@
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,
-                        userContextObj: LoginAppSrv.USER_CONTEXT,
+                        userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.loginSubmit = function(){
+                    scope.loginSubmit = function(loginForm){
                         if (!scope.d.loginFormData) {
-                            $window.alert('form is empty!');
+                            $window.alert('form is empty!', loginForm);
                             return;
                         }
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){

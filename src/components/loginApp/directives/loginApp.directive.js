@@ -5,9 +5,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('loginApp', [
-        '$translatePartialLoader', 'LoginAppSrv', '$location',
-        function ($translatePartialLoader, LoginAppSrv, $location) {
+    angular.module('znk.infra-web-app.loginApp').directive('loginApp',
+        function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document) {
+            'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
@@ -68,8 +68,18 @@
                         $location.search('app', null);
                         $location.search('state', null);
                     }
+
+                    //catching $mdMenuOpen event emitted from angular-material.js
+                    scope.$on('$mdMenuOpen', function() {
+                        $timeout(function () {
+                            //getting menu content container by tag id from html
+                            var menuContentContainer = angular.element($document[0].getElementById('app-select-menu'));
+                            // Using parent() method to get parent warper with .md-open-menu-container class and adding custom class.
+                            menuContentContainer.parent().addClass('app-select-menu-open');
+                        });
+                    });
                 }
             };
         }
-    ]);
+    );
 })(angular);

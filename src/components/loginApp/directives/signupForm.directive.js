@@ -22,9 +22,9 @@
                         userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.signupSubmit = function(){
+                    scope.signupSubmit = function(signupForm){
                         if (!scope.d.signupFormData) {
-                            $window.alert('form is empty!');
+                            $window.alert('form is empty!', signupForm);
                             return;
                         }
                         LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
