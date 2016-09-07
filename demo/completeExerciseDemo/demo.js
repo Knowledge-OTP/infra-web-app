@@ -1,7 +1,8 @@
 (function (angular) {
     angular.module('demo', [
         'znk.infra-web-app.completeExercise',
-        'znk.infra-web-app.webAppScreenSharing'
+        'znk.infra-web-app.webAppScreenSharing',
+        'demoEnv'
     ])
         .run(function ($rootScope, BaseExerciseGetterSrv, ExerciseTypeEnum, ExerciseParentEnum, ScreenSharingSrv) {
             $rootScope.data = {};
