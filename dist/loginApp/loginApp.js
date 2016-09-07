@@ -205,7 +205,7 @@
                 var loadingProvider = vm.loading[provider] = {};
                 loadingProvider.startLoader = true;
                 $auth.authenticate(provider).then(function (response) {
-                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id);
+                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id, vm.userContext);
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
@@ -232,10 +232,10 @@
 
                         if (updateProfile) {
                             LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, true).then(function () {
-                                LoginAppSrv.redirectToPage(vm.appContext.id);
+                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {
-                            LoginAppSrv.redirectToPage(vm.appContext.id);
+                            LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                         }
                     });
                 }).catch(function (error) {
@@ -385,9 +385,10 @@
                 return ALL_ENV_CONFIG[env][appContext];
             }
 
-            function _getGlobalRef(appContext) {
+            function _getGlobalRef(appContext, userContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, appEnvConfig.firebaseAppScopeName);
+                var appScopeName = (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.firebaseAppScopeName;
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, appScopeName);
             }
 
             function _getAppRef(appContext) {
@@ -468,8 +469,8 @@
                 });
             };
 
-            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext) {
-                var refAuthDB = _getGlobalRef(appContext);
+            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
+                var refAuthDB = _getGlobalRef(appContext, userContext);
                 var refDataDB = _getAppRef(appContext);
                 var proms = [
                     LoginAppSrv.createAuthWithCustomToken(refAuthDB, data.authToken),
@@ -482,8 +483,8 @@
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
-            LoginAppSrv.logout = function (appContext) {
-                var globalRef = _getGlobalRef(appContext);
+            LoginAppSrv.logout = function (appContext, userContext) {
+                var globalRef = _getGlobalRef(appContext, userContext);
                 var appRef = _getAppRef(appContext);
                 globalRef.unauth();
                 appRef.unauth();
@@ -524,11 +525,11 @@
                         return $q.reject(errMsg);
                     }
 
-                    LoginAppSrv.logout(appContext);
+                    LoginAppSrv.logout(appContext, userContext);
 
                     isLoginInProgress = true;
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.authWithPassword(formData).then(function (authData) {
                         var appEnvConfig = _getAppEnvConfig(appContext);
                         var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
@@ -571,7 +572,7 @@
                         return $q.reject(errMsg);
                     }
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
@@ -799,7 +800,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
     "                app-context=\"d.appContext\"\n" +
-    "                user-context=\"d.userContext\"\n" +
+    "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
@@ -878,7 +879,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
     "                app-context=\"d.appContext\"\n" +
-    "                user-context=\"d.userContext\"\n" +
+    "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +

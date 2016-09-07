@@ -13,7 +13,7 @@
                 var loadingProvider = vm.loading[provider] = {};
                 loadingProvider.startLoader = true;
                 $auth.authenticate(provider).then(function (response) {
-                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id);
+                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id, vm.userContext);
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
@@ -40,10 +40,10 @@
 
                         if (updateProfile) {
                             LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, true).then(function () {
-                                LoginAppSrv.redirectToPage(vm.appContext.id);
+                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {
-                            LoginAppSrv.redirectToPage(vm.appContext.id);
+                            LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                         }
                     });
                 }).catch(function (error) {
