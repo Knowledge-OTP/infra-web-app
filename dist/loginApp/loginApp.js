@@ -205,11 +205,11 @@
                 var loadingProvider = vm.loading[provider] = {};
                 loadingProvider.startLoader = true;
                 $auth.authenticate(provider).then(function (response) {
-                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id);
+                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id, vm.userContext);
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    LoginAppSrv.getUserProfile(vm.appContext.id).then(function (userProfile) {
+                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
                         var updateProfile = false;
 
                         if (!userProfile.email && userDataAuth.email) {
@@ -231,11 +231,11 @@
                         loadingProvider.startLoader = loadingProvider.fillLoader = false;
 
                         if (updateProfile) {
-                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, true).then(function () {
-                                LoginAppSrv.redirectToPage(vm.appContext.id);
+                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
+                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {
-                            LoginAppSrv.redirectToPage(vm.appContext.id);
+                            LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                         }
                     });
                 }).catch(function (error) {
@@ -385,18 +385,22 @@
                 return ALL_ENV_CONFIG[env][appContext];
             }
 
-            function _getGlobalRef(appContext) {
-                var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, appEnvConfig.firebaseAppScopeName);
+            function _getAppScopeName(userContext, appEnvConfig) {
+                return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }
 
-            function _getAppRef(appContext) {
+            function _getGlobalRef(appContext, userContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbDataEndPoint, appEnvConfig.firebaseAppScopeName);
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, _getAppScopeName(userContext, appEnvConfig));
+            }
+
+            function _getAppRef(appContext, userContext) {
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                return new Firebase(appEnvConfig.fbDataEndPoint, _getAppScopeName(userContext, appEnvConfig));
             }
 
             function _getUserContextRef(appContext, userContext) {
-                var appRef = _getAppRef(appContext);
+                var appRef = _getAppRef(appContext, userContext);
 
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
@@ -411,8 +415,8 @@
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _getUserProfile(appContext){
-                var appRef = _getAppRef(appContext);
+            function _getUserProfile(appContext, userContext){
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
@@ -426,8 +430,8 @@
                 return deferred.promise;
             }
 
-            function _writeUserProfile(formData, appContext, customProfileFlag) {
-                var appRef = _getAppRef(appContext);
+            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
@@ -468,9 +472,9 @@
                 });
             };
 
-            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext) {
-                var refAuthDB = _getGlobalRef(appContext);
-                var refDataDB = _getAppRef(appContext);
+            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
+                var refAuthDB = _getGlobalRef(appContext, userContext);
+                var refDataDB = _getAppRef(appContext, userContext);
                 var proms = [
                     LoginAppSrv.createAuthWithCustomToken(refAuthDB, data.authToken),
                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
@@ -482,9 +486,9 @@
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
-            LoginAppSrv.logout = function (appContext) {
-                var globalRef = _getGlobalRef(appContext);
-                var appRef = _getAppRef(appContext);
+            LoginAppSrv.logout = function (appContext, userContext) {
+                var globalRef = _getGlobalRef(appContext, userContext);
+                var appRef = _getAppRef(appContext, userContext);
                 globalRef.unauth();
                 appRef.unauth();
             };
@@ -524,11 +528,11 @@
                         return $q.reject(errMsg);
                     }
 
-                    LoginAppSrv.logout(appContext);
+                    LoginAppSrv.logout(appContext, userContext);
 
                     isLoginInProgress = true;
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.authWithPassword(formData).then(function (authData) {
                         var appEnvConfig = _getAppEnvConfig(appContext);
                         var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
@@ -542,7 +546,7 @@
                         };
 
                         return $http.post(postUrl, postData).then(function (token) {
-                            var appRef = _getAppRef(appContext);
+                            var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
                                 _redirectToPage(appContext, userContext);
@@ -571,12 +575,12 @@
                         return $q.reject(errMsg);
                     }
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext).then(function(){
+                            return _writeUserProfile(formData, appContext, userContext).then(function(){
                                 _redirectToPage(appContext, userContext);
                             });
                         });
@@ -799,7 +803,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
     "                app-context=\"d.appContext\"\n" +
-    "                user-context=\"d.userContext\"\n" +
+    "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
@@ -878,7 +882,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
     "                app-context=\"d.appContext\"\n" +
-    "                user-context=\"d.userContext\"\n" +
+    "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
