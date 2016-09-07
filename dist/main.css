@@ -1247,6 +1247,58 @@ md-tooltip.tooltip-for-estimated-score-widget {
           width: 253px;
           height: 290px; } }
 
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+.zoom-image-modal {
+  position: relative; }
+  .zoom-image-modal .close-popup {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: absolute;
+    right: -45px;
+    top: -35px; }
+  .zoom-image-modal md-dialog {
+    max-width: 100%; }
+
+.zoom-icon-wrapper {
+  width: 35px;
+  height: 35px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+  text-align: center;
+  cursor: pointer;
+  background-color: #a6cfd4;
+  position: absolute;
+  bottom: 0;
+  right: 0; }
+  .zoom-icon-wrapper svg-icon {
+    width: 21px;
+    height: 21px; }
+    .zoom-icon-wrapper svg-icon svg line, .zoom-icon-wrapper svg-icon svg polyline {
+      stroke: #ffffff;
+      stroke-width: 15px;
+      fill: #ffffff; }
+  .zoom-icon-wrapper:hover {
+    background-color: #89ABAF; }
+
+img.img-to-zoom {
+  border: 1px solid #f4f4f4;
+  cursor: pointer;
+  vertical-align: middle; }
+
 /*border color*/
 /*background*/
 /* box shadow */
@@ -4128,6 +4180,10 @@ workout-intro-lock {
           stroke: #0a9bad; }
         .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st4, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st4 {
           stroke: #0a9bad; }
+    .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper[disabled="disabled"] {
+      opacity: 0.3; }
+      .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper[disabled="disabled"] .avail-time-item svg-icon {
+        display: none; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .start-btn-wrapper {
     margin-top: 50px; }
 

@@ -38,6 +38,12 @@
                     zoomableImgElemArr.push(imgElement);
                 }
 
+                function DialogController($scope) {
+                    $scope.closeDialog = function () {
+                        $mdDialog.hide();
+                    };
+                }
+
                 function zoomImage(image) {
                     var parentEl = angular.element($document.body);
                     $mdDialog.show({
@@ -54,11 +60,6 @@
                         controller: DialogController
                     });
 
-                    function DialogController($scope) {
-                        $scope.closeDialog = function () {
-                            $mdDialog.hide();
-                        };
-                    }
                 }
 
                 function addIconToImage(image) {
