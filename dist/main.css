@@ -1316,9 +1316,17 @@ feedback .feedback-btn {
         text-align: center;
         margin-top: 0; }
       .feedback-dialog md-dialog.feedback-container md-dialog-content .feedback-inner .md-button {
+        font-size: 14px;
+        color: white;
+        font-family: Lato;
+        font-weight: 400;
         width: 100%;
-        margin-top: 25px;
-        margin-left: 0; }
+        height: 42px;
+        margin-left: 0;
+        box-shadow: 0 3px 0 0 #72ab40;
+        text-transform: none;
+        border-radius: 21px;
+        background-color: #76b63e; }
       .feedback-dialog md-dialog.feedback-container md-dialog-content .feedback-inner .user-details-border {
         border-top: 1px solid;
         opacity: 0.2;
@@ -1345,12 +1353,26 @@ feedback .feedback-btn {
       font-weight: 400; }
     .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon {
       margin: 36px auto 22px auto;
-      width: 111px; }
-      .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon * {
-        fill: #464646; }
+      width: 111px;
+      display: -ms-flexbox;
+      display: flex; }
+      .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon .st0 {
+        fill: none;
+        enable-background: new; }
+      .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon .st1 {
+        fill: #CACBCC; }
       .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon .st2 {
-        display: block;
-        fill: #B33520; }
+        display: none;
+        fill: none; }
+      .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon .st3 {
+        fill: #D1D2D2; }
+      .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon .st4 {
+        fill: none;
+        stroke: white;
+        stroke-width: 11.9321;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-miterlimit: 10; }
     .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback .success-msg {
       font-size: 16px;
       color: #757a83;

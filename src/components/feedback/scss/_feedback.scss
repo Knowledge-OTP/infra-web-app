@@ -50,11 +50,14 @@ feedback {
                         margin-top:0;
                     }
                     .md-button {
+                        @include text-style(14px, $fontColor1, Lato, $regularFontWeight);
                         width: 100%;
-                        margin: {
-                            top: 25px;
-                            left: 0;
-                        }
+                        height: 42px;
+                        margin-left: 0;
+                        box-shadow: 0 3px 0 0 $bsColor7;
+                        text-transform: none;
+                        border-radius: 21px;
+                        background-color: $bgColor14;
                     }
                     .user-details-border {
                         border-top: 1px solid;
@@ -81,13 +84,12 @@ feedback {
                     svg-icon.completed-v-feedback-icon {
                         margin: 36px auto 22px auto;
                         width: 111px;
-                        * {
-                            fill: $bgColor53;
-                        }
-                        .st2 {
-                            display: block;
-                            fill: $bgColor54;
-                        }
+                        display: flex;
+                        .st0{fill:none;enable-background:new;}
+                        .st1{fill:$fontColor21;}
+                        .st2{display:none;fill:none;}
+                        .st3{fill:$fontColor22;}
+                        .st4{fill:none;stroke:$fontColor1;stroke-width:11.9321;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
                     }
                     .success-msg {
                         @include text-style(16px, $fontColor4, Quicksand, $regularFontWeight, null, null, null, center);
