@@ -545,7 +545,7 @@
                             var appRef = _getAppRef(appContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage(appContext);
+                                _redirectToPage(appContext, userContext);
                                 return res;
                             });
                         });
@@ -577,7 +577,7 @@
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext).then(function(){
-                                _redirectToPage(appContext);
+                                _redirectToPage(appContext, userContext);
                             });
                         });
                     }).catch(function (err) {
@@ -721,11 +721,9 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div class=\"logo-wrapper\">\n" +
     "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
     "        </div>\n" +
-    "\n" +
     "        <div class=\"app-select\" ng-cloak>\n" +
     "            <md-menu md-offset=\"-50 80\" md-no-ink>\n" +
     "                <md-button aria-label=\"Open App Select Menu\"\n" +
-    "                           aria-owns=\"custom-class\"\n" +
     "                           class=\"md-icon-button\"\n" +
     "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
     "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
@@ -740,7 +738,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
     "        </div>\n" +
-    "\n" +
     "    </header>\n" +
     "    <div class=\"main\">\n" +
     "        <ng-switch on=\"currentForm\">\n" +

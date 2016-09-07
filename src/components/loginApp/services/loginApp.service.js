@@ -276,7 +276,7 @@
                             var appRef = _getAppRef(appContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage(appContext);
+                                _redirectToPage(appContext, userContext);
                                 return res;
                             });
                         });
@@ -308,7 +308,7 @@
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext).then(function(){
-                                _redirectToPage(appContext);
+                                _redirectToPage(appContext, userContext);
                             });
                         });
                     }).catch(function (err) {
