@@ -1266,6 +1266,12 @@ md-tooltip.tooltip-for-estimated-score-widget {
     position: absolute;
     right: -45px;
     top: -35px; }
+    .zoom-image-modal .close-popup .st1 {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-miterlimit: 10; }
   .zoom-image-modal md-dialog {
     max-width: 100%; }
 

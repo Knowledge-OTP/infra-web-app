@@ -10,7 +10,13 @@
         position: absolute;
         right: -45px;
         top: -35px;
-
+        .st1 {
+            fill: none;
+            stroke: $bgColor3;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+        }
     }
 
     md-dialog {
