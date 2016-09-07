@@ -3889,7 +3889,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "<style type=\"text/css\">\n" +
     "	.close-pop-svg {width: 100%; height: auto;}\n" +
     "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-    "	.close-pop-svg .st1{fill:none;stroke:#231F20;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
     "</style>\n" +
     "<path class=\"st0\"/>\n" +
     "<g>\n" +
