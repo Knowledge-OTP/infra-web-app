@@ -17,7 +17,7 @@
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    LoginAppSrv.getUserProfile(vm.appContext.id).then(function (userProfile) {
+                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
                         var updateProfile = false;
 
                         if (!userProfile.email && userDataAuth.email) {
@@ -39,7 +39,7 @@
                         loadingProvider.startLoader = loadingProvider.fillLoader = false;
 
                         if (updateProfile) {
-                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, true).then(function () {
+                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
                                 LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {

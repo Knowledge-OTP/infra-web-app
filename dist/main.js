@@ -5347,7 +5347,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    LoginAppSrv.getUserProfile(vm.appContext.id).then(function (userProfile) {
+                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
                         var updateProfile = false;
 
                         if (!userProfile.email && userDataAuth.email) {
@@ -5369,7 +5369,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         loadingProvider.startLoader = loadingProvider.fillLoader = false;
 
                         if (updateProfile) {
-                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, true).then(function () {
+                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
                                 LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {
@@ -5523,19 +5523,22 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return ALL_ENV_CONFIG[env][appContext];
             }
 
-            function _getGlobalRef(appContext, userContext) {
-                var appEnvConfig = _getAppEnvConfig(appContext);
-                var appScopeName = (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.firebaseAppScopeName;
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, appScopeName);
+            function _getAppScopeName(userContext, appEnvConfig) {
+                return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }
 
-            function _getAppRef(appContext) {
+            function _getGlobalRef(appContext, userContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbDataEndPoint, appEnvConfig.firebaseAppScopeName);
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, _getAppScopeName(userContext, appEnvConfig));
+            }
+
+            function _getAppRef(appContext, userContext) {
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                return new Firebase(appEnvConfig.fbDataEndPoint, _getAppScopeName(userContext, appEnvConfig));
             }
 
             function _getUserContextRef(appContext, userContext) {
-                var appRef = _getAppRef(appContext);
+                var appRef = _getAppRef(appContext, userContext);
 
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
@@ -5550,8 +5553,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _getUserProfile(appContext){
-                var appRef = _getAppRef(appContext);
+            function _getUserProfile(appContext, userContext){
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
@@ -5565,8 +5568,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return deferred.promise;
             }
 
-            function _writeUserProfile(formData, appContext, customProfileFlag) {
-                var appRef = _getAppRef(appContext);
+            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
@@ -5609,7 +5612,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
             LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
                 var refAuthDB = _getGlobalRef(appContext, userContext);
-                var refDataDB = _getAppRef(appContext);
+                var refDataDB = _getAppRef(appContext, userContext);
                 var proms = [
                     LoginAppSrv.createAuthWithCustomToken(refAuthDB, data.authToken),
                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
@@ -5623,7 +5626,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
             LoginAppSrv.logout = function (appContext, userContext) {
                 var globalRef = _getGlobalRef(appContext, userContext);
-                var appRef = _getAppRef(appContext);
+                var appRef = _getAppRef(appContext, userContext);
                 globalRef.unauth();
                 appRef.unauth();
             };
@@ -5681,7 +5684,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         };
 
                         return $http.post(postUrl, postData).then(function (token) {
-                            var appRef = _getAppRef(appContext);
+                            var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
                                 _redirectToPage(appContext, userContext);
@@ -5715,7 +5718,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext).then(function(){
+                            return _writeUserProfile(formData, appContext, userContext).then(function(){
                                 _redirectToPage(appContext, userContext);
                             });
                         });
