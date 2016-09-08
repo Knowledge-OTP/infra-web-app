@@ -5432,8 +5432,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         if (search.state) {
                             scope.changeCurrentForm(search.state);
                         }
-                        $location.search('app', null);
-                        $location.search('state', null);
+                        // $location.search('app', null);
+                        // $location.search('state', null);
                     }
 
                     //catching $mdMenuOpen event emitted from angular-material.js
