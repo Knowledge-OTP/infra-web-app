@@ -5862,6 +5862,9 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <header>\n" +
     "        <div class=\"logo-wrapper\">\n" +
     "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
+    "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
+    "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
+    "            </span>\n" +
     "        </div>\n" +
     "        <div class=\"app-select\" ng-cloak>\n" +
     "            <md-menu md-offset=\"-50 80\" md-no-ink>\n" +
