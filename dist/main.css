@@ -2061,7 +2061,7 @@ md-dialog.invite-teacher-modal-wrap {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-@import url(http://fonts.googleapis.com/icon?family=Material+Icons);
+@import 'http://fonts.googleapis.com/icon?family=Material+Icons';
 oath-login-drv .btn-wrap {
   border-radius: 25px;
   overflow: hidden;
