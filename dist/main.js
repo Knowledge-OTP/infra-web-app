@@ -6063,7 +6063,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        act: d.appContext === d.availableApps.ACT,\n" +
     "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
     "    }\">\n" +
-    "    <header>\n" +
+    "    <header class=\"container\">\n" +
     "        <div class=\"logo-wrapper\">\n" +
     "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
     "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
@@ -6088,43 +6088,49 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </md-menu>\n" +
     "        </div>\n" +
     "    </header>\n" +
-    "    <div class=\"main\">\n" +
-    "        <ng-switch on=\"currentForm\">\n" +
-    "            <div class=\"login-container\" ng-switch-when=\"login\">\n" +
-    "                <login-form app-context=\"d.appContext\"\n" +
-    "                            user-context=\"d.userContext\">\n" +
-    "                </login-form>\n" +
-    "                <p class=\"go-to-signup\">\n" +
-    "                    <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
-    "                </p>\n" +
-    "            </div>\n" +
-    "            <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
-    "                <signup-form app-context=\"d.appContext\"\n" +
-    "                             user-context=\"d.userContext\">\n" +
-    "                </signup-form>\n" +
-    "                <p class=\"go-to-login\">\n" +
-    "                    <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
-    "                </p>\n" +
-    "            </div>\n" +
-    "        </ng-switch>\n" +
-    "        <h2 class=\"banner-text\">\n" +
-    "            <ng-switch on=\"currentUserContext\">\n" +
-    "                <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                    <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
-    "                </div>\n" +
-    "                <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                    <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
-    "                </div>\n" +
-    "            </ng-switch>\n" +
-    "        </h2>\n" +
+    "    <div class=\"main container-fluid\">\n" +
+    "        <img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.STUDENT\" src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "        <img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.TEACHER\" src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "        <!--<div class=\"row\">-->\n" +
+    "            <!--<div class=\"col-xs-12\">-->\n" +
+    "                <ng-switch on=\"currentForm\">\n" +
+    "                    <div class=\"login-container\" ng-switch-when=\"login\">\n" +
+    "                        <login-form app-context=\"d.appContext\"\n" +
+    "                                    user-context=\"d.userContext\">\n" +
+    "                        </login-form>\n" +
+    "                        <p class=\"go-to-signup\">\n" +
+    "                            <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                            <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                            <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
+    "                        </p>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
+    "                        <signup-form app-context=\"d.appContext\"\n" +
+    "                                     user-context=\"d.userContext\">\n" +
+    "                        </signup-form>\n" +
+    "                        <p class=\"go-to-login\">\n" +
+    "                            <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                            <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                            <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
+    "                        </p>\n" +
+    "                    </div>\n" +
+    "                </ng-switch>\n" +
+    "                <h2 class=\"banner-text\">\n" +
+    "                    <ng-switch on=\"currentUserContext\">\n" +
+    "                        <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                            <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                            <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                            <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                        </div>\n" +
+    "                        <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                            <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                            <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                            <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                        </div>\n" +
+    "                    </ng-switch>\n" +
+    "                </h2>\n" +
+    "            <!--</div>-->\n" +
+    "        <!--</div>-->\n" +
     "    </div>\n" +
     "    <footer>\n" +
     "        <ng-switch on=\"currentUserContext\">\n" +
