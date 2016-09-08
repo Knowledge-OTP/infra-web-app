@@ -2091,16 +2091,16 @@ oath-login-drv .btn-wrap {
         background-image: url("assets/images/toefl-name@2x.png"); }
 
 login-app .login-app {
-  position: fixed;
-  width: 100%;
   height: 100%;
+  margin: 0 auto;
   background-color: #f7f7f7;
   background-image: url("assets/images/logo-pattern-bg.png");
   font-family: 'SourceSansPro', sans-serif;
   font-weight: 400; }
   login-app .login-app > header {
     width: 1366px;
-    margin: 20px auto; }
+    padding: 20px 0;
+    margin: 0 auto; }
     login-app .login-app > header .logo-wrapper {
       margin-left: 27px; }
       login-app .login-app > header .logo-wrapper .logo {
@@ -2308,7 +2308,8 @@ login-app .login-app {
       login-app .login-app .form-container.signup .signup-disclaimer a {
         text-decoration: none; }
   login-app .login-app footer {
-    text-align: center; }
+    text-align: center;
+    padding-bottom: 40px; }
     login-app .login-app footer .switch-student-educator {
       font-weight: normal; }
       login-app .login-app footer .switch-student-educator h2 {
