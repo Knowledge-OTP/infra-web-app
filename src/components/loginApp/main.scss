@@ -60,9 +60,8 @@
 
 login-app {
     .login-app {
-        position: fixed;
-        width: 100%;
         height: 100%;
+        margin: 0 auto;
         background: {
             color: #f7f7f7;
             image: url('assets/images/logo-pattern-bg.png');
@@ -73,9 +72,15 @@ login-app {
         }
         & > header {
             width: 1366px;
-            margin: 20px auto;
+            height: 84px;
+            padding: 20px 0;
+            margin: 0 auto;
+            position: relative;
+            box-sizing: border-box;
             .logo-wrapper {
                 margin-left: 27px;
+                float: left;
+                position: relative;
                 .logo {
                     width: 76px;
                     height: 36px;
@@ -86,9 +91,17 @@ login-app {
                         size: contain;
                     };
                 }
+                span {
+                    font-size: 24px;
+                    margin-left: 5px;
+                    margin-top: 15px;
+                    display: inline-block;
+                }
             }
             .app-select {
                 text-align: center;
+                position: absolute;
+                left: calc(50% - 90px);
                 md-menu {
                     .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
                     .md-button:not([disabled]).md-icon-button:hover {
@@ -378,6 +391,7 @@ login-app {
         }
         footer {
             text-align: center;
+            padding-bottom: 40px;
             .switch-student-educator {
                 font-weight:normal;
                 h2 {
