@@ -38,17 +38,12 @@
         </div>
         <div class="submit-btn-wrapper">
             <button type="submit"
-                    ng-disabled="disabled"
-                    translate=".LOGIN_IN"
+                    ng-disabled="d.disableBtn"
                     class="app-bg"
-                    element-loader
-                    fill-loader="fillLoader"
-                    show-loader="startLoader"
-                    bg-loader="'#72ab40'"
-                    precentage="50"
-                    font-color="'#FFFFFF'"
-                    bg="'#87ca4d'"
-                    autofocus></button>
+                    autofocus>
+                <span translate=".LOGIN_IN"></span>
+                <div class="loader ng-hide" ng-show="d.showSpinner"></div>
+            </button>
         </div>
         <div class="forgot-pwd-wrapper">
             <span class="app-color" translate=".FORGOT_PWD"></span>

@@ -6,14 +6,15 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        function ($translatePartialLoader, LoginAppSrv, $window, $timeout) {
+        function ($translatePartialLoader, LoginAppSrv, $window) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',
-                    userContext: '<'
+                    userContext: '<',
+                    // loaderSettings: '<'
                 },
                 link: function (scope) {
 
@@ -27,25 +28,28 @@
                             $window.alert('form is empty!', loginForm);
                             return;
                         }
-                        scope.startLoader = true;
+                        showSpinner();
+                        scope.d.disableBtn = true;
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
                             .then(function(){
-                                scope.fillLoader = true;
-                                $timeout(function () {
-                                    scope.startLoader = false;
-                                    scope.fillLoader = false;
-                                }, 100);
+                                hideSpinner();
+                                scope.d.disableBtn = false;
                             })
                             .catch(function(err){
-                                scope.fillLoader = true;
-                                $timeout(function () {
-                                    scope.startLoader = false;
-                                    scope.fillLoader = false;
-                                }, 100);
+                                hideSpinner();
+                                scope.d.disableBtn = false;
                                 console.error(err);
                                 $window.alert(err);
                             });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }

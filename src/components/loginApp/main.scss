@@ -59,6 +59,7 @@
 }
 
 login-app {
+
     .img-responsive {
         display: block;
         max-width: 100%;
@@ -110,7 +111,8 @@ login-app {
                 md-menu {
                     .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
                     .md-button:not([disabled]).md-icon-button:hover {
-                        background-color: #fbfcfc;
+                        // background-color: #fbfcfc;
+                        background-color: #dddddd;
                     }
                     & > button {
                         width: 175px;
@@ -164,9 +166,9 @@ login-app {
             //};
             .main-inner {
                 position: relative;
-                 width: 1366px;
+                width: 1366px;
                 height: 513px;
-                 margin: 0 auto;
+                margin: 0 auto;
                 h2.banner-text {
                     font: {
                         size: 32px;
@@ -237,8 +239,18 @@ login-app {
             }
         }
         &.act {
-            .app-bg {  background: $bgColor7;  }
-            .app-color {  color: $bgColor7;  }
+            .app-bg {
+                background: $bgColor7;
+                &:hover {
+                    background: $bgColor15;
+                }
+            }
+            .app-color {
+                color: $bgColor7;
+                &:hover {
+
+                }
+            }
         }
         &.toefl {
             .app-bg {
@@ -256,7 +268,7 @@ login-app {
         }
 
         .form-container {
-            width: 400px;
+            width: 340px;
             background: $bgColor40;
             border-radius: 15px;
             opacity: 0.95;
@@ -338,6 +350,7 @@ login-app {
             .submit-btn-wrapper{
                 text-align: center;
                 button {
+                    position: relative;
                     cursor: pointer;
                     box-sizing: border-box;
                     height: 37px;
@@ -351,6 +364,27 @@ login-app {
                     }
                     &:focus {
                         outline: none;
+                    }
+                    &:disabled {
+                        background-color: #dddddd;
+                    }
+
+                    .loader {
+                        margin: 0;
+                        height: 12px;
+                        width: 12px;
+                        animation: rotate 0.8s infinite linear;
+                        border: 3px solid #fff;
+                        border-right-color: transparent;
+                        border-radius: 50%;
+                        position: absolute;
+                        top: 10px;
+                        right: 30px;
+                    }
+
+                    @keyframes rotate {
+                        0%    { transform: rotate(0deg); }
+                        100%  { transform: rotate(360deg); }
                     }
                 }
             }

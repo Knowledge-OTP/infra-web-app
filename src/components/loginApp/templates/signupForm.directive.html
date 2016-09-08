@@ -40,8 +40,16 @@
             </div>
         </div>
         <div class="submit-btn-wrapper">
-            <button type="submit" translate=".SIGN_UP" class="app-bg" autofocus></button>
+            <button type="submit"
+                    ng-disabled="d.disableBtn"
+                    class="app-bg"
+                    autofocus>
+                <span translate=".SIGN_UP"></span>
+                <div class="loader ng-hide" ng-show="d.showSpinner"></div>
+            </button>
         </div>
-        <p class="signup-disclaimer" translate-values="{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}" translate=".DISCLAIMER"></p>
+        <p class="signup-disclaimer"
+           translate-values="{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}"
+           translate=".DISCLAIMER"></p>
     </form>
 </div>

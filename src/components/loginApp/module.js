@@ -6,6 +6,8 @@
         'znk.infra.svgIcon',
         'ngMaterial',
         'znk.infra.user',
+        'angular-svg-round-progress',
+        'znk.infra.general',
         'satellizer'
     ]).config([
         'SvgIconSrvProvider',

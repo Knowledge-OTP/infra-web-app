@@ -5357,6 +5357,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         'znk.infra.svgIcon',
         'ngMaterial',
         'znk.infra.user',
+        'angular-svg-round-progress',
+        'znk.infra.general',
         'satellizer'
     ]).config([
         'SvgIconSrvProvider',
@@ -5403,10 +5405,35 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
                     scope.currentUserContext =  'student';
                     scope.currentForm = 'signup';
+                    scope.d.loaderSettings = {
+                        loaderColor: '#088E9E',
+                        buttonBg: '#0a9bad'
+                    };
 
                     scope.selectApp = function(app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
+
+                        // switch (app) {
+                        //     case LoginAppSrv.APPS.SAT:
+                        //         scope.d.loaderSettings = {
+                        //             loaderColor: '#088E9E',
+                        //             buttonBg: '#0a9bad'
+                        //         };
+                        //         break;
+                        //     case LoginAppSrv.APPS.ACT:
+                        //         scope.d.loaderSettings = {
+                        //             loaderColor: '#72ab40',
+                        //             buttonBg: '#87ca4d'
+                        //         };
+                        //         break;
+                        //     case LoginAppSrv.APPS.TOEFL:
+                        //         scope.d.loaderSettings = {
+                        //             loaderColor: '#e4841d',
+                        //             buttonBg: '#ff931e'
+                        //         };
+                        //         break;
+                        // }
                     };
 
                     scope.changeCurrentForm = function (currentForm) {
@@ -5468,14 +5495,15 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", "$timeout", function ($translatePartialLoader, LoginAppSrv, $window, $timeout) {
+        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',
-                    userContext: '<'
+                    userContext: '<',
+                    // loaderSettings: '<'
                 },
                 link: function (scope) {
 
@@ -5489,25 +5517,28 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             $window.alert('form is empty!', loginForm);
                             return;
                         }
-                        scope.startLoader = true;
+                        showSpinner();
+                        scope.d.disableBtn = true;
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
                             .then(function(){
-                                scope.fillLoader = true;
-                                $timeout(function () {
-                                    scope.startLoader = false;
-                                    scope.fillLoader = false;
-                                }, 100);
+                                hideSpinner();
+                                scope.d.disableBtn = false;
                             })
                             .catch(function(err){
-                                scope.fillLoader = true;
-                                $timeout(function () {
-                                    scope.startLoader = false;
-                                    scope.fillLoader = false;
-                                }, 100);
+                                hideSpinner();
+                                scope.d.disableBtn = false;
                                 console.error(err);
                                 $window.alert(err);
                             });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }]
@@ -5529,7 +5560,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 restrict: 'E',
                 scope: {
                     appContext: '<',
-                    userContext: '<'
+                    userContext: '<',
+                    // loaderSettings: '<'
                 },
                 link: function (scope) {
 
@@ -5543,11 +5575,28 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             $window.alert('form is empty!', signupForm);
                             return;
                         }
-                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        showSpinner();
+                        scope.d.disableBtn = true;
+                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData)
+                            .then(function(){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                            })
+                            .catch(function(err){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                                console.error(err);
+                                $window.alert(err);
+                            });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }]
@@ -6213,17 +6262,12 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
     "            <button type=\"submit\"\n" +
-    "                    ng-disabled=\"disabled\"\n" +
-    "                    translate=\".LOGIN_IN\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
     "                    class=\"app-bg\"\n" +
-    "                    element-loader\n" +
-    "                    fill-loader=\"fillLoader\"\n" +
-    "                    show-loader=\"startLoader\"\n" +
-    "                    bg-loader=\"'#72ab40'\"\n" +
-    "                    precentage=\"50\"\n" +
-    "                    font-color=\"'#FFFFFF'\"\n" +
-    "                    bg=\"'#87ca4d'\"\n" +
-    "                    autofocus></button>\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".LOGIN_IN\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"forgot-pwd-wrapper\">\n" +
     "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
@@ -6305,9 +6349,17 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\" translate=\".SIGN_UP\" class=\"app-bg\" autofocus></button>\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".SIGN_UP\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
     "        </div>\n" +
-    "        <p class=\"signup-disclaimer\" translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\" translate=\".DISCLAIMER\"></p>\n" +
+    "        <p class=\"signup-disclaimer\"\n" +
+    "           translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\"\n" +
+    "           translate=\".DISCLAIMER\"></p>\n" +
     "    </form>\n" +
     "</div>\n" +
     "");

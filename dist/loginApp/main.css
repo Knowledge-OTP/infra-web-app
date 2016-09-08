@@ -136,7 +136,7 @@ login-app .login-app {
       left: calc(50% - 90px); }
       login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
       login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
-        background-color: #fbfcfc; }
+        background-color: #dddddd; }
       login-app .login-app > header .app-select md-menu > button {
         width: 175px;
         height: auto;
@@ -210,6 +210,8 @@ login-app .login-app {
       color: #087d8b; }
   login-app .login-app.act .app-bg {
     background: #87ca4d; }
+    login-app .login-app.act .app-bg:hover {
+      background: #72ab40; }
   login-app .login-app.act .app-color {
     color: #87ca4d; }
   login-app .login-app.toefl .app-bg {
@@ -221,7 +223,7 @@ login-app .login-app {
     login-app .login-app.toefl .app-color:hover {
       color: #e4841d; }
   login-app .login-app .form-container {
-    width: 400px;
+    width: 340px;
     background: #fdfdfd;
     border-radius: 15px;
     opacity: 0.95;
@@ -287,6 +289,7 @@ login-app .login-app {
     login-app .login-app .form-container .submit-btn-wrapper {
       text-align: center; }
       login-app .login-app .form-container .submit-btn-wrapper button {
+        position: relative;
         cursor: pointer;
         box-sizing: border-box;
         height: 37px;
@@ -298,6 +301,25 @@ login-app .login-app {
         font-weight: 400; }
         login-app .login-app .form-container .submit-btn-wrapper button:focus {
           outline: none; }
+        login-app .login-app .form-container .submit-btn-wrapper button:disabled {
+          background-color: #dddddd; }
+        login-app .login-app .form-container .submit-btn-wrapper button .loader {
+          margin: 0;
+          height: 12px;
+          width: 12px;
+          animation: rotate 0.8s infinite linear;
+          border: 3px solid #fff;
+          border-right-color: transparent;
+          border-radius: 50%;
+          position: absolute;
+          top: 10px;
+          right: 30px; }
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
     login-app .login-app .form-container .forgot-pwd-wrapper {
       margin-top: 10px;
       margin-bottom: 5px;
