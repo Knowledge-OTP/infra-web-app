@@ -5357,8 +5357,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         'znk.infra.svgIcon',
         'ngMaterial',
         'znk.infra.user',
-        'angular-svg-round-progress',
-        'znk.infra.general',
         'satellizer'
     ]).config([
         'SvgIconSrvProvider',
