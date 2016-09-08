@@ -59,9 +59,10 @@
 }
 
 login-app {
-    a {
-        color: inherit;
-        text-decoration: none;
+    .img-responsive {
+        display: block;
+        max-width: 100%;
+        height: auto;
     }
     .login-app {
         height: 100%;
@@ -75,7 +76,7 @@ login-app {
             weight: $regularFontWeight;
         }
         & > header {
-            width: 1366px;
+            max-width: 1366px;
             height: 84px;
             padding: 20px 0;
             margin: 0 auto;
@@ -142,10 +143,17 @@ login-app {
                     float: right;
                 }
             }
+            .for-educators {
+                float: right;
+                margin-top: 12px;
+                cursor: pointer;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
         .main {
             padding: 0;
-            position: relative;
             // width: 1366px;
             // height: 513px;
             // margin: 0 auto;
@@ -154,21 +162,27 @@ login-app {
             //    repeat: no-repeat;
             //    // position: center center;
             //};
-
+            .main-inner {
+                position: relative;
+                 width: 1366px;
+                height: 513px;
+                 margin: 0 auto;
+                h2.banner-text {
+                    font: {
+                        size: 32px;
+                        family: 'SourceSansPro-Light';
+                        weight: 100;
+                    }
+                    color: $fontColor1;
+                    margin: 0;
+                    padding: 25px 30px;
+                    bottom: 0;
+                    position: absolute;
+                }
+            }
             img.main-banner {
                 min-height: 513px;
-            }
-
-            h2.banner-text {
-                font: {
-                    size: 32px;
-                    family: 'SourceSansPro-Light';
-                    weight: 100;
-                }
-                color: $fontColor1;
-                margin: 0;
-                padding: 25px 30px;
-                bottom: 0;
+                min-width: 1366px;
                 position: absolute;
             }
 
@@ -402,6 +416,9 @@ login-app {
         footer {
             text-align: center;
             padding-bottom: 40px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
             .switch-student-educator {
                 font-weight:normal;
                 h2 {

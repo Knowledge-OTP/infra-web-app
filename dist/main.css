@@ -2148,9 +2148,10 @@ oath-login-drv .btn-wrap {
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
         background-image: url("/assets/images/toefl-name@2x.png"); }
 
-login-app a {
-  color: inherit;
-  text-decoration: none; }
+login-app .img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto; }
 
 login-app .login-app {
   height: 100%;
@@ -2160,7 +2161,7 @@ login-app .login-app {
   font-family: 'SourceSansPro', sans-serif;
   font-weight: 400; }
   login-app .login-app > header {
-    width: 1366px;
+    max-width: 1366px;
     height: 84px;
     padding: 20px 0;
     margin: 0 auto;
@@ -2211,19 +2212,31 @@ login-app .login-app {
           background-image: url("/assets/images/toefl-name@2x.png"); }
       login-app .login-app > header .app-select .expand-menu {
         float: right; }
+    login-app .login-app > header .for-educators {
+      float: right;
+      margin-top: 12px;
+      cursor: pointer; }
+      login-app .login-app > header .for-educators:hover {
+        text-decoration: underline; }
   login-app .login-app .main {
-    padding: 0;
-    position: relative; }
+    padding: 0; }
+    login-app .login-app .main .main-inner {
+      position: relative;
+      width: 1366px;
+      height: 513px;
+      margin: 0 auto; }
+      login-app .login-app .main .main-inner h2.banner-text {
+        font-size: 32px;
+        font-family: 'SourceSansPro-Light';
+        font-weight: 100;
+        color: white;
+        margin: 0;
+        padding: 25px 30px;
+        bottom: 0;
+        position: absolute; }
     login-app .login-app .main img.main-banner {
-      min-height: 513px; }
-    login-app .login-app .main h2.banner-text {
-      font-size: 32px;
-      font-family: 'SourceSansPro-Light';
-      font-weight: 100;
-      color: white;
-      margin: 0;
-      padding: 25px 30px;
-      bottom: 0;
+      min-height: 513px;
+      min-width: 1366px;
       position: absolute; }
     login-app .login-app .main .login-container,
     login-app .login-app .main .signup-container {
@@ -2377,7 +2390,10 @@ login-app .login-app {
         text-decoration: none; }
   login-app .login-app footer {
     text-align: center;
-    padding-bottom: 40px; }
+    padding-bottom: 40px;
+    position: absolute;
+    bottom: 0;
+    width: 100%; }
     login-app .login-app footer .switch-student-educator {
       font-weight: normal; }
       login-app .login-app footer .switch-student-educator h2 {
