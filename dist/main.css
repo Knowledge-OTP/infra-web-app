@@ -2106,13 +2106,13 @@ oath-login-drv .btn-wrap {
 
 @font-face {
   font-family: "SourceSansPro";
-  src: url("assets/fonts/SourceSansPro-Regular.otf");
+  src: url("/assets/fonts/SourceSansPro-Regular.otf");
   font-weight: normal;
   font-style: normal; }
 
 @font-face {
   font-family: "SourceSansPro-Light";
-  src: url("assets/fonts/SourceSansPro-Light.otf");
+  src: url("/assets/fonts/SourceSansPro-Light.otf");
   font-weight: normal;
   font-style: normal; }
 
@@ -2142,11 +2142,11 @@ oath-login-drv .btn-wrap {
       background-size: contain;
       padding: 0; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
-        background-image: url("assets/images/sat-name@2x.png"); }
+        background-image: url("/assets/images/sat-name@2x.png"); }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
-        background-image: url("assets/images/act-name@2x.png"); }
+        background-image: url("/assets/images/act-name@2x.png"); }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
-        background-image: url("assets/images/toefl-name@2x.png"); }
+        background-image: url("/assets/images/toefl-name@2x.png"); }
 
 login-app a {
   color: inherit;
@@ -2156,7 +2156,7 @@ login-app .login-app {
   height: 100%;
   margin: 0 auto;
   background-color: #f7f7f7;
-  background-image: url("assets/images/logo-pattern-bg.png");
+  background-image: url("/assets/images/logo-pattern-bg.png");
   font-family: 'SourceSansPro', sans-serif;
   font-weight: 400; }
   login-app .login-app > header {
@@ -2174,7 +2174,7 @@ login-app .login-app {
         width: 76px;
         height: 36px;
         float: left;
-        background-image: url("assets/images/zinkerz_logo.png");
+        background-image: url("/assets/images/zinkerz_logo.png");
         background-repeat: no-repeat;
         background-size: contain; }
       login-app .login-app > header .logo-wrapper span {
@@ -2204,11 +2204,11 @@ login-app .login-app {
         background-size: contain;
         float: left; }
         login-app .login-app > header .app-select .app-img-holder.sat {
-          background-image: url("assets/images/sat-name@2x.png"); }
+          background-image: url("/assets/images/sat-name@2x.png"); }
         login-app .login-app > header .app-select .app-img-holder.act {
-          background-image: url("assets/images/act-name@2x.png"); }
+          background-image: url("/assets/images/act-name@2x.png"); }
         login-app .login-app > header .app-select .app-img-holder.toefl {
-          background-image: url("assets/images/toefl-name@2x.png"); }
+          background-image: url("/assets/images/toefl-name@2x.png"); }
       login-app .login-app > header .app-select .expand-menu {
         float: right; }
   login-app .login-app .main {

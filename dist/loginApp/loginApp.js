@@ -117,7 +117,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+        ["$translatePartialLoader", "LoginAppSrv", "$window", "$timeout", function ($translatePartialLoader, LoginAppSrv, $window, $timeout) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
@@ -133,15 +133,29 @@
                         userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.loginSubmit = function(loginForm){
+                    scope.loginSubmit = function(loginForm) {
                         if (!scope.d.loginFormData) {
                             $window.alert('form is empty!', loginForm);
                             return;
                         }
-                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        scope.startLoader = true;
+                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
+                            .then(function(){
+                                scope.fillLoader = true;
+                                $timeout(function () {
+                                    scope.startLoader = false;
+                                    scope.fillLoader = false;
+                                }, 100);
+                            })
+                            .catch(function(err){
+                                scope.fillLoader = true;
+                                $timeout(function () {
+                                    scope.startLoader = false;
+                                    scope.fillLoader = false;
+                                }, 100);
+                                console.error(err);
+                                $window.alert(err);
+                            });
                     };
                 }
             };
@@ -844,7 +858,18 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\" translate=\".LOGIN_IN\" class=\"app-bg\" autofocus></button>\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"disabled\"\n" +
+    "                    translate=\".LOGIN_IN\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    element-loader\n" +
+    "                    fill-loader=\"fillLoader\"\n" +
+    "                    show-loader=\"startLoader\"\n" +
+    "                    bg-loader=\"'#72ab40'\"\n" +
+    "                    precentage=\"50\"\n" +
+    "                    font-color=\"'#FFFFFF'\"\n" +
+    "                    bg=\"'#87ca4d'\"\n" +
+    "                    autofocus></button>\n" +
     "        </div>\n" +
     "        <div class=\"forgot-pwd-wrapper\">\n" +
     "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
@@ -855,7 +880,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "");
   $templateCache.put("components/loginApp/templates/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
-    "    <button class=\"btn facebook-btn\"\n" +
+    "    <button class=\"facebook-btn\"\n" +
     "            ng-click=\"vm.socialAuth('facebook')\"\n" +
     "            ng-if=\"vm.providers.facebook\"\n" +
     "            element-loader\n" +
@@ -868,7 +893,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
     "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
     "    </button>\n" +
-    "    <button class=\"btn gplus-btn\"\n" +
+    "    <button class=\"gplus-btn\"\n" +
     "            ng-click=\"vm.socialAuth('google')\"\n" +
     "            ng-if=\"vm.providers.google\"\n" +
     "            element-loader\n" +
