@@ -2,7 +2,8 @@
 
 angular.module('demo', [
     'znk.infra-web-app.workoutsRoadmap',
-    'znk.infra.exams'
+    'znk.infra.exams',
+    'demoEnv'
 ])
 
     .config(function (ScoringServiceProvider, UserGoalsServiceProvider) {

@@ -5452,7 +5452,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         facebookAppId: '1576342295937853',
         googleAppId: '1008364992567-gpi1psnhk0t41bf8jtm86kjc74c0if7c.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/sat/web-app',
+        redirectFacebook: '//www.zinkerz.com/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'sat_app',
         studentAppName: 'sat_app',
@@ -5474,7 +5474,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
         facebookAppId: '1557254871261322',
         googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/act/web-app',
+        redirectFacebook: '//www.zinkerz.com/',
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'act_app',
@@ -5497,7 +5497,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
         facebookAppId: '1658075334429394',
         googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/toefl-test-prep/',
+        redirectFacebook: '//www.zinkerz.com/',
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'toefl_app',
@@ -5940,7 +5940,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
-    "                app-context=\"d.appContext\"\n" +
+    "                app-context=\"appContext\"\n" +
     "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
@@ -6019,7 +6019,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
-    "                app-context=\"d.appContext\"\n" +
+    "                app-context=\"appContext\"\n" +
     "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
