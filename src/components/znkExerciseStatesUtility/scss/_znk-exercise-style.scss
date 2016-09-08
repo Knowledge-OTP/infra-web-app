@@ -38,17 +38,6 @@
             background-color: $bgColor1;
         }
 
-        questions-carousel {
-            question-builder {
-                img {
-                    max-width: 400px !important;
-                    height: auto !important;
-                    vertical-align: middle;
-                }
-                height: 100%;
-            }
-        }
-
         znk-exercise-btn-section {
             .shadow-container {
                 background: $bgColor1;
@@ -74,6 +63,21 @@
                 padding: 5px;
                 border: 1px solid $borderColor15;
                 vertical-align: top;
+            }
+        }
+    }
+}
+
+.base-complete-exercise-container, .exercise-container {
+    znk-exercise {
+        questions-carousel {
+            question-builder {
+                img {
+                    max-width: 400px !important;
+                    height: auto !important;
+                    vertical-align: middle;
+                }
+                height: 100%;
             }
         }
     }
