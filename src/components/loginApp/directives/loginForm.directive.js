@@ -13,8 +13,7 @@
                 restrict: 'E',
                 scope: {
                     appContext: '<',
-                    userContext: '<',
-                    // loaderSettings: '<'
+                    userContext: '<'
                 },
                 link: function (scope) {
 

@@ -27,35 +27,10 @@
 
                     scope.currentUserContext =  'student';
                     scope.currentForm = 'signup';
-                    scope.d.loaderSettings = {
-                        loaderColor: '#088E9E',
-                        buttonBg: '#0a9bad'
-                    };
 
                     scope.selectApp = function(app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
-
-                        // switch (app) {
-                        //     case LoginAppSrv.APPS.SAT:
-                        //         scope.d.loaderSettings = {
-                        //             loaderColor: '#088E9E',
-                        //             buttonBg: '#0a9bad'
-                        //         };
-                        //         break;
-                        //     case LoginAppSrv.APPS.ACT:
-                        //         scope.d.loaderSettings = {
-                        //             loaderColor: '#72ab40',
-                        //             buttonBg: '#87ca4d'
-                        //         };
-                        //         break;
-                        //     case LoginAppSrv.APPS.TOEFL:
-                        //         scope.d.loaderSettings = {
-                        //             loaderColor: '#e4841d',
-                        //             buttonBg: '#ff931e'
-                        //         };
-                        //         break;
-                        // }
                     };
 
                     scope.changeCurrentForm = function (currentForm) {
