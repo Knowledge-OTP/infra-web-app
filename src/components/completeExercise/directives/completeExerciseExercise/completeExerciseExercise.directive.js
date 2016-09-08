@@ -8,7 +8,7 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum) {
+            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum, ZnkExerciseViewModeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -16,6 +16,8 @@
                 var exerciseViewBinding = {},
                     exerciseViewBindWatchDestroyer = angular.noop,
                     lastShDataReceived;
+
+                $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
 
                 function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
