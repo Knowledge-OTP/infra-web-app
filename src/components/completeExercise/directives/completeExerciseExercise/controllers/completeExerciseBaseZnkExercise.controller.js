@@ -27,6 +27,8 @@
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercise();
+
             var $ctrl = this;
 
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
@@ -78,12 +80,17 @@
                 //  stats exercise data
                 StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
                     $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
+                    var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                    ZnkExerciseUtilitySrv.shouldBroadCastExercise().then(function(shouldBroadcast) {
+                    shouldBroadCastExerciseProm({
+                        exercise: exerciseContent,
+                        exerciseResult: exerciseResult,
+                        exerciseParent: exerciseParentIsSectionOnly
+                    }).then(function(shouldBroadcast) {
                         if (shouldBroadcast) {
                             var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                             var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, isSection ? exerciseParentContent : undefined);
+                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
                         }
                     });
 
