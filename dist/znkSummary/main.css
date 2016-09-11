@@ -48,8 +48,10 @@ znk-summary-results {
   znk-summary-results .gauge-row-wrapper .statistics {
     width: 320px;
     height: 110px;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-around;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
     position: relative;
     top: 40px;
     left: 44px; }
@@ -62,19 +64,26 @@ znk-summary-results {
       height: 96px;
       background-color: #e7e7e7; }
     znk-summary-results .gauge-row-wrapper .statistics .stat-row {
+      display: -ms-flexbox;
       display: flex;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
       position: relative; }
       znk-summary-results .gauge-row-wrapper .statistics .stat-row .stat-val {
         width: 40px;
         height: 40px;
+        display: -ms-flexbox;
         display: flex;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         text-align: center;
         font-size: 28px;
         color: #ffffff;

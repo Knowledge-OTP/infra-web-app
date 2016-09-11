@@ -34,8 +34,10 @@ sh-viewer .header {
     font-size: 16px; }
 
 sh-viewer .sh-viewer-main-container {
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
   margin-top: 25px; }
   sh-viewer .sh-viewer-main-container .none {
     /*CSS for basic styling and non-retina image path:*/
@@ -45,7 +47,7 @@ sh-viewer .sh-viewer-main-container {
     width: 1060px;
     height: 657px;
     text-align: center; }
-    @media only screen and (min-resolution: 1.5dppx) {
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
       sh-viewer .sh-viewer-main-container .none {
         background-image: url("/assets/images/bg/etutoring-empty-sharing@2x.png"); } }
     sh-viewer .sh-viewer-main-container .none .texts-container {

@@ -149,27 +149,26 @@ login-app {
                 float: right;
                 margin-top: 12px;
                 cursor: pointer;
+                border-radius: 15px;
+                border: 1px solid;
+                padding: 5px 8px;
                 &:hover {
                     text-decoration: underline;
                 }
             }
         }
         .main {
+            position: relative;
             padding: 0;
-            // width: 1366px;
-            // height: 513px;
-            // margin: 0 auto;
-            //background: {
-            //    size: 100% auto;
-            //    repeat: no-repeat;
-            //    // position: center center;
-            //};
             .main-inner {
-                position: relative;
-                width: 1366px;
-                height: 513px;
-                margin: 0 auto;
+                // position: absolute;
+                // width: 1366px;
+                // height: 513px;
+                // margin: 0 auto;
+                // top: 0;
+                // left: calc(50% - 683px);
                 h2.banner-text {
+                    position: absolute;
                     font: {
                         size: 32px;
                         family: 'SourceSansPro-Light';
@@ -177,15 +176,13 @@ login-app {
                     }
                     color: $fontColor1;
                     margin: 0;
-                    padding: 25px 30px;
-                    bottom: 0;
-                    position: absolute;
+                    bottom: 40px;
+                    left: 40px;
                 }
             }
             img.main-banner {
                 min-height: 513px;
                 min-width: 1366px;
-                position: absolute;
             }
 
             .login-container,
@@ -208,22 +205,7 @@ login-app {
                     family: 'SourceSansPro-Light';
                 }
             }
-
-            signup-form,
-            login-form {
-
-            }
         }
-        //&.educator {
-        //    .main {
-        //        background-image: url('/assets/images/login-teacher-bg@2x.jpg');
-        //    }
-        //}
-        //&.student {
-        //    .main {
-        //        background-image: url('/assets/images/login-student-bg@2x.jpg');
-        //    }
-        //}
         &.sat {
             .app-bg {
                 background: $bgColor5;
@@ -234,7 +216,7 @@ login-app {
             .app-color {
                 color: $bgColor5;
                 &:hover {
-                    // color: $fontColor20;
+                    color: $bgColor55;
                 }
             }
         }
@@ -248,7 +230,7 @@ login-app {
             .app-color {
                 color: $bgColor7;
                 &:hover {
-
+                    color: $bgColor15;
                 }
             }
         }
@@ -262,7 +244,7 @@ login-app {
             .app-color {
                 color: $bgColor2;
                 &:hover {
-                    color: $fontColor21;
+                    color: $bgColor56;
                 }
             }
         }
@@ -450,9 +432,9 @@ login-app {
         footer {
             text-align: center;
             padding-bottom: 40px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
+            //position: absolute;
+            //bottom: 0;
+            //width: 100%;
             .switch-student-educator {
                 font-weight:normal;
                 h2 {

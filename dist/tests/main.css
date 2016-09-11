@@ -30,6 +30,7 @@
     border-left: 2px solid #0a9bad;
     transition: 0.1s; }
     .app-tests-navigationPane md-list md-list-item button {
+      display: -ms-flexbox;
       display: flex;
       width: 100%;
       height: 100%;
@@ -40,7 +41,8 @@
       border-radius: 0;
       margin: 0;
       background-color: inherit;
-      justify-content: space-between; }
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
       .app-tests-navigationPane md-list md-list-item button span {
         margin-left: 25px;
         text-transform: capitalize; }
@@ -68,7 +70,8 @@
       border-style: solid;
       border-width: 10px 0 10px 10px;
       border-color: transparent transparent transparent #f2f2f2;
-      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+      -webkit-filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+              filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
       position: absolute;
       right: -9px;
       top: 18px; }

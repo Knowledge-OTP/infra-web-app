@@ -12,8 +12,10 @@
   width: 1060px;
   height: calc(100vh - 125px);
   background-color: white;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   position: relative;
   margin-right: auto;
   margin-left: auto; }
@@ -21,7 +23,8 @@
     border-top-right-radius: 15px;
     border-top-left-radius: 15px; }
   .exercise-container znk-exercise {
-    flex-grow: 1; }
+    -ms-flex-positive: 1;
+        flex-grow: 1; }
     .exercise-container znk-exercise znk-exercise-btn-section .btn-container svg-icon {
       display: block; }
     .exercise-container znk-exercise .swiper-container {
