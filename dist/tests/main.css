@@ -1,0 +1,88 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+.app-tests-navigationPane .tests-navigation-title-header {
+  color: #4f4d4d;
+  height: 65px;
+  border-bottom: 1px solid #f2f2f2;
+  text-align: center;
+  line-height: 65px;
+  font-size: 17px;
+  font-family: Quicksand;
+  font-weight: 700; }
+
+.app-tests-navigationPane md-list {
+  padding: 0; }
+  .app-tests-navigationPane md-list.md-list-second-list md-list-item {
+    border-top: 1px solid #f2f2f2; }
+  .app-tests-navigationPane md-list md-list-item {
+    position: relative;
+    width: 100%;
+    height: 52.5px;
+    border-bottom: 1px solid #f2f2f2;
+    border-left: 2px solid #0a9bad;
+    transition: 0.1s; }
+    .app-tests-navigationPane md-list md-list-item button {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+      color: #0a9bad;
+      font-family: Lato;
+      font-weight: 400;
+      border-radius: 0;
+      margin: 0;
+      background-color: inherit;
+      justify-content: space-between; }
+      .app-tests-navigationPane md-list md-list-item button span {
+        margin-left: 25px;
+        text-transform: capitalize; }
+      .app-tests-navigationPane md-list md-list-item button.md-button:not([disabled]):hover {
+        background-color: #ebebeb; }
+    .app-tests-navigationPane md-list md-list-item.done {
+      border-left: 2px solid #87ca4d; }
+      .app-tests-navigationPane md-list md-list-item.done button {
+        color: #4f4d4d; }
+    .app-tests-navigationPane md-list md-list-item.active {
+      background-color: #f2f2f2; }
+      .app-tests-navigationPane md-list md-list-item.active button.md-button:not([disabled]):hover {
+        background-color: #f2f2f2; }
+    .app-tests-navigationPane md-list md-list-item.active:after {
+      content: "\A";
+      border-left: 7.5px solid #0a9bad;
+      left: 0;
+      position: absolute;
+      top: 0;
+      height: 100%; }
+    .app-tests-navigationPane md-list md-list-item.active.done:after {
+      border-left: 7.5px solid #87ca4d; }
+    .app-tests-navigationPane md-list md-list-item.active:before {
+      content: "\A";
+      border-style: solid;
+      border-width: 10px 0 10px 10px;
+      border-color: transparent transparent transparent #f2f2f2;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+      position: absolute;
+      right: -9px;
+      top: 18px; }
+    .app-tests-navigationPane md-list md-list-item .status-icon-wrapper {
+      position: relative;
+      color: white;
+      background: #87ca4d;
+      border-radius: 100%;
+      margin-right: 5px;
+      width: 22.5px;
+      height: 22.5px; }
+      .app-tests-navigationPane md-list md-list-item .status-icon-wrapper i {
+        font-size: 17px;
+        margin: 0;
+        position: absolute;
+        top: 3px;
+        left: 3px; }

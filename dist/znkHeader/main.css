@@ -1,0 +1,772 @@
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+@import url(http://fonts.googleapis.com/icon?family=Material+Icons);
+purchase-btn form img {
+  display: block; }
+
+purchase-btn .flex-container {
+  padding: 0;
+  margin: 0 -15px;
+  list-style: none;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  justify-content: flex-start; }
+
+purchase-btn .flex-item {
+  padding: 0;
+  margin: auto; }
+
+purchase-btn .upgrade-btn-wrapper {
+  text-align: center; }
+  purchase-btn .upgrade-btn-wrapper .md-button {
+    padding: 0; }
+
+purchase-btn .upgraded .pending md-progress-circular {
+  margin-right: 20px;
+  float: left;
+  top: -10px; }
+  purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle,
+  purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
+    border-top-color: #87ca4d; }
+  purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-left .md-half-circle {
+    border-left-color: #87ca4d; }
+  purchase-btn .upgraded .pending md-progress-circular .md-spinner-wrapper .md-inner .md-right .md-half-circle {
+    border-right-color: #87ca4d; }
+
+purchase-btn .upgraded .icon-wrapper {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: #87ca4d;
+  float: left;
+  margin-right: 20px; }
+  purchase-btn .upgraded .icon-wrapper svg-icon {
+    height: 100%; }
+  purchase-btn .upgraded .icon-wrapper svg-icon svg {
+    width: 75%;
+    height: 100%;
+    margin: auto;
+    display: block; }
+
+purchase-btn .upgraded .text {
+  line-height: 25px;
+  display: inline-block; }
+
+/* full background image with retina */
+/* full background image with retina */
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+.purchase-popup {
+  width: 585px;
+  overflow: visible;
+  background: none; }
+  .purchase-popup form {
+    overflow: visible; }
+  .purchase-popup .close-popup-wrap {
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    height: 24px;
+    width: 24px;
+    padding: 0;
+    margin: 10px;
+    cursor: pointer; }
+    .purchase-popup .close-popup-wrap svg line {
+      stroke: white; }
+  .purchase-popup .popup-header {
+    position: relative;
+    height: 40px;
+    background-color: #0a9bad;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px; }
+    .purchase-popup .popup-header .raccoon {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      margin: 0 auto;
+      position: relative;
+      bottom: 17.5px;
+      background-color: #0a9bad;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
+        width: 45px;
+        height: 45px; }
+        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
+          fill: white; }
+  .purchase-popup .md-dialog-content {
+    padding: 20px 20px 60px;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px; }
+    .purchase-popup .md-dialog-content h2 {
+      font-size: 25px;
+      color: #161616;
+      font-family: Quicksand;
+      font-weight: 700;
+      text-align: center;
+      font-size: 25px;
+      color: #161616;
+      font-family: Quicksand;
+      font-weight: 700;
+      text-align: center;
+      margin: 15px 0 10px;
+      margin: 15px 0 10px; }
+      .purchase-popup .md-dialog-content h2 .pro {
+        font-size: 20px;
+        padding: 2px 7px; }
+    .purchase-popup .md-dialog-content p {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 200;
+      text-align: center; }
+    .purchase-popup .md-dialog-content .features-box {
+      width: 300px;
+      margin: 15px auto;
+      padding: 25px 40px;
+      background-color: #E4E0E0; }
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-4-icon svg,
+      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-5-icon svg {
+        width: 26px;
+        height: auto;
+        max-height: 50px; }
+      .purchase-popup .md-dialog-content .features-box ul {
+        padding: 0;
+        margin: 0;
+        list-style: none; }
+        .purchase-popup .md-dialog-content .features-box ul li {
+          font-size: 18px;
+          color: #4f4d4d;
+          font-family: Quicksand;
+          font-weight: normal;
+          font-size: 18px;
+          color: #4f4d4d;
+          font-family: Quicksand;
+          font-weight: normal;
+          line-height: 50px;
+          line-height: 50px; }
+          .purchase-popup .md-dialog-content .features-box ul li .bullet {
+            float: left;
+            margin-right: 30px;
+            top: 8px;
+            position: relative; }
+    .purchase-popup .md-dialog-content .price {
+      font-size: 16px;
+      color: #757a83;
+      font-family: Lato;
+      font-weight: lighter;
+      text-align: center;
+      margin-bottom: 15px; }
+      .purchase-popup .md-dialog-content .price b {
+        font-size: 20px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: normal;
+        margin: 0 10px 0 15px; }
+    .purchase-popup .md-dialog-content .action .md-button {
+      width: 300px;
+      margin: 0 auto;
+      font-size: 20px;
+      color: white;
+      font-family: Lato;
+      font-weight: normal; }
+    .purchase-popup .md-dialog-content .upgraded-container {
+      text-align: center;
+      font-size: 16px;
+      color: #757a83;
+      font-family: Lato;
+      font-weight: 400;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center; }
+      .purchase-popup .md-dialog-content .upgraded-container svg-icon {
+        margin-right: 15px;
+        margin-top: 2px; }
+  .purchase-popup .pill {
+    background-color: #87ca4d;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px; }
+
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+/* full background image with retina */
+/* full background image with retina */
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+md-dialog.invitation-confirm-modal {
+  overflow: visible;
+  width: 520px;
+  max-width: 520px;
+  height: 310px;
+  max-height: 310px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background: none; }
+  md-dialog.invitation-confirm-modal md-toolbar {
+    height: 40px;
+    max-height: 40px;
+    min-height: 40px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px; }
+    md-dialog.invitation-confirm-modal md-toolbar:not(.md-menu-toolbar) {
+      background-color: #0a9bad; }
+    md-dialog.invitation-confirm-modal md-toolbar .close-popup-wrap {
+      position: absolute;
+      top: -35px;
+      right: -35px;
+      height: 14px;
+      width: 14px;
+      padding: 10px;
+      cursor: pointer; }
+  md-dialog.invitation-confirm-modal md-dialog-content {
+    padding-top: 25px;
+    height: 100%;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px; }
+    md-dialog.invitation-confirm-modal md-dialog-content .main-title {
+      margin-top: 20px; }
+    md-dialog.invitation-confirm-modal md-dialog-content .teacher {
+      font-size: 16px;
+      color: #161616;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      margin: 35px 10px;
+      padding: 0 25px; }
+      md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
+        padding-left: 1px; }
+    md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
+      display: flex;
+      flex-direction: row;
+      justify-content: center; }
+      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
+        margin: auto; }
+      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
+        color: #0a9bad; }
+  md-dialog.invitation-confirm-modal .top-icon-wrap {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 40px; }
+    md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon {
+      display: flex;
+      justify-content: center; }
+      md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap {
+        width: 76px;
+        height: 76px;
+        border-radius: 38px;
+        background-color: #0a9bad;
+        z-index: 9;
+        margin-top: -15px;
+        display: flex;
+        justify-content: center;
+        align-items: center; }
+        md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
+          width: 14px;
+          stroke: #067f8e; }
+        md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon * {
+          fill: #067f8e; }
+  md-dialog.invitation-confirm-modal .big-success-msg .completed-v-icon-wrap {
+    width: 75px;
+    margin: 8px auto; }
+  md-dialog.invitation-confirm-modal .big-success-msg div {
+    font-size: 16px;
+    color: #7d7d7d;
+    font-family: Lato;
+    font-weight: 400;
+    text-align: center;
+    margin: 10px; }
+  md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
+    display: flex;
+    justify-content: center; }
+
+/* full background image with retina */
+/* full background image with retina */
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+invitation-manager .invite-icon-btn {
+  margin-right: 5px;
+  position: relative; }
+  invitation-manager .invite-icon-btn .num-of-receive {
+    position: absolute;
+    top: 0;
+    right: 4px;
+    width: 14px;
+    height: 14px;
+    background: #ff6766;
+    font-size: 10px;
+    color: white;
+    border-radius: 7px;
+    text-align: center; }
+
+invitation-manager .circle-invite-wrap {
+  width: 33px;
+  height: 33px;
+  border-radius: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  cursor: pointer; }
+
+invitation-manager .teacher-icon-wrap {
+  background-color: #f6f6f6; }
+  invitation-manager .teacher-icon-wrap .teacher-icon {
+    width: 24px; }
+
+invitation-manager +
+.teacher-active-icon-wrap {
+  border: 1px solid #0a9bad; }
+  invitation-manager +
+.teacher-active-icon-wrap .teacher-active-icon {
+    width: 23px;
+    height: 16px; }
+  invitation-manager +
+.teacher-active-icon-wrap .teacher-active-icon * {
+    fill: #0a9bad; }
+
+md-menu-content.md-menu-content-invitation-manager {
+  min-width: 280px;
+  overflow: hidden;
+  padding: 0; }
+  md-menu-content.md-menu-content-invitation-manager md-list {
+    padding-top: 0;
+    padding-bottom: 0; }
+    md-menu-content.md-menu-content-invitation-manager md-list md-list-item {
+      min-height: 20px;
+      border-bottom: 1px solid #ebebeb;
+      display: flex;
+      flex-direction: row;
+      align-items: center; }
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
+        width: 14px;
+        height: 14px;
+        stroke: #0a9bad; }
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations * {
+        stroke: #0a9bad; }
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations {
+        width: 14px;
+        height: 14px;
+        stroke: #92969d; }
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations * {
+        stroke: #92969d; }
+    md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
+      padding: 10px 0; }
+    md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
+      display: flex;
+      flex-direction: column;
+      padding: 10px 20px;
+      flex-grow: 1; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+        font-size: 16px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: capitalize;
+        flex-grow: 1;
+        margin-bottom: 3px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+        font-size: 14px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 400; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .creation-time, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .creation-time {
+        font-size: 10px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 200; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .declined-your-invitation-text, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .declined-your-invitation-text {
+        font-size: 14px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 200;
+        margin-left: 3px; }
+    md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
+      padding: 10px 0 10px 13px;
+      flex-direction: row;
+      align-items: baseline;
+      flex-grow: 0; }
+    md-menu-content.md-menu-content-invitation-manager md-list .invite-sub-title {
+      font-size: 14px;
+      color: #757a83;
+      font-family: Lato;
+      font-weight: 400;
+      text-transform: uppercase;
+      border-bottom: 1px solid #ebebeb; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
+      width: 25px;
+      height: 25px;
+      border: 1px solid #acacac;
+      border-radius: 13px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 6px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn {
+        height: 12px;
+        width: 12px;
+        cursor: pointer;
+        margin-top: -2px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn * {
+        stroke: #acacac; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
+      border: none; }
+    md-menu-content.md-menu-content-invitation-manager md-list .approve-invite {
+      width: 25px;
+      height: 25px;
+      border: 1px solid #87ca4d;
+      border-radius: 13px;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
+        width: 14px;
+        cursor: pointer; }
+      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn * {
+        stroke: #87ca4d; }
+  md-menu-content.md-menu-content-invitation-manager .empty-invite .empty-msg {
+    font-size: 16px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400;
+    text-align: center;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px; }
+  md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    background: #fafafa; }
+    md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
+      margin: 10px auto; }
+  md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap {
+    font-size: 14px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400;
+    background-color: #fafafa;
+    border-bottom: 1px solid #ebebeb;
+    padding: 15px;
+    position: relative; }
+    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .title {
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 10px; }
+    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-name {
+      text-transform: capitalize;
+      line-height: 25px; }
+    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-email {
+      font-weight: 200;
+      color: #acacac; }
+    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher {
+      height: 12px;
+      width: 12px;
+      cursor: pointer;
+      margin-top: -2px;
+      position: absolute;
+      right: 10px;
+      top: 50%; }
+    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher * {
+      stroke: #acacac; }
+
+/* full background image with retina */
+/* full background image with retina */
+md-dialog.invite-teacher-modal-wrap {
+  overflow: visible;
+  width: 533px;
+  height: 420px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background: none; }
+  md-dialog.invite-teacher-modal-wrap md-toolbar {
+    height: 40px;
+    max-height: 40px;
+    min-height: 40px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px; }
+    md-dialog.invite-teacher-modal-wrap md-toolbar:not(.md-menu-toolbar) {
+      background-color: #0a9bad; }
+    md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap {
+      position: absolute;
+      top: -35px;
+      right: -35px;
+      padding: 10px;
+      cursor: pointer; }
+      md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg {
+        height: 14px;
+        width: 14px; }
+        md-dialog.invite-teacher-modal-wrap md-toolbar .close-popup-wrap svg line {
+          stroke: white; }
+  md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content {
+    background-color: #ffffff;
+    padding-top: 35px;
+    height: 100%;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    display: flex;
+    align-items: center;
+    overflow: hidden; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .modal-main-title {
+      margin-top: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 25px;
+      color: #161616;
+      font-family: Quicksand;
+      font-weight: 600; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .invite-teacher-form .znk-input-group input {
+      height: 40px;
+      padding-left: 10px;
+      border-width: 1px 1px 1px 1px;
+      border-radius: 0;
+      width: 328px; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .invite-teacher-form .btn-wrap {
+      margin-top: 40px;
+      text-align: center; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .invite-teacher-form .btn-wrap .invite-msg {
+        font-size: 12px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 200; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
+      width: 138px;
+      margin: 0 auto; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
+      font-size: 16px;
+      color: #7d7d7d;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      margin-top: 20px; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
+      display: flex;
+      justify-content: center; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
+        margin: 0 auto 65px; }
+  md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 40px; }
+    md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon {
+      display: flex;
+      justify-content: center; }
+      md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap {
+        width: 76px;
+        height: 76px;
+        border-radius: 38px;
+        background-color: #0a9bad;
+        z-index: 9;
+        margin-top: -15px;
+        display: flex;
+        justify-content: center;
+        align-items: center; }
+        md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
+          width: 35px;
+          stroke: #085c66; }
+        md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon * {
+          fill: #085c66; }
+        md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
+          /*CSS for basic styling and non-retina image path:*/
+          background-image: url("/assets/icons/invite-teacher-icon.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          display: inline-block;
+          width: 45px;
+          height: 42px;
+          /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+          @media only screen and (min-resolution: 1.5dppx) {
+            md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap .invite-teacher-icon {
+              background-image: url("/assets/icons/invite-teacher-icon@2x.png");
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: cover;
+              display: inline-block;
+              width: 45px;
+              height: 42px; } }
+
+.app-header {
+  background: white;
+  height: 57px;
+  border-bottom: 1px solid #f2f2f2;
+  font-family: Lato; }
+  .app-header .main-content-header {
+    margin: 0 auto;
+    height: 100%;
+    width: 1060px; }
+    .app-header .main-content-header .raccoon-logo-icon svg {
+      height: 37.5px;
+      width: 57px;
+      margin-top: 10px;
+      cursor: pointer; }
+    .app-header .main-content-header .app-states-list {
+      margin-left: 20px; }
+      .app-header .main-content-header .app-states-list md-list {
+        padding-top: 5px;
+        padding-bottom: 0; }
+        .app-header .main-content-header .app-states-list md-list md-list-item {
+          cursor: pointer;
+          flex: initial; }
+          .app-header .main-content-header .app-states-list md-list md-list-item .title {
+            text-transform: capitalize;
+            align-self: stretch;
+            padding-top: 15px; }
+          .app-header .main-content-header .app-states-list md-list md-list-item:hover .title {
+            color: #0a9bad; }
+          .app-header .main-content-header .app-states-list md-list md-list-item.active .title {
+            color: #0a9bad; }
+    .app-header .main-content-header .app-user-area {
+      align-self: center;
+      margin-left: auto; }
+      .app-header .main-content-header .app-user-area .profile-status {
+        font-size: 16px;
+        padding: 0 12px 0 0;
+        border-right: 1px solid #ebebeb;
+        cursor: pointer; }
+        .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper {
+          width: 16px;
+          height: 16px;
+          margin-right: 10px;
+          float: left; }
+          .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper + span {
+            font-size: 16px;
+            font-family: Lato;
+            font-weight: Light;
+            font-style: italic; }
+      .app-header .main-content-header .app-user-area .profile-status:hover {
+        color: #0a9bad; }
+      .app-header .main-content-header .app-user-area .profile-open-modal-btn {
+        text-transform: none;
+        font-size: 16px; }
+      .app-header .main-content-header .app-user-area .profile-open-modal-btn:hover {
+        color: #0a9bad; }
+      .app-header .main-content-header .app-user-area .md-button {
+        background: white;
+        width: auto;
+        display: flex !important;
+        justify-content: center;
+        align-items: center; }
+        .app-header .main-content-header .app-user-area .md-button div {
+          min-width: 40px; }
+
+._md-open-menu-container .header-modal-item {
+  font-family: Lato; }
+  ._md-open-menu-container .header-modal-item a {
+    width: 100%;
+    text-decoration: none;
+    color: inherit; }
+  ._md-open-menu-container .header-modal-item:not(.purchase-status) span {
+    width: 100%; }
+  ._md-open-menu-container .header-modal-item.header-modal-item-profile {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 11px; }
+    ._md-open-menu-container .header-modal-item.header-modal-item-profile .username {
+      margin-bottom: 5px; }
+    ._md-open-menu-container .header-modal-item.header-modal-item-profile .email {
+      font-size: 14px;
+      color: #acacac;
+      font-family: Lato;
+      font-weight: 300;
+      border-bottom: 1px solid #0a9bad;
+      width: 100%;
+      padding-bottom: 15px; }
+  ._md-open-menu-container .header-modal-item.header-modal-item-uppercase {
+    min-height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 300;
+    cursor: pointer; }
+    ._md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
+      color: #161616; }
+    ._md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
+      color: #898989; }
+  ._md-open-menu-container .header-modal-item .check-mark-wrapper {
+    position: relative;
+    top: -2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #cfcfcf;
+    margin-left: 10px; }
+    ._md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
+      height: 100%; }
+    ._md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
+      width: 75%;
+      height: 100%;
+      margin: auto;
+      display: block; }
+  ._md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
+    background-color: #f8f8f8; }
+
+md-menu-content.md-menu-content-znk-header {
+  min-width: 270px;
+  max-height: none;
+  padding: 16px 0; }
+  md-menu-content.md-menu-content-znk-header md-list {
+    padding-top: 0;
+    padding-bottom: 0; }
+    md-menu-content.md-menu-content-znk-header md-list .divider {
+      height: 1px;
+      margin: 10px 16px;
+      border-top: 1px solid #ebebeb; }
+  md-menu-content.md-menu-content-znk-header .pending-purchase-icon-wrapper {
+    width: 16px;
+    height: auto;
+    margin-left: 10px;
+    position: relative;
+    top: 3px; }
+  md-menu-content.md-menu-content-znk-header [disabled="disabled"] {
+    opacity: 0.5;
+    cursor: default; }
+
+.link-full-item {
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; }
