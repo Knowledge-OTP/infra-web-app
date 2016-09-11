@@ -27,7 +27,7 @@
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
-            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercise();
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
 
             var $ctrl = this;
 
@@ -82,11 +82,12 @@
                     $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
                     var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                    shouldBroadCastExerciseProm({
-                        exercise: exerciseContent,
-                        exerciseResult: exerciseResult,
-                        exerciseParent: exerciseParentIsSectionOnly
-                    }).then(function(shouldBroadcast) {
+                    shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                        var shouldBroadcast = shouldBroadcastFn({
+                            exercise: exerciseContent,
+                            exerciseResult: exerciseResult,
+                            exerciseParent: exerciseParentIsSectionOnly
+                        });
                         if (shouldBroadcast) {
                             var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                             var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
