@@ -275,29 +275,6 @@ login-app {
             .inputs-container{
                 .input-wrapper{
                     position: relative;
-                    .validationBox {
-                        width: 270px;
-                        padding: 3px 10px;
-                        position: absolute;
-                        right: 0;
-                        top: -32px;
-                        background-color: #ff6766;
-                        color: $fontColor1;
-                        border-radius: 3px;
-                        line-height: 30px;
-                        &:after {
-                            content: '';
-                            position: absolute;
-                            border: {
-                                color: transparent;
-                                style: solid;
-                                top-color: #ff6766;
-                                width: 10px;
-                            }
-                            top: 36px;
-                            left: 13px;
-                        }
-                    }
                     box-sizing: border-box;
                     width: 340px;
                     border: 1px $borderColor1 solid;
