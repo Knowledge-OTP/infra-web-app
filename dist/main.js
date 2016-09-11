@@ -412,8 +412,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", "InfraConfigSrv", "$scope", "UserProfileService", "ScreenSharingSrv", "ExerciseTypeEnum", "StatsEventsHandlerSrv", "exerciseEventsConst", "$rootScope", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum,
-                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope) {
+            controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", "InfraConfigSrv", "$scope", "UserProfileService", "ScreenSharingSrv", "ExerciseTypeEnum", "StatsEventsHandlerSrv", "exerciseEventsConst", "$rootScope", "ZnkExerciseViewModeEnum", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum,
+                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope, ZnkExerciseViewModeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -1378,7 +1378,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-
+        
     ]);
 })(angular);
 
@@ -2726,7 +2726,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -3803,7 +3803,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject';
+            'ngInject'; 
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -3832,7 +3832,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 
 (function () {
     'use strict';
-
+    
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -7989,13 +7989,13 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config'
+        'znk.infra.config' 
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -8047,7 +8047,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]);
+    ]);  
 })(angular);
 
 /**
@@ -9244,7 +9244,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
-
+            
             var svgMap = {
                 'workouts-roadmap-checkmark': 'components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg',
                 'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
@@ -9544,7 +9544,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
@@ -9817,7 +9817,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function () {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config([
             'SvgIconSrvProvider',

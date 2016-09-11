@@ -9,7 +9,7 @@
                 completeExerciseCtrl: '^completeExercise'
             },
             controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum,
-                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope) {
+                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope, ZnkExerciseViewModeEnum) {
                 'ngInject';
 
                 var $ctrl = this;

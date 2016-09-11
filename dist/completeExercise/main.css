@@ -45,7 +45,7 @@ complete-exercise-exercise .base-complete-exercise-container {
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary {
       cursor: pointer;
       height: 30px;
-      background: rgba(255, 255, 255, 0.2);
+      background: #B33520;
       text-align: center;
       border-radius: 15px;
       line-height: 30px;
