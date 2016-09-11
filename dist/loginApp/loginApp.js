@@ -90,8 +90,8 @@
                         if (search.state) {
                             scope.changeCurrentForm(search.state);
                         }
-                        $location.search('app', null);
-                        $location.search('state', null);
+                        // $location.search('app', null);
+                        // $location.search('state', null);
                     }
 
                     //catching $mdMenuOpen event emitted from angular-material.js
@@ -117,7 +117,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+        ["$translatePartialLoader", "LoginAppSrv", "$window", "$timeout", function ($translatePartialLoader, LoginAppSrv, $window, $timeout) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
@@ -133,15 +133,29 @@
                         userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.loginSubmit = function(loginForm){
+                    scope.loginSubmit = function(loginForm) {
                         if (!scope.d.loginFormData) {
                             $window.alert('form is empty!', loginForm);
                             return;
                         }
-                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        scope.startLoader = true;
+                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
+                            .then(function(){
+                                scope.fillLoader = true;
+                                $timeout(function () {
+                                    scope.startLoader = false;
+                                    scope.fillLoader = false;
+                                }, 100);
+                            })
+                            .catch(function(err){
+                                scope.fillLoader = true;
+                                $timeout(function () {
+                                    scope.startLoader = false;
+                                    scope.fillLoader = false;
+                                }, 100);
+                                console.error(err);
+                                $window.alert(err);
+                            });
                     };
                 }
             };
@@ -721,7 +735,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        act: d.appContext === d.availableApps.ACT,\n" +
     "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
     "    }\">\n" +
-    "    <header>\n" +
+    "    <header class=\"container\">\n" +
     "        <div class=\"logo-wrapper\">\n" +
     "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
     "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
@@ -745,44 +759,53 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
     "        </div>\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT\"\n" +
+    "           class=\"for-educators app-color\"\n" +
+    "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "           translate=\"LOGIN_APP.FOR_EDUCATORS_CLICK_HERE\">\n" +
+    "        </a>\n" +
     "    </header>\n" +
     "    <div class=\"main\">\n" +
-    "        <ng-switch on=\"currentForm\">\n" +
-    "            <div class=\"login-container\" ng-switch-when=\"login\">\n" +
-    "                <login-form app-context=\"d.appContext\"\n" +
-    "                            user-context=\"d.userContext\">\n" +
-    "                </login-form>\n" +
-    "                <p class=\"go-to-signup\">\n" +
-    "                    <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
-    "                </p>\n" +
-    "            </div>\n" +
-    "            <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
-    "                <signup-form app-context=\"d.appContext\"\n" +
-    "                             user-context=\"d.userContext\">\n" +
-    "                </signup-form>\n" +
-    "                <p class=\"go-to-login\">\n" +
-    "                    <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
-    "                </p>\n" +
-    "            </div>\n" +
-    "        </ng-switch>\n" +
-    "        <h2 class=\"banner-text\">\n" +
-    "            <ng-switch on=\"currentUserContext\">\n" +
-    "                <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                    <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "        <img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.STUDENT\" src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "        <img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.TEACHER\" src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "        <div class=\"main-inner\">\n" +
+    "            <ng-switch on=\"currentForm\">\n" +
+    "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
+    "                    <login-form app-context=\"d.appContext\"\n" +
+    "                                user-context=\"d.userContext\">\n" +
+    "                    </login-form>\n" +
+    "                    <p class=\"go-to-signup\">\n" +
+    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
+    "                    </p>\n" +
     "                </div>\n" +
-    "                <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                    <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
+    "                    <signup-form app-context=\"d.appContext\"\n" +
+    "                                 user-context=\"d.userContext\">\n" +
+    "                    </signup-form>\n" +
+    "                    <p class=\"go-to-login\">\n" +
+    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
+    "                    </p>\n" +
     "                </div>\n" +
     "            </ng-switch>\n" +
-    "        </h2>\n" +
+    "            <h2 class=\"banner-text\">\n" +
+    "                <ng-switch on=\"currentUserContext\">\n" +
+    "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                </ng-switch>\n" +
+    "            </h2>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <footer>\n" +
     "        <ng-switch on=\"currentUserContext\">\n" +
@@ -838,7 +861,18 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\" translate=\".LOGIN_IN\" class=\"app-bg\" autofocus></button>\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"disabled\"\n" +
+    "                    translate=\".LOGIN_IN\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    element-loader\n" +
+    "                    fill-loader=\"fillLoader\"\n" +
+    "                    show-loader=\"startLoader\"\n" +
+    "                    bg-loader=\"'#72ab40'\"\n" +
+    "                    precentage=\"50\"\n" +
+    "                    font-color=\"'#FFFFFF'\"\n" +
+    "                    bg=\"'#87ca4d'\"\n" +
+    "                    autofocus></button>\n" +
     "        </div>\n" +
     "        <div class=\"forgot-pwd-wrapper\">\n" +
     "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
@@ -849,7 +883,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "");
   $templateCache.put("components/loginApp/templates/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
-    "    <button class=\"btn facebook-btn\"\n" +
+    "    <button class=\"facebook-btn\"\n" +
     "            ng-click=\"vm.socialAuth('facebook')\"\n" +
     "            ng-if=\"vm.providers.facebook\"\n" +
     "            element-loader\n" +
@@ -862,7 +896,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
     "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
     "    </button>\n" +
-    "    <button class=\"btn gplus-btn\"\n" +
+    "    <button class=\"gplus-btn\"\n" +
     "            ng-click=\"vm.socialAuth('google')\"\n" +
     "            ng-if=\"vm.providers.google\"\n" +
     "            element-loader\n" +
