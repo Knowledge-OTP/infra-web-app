@@ -1,0 +1,352 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+oath-login-drv .btn-wrap {
+  border-radius: 25px;
+  overflow: hidden;
+  height: 37px; }
+  oath-login-drv .btn-wrap .facebook-btn,
+  oath-login-drv .btn-wrap .gplus-btn {
+    width: 50%;
+    height: 100%;
+    color: #ffffff;
+    float: left;
+    padding-left: 25px;
+    cursor: pointer;
+    border: none; }
+    oath-login-drv .btn-wrap .facebook-btn span,
+    oath-login-drv .btn-wrap .gplus-btn span {
+      display: block;
+      text-indent: -25px;
+      font-size: 14px; }
+  oath-login-drv .btn-wrap .facebook-btn {
+    background-color: #369;
+    line-height: 37px; }
+    oath-login-drv .btn-wrap .facebook-btn:hover {
+      background-color: #2a547f; }
+    oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
+      float: left;
+      margin-top: 9px; }
+      oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] svg {
+        width: 8px;
+        fill: #ffffff; }
+  oath-login-drv .btn-wrap .gplus-btn {
+    background-color: #df4a31;
+    line-height: 37px; }
+    oath-login-drv .btn-wrap .gplus-btn:hover {
+      background-color: #c5402a; }
+    oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
+      float: left;
+      margin-top: 9px; }
+      oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] svg {
+        width: 18px;
+        fill: #ffffff; }
+  oath-login-drv .btn-wrap.reset-btn {
+    margin-top: 20px; }
+
+@font-face {
+  font-family: "SourceSansPro";
+  src: url("/assets/fonts/SourceSansPro-Regular.otf");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: "SourceSansPro-Light";
+  src: url("/assets/fonts/SourceSansPro-Light.otf");
+  font-weight: normal;
+  font-style: normal; }
+
+.md-open-menu-container.app-select-menu-open {
+  border-radius: 20px;
+  overflow: hidden; }
+
+.md-open-menu-container md-menu-content#app-select-menu {
+  -ms-flex-direction: row;
+      flex-direction: row;
+  padding: 8px 20px; }
+  .md-open-menu-container md-menu-content#app-select-menu md-menu-item {
+    -ms-flex-align: center;
+        align-items: center;
+    cursor: pointer;
+    padding-right: 15px;
+    margin-right: 15px;
+    border-right: 1px solid #cccccc; }
+    .md-open-menu-container md-menu-content#app-select-menu md-menu-item:last-child {
+      border-right: none;
+      margin-right: 0;
+      padding-right: 0; }
+    .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder {
+      width: calc(175px / 2);
+      height: calc(55px / 2);
+      background-repeat: no-repeat;
+      background-size: contain;
+      padding: 0; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
+        background-image: url("/assets/images/sat-name@2x.png"); }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
+        background-image: url("/assets/images/act-name@2x.png"); }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
+        background-image: url("/assets/images/toefl-name@2x.png"); }
+
+login-app .img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto; }
+
+login-app .login-app {
+  height: 100%;
+  margin: 0 auto;
+  background-color: #f7f7f7;
+  background-image: url("/assets/images/logo-pattern-bg.png");
+  font-family: 'SourceSansPro', sans-serif;
+  font-weight: 400; }
+  login-app .login-app > header {
+    max-width: 1366px;
+    height: 84px;
+    padding: 20px 0;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box; }
+    login-app .login-app > header .logo-wrapper {
+      margin-left: 27px;
+      float: left;
+      position: relative; }
+      login-app .login-app > header .logo-wrapper .logo {
+        width: 76px;
+        height: 36px;
+        float: left;
+        background-image: url("/assets/images/zinkerz_logo.png");
+        background-repeat: no-repeat;
+        background-size: contain; }
+      login-app .login-app > header .logo-wrapper span {
+        font-size: 24px;
+        margin-left: 5px;
+        margin-top: 15px;
+        display: inline-block; }
+    login-app .login-app > header .app-select {
+      text-align: center;
+      position: absolute;
+      left: calc(50% - 90px); }
+      login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
+      login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
+        background-color: #fbfcfc; }
+      login-app .login-app > header .app-select md-menu > button {
+        width: 175px;
+        height: auto;
+        padding: 8px 15px;
+        background-color: #fbfcfc;
+        border-radius: 30px; }
+        login-app .login-app > header .app-select md-menu > button:hover {
+          box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35); }
+      login-app .login-app > header .app-select .app-img-holder {
+        width: calc(175px / 2);
+        height: calc(55px / 2);
+        background-repeat: no-repeat;
+        background-size: contain;
+        float: left; }
+        login-app .login-app > header .app-select .app-img-holder.sat {
+          background-image: url("/assets/images/sat-name@2x.png"); }
+        login-app .login-app > header .app-select .app-img-holder.act {
+          background-image: url("/assets/images/act-name@2x.png"); }
+        login-app .login-app > header .app-select .app-img-holder.toefl {
+          background-image: url("/assets/images/toefl-name@2x.png"); }
+      login-app .login-app > header .app-select .expand-menu {
+        float: right; }
+    login-app .login-app > header .for-educators {
+      float: right;
+      margin-top: 12px;
+      cursor: pointer; }
+      login-app .login-app > header .for-educators:hover {
+        text-decoration: underline; }
+  login-app .login-app .main {
+    padding: 0; }
+    login-app .login-app .main .main-inner {
+      position: relative;
+      width: 1366px;
+      height: 513px;
+      margin: 0 auto; }
+      login-app .login-app .main .main-inner h2.banner-text {
+        font-size: 32px;
+        font-family: 'SourceSansPro-Light';
+        font-weight: 100;
+        color: white;
+        margin: 0;
+        padding: 25px 30px;
+        bottom: 0;
+        position: absolute; }
+    login-app .login-app .main img.main-banner {
+      min-height: 513px;
+      min-width: 1366px;
+      position: absolute; }
+    login-app .login-app .main .login-container,
+    login-app .login-app .main .signup-container {
+      position: absolute;
+      top: 35px;
+      right: 135px; }
+    login-app .login-app .main .go-to-login,
+    login-app .login-app .main .go-to-signup {
+      margin-top: 15px;
+      text-align: center;
+      color: #fff;
+      font-family: 'SourceSansPro-Light'; }
+      login-app .login-app .main .go-to-login a,
+      login-app .login-app .main .go-to-signup a {
+        text-decoration: underline;
+        cursor: pointer; }
+  login-app .login-app.sat .app-bg {
+    background: #0a9bad; }
+    login-app .login-app.sat .app-bg:hover {
+      background: #088E9E; }
+  login-app .login-app.sat .app-color {
+    color: #0a9bad; }
+    login-app .login-app.sat .app-color:hover {
+      color: #087d8b; }
+  login-app .login-app.act .app-bg {
+    background: #87ca4d; }
+  login-app .login-app.act .app-color {
+    color: #87ca4d; }
+  login-app .login-app.toefl .app-bg {
+    background: #ff931e; }
+    login-app .login-app.toefl .app-bg:hover {
+      background: #e4841d; }
+  login-app .login-app.toefl .app-color {
+    color: #ff931e; }
+    login-app .login-app.toefl .app-color:hover {
+      color: #e4841d; }
+  login-app .login-app .form-container {
+    width: 400px;
+    background: #fdfdfd;
+    border-radius: 15px;
+    opacity: 0.95;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-bottom: 20px;
+    padding-top: 25px; }
+    login-app .login-app .form-container .title {
+      text-align: center;
+      padding-bottom: 15px;
+      color: #161616;
+      font-weight: 200;
+      font-size: 25px; }
+    login-app .login-app .form-container .inputs-container .input-wrapper {
+      box-sizing: border-box;
+      width: 340px;
+      border: 1px #9a9797 solid;
+      border-radius: 30px;
+      background-color: white;
+      margin-right: auto;
+      margin-bottom: 11px;
+      margin-left: auto;
+      padding-right: 9px;
+      padding-left: 9px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center; }
+      login-app .login-app .form-container .inputs-container .input-wrapper:last-child {
+        margin-bottom: 20px; }
+      login-app .login-app .form-container .inputs-container .input-wrapper svg-icon {
+        width: 36px; }
+      login-app .login-app .form-container .inputs-container .input-wrapper input {
+        height: 37px;
+        border: none;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0;
+        padding-bottom: 0;
+        background-color: transparent;
+        outline: none;
+        font-weight: 400;
+        font-size: 14px;
+        color: #161616; }
+        login-app .login-app .form-container .inputs-container .input-wrapper input ::-webkit-input-placeholder {
+          color: #4f4d4d;
+          font-weight: 200;
+          font-size: 14px; }
+        login-app .login-app .form-container .inputs-container .input-wrapper input :-moz-placeholder {
+          color: #4f4d4d;
+          font-weight: 200;
+          font-size: 14px; }
+        login-app .login-app .form-container .inputs-container .input-wrapper input ::-moz-placeholder {
+          color: #4f4d4d;
+          font-weight: 200;
+          font-size: 14px; }
+        login-app .login-app .form-container .inputs-container .input-wrapper input :-ms-input-placeholder {
+          color: #4f4d4d;
+          font-weight: 200;
+          font-size: 14px; }
+    login-app .login-app .form-container .submit-btn-wrapper {
+      text-align: center; }
+      login-app .login-app .form-container .submit-btn-wrapper button {
+        cursor: pointer;
+        box-sizing: border-box;
+        height: 37px;
+        width: 340px;
+        color: white;
+        border-radius: 30px;
+        border: none;
+        font-size: 18px;
+        font-weight: 400; }
+        login-app .login-app .form-container .submit-btn-wrapper button:focus {
+          outline: none; }
+    login-app .login-app .form-container .forgot-pwd-wrapper {
+      margin-top: 10px;
+      margin-bottom: 5px;
+      text-align: right;
+      color: #757a83;
+      font-weight: 200;
+      font-size: 14px;
+      font-family: 'SourceSansPro-Light'; }
+    login-app .login-app .form-container .divider {
+      width: 340px;
+      position: relative;
+      text-align: center;
+      margin: 15px auto; }
+      login-app .login-app .form-container .divider:before {
+        content: '';
+        position: absolute;
+        top: 11px;
+        right: 0;
+        left: 0;
+        border: 1px #e5e2e2 solid; }
+      login-app .login-app .form-container .divider .text {
+        display: inline-block;
+        background: #fdfdfd;
+        position: relative;
+        z-index: 1;
+        padding-right: 15px;
+        padding-left: 15px;
+        color: #c2c2c2;
+        font-weight: 200;
+        font-size: 14px; }
+    login-app .login-app .form-container.signup .signup-disclaimer {
+      text-align: center;
+      font-size: 10px;
+      color: #b7b7b7;
+      margin-top: 10px; }
+      login-app .login-app .form-container.signup .signup-disclaimer a {
+        text-decoration: none; }
+  login-app .login-app footer {
+    text-align: center;
+    padding-bottom: 40px;
+    position: absolute;
+    bottom: 0;
+    width: 100%; }
+    login-app .login-app footer .switch-student-educator {
+      font-weight: normal; }
+      login-app .login-app footer .switch-student-educator h2 {
+        font-size: 23px;
+        color: #4f4d4d;
+        margin-bottom: 5px; }
+      login-app .login-app footer .switch-student-educator a {
+        text-decoration: none;
+        font-size: 16px; }

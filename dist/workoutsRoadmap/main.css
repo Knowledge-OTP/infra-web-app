@@ -417,6 +417,10 @@ workout-intro-lock {
           stroke: #0a9bad; }
         .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item.active svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st4, .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper:not([disabled="disabled"]) .avail-time-item:hover svg-icon[name="workouts-progress-drill-icon"] .workouts-progress-drill-svg .st4 {
           stroke: #0a9bad; }
+    .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper[disabled="disabled"] {
+      opacity: 0.3; }
+      .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper[disabled="disabled"] .avail-time-item svg-icon {
+        display: none; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .start-btn-wrapper {
     margin-top: 50px; }
 

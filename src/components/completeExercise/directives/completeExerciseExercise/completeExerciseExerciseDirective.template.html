@@ -2,7 +2,8 @@
     <complete-exercise-header>
         <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>
         <pre-right-part>
-            <timer ng-if="$ctrl.timeEnabled"
+            <timer ng-if="$ctrl.timeEnabled &&
+                   $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum"
                    ng-model="$ctrl.znkExercise.exerciseResult.duration"
                    complete-exercise-timer-parser
                    type="1"
@@ -12,7 +13,8 @@
             </timer>
         </pre-right-part>
     </complete-exercise-header>
-    <complete-exercise-progress-bar ng-if="$ctrl.timeEnabled"
+    <complete-exercise-progress-bar ng-if="$ctrl.timeEnabled &&
+                                    $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum"
                                     total-time="{{$ctrl.znkExercise.exerciseContent.time}}"
                                     duration="$ctrl.znkExercise.exerciseResult.duration">
     </complete-exercise-progress-bar>

@@ -293,7 +293,15 @@
                 },
                 initForceDoneBtnDisplay: false,
                 initSlideIndex: initSlideIndex || 0,
-                allowedTimeForExercise: 12 * 60 * 1000
+                allowedTimeForExercise: 12 * 60 * 1000,
+                toolBox: {
+                    drawing: {
+                        toucheColorId: 1,
+                        exerciseDrawingPathPrefix: function () {
+                            return exerciseData.resultsData.uid;
+                        }
+                    }
+                }
             };
 
             self.questionsPerSubject = _getNumberOfQuestions();

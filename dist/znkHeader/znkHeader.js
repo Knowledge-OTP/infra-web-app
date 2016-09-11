@@ -11,6 +11,7 @@
             'znk.infra-web-app.purchase',
             'znk.infra-web-app.onBoarding',
             'znk.infra-web-app.userGoalsSelection',
+            'znk.infra-web-app.settings',
             'znk.infra.user',
             'znk.infra.general',
             'znk.infra-web-app.invitation'])
@@ -29,7 +30,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService,
+        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
@@ -48,6 +49,10 @@
 
             this.showPurchaseDialog = function () {
                 purchaseService.showPurchaseDialog();
+            };
+
+            this.showChangePassword = function() {
+                SettingsSrv.showChangePassword();
             };
 
             this.showGoalsEdit = function () {
@@ -274,7 +279,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
     "                            <a ui-sref=\"app.faq\">\n" +
-    "                                <span translate=\".WHAT_IS_THE_ACT_TEST\"></span>\n" +
+    "                                <span translate=\".WHAT_IS_THE_THIS_TEST\"></span>\n" +
     "                            </a>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item\n" +

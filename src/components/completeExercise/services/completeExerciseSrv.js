@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv) {
+        function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
             'ngInject';
 
             this.VIEW_STATES = {
@@ -10,6 +10,11 @@
                 INTRO: 1,
                 EXERCISE: 2,
                 SUMMARY: 3
+            };
+
+            this.MODE_STATES = {
+                SHARER: 1,
+                VIEWER: 2
             };
 
             this.getContextUid = function () {
@@ -21,13 +26,33 @@
                 }
             };
 
-            this.getExerciseResult = function (exerciseDetails) {
-                switch (exerciseDetails.exerciseTypeId) {
-                    case ExerciseTypeEnum.LECTURE.enum:
+            this.getExerciseResult = function (exerciseDetails, shMode) {
+                var isLecture = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.LECTURE.enum;
+
+                if(shMode === this.MODE_STATES.VIEWER){
+                    if(!exerciseDetails.resultGuid){
+                        var errMsg = 'completeExerciseSrv: exercise details is missing guid property';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
+
+                    return ExerciseResultSrv.getExerciseResultByGuid(exerciseDetails.resultGuid);
+                }
+
+                switch (exerciseDetails.exerciseParentTypeId) {
+                    case ExerciseParentEnum.MODULE.enum:
+                        if(isLecture){
+                            return ExerciseResultSrv.getExerciseResult(
+                                exerciseDetails.exerciseTypeId,
+                                exerciseDetails.exerciseId,
+                                exerciseDetails.exerciseParentId
+                            );
+                        }
+
                         return this.getContextUid().then(function (uid) {
                             return ExerciseResultSrv.getModuleExerciseResult(
                                 uid,
-                                exerciseDetails.parentId,
+                                exerciseDetails.exerciseParentId,
                                 exerciseDetails.exerciseTypeId,
                                 exerciseDetails.exerciseId
                             );

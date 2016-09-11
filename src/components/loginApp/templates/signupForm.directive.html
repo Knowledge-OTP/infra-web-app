@@ -1,0 +1,47 @@
+<div class="form-container signup" translate-namespace="SIGNUP_FORM">
+    <div class="title" translate=".STUDENT.CREATE_ACCOUNT" ng-if="userContext===d.userContextObj.STUDENT"></div>
+    <div class="title" translate=".EDUCATOR.CREATE_ACCOUNT" ng-if="userContext===d.userContextObj.TEACHER"></div>
+    <div class="social-auth-container">
+        <div class="social-auth">
+            <oath-login-drv
+                app-context="appContext"
+                user-context="userContext"
+                providers="{facebook:true,google:true}">
+            </oath-login-drv>
+        </div>
+    </div>
+    <div class="divider">
+        <div translate=".OR" class="text"></div>
+    </div>
+    <form novalidate
+          name="signupform"
+          ng-submit="signupSubmit(signupform)">
+        <div class="inputs-container">
+            <div class="input-wrapper">
+                <svg-icon name="login-username-icon"></svg-icon>
+                <input type="text"
+                       placeholder="{{'SIGNUP_FORM.NAME' | translate}}"
+                       name="nickname"
+                       ng-model="d.signupFormData.nickname">
+            </div>
+            <div class="input-wrapper">
+                <svg-icon name="form-envelope"></svg-icon>
+                <input type="text"
+                       placeholder="{{'SIGNUP_FORM.EMAIL' | translate}}"
+                       name="email"
+                       ng-model="d.signupFormData.email">
+            </div>
+            <div class="input-wrapper">
+                <svg-icon name="form-lock"></svg-icon>
+                <input type="password"
+                       placeholder="{{'SIGNUP_FORM.PASSWORD' | translate}}"
+                       name="password"
+                       ng-model="d.signupFormData.password">
+            </div>
+        </div>
+        <div class="submit-btn-wrapper">
+            <button type="submit" translate=".SIGN_UP" class="app-bg" autofocus></button>
+        </div>
+        <p class="signup-disclaimer" translate-values="{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}" translate=".DISCLAIMER"></p>
+    </form>
+</div>

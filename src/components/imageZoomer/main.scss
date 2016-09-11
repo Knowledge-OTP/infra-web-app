@@ -1,0 +1,56 @@
+@import 'src/scss/imports/variables',
+        'src/scss/imports/colors',
+        'bower_components/infra/dist/mixins/mixins';
+
+.zoom-image-modal {
+    position: relative;
+    .close-popup {
+        @include dimension(20px, 20px);
+        cursor: pointer;
+        position: absolute;
+        right: -45px;
+        top: -35px;
+        .st1 {
+            fill: none;
+            stroke: $bgColor3;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+        }
+    }
+
+    md-dialog {
+        max-width: 100%;
+    }
+}
+
+.zoom-icon-wrapper {
+    @include dimension(35px, 35px);
+    @include flex-middle;
+    cursor: pointer;
+    background-color: $bgColor57;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    svg-icon {
+        @include dimension(21px, 21px);
+        svg {
+            line, polyline {
+                stroke: $bgColor3;
+                stroke-width: 15px;
+                fill: $bgColor3;
+            }
+        }
+    }
+
+    &:hover {
+        background-color: $bgColor58;
+    }
+}
+
+img.img-to-zoom {
+    border: 1px solid $borderColor9;
+    cursor: pointer;
+    vertical-align: middle;
+}

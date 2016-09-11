@@ -8,22 +8,28 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv) {
+            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum, ZnkExerciseViewModeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
 
-                function _initTimersVitalData(){
+                var exerciseViewBinding = {},
+                    exerciseViewBindWatchDestroyer = angular.noop,
+                    lastShDataReceived;
+
+                $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
+
+                function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if(!exerciseContent.time){
+                    if (!exerciseContent.time) {
                         return;
                     }
 
                     $ctrl.timeEnabled = true;
 
-                    if(angular.isUndefined(exerciseResult.duration)){
+                    if (angular.isUndefined(exerciseResult.duration)) {
                         exerciseResult.duration = 0;
                     }
 
@@ -33,23 +39,136 @@
                     };
                 }
 
-                function _invokeExerciseCtrl(){
+                function _invokeExerciseCtrl() {
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
+
 
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
-                        actions:{
-                            done: function(){
+                        exerciseParentContent: exerciseParentContent,
+                        actions: {
+                            done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                            }
+                        },
+                        znkExerciseSettings: {
+                            onExerciseReady: function () {
+                                $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                             }
                         }
                     };
 
-                    $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl',{
+                    $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
                     });
+                }
+
+                function _resultChangeHandler(newResult) {
+                    if (!newResult || !newResult.questionResults) {
+                        return;
+                    }
+
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var updatedQuestionsResults = exerciseResult.questionResults;
+                    var newQuestionsResults = newResult.questionResults;
+                    var isNotLecture = exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
+
+                    angular.extend(exerciseResult, newResult);
+
+                    if (isNotLecture) {
+                        angular.forEach(updatedQuestionsResults, function (questionResult, index) {
+                            var newQuestionResult = newQuestionsResults[index];
+                            angular.extend(questionResult, newQuestionResult);
+                        });
+                        exerciseResult.questionResults = updatedQuestionsResults;
+                    }
+
+                }
+
+                function _registerToResultChanges() {
+                    InfraConfigSrv.getStudentStorage().then(function (storage) {
+                        var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                        storage.onEvent('value', exerciseResult.$$path, _resultChangeHandler);
+                    });
+                }
+
+                function _unregisterFromResultChanges() {
+                    InfraConfigSrv.getStudentStorage().then(function (storage) {
+                        var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                        storage.offEvent('value', exerciseResult.$$path, _resultChangeHandler);
+                    });
+                }
+
+                function _shDataChangeHandler(newScreenSharingData) {
+                    lastShDataReceived = newScreenSharingData;
+
+                    if (!newScreenSharingData) {
+                        return;
+                    }
+
+                    UserProfileService.getCurrUserId().then(function (currUid) {
+                        if (newScreenSharingData.updatedBy !== currUid) {
+                            angular.extend(exerciseViewBinding, newScreenSharingData.activeExercise);
+                        }
+                    });
+                }
+
+                function _registerToShDataChanges() {
+                    $ctrl.completeExerciseCtrl.shDataEventManager.registerCb(_shDataChangeHandler);
+                }
+
+                function _unregisterFromShDataChanges() {
+                    $ctrl.completeExerciseCtrl.shDataEventManager.unregisterCb(_shDataChangeHandler);
+                }
+
+                function _bindExerciseToShData() {
+                    _registerToResultChanges();
+                    _registerToShDataChanges();
+                    exerciseViewBindWatchDestroyer = $scope.$watch(function () {
+                        return exerciseViewBinding;
+                    }, (function () {
+                        var syncProm = $q.when();
+
+                        return function(newExerciseView) {
+                            if (!lastShDataReceived || angular.equals(exerciseViewBinding, lastShDataReceived.activeExercise)) {
+                                return null;
+                            }
+                            syncProm = syncProm.then(function () {
+                                return ScreenSharingSrv.getActiveScreenSharingData().then(function (screenSharingData) {
+                                    if (screenSharingData.activeExercise) {
+                                        angular.extend(screenSharingData.activeExercise, newExerciseView);
+                                        return screenSharingData.$save();
+                                    }
+                                });
+                            });
+                        };
+                    })(), true);
+                }
+
+                function _unbindExerciseFromShData() {
+                    _unregisterFromResultChanges();
+                    _unregisterFromShDataChanges();
+                    exerciseViewBindWatchDestroyer();
+                }
+
+                function _shModeChangedHandler(shMode) {
+                    if (shMode) {
+                        _bindExerciseToShData();
+                    } else {
+                        _unbindExerciseFromShData();
+                    }
+                }
+
+                function _registerToShModeChanges() {
+                    $ctrl.completeExerciseCtrl.shModeEventManager.registerCb(_shModeChangedHandler);
+                }
+
+                function _unregisterFromShModeChanges() {
+                    $ctrl.completeExerciseCtrl.shModeEventManager.unregisterCb(_shModeChangedHandler);
+
                 }
 
                 this.$onInit = function () {
@@ -57,11 +176,13 @@
 
                     _invokeExerciseCtrl();
 
-                    this.durationChanged = function(){
+                    _registerToShModeChanges();
+
+                    this.durationChanged = function () {
                         var exerciseResult = this.completeExerciseCtrl.getExerciseResult();
                         var exerciseContent = this.completeExerciseCtrl.getExerciseContent();
 
-                        if(exerciseResult.duration >= exerciseContent.time){
+                        if (exerciseResult.duration >= exerciseContent.time) {
                             var contentProm = $translate('COMPLETE_EXERCISE.TIME_UP_CONTENT');
                             var titleProm = $translate('COMPLETE_EXERCISE.TIME_UP_TITLE');
                             var buttonFinishProm = $translate('COMPLETE_EXERCISE.STOP');
@@ -80,6 +201,11 @@
                             });
                         }
                     };
+                };
+
+                this.$onDestroy = function () {
+                    _unregisterFromShModeChanges();
+                    _unbindExerciseFromShData();
                 };
             }
         });

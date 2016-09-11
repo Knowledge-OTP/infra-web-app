@@ -20,6 +20,14 @@
   font-family: Lato;
   font-weight: 400;
   font-size: 16px; }
+  .md-button.znk.md-primary.green {
+    background-color: #87ca4d; }
+    .md-button.znk.md-primary.green:not([disabled="disabled"]):hover {
+      background: #76b63e; }
+    .md-button.znk.md-primary.green:active {
+      background: #76b63e; }
+    .md-button.znk.md-primary.green.md-focused {
+      background: #76b63e; }
   .md-button.znk.md-primary:not([disabled="disabled"]):hover {
     background: #0a8999; }
   .md-button.znk.md-primary:active {

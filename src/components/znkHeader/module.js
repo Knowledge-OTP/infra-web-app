@@ -11,6 +11,7 @@
             'znk.infra-web-app.purchase',
             'znk.infra-web-app.onBoarding',
             'znk.infra-web-app.userGoalsSelection',
+            'znk.infra-web-app.settings',
             'znk.infra.user',
             'znk.infra.general',
             'znk.infra-web-app.invitation'])
