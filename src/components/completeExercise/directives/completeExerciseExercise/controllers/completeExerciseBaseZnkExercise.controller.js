@@ -79,10 +79,13 @@
                 StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
                     $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
 
-                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-
-                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, isSection ? exerciseParentContent : undefined);
+                    ZnkExerciseUtilitySrv.shouldBroadCastExercise().then(function(shouldBroadcast) {
+                        if (shouldBroadcast) {
+                            var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                            var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, isSection ? exerciseParentContent : undefined);
+                        }
+                    });
 
                     settings.actions.done();
                 });

@@ -60,8 +60,11 @@
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
                 exerciseData.resultsData.$save();
                 exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
-                $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData,
-                    exerciseData.resultsData, exerciseData.exam);
+                ZnkExerciseUtilitySrv.shouldBroadCastExercise().then(function(shouldBroadcast) {
+                    if (shouldBroadcast) {
+                        $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData, exerciseData.resultsData, exerciseData.exam);
+                    }
+                });
                 StatsEventsHandlerSrv.addNewExerciseResult(ExerciseTypeEnum.SECTION.enum, exerciseData.questionsData, exerciseData.resultsData);
             }
 
