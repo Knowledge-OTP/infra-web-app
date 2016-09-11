@@ -23,6 +23,7 @@
                        placeholder="{{'SIGNUP_FORM.NAME' | translate}}"
                        name="nickname"
                        ng-model="d.signupFormData.nickname">
+                <span class="validationBox"></span>
             </div>
             <div class="input-wrapper">
                 <svg-icon name="form-envelope"></svg-icon>
@@ -51,5 +52,7 @@
         <p class="signup-disclaimer"
            translate-values="{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}"
            translate=".DISCLAIMER"></p>
+
+        <p class="general-error"></p>
     </form>
 </div>
