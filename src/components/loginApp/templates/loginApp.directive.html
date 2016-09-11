@@ -32,7 +32,7 @@
         <a ng-if="d.userContext===d.userContextObj.STUDENT"
            class="for-educators app-color"
            ng-click="changeUserContext(d.userContextObj.TEACHER)"
-           translate="LOGIN_APP.FOR_EDUCATORS_CLICK_HERE">
+           translate="LOGIN_APP.EDUCATORS_CLICK_HERE">
         </a>
     </header>
     <div class="main">
@@ -49,7 +49,7 @@
                         <span translate="LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
                         <a ng-click="changeCurrentForm('signup')" translate="SIGNUP_FORM.SIGN_UP"></a>
                     </p>
-                </div>
+                </div>  `
                 <div class="signup-container" ng-switch-when="signup">
                     <signup-form app-context="d.appContext"
                                  user-context="d.userContext">
