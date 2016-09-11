@@ -645,6 +645,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
+
             var $ctrl = this;
 
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
@@ -696,11 +698,20 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 //  stats exercise data
                 StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
                     $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
+                    var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-
-                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, isSection ? exerciseParentContent : undefined);
+                    shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                        var shouldBroadcast = shouldBroadcastFn({
+                            exercise: exerciseContent,
+                            exerciseResult: exerciseResult,
+                            exerciseParent: exerciseParentIsSectionOnly
+                        });
+                        if (shouldBroadcast) {
+                            var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                            var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                        }
+                    });
 
                     settings.actions.done();
                 });
@@ -1651,6 +1662,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
 
             function _isUndefinedUserAnswer(questionResults) {
                 return questionResults.filter(function (val) {
@@ -1693,8 +1705,16 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
                 exerciseData.resultsData.$save();
                 exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
-                $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData,
-                    exerciseData.resultsData, exerciseData.exam);
+                shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                    var shouldBroadcast = shouldBroadcastFn({
+                        exercise: exerciseData.questionsData,
+                        exerciseResult: exerciseData.resultsData,
+                        exerciseParent: exerciseData.exam
+                    });
+                    if (shouldBroadcast) {
+                        $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData, exerciseData.resultsData, exerciseData.exam);
+                    }
+                });
                 StatsEventsHandlerSrv.addNewExerciseResult(ExerciseTypeEnum.SECTION.enum, exerciseData.questionsData, exerciseData.resultsData);
             }
 
