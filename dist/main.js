@@ -644,7 +644,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
-            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercise();
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
 
             var $ctrl = this;
 
@@ -699,11 +699,12 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
                     var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                    shouldBroadCastExerciseProm({
-                        exercise: exerciseContent,
-                        exerciseResult: exerciseResult,
-                        exerciseParent: exerciseParentIsSectionOnly
-                    }).then(function(shouldBroadcast) {
+                    shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                        var shouldBroadcast = shouldBroadcastFn({
+                            exercise: exerciseContent,
+                            exerciseResult: exerciseResult,
+                            exerciseParent: exerciseParentIsSectionOnly
+                        });
                         if (shouldBroadcast) {
                             var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                             var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
@@ -1660,7 +1661,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
-            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercise();
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
 
             function _isUndefinedUserAnswer(questionResults) {
                 return questionResults.filter(function (val) {
@@ -1703,11 +1704,12 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
                 exerciseData.resultsData.$save();
                 exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
-                shouldBroadCastExerciseProm({
-                    exercise: exerciseData.questionsData,
-                    exerciseResult: exerciseData.resultsData,
-                    exerciseParent: exerciseData.exam
-                }).then(function(shouldBroadcast) {
+                shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                    var shouldBroadcast = shouldBroadcastFn({
+                        exercise: exerciseData.questionsData,
+                        exerciseResult: exerciseData.resultsData,
+                        exerciseParent: exerciseData.exam
+                    });
                     if (shouldBroadcast) {
                         $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData, exerciseData.resultsData, exerciseData.exam);
                     }
