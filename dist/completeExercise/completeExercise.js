@@ -375,6 +375,8 @@
                     exerciseViewBindWatchDestroyer = angular.noop,
                     lastShDataReceived;
 
+                $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
+
                 function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
@@ -404,6 +406,7 @@
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
+                        exerciseParentContent: exerciseParentContent,
                         actions: {
                             done: function () {
                                 //  stats exercise data
@@ -612,6 +615,7 @@
 
             var exerciseContent = settings.exerciseContent;
             var exerciseResult = settings.exerciseResult;
+            var exerciseParentContent = settings.exerciseParentContent;
             var exerciseTypeId = exerciseResult.exerciseTypeId;
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
@@ -670,7 +674,8 @@
 
                     var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                     var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult);
+
+                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, isSection ? exerciseParentContent : undefined);
 
                     settings.actions.done();
                 });
@@ -1165,7 +1170,8 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    <complete-exercise-header>\n" +
     "        <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>\n" +
     "        <pre-right-part>\n" +
-    "            <timer ng-if=\"$ctrl.timeEnabled\"\n" +
+    "            <timer ng-if=\"$ctrl.timeEnabled &&\n" +
+    "                   $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum\"\n" +
     "                   ng-model=\"$ctrl.znkExercise.exerciseResult.duration\"\n" +
     "                   complete-exercise-timer-parser\n" +
     "                   type=\"1\"\n" +
@@ -1180,7 +1186,8 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "            </div>\n" +
     "        </pre-right-part>\n" +
     "    </complete-exercise-header>\n" +
-    "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled\"\n" +
+    "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled &&\n" +
+    "                                    $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum\"\n" +
     "                                    total-time=\"{{$ctrl.znkExercise.exerciseContent.time}}\"\n" +
     "                                    duration=\"$ctrl.znkExercise.exerciseResult.duration\">\n" +
     "    </complete-exercise-progress-bar>\n" +

@@ -18,6 +18,8 @@
                     exerciseViewBindWatchDestroyer = angular.noop,
                     lastShDataReceived;
 
+                $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
+
                 function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
@@ -47,6 +49,7 @@
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
+                        exerciseParentContent: exerciseParentContent,
                         actions: {
                             done: function () {
                                 //  stats exercise data
