@@ -231,6 +231,7 @@
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
 
             function _isUndefinedUserAnswer(questionResults) {
                 return questionResults.filter(function (val) {
@@ -273,8 +274,16 @@
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
                 exerciseData.resultsData.$save();
                 exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
-                $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData,
-                    exerciseData.resultsData, exerciseData.exam);
+                shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                    var shouldBroadcast = shouldBroadcastFn({
+                        exercise: exerciseData.questionsData,
+                        exerciseResult: exerciseData.resultsData,
+                        exerciseParent: exerciseData.exam
+                    });
+                    if (shouldBroadcast) {
+                        $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData, exerciseData.resultsData, exerciseData.exam);
+                    }
+                });
                 StatsEventsHandlerSrv.addNewExerciseResult(ExerciseTypeEnum.SECTION.enum, exerciseData.questionsData, exerciseData.resultsData);
             }
 
