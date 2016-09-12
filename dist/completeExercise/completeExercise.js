@@ -1272,7 +1272,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "               video-ctrl-drv\n" +
     "               on-play=\"vm.onVideoPlay()\"\n" +
     "               on-ended=\"vm.onVideoEnded()\"\n" +
-    "               video-error-poster=\"assets/images/video-is-not-available-img.png\">\n" +
+    "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
     "            <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "    </div>\n" +
