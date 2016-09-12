@@ -5,7 +5,7 @@
         act: d.appContext === d.availableApps.ACT,
         toefl: d.appContext === d.availableApps.TOEFL,
     }">
-    <header class="container">
+    <header>
         <div class="logo-wrapper">
             <a class="logo" href="//www.zinkerz.com"></a>
             <span ng-if="d.userContext===d.userContextObj.TEACHER"
@@ -32,7 +32,7 @@
         <a ng-if="d.userContext===d.userContextObj.STUDENT"
            class="for-educators app-color"
            ng-click="changeUserContext(d.userContextObj.TEACHER)"
-           translate="LOGIN_APP.FOR_EDUCATORS_CLICK_HERE">
+           translate="LOGIN_APP.EDUCATORS_CLICK_HERE">
         </a>
     </header>
     <div class="main">

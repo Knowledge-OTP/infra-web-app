@@ -5756,7 +5756,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", "$timeout", function ($translatePartialLoader, LoginAppSrv, $window, $timeout) {
+        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
@@ -5777,25 +5777,28 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             $window.alert('form is empty!', loginForm);
                             return;
                         }
-                        scope.startLoader = true;
+                        showSpinner();
+                        scope.d.disableBtn = true;
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
                             .then(function(){
-                                scope.fillLoader = true;
-                                $timeout(function () {
-                                    scope.startLoader = false;
-                                    scope.fillLoader = false;
-                                }, 100);
+                                hideSpinner();
+                                scope.d.disableBtn = false;
                             })
                             .catch(function(err){
-                                scope.fillLoader = true;
-                                $timeout(function () {
-                                    scope.startLoader = false;
-                                    scope.fillLoader = false;
-                                }, 100);
+                                hideSpinner();
+                                scope.d.disableBtn = false;
                                 console.error(err);
                                 $window.alert(err);
                             });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }]
@@ -5831,11 +5834,28 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             $window.alert('form is empty!', signupForm);
                             return;
                         }
-                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        showSpinner();
+                        scope.d.disableBtn = true;
+                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData)
+                            .then(function(){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                            })
+                            .catch(function(err){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                                console.error(err);
+                                $window.alert(err);
+                            });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }]
@@ -6374,7 +6394,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        act: d.appContext === d.availableApps.ACT,\n" +
     "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
     "    }\">\n" +
-    "    <header class=\"container\">\n" +
+    "    <header>\n" +
     "        <div class=\"logo-wrapper\">\n" +
     "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
     "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
@@ -6401,7 +6421,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT\"\n" +
     "           class=\"for-educators app-color\"\n" +
     "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
-    "           translate=\"LOGIN_APP.FOR_EDUCATORS_CLICK_HERE\">\n" +
+    "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
     "        </a>\n" +
     "    </header>\n" +
     "    <div class=\"main\">\n" +
@@ -6501,17 +6521,12 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
     "            <button type=\"submit\"\n" +
-    "                    ng-disabled=\"disabled\"\n" +
-    "                    translate=\".LOGIN_IN\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
     "                    class=\"app-bg\"\n" +
-    "                    element-loader\n" +
-    "                    fill-loader=\"fillLoader\"\n" +
-    "                    show-loader=\"startLoader\"\n" +
-    "                    bg-loader=\"'#72ab40'\"\n" +
-    "                    precentage=\"50\"\n" +
-    "                    font-color=\"'#FFFFFF'\"\n" +
-    "                    bg=\"'#87ca4d'\"\n" +
-    "                    autofocus></button>\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".LOGIN_IN\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"forgot-pwd-wrapper\">\n" +
     "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
@@ -6593,9 +6608,17 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\" translate=\".SIGN_UP\" class=\"app-bg\" autofocus></button>\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".SIGN_UP\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
     "        </div>\n" +
-    "        <p class=\"signup-disclaimer\" translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\" translate=\".DISCLAIMER\"></p>\n" +
+    "        <p class=\"signup-disclaimer\"\n" +
+    "           translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\"\n" +
+    "           translate=\".DISCLAIMER\"></p>\n" +
     "    </form>\n" +
     "</div>\n" +
     "");

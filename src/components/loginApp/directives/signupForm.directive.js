@@ -27,11 +27,28 @@
                             $window.alert('form is empty!', signupForm);
                             return;
                         }
-                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        showSpinner();
+                        scope.d.disableBtn = true;
+                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData)
+                            .then(function(){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                            })
+                            .catch(function(err){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                                console.error(err);
+                                $window.alert(err);
+                            });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }
