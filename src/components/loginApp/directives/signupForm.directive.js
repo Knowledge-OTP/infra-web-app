@@ -23,8 +23,7 @@
                     };
 
                     scope.signupSubmit = function(signupForm){
-                        if (!scope.d.signupFormData) {
-                            // $window.alert('form is empty!', signupForm);
+                        if (signupForm.$invalid) {
                             return;
                         }
                         showSpinner();
