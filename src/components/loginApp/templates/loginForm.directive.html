@@ -17,14 +17,21 @@
           name="loginform"
           ng-submit="loginSubmit(loginform)">
         <div class="inputs-container">
-            <div class="input-wrapper">
+            <div class="input-wrapper" ng-class="loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'">
                 <svg-icon name="form-envelope"></svg-icon>
-                <input type="text"
+                <input type="email"
                        placeholder="{{'LOGIN_FORM.EMAIL' | translate}}"
                        name="email"
-                       ng-model="d.loginFormData.email">
+                       ng-model="d.loginFormData.email"
+                       required>
+                <span ng-if="loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty"
+                      role="alert">
+                    <span class="validationBox">
+                        <span ng-show="loginform.email.$error.required" translate="LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY"></span>
+                    </span>
+                </span>
             </div>
-            <div class="input-wrapper">
+            <div class="input-wrapper" ng-class="loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'">
                 <svg-icon name="form-lock"></svg-icon>
                 <input type="password"
                        placeholder="{{'LOGIN_FORM.PASSWORD' | translate}}"
@@ -32,8 +39,14 @@
                        autocomplete="off"
                        ng-minlength="6"
                        ng-maxlength="25"
-                       ng-required="true"
-                       ng-model="d.loginFormData.password">
+                       ng-model="d.loginFormData.password"
+                       required>
+                <span ng-if="loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty"
+                      role="alert">
+                    <span class="validationBox">
+                        <span ng-show="loginform.password.$error.required" translate="LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY"></span>
+                    </span>
+                </span>
             </div>
         </div>
         <div class="submit-btn-wrapper">
@@ -42,12 +55,12 @@
                     class="app-bg"
                     autofocus>
                 <span translate=".LOGIN_IN"></span>
-                <div class="loader ng-hide" ng-show="d.showSpinner"></div>
+                <span class="loader ng-hide" ng-show="d.showSpinner"></span>
             </button>
         </div>
         <div class="forgot-pwd-wrapper">
             <span class="app-color" translate=".FORGOT_PWD"></span>
         </div>
+        <p class="general-error">{{d.loginError}}</p>
     </form>
-
 </div>

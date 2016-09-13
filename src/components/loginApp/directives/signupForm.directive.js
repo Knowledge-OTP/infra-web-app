@@ -37,7 +37,6 @@
                                 hideSpinner();
                                 scope.d.disableBtn = false;
                                 console.error(err);
-                                $window.alert(err);
                             });
                     };
 
