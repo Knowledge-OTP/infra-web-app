@@ -6097,9 +6097,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         studentAppName: 'toefl_app',
         dashboardAppName: 'toefl_dashboard'
     };
-    /**
-     * TODO: add toefl dev and prod vars
-     */
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
@@ -6214,6 +6211,10 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             };
 
             LoginAppSrv.APPS = APPS;
+            // Hide TOEFL app in production
+            if (env !== 'dev') {
+                delete LoginAppSrv.APPS.TOEFL;
+            }
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
@@ -6469,7 +6470,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                </md-button>\n" +
     "                <md-menu-content id=\"app-select-menu\">\n" +
     "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
-    "                                  ng-if=\"app.id!= 'TOEFL'\"\n" +
     "                                  ng-click=\"selectApp(app)\">\n" +
     "                        <div class=\"app-img-holder {{app.className}}\"></div>\n" +
     "                    </md-menu-item>\n" +

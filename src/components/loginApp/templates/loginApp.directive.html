@@ -22,7 +22,6 @@
                 </md-button>
                 <md-menu-content id="app-select-menu">
                     <md-menu-item ng-repeat="app in d.availableApps track by app.id"
-                                  ng-if="app.id!= 'TOEFL'"
                                   ng-click="selectApp(app)">
                         <div class="app-img-holder {{app.className}}"></div>
                     </md-menu-item>
