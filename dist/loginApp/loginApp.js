@@ -117,7 +117,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+        ["$translatePartialLoader", "LoginAppSrv", "$timeout", function ($translatePartialLoader, LoginAppSrv, $timeout) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
@@ -134,22 +134,38 @@
                     };
 
                     scope.loginSubmit = function(loginForm) {
-                        if (!scope.d.loginFormData) {
-                            $window.alert('form is empty!', loginForm);
+                        if (loginForm.$invalid) {
                             return;
                         }
                         showSpinner();
                         scope.d.disableBtn = true;
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
-                            .then(function(){
-                                hideSpinner();
-                                scope.d.disableBtn = false;
+                            .then(function(authData){
+                                console.log("Authenticated successfully with payload: ", authData);
                             })
                             .catch(function(err){
-                                hideSpinner();
-                                scope.d.disableBtn = false;
                                 console.error(err);
-                                $window.alert(err);
+                                if (err) {
+                                    var loginError;
+                                    switch (err.code) {
+                                        case "INVALID_EMAIL":
+                                            loginError = "The specified email is invalid.";
+                                            break;
+                                        case "INVALID_PASSWORD":
+                                            loginError ="The specified password is incorrect.";
+                                            break;
+                                        case "INVALID_USER":
+                                            loginError = "The specified user account does not exist.";
+                                            break;
+                                        default:
+                                            loginError = "Error logging user in: " + err.code;
+                                    }
+                                    $timeout(function(){
+                                        hideSpinner();
+                                        scope.d.disableBtn = false;
+                                        scope.d.loginError = loginError;
+                                    });
+                                }
                             });
                     };
 
@@ -174,7 +190,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+        ["$translatePartialLoader", "LoginAppSrv", function ($translatePartialLoader, LoginAppSrv) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
@@ -191,8 +207,7 @@
                     };
 
                     scope.signupSubmit = function(signupForm){
-                        if (!scope.d.signupFormData) {
-                            $window.alert('form is empty!', signupForm);
+                        if (signupForm.$invalid) {
                             return;
                         }
                         showSpinner();
@@ -206,7 +221,6 @@
                                 hideSpinner();
                                 scope.d.disableBtn = false;
                                 console.error(err);
-                                $window.alert(err);
                             });
                     };
 
@@ -861,14 +875,21 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "          name=\"loginform\"\n" +
     "          ng-submit=\"loginSubmit(loginform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"text\"\n" +
+    "                <input type=\"email\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
     "                       name=\"email\"\n" +
-    "                       ng-model=\"d.loginFormData.email\">\n" +
+    "                       ng-model=\"d.loginFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
@@ -876,8 +897,14 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                       autocomplete=\"off\"\n" +
     "                       ng-minlength=\"6\"\n" +
     "                       ng-maxlength=\"25\"\n" +
-    "                       ng-required=\"true\"\n" +
-    "                       ng-model=\"d.loginFormData.password\">\n" +
+    "                       ng-model=\"d.loginFormData.password\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
@@ -886,14 +913,14 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                    class=\"app-bg\"\n" +
     "                    autofocus>\n" +
     "                <span translate=\".LOGIN_IN\"></span>\n" +
-    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
     "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"forgot-pwd-wrapper\">\n" +
     "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
     "        </div>\n" +
+    "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
     "    </form>\n" +
-    "\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/loginApp/templates/oathLogin.template.html",
@@ -946,26 +973,52 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "          name=\"signupform\"\n" +
     "          ng-submit=\"signupSubmit(signupform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.nickname.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
     "                <input type=\"text\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
     "                       name=\"nickname\"\n" +
-    "                       ng-model=\"d.signupFormData.nickname\">\n" +
+    "                       ng-model=\"d.signupFormData.nickname\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.nickname.$invalid && !signupform.nickname.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.email.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"text\"\n" +
+    "                <input type=\"email\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
     "                       name=\"email\"\n" +
-    "                       ng-model=\"d.signupFormData.email\">\n" +
+    "                       ng-model=\"d.signupFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.email.$invalid && !signupform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.password.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
     "                       name=\"password\"\n" +
-    "                       ng-model=\"d.signupFormData.password\">\n" +
+    "                       ng-model=\"d.signupFormData.password\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.password.$invalid\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
+    "                        <span ng-show=\"signupform.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
+    "                        <span ng-show=\"signupform.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
@@ -980,6 +1033,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <p class=\"signup-disclaimer\"\n" +
     "           translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\"\n" +
     "           translate=\".DISCLAIMER\"></p>\n" +
+    "\n" +
+    "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
     "    </form>\n" +
     "</div>\n" +
     "");
