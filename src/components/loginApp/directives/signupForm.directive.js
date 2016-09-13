@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        function ($translatePartialLoader, LoginAppSrv) {
+        function (LoginAppSrv) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',

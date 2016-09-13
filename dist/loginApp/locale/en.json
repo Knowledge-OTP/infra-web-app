@@ -32,6 +32,12 @@
         "EDUCATOR": {
             "DONT_HAVE_AN_ACCOUNT": "Don't have a Zinkerz educator account?",
             "LOGIN": "Educator Login"
+        },
+        "ERROR_CODES": {
+            "INVALID_EMAIL": "The specified email is invalid.",
+            "INVALID_PASSWORD": "The specified password is incorrect.",
+            "INVALID_USER": "The specified user account does not exist.",
+            "DEFAULT_ERROR": "Error logging user in: "
         }
     },
     "SIGNUP_FORM": {

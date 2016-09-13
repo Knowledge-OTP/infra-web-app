@@ -5755,7 +5755,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$timeout", function ($translatePartialLoader, LoginAppSrv, $timeout) {
+        ["LoginAppSrv", "$timeout", "$translate", "$log", function (LoginAppSrv, $timeout, $translate, $log) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
@@ -5784,25 +5784,40 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             .catch(function(err){
                                 console.error(err);
                                 if (err) {
-                                    var loginError;
-                                    switch (err.code) {
-                                        case "INVALID_EMAIL":
-                                            loginError = "The specified email is invalid.";
-                                            break;
-                                        case "INVALID_PASSWORD":
-                                            loginError ="The specified password is incorrect.";
-                                            break;
-                                        case "INVALID_USER":
-                                            loginError = "The specified user account does not exist.";
-                                            break;
-                                        default:
-                                            loginError = "Error logging user in: " + err.code;
-                                    }
-                                    $timeout(function(){
-                                        hideSpinner();
-                                        scope.d.disableBtn = false;
-                                        scope.d.loginError = loginError;
-                                    });
+                                    var errorCodeStrings;
+                                    var errorCodesPath = 'LOGIN_FORM.ERROR_CODES.';
+                                    var errorCodesStringKeysArr = [
+                                        errorCodesPath + 'INVALID_EMAIL',
+                                        errorCodesPath + 'INVALID_PASSWORD',
+                                        errorCodesPath + 'INVALID_USER',
+                                        errorCodesPath + 'DEFAULT_ERROR'
+                                    ];
+                                    $translate(errorCodesStringKeysArr)
+                                        .then(function(tranlations){
+                                            var loginError;
+                                            errorCodeStrings = tranlations;
+                                            switch (err.code) {
+                                                case "INVALID_EMAIL":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_EMAIL'];
+                                                    break;
+                                                case "INVALID_PASSWORD":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_PASSWORD'];
+                                                    break;
+                                                case "INVALID_USER":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_USER'];
+                                                    break;
+                                                default:
+                                                    loginError = errorCodeStrings[errorCodesPath + 'DEFAULT_ERROR'] + err.code;
+                                            }
+                                            $timeout(function(){
+                                                hideSpinner();
+                                                scope.d.disableBtn = false;
+                                                scope.d.loginError = loginError;
+                                            });
+                                        })
+                                        .catch(function(err){
+                                            $log.error('Cannot fetch translation! ', err);
+                                        });
                                 }
                             });
                     };
@@ -5828,7 +5843,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        ["$translatePartialLoader", "LoginAppSrv", function ($translatePartialLoader, LoginAppSrv) {
+        ["LoginAppSrv", function (LoginAppSrv) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
