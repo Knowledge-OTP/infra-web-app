@@ -6,7 +6,8 @@
         'znk.infra.svgIcon',
         'ngMaterial',
         'znk.infra.user',
-        'satellizer'
+        'satellizer',
+        'znk.infra.general'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -303,6 +304,7 @@
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
+                    loadingProvider.startLoader = loadingProvider.fillLoader = false;
                 });
             };
 
@@ -322,7 +324,7 @@
                 userContext: '<'
             },
             restrict: 'E',
-            templateUrl: 'components/loginApp/templates/oathLogin.template.html',
+            templateUrl: 'components/loginApp/oathLogin/oathLogin.template.html',
             controller: 'OathLoginDrvController',
             bindToController: true,
             controllerAs: 'vm'
@@ -660,6 +662,36 @@
 })(angular);
 
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
+    "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
+    "    <button class=\"facebook-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('facebook')\"\n" +
+    "            ng-if=\"vm.providers.facebook\"\n" +
+    "            element-loader\n" +
+    "            fill-loader=\"vm.loading.facebook.fillLoader\"\n" +
+    "            show-loader=\"vm.loading.facebook.startLoader\"\n" +
+    "            bg-loader=\"'#315880'\"\n" +
+    "            precentage=\"50\"\n" +
+    "            font-color=\"'#FFFFFF'\"\n" +
+    "            bg=\"'#369'\">\n" +
+    "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
+    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
+    "    </button>\n" +
+    "    <button class=\"gplus-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('google')\"\n" +
+    "            ng-if=\"vm.providers.google\"\n" +
+    "            element-loader\n" +
+    "            fill-loader=\"vm.loading.google.fillLoader\"\n" +
+    "            show-loader=\"vm.loading.google.startLoader\"\n" +
+    "            bg-loader=\"'#BD3922'\"\n" +
+    "            precentage=\"50\"\n" +
+    "            font-color=\"'#FFFFFF'\"\n" +
+    "            bg=\"'#df4a31'\">\n" +
+    "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
+    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
+    "    </button>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/loginApp/svg/facebook-icon.svg",
     "<svg\n" +
     "    x=\"0px\"\n" +
@@ -936,36 +968,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        </div>\n" +
     "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
     "    </form>\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/oathLogin.template.html",
-    "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
-    "    <button class=\"facebook-btn\"\n" +
-    "            ng-click=\"vm.socialAuth('facebook')\"\n" +
-    "            ng-if=\"vm.providers.facebook\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.facebook.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.facebook.startLoader\"\n" +
-    "            bg-loader=\"'#315880'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#369'\">\n" +
-    "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
-    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
-    "    </button>\n" +
-    "    <button class=\"gplus-btn\"\n" +
-    "            ng-click=\"vm.socialAuth('google')\"\n" +
-    "            ng-if=\"vm.providers.google\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.google.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.google.startLoader\"\n" +
-    "            bg-loader=\"'#BD3922'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#df4a31'\">\n" +
-    "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
-    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
-    "    </button>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/loginApp/templates/signupForm.directive.html",

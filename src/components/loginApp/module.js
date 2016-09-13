@@ -6,7 +6,8 @@
         'znk.infra.svgIcon',
         'ngMaterial',
         'znk.infra.user',
-        'satellizer'
+        'satellizer',
+        'znk.infra.general'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
