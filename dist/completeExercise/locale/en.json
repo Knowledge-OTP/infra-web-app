@@ -19,6 +19,7 @@
         "TIME_UP_CONTENT": "To best simulate the conditions of a real exam, we recommend you stop taking this practice test now. However, if you prefer to continue and complete all remaining questions, you may do so.",
         "TIME_UP_TITLE": "Time’s Up",
         "STOP": "STOP",
-        "CONTINUE_BTN": "CONTINUE"
+        "CONTINUE_BTN": "CONTINUE",
+        "SUMMARY": "Summary"
     }
 }

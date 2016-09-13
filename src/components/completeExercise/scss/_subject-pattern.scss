@@ -9,3 +9,11 @@
 .verbal-subject-pattern{
     @extend .reading-subject-pattern;
 }
+
+.writing-subject-pattern{
+    @include background-image-url-retina('/assets/images/writing-background-pattern');
+}
+
+.essay-subject-pattern{
+    @extend .writing-subject-pattern;
+}

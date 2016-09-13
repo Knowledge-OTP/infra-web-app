@@ -15,7 +15,9 @@
         'znk.infra.stats',
         'znk.infra.popUp',
         'znk.infra.screenSharing',
-        'znk.infra.eventManager'
+        'znk.infra.eventManager',
+        'znk.infra.stats',
+        'znk.infra.estimatedScore'
     ]);
 })();
 
@@ -35,7 +37,8 @@
      *   mode:{
      *      1: default, sensitive to sharer screen sharing state
      *      2: sensitive to viewer screen sharing state
-     *   }
+     *   },
+     *   znkExerciseSettings: znk exercise settings
      *
      * ########
      *   translations:
@@ -146,13 +149,10 @@
                             var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                             var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                            var isExerciseCompleted = data.exerciseResult.isComplete;
-                            if ((isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                            if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
                                 newViewState = VIEW_STATES.INTRO;
-                            } else if (!isExerciseCompleted) {
-                                newViewState = VIEW_STATES.EXERCISE;
                             } else {
-                                newViewState = VIEW_STATES.SUMMARY;
+                                newViewState = VIEW_STATES.EXERCISE;
                             }
 
                             $ctrl.changeViewState(newViewState, true);
@@ -365,7 +365,8 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", "InfraConfigSrv", "$scope", "UserProfileService", "ScreenSharingSrv", "ExerciseTypeEnum", "ZnkExerciseViewModeEnum", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum, ZnkExerciseViewModeEnum) {
+            controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", "InfraConfigSrv", "$scope", "UserProfileService", "ScreenSharingSrv", "ExerciseTypeEnum", "StatsEventsHandlerSrv", "exerciseEventsConst", "$rootScope", "ZnkExerciseViewModeEnum", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum,
+                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope, ZnkExerciseViewModeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -380,7 +381,7 @@
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time) {
+                    if (!exerciseContent.time || exerciseResult.isComplete) {
                         return;
                     }
 
@@ -399,8 +400,8 @@
                 function _invokeExerciseCtrl() {
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var exerciseTypeId = $ctrl.completeExerciseCtrl.getExerciseTypeId();
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
-
 
                     var settings = {
                         exerciseContent: exerciseContent,
@@ -408,15 +409,32 @@
                         exerciseParentContent: exerciseParentContent,
                         actions: {
                             done: function () {
-                                $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
-                            }
-                        },
-                        znkExerciseSettings: {
-                            onExerciseReady: function () {
-                                $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
+                                //  stats exercise data
+                                var promMap = {};
+
+                                promMap.statsAndEstimatedScore = StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
+                                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentContent);
+                                });
+
+                                promMap.exerciseSave = exerciseResult.$save();
+
+                                $q.all(promMap).then(function(){
+                                    $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                                });
                             }
                         }
                     };
+
+                    var defaultZnkExerciseSettings = {
+                        onExerciseReady: function () {
+                            $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
+                        }
+                    };
+                    var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
+                    var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
+                    settings.znkExerciseSettings = znkExerciseSettings;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
@@ -489,7 +507,7 @@
                     }, (function () {
                         var syncProm = $q.when();
 
-                        return function(newExerciseView) {
+                        return function (newExerciseView) {
                             if (!lastShDataReceived || angular.equals(exerciseViewBinding, lastShDataReceived.activeExercise)) {
                                 return null;
                             }
@@ -558,6 +576,10 @@
                             });
                         }
                     };
+
+                    this.goToSummary = function () {
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                    };
                 };
 
                 this.$onDestroy = function () {
@@ -586,8 +608,9 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV) {
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+                  UtilitySrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -621,7 +644,7 @@
             }
 
             function _setExerciseContentQuestions() {
-                if(isNotLecture){
+                if (isNotLecture) {
                     exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
                         return a.order - b.order;
                     });
@@ -630,8 +653,8 @@
                         exerciseContent.questions,
                         exerciseContent.questionsGroupData
                     );
-                }else{
-                    exerciseContent.content.sort(function(item1, item2){
+                } else {
+                    exerciseContent.content.sort(function (item1, item2) {
                         return item1.order - item2.order;
                     });
                     for (var i = 0; i < exerciseContent.content.length; i++) {
@@ -683,7 +706,7 @@
                 }
 
                 function _getAllowedTimeForExercise() {
-                    if(!isNotLecture){
+                    if (!isNotLecture) {
                         return null;
                     }
 
@@ -705,15 +728,17 @@
                         viewMode = isSection ? ZnkExerciseViewModeEnum.ONLY_ANSWER.enum : ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
                     }
 
-                    if(isNotLecture){
-                        initSlideIndex = exerciseResult.questionResults.findIndex(function (question) {
-                            return !question.userAnswer;
+                    if (isNotLecture) {
+                        var questionResultsMap = UtilitySrv.array.convertToMap(exerciseResult.questionResults, 'questionId');
+                        initSlideIndex = exerciseContent.questions.findIndex(function (question) {
+                            var questionResult = questionResultsMap[question.id];
+                            return !questionResult || angular.isUndefined(questionResult.userAnswer);
                         });
 
                         if (initSlideIndex === -1) {
                             initSlideIndex = 0;
                         }
-                    }else{
+                    } else {
                         initSlideIndex = 0;
                     }
 
@@ -756,8 +781,8 @@
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
-                        toolBox:{
-                            drawing:{
+                        toolBox: {
+                            drawing: {
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
@@ -1086,7 +1111,7 @@
                 if (isStudentApp) {
                     return UserProfileService.getCurrUserId();
                 } else {
-                    return TeacherContextSrv.getCurrUid();
+                    return $q.when(TeacherContextSrv.getCurrUid());
                 }
             };
 
@@ -1165,6 +1190,11 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                   config=\"$ctrl.timerConfig\"\n" +
     "                   ng-change=\"$ctrl.durationChanged()\">\n" +
     "            </timer>\n" +
+    "            <div class=\"summary\"\n" +
+    "                 ng-click=\"$ctrl.goToSummary()\"\n" +
+    "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete\">\n" +
+    "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
+    "            </div>\n" +
     "        </pre-right-part>\n" +
     "    </complete-exercise-header>\n" +
     "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled &&\n" +
@@ -1253,7 +1283,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "               video-ctrl-drv\n" +
     "               on-play=\"vm.onVideoPlay()\"\n" +
     "               on-ended=\"vm.onVideoEnded()\"\n" +
-    "               video-error-poster=\"assets/images/video-is-not-available-img.png\">\n" +
+    "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
     "            <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "    </div>\n" +

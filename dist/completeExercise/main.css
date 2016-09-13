@@ -37,9 +37,25 @@ complete-exercise-exercise .base-complete-exercise-container {
     border-right: 1px solid #ffffff;
     display: block;
     padding-right: 25px;
-    margin-right: 25px; }
+    margin-right: 25px;
+    display: -ms-flexbox;
+    display: flex; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .timer-type1 .clock-icon-svg * {
       stroke: white; }
+    complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary {
+      cursor: pointer;
+      height: 30px;
+      background: #B33520;
+      text-align: center;
+      border-radius: 15px;
+      line-height: 30px;
+      padding-right: 10px;
+      padding-left: 10px; }
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .summary-text {
+        font-size: 16px;
+        color: #ffffff;
+        font-family: Lato;
+        font-weight: 200; }
   complete-exercise-exercise .base-complete-exercise-container znk-exercise {
     -ms-flex-positive: 1;
         flex-grow: 1; }
@@ -223,3 +239,11 @@ complete-exercise-progress-bar {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
     .reading-subject-pattern, .verbal-subject-pattern {
       background-image: url("/assets/images/reading-background-pattern@2x.png"); } }
+
+.writing-subject-pattern, .essay-subject-pattern {
+  /*CSS for basic styling and non-retina image path:*/
+  background-image: url("/assets/images/writing-background-pattern.png");
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+    .writing-subject-pattern, .essay-subject-pattern {
+      background-image: url("/assets/images/writing-background-pattern@2x.png"); } }
