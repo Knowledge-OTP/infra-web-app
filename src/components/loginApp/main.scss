@@ -59,7 +59,7 @@
 }
 
 login-app {
-
+    transition: all 0.5s;
     .img-responsive {
         display: block;
         max-width: 100%;
@@ -272,12 +272,12 @@ login-app {
                 }
             }
 
-            .inputs-container{
-                .input-wrapper{
+            .inputs-container {
+                .input-wrapper {
                     position: relative;
                     box-sizing: border-box;
                     width: 340px;
-                    border: 1px $borderColor1 solid;
+                    border: 1px solid;
                     border-radius: 30px;
                     background-color: $bgColor1;
                     margin: {
@@ -291,6 +291,41 @@ login-app {
                     }
                     display: flex;
                     align-items: center;
+                    .validationBox {
+                        span {
+                            width: 200px;
+                            padding: 3px 10px;
+                            position: absolute;
+                            right: 0;
+                            top: -28px;
+                            background-color: $bgColor32;
+                            color: $fontColor1;
+                            border-radius: 3px;
+                            font-size: 13px;
+                            line-height: 24px;
+                            &:after {
+                                content: '';
+                                position: absolute;
+                                border: {
+                                    color: transparent;
+                                    style: solid;
+                                    top-color: $bgColor32;
+                                    width: 10px;
+                                }
+                                bottom: -20px;
+                                left: 13px;
+                            }
+                        }
+                    }
+                    &.valid {
+                        border-color: $borderColor1;
+                    }
+                    &.invalid {
+                        border-color: $borderColor22;
+                        svg, svg * {
+                            stroke: $bgColor32;
+                        }
+                    }
 
                     &:last-child{
                         margin: {
@@ -386,6 +421,13 @@ login-app {
                 }
             }
 
+            .general-error {
+                font-size: 12px;
+                color: $fontColor17;
+                text-align: center;
+                margin-bottom: 0;
+            }
+
             .divider {
                 width: 340px;
                 position: relative;
@@ -432,9 +474,6 @@ login-app {
         footer {
             text-align: center;
             padding-bottom: 40px;
-            //position: absolute;
-            //bottom: 0;
-            //width: 100%;
             .switch-student-educator {
                 font-weight:normal;
                 h2 {

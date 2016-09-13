@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        function ($translatePartialLoader, LoginAppSrv, $window) {
+        function (LoginAppSrv, $log) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
@@ -23,8 +23,7 @@
                     };
 
                     scope.signupSubmit = function(signupForm){
-                        if (!scope.d.signupFormData) {
-                            $window.alert('form is empty!', signupForm);
+                        if (signupForm.$invalid) {
                             return;
                         }
                         showSpinner();
@@ -37,8 +36,7 @@
                             .catch(function(err){
                                 hideSpinner();
                                 scope.d.disableBtn = false;
-                                console.error(err);
-                                $window.alert(err);
+                                $log.error(err);
                             });
                     };
 

@@ -130,7 +130,7 @@ estimated-score-widget .score-estimate-container {
           font-family: Lato;
           font-weight: 400;
           position: absolute;
-          width: 35px;
+          min-width: 22px;
           height: 22px;
           line-height: 21px;
           border-radius: 13px;
@@ -211,13 +211,11 @@ md-tooltip.tooltip-for-estimated-score-widget {
         opacity: 0; }
     md-tooltip.tooltip-for-estimated-score-widget ._md-content .top-text {
       margin-top: 22px;
-      margin-bottom: 12px;
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 400; }
     md-tooltip.tooltip-for-estimated-score-widget ._md-content .bottom-text {
-      line-height: 12px;
       font-size: 12px;
       color: #4f4d4d;
       font-family: Lato;
