@@ -30,10 +30,10 @@
                         scope.d.disableBtn = true;
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
                             .then(function(authData){
-                                console.log("Authenticated successfully with payload: ", authData);
+                                $log.debug("Authenticated successfully with payload: ", authData);
                             })
                             .catch(function(err){
-                                console.error(err);
+                                $log.error(err);
                                 if (err) {
                                     var errorCodeStrings;
                                     var errorCodesPath = 'LOGIN_FORM.ERROR_CODES.';

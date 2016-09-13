@@ -141,10 +141,10 @@
                         scope.d.disableBtn = true;
                         LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
                             .then(function(authData){
-                                console.log("Authenticated successfully with payload: ", authData);
+                                $log.debug("Authenticated successfully with payload: ", authData);
                             })
                             .catch(function(err){
-                                console.error(err);
+                                $log.error(err);
                                 if (err) {
                                     var errorCodeStrings;
                                     var errorCodesPath = 'LOGIN_FORM.ERROR_CODES.';
@@ -205,7 +205,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        ["LoginAppSrv", function (LoginAppSrv) {
+        ["LoginAppSrv", "$log", function (LoginAppSrv, $log) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
@@ -235,7 +235,7 @@
                             .catch(function(err){
                                 hideSpinner();
                                 scope.d.disableBtn = false;
-                                console.error(err);
+                                $log.error(err);
                             });
                     };
 

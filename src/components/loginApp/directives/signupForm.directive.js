@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        function (LoginAppSrv) {
+        function (LoginAppSrv, $log) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
@@ -36,7 +36,7 @@
                             .catch(function(err){
                                 hideSpinner();
                                 scope.d.disableBtn = false;
-                                console.error(err);
+                                $log.error(err);
                             });
                     };
 
