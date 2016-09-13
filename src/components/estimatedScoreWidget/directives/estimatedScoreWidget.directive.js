@@ -23,6 +23,7 @@
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
+                    var scores;
 
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
@@ -40,7 +41,7 @@
                             isDiagnosticCompletedProm,
                             $q.when(false),
                             getSubjectOrderProm,
-                            getExamScoreProm
+                            getExamScoreProm,
 
                         ]).then(function (res) {
                             var estimatedScore = res[0];
@@ -56,7 +57,7 @@
                                 var estimatedScoreForSubject = estimatedScore[subjectId];
                                 return {
                                     subjectId: subjectId,
-                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject.score : 0,
+                                    estimatedScore: (scope.d.isDiagnosticComplete && (typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
                                     estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject.score) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
@@ -65,14 +66,9 @@
                                 };
                             });
 
-                            var scoresArr = [];
-                            for (var i = 0; i < scope.d.widgetItems.length; i++) {
-                                if (angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
-                                    scoresArr.push(scope.d.widgetItems[i].estimatedScore);
-                                }
-                            }
+                            scores = createAndCountScoresArray(scope.d.widgetItems);
 
-                            scope.d.estimatedCompositeScore = examScoresFn(scoresArr);
+                            scope.d.estimatedCompositeScore = scores.scoresArr.length === scores.subjectsToShow ? examScoresFn(scores.scoresArr): '-';
 
                             function filterSubjects(widgetItem) {
                                 return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
@@ -96,21 +92,26 @@
                                     scope.d.subjectsScores = scope.d.widgetItems;
                                 }, 1200);
                             });
-
-                            // if (!previousValues) {
-                            //     scope.d.subjectsScores = scope.d.widgetItems;
-                            // } else {
-                            //     scope.d.subjectsScores = previousValues;
-                            //     $timeout(function () {
-                            //         scope.d.enableEstimatedScoreChangeAnimation = true;
-                            //         $timeout(function () {
-                            //             scope.d.subjectsScores = scope.d.widgetItems;
-                            //         }, 1200);
-                            //     });
-                            // }
-
                             previousValues = scope.d.widgetItems;
                         });
+                    }
+
+                    function createAndCountScoresArray(subjectsArr) {
+                        var scoresArr = [];
+                        var subjectsToShow = 0;
+                        for (var i = 0; i < subjectsArr.length; i++) {
+                            if (typeof (subjectsArr[i].estimatedScore) === 'number') {
+                                scoresArr.push(subjectsArr[i].estimatedScore);
+                            }
+                            if (subjectsArr[i].showScore) {
+                                subjectsToShow++;
+                            }
+                        }
+                        var scores = {
+                            scoresArr: scoresArr,
+                            subjectsToShow: subjectsToShow
+                        };
+                        return scores;
                     }
 
                     function calcPercentage(correct) {

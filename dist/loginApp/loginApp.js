@@ -813,7 +813,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
     "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
     "                    </p>\n" +
-    "                </div>  `\n" +
+    "                </div>\n" +
     "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
     "                    <signup-form app-context=\"d.appContext\"\n" +
     "                                 user-context=\"d.userContext\">\n" +
