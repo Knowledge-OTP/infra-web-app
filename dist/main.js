@@ -1320,7 +1320,6 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
             this.$get = [
                 function () {
                     var webAppInfraConfigSrv = {};
-
                     return webAppInfraConfigSrv;
                 }
             ];
