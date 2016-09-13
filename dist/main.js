@@ -2863,6 +2863,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
+                    var scores;
 
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
@@ -2880,7 +2881,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             isDiagnosticCompletedProm,
                             $q.when(false),
                             getSubjectOrderProm,
-                            getExamScoreProm
+                            getExamScoreProm,
 
                         ]).then(function (res) {
                             var estimatedScore = res[0];
@@ -2896,7 +2897,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                                 var estimatedScoreForSubject = estimatedScore[subjectId];
                                 return {
                                     subjectId: subjectId,
-                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject.score : 0,
+                                    estimatedScore: (scope.d.isDiagnosticComplete && (typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
                                     estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject.score) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
@@ -2905,14 +2906,9 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                                 };
                             });
 
-                            var scoresArr = [];
-                            for (var i = 0; i < scope.d.widgetItems.length; i++) {
-                                if (angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
-                                    scoresArr.push(scope.d.widgetItems[i].estimatedScore);
-                                }
-                            }
+                            scores = createAndCountScoresArray(scope.d.widgetItems);
 
-                            scope.d.estimatedCompositeScore = examScoresFn(scoresArr);
+                            scope.d.estimatedCompositeScore = scores.scoresArr.length === scores.subjectsToShow ? examScoresFn(scores.scoresArr): '-';
 
                             function filterSubjects(widgetItem) {
                                 return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
@@ -2936,21 +2932,26 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                                     scope.d.subjectsScores = scope.d.widgetItems;
                                 }, 1200);
                             });
-
-                            // if (!previousValues) {
-                            //     scope.d.subjectsScores = scope.d.widgetItems;
-                            // } else {
-                            //     scope.d.subjectsScores = previousValues;
-                            //     $timeout(function () {
-                            //         scope.d.enableEstimatedScoreChangeAnimation = true;
-                            //         $timeout(function () {
-                            //             scope.d.subjectsScores = scope.d.widgetItems;
-                            //         }, 1200);
-                            //     });
-                            // }
-
                             previousValues = scope.d.widgetItems;
                         });
+                    }
+
+                    function createAndCountScoresArray(subjectsArr) {
+                        var scoresArr = [];
+                        var subjectsToShow = 0;
+                        for (var i = 0; i < subjectsArr.length; i++) {
+                            if (typeof (subjectsArr[i].estimatedScore) === 'number') {
+                                scoresArr.push(subjectsArr[i].estimatedScore);
+                            }
+                            if (subjectsArr[i].showScore) {
+                                subjectsToShow++;
+                            }
+                        }
+                        var scores = {
+                            scoresArr: scoresArr,
+                            subjectsToShow: subjectsToShow
+                        };
+                        return scores;
                     }
 
                     function calcPercentage(correct) {
@@ -3110,10 +3111,8 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                                          md-direction=\"top\"\n" +
     "                                          class=\"tooltip-for-estimated-score-widget md-whiteframe-2dp\">\n" +
     "                                  <div translate=\".YOUR_GOAL\" translate-values=\"{ goal: {{widgetItem.userGoal}} }\" class=\"top-text\"></div>\n" +
-    "                                  <div ng-switch=\"widgetItem.estimatedScore >= widgetItem.userGoal\" class=\"bottom-text\">\n" +
-    "                                      <span ng-switch-when=\"true\" translate=\".GOAL_REACHED\"></span>\n" +
-    "                                      <span ng-switch-default translate=\".PTS_TO_GO\" translate-values=\"{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
-    "                                  </div>\n" +
+    "                                      <span class=\"bottom-text\" ng-if=\"widgetItem.estimatedScore >= widgetItem.userGoal\" translate=\".GOAL_REACHED\"></span>\n" +
+    "                                      <span class=\"bottom-text\" ng-if=\"widgetItem.estimatedScore\" translate=\".PTS_TO_GO\" translate-values=\"{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
     "                              </md-tooltip>\n" +
     "                            {{widgetItem.estimatedScore === 0 ? '?' : widgetItem.estimatedScore}}\n" +
     "                        </span>\n" +
