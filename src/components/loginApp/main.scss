@@ -111,7 +111,6 @@ login-app {
                 md-menu {
                     .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
                     .md-button:not([disabled]).md-icon-button:hover {
-                        // background-color: #fbfcfc;
                         background-color: #dddddd;
                     }
                     & > button {
@@ -161,12 +160,6 @@ login-app {
             position: relative;
             padding: 0;
             .main-inner {
-                // position: absolute;
-                // width: 1366px;
-                // height: 513px;
-                // margin: 0 auto;
-                // top: 0;
-                // left: calc(50% - 683px);
                 h2.banner-text {
                     position: absolute;
                     font: {
@@ -197,12 +190,12 @@ login-app {
                 margin-top: 15px;
                 text-align: center;
                 color: #fff;
+                font: {
+                    size: 17px;
+                }
                 a {
                     text-decoration: underline;
                     cursor: pointer;
-                }
-                font: {
-                    family: 'SourceSansPro-Light';
                 }
             }
         }
