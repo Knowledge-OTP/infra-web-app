@@ -97,9 +97,6 @@
         studentAppName: 'toefl_app',
         dashboardAppName: 'toefl_dashboard'
     };
-    /**
-     * TODO: add toefl dev and prod vars
-     */
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
@@ -214,6 +211,10 @@
             };
 
             LoginAppSrv.APPS = APPS;
+            // Hide TOEFL app in production
+            if (env !== 'dev') {
+                delete LoginAppSrv.APPS.TOEFL;
+            }
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
