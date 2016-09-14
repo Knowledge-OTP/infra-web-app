@@ -2526,7 +2526,7 @@ login-app {
         margin-top: 15px;
         text-align: center;
         color: #fff;
-        font-family: 'SourceSansPro-Light'; }
+        font-size: 17px; }
         login-app .login-app .main .go-to-login a,
         login-app .login-app .main .go-to-signup a {
           text-decoration: underline;
