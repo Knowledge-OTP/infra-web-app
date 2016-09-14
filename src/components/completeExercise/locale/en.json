@@ -6,6 +6,13 @@
             "TYPE_3": "Exam {{exerciseParentContent.name}}: {{exerciseContent.name}}",
             "TYPE_4": "{{exerciseContent.name}}"
         },
+        "SUBJECTS":{
+            "0":"Mathematics",
+            "1":"Reading",
+            "2":"Writing",
+            "5":"English",
+            "6":"Science"
+        },
         "EXIT": "Exit",
         "GO_QST": "Go To Questions",
         "QUESTIONS": "Questions: {{num}}",
