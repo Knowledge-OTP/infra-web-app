@@ -868,14 +868,14 @@
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;
 
-                    var timeDurationFilter = $filter('formatTimeDuration');
-                    this.timeTranslateValue = {
-                        min: timeDurationFilter(exerciseContent .time, 'mm'),
-                        sec: timeDurationFilter(exerciseContent .time, 'rss')
-                    };
-
                     var translateFilter = $filter('translate');
                     this.subjectNameTranslateValue = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
+
+                    var timeDurationFilter = $filter('formatTimeDuration');
+                    this.timeTranslateValue = {
+                        min: timeDurationFilter(exerciseContent.time, 'mm'),
+                        sec: timeDurationFilter(exerciseContent.time, 'rss')
+                    };
 
                     this.start = function(){
                         this.completeExerciseIntroCtrl.goToQuestions();
