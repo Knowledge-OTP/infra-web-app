@@ -1246,7 +1246,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "              suffix=\"icon\"\n" +
     "              class=\"subject-icon\">\n" +
     "    </svg-icon>\n" +
-    "    <div class=\"subject-text\"\n" +
+    "    <div class=\"subject-text\" translate-cloak\n" +
     "         translate=\"SUBJECTS.{{$ctrl.exerciseContent.subjectId}}\">\n" +
     "    </div>\n" +
     "    <div class=\"section-data\">\n" +
