@@ -915,7 +915,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     this.exerciseParentContent = exerciseParentContent;
 
                     var translateFilter = $filter('translate');
-                    this.subjectNameTranslateValue = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
+                    this.subjectNameTranslateKey = translateFilter('SUBJECTS.' + exerciseContent.subjectId);
+                    this.instructionsTranslateKey = translateFilter('SECTION_INSTRUCTION.' + exerciseContent.subjectId);
 
                     var timeDurationFilter = $filter('formatTimeDuration');
                     this.timeTranslateValue = {
@@ -1249,7 +1250,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "              suffix=\"icon\"\n" +
     "              class=\"subject-icon\">\n" +
     "    </svg-icon>\n" +
-    "    <div class=\"subject-text\">{{$ctrl.subjectNameTranslateValue}}</div>\n" +
+    "    <div class=\"subject-text\" translate=\"$ctrl.subjectNameTranslateKey\"></div>\n" +
     "    <div class=\"section-data\">\n" +
     "        <span translate=\".QUESTIONS\"\n" +
     "              translate-values=\"{num: $ctrl.exerciseContent.questions.length}\">\n" +
@@ -1262,7 +1263,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "         translate=\".INSTRUCTIONS\">\n" +
     "    </div>\n" +
     "    <p class=\"instructions-text\"\n" +
-    "       translate=\"SECTION_INSTRUCTION.{{$ctrl.exerciseContent.subjectId}}\">\n" +
+    "       translate=\"{{$ctrl.instructionsTranslateKey}}\">\n" +
     "    </p>\n" +
     "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk\"\n" +

@@ -17,6 +17,17 @@
             "7":"Verbal",
             "8":"Essay"
         },
+        "SECTION_INSTRUCTION":{
+            "0":"Solve the following problems.",
+            "1":"Answer the following questions based on the information in the text.",
+            "2":"Evaluate the following essay.",
+            "3":"You should listen to each conversation or lecture only once. After each conversation or lecture, you will answer a series of questions. Some questions requires listening again to a part of the audio. You may take notes while you listen.",
+            "4":"The following questions requires recording of your response. You will have time to prepare your response and to speak. Further instructions appear on each question.",
+            "5":"Following is a passage with 15 questions. Some portions of text are highlighted to indicate a grammatical or stylistic error. Select the best choice from the four possible options.",
+            "6":"Answer the following questions based on the information presented in the passages.",
+            "7":"",
+            "8":"After reading the persuasive essay, assess the essay by answering the following questions."
+        },
         "EXIT": "Exit",
         "GO_QST": "Go To Questions",
         "QUESTIONS": "Questions: {{num}}",
