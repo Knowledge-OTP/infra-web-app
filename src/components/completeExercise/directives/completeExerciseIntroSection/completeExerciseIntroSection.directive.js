@@ -24,6 +24,9 @@
                         sec: timeDurationFilter(exerciseContent .time, 'rss')
                     };
 
+                    var translateFilter = $filter('translate');
+                    this.subjectNameTranslateValue = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
+
                     this.start = function(){
                         this.completeExerciseIntroCtrl.goToQuestions();
                     };

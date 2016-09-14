@@ -874,6 +874,9 @@
                         sec: timeDurationFilter(exerciseContent .time, 'rss')
                     };
 
+                    var translateFilter = $filter('translate');
+                    this.subjectNameTranslateValue = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
+
                     this.start = function(){
                         this.completeExerciseIntroCtrl.goToQuestions();
                     };
@@ -1200,7 +1203,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "              suffix=\"icon\"\n" +
     "              class=\"subject-icon\">\n" +
     "    </svg-icon>\n" +
-    "    <div class=\"subject-text\" subject-id-to-attr-drv=\"{{$ctrl.exerciseContent.subjectId}}\"></div>\n" +
+    "    <div class=\"subject-text\">{{$ctrl.subjectNameTranslateValue}}</div>\n" +
     "    <div class=\"section-data\">\n" +
     "        <span translate=\".QUESTIONS\"\n" +
     "              translate-values=\"{num: $ctrl.exerciseContent.questions.length}\">\n" +
