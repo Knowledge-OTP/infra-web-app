@@ -48,6 +48,7 @@
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
+                    loadingProvider.startLoader = loadingProvider.fillLoader = false;
                 });
             };
 
