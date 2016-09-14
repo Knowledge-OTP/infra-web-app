@@ -261,7 +261,8 @@ complete-exercise-intro-section {
       margin-bottom: 100px;
       margin-left: auto;
       width: 550px;
-      overflow: auto; }
+      overflow: auto;
+      text-align: center; }
     complete-exercise-intro-section .intro-container .btn-section {
       position: absolute;
       right: 0;

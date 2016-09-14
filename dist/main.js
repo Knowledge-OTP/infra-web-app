@@ -1263,7 +1263,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "         translate=\".INSTRUCTIONS\">\n" +
     "    </div>\n" +
     "    <p class=\"instructions-text\"\n" +
-    "       translate=\"{{$ctrl.instructionsTranslateKey}}\">\n" +
+    "       translate=\"$ctrl.instructionsTranslateKey\">\n" +
     "    </p>\n" +
     "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk\"\n" +
