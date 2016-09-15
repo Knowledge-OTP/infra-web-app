@@ -43,7 +43,6 @@
                 function _invokeExerciseCtrl() {
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
-                    var exerciseTypeId = $ctrl.completeExerciseCtrl.getExerciseTypeId();
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
 
                     var settings = {
