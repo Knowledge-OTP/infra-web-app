@@ -915,8 +915,11 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     this.exerciseParentContent = exerciseParentContent;
 
                     var translateFilter = $filter('translate');
-                    this.subjectNameTranslateKey = translateFilter('SUBJECTS.' + exerciseContent.subjectId);
-                    this.instructionsTranslateKey = translateFilter('SECTION_INSTRUCTION.' + exerciseContent.subjectId);
+                    this.subjectNameTranslateKey1 = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
+                    this.subjectNameTranslateKey2 = translateFilter('SUBJECTS.' + exerciseContent.subjectId);
+
+
+                    this.instructionsTranslateKey = '.SECTION_INSTRUCTION.' + exerciseContent.subjectId;
 
                     var timeDurationFilter = $filter('formatTimeDuration');
                     this.timeTranslateValue = {
@@ -1250,7 +1253,12 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "              suffix=\"icon\"\n" +
     "              class=\"subject-icon\">\n" +
     "    </svg-icon>\n" +
-    "    <div class=\"subject-text\" translate=\"{{$ctrl.subjectNameTranslateKey}}\"></div>\n" +
+    "    1.<div class=\"subject-text\" translate=\"{{$ctrl.subjectNameTranslateKey1}}\"></div>\n" +
+    "    2.<div class=\"subject-text\" translate=\"$ctrl.subjectNameTranslateKey1\"></div>\n" +
+    "\n" +
+    "    3.<div class=\"subject-text\" translate=\"$ctrl.subjectNameTranslateKey2\"></div>\n" +
+    "    4.<div class=\"subject-text\" translate=\"{{$ctrl.subjectNameTranslateKey2}}\"></div>\n" +
+    "\n" +
     "    <div class=\"section-data\">\n" +
     "        <span translate=\".QUESTIONS\"\n" +
     "              translate-values=\"{num: $ctrl.exerciseContent.questions.length}\">\n" +
@@ -1262,8 +1270,11 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    <div class=\"instructions-title\"\n" +
     "         translate=\".INSTRUCTIONS\">\n" +
     "    </div>\n" +
-    "    <p class=\"instructions-text\"\n" +
+    "    1.<p class=\"instructions-text\"\n" +
     "       translate=\"{{$ctrl.instructionsTranslateKey}}\">\n" +
+    "    </p>\n" +
+    "    2.<p class=\"instructions-text\"\n" +
+    "         translate=\"$ctrl.instructionsTranslateKey\">\n" +
     "    </p>\n" +
     "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk\"\n" +

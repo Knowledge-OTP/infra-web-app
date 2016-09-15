@@ -6,7 +6,12 @@
               suffix="icon"
               class="subject-icon">
     </svg-icon>
-    <div class="subject-text" translate="{{$ctrl.subjectNameTranslateKey}}"></div>
+    1.<div class="subject-text" translate="{{$ctrl.subjectNameTranslateKey1}}"></div>
+    2.<div class="subject-text" translate="$ctrl.subjectNameTranslateKey1"></div>
+
+    3.<div class="subject-text" translate="$ctrl.subjectNameTranslateKey2"></div>
+    4.<div class="subject-text" translate="{{$ctrl.subjectNameTranslateKey2}}"></div>
+
     <div class="section-data">
         <span translate=".QUESTIONS"
               translate-values="{num: $ctrl.exerciseContent.questions.length}">
@@ -18,8 +23,11 @@
     <div class="instructions-title"
          translate=".INSTRUCTIONS">
     </div>
-    <p class="instructions-text"
+    1.<p class="instructions-text"
        translate="{{$ctrl.instructionsTranslateKey}}">
+    </p>
+    2.<p class="instructions-text"
+         translate="$ctrl.instructionsTranslateKey">
     </p>
     <div class="btn-section">
         <md-button class="md-primary znk"
