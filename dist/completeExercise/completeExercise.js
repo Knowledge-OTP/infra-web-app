@@ -400,7 +400,6 @@
                 function _invokeExerciseCtrl() {
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
-                    var exerciseTypeId = $ctrl.completeExerciseCtrl.getExerciseTypeId();
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
 
                     var settings = {
@@ -409,20 +408,7 @@
                         exerciseParentContent: exerciseParentContent,
                         actions: {
                             done: function () {
-                                //  stats exercise data
-                                var promMap = {};
-
-                                promMap.statsAndEstimatedScore = StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
-                                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentContent);
-                                });
-
-                                promMap.exerciseSave = exerciseResult.$save();
-
-                                $q.all(promMap).then(function(){
-                                    $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
-                                });
+                                $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                             }
                         }
                     };
