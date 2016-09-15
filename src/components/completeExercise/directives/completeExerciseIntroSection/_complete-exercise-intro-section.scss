@@ -89,6 +89,8 @@ complete-exercise-intro-section {
             bottom: 36px;
             left: 0;
             text-align: center;
+            display: flex;
+            justify-content: center;
 
             .md-button{
                 padding: {
