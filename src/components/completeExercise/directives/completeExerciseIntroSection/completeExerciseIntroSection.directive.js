@@ -19,11 +19,8 @@
                     this.exerciseParentContent = exerciseParentContent;
 
                     var translateFilter = $filter('translate');
-                    this.subjectNameTranslateKey1 = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
-                    this.subjectNameTranslateKey2 = translateFilter('SUBJECTS.' + exerciseContent.subjectId);
-
-
-                    this.instructionsTranslateKey = '.SECTION_INSTRUCTION.' + exerciseContent.subjectId;
+                    this.subjectNameTranslateKey = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
+                    this.instructionsTranslateKey = translateFilter('COMPLETE_EXERCISE.SECTION_INSTRUCTION.' + exerciseContent.subjectId);
 
                     var timeDurationFilter = $filter('formatTimeDuration');
                     this.timeTranslateValue = {
