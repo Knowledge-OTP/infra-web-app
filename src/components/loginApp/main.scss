@@ -111,7 +111,7 @@ login-app {
                 md-menu {
                     .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
                     .md-button:not([disabled]).md-icon-button:hover {
-                        background-color: #dddddd;
+                        background-color: #fbfcfc;
                     }
                     & > button {
                         width: 175px;
@@ -147,13 +147,10 @@ login-app {
             .for-educators {
                 float: right;
                 margin-top: 12px;
+                font-size: 16px;
                 cursor: pointer;
                 border-radius: 15px;
-                border: 1px solid;
                 padding: 5px 8px;
-                &:hover {
-                    text-decoration: underline;
-                }
             }
         }
         .main {
