@@ -5,7 +5,7 @@
         "Zinkerz"
     ],
     "dependencies": {
-        "infra": "https://github.com/Knowledge-OTP/infra.git#zinkerz/dev",
+        "infra": "https://github.com/Knowledge-OTP/infra.git#allen/invitationStorage",
         "ng-tags-input": "^3.0.0",
         "angular-chart.js": "^0.10.2",
         "v-accordion": "1.4.1",
