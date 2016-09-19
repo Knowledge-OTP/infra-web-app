@@ -3,6 +3,8 @@
 
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
+        'znk.infra.auth',
+        'demoEnv',
         'znk.infra.svgIcon',
         'ngMaterial',
         'znk.infra.user',

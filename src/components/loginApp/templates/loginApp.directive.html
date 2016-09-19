@@ -28,7 +28,7 @@
                 </md-menu-content>
             </md-menu>
         </div>
-        <a ng-if="d.userContext===d.userContextObj.STUDENT"
+        <a ng-if="d.userContext===d.userContextObj.STUDENT && !d.invitationId"
            class="for-educators app-color"
            ng-click="changeUserContext(d.userContextObj.TEACHER)"
            translate="LOGIN_APP.EDUCATORS_CLICK_HERE">

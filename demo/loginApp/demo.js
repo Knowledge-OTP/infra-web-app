@@ -9,7 +9,16 @@ angular.module('demo', ['znk.infra-web-app.loginApp'])
         })
             .preferredLanguage('en');
     })
-    .run(function ($rootScope, $translate) {
+    .run(function ($rootScope, $translate, InvitationKeyService, AuthService, $location) {
+        var search = $location.search();
+        var iid = search['iid'];
+        if (angular.isDefined(iid) && iid != null) {
+            $location.search('iid', null);
+            InvitationKeyService.saveInvitationKey(iid);
+            var auth = AuthService.getAuth();
+
+        }
+
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         })

@@ -62,7 +62,18 @@
                                 }
                             });
                         }
-                        if (search.state) {
+
+                        if (search.invitationId && search.invitationId != null) {
+                            scope.d.invitationId = search.invitationId;
+                            if (search.userType === 'educator') {
+                                scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                            } else {
+                                scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                            }
+                            scope.changeCurrentForm("login");
+                        }
+
+                        else if (search.state) {
                             scope.changeCurrentForm(search.state);
                             if (search.userType) {
                                 if (search.userType === 'educator') {
