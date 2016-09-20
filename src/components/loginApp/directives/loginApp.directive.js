@@ -28,7 +28,7 @@
 
                     scope.currentUserContext = 'student';
                     scope.currentForm = 'signup';
-                    scope.userType = 'student';
+
 
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
