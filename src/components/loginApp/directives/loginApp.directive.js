@@ -70,7 +70,11 @@
                         }
 
                         if (search.userType) {
-                            search.userType === 'educator' ? scope.changeUserContext(scope.d.userContextObj.TEACHER) : scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                            if (search.userType === 'educator') {
+                                scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                            } else {
+                                scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                            }
                         }
 
                         if (search.state) {
