@@ -12,8 +12,8 @@
                   translate="LOGIN_APP.FOR_EDUCATORS">
             </span>
         </div>
-        <div class="app-select" ng-cloak>
-            <md-menu md-offset="-50 80" md-no-ink>
+        <div class="app-select" ng-cloak ng-class="{'no-dropdown': d.invitationId}">
+            <md-menu md-offset="-50 80" md-no-ink ng-if="!d.invitationId">
                 <md-button aria-label="Open App Select Menu"
                            class="md-icon-button"
                            ng-click="openMenu($mdOpenMenu, $event)">
@@ -27,6 +27,7 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
+            <div class="app-img-holder {{d.appContext.className}}" ng-if="d.invitationId"></div>
         </div>
         <a ng-if="d.userContext===d.userContextObj.STUDENT && !d.invitationId"
            class="for-educators app-color"
@@ -36,15 +37,19 @@
     </header>
     <div class="main">
         <div ng-switch="d.userContext" ng-if="!d.invitationId">
-            <img class="main-banner img-responsive" ng-switch-when="d.userContextObj.TEACHER"
+            <img class="main-banner img-responsive" ng-switch-when="1"
                  src="assets/images/login-teacher-bg@2x.jpg">
-            <img class="main-banner img-responsive" ng-switch-when="d.userContextObj.STUDENT"
+            <img class="main-banner img-responsive" ng-switch-when="2"
                  src="assets/images/login-student-bg@2x.jpg">
+        </div>
 
-            <!--<img class="main-banner img-responsive" ng-if="d.userContext===d.userContextObj.TEACHER"-->
-                 <!--src="assets/images/login-teacher-bg@2x.jpg">-->
-            <!--<img class="main-banner img-responsive" ng-if="d.userContext===d.userContextObj.STUDENT"-->
-                 <!--src="assets/images/login-student-bg@2x.jpg">-->
+        <div ng-if="d.invitationId">
+            <div ng-switch="d.userContext">
+                <img class="main-banner img-responsive" ng-switch-when="1"
+                     src="assets/images/login-teacher-invitation-bg@2x.jpg">
+                <img class="main-banner img-responsive" ng-switch-when="2"
+                     src="assets/images/login-student-invitation-bg@2x.jpg">
+            </div>
         </div>
         <div class="main-inner">
             <ng-switch on="currentForm">
@@ -53,8 +58,10 @@
                                 user-context="d.userContext">
                     </login-form>
                     <p class="go-to-signup">
-                        <span translate="LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.STUDENT"></span>
-                        <span translate="LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
+                        <span translate="LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT"
+                              ng-if="d.userContext===d.userContextObj.STUDENT"></span>
+                        <span translate="LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT"
+                              ng-if="d.userContext===d.userContextObj.TEACHER"></span>
                         <a ng-click="changeCurrentForm('signup')" translate="SIGNUP_FORM.SIGN_UP"></a>
                     </p>
                 </div>
@@ -63,37 +70,51 @@
                                  user-context="d.userContext">
                     </signup-form>
                     <p class="go-to-login">
-                        <span translate="SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT" ng-if="d.userContext===d.userContextObj.STUDENT"></span>
-                        <span translate="SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT" ng-if="d.userContext===d.userContextObj.TEACHER"></span>
+                        <span translate="SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT"
+                              ng-if="d.userContext===d.userContextObj.STUDENT"></span>
+                        <span translate="SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT"
+                              ng-if="d.userContext===d.userContextObj.TEACHER"></span>
                         <a ng-click="changeCurrentForm('login')" translate="LOGIN_FORM.LOGIN_IN"></a>
                     </p>
                 </div>
             </ng-switch>
             <h2 class="banner-text">
-                <ng-switch on="currentUserContext">
+                <ng-switch on="currentUserContext" ng-if="!d.invitationId">
                     <div ng-switch-when="teacher" class="switch-student-educator">
-                        <span translate="LOGIN_APP.SAT_EDUCATOR_TAGLINE" ng-if="d.appContext===d.availableApps.SAT"></span>
-                        <span translate="LOGIN_APP.ACT_EDUCATOR_TAGLINE" ng-if="d.appContext===d.availableApps.ACT"></span>
-                        <span translate="LOGIN_APP.TOEFL_EDUCATOR_TAGLINE" ng-if="d.appContext===d.availableApps.TOEFL"></span>
+                        <span translate="LOGIN_APP.SAT_EDUCATOR_TAGLINE"
+                              ng-if="d.appContext===d.availableApps.SAT"></span>
+                        <span translate="LOGIN_APP.ACT_EDUCATOR_TAGLINE"
+                              ng-if="d.appContext===d.availableApps.ACT"></span>
+                        <span translate="LOGIN_APP.TOEFL_EDUCATOR_TAGLINE"
+                              ng-if="d.appContext===d.availableApps.TOEFL"></span>
                     </div>
                     <div ng-switch-when="student" class="switch-student-educator">
-                        <span translate="LOGIN_APP.SAT_STUDENT_TAGLINE" ng-if="d.appContext===d.availableApps.SAT"></span>
-                        <span translate="LOGIN_APP.ACT_STUDENT_TAGLINE" ng-if="d.appContext===d.availableApps.ACT"></span>
-                        <span translate="LOGIN_APP.TOEFL_STUDENT_TAGLINE" ng-if="d.appContext===d.availableApps.TOEFL"></span>
+                        <span translate="LOGIN_APP.SAT_STUDENT_TAGLINE"
+                              ng-if="d.appContext===d.availableApps.SAT"></span>
+                        <span translate="LOGIN_APP.ACT_STUDENT_TAGLINE"
+                              ng-if="d.appContext===d.availableApps.ACT"></span>
+                        <span translate="LOGIN_APP.TOEFL_STUDENT_TAGLINE"
+                              ng-if="d.appContext===d.availableApps.TOEFL"></span>
                     </div>
                 </ng-switch>
+                <div class="invitation-title" ng-if="d.invitationId">
+                    <div class="first-row" translate="LOGIN_APP.SIGNUP_OR_LOGIN"></div>
+                    <div class="second-row" translate="LOGIN_APP.ACCEPT_INVITATION"></div>
+                </div>
             </h2>
         </div>
     </div>
     <footer>
-        <ng-switch on="currentUserContext">
+        <ng-switch on="currentUserContext" ng-if="!d.invitationId">
             <div ng-switch-when="teacher" class="switch-student-educator">
                 <h2 translate="LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS"></h2>
-                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.STUDENT)" translate="LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP"></a>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.STUDENT)"
+                   translate="LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP"></a>
             </div>
             <div ng-switch-when="student" class="switch-student-educator">
                 <h2 translate="LOGIN_APP.ARE_YOU_AN_EDUCATOR"></h2>
-                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.TEACHER)" translate="LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS"></a>
+                <a href="" class="app-color" ng-click="changeUserContext(d.userContextObj.TEACHER)"
+                   translate="LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS"></a>
             </div>
         </ng-switch>
     </footer>

@@ -1,22 +1,21 @@
 @import 'src/scss/imports/variables',
 'src/scss/imports/colors',
 'bower_components/infra/dist/mixins/mixins';
-
 // social auth login
 @import 'oathLogin/main.scss';
 
 @font-face {
-    font-family:"SourceSansPro";
-    src:url("/assets/fonts/SourceSansPro-Regular.otf");
-    font-weight:normal;
-    font-style:normal;
+    font-family: "SourceSansPro";
+    src: url("/assets/fonts/SourceSansPro-Regular.otf");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-    font-family:"SourceSansPro-Light";
-    src:url("/assets/fonts/SourceSansPro-Light.otf");
-    font-weight:normal;
-    font-style:normal;
+    font-family: "SourceSansPro-Light";
+    src: url("/assets/fonts/SourceSansPro-Light.otf");
+    font-weight: normal;
+    font-style: normal;
 }
 
 .md-open-menu-container {
@@ -71,7 +70,8 @@ login-app {
         background: {
             color: #f7f7f7;
             image: url('/assets/images/logo-pattern-bg.png');
-        };
+        }
+    ;
         font: {
             family: 'SourceSansPro', sans-serif;
             weight: $regularFontWeight;
@@ -90,12 +90,13 @@ login-app {
                 .logo {
                     width: 76px;
                     height: 36px;
-                    float:left;
+                    float: left;
                     background: {
                         image: url('/assets/images/zinkerz_logo.png');
                         repeat: no-repeat;
                         size: contain;
-                    };
+                    }
+                ;
                 }
                 span {
                     font-size: 24px;
@@ -108,6 +109,10 @@ login-app {
                 text-align: center;
                 position: absolute;
                 left: calc(50% - 90px);
+                &.no-dropdown {
+                    left:calc(50% - 0px);
+                    top: 28px;
+                }
                 md-menu {
                     .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
                     .md-button:not([disabled]).md-icon-button:hover {
@@ -129,7 +134,7 @@ login-app {
                     height: calc(55px / 2);
                     background-repeat: no-repeat;
                     background-size: contain;
-                    float:left;
+                    float: left;
                     &.sat {
                         background-image: url('/assets/images/sat-name@2x.png');
                     }
@@ -171,6 +176,15 @@ login-app {
                     margin: 0;
                     bottom: 40px;
                     left: 40px;
+                    .invitation-title {
+                        @include text-style(33px, $fontColor8, "Source Sans Pro", $regularFontWeight);
+                        .first-row {
+
+                        }
+                        .second-row {
+                            font-size: 50px;
+                        }
+                    }
                 }
             }
             img.main-banner {
@@ -252,14 +266,15 @@ login-app {
                 left: 30px;
                 bottom: 20px;
                 top: 25px;
-            };
+            }
+        ;
             .title {
                 text-align: center;
                 padding: {
                     bottom: 15px;
                 }
                 color: $fontColor2;
-                font:{
+                font: {
                     weight: $lightFontWeight;
                     size: 25px;
                 }
@@ -278,7 +293,7 @@ login-app {
                         bottom: 11px;
                         left: auto;
                     }
-                    padding:{
+                    padding: {
                         right: 9px;
                         left: 9px;
                     }
@@ -320,10 +335,11 @@ login-app {
                         }
                     }
 
-                    &:last-child{
+                    &:last-child {
                         margin: {
                             bottom: 20px;
-                        };
+                        }
+                    ;
                     }
 
                     svg-icon {
@@ -339,17 +355,18 @@ login-app {
                             right: 5px;
                             top: 0;
                             bottom: 0;
-                        };
+                        }
+                    ;
                         background-color: transparent;
-                        @include placeholder(){
+                        @include placeholder() {
                             color: $fontColor3;
-                            font:{
+                            font: {
                                 weight: $lightFontWeight;
                                 size: 14px;
                             }
                         }
                         outline: none;
-                        font:{
+                        font: {
                             weight: $regularFontWeight;
                             size: 14px;
                         }
@@ -358,7 +375,7 @@ login-app {
                 }
             }
 
-            .submit-btn-wrapper{
+            .submit-btn-wrapper {
                 text-align: center;
                 button {
                     position: relative;
@@ -369,7 +386,7 @@ login-app {
                     color: $fontColor1;
                     border-radius: 30px;
                     border: none;
-                    font:{
+                    font: {
                         size: 18px;
                         weight: $regularFontWeight;
                     }
@@ -394,8 +411,12 @@ login-app {
                     }
 
                     @keyframes rotate {
-                        0%    { transform: rotate(0deg); }
-                        100%  { transform: rotate(360deg); }
+                        0% {
+                            transform: rotate(0deg);
+                        }
+                        100% {
+                            transform: rotate(360deg);
+                        }
                     }
                 }
             }
@@ -404,10 +425,11 @@ login-app {
                 margin: {
                     top: 10px;
                     bottom: 5px;
-                };
+                }
+            ;
                 text-align: right;
                 color: $fontColor4;
-                font:{
+                font: {
                     weight: $lightFontWeight;
                     size: 14px;
                     family: 'SourceSansPro-Light';
@@ -443,9 +465,10 @@ login-app {
                     padding: {
                         right: 15px;
                         left: 15px;
-                    };
+                    }
+                ;
                     color: $fontColor5;
-                    font:{
+                    font: {
                         weight: $lightFontWeight;
                         size: 14px;
                     }
@@ -457,7 +480,7 @@ login-app {
                     text-align: center;
                     font-size: 10px;
                     color: $fontColor9;
-                    margin-top:10px;
+                    margin-top: 10px;
                     a {
                         text-decoration: none;
                     }
@@ -468,7 +491,7 @@ login-app {
             text-align: center;
             padding-bottom: 40px;
             .switch-student-educator {
-                font-weight:normal;
+                font-weight: normal;
                 h2 {
                     font-size: 23px;
                     color: $fontColor3;

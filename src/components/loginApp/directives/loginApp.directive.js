@@ -22,7 +22,7 @@
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
-                    var invitationKey  = InvitationKeyService.getInvitationKey();
+                    var invitationKey = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
 
@@ -56,7 +56,7 @@
                     };
 
                     var search = $location.search();
-                    if (!angular.equals(search, {}) && (search.app || search.state || search.userType || invitationKey)) {
+                    if (!!((!angular.equals(search, {}) || invitationKey) && (search.app || search.state || search.userType || invitationKey))) {
                         if (search.app) {
                             angular.forEach(LoginAppSrv.APPS, function (app, index) {
                                 if (index.toLowerCase() === search.app.toLowerCase()) {
@@ -65,55 +65,18 @@
                             });
                         }
 
-
                         if (invitationKey && invitationKey !== null) {
                             scope.d.invitationId = invitationKey;
                         }
 
-                        if (search.app) {
-                            if (search.userType === 'educator') {
-                                scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                            } else {
-                                scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                            }
+                        if (search.userType) {
+                            search.userType === 'educator' ? scope.changeUserContext(scope.d.userContextObj.TEACHER) : scope.changeUserContext(scope.d.userContextObj.STUDENT);
                         }
+
                         if (search.state) {
                             scope.changeCurrentForm(search.state);
                         }
 
-                        // if (invitationKey && invitationKey != null) {
-                        //     scope.d.invitationId = invitationKey;
-                        //     if (search.app) {
-                        //         if (search.userType === 'educator') {
-                        //             scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                        //         } else {
-                        //             scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                        //         }
-                        //     }
-                        //
-                        //     if (search.state) {
-                        //         scope.changeCurrentForm(search.state);
-                        //     }
-                        //
-                        //     if (search.userType === 'educator') {
-                        //         scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                        //     } else {
-                        //         scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                        //     }
-                        // }
-
-                        // else if (search.state) {
-                        //     scope.changeCurrentForm(search.state);
-                        //     if (search.app) {
-                        //         if (search.app === 'educator') {
-                        //             scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                        //         } else {
-                        //             scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                        //         }
-                        //     }
-                        // }
-                        // $location.search('app', null);
-                        // $location.search('state', null);
                     }
 
                     //catching $mdMenuOpen event emitted from angular-material.js
