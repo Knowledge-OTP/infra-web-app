@@ -110,7 +110,8 @@ login-app {
                 position: absolute;
                 left: calc(50% - 90px);
                 &.no-dropdown {
-                    left:calc(50% - 0px);
+                    left: 50%;
+                    transform: translateX(-50%);;
                     top: 28px;
                 }
                 md-menu {
