@@ -35,8 +35,17 @@
         </a>
     </header>
     <div class="main">
-        <img class="main-banner img-responsive" ng-if="d.userContext===d.userContextObj.STUDENT" src="assets/images/login-student-bg@2x.jpg">
-        <img class="main-banner img-responsive" ng-if="d.userContext===d.userContextObj.TEACHER" src="assets/images/login-teacher-bg@2x.jpg">
+        <div ng-switch="d.userContext" ng-if="!d.invitationId">
+            <img class="main-banner img-responsive" ng-switch-when="d.userContextObj.TEACHER"
+                 src="assets/images/login-teacher-bg@2x.jpg">
+            <img class="main-banner img-responsive" ng-switch-when="d.userContextObj.STUDENT"
+                 src="assets/images/login-student-bg@2x.jpg">
+
+            <!--<img class="main-banner img-responsive" ng-if="d.userContext===d.userContextObj.TEACHER"-->
+                 <!--src="assets/images/login-teacher-bg@2x.jpg">-->
+            <!--<img class="main-banner img-responsive" ng-if="d.userContext===d.userContextObj.STUDENT"-->
+                 <!--src="assets/images/login-student-bg@2x.jpg">-->
+        </div>
         <div class="main-inner">
             <ng-switch on="currentForm">
                 <div class="login-container" ng-switch-when="login">

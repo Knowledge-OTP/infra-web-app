@@ -3,6 +3,8 @@
 
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
+        'znk.infra.auth',
+        'demoEnv',
         'znk.infra.svgIcon',
         'ngMaterial',
         'znk.infra.user',
@@ -20,8 +22,38 @@
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ]);
+    ])
+        .run(["InvitationKeyService", "AuthService", "$location", "InvitationStorageSrv", "$log", function (InvitationKeyService, AuthService, $location, InvitationStorageSrv, $log) {
+            var search = $location.search();
+            var iid = search.iid;
+            if (angular.isDefined(iid) && iid !== null) {
+                $location.search('iid', null);
+                InvitationKeyService.saveInvitationKey(iid);
+                var authObj = AuthService.getAuth();
+                if (authObj) {
+                    InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
+                        var invitation = res;
+                        if (angular.equals(invitation, {})) {
+                            $log.error('Invitation object is empty');
+                            return;
+                        }
+                        var receiverEmail = invitation.receiverEmail;
+                        if (receiverEmail === authObj.auth.token.email.toLowerCase()) {
+                            redirectToApp();
+                        } else {
+                            logout();
+                        }
+                    });
+                }
+            }
+            function redirectToApp() {
+                InvitationKeyService.navigateWithInvitationKey();
+            }
 
+            function logout() {
+                AuthService.logout();
+            }
+        }]);
 })(window, angular);
 
 /**
@@ -32,7 +64,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document) {
+        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
@@ -48,13 +80,15 @@
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
+                    var invitationKey  = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
 
-                    scope.currentUserContext =  'student';
+                    scope.currentUserContext = 'student';
                     scope.currentForm = 'signup';
+                    scope.userType = 'student';
 
-                    scope.selectApp = function(app) {
+                    scope.selectApp = function (app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
                     };
@@ -66,37 +100,82 @@
                     scope.changeUserContext = function (context) {
                         scope.d.userContext = context;
                         if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
-                            scope.currentUserContext =  'student';
+                            scope.currentUserContext = 'student';
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
-                            scope.currentUserContext =  'teacher';
+                            scope.currentUserContext = 'teacher';
                         }
                     };
 
                     // App select menu
                     var originatorEv;
-                    scope.openMenu = function($mdOpenMenu, ev) {
+                    scope.openMenu = function ($mdOpenMenu, ev) {
                         originatorEv = ev;
                         $mdOpenMenu(ev);
                     };
 
                     var search = $location.search();
-                    if (!angular.equals(search, {}) && (search.app || search.state)) {
+                    if (!angular.equals(search, {}) && (search.app || search.state || search.userType || invitationKey)) {
                         if (search.app) {
-                            angular.forEach(LoginAppSrv.APPS, function(app, index){
+                            angular.forEach(LoginAppSrv.APPS, function (app, index) {
                                 if (index.toLowerCase() === search.app.toLowerCase()) {
                                     scope.selectApp(app);
                                 }
                             });
                         }
+
+
+                        if (invitationKey && invitationKey !== null) {
+                            scope.d.invitationId = invitationKey;
+                        }
+
+                        if (search.app) {
+                            if (search.userType === 'educator') {
+                                scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                            } else {
+                                scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                            }
+                        }
                         if (search.state) {
                             scope.changeCurrentForm(search.state);
                         }
+
+                        // if (invitationKey && invitationKey != null) {
+                        //     scope.d.invitationId = invitationKey;
+                        //     if (search.app) {
+                        //         if (search.userType === 'educator') {
+                        //             scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                        //         } else {
+                        //             scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                        //         }
+                        //     }
+                        //
+                        //     if (search.state) {
+                        //         scope.changeCurrentForm(search.state);
+                        //     }
+                        //
+                        //     if (search.userType === 'educator') {
+                        //         scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                        //     } else {
+                        //         scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                        //     }
+                        // }
+
+                        // else if (search.state) {
+                        //     scope.changeCurrentForm(search.state);
+                        //     if (search.app) {
+                        //         if (search.app === 'educator') {
+                        //             scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                        //         } else {
+                        //             scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                        //         }
+                        //     }
+                        // }
                         // $location.search('app', null);
                         // $location.search('state', null);
                     }
 
                     //catching $mdMenuOpen event emitted from angular-material.js
-                    scope.$on('$mdMenuOpen', function() {
+                    scope.$on('$mdMenuOpen', function () {
                         $timeout(function () {
                             //getting menu content container by tag id from html
                             var menuContentContainer = angular.element($document[0].getElementById('app-select-menu'));
@@ -330,6 +409,34 @@
             controllerAs: 'vm'
         };
     });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp').service('InvitationKeyService',
+        ["ENV", "$window", function (ENV, $window) {
+            'ngInject';
+            var invitationKey;
+
+            this.saveInvitationKey = function (_invitationKey) {
+                invitationKey = _invitationKey;
+            };
+
+            this.getInvitationKey = function () {
+                return invitationKey;
+            };
+
+            this.navigateWithInvitationKey = function () {
+                var appUrl = ENV.redirectSignup;
+                var inviteId = this.getInvitationKey();
+                if (angular.isDefined(inviteId)) {
+                    appUrl += '#?iid=' + inviteId;
+                }
+                $window.location.replace(appUrl);
+            };
+        }]
+    );
 })(angular);
 
 (function (angular) {
@@ -840,15 +947,24 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
     "        </div>\n" +
-    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT\"\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
     "           class=\"for-educators app-color\"\n" +
     "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
     "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
     "        </a>\n" +
     "    </header>\n" +
     "    <div class=\"main\">\n" +
-    "        <img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.STUDENT\" src=\"assets/images/login-student-bg@2x.jpg\">\n" +
-    "        <img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.TEACHER\" src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"d.userContextObj.TEACHER\"\n" +
+    "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"d.userContextObj.STUDENT\"\n" +
+    "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "\n" +
+    "            <!--<img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"-->\n" +
+    "                 <!--src=\"assets/images/login-teacher-bg@2x.jpg\">-->\n" +
+    "            <!--<img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"-->\n" +
+    "                 <!--src=\"assets/images/login-student-bg@2x.jpg\">-->\n" +
+    "        </div>\n" +
     "        <div class=\"main-inner\">\n" +
     "            <ng-switch on=\"currentForm\">\n" +
     "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +

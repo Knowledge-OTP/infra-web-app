@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document) {
+        function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
@@ -22,11 +22,13 @@
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
+                    var invitationKey  = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
 
                     scope.currentUserContext = 'student';
                     scope.currentForm = 'signup';
+                    scope.userType = 'student';
 
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
@@ -54,7 +56,7 @@
                     };
 
                     var search = $location.search();
-                    if (!angular.equals(search, {}) && (search.app || search.state)) {
+                    if (!angular.equals(search, {}) && (search.app || search.state || search.userType || invitationKey)) {
                         if (search.app) {
                             angular.forEach(LoginAppSrv.APPS, function (app, index) {
                                 if (index.toLowerCase() === search.app.toLowerCase()) {
@@ -63,38 +65,53 @@
                             });
                         }
 
-                        if (search.invitationId && search.invitationId != null) {
-                            scope.d.invitationId = search.invitationId;
 
-                            if (search.app) {
-                                if (search.app.indexOf('educator') != -1) {
-                                    scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                                } else {
-                                    scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                                }
-                                scope.changeCurrentForm("login");
-                            }
-
-
-                            // if (search.userType === 'educator') {
-                            //     scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                            // } else {
-                            //     scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                            // }
-                            // scope.changeCurrentForm("login");
+                        if (invitationKey && invitationKey !== null) {
+                            scope.d.invitationId = invitationKey;
                         }
 
-                        else if (search.state) {
-                            debugger;
+                        if (search.app) {
+                            if (search.userType === 'educator') {
+                                scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                            } else {
+                                scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                            }
+                        }
+                        if (search.state) {
                             scope.changeCurrentForm(search.state);
-                            if (search.app) {
-                                if (search.app.indexOf('educator') != -1) {
-                                    scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                                } else {
-                                    scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                                }
-                            }
                         }
+
+                        // if (invitationKey && invitationKey != null) {
+                        //     scope.d.invitationId = invitationKey;
+                        //     if (search.app) {
+                        //         if (search.userType === 'educator') {
+                        //             scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                        //         } else {
+                        //             scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                        //         }
+                        //     }
+                        //
+                        //     if (search.state) {
+                        //         scope.changeCurrentForm(search.state);
+                        //     }
+                        //
+                        //     if (search.userType === 'educator') {
+                        //         scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                        //     } else {
+                        //         scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                        //     }
+                        // }
+
+                        // else if (search.state) {
+                        //     scope.changeCurrentForm(search.state);
+                        //     if (search.app) {
+                        //         if (search.app === 'educator') {
+                        //             scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                        //         } else {
+                        //             scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                        //         }
+                        //     }
+                        // }
                         // $location.search('app', null);
                         // $location.search('state', null);
                     }

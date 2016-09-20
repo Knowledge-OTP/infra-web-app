@@ -25,16 +25,14 @@
     ])
         .run(function (InvitationKeyService, AuthService, $location, InvitationStorageSrv, $log) {
             var search = $location.search();
-            var iid = search['iid'];
-            if (angular.isDefined(iid) && iid != null) {
+            var iid = search.iid;
+            if (angular.isDefined(iid) && iid !== null) {
                 $location.search('iid', null);
                 InvitationKeyService.saveInvitationKey(iid);
                 var authObj = AuthService.getAuth();
-                console.log(authObj);
                 if (authObj) {
                     InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
                         var invitation = res;
-                        console.log(invitation);
                         if (angular.equals(invitation, {})) {
                             $log.error('Invitation object is empty');
                             return;
@@ -45,7 +43,7 @@
                         } else {
                             logout();
                         }
-                    })
+                    });
                 }
             }
             function redirectToApp() {
@@ -55,6 +53,5 @@
             function logout() {
                 AuthService.logout();
             }
-        })
-
+        });
 })(window, angular);
