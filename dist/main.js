@@ -5734,13 +5734,13 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
-                    var invitationKey  = InvitationKeyService.getInvitationKey();
+                    var invitationKey = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
 
                     scope.currentUserContext = 'student';
                     scope.currentForm = 'signup';
-                    scope.userType = 'student';
+
 
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
@@ -5768,7 +5768,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     };
 
                     var search = $location.search();
-                    if (!angular.equals(search, {}) && (search.app || search.state || search.userType || invitationKey)) {
+                    if (!!((!angular.equals(search, {}) || invitationKey) && (search.app || search.state || search.userType || invitationKey))) {
                         if (search.app) {
                             angular.forEach(LoginAppSrv.APPS, function (app, index) {
                                 if (index.toLowerCase() === search.app.toLowerCase()) {
@@ -5777,55 +5777,22 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             });
                         }
 
-
                         if (invitationKey && invitationKey !== null) {
                             scope.d.invitationId = invitationKey;
                         }
 
-                        if (search.app) {
+                        if (search.userType) {
                             if (search.userType === 'educator') {
                                 scope.changeUserContext(scope.d.userContextObj.TEACHER);
                             } else {
                                 scope.changeUserContext(scope.d.userContextObj.STUDENT);
                             }
                         }
+
                         if (search.state) {
                             scope.changeCurrentForm(search.state);
                         }
 
-                        // if (invitationKey && invitationKey != null) {
-                        //     scope.d.invitationId = invitationKey;
-                        //     if (search.app) {
-                        //         if (search.userType === 'educator') {
-                        //             scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                        //         } else {
-                        //             scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                        //         }
-                        //     }
-                        //
-                        //     if (search.state) {
-                        //         scope.changeCurrentForm(search.state);
-                        //     }
-                        //
-                        //     if (search.userType === 'educator') {
-                        //         scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                        //     } else {
-                        //         scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                        //     }
-                        // }
-
-                        // else if (search.state) {
-                        //     scope.changeCurrentForm(search.state);
-                        //     if (search.app) {
-                        //         if (search.app === 'educator') {
-                        //             scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                        //         } else {
-                        //             scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                        //         }
-                        //     }
-                        // }
-                        // $location.search('app', null);
-                        // $location.search('state', null);
                     }
 
                     //catching $mdMenuOpen event emitted from angular-material.js
@@ -6585,8 +6552,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
     "            </span>\n" +
     "        </div>\n" +
-    "        <div class=\"app-select\" ng-cloak>\n" +
-    "            <md-menu md-offset=\"-50 80\" md-no-ink>\n" +
+    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
+    "            <md-menu md-offset=\"-50 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
     "                <md-button aria-label=\"Open App Select Menu\"\n" +
     "                           class=\"md-icon-button\"\n" +
     "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
@@ -6600,6 +6567,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
+    "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
     "        </div>\n" +
     "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
     "           class=\"for-educators app-color\"\n" +
@@ -6609,15 +6577,19 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    </header>\n" +
     "    <div class=\"main\">\n" +
     "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
-    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"d.userContextObj.TEACHER\"\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
     "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
-    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"d.userContextObj.STUDENT\"\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
     "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "        </div>\n" +
     "\n" +
-    "            <!--<img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"-->\n" +
-    "                 <!--src=\"assets/images/login-teacher-bg@2x.jpg\">-->\n" +
-    "            <!--<img class=\"main-banner img-responsive\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"-->\n" +
-    "                 <!--src=\"assets/images/login-student-bg@2x.jpg\">-->\n" +
+    "        <div ng-if=\"d.invitationId\">\n" +
+    "            <div ng-switch=\"d.userContext\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"main-inner\">\n" +
     "            <ng-switch on=\"currentForm\">\n" +
@@ -6626,8 +6598,10 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                                user-context=\"d.userContext\">\n" +
     "                    </login-form>\n" +
     "                    <p class=\"go-to-signup\">\n" +
-    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
     "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
     "                    </p>\n" +
     "                </div>\n" +
@@ -6636,37 +6610,51 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                                 user-context=\"d.userContext\">\n" +
     "                    </signup-form>\n" +
     "                    <p class=\"go-to-login\">\n" +
-    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
     "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
     "                    </p>\n" +
     "                </div>\n" +
     "            </ng-switch>\n" +
     "            <h2 class=\"banner-text\">\n" +
-    "                <ng-switch on=\"currentUserContext\">\n" +
+    "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
     "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
     "                    </div>\n" +
     "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
     "                    </div>\n" +
     "                </ng-switch>\n" +
+    "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
+    "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
+    "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
+    "                </div>\n" +
     "            </h2>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <footer>\n" +
-    "        <ng-switch on=\"currentUserContext\">\n" +
+    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
     "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
     "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\" translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
+    "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
     "            </div>\n" +
     "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
     "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\" translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
     "            </div>\n" +
     "        </ng-switch>\n" +
     "    </footer>\n" +
