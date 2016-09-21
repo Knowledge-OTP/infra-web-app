@@ -6166,7 +6166,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", function ($q, $http, $log, $window, SatellizerConfig) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -6253,7 +6253,12 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 if (userContext === USER_CONTEXT.TEACHER) {
                     appName = appName + '-educator';
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
+                var invitationKey = InvitationKeyService.getInvitationKey();
+                var invitationPostFix = '';
+                if (angular.isDefined(invitationKey) && invitationKey !== null) {
+                        invitationPostFix = '#?iid=' + invitationKey;
+                }
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
