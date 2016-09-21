@@ -6,7 +6,6 @@
         'znk.infra.auth',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'znk.infra.user',
         'satellizer',
         'znk.infra.general'
     ]).config([

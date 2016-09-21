@@ -5660,7 +5660,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         'znk.infra.auth',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'znk.infra.user',
         'satellizer',
         'znk.infra.general'
     ]).config([
