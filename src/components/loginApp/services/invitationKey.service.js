@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').service('InvitationKeyService',
-        function (ENV, $window) {
+        function () {
             'ngInject';
             var invitationKey;
 
@@ -14,14 +14,14 @@
                 return invitationKey;
             };
 
-            this.navigateWithInvitationKey = function () {
-                var appUrl = ENV.redirectSignup;
-                var inviteId = this.getInvitationKey();
-                if (angular.isDefined(inviteId)) {
-                    appUrl += '#?iid=' + inviteId;
-                }
-                $window.location.replace(appUrl);
-            };
+          //   this.navigateWithInvitationKey = function () {
+          //       // var appUrl = ENV.redirectSignup;
+          //       var inviteId = this.getInvitationKey();
+          //       if (angular.isDefined(inviteId)) {
+          //           appUrl += '#?iid=' + inviteId;
+          //       }
+          //       $window.location.replace(appUrl);
+          // };
         }
     );
 })(angular);

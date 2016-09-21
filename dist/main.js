@@ -5658,7 +5658,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
         'znk.infra.auth',
-        'demoEnv',
         'znk.infra.svgIcon',
         'ngMaterial',
         'znk.infra.user',
@@ -5677,37 +5676,37 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
     ])
-        .run(["InvitationKeyService", "AuthService", "$location", "InvitationStorageSrv", "$log", function (InvitationKeyService, AuthService, $location, InvitationStorageSrv, $log) {
-            var search = $location.search();
-            var iid = search.iid;
-            if (angular.isDefined(iid) && iid !== null) {
-                $location.search('iid', null);
-                InvitationKeyService.saveInvitationKey(iid);
-                var authObj = AuthService.getAuth();
-                if (authObj) {
-                    InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
-                        var invitation = res;
-                        if (angular.equals(invitation, {})) {
-                            $log.error('Invitation object is empty');
-                            return;
-                        }
-                        var receiverEmail = invitation.receiverEmail;
-                        if (receiverEmail === authObj.auth.token.email.toLowerCase()) {
-                            redirectToApp();
-                        } else {
-                            logout();
-                        }
-                    });
-                }
-            }
-            function redirectToApp() {
-                InvitationKeyService.navigateWithInvitationKey();
-            }
-
-            function logout() {
-                AuthService.logout();
-            }
-        }]);
+        .run(function () {
+            // var search = $location.search();
+            // var iid = search.iid;
+            // if (angular.isDefined(iid) && iid !== null) {
+            //     $location.search('iid', null);
+            //     InvitationKeyService.saveInvitationKey(iid);
+            //     var authObj = AuthService.getAuth();
+            //     if (authObj) {
+            //         InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
+            //             var invitation = res;
+            //             if (angular.equals(invitation, {})) {
+            //                 $log.error('Invitation object is empty');
+            //                 return;
+            //             }
+            //             var receiverEmail = invitation.receiverEmail;
+            //             if (receiverEmail === authObj.auth.token.email.toLowerCase()) {
+            //                 redirectToApp();
+            //             } else {
+            //                 logout();
+            //             }
+            //         });
+            //     }
+            // }
+            // function redirectToApp() {
+            //     InvitationKeyService.navigateWithInvitationKey();
+            // }
+            //
+            // function logout() {
+            //     AuthService.logout();
+            // }
+        });
 })(window, angular);
 
 /**
@@ -6036,7 +6035,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').service('InvitationKeyService',
-        ["ENV", "$window", function (ENV, $window) {
+        function () {
             'ngInject';
             var invitationKey;
 
@@ -6048,15 +6047,15 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return invitationKey;
             };
 
-            this.navigateWithInvitationKey = function () {
-                var appUrl = ENV.redirectSignup;
-                var inviteId = this.getInvitationKey();
-                if (angular.isDefined(inviteId)) {
-                    appUrl += '#?iid=' + inviteId;
-                }
-                $window.location.replace(appUrl);
-            };
-        }]
+          //   this.navigateWithInvitationKey = function () {
+          //       // var appUrl = ENV.redirectSignup;
+          //       var inviteId = this.getInvitationKey();
+          //       if (angular.isDefined(inviteId)) {
+          //           appUrl += '#?iid=' + inviteId;
+          //       }
+          //       $window.location.replace(appUrl);
+          // };
+        }
     );
 })(angular);
 
