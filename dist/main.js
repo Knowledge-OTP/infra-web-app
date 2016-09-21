@@ -5675,12 +5675,13 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
     ])
-        .run(function () {
-            // var search = $location.search();
-            // var iid = search.iid;
-            // if (angular.isDefined(iid) && iid !== null) {
-            //     $location.search('iid', null);
-            //     InvitationKeyService.saveInvitationKey(iid);
+        .run(["$location", "InvitationKeyService", function ($location, InvitationKeyService) {
+            var search = $location.search();
+            var iid = search.iid;
+            if (angular.isDefined(iid) && iid !== null) {
+                $location.search('iid', null);
+                InvitationKeyService.saveInvitationKey(iid);
+            }
             //     var authObj = AuthService.getAuth();
             //     if (authObj) {
             //         InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
@@ -5705,7 +5706,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             // function logout() {
             //     AuthService.logout();
             // }
-        });
+        }]);
 })(window, angular);
 
 /**
