@@ -9,7 +9,16 @@
         "SIGN_UP_FOR_ZINKERZ_TEST_PREP": "Sign Up for Zinkerz Test Prep",
         "CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS": "Check out Zinkerz tools for teachers",
         "ARE_YOU_AN_EDUCATOR": "Are you an educator?",
-        "CHECK_OUT_OUR_APP_FOR_STUDENTS": "Check out our App for Students"
+        "CHECK_OUT_OUR_APP_FOR_STUDENTS": "Check out our App for Students",
+        "FOR_EDUCATORS": "For Educators",
+        "EDUCATORS_CLICK_HERE": "Educators Click Here",
+        "SIGNUP_OR_LOGIN": "Please Sign Up or Log In to",
+        "ACCEPT_INVITATION": "Accept The Invitation",
+        "FORM_VALIDATION": {
+            "FIELD_IS_EMPTY": "Required field is empty",
+            "PASSWORD_TOO_SHORT": "Password is too short, must be between 6-25 characters",
+            "PASSWORD_TOO_LONG": "Password is too long, must be between 6-25 characters"
+        }
     },
     "LOGIN_FORM": {
         "LOGIN": "Login",
@@ -25,6 +34,12 @@
         "EDUCATOR": {
             "DONT_HAVE_AN_ACCOUNT": "Don't have a Zinkerz educator account?",
             "LOGIN": "Educator Login"
+        },
+        "ERROR_CODES": {
+            "INVALID_EMAIL": "The specified email is invalid.",
+            "INVALID_PASSWORD": "The specified password is incorrect.",
+            "INVALID_USER": "The specified user account does not exist.",
+            "DEFAULT_ERROR": "Error logging user in: "
         }
     },
     "SIGNUP_FORM": {

@@ -14,7 +14,8 @@
      *   mode:{
      *      1: default, sensitive to sharer screen sharing state
      *      2: sensitive to viewer screen sharing state
-     *   }
+     *   },
+     *   znkExerciseSettings: znk exercise settings
      *
      * ########
      *   translations:
@@ -125,13 +126,10 @@
                             var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                             var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                            var isExerciseCompleted = data.exerciseResult.isComplete;
-                            if ((isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                            if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
                                 newViewState = VIEW_STATES.INTRO;
-                            } else if (!isExerciseCompleted) {
-                                newViewState = VIEW_STATES.EXERCISE;
                             } else {
-                                newViewState = VIEW_STATES.SUMMARY;
+                                newViewState = VIEW_STATES.EXERCISE;
                             }
 
                             $ctrl.changeViewState(newViewState, true);

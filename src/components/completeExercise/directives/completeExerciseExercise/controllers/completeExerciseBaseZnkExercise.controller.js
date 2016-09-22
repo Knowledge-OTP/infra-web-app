@@ -17,14 +17,18 @@
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV) {
+                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+                  UtilitySrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
             var exerciseResult = settings.exerciseResult;
+            var exerciseParentContent = settings.exerciseParentContent;
             var exerciseTypeId = exerciseResult.exerciseTypeId;
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
+
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
 
             var $ctrl = this;
 
@@ -48,7 +52,7 @@
             }
 
             function _setExerciseContentQuestions() {
-                if(isNotLecture){
+                if (isNotLecture) {
                     exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
                         return a.order - b.order;
                     });
@@ -57,8 +61,8 @@
                         exerciseContent.questions,
                         exerciseContent.questionsGroupData
                     );
-                }else{
-                    exerciseContent.content.sort(function(item1, item2){
+                } else {
+                    exerciseContent.content.sort(function (item1, item2) {
                         return item1.order - item2.order;
                     });
                     for (var i = 0; i < exerciseContent.content.length; i++) {
@@ -77,10 +81,20 @@
                 //  stats exercise data
                 StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
                     $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
+                    var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult);
+                    shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                        var shouldBroadcast = shouldBroadcastFn({
+                            exercise: exerciseContent,
+                            exerciseResult: exerciseResult,
+                            exerciseParent: exerciseParentIsSectionOnly
+                        });
+                        if (shouldBroadcast) {
+                            var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                            var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                        }
+                    });
 
                     settings.actions.done();
                 });
@@ -100,7 +114,7 @@
                 }
 
                 function _getAllowedTimeForExercise() {
-                    if(!isNotLecture){
+                    if (!isNotLecture) {
                         return null;
                     }
 
@@ -122,15 +136,17 @@
                         viewMode = isSection ? ZnkExerciseViewModeEnum.ONLY_ANSWER.enum : ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
                     }
 
-                    if(isNotLecture){
-                        initSlideIndex = exerciseResult.questionResults.findIndex(function (question) {
-                            return !question.userAnswer;
+                    if (isNotLecture) {
+                        var questionResultsMap = UtilitySrv.array.convertToMap(exerciseResult.questionResults, 'questionId');
+                        initSlideIndex = exerciseContent.questions.findIndex(function (question) {
+                            var questionResult = questionResultsMap[question.id];
+                            return !questionResult || angular.isUndefined(questionResult.userAnswer);
                         });
 
                         if (initSlideIndex === -1) {
                             initSlideIndex = 0;
                         }
-                    }else{
+                    } else {
                         initSlideIndex = 0;
                     }
 
@@ -173,8 +189,8 @@
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
-                        toolBox:{
-                            drawing:{
+                        toolBox: {
+                            drawing: {
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }

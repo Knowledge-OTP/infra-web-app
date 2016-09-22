@@ -8,10 +8,10 @@
             $rootScope.data = {};
 
             $rootScope.exerciseTypeEnumArr = ExerciseTypeEnum.getEnumArr();
-            $rootScope.data.exerciseType = ExerciseTypeEnum.TUTORIAL;
+            $rootScope.data.exerciseType = ExerciseTypeEnum.SECTION;
 
             $rootScope.exerciseParentEnumArr = ExerciseParentEnum.getEnumArr();
-            $rootScope.data.exerciseParent = ExerciseParentEnum.TUTORIAL;
+            $rootScope.data.exerciseParent = ExerciseParentEnum.EXAM;
 
             $rootScope.settings = {
                 exitAction: function () {
@@ -19,7 +19,7 @@
                 }
             };
 
-            $rootScope.uidToShareScreenWith = '7fdcdac0-ea4a-4295-9cd6-374cfed5944b';
+            $rootScope.uidToShareScreenWith = '21794e2b-3051-4016-8491-b3fe70e8212d';
 
             $rootScope.shareMyScreen = function (uid) {
                 ScreenSharingSrv.shareMyScreen({

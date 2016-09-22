@@ -41,10 +41,8 @@
                                           md-direction="top"
                                           class="tooltip-for-estimated-score-widget md-whiteframe-2dp">
                                   <div translate=".YOUR_GOAL" translate-values="{ goal: {{widgetItem.userGoal}} }" class="top-text"></div>
-                                  <div ng-switch="widgetItem.estimatedScore >= widgetItem.userGoal" class="bottom-text">
-                                      <span ng-switch-when="true" translate=".GOAL_REACHED"></span>
-                                      <span ng-switch-default translate=".PTS_TO_GO" translate-values="{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }"></span>
-                                  </div>
+                                      <span class="bottom-text" ng-if="widgetItem.estimatedScore >= widgetItem.userGoal" translate=".GOAL_REACHED"></span>
+                                      <span class="bottom-text" ng-if="widgetItem.estimatedScore" translate=".PTS_TO_GO" translate-values="{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }"></span>
                               </md-tooltip>
                             {{widgetItem.estimatedScore === 0 ? '?' : widgetItem.estimatedScore}}
                         </span>

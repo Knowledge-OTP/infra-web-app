@@ -3,10 +3,11 @@
 
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
+        'znk.infra.auth',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'znk.infra.user',
-        'satellizer'
+        'satellizer',
+        'znk.infra.general'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -19,8 +20,38 @@
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ]);
-
+    ])
+        .run(["$location", "InvitationKeyService", function ($location, InvitationKeyService) {
+            var search = $location.search();
+            var iid = search.iid;
+            if (angular.isDefined(iid) && iid !== null) {
+                InvitationKeyService.saveInvitationKey(iid);
+            }
+            //     var authObj = AuthService.getAuth();
+            //     if (authObj) {
+            //         InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
+            //             var invitation = res;
+            //             if (angular.equals(invitation, {})) {
+            //                 $log.error('Invitation object is empty');
+            //                 return;
+            //             }
+            //             var receiverEmail = invitation.receiverEmail;
+            //             if (receiverEmail === authObj.auth.token.email.toLowerCase()) {
+            //                 redirectToApp();
+            //             } else {
+            //                 logout();
+            //             }
+            //         });
+            //     }
+            // }
+            // function redirectToApp() {
+            //     InvitationKeyService.navigateWithInvitationKey();
+            // }
+            //
+            // function logout() {
+            //     AuthService.logout();
+            // }
+        }]);
 })(window, angular);
 
 /**
@@ -31,7 +62,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document) {
+        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
@@ -47,13 +78,15 @@
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
+                    var invitationKey = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
 
-                    scope.currentUserContext =  'student';
+                    scope.currentUserContext = 'student';
                     scope.currentForm = 'signup';
 
-                    scope.selectApp = function(app) {
+
+                    scope.selectApp = function (app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
                     };
@@ -65,37 +98,49 @@
                     scope.changeUserContext = function (context) {
                         scope.d.userContext = context;
                         if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
-                            scope.currentUserContext =  'student';
+                            scope.currentUserContext = 'student';
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
-                            scope.currentUserContext =  'teacher';
+                            scope.currentUserContext = 'teacher';
                         }
                     };
 
                     // App select menu
                     var originatorEv;
-                    scope.openMenu = function($mdOpenMenu, ev) {
+                    scope.openMenu = function ($mdOpenMenu, ev) {
                         originatorEv = ev;
                         $mdOpenMenu(ev);
                     };
 
                     var search = $location.search();
-                    if (!angular.equals(search, {}) && (search.app || search.state)) {
+                    if (!!((!angular.equals(search, {}) || invitationKey) && (search.app || search.state || search.userType || invitationKey))) {
                         if (search.app) {
-                            angular.forEach(LoginAppSrv.APPS, function(app, index){
+                            angular.forEach(LoginAppSrv.APPS, function (app, index) {
                                 if (index.toLowerCase() === search.app.toLowerCase()) {
                                     scope.selectApp(app);
                                 }
                             });
                         }
+
+                        if (invitationKey && invitationKey !== null) {
+                            scope.d.invitationId = invitationKey;
+                        }
+
+                        if (search.userType) {
+                            if (search.userType === 'educator') {
+                                scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                            } else {
+                                scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                            }
+                        }
+
                         if (search.state) {
                             scope.changeCurrentForm(search.state);
                         }
-                        $location.search('app', null);
-                        $location.search('state', null);
+
                     }
 
                     //catching $mdMenuOpen event emitted from angular-material.js
-                    scope.$on('$mdMenuOpen', function() {
+                    scope.$on('$mdMenuOpen', function () {
                         $timeout(function () {
                             //getting menu content container by tag id from html
                             var menuContentContainer = angular.element($document[0].getElementById('app-select-menu'));
@@ -117,7 +162,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+        ["LoginAppSrv", "$timeout", "$translate", "$log", function (LoginAppSrv, $timeout, $translate, $log) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
@@ -133,16 +178,64 @@
                         userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.loginSubmit = function(loginForm){
-                        if (!scope.d.loginFormData) {
-                            $window.alert('form is empty!', loginForm);
+                    scope.loginSubmit = function(loginForm) {
+                        if (loginForm.$invalid) {
                             return;
                         }
-                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        showSpinner();
+                        scope.d.disableBtn = true;
+                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
+                            .then(function(authData){
+                                $log.debug("Authenticated successfully with payload: ", authData);
+                            })
+                            .catch(function(err){
+                                $log.error(err);
+                                if (err) {
+                                    var errorCodeStrings;
+                                    var errorCodesPath = 'LOGIN_FORM.ERROR_CODES.';
+                                    var errorCodesStringKeysArr = [
+                                        errorCodesPath + 'INVALID_EMAIL',
+                                        errorCodesPath + 'INVALID_PASSWORD',
+                                        errorCodesPath + 'INVALID_USER',
+                                        errorCodesPath + 'DEFAULT_ERROR'
+                                    ];
+                                    $translate(errorCodesStringKeysArr)
+                                        .then(function(tranlations){
+                                            var loginError;
+                                            errorCodeStrings = tranlations;
+                                            switch (err.code) {
+                                                case "INVALID_EMAIL":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_EMAIL'];
+                                                    break;
+                                                case "INVALID_PASSWORD":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_PASSWORD'];
+                                                    break;
+                                                case "INVALID_USER":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_USER'];
+                                                    break;
+                                                default:
+                                                    loginError = errorCodeStrings[errorCodesPath + 'DEFAULT_ERROR'] + err.code;
+                                            }
+                                            $timeout(function(){
+                                                hideSpinner();
+                                                scope.d.disableBtn = false;
+                                                scope.d.loginError = loginError;
+                                            });
+                                        })
+                                        .catch(function(err){
+                                            $log.error('Cannot fetch translation! ', err);
+                                        });
+                                }
+                            });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }]
@@ -157,7 +250,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+        ["LoginAppSrv", "$log", function (LoginAppSrv, $log) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
@@ -174,15 +267,30 @@
                     };
 
                     scope.signupSubmit = function(signupForm){
-                        if (!scope.d.signupFormData) {
-                            $window.alert('form is empty!', signupForm);
+                        if (signupForm.$invalid) {
                             return;
                         }
-                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        showSpinner();
+                        scope.d.disableBtn = true;
+                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData)
+                            .then(function(){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                            })
+                            .catch(function(err){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                                $log.error(err);
+                            });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }]
@@ -205,11 +313,11 @@
                 var loadingProvider = vm.loading[provider] = {};
                 loadingProvider.startLoader = true;
                 $auth.authenticate(provider).then(function (response) {
-                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id);
+                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id, vm.userContext);
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    LoginAppSrv.getUserProfile(vm.appContext.id).then(function (userProfile) {
+                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
                         var updateProfile = false;
 
                         if (!userProfile.email && userDataAuth.email) {
@@ -231,15 +339,16 @@
                         loadingProvider.startLoader = loadingProvider.fillLoader = false;
 
                         if (updateProfile) {
-                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, true).then(function () {
-                                LoginAppSrv.redirectToPage(vm.appContext.id);
+                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
+                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {
-                            LoginAppSrv.redirectToPage(vm.appContext.id);
+                            LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                         }
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
+                    loadingProvider.startLoader = loadingProvider.fillLoader = false;
                 });
             };
 
@@ -259,12 +368,40 @@
                 userContext: '<'
             },
             restrict: 'E',
-            templateUrl: 'components/loginApp/templates/oathLogin.template.html',
+            templateUrl: 'components/loginApp/oathLogin/oathLogin.template.html',
             controller: 'OathLoginDrvController',
             bindToController: true,
             controllerAs: 'vm'
         };
     });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp').service('InvitationKeyService',
+        function () {
+            'ngInject';
+            var invitationKey;
+
+            this.saveInvitationKey = function (_invitationKey) {
+                invitationKey = _invitationKey;
+            };
+
+            this.getInvitationKey = function () {
+                return invitationKey;
+            };
+
+          //   this.navigateWithInvitationKey = function () {
+          //       // var appUrl = ENV.redirectSignup;
+          //       var inviteId = this.getInvitationKey();
+          //       if (angular.isDefined(inviteId)) {
+          //           appUrl += '#?iid=' + inviteId;
+          //       }
+          //       $window.location.replace(appUrl);
+          // };
+        }
+    );
 })(angular);
 
 (function (angular) {
@@ -314,7 +451,7 @@
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         facebookAppId: '1576342295937853',
         googleAppId: '1008364992567-gpi1psnhk0t41bf8jtm86kjc74c0if7c.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/sat/web-app',
+        redirectFacebook: '//www.zinkerz.com/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'sat_app',
         studentAppName: 'sat_app',
@@ -336,7 +473,7 @@
         fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
         facebookAppId: '1557254871261322',
         googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/act/web-app',
+        redirectFacebook: '//www.zinkerz.com/',
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'act_app',
@@ -359,16 +496,13 @@
         fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
         facebookAppId: '1658075334429394',
         googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/toefl-test-prep/',
+        redirectFacebook: '//www.zinkerz.com/',
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'toefl_app',
         studentAppName: 'toefl_app',
         dashboardAppName: 'toefl_dashboard'
     };
-    /**
-     * TODO: add toefl dev and prod vars
-     */
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
@@ -376,7 +510,7 @@
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", function ($q, $http, $log, $window, SatellizerConfig) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -385,18 +519,22 @@
                 return ALL_ENV_CONFIG[env][appContext];
             }
 
-            function _getGlobalRef(appContext) {
-                var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, appEnvConfig.firebaseAppScopeName);
+            function _getAppScopeName(userContext, appEnvConfig) {
+                return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }
 
-            function _getAppRef(appContext) {
+            function _getGlobalRef(appContext, userContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbDataEndPoint, appEnvConfig.firebaseAppScopeName);
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, _getAppScopeName(userContext, appEnvConfig));
+            }
+
+            function _getAppRef(appContext, userContext) {
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                return new Firebase(appEnvConfig.fbDataEndPoint, _getAppScopeName(userContext, appEnvConfig));
             }
 
             function _getUserContextRef(appContext, userContext) {
-                var appRef = _getAppRef(appContext);
+                var appRef = _getAppRef(appContext, userContext);
 
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
@@ -411,8 +549,8 @@
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _getUserProfile(appContext){
-                var appRef = _getAppRef(appContext);
+            function _getUserProfile(appContext, userContext){
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
@@ -426,8 +564,8 @@
                 return deferred.promise;
             }
 
-            function _writeUserProfile(formData, appContext, customProfileFlag) {
-                var appRef = _getAppRef(appContext);
+            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
@@ -459,7 +597,12 @@
                 if (userContext === USER_CONTEXT.TEACHER) {
                     appName = appName + '-educator';
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
+                var invitationKey = InvitationKeyService.getInvitationKey();
+                var invitationPostFix = '';
+                if (angular.isDefined(invitationKey) && invitationKey !== null) {
+                        invitationPostFix = '#?iid=' + invitationKey;
+                }
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -468,9 +611,9 @@
                 });
             };
 
-            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext) {
-                var refAuthDB = _getGlobalRef(appContext);
-                var refDataDB = _getAppRef(appContext);
+            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
+                var refAuthDB = _getGlobalRef(appContext, userContext);
+                var refDataDB = _getAppRef(appContext, userContext);
                 var proms = [
                     LoginAppSrv.createAuthWithCustomToken(refAuthDB, data.authToken),
                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
@@ -479,12 +622,16 @@
             };
 
             LoginAppSrv.APPS = APPS;
+            // Hide TOEFL app in production
+            if (env !== 'dev') {
+                delete LoginAppSrv.APPS.TOEFL;
+            }
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
-            LoginAppSrv.logout = function (appContext) {
-                var globalRef = _getGlobalRef(appContext);
-                var appRef = _getAppRef(appContext);
+            LoginAppSrv.logout = function (appContext, userContext) {
+                var globalRef = _getGlobalRef(appContext, userContext);
+                var appRef = _getAppRef(appContext, userContext);
                 globalRef.unauth();
                 appRef.unauth();
             };
@@ -524,11 +671,11 @@
                         return $q.reject(errMsg);
                     }
 
-                    LoginAppSrv.logout(appContext);
+                    LoginAppSrv.logout(appContext, userContext);
 
                     isLoginInProgress = true;
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.authWithPassword(formData).then(function (authData) {
                         var appEnvConfig = _getAppEnvConfig(appContext);
                         var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
@@ -542,7 +689,7 @@
                         };
 
                         return $http.post(postUrl, postData).then(function (token) {
-                            var appRef = _getAppRef(appContext);
+                            var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
                                 _redirectToPage(appContext, userContext);
@@ -571,12 +718,12 @@
                         return $q.reject(errMsg);
                     }
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext).then(function(){
+                            return _writeUserProfile(formData, appContext, userContext).then(function(){
                                 _redirectToPage(appContext, userContext);
                             });
                         });
@@ -593,6 +740,36 @@
 })(angular);
 
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
+    "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
+    "    <button class=\"facebook-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('facebook')\"\n" +
+    "            ng-if=\"vm.providers.facebook\"\n" +
+    "            element-loader\n" +
+    "            fill-loader=\"vm.loading.facebook.fillLoader\"\n" +
+    "            show-loader=\"vm.loading.facebook.startLoader\"\n" +
+    "            bg-loader=\"'#315880'\"\n" +
+    "            precentage=\"50\"\n" +
+    "            font-color=\"'#FFFFFF'\"\n" +
+    "            bg=\"'#369'\">\n" +
+    "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
+    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
+    "    </button>\n" +
+    "    <button class=\"gplus-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('google')\"\n" +
+    "            ng-if=\"vm.providers.google\"\n" +
+    "            element-loader\n" +
+    "            fill-loader=\"vm.loading.google.fillLoader\"\n" +
+    "            show-loader=\"vm.loading.google.startLoader\"\n" +
+    "            bg-loader=\"'#BD3922'\"\n" +
+    "            precentage=\"50\"\n" +
+    "            font-color=\"'#FFFFFF'\"\n" +
+    "            bg=\"'#df4a31'\">\n" +
+    "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
+    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
+    "    </button>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/loginApp/svg/facebook-icon.svg",
     "<svg\n" +
     "    x=\"0px\"\n" +
@@ -720,9 +897,12 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <header>\n" +
     "        <div class=\"logo-wrapper\">\n" +
     "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
+    "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
+    "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
+    "            </span>\n" +
     "        </div>\n" +
-    "        <div class=\"app-select\" ng-cloak>\n" +
-    "            <md-menu md-offset=\"-50 80\" md-no-ink>\n" +
+    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
+    "            <md-menu md-offset=\"-50 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
     "                <md-button aria-label=\"Open App Select Menu\"\n" +
     "                           class=\"md-icon-button\"\n" +
     "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
@@ -731,61 +911,99 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                </md-button>\n" +
     "                <md-menu-content id=\"app-select-menu\">\n" +
     "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
-    "                                  ng-if=\"app.id!= 'TOEFL'\"\n" +
     "                                  ng-click=\"selectApp(app)\">\n" +
     "                        <div class=\"app-img-holder {{app.className}}\"></div>\n" +
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
+    "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
     "        </div>\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
+    "           class=\"for-educators app-color\"\n" +
+    "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
+    "        </a>\n" +
     "    </header>\n" +
     "    <div class=\"main\">\n" +
-    "        <ng-switch on=\"currentForm\">\n" +
-    "            <div class=\"login-container\" ng-switch-when=\"login\">\n" +
-    "                <login-form app-context=\"d.appContext\"\n" +
-    "                            user-context=\"d.userContext\">\n" +
-    "                </login-form>\n" +
-    "                <p class=\"go-to-signup\">\n" +
-    "                    <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
-    "                </p>\n" +
+    "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-if=\"d.invitationId\">\n" +
+    "            <div ng-switch=\"d.userContext\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
     "            </div>\n" +
-    "            <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
-    "                <signup-form app-context=\"d.appContext\"\n" +
-    "                             user-context=\"d.userContext\">\n" +
-    "                </signup-form>\n" +
-    "                <p class=\"go-to-login\">\n" +
-    "                    <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
-    "                </p>\n" +
-    "            </div>\n" +
-    "        </ng-switch>\n" +
-    "        <h2 class=\"banner-text\">\n" +
-    "            <ng-switch on=\"currentUserContext\">\n" +
-    "                <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                    <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "        </div>\n" +
+    "        <div class=\"main-inner\">\n" +
+    "            <ng-switch on=\"currentForm\">\n" +
+    "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
+    "                    <login-form app-context=\"d.appContext\"\n" +
+    "                                user-context=\"d.userContext\">\n" +
+    "                    </login-form>\n" +
+    "                    <p class=\"go-to-signup\">\n" +
+    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
+    "                    </p>\n" +
     "                </div>\n" +
-    "                <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                    <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
+    "                    <signup-form app-context=\"d.appContext\"\n" +
+    "                                 user-context=\"d.userContext\">\n" +
+    "                    </signup-form>\n" +
+    "                    <p class=\"go-to-login\">\n" +
+    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
+    "                    </p>\n" +
     "                </div>\n" +
     "            </ng-switch>\n" +
-    "        </h2>\n" +
+    "            <h2 class=\"banner-text\">\n" +
+    "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                </ng-switch>\n" +
+    "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
+    "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
+    "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
+    "                </div>\n" +
+    "            </h2>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <footer>\n" +
-    "        <ng-switch on=\"currentUserContext\">\n" +
+    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
     "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
     "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\" translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
+    "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
     "            </div>\n" +
     "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
     "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\" translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
     "            </div>\n" +
     "        </ng-switch>\n" +
     "    </footer>\n" +
@@ -798,8 +1016,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
-    "                app-context=\"d.appContext\"\n" +
-    "                user-context=\"d.userContext\"\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
@@ -811,14 +1029,21 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "          name=\"loginform\"\n" +
     "          ng-submit=\"loginSubmit(loginform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"text\"\n" +
+    "                <input type=\"email\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
     "                       name=\"email\"\n" +
-    "                       ng-model=\"d.loginFormData.email\">\n" +
+    "                       ng-model=\"d.loginFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
@@ -826,48 +1051,30 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                       autocomplete=\"off\"\n" +
     "                       ng-minlength=\"6\"\n" +
     "                       ng-maxlength=\"25\"\n" +
-    "                       ng-required=\"true\"\n" +
-    "                       ng-model=\"d.loginFormData.password\">\n" +
+    "                       ng-model=\"d.loginFormData.password\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\" translate=\".LOGIN_IN\" class=\"app-bg\" autofocus></button>\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".LOGIN_IN\"></span>\n" +
+    "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"forgot-pwd-wrapper\">\n" +
     "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
     "        </div>\n" +
+    "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
     "    </form>\n" +
-    "\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/oathLogin.template.html",
-    "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
-    "    <button class=\"btn facebook-btn\"\n" +
-    "            ng-click=\"vm.socialAuth('facebook')\"\n" +
-    "            ng-if=\"vm.providers.facebook\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.facebook.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.facebook.startLoader\"\n" +
-    "            bg-loader=\"'#315880'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#369'\">\n" +
-    "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
-    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
-    "    </button>\n" +
-    "    <button class=\"btn gplus-btn\"\n" +
-    "            ng-click=\"vm.socialAuth('google')\"\n" +
-    "            ng-if=\"vm.providers.google\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.google.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.google.startLoader\"\n" +
-    "            bg-loader=\"'#BD3922'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#df4a31'\">\n" +
-    "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
-    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
-    "    </button>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/loginApp/templates/signupForm.directive.html",
@@ -877,8 +1084,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
-    "                app-context=\"d.appContext\"\n" +
-    "                user-context=\"d.userContext\"\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
@@ -890,32 +1097,68 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "          name=\"signupform\"\n" +
     "          ng-submit=\"signupSubmit(signupform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.nickname.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
     "                <input type=\"text\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
     "                       name=\"nickname\"\n" +
-    "                       ng-model=\"d.signupFormData.nickname\">\n" +
+    "                       ng-model=\"d.signupFormData.nickname\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.nickname.$invalid && !signupform.nickname.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.email.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"text\"\n" +
+    "                <input type=\"email\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
     "                       name=\"email\"\n" +
-    "                       ng-model=\"d.signupFormData.email\">\n" +
+    "                       ng-model=\"d.signupFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.email.$invalid && !signupform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.password.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
     "                       name=\"password\"\n" +
-    "                       ng-model=\"d.signupFormData.password\">\n" +
+    "                       ng-model=\"d.signupFormData.password\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.password.$invalid\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
+    "                        <span ng-show=\"signupform.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
+    "                        <span ng-show=\"signupform.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\" translate=\".SIGN_UP\" class=\"app-bg\" autofocus></button>\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".SIGN_UP\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
     "        </div>\n" +
-    "        <p class=\"signup-disclaimer\" translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\" translate=\".DISCLAIMER\"></p>\n" +
+    "        <p class=\"signup-disclaimer\"\n" +
+    "           translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\"\n" +
+    "           translate=\".DISCLAIMER\"></p>\n" +
+    "\n" +
+    "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
     "    </form>\n" +
     "</div>\n" +
     "");

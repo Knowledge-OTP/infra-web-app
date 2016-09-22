@@ -33,12 +33,6 @@
       border-bottom-right-radius: 15px;
       overflow: hidden;
       background-color: white; }
-    .exercise-container znk-exercise questions-carousel question-builder {
-      height: 100%; }
-      .exercise-container znk-exercise questions-carousel question-builder img {
-        max-width: 400px !important;
-        height: auto !important;
-        vertical-align: middle; }
     .exercise-container znk-exercise znk-exercise-btn-section .shadow-container {
       background: white; }
     .exercise-container znk-exercise .question-bottom-shadow {
@@ -52,3 +46,10 @@
       padding: 5px;
       border: 1px solid #dddddd;
       vertical-align: top; }
+
+.base-complete-exercise-container znk-exercise questions-carousel question-builder, .exercise-container znk-exercise questions-carousel question-builder {
+  height: 100%; }
+  .base-complete-exercise-container znk-exercise questions-carousel question-builder img, .exercise-container znk-exercise questions-carousel question-builder img {
+    max-width: 400px !important;
+    height: auto !important;
+    vertical-align: middle; }

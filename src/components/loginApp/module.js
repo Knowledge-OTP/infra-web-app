@@ -3,10 +3,11 @@
 
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
+        'znk.infra.auth',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'znk.infra.user',
-        'satellizer'
+        'satellizer',
+        'znk.infra.general'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -19,6 +20,36 @@
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ]);
-
+    ])
+        .run(function ($location, InvitationKeyService) {
+            var search = $location.search();
+            var iid = search.iid;
+            if (angular.isDefined(iid) && iid !== null) {
+                InvitationKeyService.saveInvitationKey(iid);
+            }
+            //     var authObj = AuthService.getAuth();
+            //     if (authObj) {
+            //         InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
+            //             var invitation = res;
+            //             if (angular.equals(invitation, {})) {
+            //                 $log.error('Invitation object is empty');
+            //                 return;
+            //             }
+            //             var receiverEmail = invitation.receiverEmail;
+            //             if (receiverEmail === authObj.auth.token.email.toLowerCase()) {
+            //                 redirectToApp();
+            //             } else {
+            //                 logout();
+            //             }
+            //         });
+            //     }
+            // }
+            // function redirectToApp() {
+            //     InvitationKeyService.navigateWithInvitationKey();
+            // }
+            //
+            // function logout() {
+            //     AuthService.logout();
+            // }
+        });
 })(window, angular);

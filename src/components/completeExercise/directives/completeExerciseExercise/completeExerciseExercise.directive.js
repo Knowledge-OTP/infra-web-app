@@ -8,7 +8,8 @@
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum) {
+            controller: function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum,
+                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope, ZnkExerciseViewModeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -17,11 +18,13 @@
                     exerciseViewBindWatchDestroyer = angular.noop,
                     lastShDataReceived;
 
+                $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
+
                 function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time) {
+                    if (!exerciseContent.time || exerciseResult.isComplete) {
                         return;
                     }
 
@@ -40,21 +43,27 @@
                 function _invokeExerciseCtrl() {
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
 
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
+                        exerciseParentContent: exerciseParentContent,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                             }
-                        },
-                        znkExerciseSettings: {
-                            onExerciseReady: function () {
-                                $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
-                            }
                         }
                     };
+
+                    var defaultZnkExerciseSettings = {
+                        onExerciseReady: function () {
+                            $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
+                        }
+                    };
+                    var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
+                    var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
+                    settings.znkExerciseSettings = znkExerciseSettings;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
@@ -127,7 +136,7 @@
                     }, (function () {
                         var syncProm = $q.when();
 
-                        return function(newExerciseView) {
+                        return function (newExerciseView) {
                             if (!lastShDataReceived || angular.equals(exerciseViewBinding, lastShDataReceived.activeExercise)) {
                                 return null;
                             }
@@ -195,6 +204,10 @@
                                 });
                             });
                         }
+                    };
+
+                    this.goToSummary = function () {
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                     };
                 };
 

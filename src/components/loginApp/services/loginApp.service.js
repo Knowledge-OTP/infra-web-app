@@ -45,7 +45,7 @@
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         facebookAppId: '1576342295937853',
         googleAppId: '1008364992567-gpi1psnhk0t41bf8jtm86kjc74c0if7c.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/sat/web-app',
+        redirectFacebook: '//www.zinkerz.com/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'sat_app',
         studentAppName: 'sat_app',
@@ -67,7 +67,7 @@
         fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
         facebookAppId: '1557254871261322',
         googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/act/web-app',
+        redirectFacebook: '//www.zinkerz.com/',
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'act_app',
@@ -90,16 +90,13 @@
         fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
         facebookAppId: '1658075334429394',
         googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/toefl-test-prep/',
+        redirectFacebook: '//www.zinkerz.com/',
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'toefl_app',
         studentAppName: 'toefl_app',
         dashboardAppName: 'toefl_dashboard'
     };
-    /**
-     * TODO: add toefl dev and prod vars
-     */
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
@@ -107,7 +104,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -116,18 +113,22 @@
                 return ALL_ENV_CONFIG[env][appContext];
             }
 
-            function _getGlobalRef(appContext) {
-                var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, appEnvConfig.firebaseAppScopeName);
+            function _getAppScopeName(userContext, appEnvConfig) {
+                return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }
 
-            function _getAppRef(appContext) {
+            function _getGlobalRef(appContext, userContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbDataEndPoint, appEnvConfig.firebaseAppScopeName);
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, _getAppScopeName(userContext, appEnvConfig));
+            }
+
+            function _getAppRef(appContext, userContext) {
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                return new Firebase(appEnvConfig.fbDataEndPoint, _getAppScopeName(userContext, appEnvConfig));
             }
 
             function _getUserContextRef(appContext, userContext) {
-                var appRef = _getAppRef(appContext);
+                var appRef = _getAppRef(appContext, userContext);
 
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
@@ -142,8 +143,8 @@
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _getUserProfile(appContext){
-                var appRef = _getAppRef(appContext);
+            function _getUserProfile(appContext, userContext){
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
@@ -157,8 +158,8 @@
                 return deferred.promise;
             }
 
-            function _writeUserProfile(formData, appContext, customProfileFlag) {
-                var appRef = _getAppRef(appContext);
+            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
@@ -190,7 +191,12 @@
                 if (userContext === USER_CONTEXT.TEACHER) {
                     appName = appName + '-educator';
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
+                var invitationKey = InvitationKeyService.getInvitationKey();
+                var invitationPostFix = '';
+                if (angular.isDefined(invitationKey) && invitationKey !== null) {
+                        invitationPostFix = '#?iid=' + invitationKey;
+                }
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -199,9 +205,9 @@
                 });
             };
 
-            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext) {
-                var refAuthDB = _getGlobalRef(appContext);
-                var refDataDB = _getAppRef(appContext);
+            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
+                var refAuthDB = _getGlobalRef(appContext, userContext);
+                var refDataDB = _getAppRef(appContext, userContext);
                 var proms = [
                     LoginAppSrv.createAuthWithCustomToken(refAuthDB, data.authToken),
                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
@@ -210,12 +216,16 @@
             };
 
             LoginAppSrv.APPS = APPS;
+            // Hide TOEFL app in production
+            if (env !== 'dev') {
+                delete LoginAppSrv.APPS.TOEFL;
+            }
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
-            LoginAppSrv.logout = function (appContext) {
-                var globalRef = _getGlobalRef(appContext);
-                var appRef = _getAppRef(appContext);
+            LoginAppSrv.logout = function (appContext, userContext) {
+                var globalRef = _getGlobalRef(appContext, userContext);
+                var appRef = _getAppRef(appContext, userContext);
                 globalRef.unauth();
                 appRef.unauth();
             };
@@ -255,11 +265,11 @@
                         return $q.reject(errMsg);
                     }
 
-                    LoginAppSrv.logout(appContext);
+                    LoginAppSrv.logout(appContext, userContext);
 
                     isLoginInProgress = true;
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.authWithPassword(formData).then(function (authData) {
                         var appEnvConfig = _getAppEnvConfig(appContext);
                         var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
@@ -273,7 +283,7 @@
                         };
 
                         return $http.post(postUrl, postData).then(function (token) {
-                            var appRef = _getAppRef(appContext);
+                            var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
                                 _redirectToPage(appContext, userContext);
@@ -302,12 +312,12 @@
                         return $q.reject(errMsg);
                     }
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext).then(function(){
+                            return _writeUserProfile(formData, appContext, userContext).then(function(){
                                 _redirectToPage(appContext, userContext);
                             });
                         });

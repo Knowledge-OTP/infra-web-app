@@ -11,7 +11,9 @@
 "znk.infra-web-app.estimatedScoreWidget",
 "znk.infra-web-app.evaluator",
 "znk.infra-web-app.faq",
+"znk.infra-web-app.feedback",
 "znk.infra-web-app.iapMsg",
+"znk.infra-web-app.imageZoomer",
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
 "znk.infra-web-app.loginApp",
@@ -61,7 +63,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         'znk.infra.stats',
         'znk.infra.popUp',
         'znk.infra.screenSharing',
-        'znk.infra.eventManager'
+        'znk.infra.eventManager',
+        'znk.infra.stats',
+        'znk.infra.estimatedScore'
     ]);
 })();
 
@@ -81,7 +85,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
      *   mode:{
      *      1: default, sensitive to sharer screen sharing state
      *      2: sensitive to viewer screen sharing state
-     *   }
+     *   },
+     *   znkExerciseSettings: znk exercise settings
      *
      * ########
      *   translations:
@@ -192,13 +197,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                             var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                            var isExerciseCompleted = data.exerciseResult.isComplete;
-                            if ((isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                            if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
                                 newViewState = VIEW_STATES.INTRO;
-                            } else if (!isExerciseCompleted) {
-                                newViewState = VIEW_STATES.EXERCISE;
                             } else {
-                                newViewState = VIEW_STATES.SUMMARY;
+                                newViewState = VIEW_STATES.EXERCISE;
                             }
 
                             $ctrl.changeViewState(newViewState, true);
@@ -411,7 +413,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
-            controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", "InfraConfigSrv", "$scope", "UserProfileService", "ScreenSharingSrv", "ExerciseTypeEnum", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum) {
+            controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", "InfraConfigSrv", "$scope", "UserProfileService", "ScreenSharingSrv", "ExerciseTypeEnum", "StatsEventsHandlerSrv", "exerciseEventsConst", "$rootScope", "ZnkExerciseViewModeEnum", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum,
+                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope, ZnkExerciseViewModeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -420,11 +423,13 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     exerciseViewBindWatchDestroyer = angular.noop,
                     lastShDataReceived;
 
+                $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
+
                 function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time) {
+                    if (!exerciseContent.time || exerciseResult.isComplete) {
                         return;
                     }
 
@@ -443,21 +448,27 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 function _invokeExerciseCtrl() {
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
 
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
+                        exerciseParentContent: exerciseParentContent,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                             }
-                        },
-                        znkExerciseSettings: {
-                            onExerciseReady: function () {
-                                $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
-                            }
                         }
                     };
+
+                    var defaultZnkExerciseSettings = {
+                        onExerciseReady: function () {
+                            $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
+                        }
+                    };
+                    var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
+                    var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
+                    settings.znkExerciseSettings = znkExerciseSettings;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
@@ -530,7 +541,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     }, (function () {
                         var syncProm = $q.when();
 
-                        return function(newExerciseView) {
+                        return function (newExerciseView) {
                             if (!lastShDataReceived || angular.equals(exerciseViewBinding, lastShDataReceived.activeExercise)) {
                                 return null;
                             }
@@ -599,6 +610,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             });
                         }
                     };
+
+                    this.goToSummary = function () {
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                    };
                 };
 
                 this.$onDestroy = function () {
@@ -627,15 +642,19 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV) {
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+                  UtilitySrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
             var exerciseResult = settings.exerciseResult;
+            var exerciseParentContent = settings.exerciseParentContent;
             var exerciseTypeId = exerciseResult.exerciseTypeId;
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
+
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
 
             var $ctrl = this;
 
@@ -659,7 +678,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             }
 
             function _setExerciseContentQuestions() {
-                if(isNotLecture){
+                if (isNotLecture) {
                     exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
                         return a.order - b.order;
                     });
@@ -668,8 +687,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         exerciseContent.questions,
                         exerciseContent.questionsGroupData
                     );
-                }else{
-                    exerciseContent.content.sort(function(item1, item2){
+                } else {
+                    exerciseContent.content.sort(function (item1, item2) {
                         return item1.order - item2.order;
                     });
                     for (var i = 0; i < exerciseContent.content.length; i++) {
@@ -688,10 +707,20 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 //  stats exercise data
                 StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
                     $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
+                    var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult);
+                    shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                        var shouldBroadcast = shouldBroadcastFn({
+                            exercise: exerciseContent,
+                            exerciseResult: exerciseResult,
+                            exerciseParent: exerciseParentIsSectionOnly
+                        });
+                        if (shouldBroadcast) {
+                            var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                            var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                        }
+                    });
 
                     settings.actions.done();
                 });
@@ -711,7 +740,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 }
 
                 function _getAllowedTimeForExercise() {
-                    if(!isNotLecture){
+                    if (!isNotLecture) {
                         return null;
                     }
 
@@ -733,15 +762,17 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         viewMode = isSection ? ZnkExerciseViewModeEnum.ONLY_ANSWER.enum : ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
                     }
 
-                    if(isNotLecture){
-                        initSlideIndex = exerciseResult.questionResults.findIndex(function (question) {
-                            return !question.userAnswer;
+                    if (isNotLecture) {
+                        var questionResultsMap = UtilitySrv.array.convertToMap(exerciseResult.questionResults, 'questionId');
+                        initSlideIndex = exerciseContent.questions.findIndex(function (question) {
+                            var questionResult = questionResultsMap[question.id];
+                            return !questionResult || angular.isUndefined(questionResult.userAnswer);
                         });
 
                         if (initSlideIndex === -1) {
                             initSlideIndex = 0;
                         }
-                    }else{
+                    } else {
                         initSlideIndex = 0;
                     }
 
@@ -784,8 +815,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
-                        toolBox:{
-                            drawing:{
+                        toolBox: {
+                            drawing: {
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
@@ -1118,7 +1149,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 if (isStudentApp) {
                     return UserProfileService.getCurrUserId();
                 } else {
-                    return TeacherContextSrv.getCurrUid();
+                    return $q.when(TeacherContextSrv.getCurrUid());
                 }
             };
 
@@ -1188,7 +1219,8 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    <complete-exercise-header>\n" +
     "        <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>\n" +
     "        <pre-right-part>\n" +
-    "            <timer ng-if=\"$ctrl.timeEnabled\"\n" +
+    "            <timer ng-if=\"$ctrl.timeEnabled &&\n" +
+    "                   $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum\"\n" +
     "                   ng-model=\"$ctrl.znkExercise.exerciseResult.duration\"\n" +
     "                   complete-exercise-timer-parser\n" +
     "                   type=\"1\"\n" +
@@ -1196,9 +1228,15 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                   config=\"$ctrl.timerConfig\"\n" +
     "                   ng-change=\"$ctrl.durationChanged()\">\n" +
     "            </timer>\n" +
+    "            <div class=\"summary\"\n" +
+    "                 ng-click=\"$ctrl.goToSummary()\"\n" +
+    "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete\">\n" +
+    "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
+    "            </div>\n" +
     "        </pre-right-part>\n" +
     "    </complete-exercise-header>\n" +
-    "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled\"\n" +
+    "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled &&\n" +
+    "                                    $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum\"\n" +
     "                                    total-time=\"{{$ctrl.znkExercise.exerciseContent.time}}\"\n" +
     "                                    duration=\"$ctrl.znkExercise.exerciseResult.duration\">\n" +
     "    </complete-exercise-progress-bar>\n" +
@@ -1284,7 +1322,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "               video-ctrl-drv\n" +
     "               on-play=\"vm.onVideoPlay()\"\n" +
     "               on-ended=\"vm.onVideoEnded()\"\n" +
-    "               video-error-poster=\"assets/images/video-is-not-available-img.png\">\n" +
+    "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
     "            <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "    </div>\n" +
@@ -1644,6 +1682,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             var translateFilter = $filter('translate');
             var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
             var nextQuestion;
+            var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
 
             function _isUndefinedUserAnswer(questionResults) {
                 return questionResults.filter(function (val) {
@@ -1686,8 +1725,16 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
                 exerciseData.resultsData.$save();
                 exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
-                $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData,
-                    exerciseData.resultsData, exerciseData.exam);
+                shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                    var shouldBroadcast = shouldBroadcastFn({
+                        exercise: exerciseData.questionsData,
+                        exerciseResult: exerciseData.resultsData,
+                        exerciseParent: exerciseData.exam
+                    });
+                    if (shouldBroadcast) {
+                        $rootScope.$broadcast(exerciseEventsConst.section.FINISH, exerciseData.questionsData, exerciseData.resultsData, exerciseData.exam);
+                    }
+                });
                 StatsEventsHandlerSrv.addNewExerciseResult(ExerciseTypeEnum.SECTION.enum, exerciseData.questionsData, exerciseData.resultsData);
             }
 
@@ -2836,6 +2883,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
+                    var scores;
 
                     var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
@@ -2853,7 +2901,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             isDiagnosticCompletedProm,
                             $q.when(false),
                             getSubjectOrderProm,
-                            getExamScoreProm
+                            getExamScoreProm,
 
                         ]).then(function (res) {
                             var estimatedScore = res[0];
@@ -2869,7 +2917,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                                 var estimatedScoreForSubject = estimatedScore[subjectId];
                                 return {
                                     subjectId: subjectId,
-                                    estimatedScore: (scope.d.isDiagnosticComplete) ? estimatedScoreForSubject.score : 0,
+                                    estimatedScore: (scope.d.isDiagnosticComplete && (typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
                                     estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject.score) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
@@ -2878,14 +2926,9 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                                 };
                             });
 
-                            var scoresArr = [];
-                            for (var i = 0; i < scope.d.widgetItems.length; i++) {
-                                if (angular.isDefined(scope.d.widgetItems[i].estimatedScore)) {
-                                    scoresArr.push(scope.d.widgetItems[i].estimatedScore);
-                                }
-                            }
+                            scores = createAndCountScoresArray(scope.d.widgetItems);
 
-                            scope.d.estimatedCompositeScore = examScoresFn(scoresArr);
+                            scope.d.estimatedCompositeScore = scores.scoresArr.length === scores.subjectsToShow ? examScoresFn(scores.scoresArr): '-';
 
                             function filterSubjects(widgetItem) {
                                 return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
@@ -2909,21 +2952,26 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                                     scope.d.subjectsScores = scope.d.widgetItems;
                                 }, 1200);
                             });
-
-                            // if (!previousValues) {
-                            //     scope.d.subjectsScores = scope.d.widgetItems;
-                            // } else {
-                            //     scope.d.subjectsScores = previousValues;
-                            //     $timeout(function () {
-                            //         scope.d.enableEstimatedScoreChangeAnimation = true;
-                            //         $timeout(function () {
-                            //             scope.d.subjectsScores = scope.d.widgetItems;
-                            //         }, 1200);
-                            //     });
-                            // }
-
                             previousValues = scope.d.widgetItems;
                         });
+                    }
+
+                    function createAndCountScoresArray(subjectsArr) {
+                        var scoresArr = [];
+                        var subjectsToShow = 0;
+                        for (var i = 0; i < subjectsArr.length; i++) {
+                            if (typeof (subjectsArr[i].estimatedScore) === 'number') {
+                                scoresArr.push(subjectsArr[i].estimatedScore);
+                            }
+                            if (subjectsArr[i].showScore) {
+                                subjectsToShow++;
+                            }
+                        }
+                        var scores = {
+                            scoresArr: scoresArr,
+                            subjectsToShow: subjectsToShow
+                        };
+                        return scores;
                     }
 
                     function calcPercentage(correct) {
@@ -3083,10 +3131,8 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "                                          md-direction=\"top\"\n" +
     "                                          class=\"tooltip-for-estimated-score-widget md-whiteframe-2dp\">\n" +
     "                                  <div translate=\".YOUR_GOAL\" translate-values=\"{ goal: {{widgetItem.userGoal}} }\" class=\"top-text\"></div>\n" +
-    "                                  <div ng-switch=\"widgetItem.estimatedScore >= widgetItem.userGoal\" class=\"bottom-text\">\n" +
-    "                                      <span ng-switch-when=\"true\" translate=\".GOAL_REACHED\"></span>\n" +
-    "                                      <span ng-switch-default translate=\".PTS_TO_GO\" translate-values=\"{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
-    "                                  </div>\n" +
+    "                                      <span class=\"bottom-text\" ng-if=\"widgetItem.estimatedScore >= widgetItem.userGoal\" translate=\".GOAL_REACHED\"></span>\n" +
+    "                                      <span class=\"bottom-text\" ng-if=\"widgetItem.estimatedScore\" translate=\".PTS_TO_GO\" translate-values=\"{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
     "                              </md-tooltip>\n" +
     "                            {{widgetItem.estimatedScore === 0 ? '?' : widgetItem.estimatedScore}}\n" +
     "                        </span>\n" +
@@ -3316,7 +3362,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
+        angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
             bindings: {
                 pointsGetter: '&points',
                 typeGetter: '&type' // can be a subjectId or other type of id
@@ -3761,6 +3807,273 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.feedback',
+        [
+            'ngMaterial',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'znk.infra.auth',
+            'znk.infra.analytics',
+            'znk.infra.general',
+            'znk.infra.user',
+            'znk.infra.svgIcon'
+        ])
+        .config([
+            'SvgIconSrvProvider',
+            function (SvgIconSrvProvider) {
+                var svgMap = {
+                    'close-popup': 'components/feedback/svg/close-popup.svg',
+                    'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
+                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }
+        ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.feedback').controller('feedbackCtrl',
+        ["$log", "$mdDialog", "$timeout", "$http", "ENV", "UserProfileService", "AuthService", function($log, $mdDialog, $timeout, $http, ENV, UserProfileService, AuthService) {
+            'ngInject';
+
+            var self = this;
+            var DOORBELLSTATUSOK = 201;
+            var ENTER_KEY = String.fromCharCode(13);
+            self.success = false;
+
+            UserProfileService.getProfile().then(function (res) {
+                var userEmail = res.email;
+                self.feedbackData = {
+                    email: userEmail
+                };
+                var userAuth = AuthService.getAuth();
+                self.userId = userAuth.auth.uid;
+                self.userEmail = userEmail;
+            });
+
+            this.sendFrom = function () {
+                if (self.feedbackForm.$valid) {
+                    self.startLoader = true;
+                    var authData = AuthService.getAuth();
+                    var postData = angular.copy(self.feedbackData);
+
+                    postData.tags = ENV.firebaseAppScopeName;
+                    postData.message += (ENTER_KEY + ENTER_KEY);
+                    postData.message += ' APP-NAME: ' + ENV.firebaseAppScopeName + ', UID: ' + (authData ? authData.uid : 'N/A');
+
+                    $http.post(ENV.doorBellSubmitURL, (postData)).then(function (data) {
+                        self.fillLoader = true;
+                        $timeout(function () {
+                            self.startLoader = self.fillLoader = false;
+                        }, 100);
+
+                        if (data.status === DOORBELLSTATUSOK) {
+                            self.success = true;
+                        }
+                    }, function (message) {
+                        $log.error(message);
+
+                        self.fillLoader = true;
+                        $timeout(function () {
+                            self.startLoader = self.fillLoader = false;
+                        }, 100);
+                    });
+                }
+            };
+            this.cancel = function () {
+                $mdDialog.cancel();
+            };
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.feedback').directive('feedback',
+        ["feedbackSrv", "$translatePartialLoader", function(feedbackSrv, $translatePartialLoader) {
+            'ngInject';
+            $translatePartialLoader.addPart('feedback');
+
+            var directive = {
+                restrict: 'E',
+                template: '<button class="feedback-btn" ng-click="showDialog()"><span translate="FEEDBACK_POPUP.FEEDBACK"></span></button>',
+                scope: {},
+                link: function link(scope) {
+                    scope.showDialog = function () {
+                        feedbackSrv.showFeedbackDialog();
+                    };
+                }
+            };
+            return directive;
+        }]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.feedback').service('feedbackSrv',
+
+        ["$mdDialog", function($mdDialog) {
+            'ngInject';
+
+            this.showFeedbackDialog = function () {
+                $mdDialog.show({
+                    controller: 'feedbackCtrl',
+                    controllerAs: 'vm',
+                    templateUrl: 'components/feedback/templates/feedback.template.html',
+                    clickOutsideToClose: true
+                });
+            };
+        }]
+    );
+})(angular);
+
+
+angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/feedback/svg/close-popup.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.completed-v-feedback-svg {width: 100%; height: auto;}\n" +
+    "	.completed-v-feedback-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.completed-v-feedback-svg .st1{fill:#CACBCC;}\n" +
+    "	.completed-v-feedback-svg .st2{display:none;fill:none;}\n" +
+    "	.completed-v-feedback-svg .st3{fill:#D1D2D2;}\n" +
+    "	.completed-v-feedback-svg .st4{fill:none;stroke:#FFFFFF;stroke-width:11.9321;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/svg/feedback-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "	 xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 116.4 115.7\"\n" +
+    "	 xml:space=\"preserve\" class=\"feedback-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.feedback-icon-svg {width: 100%; height: auto;}\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<path d=\"M116.4,92.8C97.8,76.9,76.5,69.3,51.6,71.4c0-16.4,0-33,0-51C75.3,20.6,97.4,15,116.4,0C116.4,30.9,116.4,61.9,116.4,92.8z\n" +
+    "		\"/>\n" +
+    "	<path d=\"M0,32.7C5.4,22.9,13.6,19,24.7,20.2c5.7,0.6,11.4,0.1,17.9,0.1c0,16.7,0,33.1,0,50.4C27.8,68.7,11,77.1,0,60\n" +
+    "		C0,50.9,0,41.8,0,32.7z\"/>\n" +
+    "	<path d=\"M23.3,115.7c-9.8-8.4-6.8-19.7-6.8-30.3c0-1,19.8-3.1,26.1-1.3c3,0.8,1.2,24.5,0.6,31.6C36.6,115.7,30,115.7,23.3,115.7z\"\n" +
+    "		/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/templates/feedback.template.html",
+    "<div class=\"feedback-dialog\">\n" +
+    "    <md-dialog class=\"base base-border-radius feedback-container\" translate-namespace=\"FEEDBACK_POPUP\">\n" +
+    "        <div class=\"top-icon-wrap\">\n" +
+    "            <div class=\"top-icon\">\n" +
+    "                <div class=\"round-icon-wrap\">\n" +
+    "                    <svg-icon name=\"feedback-icon\"></svg-icon>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"popup-header\">\n" +
+    "            <div class=\"close-popup-wrap\" ng-click=\"vm.cancel();\">\n" +
+    "                <svg-icon name=\"close-popup\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <md-dialog-content>\n" +
+    "            <div class=\"feedback-inner\">\n" +
+    "                <div class=\"main-title\" translate=\".FEEDBACK\"></div>\n" +
+    "                <ng-switch on=\"vm.success\">\n" +
+    "                    <section ng-switch-when=\"false\">\n" +
+    "                        <div class=\"sub-title\" translate=\".THINK\"></div>\n" +
+    "                        <form novalidate name=\"vm.feedbackForm\" class=\"base-form\" ng-submit=\"vm.sendFrom();\">\n" +
+    "\n" +
+    "							<textarea\n" +
+    "                                    required\n" +
+    "                                    name=\"messageFeedback\"\n" +
+    "                                    ng-model=\"vm.feedbackData.message\"\n" +
+    "                                    placeholder=\"{{'FEEDBACK_POPUP.MESSAGE' | translate}}\">\n" +
+    "                            </textarea>\n" +
+    "\n" +
+    "                            <label\n" +
+    "                                    ng-class=\"{'hidden': !(vm.feedbackForm.messageFeedback.$invalid && vm.feedbackForm.$submitted) }\"\n" +
+    "                                    translate=\".REQUIRED_FIELD\">\n" +
+    "                            </label>\n" +
+    "\n" +
+    "                            <input\n" +
+    "                                    required\n" +
+    "                                    type=\"email\"\n" +
+    "                                    name=\"emailFeedback\"\n" +
+    "                                    placeholder=\"{{'FEEDBACK_POPUP.EMAIL' | translate}}\"\n" +
+    "                                    ng-model=\"vm.feedbackData.email\"\n" +
+    "                                    ng-minlength=\"5\"\n" +
+    "                                    ng-maxlength=\"254\">\n" +
+    "\n" +
+    "                            <label\n" +
+    "                                    ng-class=\"{'hidden': !(vm.feedbackForm.emailFeedback.$invalid && vm.feedbackForm.$submitted) }\"\n" +
+    "                                    translate=\".CORRECT_EMAIL\">\n" +
+    "                            </label>\n" +
+    "\n" +
+    "                            <button\n" +
+    "                                    class=\"md-button success success-green drop-shadow\"\n" +
+    "                                    element-loader\n" +
+    "                                    fill-loader=\"vm.fillLoader\"\n" +
+    "                                    show-loader=\"vm.startLoader\"\n" +
+    "                                    bg-loader=\"'#72ab40'\"\n" +
+    "                                    precentage=\"50\"\n" +
+    "                                    font-color=\"'#FFFFFF'\"\n" +
+    "                                    bg=\"'#87ca4d'\">\n" +
+    "                                <span translate=\".SEND\"></span>\n" +
+    "                            </button>\n" +
+    "                            <div class=\"user-details-border\"></div>\n" +
+    "                            <div class=\"user-email\" ng-if=\"vm.userEmail\" translate=\".USER_EMAIL\"\n" +
+    "                                 translate-values=\"{userEmail: vm.userEmail}\"></div>\n" +
+    "                            <div class=\"user-id\" ng-if=\"vm.userId\" translate=\".USER_ID\"\n" +
+    "                                 translate-values=\"{userId: vm.userId}\"></div>\n" +
+    "                        </form>\n" +
+    "                    </section>\n" +
+    "                    <section ng-switch-default class=\"success-feedback\">\n" +
+    "                        <svg-icon name=\"completed-v-feedback-icon\"></svg-icon>\n" +
+    "                        <div class=\"success-msg\">\n" +
+    "                            <div translate=\".THANKS\"></div>\n" +
+    "                            <div translate=\".OPINION\"></div>\n" +
+    "                        </div>\n" +
+    "                        <md-button\n" +
+    "                                class=\"success success-green drop-shadow\"\n" +
+    "                                ng-click=\"vm.cancel();\">\n" +
+    "                            <span translate=\".DONE\"></span>\n" +
+    "                        </md-button>\n" +
+    "                    </section>\n" +
+    "                </ng-switch>\n" +
+    "            </div>\n" +
+    "        </md-dialog-content>\n" +
+    "    </md-dialog>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.iapMsg',[
         'ngSanitize',
         'znk.infra.svgIcon',
@@ -3943,6 +4256,209 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
     "    <path class=\"st0\" d=\"M2003.9,348.5c0-191.1-448-346-1000.7-346S2.5,157.4,2.5,348.5s448,346,1000.7,346\n" +
     "	c163.9,0,318.6-13.6,455.2-37.8c26.1,18.2,69.5,38.4,153,61.7c83.6,23.3,154.7,14.8,154.7,14.8s-87.6-50.2-134.5-115.4\n" +
     "	C1858.7,554.4,2003.9,457.3,2003.9,348.5z\"/>\n" +
+    "</svg>\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.imageZoomer', [
+        'znk.infra.svgIcon',
+        'ngMaterial'
+    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
+        'ngInject';
+        var svgMap = {
+            'image-zoomer-full-screen-icon': 'components/imageZoomer/svg/full-screen-icon.svg',
+            'image-zoomer-close-popup': 'components/imageZoomer/svg/close-popup.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+    }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.imageZoomer').directive('imageZoomer', ["$timeout", "$mdDialog", "$document", "$compile", function($timeout, $mdDialog, $document, $compile) {
+       'ngInject';
+
+        function compileFn() {
+            function preFn(scope, element) {
+                DialogController.$inject = ["$scope"];
+                var MAX_WIDTH = 400;
+                var MAX_HEIGHT = 500;
+                var MIN_SIZE_TO_ZOOM = 200;
+                var zoomableImgElemArr = [];
+
+                $timeout(function () {
+                    var imageElements = element[0].querySelectorAll('img');
+
+                    angular.forEach(imageElements, function (imgElement) {
+                        var clickableIconElement = addIconToImage(imgElement);
+                        var clickableImageElement = imgElement;
+                        addImageHandler(clickableIconElement, imgElement);  // clickable icon
+                        addImageHandler(clickableImageElement, imgElement); // clickable image
+                    });
+                });
+
+
+                function addImageHandler(imgElement, image) {
+                    if (_shouldImageBeZoomed(image)) {
+                        return;
+                    }
+                    if (_getImageWidth(image) > 400) {
+                        image.style.width = MAX_WIDTH + 'px';
+                        image.style.height = 'auto';
+                    }
+                    image.className = 'img-to-zoom';
+                    angular.element(imgElement).on('click', function () {
+                        zoomImage(image);
+                    });
+                    zoomableImgElemArr.push(imgElement);
+                }
+
+                function DialogController($scope) {
+                    $scope.closeDialog = function () {
+                        $mdDialog.hide();
+                    };
+                }
+
+                function zoomImage(image) {
+                    var parentEl = angular.element($document.body);
+                    $mdDialog.show({
+                        clickOutsideToClose: true,
+                        parent: parentEl,
+                        template: '<div class="zoom-image-modal">' +
+                        '<svg-icon ng-click="closeDialog()" name="image-zoomer-close-popup"></svg-icon>' +
+                        '<md-dialog ng-click="closeDialog()">' +
+                        '<md-dialog-content>' +
+                        '<img src="' + image.src + '" style="width:' + image.width * 2 + 'px; ' + 'height:' + image.height * 2 + 'px">' +
+                        '</md-dialog-content>' +
+                        '</md-dialog>' +
+                        '</div>',
+                        controller: DialogController
+                    });
+
+                }
+
+                function addIconToImage(image) {
+                    if (_shouldImageBeZoomed(image)) {
+                        return image;
+                    }
+
+                    if (_getImageWidth(image) > MAX_WIDTH) {
+                        image.style.width = MAX_WIDTH + 'px';
+                        image.style.height = 'auto';
+                    }
+                    var imageParent = angular.element(image.parentNode);
+                    var imageNewParent = angular.element('<div class="zoomable-image-with-icon"></div>');   // wrap img and icon with one div element
+                    imageNewParent.css('position', 'relative');
+                    imageNewParent.css('margin', '0 auto');
+                    imageNewParent.css('textAlign', 'center');
+                    imageNewParent.css('width', image.style.width);
+                    imageNewParent.css('height', image.style.height);
+                    imageNewParent.append(image);
+                    imageParent.append(imageNewParent);
+
+                    var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
+                        '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
+                        '</div>';
+
+                    imageNewParent.append(svgIconTemplate);
+                    var iconElement = imageNewParent[0].querySelector('.zoom-icon-wrapper');
+                    $compile(iconElement)(scope);
+                    return iconElement;
+                }
+
+                function _shouldImageBeZoomed(image) {
+                    return image.style.width === null || _getImageWidth(image) < MIN_SIZE_TO_ZOOM || _getImageHeight(image) < MIN_SIZE_TO_ZOOM || _getImageHeight(image) > MAX_HEIGHT;
+                }
+
+                function _getImageWidth(image) {
+                    return + image.style.width.replace('px', '');
+                }
+
+                function _getImageHeight(image) {
+                    var width = _getImageWidth(image);
+                    var height = +image.style.height.replace('px', '');
+                    return width > MAX_WIDTH ? (height * MAX_WIDTH) / width : height;
+                }
+
+                scope.$on('$destroy', function () {
+                    for (var i = 0; i < zoomableImgElemArr.length; i++) {
+                        angular.element(zoomableImgElemArr[i]).off('click');
+                    }
+                    zoomableImgElemArr = [];
+                });
+            }
+
+            return {
+                post: preFn
+            };
+        }
+
+        var directive = {
+            priority: -1000,
+            restrict: 'A',
+            scope: {},
+            compile: compileFn
+        };
+
+        return directive;
+    }]);
+
+})(angular);
+
+
+angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/imageZoomer/svg/close-popup.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"close-popup\">\n" +
+    "    <style>\n" +
+    "        .close-popup{\n" +
+    "        width:15px;\n" +
+    "        height:15px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-645.7 420.9 200.9 199\"\n" +
+    "     class=\"full-screen-icon\">\n" +
+    "<path class=\"st0\"/>\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .full-screen-icon {\n" +
+    "            width: 100%; height: auto\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-580.6\" y1=\"486.4\" x2=\"-641.7\" y2=\"425.4\"/>\n" +
+    "		<polyline class=\"st1\" points=\"-642.7,462.5 -642.7,423.9 -605.1,423.9 \"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-509.8\" y1=\"486.4\" x2=\"-448.7\" y2=\"425.4\"/>\n" +
+    "		<polyline class=\"st1\" points=\"-447.7,462.5 -447.7,423.9 -485.4,423.9 \"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-580.6\" y1=\"554.3\" x2=\"-641.7\" y2=\"615.3\"/>\n" +
+    "		<polyline class=\"st1\" points=\"-642.7,578.2 -642.7,616.8 -605.1,616.8 \"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-509.8\" y1=\"554.3\" x2=\"-448.7\" y2=\"615.3\"/>\n" +
+    "		<polyline class=\"st1\" points=\"-447.7,578.2 -447.7,616.8 -485.4,616.8 \"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
     "</svg>\n" +
     "");
 }]);
@@ -4247,7 +4763,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "               video-ctrl-drv\n" +
     "               on-play=\"d.onVideoPlay()\"\n" +
     "               on-ended=\"d.onVideoEnded()\"\n" +
-    "               video-error-poster=\"assets/images/video-is-not-available-img.png\">\n" +
+    "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
     "            <source ng-src=\"{{::d.videoSrc}}\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "        <div class=\"question-quid-text\">{{::d.quid}}</div>\n" +
@@ -5145,10 +5661,11 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
+        'znk.infra.auth',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'znk.infra.user',
-        'satellizer'
+        'satellizer',
+        'znk.infra.general'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -5161,8 +5678,38 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ]);
-
+    ])
+        .run(["$location", "InvitationKeyService", function ($location, InvitationKeyService) {
+            var search = $location.search();
+            var iid = search.iid;
+            if (angular.isDefined(iid) && iid !== null) {
+                InvitationKeyService.saveInvitationKey(iid);
+            }
+            //     var authObj = AuthService.getAuth();
+            //     if (authObj) {
+            //         InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
+            //             var invitation = res;
+            //             if (angular.equals(invitation, {})) {
+            //                 $log.error('Invitation object is empty');
+            //                 return;
+            //             }
+            //             var receiverEmail = invitation.receiverEmail;
+            //             if (receiverEmail === authObj.auth.token.email.toLowerCase()) {
+            //                 redirectToApp();
+            //             } else {
+            //                 logout();
+            //             }
+            //         });
+            //     }
+            // }
+            // function redirectToApp() {
+            //     InvitationKeyService.navigateWithInvitationKey();
+            // }
+            //
+            // function logout() {
+            //     AuthService.logout();
+            // }
+        }]);
 })(window, angular);
 
 /**
@@ -5173,7 +5720,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document) {
+        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
@@ -5189,13 +5736,15 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
+                    var invitationKey = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
 
-                    scope.currentUserContext =  'student';
+                    scope.currentUserContext = 'student';
                     scope.currentForm = 'signup';
 
-                    scope.selectApp = function(app) {
+
+                    scope.selectApp = function (app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
                     };
@@ -5207,37 +5756,49 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     scope.changeUserContext = function (context) {
                         scope.d.userContext = context;
                         if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
-                            scope.currentUserContext =  'student';
+                            scope.currentUserContext = 'student';
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
-                            scope.currentUserContext =  'teacher';
+                            scope.currentUserContext = 'teacher';
                         }
                     };
 
                     // App select menu
                     var originatorEv;
-                    scope.openMenu = function($mdOpenMenu, ev) {
+                    scope.openMenu = function ($mdOpenMenu, ev) {
                         originatorEv = ev;
                         $mdOpenMenu(ev);
                     };
 
                     var search = $location.search();
-                    if (!angular.equals(search, {}) && (search.app || search.state)) {
+                    if (!!((!angular.equals(search, {}) || invitationKey) && (search.app || search.state || search.userType || invitationKey))) {
                         if (search.app) {
-                            angular.forEach(LoginAppSrv.APPS, function(app, index){
+                            angular.forEach(LoginAppSrv.APPS, function (app, index) {
                                 if (index.toLowerCase() === search.app.toLowerCase()) {
                                     scope.selectApp(app);
                                 }
                             });
                         }
+
+                        if (invitationKey && invitationKey !== null) {
+                            scope.d.invitationId = invitationKey;
+                        }
+
+                        if (search.userType) {
+                            if (search.userType === 'educator') {
+                                scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                            } else {
+                                scope.changeUserContext(scope.d.userContextObj.STUDENT);
+                            }
+                        }
+
                         if (search.state) {
                             scope.changeCurrentForm(search.state);
                         }
-                        $location.search('app', null);
-                        $location.search('state', null);
+
                     }
 
                     //catching $mdMenuOpen event emitted from angular-material.js
-                    scope.$on('$mdMenuOpen', function() {
+                    scope.$on('$mdMenuOpen', function () {
                         $timeout(function () {
                             //getting menu content container by tag id from html
                             var menuContentContainer = angular.element($document[0].getElementById('app-select-menu'));
@@ -5259,7 +5820,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+        ["LoginAppSrv", "$timeout", "$translate", "$log", function (LoginAppSrv, $timeout, $translate, $log) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginForm.directive.html',
@@ -5275,16 +5836,64 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.loginSubmit = function(loginForm){
-                        if (!scope.d.loginFormData) {
-                            $window.alert('form is empty!', loginForm);
+                    scope.loginSubmit = function(loginForm) {
+                        if (loginForm.$invalid) {
                             return;
                         }
-                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        showSpinner();
+                        scope.d.disableBtn = true;
+                        LoginAppSrv.login(scope.appContext.id, scope.userContext, scope.d.loginFormData)
+                            .then(function(authData){
+                                $log.debug("Authenticated successfully with payload: ", authData);
+                            })
+                            .catch(function(err){
+                                $log.error(err);
+                                if (err) {
+                                    var errorCodeStrings;
+                                    var errorCodesPath = 'LOGIN_FORM.ERROR_CODES.';
+                                    var errorCodesStringKeysArr = [
+                                        errorCodesPath + 'INVALID_EMAIL',
+                                        errorCodesPath + 'INVALID_PASSWORD',
+                                        errorCodesPath + 'INVALID_USER',
+                                        errorCodesPath + 'DEFAULT_ERROR'
+                                    ];
+                                    $translate(errorCodesStringKeysArr)
+                                        .then(function(tranlations){
+                                            var loginError;
+                                            errorCodeStrings = tranlations;
+                                            switch (err.code) {
+                                                case "INVALID_EMAIL":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_EMAIL'];
+                                                    break;
+                                                case "INVALID_PASSWORD":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_PASSWORD'];
+                                                    break;
+                                                case "INVALID_USER":
+                                                    loginError = errorCodeStrings[errorCodesPath + 'INVALID_USER'];
+                                                    break;
+                                                default:
+                                                    loginError = errorCodeStrings[errorCodesPath + 'DEFAULT_ERROR'] + err.code;
+                                            }
+                                            $timeout(function(){
+                                                hideSpinner();
+                                                scope.d.disableBtn = false;
+                                                scope.d.loginError = loginError;
+                                            });
+                                        })
+                                        .catch(function(err){
+                                            $log.error('Cannot fetch translation! ', err);
+                                        });
+                                }
+                            });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }]
@@ -5299,7 +5908,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        ["$translatePartialLoader", "LoginAppSrv", "$window", function ($translatePartialLoader, LoginAppSrv, $window) {
+        ["LoginAppSrv", "$log", function (LoginAppSrv, $log) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
@@ -5316,15 +5925,30 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     };
 
                     scope.signupSubmit = function(signupForm){
-                        if (!scope.d.signupFormData) {
-                            $window.alert('form is empty!', signupForm);
+                        if (signupForm.$invalid) {
                             return;
                         }
-                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData).catch(function(err){
-                            console.error(err);
-                            $window.alert(err);
-                        });
+                        showSpinner();
+                        scope.d.disableBtn = true;
+                        LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData)
+                            .then(function(){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                            })
+                            .catch(function(err){
+                                hideSpinner();
+                                scope.d.disableBtn = false;
+                                $log.error(err);
+                            });
                     };
+
+                    function showSpinner() {
+                        scope.d.showSpinner = true;
+                    }
+
+                    function hideSpinner() {
+                        scope.d.showSpinner = false;
+                    }
                 }
             };
         }]
@@ -5347,11 +5971,11 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 var loadingProvider = vm.loading[provider] = {};
                 loadingProvider.startLoader = true;
                 $auth.authenticate(provider).then(function (response) {
-                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id);
+                    return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id, vm.userContext);
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    LoginAppSrv.getUserProfile(vm.appContext.id).then(function (userProfile) {
+                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
                         var updateProfile = false;
 
                         if (!userProfile.email && userDataAuth.email) {
@@ -5373,15 +5997,16 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         loadingProvider.startLoader = loadingProvider.fillLoader = false;
 
                         if (updateProfile) {
-                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, true).then(function () {
-                                LoginAppSrv.redirectToPage(vm.appContext.id);
+                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
+                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {
-                            LoginAppSrv.redirectToPage(vm.appContext.id);
+                            LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                         }
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
+                    loadingProvider.startLoader = loadingProvider.fillLoader = false;
                 });
             };
 
@@ -5401,12 +6026,40 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 userContext: '<'
             },
             restrict: 'E',
-            templateUrl: 'components/loginApp/templates/oathLogin.template.html',
+            templateUrl: 'components/loginApp/oathLogin/oathLogin.template.html',
             controller: 'OathLoginDrvController',
             bindToController: true,
             controllerAs: 'vm'
         };
     });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp').service('InvitationKeyService',
+        function () {
+            'ngInject';
+            var invitationKey;
+
+            this.saveInvitationKey = function (_invitationKey) {
+                invitationKey = _invitationKey;
+            };
+
+            this.getInvitationKey = function () {
+                return invitationKey;
+            };
+
+          //   this.navigateWithInvitationKey = function () {
+          //       // var appUrl = ENV.redirectSignup;
+          //       var inviteId = this.getInvitationKey();
+          //       if (angular.isDefined(inviteId)) {
+          //           appUrl += '#?iid=' + inviteId;
+          //       }
+          //       $window.location.replace(appUrl);
+          // };
+        }
+    );
 })(angular);
 
 (function (angular) {
@@ -5456,7 +6109,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         facebookAppId: '1576342295937853',
         googleAppId: '1008364992567-gpi1psnhk0t41bf8jtm86kjc74c0if7c.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/sat/web-app',
+        redirectFacebook: '//www.zinkerz.com/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'sat_app',
         studentAppName: 'sat_app',
@@ -5478,7 +6131,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
         facebookAppId: '1557254871261322',
         googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/act/web-app',
+        redirectFacebook: '//www.zinkerz.com/',
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'act_app',
@@ -5501,16 +6154,13 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
         facebookAppId: '1658075334429394',
         googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/toefl-test-prep/',
+        redirectFacebook: '//www.zinkerz.com/',
         backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
         dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
         firebaseAppScopeName: 'toefl_app',
         studentAppName: 'toefl_app',
         dashboardAppName: 'toefl_dashboard'
     };
-    /**
-     * TODO: add toefl dev and prod vars
-     */
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
@@ -5518,7 +6168,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", function ($q, $http, $log, $window, SatellizerConfig) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -5527,18 +6177,22 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return ALL_ENV_CONFIG[env][appContext];
             }
 
-            function _getGlobalRef(appContext) {
-                var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, appEnvConfig.firebaseAppScopeName);
+            function _getAppScopeName(userContext, appEnvConfig) {
+                return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }
 
-            function _getAppRef(appContext) {
+            function _getGlobalRef(appContext, userContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbDataEndPoint, appEnvConfig.firebaseAppScopeName);
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, _getAppScopeName(userContext, appEnvConfig));
+            }
+
+            function _getAppRef(appContext, userContext) {
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                return new Firebase(appEnvConfig.fbDataEndPoint, _getAppScopeName(userContext, appEnvConfig));
             }
 
             function _getUserContextRef(appContext, userContext) {
-                var appRef = _getAppRef(appContext);
+                var appRef = _getAppRef(appContext, userContext);
 
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
@@ -5553,8 +6207,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _getUserProfile(appContext){
-                var appRef = _getAppRef(appContext);
+            function _getUserProfile(appContext, userContext){
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
@@ -5568,8 +6222,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return deferred.promise;
             }
 
-            function _writeUserProfile(formData, appContext, customProfileFlag) {
-                var appRef = _getAppRef(appContext);
+            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
+                var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
@@ -5601,7 +6255,12 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 if (userContext === USER_CONTEXT.TEACHER) {
                     appName = appName + '-educator';
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
+                var invitationKey = InvitationKeyService.getInvitationKey();
+                var invitationPostFix = '';
+                if (angular.isDefined(invitationKey) && invitationKey !== null) {
+                        invitationPostFix = '#?iid=' + invitationKey;
+                }
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -5610,9 +6269,9 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 });
             };
 
-            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext) {
-                var refAuthDB = _getGlobalRef(appContext);
-                var refDataDB = _getAppRef(appContext);
+            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
+                var refAuthDB = _getGlobalRef(appContext, userContext);
+                var refDataDB = _getAppRef(appContext, userContext);
                 var proms = [
                     LoginAppSrv.createAuthWithCustomToken(refAuthDB, data.authToken),
                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
@@ -5621,12 +6280,16 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             };
 
             LoginAppSrv.APPS = APPS;
+            // Hide TOEFL app in production
+            if (env !== 'dev') {
+                delete LoginAppSrv.APPS.TOEFL;
+            }
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
-            LoginAppSrv.logout = function (appContext) {
-                var globalRef = _getGlobalRef(appContext);
-                var appRef = _getAppRef(appContext);
+            LoginAppSrv.logout = function (appContext, userContext) {
+                var globalRef = _getGlobalRef(appContext, userContext);
+                var appRef = _getAppRef(appContext, userContext);
                 globalRef.unauth();
                 appRef.unauth();
             };
@@ -5666,11 +6329,11 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         return $q.reject(errMsg);
                     }
 
-                    LoginAppSrv.logout(appContext);
+                    LoginAppSrv.logout(appContext, userContext);
 
                     isLoginInProgress = true;
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.authWithPassword(formData).then(function (authData) {
                         var appEnvConfig = _getAppEnvConfig(appContext);
                         var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
@@ -5684,7 +6347,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         };
 
                         return $http.post(postUrl, postData).then(function (token) {
-                            var appRef = _getAppRef(appContext);
+                            var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
                                 _redirectToPage(appContext, userContext);
@@ -5713,12 +6376,12 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         return $q.reject(errMsg);
                     }
 
-                    var globalRef = _getGlobalRef(appContext);
+                    var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext).then(function(){
+                            return _writeUserProfile(formData, appContext, userContext).then(function(){
                                 _redirectToPage(appContext, userContext);
                             });
                         });
@@ -5735,6 +6398,36 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 })(angular);
 
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
+    "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
+    "    <button class=\"facebook-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('facebook')\"\n" +
+    "            ng-if=\"vm.providers.facebook\"\n" +
+    "            element-loader\n" +
+    "            fill-loader=\"vm.loading.facebook.fillLoader\"\n" +
+    "            show-loader=\"vm.loading.facebook.startLoader\"\n" +
+    "            bg-loader=\"'#315880'\"\n" +
+    "            precentage=\"50\"\n" +
+    "            font-color=\"'#FFFFFF'\"\n" +
+    "            bg=\"'#369'\">\n" +
+    "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
+    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
+    "    </button>\n" +
+    "    <button class=\"gplus-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('google')\"\n" +
+    "            ng-if=\"vm.providers.google\"\n" +
+    "            element-loader\n" +
+    "            fill-loader=\"vm.loading.google.fillLoader\"\n" +
+    "            show-loader=\"vm.loading.google.startLoader\"\n" +
+    "            bg-loader=\"'#BD3922'\"\n" +
+    "            precentage=\"50\"\n" +
+    "            font-color=\"'#FFFFFF'\"\n" +
+    "            bg=\"'#df4a31'\">\n" +
+    "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
+    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
+    "    </button>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/loginApp/svg/facebook-icon.svg",
     "<svg\n" +
     "    x=\"0px\"\n" +
@@ -5862,9 +6555,12 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <header>\n" +
     "        <div class=\"logo-wrapper\">\n" +
     "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
+    "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
+    "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
+    "            </span>\n" +
     "        </div>\n" +
-    "        <div class=\"app-select\" ng-cloak>\n" +
-    "            <md-menu md-offset=\"-50 80\" md-no-ink>\n" +
+    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
+    "            <md-menu md-offset=\"-50 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
     "                <md-button aria-label=\"Open App Select Menu\"\n" +
     "                           class=\"md-icon-button\"\n" +
     "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
@@ -5873,61 +6569,99 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                </md-button>\n" +
     "                <md-menu-content id=\"app-select-menu\">\n" +
     "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
-    "                                  ng-if=\"app.id!= 'TOEFL'\"\n" +
     "                                  ng-click=\"selectApp(app)\">\n" +
     "                        <div class=\"app-img-holder {{app.className}}\"></div>\n" +
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +
+    "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
     "        </div>\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
+    "           class=\"for-educators app-color\"\n" +
+    "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
+    "        </a>\n" +
     "    </header>\n" +
     "    <div class=\"main\">\n" +
-    "        <ng-switch on=\"currentForm\">\n" +
-    "            <div class=\"login-container\" ng-switch-when=\"login\">\n" +
-    "                <login-form app-context=\"d.appContext\"\n" +
-    "                            user-context=\"d.userContext\">\n" +
-    "                </login-form>\n" +
-    "                <p class=\"go-to-signup\">\n" +
-    "                    <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
-    "                </p>\n" +
+    "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-if=\"d.invitationId\">\n" +
+    "            <div ng-switch=\"d.userContext\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
     "            </div>\n" +
-    "            <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
-    "                <signup-form app-context=\"d.appContext\"\n" +
-    "                             user-context=\"d.userContext\">\n" +
-    "                </signup-form>\n" +
-    "                <p class=\"go-to-login\">\n" +
-    "                    <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                    <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\" ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                    <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
-    "                </p>\n" +
-    "            </div>\n" +
-    "        </ng-switch>\n" +
-    "        <h2 class=\"banner-text\">\n" +
-    "            <ng-switch on=\"currentUserContext\">\n" +
-    "                <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                    <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "        </div>\n" +
+    "        <div class=\"main-inner\">\n" +
+    "            <ng-switch on=\"currentForm\">\n" +
+    "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
+    "                    <login-form app-context=\"d.appContext\"\n" +
+    "                                user-context=\"d.userContext\">\n" +
+    "                    </login-form>\n" +
+    "                    <p class=\"go-to-signup\">\n" +
+    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
+    "                    </p>\n" +
     "                </div>\n" +
-    "                <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                    <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                    <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\" ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
+    "                    <signup-form app-context=\"d.appContext\"\n" +
+    "                                 user-context=\"d.userContext\">\n" +
+    "                    </signup-form>\n" +
+    "                    <p class=\"go-to-login\">\n" +
+    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
+    "                    </p>\n" +
     "                </div>\n" +
     "            </ng-switch>\n" +
-    "        </h2>\n" +
+    "            <h2 class=\"banner-text\">\n" +
+    "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                </ng-switch>\n" +
+    "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
+    "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
+    "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
+    "                </div>\n" +
+    "            </h2>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <footer>\n" +
-    "        <ng-switch on=\"currentUserContext\">\n" +
+    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
     "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
     "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\" translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
+    "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
     "            </div>\n" +
     "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
     "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\" translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
     "            </div>\n" +
     "        </ng-switch>\n" +
     "    </footer>\n" +
@@ -5940,8 +6674,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
-    "                app-context=\"d.appContext\"\n" +
-    "                user-context=\"d.userContext\"\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
@@ -5953,14 +6687,21 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "          name=\"loginform\"\n" +
     "          ng-submit=\"loginSubmit(loginform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"text\"\n" +
+    "                <input type=\"email\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
     "                       name=\"email\"\n" +
-    "                       ng-model=\"d.loginFormData.email\">\n" +
+    "                       ng-model=\"d.loginFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
@@ -5968,48 +6709,30 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                       autocomplete=\"off\"\n" +
     "                       ng-minlength=\"6\"\n" +
     "                       ng-maxlength=\"25\"\n" +
-    "                       ng-required=\"true\"\n" +
-    "                       ng-model=\"d.loginFormData.password\">\n" +
+    "                       ng-model=\"d.loginFormData.password\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\" translate=\".LOGIN_IN\" class=\"app-bg\" autofocus></button>\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".LOGIN_IN\"></span>\n" +
+    "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"forgot-pwd-wrapper\">\n" +
     "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
     "        </div>\n" +
+    "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
     "    </form>\n" +
-    "\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/oathLogin.template.html",
-    "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
-    "    <button class=\"btn facebook-btn\"\n" +
-    "            ng-click=\"vm.socialAuth('facebook')\"\n" +
-    "            ng-if=\"vm.providers.facebook\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.facebook.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.facebook.startLoader\"\n" +
-    "            bg-loader=\"'#315880'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#369'\">\n" +
-    "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
-    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
-    "    </button>\n" +
-    "    <button class=\"btn gplus-btn\"\n" +
-    "            ng-click=\"vm.socialAuth('google')\"\n" +
-    "            ng-if=\"vm.providers.google\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.google.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.google.startLoader\"\n" +
-    "            bg-loader=\"'#BD3922'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#df4a31'\">\n" +
-    "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
-    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
-    "    </button>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/loginApp/templates/signupForm.directive.html",
@@ -6019,8 +6742,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
-    "                app-context=\"d.appContext\"\n" +
-    "                user-context=\"d.userContext\"\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
     "                providers=\"{facebook:true,google:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
@@ -6032,32 +6755,68 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "          name=\"signupform\"\n" +
     "          ng-submit=\"signupSubmit(signupform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.nickname.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
     "                <input type=\"text\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
     "                       name=\"nickname\"\n" +
-    "                       ng-model=\"d.signupFormData.nickname\">\n" +
+    "                       ng-model=\"d.signupFormData.nickname\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.nickname.$invalid && !signupform.nickname.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.email.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"text\"\n" +
+    "                <input type=\"email\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
     "                       name=\"email\"\n" +
-    "                       ng-model=\"d.signupFormData.email\">\n" +
+    "                       ng-model=\"d.signupFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.email.$invalid && !signupform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupform.password.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
     "                       name=\"password\"\n" +
-    "                       ng-model=\"d.signupFormData.password\">\n" +
+    "                       ng-model=\"d.signupFormData.password\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupform.$submitted && signupform.password.$invalid\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupform.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
+    "                        <span ng-show=\"signupform.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
+    "                        <span ng-show=\"signupform.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\" translate=\".SIGN_UP\" class=\"app-bg\" autofocus></button>\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".SIGN_UP\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
     "        </div>\n" +
-    "        <p class=\"signup-disclaimer\" translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\" translate=\".DISCLAIMER\"></p>\n" +
+    "        <p class=\"signup-disclaimer\"\n" +
+    "           translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\"\n" +
+    "           translate=\".DISCLAIMER\"></p>\n" +
+    "\n" +
+    "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
     "    </form>\n" +
     "</div>\n" +
     "");
@@ -7854,8 +8613,8 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
   $templateCache.put("components/tests/templates/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
-    "   <div class=\"tests-navigation-title-header\"\n" +
-    "        translate=\".MINI_TEST_TITLE\"></div>\n" +
+    "    <div class=\"tests-navigation-title-header\"\n" +
+    "         translate=\".MINI_TEST_TITLE\"></div>\n" +
     "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
     "        <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum}\"\n" +
     "                      ng-class=\"{\n" +
@@ -7864,9 +8623,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                      }\">\n" +
     "            <md-button md-no-ink\n" +
     "                       ng-click=\"vm.changeActive(miniExam.id)\">\n" +
-    "                <span translate=\".TEST\"\n" +
-    "                      translate-values=\"{testNumber: $index+1}\">\n" +
-    "                </span>\n" +
+    "                <span>{{miniExam.name}}</span>\n" +
     "                <div class=\"status-icon-wrapper\"\n" +
     "                     ng-if=\"miniExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +
@@ -7887,9 +8644,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                      }\">\n" +
     "            <md-button md-no-ink\n" +
     "                       ng-click=\"vm.changeActive(fullExam.id)\">\n" +
-    "                <span translate=\".TEST\"\n" +
-    "                      translate-values=\"{testNumber: $index+1}\">\n" +
-    "                </span>\n" +
+    "                <span>{{fullExam.name}}</span>\n" +
     "                <div class=\"status-icon-wrapper\"\n" +
     "                     ng-if=\"fullExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +

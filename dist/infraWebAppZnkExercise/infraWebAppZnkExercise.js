@@ -298,7 +298,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "               video-ctrl-drv\n" +
     "               on-play=\"d.onVideoPlay()\"\n" +
     "               on-ended=\"d.onVideoEnded()\"\n" +
-    "               video-error-poster=\"assets/images/video-is-not-available-img.png\">\n" +
+    "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
     "            <source ng-src=\"{{::d.videoSrc}}\" type=\"video/mp4\">\n" +
     "        </video>\n" +
     "        <div class=\"question-quid-text\">{{::d.quid}}</div>\n" +

@@ -1,22 +1,21 @@
 @import 'src/scss/imports/variables',
 'src/scss/imports/colors',
 'bower_components/infra/dist/mixins/mixins';
-
 // social auth login
 @import 'oathLogin/main.scss';
 
 @font-face {
-    font-family:"SourceSansPro";
-    src:url("assets/fonts/SourceSansPro-Regular.otf");
-    font-weight:normal;
-    font-style:normal;
+    font-family: "SourceSansPro";
+    src: url("/assets/fonts/SourceSansPro-Regular.otf");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-    font-family:"SourceSansPro-Light";
-    src:url("assets/fonts/SourceSansPro-Light.otf");
-    font-weight:normal;
-    font-style:normal;
+    font-family: "SourceSansPro-Light";
+    src: url("/assets/fonts/SourceSansPro-Light.otf");
+    font-weight: normal;
+    font-style: normal;
 }
 
 .md-open-menu-container {
@@ -45,13 +44,13 @@
                 background-size: contain;
                 padding: 0;
                 &.sat {
-                    background-image: url('assets/images/sat-name@2x.png');
+                    background-image: url('/assets/images/sat-name@2x.png');
                 }
                 &.act {
-                    background-image: url('assets/images/act-name@2x.png');
+                    background-image: url('/assets/images/act-name@2x.png');
                 }
                 &.toefl {
-                    background-image: url('assets/images/toefl-name@2x.png');
+                    background-image: url('/assets/images/toefl-name@2x.png');
                 }
             }
         }
@@ -59,40 +58,67 @@
 }
 
 login-app {
+    transition: all 0.5s;
+    .img-responsive {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
     .login-app {
-        position: fixed;
-        width: 100%;
         height: 100%;
+        margin: 0 auto;
         background: {
             color: #f7f7f7;
-            image: url('assets/images/logo-pattern-bg.png');
-        };
+            image: url('/assets/images/logo-pattern-bg.png');
+        }
+    ;
         font: {
             family: 'SourceSansPro', sans-serif;
             weight: $regularFontWeight;
         }
         & > header {
-            width: 1366px;
-            margin: 20px auto;
+            //max-width: 1366px;
+            max-width: 95%;
+            height: 84px;
+            padding: 20px 0;
+            margin: 0 auto;
+            position: relative;
+            box-sizing: border-box;
             .logo-wrapper {
                 margin-left: 27px;
+                float: left;
+                position: relative;
                 .logo {
                     width: 76px;
                     height: 36px;
-                    float:left;
+                    float: left;
                     background: {
-                        image: url('assets/images/zinkerz_logo.png');
+                        image: url('/assets/images/zinkerz_logo.png');
                         repeat: no-repeat;
                         size: contain;
-                    };
+                    }
+                ;
+                }
+                span {
+                    font-size: 24px;
+                    margin-left: 5px;
+                    margin-top: 15px;
+                    display: inline-block;
                 }
             }
             .app-select {
                 text-align: center;
+                position: absolute;
+                left: calc(50% - 90px);
+                &.no-dropdown {
+                    left: 50%;
+                    transform: translateX(-50%);;
+                    top: 28px;
+                }
                 md-menu {
                     .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
                     .md-button:not([disabled]).md-icon-button:hover {
-                        background-color: #fbfcfc;
+                        background-color: $bgColor3;
                     }
                     & > button {
                         width: 175px;
@@ -110,44 +136,62 @@ login-app {
                     height: calc(55px / 2);
                     background-repeat: no-repeat;
                     background-size: contain;
-                    float:left;
+                    float: left;
                     &.sat {
-                        background-image: url('assets/images/sat-name@2x.png');
+                        background-image: url('/assets/images/sat-name@2x.png');
                     }
                     &.act {
-                        background-image: url('assets/images/act-name@2x.png');
+                        background-image: url('/assets/images/act-name@2x.png');
                     }
                     &.toefl {
-                        background-image: url('assets/images/toefl-name@2x.png');
+                        background-image: url('/assets/images/toefl-name@2x.png');
                     }
                 }
                 .expand-menu {
                     float: right;
                 }
             }
+            .for-educators {
+                position: relative;
+                top: 5px;
+                right: 100px;
+                float: right;
+                margin-top: 12px;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 15px;
+                padding: 5px 8px;
+            }
         }
         .main {
-            width: 1366px;
-            height: 513px;
-            margin: 0 auto;
             position: relative;
-            background: {
-                size: auto 100%;
-                repeat: no-repeat;
-                position: center center;
-            };
+            padding: 0;
+            .main-inner {
+                h2.banner-text {
+                    position: absolute;
+                    font: {
+                        size: 32px;
+                        family: 'SourceSansPro-Light';
+                        weight: 100;
+                    }
+                    color: $fontColor1;
+                    margin: 0;
+                    bottom: 40px;
+                    left: 40px;
+                    .invitation-title {
+                        @include text-style(33px, $fontColor8, "Source Sans Pro", $regularFontWeight);
+                        .first-row {
 
-            h2.banner-text {
-                font: {
-                    size: 32px;
-                    family: 'SourceSansPro-Light';
-                    weight: 100;
+                        }
+                        .second-row {
+                            font-size: 50px;
+                        }
+                    }
                 }
-                color: $fontColor1;
-                margin: 0;
-                padding: 25px 30px;
-                bottom: 0;
-                position: absolute;
+            }
+            img.main-banner {
+                min-height: 513px;
+                min-width: 1366px;
             }
 
             .login-container,
@@ -162,28 +206,13 @@ login-app {
                 margin-top: 15px;
                 text-align: center;
                 color: #fff;
+                font: {
+                    size: 17px;
+                }
                 a {
                     text-decoration: underline;
                     cursor: pointer;
                 }
-                font: {
-                    family: 'SourceSansPro-Light';
-                }
-            }
-
-            signup-form,
-            login-form {
-
-            }
-        }
-        &.educator {
-            .main {
-                background-image: url('assets/images/login-teacher-bg@2x.jpg');
-            }
-        }
-        &.student {
-            .main {
-                background-image: url('assets/images/login-student-bg@2x.jpg');
             }
         }
         &.sat {
@@ -196,13 +225,23 @@ login-app {
             .app-color {
                 color: $bgColor5;
                 &:hover {
-                    color: $fontColor20;
+                    color: $bgColor55;
                 }
             }
         }
         &.act {
-            .app-bg {  background: $bgColor7;  }
-            .app-color {  color: $bgColor7;  }
+            .app-bg {
+                background: $bgColor7;
+                &:hover {
+                    background: $bgColor15;
+                }
+            }
+            .app-color {
+                color: $bgColor7;
+                &:hover {
+                    color: $bgColor15;
+                }
+            }
         }
         &.toefl {
             .app-bg {
@@ -214,7 +253,7 @@ login-app {
             .app-color {
                 color: $bgColor2;
                 &:hover {
-                    color: $fontColor21;
+                    color: $bgColor56;
                 }
             }
         }
@@ -229,24 +268,26 @@ login-app {
                 left: 30px;
                 bottom: 20px;
                 top: 25px;
-            };
+            }
+        ;
             .title {
                 text-align: center;
                 padding: {
                     bottom: 15px;
                 }
                 color: $fontColor2;
-                font:{
+                font: {
                     weight: $lightFontWeight;
                     size: 25px;
                 }
             }
 
-            .inputs-container{
-                .input-wrapper{
+            .inputs-container {
+                .input-wrapper {
+                    position: relative;
                     box-sizing: border-box;
                     width: 340px;
-                    border: 1px $borderColor1 solid;
+                    border: 1px solid;
                     border-radius: 30px;
                     background-color: $bgColor1;
                     margin: {
@@ -254,17 +295,53 @@ login-app {
                         bottom: 11px;
                         left: auto;
                     }
-                    padding:{
+                    padding: {
                         right: 9px;
                         left: 9px;
                     }
                     display: flex;
                     align-items: center;
+                    .validationBox {
+                        span {
+                            width: 200px;
+                            padding: 3px 10px;
+                            position: absolute;
+                            right: 0;
+                            top: -28px;
+                            background-color: $bgColor32;
+                            color: $fontColor1;
+                            border-radius: 3px;
+                            font-size: 13px;
+                            line-height: 24px;
+                            &:after {
+                                content: '';
+                                position: absolute;
+                                border: {
+                                    color: transparent;
+                                    style: solid;
+                                    top-color: $bgColor32;
+                                    width: 10px;
+                                }
+                                bottom: -20px;
+                                left: 13px;
+                            }
+                        }
+                    }
+                    &.valid {
+                        border-color: $borderColor1;
+                    }
+                    &.invalid {
+                        border-color: $borderColor22;
+                        svg, svg * {
+                            stroke: $bgColor32;
+                        }
+                    }
 
-                    &:last-child{
+                    &:last-child {
                         margin: {
                             bottom: 20px;
-                        };
+                        }
+                    ;
                     }
 
                     svg-icon {
@@ -280,17 +357,18 @@ login-app {
                             right: 5px;
                             top: 0;
                             bottom: 0;
-                        };
+                        }
+                    ;
                         background-color: transparent;
-                        @include placeholder(){
+                        @include placeholder() {
                             color: $fontColor3;
-                            font:{
+                            font: {
                                 weight: $lightFontWeight;
                                 size: 14px;
                             }
                         }
                         outline: none;
-                        font:{
+                        font: {
                             weight: $regularFontWeight;
                             size: 14px;
                         }
@@ -299,9 +377,10 @@ login-app {
                 }
             }
 
-            .submit-btn-wrapper{
+            .submit-btn-wrapper {
                 text-align: center;
                 button {
+                    position: relative;
                     cursor: pointer;
                     box-sizing: border-box;
                     height: 37px;
@@ -309,12 +388,37 @@ login-app {
                     color: $fontColor1;
                     border-radius: 30px;
                     border: none;
-                    font:{
+                    font: {
                         size: 18px;
                         weight: $regularFontWeight;
                     }
                     &:focus {
                         outline: none;
+                    }
+                    &:disabled {
+                        background-color: #dddddd;
+                    }
+
+                    .loader {
+                        margin: 0;
+                        height: 12px;
+                        width: 12px;
+                        animation: rotate 0.8s infinite linear;
+                        border: 3px solid #fff;
+                        border-right-color: transparent;
+                        border-radius: 50%;
+                        position: absolute;
+                        top: 10px;
+                        right: 30px;
+                    }
+
+                    @keyframes rotate {
+                        0% {
+                            transform: rotate(0deg);
+                        }
+                        100% {
+                            transform: rotate(360deg);
+                        }
                     }
                 }
             }
@@ -323,14 +427,22 @@ login-app {
                 margin: {
                     top: 10px;
                     bottom: 5px;
-                };
+                }
+            ;
                 text-align: right;
                 color: $fontColor4;
-                font:{
+                font: {
                     weight: $lightFontWeight;
                     size: 14px;
                     family: 'SourceSansPro-Light';
                 }
+            }
+
+            .general-error {
+                font-size: 12px;
+                color: $fontColor17;
+                text-align: center;
+                margin-bottom: 0;
             }
 
             .divider {
@@ -352,13 +464,13 @@ login-app {
                     display: inline-block;
                     background: $bgColor40;
                     position: relative;
-                    z-index: 1;
                     padding: {
                         right: 15px;
                         left: 15px;
-                    };
+                    }
+                ;
                     color: $fontColor5;
-                    font:{
+                    font: {
                         weight: $lightFontWeight;
                         size: 14px;
                     }
@@ -370,6 +482,7 @@ login-app {
                     text-align: center;
                     font-size: 10px;
                     color: $fontColor9;
+                    margin-top: 10px;
                     a {
                         text-decoration: none;
                     }
@@ -378,8 +491,9 @@ login-app {
         }
         footer {
             text-align: center;
+            padding-bottom: 40px;
             .switch-student-educator {
-                font-weight:normal;
+                font-weight: normal;
                 h2 {
                     font-size: 23px;
                     color: $fontColor3;

@@ -1,0 +1,30 @@
+<svg version="1.1"
+     x="0px" y="0px"
+	 viewBox="-645.7 420.9 200.9 199"
+     class="full-screen-icon">
+<path class="st0"/>
+
+    <style type="text/css">
+        .full-screen-icon {
+            width: 100%; height: auto
+        }
+    </style>
+<g>
+	<g>
+		<line class="st1" x1="-580.6" y1="486.4" x2="-641.7" y2="425.4"/>
+		<polyline class="st1" points="-642.7,462.5 -642.7,423.9 -605.1,423.9 "/>
+	</g>
+	<g>
+		<line class="st1" x1="-509.8" y1="486.4" x2="-448.7" y2="425.4"/>
+		<polyline class="st1" points="-447.7,462.5 -447.7,423.9 -485.4,423.9 "/>
+	</g>
+	<g>
+		<line class="st1" x1="-580.6" y1="554.3" x2="-641.7" y2="615.3"/>
+		<polyline class="st1" points="-642.7,578.2 -642.7,616.8 -605.1,616.8 "/>
+	</g>
+	<g>
+		<line class="st1" x1="-509.8" y1="554.3" x2="-448.7" y2="615.3"/>
+		<polyline class="st1" points="-447.7,578.2 -447.7,616.8 -485.4,616.8 "/>
+	</g>
+</g>
+</svg>

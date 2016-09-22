@@ -97,7 +97,7 @@ estimated-score-widget {
                 text-align: left;
                 @include text-style(16px, $fontColor3, Lato, 400);
 
-                .capitalize{
+                .capitalize {
                     text-transform: capitalize;
                 }
 
@@ -155,7 +155,7 @@ estimated-score-widget {
                     span {
                         @include text-style(15px, $fontColor3, Lato, 400);
                         position: absolute;
-                        width: 35px;
+                        min-width: 22px;
                         height: 22px;
                         line-height: 21px;
                         border-radius: 13px;
@@ -250,14 +250,10 @@ md-tooltip.tooltip-for-estimated-score-widget {
             }
         }
         .top-text {
-            margin: {
-                top: 22px;
-                bottom: 12px;
-            }
+            margin-top: 22px;
             @include text-style(16px, $fontColor3, Lato, 400);
         }
         .bottom-text {
-            line-height: 12px;
             @include text-style(12px, $fontColor3, Lato, 300);
         }
     }

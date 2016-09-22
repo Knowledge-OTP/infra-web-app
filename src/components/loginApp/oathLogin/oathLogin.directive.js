@@ -10,7 +10,7 @@
                 userContext: '<'
             },
             restrict: 'E',
-            templateUrl: 'components/loginApp/templates/oathLogin.template.html',
+            templateUrl: 'components/loginApp/oathLogin/oathLogin.template.html',
             controller: 'OathLoginDrvController',
             bindToController: true,
             controllerAs: 'vm'

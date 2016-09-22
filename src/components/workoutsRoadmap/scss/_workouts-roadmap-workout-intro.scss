@@ -223,6 +223,15 @@
                     }
                 }
             }
+
+            .avail-time-item-wrapper[disabled="disabled"] {
+                opacity: 0.3;
+                .avail-time-item {
+                    svg-icon {
+                        display: none;
+                    }
+                }
+            }
         }
 
         .start-btn-wrapper {
