@@ -10,6 +10,7 @@ angular.module('demo', ['znk.infra-web-app.loginApp'])
             .preferredLanguage('en');
     })
     .run(function ($rootScope, $translate) {
+
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
         })

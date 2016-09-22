@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document) {
+        function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
@@ -22,11 +22,13 @@
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
+                    var invitationKey = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
 
                     scope.currentUserContext = 'student';
                     scope.currentForm = 'signup';
+
 
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
@@ -54,7 +56,7 @@
                     };
 
                     var search = $location.search();
-                    if (!angular.equals(search, {}) && (search.app || search.state)) {
+                    if (!!((!angular.equals(search, {}) || invitationKey) && (search.app || search.state || search.userType || invitationKey))) {
                         if (search.app) {
                             angular.forEach(LoginAppSrv.APPS, function (app, index) {
                                 if (index.toLowerCase() === search.app.toLowerCase()) {
@@ -62,18 +64,23 @@
                                 }
                             });
                         }
-                        if (search.state) {
-                            scope.changeCurrentForm(search.state);
-                            if (search.userType) {
-                                if (search.userType === 'educator') {
-                                    scope.changeUserContext(scope.d.userContextObj.TEACHER);
-                                } else {
-                                    scope.changeUserContext(scope.d.userContextObj.STUDENT);
-                                }
+
+                        if (invitationKey && invitationKey !== null) {
+                            scope.d.invitationId = invitationKey;
+                        }
+
+                        if (search.userType) {
+                            if (search.userType === 'educator') {
+                                scope.changeUserContext(scope.d.userContextObj.TEACHER);
+                            } else {
+                                scope.changeUserContext(scope.d.userContextObj.STUDENT);
                             }
                         }
-                        // $location.search('app', null);
-                        // $location.search('state', null);
+
+                        if (search.state) {
+                            scope.changeCurrentForm(search.state);
+                        }
+
                     }
 
                     //catching $mdMenuOpen event emitted from angular-material.js

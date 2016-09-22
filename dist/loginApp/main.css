@@ -135,6 +135,10 @@ login-app {
         text-align: center;
         position: absolute;
         left: calc(50% - 90px); }
+        login-app .login-app > header .app-select.no-dropdown {
+          left: 50%;
+          transform: translateX(-50%);
+          top: 28px; }
         login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
         login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
           background-color: #dddddd; }
@@ -181,6 +185,13 @@ login-app {
         margin: 0;
         bottom: 40px;
         left: 40px; }
+        login-app .login-app .main .main-inner h2.banner-text .invitation-title {
+          font-size: 33px;
+          color: #ffffff;
+          font-family: "Source Sans Pro";
+          font-weight: 400; }
+          login-app .login-app .main .main-inner h2.banner-text .invitation-title .second-row {
+            font-size: 50px; }
       login-app .login-app .main img.main-banner {
         min-height: 513px;
         min-width: 1366px; }
