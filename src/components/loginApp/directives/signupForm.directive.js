@@ -22,18 +22,25 @@
                         userContextObj: LoginAppSrv.USER_CONTEXT
                     };
 
-                    scope.signupSubmit = function(signupForm){
+                    scope.signupSubmit = function (signupForm) {
                         if (signupForm.$invalid) {
                             return;
                         }
                         showSpinner();
                         scope.d.disableBtn = true;
                         LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData)
-                            .then(function(){
+                            .then(function () {
                                 hideSpinner();
                                 scope.d.disableBtn = false;
                             })
-                            .catch(function(err){
+                            .catch(function (err) {
+                                if (err.code === 'EMAIL_TAKEN') {
+                                    console.log(signupForm.email);
+                                    signupForm.email.$setValidity("EmailTaken", false);
+                                }
+                                // if (err.code === "EMAIL_TAKEN" ) {
+                                //     scope.d.emailIsTaken = true;
+                                // }
                                 hideSpinner();
                                 scope.d.disableBtn = false;
                                 $log.error(err);
