@@ -25,7 +25,6 @@
             var search = $location.search();
             var iid = search.iid;
             if (angular.isDefined(iid) && iid !== null) {
-                $location.search('iid', null);
                 InvitationKeyService.saveInvitationKey(iid);
             }
             //     var authObj = AuthService.getAuth();
