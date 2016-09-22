@@ -2473,7 +2473,7 @@ login-app {
           top: 28px; }
         login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
         login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
-          background-color: #dddddd; }
+          background-color: #ffffff; }
         login-app .login-app > header .app-select md-menu > button {
           width: 175px;
           height: auto;
@@ -2499,12 +2499,10 @@ login-app {
       login-app .login-app > header .for-educators {
         float: right;
         margin-top: 12px;
+        font-size: 16px;
         cursor: pointer;
         border-radius: 15px;
-        border: 1px solid;
         padding: 5px 8px; }
-        login-app .login-app > header .for-educators:hover {
-          text-decoration: underline; }
     login-app .login-app .main {
       position: relative;
       padding: 0; }
@@ -2545,11 +2543,11 @@ login-app {
     login-app .login-app.sat .app-bg {
       background: #0a9bad; }
       login-app .login-app.sat .app-bg:hover {
-        background: #088E9E; }
+        background: #088190; }
     login-app .login-app.sat .app-color {
       color: #0a9bad; }
       login-app .login-app.sat .app-color:hover {
-        color: #088E9E; }
+        color: #088190; }
     login-app .login-app.act .app-bg {
       background: #87ca4d; }
       login-app .login-app.act .app-bg:hover {
