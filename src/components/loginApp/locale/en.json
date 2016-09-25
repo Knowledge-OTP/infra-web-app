@@ -20,6 +20,10 @@
             "PASSWORD_TOO_LONG": "Password is too long, must be between 6-25 characters"
         }
     },
+    "CHANGE_PASSOWRD_FORM": {
+        "BACK_TO_LOGIN": "Back to Login",
+        "RESET_PASSWORD": "Reset Password"
+    },
     "LOGIN_FORM": {
         "LOGIN": "Login",
         "LOGIN_IN": "Log In",

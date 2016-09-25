@@ -13,13 +13,15 @@
                 restrict: 'E',
                 scope: {
                     appContext: '<',
-                    userContext: '<'
+                    userContext: '<',
+                    changePasswordClick: '&'
                 },
                 link: function (scope) {
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,
-                        userContextObj: LoginAppSrv.USER_CONTEXT
+                        userContextObj: LoginAppSrv.USER_CONTEXT,
+                        changePassword: false
                     };
 
                     scope.loginSubmit = function(loginForm) {
@@ -71,6 +73,10 @@
                                         });
                                 }
                             });
+                    };
+
+                    scope.replaceToChangePassword = function () {
+                        scope.d.changePassword = !scope.d.changePassword;
                     };
 
                     function showSpinner() {

@@ -198,7 +198,8 @@ login-app {
             }
 
             .login-container,
-            .signup-container {
+            .signup-container,
+            .change-password-container {
                 position: absolute;
                 top: 35px;
                 right: 135px;
@@ -215,6 +216,24 @@ login-app {
                 a {
                     text-decoration: underline;
                     cursor: pointer;
+                }
+            }
+            .back-to-login-btn {
+                display: flex;
+                cursor: pointer;
+                margin-top: 10px;
+                margin-left: -12px;
+                .back-btn-icon {
+                    width: 15px;
+                    display: block;
+                    transform: rotate(90deg);
+                    svg * {
+                        stroke: $fontColor3;
+                    }
+                }
+                .back-btn-label {
+                    margin-left: 10px;
+                    @include text-style(16px, $fontColor3, Lato, $regularFontWeight);
                 }
             }
         }
@@ -275,13 +294,9 @@ login-app {
         ;
             .title {
                 text-align: center;
+                @include text-style(25px, $fontColor3, "Source Sans Pro", $regularFontWeight);
                 padding: {
                     bottom: 15px;
-                }
-                color: $fontColor2;
-                font: {
-                    weight: $lightFontWeight;
-                    size: 25px;
                 }
             }
 
@@ -427,6 +442,9 @@ login-app {
             }
 
             .forgot-pwd-wrapper {
+                .app-color {
+                    cursor: pointer;
+                }
                 margin: {
                     top: 10px;
                     bottom: 5px;
