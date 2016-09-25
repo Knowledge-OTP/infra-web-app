@@ -134,11 +134,12 @@ md-dialog.purchase-popup {
                 cursor: pointer;
                 @include text-style(20px, $fontColor1, Lato, normal);
                 &:not([disabled]).success {
-                    background-color: #76b63e;
+                    background-color: $bgColor14;
+                    &.drop-shadow {
+                        box-shadow: 0 3px 0 0 $bgColor15;
+                    }
                 }
-                .success.drop-shadow {
-                    box-shadow: 0px 3px 0px 0px #72ab40;
-                }
+
             }
         }
 
