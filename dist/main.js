@@ -3822,7 +3822,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 var svgMap = {
-                    'close-popup': 'components/feedback/svg/close-popup.svg',
+                    'feedback-close-popup': 'components/feedback/svg/close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
                     'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg'
                 };
@@ -3996,7 +3996,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "        </div>\n" +
     "        <div class=\"popup-header\">\n" +
     "            <div class=\"close-popup-wrap\" ng-click=\"vm.cancel();\">\n" +
-    "                <svg-icon name=\"close-popup\"></svg-icon>\n" +
+    "                <svg-icon name=\"feedback-close-popup\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <md-dialog-content>\n" +
