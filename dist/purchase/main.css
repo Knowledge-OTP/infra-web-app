@@ -2,6 +2,12 @@
 /*background*/
 /* box shadow */
 /* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
 purchase-btn form img {
   display: block; }
 
@@ -56,138 +62,133 @@ purchase-btn .upgraded .text {
   line-height: 25px;
   display: inline-block; }
 
-/* full background image with retina */
-/* full background image with retina */
-/* fonts size */
-/* general */
-/* paths */
-/* general */
-.purchase-popup {
+md-dialog.purchase-popup {
   width: 585px;
   overflow: visible;
-  background: none; }
-  .purchase-popup form {
+  background: none;
+  border-radius: 15px; }
+  md-dialog.purchase-popup form {
     overflow: visible; }
-  .purchase-popup .close-popup-wrap {
+  md-dialog.purchase-popup .close-popup-wrap {
     position: absolute;
     top: -35px;
     right: -35px;
-    height: 24px;
-    width: 24px;
+    height: 14px;
+    width: 14px;
     padding: 0;
     margin: 10px;
     cursor: pointer; }
-    .purchase-popup .close-popup-wrap svg line {
-      stroke: white; }
-  .purchase-popup .popup-header {
+  md-dialog.purchase-popup .popup-header {
     position: relative;
     height: 40px;
     background-color: #0a9bad;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px; }
-    .purchase-popup .popup-header .raccoon {
+    md-dialog.purchase-popup .popup-header .raccoon {
       width: 75px;
       height: 75px;
       border-radius: 50%;
       margin: 0 auto;
       position: relative;
       bottom: 17.5px;
-      background-color: #0a9bad;
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: center;
-          justify-content: center;
-      -ms-flex-align: center;
-          align-items: center; }
-      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
+      background-color: #0a9bad; }
+      md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon {
         width: 45px;
-        height: 45px; }
-        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
+        height: 45px;
+        margin: 0 auto;
+        display: block;
+        padding-top: 20px; }
+        md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon * {
           fill: white; }
-  .purchase-popup .md-dialog-content {
+  md-dialog.purchase-popup .md-dialog-content {
     padding: 20px 20px 60px;
     background-color: white;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px; }
-    .purchase-popup .md-dialog-content h2 {
+    md-dialog.purchase-popup .md-dialog-content h2 {
       font-size: 25px;
       color: #161616;
       font-family: Quicksand;
       font-weight: 700;
       text-align: center;
-      font-size: 25px;
-      color: #161616;
-      font-family: Quicksand;
-      font-weight: 700;
-      text-align: center;
-      margin: 15px 0 10px;
       margin: 15px 0 10px; }
-      .purchase-popup .md-dialog-content h2 .pro {
+      md-dialog.purchase-popup .md-dialog-content h2 .pro {
         font-size: 20px;
         padding: 2px 7px; }
-    .purchase-popup .md-dialog-content p {
+      md-dialog.purchase-popup .md-dialog-content h2 .pill {
+        background-color: #87ca4d;
+        color: #ffffff;
+        border-radius: 20px; }
+    md-dialog.purchase-popup .md-dialog-content p {
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
-      font-weight: 200;
+      font-weight: 300;
       text-align: center; }
-    .purchase-popup .md-dialog-content .features-box {
+    md-dialog.purchase-popup .md-dialog-content .features-box {
       width: 300px;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #E4E0E0; }
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-4-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-5-icon svg {
+      background-color: #f9f9f9; }
+      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon,
+      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon,
+      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon,
+      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-4-icon,
+      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-5-icon {
         width: 26px;
-        height: auto;
         max-height: 50px; }
-      .purchase-popup .md-dialog-content .features-box ul {
+      md-dialog.purchase-popup .md-dialog-content .features-box ul {
         padding: 0;
         margin: 0;
         list-style: none; }
-        .purchase-popup .md-dialog-content .features-box ul li {
+        md-dialog.purchase-popup .md-dialog-content .features-box ul li {
           font-size: 18px;
           color: #4f4d4d;
           font-family: Quicksand;
           font-weight: normal;
-          font-size: 18px;
-          color: #4f4d4d;
-          font-family: Quicksand;
-          font-weight: normal;
-          line-height: 50px;
           line-height: 50px; }
-          .purchase-popup .md-dialog-content .features-box ul li .bullet {
+          md-dialog.purchase-popup .md-dialog-content .features-box ul li .bullet {
             float: left;
             margin-right: 30px;
             top: 8px;
             position: relative; }
-    .purchase-popup .md-dialog-content .price {
+    md-dialog.purchase-popup .md-dialog-content .price {
       font-size: 16px;
       color: #757a83;
       font-family: Lato;
-      font-weight: lighter;
+      font-weight: normal;
       text-align: center;
       margin-bottom: 15px; }
-      .purchase-popup .md-dialog-content .price b {
+      md-dialog.purchase-popup .md-dialog-content .price b {
         font-size: 20px;
         color: #4f4d4d;
         font-family: Lato;
         font-weight: normal;
         margin: 0 10px 0 15px; }
-    .purchase-popup .md-dialog-content .action .md-button {
+    md-dialog.purchase-popup .md-dialog-content .action .md-button {
       width: 300px;
       margin: 0 auto;
+      text-transform: none;
+      height: 42px;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      border-radius: 21px;
+      position: relative;
+      cursor: pointer;
       font-size: 20px;
       color: white;
       font-family: Lato;
       font-weight: normal; }
-    .purchase-popup .md-dialog-content .upgraded-container {
+      md-dialog.purchase-popup .md-dialog-content .action .md-button:not([disabled]).success {
+        background-color: #76b63e; }
+        md-dialog.purchase-popup .md-dialog-content .action .md-button:not([disabled]).success.drop-shadow {
+          box-shadow: 0 3px 0 0 #72ab40; }
+    md-dialog.purchase-popup .md-dialog-content .upgraded-container {
       text-align: center;
       font-size: 16px;
-      color: #757a83;
+      color: #4f4d4d;
       font-family: Lato;
       font-weight: 400;
       display: -ms-flexbox;
@@ -197,11 +198,8 @@ purchase-btn .upgraded .text {
       -ms-flex-align: center;
           align-items: center;
       text-align: center; }
-      .purchase-popup .md-dialog-content .upgraded-container svg-icon {
+      md-dialog.purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;
         margin-top: 2px; }
-  .purchase-popup .pill {
-    background-color: #87ca4d;
-    color: white;
-    padding: 5px 15px;
-    border-radius: 20px; }
+    md-dialog.purchase-popup .md-dialog-content .base-border-radius {
+      border-radius: 15px; }

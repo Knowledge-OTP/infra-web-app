@@ -1,9 +1,10 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.purchase').controller('PurchaseDialogController',['$mdDialog', 'purchaseService','PurchaseStateEnum',
+    angular.module('znk.infra-web-app.purchase')
+        .controller('PurchaseDialogController',
         function($mdDialog, purchaseService, PurchaseStateEnum) {
-
+            'ngInject';
             var self = this;
 
             self.purchaseStateEnum = PurchaseStateEnum;
@@ -33,7 +34,7 @@
             });
 
             this.close = function () {
-                $mdDialog.hide();
+                $mdDialog.cancel();
             };
-        }]);
+        });
 })(angular);
