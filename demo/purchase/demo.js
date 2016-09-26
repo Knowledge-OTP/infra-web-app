@@ -1,10 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('demo',
-        [
-            'znk.infra-web-app.purchase'
-        ])
+    angular.module('demo', ['znk.infra-web-app.purchase'])
         .constant('ENV', {
             firebaseAppScopeName: "sat_app",
             fbDataEndPoint: "https://sat-dev.firebaseio.com/",

@@ -4,6 +4,7 @@
     angular.module('znk.infra-web-app.purchase',
         [
             'ngAnimate',
+            'ui.router',
             'ngMaterial',
             'pascalprecht.translate',
             'znk.infra.svgIcon',
