@@ -22,7 +22,8 @@
     },
     "CHANGE_PASSOWRD_FORM": {
         "BACK_TO_LOGIN": "Back to Login",
-        "RESET_PASSWORD": "Reset Password"
+        "RESET_PASSWORD": "Reset Password",
+        "SEND": "Send"
     },
     "LOGIN_FORM": {
         "LOGIN": "Login",
