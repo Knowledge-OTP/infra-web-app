@@ -7,6 +7,7 @@
         'znk.infra.svgIcon',
         'ngMaterial',
         'satellizer',
+        'znk.infra.popUp',
         'znk.infra.general'
     ]).config([
         'SvgIconSrvProvider',

@@ -104,7 +104,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
+        this.$get = function (PopUpSrv, $q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -143,15 +143,15 @@
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _getUserProfile(appContext, userContext){
+            function _getUserProfile(appContext, userContext) {
                 var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
-                userProfileRef.on('value', function(snapshot) {
+                userProfileRef.on('value', function (snapshot) {
                     var userProfile = snapshot.val() || {};
                     deferred.resolve(userProfile);
-                }, function(err) {
+                }, function (err) {
                     $log.error('LoginAppSrv _getUserProfile: err=' + err);
                     deferred.reject(err);
                 });
@@ -164,16 +164,16 @@
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
                 if (customProfileFlag) {
-                    profile = { profile: formData };
+                    profile = {profile: formData};
                 } else {
-                    profile =  {
+                    profile = {
                         profile: {
                             email: formData.email,
                             nickname: formData.nickname
                         }
                     };
                 }
-                return userProfileRef.update(profile).catch(function(err){
+                return userProfileRef.update(profile).catch(function (err) {
                     $log.error(err);
                 });
             }
@@ -194,13 +194,13 @@
                 var invitationKey = InvitationKeyService.getInvitationKey();
                 var invitationPostFix = '';
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                        invitationPostFix = '#?iid=' + invitationKey;
+                    invitationPostFix = '#?iid=' + invitationKey;
                 }
                 $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
-                return refDB.authWithCustomToken(token).catch(function(error) {
+                return refDB.authWithCustomToken(token).catch(function (error) {
                     $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
                 });
             };
@@ -235,9 +235,9 @@
             LoginAppSrv.writeUserProfile = _writeUserProfile;
             LoginAppSrv.redirectToPage = _redirectToPage;
 
-            LoginAppSrv.setSocialProvidersConfig = function(providers, appContent) {
+            LoginAppSrv.setSocialProvidersConfig = function (providers, appContent) {
                 var env = _getAppEnvConfig(appContent);
-                angular.forEach(providers, function(provider) {
+                angular.forEach(providers, function (provider) {
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
                     if (providerConfig) {
                         providerConfig.clientId = env[provider + 'AppId'];
@@ -247,6 +247,23 @@
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
                     }
                 });
+            };
+
+            LoginAppSrv.resetPassword = function (appId, email, userContext) {
+                var globalRef = _getGlobalRef(appId, userContext);
+                return globalRef.resetPassword({
+                    email: email
+                }, function (error) {
+                    if (error === null) {
+                        $log.debug('Reset email was sent');
+                    } else {
+                        $log.debug('Email was not sent', error);
+                    }
+                }).then(function (res) {
+                    return res;
+                }).catch(function (error) {
+                    return error;
+                })
             };
 
             /**
@@ -317,7 +334,7 @@
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext, userContext).then(function(){
+                            return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
                         });
