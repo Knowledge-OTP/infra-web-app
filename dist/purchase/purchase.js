@@ -2,7 +2,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase',
-        ['ngAnimate',
+        [
+            'ngAnimate',
             'ngMaterial',
             'pascalprecht.translate',
             'znk.infra.svgIcon',
@@ -18,14 +19,14 @@
             function(SvgIconSrvProvider){
 
                 var svgMap = {
-                    'purchase-check-mark': 'components/purchase/svg/check-mark-icon.svg',
-                    'purchase-close-popup': 'components/purchase/svg/close-popup.svg',
+                    'check-mark': 'components/purchase/svg/check-mark-icon.svg',
+                    'close-popup': 'components/purchase/svg/close-popup.svg',
                     'purchase-popup-bullet-1-icon': 'components/purchase/svg/purchase-popup-bullet-1-icon.svg',
                     'purchase-popup-bullet-2-icon': 'components/purchase/svg/purchase-popup-bullet-2-icon.svg',
                     'purchase-popup-bullet-3-icon': 'components/purchase/svg/purchase-popup-bullet-3-icon.svg',
                     'purchase-popup-bullet-4-icon': 'components/purchase/svg/purchase-popup-bullet-4-icon.svg',
                     'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg',
-                    'purchase-raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
+                    'raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -35,9 +36,125 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.purchase').controller('PurchaseDialogController',['$mdDialog', 'purchaseService','PurchaseStateEnum',
-        function($mdDialog, purchaseService, PurchaseStateEnum) {
+    angular.module('znk.infra-web-app.purchase')
+        .component('purchaseBtn', {
+            bindings: {
+                purchaseState: '='
+            },
+            templateUrl:  'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
+            controllerAs: 'vm',
+            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
+                                  $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
+                'ngInject';
 
+                $translatePartialLoader.addPart('purchase');
+
+                var vm = this;
+
+                vm.showForm = false;
+                vm.translate = $filter('translate');
+
+                vm.saveAnalytics = function () {
+                    vm.purchaseState = PurchaseStateEnum.PENDING.enum;
+                    znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
+
+                };
+
+                $scope.$watch('vm.purchaseState', function (newPurchaseState) {
+                    if (angular.isUndefined(newPurchaseState)) {
+                        return;
+                    }
+
+                    if (newPurchaseState === PurchaseStateEnum.NONE.enum) {
+                        buildForm();
+                    }
+
+                    if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
+                        $q.when(purchaseService.getUpgradeData()).then(function (res) {
+                            /**
+                             * TODO: currently the createdTime doesn't exist in this object, need to add to firebase
+                             */
+                            if (res){
+                                vm.upgradeDate = $filter('date')(res.creationTime, 'mediumDate');
+                            }
+                        });
+                    }
+                });
+
+                function buildForm() {
+                    $q.all([AuthService.getAuth(), purchaseService.getProduct()]).then(function (results) {
+                        var userEmail = results[0].auth.email;
+                        var userId = results[0].auth.uid;
+                        var productId = results[1].id;
+
+                        if (userEmail && userId) {
+                            vm.userEmail = userEmail;
+                            vm.hostedButtonId = ENV.purchasePaypalParams.hostedButtonId;
+                            vm.custom = userId + '#' + productId + '#' + ENV.fbDataEndPoint + '#' + ENV.firebaseAppScopeName;  // userId#productId#dataEndPoint#appName
+                            vm.returnUrlSuccess = buildReturnUrl('purchaseSuccess', '1');
+                            vm.returnUrlFailed = buildReturnUrl('purchaseSuccess', '0');
+                            vm.formAction = trustSrc(ENV.purchasePaypalParams.formAction);
+                            vm.btnImgSrc = trustSrc(ENV.purchasePaypalParams.btnImgSrc);
+                            vm.pixelGifSrc = trustSrc(ENV.purchasePaypalParams.pixelGifSrc);
+                            vm.showForm = true;
+                        } else {
+                            /**
+                             * if case of failure
+                             * TODO: Add atatus notification
+                             */
+                            $log.error('Invalid user attributes: userId or userEmail are not defined, cannot build purchase form');
+                        }
+                    });
+                }
+
+                vm.showPurchaseError = function () {
+                    purchaseService.hidePurchaseDialog().then(function () {
+                        purchaseService.showPurchaseError();
+                    });
+                };
+
+                function buildReturnUrl(param, val) {
+                    return $location.absUrl().split('?')[0] + addUrlParam($location.search(), param, val);
+                }
+
+                // http://stackoverflow.com/questions/21292114/external-resource-not-being-loaded-by-angularjs
+                // in order to use src and action attributes that link to external url's,
+                // you should whitelist them
+                function trustSrc(src) {
+                    return $sce.trustAsResourceUrl(src);
+                }
+
+                function addUrlParam(searchObj, key, val) {
+                    var search = '';
+                    if (!angular.equals(searchObj, {})) {
+                        search = '?';
+                        // parse the search attribute as a string
+                        angular.forEach(searchObj, function (v, k) {
+                            search += k + '=' + v;
+                        });
+                    }
+
+                    var newParam = key + '=' + val,
+                        urlParams = '?' + newParam;
+                    if (search) {
+                        urlParams = search.replace(new RegExp('[\?&]' + key + '[^&]*'), '$1' + newParam);
+                        if (urlParams === search) {
+                            urlParams += '&' + newParam;
+                        }
+                    }
+                    return urlParams;
+                }
+            }]
+        });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.purchase')
+        .controller('PurchaseDialogController',
+        ["$mdDialog", "purchaseService", "PurchaseStateEnum", function($mdDialog, purchaseService, PurchaseStateEnum) {
+            'ngInject';
             var self = this;
 
             self.purchaseStateEnum = PurchaseStateEnum;
@@ -67,152 +184,9 @@
             });
 
             this.close = function () {
-                $mdDialog.hide();
+                $mdDialog.cancel();
             };
         }]);
-})(angular);
-
-/**
- * attrs:
- */
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.purchase').directive('openPurchaseDialogOnClick',
-        ["purchaseService", function (purchaseService) {
-            'ngInject';
-            return {
-                restrict: 'A',
-                controller: ["$element", function($element) {
-                    $element.on('click', function() {
-                        purchaseService.showPurchaseDialog();
-                    });
-
-                    $element.on('$destroy', function(){
-                        $element.off('click');
-                    });
-                }]
-            };
-        }]
-    );
-})(angular);
-
-/**
- * attrs:
- */
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.purchase').directive('purchaseBtn',
-        ["ENV", "$q", "$sce", "AuthService", "UserProfileService", "$location", "purchaseService", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function (ENV, $q, $sce, AuthService, UserProfileService, $location, purchaseService, $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
-            'ngInject';
-
-            return {
-                templateUrl:  'components/purchase/templates/purchaseBtn.template.html',
-                restrict: 'E',
-                scope: {
-                    purchaseState: '='
-                },
-                link: function (scope) {
-                    $translatePartialLoader.addPart('purchase');
-
-                    scope.vm = {};
-
-                    scope.vm.translate = $filter('translate');
-
-                    scope.vm.saveAnalytics = function () {
-                        znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
-                    };
-
-                    scope.$watch('purchaseState', function (newPurchaseState) {
-                        if (angular.isUndefined(newPurchaseState)) {
-                            return;
-                        }
-
-                        if (newPurchaseState === PurchaseStateEnum.NONE.enum) {
-                            buildForm();
-                        }
-
-                        if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
-                            purchaseService.getUpgradeData().then(function (resp) {
-                                /**
-                                 * TODO: currently the createdTime doesn't exist in this object, need to add to firebase
-                                 */
-                                scope.vm.upgradeDate = $filter('date')(resp.creationTime, 'mediumDate');
-                            });
-                        }
-                    });
-
-                    function buildForm() {
-                        $q.all([UserProfileService.getProfile(), purchaseService.getProduct()]).then(function (results) {
-                            var userEmail = results[0].email;
-                            //var userId = AuthService.getAuth().uid;
-                            var userId;
-                            var productId = results[1].id;
-
-                            if (userEmail && userId) {
-                                scope.vm.userEmail = userEmail;
-                                scope.vm.hostedButtonId = ENV.purchasePaypalParams.hostedButtonId;
-                                scope.vm.custom = userId + '#' + productId + '#' + ENV.fbDataEndPoint + '#' + ENV.firebaseAppScopeName;  // userId#productId#dataEndPoint#appName
-                                scope.vm.returnUrlSuccess = buildReturnUrl('purchaseSuccess', '1');
-                                scope.vm.returnUrlFailed = buildReturnUrl('purchaseSuccess', '0');
-                                scope.vm.formAction = trustSrc(ENV.purchasePaypalParams.formAction);
-                                scope.vm.btnImgSrc = trustSrc(ENV.purchasePaypalParams.btnImgSrc);
-                                scope.vm.pixelGifSrc = trustSrc(ENV.purchasePaypalParams.pixelGifSrc);
-                                scope.vm.showForm = true;
-                            } else {
-                                /**
-                                 * if case of failure
-                                 * TODO: Add atatus notification
-                                 */
-                                $log.error('Invalid user attributes: userId or userEmail are not defined, cannot build purchase form');
-                                scope.vm.showPurchaseError = function () {
-                                    purchaseService.hidePurchaseDialog().then(function () {
-                                        purchaseService.showPurchaseError();
-                                    });
-                                };
-                            }
-                        });
-                    }
-
-                    function buildReturnUrl(param, val) {
-                        return $location.absUrl().split('?')[0] + addUrlParam($location.search(), param, val);
-                    }
-
-                    // http://stackoverflow.com/questions/21292114/external-resource-not-being-loaded-by-angularjs
-                    // in order to use src and action attributes that link to external url's,
-                    // you should whitelist them
-                    function trustSrc(src) {
-                        return $sce.trustAsResourceUrl(src);
-                    }
-
-                    function addUrlParam(searchObj, key, val) {
-                        var search = '';
-                        if (!angular.equals(searchObj, {})) {
-                            search = '?';
-                            // parse the search attribute as a string
-                            angular.forEach(searchObj, function (v, k) {
-                                search += k + '=' + v;
-                            });
-                        }
-
-                        var newParam = key + '=' + val,
-                            urlParams = '?' + newParam;
-                        if (search) {
-                            urlParams = search.replace(new RegExp('[\?&]' + key + '[^&]*'), '$1' + newParam);
-                            if (urlParams === search) {
-                                urlParams += '&' + newParam;
-                            }
-                        }
-                        return urlParams;
-                    }
-                }
-
-            };
-        }]
-    );
 })(angular);
 
 (function (angular) {
@@ -456,6 +430,67 @@
 
 
 angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
+    "<ng-switch on=\"vm.purchaseState\">\n" +
+    "\n" +
+    "    <div ng-switch-when=\"pending\">\n" +
+    "        <div class=\"upgraded flex-container\">\n" +
+    "            <div class=\"flex-item\">\n" +
+    "                <div class=\"pending\">\n" +
+    "                    <md-progress-circular md-mode=\"indeterminate\" md-diameter=\"45\"></md-progress-circular>\n" +
+    "                    <span class=\"text\" translate=\".UPGRADE_PENDING\"></span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div ng-switch-when=\"pro\">\n" +
+    "        <div class=\"upgraded flex-container\">\n" +
+    "            <div class=\"flex-item\">\n" +
+    "                <div class=\"icon-wrapper completed\">\n" +
+    "                    <svg-icon name=\"check-mark\"></svg-icon>\n" +
+    "                </div>\n" +
+    "                <span class=\"text\" translate=\".UPGRADED_ON\" translate-values=\"{upgradeDate: vm.upgradeDate}\"></span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div ng-switch-when=\"none\">\n" +
+    "        <ng-switch on=\"vm.showForm\">\n" +
+    "            <div ng-switch-when=\"true\">\n" +
+    "                <form\n" +
+    "                    action=\"{{::vm.formAction}}\"\n" +
+    "                    method=\"post\"\n" +
+    "                    target=\"_top\">\n" +
+    "                    <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n" +
+    "                    <input type=\"hidden\" name=\"hosted_button_id\" ng-value=\"::vm.hostedButtonId\">\n" +
+    "                    <input type=\"hidden\" name=\"custom\" ng-value=\"::vm.custom\">\n" +
+    "                    <input type=\"hidden\" name=\"return\" ng-value=\"::vm.returnUrlSuccess\">\n" +
+    "                    <input type=\"hidden\" name=\"cancel_return\" ng-value=\"::vm.returnUrlFailed\">\n" +
+    "                    <input type=\"hidden\" name=\"landing_page\" value=\"billing\">\n" +
+    "                    <input type=\"hidden\" name=\"email\" ng-value=\"::vm.userEmail\">\n" +
+    "                    <div class=\"upgrade-btn-wrapper\">\n" +
+    "                        <button class=\"md-button success drop-shadow inline-block\"\n" +
+    "                                ng-click=\"vm.saveAnalytics()\"\n" +
+    "                                translate=\".UPGRADE_NOW\"\n" +
+    "                                name=\"submit\">\n" +
+    "                        </button>\n" +
+    "                    </div>\n" +
+    "                    <!--<input type=\"image\" src=\"{{vm.btnImgSrc}}\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">-->\n" +
+    "                    <img border=\"0\" ng-src=\"{{::vm.pixelGifSrc}}\" width=\"1\" height=\"1\" alt=\"{{vm.translate('PURCHASE_POPUP.PAYPAL_IMG_ALT')}}\" >\n" +
+    "                </form>\n" +
+    "            </div>\n" +
+    "            <div class=\"upgrade-btn-wrapper\" ng-switch-default>\n" +
+    "                <button class=\"md-button success drop-shadow\"\n" +
+    "                        ng-click=\"vm.showPurchaseError()\"\n" +
+    "                        translate=\".UPGRADE_NOW\"\n" +
+    "                        name=\"submit\">\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </ng-switch>\n" +
+    "    </div>\n" +
+    "</ng-switch>\n" +
+    "");
   $templateCache.put("components/purchase/svg/check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -480,18 +515,13 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "</svg>\n" +
     "");
   $templateCache.put("components/purchase/svg/close-popup.svg",
-    "<svg\n" +
-    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"-596.6 492.3 133.2 133.5\"\n" +
-    "    class=\"close-popup\">\n" +
-    "    <style>\n" +
-    "\n" +
-    "        .close-popup .st0{fill:none;}\n" +
-    "        .close-popup .st1{fill:none;stroke:$bgColor3;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-    "\n" +
-    "    </style>\n" +
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
     "<path class=\"st0\"/>\n" +
     "<g>\n" +
     "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
@@ -734,81 +764,15 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    </g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/purchase/templates/purchaseBtn.template.html",
-    "<ng-switch on=\"purchaseState\" translate-namespace=\"PURCHASE_POPUP\">\n" +
-    "\n" +
-    "    <div ng-switch-when=\"pending\">\n" +
-    "\n" +
-    "        <div class=\"upgraded flex-container\" >\n" +
-    "            <div class=\"flex-item\">\n" +
-    "                <div class=\"pending\">\n" +
-    "                    <md-progress-circular md-mode=\"indeterminate\" md-diameter=\"45\"></md-progress-circular>\n" +
-    "                    <span class=\"text\" translate=\".UPGRADE_PENDING\"></span>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
-    "    <div ng-switch-when=\"pro\">\n" +
-    "\n" +
-    "        <div class=\"upgraded flex-container\">\n" +
-    "            <div class=\"flex-item\">\n" +
-    "                <div class=\"icon-wrapper completed\">\n" +
-    "                    <svg-icon name=\"purchase-check-mark\"></svg-icon>\n" +
-    "                </div>\n" +
-    "                <span class=\"text\" translate=\".UPGRADED_ON\" translate-values=\"{upgradeDate: vm.upgradeDate}\"></span>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
-    "    <div ng-switch-when=\"none\">\n" +
-    "\n" +
-    "        <ng-switch on=\"vm.showForm\">\n" +
-    "            <div ng-switch-when=\"true\">\n" +
-    "                <form\n" +
-    "                    action=\"{{::vm.formAction}}\"\n" +
-    "                    method=\"post\"\n" +
-    "                    target=\"_top\">\n" +
-    "                    <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n" +
-    "                    <input type=\"hidden\" name=\"hosted_button_id\" ng-value=\"::vm.hostedButtonId\">\n" +
-    "                    <input type=\"hidden\" name=\"custom\" ng-value=\"::vm.custom\">\n" +
-    "                    <input type=\"hidden\" name=\"return\" ng-value=\"::vm.returnUrlSuccess\">\n" +
-    "                    <input type=\"hidden\" name=\"cancel_return\" ng-value=\"::vm.returnUrlFailed\">\n" +
-    "                    <input type=\"hidden\" name=\"landing_page\" value=\"billing\">\n" +
-    "                    <input type=\"hidden\" name=\"email\" ng-value=\"::vm.userEmail\">\n" +
-    "                    <div class=\"upgrade-btn-wrapper\">\n" +
-    "                        <button class=\"md-button success drop-shadow inline-block\"\n" +
-    "                                ng-click=\"vm.saveAnalytics()\"\n" +
-    "                                translate=\".UPGRADE_NOW\"\n" +
-    "                                name=\"submit\">\n" +
-    "                        </button>\n" +
-    "                    </div>\n" +
-    "                    <input type=\"image\" src=\"{{vm.btnImgSrc}}\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">\n" +
-    "                    <img border=\"0\" ng-src=\"{{::vm.pixelGifSrc}}\" width=\"1\" height=\"1\" alt=\"{{vm.translate('PURCHASE_POPUP.PAYPAL_IMG_ALT')}}\" >\n" +
-    "                </form>\n" +
-    "            </div>\n" +
-    "            <div ng-switch-default>\n" +
-    "                <button ng-click=\"vm.showPurchaseError()\"\n" +
-    "                        class=\"md-button success drop-shadow\"\n" +
-    "                        translate=\".UPGRADE_NOW\"\n" +
-    "                        name=\"submit\">\n" +
-    "                </button>\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </ng-switch>\n" +
-    "\n" +
-    "    </div>\n" +
-    "</ng-switch>\n" +
-    "");
   $templateCache.put("components/purchase/templates/purchasePopup.template.html",
     "<md-dialog class=\"purchase-popup base-border-radius\" aria-label=\"Get Zinkerz\" translate-namespace=\"PURCHASE_POPUP\">\n" +
     "    <div class=\"purchase-popup-container\">\n" +
     "        <div class=\"popup-header\">\n" +
     "            <div class=\"raccoon\">\n" +
-    "                <svg-icon name=\"purchase-raccoon-logo-icon\"></svg-icon>\n" +
+    "                <svg-icon name=\"raccoon-logo-icon\"></svg-icon>\n" +
     "            </div>\n" +
     "            <div class=\"close-popup-wrap\">\n" +
-    "                <svg-icon name=\"purchase-close-popup\" ng-click=\"vm.close()\"></svg-icon>\n" +
+    "                <svg-icon name=\"close-popup\" ng-click=\"vm.close()\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <md-dialog-content>\n" +
@@ -852,7 +816,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                        </li>\n" +
     "                    </ul>\n" +
     "                </div>\n" +
-    "                <div class=\"price ng-hide\" ng-show=\"vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
+    "                <div class=\"price\" ng-show=\"vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
     "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
     "                    <b>{{'$' + vm.productPrice}}</b>\n" +
     "                    <span translate=\".SAVE\" translate-values='{ percent: vm.productDiscountPercentage}'></span>\n" +
