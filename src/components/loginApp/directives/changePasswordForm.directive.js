@@ -5,11 +5,11 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('changePasswordForm',
+    angular.module('znk.infra-web-app.loginApp').directive('resetPasswordForm',
         function (LoginAppSrv, $timeout) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/changePasswordForm.directive.html',
+                templateUrl: 'components/loginApp/templates/resetPasswordForm.directive.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',

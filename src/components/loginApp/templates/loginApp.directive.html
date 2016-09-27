@@ -80,9 +80,9 @@
                 </div>
 
                 <div class="change-password-container" ng-switch-when="changePassword">
-                    <change-password-form app-context="d.appContext" user-context="d.userContext" back-to-login="changeCurrentForm('login')">
+                    <reset-password-form app-context="d.appContext" user-context="d.userContext" back-to-login="changeCurrentForm('login')">
 
-                    </change-password-form>
+                    </reset-password-form>
                     <a class="back-to-login-btn" ng-click="changeCurrentForm('login')">
                         <svg-icon name="dropdown-arrow" class="back-btn-icon"></svg-icon>
                         <span class="back-btn-label" translate="CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN"></span>
