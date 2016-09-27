@@ -263,7 +263,7 @@
                     return res;
                 }).catch(function (error) {
                     return error;
-                })
+                });
             };
 
             /**

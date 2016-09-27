@@ -38,9 +38,9 @@
                                         changePasswordForm.email.$setValidity("noSuchEmail", false);
                                     }
                                 }
-                            })
+                            });
                         });
-                    }
+                    };
                 }
             };
         }
