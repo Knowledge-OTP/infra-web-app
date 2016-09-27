@@ -45,12 +45,15 @@
                 padding: 0;
                 &.sat {
                     background-image: url('/assets/images/sat-name@2x.png');
+                    width: 88px;
                 }
                 &.act {
                     background-image: url('/assets/images/act-name@2x.png');
+                    width: 95px;
                 }
                 &.toefl {
                     background-image: url('/assets/images/toefl-name@2x.png');
+                    width: 126px;
                 }
             }
         }

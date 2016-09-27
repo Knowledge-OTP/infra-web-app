@@ -2,10 +2,10 @@
     <div class="purchase-popup-container">
         <div class="popup-header">
             <div class="raccoon">
-                <svg-icon name="purchase-raccoon-logo-icon"></svg-icon>
+                <svg-icon name="raccoon-logo-icon"></svg-icon>
             </div>
             <div class="close-popup-wrap">
-                <svg-icon name="purchase-close-popup" ng-click="vm.close()"></svg-icon>
+                <svg-icon name="close-popup" ng-click="vm.close()"></svg-icon>
             </div>
         </div>
         <md-dialog-content>
@@ -49,7 +49,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="price ng-hide" ng-show="vm.purchaseState === vm.purchaseStateEnum.NONE.enum">
+                <div class="price" ng-show="vm.purchaseState === vm.purchaseStateEnum.NONE.enum">
                     <del>{{'$' + vm.productPreviousPrice}}</del>
                     <b>{{'$' + vm.productPrice}}</b>
                     <span translate=".SAVE" translate-values='{ percent: vm.productDiscountPercentage}'></span>

@@ -248,7 +248,7 @@ login-app {
         text-align: center;
         padding-bottom: 15px;
         color: #161616;
-        font-weight: 200;
+        font-weight: 300;
         font-size: 25px; }
       login-app .login-app .form-container .inputs-container .input-wrapper {
         position: relative;
@@ -312,19 +312,19 @@ login-app {
           color: #161616; }
           login-app .login-app .form-container .inputs-container .input-wrapper input ::-webkit-input-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input :-moz-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input ::-moz-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input :-ms-input-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
       login-app .login-app .form-container .submit-btn-wrapper {
         text-align: center; }
@@ -365,7 +365,7 @@ login-app {
         margin-bottom: 5px;
         text-align: right;
         color: #757a83;
-        font-weight: 200;
+        font-weight: 300;
         font-size: 14px;
         font-family: 'SourceSansPro-Light'; }
       login-app .login-app .form-container .general-error {
@@ -392,7 +392,7 @@ login-app {
           padding-right: 15px;
           padding-left: 15px;
           color: #c2c2c2;
-          font-weight: 200;
+          font-weight: 300;
           font-size: 14px; }
       login-app .login-app .form-container.signup .signup-disclaimer {
         text-align: center;
