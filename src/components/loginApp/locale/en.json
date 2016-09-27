@@ -17,7 +17,8 @@
         "FORM_VALIDATION": {
             "FIELD_IS_EMPTY": "Required field is empty",
             "PASSWORD_TOO_SHORT": "Password is too short, must be between 6-25 characters",
-            "PASSWORD_TOO_LONG": "Password is too long, must be between 6-25 characters"
+            "PASSWORD_TOO_LONG": "Password is too long, must be between 6-25 characters",
+            "EMAIL_TAKEN": "Email is already taken, please choose another"
         }
     },
     "LOGIN_FORM": {

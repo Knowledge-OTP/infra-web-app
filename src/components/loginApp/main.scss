@@ -328,6 +328,9 @@ login-app {
                                 bottom: -20px;
                                 left: 13px;
                             }
+                            &.email-exist-massage {
+                                top: -55px;
+                            }
                         }
                     }
                     &.valid {

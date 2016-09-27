@@ -14,39 +14,39 @@
         <div translate=".OR" class="text"></div>
     </div>
     <form novalidate
-          name="signupform"
-          ng-submit="signupSubmit(signupform)">
+          name="signupForm"
+          ng-submit="signupSubmit(signupForm)">
         <div class="inputs-container">
-            <div class="input-wrapper" ng-class="signupform.nickname.$invalid && signupform.$submitted ? 'invalid' : 'valid'">
+            <div class="input-wrapper" ng-class="signupForm.nickname.$invalid && signupForm.$submitted ? 'invalid' : 'valid'">
                 <svg-icon name="login-username-icon"></svg-icon>
                 <input type="text"
                        placeholder="{{'SIGNUP_FORM.NAME' | translate}}"
                        name="nickname"
                        ng-model="d.signupFormData.nickname"
                        required>
-                <span ng-if="signupform.$submitted && signupform.nickname.$invalid && !signupform.nickname.$dirty"
+                <span ng-if="signupForm.$submitted && signupForm.nickname.$invalid && !signupForm.nickname.$dirty"
                       role="alert">
                     <span class="validationBox">
-                        <span ng-show="signupform.nickname.$error.required" translate="LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY"></span>
+                        <span ng-show="signupForm.nickname.$error.required" translate="LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY"></span>
                     </span>
                 </span>
             </div>
-            <div class="input-wrapper" ng-class="signupform.email.$invalid && signupform.$submitted ? 'invalid' : 'valid'">
+            <div class="input-wrapper" ng-class="signupForm.email.$invalid && signupForm.$submitted ? 'invalid' : 'valid'">
                 <svg-icon name="form-envelope"></svg-icon>
                 <input type="email"
                        placeholder="{{'SIGNUP_FORM.EMAIL' | translate}}"
                        name="email"
                        ng-model="d.signupFormData.email"
                        required>
-                <span ng-if="signupform.$submitted && signupform.email.$invalid && !signupform.email.$dirty"
-                      role="alert">
+                <span ng-if="(signupForm.$submitted && signupForm.email.$invalid && !signupForm.email.$dirty) ||
+                (signupForm.$submitted && signupForm.email.$error)" role="alert">
                     <span class="validationBox">
-                        <span ng-show="signupform.email.$error.required" translate="LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY"></span>
-                        <span ng-show="signupForm.email.$error.EmailTaken">Email is taken</span>
+                        <span ng-show="signupForm.email.$error.required" translate="LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY"></span>
+                        <span class="email-exist-massage" ng-show="signupForm.email.$error.emailTaken" translate="LOGIN_APP.FORM_VALIDATION.EMAIL_TAKEN"></span>
                     </span>
                 </span>
             </div>
-            <div class="input-wrapper" ng-class="signupform.password.$invalid && signupform.$submitted ? 'invalid' : 'valid'">
+            <div class="input-wrapper" ng-class="signupForm.password.$invalid && signupForm.$submitted ? 'invalid' : 'valid'">
                 <svg-icon name="form-lock"></svg-icon>
                 <input type="password"
                        placeholder="{{'SIGNUP_FORM.PASSWORD' | translate}}"
@@ -56,12 +56,12 @@
                        ng-maxlength="25"
                        autocomplete="off"
                        required>
-                <span ng-if="signupform.$submitted && signupform.password.$invalid"
+                <span ng-if="signupForm.$submitted && signupForm.password.$invalid"
                       role="alert">
                     <span class="validationBox">
-                        <span ng-show="signupform.password.$error.minlength" translate="LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT"></span>
-                        <span ng-show="signupform.password.$error.maxlength" translate="LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG"></span>
-                        <span ng-show="signupform.password.$error.required" translate="LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY"></span>
+                        <span ng-show="signupForm.password.$error.minlength" translate="LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT"></span>
+                        <span ng-show="signupForm.password.$error.maxlength" translate="LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG"></span>
+                        <span ng-show="signupForm.password.$error.required" translate="LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY"></span>
                     </span>
                 </span>
             </div>

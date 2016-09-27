@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        function (LoginAppSrv, $log) {
+        function (LoginAppSrv, $log, $timeout) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
@@ -25,6 +25,7 @@
                     };
 
                     scope.signupSubmit = function (signupForm) {
+                        signupForm.email.$setValidity("emailTaken", true);
                         if (signupForm.$invalid) {
                             return;
                         }
@@ -36,13 +37,12 @@
                                 scope.d.disableBtn = false;
                             })
                             .catch(function (err) {
-                                if (err.code === 'EMAIL_TAKEN') {
-                                    console.log(signupForm.email);
-                                    signupForm.email.$setValidity("EmailTaken", false);
-                                }
-                                // if (err.code === "EMAIL_TAKEN" ) {
-                                //     scope.d.emailIsTaken = true;
-                                // }
+                                $timeout(function () {
+                                    if (err.code === 'EMAIL_TAKEN') {
+                                        console.log(signupForm.email);
+                                        signupForm.email.$setValidity("emailTaken", false);
+                                    }
+                                });
                                 hideSpinner();
                                 scope.d.disableBtn = false;
                                 $log.error(err);
