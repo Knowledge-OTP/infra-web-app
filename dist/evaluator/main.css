@@ -42,7 +42,8 @@
   -ms-flex-pack: center;
       justify-content: center;
   width: 100%;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23); }
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23);
+  margin-top: -23px; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase {
     display: -ms-flexbox;
     display: flex;
@@ -80,7 +81,7 @@
       font-size: 12px;
       color: #757a83;
       font-family: Lato;
-      font-weight: 200; }
+      font-weight: 300; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated {
     display: -ms-flexbox;
     display: flex;

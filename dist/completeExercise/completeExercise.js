@@ -1180,6 +1180,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                 ng-click=\"$ctrl.goToSummary()\"\n" +
     "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete\">\n" +
     "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
+    "                <div class=\"background-opacity\"></div>\n" +
     "            </div>\n" +
     "        </pre-right-part>\n" +
     "    </complete-exercise-header>\n" +

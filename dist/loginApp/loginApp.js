@@ -263,7 +263,9 @@
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,
-                        userContextObj: LoginAppSrv.USER_CONTEXT
+                        userContextObj: LoginAppSrv.USER_CONTEXT,
+                        termsOfUseHref: '//www.zinkerz.com/terms-of-use/',
+                        privacyPolicyHref: '//www.zinkerz.com/privacy-policy/'
                     };
 
                     scope.signupSubmit = function(signupForm){
@@ -1155,7 +1157,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </button>\n" +
     "        </div>\n" +
     "        <p class=\"signup-disclaimer\"\n" +
-    "           translate-values=\"{termsOfUseHref: vm.termsOfUseHref, privacyPolicyHref: vm.privacyPolicyHref}\"\n" +
+    "           translate-values=\"{termsOfUseHref: d.termsOfUseHref, privacyPolicyHref: d.privacyPolicyHref}\"\n" +
     "           translate=\".DISCLAIMER\"></p>\n" +
     "\n" +
     "        <p class=\"general-error\">{{d.signupError}}</p>\n" +

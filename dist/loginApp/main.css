@@ -28,7 +28,7 @@ oath-login-drv .btn-wrap {
       font-size: 14px; }
   oath-login-drv .btn-wrap .facebook-btn {
     background-color: #369;
-    line-height: 37px; }
+    line-height: 32px; }
     oath-login-drv .btn-wrap .facebook-btn:hover {
       background-color: #2a547f; }
     oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
@@ -39,7 +39,7 @@ oath-login-drv .btn-wrap {
         fill: #ffffff; }
   oath-login-drv .btn-wrap .gplus-btn {
     background-color: #df4a31;
-    line-height: 37px; }
+    line-height: 32px; }
     oath-login-drv .btn-wrap .gplus-btn:hover {
       background-color: #c5402a; }
     oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
@@ -89,11 +89,14 @@ oath-login-drv .btn-wrap {
       background-size: contain;
       padding: 0; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
-        background-image: url("/assets/images/sat-name@2x.png"); }
+        background-image: url("/assets/images/sat-name@2x.png");
+        width: 88px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
-        background-image: url("/assets/images/act-name@2x.png"); }
+        background-image: url("/assets/images/act-name@2x.png");
+        width: 95px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
-        background-image: url("/assets/images/toefl-name@2x.png"); }
+        background-image: url("/assets/images/toefl-name@2x.png");
+        width: 126px; }
 
 login-app {
   transition: all 0.5s; }

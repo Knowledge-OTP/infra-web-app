@@ -219,12 +219,12 @@ md-menu-content.md-menu-content-invitation-manager {
         font-size: 10px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .declined-your-invitation-text, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .declined-your-invitation-text {
         font-size: 14px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
@@ -319,7 +319,7 @@ md-menu-content.md-menu-content-invitation-manager {
       text-transform: capitalize;
       line-height: 25px; }
     md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-email {
-      font-weight: 200;
+      font-weight: 300;
       color: #acacac; }
     md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher {
       height: 12px;
@@ -394,7 +394,7 @@ md-dialog.invite-teacher-modal-wrap {
         font-size: 12px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
       width: 138px;
       margin: 0 auto; }
