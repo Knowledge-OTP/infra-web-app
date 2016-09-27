@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="change-password-container" ng-switch-when="changePassword">
-                    <change-password-form app-context="d.appContext" user-context="d.userContext">
+                    <change-password-form app-context="d.appContext" user-context="d.userContext" back-to-login="changeCurrentForm('login')">
 
                     </change-password-form>
                     <a class="back-to-login-btn" ng-click="changeCurrentForm('login')">

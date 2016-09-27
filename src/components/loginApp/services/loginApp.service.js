@@ -104,7 +104,7 @@
             env = newEnv;
         };
 
-        this.$get = function (PopUpSrv, $q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
             'ngInject';
 
             var LoginAppSrv = {};

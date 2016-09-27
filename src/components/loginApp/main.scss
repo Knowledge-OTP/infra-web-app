@@ -293,16 +293,18 @@ login-app {
             }
         ;
             .success-massage {
+                text-align: center;
                 .v-icon-wrapper {
-                    width: 45px;
-                    height: 45px;
+                    width: 31px;
+                    height: 31px;
                     background-color: $bgColor59;
                     border-radius: 50%;
+                    padding: 7px;
                     margin: auto;
                 }
                 .massage-text {
                     @include text-style(12px, $fontColor3, Quicksand, $regularFontWeight);
-                    margin-top: 20px;
+                    margin: 20px auto;
                 }
             }
             .title {
@@ -355,6 +357,9 @@ login-app {
                                 }
                                 bottom: -20px;
                                 left: 13px;
+                            }
+                            &.no-email-massage {
+                                top: -58px;
                             }
                         }
                     }
