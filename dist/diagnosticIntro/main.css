@@ -32,7 +32,7 @@ diagnostic-intro {
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
-      font-weight: 200; }
+      font-weight: 300; }
     diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
       position: relative; }
       diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
@@ -126,6 +126,6 @@ diagnostic-intro {
           font-size: 16px;
           color: #4f4d4d;
           font-family: Lato;
-          font-weight: 200;
+          font-weight: 300;
           margin-top: 5px;
           min-height: 38px; }

@@ -146,7 +146,7 @@ workout-intro-lock {
       margin-top: 16px; }
     workout-intro-lock .lock-overlay-container .no-pro-social-sharing .text2 {
       font-size: 14px;
-      font-weight: 200;
+      font-weight: 300;
       margin-top: 12px; }
     workout-intro-lock .lock-overlay-container .no-pro-social-sharing .share-btn {
       margin-top: 15px;
@@ -173,7 +173,7 @@ workout-intro-lock {
         margin-top: 30px; }
       workout-intro-lock .lock-overlay-container .no-pro-social-sharing .get-zinkerz-pro-text, workout-intro-lock .lock-overlay-container .no-pro .get-zinkerz-pro-text {
         font-size: 16px;
-        font-weight: 200;
+        font-weight: 300;
         line-height: 30px; }
 
 .workouts-roadmap-container {
@@ -302,7 +302,7 @@ workout-intro-lock {
         font-size: 26.5px;
         color: #4f4d4d;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
         .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper .score {
           display: inline-block;
           text-transform: capitalize;
@@ -336,7 +336,7 @@ workout-intro-lock {
       animation: rotateAnimation 0.9s infinite linear; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .change-subject-container .change-subject-title {
       font-family: Lato;
-      font-weight: 200;
+      font-weight: 300;
       font-size: 12px; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .how-much-time-title {
     margin-top: 28px;
