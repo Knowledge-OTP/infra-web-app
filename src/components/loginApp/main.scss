@@ -135,7 +135,7 @@ login-app {
                     }
                 }
                 .app-img-holder {
-                    width: calc(175px / 2);
+                    width: 120px;
                     height: calc(55px / 2);
                     background-repeat: no-repeat;
                     background-size: contain;
@@ -148,7 +148,6 @@ login-app {
                     }
                     &.toefl {
                         background-image: url('/assets/images/toefl-name@2x.png');
-                        width: 120px;
                     }
                 }
                 .expand-menu {
