@@ -23,7 +23,9 @@
     "CHANGE_PASSOWRD_FORM": {
         "BACK_TO_LOGIN": "Back to Login",
         "RESET_PASSWORD": "Reset Password",
-        "SEND": "Send"
+        "SEND": "Send",
+        "NEW_PASSWORD_SENT": "A new password has been sent to your email address.",
+        "DONE": "Done"
     },
     "LOGIN_FORM": {
         "LOGIN": "Login",

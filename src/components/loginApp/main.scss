@@ -292,6 +292,19 @@ login-app {
                 top: 25px;
             }
         ;
+            .success-massage {
+                .v-icon-wrapper {
+                    width: 45px;
+                    height: 45px;
+                    background-color: $bgColor59;
+                    border-radius: 50%;
+                    margin: auto;
+                }
+                .massage-text {
+                    @include text-style(12px, $fontColor3, Quicksand, $regularFontWeight);
+                    margin-top: 20px;
+                }
+            }
             .title {
                 text-align: center;
                 @include text-style(25px, $fontColor3, "Source Sans Pro", $regularFontWeight);

@@ -15,7 +15,7 @@
                     appContext: '<',
                     userContext: '<'
                 },
-                link: function (scope) {
+                link: function (scope, $timeout) {
                     scope.resetPasswordSucceeded = false;
                     scope.passwordSubmit = function (changePasswordForm) {
                         if (changePasswordForm.$invalid) {
