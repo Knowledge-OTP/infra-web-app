@@ -1,4 +1,5 @@
 $oathLoginDrvHeight: 37px;
+$oathLoginDrvLineHeight: 32px;
 $facebookColor : #369;
 $facebookHoverColor : #2a547f;
 $gplusColor : #df4a31;
@@ -28,7 +29,7 @@ oath-login-drv {
 
         .facebook-btn {
             background-color: $facebookColor;
-            line-height: $oathLoginDrvHeight;
+            line-height: $oathLoginDrvLineHeight;
             &:hover {
                 background-color: $facebookHoverColor;
             }
@@ -44,7 +45,7 @@ oath-login-drv {
 
         .gplus-btn {
             background-color: $gplusColor;
-            line-height: $oathLoginDrvHeight;
+            line-height: $oathLoginDrvLineHeight;
             &:hover {
                 background-color: $gplusHoverColor;
             }
