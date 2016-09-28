@@ -128,10 +128,12 @@ md-dialog.setting-change-password {
     width: 100%;
     height: 40px; }
     md-dialog.setting-change-password .top-icon-wrap .top-icon {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-pack: center;
-          justify-content: center; }
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center; }
       md-dialog.setting-change-password .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -139,12 +141,15 @@ md-dialog.setting-change-password {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-pack: center;
-            justify-content: center;
-        -ms-flex-align: center;
-            align-items: center; }
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center; }
         md-dialog.setting-change-password .top-icon-wrap .top-icon .round-icon-wrap .settings-change-password-icon {
           width: 35px;
           stroke: #ffffff; }
@@ -159,6 +164,7 @@ md-dialog.setting-change-password {
     font-weight: 400;
     width: 342px;
     margin: 0 auto;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     margin-top: 10px;
@@ -168,10 +174,12 @@ md-dialog.setting-change-password {
       visibility: visible;
       width: 100%;
       height: 22px;
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-align: center;
-          align-items: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
       padding: 6px 0 6px 5px;
       font-size: 14px;
       color: #ff6766;
@@ -195,7 +203,9 @@ md-dialog.setting-change-password {
     margin-top: 20px; }
   md-dialog.setting-change-password .big-success-msg .done-btn-wrap {
     margin-top: 120px;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-pack: center;
-        justify-content: center; }
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
