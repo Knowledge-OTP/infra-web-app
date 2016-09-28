@@ -21,6 +21,14 @@
             "EMAIL_TAKEN": "Email is already taken, please choose another"
         }
     },
+    "CHANGE_PASSOWRD_FORM": {
+        "BACK_TO_LOGIN": "Back to Login",
+        "RESET_PASSWORD": "Reset Password",
+        "SEND": "Send",
+        "NEW_PASSWORD_SENT": "A new password has been sent to your email address.",
+        "DONE": "Done",
+        "NO_SUCH_EMAIL": "We don’t recognize that email. Did you use another one to sign up?"
+    },
     "LOGIN_FORM": {
         "LOGIN": "Login",
         "LOGIN_IN": "Log In",

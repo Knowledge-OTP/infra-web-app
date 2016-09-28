@@ -66,7 +66,7 @@ tags-input auto-complete ti-autocomplete-match .list-title {
   font-size: 12px;
   color: #757a83;
   font-family: Lato;
-  font-weight: 200;
+  font-weight: 300;
   text-transform: uppercase;
   padding-bottom: 25px; }
   tags-input auto-complete ti-autocomplete-match .list-title .list-left-panel {
@@ -87,13 +87,13 @@ tags-input auto-complete ti-autocomplete-match .left-panel {
     font-size: 12px;
     color: #b7b7b7;
     font-family: Lato;
-    font-weight: 200; }
+    font-weight: 300; }
 
 tags-input auto-complete ti-autocomplete-match .right-panel {
   font-size: 12px;
   color: #757a83;
   font-family: Lato;
-  font-weight: 200;
+  font-weight: 300;
   float: right; }
 
 user-goals {
@@ -157,7 +157,7 @@ user-goals {
       font-size: 16px;
       color: #757a83;
       font-family: Lato;
-      font-weight: 200;
+      font-weight: 300;
       padding-left: 3px; }
     user-goals .selected-schools .school:not(:last-child):after {
       content: ','; }
@@ -464,7 +464,7 @@ md-dialog.setting-edit-goals {
   font-size: 12px;
   color: #757a83;
   font-family: Lato;
-  font-weight: 200;
+  font-weight: 300;
   text-align: center;
   margin-top: 15px;
   cursor: pointer;
@@ -474,6 +474,6 @@ md-dialog.setting-edit-goals {
   font-size: 16px;
   color: #161616;
   font-family: Lato;
-  font-weight: 200;
+  font-weight: 300;
   margin-bottom: 20px;
   text-align: center; }

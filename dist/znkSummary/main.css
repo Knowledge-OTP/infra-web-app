@@ -39,7 +39,7 @@ znk-summary-results {
         font-size: 14px;
         color: #626060;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         position: relative;
         bottom: 2px; }
     znk-summary-results .gauge-row-wrapper .gauge-wrap .chart {
@@ -106,7 +106,7 @@ znk-summary-results {
         font-size: 10px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
 
 znk-summary-timeline .time-line-wrapper {
   background-color: #fafafa; }

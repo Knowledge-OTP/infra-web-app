@@ -45,7 +45,7 @@
     font-size: 16px;
     color: #4f4d4d;
     font-family: Lato;
-    font-weight: 200;
+    font-weight: 300;
     line-height: 24px;
     padding-left: 40px; }
   #faq-container v-accordion v-pane v-pane.is-expanded v-pane-header {
