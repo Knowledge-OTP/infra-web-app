@@ -945,10 +945,14 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;
 
+                    var translateFilter = $filter('translate');
+                    this.subjectNameTranslateKey = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
+                    this.instructionsTranslateKey = translateFilter('COMPLETE_EXERCISE.SECTION_INSTRUCTION.' + exerciseContent.subjectId);
+
                     var timeDurationFilter = $filter('formatTimeDuration');
                     this.timeTranslateValue = {
-                        min: timeDurationFilter(exerciseContent .time, 'mm'),
-                        sec: timeDurationFilter(exerciseContent .time, 'rss')
+                        min: timeDurationFilter(exerciseContent.time, 'mm'),
+                        sec: timeDurationFilter(exerciseContent.time, 'rss')
                     };
 
                     this.start = function(){
@@ -1285,9 +1289,9 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "              suffix=\"icon\"\n" +
     "              class=\"subject-icon\">\n" +
     "    </svg-icon>\n" +
-    "    <div class=\"subject-text\"\n" +
-    "         translate=\"SUBJECTS.{{$ctrl.exerciseContent.subjectId}}\">\n" +
-    "    </div>\n" +
+    "   <div class=\"subject-text\" translate=\"{{$ctrl.subjectNameTranslateKey}}\"></div>\n" +
+    "\n" +
+    "\n" +
     "    <div class=\"section-data\">\n" +
     "        <span translate=\".QUESTIONS\"\n" +
     "              translate-values=\"{num: $ctrl.exerciseContent.questions.length}\">\n" +
@@ -1300,8 +1304,9 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "         translate=\".INSTRUCTIONS\">\n" +
     "    </div>\n" +
     "    <p class=\"instructions-text\"\n" +
-    "       translate=\"SECTION_INSTRUCTION.{{$ctrl.exerciseContent.subjectId}}\">\n" +
+    "       translate=\"{{$ctrl.instructionsTranslateKey}}\">\n" +
     "    </p>\n" +
+    "\n" +
     "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk\"\n" +
     "                   md-no-ink\n" +
@@ -1359,7 +1364,6 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
             this.$get = [
                 function () {
                     var webAppInfraConfigSrv = {};
-
                     return webAppInfraConfigSrv;
                 }
             ];
@@ -3820,7 +3824,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 var svgMap = {
-                    'close-popup': 'components/feedback/svg/close-popup.svg',
+                    'feedback-close-popup': 'components/feedback/svg/close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
                     'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg'
                 };
@@ -3994,7 +3998,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "        </div>\n" +
     "        <div class=\"popup-header\">\n" +
     "            <div class=\"close-popup-wrap\" ng-click=\"vm.cancel();\">\n" +
-    "                <svg-icon name=\"close-popup\"></svg-icon>\n" +
+    "                <svg-icon name=\"feedback-close-popup\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <md-dialog-content>\n" +
@@ -5672,7 +5676,9 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 'form-lock': 'components/loginApp/svg/form-lock.svg',
                 'facebook-icon': 'components/loginApp/svg/facebook-icon.svg',
                 'google-icon': 'components/loginApp/svg/google-icon.svg',
-                'login-username-icon': 'components/loginApp/svg/login-username-icon.svg'
+                'login-username-icon': 'components/loginApp/svg/login-username-icon.svg',
+                'dropdown-arrow': 'components/loginApp/svg/dropdown-arrow.svg',
+                'v-icon': 'components/loginApp/svg/v-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -5717,6 +5723,55 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.loginApp').directive('resetPasswordForm',
+        ["LoginAppSrv", "$timeout", function (LoginAppSrv, $timeout) {
+            'ngInject';
+            return {
+                templateUrl: 'components/loginApp/templates/resetPasswordForm.directive.html',
+                restrict: 'E',
+                scope: {
+                    appContext: '<',
+                    userContext: '<',
+                    backToLogin: '&'
+                },
+                link: function (scope) {
+                    scope.resetPasswordSucceeded = false;
+                    scope.showSpinner = false;
+                    scope.passwordSubmit = function (changePasswordForm) {
+                        changePasswordForm.email.$setValidity("noSuchEmail", true);
+                        scope.showSpinner = true;
+                        if (changePasswordForm.$invalid) {
+                            scope.showSpinner = false;
+                            return;
+                        }
+                        LoginAppSrv.resetPassword(scope.appContext.id, changePasswordForm.email.$viewValue, scope.userContext).then(function (resetPasswordSate) {
+                            $timeout(function () {
+                                if (angular.isUndefined(resetPasswordSate)) {
+                                    scope.showSpinner = false;
+                                    scope.resetPasswordSucceeded = true;
+                                } else {
+                                    if (resetPasswordSate.code === 'INVALID_USER') {
+                                        scope.showSpinner = false;
+                                        scope.resetPasswordSucceeded = false;
+                                        changePasswordForm.email.$setValidity("noSuchEmail", false);
+                                    }
+                                }
+                            });
+                        });
+                    };
+                }
+            };
+        }]
+    );
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
         ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
@@ -5730,7 +5785,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         availableApps: LoginAppSrv.APPS,
                         appContext: LoginAppSrv.APPS.SAT,
                         userContextObj: LoginAppSrv.USER_CONTEXT,
-                        userContext: LoginAppSrv.USER_CONTEXT.STUDENT
+                        userContext: LoginAppSrv.USER_CONTEXT.STUDENT,
+                        changePassword: false
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
@@ -5765,6 +5821,11 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     scope.openMenu = function ($mdOpenMenu, ev) {
                         originatorEv = ev;
                         $mdOpenMenu(ev);
+                    };
+
+                    scope.changePasswordClick = function () {
+                        scope.changeCurrentForm('changePassword');
+                        scope.d.changePassword = !scope.d.changePassword;
                     };
 
                     var search = $location.search();
@@ -5825,13 +5886,15 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 restrict: 'E',
                 scope: {
                     appContext: '<',
-                    userContext: '<'
+                    userContext: '<',
+                    changePasswordClick: '&'
                 },
                 link: function (scope) {
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,
-                        userContextObj: LoginAppSrv.USER_CONTEXT
+                        userContextObj: LoginAppSrv.USER_CONTEXT,
+                        changePassword: false
                     };
 
                     scope.loginSubmit = function(loginForm) {
@@ -5885,6 +5948,10 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             });
                     };
 
+                    scope.replaceToChangePassword = function () {
+                        scope.d.changePassword = !scope.d.changePassword;
+                    };
+
                     function showSpinner() {
                         scope.d.showSpinner = true;
                     }
@@ -5906,7 +5973,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
-        ["LoginAppSrv", "$log", function (LoginAppSrv, $log) {
+        ["LoginAppSrv", "$log", "$timeout", function (LoginAppSrv, $log, $timeout) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/signupForm.directive.html',
@@ -5924,18 +5991,25 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         privacyPolicyHref: '//www.zinkerz.com/privacy-policy/'
                     };
 
-                    scope.signupSubmit = function(signupForm){
+                    scope.signupSubmit = function (signupForm) {
+                        signupForm.email.$setValidity("emailTaken", true);
                         if (signupForm.$invalid) {
                             return;
                         }
                         showSpinner();
                         scope.d.disableBtn = true;
                         LoginAppSrv.signup(scope.appContext.id, scope.userContext, scope.d.signupFormData)
-                            .then(function(){
+                            .then(function () {
                                 hideSpinner();
                                 scope.d.disableBtn = false;
                             })
-                            .catch(function(err){
+                            .catch(function (err) {
+                                $timeout(function () {
+                                    if (err.code === 'EMAIL_TAKEN') {
+                                        console.log(signupForm.email);
+                                        signupForm.email.$setValidity("emailTaken", false);
+                                    }
+                                });
                                 hideSpinner();
                                 scope.d.disableBtn = false;
                                 $log.error(err);
@@ -6207,15 +6281,15 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _getUserProfile(appContext, userContext){
+            function _getUserProfile(appContext, userContext) {
                 var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
-                userProfileRef.on('value', function(snapshot) {
+                userProfileRef.on('value', function (snapshot) {
                     var userProfile = snapshot.val() || {};
                     deferred.resolve(userProfile);
-                }, function(err) {
+                }, function (err) {
                     $log.error('LoginAppSrv _getUserProfile: err=' + err);
                     deferred.reject(err);
                 });
@@ -6228,16 +6302,16 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
                 if (customProfileFlag) {
-                    profile = { profile: formData };
+                    profile = {profile: formData};
                 } else {
-                    profile =  {
+                    profile = {
                         profile: {
                             email: formData.email,
                             nickname: formData.nickname
                         }
                     };
                 }
-                return userProfileRef.update(profile).catch(function(err){
+                return userProfileRef.update(profile).catch(function (err) {
                     $log.error(err);
                 });
             }
@@ -6258,13 +6332,13 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 var invitationKey = InvitationKeyService.getInvitationKey();
                 var invitationPostFix = '';
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                        invitationPostFix = '#?iid=' + invitationKey;
+                    invitationPostFix = '#?iid=' + invitationKey;
                 }
                 $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
-                return refDB.authWithCustomToken(token).catch(function(error) {
+                return refDB.authWithCustomToken(token).catch(function (error) {
                     $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
                 });
             };
@@ -6299,9 +6373,9 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             LoginAppSrv.writeUserProfile = _writeUserProfile;
             LoginAppSrv.redirectToPage = _redirectToPage;
 
-            LoginAppSrv.setSocialProvidersConfig = function(providers, appContent) {
+            LoginAppSrv.setSocialProvidersConfig = function (providers, appContent) {
                 var env = _getAppEnvConfig(appContent);
-                angular.forEach(providers, function(provider) {
+                angular.forEach(providers, function (provider) {
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
                     if (providerConfig) {
                         providerConfig.clientId = env[provider + 'AppId'];
@@ -6310,6 +6384,23 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     if (provider === 'facebook') {
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
                     }
+                });
+            };
+
+            LoginAppSrv.resetPassword = function (appId, email, userContext) {
+                var globalRef = _getGlobalRef(appId, userContext);
+                return globalRef.resetPassword({
+                    email: email
+                }, function (error) {
+                    if (error === null) {
+                        $log.debug('Reset email was sent');
+                    } else {
+                        $log.debug('Email was not sent', error);
+                    }
+                }).then(function (res) {
+                    return res;
+                }).catch(function (error) {
+                    return error;
                 });
             };
 
@@ -6381,7 +6472,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext, userContext).then(function(){
+                            return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
                         });
@@ -6427,6 +6518,14 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
     "    </button>\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/dropdown-arrow.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
+    "</svg>\n" +
     "");
   $templateCache.put("components/loginApp/svg/facebook-icon.svg",
     "<svg\n" +
@@ -6544,6 +6643,24 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    </g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/loginApp/svg/v-icon.svg",
+    "<svg class=\"v-icon-wrapper\" x=\"0px\" y=\"0px\" viewBox=\"0 0 334.5 228.7\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .v-icon-wrapper .st0{\n" +
+    "            fill:#ffffff;\n" +
+    "            stroke:#ffffff;\n" +
+    "            stroke-width:26;\n" +
+    "            stroke-linecap:round;\n" +
+    "            stroke-linejoin:round;\n" +
+    "            stroke-miterlimit:10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<line class=\"st0\" x1=\"13\" y1=\"109.9\" x2=\"118.8\" y2=\"215.7\"/>\n" +
+    "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/loginApp/templates/loginApp.directive.html",
     "<div class=\"login-app\" ng-class=\"{\n" +
     "        student: d.userContext === d.userContextObj.STUDENT,\n" +
@@ -6554,7 +6671,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "    }\">\n" +
     "    <header>\n" +
     "        <div class=\"logo-wrapper\">\n" +
-    "            <a class=\"logo\" href=\"//www.zinkerz.com\"></a>\n" +
+    "            <a class=\"logo\" href=\"https://www.zinkerz.com\"></a>\n" +
     "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
     "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
     "            </span>\n" +
@@ -6602,7 +6719,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            <ng-switch on=\"currentForm\">\n" +
     "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
     "                    <login-form app-context=\"d.appContext\"\n" +
-    "                                user-context=\"d.userContext\">\n" +
+    "                                user-context=\"d.userContext\"\n" +
+    "                                change-password-click=\"changePasswordClick()\">\n" +
     "                    </login-form>\n" +
     "                    <p class=\"go-to-signup\">\n" +
     "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
@@ -6623,6 +6741,17 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
     "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
     "                    </p>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"change-password-container\" ng-switch-when=\"changePassword\">\n" +
+    "                    <reset-password-form app-context=\"d.appContext\" user-context=\"d.userContext\"\n" +
+    "                                         back-to-login=\"changeCurrentForm('login')\">\n" +
+    "\n" +
+    "                    </reset-password-form>\n" +
+    "                    <a class=\"back-to-login-btn\" ng-click=\"changeCurrentForm('login')\">\n" +
+    "                        <svg-icon name=\"dropdown-arrow\" class=\"back-btn-icon\"></svg-icon>\n" +
+    "                        <span class=\"back-btn-label\" translate=\"CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN\"></span>\n" +
+    "                    </a>\n" +
     "                </div>\n" +
     "            </ng-switch>\n" +
     "            <h2 class=\"banner-text\">\n" +
@@ -6687,7 +6816,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "          name=\"loginform\"\n" +
     "          ng-submit=\"loginSubmit(loginform)\">\n" +
     "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
     "                <input type=\"email\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
@@ -6697,11 +6827,13 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
     "                      role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"loginform.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span ng-show=\"loginform.email.$error.required\"\n" +
+    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
     "                    </span>\n" +
     "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
@@ -6714,7 +6846,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
     "                      role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"loginform.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span ng-show=\"loginform.password.$error.required\"\n" +
+    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
     "                    </span>\n" +
     "                </span>\n" +
     "            </div>\n" +
@@ -6729,10 +6862,68 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"forgot-pwd-wrapper\">\n" +
-    "            <span class=\"app-color\" translate=\".FORGOT_PWD\"></span>\n" +
+    "            <span class=\"app-color\" translate=\".FORGOT_PWD\" ng-click=\"changePasswordClick()\"></span>\n" +
     "        </div>\n" +
     "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
     "    </form>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/loginApp/templates/resetPasswordForm.directive.html",
+    "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
+    "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
+    "        <form novalidate\n" +
+    "              name=\"changePasswordForm\"\n" +
+    "              ng-submit=\"passwordSubmit(changePasswordForm)\"\n" +
+    "              ng-switch-when=\"false\">\n" +
+    "            <div class=\"inputs-container\">\n" +
+    "                <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
+    "                <div class=\"input-wrapper\"\n" +
+    "                     ng-class=\"changePasswordForm.email.$invalid && changePasswordForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                    <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                    <input type=\"email\"\n" +
+    "                           placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
+    "                           name=\"email\"\n" +
+    "                           ng-model=\"d.changePasswordForm.email\"\n" +
+    "                           required>\n" +
+    "                    <span\n" +
+    "                        ng-if=\"(changePasswordForm.$submitted && changePasswordForm.email.$invalid && !changePasswordForm.email.$dirty) || (changePasswordForm.email.$error && changePasswordForm.$submitted)\"\n" +
+    "                        role=\"alert\">\n" +
+    "            <span class=\"validationBox\">\n" +
+    "                <span ng-show=\"changePasswordForm.email.$error.required\"\n" +
+    "                      translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                <span class=\"no-email-massage\" ng-show=\"changePasswordForm.email.$error.noSuchEmail\"\n" +
+    "                      translate=\".NO_SUCH_EMAIL\"></span>\n" +
+    "            </span>\n" +
+    "        </span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"submit-btn-wrapper\">\n" +
+    "                <button type=\"submit\"\n" +
+    "                        ng-disabled=\"d.disableBtn\"\n" +
+    "                        class=\"app-bg\"\n" +
+    "                        autofocus>\n" +
+    "                    <span translate=\".SEND\"></span>\n" +
+    "                    <span class=\"loader ng-hide\" ng-show=\"showSpinner\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "        <div ng-switch-when=\"true\" class=\"success-massage\">\n" +
+    "            <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
+    "                <svg-icon name=\"v-icon\"></svg-icon>\n" +
+    "            <div class=\"massage-text\" translate=\".NEW_PASSWORD_SENT\"></div>\n" +
+    "            <div class=\"submit-btn-wrapper\">\n" +
+    "                <button ng-disabled=\"d.disableBtn\"\n" +
+    "                        class=\"app-bg\"\n" +
+    "                        ng-click=\"backToLogin()\"\n" +
+    "                        autofocus>\n" +
+    "                    <span translate=\".DONE\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </ng-switch>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/loginApp/templates/signupForm.directive.html",
@@ -6752,38 +6943,39 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <div translate=\".OR\" class=\"text\"></div>\n" +
     "    </div>\n" +
     "    <form novalidate\n" +
-    "          name=\"signupform\"\n" +
-    "          ng-submit=\"signupSubmit(signupform)\">\n" +
+    "          name=\"signupForm\"\n" +
+    "          ng-submit=\"signupSubmit(signupForm)\">\n" +
     "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupform.nickname.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.nickname.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
     "                <input type=\"text\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
     "                       name=\"nickname\"\n" +
     "                       ng-model=\"d.signupFormData.nickname\"\n" +
     "                       required>\n" +
-    "                <span ng-if=\"signupform.$submitted && signupform.nickname.$invalid && !signupform.nickname.$dirty\"\n" +
+    "                <span ng-if=\"signupForm.$submitted && signupForm.nickname.$invalid && !signupForm.nickname.$dirty\"\n" +
     "                      role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupform.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span ng-show=\"signupForm.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
     "                    </span>\n" +
     "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupform.email.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.email.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
     "                <input type=\"email\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
     "                       name=\"email\"\n" +
     "                       ng-model=\"d.signupFormData.email\"\n" +
     "                       required>\n" +
-    "                <span ng-if=\"signupform.$submitted && signupform.email.$invalid && !signupform.email.$dirty\"\n" +
-    "                      role=\"alert\">\n" +
+    "                <span ng-if=\"(signupForm.$submitted && signupForm.email.$invalid && !signupForm.email.$dirty) ||\n" +
+    "                (signupForm.$submitted && signupForm.email.$error)\" role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupform.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span ng-show=\"signupForm.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span class=\"email-exist-massage\" ng-show=\"signupForm.email.$error.emailTaken\" translate=\"LOGIN_APP.FORM_VALIDATION.EMAIL_TAKEN\"></span>\n" +
     "                    </span>\n" +
     "                </span>\n" +
     "            </div>\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupform.password.$invalid && signupform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.password.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
     "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
     "                <input type=\"password\"\n" +
     "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
@@ -6793,12 +6985,12 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                       ng-maxlength=\"25\"\n" +
     "                       autocomplete=\"off\"\n" +
     "                       required>\n" +
-    "                <span ng-if=\"signupform.$submitted && signupform.password.$invalid\"\n" +
+    "                <span ng-if=\"signupForm.$submitted && signupForm.password.$invalid\"\n" +
     "                      role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupform.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
-    "                        <span ng-show=\"signupform.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
-    "                        <span ng-show=\"signupform.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
     "                    </span>\n" +
     "                </span>\n" +
     "            </div>\n" +

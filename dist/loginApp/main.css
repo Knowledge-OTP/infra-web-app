@@ -154,7 +154,7 @@ login-app {
           login-app .login-app > header .app-select md-menu > button:hover {
             box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35); }
         login-app .login-app > header .app-select .app-img-holder {
-          width: calc(175px / 2);
+          width: 120px;
           height: calc(55px / 2);
           background-repeat: no-repeat;
           background-size: contain;
@@ -200,7 +200,8 @@ login-app {
         min-height: 513px;
         min-width: 1366px; }
       login-app .login-app .main .login-container,
-      login-app .login-app .main .signup-container {
+      login-app .login-app .main .signup-container,
+      login-app .login-app .main .change-password-container {
         position: absolute;
         top: 35px;
         right: 135px; }
@@ -214,6 +215,24 @@ login-app {
         login-app .login-app .main .go-to-signup a {
           text-decoration: underline;
           cursor: pointer; }
+      login-app .login-app .main .back-to-login-btn {
+        display: -ms-flexbox;
+        display: flex;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-left: -12px; }
+        login-app .login-app .main .back-to-login-btn .back-btn-icon {
+          width: 15px;
+          display: block;
+          transform: rotate(90deg); }
+          login-app .login-app .main .back-to-login-btn .back-btn-icon svg * {
+            stroke: #4f4d4d; }
+        login-app .login-app .main .back-to-login-btn .back-btn-label {
+          margin-left: 10px;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400; }
     login-app .login-app.sat .app-bg {
       background: #0a9bad; }
       login-app .login-app.sat .app-bg:hover {
@@ -247,12 +266,28 @@ login-app {
       padding-left: 30px;
       padding-bottom: 20px;
       padding-top: 25px; }
+      login-app .login-app .form-container .success-massage {
+        text-align: center; }
+        login-app .login-app .form-container .success-massage .v-icon-wrapper {
+          width: 31px;
+          height: 31px;
+          background-color: #89c650;
+          border-radius: 50%;
+          padding: 7px;
+          margin: auto; }
+        login-app .login-app .form-container .success-massage .massage-text {
+          font-size: 12px;
+          color: #4f4d4d;
+          font-family: Quicksand;
+          font-weight: 400;
+          margin: 20px auto; }
       login-app .login-app .form-container .title {
         text-align: center;
-        padding-bottom: 15px;
-        color: #161616;
-        font-weight: 300;
-        font-size: 25px; }
+        font-size: 25px;
+        color: #4f4d4d;
+        font-family: "Source Sans Pro";
+        font-weight: 400;
+        padding-bottom: 15px; }
       login-app .login-app .form-container .inputs-container .input-wrapper {
         position: relative;
         box-sizing: border-box;
@@ -289,6 +324,10 @@ login-app {
             border-width: 10px;
             bottom: -20px;
             left: 13px; }
+          login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span.email-exist-massage {
+            top: -55px; }
+          login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span.no-email-massage {
+            top: -58px; }
         login-app .login-app .form-container .inputs-container .input-wrapper.valid {
           border-color: #9a9797; }
         login-app .login-app .form-container .inputs-container .input-wrapper.invalid {
@@ -371,6 +410,8 @@ login-app {
         font-weight: 300;
         font-size: 14px;
         font-family: 'SourceSansPro-Light'; }
+        login-app .login-app .form-container .forgot-pwd-wrapper .app-color {
+          cursor: pointer; }
       login-app .login-app .form-container .general-error {
         font-size: 12px;
         color: #ff6766;

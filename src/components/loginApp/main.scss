@@ -135,7 +135,7 @@ login-app {
                     }
                 }
                 .app-img-holder {
-                    width: calc(175px / 2);
+                    width: 120px;
                     height: calc(55px / 2);
                     background-repeat: no-repeat;
                     background-size: contain;
@@ -198,7 +198,8 @@ login-app {
             }
 
             .login-container,
-            .signup-container {
+            .signup-container,
+            .change-password-container {
                 position: absolute;
                 top: 35px;
                 right: 135px;
@@ -215,6 +216,24 @@ login-app {
                 a {
                     text-decoration: underline;
                     cursor: pointer;
+                }
+            }
+            .back-to-login-btn {
+                display: flex;
+                cursor: pointer;
+                margin-top: 10px;
+                margin-left: -12px;
+                .back-btn-icon {
+                    width: 15px;
+                    display: block;
+                    transform: rotate(90deg);
+                    svg * {
+                        stroke: $fontColor3;
+                    }
+                }
+                .back-btn-label {
+                    margin-left: 10px;
+                    @include text-style(16px, $fontColor3, Lato, $regularFontWeight);
                 }
             }
         }
@@ -273,15 +292,26 @@ login-app {
                 top: 25px;
             }
         ;
+            .success-massage {
+                text-align: center;
+                .v-icon-wrapper {
+                    width: 31px;
+                    height: 31px;
+                    background-color: $bgColor59;
+                    border-radius: 50%;
+                    padding: 7px;
+                    margin: auto;
+                }
+                .massage-text {
+                    @include text-style(12px, $fontColor3, Quicksand, $regularFontWeight);
+                    margin: 20px auto;
+                }
+            }
             .title {
                 text-align: center;
+                @include text-style(25px, $fontColor3, "Source Sans Pro", $regularFontWeight);
                 padding: {
                     bottom: 15px;
-                }
-                color: $fontColor2;
-                font: {
-                    weight: $lightFontWeight;
-                    size: 25px;
                 }
             }
 
@@ -327,6 +357,12 @@ login-app {
                                 }
                                 bottom: -20px;
                                 left: 13px;
+                            }
+                            &.email-exist-massage {
+                                top: -55px;
+                            }
+                            &.no-email-massage {
+                                top: -58px;
                             }
                         }
                     }
@@ -427,6 +463,9 @@ login-app {
             }
 
             .forgot-pwd-wrapper {
+                .app-color {
+                    cursor: pointer;
+                }
                 margin: {
                     top: 10px;
                     bottom: 5px;
