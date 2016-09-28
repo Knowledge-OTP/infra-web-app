@@ -7379,12 +7379,9 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
-                        $q.when(purchaseService.getUpgradeData()).then(function (res) {
-                            /**
-                             * TODO: currently the createdTime doesn't exist in this object, need to add to firebase
-                             */
-                            if (res){
-                                vm.upgradeDate = $filter('date')(res.creationTime, 'mediumDate');
+                        $q.when(purchaseService.getUserData()).then(function (userData) {
+                            if (userData.purchase){
+                                vm.upgradeDate = $filter('date')(userData.purchase.creationTime, 'mediumDate');
                             }
                         });
                     }
@@ -7467,24 +7464,9 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             var self = this;
 
             self.purchaseStateEnum = PurchaseStateEnum;
-
-            function _checkIfHasProVersion() {
-                purchaseService.hasProVersion().then(function (hasProVersion) {
-                    self.purchaseState = hasProVersion ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                });
-            }
-
-            var pendingPurchaseProm = purchaseService.getPendingPurchase();
-            if (pendingPurchaseProm) {
-                self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                pendingPurchaseProm.then(function () {
-                    _checkIfHasProVersion();
-                });
-            } else {
-                _checkIfHasProVersion();
-            }
-
-
+            purchaseService.getPurchaseState().then(function (state) {
+                self.purchaseState = state;
+            });
 
             purchaseService.getProduct().then(function (prodObj) {
                 self.productPrice = +prodObj.price;
@@ -7518,15 +7500,9 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window, PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", "PurchaseStateEnum", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
+                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService, PurchaseStateEnum) {
             'ngInject';
-
-            var self = this;
-
-            var studentStorageProm = InfraConfigSrv.getStudentStorage();
-            var pendingPurchaseDefer;
-            var purchaseData = null;
-            var authData = AuthService.getAuth();
 
             function getPurchasePath() {
                 if (!authData) {
@@ -7536,7 +7512,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 var path = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
                 return path.replace('$$uid', '' + authData.uid);
             }
-
             function getPendingPath() {
                 if (!authData) {
                     $log.error('Invalid user');
@@ -7546,8 +7521,20 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 return path.replace('$$uid', '' + authData.uid);
             }
 
+            var self = this;
+
+            var studentStorageProm = InfraConfigSrv.getStudentStorage();
+            var pendingPurchaseDefer;
+            var authData = AuthService.getAuth();
             var purchasePath = getPurchasePath();
             var pendingPurchasesPath = getPendingPath();
+
+            self.getPurchaseState = function () {
+                return self.getUserData().then(function (UserData) {
+                    return UserData.purchase ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                });
+
+            };
 
             self.checkUrlParams = function (params) {
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
@@ -7559,7 +7546,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     }
                     self.showPurchaseDialog();
                 } else {
-                    self.checkPendingStatus();
                 }
             };
 
@@ -7571,13 +7557,15 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             };
 
             self.hasProVersion = function () {
-                var hasProVersion = !!purchaseData;
-                return $q.when(hasProVersion);
+                return self.getUserData().then(function (UserData) {
+                    return UserData.purchase ? true : false;
+                });
             };
 
-            self.getUpgradeData = function () {
+            self.getUserData = function () {
                 return $q.when(studentStorageProm).then(function (studentStorage) {
-                    return studentStorage.get(purchasePath);
+                    var userPath = 'users/' + authData.uid;
+                    return studentStorage.getAndBindToServer(userPath);
                 });
             };
 
@@ -7607,7 +7595,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
-                return $q.all([self.getProduct(), self.purchaseDataExists(), studentStorageProm]).then(function (res) {
+                return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
+                    console.log('setPendingPurchase res ',res );
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
@@ -7645,37 +7634,23 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             };
 
             self.listenToPurchaseStatus = function () {
-                var authData = AuthService.getAuth();
-                if (authData) {
-                    $q.when(studentStorageProm).then(function (studentStorage) {
-                        var currentUID = authData.uid;
-                        var purchaseFullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-                        purchaseFullPath = purchaseFullPath.replace('$$uid', '' + currentUID);
-                        var ref = new Firebase(purchaseFullPath, ENV.firebaseAppScopeName);
-                        ref.on('value', function (dataSnapshot) {
-                            purchaseData = dataSnapshot.val();
+                $q.when(studentStorageProm).then(function (studentStorage) {
+                    self.hasProVersion().then(function (hasPro) {
+                        studentStorage.cleanPathCache(purchasePath);
 
-                            studentStorage.cleanPathCache(purchasePath);
+                        var removeListener = $rootScope.$on('$stateChangeSuccess', function () {
+                            removeListener();
 
                             if ($state.current.name && $state.current.name !== '') {
                                 $state.reload();
-                            } else {
-                                var removeListener = $rootScope.$on('$stateChangeSuccess', function () {
-                                    removeListener();
-
-                                    if ($state.current.name && $state.current.name !== '') {
-                                        $state.reload();
-                                    }
-                                });
-                            }
-
-                            if (purchaseData) {
-                                self.removePendingPurchase();
                             }
                         });
-                    });
 
-                }
+                        if (hasPro) {
+                            self.removePendingPurchase();
+                        }
+                    });
+                });
             };
 
             self.showPurchaseDialog = function () {
