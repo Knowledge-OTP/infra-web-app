@@ -35,16 +35,20 @@
 
 .evaluate-review-states-wrapper {
   min-height: 80px;
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: center;
-      align-items: center;
-  -ms-flex-pack: center;
-      justify-content: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   width: 100%;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23);
   margin-top: -23px; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     margin-top: 15px; }
@@ -62,14 +66,18 @@
       font-family: Quicksand;
       font-weight: 400; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-direction: column;
-        flex-direction: column;
-    -ms-flex-pack: center;
-        justify-content: center;
-    -ms-flex-align: center;
-        align-items: center; }
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center; }
     .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending .pending-title {
       font-size: 18px;
       color: #4f4d4d;
@@ -83,6 +91,7 @@
       font-family: Lato;
       font-weight: 300; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     font-size: 20px;
@@ -92,9 +101,11 @@
     .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluated-answer-title {
       margin-right: 8px; }
     .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; }
       .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-status-wrapper {
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex; }
         .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-status-wrapper .evaluate-text {
@@ -108,19 +119,24 @@
             width: 15px; }
 
 .evaluate-question-result-wrapper {
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: center;
-      align-items: center; }
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
   .evaluate-question-result-wrapper .question-index {
     width: 30px;
     height: 30px;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-align: center;
-        align-items: center;
-    -ms-flex-pack: center;
-        justify-content: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     font-size: 16px;
     color: white;
     font-family: Lato;
@@ -136,15 +152,18 @@
     .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-text div {
       margin-left: 10px; }
   .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-direction: column;
-        flex-direction: column;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
     font-size: 18px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 400; }
     .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-status-wrapper {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; }
       .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-status-wrapper .evaluate-text {
