@@ -216,11 +216,7 @@
             };
 
             LoginAppSrv.APPS = APPS;
-            // Hide TOEFL app in production
-            if (env !== 'dev') {
-                delete LoginAppSrv.APPS.TOEFL;
-            }
-
+            
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
             LoginAppSrv.logout = function (appContext, userContext) {
