@@ -80,7 +80,8 @@
                 </div>
 
                 <div class="change-password-container" ng-switch-when="changePassword">
-                    <reset-password-form app-context="d.appContext" user-context="d.userContext" back-to-login="changeCurrentForm('login')">
+                    <reset-password-form app-context="d.appContext" user-context="d.userContext"
+                                         back-to-login="changeCurrentForm('login')">
 
                     </reset-password-form>
                     <a class="back-to-login-btn" ng-click="changeCurrentForm('login')">
@@ -88,9 +89,6 @@
                         <span class="back-btn-label" translate="CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN"></span>
                     </a>
                 </div>
-                <!--<div class="change-password-container" ng-switch-when="changePassword">-->
-                <!--hello-->
-                <!--</div>-->
             </ng-switch>
             <h2 class="banner-text">
                 <ng-switch on="currentUserContext" ng-if="!d.invitationId">
