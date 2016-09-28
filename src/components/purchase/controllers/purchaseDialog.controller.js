@@ -8,6 +8,7 @@
             var self = this;
 
             self.purchaseStateEnum = PurchaseStateEnum;
+            self.purchaseState = PurchaseStateEnum.NONE.enum;
             purchaseService.getPurchaseState().then(function (state) {
                 self.purchaseState = state;
             });
