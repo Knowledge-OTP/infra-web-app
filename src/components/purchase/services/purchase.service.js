@@ -53,7 +53,7 @@
 
             self.getProduct = function () {
                 var productDataPath = 'iap/desktop/allContent';
-                return $q.when(studentStorageProm).then(function (studentStorage) {
+                return studentStorageProm.then(function (studentStorage) {
                     return studentStorage.get(productDataPath);
                 });
             };
@@ -65,7 +65,7 @@
             };
 
             self.getUserData = function () {
-                return $q.when(studentStorageProm).then(function (studentStorage) {
+                return studentStorageProm.then(function (studentStorage) {
                     var userPath = 'users/' + authData.uid;
                     return studentStorage.getAndBindToServer(userPath);
                 });
@@ -73,7 +73,7 @@
 
             self.purchaseDataExists = function () {
                 if(purchasePath){
-                    return $q.when(studentStorageProm).then(function (studentStorage) {
+                    return studentStorageProm.then(function (studentStorage) {
                         return studentStorage.get(purchasePath).then(function (purchaseObj) {
                             return !angular.equals(purchaseObj, {});
                         });
@@ -84,7 +84,7 @@
             };
 
             self.checkPendingStatus = function () {
-                return $q.when(studentStorageProm).then(function (studentStorage) {
+                return studentStorageProm.then(function (studentStorage) {
                     return studentStorage.get(pendingPurchasesPath).then(function (pendingObj) {
                         var isPending = !angular.equals(pendingObj, {});
                         if (isPending) {
@@ -130,13 +130,13 @@
                 if (pendingPurchaseDefer) {
                     pendingPurchaseDefer.resolve();
                 }
-                $q.when(studentStorageProm).then(function (studentStorage) {
+                studentStorageProm.then(function (studentStorage) {
                     return studentStorage.set(pendingPurchasesPath, null);
                 });
             };
 
             self.listenToPurchaseStatus = function () {
-                $q.when(studentStorageProm).then(function (studentStorage) {
+                studentStorageProm.then(function (studentStorage) {
                     self.hasProVersion().then(function (hasPro) {
                         studentStorage.cleanPathCache(purchasePath);
 
@@ -193,7 +193,7 @@
                     previousPrice: '44.99'
                 };
 
-                $q.when(studentStorageProm).then(function (studentStorage) {
+                studentStorageProm.then(function (studentStorage) {
                     studentStorage.set(path, productData).then(function (resp) {
                         $log.info(resp);
                     }).catch(function (err) {
