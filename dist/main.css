@@ -133,7 +133,7 @@ complete-exercise-exercise .base-complete-exercise-container {
       line-height: 30px;
       padding-right: 10px;
       padding-left: 10px; }
-      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .background {
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .background-opacity {
         background: #ffffff;
         opacity: 0.2;
         height: 100%;
