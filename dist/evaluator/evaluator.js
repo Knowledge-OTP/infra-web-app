@@ -32,10 +32,11 @@
 
             ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
                 'ngInject';
-                return function(question) {
-                   return question.manualEvaluation &&
-                       question.__questionStatus.userAnswer &&
-                       question.__questionStatus.userAnswer !== true;
+                return function(question, skipCheckingUserAnswer) {
+                   return question.manualEvaluation && (
+                           skipCheckingUserAnswer ? true : question.__questionStatus.userAnswer &&
+                           question.__questionStatus.userAnswer !== true
+                       );
                 };
             });
 
