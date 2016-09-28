@@ -199,21 +199,22 @@
                   PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService, PurchaseStateEnum) {
             'ngInject';
 
-            function getPurchasePath() {
+            function getPath(param) {
                 if (!authData) {
                     $log.error('Invalid user');
                     return;
                 }
-                var path = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-                return path.replace('$$uid', '' + authData.uid);
-            }
-            function getPendingPath() {
-                if (!authData) {
-                    $log.error('Invalid user');
-                    return;
+                var path;
+                switch(param) {
+                    case 'purchase':
+                        path = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                        return path.replace('$$uid', '' + authData.uid);
+                    case 'pending':
+                        path = 'pendingPurchases/' + StorageSrv.variables.uid;
+                        return path.replace('$$uid', '' + authData.uid);
+                    default: return;
                 }
-                var path = 'pendingPurchases/' + StorageSrv.variables.uid;
-                return path.replace('$$uid', '' + authData.uid);
+
             }
 
             var self = this;
@@ -221,8 +222,8 @@
             var studentStorageProm = InfraConfigSrv.getStudentStorage();
             var pendingPurchaseDefer;
             var authData = AuthService.getAuth();
-            var purchasePath = getPurchasePath();
-            var pendingPurchasesPath = getPendingPath();
+            var purchasePath = getPath('purchase');
+            var pendingPurchasesPath = getPath('pending');
 
             self.getPurchaseState = function () {
                 return self.purchaseDataExists().then(function (purchaseData) {
