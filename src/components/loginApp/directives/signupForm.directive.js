@@ -19,7 +19,9 @@
 
                     scope.d = {
                         appContext: LoginAppSrv.APPS.SAT,
-                        userContextObj: LoginAppSrv.USER_CONTEXT
+                        userContextObj: LoginAppSrv.USER_CONTEXT,
+                        termsOfUseHref: '//www.zinkerz.com/terms-of-use/',
+                        privacyPolicyHref: '//www.zinkerz.com/privacy-policy/'
                     };
 
                     scope.signupSubmit = function(signupForm){
