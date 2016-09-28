@@ -27,13 +27,25 @@ complete-exercise-exercise{
                 .summary{
                     cursor: pointer;
                     height: 30px;
-                    background: $bgColor54;
                     text-align: center;
                     border-radius: 15px;
                     line-height: 30px;
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+
                     padding: {
                         right: 10px;
                         left: 10px;
+                    }
+
+                    .background-opacity {
+                        background: $bgColor3;
+                        opacity: 0.2;
+                        height: 100%;
+                        position: absolute;
+                        width: 85px;
+                        border-radius: inherit;
                     }
 
                     .summary-text{

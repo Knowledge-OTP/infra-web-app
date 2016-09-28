@@ -45,12 +45,23 @@ complete-exercise-exercise .base-complete-exercise-container {
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary {
       cursor: pointer;
       height: 30px;
-      background: #B33520;
       text-align: center;
       border-radius: 15px;
       line-height: 30px;
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
       padding-right: 10px;
       padding-left: 10px; }
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .background-opacity {
+        background: #ffffff;
+        opacity: 0.2;
+        height: 100%;
+        position: absolute;
+        width: 85px;
+        border-radius: inherit; }
       complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .summary-text {
         font-size: 16px;
         color: #ffffff;

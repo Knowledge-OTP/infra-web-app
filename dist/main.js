@@ -1232,6 +1232,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                 ng-click=\"$ctrl.goToSummary()\"\n" +
     "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete\">\n" +
     "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
+    "                <div class=\"background-opacity\"></div>\n" +
     "            </div>\n" +
     "        </pre-right-part>\n" +
     "    </complete-exercise-header>\n" +
@@ -3196,10 +3197,11 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 
             ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
                 'ngInject';
-                return function(question) {
-                   return question.manualEvaluation &&
-                       question.__questionStatus.userAnswer &&
-                       question.__questionStatus.userAnswer !== true;
+                return function(question, skipCheckingUserAnswer) {
+                   return question.manualEvaluation && (
+                           skipCheckingUserAnswer ? true : question.__questionStatus.userAnswer &&
+                           question.__questionStatus.userAnswer !== true
+                       );
                 };
             });
 
