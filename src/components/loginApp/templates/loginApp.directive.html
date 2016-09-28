@@ -7,7 +7,7 @@
     }">
     <header>
         <div class="logo-wrapper">
-            <a class="logo" href="//www.zinkerz.com"></a>
+            <a class="logo" href="https://www.zinkerz.com"></a>
             <span ng-if="d.userContext===d.userContextObj.TEACHER"
                   translate="LOGIN_APP.FOR_EDUCATORS">
             </span>
@@ -55,7 +55,8 @@
             <ng-switch on="currentForm">
                 <div class="login-container" ng-switch-when="login">
                     <login-form app-context="d.appContext"
-                                user-context="d.userContext">
+                                user-context="d.userContext"
+                                change-password-click="changePasswordClick()">
                     </login-form>
                     <p class="go-to-signup">
                         <span translate="LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT"
@@ -76,6 +77,17 @@
                               ng-if="d.userContext===d.userContextObj.TEACHER"></span>
                         <a ng-click="changeCurrentForm('login')" translate="LOGIN_FORM.LOGIN_IN"></a>
                     </p>
+                </div>
+
+                <div class="change-password-container" ng-switch-when="changePassword">
+                    <reset-password-form app-context="d.appContext" user-context="d.userContext"
+                                         back-to-login="changeCurrentForm('login')">
+
+                    </reset-password-form>
+                    <a class="back-to-login-btn" ng-click="changeCurrentForm('login')">
+                        <svg-icon name="dropdown-arrow" class="back-btn-icon"></svg-icon>
+                        <span class="back-btn-label" translate="CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN"></span>
+                    </a>
                 </div>
             </ng-switch>
             <h2 class="banner-text">

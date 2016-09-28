@@ -128,12 +128,23 @@ complete-exercise-exercise .base-complete-exercise-container {
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary {
       cursor: pointer;
       height: 30px;
-      background: #B33520;
       text-align: center;
       border-radius: 15px;
       line-height: 30px;
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
       padding-right: 10px;
       padding-left: 10px; }
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .background-opacity {
+        background: #ffffff;
+        opacity: 0.2;
+        height: 100%;
+        position: absolute;
+        width: 85px;
+        border-radius: inherit; }
       complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .summary-text {
         font-size: 16px;
         color: #ffffff;
@@ -277,13 +288,18 @@ complete-exercise-intro-section {
       margin-bottom: 100px;
       margin-left: auto;
       width: 550px;
-      overflow: auto; }
+      overflow: auto;
+      text-align: center; }
     complete-exercise-intro-section .intro-container .btn-section {
       position: absolute;
       right: 0;
       bottom: 36px;
       left: 0;
-      text-align: center; }
+      text-align: center;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
       complete-exercise-intro-section .intro-container .btn-section .md-button {
         padding-right: 45px;
         padding-left: 45px; }
@@ -996,7 +1012,8 @@ md-tooltip.tooltip-for-estimated-score-widget {
   -ms-flex-pack: center;
       justify-content: center;
   width: 100%;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23); }
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23);
+  margin-top: -23px; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase {
     display: -ms-flexbox;
     display: flex;
@@ -2360,7 +2377,7 @@ oath-login-drv .btn-wrap {
       font-size: 14px; }
   oath-login-drv .btn-wrap .facebook-btn {
     background-color: #369;
-    line-height: 37px; }
+    line-height: 32px; }
     oath-login-drv .btn-wrap .facebook-btn:hover {
       background-color: #2a547f; }
     oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
@@ -2371,7 +2388,7 @@ oath-login-drv .btn-wrap {
         fill: #ffffff; }
   oath-login-drv .btn-wrap .gplus-btn {
     background-color: #df4a31;
-    line-height: 37px; }
+    line-height: 32px; }
     oath-login-drv .btn-wrap .gplus-btn:hover {
       background-color: #c5402a; }
     oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
@@ -2421,11 +2438,14 @@ oath-login-drv .btn-wrap {
       background-size: contain;
       padding: 0; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
-        background-image: url("/assets/images/sat-name@2x.png"); }
+        background-image: url("/assets/images/sat-name@2x.png");
+        width: 88px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
-        background-image: url("/assets/images/act-name@2x.png"); }
+        background-image: url("/assets/images/act-name@2x.png");
+        width: 95px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
-        background-image: url("/assets/images/toefl-name@2x.png"); }
+        background-image: url("/assets/images/toefl-name@2x.png");
+        width: 126px; }
 
 login-app {
   transition: all 0.5s; }
@@ -2483,7 +2503,7 @@ login-app {
           login-app .login-app > header .app-select md-menu > button:hover {
             box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35); }
         login-app .login-app > header .app-select .app-img-holder {
-          width: calc(175px / 2);
+          width: 120px;
           height: calc(55px / 2);
           background-repeat: no-repeat;
           background-size: contain;
@@ -2529,7 +2549,8 @@ login-app {
         min-height: 513px;
         min-width: 1366px; }
       login-app .login-app .main .login-container,
-      login-app .login-app .main .signup-container {
+      login-app .login-app .main .signup-container,
+      login-app .login-app .main .change-password-container {
         position: absolute;
         top: 35px;
         right: 135px; }
@@ -2543,6 +2564,24 @@ login-app {
         login-app .login-app .main .go-to-signup a {
           text-decoration: underline;
           cursor: pointer; }
+      login-app .login-app .main .back-to-login-btn {
+        display: -ms-flexbox;
+        display: flex;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-left: -12px; }
+        login-app .login-app .main .back-to-login-btn .back-btn-icon {
+          width: 15px;
+          display: block;
+          transform: rotate(90deg); }
+          login-app .login-app .main .back-to-login-btn .back-btn-icon svg * {
+            stroke: #4f4d4d; }
+        login-app .login-app .main .back-to-login-btn .back-btn-label {
+          margin-left: 10px;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400; }
     login-app .login-app.sat .app-bg {
       background: #0a9bad; }
       login-app .login-app.sat .app-bg:hover {
@@ -2576,12 +2615,28 @@ login-app {
       padding-left: 30px;
       padding-bottom: 20px;
       padding-top: 25px; }
+      login-app .login-app .form-container .success-massage {
+        text-align: center; }
+        login-app .login-app .form-container .success-massage .v-icon-wrapper {
+          width: 31px;
+          height: 31px;
+          background-color: #89c650;
+          border-radius: 50%;
+          padding: 7px;
+          margin: auto; }
+        login-app .login-app .form-container .success-massage .massage-text {
+          font-size: 12px;
+          color: #4f4d4d;
+          font-family: Quicksand;
+          font-weight: 400;
+          margin: 20px auto; }
       login-app .login-app .form-container .title {
         text-align: center;
-        padding-bottom: 15px;
-        color: #161616;
-        font-weight: 300;
-        font-size: 25px; }
+        font-size: 25px;
+        color: #4f4d4d;
+        font-family: "Source Sans Pro";
+        font-weight: 400;
+        padding-bottom: 15px; }
       login-app .login-app .form-container .inputs-container .input-wrapper {
         position: relative;
         box-sizing: border-box;
@@ -2618,6 +2673,10 @@ login-app {
             border-width: 10px;
             bottom: -20px;
             left: 13px; }
+          login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span.email-exist-massage {
+            top: -55px; }
+          login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span.no-email-massage {
+            top: -58px; }
         login-app .login-app .form-container .inputs-container .input-wrapper.valid {
           border-color: #9a9797; }
         login-app .login-app .form-container .inputs-container .input-wrapper.invalid {
@@ -2700,6 +2759,8 @@ login-app {
         font-weight: 300;
         font-size: 14px;
         font-family: 'SourceSansPro-Light'; }
+        login-app .login-app .form-container .forgot-pwd-wrapper .app-color {
+          cursor: pointer; }
       login-app .login-app .form-container .general-error {
         font-size: 12px;
         color: #ff6766;

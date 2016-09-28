@@ -18,7 +18,8 @@
                         availableApps: LoginAppSrv.APPS,
                         appContext: LoginAppSrv.APPS.SAT,
                         userContextObj: LoginAppSrv.USER_CONTEXT,
-                        userContext: LoginAppSrv.USER_CONTEXT.STUDENT
+                        userContext: LoginAppSrv.USER_CONTEXT.STUDENT,
+                        changePassword: false
                     };
 
                     var socialProvidersArr = ['facebook', 'google'];
@@ -53,6 +54,11 @@
                     scope.openMenu = function ($mdOpenMenu, ev) {
                         originatorEv = ev;
                         $mdOpenMenu(ev);
+                    };
+
+                    scope.changePasswordClick = function () {
+                        scope.changeCurrentForm('changePassword');
+                        scope.d.changePassword = !scope.d.changePassword;
                     };
 
                     var search = $location.search();
