@@ -32,8 +32,9 @@
             var pendingPurchasesPath = getPendingPath();
 
             self.getPurchaseState = function () {
-                return self.getUserData().then(function (UserData) {
-                    return UserData.purchase ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                return self.purchaseDataExists().then(function (purchaseData) {
+                    console.log('purchaseData: ', purchaseData);
+                    return !angular.equals(purchaseData, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
                 });
 
             };
@@ -59,24 +60,15 @@
             };
 
             self.hasProVersion = function () {
-                return self.getUserData().then(function (UserData) {
-                    return UserData.purchase ? true : false;
-                });
-            };
-
-            self.getUserData = function () {
-                return studentStorageProm.then(function (studentStorage) {
-                    var userPath = 'users/' + authData.uid;
-                    return studentStorage.getAndBindToServer(userPath);
+                return self.purchaseDataExists().then(function (purchaseData) {
+                    return !angular.equals(purchaseData, {});
                 });
             };
 
             self.purchaseDataExists = function () {
                 if(purchasePath){
                     return studentStorageProm.then(function (studentStorage) {
-                        return studentStorage.get(purchasePath).then(function (purchaseObj) {
-                            return !angular.equals(purchaseObj, {});
-                        });
+                        return studentStorage.getAndBindToServer(purchasePath);
                     });
                 } else {
                     return $q.reject();

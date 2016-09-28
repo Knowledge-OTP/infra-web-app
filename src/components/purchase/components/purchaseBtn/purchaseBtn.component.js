@@ -35,9 +35,9 @@
                     }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
-                        $q.when(purchaseService.getUserData()).then(function (userData) {
-                            if (userData.purchase){
-                                vm.upgradeDate = $filter('date')(userData.purchase.creationTime, 'mediumDate');
+                        $q.when(purchaseService.purchaseDataExists()).then(function (purchaseData) {
+                            if (!angular.equals(purchaseData, {})){
+                                vm.upgradeDate = $filter('date')(purchaseData.creationTime, 'mediumDate');
                             }
                         });
                     }
