@@ -16,7 +16,7 @@
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 var svgMap = {
-                    'close-popup': 'components/feedback/svg/close-popup.svg',
+                    'feedback-close-popup': 'components/feedback/svg/close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
                     'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg'
                 };

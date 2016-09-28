@@ -194,13 +194,18 @@ complete-exercise-intro-section {
       margin-bottom: 100px;
       margin-left: auto;
       width: 550px;
-      overflow: auto; }
+      overflow: auto;
+      text-align: center; }
     complete-exercise-intro-section .intro-container .btn-section {
       position: absolute;
       right: 0;
       bottom: 36px;
       left: 0;
-      text-align: center; }
+      text-align: center;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
       complete-exercise-intro-section .intro-container .btn-section .md-button {
         padding-right: 45px;
         padding-left: 45px; }

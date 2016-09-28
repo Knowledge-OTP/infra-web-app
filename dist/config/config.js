@@ -14,7 +14,6 @@
             this.$get = [
                 function () {
                     var webAppInfraConfigSrv = {};
-
                     return webAppInfraConfigSrv;
                 }
             ];
