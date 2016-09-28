@@ -7533,7 +7533,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
             self.getPurchaseState = function () {
                 return self.purchaseDataExists().then(function (purchaseData) {
-                    console.log('purchaseData: ', purchaseData);
                     return !angular.equals(purchaseData, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
                 });
 
