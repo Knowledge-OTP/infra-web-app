@@ -2,17 +2,15 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('promoCode',
+    angular.module('znk.infra-web-app.loginApp').directive('promoCodeInput',
         function () {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/promoCode.template.html',
+                templateUrl: 'components/loginApp/templates/promoCodeInput.template.html',
                 restrict: 'E',
-                scope: {
-
-                },
+                scope: {},
                 link: function (scope) {
-                    scope.d = {};
+
                 }
             };
         }

@@ -1,0 +1,58 @@
+.promo-code-input-wrapper {
+
+    .input-wrapper {
+        @include dimension(261.5px, 43px);
+        margin: 0 auto;
+        position: relative;
+
+        .arrow-wrapper {
+            @include dimension(35px, 34px);
+            display: flex;
+            border-radius: 0 23px 23px 0;
+            background-color: $bgColor5;
+            position: absolute;
+            top: 1px;
+            right: 19px;
+            cursor: pointer;
+        }
+
+        //.arrow-wrapper:active {
+        //    background-color: $bgColor55;
+        //    opacity: 0.2;
+        //}
+
+        .arrow-wrapper:hover {
+            background-color: $bgColor55;
+        }
+
+        .arrow-wrapper:focus {
+            outline: none;
+        }
+
+        input {
+            @include dimension(244px, 36px);
+            @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
+            box-sizing: border-box;
+            border-radius: 30px;
+            border: 1px solid $borderColor1;
+            padding-left: 18px;
+
+            font: {
+                weight: $regularFontWeight;
+                size: 14px;
+            }
+            color: $fontColor2;
+        }
+
+
+        @include placeholder() {
+            font: {
+                size: 14px;
+            }
+        }
+
+        input:focus {
+            outline: none;
+        }
+    }
+}

@@ -75,6 +75,7 @@
         "ERROR_CONTENT": "An error occurred while trying to connect with {{provider}}, please try again. If the problem persists please contact us at <a href='//www.zinkerz.com/contact/' target='_blank'>support@zinkerz.com</a>"
     },
     "PROMO_CODE":{
-        "GOT_A_PROMO_CODE":"Got a Promo Code?"
+        "GOT_A_PROMO_CODE":"Got a Promo Code?",
+        "ENTER_YOUR_CODE": "Enter your code..."
     }
 }

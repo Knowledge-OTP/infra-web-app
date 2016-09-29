@@ -1,7 +1,7 @@
 <div class="promo-code-wrapper" translate-namespace="PROMO_CODE">
-    <div class="promo-code-title" translate=".GOT_A_PROMO_CODE"></div>
+    <div class="promo-code-title" translate=".GOT_A_PROMO_CODE" ng-click="d.showPromoCodeOverlay = !d.showPromoCodeOverlay"></div>
 
-    <div class="promo-code-overlay">
-
+    <div class="promo-code-overlay" ng-show="d.showPromoCodeOverlay">
+        <promo-code-input></promo-code-input>
     </div>
 </div>

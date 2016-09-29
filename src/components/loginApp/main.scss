@@ -5,7 +5,8 @@
 
 // social auth login
 @import 'oathLogin/main.scss',
-        'scss/promo-code';
+        'scss/promo-code',
+        'scss/promo-code-input';
 
 @font-face {
     font-family: "SourceSansPro";
@@ -414,7 +415,7 @@ login-app {
                             weight: $regularFontWeight;
                             size: 14px;
                         }
-                        color: $fontColor2;
+                        color: red;
                     }
                 }
             }
