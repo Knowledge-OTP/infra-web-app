@@ -667,7 +667,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
                         return {
                             questionId: question.id,
-                            categoryId: question.categoryId
+                            categoryId: question.categoryId,
+                            manualEvaluation: question.manualEvaluation || false
                         };
                     });
                 }
