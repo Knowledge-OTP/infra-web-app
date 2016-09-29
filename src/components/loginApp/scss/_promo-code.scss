@@ -1,0 +1,40 @@
+promo-code {
+    display: block;
+    height: 50px;
+    .promo-code-wrapper {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        .promo-code-title {
+            @include dimension(auto, 27px);
+            @include text-style(14px, $fontColor12, Lato, $regularFontWeight);
+            padding: 0 13px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 20px;
+            background-color: $bgColor23;
+        }
+
+        .promo-code-overlay {
+            @include dimension(340px, 90px);
+            box-shadow: 0 1px 2px 1px $bsColor8;;
+            position: absolute;
+            background-color: $bgColor1;
+            border: 1px solid $borderColor21;
+            border-radius: 20px;
+        }
+
+        .promo-code-overlay::before {
+            content: '';
+            position: absolute;
+            left: calc(50% - 5px);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid black;
+        }
+    }
+}

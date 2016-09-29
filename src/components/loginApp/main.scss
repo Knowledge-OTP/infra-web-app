@@ -1,8 +1,11 @@
 @import 'src/scss/imports/variables',
 'src/scss/imports/colors',
 'bower_components/infra/dist/mixins/mixins';
+
+
 // social auth login
-@import 'oathLogin/main.scss';
+@import 'oathLogin/main.scss',
+        'scss/promo-code';
 
 @font-face {
     font-family: "SourceSansPro";
