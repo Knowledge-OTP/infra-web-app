@@ -9,23 +9,10 @@
 
             self.purchaseStateEnum = PurchaseStateEnum;
 
-            function _checkIfHasProVersion() {
-                purchaseService.hasProVersion().then(function (hasProVersion) {
-                    self.purchaseState = hasProVersion ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                });
-            }
-
-            var pendingPurchaseProm = purchaseService.getPendingPurchase();
-            if (pendingPurchaseProm) {
-                self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                pendingPurchaseProm.then(function () {
-                    _checkIfHasProVersion();
-                });
-            } else {
-                _checkIfHasProVersion();
-            }
-
-
+            // self.purchaseState = PurchaseStateEnum.NONE.enum;
+            purchaseService.getPurchaseState().then(function (state) {
+                self.purchaseState = state;
+            });
 
             purchaseService.getProduct().then(function (prodObj) {
                 self.productPrice = +prodObj.price;
