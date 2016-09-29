@@ -40,6 +40,22 @@
                 };
             });
 
+            ZnkEvaluatorSrvProvider.isEvaluateExerciseTypeFnGetter(["ZnkEvaluatorSrv", function (ZnkEvaluatorSrv) {
+                'ngInject';
+                var evaluateQuestionTypeFn = ZnkEvaluatorSrv.isEvaluateQuestionTypeFn();
+                return function(questions) {
+                    var isExerciseEvaluateType = false;
+                    // if even one question is evaluation type then return true
+                    for (var i = 0, ii = questions.length; i < ii; i++) {
+                        if (evaluateQuestionTypeFn(questions[i], true)) {
+                            isExerciseEvaluateType = true;
+                            break;
+                        }
+                    }
+                    return isExerciseEvaluateType;
+                };
+            }]);
+
             ZnkEvaluatorSrvProvider.getEvaluateStatusFnGetter(["EvaluatorStatesEnum", "purchaseService", function (EvaluatorStatesEnum, purchaseService) {
                 'ngInject';
                 return function(evaluatorData) {

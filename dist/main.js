@@ -667,7 +667,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
                         return {
                             questionId: question.id,
-                            categoryId: question.categoryId
+                            categoryId: question.categoryId,
+                            manualEvaluation: question.manualEvaluation || false
                         };
                     });
                 }
@@ -3204,6 +3205,22 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                        );
                 };
             });
+
+            ZnkEvaluatorSrvProvider.isEvaluateExerciseTypeFnGetter(["ZnkEvaluatorSrv", function (ZnkEvaluatorSrv) {
+                'ngInject';
+                var evaluateQuestionTypeFn = ZnkEvaluatorSrv.isEvaluateQuestionTypeFn();
+                return function(questions) {
+                    var isExerciseEvaluateType = false;
+                    // if even one question is evaluation type then return true
+                    for (var i = 0, ii = questions.length; i < ii; i++) {
+                        if (evaluateQuestionTypeFn(questions[i], true)) {
+                            isExerciseEvaluateType = true;
+                            break;
+                        }
+                    }
+                    return isExerciseEvaluateType;
+                };
+            }]);
 
             ZnkEvaluatorSrvProvider.getEvaluateStatusFnGetter(["EvaluatorStatesEnum", "purchaseService", function (EvaluatorStatesEnum, purchaseService) {
                 'ngInject';
