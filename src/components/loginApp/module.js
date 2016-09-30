@@ -7,7 +7,8 @@
         'znk.infra.svgIcon',
         'ngMaterial',
         'satellizer',
-        'znk.infra.general'
+        'znk.infra.general',
+        'znk.infra.autofocus'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {

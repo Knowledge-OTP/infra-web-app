@@ -76,6 +76,8 @@
     },
     "PROMO_CODE":{
         "GOT_A_PROMO_CODE":"Got a Promo Code?",
-        "ENTER_YOUR_CODE": "Enter your code..."
+        "ENTER_YOUR_CODE": "Enter your code...",
+        "ZINKERZ_EDUCATORS_CODE_ACCEPTED": "Zinkerz Educators Code Accepted",
+        "INVALID_CODE": "Invalid code, please contact support@zinkerz.com"
     }
 }
