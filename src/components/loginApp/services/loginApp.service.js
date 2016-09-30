@@ -104,7 +104,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -216,7 +216,7 @@
             };
 
             LoginAppSrv.APPS = APPS;
-            
+
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
             LoginAppSrv.logout = function (appContext, userContext) {
@@ -281,7 +281,6 @@
                     LoginAppSrv.logout(appContext, userContext);
 
                     isLoginInProgress = true;
-
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.authWithPassword(formData).then(function (authData) {
                         var appEnvConfig = _getAppEnvConfig(appContext);
@@ -294,6 +293,8 @@
                             auth: appEnvConfig.dataAuthSecret,
                             token: authData.token
                         };
+
+                        updatePromoCode.updatePromoCode(authData.uid);
 
                         return $http.post(postUrl, postData).then(function (token) {
                             var appRef = _getAppRef(appContext, userContext);

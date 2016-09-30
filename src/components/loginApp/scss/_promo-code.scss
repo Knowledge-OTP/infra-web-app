@@ -55,5 +55,125 @@ promo-code {
             border-bottom: 10px solid $borderColor21;
             z-index: 1;
         }
+
+        .promo-code-overlay {
+            .promo-code-input-wrapper {
+
+                .input-wrapper {
+                    @include dimension(290px, 43px);
+                    margin: 0 auto;
+                    position: relative;
+
+                    .icon-wrapper {
+                        @include dimension(35px, 34px);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 0 23px 23px 0;
+                        background-color: $bgColor5;
+                        position: absolute;
+                        top: 1px;
+                        right: 1px;
+                        cursor: pointer;
+
+                        svg {
+                            line {
+                                stroke: $bgColor1;
+                            }
+                        }
+                        .close-icon, .correct-icon {
+                            svg {
+                                @include dimension(20px, 15px);
+                            }
+
+                            display: none;
+                        }
+                    }
+
+                    .icon-wrapper:hover {
+                        background-color: $bgColor55;
+                    }
+
+                    .close-icon:hover {
+                        opacity: 0.9;
+                    }
+
+                    .arrow-icon:focus, .close-icon {
+                        outline: none;
+                    }
+
+                    .promo-code-spinner {
+                        position: absolute;
+                        z-index: 10;
+                        right: 50px;
+                        top: 5.5px;
+                    }
+
+                    input {
+                        @include dimension(100%, 36px);
+                        @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
+                        box-sizing: border-box;
+                        border-radius: 30px;
+                        border: 1px solid $borderColor1;
+                        padding-left: 18px;
+
+                        font: {
+                            weight: $regularFontWeight;
+                            size: 14px;
+                        }
+                        color: $fontColor2;
+                    }
+
+                    @include placeholder() {
+                        font: {
+                            size: 14px;
+                        }
+                    }
+
+                    input:focus {
+                        outline: none;
+                    }
+
+                    .promo-code-status-text {
+                        @include text-style(12px, $fontColor2, Lato, $regularFontWeight); // todo -get correct style
+                        padding-left: 20px;
+                        margin-top: 6px;
+                    }
+
+                    &.promo-code-accepted {
+                        .promo-code-status-text, input {
+                            color: $fontColor7;
+                        }
+
+                        .icon-wrapper {
+                            background-color: $bgColor7; // todo - check if correct color
+                            .correct-icon {
+                                display: block
+                            }
+                            .arrow-icon {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    &.promo-code-invalid {
+                        .promo-code-status-text, input {
+                            color: $fontColor17;
+                        }
+
+                        .icon-wrapper {
+                            background-color: $bgColor32; // todo - check if correct color
+                            .close-icon {
+                                display: block;
+                            }
+
+                            .arrow-icon {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

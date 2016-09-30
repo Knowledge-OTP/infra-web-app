@@ -1,4 +1,4 @@
-angular.module('demo', ['znk.infra-web-app.loginApp'])
+angular.module('demo', ['znk.infra-web-app.loginApp', 'demoEnv'])
     .config(function ($translateProvider, $locationProvider) {
         $locationProvider.html5Mode({
             enabled: true,
