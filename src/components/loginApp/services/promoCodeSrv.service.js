@@ -9,12 +9,12 @@
             var promoCodeStatus;
             var INVALID = 'PROMO_CODE.INVALID_CODE';
             var promoCodeCheckUrl = 'http://localhost:8000/promoCode/check'; // todo - get correct url
-            var promoCodeToUpdateUrl= 'http://localhost:8000/promoCode/update'; // todo - get correct url
+            var promoCodeToUpdateUrl = 'http://localhost:8000/promoCode/update'; // todo - get correct url
             var promoCodeToUpdate;
 
             var promoCodeStatusText = {};
             promoCodeStatusText[PROMO_CODE_TYPE.ZINKERZ_EDUCATOR] = 'PROMO_CODE.ZINKERZ_EDUCATORS_CODE_ACCEPTED';
-            promoCodeStatusText[PROMO_CODE_TYPE.FREE_LICENCE] = '';  //todo- what text to display
+            promoCodeStatusText[PROMO_CODE_TYPE.FREE_LICENCE] = ' ';  //todo- what text to display
             promoCodeStatusText[INVALID] = INVALID;
 
 
@@ -22,8 +22,7 @@
                 defferd = $q.defer();
                 var dataToSend = {};
                 dataToSend.promoCode = promoCode;
-                // dataToSend[appName] =  ENV.firebaseAppScopeName;
-                dataToSend.appName = 'act_app';
+                dataToSend.appName = ENV.firebaseAppScopeName;
 
                 $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
                 return defferd.promise;
@@ -34,15 +33,22 @@
             };
 
             this.updatePromoCode = function (uid) {
+                defferd = $q.defer();
                 var dataToSend = {};
-                // dataToSend[appName] =  ENV.firebaseAppScopeName;
-                dataToSend.appName = 'act_app';
+                dataToSend.appName = ENV.firebaseAppScopeName;
                 dataToSend.uid = uid;
                 dataToSend.promoCode = promoCodeToUpdate;
 
                 if (promoCodeToUpdate) {
-                    $http.post(promoCodeToUpdateUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
+                    $http.post(promoCodeToUpdateUrl, dataToSend).then(function () {
+                        defferd.resolve();
+                    }, function (error) {
+                        defferd.reject(error);
+                    });
+                } else {
+                    defferd.resolve();
                 }
+                return defferd.promise;
             };
 
             function _validPromoCode(response) {
