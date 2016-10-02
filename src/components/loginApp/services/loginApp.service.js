@@ -269,55 +269,50 @@
              *  formData: email & password
              */
             LoginAppSrv.login = (function () {
-                    var isLoginInProgress;
+                var isLoginInProgress;
 
-                    return function (appContext, userContext, formData) {
-                        if (isLoginInProgress) {
-                            var errMsg = 'login already in progress';
-                            $log.debug(errMsg);
-                            return $q.reject(errMsg);
-                        }
+                return function (appContext, userContext, formData) {
+                    if (isLoginInProgress) {
+                        var errMsg = 'login already in progress';
+                        $log.debug(errMsg);
+                        return $q.reject(errMsg);
+                    }
 
-                        LoginAppSrv.logout(appContext, userContext);
+                    LoginAppSrv.logout(appContext, userContext);
 
-                        isLoginInProgress = true;
-                        var globalRef = _getGlobalRef(appContext, userContext);
-                        return globalRef.authWithPassword(formData).then(function (authData) {
-                            var appEnvConfig = _getAppEnvConfig(appContext);
-                            var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
-                            var postData = {
-                                email: authData.password ? authData.password.email : '',
-                                uid: authData.uid,
-                                fbDataEndPoint: appEnvConfig.fbDataEndPoint,
-                                fbEndpoint: appEnvConfig.fbGlobalEndPoint,
-                                auth: appEnvConfig.dataAuthSecret,
-                                token: authData.token
-                            };
+                    isLoginInProgress = true;
+                    var globalRef = _getGlobalRef(appContext, userContext);
+                    return globalRef.authWithPassword(formData).then(function (authData) {
+                        var appEnvConfig = _getAppEnvConfig(appContext);
+                        var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
+                        var postData = {
+                            email: authData.password ? authData.password.email : '',
+                            uid: authData.uid,
+                            fbDataEndPoint: appEnvConfig.fbDataEndPoint,
+                            fbEndpoint: appEnvConfig.fbGlobalEndPoint,
+                            auth: appEnvConfig.dataAuthSecret,
+                            token: authData.token
+                        };
 
-                            return PromoCodeSrv.updatePromoCode(authData.uid).then(function () {
-                                debugger;
-                                return $http.post(postUrl, postData).then(function (token) {
-                                    var appRef = _getAppRef(appContext, userContext);
-                                    return appRef.authWithCustomToken(token.data).then(function (res) {
-                                        isLoginInProgress = false;
-                                        _redirectToPage(appContext, userContext);
-                                        return res;
-                                    });
-                                });
-                            },function(error){
-                                debugger;
-                            }).catch(function (error) {
-                                debugger;
-                            });
-
-                        }).catch(function (err) {
-                            debugger;
+                        return PromoCodeSrv.updatePromoCode(authData.uid).then(function () {
+                            return $http.post(postUrl, postData);
+                        }).then(function (token) {
+                            var appRef = _getAppRef(appContext, userContext);
+                            return appRef.authWithCustomToken(token.data)
+                        }).then(function (res) {
                             isLoginInProgress = false;
-                            return $q.reject(err);
+                            _redirectToPage(appContext, userContext);
+                            return res;
+                        }).catch(function (error) {
+                            alert(error.data); // todo - error popup ?
                         });
 
-                    };
-                })();
+                    }).catch(function (err) {
+                        isLoginInProgress = false;
+                        return $q.reject(err);
+                    });
+                };
+            })();
             /**
              * params:
              *  appContext: ACT/SAT etc (APPS constant)
