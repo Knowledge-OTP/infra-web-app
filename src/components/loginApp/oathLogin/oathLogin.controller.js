@@ -11,7 +11,7 @@
             this.socialAuth = function (provider) {
                 vm.loading = {};
                 var loadingProvider = vm.loading[provider] = {};
-                loadingProvider.startLoader = true;
+                loadingProvider.showSpinner = true;
                 $auth.authenticate(provider).then(function (response) {
                     return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id, vm.userContext);
                 }).then(function (results) {
@@ -35,8 +35,8 @@
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
-                        loadingProvider.fillLoader = true;
-                        loadingProvider.startLoader = loadingProvider.fillLoader = false;
+
+                        loadingProvider.showSpinner = false;
 
                         if (updateProfile) {
                             LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
@@ -48,7 +48,7 @@
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
-                    loadingProvider.startLoader = loadingProvider.fillLoader = false;
+                    loadingProvider.showSpinner = false;
                 });
             };
 

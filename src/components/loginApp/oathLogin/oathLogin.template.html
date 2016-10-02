@@ -1,18 +1,17 @@
 <div class="btn-wrap" translate-namespace="OATH_SOCIAL">
-    <button class="facebook-btn"
+    <button class="social-btn facebook-btn"
             ng-click="vm.socialAuth('facebook')"
             ng-if="vm.providers.facebook"
             element-loader
-            fill-loader="vm.loading.facebook.fillLoader"
-            show-loader="vm.loading.facebook.startLoader"
             bg-loader="'#315880'"
             precentage="50"
             font-color="'#FFFFFF'"
             bg="'#369'">
         <svg-icon name="facebook-icon"></svg-icon>
+        <span class="loader ng-hide" ng-show="vm.loading.facebook.showSpinner"></span>
         <span translate=".CONNECT_WITH_FB"></span>
     </button>
-    <button class="gplus-btn"
+    <button class="social-btn gplus-btn"
             ng-click="vm.socialAuth('google')"
             ng-if="vm.providers.google"
             element-loader
@@ -23,6 +22,7 @@
             font-color="'#FFFFFF'"
             bg="'#df4a31'">
         <svg-icon name="google-icon"></svg-icon>
+        <span class="loader ng-hide" ng-show="vm.loading.google.showSpinner"></span>
         <span translate=".CONNECT_WITH_GOOGLE"></span>
     </button>
 </div>
