@@ -1,14 +1,12 @@
 .app-header {
     background: $bgColor1;
     height: 57px;
-    border-bottom: 1px solid $bgColor28;
+    border-bottom: 1px solid $borderColor17;
     font-family: Lato;
-
     .main-content-header {
         margin: 0 auto;
         height: 100%;
-        width: $mainContentWidth;
-
+        width: $mainHeaderWidth;
         .raccoon-logo-icon {
             svg {
                 height: 37.5px;
@@ -29,6 +27,10 @@
                         text-transform: capitalize;
                         align-self: stretch;
                         padding-top: 15px;
+
+                        &.no-text-transform{
+                            text-transform: none;
+                        }
                     }
                     &:hover {
                         .title {
@@ -49,7 +51,7 @@
             .profile-status {
                 font-size: 16px;
                 padding: 0 12px 0 0;
-                border-right: 1px solid $borderColor7;
+                border-right: 1px solid $borderColor23;
                 cursor: pointer;
 
                 .pending-purchase-icon-wrapper {
@@ -78,9 +80,7 @@
             .md-button {
                 background: $bgColor1;
                 width: auto;
-                display: flex !important;             // shared style for buttons?
-                justify-content: center;
-                align-items: center;
+                display: flex;
                 div{
                     min-width: 40px;
                 }
@@ -89,10 +89,12 @@
     }
 }
 
-
-._md-open-menu-container {
+.md-open-menu-container {
     .header-modal-item {
         font-family: Lato;
+        &::before {
+            min-height: 0;
+        }
         a {
             width: 100%;
             text-decoration: none;
@@ -108,7 +110,7 @@
             }
             .email {
                 @include text-style(14px, $fontColor14, Lato, 300);
-                border-bottom: 1px solid $borderColor4;
+                border-bottom: 1px solid $borderColor7;
                 width: 100%;
                 padding-bottom: 15px;
             }
@@ -121,10 +123,10 @@
             font-weight: $bookFontWeight;
             cursor: pointer;
             &.links {
-                color: $fontColor2;
+                color:$fontColor2;
             }
             &.logout {
-                color: $fontColor12;
+                color:$fontColor12;
             }
         }
         .check-mark-wrapper {
@@ -133,10 +135,11 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background-color: $borderColor5;
+            background-color: $bgColor7;
             margin-left: 10px;
             svg-icon {
                 height: 100%;
+                display: block;
             }
             svg-icon svg {
                 width:75%;
@@ -148,11 +151,22 @@
         &:hover:not(.header-modal-item-profile) {
             background-color: $bgColor29;
         }
+
+        &.no-live-lessons {
+            opacity: 0.6;
+            pointer-events: none;
+
+        }
+
+        .support-feedback-btn{
+            width: 100%;
+        }
     }
+
 }
 
 
-md-menu-content.md-menu-content-znk-header {
+.md-menu-content-znk-header {
     min-width: 270px;
     max-height: none;
     padding: 16px 0;
@@ -191,3 +205,4 @@ md-menu-content.md-menu-content-znk-header {
     width: 100%;
     height: 100%;
 }
+

@@ -21,10 +21,10 @@
             </md-list>
         </div>
 
-        <div class="app-user-area" layout="row" layout-align="center center">
+        <div class="app-user-area" layout="row" layout-align="center right">
             <invitation-manager></invitation-manager>
-            <div class="profile-status" ng-click="vm.showPurchaseDialog()">
-                <div class="pending-purchase-icon-wrapper" ng-if="vm.purchaseState === 'pending'">
+            <div class="profile-status" ng-if="vm.purchaseState === 'pending'" ng-click="vm.showPurchaseDialog()">
+                <div class="pending-purchase-icon-wrapper">
                     <svg-icon name="pending-purchase-clock-icon"></svg-icon>
                 </div>
                 <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
@@ -43,7 +43,7 @@
                             <span class="email">{{::vm.userProfile.email}}</span>
                         </md-list-item>
                         <md-list-item md-ink-ripple class="header-modal-item header-modal-item-uppercase links purchase-status">
-                            <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
+                            <span translate="{{vm.subscriptionStatus ? vm.subscriptionStatus : 'ZNK_HEADER.PROFILE_STATUS_BASIC'}}" translate-compile></span>
                             <span class="link-full-item" ng-click="vm.showPurchaseDialog()"></span>
                             <ng-switch on="vm.purchaseState">
                                 <div ng-switch-when="pending" class="pending-purchase-icon-wrapper">
@@ -53,6 +53,14 @@
                                     <svg-icon name="check-mark"></svg-icon>
                                 </div>
                             </ng-switch>
+                        </md-list-item>
+                        <md-list-item
+                                md-ink-ripple
+                                ng-class="{'no-live-lessons': vm.noLiveLessons}"
+                                class="header-modal-item header-modal-item-uppercase links">
+                            <span
+                                    ng-click="vm.showMyLiveLessonsSchedule()"
+                                    translate=".MY_LIVE_LESSONS"></span>
                         </md-list-item>
                         <md-list-item
                             md-ink-ripple
