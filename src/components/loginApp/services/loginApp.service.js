@@ -281,6 +281,7 @@
                     LoginAppSrv.logout(appContext, userContext);
 
                     isLoginInProgress = true;
+
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.authWithPassword(formData).then(function (authData) {
                         var appEnvConfig = _getAppEnvConfig(appContext);
@@ -298,13 +299,13 @@
                             return $http.post(postUrl, postData);
                         }).then(function (token) {
                             var appRef = _getAppRef(appContext, userContext);
-                            return appRef.authWithCustomToken(token.data)
+                            return appRef.authWithCustomToken(token.data);
                         }).then(function (res) {
                             isLoginInProgress = false;
                             _redirectToPage(appContext, userContext);
                             return res;
-                        }).catch(function (error) {
-                            alert(error.data); // todo - error popup ?
+                        }).catch(function () {
+                            _redirectToPage(appContext, userContext);    // todo - error popup ? update failure blocking login?
                         });
 
                     }).catch(function (err) {

@@ -39,7 +39,7 @@
                 dataToSend.promoCode = promoCodeToUpdate;
 
                 if (promoCodeToUpdate) {
-                     return $http.post(promoCodeToUpdateUrl, dataToSend)
+                     return $http.post(promoCodeToUpdateUrl, dataToSend);
                 }
                 return $q.when({});
             };
@@ -48,10 +48,10 @@
                 promoCodeStatus = {};
                 if (response.data && promoCodeStatusText[response.data]) {
                     promoCodeStatus.text = _getPromoCodeStatusText(response.data);
-                    promoCodeStatus.status = PROMO_CODE_STATUS.accepted
+                    promoCodeStatus.status = PROMO_CODE_STATUS.accepted;
                 } else {
                     promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
-                    promoCodeStatus.status = PROMO_CODE_STATUS.invalid
+                    promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
                 }
                 defferd.resolve(promoCodeStatus);
             }
