@@ -4306,7 +4306,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                 DialogController.$inject = ["$scope"];
                 var MAX_WIDTH = 400;
                 var MAX_HEIGHT = 500;
-                var MIN_SIZE_TO_ZOOM = 200;
+                var MIN_SIZE_TO_ZOOM = 100;
                 var zoomableImgElemArr = [];
 
                 $timeout(function () {
@@ -4376,9 +4376,10 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageNewParent.css('textAlign', 'center');
                     imageNewParent.css('width', image.style.width);
                     imageNewParent.css('height', image.style.height);
-                    imageNewParent.append(image);
                     imageParent.append(imageNewParent);
-
+                    imageParent[0].replaceChild(imageNewParent[0], image);
+                    imageNewParent.append(image);
+                    
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -5684,7 +5685,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         'znk.infra.svgIcon',
         'ngMaterial',
         'satellizer',
-        'znk.infra.general'
+        'znk.infra.general',
+        'znk.infra.autofocus'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -5695,7 +5697,10 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 'google-icon': 'components/loginApp/svg/google-icon.svg',
                 'login-username-icon': 'components/loginApp/svg/login-username-icon.svg',
                 'dropdown-arrow': 'components/loginApp/svg/dropdown-arrow.svg',
-                'v-icon': 'components/loginApp/svg/v-icon.svg'
+                'v-icon': 'components/loginApp/svg/v-icon.svg',
+                'loginApp-arrow-icon': 'components/loginApp/svg/arrow-icon.svg',
+                'loginApp-close-icon': 'components/loginApp/svg/close-icon.svg',
+                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -5982,6 +5987,67 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     );
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp').directive('promoCode',
+        ["PromoCodeSrv", "PROMO_CODE_STATUS", function (PromoCodeSrv, PROMO_CODE_STATUS) {
+            'ngInject';
+            return {
+                templateUrl: 'components/loginApp/templates/promoCode.template.html',
+                restrict: 'E',
+                scope: {},
+                link: function (scope) {
+                    var ENTER_KEY_CODE = 13;
+
+                    scope.d = {};
+                    scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
+
+
+                    scope.d.sendPromoCode = function (promoCode) {
+                        if (promoCode) {
+                            scope.d.showSpinner = true;
+                            PromoCodeSrv.checkPromoCode(promoCode).then(function (promoCodeResult) {
+                                scope.d.promoCodeStatus = promoCodeResult.status;
+                                scope.d.promoCodeStatusText = promoCodeResult.text;
+                                scope.d.showSpinner = false;
+                                if (scope.d.promoCodeStatus === scope.d.promoCodeStatusConst.accepted) {
+                                    PromoCodeSrv.promoCodeToUpdate(promoCode);
+                                } else {
+                                    PromoCodeSrv.promoCodeToUpdate(undefined);
+                                }
+                            });
+                        }
+                    };
+                    scope.d.clearInput = function () {
+                        _cleanPromoCodeStatus();
+                        scope.d.promoCode = '';
+                    };
+
+                    scope.d.keyDownHandler = function ($event, promoCode) {
+                        if ($event.keyCode !== ENTER_KEY_CODE) {
+                            _cleanPromoCodeStatus();
+                            return;
+                        }
+                        scope.d.sendPromoCode(promoCode);
+                    };
+
+                    var promoCodeToUpdate = PromoCodeSrv.getPromoCodeToUpdate();  // restore promo code (if was entered) between login view and sign up view.
+                    if (promoCodeToUpdate) {
+                        scope.d.promoCode = promoCodeToUpdate;
+                        scope.d.sendPromoCode(promoCodeToUpdate);
+                    }
+
+                    function _cleanPromoCodeStatus() {
+                        scope.d.promoCodeStatus = -1;
+                        scope.d.promoCodeStatusText = '';
+                    }
+                }
+            };
+        }]
+    );
+})(angular);
+
 /**
  * attrs:
  */
@@ -6128,6 +6194,21 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.loginApp').service('PromoCodeTypeEnum',['EnumSrv',
+        function(EnumSrv) {
+
+            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
+                ['FREE_LICENSE', 1, 'free license'],
+                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
+            ]);
+
+            return PromoCodeTypeEnum;
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.loginApp').service('InvitationKeyService',
         function () {
             'ngInject';
@@ -6259,7 +6340,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -6351,7 +6432,12 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
                     invitationPostFix = '#?iid=' + invitationKey;
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
+                var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
+                var promoCodePostFix = '';
+                if (angular.isDefined(promoCode) && promoCode !== null) {
+                    promoCodePostFix = '#?pcid=' + promoCode;
+                }
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -6371,7 +6457,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             };
 
             LoginAppSrv.APPS = APPS;
-            
+
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
             LoginAppSrv.logout = function (appContext, userContext) {
@@ -6501,6 +6587,79 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     });
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp').constant('PROMO_CODE_STATUS', {
+        accepted: 0,
+        invalid: 1
+    });
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp').service('PromoCodeSrv',
+        ["PROMO_CODE_STATUS", "$translate", "$q", "$http", "ENV", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $q, $http, ENV, PromoCodeTypeEnum) {
+            'ngInject';
+
+            var deferred;
+            var promoCodeStatus;
+            var INVALID = 'PROMO_CODE.INVALID_CODE';
+            var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
+            var promoCodeToUpdate;
+
+            var promoCodeStatusText = {};
+            promoCodeStatusText[PromoCodeTypeEnum.FREE_LICENSE.enum] = 'PROMO_CODE.PROMO_CODE_ACCEPTED';
+            promoCodeStatusText[PromoCodeTypeEnum.ZINKERZ_EDUCATOR.enum] = 'PROMO_CODE.ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED';
+            promoCodeStatusText[INVALID] = INVALID;
+
+            this.checkPromoCode = function (promoCode) {
+                deferred = $q.defer();
+                var dataToSend = {};
+                dataToSend.promoCode = promoCode;
+                dataToSend.appName = ENV.firebaseAppScopeName;
+
+                $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
+                return deferred.promise;
+            };
+
+            this.promoCodeToUpdate = function (promoCode) {
+                promoCodeToUpdate = promoCode;
+            };
+
+            this.getPromoCodeToUpdate = function () {
+                return promoCodeToUpdate;
+            };
+
+            function _validPromoCode(response) {
+                promoCodeStatus = {};
+                var promoCodeType = response.data;
+                if (response.data && promoCodeStatusText[promoCodeType]) {
+                    promoCodeStatus.text = _getPromoCodeStatusText(response.data);
+                    promoCodeStatus.status = PROMO_CODE_STATUS.accepted;
+                } else {
+                    promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
+                    promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
+                }
+                deferred.resolve(promoCodeStatus);
+            }
+
+            function _invalidPromoCode() {
+                promoCodeStatus = {};
+                promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
+                promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
+                deferred.resolve(promoCodeStatus);
+            }
+
+            function _getPromoCodeStatusText(translationKey) {
+                return $translate.instant(promoCodeStatusText[translationKey]);
+            }
+        }]
+    );
+})(angular);
+
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
@@ -6519,6 +6678,97 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
     "    </button>\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/arrow-icon.svg",
+    "<svg\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    version=\"1.1\" id=\"Capa_1\" x=\"0px\" y=\"0px\"\n" +
+    "    viewBox=\"0 0 611.987 611.987\"\n" +
+    "    xml:space=\"preserve\">\n" +
+    "    <style>\n" +
+    "        svg{\n" +
+    "        width:30px;\n" +
+    "        height:20px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<g id=\"arrow-R\">\n" +
+    "		<g>\n" +
+    "			<path d=\"M604.652,287.018c-0.532-0.532-1.225-0.692-1.757-1.171L417.717,100.668c-10.329-10.329-27.074-10.329-37.377,0     c-10.328,10.329-10.328,27.074,0,37.376l141.334,141.333H26.622C11.926,279.377,0,291.304,0,306     c0,14.694,11.926,26.621,26.622,26.621h495.052L380.341,473.954c-10.329,10.329-10.329,27.074,0,37.376     c10.329,10.303,27.073,10.329,37.376,0l185.232-185.258c0.532-0.453,1.197-0.612,1.703-1.092c0.825-0.825,0.825-1.97,1.518-2.875     c2.263-2.796,3.86-5.856,4.818-9.158c0.346-1.277,0.586-2.396,0.719-3.7C612.799,301.34,610.749,293.087,604.652,287.018z\" fill=\"#FFFFFF\"/>\n" +
+    "		</g>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/close-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/correct-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     class=\"correct-icon-svg\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 188.5 129\"\n" +
+    "     style=\"enable-background:new 0 0 188.5 129;\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.correct-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #231F20;\n" +
+    "        stroke-width: 15;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<line class=\"st0\" x1=\"7.5\" y1=\"62\" x2=\"67\" y2=\"121.5\"/>\n" +
+    "	<line class=\"st0\" x1=\"67\" y1=\"121.5\" x2=\"181\" y2=\"7.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
     "");
   $templateCache.put("components/loginApp/svg/dropdown-arrow.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
@@ -6801,6 +7051,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "    <promo-code></promo-code>\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -6872,6 +7123,44 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "\n" +
     "\n" +
     "");
+  $templateCache.put("components/loginApp/templates/promoCode.template.html",
+    "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\">\n" +
+    "    <div class=\"promo-code-title\" translate=\".GOT_A_PROMO_CODE\" ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></div>\n" +
+    "\n" +
+    "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
+    "\n" +
+    "        <div class=\"promo-code-input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"{\n" +
+    "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
+    "             'promo-code-invalid': d.promoCodeStatus === d.promoCodeStatusConst.invalid\n" +
+    "             }\">\n" +
+    "                <md-progress-circular ng-if=\"d.showSpinner\"\n" +
+    "                                      class=\"promo-code-spinner\"\n" +
+    "                                      md-mode=\"indeterminate\"\n" +
+    "                                      md-diameter=\"25\">\n" +
+    "                </md-progress-circular>\n" +
+    "                <input\n" +
+    "                    type=\"text\"\n" +
+    "                    ng-model=\"d.promoCode\"\n" +
+    "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
+    "                    ng-autofocus =\"true\"\n" +
+    "                    placeholder=\"{{'PROMO_CODE.ENTER_YOUR_CODE' | translate}}\">\n" +
+    "                <div class=\"icon-wrapper\" >\n" +
+    "                    <svg-icon class=\"arrow-icon\" name=\"loginApp-arrow-icon\" ng-click=\"d.sendPromoCode(d.promoCode)\"></svg-icon>\n" +
+    "                    <svg-icon class=\"close-icon\" name=\"loginApp-close-icon\" ng-click=\"d.clearInput()\"></svg-icon>\n" +
+    "                    <svg-icon class=\"correct-icon\" name=\"loginApp-correct-icon\"  ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></svg-icon>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"promo-code-status-text\">\n" +
+    "                    {{d.promoCodeStatusText}}\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/loginApp/templates/resetPasswordForm.directive.html",
     "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
     "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
@@ -6931,6 +7220,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
     "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "    <promo-code></promo-code>\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +

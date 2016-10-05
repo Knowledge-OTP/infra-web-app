@@ -104,7 +104,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -196,7 +196,12 @@
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
                     invitationPostFix = '#?iid=' + invitationKey;
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
+                var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
+                var promoCodePostFix = '';
+                if (angular.isDefined(promoCode) && promoCode !== null) {
+                    promoCodePostFix = '#?pcid=' + promoCode;
+                }
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -216,7 +221,7 @@
             };
 
             LoginAppSrv.APPS = APPS;
-            
+
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
             LoginAppSrv.logout = function (appContext, userContext) {
