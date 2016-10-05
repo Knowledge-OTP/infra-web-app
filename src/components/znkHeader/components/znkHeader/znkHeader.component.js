@@ -11,60 +11,60 @@
                 'ngInject';
                 $translatePartialLoader.addPart('znkHeader');
 
-                var self = this;
-                self.expandIcon = 'expand_more';
-                self.additionalItems = znkHeaderSrv.getAdditionalItems();
+                var vm = this;
+                vm.expandIcon = 'expand_more';
+                vm.additionalItems = znkHeaderSrv.getAdditionalItems();
 
                 OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
-                    self.isOnBoardingCompleted = isCompleted;
+                    vm.isOnBoardingCompleted = isCompleted;
                 });
 
-                self.invokeOnClickHandler = function(onClickHandler){
+                vm.invokeOnClickHandler = function(onClickHandler){
                     $injector.invoke(onClickHandler);
                 };
 
-                this.showPurchaseDialog = function () {
+                vm.showPurchaseDialog = function () {
                     purchaseService.showPurchaseDialog();
                 };
 
-                this.showChangePassword = function() {
+                vm.showChangePassword = function() {
                     SettingsSrv.showChangePassword();
                 };
 
-                this.showGoalsEdit = function () {
+                vm.showGoalsEdit = function () {
                     userGoalsSelectionService.openEditGoalsDialog({
                         clickOutsideToCloseFlag: true
                     });
                 };
 
                 UserProfileService.getProfile().then(function (profile) {
-                    self.userProfile = {
+                    vm.userProfile = {
                         username: profile.nickname,
                         email: profile.email
                     };
                 });
 
-                this.znkOpenModal = function () {
-                    self.expandIcon = 'expand_less';
+                vm.znkOpenModal = function () {
+                    vm.expandIcon = 'expand_less';
                 };
 
-                this.logout = function () {
+                vm.logout = function () {
                     AuthService.logout();
                     $window.location.replace(ENV.redirectLogout);
                 };
 
                 function _checkIfHasProVersion() {
                     purchaseService.hasProVersion().then(function (hasProVersion) {
-                        self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                        self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+                        vm.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                        vm.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
                     });
                 }
 
-                // self.subscriptionStatus = '.PROFILE_STATUS_BASIC';
+                // vm.subscriptionStatus = '.PROFILE_STATUS_BASIC';
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
                 if (pendingPurchaseProm) {
-                    self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+                    vm.purchaseState = PurchaseStateEnum.PENDING.enum;
+                    vm.subscriptionStatus = '.PROFILE_STATUS_PENDING';
                     pendingPurchaseProm.then(function () {
                         _checkIfHasProVersion();
                     });
@@ -73,9 +73,8 @@
                 }
 
                 $scope.$on('$mdMenuClose', function () {
-                    self.expandIcon = 'expand_more';
+                    vm.expandIcon = 'expand_more';
                 });
-
             }
         });
 })(angular);
