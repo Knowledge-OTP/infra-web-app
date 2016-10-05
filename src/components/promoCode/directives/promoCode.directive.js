@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('promoCode',
+    angular.module('znk.infra-web-app.promoCode').directive('promoCode',
         function (PromoCodeSrv, PROMO_CODE_STATUS) {
             'ngInject';
             return {

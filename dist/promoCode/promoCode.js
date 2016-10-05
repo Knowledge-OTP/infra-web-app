@@ -1,8 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode', [
-    ]).config([
+    angular.module('znk.infra-web-app.promoCode', []).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
@@ -19,7 +18,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('promoCode',
+    angular.module('znk.infra-web-app.promoCode').directive('promoCode',
         ["PromoCodeSrv", "PROMO_CODE_STATUS", function (PromoCodeSrv, PROMO_CODE_STATUS) {
             'ngInject';
             return {
@@ -80,7 +79,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').service('PromoCodeSrv',
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeSrv',
         ["PROMO_CODE_STATUS", "$translate", "$http", "ENV", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, ENV, PromoCodeTypeEnum) {
             'ngInject';
 

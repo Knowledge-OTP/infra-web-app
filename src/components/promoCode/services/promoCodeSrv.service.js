@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').service('PromoCodeSrv',
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeSrv',
         function (PROMO_CODE_STATUS, $translate, $http, ENV, PromoCodeTypeEnum) {
             'ngInject';
 
