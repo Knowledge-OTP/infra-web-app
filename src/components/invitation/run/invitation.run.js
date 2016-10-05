@@ -6,7 +6,7 @@
             'ngInject';
             var search = $location.search();
 
-            if (angular.isDefined(search['iid'])) {
+            if (angular.isDefined(search.iid)) {
                 InvitationService.showInvitationConfirm(search.iid);
                 delete search.iid;
                 $location.search(search);
