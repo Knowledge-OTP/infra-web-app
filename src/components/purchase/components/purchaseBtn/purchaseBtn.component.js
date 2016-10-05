@@ -35,12 +35,9 @@
                     }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
-                        $q.when(purchaseService.getUpgradeData()).then(function (res) {
-                            /**
-                             * TODO: currently the createdTime doesn't exist in this object, need to add to firebase
-                             */
-                            if (res){
-                                vm.upgradeDate = $filter('date')(res.creationTime, 'mediumDate');
+                        $q.when(purchaseService.purchaseDataExists()).then(function (purchaseData) {
+                            if (!angular.equals(purchaseData, {})){
+                                vm.upgradeDate = $filter('date')(purchaseData.creationTime, 'mediumDate');
                             }
                         });
                     }
