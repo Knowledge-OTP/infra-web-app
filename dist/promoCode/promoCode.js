@@ -85,8 +85,7 @@
 
             var promoCodeStatus;
             var INVALID = 'PROMO_CODE.INVALID_CODE';
-            // var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
-            var promoCodeCheckUrl = 'http://localhost:8000/promoCode/check'; // todo - get correct url
+            var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
             var promoCodeToUpdate;
 
             var promoCodeStatusText = {};
