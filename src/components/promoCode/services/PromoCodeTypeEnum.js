@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').service('PromoCodeTypeEnum',['EnumSrv',
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
         function(EnumSrv) {
 
             var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
