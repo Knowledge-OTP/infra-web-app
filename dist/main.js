@@ -5309,7 +5309,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                             },
                             controller: 'InvitationApproveModalController',
                             controllerAs: 'vm',
-                            templateUrl: 'app/components/invitation/approveModal/invitationApproveModal.template.html',
+                            templateUrl: 'components/invitation/approveModal/invitationApproveModal.template.html',
                             clickOutsideToClose: true,
                             escapeToClose: true
                         });
