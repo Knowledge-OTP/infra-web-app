@@ -196,7 +196,13 @@
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
                     invitationPostFix = '#?iid=' + invitationKey;
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
+                var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
+                var promoCodePostFix = '';
+                if (angular.isDefined(promoCode) && promoCode !== null) {
+                    promoCodePostFix = '#?pcid=' + promoCode;
+                }
+                // $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix;
+                $window.location.href = "http://localhost:3000/#/app/" + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -295,19 +301,14 @@
                             token: authData.token
                         };
 
-                        return PromoCodeSrv.updatePromoCode(authData.uid).then(function () {
-                            return $http.post(postUrl, postData);
-                        }).then(function (token) {
+                        return $http.post(postUrl, postData).then(function (token) {
                             var appRef = _getAppRef(appContext, userContext);
-                            return appRef.authWithCustomToken(token.data);
-                        }).then(function (res) {
-                            isLoginInProgress = false;
-                            _redirectToPage(appContext, userContext);
-                            return res;
-                        }).catch(function () {
-                            _redirectToPage(appContext, userContext);    // todo - error popup ? update failure blocking login?
+                            return appRef.authWithCustomToken(token.data).then(function (res) {
+                                isLoginInProgress = false;
+                                _redirectToPage(appContext, userContext);
+                                return res;
+                            });
                         });
-
                     }).catch(function (err) {
                         isLoginInProgress = false;
                         return $q.reject(err);

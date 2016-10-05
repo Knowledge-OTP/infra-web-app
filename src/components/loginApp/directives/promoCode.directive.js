@@ -1,4 +1,3 @@
-
 (function (angular) {
     'use strict';
 
@@ -15,6 +14,7 @@
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
 
+
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {
                             scope.d.showSpinner = true;
@@ -30,7 +30,6 @@
                             });
                         }
                     };
-
                     scope.d.clearInput = function () {
                         _cleanPromoCodeStatus();
                         scope.d.promoCode = '';
@@ -43,6 +42,12 @@
                         }
                         scope.d.sendPromoCode(promoCode);
                     };
+
+                    var promoCodeToUpdate = PromoCodeSrv.getPromoCodeToUpdate();  // restore promo code (if was entered) between login view and sign up view.
+                    if (promoCodeToUpdate) {
+                        scope.d.promoCode = promoCodeToUpdate;
+                        scope.d.sendPromoCode(promoCodeToUpdate);
+                    }
 
                     function _cleanPromoCodeStatus() {
                         scope.d.promoCodeStatus = -1;

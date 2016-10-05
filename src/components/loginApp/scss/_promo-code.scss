@@ -17,11 +17,11 @@ promo-code {
             background-color: $bgColor23;
         }
 
-        .promo-code-title:focus{
+        .promo-code-title:focus {
             outline: none;
         }
 
-        .promo-code-title:hover{
+        .promo-code-title:hover {
             background-color: $bgColor18;
         }
 
@@ -34,12 +34,12 @@ promo-code {
             background-color: $bgColor1;
             border: 1px solid $borderColor21;
             border-radius: 20px;
-            top:40px;
+            top: 40px;
             z-index: 5;
         }
 
         .promo-code-overlay::before, .promo-code-overlay::after {
-            @include dimension(0,0);
+            @include dimension(0, 0);
             content: '';
             position: absolute;
             top: -9px;
@@ -98,7 +98,7 @@ promo-code {
                         opacity: 0.9;
                     }
 
-                    .arrow-icon:focus, .close-icon {
+                    .arrow-icon:focus, .correct-icon:focus {
                         outline: none;
                     }
 

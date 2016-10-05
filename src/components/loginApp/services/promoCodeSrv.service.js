@@ -2,65 +2,56 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').service('PromoCodeSrv',
-        function (PROMO_CODE_STATUS, PROMO_CODE_TYPE, $translate, $q, $http, ENV) {
+        function (PROMO_CODE_STATUS, $translate, $q, $http, ENV, PromoCodeTypeEnum) {
             'ngInject';
 
-            var defferd;
+            var deferred;
             var promoCodeStatus;
             var INVALID = 'PROMO_CODE.INVALID_CODE';
-            var promoCodeCheckUrl = 'http://localhost:8000/promoCode/check'; // todo - get correct url
-            var promoCodeToUpdateUrl= 'http://localhost:8000/promoCode/update'; // todo - get correct url
+            var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
             var promoCodeToUpdate;
 
             var promoCodeStatusText = {};
-            promoCodeStatusText[PROMO_CODE_TYPE.ZINKERZ_EDUCATOR] = 'PROMO_CODE.ZINKERZ_EDUCATORS_CODE_ACCEPTED';
-            promoCodeStatusText[PROMO_CODE_TYPE.FREE_LICENCE] = ' ';  //todo- what text to display
+            promoCodeStatusText[PromoCodeTypeEnum.FREE_LICENSE.enum] = 'PROMO_CODE.PROMO_CODE_ACCEPTED';
+            promoCodeStatusText[PromoCodeTypeEnum.ZINKERZ_EDUCATOR.enum] = 'PROMO_CODE.ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED';
             promoCodeStatusText[INVALID] = INVALID;
 
-
             this.checkPromoCode = function (promoCode) {
-                defferd = $q.defer();
+                deferred = $q.defer();
                 var dataToSend = {};
                 dataToSend.promoCode = promoCode;
-                dataToSend.appName =  ENV.firebaseAppScopeName;
+                dataToSend.appName = ENV.firebaseAppScopeName;
 
                 $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
-                return defferd.promise;
+                return deferred.promise;
             };
 
             this.promoCodeToUpdate = function (promoCode) {
                 promoCodeToUpdate = promoCode;
             };
 
-            this.updatePromoCode = function (uid) {
-                var dataToSend = {};
-                dataToSend.appName =  ENV.firebaseAppScopeName;
-                dataToSend.uid = uid;
-                dataToSend.promoCode = promoCodeToUpdate;
-
-                if (promoCodeToUpdate) {
-                     return $http.post(promoCodeToUpdateUrl, dataToSend);
-                }
-                return $q.when({});
+            this.getPromoCodeToUpdate = function () {
+                return promoCodeToUpdate;
             };
 
             function _validPromoCode(response) {
                 promoCodeStatus = {};
-                if (response.data && promoCodeStatusText[response.data]) {
+                var promoCodeType = response.data;
+                if (response.data && promoCodeStatusText[promoCodeType]) {
                     promoCodeStatus.text = _getPromoCodeStatusText(response.data);
                     promoCodeStatus.status = PROMO_CODE_STATUS.accepted;
                 } else {
                     promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
                     promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
                 }
-                defferd.resolve(promoCodeStatus);
+                deferred.resolve(promoCodeStatus);
             }
 
             function _invalidPromoCode() {
                 promoCodeStatus = {};
                 promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
                 promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
-                defferd.resolve(promoCodeStatus);
+                deferred.resolve(promoCodeStatus);
             }
 
             function _getPromoCodeStatusText(translationKey) {
