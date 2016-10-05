@@ -5120,6 +5120,23 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     );
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.invitation')
+        .run(["$location", "InvitationService", function($location, InvitationService){
+            'ngInject';
+            var search = $location.search();
+
+            if (angular.isDefined(search.iid)) {
+                InvitationService.showInvitationConfirm(search.iid);
+                delete search.iid;
+                $location.search(search);
+            }
+        }]);
+
+})(angular);
+
 'use strict';
 
 angular.module('znk.infra-web-app.invitation').service('InvitationListenerService',
