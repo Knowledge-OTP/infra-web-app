@@ -5307,7 +5307,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                             locals: {
                                 invitation: response.data.data
                             },
-                            controller: 'InvitationApproveModalController',
+                            controller: 'invitationApproveModalCtrl',
                             controllerAs: 'vm',
                             templateUrl: 'components/invitation/approveModal/invitationApproveModal.template.html',
                             clickOutsideToClose: true,
