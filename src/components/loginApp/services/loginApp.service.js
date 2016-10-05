@@ -201,8 +201,7 @@
                 if (angular.isDefined(promoCode) && promoCode !== null) {
                     promoCodePostFix = '#?pcid=' + promoCode;
                 }
-                // $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix;
-                $window.location.href = "http://localhost:3000/#/app/" + invitationPostFix + promoCodePostFix;
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
