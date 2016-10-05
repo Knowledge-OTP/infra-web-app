@@ -2,13 +2,13 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').service('PromoCodeSrv',
-        function (PROMO_CODE_STATUS, $translate, $q, $http, ENV, PromoCodeTypeEnum) {
+        function (PROMO_CODE_STATUS, $translate, $http, ENV, PromoCodeTypeEnum) {
             'ngInject';
 
-            var deferred;
             var promoCodeStatus;
             var INVALID = 'PROMO_CODE.INVALID_CODE';
-            var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
+            // var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
+            var promoCodeCheckUrl = 'http://localhost:8000/promoCode/check'; // todo - get correct url
             var promoCodeToUpdate;
 
             var promoCodeStatusText = {};
@@ -17,13 +17,13 @@
             promoCodeStatusText[INVALID] = INVALID;
 
             this.checkPromoCode = function (promoCode) {
-                deferred = $q.defer();
-                var dataToSend = {};
-                dataToSend.promoCode = promoCode;
-                dataToSend.appName = ENV.firebaseAppScopeName;
+                var dataToSend = {
+                    promoCode: promoCode,
+                    appName: ENV.firebaseAppScopeName
 
-                $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
-                return deferred.promise;
+                };
+
+                return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
             };
 
             this.promoCodeToUpdate = function (promoCode) {
@@ -44,14 +44,14 @@
                     promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
                     promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
                 }
-                deferred.resolve(promoCodeStatus);
+                return promoCodeStatus;
             }
 
             function _invalidPromoCode() {
                 promoCodeStatus = {};
                 promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
                 promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
-                deferred.resolve(promoCodeStatus);
+                return promoCodeStatus;
             }
 
             function _getPromoCodeStatusText(translationKey) {

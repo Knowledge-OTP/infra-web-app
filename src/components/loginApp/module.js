@@ -8,7 +8,8 @@
         'ngMaterial',
         'satellizer',
         'znk.infra.general',
-        'znk.infra.autofocus'
+        'znk.infra.autofocus',
+        'znk.infra-web-app.promoCode'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {

@@ -194,13 +194,14 @@
                 var invitationKey = InvitationKeyService.getInvitationKey();
                 var invitationPostFix = '';
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                    invitationPostFix = '#?iid=' + invitationKey;
+                    invitationPostFix = '?&iid=' + invitationKey;
                 }
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 var promoCodePostFix = '';
                 if (angular.isDefined(promoCode) && promoCode !== null) {
-                    promoCodePostFix = '#?pcid=' + promoCode;
+                    promoCodePostFix = '&pcid=' + promoCode;
                 }
+
                 $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix;
             }
 
