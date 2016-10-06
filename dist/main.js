@@ -3228,7 +3228,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                     return purchaseService.hasProVersion().then(function(isPro) {
                         if (!isPro) {
                             return EvaluatorStatesEnum.NOT_PURCHASE.enum;
-                        } else if (evaluatorData.points) {
+                        } else if (evaluatorData && evaluatorData.points) {
                             return EvaluatorStatesEnum.EVALUATED.enum;
                         } else {
                             return EvaluatorStatesEnum.PENDING.enum;
