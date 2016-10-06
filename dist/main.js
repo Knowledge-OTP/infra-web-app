@@ -6874,7 +6874,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "    <promo-code></promo-code>\n" +
+    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -6948,7 +6948,10 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "");
   $templateCache.put("components/loginApp/templates/promoCode.template.html",
     "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\">\n" +
-    "    <div class=\"promo-code-title\" translate=\".GOT_A_PROMO_CODE\" ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></div>\n" +
+    "    <div class=\"promo-code-title\"\n" +
+    "         translate=\"{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}\"\n" +
+    "         ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\">\n" +
+    "    </div>\n" +
     "\n" +
     "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
     "\n" +
@@ -7043,7 +7046,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
     "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "    <promo-code></promo-code>\n" +
+    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -7652,13 +7655,15 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             return {
                 templateUrl: 'components/loginApp/templates/promoCode.template.html',
                 restrict: 'E',
-                scope: {},
+                scope: {
+                    userContext:'=',
+                    userContextConst:"="
+                },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
 
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
-
 
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {

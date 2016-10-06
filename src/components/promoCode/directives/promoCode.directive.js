@@ -7,13 +7,15 @@
             return {
                 templateUrl: 'components/loginApp/templates/promoCode.template.html',
                 restrict: 'E',
-                scope: {},
+                scope: {
+                    userContext:'=',
+                    userContextConst:"="
+                },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
 
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
-
 
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {
