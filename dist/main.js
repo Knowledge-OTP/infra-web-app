@@ -6371,8 +6371,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 }
 
                 var parmasPrefix = isParamsUrlToSend ? '?' : '';
-                $window.location.href = "http://localhost:3000/#/app/" + parmasPrefix + invitationPostFix + promoCodePostFix;
-                // $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix; // todo
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -7603,8 +7602,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
 
-                    scope.translateText = scope.userContext === scope.userContextConst.TEACHER ? 'GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : 'PROMO_CODE.ENTER_YOUR_CODE';
-
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {
                             scope.d.showSpinner = true;
@@ -7683,12 +7680,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
             var promoCodeStatus;
             var INVALID = 'PROMO_CODE.INVALID_CODE';
-            // var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
-            // var promoCodeToUpdateUrl = ENV.backendEndpoint + '/promoCode/update';
-
-            var promoCodeCheckUrl ='http://localhost:8000/promoCode/check'; // todo
-            var promoCodeToUpdateUrl= 'http://localhost:8000/promoCode/update'; // todo
-
+            var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
+            var promoCodeToUpdateUrl = ENV.backendEndpoint + '/promoCode/update';
             var promoCodeToUpdate;
 
             var promoCodeStatusText = {};
