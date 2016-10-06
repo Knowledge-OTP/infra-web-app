@@ -7,8 +7,12 @@
 
             var promoCodeStatus;
             var INVALID = 'PROMO_CODE.INVALID_CODE';
-            var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
-            var promoCodeToUpdateUrl = ENV.backendEndpoint + '/promoCode/update';
+            // var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
+            // var promoCodeToUpdateUrl = ENV.backendEndpoint + '/promoCode/update';
+
+            var promoCodeCheckUrl ='http://localhost:8000/promoCode/check'; // todo
+            var promoCodeToUpdateUrl= 'http://localhost:8000/promoCode/update'; // todo
+
             var promoCodeToUpdate;
 
             var promoCodeStatusText = {};

@@ -7,13 +7,17 @@
             return {
                 templateUrl: 'components/loginApp/templates/promoCode.template.html',
                 restrict: 'E',
-                scope: {},
+                scope: {
+                    userContext:'=',
+                    userContextConst:"="
+                },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
 
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
 
+                    scope.translateText = scope.userContext === scope.userContextConst.TEACHER ? 'GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : 'PROMO_CODE.ENTER_YOUR_CODE';
 
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {

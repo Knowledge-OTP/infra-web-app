@@ -209,7 +209,8 @@
                 }
 
                 var parmasPrefix = isParamsUrlToSend ? '?' : '';
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
+                $window.location.href = "http://localhost:3000/#/app/" + parmasPrefix + invitationPostFix + promoCodePostFix;
+                // $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix; // todo
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {

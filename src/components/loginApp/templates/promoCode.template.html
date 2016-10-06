@@ -1,5 +1,8 @@
 <div class="promo-code-wrapper" translate-namespace="PROMO_CODE">
-    <div class="promo-code-title" translate=".GOT_A_PROMO_CODE" ng-click="d.showPromoCodeOverlay = !d.showPromoCodeOverlay"></div>
+    <div class="promo-code-title"
+         translate="{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}"
+         ng-click="d.showPromoCodeOverlay = !d.showPromoCodeOverlay">
+    </div>
 
     <div class="promo-code-overlay" ng-if="d.showPromoCodeOverlay">
 
