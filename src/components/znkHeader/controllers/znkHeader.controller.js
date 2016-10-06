@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
         function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
-                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
             'ngInject';
             $translatePartialLoader.addPart('znkHeader');
 
@@ -39,6 +39,10 @@
                     email: profile.email
                 };
             });
+
+            self.showFeedbackDialog = function () {
+                feedbackSrv.showFeedbackDialog();
+            };
 
             this.znkOpenModal = function () {
                 self.expandIcon = 'expand_less';
