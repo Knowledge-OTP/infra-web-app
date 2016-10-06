@@ -22,7 +22,7 @@
 'use strict';
 
 angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
-    ["DiagnosticIntroSrv", "$translatePartialLoader", "$log", function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
+    ["DiagnosticIntroSrv", "$log", function (DiagnosticIntroSrv, $log) {
         'ngInject';
 
         var directive = {
@@ -32,9 +32,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
             },
             templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
             link: function link(scope) {
-
-                $translatePartialLoader.addPart('diagnosticIntro');
-
                 scope.d = {};
 
                 DiagnosticIntroSrv.getActiveData().then(function (activeId) {
@@ -117,6 +114,16 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             };
         }];
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.diagnosticIntro').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('diagnosticIntro');
+    }]);
+})(angular);
+
 
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
