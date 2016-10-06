@@ -13,6 +13,9 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
             link: function link(scope) {
                 scope.d = {};
 
+                scope.d.diagQuestion = '.QUESTIONS';
+                scope.d.diagInsTitle = '.INSTRUCTIONS_TITLE';
+
                 var translateMap = {
                     diagDesc: '.DIAG_DESCRIPTION_',
                     diagSubjectText: '.DIAG_SUBJECT_TEXT_',

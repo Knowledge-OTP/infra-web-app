@@ -34,6 +34,9 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
             link: function link(scope) {
                 scope.d = {};
 
+                scope.d.diagQuestion = '.QUESTIONS';
+                scope.d.diagInsTitle = '.INSTRUCTIONS_TITLE';
+
                 var translateMap = {
                     diagDesc: '.DIAG_DESCRIPTION_',
                     diagSubjectText: '.DIAG_SUBJECT_TEXT_',
@@ -171,9 +174,9 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "                    class=\"{{d.currMapData.subjectNameAlias}}\"\n" +
     "                    translate=\"{{d.currMapData.diagSubjectName}}\">\n" +
     "                </span>\n" +
-    "                <span translate=\".QUESTIONS\"></span>\n" +
+    "                <span translate=\"{{d.diagQuestion}}\"></span>\n" +
     "                <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
-    "                    <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
+    "                    <span class=\"diagnostic-instructions-title\" translate=\"{{d.diagInsTitle}}\"></span>\n" +
     "                    <span class=\"diagnostic-instructions-text\" translate=\"{{d.currMapData.diagIns}}\"></span>\n" +
     "                </div>\n" +
     "            </div>\n" +

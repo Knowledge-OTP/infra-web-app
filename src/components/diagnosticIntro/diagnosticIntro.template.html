@@ -30,9 +30,9 @@
                     class="{{d.currMapData.subjectNameAlias}}"
                     translate="{{d.currMapData.diagSubjectName}}">
                 </span>
-                <span translate=".QUESTIONS"></span>
+                <span translate="{{d.diagQuestion}}"></span>
                 <div class="diagnostic-instructions" ng-if="showInstructions">
-                    <span class="diagnostic-instructions-title" translate=".INSTRUCTIONS_TITLE"></span>
+                    <span class="diagnostic-instructions-title" translate="{{d.diagInsTitle}}"></span>
                     <span class="diagnostic-instructions-text" translate="{{d.currMapData.diagIns}}"></span>
                 </div>
             </div>
