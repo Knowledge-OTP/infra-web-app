@@ -210,6 +210,23 @@
     );
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.invitation')
+        .run(["$location", "InvitationService", function($location, InvitationService){
+            'ngInject';
+            var search = $location.search();
+
+            if (angular.isDefined(search.iid)) {
+                InvitationService.showInvitationConfirm(search.iid);
+                delete search.iid;
+                $location.search(search);
+            }
+        }]);
+
+})(angular);
+
 'use strict';
 
 angular.module('znk.infra-web-app.invitation').service('InvitationListenerService',
@@ -380,9 +397,9 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                             locals: {
                                 invitation: response.data.data
                             },
-                            controller: 'InvitationApproveModalController',
+                            controller: 'invitationApproveModalCtrl',
                             controllerAs: 'vm',
-                            templateUrl: 'app/components/invitation/approveModal/invitationApproveModal.template.html',
+                            templateUrl: 'components/invitation/approveModal/invitationApproveModal.template.html',
                             clickOutsideToClose: true,
                             escapeToClose: true
                         });

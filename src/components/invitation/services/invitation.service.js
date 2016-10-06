@@ -54,9 +54,9 @@
                             locals: {
                                 invitation: response.data.data
                             },
-                            controller: 'InvitationApproveModalController',
+                            controller: 'invitationApproveModalCtrl',
                             controllerAs: 'vm',
-                            templateUrl: 'app/components/invitation/approveModal/invitationApproveModal.template.html',
+                            templateUrl: 'components/invitation/approveModal/invitationApproveModal.template.html',
                             clickOutsideToClose: true,
                             escapeToClose: true
                         });
