@@ -6135,21 +6135,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').service('PromoCodeTypeEnum',['EnumSrv',
-        function(EnumSrv) {
-
-            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
-                ['FREE_LICENSE', 1, 'free license'],
-                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
-            ]);
-
-            return PromoCodeTypeEnum;
-        }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.loginApp').service('InvitationKeyService',
         function () {
             'ngInject';
@@ -6528,16 +6513,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         }];
     });
 })(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.loginApp').constant('PROMO_CODE_STATUS', {
-        accepted: 0,
-        invalid: 1
-    });
-})(angular);
-
 
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
@@ -7658,6 +7633,31 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
         }]
     );
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
+        function(EnumSrv) {
+
+            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
+                ['FREE_LICENSE', 1, 'free license'],
+                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
+            ]);
+
+            return PromoCodeTypeEnum;
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.promoCode').constant('PROMO_CODE_STATUS', {
+        accepted: 0,
+        invalid: 1
+    });
+})(angular);
+
 
 (function (angular) {
     'use strict';
