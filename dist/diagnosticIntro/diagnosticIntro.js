@@ -34,6 +34,13 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
             link: function link(scope) {
                 scope.d = {};
 
+                var translateMap = {
+                    diagDesc: '.DIAG_DESCRIPTION_',
+                    diagSubjectText: 'DIAG_SUBJECT_TEXT_',
+                    diagSubjectName: 'DIAG_SUBJECT_NAME_',
+                    diagIns: 'DIAG_INSTRUCTIONS_'
+                };
+
                 DiagnosticIntroSrv.getActiveData().then(function (activeId) {
                     scope.d.activeId = activeId;
                     return DiagnosticIntroSrv.getConfigMap();
@@ -66,6 +73,11 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
                     }
 
                     scope.d.currMapData = currMapData;
+
+                    angular.forEach(translateMap, function(val, key) {
+                        scope.d.currMapData[key] = val + angular.uppercase(currMapData.subjectNameAlias);
+                    });
+
                     scope.d.currMapIndex = currMapIndex;
                 }).catch(function (err) {
                     $log.error('DiagnosticIntroDirective: Error catch' + err);
@@ -130,7 +142,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
     "        <div class=\"diagnostic-text\"\n" +
-    "             translate=\".DIAG_DESCRIPTION_{{d.currMapData.subjectNameAlias | uppercase}}\">\n" +
+    "             translate=\"d.currMapData.diagDesc\">\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"icons-section\">\n" +
@@ -154,15 +166,15 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "    </div>\n" +
     "    <div class=\"section-question\" ng-if=\"!d.currMapData.hideSectionQuestion\">\n" +
     "            <div>\n" +
-    "                <span translate=\".DIAG_SUBJECT_TEXT_{{d.currMapData.subjectNameAlias | uppercase}}\" ng-cloak></span>\n" +
+    "                <span translate=\"d.currMapData.diagSubjectText\" ng-cloak></span>\n" +
     "                <span\n" +
     "                    class=\"{{d.currMapData.subjectNameAlias}}\"\n" +
-    "                    translate=\".DIAG_SUBJECT_NAME_{{d.currMapData.subjectNameAlias | uppercase}}\">\n" +
+    "                    translate=\"d.currMapData.diagSubjectName\">\n" +
     "                </span>\n" +
     "                <span translate=\".QUESTIONS\"></span>\n" +
     "                <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
     "                    <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
-    "                    <span class=\"diagnostic-instructions-text\" translate=\".DIAG_INSTRUCTIONS_{{d.currMapData.subjectNameAlias | uppercase}}\"></span>\n" +
+    "                    <span class=\"diagnostic-instructions-text\" translate=\"d.currMapData.diagIns\"></span>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "    </div>\n" +
