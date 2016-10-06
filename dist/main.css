@@ -4719,7 +4719,8 @@ workout-intro-lock {
     .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container {
       -ms-flex-positive: 1;
           flex-grow: 1;
-      position: relative; }
+      position: relative;
+      overflow: hidden; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {

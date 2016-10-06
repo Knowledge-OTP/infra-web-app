@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -19,7 +19,6 @@
                     widgetTitle: '@'
                 },
                 link: function (scope, element, attrs, ngModelCtrl) {
-                    $translatePartialLoader.addPart('estimatedScoreWidget');
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');

@@ -103,12 +103,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "$translatePartialLoader", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                                  $translatePartialLoader, ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                                  ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
                                   EventManagerSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('completeExercise');
 
                 var $ctrl = this;
 
@@ -1124,6 +1122,16 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             };
             return directive;
         });
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.completeExercise').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('completeExercise');
+    }]);
 })(angular);
 
 
@@ -2662,7 +2670,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
 'use strict';
 
 angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
-    ["DiagnosticIntroSrv", "$translatePartialLoader", "$log", function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
+    ["DiagnosticIntroSrv", "$log", function (DiagnosticIntroSrv, $log) {
         'ngInject';
 
         var directive = {
@@ -2672,10 +2680,14 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
             },
             templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
             link: function link(scope) {
-
-                $translatePartialLoader.addPart('diagnosticIntro');
-
                 scope.d = {};
+
+                var translateMap = {
+                    diagDesc: '.DIAG_DESCRIPTION_',
+                    diagSubjectText: '.DIAG_SUBJECT_TEXT_',
+                    diagSubjectName: '.DIAG_SUBJECT_NAME_',
+                    diagIns: '.DIAG_INSTRUCTIONS_'
+                };
 
                 DiagnosticIntroSrv.getActiveData().then(function (activeId) {
                     scope.d.activeId = activeId;
@@ -2709,6 +2721,11 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
                     }
 
                     scope.d.currMapData = currMapData;
+
+                    angular.forEach(translateMap, function(val, key) {
+                        scope.d.currMapData[key] = val + angular.uppercase(currMapData.subjectNameAlias);
+                    });
+
                     scope.d.currMapIndex = currMapIndex;
                 }).catch(function (err) {
                     $log.error('DiagnosticIntroDirective: Error catch' + err);
@@ -2758,12 +2775,22 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
         }];
 }]);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.diagnosticIntro').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('diagnosticIntro');
+    }]);
+})(angular);
+
+
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
     "        <div class=\"diagnostic-text\"\n" +
-    "             translate=\".DIAG_DESCRIPTION_{{d.currMapData.subjectNameAlias | uppercase}}\">\n" +
+    "             translate=\"{{d.currMapData.diagDesc}}\">\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"icons-section\">\n" +
@@ -2785,17 +2812,17 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "            <div class=\"diagnostic-raccoon\" ng-class=\"'diagnostic-raccoon-'+d.currMapData.subjectNameAlias\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"section-question\" ng-if=\"!d.currMapData.hideSectionQuestion\">\n" +
+    "    <div class=\"section-question\" ng-if=\"d.currMapData && !d.currMapData.hideSectionQuestion\">\n" +
     "            <div>\n" +
-    "                <span translate=\".DIAG_SUBJECT_TEXT_{{d.currMapData.subjectNameAlias | uppercase}}\" ng-cloak></span>\n" +
+    "                <span translate=\"{{d.currMapData.diagSubjectText}}\" ng-cloak></span>\n" +
     "                <span\n" +
     "                    class=\"{{d.currMapData.subjectNameAlias}}\"\n" +
-    "                    translate=\".DIAG_SUBJECT_NAME_{{d.currMapData.subjectNameAlias | uppercase}}\">\n" +
+    "                    translate=\"{{d.currMapData.diagSubjectName}}\">\n" +
     "                </span>\n" +
     "                <span translate=\".QUESTIONS\"></span>\n" +
     "                <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
     "                    <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
-    "                    <span class=\"diagnostic-instructions-text\" translate=\".DIAG_INSTRUCTIONS_{{d.currMapData.subjectNameAlias | uppercase}}\"></span>\n" +
+    "                    <span class=\"diagnostic-instructions-text\" translate=\"{{d.currMapData.diagIns}}\"></span>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "    </div>\n" +
@@ -2869,7 +2896,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -2882,7 +2909,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     widgetTitle: '@'
                 },
                 link: function (scope, element, attrs, ngModelCtrl) {
-                    $translatePartialLoader.addPart('estimatedScoreWidget');
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
@@ -3009,6 +3035,16 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
             };
         }]
     );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.estimatedScoreWidget').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('estimatedScoreWidget');
+    }]);
 })(angular);
 
 
@@ -7163,8 +7199,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingController', ['$state', 'onBoardingStep', '$translatePartialLoader', function($state, onBoardingStep, $translatePartialLoader) {
-        $translatePartialLoader.addPart('onBoarding');
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingController', ["$state", "onBoardingStep", function($state, onBoardingStep) {
+        'ngInject';
         $state.go(onBoardingStep.url);
     }]);
 })(angular);
@@ -7396,6 +7432,16 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
         }];
     }]);
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.onBoarding').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('onBoarding');
+    }]);
+})(angular);
+
 
 angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
@@ -9043,7 +9089,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
     'use strict';
 
     angular.module('znk.infra-web-app.tests').directive('navigationPane',
-        ["$translatePartialLoader", "ExamTypeEnum", "ExamSrv", "ExerciseResultSrv", "$q", function ($translatePartialLoader, ExamTypeEnum, ExamSrv, ExerciseResultSrv, $q) {
+        ["ExamTypeEnum", "ExamSrv", "ExerciseResultSrv", "$q", function (ExamTypeEnum, ExamSrv, ExerciseResultSrv, $q) {
             'ngInject';
             return {
                 scope: {},
@@ -9051,7 +9097,6 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                 templateUrl: 'components/tests/templates/navigationPane.template.html',
                 require: '?ngModel',
                 link: function (scope, element, attributes, ngModelCtrl) {
-                    $translatePartialLoader.addPart('tests');
 
                     scope.vm = {};
 
@@ -9112,6 +9157,16 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
             };
         }]
     );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tests').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('tests');
+    }]);
 })(angular);
 
 
@@ -9375,7 +9430,7 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect',
-        ["userGoalsSelectionService", "$translate", "UtilitySrv", "$timeout", "$q", "$translatePartialLoader", function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
+        ["userGoalsSelectionService", "$translate", "UtilitySrv", "$timeout", "$q", function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q) {
             'ngInject';
 
             var schoolList = [];
@@ -9388,8 +9443,6 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
                     getSelectedSchools: '&?'
                 },
                 link: function link(scope, element, attrs) {
-                    $translatePartialLoader.addPart('userGoalsSelection');
-
                     var MIN_LENGTH_AUTO_COMPLETE = 3;
                     var MAX_SCHOOLS_SELECT = 3;
                     var userSchools;
@@ -9509,8 +9562,9 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',['UserGoalsService', '$timeout', 'userGoalsSelectionService', '$q', '$translatePartialLoader', 'ScoringService',
-        function UserGoalsDirective(UserGoalsService, $timeout, userGoalsSelectionService, $q, $translatePartialLoader, ScoringService) {
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',
+        ["UserGoalsService", "$timeout", "userGoalsSelectionService", "$q", "ScoringService", function UserGoalsDirective(UserGoalsService, $timeout, userGoalsSelectionService, $q, ScoringService) {
+            'ngInject';
             var directive = {
                 restrict: 'E',
                 templateUrl: 'components/userGoalsSelection/templates/userGoals.template.html',
@@ -9519,7 +9573,6 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
                     setting: '='
                 },
                 link: function link(scope) {
-                    $translatePartialLoader.addPart('userGoalsSelection');
                     var userGoalRef;
                     scope.scoringLimits = ScoringService.getScoringLimits();
                     scope.goalsSettings = UserGoalsService.getGoalsSettings();
@@ -9598,6 +9651,16 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
             return directive;
         }]);
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.userGoalsSelection').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('userGoalsSelection');
+    }]);
+})(angular);
+
 
 'use strict';
 
@@ -10238,10 +10301,8 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", "$translatePartialLoader", function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
+        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", function (data, $state, $scope, ExerciseStatusEnum, $location) {
             'ngInject';
-
-            $translatePartialLoader.addPart('workoutsRoadmap');
 
             var vm = this;
 
@@ -10947,6 +11008,16 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             }]
         );
 })();
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('workoutsRoadmap');
+    }]);
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -11952,10 +12023,9 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
+        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
-            $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
@@ -12041,6 +12111,16 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             };
         }
     ]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkHeader').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('znkHeader');
+    }]);
 })(angular);
 
 

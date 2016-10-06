@@ -1,7 +1,8 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',['UserGoalsService', '$timeout', 'userGoalsSelectionService', '$q', '$translatePartialLoader', 'ScoringService',
-        function UserGoalsDirective(UserGoalsService, $timeout, userGoalsSelectionService, $q, $translatePartialLoader, ScoringService) {
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',
+        function UserGoalsDirective(UserGoalsService, $timeout, userGoalsSelectionService, $q, ScoringService) {
+            'ngInject';
             var directive = {
                 restrict: 'E',
                 templateUrl: 'components/userGoalsSelection/templates/userGoals.template.html',
@@ -10,7 +11,6 @@
                     setting: '='
                 },
                 link: function link(scope) {
-                    $translatePartialLoader.addPart('userGoalsSelection');
                     var userGoalRef;
                     scope.scoringLimits = ScoringService.getScoringLimits();
                     scope.goalsSettings = UserGoalsService.getGoalsSettings();
@@ -87,5 +87,5 @@
             };
 
             return directive;
-        }]);
+        });
 })(angular);

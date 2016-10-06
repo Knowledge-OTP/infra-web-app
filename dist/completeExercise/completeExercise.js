@@ -54,12 +54,10 @@
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "$translatePartialLoader", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                                  $translatePartialLoader, ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                                  ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
                                   EventManagerSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('completeExercise');
 
                 var $ctrl = this;
 
@@ -1075,6 +1073,16 @@
             };
             return directive;
         });
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.completeExercise').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('completeExercise');
+    }]);
 })(angular);
 
 

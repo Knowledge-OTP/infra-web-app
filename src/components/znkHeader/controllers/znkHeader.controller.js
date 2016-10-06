@@ -2,10 +2,9 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
+        function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
-            $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
