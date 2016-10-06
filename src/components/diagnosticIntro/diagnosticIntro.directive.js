@@ -13,6 +13,13 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
             link: function link(scope) {
                 scope.d = {};
 
+                var translateMap = {
+                    diagDesc: '.DIAG_DESCRIPTION_',
+                    diagSubjectText: 'DIAG_SUBJECT_TEXT_',
+                    diagSubjectName: 'DIAG_SUBJECT_NAME_',
+                    diagIns: 'DIAG_INSTRUCTIONS_'
+                };
+
                 DiagnosticIntroSrv.getActiveData().then(function (activeId) {
                     scope.d.activeId = activeId;
                     return DiagnosticIntroSrv.getConfigMap();
@@ -45,6 +52,11 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
                     }
 
                     scope.d.currMapData = currMapData;
+
+                    angular.forEach(translateMap, function(val, key) {
+                        scope.d.currMapData[key] = val + angular.uppercase(currMapData.subjectNameAlias);
+                    });
+
                     scope.d.currMapIndex = currMapIndex;
                 }).catch(function (err) {
                     $log.error('DiagnosticIntroDirective: Error catch' + err);
