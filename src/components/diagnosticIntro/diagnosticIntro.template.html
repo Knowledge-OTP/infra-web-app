@@ -1,7 +1,7 @@
 <div class="diagnostic-intro-drv" translate-namespace="DIAGNOSTIC_INTRO">
     <div class="description">
         <div class="diagnostic-text"
-             translate="d.currMapData.diagDesc">
+             translate="{{d.currMapData.diagDesc}}">
         </div>
     </div>
     <div class="icons-section">
@@ -25,15 +25,15 @@
     </div>
     <div class="section-question" ng-if="!d.currMapData.hideSectionQuestion">
             <div>
-                <span translate="d.currMapData.diagSubjectText" ng-cloak></span>
+                <span translate="{{d.currMapData.diagSubjectText}}" ng-cloak></span>
                 <span
                     class="{{d.currMapData.subjectNameAlias}}"
-                    translate="d.currMapData.diagSubjectName">
+                    translate="{{d.currMapData.diagSubjectName}}">
                 </span>
                 <span translate=".QUESTIONS"></span>
                 <div class="diagnostic-instructions" ng-if="showInstructions">
                     <span class="diagnostic-instructions-title" translate=".INSTRUCTIONS_TITLE"></span>
-                    <span class="diagnostic-instructions-text" translate="d.currMapData.diagIns"></span>
+                    <span class="diagnostic-instructions-text" translate="{{d.currMapData.diagIns}}"></span>
                 </div>
             </div>
     </div>
