@@ -169,7 +169,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     "</svg>\n" +
     "");
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
-    "<svg version=\"1.1\"\n" +
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-645.7 420.9 200.9 199\"\n" +
     "     class=\"full-screen-icon\">\n" +
@@ -177,7 +177,9 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     "\n" +
     "    <style type=\"text/css\">\n" +
     "        .full-screen-icon {\n" +
-    "            width: 100%; height: auto\n" +
+    "            width: 100%;\n" +
+    "			height: auto;\n" +
+    "			fill:none;\n" +
     "        }\n" +
     "    </style>\n" +
     "<g>\n" +
