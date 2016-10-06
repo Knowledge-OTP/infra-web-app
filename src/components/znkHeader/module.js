@@ -20,7 +20,8 @@
             function(SvgIconSrvProvider){
 
                 var svgMap = {
-                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg'
+                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/znk-header-check-mark-icon'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);

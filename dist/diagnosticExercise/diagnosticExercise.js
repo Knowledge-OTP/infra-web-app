@@ -28,7 +28,7 @@
         'ngInject';
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
-            'diagnostic-check-mark': 'components/diagnosticExercise/svg/check-mark-icon.svg',
+            'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
             'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
@@ -1016,14 +1016,14 @@
 
 
 angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/diagnosticExercise/svg/check-mark-icon.svg",
+  $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
     "     y=\"0px\"\n" +
     "	 viewBox=\"0 0 329.5 223.7\"\n" +
-    "	 class=\"check-mark-svg\">\n" +
+    "	 class=\"diagnostic-check-mark-svg\">\n" +
     "    <style type=\"text/css\">\n" +
-    "        .check-mark-svg .st0 {\n" +
+    "        .diagnostic-check-mark-svg .st0 {\n" +
     "            fill: none;\n" +
     "            stroke: #ffffff;\n" +
     "            stroke-width: 21;\n" +

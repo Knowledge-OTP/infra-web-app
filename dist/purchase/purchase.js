@@ -20,14 +20,14 @@
             function(SvgIconSrvProvider){
 
                 var svgMap = {
-                    'check-mark': 'components/purchase/svg/check-mark-icon.svg',
-                    'close-popup': 'components/purchase/svg/close-popup.svg',
+                    'purchase-check-mark': 'components/purchase/svg/check-mark-icon.svg',
+                    'purchase-close-popup': 'components/purchase/svg/purchase-close-popup.svg',
                     'purchase-popup-bullet-1-icon': 'components/purchase/svg/purchase-popup-bullet-1-icon.svg',
                     'purchase-popup-bullet-2-icon': 'components/purchase/svg/purchase-popup-bullet-2-icon.svg',
                     'purchase-popup-bullet-3-icon': 'components/purchase/svg/purchase-popup-bullet-3-icon.svg',
                     'purchase-popup-bullet-4-icon': 'components/purchase/svg/purchase-popup-bullet-4-icon.svg',
                     'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg',
-                    'raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
+                    'purchase-raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -396,7 +396,7 @@
                 var toastTemplate =
                     '<md-toast class="purchase-nudge" ng-class="{first: vm.mode === 1, all: vm.mode === 2}" translate-namespace="PURCHASE_POPUP">' +
                     '<div class="md-toast-text" flex>' +
-                    '<div class="close-toast cursor-pointer" ng-click="vm.closeToast()"><svg-icon name="close-popup"></svg-icon></div>' +
+                    '<div class="close-toast cursor-pointer" ng-click="vm.closeToast()"><svg-icon name="purchase-close-popup"></svg-icon></div>' +
                     '<span translate="{{vm.nudgeMessage}}" translate-values="{num: {{vm.num}} }"></span> ' +
                     '<span class="open-dialog" ng-click="vm.showPurchaseDialog()"><span translate="{{vm.nudgeAction}}"></span></span>' +
                     '</div>' +
@@ -452,7 +452,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "        <div class=\"upgraded flex-container\">\n" +
     "            <div class=\"flex-item\">\n" +
     "                <div class=\"icon-wrapper completed\">\n" +
-    "                    <svg-icon name=\"check-mark\"></svg-icon>\n" +
+    "                    <svg-icon name=\"purchase-check-mark\"></svg-icon>\n" +
     "                </div>\n" +
     "                <span class=\"text\" translate=\".UPGRADED_ON\" translate-values=\"{upgradeDate: vm.upgradeDate}\"></span>\n" +
     "            </div>\n" +
@@ -501,9 +501,9 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "     x=\"0px\"\n" +
     "     y=\"0px\"\n" +
     "	 viewBox=\"0 0 329.5 223.7\"\n" +
-    "	 class=\"check-mark-svg\">\n" +
+    "	 class=\"purchase-check-mark-svg\">\n" +
     "    <style type=\"text/css\">\n" +
-    "        .check-mark-svg .st0 {\n" +
+    "        .purchase-check-mark-svg .st0 {\n" +
     "            fill: none;\n" +
     "            stroke: #ffffff;\n" +
     "            stroke-width: 21;\n" +
@@ -516,21 +516,6 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
     "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
     "    </g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/purchase/svg/close-popup.svg",
-    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
-    "<style type=\"text/css\">\n" +
-    "	.close-pop-svg {width: 100%; height: auto;}\n" +
-    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-    "</style>\n" +
-    "<path class=\"st0\"/>\n" +
-    "<g>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-    "</g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/purchase/svg/previous-icon.svg",
@@ -589,6 +574,21 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    <circle cx=\"-220.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
     "    <circle cx=\"-220.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
     "    <circle cx=\"-220.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/purchase-close-popup.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/purchase/svg/purchase-popup-bullet-1-icon.svg",
@@ -773,10 +773,10 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    <div class=\"purchase-popup-container\">\n" +
     "        <div class=\"popup-header\">\n" +
     "            <div class=\"raccoon\">\n" +
-    "                <svg-icon name=\"raccoon-logo-icon\"></svg-icon>\n" +
+    "                <svg-icon name=\"purchase-raccoon-logo-icon\"></svg-icon>\n" +
     "            </div>\n" +
     "            <div class=\"close-popup-wrap\">\n" +
-    "                <svg-icon name=\"close-popup\" ng-click=\"vm.close()\"></svg-icon>\n" +
+    "                <svg-icon name=\"purchase-close-popup\" ng-click=\"vm.close()\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <md-dialog-content>\n" +

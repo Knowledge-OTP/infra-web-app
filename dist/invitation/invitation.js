@@ -14,7 +14,7 @@
 
                 var svgMap = {
                     'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
-                    'invitation-close-popup': 'components/invitation/svg/close-popup.svg'
+                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -544,7 +544,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "<md-dialog ng-cloak class=\"invitation-confirm-modal\" translate-namespace=\"INVITE_APPROVE_MODAL\">\n" +
     "    <md-toolbar>\n" +
     "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
-    "            <svg-icon name=\"close-popup\"></svg-icon>\n" +
+    "            <svg-icon name=\"invitation-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
     "    </md-toolbar>\n" +
     "    <md-dialog-content ng-switch=\"vm.requestMessage\">\n" +
@@ -628,7 +628,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            <div class=\"title\" translate=\".MY_TEACHER\"></div>\n" +
     "            <div class=\"teacher-name\">{{::teacher.senderName}}</div>\n" +
     "            <div class=\"teacher-email\">{{::teacher.senderEmail}}</div>\n" +
-    "            <svg-icon name=\"close-popup\" class=\"delete-teacher\" ng-click=\"deleteTeacher(teacher)\"></svg-icon>\n" +
+    "            <svg-icon name=\"invitation-close-popup\" class=\"delete-teacher\" ng-click=\"deleteTeacher(teacher)\"></svg-icon>\n" +
     "        </div>\n" +
     "        <md-list ng-if=\"hasItems(declinedInvitations)\">\n" +
     "            <md-subheader class=\"invite-sub-title\">{{::declinedTitle}}</md-subheader>\n" +
@@ -648,7 +648,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                    <div class=\"creation-time\">{{::invite.creationTime | date : 'd MMM, h:mm a'}}</div>\n" +
     "                </div>\n" +
     "                <div class=\"decline-invite\">\n" +
-    "                    <svg-icon name=\"close-popup\" class=\"decline-invite-btn\" ng-click=\"decline(invite)\"></svg-icon>\n" +
+    "                    <svg-icon name=\"invitation-close-popup\" class=\"decline-invite-btn\" ng-click=\"decline(invite)\"></svg-icon>\n" +
     "                </div>\n" +
     "                <div class=\"approve-invite\">\n" +
     "                    <svg-icon name=\"v-icon\" class=\"v-icon-btn\" ng-click=\"approve(invite)\"></svg-icon>\n" +
@@ -663,7 +663,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                    <div class=\"teacher-email\">{{::conformation.receiverName}}</div>\n" +
     "                </div>\n" +
     "                <div class=\"decline-conformation\">\n" +
-    "                    <svg-icon name=\"close-popup\" class=\"decline-conformation-btn\" ng-click=\"deletePendingConformations(conformation)\"></svg-icon>\n" +
+    "                    <svg-icon name=\"invitation-close-popup\" class=\"decline-conformation-btn\" ng-click=\"deletePendingConformations(conformation)\"></svg-icon>\n" +
     "                </div>\n" +
     "            </md-list-item>\n" +
     "        </md-list>\n" +
@@ -727,7 +727,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    </div>\n" +
     "</md-dialog>\n" +
     "");
-  $templateCache.put("components/invitation/svg/close-popup.svg",
+  $templateCache.put("components/invitation/svg/invitation-close-popup.svg",
     "<svg\n" +
     "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "    x=\"0px\"\n" +
@@ -735,16 +735,15 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    viewBox=\"-596.6 492.3 133.2 133.5\"\n" +
     "    class=\"invitation-close-popup\">\n" +
     "    <style>\n" +
-    "\n" +
     "        .invitation-close-popup .st0{fill:none;}\n" +
-    "        .invitation-close-popup .st1{fill:none;stroke: #ffffff;;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-    "\n" +
+    "        .invitation-close-popup .st1{fill:none;stroke:\n" +
+    "        #ffffff;;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
     "    </style>\n" +
-    "<path class=\"st0\"/>\n" +
-    "<g>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-    "</g>\n" +
+    "    <path class=\"st0\"/>\n" +
+    "    <g>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "    </g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/invitation/svg/teacher-icon.svg",

@@ -22,7 +22,7 @@
             <div class="title" translate=".MY_TEACHER"></div>
             <div class="teacher-name">{{::teacher.senderName}}</div>
             <div class="teacher-email">{{::teacher.senderEmail}}</div>
-            <svg-icon name="close-popup" class="delete-teacher" ng-click="deleteTeacher(teacher)"></svg-icon>
+            <svg-icon name="invitation-close-popup" class="delete-teacher" ng-click="deleteTeacher(teacher)"></svg-icon>
         </div>
         <md-list ng-if="hasItems(declinedInvitations)">
             <md-subheader class="invite-sub-title">{{::declinedTitle}}</md-subheader>
@@ -42,7 +42,7 @@
                     <div class="creation-time">{{::invite.creationTime | date : 'd MMM, h:mm a'}}</div>
                 </div>
                 <div class="decline-invite">
-                    <svg-icon name="close-popup" class="decline-invite-btn" ng-click="decline(invite)"></svg-icon>
+                    <svg-icon name="invitation-close-popup" class="decline-invite-btn" ng-click="decline(invite)"></svg-icon>
                 </div>
                 <div class="approve-invite">
                     <svg-icon name="v-icon" class="v-icon-btn" ng-click="approve(invite)"></svg-icon>
@@ -57,7 +57,7 @@
                     <div class="teacher-email">{{::conformation.receiverName}}</div>
                 </div>
                 <div class="decline-conformation">
-                    <svg-icon name="close-popup" class="decline-conformation-btn" ng-click="deletePendingConformations(conformation)"></svg-icon>
+                    <svg-icon name="invitation-close-popup" class="decline-conformation-btn" ng-click="deletePendingConformations(conformation)"></svg-icon>
                 </div>
             </md-list-item>
         </md-list>

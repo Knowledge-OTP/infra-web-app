@@ -7,7 +7,7 @@ answer-explanation-content {
         @include text-style(18px, $fontColor2, Quicksand, bold);
     }
 
-    svg-icon[name="close-popup"] {
+    svg-icon[name="answer-explanation-close"] {
         svg {
             line {
                 stroke: $fontColor2;
