@@ -9,7 +9,6 @@
             var INVALID = 'PROMO_CODE.INVALID_CODE';
             var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
             var promoCodeToUpdateUrl = ENV.backendEndpoint + '/promoCode/update';
-
             var promoCodeToUpdate;
 
             var promoCodeStatusText = {};
