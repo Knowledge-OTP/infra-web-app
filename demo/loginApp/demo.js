@@ -1,4 +1,4 @@
-angular.module('demo', ['znk.infra-web-app.loginApp'])
+angular.module('demo', ['znk.infra-web-app.loginApp', 'demoEnv', 'znk.infra-web-app.promoCode'])
     .config(function ($translateProvider, $locationProvider) {
         $locationProvider.html5Mode({
             enabled: true,
@@ -13,5 +13,5 @@ angular.module('demo', ['znk.infra-web-app.loginApp'])
 
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
-        })
+        });
     });

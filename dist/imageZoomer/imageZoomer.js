@@ -25,7 +25,7 @@
                 DialogController.$inject = ["$scope"];
                 var MAX_WIDTH = 400;
                 var MAX_HEIGHT = 500;
-                var MIN_SIZE_TO_ZOOM = 200;
+                var MIN_SIZE_TO_ZOOM = 100;
                 var zoomableImgElemArr = [];
 
                 $timeout(function () {
@@ -95,9 +95,10 @@
                     imageNewParent.css('textAlign', 'center');
                     imageNewParent.css('width', image.style.width);
                     imageNewParent.css('height', image.style.height);
-                    imageNewParent.append(image);
                     imageParent.append(imageNewParent);
-
+                    imageParent[0].replaceChild(imageNewParent[0], image);
+                    imageNewParent.append(image);
+                    
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
