@@ -6353,18 +6353,25 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 if (userContext === USER_CONTEXT.TEACHER) {
                     appName = appName + '-educator';
                 }
+
+                var isParamsUrlToSend = false;
+
                 var invitationKey = InvitationKeyService.getInvitationKey();
                 var invitationPostFix = '';
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                    invitationPostFix = '?&iid=' + invitationKey;
+                    invitationPostFix = '&iid=' + invitationKey;
+                    isParamsUrlToSend = true;
                 }
+
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 var promoCodePostFix = '';
                 if (angular.isDefined(promoCode) && promoCode !== null) {
                     promoCodePostFix = '&pcid=' + promoCode;
+                    isParamsUrlToSend = true;
                 }
 
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix + promoCodePostFix;
+                var parmasPrefix = isParamsUrlToSend ? '?' : '';
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -7670,7 +7677,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             var INVALID = 'PROMO_CODE.INVALID_CODE';
             var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
             var promoCodeToUpdateUrl = ENV.backendEndpoint + '/promoCode/update';
-
             var promoCodeToUpdate;
 
             var promoCodeStatusText = {};
