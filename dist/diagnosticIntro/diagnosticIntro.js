@@ -36,9 +36,9 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
 
                 var translateMap = {
                     diagDesc: '.DIAG_DESCRIPTION_',
-                    diagSubjectText: 'DIAG_SUBJECT_TEXT_',
-                    diagSubjectName: 'DIAG_SUBJECT_NAME_',
-                    diagIns: 'DIAG_INSTRUCTIONS_'
+                    diagSubjectText: '.DIAG_SUBJECT_TEXT_',
+                    diagSubjectName: '.DIAG_SUBJECT_NAME_',
+                    diagIns: '.DIAG_INSTRUCTIONS_'
                 };
 
                 DiagnosticIntroSrv.getActiveData().then(function (activeId) {
