@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.promoCode').service('PromoCodeSrv',
-        function (PROMO_CODE_STATUS, $translate, $http, ENV, PromoCodeTypeEnum, $q) {
+        function (PROMO_CODE_STATUS, $translate, $http, ENV, PromoCodeTypeEnum) {
             'ngInject';
 
             var promoCodeStatus;
@@ -35,16 +35,12 @@
                 return promoCodeToUpdate;
             };
 
-            this.updatePromoCode = function (uid) {
+            this.updatePromoCode = function (uid, promoCode) {
                 var dataToSend = {};
                 dataToSend.appName =  ENV.firebaseAppScopeName;
                 dataToSend.uid = uid;
-                dataToSend.promoCode = promoCodeToUpdate;
-
-                if (promoCodeToUpdate) {
-                     return $http.post(promoCodeToUpdateUrl, dataToSend);
-                }
-                return $q.when({});
+                dataToSend.promoCode = promoCode;
+                return $http.post(promoCodeToUpdateUrl, dataToSend);
             };
 
             function _validPromoCode(response) {
