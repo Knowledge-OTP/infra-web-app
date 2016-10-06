@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
-    function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
+    function (DiagnosticIntroSrv, $log) {
         'ngInject';
 
         var directive = {
@@ -11,9 +11,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
             },
             templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
             link: function link(scope) {
-
-                $translatePartialLoader.addPart('diagnosticIntro');
-
                 scope.d = {};
 
                 DiagnosticIntroSrv.getActiveData().then(function (activeId) {
