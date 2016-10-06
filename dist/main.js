@@ -6186,15 +6186,15 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             name: 'SAT',
             className: 'sat'
         },
-        ACT: {
-            id: 'ACT',
-            name: 'ACT',
-            className: 'act'
-        },
         TOEFL: {
             id: 'TOEFL',
             name: 'TOEFL',
             className: 'toefl'
+        },
+        ACT: {
+            id: 'ACT',
+            name: 'ACT',
+            className: 'act'
         }
     };
 
