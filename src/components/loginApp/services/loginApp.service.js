@@ -99,12 +99,12 @@
     };
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
-        var env = 'prod';
+        var env = 'dev';
         this.setEnv = function (newEnv) {
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) { //, PromoCodeSrv) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -201,15 +201,15 @@
                     isParamsUrlToSend = true;
                 }
 
-                // var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
-                // var promoCodePostFix = '';
-                // if (angular.isDefined(promoCode) && promoCode !== null) {
-                //     promoCodePostFix = '&pcid=' + promoCode;
-                //     isParamsUrlToSend = true;
-                // }
+                var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
+                var promoCodePostFix = '';
+                if (angular.isDefined(promoCode) && promoCode !== null) {
+                    promoCodePostFix = '&pcid=' + promoCode;
+                    isParamsUrlToSend = true;
+                }
 
                 var parmasPrefix = isParamsUrlToSend ? '?' : '';
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix;// + promoCodePostFix;
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
