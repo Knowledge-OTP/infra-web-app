@@ -99,7 +99,7 @@
     };
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
-        var env = 'prod';
+        var env = 'dev';
         this.setEnv = function (newEnv) {
             env = newEnv;
         };
