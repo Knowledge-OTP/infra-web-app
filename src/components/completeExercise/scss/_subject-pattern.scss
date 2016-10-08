@@ -2,6 +2,10 @@
     background-repeat: repeat;
 }
 
+.math-subject-pattern{
+    @include background-image-url-retina('/assets/images/math-background-pattern');
+}
+
 .reading-subject-pattern{
     @include background-image-url-retina('/assets/images/reading-background-pattern');
 }

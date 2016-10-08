@@ -30,10 +30,9 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
+        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
-            $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
@@ -119,6 +118,16 @@
             };
         }
     ]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkHeader').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('znkHeader');
+    }]);
 })(angular);
 
 

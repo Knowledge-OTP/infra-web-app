@@ -25,7 +25,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').directive('navigationPane',
-        ["$translatePartialLoader", "ExamTypeEnum", "ExamSrv", "ExerciseResultSrv", "$q", function ($translatePartialLoader, ExamTypeEnum, ExamSrv, ExerciseResultSrv, $q) {
+        ["ExamTypeEnum", "ExamSrv", "ExerciseResultSrv", "$q", function (ExamTypeEnum, ExamSrv, ExerciseResultSrv, $q) {
             'ngInject';
             return {
                 scope: {},
@@ -33,7 +33,6 @@
                 templateUrl: 'components/tests/templates/navigationPane.template.html',
                 require: '?ngModel',
                 link: function (scope, element, attributes, ngModelCtrl) {
-                    $translatePartialLoader.addPart('tests');
 
                     scope.vm = {};
 
@@ -94,6 +93,16 @@
             };
         }]
     );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tests').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('tests');
+    }]);
 })(angular);
 
 

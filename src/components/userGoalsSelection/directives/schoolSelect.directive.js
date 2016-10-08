@@ -6,7 +6,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect',
-        function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
+        function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q) {
             'ngInject';
 
             var schoolList = [];
@@ -19,8 +19,6 @@
                     getSelectedSchools: '&?'
                 },
                 link: function link(scope, element, attrs) {
-                    $translatePartialLoader.addPart('userGoalsSelection');
-
                     var MIN_LENGTH_AUTO_COMPLETE = 3;
                     var MAX_SCHOOLS_SELECT = 3;
                     var userSchools;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
-    function (DiagnosticIntroSrv, $translatePartialLoader, $log) {
+    function (DiagnosticIntroSrv, $log) {
         'ngInject';
 
         var directive = {
@@ -11,10 +11,14 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
             },
             templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
             link: function link(scope) {
-
-                $translatePartialLoader.addPart('diagnosticIntro');
-
                 scope.d = {};
+
+                var translateMap = {
+                    diagDesc: '.DIAG_DESCRIPTION_',
+                    diagSubjectText: '.DIAG_SUBJECT_TEXT_',
+                    diagSubjectName: '.DIAG_SUBJECT_NAME_',
+                    diagIns: '.DIAG_INSTRUCTIONS_'
+                };
 
                 DiagnosticIntroSrv.getActiveData().then(function (activeId) {
                     scope.d.activeId = activeId;
@@ -48,6 +52,11 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
                     }
 
                     scope.d.currMapData = currMapData;
+
+                    angular.forEach(translateMap, function(val, key) {
+                        scope.d.currMapData[key] = val + angular.uppercase(currMapData.subjectNameAlias);
+                    });
+
                     scope.d.currMapIndex = currMapIndex;
                 }).catch(function (err) {
                     $log.error('DiagnosticIntroDirective: Error catch' + err);
