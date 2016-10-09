@@ -1,0 +1,7 @@
+@import '../../../src/scss/imports/_colors',
+        '../../../src/scss/imports/variables',
+        '../../../bower_components/infra/dist/mixins/mixins';
+
+@import 'scss/my-live-lessons-schedule',
+        'scss/reschedule-lesson-modal',
+        'scss/upcoming-lesson-toast';
