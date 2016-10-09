@@ -92,13 +92,13 @@ md-dialog.purchase-popup {
       position: relative;
       bottom: 17.5px;
       background-color: #0a9bad; }
-      md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon {
+      md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon, md-dialog.purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon {
         width: 45px;
         height: 45px;
         margin: 0 auto;
         display: block;
         padding-top: 20px; }
-        md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon * {
+        md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon *, md-dialog.purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon * {
           fill: white; }
   md-dialog.purchase-popup .md-dialog-content {
     padding: 20px 20px 60px;

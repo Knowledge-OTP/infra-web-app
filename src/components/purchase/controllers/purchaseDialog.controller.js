@@ -9,7 +9,6 @@
 
             vm.purchaseStateEnum = PurchaseStateEnum;
             vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
-            console.log('vm.appName ', vm.appName);
 
             purchaseService.getPurchaseState().then(function (state) {
                 vm.purchaseState = state;

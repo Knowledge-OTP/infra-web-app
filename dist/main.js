@@ -8055,24 +8055,24 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 
     angular.module('znk.infra-web-app.purchase')
         .controller('PurchaseDialogController',
-        ["$mdDialog", "purchaseService", "PurchaseStateEnum", function($mdDialog, purchaseService, PurchaseStateEnum) {
+        ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", function($mdDialog, purchaseService, PurchaseStateEnum, ENV) {
             'ngInject';
-            var self = this;
+            var vm = this;
 
-            self.purchaseStateEnum = PurchaseStateEnum;
+            vm.purchaseStateEnum = PurchaseStateEnum;
+            vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
 
-            // self.purchaseState = PurchaseStateEnum.NONE.enum;
             purchaseService.getPurchaseState().then(function (state) {
-                self.purchaseState = state;
+                vm.purchaseState = state;
             });
 
-            purchaseService.getProduct().then(function (prodObj) {
-                self.productPrice = +prodObj.price;
-                self.productPreviousPrice = +prodObj.previousPrice;
-                self.productDiscountPercentage = Math.floor(100 - ((self.productPrice / self.productPreviousPrice) * 100)) + '%';
+            purchaseService.getProduct().then(function (productPrice) {
+                vm.productPrice = +productPrice.price;
+                vm.productPreviousPrice = +productPrice.previousPrice;
+                vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
             });
 
-            this.close = function () {
+            vm.close = function () {
                 $mdDialog.cancel();
             };
         }]);

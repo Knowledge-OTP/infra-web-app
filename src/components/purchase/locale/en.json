@@ -3,6 +3,11 @@
         "GET_ZINKERZ": "Zinkerz ",
         "PRO": "Pro",
         "DESCRIPTION": "Get the most out of Zinkerz",
+        "BULLET1": "Full SAT® Practice Tests",
+        "BULLET2": "Personalized Workouts",
+        "BULLET3": "2000+ Practice Questions",
+        "BULLET4": "Estimated Score",
+        "BULLET5": "Unlimited lifetime access",
         "SAVE": "(save {{percent}})",
         "UPGRADE_NOW": "Upgrade Now",
         "UPGRADED_ON": "Upgraded on {{upgradeDate}}",
@@ -12,29 +17,7 @@
         "PAYPAL_IMG_ALT": "PayPal - The safer, easier way to pay online!",
         "PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT": "You've completed all free workouts. It's time to upgrade.",
         "PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT": "Lets do it!",
-        "PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT": "Workout {{num}} completed! Upgrade to Zinkerz PRO to get everything you need to ace the test.",
-        "PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT": "Lets do it!",
-        "SAT": {
-            "BULLET1": "Full SAT® Practice Tests",
-            "BULLET2": "Personalized Workouts",
-            "BULLET3": "2000+ Practice Questions",
-            "BULLET4": "Estimated Score",
-            "BULLET5": "Unlimited lifetime access"
-        },
-        "ACT": {
-            "BULLET1": "Full ACT® Practice Tests",
-            "BULLET2": "Personalized Workouts",
-            "BULLET3": "2000+ Practice Questions",
-            "BULLET4": "Estimated Score",
-            "BULLET5": "Unlimited lifetime access"
-        },
-        "TOEFL": {
-            "BULLET1": "Full TOEFL® Practice Tests",
-            "BULLET2": "Personalized Workouts",
-            "BULLET3": "2000+ Practice Questions",
-            "BULLET4": "Estimated Score",
-            "BULLET5": "Unlimited lifetime access"
-        }
-
+        "PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT": "Workout {{num}} completed! Upgrade to Zinkerz PRO to get everything you need to ace the SAT text.",
+        "PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT": "Lets do it!"
     }
 }
