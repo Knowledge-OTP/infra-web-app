@@ -14,66 +14,10 @@
         </div>
     </md-toolbar>
 
-    <div class="main-title" translate=".CHANGE_PASSWORD"></div>
+    <div class="main-title" translate=".MY_PROFILE"></div>
 
-    <md-dialog-content class="change-password" ng-switch="!!vm.showSuccess">
-        <div class="container-title md-subheader" translate=".CHANGE_PASSWORD"></div>
-        <form name="authform" novalidate class="auth-form" ng-submit="vm.changePassword(authform)" ng-switch-when="false">
-            <div class="znk-input-group" ng-class="{'invalid-input': !vm.changePasswordData.oldPassword && authform.$submitted}">
-                <label>{{'MY_PROFILE.CURRENT_PASSWORD' | translate}}</label>
-                <input
-                    type="password"
-                    autocomplete="off"
-                    name="oldPassword"
-                    ng-minlength="6"
-                    ng-maxlength="25"
-                    ng-required="true"
-                    ng-model="vm.changePasswordData.oldPassword">
-                <div class="error-msg" translate="{{vm.oldPassError}}"></div>
-            </div>
-            <div class="znk-input-group" ng-class="{'invalid-input': !vm.changePasswordData.newPassword && authform.$submitted}">
-                <label>{{'MY_PROFILE.NEW_PASSWORD' | translate}}</label>
-                <input
-                    type="password"
-                    autocomplete="off"
-                    name="newPassword"
-                    ng-minlength="6"
-                    ng-maxlength="25"
-                    ng-required="true"
-                    ng-model="vm.changePasswordData.newPassword">
-                <div class="error-msg" translate=".PASSWORD_LENGTH"></div>
-            </div>
-            <div class="znk-input-group" ng-class="{'invalid-input': !vm.changePasswordData.newPasswordConfirm && authform.$submitted}">
-                <label>{{'MY_PROFILE.CONFIRM_NEW_PASSWORD' | translate}}</label>
-                <input
-                    type="password"
-                    autocomplete="off"
-                    name="newPasswordConfirm"
-                    ng-minlength="6"
-                    ng-maxlength="25"
-                    ng-required="true"
-                    ng-model="vm.changePasswordData.newPasswordConfirm">
-                <div class="error-msg" translate=".PASSWORD_NOT_MATCH"></div>
-            </div>
-            <div class="btn-wrap">
-                <button class="save-pass-btn"><span translate="{{vm.saveTitle}}"></span></button>
-            </div>
-        </form>
-        <div class="big-success-msg" ng-switch-when="true">
-            <svg-icon class="completed-v-icon-wrap" name="settings-completed-v-icon"></svg-icon>
-            <div translate=".SAVE_SUCCESS"></div>
-            <div class="done-btn-wrap">
-                <md-button class="success drop-shadow md-primary green znk" ng-click="vm.closeDialog()">
-                    <span translate=".DONE"></span>
-                </md-button>
-            </div>
-        </div>
-        <div class="msg-wrap" ng-class="{'show-error': vm.showError}">
-            <div class="error-msg">
-                <svg-icon name="settings-danger-red-icon" class="settings-danger-red-icon"></svg-icon>
-                <div translate="{{vm.generalError}}"></div>
-            </div>
-        </div>
-    </md-dialog-content>
+    <update-profile user-profile="vm.userProfile" timezones-list="vm.timezonesList" class="change-profile"></update-profile>
+
+    <change-password class="change-password"></change-password>
 
 </md-dialog>

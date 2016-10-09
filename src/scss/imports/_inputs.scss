@@ -37,8 +37,8 @@
         .error-msg{
             @include text-style(12px, $fontColor17,Lato,$regularFontWeight);
             text-align: left;
-            margin-top: -4px;
-            padding-left: 20px;
+            margin-top: 0;
+            padding-left: 40px;
             display: block;
         }
 

@@ -1,0 +1,61 @@
+<md-dialog-content ng-switch="!!vm.showSuccess">
+    <form name="profileform" novalidate class="auth-form" ng-submit="vm.updateProfile(profileform)" ng-switch-when="false">
+        <div class="znk-input-group" ng-class="{'invalid-input': !vm.profileData.nickname}">
+            <label>{{'MY_PROFILE.USERNAME' | translate}}</label>
+            <div class="znk-input">
+                <input
+                        type="text"
+                        autocomplete="on"
+                        name="nickname"
+                        ng-required="true"
+                        ng-model="vm.profileData.nickname">
+                <div class="error-msg" translate="{{vm.nicknameError}}"></div>
+            </div>
+        </div>
+        <div class="znk-input-group" ng-class="{'invalid-input': !vm.profileData.email}">
+            <label>{{'MY_PROFILE.EMAIL' | translate}}</label>
+            <div class="znk-input">
+                <input
+                        type="email"
+                        autocomplete="on"
+                        name="email"
+                        ng-required="true"
+                        ng-model="vm.profileData.email">
+                <div class="error-msg" translate=".EMAIL_ERROR"></div>
+            </div>
+        </div>
+        <div class="znk-input-group" ng-class="{'invalid-input': !vm.profileData.timezone}">
+            <label for="timezone">{{'MY_PROFILE.TIMEZONE' | translate}}</label>
+            <div class="znk-input">
+                <select id="timezone" name="timezone"
+                        ng-options="time as time for time in vm.timezonesList"
+                        ng-model="vm.profileData.timezone">
+                </select>
+                <div class="error-msg" translate=".TIME_ZONE_ERROR"></div>
+            </div>
+        </div>
+        <div class="timezone-manual">
+            <input type="checkbox" id="timezoneManual" name="timezoneManual" ng-model="vm.profileData.isTimezoneManual">
+            <label for="timezoneManual">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>
+        </div>
+
+        <div class="btn-wrap">
+            <button class="save-pass-btn"><span translate="{{vm.saveTitle}}"></span></button>
+        </div>
+    </form>
+    <div class="big-success-msg" ng-switch-when="true">
+        <svg-icon class="completed-v-icon-wrap" name="settings-completed-v-icon"></svg-icon>
+        <div translate=".SAVE_SUCCESS"></div>
+        <div class="done-btn-wrap">
+            <md-button class="success drop-shadow md-primary green znk" ng-click="vm.closeDialog()">
+                <span translate=".DONE"></span>
+            </md-button>
+        </div>
+    </div>
+    <div class="msg-wrap" ng-class="{'show-error': vm.showError}" ng-if="vm.showError">
+        <div class="error-msg">
+            <svg-icon name="settings-danger-red-icon" class="settings-danger-red-icon"></svg-icon>
+            <div translate="{{vm.generalError}}"></div>
+        </div>
+    </div>
+</md-dialog-content>

@@ -6,7 +6,9 @@
         'pascalprecht.translate',
         'znk.infra.auth',
         'znk.infra.svgIcon',
-        'znk.infra.general'
+        'znk.infra.general',
+        'znk.infra.storage',
+        'znk.infra.user'
     ])
     .config([
         'SvgIconSrvProvider',

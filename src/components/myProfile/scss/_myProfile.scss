@@ -44,93 +44,114 @@ md-dialog.my-profile {
         background-color: $bgColor3;
     }
 
-    md-toolbar{
+    md-toolbar {
         height: 40px;
         max-height: 40px;
         min-height: 40px;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
 
-            &:not(.md-menu-toolbar){
-                background-color: $bgColor5;
-            }
-
-            .close-popup-wrap {
-                @include absolute-position(-35px, -35px);
-                height:14px;
-                width: 14px;
-                padding: 10px;
-                cursor: pointer;
-            }
+        &:not(.md-menu-toolbar){
+            background-color: $bgColor5;
         }
 
-    .change-password {
+        .close-popup-wrap {
+            @include absolute-position(-35px, -35px);
+            height:14px;
+            width: 14px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    }
+
+    .change-profile {
             background-color: $bgColor27;
-            padding: 25px;
-            margin: 20px 50px 40px 50px;
+            padding: 20px 20px 0 20px;
+            margin: 5px 40px;
             height: 100%;
             border-radius: 15px;
+    }
+    
+    .change-password{
+        @extend .change-profile;
+        margin-bottom: 30px;
 
         .container-title{
-            @include text-style(16px, $fontColor3, Quicksand, $semiBoldFontWeight);
+            @include text-style(18px, $fontColor3, Quicksand, $semiBoldFontWeight);
             text-align: center;
         }
+    }
 
-        .auth-form{
-                margin: {
-                    right: auto;
-                    left: auto;
-                    bottom: 10px;
-                    top: 43px;
-                };
+    .auth-form{
+        margin: {
+            right: auto;
+            left: auto;
+            bottom: 10px;
+            top: 43px;
+        };
 
-                .znk-input-group {
-                    width: 100%;
-                    min-height:0;
-                    display: flex;
-                    margin: 10px;
-                    label{
-                        width: 50%;
-                        text-transform: uppercase;
-                        text-align: right;
-                        margin: auto;
-                    }
-                    input {
-                        width: 100%;
-                        display: block;
-                        border-radius: 0;
-                        padding-left: 20px;
-                        box-sizing:border-box;
-                        margin: 0 50px 2px 30px;
-                    }
-                    .locked-icon {
-                        width: 14px;
-                        display: inline-block;
-                        position: absolute;
-                        left: 12px;
-                        top: 16px;
-                    }
-
-                    .locked-icon *{
-                        stroke: $fontColor18;
-                    }
-                 }
-
-                .btn-wrap{
-                    display: flex;
-                    justify-content: flex-end;
-                    margin-right: 40px;
-                    .save-pass-btn {
-                        width: 15%;
-                        margin: 0;
-                        box-shadow: none;
-                        height: 30px;
-                        background: transparent;
-                        border-radius: 20px;
-                        border-color: $bsColor5;
-                        color: $fontColor6;
-                    }
+        .znk-input-group {
+            width: 100%;
+            min-height:0;
+            display: flex;
+            margin: 10px -10px;
+            label{
+                width: 30%;
+                text-transform: uppercase;
+                text-align: right;
+                margin: auto;
+                color: $fontColor14;
+            }
+            .znk-input{
+                width: 70%;
+                display: flex;
+                flex-direction: column;
+                input ,select{
+                    width: 86%;
+                    display: block;
+                    border-radius: 0;
+                    padding-left: 20px;
+                    box-sizing:border-box;
+                    margin: 10px 50px 2px 30px;
+                    color: $fontColor2;
                 }
+                select{
+                    height: 40px;
+                }
+            }
+
+            .locked-icon {
+                width: 14px;
+                display: inline-block;
+                position: absolute;
+                left: 12px;
+                top: 16px;
+            }
+
+            .locked-icon *{
+                stroke: $fontColor18;
+            }
+        }
+
+        .timezone-manual {
+            margin: -10px 220px;
+            color: $fontColor16;
+        }
+
+        .btn-wrap{
+            display: flex;
+            justify-content: flex-end;
+            margin-right: 50px;
+            .save-pass-btn {
+                width: 15%;
+                margin: 0;
+                box-shadow: none;
+                height: 30px;
+                background: transparent;
+                border-radius: 20px;
+                border-color: $bsColor5;
+                color: $fontColor6;
+            }
         }
     }
 
@@ -179,7 +200,7 @@ md-dialog.my-profile {
         }
 
         .done-btn-wrap{
-            margin-top: 120px;
+            margin: 40px auto;
             display: flex;
             justify-content: center;
         }
