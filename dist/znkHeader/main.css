@@ -215,6 +215,32 @@ md-dialog.purchase-popup {
     md-dialog.purchase-popup .md-dialog-content .base-border-radius {
       border-radius: 15px; }
 
+md-toast.purchase-nudge {
+  position: static;
+  padding: 0;
+  transition: all 0s ease 0s; }
+  md-toast.purchase-nudge .close-toast {
+    float: right; }
+    md-toast.purchase-nudge .close-toast svg-icon[name="close-popup"] {
+      width: 15px; }
+  md-toast.purchase-nudge .md-toast-content {
+    max-width: none;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    font-family: Lato;
+    font-weight: lighter; }
+  md-toast.purchase-nudge.first .md-toast-content {
+    background-color: #67a531; }
+  md-toast.purchase-nudge.all .md-toast-content {
+    background-color: #ff931e; }
+  md-toast.purchase-nudge .open-dialog {
+    cursor: pointer;
+    text-decoration: underline; }
+
+.inline-block {
+  display: inline-block; }
+
 /*border color*/
 /*background*/
 /* box shadow */
