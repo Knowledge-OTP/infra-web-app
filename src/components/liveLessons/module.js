@@ -5,6 +5,7 @@
         'pascalprecht.translate',
         'znk.infra.svgIcon',
         'znk.infra.user',
+        'znk.infra.mailSender',
         'znk.infra.storage',
         'ngMaterial'
     ]).config([
