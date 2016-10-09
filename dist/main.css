@@ -1694,7 +1694,7 @@ answer-explanation-content {
     color: #161616;
     font-family: Quicksand;
     font-weight: bold; }
-  answer-explanation-content svg-icon[name="close-popup"] svg line {
+  answer-explanation-content svg-icon[name="answer-explanation-close"] svg line {
     stroke: #161616; }
   answer-explanation-content .flex-wrap {
     display: -ms-flexbox;
@@ -4719,7 +4719,8 @@ workout-intro-lock {
     .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container {
       -ms-flex-positive: 1;
           flex-grow: 1;
-      position: relative; }
+      position: relative;
+      overflow: hidden; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {

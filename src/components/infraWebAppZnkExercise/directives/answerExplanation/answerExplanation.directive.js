@@ -7,7 +7,7 @@
 
             var svgMap = {
                 'answer-explanation-lamp-icon': 'components/infraWebAppZnkExercise/svg/lamp-icon.svg',
-                'answer-explanation-close': 'components/infraWebAppZnkExercise/svg/close.svg'
+                'answer-explanation-close': 'components/infraWebAppZnkExercise/svg/answer-explanation-close.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })

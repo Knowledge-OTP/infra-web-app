@@ -27,7 +27,7 @@
         function (SvgIconSrvProvider) {
             var svgMap = {
                 'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
-                'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/close-popup.svg'
+                'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -42,7 +42,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "$translatePartialLoader", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, $translatePartialLoader, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -55,7 +55,6 @@
                     widgetTitle: '@'
                 },
                 link: function (scope, element, attrs, ngModelCtrl) {
-                    $translatePartialLoader.addPart('estimatedScoreWidget');
                     scope.d = {};
 
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
@@ -188,6 +187,16 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.estimatedScoreWidget').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('estimatedScoreWidget');
+    }]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.estimatedScoreWidget').provider('EstimatedScoreWidgetSrv', [
         function () {
             var _subjectOrderGetter;
@@ -217,7 +226,7 @@
 })(angular);
 
 angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/estimatedScoreWidget/svg/close-popup.svg",
+  $templateCache.put("components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg",
     "<svg\n" +
     "    class=\"estimated-score-widget-close-popup-svg\"\n" +
     "    x=\"0px\"\n" +

@@ -20,7 +20,8 @@
             function(SvgIconSrvProvider){
 
                 var svgMap = {
-                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg'
+                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/znk-header-check-mark-icon'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -30,10 +31,9 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$translatePartialLoader", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
+        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
             'ngInject';
-            $translatePartialLoader.addPart('znkHeader');
 
             var self = this;
             self.expandIcon = 'expand_more';
@@ -122,6 +122,16 @@
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkHeader').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('znkHeader');
+    }]);
+})(angular);
+
+
 /**
  *
  *   api:
@@ -205,6 +215,29 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "    </g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/znkHeader/svg/znk-header-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"znkHeader-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .znkHeader-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/znkHeader/templates/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
@@ -258,7 +291,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                                    <svg-icon name=\"pending-purchase-clock-icon\"></svg-icon>\n" +
     "                                </div>\n" +
     "                                <div ng-switch-when=\"pro\" class=\"check-mark-wrapper\">\n" +
-    "                                    <svg-icon name=\"check-mark\"></svg-icon>\n" +
+    "                                    <svg-icon name=\"znkHeader-check-mark-icon\"></svg-icon>\n" +
     "                                </div>\n" +
     "                            </ng-switch>\n" +
     "                        </md-list-item>\n" +
