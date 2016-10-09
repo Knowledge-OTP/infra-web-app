@@ -12013,7 +12013,8 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             'znk.infra-web-app.settings',
             'znk.infra.user',
             'znk.infra.general',
-            'znk.infra-web-app.invitation'])
+            'znk.infra-web-app.invitation',
+            'znk.infra-web-app.feedback'])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){
@@ -12030,8 +12031,8 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
-                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
+        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
             'ngInject';
 
             var self = this;
@@ -12066,6 +12067,10 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                     email: profile.email
                 };
             });
+
+            self.showFeedbackDialog = function () {
+                feedbackSrv.showFeedbackDialog();
+            };
 
             this.znkOpenModal = function () {
                 self.expandIcon = 'expand_less';
@@ -12317,9 +12322,9 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                        <md-list-item\n" +
     "                            md-ink-ripple\n" +
     "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <a ng-href=\"http://zinkerz.com/contact/\" target=\"_blank\">\n" +
+    "                            <div class=\"support-feedback-btn\" ng-click=\"vm.showFeedbackDialog()\">\n" +
     "                                <span translate=\".PROFILE_SUPPORT\"></span>\n" +
-    "                            </a>\n" +
+    "                            </div>\n" +
     "                        </md-list-item>\n" +
     "                        <div class=\"divider\"></div>\n" +
     "                        <md-list-item\n" +
