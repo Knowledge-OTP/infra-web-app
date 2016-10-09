@@ -200,37 +200,39 @@
              *  2 - completed all free content
              */
             self.openPurchaseNudge = function (mode, num) {
+                return;  // todo - temporary removed because the style is broken
+
                 var toastTemplate =
-                    '<md-toast class="purchase-nudge" ng-class="{first: vm.mode === 1, all: vm.mode === 2}" translate-namespace="PURCHASE_POPUP">' +
+                    '<md-toast class="purchase-nudge" ng-class="{first: vm.mode === 1, all: vm.mode === 2}" translate-namespace="PURCHASE_POPUP">'  +
                     '<div class="md-toast-text" flex>' +
                     '<div class="close-toast cursor-pointer" ng-click="vm.closeToast()"><svg-icon name="purchase-close-popup"></svg-icon></div>' +
                     '<span translate="{{vm.nudgeMessage}}" translate-values="{num: {{vm.num}} }"></span> ' +
                     '<span class="open-dialog" ng-click="vm.showPurchaseDialog()"><span translate="{{vm.nudgeAction}}"></span></span>' +
                     '</div>' +
-                    '</md-toast>';
+                '</md-toast>';
 
                 $mdToast.show({
                     template: toastTemplate,
                     position: 'top',
                     hideDelay: false,
                     controller: function () {
-                        self.closeToast = function () {
+                        this.num = num;
+                        this. node = mode;
+                        this.closeToast = function () {
                             $mdToast.hide();
                         };
 
-                        self.showPurchaseDialog = function () {
-                            self.showPurchaseDialog();
-                        };
+                        this.showPurchaseDialog = self.showPurchaseDialog; // todo - check if it's working
 
                         if (mode === 1) { // completed first workout
-                            self.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT';
-                            self.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT';
+                            this.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT';
+                            this.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT';
                         } else if (mode === 2) { // completed all free content
-                            self.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT';
-                            self.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT';
+                            this.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT';
+                            this.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT';
                         }
-                        self.mode = mode;
-                        self.num = num;
+                        this.mode = mode;
+                        this.num = num;
                     },
                     controllerAs: 'vm'
                 });

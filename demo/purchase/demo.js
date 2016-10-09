@@ -27,12 +27,13 @@
         .run(function ($rootScope, $translate) {
             $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
                 $translate.refresh();
-            })
+            });
         })
         .controller('Main', function (purchaseService) {
             'ngInject';
             var vm = this;
             vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
+            purchaseService.openPurchaseNudge(1,1);
         });
 })(angular);
 
