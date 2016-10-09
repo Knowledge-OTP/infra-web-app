@@ -1694,7 +1694,7 @@ answer-explanation-content {
     color: #161616;
     font-family: Quicksand;
     font-weight: bold; }
-  answer-explanation-content svg-icon[name="close-popup"] svg line {
+  answer-explanation-content svg-icon[name="answer-explanation-close"] svg line {
     stroke: #161616; }
   answer-explanation-content .flex-wrap {
     display: -ms-flexbox;

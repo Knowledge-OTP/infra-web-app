@@ -8,7 +8,7 @@
         'ngInject';
         var svgMap = {
             'image-zoomer-full-screen-icon': 'components/imageZoomer/svg/full-screen-icon.svg',
-            'image-zoomer-close-popup': 'components/imageZoomer/svg/close-popup.svg'
+            'image-zoomer-close-popup': 'components/imageZoomer/svg/image-zoomer-close-popup.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
     }]);
@@ -150,24 +150,6 @@
 
 
 angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/imageZoomer/svg/close-popup.svg",
-    "<svg\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"close-popup\">\n" +
-    "    <style>\n" +
-    "        .close-popup{\n" +
-    "        width:15px;\n" +
-    "        height:15px;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "<path class=\"st0\"/>\n" +
-    "<g>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-    "</g>\n" +
-    "</svg>\n" +
-    "");
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\" y=\"0px\"\n" +
@@ -200,6 +182,24 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     "		<polyline class=\"st1\" points=\"-447.7,578.2 -447.7,616.8 -485.4,616.8 \"/>\n" +
     "	</g>\n" +
     "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/imageZoomer/svg/image-zoomer-close-popup.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"image-zoomer-close-popup\">\n" +
+    "    <style>\n" +
+    "        .image-zoomer-close-popup{\n" +
+    "        width:15px;\n" +
+    "        height:15px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <path class=\"st0\"/>\n" +
+    "    <g>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "    </g>\n" +
     "</svg>\n" +
     "");
 }]);
