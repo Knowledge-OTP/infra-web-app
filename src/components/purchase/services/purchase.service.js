@@ -91,7 +91,7 @@
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
                 return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
-                    console.log('setPendingPurchase res ', res);
+                    $log.debug('setPendingPurchase res ', res);
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
@@ -188,9 +188,9 @@
 
                 studentStorageProm.then(function (studentStorage) {
                     studentStorage.set(path, productData).then(function (resp) {
-                        $log.info(resp);
+                        $log.debug(resp);
                     }).catch(function (err) {
-                        $log.info(err);
+                        $log.debug(err);
                     });
                 });
             };
