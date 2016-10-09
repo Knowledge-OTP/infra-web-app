@@ -21,6 +21,12 @@ md-dialog.my-lessons-schedule-wrapper {
 
         }
     }
+    .close-popup-wrap {
+        * {
+            stroke: $bgColor3;
+            stroke-width: 8px;
+        }
+    }
 
     .md-dialog-content {
         padding: 40px 22px 22px 22px;

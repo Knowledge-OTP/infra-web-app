@@ -101,11 +101,11 @@
             self.rescheduleModal = function (lessonObj) {
                 UserProfileService.getProfile().then(function (studentProfile) {
                     $mdDialog.show({
-                        templateUrl: 'app/components/liveLessons/templates/rescheduleLessonModal.template.html',
+                        templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
                         disableParentScroll: false,
                         clickOutsideToClose: true,
                         fullscreen: false,
-                        controller: 'rescheduleLessonController',
+                        controller: 'RescheduleLessonController',
                         controllerAs: 'vm',
                         locals: {
                             lessonData: lessonObj,

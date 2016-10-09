@@ -10,7 +10,11 @@
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
-            var svgMap = {};
+            var svgMap = {
+                'close-popup': 'components/liveLessons/svg/close-popup.svg',
+                'reschedule-icon': 'components/liveLessons/svg/reschedule-icon.svg',
+                'calendar-icon': 'components/liveLessons/svg/calendar-icon.svg'
+            };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
     ])
