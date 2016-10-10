@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
         function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService, PurchaseStateEnum) {
+                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
             'ngInject';
 
             function getPath(param) {
@@ -33,13 +33,6 @@
             var purchasePath = getPath('purchase');
             var pendingPurchasesPath = getPath('pending');
 
-            self.getPurchaseState = function () {
-                return self.purchaseDataExists().then(function (purchaseData) {
-                    return !angular.equals(purchaseData, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                });
-
-            };
-
             self.checkUrlParams = function (params) {
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
                     if (+params.purchaseSuccess === 1) {
@@ -61,12 +54,12 @@
             };
 
             self.hasProVersion = function () {
-                return self.purchaseDataExists().then(function (purchaseData) {
+                return self.getPurchaseData().then(function (purchaseData) {
                     return !angular.equals(purchaseData, {});
                 });
             };
 
-            self.purchaseDataExists = function () {
+            self.getPurchaseData = function () {
                 if (purchasePath) {
                     return studentStorageProm.then(function (studentStorage) {
                         return studentStorage.getAndBindToServer(purchasePath);
