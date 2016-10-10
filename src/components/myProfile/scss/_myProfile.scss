@@ -117,6 +117,9 @@ md-dialog.my-profile {
                 }
                 select{
                     height: 40px;
+                    &[disabled]{
+                        color: $fontColor14;
+                }
                 }
             }
 
@@ -131,6 +134,49 @@ md-dialog.my-profile {
             .locked-icon *{
                 stroke: $fontColor18;
             }
+
+            .validationBox {
+                span {
+                    width: 335px;
+                    padding: 3px 10px;
+                    position: absolute;
+                    right: 37px;
+                    top: -25px;
+                    background-color: $bgColor32;
+                    color: $fontColor1;
+                    font-size: 13px;
+                    line-height: 24px;
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        border: {
+                            color: transparent;
+                            style: solid;
+                            top-color: $bgColor32;
+                            width: 10px;
+                        }
+                        bottom: -20px;
+                        left: 13px;
+                    }
+                    &.email-exist-massage {
+                        top: -55px;
+                    }
+                    &.no-email-massage {
+                        top: -58px;
+                    }
+                }
+            }
+            &.valid {
+                input, select {
+                    border-color: $borderColor1;
+                }
+            }
+            &.invalid {
+                input, select {
+                border-color: $borderColor22;
+                }
+            }
+
         }
 
         .timezone-manual {

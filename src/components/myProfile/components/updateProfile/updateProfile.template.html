@@ -1,6 +1,7 @@
 <md-dialog-content ng-switch="!!vm.showSuccess">
     <form name="profileform" novalidate class="auth-form" ng-submit="vm.updateProfile(profileform)" ng-switch-when="false">
-        <div class="znk-input-group" ng-class="{'invalid-input': !vm.profileData.nickname}">
+        <div class="znk-input-group"
+             ng-class="profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'">
             <label>{{'MY_PROFILE.USERNAME' | translate}}</label>
             <div class="znk-input">
                 <input
@@ -9,10 +10,17 @@
                         name="nickname"
                         ng-required="true"
                         ng-model="vm.profileData.nickname">
-                <div class="error-msg" translate="{{vm.nicknameError}}"></div>
+                <span ng-if="profileform.$submitted && profileform.nickname.$invalid"
+                      role="alert">
+                    <span class="validationBox">
+                        <span ng-show="profileform.nickname.$error.required"
+                              translate="{{vm.nicknameError}}"></span>
+                    </span>
+                </span>
             </div>
         </div>
-        <div class="znk-input-group" ng-class="{'invalid-input': !vm.profileData.email}">
+        <div class="znk-input-group"
+             ng-class="profileform.email.$invalid && profileform.$submitted ? 'invalid' : 'valid'">
             <label>{{'MY_PROFILE.EMAIL' | translate}}</label>
             <div class="znk-input">
                 <input
@@ -21,17 +29,23 @@
                         name="email"
                         ng-required="true"
                         ng-model="vm.profileData.email">
-                <div class="error-msg" translate=".EMAIL_ERROR"></div>
+                <span ng-if="profileform.$submitted && profileform.email.$invalid"
+                      role="alert">
+                    <span class="validationBox">
+                        <span ng-show="profileform.email.$error.required"
+                              translate=".EMAIL_ERROR"></span>
+                    </span>
+                </span>
             </div>
         </div>
-        <div class="znk-input-group" ng-class="{'invalid-input': !vm.profileData.timezone}">
+        <div class="znk-input-group">
             <label for="timezone">{{'MY_PROFILE.TIMEZONE' | translate}}</label>
             <div class="znk-input">
                 <select id="timezone" name="timezone"
                         ng-options="time as time for time in vm.timezonesList"
-                        ng-model="vm.profileData.timezone">
+                        ng-model="vm.profileData.timezone"
+                        ng-disabled="!vm.profileData.isTimezoneManual">
                 </select>
-                <div class="error-msg" translate=".TIME_ZONE_ERROR"></div>
             </div>
         </div>
         <div class="timezone-manual">
