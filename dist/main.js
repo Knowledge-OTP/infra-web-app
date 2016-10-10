@@ -12037,7 +12037,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "$timeout", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv, $timeout,
+        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
             'ngInject';
 
@@ -12087,16 +12087,23 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 $window.location.replace(ENV.redirectLogout);
             };
 
-            purchaseService.getPurchaseData().then(function (purchaseData) {
-                self.purchaseData = purchaseData;
-            });
-
-            $scope.$watch('self.purchaseData', function (newPurchaseState) {
-                $timeout(function () {
-                    self.purchaseState = !angular.equals(newPurchaseState, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = !angular.equals(newPurchaseState, {}) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+            function _checkIfHasProVersion() {
+                purchaseService.hasProVersion().then(function (hasProVersion) {
+                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
                 });
-            }, true);
+            }
+
+            var pendingPurchaseProm = purchaseService.getPendingPurchase();
+            if (pendingPurchaseProm) {
+                self.purchaseState = PurchaseStateEnum.PENDING.enum;
+                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+                pendingPurchaseProm.then(function () {
+                    _checkIfHasProVersion();
+                });
+            } else {
+                _checkIfHasProVersion();
+            }
 
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
