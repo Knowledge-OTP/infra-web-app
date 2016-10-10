@@ -54,7 +54,7 @@
                     var relevantLiveLessonsArr = [];
 
                     angular.forEach(liveLessonsArr, function (value) {
-                        if ((angular.isDefined(value.endTime) & value.endTime > currentTimestamp) || value.startTime > currentTimestamp) {
+                        if ((angular.isDefined(value.endTime) && value.endTime > currentTimestamp) || value.startTime > currentTimestamp) {
                             relevantLiveLessonsArr.push(value);
                         }
                     });
@@ -77,16 +77,8 @@
 
             self.liveLessonsScheduleModal = function () {
                 return self.getRelevantLiveLessons().then(function (liveLessonsArr) {
-                    return $mdDialog.show({
-                        templateUrl: 'components/liveLessons/templates/myLiveLessonsModal.template.html',
-                        disableParentScroll: false,
-                        clickOutsideToClose: true,
-                        fullscreen: false,
-                        controller: ctrl,
-                        controllerAs: 'vm'
-                    });
-
                     function ctrl() {
+                        /*jshint validthis: true */
                         this.liveLessonsArr = liveLessonsArr;
                         this.closeDialog = $mdDialog.cancel;
                         var currDate = new Date();
@@ -95,6 +87,15 @@
                             self.rescheduleModal(lessonObj);
                         };
                     }
+
+                    return $mdDialog.show({
+                        templateUrl: 'components/liveLessons/templates/myLiveLessonsModal.template.html',
+                        disableParentScroll: false,
+                        clickOutsideToClose: true,
+                        fullscreen: false,
+                        controller: ctrl,
+                        controllerAs: 'vm'
+                    });
                 });
             };
 
@@ -190,7 +191,7 @@
             }
 
             self.getCdtOrCst = function () {
-                var today = new Date;
+                var today = new Date();
                 var date = $filter('date')(today, 'medium', 'CST'); // calculate by cst time zone.
                 var yr = new Date(date).getFullYear();
 
