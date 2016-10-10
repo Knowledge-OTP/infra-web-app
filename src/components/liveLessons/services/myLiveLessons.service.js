@@ -17,8 +17,8 @@
                     dataAsString = res[0];
                     userId = res[1];
                     return UserProfileService.getUserTeachWorksId(userId).then(function (teachworksIdObj) {
-                        // teachworksId = angular.isDefined(teachworksIdObj) ? teachworksIdObj.id : undefined;
-                        teachworksId = 'Samantha Puterman';
+                        teachworksId = angular.isDefined(teachworksIdObj) ? teachworksIdObj.id : undefined;
+                        // teachworksId = 'Samantha Puterman';
                         if (teachworksId && dataAsString) {
                             teachworksId = teachworksId.replace(/\s/g, '').toLowerCase();
                             var allRecordsData = dataAsString.match(/.*DTSTART(.|[\r\n])*?UID/g);

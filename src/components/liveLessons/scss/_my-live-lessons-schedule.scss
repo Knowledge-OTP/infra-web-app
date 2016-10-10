@@ -68,6 +68,13 @@ md-dialog.my-lessons-schedule-wrapper {
             .ok-button {
                 margin: 15px auto 0 auto;
                 box-shadow: none;
+                width: 320px;
+                border-radius: 25px;
+                background-color: $bgColor5;
+                color: $fontColor1;
+            }
+            .ok-button:hover {
+                background-color: $bgColor10;
             }
         }
 
@@ -154,7 +161,7 @@ md-dialog.my-lessons-schedule-wrapper {
 }
 
 md-tooltip.reschedule-tooltip {
-    @include dimension(130px, 25px);
+    @include dimension(130px, 36px);
     padding: 0;
     border-radius: 5px;
     .md-content {

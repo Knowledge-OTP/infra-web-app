@@ -88,12 +88,22 @@ md-dialog.my-lessons-schedule-wrapper {
                     background-color: $bgColor3;
                     border: 1px solid $borderColor4;
                     color: $fontColor6;
+                    width: 160px;
+                    border-radius: 25px;
+                }
+                .cancel-btn:hover {
+                    background-color: $bgColor39;
                 }
 
                 .send-btn {
                     background-color: $bgColor5;
                     border: 1px solid $borderColor4;
                     color: $fontColor1;
+                    width: 160px;
+                    border-radius: 25px;
+                }
+                .send-btn:hover {
+                    background-color: $bgColor10;
                 }
             }
         }
