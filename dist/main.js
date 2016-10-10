@@ -7975,7 +7975,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                     }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
-                        $q.when(purchaseService.purchaseDataExists()).then(function (purchaseData) {
+                        $q.when(purchaseService.getPurchaseData()).then(function (purchaseData) {
                             if (!angular.equals(purchaseData, {})){
                                 vm.upgradeDate = $filter('date')(purchaseData.creationTime, 'mediumDate');
                             }
@@ -8055,27 +8055,34 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 
     angular.module('znk.infra-web-app.purchase')
         .controller('PurchaseDialogController',
-        ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", function($mdDialog, purchaseService, PurchaseStateEnum, ENV) {
-            'ngInject';
-            var vm = this;
+            ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
+                'ngInject';
+                var vm = this;
+                vm.purchaseData = {};
 
-            vm.purchaseStateEnum = PurchaseStateEnum;
-            vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
+                vm.purchaseStateEnum = PurchaseStateEnum;
+                vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
 
-            purchaseService.getPurchaseState().then(function (state) {
-                vm.purchaseState = state;
-            });
+                purchaseService.getPurchaseData().then(function (purchaseData) {
+                    vm.purchaseData = purchaseData;
+                });
 
-            purchaseService.getProduct().then(function (productPrice) {
-                vm.productPrice = +productPrice.price;
-                vm.productPreviousPrice = +productPrice.previousPrice;
-                vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
-            });
+                purchaseService.getProduct().then(function (productPrice) {
+                    vm.productPrice = +productPrice.price;
+                    vm.productPreviousPrice = +productPrice.previousPrice;
+                    vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
+                });
 
-            vm.close = function () {
-                $mdDialog.cancel();
-            };
-        }]);
+                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
+                    $timeout(function () {
+                        vm.purchaseState = !angular.equals(newPurchaseState, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                    });
+                }, true);
+
+                vm.close = function () {
+                    $mdDialog.cancel();
+                };
+            }]);
 })(angular);
 
 (function (angular) {
@@ -8098,8 +8105,8 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", "PurchaseStateEnum", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService, PurchaseStateEnum) {
+        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
+                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
             'ngInject';
 
             function getPath(param) {
@@ -8129,13 +8136,6 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             var purchasePath = getPath('purchase');
             var pendingPurchasesPath = getPath('pending');
 
-            self.getPurchaseState = function () {
-                return self.purchaseDataExists().then(function (purchaseData) {
-                    return !angular.equals(purchaseData, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                });
-
-            };
-
             self.checkUrlParams = function (params) {
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
                     if (+params.purchaseSuccess === 1) {
@@ -8157,12 +8157,12 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             };
 
             self.hasProVersion = function () {
-                return self.purchaseDataExists().then(function (purchaseData) {
+                return self.getPurchaseData().then(function (purchaseData) {
                     return !angular.equals(purchaseData, {});
                 });
             };
 
-            self.purchaseDataExists = function () {
+            self.getPurchaseData = function () {
                 if (purchasePath) {
                     return studentStorageProm.then(function (studentStorage) {
                         return studentStorage.getAndBindToServer(purchasePath);
@@ -12037,7 +12037,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
+        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "$timeout", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv, $timeout,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
             'ngInject';
 
@@ -12087,23 +12087,16 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 $window.location.replace(ENV.redirectLogout);
             };
 
-            function _checkIfHasProVersion() {
-                purchaseService.hasProVersion().then(function (hasProVersion) {
-                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
-                });
-            }
+            purchaseService.getPurchaseData().then(function (purchaseData) {
+                self.purchaseData = purchaseData;
+            });
 
-            var pendingPurchaseProm = purchaseService.getPendingPurchase();
-            if (pendingPurchaseProm) {
-                self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
-                pendingPurchaseProm.then(function () {
-                    _checkIfHasProVersion();
+            $scope.$watch('self.purchaseData', function (newPurchaseState) {
+                $timeout(function () {
+                    self.purchaseState = !angular.equals(newPurchaseState, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                    self.subscriptionStatus = !angular.equals(newPurchaseState, {}) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
                 });
-            } else {
-                _checkIfHasProVersion();
-            }
+            }, true);
 
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
