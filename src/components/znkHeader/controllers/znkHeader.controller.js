@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv, $timeout,
+        function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
             'ngInject';
 
@@ -52,16 +52,23 @@
                 $window.location.replace(ENV.redirectLogout);
             };
 
-            purchaseService.getPurchaseData().then(function (purchaseData) {
-                self.purchaseData = purchaseData;
-            });
-
-            $scope.$watch('self.purchaseData', function (newPurchaseState) {
-                $timeout(function () {
-                    self.purchaseState = !angular.equals(newPurchaseState, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = !angular.equals(newPurchaseState, {}) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+            function _checkIfHasProVersion() {
+                purchaseService.hasProVersion().then(function (hasProVersion) {
+                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
                 });
-            }, true);
+            }
+
+            var pendingPurchaseProm = purchaseService.getPendingPurchase();
+            if (pendingPurchaseProm) {
+                self.purchaseState = PurchaseStateEnum.PENDING.enum;
+                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+                pendingPurchaseProm.then(function () {
+                    _checkIfHasProVersion();
+                });
+            } else {
+                _checkIfHasProVersion();
+            }
 
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
