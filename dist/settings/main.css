@@ -89,6 +89,9 @@ md-dialog.setting-change-password {
       width: 14px;
       padding: 10px;
       cursor: pointer; }
+      md-dialog.setting-change-password md-toolbar .close-popup-wrap * {
+        stroke: white;
+        stroke-width: 8px; }
   md-dialog.setting-change-password md-dialog-content {
     background-color: #ffffff;
     padding-top: 25px;
