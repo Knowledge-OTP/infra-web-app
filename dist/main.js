@@ -8077,7 +8077,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                 $scope.$watch('vm.purchaseData', function (newPurchaseState) {
                     $timeout(function () {
                         var hasProVersion = !(angular.equals(newPurchaseState, {}));
-                        vm.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                        if (hasProVersion){
+                            vm.purchaseState = PurchaseStateEnum.PRO.enum;
+                        }
                     });
                 }, true);
 
@@ -12062,7 +12064,6 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             } else {
                 self.purchaseState = PurchaseStateEnum.NONE.enum;
                 self.subscriptionStatus = '.PROFILE_STATUS_BASIC';
-
             }
 
             purchaseService.getPurchaseData().then(function (purchaseData) {
@@ -12074,8 +12075,10 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             }, function (newPurchaseState) {
                 $timeout(function () {
                     var hasProVersion = !(angular.equals(newPurchaseState, {}));
-                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+                    if (hasProVersion){
+                        self.purchaseState = PurchaseStateEnum.PRO.enum;
+                        self.subscriptionStatus = '.PROFILE_STATUS_PRO';
+                    }
                 });
             }, true);
 

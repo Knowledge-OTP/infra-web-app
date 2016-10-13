@@ -174,7 +174,9 @@
                 $scope.$watch('vm.purchaseData', function (newPurchaseState) {
                     $timeout(function () {
                         var hasProVersion = !(angular.equals(newPurchaseState, {}));
-                        vm.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                        if (hasProVersion){
+                            vm.purchaseState = PurchaseStateEnum.PRO.enum;
+                        }
                     });
                 }, true);
 
