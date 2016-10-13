@@ -7,15 +7,15 @@
             name: 'SAT',
             className: 'sat'
         },
-        ACT: {
-            id: 'ACT',
-            name: 'ACT',
-            className: 'act'
-        },
         TOEFL: {
             id: 'TOEFL',
             name: 'TOEFL',
             className: 'toefl'
+        },
+        ACT: {
+            id: 'ACT',
+            name: 'ACT',
+            className: 'act'
         }
     };
 
@@ -104,7 +104,7 @@
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -191,12 +191,25 @@
                 if (userContext === USER_CONTEXT.TEACHER) {
                     appName = appName + '-educator';
                 }
+
+                var isParamsUrlToSend = false;
+
                 var invitationKey = InvitationKeyService.getInvitationKey();
                 var invitationPostFix = '';
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                    invitationPostFix = '#?iid=' + invitationKey;
+                    invitationPostFix = '&iid=' + invitationKey;
+                    isParamsUrlToSend = true;
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
+
+                var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
+                var promoCodePostFix = '';
+                if (angular.isDefined(promoCode) && promoCode !== null) {
+                    promoCodePostFix = '&pcid=' + promoCode;
+                    isParamsUrlToSend = true;
+                }
+
+                var parmasPrefix = isParamsUrlToSend ? '?' : '';
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -216,7 +229,7 @@
             };
 
             LoginAppSrv.APPS = APPS;
-            
+
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
             LoginAppSrv.logout = function (appContext, userContext) {

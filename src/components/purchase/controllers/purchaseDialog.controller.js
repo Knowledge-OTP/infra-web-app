@@ -3,25 +3,32 @@
 
     angular.module('znk.infra-web-app.purchase')
         .controller('PurchaseDialogController',
-        function($mdDialog, purchaseService, PurchaseStateEnum) {
-            'ngInject';
-            var self = this;
+            ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
+                'ngInject';
+                var vm = this;
+                vm.purchaseData = {};
 
-            self.purchaseStateEnum = PurchaseStateEnum;
+                vm.purchaseStateEnum = PurchaseStateEnum;
+                vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
 
-            // self.purchaseState = PurchaseStateEnum.NONE.enum;
-            purchaseService.getPurchaseState().then(function (state) {
-                self.purchaseState = state;
-            });
+                purchaseService.getPurchaseData().then(function (purchaseData) {
+                    vm.purchaseData = purchaseData;
+                });
 
-            purchaseService.getProduct().then(function (prodObj) {
-                self.productPrice = +prodObj.price;
-                self.productPreviousPrice = +prodObj.previousPrice;
-                self.productDiscountPercentage = Math.floor(100 - ((self.productPrice / self.productPreviousPrice) * 100)) + '%';
-            });
+                purchaseService.getProduct().then(function (productPrice) {
+                    vm.productPrice = +productPrice.price;
+                    vm.productPreviousPrice = +productPrice.previousPrice;
+                    vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
+                });
 
-            this.close = function () {
-                $mdDialog.cancel();
-            };
-        });
+                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
+                    $timeout(function () {
+                        vm.purchaseState = !angular.equals(newPurchaseState, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                    });
+                }, true);
+
+                vm.close = function () {
+                    $mdDialog.cancel();
+                };
+            }]);
 })(angular);

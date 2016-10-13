@@ -2,9 +2,9 @@
      xmlns="http://www.w3.org/2000/svg"x="0px"
      y="0px"
 	 viewBox="0 0 329.5 223.7"
-	 class="check-mark-svg">
+	 class="diagnostic-check-mark-svg">
     <style type="text/css">
-        .check-mark-svg .st0 {
+        .diagnostic-check-mark-svg .st0 {
             fill: none;
             stroke: #ffffff;
             stroke-width: 21;

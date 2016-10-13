@@ -22,12 +22,12 @@
             padding: {
                 top: 20px;
             }
-        ;
         }
 
         .workouts-container {
             flex-grow: 1;
             position: relative;
+            overflow: hidden;
 
             &.left-animation {
                 .workouts-ui-view {

@@ -7,7 +7,9 @@
         'znk.infra.svgIcon',
         'ngMaterial',
         'satellizer',
-        'znk.infra.general'
+        'znk.infra.general',
+        'znk.infra.autofocus',
+        'znk.infra-web-app.promoCode'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -18,7 +20,10 @@
                 'google-icon': 'components/loginApp/svg/google-icon.svg',
                 'login-username-icon': 'components/loginApp/svg/login-username-icon.svg',
                 'dropdown-arrow': 'components/loginApp/svg/dropdown-arrow.svg',
-                'v-icon': 'components/loginApp/svg/v-icon.svg'
+                'v-icon': 'components/loginApp/svg/v-icon.svg',
+                'loginApp-arrow-icon': 'components/loginApp/svg/arrow-icon.svg',
+                'loginApp-close-icon': 'components/loginApp/svg/close-icon.svg',
+                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -383,7 +388,7 @@
             this.socialAuth = function (provider) {
                 vm.loading = {};
                 var loadingProvider = vm.loading[provider] = {};
-                loadingProvider.startLoader = true;
+                loadingProvider.showSpinner = true;
                 $auth.authenticate(provider).then(function (response) {
                     return LoginAppSrv.userDataForAuthAndDataFb(response.data, vm.appContext.id, vm.userContext);
                 }).then(function (results) {
@@ -407,8 +412,8 @@
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
-                        loadingProvider.fillLoader = true;
-                        loadingProvider.startLoader = loadingProvider.fillLoader = false;
+
+                        loadingProvider.showSpinner = false;
 
                         if (updateProfile) {
                             LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
@@ -420,7 +425,7 @@
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
-                    loadingProvider.startLoader = loadingProvider.fillLoader = false;
+                    loadingProvider.showSpinner = false;
                 });
             };
 
@@ -485,15 +490,15 @@
             name: 'SAT',
             className: 'sat'
         },
-        ACT: {
-            id: 'ACT',
-            name: 'ACT',
-            className: 'act'
-        },
         TOEFL: {
             id: 'TOEFL',
             name: 'TOEFL',
             className: 'toefl'
+        },
+        ACT: {
+            id: 'ACT',
+            name: 'ACT',
+            className: 'act'
         }
     };
 
@@ -582,7 +587,7 @@
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -669,12 +674,25 @@
                 if (userContext === USER_CONTEXT.TEACHER) {
                     appName = appName + '-educator';
                 }
+
+                var isParamsUrlToSend = false;
+
                 var invitationKey = InvitationKeyService.getInvitationKey();
                 var invitationPostFix = '';
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                    invitationPostFix = '#?iid=' + invitationKey;
+                    invitationPostFix = '&iid=' + invitationKey;
+                    isParamsUrlToSend = true;
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + invitationPostFix;
+
+                var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
+                var promoCodePostFix = '';
+                if (angular.isDefined(promoCode) && promoCode !== null) {
+                    promoCodePostFix = '&pcid=' + promoCode;
+                    isParamsUrlToSend = true;
+                }
+
+                var parmasPrefix = isParamsUrlToSend ? '?' : '';
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -694,10 +712,6 @@
             };
 
             LoginAppSrv.APPS = APPS;
-            // Hide TOEFL app in production
-            if (env !== 'dev') {
-                delete LoginAppSrv.APPS.TOEFL;
-            }
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
@@ -831,30 +845,18 @@
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
-    "    <button class=\"facebook-btn\"\n" +
+    "    <button class=\"social-btn facebook-btn\"\n" +
     "            ng-click=\"vm.socialAuth('facebook')\"\n" +
-    "            ng-if=\"vm.providers.facebook\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.facebook.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.facebook.startLoader\"\n" +
-    "            bg-loader=\"'#315880'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#369'\">\n" +
+    "            ng-if=\"vm.providers.facebook\">\n" +
     "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
+    "        <span class=\"loader ng-hide\" ng-show=\"vm.loading.facebook.showSpinner\"></span>\n" +
     "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
     "    </button>\n" +
-    "    <button class=\"gplus-btn\"\n" +
+    "    <button class=\"social-btn gplus-btn\"\n" +
     "            ng-click=\"vm.socialAuth('google')\"\n" +
-    "            ng-if=\"vm.providers.google\"\n" +
-    "            element-loader\n" +
-    "            fill-loader=\"vm.loading.google.fillLoader\"\n" +
-    "            show-loader=\"vm.loading.google.startLoader\"\n" +
-    "            bg-loader=\"'#BD3922'\"\n" +
-    "            precentage=\"50\"\n" +
-    "            font-color=\"'#FFFFFF'\"\n" +
-    "            bg=\"'#df4a31'\">\n" +
+    "            ng-if=\"vm.providers.google\">\n" +
     "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
+    "        <span class=\"loader ng-hide\" ng-show=\"vm.loading.google.showSpinner\"></span>\n" +
     "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
     "    </button>\n" +
     "</div>\n" +
@@ -1033,7 +1035,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </md-menu>\n" +
     "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
     "        </div>\n" +
-    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId && d.appContext.className !== 'toefl'\"\n" +
     "           class=\"for-educators app-color\"\n" +
     "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
     "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
@@ -1121,7 +1123,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        </div>\n" +
     "    </div>\n" +
     "    <footer>\n" +
-    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId && d.appContext.className !== 'toefl'\">\n" +
     "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
     "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
     "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
@@ -1140,6 +1142,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -1211,6 +1214,47 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "\n" +
     "\n" +
     "");
+  $templateCache.put("components/loginApp/templates/promoCode.template.html",
+    "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\">\n" +
+    "    <div class=\"promo-code-title\"\n" +
+    "         translate=\"{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}\"\n" +
+    "         ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\">\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
+    "\n" +
+    "        <div class=\"promo-code-input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"{\n" +
+    "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
+    "             'promo-code-invalid': d.promoCodeStatus === d.promoCodeStatusConst.invalid\n" +
+    "             }\">\n" +
+    "                <md-progress-circular ng-if=\"d.showSpinner\"\n" +
+    "                                      class=\"promo-code-spinner\"\n" +
+    "                                      md-mode=\"indeterminate\"\n" +
+    "                                      md-diameter=\"25\">\n" +
+    "                </md-progress-circular>\n" +
+    "                <input\n" +
+    "                    type=\"text\"\n" +
+    "                    ng-model=\"d.promoCode\"\n" +
+    "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
+    "                    ng-autofocus =\"true\"\n" +
+    "                    placeholder=\"{{'PROMO_CODE.ENTER_YOUR_CODE' | translate}}\">\n" +
+    "                <div class=\"icon-wrapper\" >\n" +
+    "                    <svg-icon class=\"arrow-icon\" name=\"promo-code-arrow-icon\" ng-click=\"d.sendPromoCode(d.promoCode)\"></svg-icon>\n" +
+    "                    <svg-icon class=\"close-icon\" name=\"promo-code-close-icon\" ng-click=\"d.clearInput()\"></svg-icon>\n" +
+    "                    <svg-icon class=\"correct-icon\" name=\"promo-code-correct-icon\"  ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></svg-icon>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"promo-code-status-text\">\n" +
+    "                    {{d.promoCodeStatusText}}\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/loginApp/templates/resetPasswordForm.directive.html",
     "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
     "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
@@ -1270,6 +1314,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
     "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +

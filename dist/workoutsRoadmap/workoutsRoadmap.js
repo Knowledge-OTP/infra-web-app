@@ -208,10 +208,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", "$translatePartialLoader", function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
+        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", function (data, $state, $scope, ExerciseStatusEnum, $location) {
             'ngInject';
-
-            $translatePartialLoader.addPart('workoutsRoadmap');
 
             var vm = this;
 
@@ -768,14 +766,14 @@
 
 (function () {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config([
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 var svgMap = {
                     'workouts-progress-flag': 'components/workoutsRoadmap/svg/flag-icon.svg',
-                    'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/check-mark-icon.svg',
+                    'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg',
                     'workouts-progress-tutorial-icon': 'components/workoutsRoadmap/svg/tutorial-icon.svg',
                     'workouts-progress-practice-icon': 'components/workoutsRoadmap/svg/practice-icon.svg',
                     'workouts-progress-game-icon': 'components/workoutsRoadmap/svg/game-icon.svg',
@@ -917,6 +915,16 @@
             }]
         );
 })();
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap').run(["$translatePartialLoader", function ($translatePartialLoader) {
+        'ngInject';
+        $translatePartialLoader.addPart('workoutsRoadmap');
+    }]);
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -1107,34 +1115,6 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "	<path id=\"XMLID_68_\" class=\"st0\" d=\"M77.9,42.2c-3.2,16.3-17.5,28.6-34.7,28.6c-17.5,0-32-12.7-34.8-29.5\"/>\n" +
     "	<polyline id=\"XMLID_67_\" class=\"st0\" points=\"20.7,47.6 8.1,41.3 0.7,52.9 	\"/>\n" +
     "</g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/workoutsRoadmap/svg/check-mark-icon.svg",
-    "<svg version=\"1.1\"\n" +
-    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-    "     x=\"0px\"\n" +
-    "     y=\"0px\"\n" +
-    "	 viewBox=\"0 0 329.5 223.7\"\n" +
-    "	 class=\"check-mark-svg\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .check-mark-svg{\n" +
-    "            width: 30px;\n" +
-    "        }\n" +
-    "\n" +
-    "        .check-mark-svg .st0 {\n" +
-    "            fill: none;\n" +
-    "            stroke: #ffffff;\n" +
-    "            stroke-width: 21;\n" +
-    "            stroke-linecap: round;\n" +
-    "            stroke-linejoin: round;\n" +
-    "            stroke-miterlimit: 10;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "    <g>\n" +
-    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-    "    </g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg",
@@ -1605,6 +1585,33 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "        <line class=\"st2\" x1=\"39.8\" y1=\"178.5\" x2=\"103.8\" y2=\"178.5\"/>\n" +
     "        <line class=\"st2\" x1=\"45.8\" y1=\"190.5\" x2=\"95.8\" y2=\"190.5\"/>\n" +
     "        <path d=\"M87.5,198.5c-1.2,6.2-7.3,9.3-16.4,9.3s-14.4-3.3-16.4-9.3\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"workout-roadmap-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .workout-roadmap-check-mark-svg{\n" +
+    "            width: 30px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workout-roadmap-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
     "    </g>\n" +
     "</svg>\n" +
     "");

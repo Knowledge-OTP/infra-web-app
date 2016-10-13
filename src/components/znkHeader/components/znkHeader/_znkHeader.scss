@@ -27,10 +27,6 @@
                         text-transform: capitalize;
                         align-self: stretch;
                         padding-top: 15px;
-
-                        &.no-text-transform{
-                            text-transform: none;
-                        }
                     }
                     &:hover {
                         .title {
@@ -152,16 +148,15 @@
             background-color: $bgColor29;
         }
 
-        &.no-live-lessons {
-            opacity: 0.6;
-            pointer-events: none;
-
-        }
-
         .support-feedback-btn{
             width: 100%;
         }
+
+        .support-feedback-btn:focus, .support-feedback-btn:active{
+            outline: none;
+        }
     }
+}
 
 }
 

@@ -56,7 +56,7 @@
 
             var svgMap = {
                 'answer-explanation-lamp-icon': 'components/infraWebAppZnkExercise/svg/lamp-icon.svg',
-                'answer-explanation-close': 'components/infraWebAppZnkExercise/svg/close.svg'
+                'answer-explanation-close': 'components/infraWebAppZnkExercise/svg/answer-explanation-close.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
@@ -341,7 +341,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "    <div class=\"quit-back-button\" translate=\".QUIT_BTN_TEXT\" ng-if=\"vm.options.showQuit\" ng-click=\"vm.onClickedQuit()\"></div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/infraWebAppZnkExercise/svg/close.svg",
+  $templateCache.put("components/infraWebAppZnkExercise/svg/answer-explanation-close.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +

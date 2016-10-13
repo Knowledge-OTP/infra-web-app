@@ -33,7 +33,7 @@ md-dialog.purchase-popup {
             bottom: 17.5px;
             background-color: $bgColor5;
 
-            .raccoon-logo-icon {
+            .raccoon-logo-icon, .purchase-raccoon-logo-icon {
                 width: 45px;
                 height: 45px;
                 margin: 0 auto;
@@ -161,4 +161,44 @@ md-dialog.purchase-popup {
         }
     }
 
+}
+
+
+md-toast.purchase-nudge {
+    position: static;
+    padding:0;
+    transition: all 0s ease 0s;
+
+    .close-toast {
+        float:right;
+        svg-icon[name="close-popup"] {
+            width: 15px;
+        }
+    }
+
+    .md-toast-content {
+        max-width: none;
+        text-align: center;
+        @include text-style(18px, $fontColor1, Lato, lighter);
+    }
+
+    &.first {
+        .md-toast-content {
+            background-color: $bgColor13;
+        }
+    }
+    &.all {
+        .md-toast-content {
+            background-color: $bgColor2;
+        }
+    }
+
+    .open-dialog {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}
+
+.inline-block{
+    display: inline-block;
 }
