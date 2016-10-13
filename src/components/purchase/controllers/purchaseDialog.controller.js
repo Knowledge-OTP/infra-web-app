@@ -11,9 +11,23 @@
                 vm.purchaseStateEnum = PurchaseStateEnum;
                 vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
 
+                var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                if (pendingPurchaseProm) {
+                    self.purchaseState = PurchaseStateEnum.PENDING.enum;
+                    self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+                }
+
                 purchaseService.getPurchaseData().then(function (purchaseData) {
-                    vm.purchaseData = purchaseData;
+                    self.purchaseData = purchaseData;
                 });
+
+                $scope.$watch('self.purchaseData', function (newPurchaseState) {
+                    $timeout(function () {
+                        var hasProVersion = !(angular.equals(newPurchaseState, {}));
+                        self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                        self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+                    });
+                }, true);
 
                 purchaseService.getProduct().then(function (productPrice) {
                     vm.productPrice = +productPrice.price;
@@ -21,11 +35,6 @@
                     vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
                 });
 
-                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
-                    $timeout(function () {
-                        vm.purchaseState = !angular.equals(newPurchaseState, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    });
-                }, true);
 
                 vm.close = function () {
                     $mdDialog.cancel();

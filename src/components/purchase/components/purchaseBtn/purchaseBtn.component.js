@@ -22,7 +22,6 @@
                 vm.saveAnalytics = function () {
                     vm.purchaseState = PurchaseStateEnum.PENDING.enum;
                     znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
-
                 };
 
                 $scope.$watch('vm.purchaseState', function (newPurchaseState) {
@@ -35,7 +34,7 @@
                     }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
-                        $q.when(purchaseService.getPurchaseData()).then(function (purchaseData) {
+                        $q.when(purchaseService.purchaseDataExists()).then(function (purchaseData) {
                             if (!angular.equals(purchaseData, {})){
                                 vm.upgradeDate = $filter('date')(purchaseData.creationTime, 'mediumDate');
                             }
