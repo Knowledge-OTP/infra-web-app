@@ -1,0 +1,257 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+.app-workouts-diagnostic .exercise-container {
+  width: 100%;
+  height: calc(100vh - 95px);
+  background-color: white;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  position: relative; }
+  .app-workouts-diagnostic .exercise-container znk-exercise {
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+    width: 100%; }
+
+.app-workouts-diagnostic .inline-block {
+  display: inline-block; }
+
+.app-workouts-diagnostic .base-border-radius {
+  border-radius: 15px; }
+
+.app-workouts-diagnostic .base-box-shadow {
+  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
+
+.app-workouts-diagnostic znk-exercise {
+  box-shadow: none; }
+
+.app-workouts-diagnostic ui-view {
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
+
+.app-workouts-diagnostic .md-button {
+  display: block;
+  margin: 15px auto;
+  border-radius: 30px; }
+  .app-workouts-diagnostic .md-button.md {
+    width: 180px; }
+  .app-workouts-diagnostic .md-button.primary {
+    text-transform: uppercase; }
+
+.app-workouts-diagnostic .answer-index-wrapper {
+  cursor: pointer; }
+
+.app-workouts-diagnostic .answer.answered .answer-index-wrapper {
+  transition: 0.6s; }
+
+.diagnostic-loading-wrapper {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column; }
+  .diagnostic-loading-wrapper .loading-title {
+    font-size: 32px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 700;
+    text-align: center;
+    z-index: 1;
+    margin-bottom: 19px; }
+  .diagnostic-loading-wrapper .video-wrapper {
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex; }
+    .diagnostic-loading-wrapper .video-wrapper video {
+      width: 610px;
+      -ms-flex-item-align: end;
+          align-self: flex-end; }
+
+.diagnostic-summary-wrapper {
+  padding-top: 50px; }
+  .diagnostic-summary-wrapper .title {
+    text-align: center;
+    margin-bottom: 52px; }
+    .diagnostic-summary-wrapper .title div {
+      font-size: 20px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400;
+      margin-bottom: 35px; }
+    .diagnostic-summary-wrapper .title span {
+      font-size: 22px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 800; }
+  .diagnostic-summary-wrapper .doughnuts-container {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -ms-flex-pack: center;
+        justify-content: center; }
+    .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper {
+      margin-left: 9px;
+      margin-right: 9px; }
+      .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
+        text-align: center;
+        display: flex;
+        -ms-flex-direction: column;
+            flex-direction: column;
+        border-radius: 13px;
+        background-color: #f9f9f9;
+        height: 250px; }
+        .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .subject-name {
+          font-size: 15px;
+          color: #757a83;
+          font-family: Lato;
+          font-weight: 400;
+          position: relative;
+          bottom: 10px; }
+        .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut {
+          position: relative;
+          z-index: 2;
+          width: 220px;
+          height: 110px; }
+          .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .goal-point {
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            background-color: #c9c9c9;
+            border-radius: 50px;
+            -webkit-animation: goal-point 2s; }
+          .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .goal-point-bg {
+            width: 6px;
+            height: 6px;
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            background-color: white;
+            border-radius: 50px; }
+          .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .goal-point-subject-color {
+            width: 4px;
+            height: 4px;
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            border-radius: 50px; }
+          .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .white-bg-doughnut-score {
+            width: 100px;
+            height: 100px;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-pack: center;
+                justify-content: center;
+            -ms-flex-align: center;
+                align-items: center;
+            text-align: center;
+            font-size: 24px;
+            color: #4f4d4d;
+            font-family: Quicksand;
+            font-weight: 700;
+            position: absolute;
+            z-index: -1;
+            border-radius: 100px;
+            top: 5px;
+            left: 60px;
+            background-color: white; }
+        .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .your-goal-wrapper {
+          margin-top: 20px; }
+          .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .your-goal-wrapper .score-goal {
+            font-size: 15px;
+            color: #757a83;
+            font-family: Quicksand;
+            font-weight: 400; }
+          .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .your-goal-wrapper span {
+            font-size: 15px;
+            color: #757a83;
+            font-family: Quicksand;
+            font-weight: 700;
+            margin-left: 7px; }
+  .diagnostic-summary-wrapper .footer-text {
+    font-size: 18px;
+    color: #4f4d4d;
+    font-family: Lato;
+    font-weight: 300;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 35px;
+    line-height: 25px; }
+  .diagnostic-summary-wrapper .start-button.md-button.primary {
+    border-radius: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 35px;
+    margin-bottom: 35px; }
+
+md-tooltip.tooltip-for-diagnostic-summary {
+  opacity: 0;
+  width: auto;
+  height: auto;
+  background: white;
+  padding: 0 5px; }
+  md-tooltip.tooltip-for-diagnostic-summary ._md-content {
+    font-size: 14px;
+    color: #4f4d4d;
+    font-family: Lato;
+    font-weight: 400;
+    height: auto;
+    text-align: center;
+    background: white;
+    white-space: normal; }
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      pointer-events: auto;
+      will-change: auto; }
+    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
+      transition: none; }
+      md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
+        transform: none;
+        opacity: 0; }
+  md-tooltip.tooltip-for-diagnostic-summary._md-hide {
+    transition: opacity 0.4s;
+    opacity: 0; }
+  md-tooltip.tooltip-for-diagnostic-summary._md-show {
+    opacity: 1;
+    transition: opacity 0.4s;
+    pointer-events: auto;
+    will-change: opacity; }
+
+/**
+*  FONTS
+*/
+/* Lato fonts from google*/
+/* Quicksand fonts */
+/* Material+Icons */
