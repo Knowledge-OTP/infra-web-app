@@ -49,6 +49,10 @@
                         var userId = results[0].auth.uid;
                         var productId = results[1].id;
 
+                        if (!userEmail) {
+                            userEmail = userId + '@zinkerz.com';
+                        }
+
                         if (userEmail && userId) {
                             vm.userEmail = userEmail;
                             vm.hostedButtonId = ENV.purchasePaypalParams.hostedButtonId;
