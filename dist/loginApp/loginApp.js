@@ -507,93 +507,23 @@
         STUDENT: 2
     };
 
-    var ALL_ENV_CONFIG = {
-        'dev': {},
-        'prod': {}
-    };
-    ALL_ENV_CONFIG.dev[APPS.SAT.id] = {
-        fbDataEndPoint: 'https://sat-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        facebookAppId: '1624086287830120',
-        googleAppId: '1008364992567-hpchkt4nuo4eosjfrbpqrm1ruamg62nj.apps.googleusercontent.com',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'sat_app',
-        studentAppName: 'sat_app',
-        dashboardAppName: 'sat_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.SAT.id] = {
-        fbDataEndPoint: 'https://sat2-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        facebookAppId: '1576342295937853',
-        googleAppId: '1008364992567-gpi1psnhk0t41bf8jtm86kjc74c0if7c.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'sat_app',
-        studentAppName: 'sat_app',
-        dashboardAppName: 'sat_dashboard'
-    };
-    ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
-        fbDataEndPoint: 'https://act-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        facebookAppId: '1557255967927879',
-        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'act_app',
-        studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.ACT.id] = {
-        fbDataEndPoint: 'https://act-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        facebookAppId: '1557254871261322',
-        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'act_app',
-        studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboard'
-    };
-    ALL_ENV_CONFIG.dev[APPS.TOEFL.id] = {
-        fbDataEndPoint: 'https://znk-toefl-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        facebookAppId: '1801767253393534',
-        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'toefl_app',
-        studentAppName: 'toefl_app',
-        dashboardAppName: 'toefl_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.TOEFL.id] = {
-        fbDataEndPoint: 'https://znk-toefl-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        facebookAppId: '1658075334429394',
-        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'toefl_app',
-        studentAppName: 'toefl_app',
-        dashboardAppName: 'toefl_dashboard'
-    };
-
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
-        var env = 'prod';
+        var env = 'dev';
         this.setEnv = function (newEnv) {
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService) { //, PromoCodeSrv) {
+        this.getEnv = function(){
+            return env;
+        };
+
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvConfigSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvConfigSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
-                return ALL_ENV_CONFIG[env][appContext];
+                return AllEnvConfigSrv[env][appContext];
             }
 
             function _getAppScopeName(userContext, appEnvConfig) {
@@ -684,15 +614,15 @@
                     isParamsUrlToSend = true;
                 }
 
-                // var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
-                // var promoCodePostFix = '';
-                // if (angular.isDefined(promoCode) && promoCode !== null) {
-                //     promoCodePostFix = '&pcid=' + promoCode;
-                //     isParamsUrlToSend = true;
-                // }
+                var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
+                var promoCodePostFix = '';
+                if (angular.isDefined(promoCode) && promoCode !== null) {
+                    promoCodePostFix = '&pcid=' + promoCode;
+                    isParamsUrlToSend = true;
+                }
 
                 var parmasPrefix = isParamsUrlToSend ? '?' : '';
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix;// + promoCodePostFix;
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -1142,7 +1072,13 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -1314,7 +1250,13 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
     "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +

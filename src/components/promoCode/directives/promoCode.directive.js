@@ -1,9 +1,3 @@
-/**
- * attrs:
- *  config obj with the properties:
- *      1. backendEndpoint
- *      2. firebaseAppScopeName
- */
 
 (function (angular) {
     'use strict';
@@ -21,7 +15,6 @@
                 },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
-                    debugger;
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
 
