@@ -7,7 +7,7 @@
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
             controller: function ($scope, $translatePartialLoader, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
-                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV) {
+                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
                 'ngInject';
                 $translatePartialLoader.addPart('znkHeader');
 
@@ -53,24 +53,37 @@
                     $window.location.replace(ENV.redirectLogout);
                 };
 
-                function _checkIfHasProVersion() {
-                    purchaseService.hasProVersion().then(function (hasProVersion) {
-                        vm.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                        vm.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
-                    });
-                }
+                purchaseService.getPurchaseData().then(function (purchaseData) {
+                    self.purchaseData = purchaseData;
+                });
 
-                // vm.subscriptionStatus = '.PROFILE_STATUS_BASIC';
-                var pendingPurchaseProm = purchaseService.getPendingPurchase();
-                if (pendingPurchaseProm) {
-                    vm.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    vm.subscriptionStatus = '.PROFILE_STATUS_PENDING';
-                    pendingPurchaseProm.then(function () {
-                        _checkIfHasProVersion();
+                $scope.$watch('self.purchaseData', function (newPurchaseState) {
+                    $timeout(function () {
+                        var hasProVersion = !angular.equals(newPurchaseState, {});
+                        self.purchaseState = hasProVersion ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                        self.subscriptionStatus = hasProVersion ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
                     });
-                } else {
-                    _checkIfHasProVersion();
-                }
+                }, true);
+
+
+                // function _checkIfHasProVersion() {
+                //     purchaseService.hasProVersion().then(function (hasProVersion) {
+                //         vm.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                //         vm.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+                //     });
+                // }
+                //
+                // // vm.subscriptionStatus = '.PROFILE_STATUS_BASIC';
+                // var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                // if (pendingPurchaseProm) {
+                //     vm.purchaseState = PurchaseStateEnum.PENDING.enum;
+                //     vm.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+                //     pendingPurchaseProm.then(function () {
+                //         _checkIfHasProVersion();
+                //     });
+                // } else {
+                //     _checkIfHasProVersion();
+                // }
 
                 $scope.$on('$mdMenuClose', function () {
                     vm.expandIcon = 'expand_more';

@@ -1,4 +1,27 @@
-angular.module('demo', ['znk.infra-web-app.znkHeader'])
+(function (angular) {
+    'use strict';
+
+    angular.module('demo', ['znk.infra-web-app.znkHeader'])
+    .constant('ENV', {
+        firebaseAppScopeName: "act_app",
+        fbDataEndPoint: "https://act-dev.firebaseio.com/",
+        appContext: 'student',
+        studentAppName: 'sat_app',
+        dashboardAppName: 'sat_dashboard',
+        videosEndPoint: "//dfz02hjbsqn5e.cloudfront.net/sat_app/",
+        mediaEndPoint: "//dfz02hjbsqn5e.cloudfront.net/",
+        backendEndpoint: "https://znk-web-backend-dev.azurewebsites.net/",
+        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
+        dataAuthSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM",
+        redirectLogin: "http://dev-act.zinkerz.com.s3-website-eu-west-1.amazonaws.com/",
+        redirectLogout: "http://localhost:9002",
+        purchasePaypalParams: {
+            "formAction": "https://www.sandbox.paypal.com/cgi-bin/webscr",
+            "hostedButtonId": "J2J2GMDNZCMBU",
+            "btnImgSrc": "https://www.sandbox.paypal.com/en_US/i/btn/btn_buynow_LG.gif",
+            "pixelGifSrc": "https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif"
+        }
+    })
     .config(function ($translateProvider, znkHeaderSrvProvider, $stateProvider) {
 
         $translateProvider.useLoader('$translatePartialLoader', {
@@ -31,15 +54,7 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
 
         znkHeaderSrvProvider.addAdditionalNavMenuItems(additionalItems);
     })
-    .service('ENV', function () {
-        this.fbGlobalEndPoint = "https://znk-dev.firebaseio.com/";
-        this.backendEndpoint = "https://znk-web-backend-dev.azurewebsites.net/";
-        this.fbDataEndPoint = "https://act-dev.firebaseio.com/";
-        this.dataAuthSecret = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM";
-        this.redirectLogin = "http://dev-act.zinkerz.com.s3-website-eu-west-1.amazonaws.com/";
-        this.firebaseAppScopeName = "act_app";
-        this.redirectLogout = "http://localhost:9002";
-    })
+
     .run(function ($rootScope, $translate, $translatePartialLoader) {
         $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
             $translate.refresh();
@@ -48,3 +63,4 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
         $translatePartialLoader.addPart('feedback');
     });
 
+})(angular);
