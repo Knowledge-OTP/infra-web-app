@@ -34,10 +34,12 @@ sh-viewer .header {
     font-size: 16px; }
 
 sh-viewer .sh-viewer-main-container {
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   margin-top: 25px; }
   sh-viewer .sh-viewer-main-container .none {
     /*CSS for basic styling and non-retina image path:*/
