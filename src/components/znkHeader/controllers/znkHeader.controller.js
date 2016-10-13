@@ -18,7 +18,6 @@
             } else {
                 self.purchaseState = PurchaseStateEnum.NONE.enum;
                 self.subscriptionStatus = '.PROFILE_STATUS_BASIC';
-
             }
 
             purchaseService.getPurchaseData().then(function (purchaseData) {
@@ -30,8 +29,10 @@
             }, function (newPurchaseState) {
                 $timeout(function () {
                     var hasProVersion = !(angular.equals(newPurchaseState, {}));
-                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+                    if (hasProVersion){
+                        self.purchaseState = PurchaseStateEnum.PRO.enum;
+                        self.subscriptionStatus = '.PROFILE_STATUS_PRO';
+                    }
                 });
             }, true);
 
