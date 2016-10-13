@@ -1,10 +1,11 @@
 <svg version="1.1"
-     xmlns="http://www.w3.org/2000/svg"x="0px"
+     xmlns="http://www.w3.org/2000/svg"
+     x="0px"
      y="0px"
 	 viewBox="0 0 329.5 223.7"
-	 class="check-mark-svg">
+	 class="diagnostic-intro-check-mark-svg">
     <style type="text/css">
-        .check-mark-svg .st0 {
+        .diagnostic-intro-check-mark-svg .st0 {
             fill: none;
             stroke: #ffffff;
             stroke-width: 21;

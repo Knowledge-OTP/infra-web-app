@@ -6,6 +6,7 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
         })
             .preferredLanguage('en');
 
+
         $stateProvider
             .state('item1', {
                 url: '/item1',
@@ -44,5 +45,6 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
             $translate.refresh();
         });
         $translatePartialLoader.addPart('demo');
+        $translatePartialLoader.addPart('feedback');
     });
 

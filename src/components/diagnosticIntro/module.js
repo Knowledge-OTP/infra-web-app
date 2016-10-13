@@ -10,7 +10,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'diagnostic-intro-check-mark': 'components/diagnosticIntro/svg/check-mark-icon.svg'
+                'diagnostic-intro-check-mark': 'components/diagnosticIntro/svg/diagnostic-intro-check-mark-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }

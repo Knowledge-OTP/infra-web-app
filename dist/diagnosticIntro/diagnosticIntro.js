@@ -10,7 +10,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'diagnostic-intro-check-mark': 'components/diagnosticIntro/svg/check-mark-icon.svg'
+                'diagnostic-intro-check-mark': 'components/diagnosticIntro/svg/diagnostic-intro-check-mark-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -180,14 +180,15 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/diagnosticIntro/svg/check-mark-icon.svg",
+  $templateCache.put("components/diagnosticIntro/svg/diagnostic-intro-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
-    "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
     "     y=\"0px\"\n" +
     "	 viewBox=\"0 0 329.5 223.7\"\n" +
-    "	 class=\"check-mark-svg\">\n" +
+    "	 class=\"diagnostic-intro-check-mark-svg\">\n" +
     "    <style type=\"text/css\">\n" +
-    "        .check-mark-svg .st0 {\n" +
+    "        .diagnostic-intro-check-mark-svg .st0 {\n" +
     "            fill: none;\n" +
     "            stroke: #ffffff;\n" +
     "            stroke-width: 21;\n" +

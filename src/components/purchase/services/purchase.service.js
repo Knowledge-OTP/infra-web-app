@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
         function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService, PurchaseStateEnum) {
+                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
             'ngInject';
 
             function getPath(param) {
@@ -12,14 +12,15 @@
                     return;
                 }
                 var path;
-                switch(param) {
+                switch (param) {
                     case 'purchase':
                         path = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
                         return path.replace('$$uid', '' + authData.uid);
                     case 'pending':
                         path = 'pendingPurchases/' + StorageSrv.variables.uid;
                         return path.replace('$$uid', '' + authData.uid);
-                    default: return;
+                    default:
+                        return;
                 }
 
             }
@@ -32,20 +33,13 @@
             var purchasePath = getPath('purchase');
             var pendingPurchasesPath = getPath('pending');
 
-            self.getPurchaseState = function () {
-                return self.purchaseDataExists().then(function (purchaseData) {
-                    return !angular.equals(purchaseData, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                });
-
-            };
-
             self.checkUrlParams = function (params) {
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
                     if (+params.purchaseSuccess === 1) {
                         self.setPendingPurchase();
-                        znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderPending' });
+                        znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
                     } else {
-                        znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderCancelled' });
+                        znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
                     }
                     self.showPurchaseDialog();
                 } else {
@@ -60,13 +54,13 @@
             };
 
             self.hasProVersion = function () {
-                return self.purchaseDataExists().then(function (purchaseData) {
+                return self.getPurchaseData().then(function (purchaseData) {
                     return !angular.equals(purchaseData, {});
                 });
             };
 
-            self.purchaseDataExists = function () {
-                if(purchasePath){
+            self.getPurchaseData = function () {
+                if (purchasePath) {
                     return studentStorageProm.then(function (studentStorage) {
                         return studentStorage.getAndBindToServer(purchasePath);
                     });
@@ -90,7 +84,7 @@
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
                 return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
-                    console.log('setPendingPurchase res ',res );
+                    $log.debug('setPendingPurchase res ', res);
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
@@ -187,9 +181,9 @@
 
                 studentStorageProm.then(function (studentStorage) {
                     studentStorage.set(path, productData).then(function (resp) {
-                        $log.info(resp);
+                        $log.debug(resp);
                     }).catch(function (err) {
-                        $log.info(err);
+                        $log.debug(err);
                     });
                 });
             };
@@ -200,40 +194,45 @@
              *  2 - completed all free content
              */
             self.openPurchaseNudge = function (mode, num) {
-                var toastTemplate =
-                    '<md-toast class="purchase-nudge" ng-class="{first: vm.mode === 1, all: vm.mode === 2}" translate-namespace="PURCHASE_POPUP">' +
-                    '<div class="md-toast-text" flex>' +
-                    '<div class="close-toast cursor-pointer" ng-click="vm.closeToast()"><svg-icon name="close-popup"></svg-icon></div>' +
-                    '<span translate="{{vm.nudgeMessage}}" translate-values="{num: {{vm.num}} }"></span> ' +
-                    '<span class="open-dialog" ng-click="vm.showPurchaseDialog()"><span translate="{{vm.nudgeAction}}"></span></span>' +
-                    '</div>' +
-                    '</md-toast>';
+                if (true) {
+                    return;  // todo - temporary removed because the style is broken
+                } else {
+                    var toastTemplate =
+                        '<md-toast class="purchase-nudge" ng-class="{first: vm.mode === 1, all: vm.mode === 2}" translate-namespace="PURCHASE_POPUP">' +
+                        '<div class="md-toast-text" flex>' +
+                        '<div class="close-toast cursor-pointer" ng-click="vm.closeToast()"><svg-icon name="purchase-close-popup"></svg-icon></div>' +
+                        '<span translate="{{vm.nudgeMessage}}" translate-values="{num: {{vm.num}} }"></span> ' +
+                        '<span class="open-dialog" ng-click="vm.showPurchaseDialog()"><span translate="{{vm.nudgeAction}}"></span></span>' +
+                        '</div>' +
+                        '</md-toast>';
 
-                $mdToast.show({
-                    template: toastTemplate,
-                    position: 'top',
-                    hideDelay: false,
-                    controller: function () {
-                        self.closeToast = function () {
-                            $mdToast.hide();
-                        };
+                    $mdToast.show({
+                        template: toastTemplate,
+                        position: 'top',
+                        hideDelay: false,
+                        controller: function () {
+                            this.num = num;
+                            this.node = mode;
+                            this.closeToast = function () {
+                                $mdToast.hide();
+                            };
 
-                        self.showPurchaseDialog = function () {
-                            self.showPurchaseDialog();
-                        };
+                            this.showPurchaseDialog = self.showPurchaseDialog; // todo - check if it's working
 
-                        if (mode === 1) { // completed first workout
-                            self.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT';
-                            self.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT';
-                        } else if (mode === 2) { // completed all free content
-                            self.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT';
-                            self.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT';
-                        }
-                        self.mode = mode;
-                        self.num = num;
-                    },
-                    controllerAs: 'vm'
-                });
+                            if (mode === 1) { // completed first workout
+                                this.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT';
+                                this.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT';
+                            } else if (mode === 2) { // completed all free content
+                                this.nudgeMessage = '.PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT';
+                                this.nudgeAction = '.PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT';
+                            }
+                            this.mode = mode;
+                            this.num = num;
+                        },
+                        controllerAs: 'vm'
+                    });
+                }
+
             };
         }
     );
