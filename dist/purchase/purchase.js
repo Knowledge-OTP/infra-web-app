@@ -73,7 +73,7 @@
                     }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
-                        $q.when(purchaseService.purchaseDataExists()).then(function (purchaseData) {
+                        $q.when(purchaseService.getPurchaseData()).then(function (purchaseData) {
                             if (!angular.equals(purchaseData, {})){
                                 vm.upgradeDate = $filter('date')(purchaseData.creationTime, 'mediumDate');
                             }
@@ -293,7 +293,6 @@
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
                 return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
-                    $log.debug('setPendingPurchase res ', res);
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];

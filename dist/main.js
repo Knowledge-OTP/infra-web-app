@@ -7976,7 +7976,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                     }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
-                        $q.when(purchaseService.purchaseDataExists()).then(function (purchaseData) {
+                        $q.when(purchaseService.getPurchaseData()).then(function (purchaseData) {
                             if (!angular.equals(purchaseData, {})){
                                 vm.upgradeDate = $filter('date')(purchaseData.creationTime, 'mediumDate');
                             }
@@ -8196,7 +8196,6 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
                 return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
-                    $log.debug('setPendingPurchase res ', res);
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
@@ -12036,7 +12035,8 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
                 var svgMap = {
                     'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
-                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/znk-header-check-mark-icon.svg'
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/znk-header-check-mark-icon.svg',
+                    'pending-purchase-clock-icon': 'components/znkHeader/svg/pending-purchase-clock-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -12215,6 +12215,25 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
 
 angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/znkHeader/svg/pending-purchase-clock-icon.svg",
+    "<svg\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 183 183\"\n" +
+    "    style=\"enable-background:new 0 0 183 183;\" xml:space=\"preserve\"\n" +
+    "    class=\"pending-purchase-clock-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.pending-purchase-clock-svg .st0{fill:none;stroke:#231F20;stroke-width:10.5417;stroke-miterlimit:10;}\n" +
+    "	.pending-purchase-clock-svg .st1{fill:none;stroke:#231F20;stroke-width:12.3467;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "	.pending-purchase-clock-svg .st2{fill:none;stroke:#231F20;stroke-width:11.8313;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<circle class=\"st0\" cx=\"91.5\" cy=\"91.5\" r=\"86.2\"/>\n" +
+    "<line class=\"st1\" x1=\"92.1\" y1=\"96\" x2=\"92.1\" y2=\"35.5\"/>\n" +
+    "<line class=\"st2\" x1=\"92.1\" y1=\"96\" x2=\"131.4\" y2=\"96\"/>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/znkHeader/svg/raccoon-logo.svg",
     "<svg\n" +
     "    x=\"0px\"\n" +
