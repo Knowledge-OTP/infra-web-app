@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
         function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv, $timeout,
-                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv, $log) {
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
             'ngInject';
 
             var self = this;

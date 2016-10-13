@@ -25,7 +25,7 @@
                 };
 
                 $scope.$watch(function () {
-                    return self.purchaseData;
+                    return vm.purchaseData;
                 }, function (newPurchaseState) {
                     if (angular.isUndefined(newPurchaseState)) {
                         return;
