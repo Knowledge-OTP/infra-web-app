@@ -24,7 +24,9 @@
                     znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
                 };
 
-                $scope.$watch('vm.purchaseState', function (newPurchaseState) {
+                $scope.$watch(function () {
+                    return self.purchaseData;
+                }, function (newPurchaseState) {
                     if (angular.isUndefined(newPurchaseState)) {
                         return;
                     }

@@ -3,12 +3,38 @@
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
         function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv, $timeout,
-                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
+                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv, $log) {
             'ngInject';
 
             var self = this;
+            var pendingPurchaseProm = purchaseService.getPendingPurchase();
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
+            self.purchaseData = {};
+
+            if (pendingPurchaseProm) {
+                self.purchaseState = PurchaseStateEnum.PENDING.enum;
+                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+            } else {
+                self.purchaseState = PurchaseStateEnum.NONE.enum;
+                self.subscriptionStatus = '.PROFILE_STATUS_BASIC';
+
+            }
+
+            purchaseService.getPurchaseData().then(function (purchaseData) {
+                self.purchaseData = purchaseData;
+            });
+
+            $scope.$watch(function () {
+                return self.purchaseData;
+            }, function (newPurchaseState) {
+                $timeout(function () {
+                    var hasProVersion = !(angular.equals(newPurchaseState, {}));
+                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+                });
+            }, true);
+
 
             OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
                 self.isOnBoardingCompleted = isCompleted;
@@ -51,24 +77,6 @@
                 AuthService.logout();
                 $window.location.replace(ENV.redirectLogout);
             };
-
-            var pendingPurchaseProm = purchaseService.getPendingPurchase();
-            if (pendingPurchaseProm) {
-                self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
-            }
-
-            purchaseService.getPurchaseData().then(function (purchaseData) {
-                self.purchaseData = purchaseData;
-            });
-
-            $scope.$watch('self.purchaseData', function (newPurchaseState) {
-                $timeout(function () {
-                    var hasProVersion = !(angular.equals(newPurchaseState, {}));
-                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
-                });
-            }, true);
 
 
             $scope.$on('$mdMenuClose', function () {
