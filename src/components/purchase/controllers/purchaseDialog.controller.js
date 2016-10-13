@@ -13,19 +13,18 @@
 
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
                 if (pendingPurchaseProm) {
-                    self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+                    vm.purchaseState = PurchaseStateEnum.PENDING.enum;
+                    vm.subscriptionStatus = '.PROFILE_STATUS_PENDING';
                 }
 
                 purchaseService.getPurchaseData().then(function (purchaseData) {
-                    self.purchaseData = purchaseData;
+                    vm.purchaseData = purchaseData;
                 });
 
-                $scope.$watch('self.purchaseData', function (newPurchaseState) {
+                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
                     $timeout(function () {
                         var hasProVersion = !(angular.equals(newPurchaseState, {}));
-                        self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                        self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
+                        vm.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
                     });
                 }, true);
 
