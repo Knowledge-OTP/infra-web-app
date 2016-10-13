@@ -22,7 +22,8 @@
 
                 var svgMap = {
                     'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
-                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/znk-header-check-mark-icon'
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/znk-header-check-mark-icon.svg',
+                    'pending-purchase-clock-icon': 'components/znkHeader/svg/pending-purchase-clock-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -32,13 +33,40 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
+        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "$timeout", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv, $timeout,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
             'ngInject';
 
             var self = this;
+            var pendingPurchaseProm = purchaseService.getPendingPurchase();
             self.expandIcon = 'expand_more';
             self.additionalItems = znkHeaderSrv.getAdditionalItems();
+            self.purchaseData = {};
+
+            if (pendingPurchaseProm) {
+                self.purchaseState = PurchaseStateEnum.PENDING.enum;
+                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+            } else {
+                self.purchaseState = PurchaseStateEnum.NONE.enum;
+                self.subscriptionStatus = '.PROFILE_STATUS_BASIC';
+            }
+
+            purchaseService.getPurchaseData().then(function (purchaseData) {
+                self.purchaseData = purchaseData;
+            });
+
+            $scope.$watch(function () {
+                return self.purchaseData;
+            }, function (newPurchaseState) {
+                $timeout(function () {
+                    var hasProVersion = !(angular.equals(newPurchaseState, {}));
+                    if (hasProVersion){
+                        self.purchaseState = PurchaseStateEnum.PRO.enum;
+                        self.subscriptionStatus = '.PROFILE_STATUS_PRO';
+                    }
+                });
+            }, true);
+
 
             OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
                 self.isOnBoardingCompleted = isCompleted;
@@ -82,23 +110,6 @@
                 $window.location.replace(ENV.redirectLogout);
             };
 
-            function _checkIfHasProVersion() {
-                purchaseService.hasProVersion().then(function (hasProVersion) {
-                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
-                });
-            }
-
-            var pendingPurchaseProm = purchaseService.getPendingPurchase();
-            if (pendingPurchaseProm) {
-                self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
-                pendingPurchaseProm.then(function () {
-                    _checkIfHasProVersion();
-                });
-            } else {
-                _checkIfHasProVersion();
-            }
 
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
@@ -192,6 +203,25 @@
 
 
 angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/znkHeader/svg/pending-purchase-clock-icon.svg",
+    "<svg\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 183 183\"\n" +
+    "    style=\"enable-background:new 0 0 183 183;\" xml:space=\"preserve\"\n" +
+    "    class=\"pending-purchase-clock-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.pending-purchase-clock-svg .st0{fill:none;stroke:#231F20;stroke-width:10.5417;stroke-miterlimit:10;}\n" +
+    "	.pending-purchase-clock-svg .st1{fill:none;stroke:#231F20;stroke-width:12.3467;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "	.pending-purchase-clock-svg .st2{fill:none;stroke:#231F20;stroke-width:11.8313;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<circle class=\"st0\" cx=\"91.5\" cy=\"91.5\" r=\"86.2\"/>\n" +
+    "<line class=\"st1\" x1=\"92.1\" y1=\"96\" x2=\"92.1\" y2=\"35.5\"/>\n" +
+    "<line class=\"st2\" x1=\"92.1\" y1=\"96\" x2=\"131.4\" y2=\"96\"/>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/znkHeader/svg/raccoon-logo.svg",
     "<svg\n" +
     "    x=\"0px\"\n" +

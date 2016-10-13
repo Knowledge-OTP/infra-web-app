@@ -59,10 +59,11 @@
                 vm.saveAnalytics = function () {
                     vm.purchaseState = PurchaseStateEnum.PENDING.enum;
                     znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
-
                 };
 
-                $scope.$watch('vm.purchaseState', function (newPurchaseState) {
+                $scope.$watch(function () {
+                    return vm.purchaseState;
+                }, function (newPurchaseState) {
                     if (angular.isUndefined(newPurchaseState)) {
                         return;
                     }
@@ -160,9 +161,22 @@
                 vm.purchaseStateEnum = PurchaseStateEnum;
                 vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
 
+                var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                if (pendingPurchaseProm) {
+                    vm.purchaseState = PurchaseStateEnum.PENDING.enum;
+                    vm.subscriptionStatus = '.PROFILE_STATUS_PENDING';
+                }
+
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
                 });
+
+                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
+                    $timeout(function () {
+                        var hasProVersion = !(angular.equals(newPurchaseState, {}));
+                        vm.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                    });
+                }, true);
 
                 purchaseService.getProduct().then(function (productPrice) {
                     vm.productPrice = +productPrice.price;
@@ -170,11 +184,6 @@
                     vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
                 });
 
-                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
-                    $timeout(function () {
-                        vm.purchaseState = !angular.equals(newPurchaseState, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    });
-                }, true);
 
                 vm.close = function () {
                     $mdDialog.cancel();
@@ -284,7 +293,6 @@
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
                 return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
-                    $log.debug('setPendingPurchase res ', res);
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];

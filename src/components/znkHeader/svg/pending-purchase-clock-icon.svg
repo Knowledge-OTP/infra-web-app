@@ -1,0 +1,17 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    x="0px"
+    y="0px"
+    viewBox="0 0 183 183"
+    style="enable-background:new 0 0 183 183;" xml:space="preserve"
+    class="pending-purchase-clock-svg">
+<style type="text/css">
+	.pending-purchase-clock-svg .st0{fill:none;stroke:#231F20;stroke-width:10.5417;stroke-miterlimit:10;}
+	.pending-purchase-clock-svg .st1{fill:none;stroke:#231F20;stroke-width:12.3467;stroke-linecap:round;stroke-miterlimit:10;}
+	.pending-purchase-clock-svg .st2{fill:none;stroke:#231F20;stroke-width:11.8313;stroke-linecap:round;stroke-miterlimit:10;}
+</style>
+<circle class="st0" cx="91.5" cy="91.5" r="86.2"/>
+<line class="st1" x1="92.1" y1="96" x2="92.1" y2="35.5"/>
+<line class="st2" x1="92.1" y1="96" x2="131.4" y2="96"/>
+</svg>

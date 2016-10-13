@@ -134,10 +134,11 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background-color: $borderColor5;
+            background-color: $bgColor7;
             margin-left: 10px;
             svg-icon {
                 height: 100%;
+                display: block;
             }
             svg-icon svg {
                 width: 75%;

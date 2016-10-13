@@ -22,10 +22,11 @@
                 vm.saveAnalytics = function () {
                     vm.purchaseState = PurchaseStateEnum.PENDING.enum;
                     znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
-
                 };
 
-                $scope.$watch('vm.purchaseState', function (newPurchaseState) {
+                $scope.$watch(function () {
+                    return vm.purchaseState;
+                }, function (newPurchaseState) {
                     if (angular.isUndefined(newPurchaseState)) {
                         return;
                     }
