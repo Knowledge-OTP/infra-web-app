@@ -86,6 +86,11 @@
                         var userId = results[0].auth.uid;
                         var productId = results[1].id;
 
+                        if (!userEmail) {
+                            $log.error('Invalid user attribute: userEmail is not defined, generating uid email');
+                            userEmail = userId + '@zinkerz.com';
+                        }
+
                         if (userEmail && userId) {
                             vm.userEmail = userEmail;
                             vm.hostedButtonId = ENV.purchasePaypalParams.hostedButtonId;
