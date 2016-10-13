@@ -18,12 +18,10 @@ workouts-progress {
   workouts-progress .items-container {
     height: 67px;
     white-space: nowrap;
-    display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     padding-right: 90px;
     padding-left: 300px; }
     workouts-progress .items-container .dotted-lines-container {
@@ -32,30 +30,24 @@ workouts-progress {
       right: 0;
       bottom: 0;
       left: 0;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: center;
+          align-items: center; }
       workouts-progress .items-container .dotted-lines-container .dotted-line {
         border-top: 2px dotted #0a9bad;
         display: inline-block; }
         workouts-progress .items-container .dotted-lines-container .dotted-line.future {
-          -webkit-flex-grow: 1;
-              -ms-flex-positive: 1;
-                  flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
           border-top-color: #cfcfcf; }
     workouts-progress .items-container .item-container {
-      display: -webkit-inline-flex;
       display: -ms-inline-flexbox;
       display: inline-flex;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
       height: 100%;
       cursor: pointer;
       padding-left: 17.5px;
@@ -65,8 +57,7 @@ workouts-progress {
         workouts-progress .items-container .item-container.diagnostic .item.selected:after {
           border-color: #87ca4d; }
       workouts-progress .items-container .item-container .item {
-        -webkit-transform: scale(0.6);
-                transform: scale(0.6);
+        transform: scale(0.6);
         box-sizing: border-box;
         display: inline-block;
         width: 50px;
@@ -75,20 +66,15 @@ workouts-progress {
         font-size: 28px;
         color: #ffffff;
         font-family: Quicksand;
-        display: -webkit-inline-flex;
         display: -ms-inline-flexbox;
         display: inline-flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
-        transition: -webkit-transform 0.3s cubic-bezier(0, 1.18, 0.58, 1);
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1); }
         workouts-progress .items-container .item-container .item.selected {
-          -webkit-transform: scale(1);
-                  transform: scale(1);
+          transform: scale(1);
           color: #ffffff;
           position: relative;
           border: none; }
@@ -191,12 +177,10 @@ workout-intro-lock {
         line-height: 30px; }
 
 .workouts-roadmap-container {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
   min-height: 665px; }
   .workouts-roadmap-container > ui-view {
     width: 100%;
@@ -205,34 +189,28 @@ workout-intro-lock {
     background: #ffffff;
     margin-right: 30px;
     width: 705px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column; }
+    -ms-flex-direction: column;
+        flex-direction: column; }
     .workouts-roadmap-container .workouts-roadmap-wrapper workouts-progress {
       height: 67px;
       padding-top: 20px; }
     .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container {
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
       position: relative;
       overflow: hidden; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
-        -webkit-transform: translateX(580px);
-                transform: translateX(580px);
+        transform: translateX(580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter-active {
-        -webkit-transform: translateX(0);
-                transform: translateX(0);
+        transform: translateX(0);
         opacity: 1; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave-active {
-        -webkit-transform: translateX(-580px);
-                transform: translateX(-580px);
+        transform: translateX(-580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out;
@@ -242,16 +220,13 @@ workout-intro-lock {
         bottom: 0;
         left: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter {
-        -webkit-transform: translateX(-580px);
-                transform: translateX(-580px);
+        transform: translateX(-580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter-active {
-        -webkit-transform: translateX(0);
-                transform: translateX(0);
+        transform: translateX(0);
         opacity: 1; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave-active {
-        -webkit-transform: translateX(580px);
-                transform: translateX(580px);
+        transform: translateX(580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container .workouts-ui-view {
         position: absolute;
@@ -311,12 +286,10 @@ workout-intro-lock {
     text-transform: uppercase;
     margin-top: 53px; }
   .workouts-roadmap-diagnostic-intro .first-row, .workouts-roadmap-diagnostic-intro .second-row, .workouts-roadmap-diagnostic-summary .first-row, .workouts-roadmap-diagnostic-summary .second-row {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
     .workouts-roadmap-diagnostic-intro .first-row .subject-score, .workouts-roadmap-diagnostic-intro .second-row .subject-score, .workouts-roadmap-diagnostic-summary .first-row .subject-score, .workouts-roadmap-diagnostic-summary .second-row .subject-score {
       display: inline-block;
       margin: 67.5px 37px auto;
@@ -361,8 +334,7 @@ workout-intro-lock {
     margin-top: 5px;
     display: inline-block; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .change-subject-container.rotate svg-icon svg {
-      -webkit-animation: rotateAnimation 0.9s infinite linear;
-              animation: rotateAnimation 0.9s infinite linear; }
+      animation: rotateAnimation 0.9s infinite linear; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .change-subject-container .change-subject-title {
       font-family: Lato;
       font-weight: 300;
@@ -373,12 +345,10 @@ workout-intro-lock {
     font-weight: 400;
     font-size: 18px; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+        justify-content: center;
     margin-top: 33px; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper {
       margin-right: 15px; }
@@ -455,21 +425,11 @@ workout-intro-lock {
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .start-btn-wrapper {
     margin-top: 50px; }
 
-@-webkit-keyframes rotateAnimation {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
-
 @keyframes rotateAnimation {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
+    transform: rotate(0deg); }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
+    transform: rotate(360deg); } }
 
 .workouts-roadmap-workout-in-progress .workouts-roadmap-workout-in-progress-wrapper {
   color: #4f4d4d;
@@ -509,33 +469,18 @@ workout-intro-lock {
     font-weight: 700; }
   .workouts-roadmap-base-pre-summary .checkmark-icon {
     margin-top: 52px;
-    -webkit-animation-name: scale-icon;
-            animation-name: scale-icon;
-    -webkit-animation-duration: 0.3s;
-            animation-duration: 0.3s;
-    -webkit-animation-iteration-count: 1;
-            animation-iteration-count: 1;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out;
-    -webkit-animation-fill-mode: forwards;
-            animation-fill-mode: forwards; }
+    animation-name: scale-icon;
+    animation-duration: 0.3s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards; }
   .workouts-roadmap-base-pre-summary .complete-text {
     margin-top: 23px;
     font-size: 23px;
     font-weight: 400; }
 
-@-webkit-keyframes scale-icon {
-  0% {
-    -webkit-transform: scale(0);
-            transform: scale(0); }
-  100% {
-    -webkit-transform: scale(1);
-            transform: scale(1); } }
-
 @keyframes scale-icon {
   0% {
-    -webkit-transform: scale(0);
-            transform: scale(0); }
+    transform: scale(0); }
   100% {
-    -webkit-transform: scale(1);
-            transform: scale(1); } }
+    transform: scale(1); } }
