@@ -24,7 +24,8 @@
   #faq-container #faq-inner {
     padding: 40px 55px 20px; }
   #faq-container v-accordion v-pane:not(.is-expanded) > v-pane-header .faq-icon {
-    transform: rotate(-90deg); }
+    -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg); }
   #faq-container v-accordion v-pane v-pane-header {
     font-size: 18px;
     color: #0a9bad;
@@ -40,6 +41,7 @@
       height: 20px;
       position: absolute;
       left: 0;
+      transition: -webkit-transform 0.5s;
       transition: transform 0.5s; }
   #faq-container v-accordion v-pane v-pane-content {
     font-size: 16px;
