@@ -7965,7 +7965,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                 };
 
                 $scope.$watch(function () {
-                    return vm.purchaseData;
+                    return vm.purchaseState;
                 }, function (newPurchaseState) {
                     if (angular.isUndefined(newPurchaseState)) {
                         return;
