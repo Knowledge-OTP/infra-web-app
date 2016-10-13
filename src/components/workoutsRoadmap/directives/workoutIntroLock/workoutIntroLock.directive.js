@@ -17,7 +17,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })
         .directive('workoutIntroLock',
-            function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv) {
+            function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv, purchaseService) {
                 'ngInject';
 
                 return {
@@ -58,6 +58,7 @@
                                 if (prevWorkout.status !== ExerciseStatusEnum.COMPLETED.enum) {
                                     element.addClass('lock');
                                     scope.vm.lockState = LOCK_STATES.PREV_NOT_COMPLETED;
+                                    debugger;
                                     return $q.reject(null);
                                 }
                             }
@@ -83,6 +84,10 @@
                         setLockStateFlowControlProm.then(function(){
                             scope.vm.lockState = LOCK_STATES.NO_LOCK;
                         });
+
+                        scope.vm.openPurchaseModal = function () {
+                            purchaseService.showPurchaseDialog();
+                        }
                     }
                 };
             }

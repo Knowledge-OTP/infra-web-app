@@ -5933,6 +5933,8 @@ md-menu-content.md-menu-content-znk-header {
       height: 1px;
       margin: 10px 16px;
       border-top: 1px solid #ebebeb; }
+    md-menu-content.md-menu-content-znk-header md-list md-list-item::before {
+      min-height: 0; }
   md-menu-content.md-menu-content-znk-header .pending-purchase-icon-wrapper {
     width: 16px;
     height: auto;
