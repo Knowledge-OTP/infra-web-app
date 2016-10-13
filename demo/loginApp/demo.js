@@ -1,4 +1,6 @@
-angular.module('demo', ['znk.infra-web-app.loginApp', 'demoEnv', 'znk.infra-web-app.promoCode'])
+(function(angular) {
+
+    angular.module('demo', ['znk.infra-web-app.loginApp', 'znk.infra-web-app.promoCode'])
     .config(function ($translateProvider, $locationProvider, PromoCodeSrvProvider, AllEnvConfigSrvProvider, LoginAppSrvProvider) {
         'ngInject';
         $locationProvider.html5Mode({
@@ -347,3 +349,4 @@ angular.module('demo', ['znk.infra-web-app.loginApp', 'demoEnv', 'znk.infra-web-
             return AllEnvConfigObj;
         }
     });
+})(angular);
