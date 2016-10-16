@@ -54,38 +54,34 @@
                                 </div>
                             </ng-switch>
                         </md-list-item>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase links">
-                            <span ng-disabled="!vm.isOnBoardingCompleted"
-                                  disable-click-drv
-                                  ng-click="vm.showGoalsEdit()"
-                                  translate=".PROFILE_GOALS"></span>
+                        <md-list-item md-ink-ripple
+                            ng-disabled="!vm.isOnBoardingCompleted"
+                            disable-click-drv
+                            ng-click="vm.showGoalsEdit()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                 translate=".PROFILE_GOALS"></div>
                         </md-list-item>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase links">
-                            <span ng-click="vm.showChangePassword()" translate=".PROFILE_CHANGE_PASSWORD"></span>
+                        <md-list-item md-ink-ripple
+                            ng-click="vm.showChangePassword()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                 translate=".PROFILE_CHANGE_PASSWORD"></div>
                         </md-list-item>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase links">
-                            <a ui-sref="app.faq">
-                                <span translate=".WHAT_IS_THE_THIS_TEST"></span>
+                        <md-list-item md-ink-ripple>
+                            <a ui-sref="app.faq"
+                               class="header-modal-item header-modal-item-uppercase links"
+                               translate=".WHAT_IS_THE_THIS_TEST">
                             </a>
                         </md-list-item>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase links">
-                            <div class="support-feedback-btn" ng-click="vm.showFeedbackDialog()">
-                                <span translate=".PROFILE_SUPPORT"></span>
-                            </div>
+                        <md-list-item  md-ink-ripple
+                                       ng-click="vm.showFeedbackDialog()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                  translate=".PROFILE_SUPPORT"></div>
                         </md-list-item>
                         <div class="divider"></div>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase logout">
-                            <span ng-click="vm.logout()" translate=".PROFILE_LOGOUT"></span>
+                        <md-list-item md-ink-ripple
+                            ng-click="vm.logout()">
+                            <div class="header-modal-item header-modal-item-uppercase logout"
+                                  translate=".PROFILE_LOGOUT"></div>
                         </md-list-item>
                     </md-list>
                 </md-menu-content>
