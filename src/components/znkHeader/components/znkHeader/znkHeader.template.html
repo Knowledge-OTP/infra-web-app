@@ -21,11 +21,10 @@
             </md-list>
         </div>
 
-        <div class="app-user-area" layout="row" layout-align="center right">
+        <div class="app-user-area" layout="row" layout-align="center center">
             <invitation-manager></invitation-manager>
-            <div class="profile-status" ng-if="vm.purchaseState === 'pending'"
-                 ng-click="vm.showPurchaseDialog()">
-                <div class="pending-purchase-icon-wrapper">
+            <div class="profile-status" ng-click="vm.showPurchaseDialog()">
+                <div class="pending-purchase-icon-wrapper" ng-if="vm.purchaseState === 'pending'">
                     <svg-icon name="pending-purchase-clock-icon"></svg-icon>
                 </div>
                 <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
@@ -44,7 +43,7 @@
                             <span class="email">{{::vm.userProfile.email}}</span>
                         </md-list-item>
                         <md-list-item md-ink-ripple class="header-modal-item header-modal-item-uppercase links purchase-status">
-                            <span translate="{{vm.subscriptionStatus ? vm.subscriptionStatus : 'ZNK_HEADER.PROFILE_STATUS_BASIC'}}" translate-compile></span>
+                            <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
                             <span class="link-full-item" ng-click="vm.showPurchaseDialog()"></span>
                             <ng-switch on="vm.purchaseState">
                                 <div ng-switch-when="pending" class="pending-purchase-icon-wrapper">
@@ -55,46 +54,34 @@
                                 </div>
                             </ng-switch>
                         </md-list-item>
-                        <md-list-item
-                                md-ink-ripple
-                                ng-class="{'no-live-lessons': vm.noLiveLessons}"
-                                class="header-modal-item header-modal-item-uppercase links">
-                            <span
-                                    ng-click="vm.showMyLiveLessonsSchedule()"
-                                    translate=".MY_LIVE_LESSONS"></span>
+                        <md-list-item md-ink-ripple
+                                      ng-disabled="!vm.isOnBoardingCompleted"
+                                      disable-click-drv
+                                      ng-click="vm.showGoalsEdit()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                 translate=".PROFILE_GOALS"></div>
                         </md-list-item>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase links">
-                            <span ng-disabled="!vm.isOnBoardingCompleted"
-                                  disable-click-drv
-                                  ng-click="vm.showGoalsEdit()"
-                                  translate=".PROFILE_GOALS"></span>
+                        <md-list-item md-ink-ripple
+                                      ng-click="vm.showMyProfile()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                 translate=".MY_PROFILE"></div>
                         </md-list-item>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase links">
-                            <span ng-click="vm.showChangePassword()" translate=".MY_PROFILE"></span>
-                        </md-list-item>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase links">
-                            <a ui-sref="app.faq">
-                                <span translate=".WHAT_IS_THE_THIS_TEST"></span>
+                        <md-list-item md-ink-ripple>
+                            <a ui-sref="app.faq"
+                               class="header-modal-item header-modal-item-uppercase links"
+                               translate=".WHAT_IS_THE_THIS_TEST">
                             </a>
                         </md-list-item>
-                        <md-list-item
-                            md-ink-ripple
-                            class="header-modal-item header-modal-item-uppercase links">
-                            <div class="support-feedback-btn" ng-click="vm.showFeedbackDialog()">
-                                <span translate=".PROFILE_SUPPORT"></span>
-                            </div>
+                        <md-list-item  md-ink-ripple
+                                       ng-click="vm.showFeedbackDialog()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                 translate=".PROFILE_SUPPORT"></div>
                         </md-list-item>
                         <div class="divider"></div>
-                        <md-list-item
-                            md-ink-ripple
-                            ng-click="vm.logout()">
-                            <span class="header-modal-item header-modal-item-uppercase logout" translate=".PROFILE_LOGOUT"></span>
+                        <md-list-item md-ink-ripple
+                                      ng-click="vm.logout()">
+                            <div class="header-modal-item header-modal-item-uppercase logout"
+                                 translate=".PROFILE_LOGOUT"></div>
                         </md-list-item>
                     </md-list>
                 </md-menu-content>

@@ -24,12 +24,12 @@ md-dialog.my-profile {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                .settings-change-password-icon{
+                .myProfile-icon{
                     width: 35px;
                     stroke: $bgColor3;
                 }
 
-                .settings-change-password-icon *{
+                .myProfile-icon *{
                     fill: $bgColor3;
                 }
             }
@@ -59,7 +59,6 @@ md-dialog.my-profile {
             @include absolute-position(-35px, -35px);
             height:14px;
             width: 14px;
-            padding: 10px;
             cursor: pointer;
         }
     }
@@ -188,6 +187,7 @@ md-dialog.my-profile {
             display: flex;
             justify-content: flex-end;
             margin-right: 50px;
+            outline: none;
             .save-pass-btn {
                 width: 15%;
                 margin: 0;
@@ -197,6 +197,7 @@ md-dialog.my-profile {
                 border-radius: 20px;
                 border-color: $bsColor5;
                 color: $fontColor6;
+                outline: none;
             }
         }
     }
@@ -222,7 +223,7 @@ md-dialog.my-profile {
                 }
             }
 
-        .settings-danger-red-icon {
+        .myProfile-danger-red-icon {
             width: 20px;
             margin-right: 17px;
             * {

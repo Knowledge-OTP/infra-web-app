@@ -147,14 +147,6 @@
         &:hover:not(.header-modal-item-profile) {
             background-color: $bgColor29;
         }
-
-        .support-feedback-btn{
-            width: 100%;
-        }
-
-        .support-feedback-btn:focus, .support-feedback-btn:active{
-            outline: none;
-        }
     }
 }
 

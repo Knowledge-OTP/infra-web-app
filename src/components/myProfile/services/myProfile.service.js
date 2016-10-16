@@ -9,8 +9,8 @@
                 var self = this;
 
                 this.getTimezonesList = function () {
-                    return $http.get(ENV.timezonesJsonUrl, {
-                        timeout: ENV.promiseTimeOut,
+                    return $http.get('./assets/timezones.json', {
+                        timeout: 5000,
                         cache: true
                     });
                 };

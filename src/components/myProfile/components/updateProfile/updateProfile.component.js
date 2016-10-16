@@ -55,7 +55,7 @@
                     vm.showError = vm.showSuccess = false;
 
                     if (profileform.$valid) {
-                        UserProfileService.setProfile(vm.profileData).then(function (res) {
+                        UserProfileService.setProfile(vm.profileData).then(function () {
                             $timeout(function () {
                                 vm.showSuccess = true;
                                 vm.saveTitle = 'MY_PROFILE.DONE';

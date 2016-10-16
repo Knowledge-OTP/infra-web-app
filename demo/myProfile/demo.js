@@ -20,7 +20,5 @@
             this.firebaseAppScopeName = 'sat_app';
             this.fbGlobalEndPoint = 'https://znk-dev.firebaseio.com/';
             this.fbDataEndPoint = 'https://sat-dev.firebaseio.com/';
-            this.timezonesJsonUrl = "./timezones.json";
-            this.promiseTimeOut = 5000;
         });
 })(angular);
