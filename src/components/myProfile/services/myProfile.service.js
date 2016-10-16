@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.myProfile')
         .service('MyProfileSrv',
-            function ($mdDialog, $http, ENV, UserProfileService ,$q) {
+            function ($mdDialog, $http, ENV, UserProfileService ,$q, $mdToast) {
                 'ngInject';
 
                 var self = this;
@@ -32,6 +32,17 @@
                             escapeToClose: true
                         });
                     });
+                };
+
+                this.showToast = function (mode, num) {
+                    $mdToast.show({
+                        templateUrl: 'components/myProfile/templates/toast.template.html',
+                        position: 'top right',
+                        hideDelay: false,
+                        controllerAs: 'vm',
+                        controller: 'ToastController'
+                    });
+
                 };
             }
         );

@@ -15,6 +15,10 @@
             $scope.openPopup = function() {
                 MyProfileSrv.showMyProfile();
             };
+
+            $scope.openToast = function() {
+                MyProfileSrv.showToast();
+            };
         })
         .service('ENV', function() {
             this.firebaseAppScopeName = 'sat_app';
