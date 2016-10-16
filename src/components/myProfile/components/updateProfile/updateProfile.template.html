@@ -49,7 +49,10 @@
             </div>
         </div>
         <div class="timezone-manual">
-            <input type="checkbox" id="timezoneManual" name="timezoneManual" ng-model="vm.profileData.isTimezoneManual">
+            <input type="checkbox"
+                   id="timezoneManual" name="timezoneManual"
+                   ng-model="vm.profileData.isTimezoneManual"
+                   ng-change="vm.updateProfileTimezone()">
             <label for="timezoneManual">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>
         </div>
 
