@@ -7168,17 +7168,18 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
             bindings: {},
             templateUrl:  'components/myProfile/components/changePassword/changePassword.template.html',
             controllerAs: 'vm',
-            controller: ["AuthService", "$mdDialog", "$timeout", function (AuthService, $mdDialog, $timeout) {
+            controller: ["AuthService", "$mdDialog", "$timeout", "MyProfileSrv", function (AuthService, $mdDialog, $timeout, MyProfileSrv) {
                 'ngInject';
 
                 var vm = this;
+                var showToast = MyProfileSrv.showToast;
+
                 vm.saveTitle = 'MY_PROFILE.SAVE';
                 vm.oldPassError = 'MY_PROFILE.REQUIRED_FIELD';
-                vm.generalError = 'MY_PROFILE.ERROR_OCCURRED';
                 vm.changePasswordData = {};
 
                 vm.changePassword = function (authform) {
-                    vm.showError = vm.showSuccess = false;
+                    var type, msg;
 
                     if (vm.changePasswordData.newPassword !== vm.changePasswordData.newPasswordConfirm) {
                         vm.changePasswordData.newPasswordConfirm = undefined;
@@ -7186,29 +7187,29 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                     }
 
                     if (!authform.$invalid) {
-                        vm.startLoader = true;
                         AuthService.changePassword(vm.changePasswordData).then(function () {
-                            vm.fillLoader = true;
-                            $timeout(function () {
-                                vm.startLoader = vm.fillLoader = false;
-                                vm.showSuccess = true;
-                                vm.saveTitle = 'MY_PROFILE.DONE';
-                            }, 100);
+                            $timeout(function (res) {
+                                console.log('res ', res);
+                                type = 'success';
+                                msg = 'MY_PROFILE.PASSWORD_SAVE_SUCCESS';
+                                showToast(type, msg);
+                            }, 10);
                         }, function (err) {
-                            vm.fillLoader = true;
-
+                            console.log('err: ', err);
                             $timeout(function () {
-                                vm.startLoader = vm.fillLoader = false;
+                                type = 'error';
                                 if (err.code === 'INVALID_PASSWORD') {
                                     vm.changePasswordData.oldPassword = null;
-                                    vm.oldPassError = 'MY_PROFILE.INCORRECT_PASSWORD';
+                                    msg = 'MY_PROFILE.INCORRECT_PASSWORD';
+                                    showToast(type, msg);
                                 } else if (err.code === 'NETWORK_ERROR') {
-                                    vm.generalError = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
-                                    vm.showError = true;
+                                    msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
+                                    showToast(type, msg);
                                 } else {
-                                    vm.showError = true;
+                                    msg = 'MY_PROFILE.ERROR_OCCURRED';
+                                    showToast(type, msg);
                                 }
-                            }, 100);
+                            }, 10);
                         });
                     }
                 };
@@ -7232,7 +7233,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
             },
             templateUrl:  'components/myProfile/components/updateProfile/updateProfile.template.html',
             controllerAs: 'vm',
-            controller:  ["AuthService", "$mdDialog", "$timeout", "UserProfileService", function (AuthService, $mdDialog, $timeout, UserProfileService) {
+            controller:  ["AuthService", "$mdDialog", "$timeout", "UserProfileService", "MyProfileSrv", function (AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
                 'ngInject';
 
                 function getLocalTimezone() {
@@ -7262,10 +7263,10 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 
                 var defaultTimeZone = getLocalTimezone();
                 var userAuth = AuthService.getAuth();
+                var showToast = MyProfileSrv.showToast;
 
                 vm.saveTitle = 'MY_PROFILE.SAVE';
                 vm.nicknameError = 'MY_PROFILE.REQUIRED_FIELD';
-                vm.generalError = 'MY_PROFILE.ERROR_OCCURRED';
                 vm.profileData = {};
 
                 vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.auth.email;
@@ -7275,23 +7276,26 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 
 
                 vm.updateProfile = function (profileform) {
-                    vm.showError = vm.showSuccess = false;
+                    var type, msg;
 
                     if (profileform.$valid) {
                         UserProfileService.setProfile(vm.profileData).then(function () {
                             $timeout(function () {
-                                vm.showSuccess = true;
-                                vm.saveTitle = 'MY_PROFILE.DONE';
-                            }, 100);
+                                type = 'success';
+                                msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
+                                showToast(type, msg);
+                            }, 10);
                         }, function (err) {
                             $timeout(function () {
+                                type = 'error';
                                 if (err.code === 'NETWORK_ERROR') {
-                                    vm.generalError = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
-                                    vm.showError = true;
+                                    msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
+                                    showToast(type, msg);
                                 } else {
-                                    vm.showError = true;
+                                    msg = 'MY_PROFILE.ERROR_OCCURRED';
+                                    showToast(type, msg);
                                 }
-                            }, 100);
+                            }, 10);
                         });
                     }
                 };
@@ -7333,9 +7337,28 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.myProfile').controller('ToastController',
+        ["$mdToast", "type", "msg", function ($mdToast, type, msg) {
+            'ngInject';
+
+            var vm = this;
+            vm.type = type;
+            vm.msg = msg;
+
+            vm.closeToast = function () {
+                $mdToast.hide();
+            };
+
+        }]
+        );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.myProfile')
         .service('MyProfileSrv',
-            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", function ($mdDialog, $http, ENV, UserProfileService ,$q) {
+            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$mdToast", function ($mdDialog, $http, ENV, UserProfileService ,$q, $mdToast) {
                 'ngInject';
 
                 var self = this;
@@ -7364,6 +7387,18 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                             escapeToClose: true
                         });
                     });
+                };
+
+                this.showToast = function (type, msg) {
+                    $mdToast.show({
+                        locals:{ type: type,  msg: msg },
+                        templateUrl: 'components/myProfile/templates/toast.template.html',
+                        position: 'top right',
+                        hideDelay: 3000,
+                        controllerAs: 'vm',
+                        controller: 'ToastController'
+                    });
+
                 };
             }]
         );
@@ -7446,7 +7481,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "    </form>\n" +
     "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
-    "        <div translate=\".SAVE_SUCCESS\"></div>\n" +
+    "        <div translate=\".PASSWORD_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
     "            <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
@@ -7525,7 +7560,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "    </form>\n" +
     "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
-    "        <div translate=\".SAVE_SUCCESS\"></div>\n" +
+    "        <div translate=\".PROFILE_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
     "            <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
@@ -7612,8 +7647,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "</svg>\n" +
     "");
   $templateCache.put("components/myProfile/svg/error-icon.svg",
-    "<svg\n" +
-    "    class=\"settings-error-icon\"\n" +
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    class=\"error-icon\"\n" +
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
     "    viewBox=\"0 0 54.8 49.1\">\n" +
@@ -7648,6 +7683,25 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "    <change-password class=\"change-password\"></change-password>\n" +
     "\n" +
     "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/myProfile/templates/toast.template.html",
+    "<md-toast ng-cloak  translate-namespace=\"MY_PROFILE\"\n" +
+    "          ng-class=\"{'toast-wrap': vm.type === 'success',\n" +
+    "                     'toast-wrap-error': vm.type === 'error'}\">\n" +
+    "    <div class=\"icon-wrap\">\n" +
+    "        <svg-icon name=\"myProfile-completed-v-icon\" ng-if=\"vm.type === 'success'\"></svg-icon>\n" +
+    "        <svg-icon name=\"myProfile-close-popup\" ng-if=\"vm.type === 'error'\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"md-toast-content\">\n" +
+    "        <div class=\"md-toast-text\" flex>{{vm.msg | translate}}</div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <md-button class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
+    "        <svg-icon name=\"myProfile-close-popup\"></svg-icon>\n" +
+    "    </md-button>\n" +
+    "\n" +
+    "</md-toast>\n" +
     "");
 }]);
 
