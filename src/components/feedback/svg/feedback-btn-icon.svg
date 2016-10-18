@@ -1,0 +1,18 @@
+<svg version="1.1"
+     xmlns="http://www.w3.org/2000/svg"
+     x="0px" y="0px"
+     class="act-feedback-btn-icon"
+     viewBox="0 0 200 178.1">
+    <style type="text/css">
+        .act-feedback-btn-icon{
+        width:25px;
+        height:25px;
+        .st0{fill:none;stroke:#231F20;stroke-width:7;stroke-linejoin:round;stroke-miterlimit:10;}
+        }
+    </style>
+    <g>
+        <path  class="st0" d="M7.3,61v46.2c0,0,54.1-4.9,72.1,6V55.8C79.4,55.8,66.6,64.1,7.3,61z"/>
+        <path  class="st0" d="M89.9,50.9c0,0,70.2-12,98.8-45.1v157.7c0,0-50.3-43.9-98.8-46.2V50.9z"/>
+        <polyline class="st0" points="25.7,109.1 25.7,160.9 56.8,173 56.8,109.1 	"/>
+    </g>
+</svg>
