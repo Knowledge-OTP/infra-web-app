@@ -35,14 +35,12 @@ answer-explanation {
         margin: 0 auto;
         border-radius: 0px 0px 10px 10px; }
         answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .right-corner {
-          -webkit-transform: rotate(25deg);
-                  transform: rotate(25deg);
+          transform: rotate(25deg);
           border-radius: 50px 0px 50px 1px;
           right: -14px;
           box-shadow: -7px -2px #0a9bad; }
         answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .left-corner {
-          -webkit-transform: rotate(-25deg);
-                  transform: rotate(-25deg);
+          transform: rotate(-25deg);
           border-radius: 0 50px 1px 50px;
           left: -14px;
           box-shadow: 7px -2px #0a9bad; }
@@ -88,7 +86,6 @@ answer-explanation-content {
   answer-explanation-content svg-icon[name="answer-explanation-close"] svg line {
     stroke: #161616; }
   answer-explanation-content .flex-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     padding-top: 25px; }
@@ -121,48 +118,38 @@ answer-explanation-content {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   height: 47px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
   color: white;
   font-family: Lato;
   font-size: 16px; }
   .exercise-header .left-area {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center; }
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
     .exercise-header .left-area .side-text {
       padding-left: 25px;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
       text-transform: capitalize; }
     .exercise-header .left-area .no-math-icon-wrapper {
       width: 32px;
       height: 32px;
       margin-left: 30px;
       position: relative;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       border: 1px solid #81649c;
       border-radius: 100%; }
       .exercise-header .left-area .no-math-icon-wrapper svg {
@@ -177,8 +164,7 @@ answer-explanation-content {
         left: 0;
         width: 100%;
         height: 1px;
-        -webkit-transform: rotate(30deg);
-                transform: rotate(30deg);
+        transform: rotate(30deg);
         background-color: #81649c;
         z-index: 1; }
   .exercise-header .quit-back-button {
@@ -214,8 +200,7 @@ answer-explanation-content {
     top: 12px;
     left: 50%;
     font-size: 20px;
-    -webkit-transform: translate(-50%);
-            transform: translate(-50%); }
+    transform: translate(-50%); }
   .exercise-header .pattern {
     background-repeat: repeat-x;
     width: 100%;
@@ -242,12 +227,10 @@ answer-explanation-content {
     .exercise-header .right-area .date-box {
       float: right;
       position: relative;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-align-items: baseline;
-          -ms-flex-align: baseline;
-              align-items: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
       border-right: 1px solid #ffffff; }
       .exercise-header .right-area .date-box .timer-view {
         margin-right: 25px;

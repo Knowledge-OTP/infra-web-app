@@ -32,8 +32,7 @@ oath-login-drv .btn-wrap {
         margin: 0;
         height: 12px;
         width: 12px;
-        -webkit-animation: rotate 0.8s infinite linear;
-                animation: rotate 0.8s infinite linear;
+        animation: rotate 0.8s infinite linear;
         border: 3px solid #fff;
         border-right-color: transparent;
         border-radius: 50%;
@@ -41,21 +40,11 @@ oath-login-drv .btn-wrap {
         top: 10px;
         right: 15px; }
 
-@-webkit-keyframes rotate {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
-
 @keyframes rotate {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
+    transform: rotate(0deg); }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
+    transform: rotate(360deg); } }
   oath-login-drv .btn-wrap .facebook-btn {
     background-color: #369;
     line-height: 32px; }
@@ -85,12 +74,10 @@ promo-code {
   display: block;
   height: 50px; }
   promo-code .promo-code-wrapper {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+        justify-content: center;
     position: relative; }
     promo-code .promo-code-wrapper .promo-code-title {
       width: auto;
@@ -100,15 +87,12 @@ promo-code {
       font-family: Lato;
       font-weight: 400;
       padding: 0 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       cursor: pointer;
       border-radius: 20px;
       background-color: #f7f7f7; }
@@ -151,15 +135,12 @@ promo-code {
       promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
         width: 35px;
         height: 34px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         border-radius: 0 23px 23px 0;
         background-color: #0a9bad;
         position: absolute;
@@ -249,14 +230,12 @@ promo-code {
   overflow: hidden; }
 
 .md-open-menu-container md-menu-content#app-select-menu {
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
   padding: 8px 20px; }
   .md-open-menu-container md-menu-content#app-select-menu md-menu-item {
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     cursor: pointer;
     padding-right: 15px;
     margin-right: 15px;
@@ -323,8 +302,7 @@ login-app {
         left: calc(50% - 90px); }
         login-app .login-app > header .app-select.no-dropdown {
           left: 50%;
-          -webkit-transform: translateX(-50%);
-                  transform: translateX(-50%);
+          transform: translateX(-50%);
           top: 28px; }
         login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
         login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
@@ -400,7 +378,6 @@ login-app {
           text-decoration: underline;
           cursor: pointer; }
       login-app .login-app .main .back-to-login-btn {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
         cursor: pointer;
@@ -409,8 +386,7 @@ login-app {
         login-app .login-app .main .back-to-login-btn .back-btn-icon {
           width: 15px;
           display: block;
-          -webkit-transform: rotate(90deg);
-                  transform: rotate(90deg); }
+          transform: rotate(90deg); }
           login-app .login-app .main .back-to-login-btn .back-btn-icon svg * {
             stroke: #4f4d4d; }
         login-app .login-app .main .back-to-login-btn .back-btn-label {
@@ -486,12 +462,10 @@ login-app {
         margin-left: auto;
         padding-right: 9px;
         padding-left: 9px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-align: center;
+            align-items: center; }
         login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span {
           width: 200px;
           padding: 3px 10px;
@@ -529,9 +503,8 @@ login-app {
         login-app .login-app .form-container .inputs-container .input-wrapper input {
           height: 37px;
           border: none;
-          -webkit-flex-grow: 1;
-              -ms-flex-positive: 1;
-                  flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
           padding-left: 5px;
           padding-right: 5px;
           padding-top: 0;
@@ -578,8 +551,7 @@ login-app {
             margin: 0;
             height: 12px;
             width: 12px;
-            -webkit-animation: rotate 0.8s infinite linear;
-                    animation: rotate 0.8s infinite linear;
+            animation: rotate 0.8s infinite linear;
             border: 3px solid #fff;
             border-right-color: transparent;
             border-radius: 50%;
@@ -589,11 +561,9 @@ login-app {
 
 @keyframes rotate {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
+    transform: rotate(0deg); }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
+    transform: rotate(360deg); } }
       login-app .login-app .form-container .forgot-pwd-wrapper {
         margin-top: 10px;
         margin-bottom: 5px;

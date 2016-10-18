@@ -30,7 +30,6 @@
     border-left: 2px solid #0a9bad;
     transition: 0.1s; }
     .app-tests-navigationPane md-list md-list-item button {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
       width: 100%;
@@ -42,9 +41,8 @@
       border-radius: 0;
       margin: 0;
       background-color: inherit;
-      -webkit-justify-content: space-between;
-          -ms-flex-pack: justify;
-              justify-content: space-between; }
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
       .app-tests-navigationPane md-list md-list-item button span {
         margin-left: 25px;
         text-transform: capitalize; }

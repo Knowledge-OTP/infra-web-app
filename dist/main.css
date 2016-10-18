@@ -44,16 +44,14 @@ md-tooltip {
     white-space: normal; }
     md-tooltip .md-content.md-show {
       opacity: 1;
-      -webkit-transform: none;
-              transform: none;
+      transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip .md-content.md-show-remove {
       transition: none; }
       md-tooltip .md-content.md-show-remove.md-show-remove-active {
-        -webkit-transform: none;
-                transform: none;
+        transform: none;
         opacity: 0; }
     md-tooltip .md-content .top-text {
       margin-top: 22px;
@@ -113,19 +111,16 @@ complete-exercise-intro .base-complete-exercise-container {
     vertical-align: middle; }
 
 complete-exercise-exercise .base-complete-exercise-container {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   box-shadow: none; }
   complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part {
     border-right: 1px solid #ffffff;
     display: block;
     padding-right: 25px;
     margin-right: 25px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .timer-type1 .clock-icon-svg * {
@@ -137,12 +132,10 @@ complete-exercise-exercise .base-complete-exercise-container {
       border-radius: 15px;
       line-height: 30px;
       position: relative;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
       padding-right: 10px;
       padding-left: 10px; }
       complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .background-opacity {
@@ -158,9 +151,8 @@ complete-exercise-exercise .base-complete-exercise-container {
         font-family: Lato;
         font-weight: 300; }
   complete-exercise-exercise .base-complete-exercise-container znk-exercise {
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1; }
+    -ms-flex-positive: 1;
+        flex-grow: 1; }
     complete-exercise-exercise .base-complete-exercise-container znk-exercise questions-carousel {
       box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
     complete-exercise-exercise .base-complete-exercise-container znk-exercise questions-carousel, complete-exercise-exercise .base-complete-exercise-container znk-exercise .question-bottom-shadow {
@@ -174,12 +166,10 @@ complete-exercise-header {
   border-top-left-radius: 15px; }
   complete-exercise-header .header-container {
     height: 50px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     padding-right: 28px;
     padding-left: 28px;
     color: white;
@@ -187,12 +177,10 @@ complete-exercise-header {
     font-weight: 400;
     font-size: 16px; }
     complete-exercise-header .header-container .left-part, complete-exercise-header .header-container .center-part, complete-exercise-header .header-container .right-part {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-align: center;
+          align-items: center; }
     complete-exercise-header .header-container .left-part {
       width: 400px;
       overflow: hidden; }
@@ -202,18 +190,15 @@ complete-exercise-header {
         overflow: hidden;
         text-overflow: ellipsis; }
     complete-exercise-header .header-container .center-part {
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+      -ms-flex-pack: center;
+          justify-content: center; }
     complete-exercise-header .header-container .right-part {
       width: 400px;
       text-align: right;
-      -webkit-justify-content: flex-end;
-          -ms-flex-pack: end;
-              justify-content: flex-end; }
+      -ms-flex-pack: end;
+          justify-content: flex-end; }
       complete-exercise-header .header-container .right-part .exit {
         cursor: pointer; }
 
@@ -227,17 +212,14 @@ complete-exercise-intro-tutorial {
   complete-exercise-intro-tutorial .intro-container {
     padding-right: 180px;
     padding-left: 180px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
+    -ms-flex-direction: column;
+        flex-direction: column;
     height: 100%; }
     complete-exercise-intro-tutorial .intro-container > *:not(.content-wrapper) {
-      -webkit-flex-shrink: 0;
-          -ms-flex-negative: 0;
-              flex-shrink: 0; }
+      -ms-flex-negative: 0;
+          flex-shrink: 0; }
     complete-exercise-intro-tutorial .intro-container .video-wrapper {
       margin-top: 35px;
       text-align: center; }
@@ -261,20 +243,16 @@ complete-exercise-intro-section {
   bottom: 0;
   left: 0; }
   complete-exercise-intro-section .intro-container {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: center;
+        align-items: center;
     height: 100%; }
     complete-exercise-intro-section .intro-container > *:not(.instructions-text) {
-      -webkit-flex-shrink: 0;
-          -ms-flex-negative: 0;
-              flex-shrink: 0; }
+      -ms-flex-negative: 0;
+          flex-shrink: 0; }
     complete-exercise-intro-section .intro-container .title {
       color: #4f4d4d;
       font-family: Quicksand;
@@ -318,12 +296,10 @@ complete-exercise-intro-section {
       bottom: 36px;
       left: 0;
       text-align: center;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       complete-exercise-intro-section .intro-container .btn-section .md-button {
         padding-right: 45px;
         padding-left: 45px; }
@@ -401,17 +377,14 @@ complete-exercise-progress-bar {
   width: 100%;
   height: calc(100vh - 95px);
   background-color: white;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   position: relative; }
   .app-workouts-diagnostic .exercise-container znk-exercise {
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
     width: 100%; }
 
 .app-workouts-diagnostic .inline-block {
@@ -427,12 +400,10 @@ complete-exercise-progress-bar {
   box-shadow: none; }
 
 .app-workouts-diagnostic ui-view {
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start; }
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
 
 .app-workouts-diagnostic .md-button {
   display: block;
@@ -450,15 +421,12 @@ complete-exercise-progress-bar {
   transition: 0.6s; }
 
 .diagnostic-loading-wrapper {
-  -webkit-flex-basis: 100%;
-      -ms-flex-preferred-size: 100%;
-          flex-basis: 100%;
-  display: -webkit-flex;
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column; }
+  -ms-flex-direction: column;
+      flex-direction: column; }
   .diagnostic-loading-wrapper .loading-title {
     font-size: 32px;
     color: #4f4d4d;
@@ -468,18 +436,15 @@ complete-exercise-progress-bar {
     z-index: 1;
     margin-bottom: 19px; }
   .diagnostic-loading-wrapper .video-wrapper {
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
     position: relative;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex; }
     .diagnostic-loading-wrapper .video-wrapper video {
       width: 610px;
-      -webkit-align-self: flex-end;
-          -ms-flex-item-align: end;
-              align-self: flex-end; }
+      -ms-flex-item-align: end;
+          align-self: flex-end; }
 
 .diagnostic-summary-wrapper {
   padding-top: 50px; }
@@ -498,33 +463,26 @@ complete-exercise-progress-bar {
       font-family: Quicksand;
       font-weight: 800; }
   .diagnostic-summary-wrapper .doughnuts-container {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -ms-flex-pack: center;
+        justify-content: center; }
     .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper {
       margin-left: 9px;
       margin-right: 9px; }
       .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         text-align: center;
         display: flex;
-        -webkit-flex-direction: column;
-            -ms-flex-direction: column;
-                flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
         border-radius: 13px;
         background-color: #f9f9f9;
         height: 250px; }
@@ -547,12 +505,6 @@ complete-exercise-progress-bar {
             background-color: #c9c9c9;
             border-radius: 50px;
             -webkit-animation: goal-point 2s; }
-
-@-webkit-keyframes goal-point {
-  from {
-    opacity: 0; }
-  to {
-    opacity: 1; } }
           .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .goal-point-bg {
             width: 6px;
             height: 6px;
@@ -571,15 +523,12 @@ complete-exercise-progress-bar {
           .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .white-bg-doughnut-score {
             width: 100px;
             height: 100px;
-            display: -webkit-flex;
             display: -ms-flexbox;
             display: flex;
-            -webkit-justify-content: center;
-                -ms-flex-pack: center;
-                    justify-content: center;
-            -webkit-align-items: center;
-                -ms-flex-align: center;
-                    align-items: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+            -ms-flex-align: center;
+                align-items: center;
             text-align: center;
             font-size: 24px;
             color: #4f4d4d;
@@ -639,16 +588,14 @@ md-tooltip.tooltip-for-diagnostic-summary {
     white-space: normal; }
     md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
       opacity: 1;
-      -webkit-transform: none;
-              transform: none;
+      transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
       transition: none; }
       md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
-        -webkit-transform: none;
-                transform: none;
+        transform: none;
         opacity: 0; }
   md-tooltip.tooltip-for-diagnostic-summary._md-hide {
     transition: opacity 0.4s;
@@ -726,12 +673,10 @@ diagnostic-intro {
             width: 160px;
             height: 169px; } }
     diagnostic-intro .diagnostic-intro-drv .icons-section {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: space-around;
-          -ms-flex-pack: distribute;
-              justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
       width: 40%;
       margin: 0 auto;
       min-height: 140px; }
@@ -749,15 +694,12 @@ diagnostic-intro {
           display: block; }
         diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
           height: 100%;
-          display: -webkit-flex;
           display: -ms-flexbox;
           display: flex;
-          -webkit-align-items: center;
-              -ms-flex-align: center;
-                  align-items: center;
-          -webkit-justify-content: center;
-              -ms-flex-pack: center;
-                  justify-content: center;
+          -ms-flex-align: center;
+              align-items: center;
+          -ms-flex-pack: center;
+              justify-content: center;
           vertical-align: top; }
           diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon {
             width: 45px; }
@@ -784,12 +726,10 @@ diagnostic-intro {
       diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions {
         margin-top: 40px;
         text-transform: none;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-flex-direction: column;
-            -ms-flex-direction: column;
-                flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
         padding-right: 110px;
         padding-left: 110px; }
         diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title {
@@ -1007,16 +947,14 @@ md-tooltip.tooltip-for-estimated-score-widget {
     white-space: normal; }
     md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show {
       opacity: 1;
-      -webkit-transform: none;
-              transform: none;
+      transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show-remove {
       transition: none; }
       md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show-remove._md-show-remove-active {
-        -webkit-transform: none;
-                transform: none;
+        transform: none;
         opacity: 0; }
     md-tooltip.tooltip-for-estimated-score-widget ._md-content .top-text {
       margin-top: 22px;
@@ -1075,20 +1013,16 @@ md-tooltip.tooltip-for-estimated-score-widget {
 
 .evaluate-review-states-wrapper {
   min-height: 80px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
   width: 100%;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23);
   margin-top: -23px; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     margin-top: 15px; }
@@ -1106,18 +1040,14 @@ md-tooltip.tooltip-for-estimated-score-widget {
       font-family: Quicksand;
       font-weight: 400; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center; }
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
     .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending .pending-title {
       font-size: 18px;
       color: #4f4d4d;
@@ -1131,7 +1061,6 @@ md-tooltip.tooltip-for-estimated-score-widget {
       font-family: Lato;
       font-weight: 300; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     font-size: 20px;
@@ -1141,11 +1070,9 @@ md-tooltip.tooltip-for-estimated-score-widget {
     .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluated-answer-title {
       margin-right: 8px; }
     .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; }
       .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-status-wrapper {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex; }
         .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-status-wrapper .evaluate-text {
@@ -1159,24 +1086,19 @@ md-tooltip.tooltip-for-estimated-score-widget {
             width: 15px; }
 
 .evaluate-question-result-wrapper {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center; }
+  -ms-flex-align: center;
+      align-items: center; }
   .evaluate-question-result-wrapper .question-index {
     width: 30px;
     height: 30px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
     font-size: 16px;
     color: white;
     font-family: Lato;
@@ -1192,18 +1114,15 @@ md-tooltip.tooltip-for-estimated-score-widget {
     .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-text div {
       margin-left: 10px; }
   .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
+    -ms-flex-direction: column;
+        flex-direction: column;
     font-size: 18px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 400; }
     .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-status-wrapper {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; }
       .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-status-wrapper .evaluate-text {
@@ -1249,8 +1168,7 @@ md-tooltip.tooltip-for-estimated-score-widget {
   #faq-container #faq-inner {
     padding: 40px 55px 20px; }
   #faq-container v-accordion v-pane:not(.is-expanded) > v-pane-header .faq-icon {
-    -webkit-transform: rotate(-90deg);
-            transform: rotate(-90deg); }
+    transform: rotate(-90deg); }
   #faq-container v-accordion v-pane v-pane-header {
     font-size: 18px;
     color: #0a9bad;
@@ -1266,7 +1184,6 @@ md-tooltip.tooltip-for-estimated-score-widget {
       height: 20px;
       position: absolute;
       left: 0;
-      transition: -webkit-transform 0.5s;
       transition: transform 0.5s; }
   #faq-container v-accordion v-pane v-pane-content {
     font-size: 16px;
@@ -1302,12 +1219,10 @@ md-dialog.base {
     width: 100%;
     height: 40px; }
     md-dialog.base .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.base .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -1315,15 +1230,12 @@ md-dialog.base {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         text-align: center; }
         md-dialog.base .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
           width: 35px; }
@@ -1334,7 +1246,6 @@ md-dialog.base {
     font-weight: 400;
     width: 318px;
     margin: 0 auto;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     margin-top: 10px;
@@ -1344,15 +1255,12 @@ md-dialog.base {
       visibility: visible;
       width: 100%;
       height: 22px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       text-align: center;
       background-color: #ff6766; }
     md-dialog.base .msg-wrap.show-error .success-msg {
@@ -1363,15 +1271,12 @@ md-dialog.base {
       visibility: visible;
       width: 100%;
       height: 22px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       text-align: center;
       background-color: #87ca4d; }
     md-dialog.base .msg-wrap .v-icon {
@@ -1388,15 +1293,12 @@ md-dialog.base {
         fill: #c95050; }
   md-dialog.base md-dialog-content .sub-title {
     margin: 15px auto 37px auto;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     text-align: center; }
   md-dialog.base .close-popup-wrap {
     position: absolute;
@@ -1499,7 +1401,6 @@ feedback .feedback-btn {
     .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon {
       margin: 36px auto 22px auto;
       width: 111px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; }
       .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon .st0 {
@@ -1681,15 +1582,12 @@ feedback .feedback-btn {
 .zoom-icon-wrapper {
   width: 35px;
   height: 35px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
   text-align: center;
   cursor: pointer;
   background-color: #a6cfd4;
@@ -1748,14 +1646,12 @@ answer-explanation {
         margin: 0 auto;
         border-radius: 0px 0px 10px 10px; }
         answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .right-corner {
-          -webkit-transform: rotate(25deg);
-                  transform: rotate(25deg);
+          transform: rotate(25deg);
           border-radius: 50px 0px 50px 1px;
           right: -14px;
           box-shadow: -7px -2px #0a9bad; }
         answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .left-corner {
-          -webkit-transform: rotate(-25deg);
-                  transform: rotate(-25deg);
+          transform: rotate(-25deg);
           border-radius: 0 50px 1px 50px;
           left: -14px;
           box-shadow: 7px -2px #0a9bad; }
@@ -1801,7 +1697,6 @@ answer-explanation-content {
   answer-explanation-content svg-icon[name="answer-explanation-close"] svg line {
     stroke: #161616; }
   answer-explanation-content .flex-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     padding-top: 25px; }
@@ -1834,48 +1729,38 @@ answer-explanation-content {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   height: 47px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
   color: white;
   font-family: Lato;
   font-size: 16px; }
   .exercise-header .left-area {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center; }
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
     .exercise-header .left-area .side-text {
       padding-left: 25px;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
       text-transform: capitalize; }
     .exercise-header .left-area .no-math-icon-wrapper {
       width: 32px;
       height: 32px;
       margin-left: 30px;
       position: relative;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       border: 1px solid #81649c;
       border-radius: 100%; }
       .exercise-header .left-area .no-math-icon-wrapper svg {
@@ -1890,8 +1775,7 @@ answer-explanation-content {
         left: 0;
         width: 100%;
         height: 1px;
-        -webkit-transform: rotate(30deg);
-                transform: rotate(30deg);
+        transform: rotate(30deg);
         background-color: #81649c;
         z-index: 1; }
   .exercise-header .quit-back-button {
@@ -1927,8 +1811,7 @@ answer-explanation-content {
     top: 12px;
     left: 50%;
     font-size: 20px;
-    -webkit-transform: translate(-50%);
-            transform: translate(-50%); }
+    transform: translate(-50%); }
   .exercise-header .pattern {
     background-repeat: repeat-x;
     width: 100%;
@@ -1955,12 +1838,10 @@ answer-explanation-content {
     .exercise-header .right-area .date-box {
       float: right;
       position: relative;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-align-items: baseline;
-          -ms-flex-align: baseline;
-              align-items: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
       border-right: 1px solid #ffffff; }
       .exercise-header .right-area .date-box .timer-view {
         margin-right: 25px;
@@ -2073,15 +1954,12 @@ md-dialog.invitation-confirm-modal {
       md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
         padding-left: 1px; }
     md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
         margin: auto; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
@@ -2092,12 +1970,10 @@ md-dialog.invitation-confirm-modal {
     width: 100%;
     height: 40px; }
     md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -2105,15 +1981,12 @@ md-dialog.invitation-confirm-modal {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
           width: 14px;
           stroke: #067f8e; }
@@ -2130,12 +2003,10 @@ md-dialog.invitation-confirm-modal {
     text-align: center;
     margin: 10px; }
   md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -2162,15 +2033,12 @@ invitation-manager .circle-invite-wrap {
   width: 33px;
   height: 33px;
   border-radius: 17px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
   margin-right: 10px;
   cursor: pointer; }
 
@@ -2200,15 +2068,12 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list md-list-item {
       min-height: 20px;
       border-bottom: 1px solid #ebebeb;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
         width: 14px;
         height: 14px;
@@ -2224,25 +2089,21 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
       padding: 10px 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: column;
-          -ms-flex-direction: column;
-              flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
       padding: 10px 20px;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1; }
+      -ms-flex-positive: 1;
+          flex-grow: 1; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 16px;
         color: #757a83;
         font-family: Lato;
         font-weight: 400;
         text-transform: capitalize;
-        -webkit-flex-grow: 1;
-            -ms-flex-positive: 1;
-                flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
         margin-bottom: 3px; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 14px;
@@ -2262,15 +2123,12 @@ md-menu-content.md-menu-content-invitation-manager {
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: baseline;
-          -ms-flex-align: baseline;
-              align-items: baseline;
-      -webkit-flex-grow: 0;
-          -ms-flex-positive: 0;
-              flex-grow: 0; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+      -ms-flex-positive: 0;
+          flex-grow: 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .invite-sub-title {
       font-size: 14px;
       color: #757a83;
@@ -2283,15 +2141,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #acacac;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       margin-right: 6px; }
       md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn {
         height: 12px;
@@ -2307,15 +2162,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #87ca4d;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
         width: 14px;
         cursor: pointer; }
@@ -2327,26 +2179,20 @@ md-menu-content.md-menu-content-invitation-manager {
     font-family: Lato;
     font-weight: 400;
     text-align: center;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     min-height: 80px; }
   md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     height: 60px;
     background: #fafafa; }
     md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
@@ -2417,12 +2263,10 @@ md-dialog.invite-teacher-modal-wrap {
     height: 100%;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     overflow: hidden; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .modal-main-title {
       margin-top: 20px;
@@ -2457,12 +2301,10 @@ md-dialog.invite-teacher-modal-wrap {
       text-align: center;
       margin-top: 20px; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
         margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
@@ -2471,12 +2313,10 @@ md-dialog.invite-teacher-modal-wrap {
     width: 100%;
     height: 40px; }
     md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -2484,15 +2324,12 @@ md-dialog.invite-teacher-modal-wrap {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
           width: 35px;
           stroke: #085c66; }
@@ -2552,8 +2389,7 @@ oath-login-drv .btn-wrap {
         margin: 0;
         height: 12px;
         width: 12px;
-        -webkit-animation: rotate 0.8s infinite linear;
-                animation: rotate 0.8s infinite linear;
+        animation: rotate 0.8s infinite linear;
         border: 3px solid #fff;
         border-right-color: transparent;
         border-radius: 50%;
@@ -2561,21 +2397,11 @@ oath-login-drv .btn-wrap {
         top: 10px;
         right: 15px; }
 
-@-webkit-keyframes rotate {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
-
 @keyframes rotate {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
+    transform: rotate(0deg); }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
+    transform: rotate(360deg); } }
   oath-login-drv .btn-wrap .facebook-btn {
     background-color: #369;
     line-height: 32px; }
@@ -2605,12 +2431,10 @@ promo-code {
   display: block;
   height: 50px; }
   promo-code .promo-code-wrapper {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+        justify-content: center;
     position: relative; }
     promo-code .promo-code-wrapper .promo-code-title {
       width: auto;
@@ -2620,15 +2444,12 @@ promo-code {
       font-family: Lato;
       font-weight: 400;
       padding: 0 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       cursor: pointer;
       border-radius: 20px;
       background-color: #f7f7f7; }
@@ -2671,15 +2492,12 @@ promo-code {
       promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
         width: 35px;
         height: 34px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         border-radius: 0 23px 23px 0;
         background-color: #0a9bad;
         position: absolute;
@@ -2769,14 +2587,12 @@ promo-code {
   overflow: hidden; }
 
 .md-open-menu-container md-menu-content#app-select-menu {
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
   padding: 8px 20px; }
   .md-open-menu-container md-menu-content#app-select-menu md-menu-item {
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     cursor: pointer;
     padding-right: 15px;
     margin-right: 15px;
@@ -2843,8 +2659,7 @@ login-app {
         left: calc(50% - 90px); }
         login-app .login-app > header .app-select.no-dropdown {
           left: 50%;
-          -webkit-transform: translateX(-50%);
-                  transform: translateX(-50%);
+          transform: translateX(-50%);
           top: 28px; }
         login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
         login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
@@ -2920,7 +2735,6 @@ login-app {
           text-decoration: underline;
           cursor: pointer; }
       login-app .login-app .main .back-to-login-btn {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
         cursor: pointer;
@@ -2929,8 +2743,7 @@ login-app {
         login-app .login-app .main .back-to-login-btn .back-btn-icon {
           width: 15px;
           display: block;
-          -webkit-transform: rotate(90deg);
-                  transform: rotate(90deg); }
+          transform: rotate(90deg); }
           login-app .login-app .main .back-to-login-btn .back-btn-icon svg * {
             stroke: #4f4d4d; }
         login-app .login-app .main .back-to-login-btn .back-btn-label {
@@ -3006,12 +2819,10 @@ login-app {
         margin-left: auto;
         padding-right: 9px;
         padding-left: 9px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-align: center;
+            align-items: center; }
         login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span {
           width: 200px;
           padding: 3px 10px;
@@ -3049,9 +2860,8 @@ login-app {
         login-app .login-app .form-container .inputs-container .input-wrapper input {
           height: 37px;
           border: none;
-          -webkit-flex-grow: 1;
-              -ms-flex-positive: 1;
-                  flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
           padding-left: 5px;
           padding-right: 5px;
           padding-top: 0;
@@ -3098,8 +2908,7 @@ login-app {
             margin: 0;
             height: 12px;
             width: 12px;
-            -webkit-animation: rotate 0.8s infinite linear;
-                    animation: rotate 0.8s infinite linear;
+            animation: rotate 0.8s infinite linear;
             border: 3px solid #fff;
             border-right-color: transparent;
             border-radius: 50%;
@@ -3109,11 +2918,9 @@ login-app {
 
 @keyframes rotate {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
+    transform: rotate(0deg); }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
+    transform: rotate(360deg); } }
       login-app .login-app .form-container .forgot-pwd-wrapper {
         margin-top: 10px;
         margin-bottom: 5px;
@@ -3193,15 +3000,12 @@ on-boarding-bar {
   bottom: -70px;
   width: 100%; }
   on-boarding-bar .on-board-pager-wrap .on-board-pager {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     background-color: white;
     width: 30%;
     margin-left: auto;
@@ -3253,15 +3057,12 @@ on-boarding-bar {
     display: block; }
   .on-board .svg-wrapper {
     height: 100%;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center; }
   .on-board .clearfix:after {
     content: " ";
     display: block;
@@ -3324,15 +3125,12 @@ on-boarding-bar {
     box-sizing: border-box;
     position: relative; }
     .on-board .container .step {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: column;
-          -ms-flex-direction: column;
-              flex-direction: column;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center; }
       .on-board .container .step .welcome .main-title {
         margin-bottom: 50px; }
       .on-board .container .step .welcome .sub-title {
@@ -3365,8 +3163,7 @@ on-boarding-bar {
           font-weight: 400; }
           .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg {
             width: 16px;
-            -webkit-transform: rotate(-90deg);
-                    transform: rotate(-90deg); }
+            transform: rotate(-90deg); }
             .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg polyline {
               stroke: #ffffff; }
       .on-board .container .step .goals .sub-title {
@@ -3400,9 +3197,8 @@ on-boarding-bar {
         .on-board .container .step .bg-wrap .thinking-raccoon {
           display: block; }
       .on-board .container .step.make-padding {
-        -webkit-flex-direction: row;
-            -ms-flex-direction: row;
-                flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
         padding-top: 61px;
         padding-bottom: 61px; }
       .on-board .container .step.diagnostic .diagnostic-title {
@@ -3420,15 +3216,12 @@ on-boarding-bar {
         text-align: center;
         margin-top: 15px; }
       .on-board .container .step.diagnostic .btn-wrap {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-flex-direction: row;
-            -ms-flex-direction: row;
-                flex-direction: row;
-        -webkit-justify-content: flex-end;
-            -ms-flex-pack: end;
-                justify-content: flex-end;
+        -ms-flex-direction: row;
+            flex-direction: row;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
         margin-top: 52px;
         margin-right: 20px; }
         .on-board .container .step.diagnostic .btn-wrap button {
@@ -3462,12 +3255,10 @@ promo-code {
   display: block;
   height: 50px; }
   promo-code .promo-code-wrapper {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+        justify-content: center;
     position: relative; }
     promo-code .promo-code-wrapper .promo-code-title {
       width: auto;
@@ -3477,15 +3268,12 @@ promo-code {
       font-family: Lato;
       font-weight: 400;
       padding: 0 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       cursor: pointer;
       border-radius: 20px;
       background-color: #f7f7f7; }
@@ -3528,15 +3316,12 @@ promo-code {
       promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
         width: 35px;
         height: 34px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         border-radius: 0 23px 23px 0;
         background-color: #0a9bad;
         position: absolute;
@@ -3626,13 +3411,11 @@ purchase-btn .flex-container {
   padding: 0;
   margin: 0 -15px;
   list-style: none;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-flex-flow: row wrap;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start; }
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
 
 purchase-btn .flex-item {
   padding: 0;
@@ -3783,12 +3566,10 @@ md-dialog.purchase-popup {
       margin: 0 auto;
       text-transform: none;
       height: 42px;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
       border-radius: 21px;
       position: relative;
       cursor: pointer;
@@ -3806,15 +3587,12 @@ md-dialog.purchase-popup {
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 400;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       text-align: center; }
       md-dialog.purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;
@@ -3981,12 +3759,10 @@ md-dialog.setting-change-password {
     width: 100%;
     height: 40px; }
     md-dialog.setting-change-password .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.setting-change-password .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -3994,15 +3770,12 @@ md-dialog.setting-change-password {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.setting-change-password .top-icon-wrap .top-icon .round-icon-wrap .settings-change-password-icon {
           width: 35px;
           stroke: #ffffff; }
@@ -4017,7 +3790,6 @@ md-dialog.setting-change-password {
     font-weight: 400;
     width: 342px;
     margin: 0 auto;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     margin-top: 10px;
@@ -4027,12 +3799,10 @@ md-dialog.setting-change-password {
       visibility: visible;
       width: 100%;
       height: 22px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
       padding: 6px 0 6px 5px;
       font-size: 14px;
       color: #ff6766;
@@ -4056,12 +3826,10 @@ md-dialog.setting-change-password {
     margin-top: 20px; }
   md-dialog.setting-change-password .big-success-msg .done-btn-wrap {
     margin-top: 120px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
 
 /* fonts size */
 /* general */
@@ -4095,7 +3863,6 @@ md-dialog.setting-change-password {
     border-left: 2px solid #0a9bad;
     transition: 0.1s; }
     .app-tests-navigationPane md-list md-list-item button {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
       width: 100%;
@@ -4107,9 +3874,8 @@ md-dialog.setting-change-password {
       border-radius: 0;
       margin: 0;
       background-color: inherit;
-      -webkit-justify-content: space-between;
-          -ms-flex-pack: justify;
-              justify-content: space-between; }
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
       .app-tests-navigationPane md-list md-list-item button span {
         margin-left: 25px;
         text-transform: capitalize; }
@@ -4334,18 +4100,14 @@ user-goals {
     user-goals > section .selected-schools-container {
       height: 19px; }
   user-goals .title-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-            flex-direction: row;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: flex-end;
-        -ms-flex-align: end;
-            align-items: flex-end;
+    -ms-flex-direction: row;
+        flex-direction: row;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: end;
+        align-items: flex-end;
     margin-top: 41px; }
     user-goals .title-wrap .edit-title {
       font-size: 18px;
@@ -4390,27 +4152,21 @@ user-goals {
     user-goals .selected-schools .school:not(:last-child):after {
       content: ','; }
   user-goals .subject-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-pack: center;
+        justify-content: center;
     position: relative;
     margin-top: 50px; }
   user-goals .goals-title {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     font-size: 20px;
     color: #4f4d4d;
     font-family: Quicksand;
@@ -4418,54 +4174,42 @@ user-goals {
     text-transform: uppercase;
     text-align: center; }
     user-goals .goals-title .recommended-title {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       margin-right: 12px; }
     user-goals .goals-title .info-wrap .info-icon {
       cursor: pointer;
       margin-top: 2px;
       width: 15px; }
   user-goals .subject-goal-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
     user-goals .subject-goal-wrap .subjects-goal {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-justify-content: flex-start;
-          -ms-flex-pack: start;
-              justify-content: flex-start;
-      -webkit-flex-wrap: wrap;
-          -ms-flex-wrap: wrap;
-              flex-wrap: wrap;
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
       margin-top: 70px;
       margin-right: 0;
       margin-bottom: 70px;
       margin-left: 0; }
       user-goals .subject-goal-wrap .subjects-goal .subject {
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-flex-direction: row;
-            -ms-flex-direction: row;
-                flex-direction: row;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-direction: row;
+            flex-direction: row;
+        -ms-flex-align: center;
+            align-items: center;
         width: 284px; }
         user-goals .subject-goal-wrap .subjects-goal .subject .icon-wrapper {
           width: 50px;
@@ -4526,8 +4270,7 @@ user-goals {
       top: -2px; }
       user-goals .save-btn-wrap .dropdown-arrow-icon svg {
         width: 15px;
-        -webkit-transform: rotate(-90deg);
-                transform: rotate(-90deg); }
+        transform: rotate(-90deg); }
         user-goals .save-btn-wrap .dropdown-arrow-icon svg polyline {
           stroke: white; }
     user-goals .save-btn-wrap svg-icon {
@@ -4552,16 +4295,13 @@ goal-select {
   color: #4f4d4d;
   font-family: Quicksand;
   font-weight: 400;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   display: flex;
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center; }
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-align: center;
+      align-items: center; }
   goal-select .goal {
     width: 45px;
     text-align: center; }
@@ -4571,12 +4311,10 @@ goal-select {
     font-size: 120%;
     text-align: center;
     cursor: pointer;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center; }
+    -ms-flex-align: center;
+        align-items: center; }
     goal-select .action-btn svg {
       margin: 0 auto;
       width: 35%; }
@@ -4656,12 +4394,10 @@ md-dialog.setting-edit-goals {
     width: 100%;
     height: 40px; }
     md-dialog.setting-edit-goals .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.setting-edit-goals .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -4768,12 +4504,10 @@ sh-viewer .header {
     font-size: 16px; }
 
 sh-viewer .sh-viewer-main-container {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
   margin-top: 25px; }
   sh-viewer .sh-viewer-main-container .none {
     /*CSS for basic styling and non-retina image path:*/
@@ -4833,12 +4567,10 @@ workouts-progress {
   workouts-progress .items-container {
     height: 67px;
     white-space: nowrap;
-    display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     padding-right: 90px;
     padding-left: 300px; }
     workouts-progress .items-container .dotted-lines-container {
@@ -4847,30 +4579,24 @@ workouts-progress {
       right: 0;
       bottom: 0;
       left: 0;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: center;
+          align-items: center; }
       workouts-progress .items-container .dotted-lines-container .dotted-line {
         border-top: 2px dotted #0a9bad;
         display: inline-block; }
         workouts-progress .items-container .dotted-lines-container .dotted-line.future {
-          -webkit-flex-grow: 1;
-              -ms-flex-positive: 1;
-                  flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
           border-top-color: #cfcfcf; }
     workouts-progress .items-container .item-container {
-      display: -webkit-inline-flex;
       display: -ms-inline-flexbox;
       display: inline-flex;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
       height: 100%;
       cursor: pointer;
       padding-left: 17.5px;
@@ -4880,8 +4606,7 @@ workouts-progress {
         workouts-progress .items-container .item-container.diagnostic .item.selected:after {
           border-color: #87ca4d; }
       workouts-progress .items-container .item-container .item {
-        -webkit-transform: scale(0.6);
-                transform: scale(0.6);
+        transform: scale(0.6);
         box-sizing: border-box;
         display: inline-block;
         width: 50px;
@@ -4890,20 +4615,15 @@ workouts-progress {
         font-size: 28px;
         color: #ffffff;
         font-family: Quicksand;
-        display: -webkit-inline-flex;
         display: -ms-inline-flexbox;
         display: inline-flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
-        transition: -webkit-transform 0.3s cubic-bezier(0, 1.18, 0.58, 1);
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         transition: transform 0.3s cubic-bezier(0, 1.18, 0.58, 1); }
         workouts-progress .items-container .item-container .item.selected {
-          -webkit-transform: scale(1);
-                  transform: scale(1);
+          transform: scale(1);
           color: #ffffff;
           position: relative;
           border: none; }
@@ -5006,12 +4726,10 @@ workout-intro-lock {
         line-height: 30px; }
 
 .workouts-roadmap-container {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
   min-height: 665px; }
   .workouts-roadmap-container > ui-view {
     width: 100%;
@@ -5020,34 +4738,28 @@ workout-intro-lock {
     background: #ffffff;
     margin-right: 30px;
     width: 705px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column; }
+    -ms-flex-direction: column;
+        flex-direction: column; }
     .workouts-roadmap-container .workouts-roadmap-wrapper workouts-progress {
       height: 67px;
       padding-top: 20px; }
     .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container {
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
       position: relative;
       overflow: hidden; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
-        -webkit-transform: translateX(580px);
-                transform: translateX(580px);
+        transform: translateX(580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter-active {
-        -webkit-transform: translateX(0);
-                transform: translateX(0);
+        transform: translateX(0);
         opacity: 1; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave-active {
-        -webkit-transform: translateX(-580px);
-                transform: translateX(-580px);
+        transform: translateX(-580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out;
@@ -5057,16 +4769,13 @@ workout-intro-lock {
         bottom: 0;
         left: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter {
-        -webkit-transform: translateX(-580px);
-                transform: translateX(-580px);
+        transform: translateX(-580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-enter-active {
-        -webkit-transform: translateX(0);
-                transform: translateX(0);
+        transform: translateX(0);
         opacity: 1; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.right-animation .workouts-ui-view.ng-leave-active {
-        -webkit-transform: translateX(580px);
-                transform: translateX(580px);
+        transform: translateX(580px);
         opacity: 0; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container .workouts-ui-view {
         position: absolute;
@@ -5126,12 +4835,10 @@ workout-intro-lock {
     text-transform: uppercase;
     margin-top: 53px; }
   .workouts-roadmap-diagnostic-intro .first-row, .workouts-roadmap-diagnostic-intro .second-row, .workouts-roadmap-diagnostic-summary .first-row, .workouts-roadmap-diagnostic-summary .second-row {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
     .workouts-roadmap-diagnostic-intro .first-row .subject-score, .workouts-roadmap-diagnostic-intro .second-row .subject-score, .workouts-roadmap-diagnostic-summary .first-row .subject-score, .workouts-roadmap-diagnostic-summary .second-row .subject-score {
       display: inline-block;
       margin: 67.5px 37px auto;
@@ -5176,8 +4883,7 @@ workout-intro-lock {
     margin-top: 5px;
     display: inline-block; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .change-subject-container.rotate svg-icon svg {
-      -webkit-animation: rotateAnimation 0.9s infinite linear;
-              animation: rotateAnimation 0.9s infinite linear; }
+      animation: rotateAnimation 0.9s infinite linear; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .change-subject-container .change-subject-title {
       font-family: Lato;
       font-weight: 300;
@@ -5188,12 +4894,10 @@ workout-intro-lock {
     font-weight: 400;
     font-size: 18px; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+        justify-content: center;
     margin-top: 33px; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper {
       margin-right: 15px; }
@@ -5270,21 +4974,11 @@ workout-intro-lock {
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .start-btn-wrapper {
     margin-top: 50px; }
 
-@-webkit-keyframes rotateAnimation {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
-
 @keyframes rotateAnimation {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg); }
+    transform: rotate(0deg); }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg); } }
+    transform: rotate(360deg); } }
 
 .workouts-roadmap-workout-in-progress .workouts-roadmap-workout-in-progress-wrapper {
   color: #4f4d4d;
@@ -5324,36 +5018,21 @@ workout-intro-lock {
     font-weight: 700; }
   .workouts-roadmap-base-pre-summary .checkmark-icon {
     margin-top: 52px;
-    -webkit-animation-name: scale-icon;
-            animation-name: scale-icon;
-    -webkit-animation-duration: 0.3s;
-            animation-duration: 0.3s;
-    -webkit-animation-iteration-count: 1;
-            animation-iteration-count: 1;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out;
-    -webkit-animation-fill-mode: forwards;
-            animation-fill-mode: forwards; }
+    animation-name: scale-icon;
+    animation-duration: 0.3s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards; }
   .workouts-roadmap-base-pre-summary .complete-text {
     margin-top: 23px;
     font-size: 23px;
     font-weight: 400; }
 
-@-webkit-keyframes scale-icon {
-  0% {
-    -webkit-transform: scale(0);
-            transform: scale(0); }
-  100% {
-    -webkit-transform: scale(1);
-            transform: scale(1); } }
-
 @keyframes scale-icon {
   0% {
-    -webkit-transform: scale(0);
-            transform: scale(0); }
+    transform: scale(0); }
   100% {
-    -webkit-transform: scale(1);
-            transform: scale(1); } }
+    transform: scale(1); } }
 
 /*border color*/
 /*background*/
@@ -5369,12 +5048,10 @@ workout-intro-lock {
   width: 1060px;
   height: calc(100vh - 125px);
   background-color: white;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   position: relative;
   margin-right: auto;
   margin-left: auto; }
@@ -5382,9 +5059,8 @@ workout-intro-lock {
     border-top-right-radius: 15px;
     border-top-left-radius: 15px; }
   .exercise-container znk-exercise {
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1; }
+    -ms-flex-positive: 1;
+        flex-grow: 1; }
     .exercise-container znk-exercise znk-exercise-btn-section .btn-container svg-icon {
       display: block; }
     .exercise-container znk-exercise .swiper-container {
@@ -5442,13 +5118,11 @@ purchase-btn .flex-container {
   padding: 0;
   margin: 0 -15px;
   list-style: none;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-flex-flow: row wrap;
-  -webkit-justify-content: flex-start;
-      -ms-flex-pack: start;
-          justify-content: flex-start; }
+  -ms-flex-pack: start;
+      justify-content: flex-start; }
 
 purchase-btn .flex-item {
   padding: 0;
@@ -5599,12 +5273,10 @@ md-dialog.purchase-popup {
       margin: 0 auto;
       text-transform: none;
       height: 42px;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
       border-radius: 21px;
       position: relative;
       cursor: pointer;
@@ -5622,15 +5294,12 @@ md-dialog.purchase-popup {
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 400;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       text-align: center; }
       md-dialog.purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;
@@ -5725,15 +5394,12 @@ md-dialog.invitation-confirm-modal {
       md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
         padding-left: 1px; }
     md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
         margin: auto; }
       md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
@@ -5744,12 +5410,10 @@ md-dialog.invitation-confirm-modal {
     width: 100%;
     height: 40px; }
     md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -5757,15 +5421,12 @@ md-dialog.invitation-confirm-modal {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
           width: 14px;
           stroke: #067f8e; }
@@ -5782,12 +5443,10 @@ md-dialog.invitation-confirm-modal {
     text-align: center;
     margin: 10px; }
   md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center; }
+    -ms-flex-pack: center;
+        justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -5814,15 +5473,12 @@ invitation-manager .circle-invite-wrap {
   width: 33px;
   height: 33px;
   border-radius: 17px;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
   margin-right: 10px;
   cursor: pointer; }
 
@@ -5852,15 +5508,12 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list md-list-item {
       min-height: 20px;
       border-bottom: 1px solid #ebebeb;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
         width: 14px;
         height: 14px;
@@ -5876,25 +5529,21 @@ md-menu-content.md-menu-content-invitation-manager {
     md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
       padding: 10px 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-flex-direction: column;
-          -ms-flex-direction: column;
-              flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
       padding: 10px 20px;
-      -webkit-flex-grow: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1; }
+      -ms-flex-positive: 1;
+          flex-grow: 1; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 16px;
         color: #757a83;
         font-family: Lato;
         font-weight: 400;
         text-transform: capitalize;
-        -webkit-flex-grow: 1;
-            -ms-flex-positive: 1;
-                flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
         margin-bottom: 3px; }
       md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 14px;
@@ -5914,15 +5563,12 @@ md-menu-content.md-menu-content-invitation-manager {
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
-      -webkit-flex-direction: row;
-          -ms-flex-direction: row;
-              flex-direction: row;
-      -webkit-align-items: baseline;
-          -ms-flex-align: baseline;
-              align-items: baseline;
-      -webkit-flex-grow: 0;
-          -ms-flex-positive: 0;
-              flex-grow: 0; }
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+      -ms-flex-positive: 0;
+          flex-grow: 0; }
     md-menu-content.md-menu-content-invitation-manager md-list .invite-sub-title {
       font-size: 14px;
       color: #757a83;
@@ -5935,15 +5581,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #acacac;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
       margin-right: 6px; }
       md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn {
         height: 12px;
@@ -5959,15 +5602,12 @@ md-menu-content.md-menu-content-invitation-manager {
       height: 25px;
       border: 1px solid #87ca4d;
       border-radius: 13px;
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
       md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
         width: 14px;
         cursor: pointer; }
@@ -5979,26 +5619,20 @@ md-menu-content.md-menu-content-invitation-manager {
     font-family: Lato;
     font-weight: 400;
     text-align: center;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    -webkit-justify-content: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
     min-height: 80px; }
   md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action {
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     height: 60px;
     background: #fafafa; }
     md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
@@ -6069,12 +5703,10 @@ md-dialog.invite-teacher-modal-wrap {
     height: 100%;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+        align-items: center;
     overflow: hidden; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .modal-main-title {
       margin-top: 20px;
@@ -6109,12 +5741,10 @@ md-dialog.invite-teacher-modal-wrap {
       text-align: center;
       margin-top: 20px; }
     md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
         margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
@@ -6123,12 +5753,10 @@ md-dialog.invite-teacher-modal-wrap {
     width: 100%;
     height: 40px; }
     md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-justify-content: center;
-          -ms-flex-pack: center;
-              justify-content: center; }
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -6136,15 +5764,12 @@ md-dialog.invite-teacher-modal-wrap {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         md-dialog.invite-teacher-modal-wrap .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
           width: 35px;
           stroke: #085c66; }
@@ -6191,23 +5816,20 @@ md-dialog.invite-teacher-modal-wrap {
         padding-bottom: 0; }
         .app-header .main-content-header .app-states-list md-list md-list-item {
           cursor: pointer;
-          -webkit-flex: initial;
-              -ms-flex: initial;
-                  flex: initial; }
+          -ms-flex: initial;
+              flex: initial; }
           .app-header .main-content-header .app-states-list md-list md-list-item .title {
             text-transform: capitalize;
-            -webkit-align-self: stretch;
-                -ms-flex-item-align: stretch;
-                    align-self: stretch;
+            -ms-flex-item-align: stretch;
+                align-self: stretch;
             padding-top: 15px; }
           .app-header .main-content-header .app-states-list md-list md-list-item:hover .title {
             color: #0a9bad; }
           .app-header .main-content-header .app-states-list md-list md-list-item.active .title {
             color: #0a9bad; }
     .app-header .main-content-header .app-user-area {
-      -webkit-align-self: center;
-          -ms-flex-item-align: center;
-              align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center;
       margin-left: auto; }
       .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
@@ -6234,15 +5856,12 @@ md-dialog.invite-teacher-modal-wrap {
       .app-header .main-content-header .app-user-area .md-button {
         background: white;
         width: auto;
-        display: -webkit-flex !important;
         display: -ms-flexbox !important;
         display: flex !important;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center; }
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
         .app-header .main-content-header .app-user-area .md-button div {
           min-width: 40px; }
 
@@ -6255,12 +5874,10 @@ md-dialog.invite-teacher-modal-wrap {
   ._md-open-menu-container .header-modal-item:not(.purchase-status) span, .md-open-menu-container .header-modal-item:not(.purchase-status) span {
     width: 100%; }
   ._md-open-menu-container .header-modal-item.header-modal-item-profile, .md-open-menu-container .header-modal-item.header-modal-item-profile {
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-align-items: flex-start;
-        -ms-flex-align: start;
-            align-items: flex-start;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: start;
+        align-items: flex-start;
     margin-bottom: 11px; }
     ._md-open-menu-container .header-modal-item.header-modal-item-profile .username, .md-open-menu-container .header-modal-item.header-modal-item-profile .username {
       margin-bottom: 5px; }
@@ -6387,12 +6004,10 @@ znk-summary-results {
   znk-summary-results .gauge-row-wrapper .statistics {
     width: 320px;
     height: 110px;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-justify-content: space-around;
-        -ms-flex-pack: distribute;
-            justify-content: space-around;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
     position: relative;
     top: 40px;
     left: 44px; }
@@ -6405,33 +6020,26 @@ znk-summary-results {
       height: 96px;
       background-color: #e7e7e7; }
     znk-summary-results .gauge-row-wrapper .statistics .stat-row {
-      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
       display: flex;
-      -webkit-flex-direction: column;
-          -ms-flex-direction: column;
-              flex-direction: column;
-      -webkit-align-items: center;
-          -ms-flex-align: center;
-              align-items: center;
-      -webkit-justify-content: space-around;
-          -ms-flex-pack: distribute;
-              justify-content: space-around;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
       position: relative; }
       znk-summary-results .gauge-row-wrapper .statistics .stat-row .stat-val {
         width: 40px;
         height: 40px;
-        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
         display: flex;
-        -webkit-justify-content: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -webkit-align-items: center;
-            -ms-flex-align: center;
-                align-items: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
         text-align: center;
         font-size: 28px;
         color: #ffffff;
