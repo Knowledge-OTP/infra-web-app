@@ -39,7 +39,7 @@
                         locals:{ type: type,  msg: msg },
                         templateUrl: 'components/myProfile/templates/toast.template.html',
                         position: 'top right',
-                        hideDelay: 3000,
+                        hideDelay: false,
                         controllerAs: 'vm',
                         controller: 'ToastController'
                     });
