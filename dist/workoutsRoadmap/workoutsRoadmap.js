@@ -598,7 +598,7 @@
                     delete vm.selectedTime;
 
                     $timeout(function(){
-                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder);
+                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
                             vm.rotate = false;
@@ -951,7 +951,7 @@
 
                 var WorkoutsRoadmapSrv = {};
 
-                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder){
+                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn){
                     if(!_newWorkoutGeneratorGetter){
                         var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
                         $log.error(errMsg);
@@ -963,7 +963,7 @@
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
-                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder));
+                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder,clickedOnChangeSubjectBtn));
                 };
 
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes = function(){
