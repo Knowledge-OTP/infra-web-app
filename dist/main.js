@@ -10791,7 +10791,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('workoutIntroLock',
-            ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv) {
+            ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", "purchaseService", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv, purchaseService) {
                 'ngInject';
 
                 return {
@@ -10857,6 +10857,10 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                         setLockStateFlowControlProm.then(function(){
                             scope.vm.lockState = LOCK_STATES.NO_LOCK;
                         });
+
+                        scope.vm.openPurchaseModal = function () {
+                            purchaseService.showPurchaseDialog();
+                        };
                     }
                 };
             }]
@@ -11127,7 +11131,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
     "            <div class=\"description\" translate=\".MORE_PRACTICE\"></div>\n" +
     "            <div class=\"get-zinkerz-pro-text\" translate=\".GET_ZINKERZ_PRO\"></div>\n" +
-    "            <md-button class=\"upgrade-btn znk md-primary\">\n" +
+    "            <md-button class=\"upgrade-btn znk md-primary\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -12329,38 +12333,34 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                                </div>\n" +
     "                            </ng-switch>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item\n" +
-    "                            md-ink-ripple\n" +
-    "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <span ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
-    "                                  disable-click-drv\n" +
-    "                                  ng-click=\"vm.showGoalsEdit()\"\n" +
-    "                                  translate=\".PROFILE_GOALS\"></span>\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                            ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
+    "                            disable-click-drv\n" +
+    "                            ng-click=\"vm.showGoalsEdit()\">\n" +
+    "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
+    "                                 translate=\".PROFILE_GOALS\"></div>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item\n" +
-    "                            md-ink-ripple\n" +
-    "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <span ng-click=\"vm.showChangePassword()\" translate=\".PROFILE_CHANGE_PASSWORD\"></span>\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                            ng-click=\"vm.showChangePassword()\">\n" +
+    "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
+    "                                 translate=\".PROFILE_CHANGE_PASSWORD\"></div>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item\n" +
-    "                            md-ink-ripple\n" +
-    "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <a ui-sref=\"app.faq\">\n" +
-    "                                <span translate=\".WHAT_IS_THE_THIS_TEST\"></span>\n" +
+    "                        <md-list-item md-ink-ripple>\n" +
+    "                            <a ui-sref=\"app.faq\"\n" +
+    "                               class=\"header-modal-item header-modal-item-uppercase links\"\n" +
+    "                               translate=\".WHAT_IS_THE_THIS_TEST\">\n" +
     "                            </a>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item\n" +
-    "                            md-ink-ripple\n" +
-    "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <div class=\"support-feedback-btn\" ng-click=\"vm.showFeedbackDialog()\">\n" +
-    "                                <span translate=\".PROFILE_SUPPORT\"></span>\n" +
-    "                            </div>\n" +
+    "                        <md-list-item  md-ink-ripple\n" +
+    "                                       ng-click=\"vm.showFeedbackDialog()\">\n" +
+    "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
+    "                                  translate=\".PROFILE_SUPPORT\"></div>\n" +
     "                        </md-list-item>\n" +
     "                        <div class=\"divider\"></div>\n" +
-    "                        <md-list-item\n" +
-    "                            md-ink-ripple\n" +
-    "                            class=\"header-modal-item header-modal-item-uppercase logout\">\n" +
-    "                            <span ng-click=\"vm.logout()\" translate=\".PROFILE_LOGOUT\"></span>\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                            ng-click=\"vm.logout()\">\n" +
+    "                            <div class=\"header-modal-item header-modal-item-uppercase logout\"\n" +
+    "                                  translate=\".PROFILE_LOGOUT\"></div>\n" +
     "                        </md-list-item>\n" +
     "                    </md-list>\n" +
     "                </md-menu-content>\n" +
