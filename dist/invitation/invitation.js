@@ -331,8 +331,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
         }
 
         function firebaseListenerRef(userPath) {
-            //var authData = AuthService.getAuth();
-            var authData = 'sadssad';
+            var authData = AuthService.getAuth();
             var fullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + userPath;
             var userFullPath = fullPath.replace('$$uid', authData.uid);
             return new Firebase(userFullPath);
