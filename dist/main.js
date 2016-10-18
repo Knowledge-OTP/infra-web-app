@@ -3881,7 +3881,8 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
                 var svgMap = {
                     'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
-                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg'
+                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg',
+                    'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }
@@ -3955,7 +3956,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 
             var directive = {
                 restrict: 'E',
-                template: '<button class="feedback-btn" ng-click="showDialog()"><span translate="FEEDBACK_POPUP.FEEDBACK"></span></button>',
+                template: '<button class="feedback-btn" ng-click="showDialog()"><svg-icon name="feedback-btn-icon"></svg-icon></button>',
                 scope: {},
                 link: function link(scope) {
                     scope.showDialog = function () {
@@ -4006,6 +4007,26 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
     "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
     "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/svg/feedback-btn-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "     class=\"act-feedback-btn-icon\"\n" +
+    "     viewBox=\"0 0 200 178.1\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .act-feedback-btn-icon{\n" +
+    "        width:25px;\n" +
+    "        height:25px;\n" +
+    "        .st0{fill:none;stroke:#231F20;stroke-width:7;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path  class=\"st0\" d=\"M7.3,61v46.2c0,0,54.1-4.9,72.1,6V55.8C79.4,55.8,66.6,64.1,7.3,61z\"/>\n" +
+    "        <path  class=\"st0\" d=\"M89.9,50.9c0,0,70.2-12,98.8-45.1v157.7c0,0-50.3-43.9-98.8-46.2V50.9z\"/>\n" +
+    "        <polyline class=\"st0\" points=\"25.7,109.1 25.7,160.9 56.8,173 56.8,109.1 	\"/>\n" +
+    "    </g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/feedback/svg/feedback-close-popup.svg",
@@ -5282,8 +5303,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
         }
 
         function firebaseListenerRef(userPath) {
-            //var authData = AuthService.getAuth();
-            var authData = 'sadssad';
+            var authData = AuthService.getAuth();
             var fullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + userPath;
             var userFullPath = fullPath.replace('$$uid', authData.uid);
             return new Firebase(userFullPath);
@@ -7989,6 +8009,11 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                         var userEmail = results[0].auth.email;
                         var userId = results[0].auth.uid;
                         var productId = results[1].id;
+
+                        if (!userEmail) {
+                            $log.error('Invalid user attribute: userEmail is not defined, generating uid email');
+                            userEmail = userId + '@zinkerz.com';
+                        }
 
                         if (userEmail && userId) {
                             vm.userEmail = userEmail;
