@@ -2915,7 +2915,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScores();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -2931,8 +2931,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             isDiagnosticCompletedProm,
                             $q.when(false),
                             getSubjectOrderProm,
-                            getExamScoreProm,
-
+                            getExamScoreProm
                         ]).then(function (res) {
                             var estimatedScore = res[0];
                             var isDiagnosticCompleted = res[1];
@@ -5282,8 +5281,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
         }
 
         function firebaseListenerRef(userPath) {
-            //var authData = AuthService.getAuth();
-            var authData = 'sadssad';
+            var authData = AuthService.getAuth();
             var fullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + userPath;
             var userFullPath = fullPath.replace('$$uid', authData.uid);
             return new Firebase(userFullPath);
@@ -7989,6 +7987,11 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                         var userEmail = results[0].auth.email;
                         var userId = results[0].auth.uid;
                         var productId = results[1].id;
+
+                        if (!userEmail) {
+                            $log.error('Invalid user attribute: userEmail is not defined, generating uid email');
+                            userEmail = userId + '@zinkerz.com';
+                        }
 
                         if (userEmail && userId) {
                             vm.userEmail = userEmail;
