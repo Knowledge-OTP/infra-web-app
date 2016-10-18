@@ -121,22 +121,10 @@
             };
 
             self.listenToPurchaseStatus = function () {
-                studentStorageProm.then(function (studentStorage) {
-                    self.hasProVersion().then(function (hasPro) {
-                        studentStorage.cleanPathCache(purchasePath);
-
-                        var removeListener = $rootScope.$on('$stateChangeSuccess', function () {
-                            removeListener();
-
-                            if ($state.current.name && $state.current.name !== '') {
-                                $state.reload();
-                            }
-                        });
-
-                        if (hasPro) {
-                            self.removePendingPurchase();
-                        }
-                    });
+                self.hasProVersion().then(function (hasPro) {
+                    if (hasPro) {
+                        self.removePendingPurchase();
+                    }
                 });
             };
 
