@@ -8063,17 +8063,13 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
         .controller('PurchaseDialogController',
             ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
                 'ngInject';
-                var vm = this;
-                vm.purchaseData = {};
 
+                var vm = this;
+                var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                vm.purchaseData = {};
                 vm.purchaseStateEnum = PurchaseStateEnum;
                 vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
-
-                var pendingPurchaseProm = purchaseService.getPendingPurchase();
-                if (pendingPurchaseProm) {
-                    vm.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    vm.subscriptionStatus = '.PROFILE_STATUS_PENDING';
-                }
+                vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
 
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
@@ -8240,22 +8236,10 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             };
 
             self.listenToPurchaseStatus = function () {
-                studentStorageProm.then(function (studentStorage) {
-                    self.hasProVersion().then(function (hasPro) {
-                        studentStorage.cleanPathCache(purchasePath);
-
-                        var removeListener = $rootScope.$on('$stateChangeSuccess', function () {
-                            removeListener();
-
-                            if ($state.current.name && $state.current.name !== '') {
-                                $state.reload();
-                            }
-                        });
-
-                        if (hasPro) {
-                            self.removePendingPurchase();
-                        }
-                    });
+                self.hasProVersion().then(function (hasPro) {
+                    if (hasPro) {
+                        self.removePendingPurchase();
+                    }
                 });
             };
 

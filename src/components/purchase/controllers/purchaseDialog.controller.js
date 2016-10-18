@@ -5,17 +5,13 @@
         .controller('PurchaseDialogController',
             ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
                 'ngInject';
-                var vm = this;
-                vm.purchaseData = {};
 
+                var vm = this;
+                var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                vm.purchaseData = {};
                 vm.purchaseStateEnum = PurchaseStateEnum;
                 vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
-
-                var pendingPurchaseProm = purchaseService.getPendingPurchase();
-                if (pendingPurchaseProm) {
-                    vm.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    vm.subscriptionStatus = '.PROFILE_STATUS_PENDING';
-                }
+                vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
 
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
