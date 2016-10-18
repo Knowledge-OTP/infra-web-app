@@ -1,0 +1,146 @@
+md-dialog.my-lessons-schedule-wrapper {
+    @include dimension(580px, auto);
+    min-height: 465px;
+    border-radius: 15px;
+
+    .top-icon-wrap {
+        @include dimension(100%, 40px);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        position: relative;
+        top: 0;
+        background-color: $bgColor5;
+
+        .reschedule-icon {
+            svg {
+                width: 35px;
+                path, polygon {
+                    fill: $bgColor3,
+                }
+            }
+
+        }
+    }
+    .close-popup-wrap {
+        * {
+            stroke: $bgColor3;
+            stroke-width: 8px;
+        }
+    }
+
+    .md-dialog-content {
+        padding: 40px 22px 22px 22px;
+
+        .reschedule-lesson-title {
+            @include text-style(32px, $fontColor3, Quicksand, $boldFontWeight);
+            text-align: center;
+        }
+
+
+        .email-container {
+            text-align: center;
+
+            .note-wrapper {
+                @include dimension(470px, 56px);
+                background-color: $bgColor35;
+                margin: 17px auto 0 auto;
+                border: 1px solid $borderColor22;
+                text-align: center;
+                padding-top: 9px;
+                box-sizing: border-box;
+                border-radius: 6px;
+
+                .red-color-text {
+                    @include text-style(14px, $fontColor17, Lato, $regularFontWeight);
+                }
+
+                .warning-text {
+                    @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
+                }
+            }
+
+            .reschedule-container {
+                @include dimension(468px, 205px);
+                @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
+
+                margin: 15px auto 0 auto;
+                border: 1px solid $borderColor13;
+                padding: 20px 17px;
+                box-sizing: border-box;
+
+                .text-with-underline {
+                    text-decoration: underline;
+                }
+            }
+
+            .bottom-lesson {
+                @include text-style(14px, $fontColor3, Lato, $lightFontWeight);
+                text-align: center;
+                margin-top: 25px;
+            }
+
+            .buttons-wrapper {
+                display: flex;
+                justify-content: center;
+                margin-top: 15px;
+
+                .cancel-btn {
+                    background-color: $bgColor3;
+                    border: 1px solid $borderColor4;
+                    color: $fontColor6;
+                    width: 160px;
+                    border-radius: 25px;
+                }
+                .cancel-btn:hover {
+                    background-color: $bgColor39;
+                }
+
+                .send-btn {
+                    background-color: $bgColor5;
+                    border: 1px solid $borderColor4;
+                    color: $fontColor1;
+                    width: 160px;
+                    border-radius: 25px;
+                }
+                .send-btn:hover {
+                    background-color: $bgColor10;
+                }
+            }
+        }
+
+        .big-success-msg {
+            margin-top: 40px;
+            text-align: center;
+            transition: 0.3s;
+
+            .completed-v-icon-wrap {
+                width: 120px;
+                margin: 0 auto;
+            }
+            div {
+                @include text-style(16px, $fontColor13, Lato, $regularFontWeight);
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .done-btn-wrap {
+                display: flex;
+                justify-content: center;
+                .md-button {
+                    margin: 6px auto;
+                }
+            }
+        }
+
+        .big-success-msg.ng-leave.ng-leave-active,
+        .big-success-msg.ng-enter {
+            opacity: 0;
+        }
+        .big-success-msg.ng-leave,
+        .big-success-msg.ng-enter.ng-enter-active {
+            opacity: 1;
+
+        }
+
+    }
+}

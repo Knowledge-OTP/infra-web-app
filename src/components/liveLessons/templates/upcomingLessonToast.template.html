@@ -1,0 +1,24 @@
+<div class="upcoming-lesson-toast-wrapper base-border-radius" translate-namespace="UPCOMING_LESSON_TOAST"
+     ng-class="{'animate-toast': vm.animateToast}">
+    <svg-icon name="close-popup" ng-click="vm.closeToast()"></svg-icon>
+
+    <div class="left-side-container" ng-click="vm.openMyLessonsPopup()">
+        <svg-icon name="calendar-icon"></svg-icon>
+    </div>
+
+    <div class="right-side-container" >
+        <div class="closest-lesson-details" ng-click="vm.openMyLessonsPopup()">
+            <div class="top-title" translate=".YOUR_UPCOMING_LESSON_WITH"></div>
+            <div class="teacher-name">{{vm.closestLiveLesson.educatorName}}</div>
+            <div class="lesson-date">{{vm.closestLiveLesson.startTime | date: 'EEEE, MMMM d'}}</div>
+            <div class="lesson-hour">{{vm.closestLiveLesson.startTime | date:'h:mm a'}}</div>
+        </div>
+        <div class="bottom-container">
+            <div class="bottom-clickable-text" translate=".MY_LIVE_LESSONS_SCHEDULE" ng-click="vm.openMyLessonsPopup()"></div>
+            <div class="reschedule-wrapper" ng-click="vm.openRescheduleModal(vm.closestLiveLesson)">
+                <svg-icon name="reschedule-icon"></svg-icon>
+                <div class="reschedule-text" translate=".RESCHEDULE"></div>
+            </div>
+        </div>
+    </div>
+</div>
