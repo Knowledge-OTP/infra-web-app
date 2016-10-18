@@ -24,7 +24,7 @@
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScores();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -40,8 +40,7 @@
                             isDiagnosticCompletedProm,
                             $q.when(false),
                             getSubjectOrderProm,
-                            getExamScoreProm,
-
+                            getExamScoreProm
                         ]).then(function (res) {
                             var estimatedScore = res[0];
                             var isDiagnosticCompleted = res[1];

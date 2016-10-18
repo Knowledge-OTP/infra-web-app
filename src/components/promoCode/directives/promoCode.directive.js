@@ -1,3 +1,4 @@
+
 (function (angular) {
     'use strict';
 
@@ -8,19 +9,19 @@
                 templateUrl: 'components/loginApp/templates/promoCode.template.html',
                 restrict: 'E',
                 scope: {
-                    userContext:'=',
-                    userContextConst:"="
+                    userContext: '<',
+                    userContextConst: "<",
+                    appContext: '<',
                 },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
-
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
 
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {
                             scope.d.showSpinner = true;
-                            PromoCodeSrv.checkPromoCode(promoCode).then(function (promoCodeResult) {
+                            PromoCodeSrv.checkPromoCode(promoCode, scope.appContext.id).then(function (promoCodeResult) {
                                 scope.d.promoCodeStatus = promoCodeResult.status;
                                 scope.d.promoCodeStatusText = promoCodeResult.text;
                                 scope.d.showSpinner = false;
