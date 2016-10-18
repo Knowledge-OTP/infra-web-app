@@ -428,7 +428,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time || exerciseResult.isComplete) {
+                    if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
                         return;
                     }
 
@@ -6239,93 +6239,23 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         STUDENT: 2
     };
 
-    var ALL_ENV_CONFIG = {
-        'dev': {},
-        'prod': {}
-    };
-    ALL_ENV_CONFIG.dev[APPS.SAT.id] = {
-        fbDataEndPoint: 'https://sat-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        facebookAppId: '1624086287830120',
-        googleAppId: '1008364992567-hpchkt4nuo4eosjfrbpqrm1ruamg62nj.apps.googleusercontent.com',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'sat_app',
-        studentAppName: 'sat_app',
-        dashboardAppName: 'sat_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.SAT.id] = {
-        fbDataEndPoint: 'https://sat2-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        facebookAppId: '1576342295937853',
-        googleAppId: '1008364992567-gpi1psnhk0t41bf8jtm86kjc74c0if7c.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'sat_app',
-        studentAppName: 'sat_app',
-        dashboardAppName: 'sat_dashboard'
-    };
-    ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
-        fbDataEndPoint: 'https://act-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        facebookAppId: '1557255967927879',
-        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'act_app',
-        studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.ACT.id] = {
-        fbDataEndPoint: 'https://act-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        facebookAppId: '1557254871261322',
-        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'act_app',
-        studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboard'
-    };
-    ALL_ENV_CONFIG.dev[APPS.TOEFL.id] = {
-        fbDataEndPoint: 'https://znk-toefl-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        facebookAppId: '1801767253393534',
-        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'toefl_app',
-        studentAppName: 'toefl_app',
-        dashboardAppName: 'toefl_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.TOEFL.id] = {
-        fbDataEndPoint: 'https://znk-toefl-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        facebookAppId: '1658075334429394',
-        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'toefl_app',
-        studentAppName: 'toefl_app',
-        dashboardAppName: 'toefl_dashboard'
-    };
-
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
         this.setEnv = function (newEnv) {
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv) {
+        this.getEnv = function(){
+            return env;
+        };
+
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvConfigSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvConfigSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
-                return ALL_ENV_CONFIG[env][appContext];
+                return AllEnvConfigSrv[env][appContext];
             }
 
             function _getAppScopeName(userContext, appEnvConfig) {
@@ -6874,7 +6804,13 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -7046,7 +6982,13 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
     "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -7646,6 +7588,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
 })(angular);
 
+
 (function (angular) {
     'use strict';
 
@@ -7656,19 +7599,19 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 templateUrl: 'components/loginApp/templates/promoCode.template.html',
                 restrict: 'E',
                 scope: {
-                    userContext:'=',
-                    userContextConst:"="
+                    userContext: '<',
+                    userContextConst: "<",
+                    appContext: '<',
                 },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
-
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
 
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {
                             scope.d.showSpinner = true;
-                            PromoCodeSrv.checkPromoCode(promoCode).then(function (promoCodeResult) {
+                            PromoCodeSrv.checkPromoCode(promoCode, scope.appContext.id).then(function (promoCodeResult) {
                                 scope.d.promoCodeStatus = promoCodeResult.status;
                                 scope.d.promoCodeStatusText = promoCodeResult.text;
                                 scope.d.showSpinner = false;
@@ -7737,71 +7680,93 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode').service('PromoCodeSrv',
-        ["PROMO_CODE_STATUS", "$translate", "$http", "ENV", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, ENV, PromoCodeTypeEnum) {
-            'ngInject';
+    angular.module('znk.infra-web-app.promoCode').provider('PromoCodeSrv',
+        function () {
+            var backendData = {};
 
-            var promoCodeStatus;
-            var INVALID = 'PROMO_CODE.INVALID_CODE';
-            var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
-            var promoCodeToUpdateUrl = ENV.backendEndpoint + '/promoCode/update';
-            var promoCodeToUpdate;
+            this.setBackendData = function (_backendData) {
+                backendData = _backendData;
+            };
 
-            var promoCodeStatusText = {};
-            promoCodeStatusText[PromoCodeTypeEnum.FREE_LICENSE.enum] = 'PROMO_CODE.PROMO_CODE_ACCEPTED';
-            promoCodeStatusText[PromoCodeTypeEnum.ZINKERZ_EDUCATOR.enum] = 'PROMO_CODE.ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED';
-            promoCodeStatusText[INVALID] = INVALID;
+            this.$get = ["PROMO_CODE_STATUS", "$translate", "$http", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, PromoCodeTypeEnum) {
+                'ngInject';
 
-            this.checkPromoCode = function (promoCode) {
-                var dataToSend = {
-                    promoCode: promoCode,
-                    appName: ENV.firebaseAppScopeName
+               var promoCodeSrv = {};
 
+                var promoCodeStatus;
+                var INVALID = 'PROMO_CODE.INVALID_CODE';
+                var promoCodeCheckBaseUrl = '%backendEndpoint%/promoCode/check';
+                var promoCodeUpdateBaseUrl = '%backendEndpoint%/promoCode/update';
+                var promoCodeToUpdate;
+
+                var promoCodeStatusText = {};
+                promoCodeStatusText[PromoCodeTypeEnum.FREE_LICENSE.enum] = 'PROMO_CODE.PROMO_CODE_ACCEPTED';
+                promoCodeStatusText[PromoCodeTypeEnum.ZINKERZ_EDUCATOR.enum] = 'PROMO_CODE.ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED';
+                promoCodeStatusText[INVALID] = INVALID;
+
+                promoCodeSrv.checkPromoCode = function (promoCode, appContext) {
+                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
+                    var backendEndpointUrl = backendData[appContext].backendEndpoint;
+
+                    var promoCodeCheckUrl = promoCodeCheckBaseUrl;
+                    promoCodeCheckUrl = promoCodeCheckUrl.replace('%backendEndpoint%', backendEndpointUrl);
+
+                    var dataToSend = {
+                        promoCode: promoCode,
+                        appName: firebaseAppScopeName
+                    };
+                    return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
                 };
 
-                return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
-            };
+                promoCodeSrv.promoCodeToUpdate = function (promoCode) {
+                    promoCodeToUpdate = promoCode;
+                };
 
-            this.promoCodeToUpdate = function (promoCode) {
-                promoCodeToUpdate = promoCode;
-            };
+                promoCodeSrv.getPromoCodeToUpdate = function () {
+                    return promoCodeToUpdate;
+                };
 
-            this.getPromoCodeToUpdate = function () {
-                return promoCodeToUpdate;
-            };
+                promoCodeSrv.updatePromoCode = function (uid, promoCode, appContext) {
+                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
+                    var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
-            this.updatePromoCode = function (uid, promoCode) {
-                var dataToSend = {};
-                dataToSend.appName =  ENV.firebaseAppScopeName;
-                dataToSend.uid = uid;
-                dataToSend.promoCode = promoCode;
-                return $http.post(promoCodeToUpdateUrl, dataToSend);
-            };
+                    var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl;
+                    promoCodeUpdatekUrl = promoCodeUpdatekUrl.replace('%backendEndpoint%', backendEndpointUrl);
+                    var dataToSend = {
+                        appName: firebaseAppScopeName,
+                        uid: uid,
+                        promoCode: promoCode
+                    };
+                    return $http.post(promoCodeUpdatekUrl, dataToSend);
+                };
 
-            function _validPromoCode(response) {
-                promoCodeStatus = {};
-                var promoCodeType = response.data;
-                if (response.data && promoCodeStatusText[promoCodeType]) {
-                    promoCodeStatus.text = _getPromoCodeStatusText(response.data);
-                    promoCodeStatus.status = PROMO_CODE_STATUS.accepted;
-                } else {
+                function _validPromoCode(response) {
+                    promoCodeStatus = {};
+                    var promoCodeType = response.data;
+                    if (response.data && promoCodeStatusText[promoCodeType]) {
+                        promoCodeStatus.text = _getPromoCodeStatusText(response.data);
+                        promoCodeStatus.status = PROMO_CODE_STATUS.accepted;
+                    } else {
+                        promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
+                        promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
+                    }
+                    return promoCodeStatus;
+                }
+
+                function _invalidPromoCode() {
+                    promoCodeStatus = {};
                     promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
                     promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
+                    return promoCodeStatus;
                 }
-                return promoCodeStatus;
-            }
 
-            function _invalidPromoCode() {
-                promoCodeStatus = {};
-                promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
-                promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
-                return promoCodeStatus;
-            }
+                function _getPromoCodeStatusText(translationKey) {
+                    return $translate.instant(promoCodeStatusText[translationKey]);
+                }
 
-            function _getPromoCodeStatusText(translationKey) {
-                return $translate.instant(promoCodeStatusText[translationKey]);
-            }
-        }]
+                return promoCodeSrv;
+            }];
+        }
     );
 })(angular);
 

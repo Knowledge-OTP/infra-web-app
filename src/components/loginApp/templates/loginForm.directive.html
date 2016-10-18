@@ -1,7 +1,13 @@
 <div class="form-container login" translate-namespace="LOGIN_FORM">
     <div class="title" translate="LOGIN_FORM.STUDENT.LOGIN" ng-if="userContext===d.userContextObj.STUDENT"></div>
     <div class="title" translate="LOGIN_FORM.EDUCATOR.LOGIN" ng-if="userContext===d.userContextObj.TEACHER"></div>
-    <promo-code user-context-const="d.userContextObj" user-context="userContext"></promo-code>
+
+    <promo-code
+        user-context-const="d.userContextObj"
+        user-context="userContext"
+        app-context="appContext">
+    </promo-code>
+
     <div class="social-auth-container">
         <div class="social-auth">
             <oath-login-drv
