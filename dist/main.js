@@ -5282,8 +5282,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
         }
 
         function firebaseListenerRef(userPath) {
-            //var authData = AuthService.getAuth();
-            var authData = 'sadssad';
+            var authData = AuthService.getAuth();
             var fullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + userPath;
             var userFullPath = fullPath.replace('$$uid', authData.uid);
             return new Firebase(userFullPath);
@@ -7989,6 +7988,11 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                         var userEmail = results[0].auth.email;
                         var userId = results[0].auth.uid;
                         var productId = results[1].id;
+
+                        if (!userEmail) {
+                            $log.error('Invalid user attribute: userEmail is not defined, generating uid email');
+                            userEmail = userId + '@zinkerz.com';
+                        }
 
                         if (userEmail && userId) {
                             vm.userEmail = userEmail;
@@ -10698,7 +10702,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                     delete vm.selectedTime;
 
                     $timeout(function(){
-                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder);
+                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
                             vm.rotate = false;
@@ -11051,7 +11055,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
                 var WorkoutsRoadmapSrv = {};
 
-                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder){
+                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn){
                     if(!_newWorkoutGeneratorGetter){
                         var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
                         $log.error(errMsg);
@@ -11063,7 +11067,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
-                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder));
+                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder,clickedOnChangeSubjectBtn));
                 };
 
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes = function(){
