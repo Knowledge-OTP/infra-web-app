@@ -6,17 +6,18 @@
             bindings: {},
             templateUrl:  'components/myProfile/components/changePassword/changePassword.template.html',
             controllerAs: 'vm',
-            controller: function (AuthService, $mdDialog, $timeout) {
+            controller: function (AuthService, $mdDialog, $timeout, MyProfileSrv) {
                 'ngInject';
 
                 var vm = this;
+                var showToast = MyProfileSrv.showToast;
+
                 vm.saveTitle = 'MY_PROFILE.SAVE';
                 vm.oldPassError = 'MY_PROFILE.REQUIRED_FIELD';
-                vm.generalError = 'MY_PROFILE.ERROR_OCCURRED';
                 vm.changePasswordData = {};
 
                 vm.changePassword = function (authform) {
-                    vm.showError = vm.showSuccess = false;
+                    var type, msg;
 
                     if (vm.changePasswordData.newPassword !== vm.changePasswordData.newPasswordConfirm) {
                         vm.changePasswordData.newPasswordConfirm = undefined;
@@ -24,29 +25,29 @@
                     }
 
                     if (!authform.$invalid) {
-                        vm.startLoader = true;
                         AuthService.changePassword(vm.changePasswordData).then(function () {
-                            vm.fillLoader = true;
-                            $timeout(function () {
-                                vm.startLoader = vm.fillLoader = false;
-                                vm.showSuccess = true;
-                                vm.saveTitle = 'MY_PROFILE.DONE';
-                            }, 100);
+                            $timeout(function (res) {
+                                console.log('res ', res);
+                                type = 'success';
+                                msg = 'MY_PROFILE.PASSWORD_SAVE_SUCCESS';
+                                showToast(type, msg);
+                            }, 10);
                         }, function (err) {
-                            vm.fillLoader = true;
-
+                            console.log('err: ', err);
                             $timeout(function () {
-                                vm.startLoader = vm.fillLoader = false;
+                                type = 'error';
                                 if (err.code === 'INVALID_PASSWORD') {
                                     vm.changePasswordData.oldPassword = null;
-                                    vm.oldPassError = 'MY_PROFILE.INCORRECT_PASSWORD';
+                                    msg = 'MY_PROFILE.INCORRECT_PASSWORD';
+                                    showToast(type, msg);
                                 } else if (err.code === 'NETWORK_ERROR') {
-                                    vm.generalError = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
-                                    vm.showError = true;
+                                    msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
+                                    showToast(type, msg);
                                 } else {
-                                    vm.showError = true;
+                                    msg = 'MY_PROFILE.ERROR_OCCURRED';
+                                    showToast(type, msg);
                                 }
-                            }, 100);
+                            }, 10);
                         });
                     }
                 };

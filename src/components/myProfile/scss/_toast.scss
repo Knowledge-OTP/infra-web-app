@@ -1,4 +1,6 @@
 md-toast.toast-wrap{
+    top: 250px;
+    right: 200px;
     width: 400px;
     height: 60px;
     display: flex;
@@ -42,6 +44,24 @@ md-toast.toast-wrap{
                 stroke: #4F4D4D;
             }
         }
+    }
+}
+
+md-toast.toast-wrap-error{
+    @extend md-toast.toast-wrap;
+    border: 2px solid #FF6766;
+    .icon-wrap{
+        background: #FF6766;
+        svg-icon{
+            width: 25px;
+            height: 25px;
+            .close-pop-svg{
+                .st1 {
+                    stroke: #000000;
+                }
+            }
+        }
+
     }
 
 }

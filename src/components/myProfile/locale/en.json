@@ -14,7 +14,6 @@
         "PROFILE_SAVE_SUCCESS": "Your profile has been successfully saved.",
         "INCORRECT_PASSWORD":"Incorrect password.",
         "NO_INTERNET_CONNECTION_ERR": "No internet connection. Please try again later.",
-        "DONE": "Done",
         "USERNAME": "Username",
         "EMAIL": "Email",
         "TIMEZONE": "Timezone",

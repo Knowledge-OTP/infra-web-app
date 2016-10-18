@@ -2,13 +2,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.myProfile').controller('ToastController',
-        function ($translatePartialLoader, $mdToast) {
+        function ($mdToast, type, msg) {
             'ngInject';
 
             var vm = this;
-            vm.msg = 'Your profile has been successfully saved.';
-
-            $translatePartialLoader.addPart('myProfile');
+            vm.type = type;
+            vm.msg = msg;
 
             vm.closeToast = function () {
                 $mdToast.hide();

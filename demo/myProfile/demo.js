@@ -17,7 +17,9 @@
             };
 
             $scope.openToast = function() {
-                MyProfileSrv.showToast();
+                var type = 'success';
+                var msg = 'Your profile has been successfully saved.';
+                MyProfileSrv.showToast(type, msg);
             };
         })
         .service('ENV', function() {

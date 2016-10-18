@@ -9,7 +9,7 @@
             },
             templateUrl:  'components/myProfile/components/updateProfile/updateProfile.template.html',
             controllerAs: 'vm',
-            controller:  function (AuthService, $mdDialog, $timeout, UserProfileService) {
+            controller:  function (AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
                 'ngInject';
 
                 function getLocalTimezone() {
@@ -39,10 +39,10 @@
 
                 var defaultTimeZone = getLocalTimezone();
                 var userAuth = AuthService.getAuth();
+                var showToast = MyProfileSrv.showToast;
 
                 vm.saveTitle = 'MY_PROFILE.SAVE';
                 vm.nicknameError = 'MY_PROFILE.REQUIRED_FIELD';
-                vm.generalError = 'MY_PROFILE.ERROR_OCCURRED';
                 vm.profileData = {};
 
                 vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.auth.email;
@@ -52,23 +52,26 @@
 
 
                 vm.updateProfile = function (profileform) {
-                    vm.showError = vm.showSuccess = false;
+                    var type, msg;
 
                     if (profileform.$valid) {
                         UserProfileService.setProfile(vm.profileData).then(function () {
                             $timeout(function () {
-                                vm.showSuccess = true;
-                                vm.saveTitle = 'MY_PROFILE.DONE';
-                            }, 100);
+                                type = 'success';
+                                msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
+                                showToast(type, msg);
+                            }, 10);
                         }, function (err) {
                             $timeout(function () {
+                                type = 'error';
                                 if (err.code === 'NETWORK_ERROR') {
-                                    vm.generalError = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
-                                    vm.showError = true;
+                                    msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
+                                    showToast(type, msg);
                                 } else {
-                                    vm.showError = true;
+                                    msg = 'MY_PROFILE.ERROR_OCCURRED';
+                                    showToast(type, msg);
                                 }
-                            }, 100);
+                            }, 10);
                         });
                     }
                 };
