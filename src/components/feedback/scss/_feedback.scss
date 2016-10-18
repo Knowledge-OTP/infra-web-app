@@ -1,16 +1,27 @@
 feedback {
     .feedback-btn {
-        @include misc-pos(fixed, null, 10px, 0px, null);
-        @include border-top-radius(10px);
-        @include text-style(18px, $fontColor8, Lato, $regularFontWeight);
-        @include dimension(150px, 37px);
-        background-color: $bgColor52;
-        opacity: 0.851;
-        line-height: 1.667;
-        z-index: 9999;
-        box-shadow: none;
-        border: none;
-        padding: 0;
+        @include dimension(45px, 45px);
+        @include misc-pos(fixed, null, 30px, 10px, null);
+        border:1px solid $borderColor23;
+        cursor: pointer;
+        box-shadow:0 1px 5px 0 $bsColor9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50px;
+        background-color: $bgColor43;
+        z-index: 78;
+
+        svg {
+            g{
+                fill: $transparent;
+            }
+
+            path, polyline{
+                stroke-width: 10px;
+                stroke: $fontColor4;
+            }
+        }
     }
 }
 
