@@ -1,0 +1,317 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+.znk-input-group {
+  position: relative;
+  min-height: 70px; }
+  .znk-input-group ::-webkit-input-placeholder {
+    color: #CACACA; }
+  .znk-input-group :-moz-placeholder {
+    color: #CACACA;
+    opacity: 1; }
+  .znk-input-group ::-moz-placeholder {
+    color: #CACACA;
+    opacity: 1; }
+  .znk-input-group :-ms-input-placeholder {
+    color: #CACACA; }
+  .znk-input-group input {
+    font-size: 14px;
+    color: #9a9797;
+    font-family: Lato;
+    font-weight: 400;
+    outline: none;
+    width: 290px;
+    height: 40px;
+    border: 1px solid #CACACA;
+    border-radius: 21px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding-left: 45px; }
+  .znk-input-group i {
+    position: absolute;
+    left: 20px;
+    top: 21px; }
+  .znk-input-group .error-msg {
+    display: none; }
+  .znk-input-group.invalid-input input {
+    border: 1px solid #ff6766; }
+  .znk-input-group.invalid-input .error-msg {
+    font-size: 12px;
+    color: #ff6766;
+    font-family: Lato;
+    font-weight: 400;
+    text-align: left;
+    margin-top: 0;
+    padding-left: 40px;
+    display: block; }
+  .znk-input-group.invalid-input svg-icon svg * {
+    stroke: #ff6766 !important; }
+
+md-dialog.my-profile {
+  background-color: #ffffff;
+  overflow: visible;
+  width: 800px;
+  height: auto;
+  border-radius: 20px;
+  padding-bottom: 20px; }
+  md-dialog.my-profile .top-icon-wrap {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 40px; }
+    md-dialog.my-profile .top-icon-wrap .top-icon {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap {
+        width: 76px;
+        height: 76px;
+        border-radius: 38px;
+        background-color: #0a9bad;
+        z-index: 9;
+        margin-top: -15px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
+        md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon {
+          width: 35px;
+          stroke: #ffffff; }
+        md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon * {
+          fill: #ffffff; }
+  md-dialog.my-profile .main-title {
+    font-size: 32px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 20px;
+    margin: 20px;
+    background-color: #ffffff; }
+  md-dialog.my-profile md-toolbar {
+    height: 40px;
+    max-height: 40px;
+    min-height: 40px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px; }
+    md-dialog.my-profile md-toolbar:not(.md-menu-toolbar) {
+      background-color: #0a9bad; }
+    md-dialog.my-profile md-toolbar .close-popup-wrap {
+      position: absolute;
+      top: -35px;
+      right: -35px;
+      height: 14px;
+      width: 14px;
+      cursor: pointer; }
+  md-dialog.my-profile .change-profile, md-dialog.my-profile .change-password {
+    background-color: #f9f9f9;
+    padding: 20px 20px 0 20px;
+    margin: 5px 40px;
+    height: 100%;
+    border-radius: 15px; }
+  md-dialog.my-profile .change-password {
+    margin-bottom: 30px; }
+    md-dialog.my-profile .change-password .container-title {
+      font-size: 18px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 600;
+      text-align: center; }
+  md-dialog.my-profile .auth-form {
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 10px;
+    margin-top: 43px; }
+    md-dialog.my-profile .auth-form .znk-input-group {
+      width: 100%;
+      min-height: 0;
+      display: -ms-flexbox;
+      display: flex;
+      margin: 10px -10px; }
+      md-dialog.my-profile .auth-form .znk-input-group label {
+        width: 30%;
+        text-transform: uppercase;
+        text-align: right;
+        margin: auto;
+        color: #acacac; }
+      md-dialog.my-profile .auth-form .znk-input-group .znk-input {
+        width: 70%;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+            flex-direction: column; }
+        md-dialog.my-profile .auth-form .znk-input-group .znk-input input, md-dialog.my-profile .auth-form .znk-input-group .znk-input select {
+          width: 86%;
+          display: block;
+          border-radius: 0;
+          padding-left: 20px;
+          box-sizing: border-box;
+          margin: 10px 50px 2px 30px;
+          color: #161616;
+          font-size: 14px; }
+        md-dialog.my-profile .auth-form .znk-input-group .znk-input select {
+          height: 40px; }
+          md-dialog.my-profile .auth-form .znk-input-group .znk-input select[disabled] {
+            color: #acacac; }
+      md-dialog.my-profile .auth-form .znk-input-group .locked-icon {
+        width: 14px;
+        display: inline-block;
+        position: absolute;
+        left: 12px;
+        top: 16px; }
+      md-dialog.my-profile .auth-form .znk-input-group .locked-icon * {
+        stroke: #CACACA; }
+      md-dialog.my-profile .auth-form .znk-input-group .validationBox span {
+        width: 335px;
+        padding: 3px 10px;
+        position: absolute;
+        right: 37px;
+        top: -25px;
+        background-color: #ff6766;
+        color: white;
+        font-size: 13px;
+        line-height: 24px; }
+        md-dialog.my-profile .auth-form .znk-input-group .validationBox span:after {
+          content: '';
+          position: absolute;
+          border-color: transparent;
+          border-style: solid;
+          border-top-color: #ff6766;
+          border-width: 10px;
+          bottom: -20px;
+          left: 13px; }
+        md-dialog.my-profile .auth-form .znk-input-group .validationBox span.email-exist-massage {
+          top: -55px; }
+        md-dialog.my-profile .auth-form .znk-input-group .validationBox span.no-email-massage {
+          top: -58px; }
+      md-dialog.my-profile .auth-form .znk-input-group.valid input, md-dialog.my-profile .auth-form .znk-input-group.valid select {
+        border-color: #9a9797; }
+      md-dialog.my-profile .auth-form .znk-input-group.invalid input, md-dialog.my-profile .auth-form .znk-input-group.invalid select {
+        border-color: #ff6766; }
+    md-dialog.my-profile .auth-form .timezone-manual {
+      margin: -10px 220px;
+      color: #626060; }
+    md-dialog.my-profile .auth-form .btn-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+      margin-right: 50px;
+      outline: none; }
+      md-dialog.my-profile .auth-form .btn-wrap .save-pass-btn {
+        width: 15%;
+        margin: 0;
+        box-shadow: none;
+        height: 30px;
+        background: transparent;
+        border-radius: 20px;
+        border-color: #0a9bad;
+        color: #0a9bad;
+        outline: none; }
+  md-dialog.my-profile .msg-wrap {
+    font-size: 12px;
+    color: #ffffff;
+    font-family: Lato;
+    font-weight: 400;
+    width: 342px;
+    margin: 0 auto;
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 10px;
+    max-height: 28px;
+    visibility: hidden; }
+    md-dialog.my-profile .msg-wrap.show-error .error-msg {
+      visibility: visible;
+      width: 100%;
+      height: 22px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center;
+      padding: 6px 0 6px 5px;
+      font-size: 14px;
+      color: #ff6766;
+      font-family: Lato;
+      font-weight: 400; }
+    md-dialog.my-profile .msg-wrap .myProfile-danger-red-icon {
+      width: 20px;
+      margin-right: 17px; }
+      md-dialog.my-profile .msg-wrap .myProfile-danger-red-icon * {
+        fill: #c95050; }
+  md-dialog.my-profile .big-success-msg .completed-v-icon-wrap {
+    width: 120px;
+    margin: 25px auto;
+    display: block; }
+  md-dialog.my-profile .big-success-msg div {
+    font-size: 16px;
+    color: #7d7d7d;
+    font-family: Lato;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 20px; }
+  md-dialog.my-profile .big-success-msg .done-btn-wrap {
+    margin: 40px auto;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center; }
+
+md-toast.toast-wrap, md-toast.toast-wrap-error {
+  top: 100px;
+  right: calc(50% - 600px);
+  width: 400px;
+  height: 60px;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #FFFFFF;
+  border: 2px solid #87CA4D;
+  border-radius: 10px; }
+  md-toast.toast-wrap .icon-wrap, md-toast.toast-wrap-error .icon-wrap {
+    width: 60px;
+    margin: -8px;
+    padding: 8px;
+    background: #87CA4D;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
+    md-toast.toast-wrap .icon-wrap svg-icon, md-toast.toast-wrap-error .icon-wrap svg-icon {
+      width: 40px;
+      height: 40px; }
+      md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg .st1, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg .st1, md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg .st3, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg .st3 {
+        fill: #87CA4D; }
+  md-toast.toast-wrap .md-toast-content, md-toast.toast-wrap-error .md-toast-content {
+    background: #FFFFFF;
+    box-shadow: none;
+    color: #4F4D4D;
+    margin-left: 10px; }
+  md-toast.toast-wrap .close-toast-wrap, md-toast.toast-wrap-error .close-toast-wrap {
+    position: absolute;
+    right: 3px;
+    top: -10px; }
+    md-toast.toast-wrap .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg {
+      width: 10px; }
+      md-toast.toast-wrap .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg .st1 {
+        stroke: #4F4D4D; }
+
+md-toast.toast-wrap-error {
+  border: 2px solid #FF6766; }
+  md-toast.toast-wrap-error .icon-wrap {
+    background: #FF6766; }
+    md-toast.toast-wrap-error .icon-wrap svg-icon {
+      width: 25px;
+      height: 25px; }
+      md-toast.toast-wrap-error .icon-wrap svg-icon .close-pop-svg .st1 {
+        stroke: #000000; }
