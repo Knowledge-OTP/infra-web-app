@@ -7150,7 +7150,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'myProfile-icon': 'components/myProfile/svg/change-password-icon.svg',
+                'myProfile-icon': 'components/myProfile/svg/user-icon.svg',
                 'myProfile-danger-red-icon': 'components/myProfile/svg/error-icon.svg',
                 'myProfile-close-popup': 'components/myProfile/svg/close-popup.svg',
                 'myProfile-completed-v-icon': 'components/myProfile/svg/completed-v.svg'
@@ -7574,18 +7574,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        </div>\n" +
     "    </div>\n" +
     "</md-dialog-content>");
-  $templateCache.put("components/myProfile/svg/change-password-icon.svg",
-    "<svg class=\"change-password-icon-wrap\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 75 75\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .change-password-icon-wrap{\n" +
-    "            width: 100%;\n" +
-    "            height: auto;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "<path d=\"M52.5,30c-4.1,0-7.5-3.4-7.5-7.5s3.4-7.5,7.5-7.5s7.5,3.4,7.5,7.5S56.6,30,52.5,30z M52.5,0C40.1,0,30,10.1,30,22.5V30L0,60\n" +
-    "	v15h15v-7.5h7.5V60H30v-7.5h7.5V45h15C64.9,45,75,34.9,75,22.5S64.9,0,52.5,0z\"/>\n" +
-    "</svg>\n" +
-    "");
   $templateCache.put("components/myProfile/svg/close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
@@ -7657,6 +7645,29 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "	c0.7,0.7,1,1.5,1,2.4C30.8,41.4,30.5,42.2,29.8,42.9z M30.7,17.7l-1,11.2c-0.1,1.3-0.3,2.4-0.7,3.1c-0.3,0.7-0.9,1.1-1.7,1.1\n" +
     "	c-0.8,0-1.4-0.3-1.7-1c-0.3-0.7-0.5-1.7-0.7-3.1l-0.7-10.9C24,15.8,24,14.3,24,13.4c0-1.3,0.3-2.2,1-2.9s1.5-1.1,2.6-1.1\n" +
     "	c1.3,0,2.2,0.5,2.6,1.4c0.4,0.9,0.7,2.2,0.7,3.9C30.8,15.6,30.8,16.6,30.7,17.7z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/myProfile/svg/user-icon.svg",
+    "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" x=\"0px\" y=\"0px\"\n" +
+    "     viewBox=\"0 0 409.165 409.164\" xml:space=\"preserve\" class=\"user-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.user-svg {width: 100%; height: auto;}\n" +
+    "	.user-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.user-svg .st1{fill:#000000;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path class=\"st1\" d=\"M204.583,216.671c50.664,0,91.74-48.075,91.74-107.378c0-82.237-41.074-107.377-91.74-107.377\n" +
+    "		c-50.668,0-91.74,25.14-91.74,107.377C112.844,168.596,153.916,216.671,204.583,216.671z\"/>\n" +
+    "\n" +
+    "		<path class=\"st1\" d=\"M407.164,374.717L360.88,270.454c-2.117-4.771-5.836-8.728-10.465-11.138l-71.83-37.392\n" +
+    "		c-1.584-0.823-3.502-0.663-4.926,0.415c-20.316,15.366-44.203,23.488-69.076,23.488c-24.877,0-48.762-8.122-69.078-23.488\n" +
+    "		c-1.428-1.078-3.346-1.238-4.93-0.415L58.75,259.316c-4.631,2.41-8.346,6.365-10.465,11.138L2.001,374.717\n" +
+    "		c-3.191,7.188-2.537,15.412,1.75,22.005c4.285,6.592,11.537,10.526,19.4,10.526h362.861c7.863,0,15.117-3.936,19.402-10.527\n" +
+    "		C409.699,390.129,410.355,381.902,407.164,374.717z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/myProfile/templates/myProfile.template.html",
