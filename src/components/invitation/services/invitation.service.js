@@ -52,6 +52,7 @@
                     angular.forEach(teachers, function (teacher) {
                         var prom = UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                             teacher.zinkerzTeacher = profile.zinkerzTeacher;
+                            teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
                         });
                         promArr.push(prom);
                     });
