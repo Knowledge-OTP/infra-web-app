@@ -2718,7 +2718,7 @@ login-app {
           login-app .login-app .main .main-inner h2.banner-text .invitation-title .second-row {
             font-size: 50px; }
       login-app .login-app .main img.main-banner {
-        min-height: 513px;
+        min-height: 545px;
         min-width: 1366px; }
       login-app .login-app .main .login-container,
       login-app .login-app .main .signup-container,
@@ -4036,6 +4036,9 @@ md-dialog.setting-change-password {
       width: 14px;
       padding: 10px;
       cursor: pointer; }
+      md-dialog.setting-change-password md-toolbar .close-popup-wrap * {
+        stroke: white;
+        stroke-width: 8px; }
   md-dialog.setting-change-password md-dialog-content {
     background-color: #ffffff;
     padding-top: 25px;
@@ -5799,11 +5802,9 @@ invitation-manager .circle-invite-wrap {
   cursor: pointer; }
 
 invitation-manager .teacher-icon-wrap {
-  border: 1px solid #000000;
-  background-color: transparent; }
+  background-color: #f6f6f6; }
   invitation-manager .teacher-icon-wrap .teacher-icon {
-    width: 24px;
-    height: 16px; }
+    width: 24px; }
 
 invitation-manager +
 .teacher-active-icon-wrap {

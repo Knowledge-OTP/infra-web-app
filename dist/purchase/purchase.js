@@ -59,10 +59,11 @@
                 vm.saveAnalytics = function () {
                     vm.purchaseState = PurchaseStateEnum.PENDING.enum;
                     znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
-
                 };
 
-                $scope.$watch('vm.purchaseState', function (newPurchaseState) {
+                $scope.$watch(function () {
+                    return vm.purchaseState;
+                }, function (newPurchaseState) {
                     if (angular.isUndefined(newPurchaseState)) {
                         return;
                     }
@@ -154,15 +155,26 @@
         .controller('PurchaseDialogController',
             ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
                 'ngInject';
-                var vm = this;
-                vm.purchaseData = {};
 
+                var vm = this;
+                var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                vm.purchaseData = {};
                 vm.purchaseStateEnum = PurchaseStateEnum;
                 vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
+                vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
 
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
                 });
+
+                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
+                    $timeout(function () {
+                        var hasProVersion = !(angular.equals(newPurchaseState, {}));
+                        if (hasProVersion){
+                            vm.purchaseState = PurchaseStateEnum.PRO.enum;
+                        }
+                    });
+                }, true);
 
                 purchaseService.getProduct().then(function (productPrice) {
                     vm.productPrice = +productPrice.price;
@@ -170,11 +182,6 @@
                     vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
                 });
 
-                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
-                    $timeout(function () {
-                        vm.purchaseState = !angular.equals(newPurchaseState, {}) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    });
-                }, true);
 
                 vm.close = function () {
                     $mdDialog.cancel();
@@ -284,7 +291,6 @@
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
                 return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
-                    $log.debug('setPendingPurchase res ', res);
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
@@ -322,22 +328,10 @@
             };
 
             self.listenToPurchaseStatus = function () {
-                studentStorageProm.then(function (studentStorage) {
-                    self.hasProVersion().then(function (hasPro) {
-                        studentStorage.cleanPathCache(purchasePath);
-
-                        var removeListener = $rootScope.$on('$stateChangeSuccess', function () {
-                            removeListener();
-
-                            if ($state.current.name && $state.current.name !== '') {
-                                $state.reload();
-                            }
-                        });
-
-                        if (hasPro) {
-                            self.removePendingPurchase();
-                        }
-                    });
+                self.hasProVersion().then(function (hasPro) {
+                    if (hasPro) {
+                        self.removePendingPurchase();
+                    }
                 });
             };
 

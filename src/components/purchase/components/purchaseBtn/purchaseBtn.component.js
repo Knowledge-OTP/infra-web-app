@@ -22,10 +22,11 @@
                 vm.saveAnalytics = function () {
                     vm.purchaseState = PurchaseStateEnum.PENDING.enum;
                     znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
-
                 };
 
-                $scope.$watch('vm.purchaseState', function (newPurchaseState) {
+                $scope.$watch(function () {
+                    return vm.purchaseState;
+                }, function (newPurchaseState) {
                     if (angular.isUndefined(newPurchaseState)) {
                         return;
                     }
@@ -48,6 +49,11 @@
                         var userEmail = results[0].auth.email;
                         var userId = results[0].auth.uid;
                         var productId = results[1].id;
+
+                        if (!userEmail) {
+                            $log.error('Invalid user attribute: userEmail is not defined, generating uid email');
+                            userEmail = userId + '@zinkerz.com';
+                        }
 
                         if (userEmail && userId) {
                             vm.userEmail = userEmail;

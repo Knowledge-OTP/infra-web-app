@@ -84,7 +84,6 @@
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
                 return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
-                    $log.debug('setPendingPurchase res ', res);
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
@@ -122,22 +121,10 @@
             };
 
             self.listenToPurchaseStatus = function () {
-                studentStorageProm.then(function (studentStorage) {
-                    self.hasProVersion().then(function (hasPro) {
-                        studentStorage.cleanPathCache(purchasePath);
-
-                        var removeListener = $rootScope.$on('$stateChangeSuccess', function () {
-                            removeListener();
-
-                            if ($state.current.name && $state.current.name !== '') {
-                                $state.reload();
-                            }
-                        });
-
-                        if (hasPro) {
-                            self.removePendingPurchase();
-                        }
-                    });
+                self.hasProVersion().then(function (hasPro) {
+                    if (hasPro) {
+                        self.removePendingPurchase();
+                    }
                 });
             };
 
