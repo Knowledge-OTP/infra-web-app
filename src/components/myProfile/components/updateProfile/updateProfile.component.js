@@ -14,8 +14,6 @@
                 'ngInject';
 
                 var vm = this;
-
-                console.log('vm.localTimezone: ', vm.localTimezone);
                 var userAuth = AuthService.getAuth();
                 var showToast = MyProfileSrv.showToast;
 

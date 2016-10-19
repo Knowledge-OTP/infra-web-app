@@ -7812,8 +7812,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 'ngInject';
 
                 var vm = this;
-
-                console.log('vm.localTimezone: ', vm.localTimezone);
                 var userAuth = AuthService.getAuth();
                 var showToast = MyProfileSrv.showToast;
 
@@ -7910,18 +7908,21 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 
     angular.module('znk.infra-web-app.myProfile')
         .service('MyProfileSrv',
-            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$mdToast", function ($mdDialog, $http, ENV, UserProfileService ,$q, $mdToast) {
+            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$mdToast", "StorageSrv", "InfraConfigSrv", function ($mdDialog, $http, ENV, UserProfileService ,$q, $mdToast, StorageSrv, InfraConfigSrv) {
                 'ngInject';
 
-                function getTimezonesList() {
-                    return $http.get('./assets/timezones.json', {
-                        timeout: 5000,
-                        cache: true
-                    });
+                function obj2Array(obj) {
+                    return Object.keys(obj).map(function (key) { return obj[key]; });
                 }
 
                 var self = this;
-                var timezonesProm = getTimezonesList();
+                var globalStorageProm = InfraConfigSrv.getGlobalStorage();
+
+                self.getTimezonesList = function getTimezonesList() {
+                    return globalStorageProm.then(function (globalStorage) {
+                        return globalStorage.get('timezones');
+                    });
+                };
 
                 self.getLocalTimezone = function () {
                     var dateArray = new Date().toString().split(' ');
@@ -7930,8 +7931,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                     });
                     timezoneCity = timezoneCity.replace('(', '');
 
-                    return timezonesProm.then(function (timezonesList) {
-                        timezonesList = timezonesList.data;
+                    return self.getTimezonesList().then(function (timezonesList) {
+                        timezonesList = obj2Array(timezonesList);
                         var localTimezone = timezonesList.find(function (timezone) {
                             return (timezone.indexOf(timezoneCity)!== -1);
                         });
@@ -7952,14 +7953,14 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 self.showMyProfile = function () {
                     var userProfileProm = UserProfileService.getProfile();
 
-                    $q.all([userProfileProm, timezonesProm, self.getLocalTimezone()]).then(function(values) {
+                    $q.all([userProfileProm, self.getTimezonesList(), self.getLocalTimezone()]).then(function(values) {
                         var userProfile = values[0];
-                        var timezonesList = values[1].data;
+                        var timezonesList = values[1];
                         var localTimezone = values[2];
                         $mdDialog.show({
                             locals:{
                                 userProfile: userProfile,
-                                timezonesList: timezonesList,
+                                timezonesList: obj2Array(timezonesList),
                                 localTimezone: localTimezone
                             },
                             controller: 'MyProfileController',
