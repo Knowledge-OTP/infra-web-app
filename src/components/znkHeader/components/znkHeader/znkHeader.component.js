@@ -14,9 +14,12 @@
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
                 vm.expandIcon = 'expand_more';
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
+                vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
+                vm.showMyProfile = MyProfileSrv.showMyProfile;
+                vm.showFeedbackDialog = feedbackSrv.showFeedbackDialog;
                 vm.purchaseData = {};
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
-                vm.subscriptionStatus = pendingPurchaseProm ?'.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
+                vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
 
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
@@ -27,7 +30,7 @@
                 }, function (newPurchaseState) {
                     $timeout(function () {
                         var hasProVersion = !(angular.equals(newPurchaseState, {}));
-                        if (hasProVersion){
+                        if (hasProVersion) {
                             vm.purchaseState = PurchaseStateEnum.PRO.enum;
                             vm.subscriptionStatus = '.PROFILE_STATUS_PRO';
                         }
@@ -40,18 +43,6 @@
 
                 vm.invokeOnClickHandler = function(onClickHandler){
                     $injector.invoke(onClickHandler);
-                };
-
-                vm.showPurchaseDialog = function () {
-                    purchaseService.showPurchaseDialog();
-                };
-
-                vm.showMyProfile = function() {
-                    MyProfileSrv.showMyProfile();
-                };
-
-                vm.showFeedbackDialog = function() {
-                    feedbackSrv.showFeedbackDialog();
                 };
 
                 vm.showGoalsEdit = function () {
