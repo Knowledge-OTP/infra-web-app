@@ -344,7 +344,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InvitationListenerService", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService) {
+        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InvitationListenerService", "InfraConfigSrv", "StudentContextSrv", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService, InfraConfigSrv, StudentContextSrv) {
             'ngInject';
 
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
@@ -353,6 +353,63 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                 headers: 'application/json',
                 timeout: ENV.promiseTimeOut
             };
+
+            /*-------------------New Code Start --------------------------------------------*/
+            var registerEvents = {};
+
+            this.offMyTeachersCB = function (userId, valueCB) {
+                InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    var path = 'users/' + userId + '/invitations/approved/';
+                    studentStorage.offEvent('value', path, myTeachersCB);
+
+                    angular.forEach(registerEvents[userId].valueCB, function (cb, index) {
+                        if (cb === valueCB) {
+                            registerEvents[userId].valueCB.splice(index, 1);
+                        }
+                    });
+                });
+            };
+
+            this.registerMyTeachersCB = function (userId, valueCB) {
+                InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    if (!registerEvents[userId]) {
+                        registerEvents[userId] = {};
+                    }
+
+                    if (!registerEvents[userId].valueCB) {
+                        registerEvents[userId].valueCB = [];
+                    }
+                    registerEvents[userId].valueCB.push(valueCB);
+
+                    var path = 'users/' + userId + '/invitations/approved/';
+
+                    studentStorage.onEvent('value', path, myTeachersCB);
+                });
+            };
+
+            function myTeachersCB(teachers) {
+                if (!angular.isUndefined(teachers)) {
+                    var userId = StudentContextSrv.getCurrUid();
+                    var promArr = [];
+                    angular.forEach(teachers, function (teacher) {
+                        var prom = UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
+                            teacher.zinkerzTeacher = profile.zinkerzTeacher;
+                        });
+                        promArr.push(prom);
+                    });
+
+                    $q.all(promArr).then(function () {
+                        angular.forEach(registerEvents[userId].valueCB, function (valueCB) {
+                            if (angular.isFunction(valueCB)) {
+                                valueCB(teachers);
+                            }
+                        });
+                    });
+                }
+            }
+
+            /*---------------------------------------------------------------*/
+
 
             this.invitationStatus = {
                 pending: 0,
