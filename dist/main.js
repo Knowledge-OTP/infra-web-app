@@ -16,6 +16,7 @@
 "znk.infra-web-app.imageZoomer",
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
+"znk.infra-web-app.liveLessons",
 "znk.infra-web-app.loginApp",
 "znk.infra-web-app.myProfile",
 "znk.infra-web-app.onBoarding",
@@ -429,7 +430,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time || exerciseResult.isComplete) {
+                    if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
                         return;
                     }
 
@@ -2916,7 +2917,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScores();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -2932,8 +2933,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             isDiagnosticCompletedProm,
                             $q.when(false),
                             getSubjectOrderProm,
-                            getExamScoreProm,
-
+                            getExamScoreProm
                         ]).then(function (res) {
                             var estimatedScore = res[0];
                             var isDiagnosticCompleted = res[1];
@@ -3882,7 +3882,8 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
                 var svgMap = {
                     'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
-                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg'
+                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg',
+                    'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }
@@ -3956,7 +3957,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 
             var directive = {
                 restrict: 'E',
-                template: '<button class="feedback-btn" ng-click="showDialog()"><span translate="FEEDBACK_POPUP.FEEDBACK"></span></button>',
+                template: '<button class="feedback-btn" ng-click="showDialog()"><svg-icon name="feedback-btn-icon"></svg-icon></button>',
                 scope: {},
                 link: function link(scope) {
                     scope.showDialog = function () {
@@ -4007,6 +4008,26 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
     "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
     "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/svg/feedback-btn-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "     class=\"act-feedback-btn-icon\"\n" +
+    "     viewBox=\"0 0 200 178.1\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .act-feedback-btn-icon{\n" +
+    "        width:25px;\n" +
+    "        height:25px;\n" +
+    "        .st0{fill:none;stroke:#231F20;stroke-width:7;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path  class=\"st0\" d=\"M7.3,61v46.2c0,0,54.1-4.9,72.1,6V55.8C79.4,55.8,66.6,64.1,7.3,61z\"/>\n" +
+    "        <path  class=\"st0\" d=\"M89.9,50.9c0,0,70.2-12,98.8-45.1v157.7c0,0-50.3-43.9-98.8-46.2V50.9z\"/>\n" +
+    "        <polyline class=\"st0\" points=\"25.7,109.1 25.7,160.9 56.8,173 56.8,109.1 	\"/>\n" +
+    "    </g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/feedback/svg/feedback-close-popup.svg",
@@ -5283,8 +5304,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
         }
 
         function firebaseListenerRef(userPath) {
-            //var authData = AuthService.getAuth();
-            var authData = 'sadssad';
+            var authData = AuthService.getAuth();
             var fullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + userPath;
             var userFullPath = fullPath.replace('$$uid', authData.uid);
             return new Firebase(userFullPath);
@@ -5730,6 +5750,618 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "	c1,1.3,0.7,3.2-0.7,4.2C71.9,92,71.3,92.2,70.7,92.2z\"/>\n" +
     "<path d=\"M83,134.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,134.2,83,134.2z\"/>\n" +
     "</svg>\n" +
+    "");
+}]);
+
+(function (window, angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveLessons', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon',
+        'znk.infra.user',
+        'znk.infra.mailSender',
+        'znk.infra.storage',
+        'ngMaterial'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'close-popup': 'components/liveLessons/svg/close-popup.svg',
+                'reschedule-icon': 'components/liveLessons/svg/reschedule-icon.svg',
+                'calendar-icon': 'components/liveLessons/svg/calendar-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ])
+        .run(["$mdToast", "MyLiveLessons", function ($mdToast, MyLiveLessons) {
+            'ngInject';
+            MyLiveLessons.getClosestLiveLesson().then(function (closestLiveLessonObj) {
+                if (angular.isUndefined(closestLiveLessonObj.startTime)) {
+                    return;
+                }
+
+                var optionsOrPreset = {
+                    templateUrl: 'components/liveLessons/templates/upcomingLessonToast.template.html',
+                    hideDelay: false,
+                    controller: 'UpcomingLessonToasterController',
+                    controllerAs: 'vm',
+                    locals: {
+                        closestLiveLesson: closestLiveLessonObj
+                    }
+                };
+
+                $mdToast.cancel().then(function () {
+                    $mdToast.show(optionsOrPreset);
+                });
+            });
+        }]);
+})(window, angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveLessons').controller('RescheduleLessonController',
+        ["$mdDialog", "lessonData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", "$translatePartialLoader", function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons, $translatePartialLoader) {
+            'ngInject';
+
+            $translatePartialLoader.addPart('liveLessons');
+
+            var self = this;
+            self.closeDialog = $mdDialog.cancel;
+
+            var currentTimeStamp = new Date().getTime();
+            var FORTY_EIGHT_HOURS = 172800000;
+            var MAIL_TO_SEND = 'zoe@zinkerz.com';
+            var TEMPLATE_KEY = 'reschedule';
+
+            if (currentTimeStamp + FORTY_EIGHT_HOURS > lessonData.startTime) {
+                self.islessonInNextFortyEightHours = true;
+            }
+
+            var localTimeZone = MyLiveLessons.getLocalTimeZone();
+            var studentName = studentData.studentProfile.nickname;
+            var localStartTimeLesson = $filter('date')(lessonData.startTime, 'MMMM d, h:mma') + localTimeZone;
+            var emailBodyMessageVars = {
+                teacherName: lessonData.educatorName,
+                lessonDate: localStartTimeLesson,
+                studentName: studentName
+            };
+
+            $translate('RESCHEDULE_LESSON_MODAL.MESSAGE', emailBodyMessageVars).then(function (message) {
+                self.message = message;
+            });
+
+            var rescheduleRequest = '';
+            $translate('RESCHEDULE_LESSON_MODAL.RESCHEDULE_REQUEST', emailBodyMessageVars).then(function (rescheduleRequestText) {
+                rescheduleRequest = rescheduleRequestText;
+            });
+
+            // add to message body student email, uid and original lesson time
+            var originStartTime = lessonData.originStartTime;
+            var originTimeZone = MyLiveLessons.getCdtOrCst();
+            var ADD_TO_MESSAGE = '\r\n\r\n' + 'email: ' + studentData.studentProfile.email + ' | ';
+            ADD_TO_MESSAGE += '\r\n' + 'uid: ' + studentData.userId + ' | ';
+            ADD_TO_MESSAGE += '\r\n' + 'original time: ' + originStartTime;
+            ADD_TO_MESSAGE += ' ' + originTimeZone;
+
+            self.send = function () {
+                // subject format: Resquedule Request- [Student Name] | [Teacher Name] | [Lesson Time]
+                var emailSubject = rescheduleRequest;
+                emailSubject += ' - ' + studentName;
+                emailSubject += ' | ' + lessonData.educatorName;
+                emailSubject += ' | ' + localStartTimeLesson;
+
+                var message = self.message + ADD_TO_MESSAGE;
+
+                var dataToSend = {
+                    emails: [MAIL_TO_SEND],
+                    message: message,
+                    subject: emailSubject,
+                    appName: ENV.firebaseAppScopeName,
+                    templateKey: TEMPLATE_KEY
+                };
+
+                MailSenderService.postMailRequest(dataToSend).then(function () {
+                    self.requestWasSent = true;
+                });
+            };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveLessons').controller('UpcomingLessonToasterController',
+        ["$mdToast", "MyLiveLessons", "closestLiveLesson", "$timeout", "$translatePartialLoader", function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout, $translatePartialLoader) {
+        'ngInject';
+
+            $translatePartialLoader.addPart('liveLessons');
+
+            var self = this;
+
+            $timeout(function () {
+                self.animateToast = true;
+            });
+
+            self.closeToast = function () {
+                $mdToast.hide();
+            };
+
+            self.closestLiveLesson = closestLiveLesson;
+
+            self.openMyLessonsPopup = function () {
+                $mdToast.hide();
+                MyLiveLessons.liveLessonsScheduleModal();
+            };
+
+            self.openRescheduleModal = function (lessonObj) {
+                $mdToast.hide();
+                MyLiveLessons.rescheduleModal(lessonObj);
+            };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveLessons').service('MyLiveLessons',
+        ["$mdDialog", "UserProfileService", "$http", "$q", "$log", "ENV", "$filter", function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter) {
+            'ngInject';
+
+            var self = this;
+            var dataAsString;
+            var teachworksIdUrl = ENV.backendEndpoint + ENV.teachworksDataUrl;
+            var teachworksId;
+            var userId;
+
+            function getLiveLessonsSchedule() {
+                var liveLessonsArr = [];
+                return $q.all([_getTeachworksData(), UserProfileService.getCurrUserId()]).then(function (res) {
+                    dataAsString = res[0];
+                    userId = res[1];
+                    return UserProfileService.getUserTeachWorksId(userId).then(function (teachworksIdObj) {
+                        teachworksId = angular.isDefined(teachworksIdObj) ? teachworksIdObj.id : undefined;
+                        // teachworksId = 'Samantha Puterman';
+                        if (teachworksId && dataAsString) {
+                            teachworksId = teachworksId.replace(/\s/g, '').toLowerCase();
+                            var allRecordsData = dataAsString.match(/.*DTSTART(.|[\r\n])*?UID/g);
+                            for (var i = 0; i < allRecordsData.length; i++) {
+                                if (isTeachworksIdMatch(allRecordsData[i])) {
+                                    var liveLessonObject = _buildLiveLessonObj(allRecordsData[i]);
+                                    if (angular.isDefined(liveLessonObject.educatorName) && angular.isDefined(liveLessonObject.startTime)) {
+                                        liveLessonsArr.push(liveLessonObject);
+                                    }
+                                }
+                            }
+                        }
+                        return liveLessonsArr;
+                    });
+                });
+            }
+
+            function _getTeachworksData() {
+                return $http({
+                    method: 'GET',
+                    url: teachworksIdUrl,
+                    cache: true
+                }).then(function successCallback(response) {
+                    return response.data;
+                }, function errorCallback(response) {
+                    $log.debug('myLiveLessons:' + response);
+                });
+            }
+
+            self.getRelevantLiveLessons = function () {
+                return getLiveLessonsSchedule().then(function (liveLessonsArr) {
+                    var currentTimestamp = new Date().getTime();
+                    var relevantLiveLessonsArr = [];
+
+                    angular.forEach(liveLessonsArr, function (value) {
+                        if ((angular.isDefined(value.endTime) && value.endTime > currentTimestamp) || value.startTime > currentTimestamp) {
+                            relevantLiveLessonsArr.push(value);
+                        }
+                    });
+                    return relevantLiveLessonsArr;
+                });
+            };
+
+            self.getClosestLiveLesson = function () {
+                return self.getRelevantLiveLessons().then(function (liveLessonsArr) {
+                    var closestLiveLessonObj = {};
+
+                    angular.forEach(liveLessonsArr, function (value) {
+                        if (value.startTime < closestLiveLessonObj.startTime || angular.isUndefined(closestLiveLessonObj.startTime)) {
+                            closestLiveLessonObj = value;
+                        }
+                    });
+                    return closestLiveLessonObj;
+                });
+            };
+
+            self.liveLessonsScheduleModal = function () {
+                return self.getRelevantLiveLessons().then(function (liveLessonsArr) {
+                    function ctrl() {
+                        /*jshint validthis: true */
+                        this.liveLessonsArr = liveLessonsArr;
+                        this.closeDialog = $mdDialog.cancel;
+                        var currDate = new Date();
+                        this.currentTime = $filter('date')(currDate, 'fullDate') + ' ' + currDate.toTimeString();
+                        this.openRescheduleModal = function (lessonObj) {
+                            self.rescheduleModal(lessonObj);
+                        };
+                    }
+
+                    return $mdDialog.show({
+                        templateUrl: 'components/liveLessons/templates/myLiveLessonsModal.template.html',
+                        disableParentScroll: false,
+                        clickOutsideToClose: true,
+                        fullscreen: false,
+                        controller: ctrl,
+                        controllerAs: 'vm'
+                    });
+                });
+            };
+
+            self.rescheduleModal = function (lessonObj) {
+                UserProfileService.getProfile().then(function (studentProfile) {
+                    $mdDialog.show({
+                        templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
+                        disableParentScroll: false,
+                        clickOutsideToClose: true,
+                        fullscreen: false,
+                        controller: 'RescheduleLessonController',
+                        controllerAs: 'vm',
+                        locals: {
+                            lessonData: lessonObj,
+                            studentData: {
+                                studentProfile: studentProfile,
+                                userId: userId
+                            }
+                        }
+                    });
+                });
+            };
+
+            // -------------------------------------parsing data------------------------------- //
+
+            function isTeachworksIdMatch(recordString) {
+                var rawId = recordString.match(/SUMMARY.*/);
+                if (rawId !== null) {
+                    rawId = rawId[0].replace(/SUMMARY:|END/g, '');
+                    var id = rawId.replace(/\s/g, '').toLowerCase();
+                    return teachworksId === id;
+                }
+                return false;
+            }
+
+            function _buildLiveLessonObj(recordString) {
+                var liveLessonObj = {};
+                liveLessonObj.startTime = _getStartTime(recordString);
+                liveLessonObj.originStartTime = _getOriginalDate(recordString);
+                liveLessonObj.endTime = _getEndTime(recordString);
+                liveLessonObj.educatorName = _getTeacherName(recordString);
+                return liveLessonObj;
+            }
+
+            function _getStartTime(recordString) {
+                var startTime = recordString.match(/DTSTART.*?\d+T\d+/);
+                startTime = startTime[0].match(/\d+T\d+/);
+                if (startTime !== null) {
+                    return _convertDateToMilliseconds(startTime[0]);
+                }
+            }
+
+            function _getOriginalDate(recordString) {
+                var startTime = recordString.match(/DTSTART.*?\d+T\d+/);
+                startTime = startTime[0].match(/\d+T\d+/);
+                return _parseDate(startTime[0]);
+            }
+
+            function _getEndTime(recordString) {
+                var endTime = recordString.match(/DTEND.*?\d+T\d+/);
+                endTime = endTime !== null ? endTime[0].match(/\d+T\d+/)[0] : undefined;
+                return endTime;
+            }
+
+            function _getTeacherName(recordString) {
+                var teacherName = recordString.match(/DESCRIPTION:Employee.*/);
+                if (teacherName !== null && teacherName[0]) {
+                    teacherName = teacherName[0].match(/-.*/);
+                    teacherName = teacherName[0].replace(/-/g, '');
+                    teacherName = teacherName.match(/\w+\s*\w+/, '');
+                    return teacherName !== null ? teacherName[0] : null;
+                }
+            }
+
+            function _convertDateToMilliseconds(startTimeString) {
+                var timeZone = self.getCdtOrCst();
+                var originalDate = _parseDate(startTimeString) + ' ' + timeZone;
+                var localFullDate = new Date(originalDate).toString();  // convert CST/CDT timezone to local timezone.
+                return new Date(localFullDate).getTime();
+            }
+
+            function _parseDate(startTimeString) { // convert 20160720T160030 to 07/20/2016 16:00:30 and return as milliseconds.
+                var YEAR = 4, MONTH = 6, DAY = 8, T = 9, HOUR = 11, MINUTE = 13, SECOND = 15;
+                var day = startTimeString.slice(MONTH, DAY),
+                    month = startTimeString.slice(YEAR, MONTH),
+                    year = startTimeString.slice(0, YEAR),
+                    hour = startTimeString.slice(T, HOUR),
+                    minute = startTimeString.slice(HOUR, MINUTE),
+                    second = startTimeString.slice(MINUTE, SECOND);
+
+                var originalDate = month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
+                return originalDate;
+            }
+
+            self.getCdtOrCst = function () {
+                var today = new Date();
+                var date = $filter('date')(today, 'medium', 'CST'); // calculate by cst time zone.
+                var yr = new Date(date).getFullYear();
+
+                var cdtStart = new Date('March 13, ' + yr + ' 02:00:00'); // 2nd Sunday in March can't occur after the 14th
+                var cdtEnd = new Date('November 07, ' + yr + ' 02:00:00'); // 1st Sunday in November can't occur after the 7th
+
+                var day;
+                day = cdtStart.getDay(); // day of week of 14th
+                cdtStart.setDate(14 - day); // Calculate 2nd Sunday in March of this year
+                day = cdtEnd.getDay(); // day of the week of 7th
+                cdtEnd.setDate(7 - day); // Calculate first Sunday in November of this year
+                if (today.getTime() >= cdtStart.getTime() && today.getTime() < cdtEnd.getTime()) {
+                    return 'CDT';
+                }
+                return 'CST';
+            };
+
+            self.getLocalTimeZone = function () {
+                var date = new Date();
+                var localTimeString = date.toTimeString();
+                var localTimeZone = localTimeString.replace(/([^\s]+)/, '');
+                if (angular.isUndefined(date) || date === null) {
+                    return '';
+                }
+                return localTimeZone;
+            };
+
+            // -------------------------------------parsing data------------------------------- //
+        }]
+    );
+})(angular);
+
+angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/liveLessons/svg/calendar-icon.svg",
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" class=\"calendar-icon\"\n" +
+    "     viewBox=\"0 0 176.3 200\">\n" +
+    "    <style>\n" +
+    "        .calendar-icon{\n" +
+    "        enable-background:new 0 0 176.3 200;\n" +
+    "        width:35px;\n" +
+    "        height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g id=\"XMLID_40_\">\n" +
+    "        <path id=\"XMLID_138_\" d=\"M164.1,200c-50.7,0-101.3,0-152,0C3.1,196-0.1,189.1,0,179.3c0.3-36.5,0.1-73,0.1-109.5c0-1.9,0-3.8,0-5.6\n" +
+    "		c59,0,117.3,0,176,0c0,2,0,3.8,0,5.6c0,36.5-0.2,73,0.1,109.5C176.4,189.1,173.2,196,164.1,200z M163.9,156.3\n" +
+    "		c-10.8,0-21.1,0-31.4,0c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C163.9,177.2,163.9,166.9,163.9,156.3z M123.9,156.2\n" +
+    "		c-10.8,0-21.1,0-31.5,0c0,10.6,0,21,0,31.4c10.7,0,21.1,0,31.5,0C123.9,177,123.9,166.7,123.9,156.2z M52.4,187.7\n" +
+    "		c10.8,0,21.1,0,31.5,0c0-10.6,0-21,0-31.4c-10.7,0-21.1,0-31.5,0C52.4,166.9,52.4,177.2,52.4,187.7z M12.5,156.2\n" +
+    "		c0,10.7,0,21.1,0,31.4c10.7,0,21.1,0,31.4,0c0-10.6,0-20.9,0-31.4C33.4,156.2,23.1,156.2,12.5,156.2z M163.8,147.7\n" +
+    "		c0-10.8,0-21.1,0-31.4c-10.7,0-21.1,0-31.4,0c0,10.7,0,20.9,0,31.4C142.9,147.7,153.2,147.7,163.8,147.7z M123.9,147.7\n" +
+    "		c0-10.8,0-21.1,0-31.5c-10.6,0-21,0-31.4,0c0,10.7,0,21.1,0,31.5C103.1,147.7,113.4,147.7,123.9,147.7z M52.4,147.6\n" +
+    "		c10.8,0,21.2,0,31.4,0c0-10.7,0-21.1,0-31.4c-10.7,0-20.9,0-31.4,0C52.4,126.7,52.4,137,52.4,147.6z M43.9,116.3\n" +
+    "		c-10.7,0-21.1,0-31.4,0c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C43.9,137.2,43.9,127,43.9,116.3z M132.5,76.1\n" +
+    "		c0,10.9,0,21.3,0,31.5c10.7,0,20.9,0,31.3,0c0-10.6,0-21,0-31.5C153.3,76.1,143,76.1,132.5,76.1z M92.5,76.2c0,10.8,0,21.1,0,31.4\n" +
+    "		c10.7,0,21.1,0,31.4,0c0-10.7,0-20.9,0-31.4C113.4,76.2,103.1,76.2,92.5,76.2z M83.9,76.3c-10.8,0-21.1,0-31.4,0\n" +
+    "		c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C83.9,97.2,83.9,86.9,83.9,76.3z M43.9,76.3c-10.8,0-21.2,0-31.4,0\n" +
+    "		c0,10.7,0,21.1,0,31.4c10.7,0,20.9,0,31.4,0C43.9,97.1,43.9,86.9,43.9,76.3z\"/>\n" +
+    "        <path id=\"XMLID_119_\" d=\"M176.1,55.8c-58.9,0-117.1,0-175.7,0c0-6.4-0.6-12.7,0.2-18.9c1-7.6,7.6-12.7,15.5-12.9\n" +
+    "		c4.3-0.1,8.7,0,13,0c4.1,0,8.3,0,13,0c0-5.8-0.1-11.2,0-16.6c0.1-4.7,2.5-7.7,6.2-7.3c4.3,0.4,5.8,3.2,5.8,7.3\n" +
+    "		c-0.1,5.3,0,10.6,0,16.3c22.6,0,45,0,68,0c0-5.4,0.1-10.8,0-16.3c-0.1-4.1,1.4-6.9,5.8-7.3c3.7-0.4,6.2,2.6,6.2,7.3\n" +
+    "		c0.1,5.3,0,10.6,0,16.6c7.8,0,15.4,0,23,0c12.9,0,19,6.1,19,18.9C176.1,47,176.1,51.1,176.1,55.8z M122.2,29.9\n" +
+    "		c-5.7,4.3-7.2,9.1-5.1,14.4c2,5.2,7.3,8.3,12.7,7.6c5.2-0.7,9.5-4.9,10.3-10.1c0.8-4.9-1.5-9.2-5.9-11.2c0,3.1,0.1,6.1,0,9\n" +
+    "		c-0.1,3.7-2.1,6.1-5.8,6.2c-4,0.1-6-2.4-6.1-6.3C122.1,36.6,122.2,33.6,122.2,29.9z M42.2,29.9c-5.7,4.3-7.2,9-5.2,14.3\n" +
+    "		c2,5.2,7.2,8.3,12.7,7.6c5.2-0.7,9.5-4.9,10.4-10.1c0.8-4.8-1.4-9.2-5.9-11.2c0,3.3,0.2,6.4,0,9.5c-0.2,3.4-2.3,5.6-5.7,5.7\n" +
+    "		c-3.7,0.1-5.9-2.1-6.1-5.8C42,36.9,42.2,33.8,42.2,29.9z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveLessons/svg/close-popup.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"close-popup\">\n" +
+    "    <style>\n" +
+    "        .close-popup{\n" +
+    "        width:15px;\n" +
+    "        height:15px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveLessons/svg/reschedule-icon.svg",
+    "<svg version=\"1.1\" id=\"Layer_1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 172 188\"\n" +
+    "     style=\"enable-background:new 0 0 172 188;\"\n" +
+    "     class=\"reschedule-icon\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "    svg.reschedule-icon{\n" +
+    "        width:12px;\n" +
+    "    	.st0{fill:none;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<path id=\"XMLID_65_\" d=\"M12,63.7c49.6,0,98.6,0,147.9,0c0-9,0.3-17.8-0.1-26.6c-0.2-5.4-4.5-8.8-10.1-9.2c-2.8-0.2-6,0.7-8.4-0.3\n" +
+    "	c-2.2-0.9-4.7-3.5-5-5.6c-0.2-1.8,2.4-5.5,4-5.7c6.7-0.7,13.7-1.5,20,2.1c7.3,4.2,11.6,10.5,11.6,19.1c0.1,42.8,0.1,85.6,0,128.5\n" +
+    "	c0,12.3-9.6,21.8-21.9,21.8c-42.7,0.1-85.3,0.1-128,0c-12.5,0-22-9.6-22-22.2c0-42.5,0-85,0-127.5c0-12.6,9.5-22.1,22-22.2\n" +
+    "	c2.5,0,5,0,7.5,0c4,0.1,6.4,2.1,6.4,6.1c-0.1,4-2.6,5.9-6.6,5.9c-2.5,0-5-0.1-7.5,0.1c-5.6,0.5-9.5,4-9.7,9.5\n" +
+    "	C11.8,46.2,12,54.8,12,63.7z M12,76.2c0,29.4,0,58.2,0,87c0,9.4,3.5,12.8,13.1,12.8c40.7,0,81.3,0,122,0c9.5,0,13-3.5,13-13\n" +
+    "	c0-27.3,0-54.6,0-82c0-1.6-0.1-3.2-0.2-4.9C110.4,76.2,61.5,76.2,12,76.2z\"/>\n" +
+    "<path id=\"XMLID_58_\" d=\"M86,27.9c-7.7,0-15.3,0-23,0c-4.7,0-7.6-2.5-7.3-6.2c0.4-4.3,3.1-5.8,7.2-5.8C78.3,16,93.6,16,109,16\n" +
+    "	c4.1,0,6.9,1.7,6.9,6c0,4.3-2.8,6-6.9,6C101.3,27.9,93.7,27.9,86,27.9z\"/>\n" +
+    "<path id=\"XMLID_4_\" d=\"M46.7,58.8C38,58.8,31,51.8,31,43.1S38,27.3,46.7,27.3s15.8,7.1,15.8,15.8S55.4,58.8,46.7,58.8z M46.7,34.3\n" +
+    "	c-4.8,0-8.8,3.9-8.8,8.8s3.9,8.8,8.8,8.8s8.8-3.9,8.8-8.8S51.6,34.3,46.7,34.3z\"/>\n" +
+    "<path id=\"XMLID_5_\" d=\"M46.7,34.3c-1.9,0-3.5-1.6-3.5-3.5V4.4c0-1.9,1.6-3.5,3.5-3.5s3.5,1.6,3.5,3.5v26.4\n" +
+    "	C50.2,32.8,48.7,34.3,46.7,34.3z\"/>\n" +
+    "<path id=\"XMLID_6_\" d=\"M127.2,57.9c-8.7,0-15.8-7.1-15.8-15.8s7.1-15.8,15.8-15.8s15.7,7.1,15.7,15.8S135.8,57.9,127.2,57.9z\n" +
+    "	 M127.2,33.4c-4.8,0-8.8,3.9-8.8,8.8s3.9,8.8,8.8,8.8c4.8,0,8.7-3.9,8.7-8.8S132,33.4,127.2,33.4z\"/>\n" +
+    "<path id=\"XMLID_7_\" d=\"M127.2,33.4c-1.9,0-3.5-1.6-3.5-3.5V3.5c0-1.9,1.6-3.5,3.5-3.5c1.9,0,3.5,1.6,3.5,3.5v26.4\n" +
+    "	C130.7,31.8,129.1,33.4,127.2,33.4z\"/>\n" +
+    "<path id=\"XMLID_26_\" d=\"M56.4,130.4c-1.9,0-3.5-1.5-3.5-3.4c0-1.5,0.1-3,0.2-4.6c2.2-18.5,19-31.7,37.5-29.5\n" +
+    "	c13.3,1.6,24.4,10.9,28.3,23.7c0.6,1.8-0.5,3.8-2.3,4.4c-1.8,0.6-3.8-0.5-4.4-2.3c-3.1-10.2-11.9-17.5-22.5-18.8\n" +
+    "	c-14.7-1.7-28,8.8-29.7,23.4c-0.1,1.2-0.2,2.4-0.2,3.6C59.9,128.7,58.4,130.3,56.4,130.4C56.4,130.4,56.4,130.4,56.4,130.4z\"/>\n" +
+    "<polygon id=\"XMLID_13_\" points=\"122.2,106.1 118.8,121.6 118.7,122.9 102.7,115.2 \"/>\n" +
+    "<path id=\"XMLID_27_\" d=\"M89.1,163c-13.6,0-25.8-8.1-31.1-20.6c-0.8-1.8,0.1-3.8,1.9-4.6c1.8-0.8,3.8,0.1,4.6,1.9\n" +
+    "	c4.2,9.9,13.9,16.3,24.7,16.3c13.9,0,25.3-10.4,26.6-24.2c0.2-1.9,1.9-3.3,3.8-3.2c1.9,0.2,3.3,1.9,3.2,3.8\n" +
+    "	C121,149.8,106.6,163,89.1,163z\"/>\n" +
+    "<polygon id=\"XMLID_3_\" points=\"54.6,150.1 55.4,134.9 55.4,133.5 72.2,139.3 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveLessons/templates/myLiveLessonsModal.template.html",
+    "<md-dialog ng-cloak class=\"my-lessons-schedule-wrapper base\" translate-namespace=\"MY_LIVE_LESSONS_POPUP\">\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"calendar-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"close-popup-wrap\">\n" +
+    "        <svg-icon name=\"close-popup\" ng-click=\"vm.closeDialog()\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <md-dialog-content>\n" +
+    "        <div class=\"md-dialog-content\">\n" +
+    "            <div class=\"live-lessons-title\" translate=\".LIVE_LESSONS_SCHEDULE\"></div>\n" +
+    "            <div class=\"upcoming-lesson-title\" translate=\".UPCOMING_LESSON\"></div>\n" +
+    "\n" +
+    "            <div class=\"live-lessons-wrapper znk-scrollbar\">\n" +
+    "                <div class=\"live-lesson-repeater\" ng-repeat=\"lesson in vm.liveLessonsArr | orderBy: 'startTime'\">\n" +
+    "                    <div class=\"live-lesson\" >\n" +
+    "                        <div class=\"date\">{{lesson.startTime | date:'d MMM' | uppercase}}</div>\n" +
+    "                        <div class=\"hour\">{{lesson.startTime | date:'h:mm a'}}</div>\n" +
+    "                        <div class=\"educator-name\">{{lesson.educatorName}}</div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"reschedule-wrapper\">\n" +
+    "                        <md-tooltip md-direction=\"top\" class=\"reschedule-tooltip\">\n" +
+    "                            <div translate=\".RESCHEDULE_LESSON\"></div>\n" +
+    "                        </md-tooltip>\n" +
+    "                        <svg-icon name=\"reschedule-icon\" ng-click=\"vm.openRescheduleModal(lesson)\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"no-live-lessons-text\" translate=\".NO_LIVE_LESSONS\"></div>\n" +
+    "            </div>\n" +
+    "            <div class=\"current-time\" translate=\".CURRENT_TIME\"\n" +
+    "                 translate-values=\"{ currentTime: {{'vm.currentTime'}} }\"></div>\n" +
+    "            <div class=\"btn-wrapper\">\n" +
+    "                <md-button class=\"ok-button success drop-shadow\" ng-click=\"vm.closeDialog()\">\n" +
+    "                    <span translate=\".OK\"></span>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </md-dialog-content>\n" +
+    "\n" +
+    "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/liveLessons/templates/rescheduleLessonModal.template.html",
+    "<md-dialog ng-cloak class=\"my-lessons-schedule-wrapper base\" translate-namespace=\"RESCHEDULE_LESSON_MODAL\">\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"reschedule-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"close-popup-wrap\">\n" +
+    "        <svg-icon name=\"close-popup\" ng-click=\"vm.closeDialog()\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <md-dialog-content>\n" +
+    "        <div ng-switch=\"!!vm.requestWasSent\">\n" +
+    "            <div class=\"md-dialog-content\">\n" +
+    "                <div class=\"reschedule-lesson-title\" translate=\".RESCHEDULE_LESSON\"></div>\n" +
+    "\n" +
+    "                <div class=\"email-container\" ng-switch-when=\"false\">\n" +
+    "                    <div class=\"note-wrapper\" ng-if=\"vm.islessonInNextFortyEightHours\">\n" +
+    "                        <span class=\"red-color-text\" translate=\".NOTE\"></span>\n" +
+    "                        <span class=\"warning-text\" translate=\".RESCHEDULING_FEE_PART1\"></span>\n" +
+    "                        <span class=\"red-color-text\" translate=\".HOURS\"></span>\n" +
+    "                        <div class=\"warning-text\" translate=\".RESCHEDULING_FEE_PART2\"></div>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <textarea class=\"reschedule-container\"\n" +
+    "                              required\n" +
+    "                              ng-model=\"vm.message\"\n" +
+    "                              md-select-on-focus>\n" +
+    "                </textarea>\n" +
+    "                    <div class=\"bottom-lesson\" translate=\".WE_WILL_CONTACT_YOU\"></div>\n" +
+    "                    <div class=\"buttons-wrapper\">\n" +
+    "                        <md-button\n" +
+    "                            class=\"md-button cancel-btn\"\n" +
+    "                            translate=\".CANCEL\"\n" +
+    "                            ng-click=\"vm.closeDialog()\">\n" +
+    "\n" +
+    "                        </md-button>\n" +
+    "                        <md-button\n" +
+    "                            class=\"md-button send-btn\"\n" +
+    "                            translate=\".SEND\"\n" +
+    "                            ng-click=\"vm.send()\">\n" +
+    "                        </md-button>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
+    "                    <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
+    "                    <div translate=\".SUCCESS_SHARED\"></div>\n" +
+    "                    <div class=\"done-btn-wrap\">\n" +
+    "                        <md-button class=\"success lg drop-shadow\"\n" +
+    "                                   ng-click=\"vm.closeDialog()\">\n" +
+    "                            <span translate=\".DONE\"></span>\n" +
+    "                        </md-button>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </md-dialog-content>\n" +
+    "\n" +
+    "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/liveLessons/templates/upcomingLessonToast.template.html",
+    "<div class=\"upcoming-lesson-toast-wrapper base-border-radius\" translate-namespace=\"UPCOMING_LESSON_TOAST\"\n" +
+    "     ng-class=\"{'animate-toast': vm.animateToast}\">\n" +
+    "    <svg-icon name=\"close-popup\" ng-click=\"vm.closeToast()\"></svg-icon>\n" +
+    "\n" +
+    "    <div class=\"left-side-container\" ng-click=\"vm.openMyLessonsPopup()\">\n" +
+    "        <svg-icon name=\"calendar-icon\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"right-side-container\" >\n" +
+    "        <div class=\"closest-lesson-details\" ng-click=\"vm.openMyLessonsPopup()\">\n" +
+    "            <div class=\"top-title\" translate=\".YOUR_UPCOMING_LESSON_WITH\"></div>\n" +
+    "            <div class=\"teacher-name\">{{vm.closestLiveLesson.educatorName}}</div>\n" +
+    "            <div class=\"lesson-date\">{{vm.closestLiveLesson.startTime | date: 'EEEE, MMMM d'}}</div>\n" +
+    "            <div class=\"lesson-hour\">{{vm.closestLiveLesson.startTime | date:'h:mm a'}}</div>\n" +
+    "        </div>\n" +
+    "        <div class=\"bottom-container\">\n" +
+    "            <div class=\"bottom-clickable-text\" translate=\".MY_LIVE_LESSONS_SCHEDULE\" ng-click=\"vm.openMyLessonsPopup()\"></div>\n" +
+    "            <div class=\"reschedule-wrapper\" ng-click=\"vm.openRescheduleModal(vm.closestLiveLesson)\">\n" +
+    "                <svg-icon name=\"reschedule-icon\"></svg-icon>\n" +
+    "                <div class=\"reschedule-text\" translate=\".RESCHEDULE\"></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
     "");
 }]);
 
@@ -6242,93 +6874,23 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         STUDENT: 2
     };
 
-    var ALL_ENV_CONFIG = {
-        'dev': {},
-        'prod': {}
-    };
-    ALL_ENV_CONFIG.dev[APPS.SAT.id] = {
-        fbDataEndPoint: 'https://sat-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        facebookAppId: '1624086287830120',
-        googleAppId: '1008364992567-hpchkt4nuo4eosjfrbpqrm1ruamg62nj.apps.googleusercontent.com',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'sat_app',
-        studentAppName: 'sat_app',
-        dashboardAppName: 'sat_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.SAT.id] = {
-        fbDataEndPoint: 'https://sat2-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        facebookAppId: '1576342295937853',
-        googleAppId: '1008364992567-gpi1psnhk0t41bf8jtm86kjc74c0if7c.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'sat_app',
-        studentAppName: 'sat_app',
-        dashboardAppName: 'sat_dashboard'
-    };
-    ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
-        fbDataEndPoint: 'https://act-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        facebookAppId: '1557255967927879',
-        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'act_app',
-        studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.ACT.id] = {
-        fbDataEndPoint: 'https://act-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        facebookAppId: '1557254871261322',
-        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'act_app',
-        studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboard'
-    };
-    ALL_ENV_CONFIG.dev[APPS.TOEFL.id] = {
-        fbDataEndPoint: 'https://znk-toefl-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        facebookAppId: '1801767253393534',
-        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'toefl_app',
-        studentAppName: 'toefl_app',
-        dashboardAppName: 'toefl_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.TOEFL.id] = {
-        fbDataEndPoint: 'https://znk-toefl-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        facebookAppId: '1658075334429394',
-        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'toefl_app',
-        studentAppName: 'toefl_app',
-        dashboardAppName: 'toefl_dashboard'
-    };
-
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
         this.setEnv = function (newEnv) {
             env = newEnv;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv) {
+        this.getEnv = function(){
+            return env;
+        };
+
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvConfigSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvConfigSrv) {
             'ngInject';
 
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
-                return ALL_ENV_CONFIG[env][appContext];
+                return AllEnvConfigSrv[env][appContext];
             }
 
             function _getAppScopeName(userContext, appEnvConfig) {
@@ -6877,7 +7439,13 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -7049,7 +7617,13 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
     "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
     "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "    <promo-code user-context-const=\"d.userContextObj\" user-context=\"userContext\"></promo-code>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
     "    <div class=\"social-auth-container\">\n" +
     "        <div class=\"social-auth\">\n" +
     "            <oath-login-drv\n" +
@@ -8231,6 +8805,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
 })(angular);
 
+
 (function (angular) {
     'use strict';
 
@@ -8241,19 +8816,19 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 templateUrl: 'components/loginApp/templates/promoCode.template.html',
                 restrict: 'E',
                 scope: {
-                    userContext:'=',
-                    userContextConst:"="
+                    userContext: '<',
+                    userContextConst: "<",
+                    appContext: '<',
                 },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
-
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
 
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {
                             scope.d.showSpinner = true;
-                            PromoCodeSrv.checkPromoCode(promoCode).then(function (promoCodeResult) {
+                            PromoCodeSrv.checkPromoCode(promoCode, scope.appContext.id).then(function (promoCodeResult) {
                                 scope.d.promoCodeStatus = promoCodeResult.status;
                                 scope.d.promoCodeStatusText = promoCodeResult.text;
                                 scope.d.showSpinner = false;
@@ -8322,71 +8897,93 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode').service('PromoCodeSrv',
-        ["PROMO_CODE_STATUS", "$translate", "$http", "ENV", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, ENV, PromoCodeTypeEnum) {
-            'ngInject';
+    angular.module('znk.infra-web-app.promoCode').provider('PromoCodeSrv',
+        function () {
+            var backendData = {};
 
-            var promoCodeStatus;
-            var INVALID = 'PROMO_CODE.INVALID_CODE';
-            var promoCodeCheckUrl = ENV.backendEndpoint + '/promoCode/check';
-            var promoCodeToUpdateUrl = ENV.backendEndpoint + '/promoCode/update';
-            var promoCodeToUpdate;
+            this.setBackendData = function (_backendData) {
+                backendData = _backendData;
+            };
 
-            var promoCodeStatusText = {};
-            promoCodeStatusText[PromoCodeTypeEnum.FREE_LICENSE.enum] = 'PROMO_CODE.PROMO_CODE_ACCEPTED';
-            promoCodeStatusText[PromoCodeTypeEnum.ZINKERZ_EDUCATOR.enum] = 'PROMO_CODE.ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED';
-            promoCodeStatusText[INVALID] = INVALID;
+            this.$get = ["PROMO_CODE_STATUS", "$translate", "$http", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, PromoCodeTypeEnum) {
+                'ngInject';
 
-            this.checkPromoCode = function (promoCode) {
-                var dataToSend = {
-                    promoCode: promoCode,
-                    appName: ENV.firebaseAppScopeName
+               var promoCodeSrv = {};
 
+                var promoCodeStatus;
+                var INVALID = 'PROMO_CODE.INVALID_CODE';
+                var promoCodeCheckBaseUrl = '%backendEndpoint%/promoCode/check';
+                var promoCodeUpdateBaseUrl = '%backendEndpoint%/promoCode/update';
+                var promoCodeToUpdate;
+
+                var promoCodeStatusText = {};
+                promoCodeStatusText[PromoCodeTypeEnum.FREE_LICENSE.enum] = 'PROMO_CODE.PROMO_CODE_ACCEPTED';
+                promoCodeStatusText[PromoCodeTypeEnum.ZINKERZ_EDUCATOR.enum] = 'PROMO_CODE.ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED';
+                promoCodeStatusText[INVALID] = INVALID;
+
+                promoCodeSrv.checkPromoCode = function (promoCode, appContext) {
+                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
+                    var backendEndpointUrl = backendData[appContext].backendEndpoint;
+
+                    var promoCodeCheckUrl = promoCodeCheckBaseUrl;
+                    promoCodeCheckUrl = promoCodeCheckUrl.replace('%backendEndpoint%', backendEndpointUrl);
+
+                    var dataToSend = {
+                        promoCode: promoCode,
+                        appName: firebaseAppScopeName
+                    };
+                    return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
                 };
 
-                return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
-            };
+                promoCodeSrv.promoCodeToUpdate = function (promoCode) {
+                    promoCodeToUpdate = promoCode;
+                };
 
-            this.promoCodeToUpdate = function (promoCode) {
-                promoCodeToUpdate = promoCode;
-            };
+                promoCodeSrv.getPromoCodeToUpdate = function () {
+                    return promoCodeToUpdate;
+                };
 
-            this.getPromoCodeToUpdate = function () {
-                return promoCodeToUpdate;
-            };
+                promoCodeSrv.updatePromoCode = function (uid, promoCode, appContext) {
+                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
+                    var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
-            this.updatePromoCode = function (uid, promoCode) {
-                var dataToSend = {};
-                dataToSend.appName =  ENV.firebaseAppScopeName;
-                dataToSend.uid = uid;
-                dataToSend.promoCode = promoCode;
-                return $http.post(promoCodeToUpdateUrl, dataToSend);
-            };
+                    var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl;
+                    promoCodeUpdatekUrl = promoCodeUpdatekUrl.replace('%backendEndpoint%', backendEndpointUrl);
+                    var dataToSend = {
+                        appName: firebaseAppScopeName,
+                        uid: uid,
+                        promoCode: promoCode
+                    };
+                    return $http.post(promoCodeUpdatekUrl, dataToSend);
+                };
 
-            function _validPromoCode(response) {
-                promoCodeStatus = {};
-                var promoCodeType = response.data;
-                if (response.data && promoCodeStatusText[promoCodeType]) {
-                    promoCodeStatus.text = _getPromoCodeStatusText(response.data);
-                    promoCodeStatus.status = PROMO_CODE_STATUS.accepted;
-                } else {
+                function _validPromoCode(response) {
+                    promoCodeStatus = {};
+                    var promoCodeType = response.data;
+                    if (response.data && promoCodeStatusText[promoCodeType]) {
+                        promoCodeStatus.text = _getPromoCodeStatusText(response.data);
+                        promoCodeStatus.status = PROMO_CODE_STATUS.accepted;
+                    } else {
+                        promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
+                        promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
+                    }
+                    return promoCodeStatus;
+                }
+
+                function _invalidPromoCode() {
+                    promoCodeStatus = {};
                     promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
                     promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
+                    return promoCodeStatus;
                 }
-                return promoCodeStatus;
-            }
 
-            function _invalidPromoCode() {
-                promoCodeStatus = {};
-                promoCodeStatus.text = _getPromoCodeStatusText(INVALID);
-                promoCodeStatus.status = PROMO_CODE_STATUS.invalid;
-                return promoCodeStatus;
-            }
+                function _getPromoCodeStatusText(translationKey) {
+                    return $translate.instant(promoCodeStatusText[translationKey]);
+                }
 
-            function _getPromoCodeStatusText(translationKey) {
-                return $translate.instant(promoCodeStatusText[translationKey]);
-            }
-        }]
+                return promoCodeSrv;
+            }];
+        }
     );
 })(angular);
 
@@ -8545,10 +9142,11 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                 vm.saveAnalytics = function () {
                     vm.purchaseState = PurchaseStateEnum.PENDING.enum;
                     znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
-
                 };
 
-                $scope.$watch('vm.purchaseState', function (newPurchaseState) {
+                $scope.$watch(function () {
+                    return vm.purchaseState;
+                }, function (newPurchaseState) {
                     if (angular.isUndefined(newPurchaseState)) {
                         return;
                     }
@@ -8571,6 +9169,11 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                         var userEmail = results[0].auth.email;
                         var userId = results[0].auth.uid;
                         var productId = results[1].id;
+
+                        if (!userEmail) {
+                            $log.error('Invalid user attribute: userEmail is not defined, generating uid email');
+                            userEmail = userId + '@zinkerz.com';
+                        }
 
                         if (userEmail && userId) {
                             vm.userEmail = userEmail;
@@ -8776,7 +9379,6 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
                 return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
-                    $log.debug('setPendingPurchase res ', res);
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
@@ -8814,22 +9416,10 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             };
 
             self.listenToPurchaseStatus = function () {
-                studentStorageProm.then(function (studentStorage) {
-                    self.hasProVersion().then(function (hasPro) {
-                        studentStorage.cleanPathCache(purchasePath);
-
-                        var removeListener = $rootScope.$on('$stateChangeSuccess', function () {
-                            removeListener();
-
-                            if ($state.current.name && $state.current.name !== '') {
-                                $state.reload();
-                            }
-                        });
-
-                        if (hasPro) {
-                            self.removePendingPurchase();
-                        }
-                    });
+                self.hasProVersion().then(function (hasPro) {
+                    if (hasPro) {
+                        self.removePendingPurchase();
+                    }
                 });
             };
 
@@ -11293,7 +11883,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                     delete vm.selectedTime;
 
                     $timeout(function(){
-                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder);
+                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
                             vm.rotate = false;
@@ -11386,7 +11976,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('workoutIntroLock',
-            ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv) {
+            ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", "purchaseService", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv, purchaseService) {
                 'ngInject';
 
                 return {
@@ -11452,6 +12042,10 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                         setLockStateFlowControlProm.then(function(){
                             scope.vm.lockState = LOCK_STATES.NO_LOCK;
                         });
+
+                        scope.vm.openPurchaseModal = function () {
+                            purchaseService.showPurchaseDialog();
+                        };
                     }
                 };
             }]
@@ -11642,7 +12236,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
                 var WorkoutsRoadmapSrv = {};
 
-                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder){
+                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn){
                     if(!_newWorkoutGeneratorGetter){
                         var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
                         $log.error(errMsg);
@@ -11654,7 +12248,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
-                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder));
+                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder,clickedOnChangeSubjectBtn));
                 };
 
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes = function(){
@@ -11722,7 +12316,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
     "            <div class=\"description\" translate=\".MORE_PRACTICE\"></div>\n" +
     "            <div class=\"get-zinkerz-pro-text\" translate=\".GET_ZINKERZ_PRO\"></div>\n" +
-    "            <md-button class=\"upgrade-btn znk md-primary\">\n" +
+    "            <md-button class=\"upgrade-btn znk md-primary\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -12596,7 +13190,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     'use strict';
 
     angular.module('znk.infra-web-app.znkHeader',
-        ['ngAnimate',
+        [   'ngAnimate',
             'ngMaterial',
             'znk.infra.svgIcon',
             'znk.infra.popUp',
@@ -12605,131 +13199,109 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             'znk.infra-web-app.purchase',
             'znk.infra-web-app.onBoarding',
             'znk.infra-web-app.userGoalsSelection',
-            'znk.infra-web-app.settings',
+            'znk.infra-web-app.myProfile',
             'znk.infra.user',
             'znk.infra.general',
             'znk.infra-web-app.invitation',
             'znk.infra-web-app.feedback'])
-        .config([
-            'SvgIconSrvProvider',
-            function(SvgIconSrvProvider){
-
+        .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
+                'ngInject';
                 var svgMap = {
                     'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
-                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/znk-header-check-mark-icon'
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
-        ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv,
-                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
+            }])
+        .run(["$translatePartialLoader", function ($translatePartialLoader) {
             'ngInject';
-
-            var self = this;
-            self.expandIcon = 'expand_more';
-            self.additionalItems = znkHeaderSrv.getAdditionalItems();
-
-            OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
-                self.isOnBoardingCompleted = isCompleted;
-            });
-
-            self.invokeOnClickHandler = function(onClickHandler){
-                $injector.invoke(onClickHandler);
-            };
-
-            this.showPurchaseDialog = function () {
-                purchaseService.showPurchaseDialog();
-            };
-
-            this.showChangePassword = function() {
-                SettingsSrv.showChangePassword();
-            };
-
-            this.showGoalsEdit = function () {
-                userGoalsSelectionService.openEditGoalsDialog({
-                    clickOutsideToCloseFlag: true
-                });
-            };
-
-            UserProfileService.getProfile().then(function (profile) {
-                self.userProfile = {
-                    username: profile.nickname,
-                    email: profile.email
-                };
-            });
-
-            self.showFeedbackDialog = function () {
-                feedbackSrv.showFeedbackDialog();
-            };
-
-            this.znkOpenModal = function () {
-                self.expandIcon = 'expand_less';
-            };
-
-            this.logout = function () {
-                AuthService.logout();
-                $window.location.replace(ENV.redirectLogout);
-            };
-
-            function _checkIfHasProVersion() {
-                purchaseService.hasProVersion().then(function (hasProVersion) {
-                    self.purchaseState = (hasProVersion) ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
-                    self.subscriptionStatus = (hasProVersion) ? '.PROFILE_STATUS_PRO' : '.PROFILE_STATUS_BASIC';
-                });
-            }
-
-            var pendingPurchaseProm = purchaseService.getPendingPurchase();
-            if (pendingPurchaseProm) {
-                self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                self.subscriptionStatus = '.PROFILE_STATUS_PENDING';
-                pendingPurchaseProm.then(function () {
-                    _checkIfHasProVersion();
-                });
-            } else {
-                _checkIfHasProVersion();
-            }
-
-            $scope.$on('$mdMenuClose', function () {
-                self.expandIcon = 'expand_more';
-            });
-
+            $translatePartialLoader.addPart('znkHeader');
         }]);
 })(angular);
 
-
-
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkHeader').directive('znkHeader', [
+    angular.module('znk.infra-web-app.znkHeader')
+        .component('znkHeader', {
+            bindings: {},
+            templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
+            controllerAs: 'vm',
+            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "MyProfileSrv", "feedbackSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, MyProfileSrv, feedbackSrv,
+                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
+                'ngInject';
 
-        function () {
-            return {
-                    scope: {},
-                    restrict: 'E',
-                    templateUrl: 'components/znkHeader/templates/znkHeader.template.html',
-                    controller: 'znkHeaderCtrl',
-                    controllerAs: 'vm'
-            };
-        }
-    ]);
+                var vm = this;
+                var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                vm.expandIcon = 'expand_more';
+                vm.additionalItems = znkHeaderSrv.getAdditionalItems();
+                vm.purchaseData = {};
+                vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
+                vm.subscriptionStatus = pendingPurchaseProm ?'.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
+
+                purchaseService.getPurchaseData().then(function (purchaseData) {
+                    vm.purchaseData = purchaseData;
+                });
+
+                $scope.$watch(function () {
+                    return vm.purchaseData;
+                }, function (newPurchaseState) {
+                    $timeout(function () {
+                        var hasProVersion = !(angular.equals(newPurchaseState, {}));
+                        if (hasProVersion){
+                            vm.purchaseState = PurchaseStateEnum.PRO.enum;
+                            vm.subscriptionStatus = '.PROFILE_STATUS_PRO';
+                        }
+                    });
+                }, true);
+
+                OnBoardingService.isOnBoardingCompleted().then(function (isCompleted) {
+                    vm.isOnBoardingCompleted = isCompleted;
+                });
+
+                vm.invokeOnClickHandler = function(onClickHandler){
+                    $injector.invoke(onClickHandler);
+                };
+
+                vm.showPurchaseDialog = function () {
+                    purchaseService.showPurchaseDialog();
+                };
+
+                vm.showMyProfile = function() {
+                    MyProfileSrv.showMyProfile();
+                };
+
+                vm.showFeedbackDialog = function() {
+                    feedbackSrv.showFeedbackDialog();
+                };
+
+                vm.showGoalsEdit = function () {
+                    userGoalsSelectionService.openEditGoalsDialog({
+                        clickOutsideToCloseFlag: true
+                    });
+                };
+
+                UserProfileService.getProfile().then(function (profile) {
+                    vm.userProfile = {
+                        username: profile.nickname,
+                        email: profile.email
+                    };
+                });
+
+                vm.znkOpenModal = function () {
+                    vm.expandIcon = 'expand_less';
+                };
+
+                vm.logout = function () {
+                    AuthService.logout();
+                    $window.location.replace(ENV.redirectLogout);
+                };
+
+                $scope.$on('$mdMenuClose', function () {
+                    vm.expandIcon = 'expand_more';
+                });
+            }]
+        });
 })(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkHeader').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('znkHeader');
-    }]);
-})(angular);
-
 
 /**
  *
@@ -12770,7 +13342,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
                 addDefaultNavItem('ZNK_HEADER.WORKOUTS', 'app.workouts.roadmap', { reload: true });
                 addDefaultNavItem('ZNK_HEADER.TESTS', 'app.tests.roadmap');
-                addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials.roadmap');
+                // addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials.roadmap');
                 addDefaultNavItem('ZNK_HEADER.PERFORMANCE', 'app.performance');
 
                 return {
@@ -12786,77 +13358,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
 
 angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/znkHeader/svg/pending-purchase-clock-icon.svg",
-    "<svg\n" +
-    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-    "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"0 0 183 183\"\n" +
-    "    style=\"enable-background:new 0 0 183 183;\" xml:space=\"preserve\"\n" +
-    "    class=\"pending-purchase-clock-svg\">\n" +
-    "<style type=\"text/css\">\n" +
-    "	.pending-purchase-clock-svg .st0{fill:none;stroke:#231F20;stroke-width:10.5417;stroke-miterlimit:10;}\n" +
-    "	.pending-purchase-clock-svg .st1{fill:none;stroke:#231F20;stroke-width:12.3467;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-    "	.pending-purchase-clock-svg .st2{fill:none;stroke:#231F20;stroke-width:11.8313;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-    "</style>\n" +
-    "<circle class=\"st0\" cx=\"91.5\" cy=\"91.5\" r=\"86.2\"/>\n" +
-    "<line class=\"st1\" x1=\"92.1\" y1=\"96\" x2=\"92.1\" y2=\"35.5\"/>\n" +
-    "<line class=\"st2\" x1=\"92.1\" y1=\"96\" x2=\"131.4\" y2=\"96\"/>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/znkHeader/svg/raccoon-logo.svg",
-    "<svg\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"0 0 237 158\"\n" +
-    "    class=\"raccoon-logo-svg\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .raccoon-logo-svg .circle{fill:#000001;}\n" +
-    "    </style>\n" +
-    "    <g>\n" +
-    "        <circle class=\"circle\" cx=\"175\" cy=\"93.1\" r=\"13.7\"/>\n" +
-    "        <path class=\"circle\" d=\"M118.5,155.9c10.2,0,18.5-8.3,18.5-18.5c0-10.2-8.3-18.5-18.5-18.5c-10.2,0-18.5,8.3-18.5,18.5\n" +
-    "		C100,147.6,108.3,155.9,118.5,155.9z\"/>\n" +
-    "        <path class=\"circle\" d=\"M172.4,67.5c-15.8-9.7-34.3-15.3-53.9-15.3c-19.6,0-38.2,5.5-53.9,15.3\n" +
-    "		c13,1.3,23.1,12.3,23.1,25.6c0,1.8-0.2,3.5-0.5,5.1c9.3-5.2,20-8.1,31.3-8.1c11.3,0,22,2.9,31.4,8.1c-0.3-1.7-0.5-3.4-0.5-5.1\n" +
-    "		C149.3,79.8,159.5,68.8,172.4,67.5z\"/>\n" +
-    "        <path class=\"circle\" d=\"M36.3,93.5c-8,10.8-14,23.4-17.4,37.2c-1.2,4.9-0.4,10,2.3,14.3c2.6,4.3,6.8,7.3,11.7,8.5\n" +
-    "		c1.5,0.4,3,0.5,4.5,0.5c8.8,0,16.3-6,18.4-14.5c1.8-7.7,5-14.7,9.2-20.9c-1,0.1-2,0.2-3,0.2C47.9,118.8,36.5,107.5,36.3,93.5z\"/>\n" +
-    "        <path class=\"circle\" d=\"M232.2,92.5c0.6-6.7,6.5-78-4.5-88.4c-9.5-9.1-60.3,16-77.5,24.9\n" +
-    "		C185.3,37.8,215,60.9,232.2,92.5z\"/>\n" +
-    "        <circle class=\"circle\" cx=\"62\" cy=\"93.1\" r=\"13.7\"/>\n" +
-    "        <path class=\"circle\" d=\"M204.1,153.6c10.2-2.4,16.4-12.7,14-22.8c-3.3-13.8-9.3-26.4-17.4-37.2\n" +
-    "		c-0.2,14-11.6,25.3-25.7,25.3c-1,0-2-0.1-3-0.2c4.2,6.2,7.4,13.3,9.2,21c2,8.6,9.6,14.5,18.4,14.5\n" +
-    "		C201.1,154.1,202.6,153.9,204.1,153.6\"/>\n" +
-    "        <path class=\"circle\" d=\"M86.7,29C69.5,20.1,18.8-5,9.2,4.1c-11,10.4-5.1,81.5-4.5,88.4C22,60.8,51.7,37.8,86.7,29z\"/>\n" +
-    "    </g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/znkHeader/svg/znk-header-check-mark-icon.svg",
-    "<svg version=\"1.1\"\n" +
-    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-    "     x=\"0px\"\n" +
-    "     y=\"0px\"\n" +
-    "	 viewBox=\"0 0 329.5 223.7\"\n" +
-    "	 class=\"znkHeader-check-mark-svg\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .znkHeader-check-mark-svg .st0 {\n" +
-    "            fill: none;\n" +
-    "            stroke: #ffffff;\n" +
-    "            stroke-width: 21;\n" +
-    "            stroke-linecap: round;\n" +
-    "            stroke-linejoin: round;\n" +
-    "            stroke-miterlimit: 10;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "    <g>\n" +
-    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-    "    </g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/znkHeader/templates/znkHeader.template.html",
+  $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
     "        <svg-icon class=\"raccoon-logo-icon\"\n" +
@@ -12970,6 +13472,25 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
     "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
     "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/znkHeader/svg/pending-purchase-clock-icon.svg",
+    "<svg\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 183 183\"\n" +
+    "    style=\"enable-background:new 0 0 183 183;\" xml:space=\"preserve\"\n" +
+    "    class=\"pending-purchase-clock-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.pending-purchase-clock-svg .st0{fill:none;stroke:#231F20;stroke-width:10.5417;stroke-miterlimit:10;}\n" +
+    "	.pending-purchase-clock-svg .st1{fill:none;stroke:#231F20;stroke-width:12.3467;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "	.pending-purchase-clock-svg .st2{fill:none;stroke:#231F20;stroke-width:11.8313;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<circle class=\"st0\" cx=\"91.5\" cy=\"91.5\" r=\"86.2\"/>\n" +
+    "<line class=\"st1\" x1=\"92.1\" y1=\"96\" x2=\"92.1\" y2=\"35.5\"/>\n" +
+    "<line class=\"st2\" x1=\"92.1\" y1=\"96\" x2=\"131.4\" y2=\"96\"/>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/znkHeader/svg/raccoon-logo.svg",
