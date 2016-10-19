@@ -7953,7 +7953,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                     var userProfileProm = UserProfileService.getProfile();
 
                     $q.all([userProfileProm, timezonesProm, self.getLocalTimezone()]).then(function(values) {
-                        console.log('values: ', values);
                         var userProfile = values[0];
                         var timezonesList = values[1].data;
                         var localTimezone = values[2];
