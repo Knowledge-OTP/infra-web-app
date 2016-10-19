@@ -5,39 +5,17 @@
         .component('updateProfile', {
             bindings: {
                 userProfile: '=',
-                timezonesList: '='
+                timezonesList: '=',
+                localTimezone: '='
             },
             templateUrl:  'components/myProfile/components/updateProfile/updateProfile.template.html',
             controllerAs: 'vm',
             controller:  function (AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
                 'ngInject';
 
-                function getLocalTimezone() {
-                    var dateArray = new Date().toString().split(' ');
-                    var timezoneCity = dateArray.find(function (item) {
-                        return (item.indexOf('(')!== -1);
-                    });
-                    timezoneCity = timezoneCity.replace('(', '');
-
-                    var localTimezone = vm.timezonesList.find(function (timezone) {
-                        return (timezone.indexOf(timezoneCity)!== -1);
-                    });
-
-                    if (!localTimezone){
-                        var timezoneGMT = dateArray.find(function (item) {
-                            return (item.indexOf('GMT')!== -1);
-                        });
-                        localTimezone = vm.timezonesList.find(function (timezone) {
-                            timezone = timezone.replace(':', '');
-                            return (timezone.indexOf(timezoneGMT)!== -1);
-                        });
-                    }
-                    return localTimezone;
-                }
-
                 var vm = this;
 
-                var defaultTimeZone = getLocalTimezone();
+                console.log('vm.localTimezone: ', vm.localTimezone);
                 var userAuth = AuthService.getAuth();
                 var showToast = MyProfileSrv.showToast;
 
@@ -47,9 +25,8 @@
 
                 vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.auth.email;
                 vm.profileData.email = vm.userProfile.email ? vm.userProfile.email : userAuth.auth.email;
-                vm.profileData.timezone = vm.userProfile.isTimezoneManual ? vm.userProfile.timezone : defaultTimeZone;
+                vm.profileData.timezone = vm.userProfile.isTimezoneManual ? vm.userProfile.timezone : vm.localTimezone;
                 vm.profileData.isTimezoneManual = vm.userProfile.isTimezoneManual ? vm.userProfile.isTimezoneManual : false;
-
 
                 vm.updateProfile = function (profileform) {
                     var type, msg;
@@ -82,7 +59,7 @@
 
                 vm.updateProfileTimezone = function () {
                     if (!vm.profileData.isTimezoneManual){
-                        vm.profileData.timezone = defaultTimeZone;
+                        vm.profileData.timezone = vm.localTimezone;
                     }
                 };
             }

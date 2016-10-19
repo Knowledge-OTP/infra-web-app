@@ -7803,39 +7803,17 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
         .component('updateProfile', {
             bindings: {
                 userProfile: '=',
-                timezonesList: '='
+                timezonesList: '=',
+                localTimezone: '='
             },
             templateUrl:  'components/myProfile/components/updateProfile/updateProfile.template.html',
             controllerAs: 'vm',
             controller:  ["AuthService", "$mdDialog", "$timeout", "UserProfileService", "MyProfileSrv", function (AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
                 'ngInject';
 
-                function getLocalTimezone() {
-                    var dateArray = new Date().toString().split(' ');
-                    var timezoneCity = dateArray.find(function (item) {
-                        return (item.indexOf('(')!== -1);
-                    });
-                    timezoneCity = timezoneCity.replace('(', '');
-
-                    var localTimezone = vm.timezonesList.find(function (timezone) {
-                        return (timezone.indexOf(timezoneCity)!== -1);
-                    });
-
-                    if (!localTimezone){
-                        var timezoneGMT = dateArray.find(function (item) {
-                            return (item.indexOf('GMT')!== -1);
-                        });
-                        localTimezone = vm.timezonesList.find(function (timezone) {
-                            timezone = timezone.replace(':', '');
-                            return (timezone.indexOf(timezoneGMT)!== -1);
-                        });
-                    }
-                    return localTimezone;
-                }
-
                 var vm = this;
 
-                var defaultTimeZone = getLocalTimezone();
+                console.log('vm.localTimezone: ', vm.localTimezone);
                 var userAuth = AuthService.getAuth();
                 var showToast = MyProfileSrv.showToast;
 
@@ -7845,9 +7823,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 
                 vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.auth.email;
                 vm.profileData.email = vm.userProfile.email ? vm.userProfile.email : userAuth.auth.email;
-                vm.profileData.timezone = vm.userProfile.isTimezoneManual ? vm.userProfile.timezone : defaultTimeZone;
+                vm.profileData.timezone = vm.userProfile.isTimezoneManual ? vm.userProfile.timezone : vm.localTimezone;
                 vm.profileData.isTimezoneManual = vm.userProfile.isTimezoneManual ? vm.userProfile.isTimezoneManual : false;
-
 
                 vm.updateProfile = function (profileform) {
                     var type, msg;
@@ -7880,7 +7857,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 
                 vm.updateProfileTimezone = function () {
                     if (!vm.profileData.isTimezoneManual){
-                        vm.profileData.timezone = defaultTimeZone;
+                        vm.profileData.timezone = vm.localTimezone;
                     }
                 };
             }]
@@ -7891,7 +7868,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.myProfile').controller('MyProfileController',
-            ["AuthService", "$mdDialog", "$timeout", "$translatePartialLoader", "userProfile", "timezonesList", function (AuthService, $mdDialog, $timeout, $translatePartialLoader, userProfile, timezonesList) {
+            ["AuthService", "$mdDialog", "$timeout", "$translatePartialLoader", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, $translatePartialLoader, userProfile, timezonesList, localTimezone) {
                 'ngInject';
 
                 $translatePartialLoader.addPart('myProfile');
@@ -7900,6 +7877,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 
                 vm.userProfile = userProfile;
                 vm.timezonesList = timezonesList;
+                vm.localTimezone = localTimezone;
 
                 vm.closeDialog = function () {
                     $mdDialog.cancel();
@@ -7935,25 +7913,56 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
             ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$mdToast", function ($mdDialog, $http, ENV, UserProfileService ,$q, $mdToast) {
                 'ngInject';
 
-                var self = this;
-
-                this.getTimezonesList = function () {
+                function getTimezonesList() {
                     return $http.get('./assets/timezones.json', {
                         timeout: 5000,
                         cache: true
                     });
+                }
+
+                var self = this;
+                var timezonesProm = getTimezonesList();
+
+                self.getLocalTimezone = function () {
+                    var dateArray = new Date().toString().split(' ');
+                    var timezoneCity = dateArray.find(function (item) {
+                        return (item.indexOf('(')!== -1);
+                    });
+                    timezoneCity = timezoneCity.replace('(', '');
+
+                    return timezonesProm.then(function (timezonesList) {
+                        timezonesList = timezonesList.data;
+                        var localTimezone = timezonesList.find(function (timezone) {
+                            return (timezone.indexOf(timezoneCity)!== -1);
+                        });
+
+                        if (!localTimezone){
+                            var timezoneGMT = dateArray.find(function (item) {
+                                return (item.indexOf('GMT')!== -1);
+                            });
+                            localTimezone = timezonesList.find(function (timezone) {
+                                timezone = timezone.replace(':', '');
+                                return (timezone.indexOf(timezoneGMT)!== -1);
+                            });
+                        }
+                        return localTimezone;
+                    });
                 };
 
-
-                var timezonesProm = self.getTimezonesList();
-                this.showMyProfile = function () {
+                self.showMyProfile = function () {
                     var userProfileProm = UserProfileService.getProfile();
 
-                    $q.all([userProfileProm, timezonesProm]).then(function(values) {
+                    $q.all([userProfileProm, timezonesProm, self.getLocalTimezone()]).then(function(values) {
+                        console.log('values: ', values);
                         var userProfile = values[0];
                         var timezonesList = values[1].data;
+                        var localTimezone = values[2];
                         $mdDialog.show({
-                            locals:{ userProfile: userProfile,  timezonesList: timezonesList },
+                            locals:{
+                                userProfile: userProfile,
+                                timezonesList: timezonesList,
+                                localTimezone: localTimezone
+                            },
                             controller: 'MyProfileController',
                             controllerAs: 'vm',
                             templateUrl: 'components/myProfile/templates/myProfile.template.html',
@@ -7963,7 +7972,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                     });
                 };
 
-                this.showToast = function (type, msg) {
+                self.showToast = function (type, msg) {
                     $mdToast.show({
                         locals:{ type: type,  msg: msg },
                         templateUrl: 'components/myProfile/templates/toast.template.html',
@@ -7972,7 +7981,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                         controllerAs: 'vm',
                         controller: 'ToastController'
                     });
-
                 };
             }]
         );
@@ -8263,7 +8271,12 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "\n" +
     "    <div class=\"main-title\" translate=\".MY_PROFILE\"></div>\n" +
     "\n" +
-    "    <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\" class=\"change-profile\"></update-profile>\n" +
+    "    <update-profile user-profile=\"vm.userProfile\"\n" +
+    "                    timezones-list=\"vm.timezonesList\"\n" +
+    "                    local-timezone=\"vm.localTimezone\"\n" +
+    "                    class=\"change-profile\">\n" +
+    "\n" +
+    "    </update-profile>\n" +
     "\n" +
     "    <change-password class=\"change-password\"></change-password>\n" +
     "\n" +

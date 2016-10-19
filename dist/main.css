@@ -3534,7 +3534,8 @@ md-dialog.my-profile {
           padding-left: 20px;
           box-sizing: border-box;
           margin: 10px 50px 2px 30px;
-          color: #161616; }
+          color: #161616;
+          font-size: 14px; }
         md-dialog.my-profile .auth-form .znk-input-group .znk-input select {
           height: 40px; }
           md-dialog.my-profile .auth-form .znk-input-group .znk-input select[disabled] {

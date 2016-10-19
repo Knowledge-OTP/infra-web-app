@@ -16,7 +16,12 @@
 
     <div class="main-title" translate=".MY_PROFILE"></div>
 
-    <update-profile user-profile="vm.userProfile" timezones-list="vm.timezonesList" class="change-profile"></update-profile>
+    <update-profile user-profile="vm.userProfile"
+                    timezones-list="vm.timezonesList"
+                    local-timezone="vm.localTimezone"
+                    class="change-profile">
+
+    </update-profile>
 
     <change-password class="change-password"></change-password>
 
