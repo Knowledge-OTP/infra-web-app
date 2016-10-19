@@ -132,7 +132,7 @@
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 if (angular.isDefined(promoCode) && promoCode !== null) {
 
-                    urlParams = urlParams === '' ? '?pcid=' + promoCode : urlParams + '&pcid' + promoCode;
+                    urlParams = urlParams === '' ? '?pcid=' + promoCode : urlParams + '&pcid=' + promoCode;
 
                 }
                 $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
