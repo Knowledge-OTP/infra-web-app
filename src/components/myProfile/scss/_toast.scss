@@ -1,6 +1,6 @@
 md-toast.toast-wrap{
-    top: 100px;
-    right: calc(50% - 600px);
+    top: 100px !important;
+    right: calc(50% - 600px) !important;
     width: 400px;
     height: 60px;
     display: flex;
@@ -37,7 +37,8 @@ md-toast.toast-wrap{
     .close-toast-wrap{
         position: absolute;
         right: 3px;
-        top: -10px;
+        top: -15px;
+        width: 20px;
         .close-pop-svg{
             width: 10px;
             .st1 {
