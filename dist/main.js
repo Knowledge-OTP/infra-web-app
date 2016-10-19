@@ -7829,7 +7829,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 vm.updateProfile = function (profileform) {
                     var type, msg;
 
-                    if (profileform.$valid) {
+                    if (profileform.$valid && profileform.$dirty) {
                         UserProfileService.setProfile(vm.profileData).then(function () {
                             $timeout(function () {
                                 type = 'success';
