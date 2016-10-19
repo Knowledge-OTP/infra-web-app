@@ -1166,7 +1166,7 @@ md-tooltip.tooltip-for-estimated-score-widget {
     text-align: center;
     margin-top: 40px; }
   #faq-container #faq-inner {
-    padding: 40px 55px 20px; }
+    padding: 20px 55px; }
   #faq-container v-accordion v-pane:not(.is-expanded) > v-pane-header .faq-icon {
     transform: rotate(-90deg); }
   #faq-container v-accordion v-pane v-pane-header {
@@ -1313,24 +1313,28 @@ md-dialog.base {
       height: 19px; }
 
 feedback .feedback-btn {
+  width: 45px;
+  height: 45px;
   position: fixed;
-  right: 10px;
-  bottom: 0px;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  font-size: 18px;
-  color: #ffffff;
-  font-family: Lato;
-  font-weight: 400;
-  width: 150px;
-  height: 37px;
-  background-color: #252525;
-  opacity: 0.851;
-  line-height: 1.667;
-  z-index: 9999;
-  box-shadow: none;
-  border: none;
-  padding: 0; }
+  right: 30px;
+  bottom: 10px;
+  border: 1px solid #c2c2c2;
+  cursor: pointer;
+  box-shadow: 0 1px 5px 0 rgba(63, 63, 63, 0.2);
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+  border-radius: 50px;
+  background-color: #ebebeb;
+  z-index: 78; }
+  feedback .feedback-btn svg g {
+    fill: transparent; }
+  feedback .feedback-btn svg path, feedback .feedback-btn svg polyline {
+    stroke-width: 10px;
+    stroke: #757a83; }
 
 .feedback-dialog .popup-header {
   position: relative;

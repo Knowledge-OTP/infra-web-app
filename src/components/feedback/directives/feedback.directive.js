@@ -8,7 +8,7 @@
 
             var directive = {
                 restrict: 'E',
-                template: '<button class="feedback-btn" ng-click="showDialog()"><span translate="FEEDBACK_POPUP.FEEDBACK"></span></button>',
+                template: '<button class="feedback-btn" ng-click="showDialog()"><svg-icon name="feedback-btn-icon"></svg-icon></button>',
                 scope: {},
                 link: function link(scope) {
                     scope.showDialog = function () {
