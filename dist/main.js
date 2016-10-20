@@ -6919,10 +6919,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 var userContextAppRef = _getUserContextRef(appContext, userContext);
                 var auth = userContextAppRef.getAuth();
                 var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
-                $log.debug('hello allen');
-                return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP).catch(function (err) {
-                    $log.debug(err);
-                });
+                return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
             function _getUserProfile(appContext, userContext) {
