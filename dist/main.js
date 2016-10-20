@@ -5318,14 +5318,14 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
 
         ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InvitationListenerService", "InfraConfigSrv", "StudentContextSrv", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService, InfraConfigSrv, StudentContextSrv) {
             'ngInject';
-
+            var self = this;
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
             var translate = $filter('translate');
             var httpConfig = {
                 headers: 'application/json',
                 timeout: ENV.promiseTimeOut
             };
-            var invitationDataListener = {
+            this.invitationDataListener = {
                 USER_TEACHERS: 'approved',
                 NEW_INVITATIONS: 'sent',
                 PENDING_CONFIRMATIONS: 'received'
@@ -5363,7 +5363,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                 });
             };*/
 
-            this.registerMyTeachersCB = function (event, userId, valueCB) {
+            this.registerListenerCB = function (event, userId, valueCB) {
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     if (!registerEvents[userId]) {
                         registerEvents[userId] = {};
@@ -5386,17 +5386,17 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
 
             function getListenerData(userId, event){
                 var listenerData = {
-                    path: 'users/' + userId + '/invitations/' + invitationDataListener[event]
+                    path: 'users/' + userId + '/invitations/' + self.invitationDataListener[event]
                 };
 
                 switch (event){
-                    case invitationDataListener.USER_TEACHERS:
+                    case self.invitationDataListener.USER_TEACHERS:
                         listenerData.cb = userTeachersCB;
                         break;
-                    case invitationDataListener.NEW_INVITATIONS:
+                    case self.invitationDataListener.NEW_INVITATIONS:
                         listenerData.cb = newInvitationsCB;
                         break;
-                    case invitationDataListener.PENDING_CONFIRMATIONS:
+                    case self.invitationDataListener.PENDING_CONFIRMATIONS:
                         listenerData.cb = pendingConfirmationsCB;
                         break;
                 }
@@ -5417,7 +5417,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                     });
 
                     $q.all(promArr).then(function () {
-                        angular.forEach(registerEvents[userId][invitationDataListener.USER_TEACHERS].cb, function (cb) {
+                        angular.forEach(registerEvents[userId][self.invitationDataListener.USER_TEACHERS].cb, function (cb) {
                             if (angular.isFunction(cb)) {
                                 cb(teachers);
                             }
@@ -5428,7 +5428,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
 
             function newInvitationsCB (data) {
                 var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][invitationDataListener.NEW_INVITATIONS].cb, function (cb) {
+                angular.forEach(registerEvents[userId][self.invitationDataListener.NEW_INVITATIONS].cb, function (cb) {
                     if (angular.isFunction(cb)) {
                         cb(data);
                     }
@@ -5437,7 +5437,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
 
             function pendingConfirmationsCB (data) {
                 var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][invitationDataListener.PENDING_CONFIRMATIONS].cb, function (cb) {
+                angular.forEach(registerEvents[userId][self.invitationDataListener.PENDING_CONFIRMATIONS].cb, function (cb) {
                     if (angular.isFunction(cb)) {
                         cb(data);
                     }
@@ -5572,7 +5572,7 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                     });
             }
 
-            InvitationListenerService.addListeners();
+            //InvitationListenerService.addListeners();
         }]
     );
 })(angular);
