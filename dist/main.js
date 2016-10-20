@@ -6919,7 +6919,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 var userContextAppRef = _getUserContextRef(appContext, userContext);
                 var auth = userContextAppRef.getAuth();
                 var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
-                return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
+                $log.debug('hello allen');
+                return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP).catch(function (err) {
+                    $log.debug(err);
+                });
             }
 
             function _getUserProfile(appContext, userContext) {
@@ -7115,6 +7118,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
+                        _addFirstRegistrationRecord(appContext, userContext);
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
                             _addFirstRegistrationRecord(appContext, userContext);
