@@ -2916,7 +2916,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScores();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScoresData();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
