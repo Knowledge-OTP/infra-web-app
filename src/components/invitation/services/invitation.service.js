@@ -72,7 +72,7 @@
 
             function getListenerData(userId, event){
                 var listenerData = {
-                    path: 'users/' + userId + '/invitations/' + self.invitationDataListener[event]
+                    path: 'users/' + userId + '/invitations/' + event
                 };
 
                 switch (event){
@@ -90,22 +90,16 @@
                 return listenerData;
             }
 
-            function userTeachersCB(teachers) {
-                if (!angular.isUndefined(teachers)) {
+            function userTeachersCB(teacher) {
+                if (!angular.isUndefined(teacher)) {
                     var userId = StudentContextSrv.getCurrUid();
-                    var promArr = [];
-                    angular.forEach(teachers, function (teacher) {
-                        var prom = UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
-                            teacher.zinkerzTeacher = profile.zinkerzTeacher;
-                            teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
-                        });
-                        promArr.push(prom);
-                    });
+                    UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
+                        teacher.zinkerzTeacher = profile.zinkerzTeacher;
+                        teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
 
-                    $q.all(promArr).then(function () {
                         angular.forEach(registerEvents[userId][self.invitationDataListener.USER_TEACHERS].cb, function (cb) {
                             if (angular.isFunction(cb)) {
-                                cb(teachers);
+                                cb(teacher);
                             }
                         });
                     });
