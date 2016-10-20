@@ -54,13 +54,14 @@
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
                                 var estimatedScoreForSubjectArr = estimatedScore[subjectId];
                                 var estimatedScoreForSubject = estimatedScoreForSubjectArr[estimatedScoreForSubjectArr.length - 1];
+                                var isSubjectExist = estimatedScoreForSubject && estimatedScoreForSubject.score;
                                 return {
                                     subjectId: subjectId,
-                                    estimatedScore: (scope.d.isDiagnosticComplete && (typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
-                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject.score) : 0,
+                                    estimatedScore: (scope.d.isDiagnosticComplete && (isSubjectExist && typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
+                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete && isSubjectExist) ? calcPercentage(estimatedScoreForSubject.score) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
-                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
+                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete && isSubjectExist) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
                                     showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
