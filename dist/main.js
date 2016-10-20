@@ -2944,7 +2944,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                                var estimatedScoreForSubject = estimatedScore[subjectId];
+                                var estimatedScoreForSubject = estimatedScore[subjectId][0];
                                 return {
                                     subjectId: subjectId,
                                     estimatedScore: (scope.d.isDiagnosticComplete && (typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
