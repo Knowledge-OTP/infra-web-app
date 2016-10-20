@@ -102,7 +102,7 @@
                     scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
                     scope.declinedTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.DECLINED_INVITATIONS');
 
-                    InvitationService.getReceived().then(function (invitations) {
+                   /* InvitationService.getReceived().then(function (invitations) {
                         scope.invitations = invitations;
                         scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
                     });
@@ -121,7 +121,7 @@
 
                     InvitationService.getMyTeacher().then(function (teacherObj) {
                         scope.myTeachers = teacherObj;
-                    });
+                    });*/
 
                     scope.hasItems = function (obj) {
                         return !!scope.getItemsCount(obj);
@@ -227,169 +227,50 @@
 
 })(angular);
 
-'use strict';
-
-angular.module('znk.infra-web-app.invitation').service('InvitationListenerService',
-    ["ENV", "InfraConfigSrv", "AuthService", "$timeout", "$q", "StorageSrv", function (ENV, InfraConfigSrv, AuthService, $timeout, $q, StorageSrv) {
-        'ngInject';
-
-        var NEW_INVITATION_PATH, SENT_INVITATION_PATH, MY_TEACHER_PATH;
-
-        var self = this;
-        self.receivedInvitations = {};
-        self.pendingConformations = {};
-        self.declinedInvitations = {};
-        self.myTeacher = {};
-
-
-        var pathsProm = $q.when().then(function () {
-            var STUDENT_INVITATION_PATH = StorageSrv.variables.appUserSpacePath + '/invitations';
-            NEW_INVITATION_PATH = STUDENT_INVITATION_PATH + '/received';
-            SENT_INVITATION_PATH = STUDENT_INVITATION_PATH + '/sent';
-            MY_TEACHER_PATH = STUDENT_INVITATION_PATH + '/approved/';
-           return $q.when();
-        });
-
-        this.removeListeners = function () {
-            $q.when(pathsProm).then(function(){
-                var receivedInvitationRef = firebaseListenerRef(NEW_INVITATION_PATH);
-                receivedInvitationRef.off('child_added', receivedInvitationsChildAdded);
-                receivedInvitationRef.off('child_removed', receivedInvitationsChildRemoved);
-
-                var myTeacherRef = firebaseListenerRef(MY_TEACHER_PATH);
-                myTeacherRef.off('child_added', myTeacherChildAdded);
-                myTeacherRef.off('child_removed', myTeacherChildRemoved);
-
-                var sentInvitationRef = firebaseListenerRef(SENT_INVITATION_PATH);
-                sentInvitationRef.off('child_added', sentInvitationsChildAdded);
-                sentInvitationRef.off('child_removed', sentInvitationsChildRemoved);
-            });
-        };
-
-
-        self.addListeners = function () {
-            $q.when(pathsProm).then(function(){
-                _childAddedOrRemovedListener(NEW_INVITATION_PATH, receivedInvitationsChildAdded, receivedInvitationsChildRemoved);
-                _childAddedOrRemovedListener(MY_TEACHER_PATH, myTeacherChildAdded, myTeacherChildRemoved);
-                _childAddedOrRemovedListener(SENT_INVITATION_PATH, sentInvitationsChildAdded, sentInvitationsChildRemoved);
-            });
-        };
-
-        function _childAddedOrRemovedListener(path, childAddedHandler, childRemovedHandler){
-            var ref = firebaseListenerRef(path);
-            ref.on('child_added', childAddedHandler);
-            ref.on('child_removed', childRemovedHandler);
-        }
-
-
-        function receivedInvitationsChildAdded(dataSnapshot) {
-            $timeout(function () {
-                if (dataSnapshot) {
-                    self.receivedInvitations[dataSnapshot.key()] = dataSnapshot.val();
-                }
-            });
-        }
-
-        function receivedInvitationsChildRemoved(dataSnapshot) {
-            $timeout(function () {
-                if (dataSnapshot) {
-                    delete self.receivedInvitations[dataSnapshot.key()];
-                }
-            });
-        }
-
-        function myTeacherChildAdded(dataSnapshot) {
-            $timeout(function () {
-                if (dataSnapshot) {
-                    self.myTeacher[dataSnapshot.key()] = dataSnapshot.val();
-                }
-            });
-        }
-
-        function myTeacherChildRemoved(dataSnapshot) {
-            $timeout(function () {
-                if (dataSnapshot) {
-                    delete self.myTeacher[dataSnapshot.key()];
-                }
-            });
-        }
-
-        function sentInvitationsChildAdded(dataSnapshot) {
-            $timeout(function () {
-                if (dataSnapshot) {
-                    self.pendingConformations[dataSnapshot.key()] = dataSnapshot.val();
-                }
-            });
-        }
-
-        function sentInvitationsChildRemoved(dataSnapshot) {
-            $timeout(function () {
-                if (dataSnapshot) {
-                    delete self.pendingConformations[dataSnapshot.key()];
-                }
-            });
-        }
-
-        function firebaseListenerRef(userPath) {
-            var authData = AuthService.getAuth();
-            var fullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + userPath;
-            var userFullPath = fullPath.replace('$$uid', authData.uid);
-            return new Firebase(userFullPath);
-        }
-
-    }]
-);
-
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InvitationListenerService", "InfraConfigSrv", "StudentContextSrv", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService, InfraConfigSrv, StudentContextSrv) {
+        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InfraConfigSrv", "StudentContextSrv", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
             'ngInject';
             var self = this;
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
             var translate = $filter('translate');
+            var registerEvents = {};
             var httpConfig = {
                 headers: 'application/json',
                 timeout: ENV.promiseTimeOut
             };
+
             this.invitationDataListener = {
                 USER_TEACHERS: 'approved',
                 NEW_INVITATIONS: 'sent',
                 PENDING_CONFIRMATIONS: 'received'
             };
-            /*-------------------New Code Start --------------------------------------------*/
-            var registerEvents = {};
 
-            /*this.offMyTeachersCB = function (userId, valueCB) {
+            this.invitationStatus = {
+                pending: 0,
+                approved: 1,
+                receiverDeclined: 2,
+                senderDelete: 3,
+                resent: 4,
+                connectToUser: 5,
+                receiverDelete: 6
+            };
+
+            this.offListenerCB = function (event, userId, valueCB) {
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                    var path = 'users/' + userId + '/invitations/approved/';
-                    studentStorage.offEvent('value', path, myTeachersCB);
+                    var listenerData = getListenerData(userId, event);
+                    studentStorage.offEvent('child_added', listenerData.path, listenerData.cb);
+                    studentStorage.offEvent('child_removed', listenerData.path, listenerData.cb);
 
-                    angular.forEach(registerEvents[userId].valueCB, function (cb, index) {
+                    angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
-                            registerEvents[userId].valueCB.splice(index, 1);
+                            registerEvents[userId][event].cb.splice(index, 1);
                         }
                     });
                 });
             };
-
-            this.registerMyTeachersCB_1 = function (userId, valueCB) {
-                InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                    if (!registerEvents[userId]) {
-                        registerEvents[userId] = {};
-                    }
-
-                    if (!registerEvents[userId].valueCB) {
-                        registerEvents[userId].valueCB = [];
-                    }
-                    registerEvents[userId].valueCB.push(valueCB);
-
-                    var path = 'users/' + userId + '/invitations/approved/';
-
-                    studentStorage.onEvent('value', path, myTeachersCB);
-                });
-            };*/
 
             this.registerListenerCB = function (event, userId, valueCB) {
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
@@ -406,91 +287,9 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                     registerEvents[userId][event].cb.push(valueCB);
 
                     var listenerData = getListenerData(userId, event);
-
                     studentStorage.onEvent('child_added', listenerData.path, listenerData.cb);
                     studentStorage.onEvent('child_removed', listenerData.path, listenerData.cb);
                 });
-            };
-
-            function getListenerData(userId, event){
-                var listenerData = {
-                    path: 'users/' + userId + '/invitations/' + event
-                };
-
-                switch (event){
-                    case self.invitationDataListener.USER_TEACHERS:
-                        listenerData.cb = userTeachersCB;
-                        break;
-                    case self.invitationDataListener.NEW_INVITATIONS:
-                        listenerData.cb = newInvitationsCB;
-                        break;
-                    case self.invitationDataListener.PENDING_CONFIRMATIONS:
-                        listenerData.cb = pendingConfirmationsCB;
-                        break;
-                }
-
-                return listenerData;
-            }
-
-            function userTeachersCB(teacher) {
-                if (!angular.isUndefined(teacher)) {
-                    var userId = StudentContextSrv.getCurrUid();
-                    UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
-                        teacher.zinkerzTeacher = profile.zinkerzTeacher;
-                        teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
-
-                        angular.forEach(registerEvents[userId][self.invitationDataListener.USER_TEACHERS].cb, function (cb) {
-                            if (angular.isFunction(cb)) {
-                                cb(teacher);
-                            }
-                        });
-                    });
-                }
-            }
-
-            function newInvitationsCB (data) {
-                var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][self.invitationDataListener.NEW_INVITATIONS].cb, function (cb) {
-                    if (angular.isFunction(cb)) {
-                        cb(data);
-                    }
-                });
-            }
-
-            function pendingConfirmationsCB (data) {
-                var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][self.invitationDataListener.PENDING_CONFIRMATIONS].cb, function (cb) {
-                    if (angular.isFunction(cb)) {
-                        cb(data);
-                    }
-                });
-            }
-
-            /*---------------------------------------------------------------*/
-            this.invitationStatus = {
-                pending: 0,
-                approved: 1,
-                receiverDeclined: 2,
-                senderDelete: 3,
-                resent: 4,
-                connectToUser: 5,
-                receiverDelete: 6
-            };
-
-            this.getMyTeacher = function () {
-                return $q.when(InvitationListenerService.myTeacher);
-            };
-
-            this.getReceived = function () {
-                return $q.when(InvitationListenerService.receivedInvitations);
-            };
-
-            this.getPendingConformations = function () {
-                return $q.when(InvitationListenerService.pendingConformations);
-            };
-
-            this.getDeclinedInvitations = function () {
-                return $q.when(InvitationListenerService.declinedInvitations);
             };
 
             this.showInvitationConfirm = function (invitationId) {
@@ -575,10 +374,6 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                 return updateStatus(invitation);
             };
 
-            this.removeListeners = function () {
-                InvitationListenerService.removeListeners();
-            };
-
             function updateStatus(invitation) {
                 var updateUrl = invitationEndpoint + '/' + invitation.invitationId;
                 return $http.put(updateUrl, invitation, httpConfig).then(
@@ -594,7 +389,59 @@ angular.module('znk.infra-web-app.invitation').service('InvitationListenerServic
                     });
             }
 
-            //InvitationListenerService.addListeners();
+            function getListenerData(userId, event){
+                var listenerData = {
+                    path: 'users/' + userId + '/invitations/' + event
+                };
+
+                switch (event){
+                    case self.invitationDataListener.USER_TEACHERS:
+                        listenerData.cb = userTeachersCB;
+                        break;
+                    case self.invitationDataListener.NEW_INVITATIONS:
+                        listenerData.cb = newInvitationsCB;
+                        break;
+                    case self.invitationDataListener.PENDING_CONFIRMATIONS:
+                        listenerData.cb = pendingConfirmationsCB;
+                        break;
+                }
+
+                return listenerData;
+            }
+
+            function userTeachersCB(teacher) {
+                if (!angular.isUndefined(teacher)) {
+                    var userId = StudentContextSrv.getCurrUid();
+                    UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
+                        teacher.zinkerzTeacher = profile.zinkerzTeacher;
+                        teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
+
+                        angular.forEach(registerEvents[userId][self.invitationDataListener.USER_TEACHERS].cb, function (cb) {
+                            if (angular.isFunction(cb)) {
+                                cb(teacher);
+                            }
+                        });
+                    });
+                }
+            }
+
+            function newInvitationsCB (data) {
+                var userId = StudentContextSrv.getCurrUid();
+                angular.forEach(registerEvents[userId][self.invitationDataListener.NEW_INVITATIONS].cb, function (cb) {
+                    if (angular.isFunction(cb)) {
+                        cb(data);
+                    }
+                });
+            }
+
+            function pendingConfirmationsCB (data) {
+                var userId = StudentContextSrv.getCurrUid();
+                angular.forEach(registerEvents[userId][self.invitationDataListener.PENDING_CONFIRMATIONS].cb, function (cb) {
+                    if (angular.isFunction(cb)) {
+                        cb(data);
+                    }
+                });
+            }
         }]
     );
 })(angular);

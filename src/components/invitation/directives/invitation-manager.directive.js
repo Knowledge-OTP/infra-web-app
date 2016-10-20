@@ -23,7 +23,7 @@
                     scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
                     scope.declinedTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.DECLINED_INVITATIONS');
 
-                    InvitationService.getReceived().then(function (invitations) {
+                   /* InvitationService.getReceived().then(function (invitations) {
                         scope.invitations = invitations;
                         scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
                     });
@@ -42,7 +42,7 @@
 
                     InvitationService.getMyTeacher().then(function (teacherObj) {
                         scope.myTeachers = teacherObj;
-                    });
+                    });*/
 
                     scope.hasItems = function (obj) {
                         return !!scope.getItemsCount(obj);
