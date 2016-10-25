@@ -5067,6 +5067,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
                     scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
                     scope.declinedTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.DECLINED_INVITATIONS');
+                    scope.hasTeachers = scope.hasInvitations = scope.hasConfirmations = false;
+
 
                     function myTeachersCB(teacher){
                         if (!angular.isObject(scope.myTeachers)) {
