@@ -14,7 +14,8 @@
 
                 var svgMap = {
                     'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
-                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg'
+                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
+                    'invitation-teacher-active-icon': 'assets/svg/icons/invitation-teacher-icon-active.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);

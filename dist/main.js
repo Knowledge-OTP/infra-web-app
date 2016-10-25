@@ -4986,7 +4986,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
                 var svgMap = {
                     'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
-                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg'
+                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
+                    'invitation-teacher-active-icon': 'assets/svg/icons/invitation-teacher-icon-active.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -5545,14 +5546,14 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "");
   $templateCache.put("components/invitation/directives/invitation-manager.template.html",
     "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\">\n" +
-    "<md-menu md-offset=\"-225 51\"  class=\"invitation-manager\">\n" +
+    "    <md-menu md-offset=\"-225 51\"  class=\"invitation-manager\">\n" +
     "    <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" aria-label=\"Open Invite menu\" ng-switch=\"hasTeachers\">\n" +
     "        <div class=\"num-of-receive\" ng-if=\"hasInvitations\">{{getItemsCount(invitations)}}</div>\n" +
     "        <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
     "            <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
     "        </section>\n" +
     "        <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
-    "            <svg-icon name=\"teacher-active-icon\"></svg-icon>\n" +
+    "            <svg-icon name=\"invitation-teacher-active-icon\"></svg-icon>\n" +
     "        </section>\n" +
     "    </div>\n" +
     "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasInvitations || hasTeachers || hasConfirmations)\">\n" +
@@ -5675,6 +5676,35 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
     "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
     "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/invitation-teacher-icon-active.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 193.7 145.6\" xml:space=\"preserve\" class=\"active-teacher-icon\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.active-teacher-icon .st0{display:none;fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "	.active-teacher-icon .st1{fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "	.active-teacher-icon .st2{display:none;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M76.7,114.2H16c-1.6,0-3-1.3-3-3V9c0-1.7,1.4-3,3-3h134c1.6,0,3,1.3,3,3l0,45.9\"/>\n" +
+    "<path class=\"st1\" d=\"M135.7,103.2\"/>\n" +
+    "<path d=\"M83,137.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,137.2,83,137.2z\"/>\n" +
+    "<path d=\"M193.7,145.6c0.8-29.2-29.3-39.7-29.3-39.7l-0.8-0.1c7.1-4.2,11.8-11.9,11.8-20.8c0-12.7-9.8-23.2-22.3-24.1\n" +
+    "	c-0.6,0-1.2-0.1-1.8-0.1c-13.3,0-24.2,10.8-24.2,24.2c0,7.5,3.4,14.2,8.8,18.6l-0.9-0.1l-33.2,17.9c-1.8,0.9-3.9,0.3-4.9-1.4\n" +
+    "	L82.6,95.5c-0.9-1.6-3.1-3.4-4.9-3.9c-6.1-1.7-9.8,2.3-9.7,7.2c0,1.5,0.8,3.7,1.6,5c3.6,5.5,12.2,18.7,17.4,26.2\n" +
+    "	c4.3,6.2,8.4,8,10.8,8.5c1.1,0.2,2.2,0.2,3.3-0.2l9.3-3l-3.3,10.3H193.7z\"/>\n" +
+    "<path class=\"st2\" d=\"M65.8,105.8c-1.1-1.7-2.3-4.7-2.3-7.4c0-2.9,0.8-5.6,2.4-7.7l-24.6-34c-1-1.3-0.7-3.2,0.7-4.2\n" +
+    "	c1.3-1,3.2-0.7,4.2,0.7L70.7,87c2.5-1,5.3-1.1,8.3-0.2c2.9,0.8,6.1,3.3,7.6,6l12.2,21.3h6.4l23-12.4c-3.6-4.9-5.6-10.9-5.6-17.1\n" +
+    "	c0-15.8,12.9-28.7,28.7-28.7c0.6,0,1.2,0,1.8,0.1V9c0-1.6-1.3-3-3-3H16c-1.6,0-3,1.4-3,3v102.2c0,1.6,1.4,3,3,3h55.3\n" +
+    "	C69.1,110.8,67.1,107.7,65.8,105.8z M68,21.2h61c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3S66.3,21.2,68,21.2z M68,41.3h61\n" +
+    "	c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3S66.3,41.3,68,41.3z M68,61.5h46c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3\n" +
+    "	S66.3,61.5,68,61.5z\"/>\n" +
+    "<path d=\"M60,120.2H16c-5,0-9-4-9-9V9c0-5,4-9,9-9h134c5,0,9,4,9,9v41.2c0,3.3-2.7,6-6,6s-6-2.7-6-6V12H19v96.2h41c3.3,0,6,2.7,6,6\n" +
+    "	S63.3,120.2,60,120.2z\"/>\n" +
+    "<path d=\"M129,27.2H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,27.2,129,27.2z\"/>\n" +
+    "<path d=\"M129,47.3H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,47.3,129,47.3z\"/>\n" +
+    "<path d=\"M114,67.5H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h46c1.7,0,3,1.3,3,3S115.7,67.5,114,67.5z\"/>\n" +
+    "<path d=\"M70.7,95.2c-0.9,0-1.8-0.4-2.4-1.2L41.3,56.7c-1-1.3-0.7-3.2,0.7-4.2c1.3-1,3.2-0.7,4.2,0.7l26.9,37.2\n" +
+    "	c1,1.3,0.7,3.2-0.7,4.2C71.9,95,71.3,95.2,70.7,95.2z\"/>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/invitation/svg/teacher-icon.svg",

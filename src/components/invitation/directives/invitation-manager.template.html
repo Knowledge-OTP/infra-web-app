@@ -1,12 +1,12 @@
 <div translate-namespace="INVITATION_MANAGER_DIRECTIVE">
-<md-menu md-offset="-225 51"  class="invitation-manager">
+    <md-menu md-offset="-225 51"  class="invitation-manager">
     <div ng-click="$mdOpenMenu($event);" class="md-icon-button invite-icon-btn" aria-label="Open Invite menu" ng-switch="hasTeachers">
         <div class="num-of-receive" ng-if="hasInvitations">{{getItemsCount(invitations)}}</div>
         <section ng-switch-when="false" class="circle-invite-wrap teacher-icon-wrap">
             <svg-icon name="invitation-teacher-icon"></svg-icon>
         </section>
         <section ng-switch-when="true" class="circle-invite-wrap teacher-active-icon-wrap">
-            <svg-icon name="teacher-active-icon"></svg-icon>
+            <svg-icon name="invitation-teacher-active-icon"></svg-icon>
         </section>
     </div>
     <md-menu-content class="md-menu-content-invitation-manager" ng-switch="(hasInvitations || hasTeachers || hasConfirmations)">
