@@ -4581,7 +4581,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         var questionBuilderCtrl = ctrls[0];
                         var znkExerciseCtrl = ctrls[1];
 
-                        var functionsToBind = ['getViewMode','addQuestionChangeResolver','removeQuestionChangeResolver', 'getCurrentIndex'];
+                        var functionsToBind = ['getViewMode','addQuestionChangeResolver','removeQuestionChangeResolver', 'getCurrentIndex', 'bindExerciseEventManager'];
                         ZnkExerciseUtilitySrv.bindFunctions(questionBuilderCtrl, znkExerciseCtrl,functionsToBind);
 
                         element.append('<answer-explanation></answer-explanation>');
