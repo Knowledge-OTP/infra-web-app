@@ -78,6 +78,36 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.evaluator')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "EVALUATE_RESULT_DRV": {
+                            "WEAK": "Weak",
+                            "LIMITED": "Limited",
+                            "FAIR": "Fair",
+                            "GOOD": "Good",
+                            "POINTS": "({{pts}} pts)"
+                        },
+                        "EVALUATE_REVIEW_STATES_DRV": {
+                            "UPGRADE_BTN": "Upgrade to Pro",
+                            "PENDING_TITLE": "Your answer is pending evaluation.",
+                            "PENDING_DESC": "This may take a few days. We will notify you when the evaluation is ready.",
+                            "EVALUATED_ANSWER_TITLE": "Answer evaluation:"
+                        },
+                        "EVALUATE_QUESTION_RESULT_DRV": {
+                            "COMPLETED": "Completed",
+                            "SKIPPED": "Skipped"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.evaluator').config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -117,10 +147,8 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var vm = this;
 
@@ -174,10 +202,8 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function (ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 function _changeEvaluateStatus(stateData) {
                     var evaluateStatusFnProm = ZnkEvaluatorSrv.getEvaluateStatusFn();
@@ -222,12 +248,10 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
 
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var starStatusMap = {
                     empty: 1,

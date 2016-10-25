@@ -4,10 +4,9 @@ angular.module('demo', [
     'znk.infra-web-app.performance'
 ])
     .config(function ($translateProvider, SvgIconSrvProvider) {
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: '/{part}/locale/{lang}.json'
-        })
-            .preferredLanguage('en');
+        'ngInject';
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useSanitizeValueStrategy(null);
 
         var svgMap = {};
 
@@ -101,10 +100,4 @@ angular.module('demo', [
             template: '<ui-view></ui-view>',
             abstract: true
         })
-    })
-    .run(function ($rootScope, $translate, $translatePartialLoader) {
-        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-            $translate.refresh();
-        });
-        $translatePartialLoader.addPart('demo');
     });

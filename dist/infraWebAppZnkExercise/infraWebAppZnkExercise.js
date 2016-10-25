@@ -12,6 +12,32 @@
     ]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.infraWebAppZnkExercise')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "ANSWER_EXPLANATION":{
+                            "ANSWER_EXPLANATION": "Answer explanation",
+                            "TITLE": "Why is this right?"
+                        },
+                        "CONTAINER_HEADER": {
+                            "QUIT_BTN_TEXT": "Exit",
+                            "SUMMARY": "Summary",
+                            "DIAGNOSTIC_TEXT": "Diagnostic Test: {{subjectName}}",
+                            "FULL_TEST_TEXT": "Full Test {{exerciseNum}}: {{subjectName}}",
+                            "MINI_TEST_TEXT": "Mini Test {{exerciseNum}}: {{subjectName}}",
+                            "NO_CALC_TOOLTIP": "This workout do not permit the use of a calculator.",
+                            "GOT_IT": "Got it"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
 /**
  * attrs:
  */
@@ -61,7 +87,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function ($translatePartialLoader, ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
                 'ngInject';
 
                 var directive = {
@@ -69,7 +95,6 @@
                     require: ['^questionBuilder', '^ngModel'],
                     templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
                     link: function link(scope, element, attrs, ctrls) {
-                        $translatePartialLoader.addPart('infraWebAppZnkExercise');
 
                         var questionBuilderCtrl = ctrls[0];
                         var ngModelCtrl = ctrls[1];
@@ -211,7 +236,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
-        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
+        ["$timeout", "SubjectEnum", function($timeout, SubjectEnum){
         'ngInject';
 
         return {
@@ -233,7 +258,6 @@
             require: '?ngModel',
             templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
             controller: function () {
-                $translatePartialLoader.addPart('infraWebAppZnkExercise');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
                     throw new Error('Error: exerciseHeaderController: subjectId is required!');

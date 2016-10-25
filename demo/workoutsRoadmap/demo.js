@@ -5,7 +5,11 @@ angular.module('demo', [
     'znk.infra.exams',
     'demoEnv'
 ])
-
+    .config(function ($translateProvider) {
+        'ngInject';
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useSanitizeValueStrategy(null);
+    })
     .config(function (ScoringServiceProvider, UserGoalsServiceProvider) {
         ScoringServiceProvider.setScoringLimits({
             exam: {
@@ -92,9 +96,8 @@ angular.module('demo', [
             abstract: true
         });
     })
-    .run(function ($rootScope, $translatePartialLoader) {
+    .run(function ($rootScope) {
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
             console.error(error.message);
         });
-        $translatePartialLoader.addPart('demo');
     });

@@ -10,7 +10,11 @@
         // 'pascalprecht.translate',
         'znk.infra.exerciseDataGetters'
     ])
-        .config(function (QuestionTypesSrvProvider, $sceProvider) {
+        .config(function ($translateProvider, QuestionTypesSrvProvider, $sceProvider) {
+            'ngInject';
+            $translateProvider.preferredLanguage('en');
+            $translateProvider.useSanitizeValueStrategy(null);
+
             $sceProvider.enabled(false);
 
             var map = {

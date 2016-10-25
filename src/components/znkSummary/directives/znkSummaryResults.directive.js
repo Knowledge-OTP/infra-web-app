@@ -7,9 +7,8 @@
         bindings: {
             exerciseResult: '<'
         },
-        controller: function($translatePartialLoader) {
+        controller: function() {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var PERCENTAGE = 100;
 

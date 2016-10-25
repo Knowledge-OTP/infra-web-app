@@ -1,6 +1,12 @@
-angular.module('demo', [
-    'znk.infra-web-app.liveLessons',
-    'demoEnv'
-]).controller('Main', function () {
-
-});
+(function(angular) {
+    'use strict';
+    angular.module('demo', [
+        'demoEnv',
+        'znk.infra-web-app.liveLessons'
+    ])
+        .config(function ($translateProvider) {
+            'ngInject';
+            $translateProvider.preferredLanguage('en');
+            $translateProvider.useSanitizeValueStrategy(null);
+        });
+})(angular);

@@ -19,6 +19,23 @@
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.diagnosticIntro')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "DIAGNOSTIC_INTRO": {
+                            "QUESTIONS": "questions",
+                            "INSTRUCTIONS_TITLE": "Instructions:"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
 'use strict';
 
 angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
@@ -126,16 +143,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             };
         }];
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.diagnosticIntro').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('diagnosticIntro');
-    }]);
-})(angular);
-
 
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",

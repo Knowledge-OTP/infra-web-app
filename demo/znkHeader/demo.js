@@ -20,13 +20,9 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
         }
     })
     .config(function ($translateProvider, znkHeaderSrvProvider, $stateProvider) {
-
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: '/{part}/locale/{lang}.json'
-        })
-            .preferredLanguage('en');
-
-
+        'ngInject';
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useSanitizeValueStrategy(null);
         $stateProvider
             .state('item1', {
                 url: '/item1',
@@ -50,13 +46,5 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
         var additionalItems = [demoItem1, demoItem2];
 
         znkHeaderSrvProvider.addAdditionalNavMenuItems(additionalItems);
-    })
-
-    .run(function ($rootScope, $translate, $translatePartialLoader) {
-        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-            $translate.refresh();
-        });
-        $translatePartialLoader.addPart('demo');
-        $translatePartialLoader.addPart('feedback');
     });
 

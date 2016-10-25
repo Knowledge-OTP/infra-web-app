@@ -9,6 +9,33 @@
     ]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkSummary')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "ZNK_SUMMARY":{
+                            "SUCCESS": "success",
+                            "CORRECT": "Correct",
+                            "AVG": "Avg",
+                            "SEC": "sec",
+                            "WRONG": "Missed",
+                            "SKIPPED": "Skipped",
+                            "CATEGORY": "Category",
+                            "ESTIMATED_SCORE": "{{subjectName}} Estimated Score",
+                            "MASTERY_LEVEL": "Mastery Level",
+                            "MASTERY": "mastery",
+                            "REVIEW": "REVIEW",
+                            "TEST_TITLE": "Test Score:"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -18,9 +45,8 @@
         bindings: {
             exerciseResult: '<'
         },
-        controller: ["$translatePartialLoader", function($translatePartialLoader) {
+        controller: function() {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var PERCENTAGE = 100;
 
@@ -47,7 +73,7 @@
                     animation: false
                 }
             };
-        }],
+        },
         controllerAs: 'vm'
     });
 })(angular);
@@ -62,9 +88,8 @@
         bindings: {
             exerciseData: '<'
         },
-        controller: ["$translatePartialLoader", "SubjectEnum", function($translatePartialLoader, SubjectEnum) {
+        controller: ["SubjectEnum", function(SubjectEnum) {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var vm = this;
 

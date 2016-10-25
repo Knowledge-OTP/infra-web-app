@@ -1,5 +1,10 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding'])
-    .config(function ($stateProvider, $translateProvider, $urlRouterProvider, InfraConfigSrvProvider, OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider, SvgIconSrvProvider, ScoringServiceProvider) {
+    .config(function ($stateProvider, $translateProvider, $urlRouterProvider, InfraConfigSrvProvider,
+                      OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider,
+                      SvgIconSrvProvider, ScoringServiceProvider) {
+        'ngInject';
+        $translateProvider.preferredLanguage('en');
+        $translateProvider.useSanitizeValueStrategy(null);
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -13,11 +18,6 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
         });
 
         $urlRouterProvider.otherwise('/onBoarding');
-
-        $translateProvider.useLoader('$translatePartialLoader', {
-                urlTemplate: '/{part}/locale/{lang}.json'
-            })
-            .preferredLanguage('en');
 
         var storageFake = ['$q', function($q) {
             return {
@@ -103,14 +103,7 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
         });
 
     })
-    .run(function ($rootScope, $translate, $translatePartialLoader) {
-        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-            $translate.refresh();
-        });
-
-        $translatePartialLoader.addPart('demo');
-
-    }) // mock AuthService
+    // mock AuthService
     .factory('AuthService', function() {
         return {
             getAuth: function() {

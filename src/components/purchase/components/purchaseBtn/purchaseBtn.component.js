@@ -9,10 +9,8 @@
             templateUrl:  'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
             controllerAs: 'vm',
             controller: function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
-                                  $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
+                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('purchase');
 
                 var vm = this;
 

@@ -74,6 +74,64 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.completeExercise')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "COMPLETE_EXERCISE": {
+                            "EXERCISE_PARENT": {
+                                "TYPE_1": "Workout {{exerciseParentId}}: {{exerciseContent.name}}",
+                                "TYPE_2": "Tips & Tricks: {{exerciseContent.name}}",
+                                "TYPE_3": "Exam {{exerciseParentContent.name}}: {{exerciseContent.name}}",
+                                "TYPE_4": "{{exerciseContent.name}}"
+                            },
+                            "SECTION_INSTRUCTION":{
+                                "0":"Solve the following problems.",
+                                "1":"Answer the following questions based on the information in the text.",
+                                "2":"Evaluate the following essay.",
+                                "3":"You should listen to each conversation or lecture only once. After each conversation or lecture, you will answer a series of questions. Some questions requires listening again to a part of the audio. You may take notes while you listen.",
+                                "4":"The following questions requires recording of your response. You will have time to prepare your response and to speak. Further instructions appear on each question.",
+                                "5":"Following is a passage with 15 questions. Some portions of text are highlighted to indicate a grammatical or stylistic error. Select the best choice from the four possible options.",
+                                "6":"Answer the following questions based on the information presented in the passages.",
+                                "7":"",
+                                "8":"After reading the persuasive essay, assess the essay by answering the following questions."
+                            },
+                            "SUBJECTS":{
+                                "0":"Mathematics",
+                                "1":"Reading",
+                                "2":"Writing",
+                                "3":"Listening",
+                                "4":"Speaking",
+                                "5":"English",
+                                "6":"Science",
+                                "7":"Verbal",
+                                "8":"Essay"
+                            },
+                            "EXIT": "Exit",
+                            "GO_QST": "Go To Questions",
+                            "QUESTIONS": "Questions: {{num}}",
+                            "TIME": "Time: {{min}} min {{sec}} sec",
+                            "INSTRUCTIONS": "Instructions",
+                            "START": "START",
+                            "SOME_ANSWER_LEFT_CONTENT": "You’ve left some questions unanswered…",
+                            "FINISH_TITLE": "Finished?",
+                            "GO_TO_SUMMARY_BTN": "GO TO SUMMARY",
+                            "STAY_BTN": "STAY",
+                            "TIME_UP_CONTENT": "To best simulate the conditions of a real exam, we recommend you stop taking this practice test now. However, if you prefer to continue and complete all remaining questions, you may do so.",
+                            "TIME_UP_TITLE": "Time’s Up",
+                            "STOP": "STOP",
+                            "CONTINUE_BTN": "CONTINUE",
+                            "SUMMARY": "Summary"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     /**
      * exerciseDetails:
      *   exerciseTypeId
@@ -1129,16 +1187,6 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.completeExercise').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('completeExercise');
-    }]);
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
         ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
             'ngInject';
@@ -1501,6 +1549,41 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.diagnosticExercise')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "WORKOUTS_DIAGNOSTIC_INTRO":{
+                            "HEADER_TITLE": "Diagnostic Test: {{subject}}"
+                        },
+                        "WORKOUTS_DIAGNOSTIC_EXERCISE":{
+                            "HEADER_TITLE": "Diagnostic Test: {{subject}}"
+                        },
+                        "WORKOUTS_DIAGNOSTIC_SUMMARY": {
+                            "YOUR_INITIAL_SCORE_ESTIMATE": "YOUR INITIAL ESTIMATED SCORE",
+                            "ESTIMATED_SCORE": "ESTIMATED SCORE",
+                            "YOUR_GOAL": "Your Goal:",
+                            "VERBAL": "VERBAL",
+                            "MATH": "MATH",
+                            "DONE": "DONE",
+                            "EVALUATE_START": "We've just designed a personalized training roadmap to help you improve in all four subjects.",
+                            "GREAT_START": "That’s a great start! You're on the path to an excellent score!",
+                            "GOOD_START": "Good work! We’ve personalized your roadmap to make you an expert in no time.",
+                            "BAD_START": "Nice start! We've just designed a special roadmap to help you improve in all four subjects.",
+                            "GOAL_TOOLTIP": "{{ptsToGoal}} pts to go!"
+                        },
+                        "WORKOUTS_DIAGNOSTIC_PRE_SUMMARY": {
+                            "READY": "Ready to see your scores?"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.diagnosticExercise').config(
         ["$stateProvider", function ($stateProvider) {
             'ngInject';
@@ -1662,12 +1745,12 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticController', ["$state", "currentState", "$translatePartialLoader", function($state, currentState, $translatePartialLoader) {
+    angular.module('znk.infra-web-app.diagnosticExercise')
+        .controller('WorkoutsDiagnosticController', ["$state", "currentState", function($state, currentState) {
         'ngInject';
 
         var EXAM_STATE = 'app.diagnostic';
 
-        $translatePartialLoader.addPart('diagnosticExercise');
 
         $state.go(EXAM_STATE + currentState.state, currentState.params);
     }]);
@@ -2668,6 +2751,23 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.diagnosticIntro')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "DIAGNOSTIC_INTRO": {
+                            "QUESTIONS": "questions",
+                            "INSTRUCTIONS_TITLE": "Instructions:"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
 'use strict';
 
 angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
@@ -2776,16 +2876,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
         }];
 }]);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.diagnosticIntro').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('diagnosticIntro');
-    }]);
-})(angular);
-
-
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
@@ -2875,6 +2965,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra.svgIcon',
+        'znk.infra.analytics',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.diagnostic'
@@ -2888,6 +2979,35 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
     ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.estimatedScoreWidget')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "ESTIMATED_SCORE_WIDGET_DIRECTIVE": {
+                            "PTS_TO_GO": "You are {{pts}}pt away",
+                            "YOUR_GOAL": "Your Goal: {{goal}}",
+                            "GOAL_REACHED": "you've reached your goal!",
+                            "COMPOSITE_SCORE": "Total Score:",
+                            "GOAL_SCORE": "Goal Score:",
+                            "EDIT_MY_GOALS": "Edit my goals",
+                            "0": "Math",
+                            "1": "English",
+                            "7": "Verbal",
+                            "8": "Essay",
+                            "UNFINISHED_DIAGNOSTIC_TITLE": "Set your initial score by completing the diagnostic test."
+                        },
+                        "SETTING.EDIT_GOALS": {
+                            "MY_GOALS": "My Goals"
+                        }
+                    }
+                );
+            }]);
 })(angular);
 
 /**
@@ -3038,16 +3158,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
             };
         }]
     );
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.estimatedScoreWidget').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('estimatedScoreWidget');
-    }]);
 })(angular);
 
 
@@ -3284,6 +3394,36 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.evaluator')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "EVALUATE_RESULT_DRV": {
+                            "WEAK": "Weak",
+                            "LIMITED": "Limited",
+                            "FAIR": "Fair",
+                            "GOOD": "Good",
+                            "POINTS": "({{pts}} pts)"
+                        },
+                        "EVALUATE_REVIEW_STATES_DRV": {
+                            "UPGRADE_BTN": "Upgrade to Pro",
+                            "PENDING_TITLE": "Your answer is pending evaluation.",
+                            "PENDING_DESC": "This may take a few days. We will notify you when the evaluation is ready.",
+                            "EVALUATED_ANSWER_TITLE": "Answer evaluation:"
+                        },
+                        "EVALUATE_QUESTION_RESULT_DRV": {
+                            "COMPLETED": "Completed",
+                            "SKIPPED": "Skipped"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.evaluator').config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -3323,10 +3463,8 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var vm = this;
 
@@ -3380,10 +3518,8 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function (ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 function _changeEvaluateStatus(stateData) {
                     var evaluateStatusFnProm = ZnkEvaluatorSrv.getEvaluateStatusFn();
@@ -3428,12 +3564,10 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
 
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var starStatusMap = {
                     empty: 1,
@@ -3877,9 +4011,9 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
             'znk.infra.user',
             'znk.infra.svgIcon'
         ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
+        .config(
+            ["SvgIconSrvProvider", "$translateProvider", function (SvgIconSrvProvider, $translateProvider) {
+                'ngInject';
                 var svgMap = {
                     'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
@@ -3887,8 +4021,50 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
                     'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
+
+                $translateProvider.translations('en', {
+                    "FEEDBACK_POPUP": {
+                        "FEEDBACK"       : "Feedback",
+                        "REQUIRED_FIELD" : "This field is required.",
+                        "CORRECT_EMAIL"  : "Please enter a valid email address",
+                        "EMAIL"          : "Your email address",
+                        "MESSAGE"        : "Send us your comments or suggestions...",
+                        "SEND"           : "Send",
+                        "THINK"          : "Let us know what you think!",
+                        "THANKS"         : "Thank you!",
+                        "OPINION"        : "Your feedback is important to us.",
+                        "DONE"           : "Done",
+                        "USER_EMAIL"     : "email: {{userEmail}}",
+                        "USER_ID"        : "uid: {{userId}}"
+                    }
+                });
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.feedback')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                    "FEEDBACK_POPUP": {
+                        "FEEDBACK"       : "Feedback",
+                        "REQUIRED_FIELD" : "This field is required.",
+                        "CORRECT_EMAIL"  : "Please enter a valid email address",
+                        "EMAIL"          : "Your email address",
+                        "MESSAGE"        : "Send us your comments or suggestions...",
+                        "SEND"           : "Send",
+                        "THINK"          : "Let us know what you think!",
+                        "THANKS"         : "Thank you!",
+                        "OPINION"        : "Your feedback is important to us.",
+                        "DONE"           : "Done",
+                        "USER_EMAIL"     : "email: {{userEmail}}",
+                        "USER_ID"        : "uid: {{userId}}"
+                    }
+                });
+            }]);
 })(angular);
 
 (function (angular) {
@@ -3952,9 +4128,8 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
     'use strict';
 
     angular.module('znk.infra-web-app.feedback').directive('feedback',
-        ["feedbackSrv", "$translatePartialLoader", function(feedbackSrv, $translatePartialLoader) {
+        ["feedbackSrv", function(feedbackSrv) {
             'ngInject';
-            $translatePartialLoader.addPart('feedback');
 
             var directive = {
                 restrict: 'E',
@@ -4560,6 +4735,32 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     ]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.infraWebAppZnkExercise')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "ANSWER_EXPLANATION":{
+                            "ANSWER_EXPLANATION": "Answer explanation",
+                            "TITLE": "Why is this right?"
+                        },
+                        "CONTAINER_HEADER": {
+                            "QUIT_BTN_TEXT": "Exit",
+                            "SUMMARY": "Summary",
+                            "DIAGNOSTIC_TEXT": "Diagnostic Test: {{subjectName}}",
+                            "FULL_TEST_TEXT": "Full Test {{exerciseNum}}: {{subjectName}}",
+                            "MINI_TEST_TEXT": "Mini Test {{exerciseNum}}: {{subjectName}}",
+                            "NO_CALC_TOOLTIP": "This workout do not permit the use of a calculator.",
+                            "GOT_IT": "Got it"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
 /**
  * attrs:
  */
@@ -4609,7 +4810,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function ($translatePartialLoader, ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
                 'ngInject';
 
                 var directive = {
@@ -4617,7 +4818,6 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                     require: ['^questionBuilder', '^ngModel'],
                     templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
                     link: function link(scope, element, attrs, ctrls) {
-                        $translatePartialLoader.addPart('infraWebAppZnkExercise');
 
                         var questionBuilderCtrl = ctrls[0];
                         var ngModelCtrl = ctrls[1];
@@ -4759,7 +4959,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
-        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
+        ["$timeout", "SubjectEnum", function($timeout, SubjectEnum){
         'ngInject';
 
         return {
@@ -4781,7 +4981,6 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
             require: '?ngModel',
             templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
             controller: function () {
-                $translatePartialLoader.addPart('infraWebAppZnkExercise');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
                     throw new Error('Error: exerciseHeaderController: subjectId is required!');
@@ -5053,9 +5252,68 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.invitation')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "INVITE_APPROVE_MODAL":{
+                            "YOU_HAVE_INVITE": "You have an invitation",
+                            "WANT_TO_CONNECT": "would like to track your progress and view your completed work",
+                            "DECLINE": "DECLINE",
+                            "ACCEPT": "ACCEPT",
+                            "SUCCESS_SEND_MSG": "You’ve successfully connected with your teacher.",
+                            "DONE": "Done",
+                            "INVITE_ERROR_TITLE": "Invalid Invitation",
+                            "INVITE_ERROR_MSG": "The invitation you are trying to use is either invalid or expired. Please contact your educator to get a new invitation"
+                        },
+
+                        "INVITATION_MANAGER_DIRECTIVE": {
+                            "EMPTY_INVITE":"Invite a teacher to track<br>your progress",
+                            "INVITE_STUDENTS": "Invite a Teacher",
+                            "PENDING_INVITATIONS": "Pending Invitations",
+                            "PENDING_CONFORMATIONS": "Pending conformations",
+                            "APPROVE_INVITE_ERROR":"We couldn't approve this invitation, please try again later.<br>If this persists please contact support@zinkerz.com",
+                            "CANCEL_INVITE_ERROR": "The invitation couldn't be declined, please try again later.<br>If this persists please contact support@zinkerz.com",
+                            "SUCCESS": "Success",
+                            "SUCCESS_CONNECT": "You've successfully connected<br>with ",
+                            "SUCCESS_DECLINE": "The invitation was declined",
+                            "SUCCESS_DISCONNECT": "You've successfully disconnected from your teacher",
+                            "DISCONNECT_ERROR": "We couldn't disconnected you from your teacher, please try again later.<br>If this persists please contact support@zinkerz.com",
+                            "MY_TEACHER":"My Teacher",
+                            "DECLINED_INVITATIONS": "DECLINED",
+                            "DECLINED_YOR_INVITATION": "declined your invitation",
+                            "DELETE_INVITATION": "Delete Invitation",
+                            "ARE_U_SURE": "Are you sure?",
+                            "YES": "Yes",
+                            "NO": "No",
+                            "DELETE_SUCCESS": "The invitation was successfully deleted",
+                            "DELETE_ERROR": "We couldn't delete this invitation, please try again later.<br>If this persists please contact support@zinkerz.com"
+                        },
+
+                        "INVITE_TEACHER_MODAL": {
+                            "INVITE_TEACHER": "Invite a Teacher",
+                            "TEACHER_EMAIL": "Your teacher's email",
+                            "TEACHER_NAME": "Your teacher's name",
+                            "REQUIRED": "This field is required",
+                            "INVITE": "Invite",
+                            "INVITE_MSG": "Your teacher will receive an email invitation.",
+                            "SUCCESS_INVITE": "You've successfully invited your teacher.",
+                            "DONE": "Done",
+                            "GENERAL_ERROR" : "An error has occurred, Please try again later"
+                        }
+                    }
+
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
+        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv) {
             'ngInject';
 
            return {
@@ -5069,8 +5327,6 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     // }
 
                     scope.translate = $filter('translate');
-                    $translatePartialLoader.addPart('invitation');
-
 
                     scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
                     scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
@@ -5802,11 +6058,53 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.liveLessons').controller('RescheduleLessonController',
-        ["$mdDialog", "lessonData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", "$translatePartialLoader", function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons, $translatePartialLoader) {
-            'ngInject';
+    angular.module('znk.infra-web-app.liveLessons')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "MY_LIVE_LESSONS_POPUP":{
+                            "LIVE_LESSONS_SCHEDULE": "Live Lessons Schedule",
+                            "UPCOMING_LESSON": "UPCOMING LESSON",
+                            "OK": "OK",
+                            "NO_LIVE_LESSONS": "You didn't schedule any live lessons yet...",
+                            "CURRENT_TIME": "Current Time - {{currentTime}}",
+                            "RESCHEDULE_LESSON": "Reschedule Lesson"
+                        },
 
-            $translatePartialLoader.addPart('liveLessons');
+                        "RESCHEDULE_LESSON_MODAL": {
+                            "RESCHEDULE_LESSON": "Reschedule Lesson",
+                            "RESCHEDULE_REQUEST": "Reschedule Request",
+                            "NOTE": "NOTE:",
+                            "RESCHEDULING_FEE_PART1": "This lesson is scheduled to be held within th next",
+                            "RESCHEDULING_FEE_PART2": "rescheduling it will incur rescheduling fee.",
+                            "HOURS": "48 HOURS,",
+                            "HELLO": "Hello,",
+                            "THANKS": "Thanks,",
+                            "WE_WILL_CONTACT_YOU": "We will contact you shortly to reschedule the lesson at your convenience",
+                            "CANCEL": "CANCEL",
+                            "SEND": "SEND",
+                            "SUCCESS_SHARED": "Successfully sent",
+                            "DONE": "Done",
+                            "MESSAGE": "Hello,\r\n\r\nI would like to reschedule my lesson with {{teacherName}}\r\nschedules for {{lessonDate}}\r\n\r\nThanks,\r\n{{studentName}}."
+                        },
+
+                        "UPCOMING_LESSON_TOAST":{
+                            "YOUR_UPCOMING_LESSON_WITH": "Your upcoming lesson with",
+                            "MY_LIVE_LESSONS_SCHEDULE": "My Live Lessons Schedule",
+                            "RESCHEDULE": "Reschedule"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveLessons').controller('RescheduleLessonController',
+        ["$mdDialog", "lessonData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons) {
+            'ngInject';
 
             var self = this;
             self.closeDialog = $mdDialog.cancel;
@@ -5875,10 +6173,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('UpcomingLessonToasterController',
-        ["$mdToast", "MyLiveLessons", "closestLiveLesson", "$timeout", "$translatePartialLoader", function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout, $translatePartialLoader) {
+        ["$mdToast", "MyLiveLessons", "closestLiveLesson", "$timeout", function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout) {
         'ngInject';
-
-            $translatePartialLoader.addPart('liveLessons');
 
             var self = this;
 
@@ -6429,6 +6725,102 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
         }]);
 })(window, angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "LOGIN_APP": {
+                            "SAT_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the SAT® test with Zinkerz!",
+                            "ACT_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the ACT® test with Zinkerz!",
+                            "TOEFL_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the TOEFL® test with Zinkerz!",
+                            "SAT_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>SAT® desktop app for educators.",
+                            "ACT_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>ACT® desktop app for educators.",
+                            "TOEFL_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>TOEFL® desktop app for educators.",
+                            "SIGN_UP_FOR_ZINKERZ_TEST_PREP": "Sign Up for Zinkerz Test Prep",
+                            "CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS": "Check out Zinkerz tools for teachers",
+                            "ARE_YOU_AN_EDUCATOR": "Are you an educator?",
+                            "CHECK_OUT_OUR_APP_FOR_STUDENTS": "Check out our App for Students",
+                            "FOR_EDUCATORS": "For Educators",
+                            "EDUCATORS_CLICK_HERE": "Educators Click Here",
+                            "SIGNUP_OR_LOGIN": "Please Sign Up or Log In to",
+                            "ACCEPT_INVITATION": "Accept The Invitation",
+                            "FORM_VALIDATION": {
+                                "FIELD_IS_EMPTY": "Required field is empty",
+                                "PASSWORD_TOO_SHORT": "Password is too short, must be between 6-25 characters",
+                                "PASSWORD_TOO_LONG": "Password is too long, must be between 6-25 characters",
+                                "EMAIL_TAKEN": "Email is already taken, please choose another"
+                            }
+                        },
+                        "CHANGE_PASSOWRD_FORM": {
+                            "BACK_TO_LOGIN": "Back to Login",
+                            "RESET_PASSWORD": "Reset Password",
+                            "SEND": "Send",
+                            "NEW_PASSWORD_SENT": "A new password has been sent to your email address.",
+                            "DONE": "Done",
+                            "NO_SUCH_EMAIL": "We don’t recognize that email. Did you use another one to sign up?"
+                        },
+                        "LOGIN_FORM": {
+                            "LOGIN": "Login",
+                            "LOGIN_IN": "Log In",
+                            "FORGOT_PWD": "Forgot password?",
+                            "OR": "or",
+                            "EMAIL": "Email",
+                            "PASSWORD": "Password",
+                            "STUDENT": {
+                                "DONT_HAVE_AN_ACCOUNT": "Don't have a Zinkerz student account?",
+                                "LOGIN": "Student Login"
+                            },
+                            "EDUCATOR": {
+                                "DONT_HAVE_AN_ACCOUNT": "Don't have a Zinkerz educator account?",
+                                "LOGIN": "Educator Login"
+                            },
+                            "ERROR_CODES": {
+                                "INVALID_EMAIL": "The specified email is invalid.",
+                                "INVALID_PASSWORD": "The specified password is incorrect.",
+                                "INVALID_USER": "The specified user account does not exist.",
+                                "DEFAULT_ERROR": "Error logging user in: "
+                            }
+                        },
+                        "SIGNUP_FORM": {
+                            "SIGNUP": "Signup",
+                            "SIGN_UP": "Sign Up",
+                            "OR": "or",
+                            "NAME": "Name",
+                            "EMAIL": "Email",
+                            "PASSWORD": "Password",
+                            "DISCLAIMER": "By signing up I agree to the <a href='{{termsOfUseHref}}' class='app-color'>Terms of Use</a> and <a href='{{privacyPolicyHref}}' class='app-color'>Privacy Policy</a>",
+                            "STUDENT": {
+                                "CREATE_ACCOUNT": "Create a Student Account",
+                                "ALREADY_HAVE_ACCOUNT": "Already have a Zinkerz student account?"
+                            },
+                            "EDUCATOR": {
+                                "CREATE_ACCOUNT": "Create an Educator Account",
+                                "ALREADY_HAVE_ACCOUNT": "Already have a Zinkerz educator account?"
+                            }
+                        },
+                        "OATH_SOCIAL": {
+                            "CONNECT_WITH_FB": "Facebook",
+                            "CONNECT_WITH_GOOGLE": "Google",
+                            "ERROR_TITLE": "Connect With {{provider}} Failed",
+                            "ERROR_CONTENT": "An error occurred while trying to connect with {{provider}}, please try again. If the problem persists please contact us at <a href='//www.zinkerz.com/contact/' target='_blank'>support@zinkerz.com</a>"
+                        },
+                        "PROMO_CODE":{
+                            "GOT_A_PROMO_CODE":"Got a Promo Code?",
+                            "GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE": "Got a Zinkerz Educator Code?",
+                            "ENTER_YOUR_CODE": "Enter your code...",
+                            "ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED": "Zinkerz Educators Code Accepted",
+                            "PROMO_CODE_ACCEPTED": "Promo code accepted",
+                            "INVALID_CODE": "Invalid code, please contact support@zinkerz.com"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
 /**
  * attrs:
  */
@@ -6486,13 +6878,12 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
+        ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
                 link: function (scope) {
-                    $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
@@ -7777,6 +8168,38 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.onBoarding')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "ON_BOARDING.WELCOME": {
+                            "WELCOME": "Welcome ",
+                            "THANK_YOU_MESSAGE": "Thank you for joining us at ",
+                            "WE_ARE_HERE_TO_HELP": "We'll show you how to earn your highest possible score!",
+                            "CONTINUE": "CONTINUE"
+                        },
+                        "ON_BOARDING.GOALS": {
+                            "SET_SCORE_GOALS": "Set Your Score Goals",
+                            "WHATS_YOUR_DREAM_SCHOOL": "What is your dream school?",
+                            "I_DONT_KNOW": "I don't know yet",
+                            "SELECT_3_DREAM_SCHOOLS": "Select up to 3 dream schools"
+                        },
+                        "ON_BOARDING.DIAGNOSTIC": {
+                            "DIAGNOSTIC_TEST": "Diagnostic Test",
+                            "TAKE_IT_LATER": "Take it later",
+                            "START_TEST": "START TEST",
+                            "LETS_LEARN": "Let's learn a little about your mastery level in each subject.",
+                            "THIS_QUICK_TEST": "This quick test will determine your initial estimated score and your training roadmap."
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingController', ["$state", "onBoardingStep", function($state, onBoardingStep) {
         'ngInject';
         $state.go(onBoardingStep.url);
@@ -8011,16 +8434,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.onBoarding').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('onBoarding');
-    }]);
-})(angular);
-
-
 angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
@@ -8207,7 +8620,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode', []).config([
+    angular.module('znk.infra-web-app.promoCode', [])
+        .config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
@@ -8219,6 +8633,27 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
         }
     ]);
 
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.promoCode')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "PROMO_CODE": {
+                            "GOT_A_PROMO_CODE": "Got a Promo Code?",
+                            "GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE": "Got a Zinkerz Educator Code",
+                            "ENTER_YOUR_CODE": "Enter your code...",
+                            "ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED": "Zinkerz Educators Code Accepted",
+                            "PROMO_CODE_ACCEPTED": "Promo code accepted",
+                            "INVALID_CODE": "Invalid code, please contact support@zinkerz.com"
+                        }
+                    }
+                );
+            }]);
 })(angular);
 
 
@@ -8513,24 +8948,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             'znk.infra.storage',
             'znk.infra.auth',
             'znk.infra.analytics'
-        ])
-        .config([
-            'SvgIconSrvProvider',
-            function(SvgIconSrvProvider){
-
-                var svgMap = {
-                    'purchase-check-mark': 'components/purchase/svg/check-mark-icon.svg',
-                    'purchase-close-popup': 'components/purchase/svg/purchase-close-popup.svg',
-                    'purchase-popup-bullet-1-icon': 'components/purchase/svg/purchase-popup-bullet-1-icon.svg',
-                    'purchase-popup-bullet-2-icon': 'components/purchase/svg/purchase-popup-bullet-2-icon.svg',
-                    'purchase-popup-bullet-3-icon': 'components/purchase/svg/purchase-popup-bullet-3-icon.svg',
-                    'purchase-popup-bullet-4-icon': 'components/purchase/svg/purchase-popup-bullet-4-icon.svg',
-                    'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg',
-                    'purchase-raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-
+        ]);
 })(angular);
 
 
@@ -8544,11 +8962,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             },
             templateUrl:  'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
-                                  $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
+            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "znkAnalyticsSrv", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
+                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('purchase');
 
                 var vm = this;
 
@@ -8650,6 +9066,61 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                 }
             }]
         });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.purchase')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "PURCHASE_POPUP": {
+                            "GET_ZINKERZ": "Zinkerz ",
+                            "PRO": "Pro",
+                            "DESCRIPTION": "Get the most out of Zinkerz",
+                            "BULLET1": "Full TOEFL® Practice Tests",
+                            "BULLET2": "Personalized Workouts",
+                            "BULLET3": "2000+ Practice Questions",
+                            "BULLET4": "Estimated Score",
+                            "BULLET5": "Unlimited lifetime access",
+                            "SAVE": "(save {{percent}})",
+                            "UPGRADE_NOW": "Upgrade Now",
+                            "UPGRADED_ON": "Upgraded on {{upgradeDate}}",
+                            "UPGRADE_PENDING": "Processing payment...",
+                            "UPGRADE_ERROR_POPUP_TITLE": "Purchase Error",
+                            "UPGRADE_ERROR_POPUP_CONTENT": "There has been a problem with the purchase process, please refresh the page and try again",
+                            "PAYPAL_IMG_ALT": "PayPal - The safer, easier way to pay online!",
+                            "PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT": "You've completed all free workouts. It's time to upgrade.",
+                            "PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT": "Lets do it!",
+                            "PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT": "Workout {{num}} completed! Upgrade to Zinkerz PRO to get everything you need to ace the TOEFL text.",
+                            "PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT": "Lets do it!"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.purchase')
+        .config(
+            ["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
+                var svgMap = {
+                    'purchase-check-mark': 'components/purchase/svg/check-mark-icon.svg',
+                    'purchase-close-popup': 'components/purchase/svg/purchase-close-popup.svg',
+                    'purchase-popup-bullet-1-icon': 'components/purchase/svg/purchase-popup-bullet-1-icon.svg',
+                    'purchase-popup-bullet-2-icon': 'components/purchase/svg/purchase-popup-bullet-2-icon.svg',
+                    'purchase-popup-bullet-3-icon': 'components/purchase/svg/purchase-popup-bullet-3-icon.svg',
+                    'purchase-popup-bullet-4-icon': 'components/purchase/svg/purchase-popup-bullet-4-icon.svg',
+                    'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg',
+                    'purchase-raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
 })(angular);
 
 (function (angular) {
@@ -9354,6 +9825,34 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.settings')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "SETTING": {
+                            "CHANGE_PASSWORD": "Change Password",
+                            "SAVE": "Save",
+                            "OLD_PASSWORD": "Old Password",
+                            "NEW_PASSWORD": "New Password",
+                            "CONFIRM_NEW_PASSWORD": "Confirm New Password",
+                            "REQUIRED_FIELD":"This is required.",
+                            "PASSWORD_LENGTH": "Password length must be between 6 to 25 characters.",
+                            "PASSWORD_NOT_MATCH": "New Password doesn't match.",
+                            "ERROR_OCCURRED": "An error has occurred, Please try again.",
+                            "SAVE_SUCCESS": "Your new password has been successfully saved.",
+                            "INCORRECT_PASSWORD":"Incorrect password.",
+                            "NO_INTERNET_CONNECTION_ERR": "No internet connection. Please try again later.",
+                            "DONE": "Done"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.settings').config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -9373,10 +9872,8 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.settings').controller('SettingsChangePasswordController',
-            ["AuthService", "$mdDialog", "$timeout", "$translatePartialLoader", function (AuthService, $mdDialog, $timeout, $translatePartialLoader) {
+            ["AuthService", "$mdDialog", "$timeout", function (AuthService, $mdDialog, $timeout) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('settings');
 
                 var self = this;
                 this.saveTitle = 'SETTING.SAVE';
@@ -9689,6 +10186,24 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
     ]);  
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tests')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "NAVIGATION_PANE": {
+                            "TEST": "Test {{testNumber}}",
+                            "FULL_TEST_TITLE": "Full test",
+                            "MINI_TEST_TITLE": "Mini test"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
 /**
  * attrs:
  */
@@ -9765,16 +10280,6 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
             };
         }]
     );
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tests').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('tests');
-    }]);
 })(angular);
 
 
@@ -9967,6 +10472,35 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
 
 })(angular);
 
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.userGoalsSelection')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "SCHOOL_SELECT": {
+                            "SELECT_TO_CONTINUE": "Select up to 3 dream schools to continue",
+                            "SCHOOLS": "Schools",
+                            "REQUIRED_SCORE": "Required Score",
+                            "SELECT_3_SCHOOLS": "Enter at least 3 letters to search for schools",
+                            "NO_RESULTS": "No schools matched your search"
+                        },
+                        "USER_GOALS": {
+                            "DREAM_SCHOOLS": "DREAM SCHOOLS",
+                            "EDIT": "edit",
+                            "CANCEL": "cancel",
+                            "SAVE_AND_CONTINUE": "SAVE & CONTINUE",
+                            "SAVE": "SAVE",
+                            "SAVED": "SAVED",
+                            "I_DONT_KNOW": "I don't know yet..."
+                        }
+                    }
+                );
+            }]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -10259,16 +10793,6 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
             return directive;
         }]);
 })(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.userGoalsSelection').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('userGoalsSelection');
-    }]);
-})(angular);
-
 
 'use strict';
 
@@ -10616,6 +11140,31 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     'use strict';
 
     angular.module('znk.infra-web-app.webAppScreenSharing')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "SH_VIEWER": {
+                            "STUDENT":{
+                                "YOU_ARE_VIEWING": "Your are viewing your teacher's screen: ",
+                                "NO_OPENED_EXERCISES": "Your teacher does not have any exercises open.",
+                                "ONCE_OPEN": "Once your teacher opens an exercise, you will be able to view it here."
+                            },
+                            "DASHBOARD":{
+                                "YOU_ARE_VIEWING": "Your are viewing your student's screen: ",
+                                "NO_OPENED_EXERCISES": "Your student does not have any exercises open.",
+                                "ONCE_OPEN": "Once your student opens an exercise, you will be able to view it here."
+                            }
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.webAppScreenSharing')
         .config(["ScreenSharingUiSrvProvider", function (ScreenSharingUiSrvProvider) {
             'ngInject';
 
@@ -10632,10 +11181,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
     angular.module('znk.infra-web-app.webAppScreenSharing').component('shViewer', {
         templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html',
-        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", "$translatePartialLoader", function (CompleteExerciseSrv, ENV, ScreenSharingSrv, $translatePartialLoader) {
+        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", function (CompleteExerciseSrv, ENV, ScreenSharingSrv) {
             'ngInject';
-
-            $translatePartialLoader.addPart('webAppScreenSharing');
 
             var $ctrl= this;
 
@@ -10784,6 +11331,58 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.estimatedScoreWidget'
     ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "WORKOUTS_ROADMAP_DIAGNOSTIC_INTRO":{
+                            "DIAGNOSTIC_TEST": "Diagnostic Test",
+                            "START_TEST": "START TEST",
+                            "CONTINUE_TEST": "CONTINUE TEST"
+                        },
+                        "WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY": {
+                            "DIAGNOSTIC_TEST": "Diagnostic Test",
+                            "DIAG_RES_TEXT": "Your Results"
+                        },
+                        "ROADMAP_BASE_PRE_SUMMARY": {
+                            "DIAGNOSTIC_TEST": "Diagnostic Test",
+                            "COMPLETE": "Completed!",
+                            "WORKOUT": "Workout"
+                        },
+                        "WORKOUTS_ROADMAP_WORKOUT_INTRO":{
+                            "TITLE": "Workout {{workoutOrder}}",
+                            "CHANGE_SUBJECT": "Change subject",
+                            "HOW_MUCH_TIME": "How much time do you have?",
+                            "WORKOUT_TIME": "WORKOUT_TIME",
+                            "START": "START",
+                            "MINUTES": "minutes"
+                        },
+                        "WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS":{
+                            "TITLE": "Workout {{workoutOrder}}",
+                            "KEEP_GOING": "Let's keep going!",
+                            "ANSWERED": "Answered: {{answered}}/{{total}}",
+                            "CONTINUE": "CONTINUE"
+                        },
+                        "WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK":{
+                            "TITLE": "Workout {{workoutOrder}}",
+                            "DIAGNOSTIC_NOT_COMPLETED": "This workout will be available after you have <br>completed the diagnostic test",
+                            "PREV_NOT_COMPLETED": "Complete the previous workout to unlock this workout",
+                            "MORE_WORKOUTS": "Want to get one more workout for free?",
+                            "TELL_FRIENDS": "Tell friends about us!",
+                            "SHARE": "SHARE",
+                            "UPGRADE": "Upgrade",
+                            "GET_ZINKERZ_PRO": "Get Zinkerz PRO to unlock all workouts.",
+                            "MORE_PRACTICE": "Do you feel like you need more practice? Or do you <br>want to be 100% sure you’re ready for the test?"
+                        }
+                    }
+                );
+            }]);
 })(angular);
 
 (function (angular) {
@@ -11620,16 +12219,6 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             }]
         );
 })();
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.workoutsRoadmap').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('workoutsRoadmap');
-    }]);
-})(angular);
-
 
 (function (angular) {
     'use strict';
@@ -12636,6 +13225,33 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.znkHeader')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "ZNK_HEADER": {
+                            "WORKOUTS": "workouts",
+                            "TESTS": "tests",
+                            "TUTORIALS": "tips&Tricks",
+                            "PERFORMANCE": "performance",
+                            "ETUTORING": "Live Lessons",
+                            "PROFILE_STATUS_BASIC": "Get Zinkerz Pro",
+                            "PROFILE_STATUS_PENDING": "Processing payment...",
+                            "PROFILE_STATUS_PRO": "Zinkerz Pro",
+                            "PROFILE_GOALS": "my goals",
+                            "PROFILE_CHANGE_PASSWORD": "change password",
+                            "PROFILE_SUPPORT": "support",
+                            "PROFILE_LOGOUT": "log out"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.znkHeader').controller('znkHeaderCtrl',
         ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "SettingsSrv", "$timeout", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "feedbackSrv", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, SettingsSrv, $timeout,
                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, feedbackSrv) {
@@ -12739,16 +13355,6 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             };
         }
     ]);
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkHeader').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('znkHeader');
-    }]);
 })(angular);
 
 
@@ -12984,6 +13590,33 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     ]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkSummary')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "ZNK_SUMMARY":{
+                            "SUCCESS": "success",
+                            "CORRECT": "Correct",
+                            "AVG": "Avg",
+                            "SEC": "sec",
+                            "WRONG": "Missed",
+                            "SKIPPED": "Skipped",
+                            "CATEGORY": "Category",
+                            "ESTIMATED_SCORE": "{{subjectName}} Estimated Score",
+                            "MASTERY_LEVEL": "Mastery Level",
+                            "MASTERY": "mastery",
+                            "REVIEW": "REVIEW",
+                            "TEST_TITLE": "Test Score:"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -12993,9 +13626,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
         bindings: {
             exerciseResult: '<'
         },
-        controller: ["$translatePartialLoader", function($translatePartialLoader) {
+        controller: function() {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var PERCENTAGE = 100;
 
@@ -13022,7 +13654,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                     animation: false
                 }
             };
-        }],
+        },
         controllerAs: 'vm'
     });
 })(angular);
@@ -13037,9 +13669,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
         bindings: {
             exerciseData: '<'
         },
-        controller: ["$translatePartialLoader", "SubjectEnum", function($translatePartialLoader, SubjectEnum) {
+        controller: ["SubjectEnum", function(SubjectEnum) {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var vm = this;
 
@@ -13124,16 +13755,30 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.znkTimelineWebWrapper')
+        .config(
+            ["$translateProvider", function ($translateProvider) {
+                'ngInject';
+                $translateProvider.translations('en', {
+                        "TIMELINE_WEB_WRAPPER": {
+                            "POINTS_LEFT": "{{points}} pts to go!"
+                        }
+                    }
+                );
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?'
         },
         controllerAs: 'vm',
-        controller: ["EstimatedScoreSrv", "UserGoalsService", "ScoringService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", "$translatePartialLoader", function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum, $translatePartialLoader) {
+        controller: ["EstimatedScoreSrv", "UserGoalsService", "ScoringService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
             'ngInject';
-
-            $translatePartialLoader.addPart('znkTimelineWebWrapper');
 
             var vm = this;
             var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();

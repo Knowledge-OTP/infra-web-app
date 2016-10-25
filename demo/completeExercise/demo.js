@@ -4,6 +4,11 @@
         'znk.infra-web-app.webAppScreenSharing',
         'demoEnv'
     ])
+        .config(function ($translateProvider) {
+            'ngInject';
+            $translateProvider.preferredLanguage('en');
+            $translateProvider.useSanitizeValueStrategy(null);
+        })
         .run(function ($rootScope, BaseExerciseGetterSrv, ExerciseTypeEnum, ExerciseParentEnum, ScreenSharingSrv) {
             $rootScope.data = {};
 
@@ -83,11 +88,6 @@
                     exerciseParentId: parentId
                 };
             }, true);
-        })
-        .run(function ($timeout, $translatePartialLoader) {
-            $timeout(function () {
-                $translatePartialLoader.addPart('completeExerciseDemoLocale');
-            });
         })
         .component('completeExerciseSummary',{
             template: '<div>Summary</div>'
