@@ -611,7 +611,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
     "            </section>\n" +
     "            <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
-    "                <svg-icon name=\"invitation-teacher-active-icon\"></svg-icon>\n" +
+    "                <svg-icon name=\"invitation-teacher-active-icon\" class=\"teacher-active-icon\"></svg-icon>\n" +
     "            </section>\n" +
     "        </div>\n" +
     "        <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"hasAnyItems()\">\n" +

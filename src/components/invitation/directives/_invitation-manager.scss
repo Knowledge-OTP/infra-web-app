@@ -33,7 +33,7 @@ invitation-manager {
 
                 &.teacher-icon-wrap {
                     background-color: $bgColor33;
-                    svg-icon.teacher-icon {
+                    svg-icon.invitation-teacher-icon {
                         width: 24px;
                         svg {
                             width: 100%;
@@ -43,7 +43,7 @@ invitation-manager {
 
                 &.teacher-active-icon-wrap {
                     border: 1px solid $bgColor5;
-                    .teacher-active-icon {
+                    svg-icon.teacher-active-icon {
                         width: 23px;
                         height: 16px;
                         svg {
