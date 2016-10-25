@@ -5135,13 +5135,14 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     };
 
                     InvitationService.registerListenerCB(InvitationService.invitationDataListener.USER_TEACHERS, userId, myTeachersCB);
-
                     InvitationService.registerListenerCB(InvitationService.invitationDataListener.NEW_INVITATIONS, userId, newInvitationsCB);
-
                     InvitationService.registerListenerCB(InvitationService.invitationDataListener.PENDING_CONFIRMATIONS, userId, pendingConfirmationsCB);
 
                     var watcherDestroy = scope.$on('$destroy', function () {
-                        InvitationService.removeListeners();
+                        InvitationService.offListenerCB(InvitationService.invitationDataListener.USER_TEACHERS, userId, myTeachersCB);
+                        InvitationService.offListenerCB(InvitationService.invitationDataListener.NEW_INVITATIONS, userId, newInvitationsCB);
+                        InvitationService.offListenerCB(InvitationService.invitationDataListener.PENDING_CONFIRMATIONS, userId, pendingConfirmationsCB);
+
                         watcherDestroy();
                     });
                 }
@@ -5548,7 +5549,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            <svg-icon name=\"teacher-active-icon\"></svg-icon>\n" +
     "        </section>\n" +
     "    </div>\n" +
-    "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasItems(invitations) || hasItems(myTeachers) || hasItems(declinedInvitations) || hasItems(conformations))\">\n" +
+    "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasItems(invitations) || hasItems(myTeachers) || hasItems(conformations))\">\n" +
     "        <div class=\"empty-invite\" ng-switch-when=\"false\">\n" +
     "            <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
     "            <div class=\"invite-action\">\n" +
