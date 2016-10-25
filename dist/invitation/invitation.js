@@ -576,7 +576,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            <svg-icon name=\"teacher-active-icon\"></svg-icon>\n" +
     "        </section>\n" +
     "    </div>\n" +
-    "    hasInvitations={{hasInvitations}};hasTeachers={{hasTeachers}};hasConfirmations={{hasConfirmations}}; xx={{(hasInvitations || hasTeachers || hasConfirmations)}}\n" +
     "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasInvitations || hasTeachers || hasConfirmations)\">\n" +
     "        <div class=\"empty-invite\" ng-switch-when=\"false\">\n" +
     "            <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
@@ -586,13 +585,13 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div ng-if=\"hasTeachers\" class=\"my-teacher-wrap\" ng-init=\"myTeachers = [{senderName:'hughu', senderEmail: 'hug'}]\" ng-repeat=\"teacher in myTeachers\">\n" +
+    "        <div ng-switch-when=\"true\" ng-if=\"hasTeachers\" class=\"my-teacher-wrap\" ng-repeat=\"teacher in myTeachers\">\n" +
     "            <div class=\"title\" translate=\".MY_TEACHER\"></div>\n" +
     "            <div class=\"teacher-name\">{{::teacher.senderName}}</div>\n" +
     "            <div class=\"teacher-email\">{{::teacher.senderEmail}}</div>\n" +
     "            <svg-icon name=\"invitation-close-popup\" class=\"delete-teacher\" ng-click=\"deleteTeacher(teacher)\"></svg-icon>\n" +
     "        </div>\n" +
-    "        <md-list ng-if=\"hasInvitations\" ng-switch-when=\"true\">\n" +
+    "        <md-list ng-switch-when=\"true\" ng-if=\"hasInvitations\">\n" +
     "            <md-subheader class=\"invite-sub-title\">{{::pendingTitle}}</md-subheader>\n" +
     "            <md-list-item ng-repeat=\"invite in invitations\">\n" +
     "                <svg-icon name=\"received-invitations-icon\" class=\"received-invitations\"></svg-icon>\n" +
@@ -608,7 +607,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                </div>\n" +
     "            </md-list-item>\n" +
     "        </md-list>\n" +
-    "        <md-list ng-if=\"hasConfirmations\">\n" +
+    "        <md-list g-switch-when=\"true\" ng-if=\"hasConfirmations\">\n" +
     "            <md-subheader class=\"invite-sub-title\">{{::pendingConformationsTitle}}</md-subheader>\n" +
     "            <md-list-item ng-repeat=\"conformation in conformations\">\n" +
     "                <svg-icon name=\"sent-invitations-icon\" class=\"sent-invitations\"></svg-icon>\n" +

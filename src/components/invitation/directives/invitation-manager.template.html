@@ -9,7 +9,6 @@
             <svg-icon name="teacher-active-icon"></svg-icon>
         </section>
     </div>
-    hasInvitations={{hasInvitations}};hasTeachers={{hasTeachers}};hasConfirmations={{hasConfirmations}}; xx={{(hasInvitations || hasTeachers || hasConfirmations)}}
     <md-menu-content class="md-menu-content-invitation-manager" ng-switch="(hasInvitations || hasTeachers || hasConfirmations)">
         <div class="empty-invite" ng-switch-when="false">
             <div class="empty-msg" translate=".EMPTY_INVITE"></div>
@@ -19,13 +18,13 @@
                 </div>
             </div>
         </div>
-        <div ng-if="hasTeachers" class="my-teacher-wrap" ng-init="myTeachers = [{senderName:'hughu', senderEmail: 'hug'}]" ng-repeat="teacher in myTeachers">
+        <div ng-switch-when="true" ng-if="hasTeachers" class="my-teacher-wrap" ng-repeat="teacher in myTeachers">
             <div class="title" translate=".MY_TEACHER"></div>
             <div class="teacher-name">{{::teacher.senderName}}</div>
             <div class="teacher-email">{{::teacher.senderEmail}}</div>
             <svg-icon name="invitation-close-popup" class="delete-teacher" ng-click="deleteTeacher(teacher)"></svg-icon>
         </div>
-        <md-list ng-if="hasInvitations" ng-switch-when="true">
+        <md-list ng-switch-when="true" ng-if="hasInvitations">
             <md-subheader class="invite-sub-title">{{::pendingTitle}}</md-subheader>
             <md-list-item ng-repeat="invite in invitations">
                 <svg-icon name="received-invitations-icon" class="received-invitations"></svg-icon>
@@ -41,7 +40,7 @@
                 </div>
             </md-list-item>
         </md-list>
-        <md-list ng-if="hasConfirmations">
+        <md-list g-switch-when="true" ng-if="hasConfirmations">
             <md-subheader class="invite-sub-title">{{::pendingConformationsTitle}}</md-subheader>
             <md-list-item ng-repeat="conformation in conformations">
                 <svg-icon name="sent-invitations-icon" class="sent-invitations"></svg-icon>
