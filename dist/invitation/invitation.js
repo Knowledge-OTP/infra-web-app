@@ -81,7 +81,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
+        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", "StudentContextSrv", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader, StudentContextSrv) {
             'ngInject';
 
            return {
@@ -89,39 +89,35 @@
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
-                    // if (!ENV.dashboardFeatureEnabled) {
-                    //    element.remove();
-                    //    return;
-                    // }
-
-                    scope.translate = $filter('translate');
+                    var userId = StudentContextSrv.getCurrUid();
                     $translatePartialLoader.addPart('invitation');
-
-
+                    scope.translate = $filter('translate');
                     scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
                     scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
                     scope.declinedTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.DECLINED_INVITATIONS');
 
-                   /* InvitationService.getReceived().then(function (invitations) {
-                        scope.invitations = invitations;
+                    function myTeachersCB(teacher){
+                        if (!angular.isObject(scope.myTeachers)) {
+                            scope.myTeachers = {};
+                        }
+                        scope.myTeachers[teacher.senderUid] = teacher;
+                    }
+
+                    function newInvitationsCB(invitation){
+                        if (!angular.isObject(scope.invitations)) {
+                            scope.invitations = {};
+                        }
+                        scope.invitations[invitation.invitationId] = invitation;
                         scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
-                    });
+                    }
 
-                    InvitationService.getPendingConformations().then(function (conformations) {
-                        angular.forEach(conformations, function (conformation, key) {
-                            conformation.invitationId = key;
-                        });
-                        scope.conformations = conformations;
+                    function pendingConfirmationsCB(pendingConf){
+                        if (!angular.isObject(scope.conformations)) {
+                            scope.conformations = {};
+                        }
+                        scope.conformations[pendingConf.invitationId] = pendingConf;
                         scope.pendingConformationsTitle += ' (' + (scope.getItemsCount(scope.conformations) || 0) + ')';
-                    });
-
-                    InvitationService.getDeclinedInvitations().then(function (declinedInvitations) {
-                        scope.declinedInvitations = declinedInvitations;
-                    });
-
-                    InvitationService.getMyTeacher().then(function (teacherObj) {
-                        scope.myTeachers = teacherObj;
-                    });*/
+                    }
 
                     scope.hasItems = function (obj) {
                         return !!scope.getItemsCount(obj);
@@ -165,6 +161,12 @@
                     scope.openInviteModal = function () {
                         InvitationService.openInviteTeacherModal();
                     };
+
+                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.USER_TEACHERS, userId, myTeachersCB);
+
+                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.NEW_INVITATIONS, userId, newInvitationsCB);
+
+                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.PENDING_CONFIRMATIONS, userId, pendingConfirmationsCB);
 
                     var watcherDestroy = scope.$on('$destroy', function () {
                         InvitationService.removeListeners();
