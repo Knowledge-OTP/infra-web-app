@@ -4987,7 +4987,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 var svgMap = {
                     'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
                     'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
-                    'invitation-teacher-active-icon': 'assets/svg/icons/invitation-teacher-icon-active.svg'
+                    'invitation-teacher-active-icon': 'assets/svg/icons/invitation-teacher-active-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -5678,7 +5678,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    </g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/invitation/svg/invitation-teacher-icon-active.svg",
+  $templateCache.put("components/invitation/svg/invitation-teacher-active-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 193.7 145.6\" xml:space=\"preserve\" class=\"active-teacher-icon\">\n" +
     "<style type=\"text/css\">\n" +
     "	.active-teacher-icon .st0{display:none;fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-miterlimit:10;}\n" +
