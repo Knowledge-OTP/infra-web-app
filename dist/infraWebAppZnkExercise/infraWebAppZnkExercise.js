@@ -137,6 +137,26 @@
                                 viewChangeListener();
                                 break;
                         }
+
+                        function _updateBindExercise() {
+                            var objToUpdate = {};
+                            objToUpdate[question.id] = scope.d.toggleWrittenSln;
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', objToUpdate);
+                        }
+
+                        scope.d.close = function () {
+                            scope.d.toggleWrittenSln = false;
+                            _updateBindExercise();
+                        };
+
+                        scope.d.toggleAnswer = function () {
+                            scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                            _updateBindExercise();
+                        };
+
+                        questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
+                            scope.d.toggleWrittenSln = newVal[question.id];
+                        });
                     }
                 };
                 return directive;
@@ -266,12 +286,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
-    "         ng-if=\"d.showWrittenSln\">\n" +
+    "         ng-if=\"d.toggleWrittenSln\">\n" +
     "        <answer-explanation-content class=\"znk-scrollbar\"\n" +
-    "                                    on-close=\"d.showWrittenSln = false\">\n" +
+    "                                    on-close=\"d.close()\">\n" +
     "        </answer-explanation-content>\n" +
     "    </div>\n" +
-    "    <div class=\"answer-explanation-header\" ng-click=\"d.showWrittenSln = !d.showWrittenSln\">\n" +
+    "    <div class=\"answer-explanation-header\" ng-click=\"d.toggleAnswer()\">\n" +
     "        <div class=\"answer-explanation-btn\">\n" +
     "            <div class=\"main-content-wrapper\">\n" +
     "                <svg-icon class=\"lamp-icon\" name=\"answer-explanation-lamp-icon\"></svg-icon>\n" +
