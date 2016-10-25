@@ -22,6 +22,7 @@
                             scope.myTeachers = {};
                         }
                         scope.myTeachers[teacher.senderUid] = teacher;
+                        scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
                     }
 
                     function newInvitationsCB(invitation){
@@ -30,6 +31,7 @@
                         }
                         scope.invitations[invitation.invitationId] = invitation;
                         scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
+                        scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
                     }
 
                     function pendingConfirmationsCB(pendingConf){
@@ -38,11 +40,8 @@
                         }
                         scope.conformations[pendingConf.invitationId] = pendingConf;
                         scope.pendingConformationsTitle += ' (' + (scope.getItemsCount(scope.conformations) || 0) + ')';
+                        scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
                     }
-
-                    scope.hasItems = function (obj) {
-                        return scope.getItemsCount(obj || {});
-                    };
 
                     scope.getItemsCount = function (obj) {
                         return Object.keys(obj || {}).length;

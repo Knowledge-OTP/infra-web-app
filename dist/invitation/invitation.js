@@ -101,6 +101,7 @@
                             scope.myTeachers = {};
                         }
                         scope.myTeachers[teacher.senderUid] = teacher;
+                        scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
                     }
 
                     function newInvitationsCB(invitation){
@@ -109,6 +110,7 @@
                         }
                         scope.invitations[invitation.invitationId] = invitation;
                         scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
+                        scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
                     }
 
                     function pendingConfirmationsCB(pendingConf){
@@ -117,11 +119,8 @@
                         }
                         scope.conformations[pendingConf.invitationId] = pendingConf;
                         scope.pendingConformationsTitle += ' (' + (scope.getItemsCount(scope.conformations) || 0) + ')';
+                        scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
                     }
-
-                    scope.hasItems = function (obj) {
-                        return scope.getItemsCount(obj || {});
-                    };
 
                     scope.getItemsCount = function (obj) {
                         return Object.keys(obj || {}).length;
@@ -568,8 +567,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
   $templateCache.put("components/invitation/directives/invitation-manager.template.html",
     "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\">\n" +
     "<md-menu md-offset=\"-225 51\"  class=\"invitation-manager\">\n" +
-    "    <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" aria-label=\"Open Invite menu\" ng-switch=\"hasItems(myTeachers)\">\n" +
-    "        <div class=\"num-of-receive\" ng-if=\"hasItems(invitations)\">{{getItemsCount(invitations)}}</div>\n" +
+    "    <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" aria-label=\"Open Invite menu\" ng-switch=\"hasTeachers\">\n" +
+    "        <div class=\"num-of-receive\" ng-if=\"hasInvitations\">{{getItemsCount(invitations)}}</div>\n" +
     "        <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
     "            <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
     "        </section>\n" +
@@ -577,7 +576,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            <svg-icon name=\"teacher-active-icon\"></svg-icon>\n" +
     "        </section>\n" +
     "    </div>\n" +
-    "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasItems(invitations) || hasItems(myTeachers) || hasItems(conformations))\">\n" +
+    "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasInvitations || hasTeachers || hasConfirmations)\">\n" +
     "        <div class=\"empty-invite\" ng-switch-when=\"false\">\n" +
     "            <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
     "            <div class=\"invite-action\">\n" +
@@ -586,22 +585,13 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div ng-if=\"hasItems(myTeachers)\" class=\"my-teacher-wrap\" ng-repeat=\"teacher in myTeachers\">\n" +
+    "        <div ng-if=\"hasTeachers\" class=\"my-teacher-wrap\" ng-repeat=\"teacher in myTeachers\">\n" +
     "            <div class=\"title\" translate=\".MY_TEACHER\"></div>\n" +
     "            <div class=\"teacher-name\">{{::teacher.senderName}}</div>\n" +
     "            <div class=\"teacher-email\">{{::teacher.senderEmail}}</div>\n" +
     "            <svg-icon name=\"invitation-close-popup\" class=\"delete-teacher\" ng-click=\"deleteTeacher(teacher)\"></svg-icon>\n" +
     "        </div>\n" +
-    "        <md-list ng-if=\"hasItems(declinedInvitations)\">\n" +
-    "            <md-subheader class=\"invite-sub-title\">{{::declinedTitle}}</md-subheader>\n" +
-    "            <md-list-item class=\"declined-invitation-list\" ng-repeat=\"declinedInvitation in declinedInvitations\">\n" +
-    "                <div class=\"declined-teacher-wrap\">\n" +
-    "                    <div class=\"teacher-name\">{{::declinedInvitation.teacherName}} </div>\n" +
-    "                    <span class=\"declined-your-invitation-text\" translate=\".DECLINED_YOR_INVITATION\"></span>\n" +
-    "                </div>\n" +
-    "            </md-list-item>\n" +
-    "        </md-list>\n" +
-    "        <md-list ng-if=\"hasItems(invitations)\" ng-switch-when=\"true\">\n" +
+    "        <md-list ng-if=\"hasInvitations\" ng-switch-when=\"true\">\n" +
     "            <md-subheader class=\"invite-sub-title\">{{::pendingTitle}}</md-subheader>\n" +
     "            <md-list-item ng-repeat=\"invite in invitations\">\n" +
     "                <svg-icon name=\"received-invitations-icon\" class=\"received-invitations\"></svg-icon>\n" +
@@ -617,7 +607,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                </div>\n" +
     "            </md-list-item>\n" +
     "        </md-list>\n" +
-    "        <md-list ng-if=\"hasItems(conformations)\">\n" +
+    "        <md-list ng-if=\"hasConfirmations\">\n" +
     "            <md-subheader class=\"invite-sub-title\">{{::pendingConformationsTitle}}</md-subheader>\n" +
     "            <md-list-item ng-repeat=\"conformation in conformations\">\n" +
     "                <svg-icon name=\"sent-invitations-icon\" class=\"sent-invitations\"></svg-icon>\n" +

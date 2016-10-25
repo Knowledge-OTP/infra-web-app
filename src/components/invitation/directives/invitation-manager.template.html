@@ -1,7 +1,7 @@
 <div translate-namespace="INVITATION_MANAGER_DIRECTIVE">
 <md-menu md-offset="-225 51"  class="invitation-manager">
-    <div ng-click="$mdOpenMenu($event);" class="md-icon-button invite-icon-btn" aria-label="Open Invite menu" ng-switch="hasItems(myTeachers)">
-        <div class="num-of-receive" ng-if="hasItems(invitations)">{{getItemsCount(invitations)}}</div>
+    <div ng-click="$mdOpenMenu($event);" class="md-icon-button invite-icon-btn" aria-label="Open Invite menu" ng-switch="hasTeachers">
+        <div class="num-of-receive" ng-if="hasInvitations">{{getItemsCount(invitations)}}</div>
         <section ng-switch-when="false" class="circle-invite-wrap teacher-icon-wrap">
             <svg-icon name="invitation-teacher-icon"></svg-icon>
         </section>
@@ -9,7 +9,7 @@
             <svg-icon name="teacher-active-icon"></svg-icon>
         </section>
     </div>
-    <md-menu-content class="md-menu-content-invitation-manager" ng-switch="(hasItems(invitations) || hasItems(myTeachers) || hasItems(conformations))">
+    <md-menu-content class="md-menu-content-invitation-manager" ng-switch="(hasInvitations || hasTeachers || hasConfirmations)">
         <div class="empty-invite" ng-switch-when="false">
             <div class="empty-msg" translate=".EMPTY_INVITE"></div>
             <div class="invite-action">
@@ -18,22 +18,13 @@
                 </div>
             </div>
         </div>
-        <div ng-if="hasItems(myTeachers)" class="my-teacher-wrap" ng-repeat="teacher in myTeachers">
+        <div ng-if="hasTeachers" class="my-teacher-wrap" ng-repeat="teacher in myTeachers">
             <div class="title" translate=".MY_TEACHER"></div>
             <div class="teacher-name">{{::teacher.senderName}}</div>
             <div class="teacher-email">{{::teacher.senderEmail}}</div>
             <svg-icon name="invitation-close-popup" class="delete-teacher" ng-click="deleteTeacher(teacher)"></svg-icon>
         </div>
-        <md-list ng-if="hasItems(declinedInvitations)">
-            <md-subheader class="invite-sub-title">{{::declinedTitle}}</md-subheader>
-            <md-list-item class="declined-invitation-list" ng-repeat="declinedInvitation in declinedInvitations">
-                <div class="declined-teacher-wrap">
-                    <div class="teacher-name">{{::declinedInvitation.teacherName}} </div>
-                    <span class="declined-your-invitation-text" translate=".DECLINED_YOR_INVITATION"></span>
-                </div>
-            </md-list-item>
-        </md-list>
-        <md-list ng-if="hasItems(invitations)" ng-switch-when="true">
+        <md-list ng-if="hasInvitations" ng-switch-when="true">
             <md-subheader class="invite-sub-title">{{::pendingTitle}}</md-subheader>
             <md-list-item ng-repeat="invite in invitations">
                 <svg-icon name="received-invitations-icon" class="received-invitations"></svg-icon>
@@ -49,7 +40,7 @@
                 </div>
             </md-list-item>
         </md-list>
-        <md-list ng-if="hasItems(conformations)">
+        <md-list ng-if="hasConfirmations">
             <md-subheader class="invite-sub-title">{{::pendingConformationsTitle}}</md-subheader>
             <md-list-item ng-repeat="conformation in conformations">
                 <svg-icon name="sent-invitations-icon" class="sent-invitations"></svg-icon>
