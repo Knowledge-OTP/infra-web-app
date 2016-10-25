@@ -586,7 +586,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div ng-if=\"hasTeachers\" class=\"my-teacher-wrap\" ng-repeat=\"teacher in myTeachers\">\n" +
+    "        <div ng-if=\"hasTeachers\" class=\"my-teacher-wrap\" ng-init=\"myTeachers = [{senderName:'hughu', senderEmail: 'hug'}]\" ng-repeat=\"teacher in myTeachers\">\n" +
     "            <div class=\"title\" translate=\".MY_TEACHER\"></div>\n" +
     "            <div class=\"teacher-name\">{{::teacher.senderName}}</div>\n" +
     "            <div class=\"teacher-email\">{{::teacher.senderEmail}}</div>\n" +
