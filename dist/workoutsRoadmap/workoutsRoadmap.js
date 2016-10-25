@@ -100,7 +100,14 @@
                         },
                         "WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY": {
                             "DIAGNOSTIC_TEST": "Diagnostic Test",
-                            "DIAG_RES_TEXT": "Your Results"
+                            "DIAG_RES_TEXT": "Your Results",
+                            "DIAG_COMPOS_SCORE": "total score: {{total}}",
+                            "LISTENING": "Listening",
+                            "SPEAKING": "Speaking",
+                            "READING": "Reading",
+                            "WRITING": "Writing",
+                            "MATH": "Math",
+                            "VERBAL": "Verbal"
                         },
                         "ROADMAP_BASE_PRE_SUMMARY": {
                             "DIAGNOSTIC_TEST": "Diagnostic Test",
