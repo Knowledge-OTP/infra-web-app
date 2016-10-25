@@ -18,6 +18,13 @@ invitation-manager {
             border-radius: 7px;
             text-align: center;
         }
+
+        .teacher-icon-wrap {
+            background-color: $bgColor33;
+            svg-icon {
+                width: 24px;
+            }
+        }
     }
 
     .circle-invite-wrap {
@@ -31,13 +38,6 @@ invitation-manager {
         cursor: pointer;
     }
 
-    .teacher-icon-wrap {
-        background-color: $bgColor33;
-        .teacher-icon {
-            width: 24px;
-        }
-    }
-+
     .teacher-active-icon-wrap {
         border: 1px solid $bgColor5;
         .teacher-active-icon {
