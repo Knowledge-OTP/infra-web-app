@@ -2050,11 +2050,10 @@ invitation-manager .invitation-manager .invite-icon-btn {
         width: 24px; }
     invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap {
       border: 1px solid #0a9bad; }
-      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon {
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon * {
+        fill: #0a9bad;
         width: 23px;
         height: 16px; }
-      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon * {
-        fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
   min-width: 280px;
@@ -5876,11 +5875,10 @@ invitation-manager .invitation-manager .invite-icon-btn {
         width: 24px; }
     invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap {
       border: 1px solid #0a9bad; }
-      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon {
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon * {
+        fill: #0a9bad;
         width: 23px;
         height: 16px; }
-      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon * {
-        fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
   min-width: 280px;

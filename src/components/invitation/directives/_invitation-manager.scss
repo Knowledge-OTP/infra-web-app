@@ -40,12 +40,10 @@ invitation-manager {
 
                 &.teacher-active-icon-wrap {
                     border: 1px solid $bgColor5;
-                    .invitation-teacher-active-icon {
-                        width: 23px;
-                        height: 16px;
-                    }
                     .invitation-teacher-active-icon * {
                         fill: $bgColor5;
+                        width: 23px;
+                        height: 16px;
                     }
                 }
             }
