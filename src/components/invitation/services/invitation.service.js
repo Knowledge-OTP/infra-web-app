@@ -112,7 +112,6 @@
             };
 
             this.inviteTeacher = function (receiverEmail, receiverName) {
-                console.log('InvitationService.inviteTeacher --> UserProfileService.getProfile()');
                 return UserProfileService.getProfile().then(function (profile) {
                     var authData = AuthService.getAuth();
                     var newInvitiation = [{
@@ -182,9 +181,8 @@
             }
 
             function userTeachersCB(teacher) {
-                if (!angular.isUndefined(teacher)) {
+                if (!angular.isUndefined(teacher) && teacher.senderUid) {
                     var userId = StudentContextSrv.getCurrUid();
-                    console.log('InvitationService.userTeachersCB --> UserProfileService.getProfileByUserId()', teacher.senderUid);
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                         teacher.zinkerzTeacher = profile.zinkerzTeacher;
                         teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
