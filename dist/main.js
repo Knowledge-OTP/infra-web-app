@@ -5092,7 +5092,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     }
 
                     scope.hasItems = function (obj) {
-                        return !!scope.getItemsCount(obj || {});
+                        return scope.getItemsCount(obj || {});
                     };
 
                     scope.getItemsCount = function (obj) {
