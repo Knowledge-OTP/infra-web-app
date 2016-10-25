@@ -10,44 +10,41 @@
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
-                    var userId = StudentContextSrv.getCurrUid();
                     $translatePartialLoader.addPart('invitation');
                     scope.translate = $filter('translate');
                     scope.userStatus = PresenceService.userStatus;
                     scope.deleteTeacherMode = false;
 
                     function myTeachersCB(teacher){
-                        $timeout(function () {
-                            if (!angular.isObject(scope.myTeachers)) {
-                                scope.myTeachers = {};
-                            }
-                            scope.myTeachers[teacher.senderUid] = teacher;
-                            scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
-                            startTrackTeachersPresence();
-                        });
+                        if (!angular.isObject(scope.myTeachers)) {
+                            scope.myTeachers = {};
+                        }
+                        scope.myTeachers[teacher.senderUid] = teacher;
+                        scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
+                        startTrackTeachersPresence();
                     }
 
                     function newInvitationsCB(invitation){
-                        $timeout(function () {
-                            if (!angular.isObject(scope.invitations)) {
-                                scope.invitations = {};
-                            }
-                            scope.invitations[invitation.invitationId] = invitation;
-                            scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
-                        });
+                        if (!angular.isObject(scope.invitations)) {
+                            scope.invitations = {};
+                        }
+                        scope.invitations[invitation.invitationId] = invitation;
+                        scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
                     }
 
                     function pendingConfirmationsCB(pendingConf){
-                        $timeout(function () {
-                            if (!angular.isObject(scope.conformations)) {
-                                scope.conformations = {};
-                            }
-                            scope.conformations[pendingConf.invitationId] = pendingConf;
-                            scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
-                        });
+                        if (!angular.isObject(scope.conformations)) {
+                            scope.conformations = {};
+                        }
+                        scope.conformations[pendingConf.invitationId] = pendingConf;
+                        scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
                     }
 
                     function startTrackTeachersPresence() {
+                        if (startTrackTeachersPresence.isTracking) {
+                            return;
+                        }
+                        startTrackTeachersPresence.isTracking = true;
                         angular.forEach(scope.myTeachers, function (teacher) {
                             PresenceService.startTrackUserPresence(teacher.senderUid, trackUserPresenceCB.bind(null, teacher.senderUid));
                         });
@@ -116,14 +113,14 @@
                         InvitationService.openInviteTeacherModal();
                     };
 
-                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.USER_TEACHERS, userId, myTeachersCB);
-                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.NEW_INVITATIONS, userId, newInvitationsCB);
-                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.PENDING_CONFIRMATIONS, userId, pendingConfirmationsCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.USER_TEACHERS, myTeachersCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
                     var watcherDestroy = scope.$on('$destroy', function () {
-                        InvitationService.offListenerCB(InvitationService.invitationDataListener.USER_TEACHERS, userId, myTeachersCB);
-                        InvitationService.offListenerCB(InvitationService.invitationDataListener.NEW_INVITATIONS, userId, newInvitationsCB);
-                        InvitationService.offListenerCB(InvitationService.invitationDataListener.PENDING_CONFIRMATIONS, userId, pendingConfirmationsCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, myTeachersCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
                         watcherDestroy();
                     });

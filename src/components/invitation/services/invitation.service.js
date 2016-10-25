@@ -2,7 +2,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
+        function ($mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
             'ngInject';
             var self = this;
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
@@ -13,7 +13,7 @@
                 timeout: ENV.promiseTimeOut
             };
 
-            this.invitationDataListener = {
+            this.listeners = {
                 USER_TEACHERS: 'approved',
                 NEW_INVITATIONS: 'sent',
                 PENDING_CONFIRMATIONS: 'received'
@@ -29,8 +29,9 @@
                 receiverDelete: 6
             };
 
-            this.offListenerCB = function (event, userId, valueCB) {
+            this.offListenerCB = function (event, valueCB) {
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    var userId = StudentContextSrv.getCurrUid();
                     var listenerData = getListenerData(userId, event);
                     studentStorage.offEvent('child_added', listenerData.path, listenerData.cb);
                     studentStorage.offEvent('child_removed', listenerData.path, listenerData.cb);
@@ -43,8 +44,9 @@
                 });
             };
 
-            this.registerListenerCB = function (event, userId, valueCB) {
+            this.registerListenerCB = function (event, valueCB) {
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    var userId = StudentContextSrv.getCurrUid();
                     if (!registerEvents[userId]) {
                         registerEvents[userId] = {};
                     }
@@ -166,13 +168,13 @@
                 };
 
                 switch (event){
-                    case self.invitationDataListener.USER_TEACHERS:
+                    case self.listeners.USER_TEACHERS:
                         listenerData.cb = userTeachersCB;
                         break;
-                    case self.invitationDataListener.NEW_INVITATIONS:
+                    case self.listeners.NEW_INVITATIONS:
                         listenerData.cb = newInvitationsCB;
                         break;
-                    case self.invitationDataListener.PENDING_CONFIRMATIONS:
+                    case self.listeners.PENDING_CONFIRMATIONS:
                         listenerData.cb = pendingConfirmationsCB;
                         break;
                 }
@@ -187,9 +189,11 @@
                         teacher.zinkerzTeacher = profile.zinkerzTeacher;
                         teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
 
-                        angular.forEach(registerEvents[userId][self.invitationDataListener.USER_TEACHERS].cb, function (cb) {
+                        angular.forEach(registerEvents[userId][self.listeners.USER_TEACHERS].cb, function (cb) {
                             if (angular.isFunction(cb)) {
-                                cb(teacher);
+                                $timeout(function () {
+                                    cb(teacher);
+                                });
                             }
                         });
                     });
@@ -198,18 +202,22 @@
 
             function newInvitationsCB (data) {
                 var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][self.invitationDataListener.NEW_INVITATIONS].cb, function (cb) {
+                angular.forEach(registerEvents[userId][self.listeners.NEW_INVITATIONS].cb, function (cb) {
                     if (angular.isFunction(cb)) {
-                        cb(data);
+                        $timeout(function () {
+                            cb(data);
+                        });
                     }
                 });
             }
 
             function pendingConfirmationsCB (data) {
                 var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][self.invitationDataListener.PENDING_CONFIRMATIONS].cb, function (cb) {
+                angular.forEach(registerEvents[userId][self.listeners.PENDING_CONFIRMATIONS].cb, function (cb) {
                     if (angular.isFunction(cb)) {
-                        cb(data);
+                        $timeout(function () {
+                            cb(data);
+                        });
                     }
                 });
             }

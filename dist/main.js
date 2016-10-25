@@ -5065,44 +5065,41 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
-                    var userId = StudentContextSrv.getCurrUid();
                     $translatePartialLoader.addPart('invitation');
                     scope.translate = $filter('translate');
                     scope.userStatus = PresenceService.userStatus;
                     scope.deleteTeacherMode = false;
 
                     function myTeachersCB(teacher){
-                        $timeout(function () {
-                            if (!angular.isObject(scope.myTeachers)) {
-                                scope.myTeachers = {};
-                            }
-                            scope.myTeachers[teacher.senderUid] = teacher;
-                            scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
-                            startTrackTeachersPresence();
-                        });
+                        if (!angular.isObject(scope.myTeachers)) {
+                            scope.myTeachers = {};
+                        }
+                        scope.myTeachers[teacher.senderUid] = teacher;
+                        scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
+                        startTrackTeachersPresence();
                     }
 
                     function newInvitationsCB(invitation){
-                        $timeout(function () {
-                            if (!angular.isObject(scope.invitations)) {
-                                scope.invitations = {};
-                            }
-                            scope.invitations[invitation.invitationId] = invitation;
-                            scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
-                        });
+                        if (!angular.isObject(scope.invitations)) {
+                            scope.invitations = {};
+                        }
+                        scope.invitations[invitation.invitationId] = invitation;
+                        scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
                     }
 
                     function pendingConfirmationsCB(pendingConf){
-                        $timeout(function () {
-                            if (!angular.isObject(scope.conformations)) {
-                                scope.conformations = {};
-                            }
-                            scope.conformations[pendingConf.invitationId] = pendingConf;
-                            scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
-                        });
+                        if (!angular.isObject(scope.conformations)) {
+                            scope.conformations = {};
+                        }
+                        scope.conformations[pendingConf.invitationId] = pendingConf;
+                        scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
                     }
 
                     function startTrackTeachersPresence() {
+                        if (startTrackTeachersPresence.isTracking) {
+                            return;
+                        }
+                        startTrackTeachersPresence.isTracking = true;
                         angular.forEach(scope.myTeachers, function (teacher) {
                             PresenceService.startTrackUserPresence(teacher.senderUid, trackUserPresenceCB.bind(null, teacher.senderUid));
                         });
@@ -5171,14 +5168,14 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                         InvitationService.openInviteTeacherModal();
                     };
 
-                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.USER_TEACHERS, userId, myTeachersCB);
-                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.NEW_INVITATIONS, userId, newInvitationsCB);
-                    InvitationService.registerListenerCB(InvitationService.invitationDataListener.PENDING_CONFIRMATIONS, userId, pendingConfirmationsCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.USER_TEACHERS, myTeachersCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
                     var watcherDestroy = scope.$on('$destroy', function () {
-                        InvitationService.offListenerCB(InvitationService.invitationDataListener.USER_TEACHERS, userId, myTeachersCB);
-                        InvitationService.offListenerCB(InvitationService.invitationDataListener.NEW_INVITATIONS, userId, newInvitationsCB);
-                        InvitationService.offListenerCB(InvitationService.invitationDataListener.PENDING_CONFIRMATIONS, userId, pendingConfirmationsCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, myTeachersCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
                         watcherDestroy();
                     });
@@ -5243,7 +5240,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InfraConfigSrv", "StudentContextSrv", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
+        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "$timeout", "PopUpSrv", "$filter", "UserProfileService", "InfraConfigSrv", "StudentContextSrv", function ($mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
             'ngInject';
             var self = this;
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
@@ -5254,7 +5251,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 timeout: ENV.promiseTimeOut
             };
 
-            this.invitationDataListener = {
+            this.listeners = {
                 USER_TEACHERS: 'approved',
                 NEW_INVITATIONS: 'sent',
                 PENDING_CONFIRMATIONS: 'received'
@@ -5270,8 +5267,9 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 receiverDelete: 6
             };
 
-            this.offListenerCB = function (event, userId, valueCB) {
+            this.offListenerCB = function (event, valueCB) {
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    var userId = StudentContextSrv.getCurrUid();
                     var listenerData = getListenerData(userId, event);
                     studentStorage.offEvent('child_added', listenerData.path, listenerData.cb);
                     studentStorage.offEvent('child_removed', listenerData.path, listenerData.cb);
@@ -5284,8 +5282,9 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 });
             };
 
-            this.registerListenerCB = function (event, userId, valueCB) {
+            this.registerListenerCB = function (event, valueCB) {
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    var userId = StudentContextSrv.getCurrUid();
                     if (!registerEvents[userId]) {
                         registerEvents[userId] = {};
                     }
@@ -5407,13 +5406,13 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 };
 
                 switch (event){
-                    case self.invitationDataListener.USER_TEACHERS:
+                    case self.listeners.USER_TEACHERS:
                         listenerData.cb = userTeachersCB;
                         break;
-                    case self.invitationDataListener.NEW_INVITATIONS:
+                    case self.listeners.NEW_INVITATIONS:
                         listenerData.cb = newInvitationsCB;
                         break;
-                    case self.invitationDataListener.PENDING_CONFIRMATIONS:
+                    case self.listeners.PENDING_CONFIRMATIONS:
                         listenerData.cb = pendingConfirmationsCB;
                         break;
                 }
@@ -5428,9 +5427,11 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                         teacher.zinkerzTeacher = profile.zinkerzTeacher;
                         teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
 
-                        angular.forEach(registerEvents[userId][self.invitationDataListener.USER_TEACHERS].cb, function (cb) {
+                        angular.forEach(registerEvents[userId][self.listeners.USER_TEACHERS].cb, function (cb) {
                             if (angular.isFunction(cb)) {
-                                cb(teacher);
+                                $timeout(function () {
+                                    cb(teacher);
+                                });
                             }
                         });
                     });
@@ -5439,18 +5440,22 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
             function newInvitationsCB (data) {
                 var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][self.invitationDataListener.NEW_INVITATIONS].cb, function (cb) {
+                angular.forEach(registerEvents[userId][self.listeners.NEW_INVITATIONS].cb, function (cb) {
                     if (angular.isFunction(cb)) {
-                        cb(data);
+                        $timeout(function () {
+                            cb(data);
+                        });
                     }
                 });
             }
 
             function pendingConfirmationsCB (data) {
                 var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][self.invitationDataListener.PENDING_CONFIRMATIONS].cb, function (cb) {
+                angular.forEach(registerEvents[userId][self.listeners.PENDING_CONFIRMATIONS].cb, function (cb) {
                     if (angular.isFunction(cb)) {
-                        cb(data);
+                        $timeout(function () {
+                            cb(data);
+                        });
                     }
                 });
             }
