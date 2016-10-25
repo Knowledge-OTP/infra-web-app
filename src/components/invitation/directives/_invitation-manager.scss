@@ -2,53 +2,55 @@
         '../../../../src/scss/imports/variables';
 
 invitation-manager {
-    .invite-icon-btn {
-        margin-right: 5px;
-        position: relative;
 
-        .num-of-receive {
-            position: absolute;
-            top: 0;
-            right: 4px;
-            width: 14px;
-            height: 14px;
-            background: $bgColor32;
-            font-size: 10px;
-            color: white;
-            border-radius: 7px;
-            text-align: center;
-        }
+    .invitation-manager{
+        .invite-icon-btn {
+            margin-right: 5px;
+            position: relative;
 
-        .teacher-icon-wrap {
-            background-color: $bgColor33;
-            svg-icon {
-                width: 24px;
+            .num-of-receive {
+                position: absolute;
+                top: 0;
+                right: 4px;
+                width: 14px;
+                height: 14px;
+                background: $bgColor32;
+                font-size: 10px;
+                color: white;
+                border-radius: 7px;
+                text-align: center;
+            }
+
+            .circle-invite-wrap {
+                width: 33px;
+                height: 33px;
+                border-radius: 17px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-right: 10px;
+                cursor: pointer;
+
+                &.teacher-icon-wrap {
+                    background-color: $bgColor33;
+                    svg-icon {
+                        width: 24px;
+                    }
+                }
+
+                &.teacher-active-icon-wrap {
+                    border: 1px solid $bgColor5;
+                    .invitation-teacher-active-icon {
+                        width: 23px;
+                        height: 16px;
+                    }
+                    .invitation-teacher-active-icon * {
+                        fill: $bgColor5;
+                    }
+                }
             }
         }
     }
-
-    .circle-invite-wrap {
-        width: 33px;
-        height: 33px;
-        border-radius: 17px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: 10px;
-        cursor: pointer;
-    }
-
-    .teacher-active-icon-wrap {
-        border: 1px solid $bgColor5;
-        .teacher-active-icon {
-            width: 23px;
-            height: 16px;
-        }
-        .teacher-active-icon * {
-            fill: $bgColor5;
-        }
-    }
-
 }
 
 md-menu-content.md-menu-content-invitation-manager {

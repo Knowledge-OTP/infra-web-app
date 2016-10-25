@@ -2018,10 +2018,10 @@ md-dialog.invitation-confirm-modal {
 /* general */
 /* paths */
 /* general */
-invitation-manager .invite-icon-btn {
+invitation-manager .invitation-manager .invite-icon-btn {
   margin-right: 5px;
   position: relative; }
-  invitation-manager .invite-icon-btn .num-of-receive {
+  invitation-manager .invitation-manager .invite-icon-btn .num-of-receive {
     position: absolute;
     top: 0;
     right: 4px;
@@ -2032,31 +2032,29 @@ invitation-manager .invite-icon-btn {
     color: white;
     border-radius: 7px;
     text-align: center; }
-  invitation-manager .invite-icon-btn .teacher-icon-wrap {
-    background-color: #f6f6f6; }
-    invitation-manager .invite-icon-btn .teacher-icon-wrap svg-icon {
-      width: 24px; }
-
-invitation-manager .circle-invite-wrap {
-  width: 33px;
-  height: 33px;
-  border-radius: 17px;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
-  -ms-flex-align: center;
-      align-items: center;
-  margin-right: 10px;
-  cursor: pointer; }
-
-invitation-manager .teacher-active-icon-wrap {
-  border: 1px solid #0a9bad; }
-  invitation-manager .teacher-active-icon-wrap .teacher-active-icon {
-    width: 23px;
-    height: 16px; }
-  invitation-manager .teacher-active-icon-wrap .teacher-active-icon * {
-    fill: #0a9bad; }
+  invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap {
+    width: 33px;
+    height: 33px;
+    border-radius: 17px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    margin-right: 10px;
+    cursor: pointer; }
+    invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap {
+      background-color: #f6f6f6; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap svg-icon {
+        width: 24px; }
+    invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap {
+      border: 1px solid #0a9bad; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon {
+        width: 23px;
+        height: 16px; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon * {
+        fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
   min-width: 280px;
@@ -5846,10 +5844,10 @@ md-dialog.invitation-confirm-modal {
 /* general */
 /* paths */
 /* general */
-invitation-manager .invite-icon-btn {
+invitation-manager .invitation-manager .invite-icon-btn {
   margin-right: 5px;
   position: relative; }
-  invitation-manager .invite-icon-btn .num-of-receive {
+  invitation-manager .invitation-manager .invite-icon-btn .num-of-receive {
     position: absolute;
     top: 0;
     right: 4px;
@@ -5860,31 +5858,29 @@ invitation-manager .invite-icon-btn {
     color: white;
     border-radius: 7px;
     text-align: center; }
-  invitation-manager .invite-icon-btn .teacher-icon-wrap {
-    background-color: #f6f6f6; }
-    invitation-manager .invite-icon-btn .teacher-icon-wrap svg-icon {
-      width: 24px; }
-
-invitation-manager .circle-invite-wrap {
-  width: 33px;
-  height: 33px;
-  border-radius: 17px;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
-  -ms-flex-align: center;
-      align-items: center;
-  margin-right: 10px;
-  cursor: pointer; }
-
-invitation-manager .teacher-active-icon-wrap {
-  border: 1px solid #0a9bad; }
-  invitation-manager .teacher-active-icon-wrap .teacher-active-icon {
-    width: 23px;
-    height: 16px; }
-  invitation-manager .teacher-active-icon-wrap .teacher-active-icon * {
-    fill: #0a9bad; }
+  invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap {
+    width: 33px;
+    height: 33px;
+    border-radius: 17px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    margin-right: 10px;
+    cursor: pointer; }
+    invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap {
+      background-color: #f6f6f6; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap svg-icon {
+        width: 24px; }
+    invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap {
+      border: 1px solid #0a9bad; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon {
+        width: 23px;
+        height: 16px; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap .invitation-teacher-active-icon * {
+        fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
   min-width: 280px;

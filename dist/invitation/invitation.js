@@ -575,60 +575,60 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
   $templateCache.put("components/invitation/directives/invitation-manager.template.html",
     "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\">\n" +
     "    <md-menu md-offset=\"-225 51\"  class=\"invitation-manager\">\n" +
-    "    <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" aria-label=\"Open Invite menu\" ng-switch=\"hasTeachers\">\n" +
-    "        <div class=\"num-of-receive\" ng-if=\"hasInvitations\">{{getItemsCount(invitations)}}</div>\n" +
-    "        <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
-    "            <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
-    "        </section>\n" +
-    "        <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
-    "            <svg-icon name=\"invitation-teacher-active-icon\"></svg-icon>\n" +
-    "        </section>\n" +
-    "    </div>\n" +
-    "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasInvitations || hasTeachers || hasConfirmations)\">\n" +
-    "        <div class=\"empty-invite\" ng-switch-when=\"false\">\n" +
-    "            <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
-    "            <div class=\"invite-action\">\n" +
-    "                <div class=\"md-button outline-blue invite-btn\" ng-click=\"openInviteModal()\">\n" +
-    "                    <div translate=\".INVITE_STUDENTS\"></div>\n" +
+    "        <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" aria-label=\"Open Invite menu\" ng-switch=\"hasTeachers\">\n" +
+    "            <div class=\"num-of-receive\" ng-if=\"hasInvitations\">{{getItemsCount(invitations)}}</div>\n" +
+    "            <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
+    "                <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
+    "            </section>\n" +
+    "            <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
+    "                <svg-icon name=\"invitation-teacher-active-icon\" class=\"invitation-teacher-active-icon\"></svg-icon>\n" +
+    "            </section>\n" +
+    "        </div>\n" +
+    "        <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasInvitations || hasTeachers || hasConfirmations)\">\n" +
+    "            <div class=\"empty-invite\" ng-switch-when=\"false\">\n" +
+    "                <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
+    "                <div class=\"invite-action\">\n" +
+    "                    <div class=\"md-button outline-blue invite-btn\" ng-click=\"openInviteModal()\">\n" +
+    "                        <div translate=\".INVITE_STUDENTS\"></div>\n" +
+    "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "        </div>\n" +
-    "        <div ng-switch-when=\"true\" ng-if=\"hasTeachers\" class=\"my-teacher-wrap\" ng-repeat=\"teacher in myTeachers\">\n" +
-    "            <div class=\"title\" translate=\".MY_TEACHER\"></div>\n" +
-    "            <div class=\"teacher-name\">{{::teacher.senderName}}</div>\n" +
-    "            <div class=\"teacher-email\">{{::teacher.senderEmail}}</div>\n" +
-    "            <svg-icon name=\"invitation-close-popup\" class=\"delete-teacher\" ng-click=\"deleteTeacher(teacher)\"></svg-icon>\n" +
-    "        </div>\n" +
-    "        <md-list ng-switch-when=\"true\" ng-if=\"hasInvitations\">\n" +
-    "            <md-subheader class=\"invite-sub-title\">{{::pendingTitle}}</md-subheader>\n" +
-    "            <md-list-item ng-repeat=\"invite in invitations\">\n" +
-    "                <svg-icon name=\"received-invitations-icon\" class=\"received-invitations\"></svg-icon>\n" +
-    "                <div class=\"teacher-wrap\">\n" +
-    "                    <div class=\"teacher-name\">{{::invite.senderName}}</div>\n" +
-    "                    <div class=\"creation-time\">{{::invite.creationTime | date : 'd MMM, h:mm a'}}</div>\n" +
-    "                </div>\n" +
-    "                <div class=\"decline-invite\">\n" +
-    "                    <svg-icon name=\"invitation-close-popup\" class=\"decline-invite-btn\" ng-click=\"decline(invite)\"></svg-icon>\n" +
-    "                </div>\n" +
-    "                <div class=\"approve-invite\">\n" +
-    "                    <svg-icon name=\"v-icon\" class=\"v-icon-btn\" ng-click=\"approve(invite)\"></svg-icon>\n" +
-    "                </div>\n" +
-    "            </md-list-item>\n" +
-    "        </md-list>\n" +
-    "        <md-list g-switch-when=\"true\" ng-if=\"hasConfirmations\">\n" +
-    "            <md-subheader class=\"invite-sub-title\">{{::pendingConformationsTitle}}</md-subheader>\n" +
-    "            <md-list-item ng-repeat=\"conformation in conformations\">\n" +
-    "                <svg-icon name=\"sent-invitations-icon\" class=\"sent-invitations\"></svg-icon>\n" +
-    "                <div class=\"teacher-wrap\">\n" +
-    "                    <div class=\"teacher-email\">{{::conformation.receiverName}}</div>\n" +
-    "                </div>\n" +
-    "                <div class=\"decline-conformation\">\n" +
-    "                    <svg-icon name=\"invitation-close-popup\" class=\"decline-conformation-btn\" ng-click=\"deletePendingConformations(conformation)\"></svg-icon>\n" +
-    "                </div>\n" +
-    "            </md-list-item>\n" +
-    "        </md-list>\n" +
-    "    </md-menu-content>\n" +
-    "</md-menu>\n" +
+    "            <div ng-switch-when=\"true\" ng-if=\"hasTeachers\" class=\"my-teacher-wrap\" ng-repeat=\"teacher in myTeachers\">\n" +
+    "                <div class=\"title\" translate=\".MY_TEACHER\"></div>\n" +
+    "                <div class=\"teacher-name\">{{::teacher.senderName}}</div>\n" +
+    "                <div class=\"teacher-email\">{{::teacher.senderEmail}}</div>\n" +
+    "                <svg-icon name=\"invitation-close-popup\" class=\"delete-teacher\" ng-click=\"deleteTeacher(teacher)\"></svg-icon>\n" +
+    "            </div>\n" +
+    "            <md-list ng-switch-when=\"true\" ng-if=\"hasInvitations\">\n" +
+    "                <md-subheader class=\"invite-sub-title\">{{::pendingTitle}}</md-subheader>\n" +
+    "                <md-list-item ng-repeat=\"invite in invitations\">\n" +
+    "                    <svg-icon name=\"received-invitations-icon\" class=\"received-invitations\"></svg-icon>\n" +
+    "                    <div class=\"teacher-wrap\">\n" +
+    "                        <div class=\"teacher-name\">{{::invite.senderName}}</div>\n" +
+    "                        <div class=\"creation-time\">{{::invite.creationTime | date : 'd MMM, h:mm a'}}</div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"decline-invite\">\n" +
+    "                        <svg-icon name=\"invitation-close-popup\" class=\"decline-invite-btn\" ng-click=\"decline(invite)\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"approve-invite\">\n" +
+    "                        <svg-icon name=\"v-icon\" class=\"v-icon-btn\" ng-click=\"approve(invite)\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                </md-list-item>\n" +
+    "            </md-list>\n" +
+    "            <md-list g-switch-when=\"true\" ng-if=\"hasConfirmations\">\n" +
+    "                <md-subheader class=\"invite-sub-title\">{{::pendingConformationsTitle}}</md-subheader>\n" +
+    "                <md-list-item ng-repeat=\"conformation in conformations\">\n" +
+    "                    <svg-icon name=\"sent-invitations-icon\" class=\"sent-invitations\"></svg-icon>\n" +
+    "                    <div class=\"teacher-wrap\">\n" +
+    "                        <div class=\"teacher-email\">{{::conformation.receiverName}}</div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"decline-conformation\">\n" +
+    "                        <svg-icon name=\"invitation-close-popup\" class=\"decline-conformation-btn\" ng-click=\"deletePendingConformations(conformation)\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                </md-list-item>\n" +
+    "            </md-list>\n" +
+    "        </md-menu-content>\n" +
+    "    </md-menu>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html",
