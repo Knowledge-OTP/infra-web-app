@@ -5053,7 +5053,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", "StudentContextSrv", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader, StudentContextSrv) {
+        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", "StudentContextSrv", "$timeout", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader, StudentContextSrv, $timeout) {
             'ngInject';
 
            return {
@@ -5069,31 +5069,36 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     scope.declinedTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.DECLINED_INVITATIONS');
                     scope.hasTeachers = scope.hasInvitations = scope.hasConfirmations = false;
 
-
                     function myTeachersCB(teacher){
-                        if (!angular.isObject(scope.myTeachers)) {
-                            scope.myTeachers = {};
-                        }
-                        scope.myTeachers[teacher.senderUid] = teacher;
-                        scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
+                        $timeout(function () {
+                            if (!angular.isObject(scope.myTeachers)) {
+                                scope.myTeachers = {};
+                            }
+                            scope.myTeachers[teacher.senderUid] = teacher;
+                            scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
+                        });
                     }
 
                     function newInvitationsCB(invitation){
-                        if (!angular.isObject(scope.invitations)) {
-                            scope.invitations = {};
-                        }
-                        scope.invitations[invitation.invitationId] = invitation;
-                        scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
-                        scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
+                        $timeout(function () {
+                            if (!angular.isObject(scope.invitations)) {
+                                scope.invitations = {};
+                            }
+                            scope.invitations[invitation.invitationId] = invitation;
+                            scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
+                            scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
+                        });
                     }
 
                     function pendingConfirmationsCB(pendingConf){
-                        if (!angular.isObject(scope.conformations)) {
-                            scope.conformations = {};
-                        }
-                        scope.conformations[pendingConf.invitationId] = pendingConf;
-                        scope.pendingConformationsTitle += ' (' + (scope.getItemsCount(scope.conformations) || 0) + ')';
-                        scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
+                        $timeout(function () {
+                            if (!angular.isObject(scope.conformations)) {
+                                scope.conformations = {};
+                            }
+                            scope.conformations[pendingConf.invitationId] = pendingConf;
+                            scope.pendingConformationsTitle += ' (' + (scope.getItemsCount(scope.conformations) || 0) + ')';
+                            scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
+                        });
                     }
 
                     scope.getItemsCount = function (obj) {
