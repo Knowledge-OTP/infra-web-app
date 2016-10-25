@@ -34,13 +34,13 @@
             return env;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvConfigSrv) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, ENV) {
             'ngInject';
 
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
-                return AllEnvConfigSrv[env][appContext];
+                return ENV[env][appContext];
             }
 
             function _getAppScopeName(userContext, appEnvConfig) {
