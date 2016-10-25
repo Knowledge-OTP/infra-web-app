@@ -268,7 +268,7 @@
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
-                            _addFirstRegistrationRecord(appContext, userContext);
+                            // _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
