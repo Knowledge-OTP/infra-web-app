@@ -15,7 +15,10 @@
                 var svgMap = {
                     'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
                     'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
-                    'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg'
+                    'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
+                    'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
+                    'received-invitations-icon': 'components/invitation/svg/received-invitations-icon.svg',
+                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);

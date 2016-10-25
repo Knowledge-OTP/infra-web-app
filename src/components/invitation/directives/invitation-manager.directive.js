@@ -2,7 +2,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader, StudentContextSrv, $timeout) {
+        function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader, StudentContextSrv, $timeout, PresenceService) {
             'ngInject';
 
            return {
@@ -13,10 +13,8 @@
                     var userId = StudentContextSrv.getCurrUid();
                     $translatePartialLoader.addPart('invitation');
                     scope.translate = $filter('translate');
-                    scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
-                    scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
-                    scope.declinedTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.DECLINED_INVITATIONS');
-                    scope.hasTeachers = scope.hasInvitations = scope.hasConfirmations = false;
+                    scope.userStatus = PresenceService.userStatus;
+                    scope.deleteTeacherMode = false;
 
                     function myTeachersCB(teacher){
                         $timeout(function () {
@@ -25,6 +23,7 @@
                             }
                             scope.myTeachers[teacher.senderUid] = teacher;
                             scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
+                            startTrackTeachersPresence();
                         });
                     }
 
@@ -34,7 +33,6 @@
                                 scope.invitations = {};
                             }
                             scope.invitations[invitation.invitationId] = invitation;
-                            scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
                             scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
                         });
                     }
@@ -45,13 +43,42 @@
                                 scope.conformations = {};
                             }
                             scope.conformations[pendingConf.invitationId] = pendingConf;
-                            scope.pendingConformationsTitle += ' (' + (scope.getItemsCount(scope.conformations) || 0) + ')';
                             scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
                         });
                     }
 
+                    function startTrackTeachersPresence() {
+                        angular.forEach(scope.myTeachers, function (teacher) {
+                            PresenceService.startTrackUserPresence(teacher.senderUid, trackUserPresenceCB.bind(null, teacher.senderUid));
+                        });
+                    }
+
+                    function trackUserPresenceCB(userId, newStatus) {
+                        $timeout(function () {
+                            angular.forEach(scope.myTeachers, function (teacher) {
+                                if (teacher.senderUid === userId) {
+                                    teacher.presence = newStatus;
+                                    teacher.callBtnData = angular.copy({
+                                        receiverId: teacher.senderUid,
+                                        isOffline: teacher.presence === PresenceService.userStatus.OFFLINE
+                                    });
+                                }
+                            });
+                        });
+                    }
+
+                    scope.toggleDeleteTeacher = function () {
+                        scope.deleteTeacherMode = !scope.deleteTeacherMode;
+                    };
+
                     scope.getItemsCount = function (obj) {
                         return Object.keys(obj || {}).length;
+                    };
+
+                    scope.hasAnyItems = function () {
+                        return (Object.keys(scope.invitations || {}).length > 0 ||
+                        Object.keys(scope.conformations || {}).length > 0 ||
+                        Object.keys(scope.myTeachers || {}).length > 0);
                     };
 
                     scope.approve = function (invitation) {

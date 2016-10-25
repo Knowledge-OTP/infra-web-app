@@ -1,0 +1,9 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 76.3 56.3" class="received-invitations-svg">
+<style type="text/css">
+	.received-invitations-svg .st0{fill:none;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<path class="st0" d="M73.8,18.2v25.1c0,5.8-4.8,10.6-10.6,10.6H13.1c-5.8,0-10.6-4.8-10.6-10.6V18.2"/>
+<line class="st0" x1="38.2" y1="2.5" x2="38.2" y2="38.8"/>
+<line class="st0" x1="38.2" y1="40.2" x2="54.5" y2="23.9"/>
+<line class="st0" x1="38.2" y1="40.2" x2="21.9" y2="23.9"/>
+</svg>

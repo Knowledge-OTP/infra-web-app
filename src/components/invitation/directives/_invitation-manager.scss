@@ -1,20 +1,21 @@
 @import '../../../../bower_components/infra/dist/mixins/mixins',
-        '../../../../src/scss/imports/variables';
+'../../../../src/scss/imports/variables';
 
 invitation-manager {
+    .invitation-manager {
+        display: block;
+        padding-right: 10px;
 
-    .invitation-manager{
         .invite-icon-btn {
-            margin-right: 5px;
             position: relative;
 
             .num-of-receive {
                 position: absolute;
                 top: 0;
-                right: 4px;
+                right: -5px;
                 width: 14px;
                 height: 14px;
-                background: $bgColor32;
+                background: $bgColor18;
                 font-size: 10px;
                 color: white;
                 border-radius: 7px;
@@ -28,22 +29,29 @@ invitation-manager {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin-right: 10px;
                 cursor: pointer;
 
                 &.teacher-icon-wrap {
                     background-color: $bgColor33;
-                    svg-icon {
+                    svg-icon.teacher-icon {
                         width: 24px;
+                        svg {
+                            width: 100%;
+                        }
                     }
                 }
 
                 &.teacher-active-icon-wrap {
-                    border: 1px solid $bgColor5;
-                    .invitation-teacher-active-icon * {
-                        fill: $bgColor5;
+                    border: 1px solid $bgColor23;
+                    .teacher-active-icon {
                         width: 23px;
                         height: 16px;
+                        svg {
+                            width: 100%;
+                            * {
+                                fill: $bgColor23;
+                            }
+                        }
                     }
                 }
             }
@@ -53,9 +61,9 @@ invitation-manager {
 
 md-menu-content.md-menu-content-invitation-manager {
     min-width: 280px;
-    overflow: hidden;
+    max-height: 400px;
+    border-radius: 6px;
     padding: 0;
-
     md-list {
         padding: {
             top: 0;
@@ -64,30 +72,39 @@ md-menu-content.md-menu-content-invitation-manager {
 
         md-list-item {
             min-height: 20px;
-            border-bottom: 1px solid $borderColor7;
+            border-bottom: 1px solid $bgColor43;
             display: flex;
             flex-direction: row;
             align-items: center;
 
-            .received-invitations {
+            svg-icon.received-invitations {
                 width: 14px;
                 height: 14px;
-                stroke: $bgColor5;
-            }
-
-            .received-invitations * {
-                stroke: $bgColor5;
+                stroke: $bgColor23;
+                margin-bottom: 5px;
+                svg {
+                    width: 100%;
+                    * {
+                        stroke: $bgColor23;
+                    }
+                }
             }
 
             .sent-invitations {
                 width: 14px;
                 height: 14px;
                 stroke: $bgColor34;
+                svg {
+                    width: 100%;
+                    * {
+                        stroke: $bgColor34;
+                    }
+                }
             }
 
-            .sent-invitations * {
-                stroke: $bgColor34;
-
+            &.invite-list-wrap {
+                margin-bottom: 10px;
+                padding-left: 6px;
             }
         }
 
@@ -95,13 +112,27 @@ md-menu-content.md-menu-content-invitation-manager {
             padding: 10px 0;
         }
 
-        .teacher-wrap, .declined-teacher-wrap {
+        .icon-wrap {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+            .creation-time {
+                @include text-style(10px, $fontColor4, Lato, $lightFontWeight);
+            }
+        }
+
+        .teacher-wrap,
+        .declined-teacher-wrap {
             display: flex;
             flex-direction: column;
-            padding: 10px 20px;
             flex-grow: 1;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 12px;
 
-            .teacher-name, .teacher-email {
+            .teacher-name,
+            .teacher-email {
                 @include text-style(16px, $fontColor4, Lato, $regularFontWeight);
                 text-transform: capitalize;
                 flex-grow: 1;
@@ -109,12 +140,8 @@ md-menu-content.md-menu-content-invitation-manager {
             }
 
             .teacher-email {
-                @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
-
-            }
-
-            .creation-time {
-                @include text-style(10px, $fontColor4, Lato, $lightFontWeight);
+                @include text-style(12px, $fontColor4, Lato, $regularFontWeight);
+                text-transform: lowercase;
             }
 
             .declined-your-invitation-text {
@@ -134,9 +161,42 @@ md-menu-content.md-menu-content-invitation-manager {
             @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
             text-transform: uppercase;
             border-bottom: 1px solid $borderColor7;
+            padding: 10px;
+        }
+        .decline-invite-count {
+            padding-top: 20px;
+        }
+        .conf-wrap {
+            padding-left: 14px;
+            .teacher-wrap {
+                padding-left: 20px
+            }
         }
 
-        .decline-invite, .decline-conformation {
+        .decline-conformation {
+            width: 25px;
+            height: 25px;
+            border: 1px solid $borderColor13;
+            border-radius: 13px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            svg-icon.decline-invite-btn,
+            svg-icon.decline-conformation-btn {
+                width: 9px;
+                cursor: pointer;
+                margin-top: -2px;
+                svg {
+                    width: 100%;
+                    * {
+                        stroke: $bgColor34;
+                    }
+                }
+            }
+        }
+
+        .decline-invite {
             width: 25px;
             height: 25px;
             border: 1px solid $borderColor13;
@@ -144,50 +204,52 @@ md-menu-content.md-menu-content-invitation-manager {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-right: 6px;
 
-            .decline-invite-btn, .decline-conformation-btn {
-                height: 12px;
-                width: 12px;
+            svg-icon.decline-invite-btn,
+            svg-icon.decline-conformation-btn {
+                width: 9px;
                 cursor: pointer;
                 margin-top: -2px;
-            }
-
-            .decline-invite-btn *, .decline-conformation-btn * {
-                stroke: $bgColor31;
+                svg {
+                    width: 100%;
+                    * {
+                        stroke: $bgColor34;
+                    }
+                }
             }
         }
 
         .decline-conformation {
             border: none;
-            .decline-conformation-btn {
-
-            }
         }
 
+        .decline-invite {
+            margin-right: 3px;
+        }
         .approve-invite {
             width: 25px;
             height: 25px;
-            border: 1px solid $borderColor3;
+            border: 1px solid $bgColor7;
             border-radius: 13px;
             display: flex;
             justify-content: center;
             align-items: center;
 
-            .v-icon-btn {
+            svg-icon.v-icon-btn {
                 width: 14px;
                 cursor: pointer;
-            }
-
-            .v-icon-btn * {
-                stroke: $bgColor7;
+                svg {
+                    width: 100%;
+                    * {
+                        stroke: $bgColor12;
+                    }
+                }
             }
         }
     }
-
     .empty-invite {
         .empty-msg {
-            @include text-style(16px, $fontColor2, Lato, $regularFontWeight);
+            @include text-style(16px, $fontColor3, Lato, $regularFontWeight);
             text-align: center;
             display: flex;
             flex-grow: 1;
@@ -199,50 +261,115 @@ md-menu-content.md-menu-content-invitation-manager {
         .invite-action {
             display: flex;
             align-items: center;
-            height: 60px;
             background: $bgColor35;
+            padding: 10px;
 
             .invite-btn {
-                margin: 10px auto;
+                margin: 0 auto;
             }
         }
     }
-
-    .my-teacher-wrap {
-        @include text-style(14px, $fontColor2, Lato, $regularFontWeight);
-        background-color: $bgColor35;
+    .my-teachers-wrap {
+        @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
         border-bottom: 1px solid $borderColor7;
-        padding: 15px;
         position: relative;
 
-        .title {
-            font-size: 12px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
+        .teachers-header {
+            height: 34px;
+            line-height: 34px;
+            @include text-style(16px, $fontColor3, Quicksand, $boldFontWeight);
+            text-align: center;
+            background-color: $bgColor49;
+
+            .tutors-list-edit-icon {
+                width: 14px;
+                height: 14px;
+                fill: $bgColor29;
+                float: right;
+                padding-right: 15px;
+                padding-top: 10px;
+                cursor: pointer;
+                svg {
+                    width: 14px;
+                    height: 14px;
+                }
+                &.delete-techer-mode {
+                    fill: $bgColor23;
+                }
+            }
         }
 
-        .teacher-name {
-            text-transform: capitalize;
-            line-height: 25px;
-        }
+        .teacher-item {
+            padding: 13px 10px;
+            border-bottom: 1px solid $borderColor7;
+            &:last-child {
+                border-bottom: none;
+            }
+            .inner {
+                display: flex;
+                align-items: center;
+                .teacher-status {
+                    flex-basis: 10%;
+                    padding: 5px;
+                    position: relative;
+                    .online-indicator {
+                        position: absolute;
+                        top: -12px;
+                        background: #B33520;
+                        width: 7px;
+                        height: 7px;
+                        border: 2px solid #ebebeb;
+                        border-radius: 6px;
 
-        .teacher-email {
-            font-weight: $lightFontWeight;
-            color: $bgColor31;
-        }
+                        &.offline {
+                            background: $bgColor56;
+                        }
+                        &.online {
+                            background: $bgColor12;
+                        }
+                        &.idle {
+                            background: $bgColor46;
+                        }
+                    }
+                }
+                .teacher-name {
+                    padding: 5px;
+                    flex-basis: 80%;
 
-        .delete-teacher {
-            height: 12px;
-            width: 12px;
-            cursor: pointer;
-            margin-top: -2px;
-            position: absolute;
-            right: 10px;
-            top: 50%;
-        }
-
-        .delete-teacher * {
-            stroke: $bgColor31;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    box-sizing: border-box;
+                    @include text-style(18px, $fontColor3, Lato, $boldFontWeight);
+                    .teacher-subject,
+                    .teacher-email {
+                        margin-top: 11px;
+                        line-height: 12px;
+                        @include text-style(12px, $fontColor4, Lato, $regularFontWeight);
+                    }
+                    .teacher-email {
+                        text-transform: lowercase;
+                    }
+                }
+                .actions {
+                    min-width: 47px;
+                    flex-basis: 10%;
+                    padding: {
+                        top: 5px;
+                        bottom: 5px;
+                        left: 5px;
+                        right: 0;
+                    }
+                    .delete-teacher {
+                        text-align: center;
+                        cursor: pointer;
+                        color: $fontColor17;
+                        padding: {
+                            top: 10px;
+                        }
+                    }
+                }
+            }
         }
     }
 }
