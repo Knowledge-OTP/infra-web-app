@@ -9,6 +9,7 @@
             <svg-icon name="teacher-active-icon"></svg-icon>
         </section>
     </div>
+    hasInvitations={{hasInvitations}};hasTeachers={{hasTeachers}};hasConfirmations={{hasConfirmations}}; xx={{(hasInvitations || hasTeachers || hasConfirmations)}}
     <md-menu-content class="md-menu-content-invitation-manager" ng-switch="(hasInvitations || hasTeachers || hasConfirmations)">
         <div class="empty-invite" ng-switch-when="false">
             <div class="empty-msg" translate=".EMPTY_INVITE"></div>

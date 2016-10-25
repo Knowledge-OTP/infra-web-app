@@ -576,6 +576,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            <svg-icon name=\"teacher-active-icon\"></svg-icon>\n" +
     "        </section>\n" +
     "    </div>\n" +
+    "    hasInvitations={{hasInvitations}};hasTeachers={{hasTeachers}};hasConfirmations={{hasConfirmations}}; xx={{(hasInvitations || hasTeachers || hasConfirmations)}}\n" +
     "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasInvitations || hasTeachers || hasConfirmations)\">\n" +
     "        <div class=\"empty-invite\" ng-switch-when=\"false\">\n" +
     "            <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
