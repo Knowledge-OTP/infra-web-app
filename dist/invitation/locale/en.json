@@ -29,6 +29,7 @@
         "ARE_U_SURE": "Are you sure?",
         "YES": "Yes",
         "NO": "No",
+        "MY_TEACHERS":"My Teachers",
         "DELETE_SUCCESS": "The invitation was successfully deleted",
         "DELETE_ERROR": "We couldn't delete this invitation, please try again later.<br>If this persists please contact support@zinkerz.com"
     },

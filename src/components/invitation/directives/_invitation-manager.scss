@@ -42,14 +42,14 @@ invitation-manager {
                 }
 
                 &.teacher-active-icon-wrap {
-                    border: 1px solid $bgColor23;
+                    border: 1px solid $bgColor5;
                     .teacher-active-icon {
                         width: 23px;
                         height: 16px;
                         svg {
                             width: 100%;
                             * {
-                                fill: $bgColor23;
+                                fill: $bgColor5;
                             }
                         }
                     }
