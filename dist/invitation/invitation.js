@@ -120,11 +120,11 @@
                     }
 
                     scope.hasItems = function (obj) {
-                        return !!scope.getItemsCount(obj);
+                        return !!scope.getItemsCount(obj || {});
                     };
 
                     scope.getItemsCount = function (obj) {
-                        return Object.keys(obj).length;
+                        return Object.keys(obj || {}).length;
                     };
 
                     scope.approve = function (invitation) {
