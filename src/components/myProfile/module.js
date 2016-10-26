@@ -14,7 +14,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'myProfile-icon': 'components/myProfile/svg/user-icon.svg',
+                'myProfile-icon': 'components/myProfile/svg/profile-icon.svg',
                 'myProfile-danger-red-icon': 'components/myProfile/svg/error-icon.svg',
                 'myProfile-close-popup': 'components/myProfile/svg/close-popup.svg',
                 'myProfile-completed-v-icon': 'components/myProfile/svg/completed-v.svg'

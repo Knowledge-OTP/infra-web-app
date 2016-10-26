@@ -14,7 +14,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'myProfile-icon': 'components/myProfile/svg/user-icon.svg',
+                'myProfile-icon': 'components/myProfile/svg/profile-icon.svg',
                 'myProfile-danger-red-icon': 'components/myProfile/svg/error-icon.svg',
                 'myProfile-close-popup': 'components/myProfile/svg/close-popup.svg',
                 'myProfile-completed-v-icon': 'components/myProfile/svg/completed-v.svg'
@@ -519,26 +519,22 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "	c1.3,0,2.2,0.5,2.6,1.4c0.4,0.9,0.7,2.2,0.7,3.9C30.8,15.6,30.8,16.6,30.7,17.7z\"/>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/myProfile/svg/user-icon.svg",
-    "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" x=\"0px\" y=\"0px\"\n" +
-    "     viewBox=\"0 0 409.165 409.164\" xml:space=\"preserve\" class=\"user-svg\">\n" +
+  $templateCache.put("components/myProfile/svg/profile-icon.svg",
+    "<svg version=\"1.1\" id=\"Layer_1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 140.7 171.1\" xml:space=\"preserve\" class=\"profile-svg\">\n" +
     "<style type=\"text/css\">\n" +
-    "	.user-svg {width: 100%; height: auto;}\n" +
-    "	.user-svg .st0{fill:none;enable-background:new    ;}\n" +
-    "	.user-svg .st1{fill:#000000;}\n" +
+    "	.profile-svg {width: 100%; height: auto;}\n" +
+    "	.profile-svg .st0{fill:#000000;}\n" +
     "</style>\n" +
-    "<path class=\"st0\"/>\n" +
-    "<g>\n" +
-    "	<g>\n" +
-    "		<path class=\"st1\" d=\"M204.583,216.671c50.664,0,91.74-48.075,91.74-107.378c0-82.237-41.074-107.377-91.74-107.377\n" +
-    "		c-50.668,0-91.74,25.14-91.74,107.377C112.844,168.596,153.916,216.671,204.583,216.671z\"/>\n" +
     "\n" +
-    "		<path class=\"st1\" d=\"M407.164,374.717L360.88,270.454c-2.117-4.771-5.836-8.728-10.465-11.138l-71.83-37.392\n" +
-    "		c-1.584-0.823-3.502-0.663-4.926,0.415c-20.316,15.366-44.203,23.488-69.076,23.488c-24.877,0-48.762-8.122-69.078-23.488\n" +
-    "		c-1.428-1.078-3.346-1.238-4.93-0.415L58.75,259.316c-4.631,2.41-8.346,6.365-10.465,11.138L2.001,374.717\n" +
-    "		c-3.191,7.188-2.537,15.412,1.75,22.005c4.285,6.592,11.537,10.526,19.4,10.526h362.861c7.863,0,15.117-3.936,19.402-10.527\n" +
-    "		C409.699,390.129,410.355,381.902,407.164,374.717z\"/>\n" +
-    "	</g>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M0.2,171.1c-0.9-10.2,0.8-19.6,3.6-28.9c2.9-9.6,9.3-14.6,19.1-15.7c4.1-0.5,8.3-1.1,12.3-2.1c6.1-1.5,10.7-5.1,13.7-11.2\n" +
+    "		c-7.7-7.5-13.2-16.5-16.9-26.6c-0.3-0.7-0.9-1.7-1.5-1.8c-6.2-0.8-7.3-5.8-8.4-10.4c-0.9-3.7-0.9-7.6-0.9-11.4\n" +
+    "		c0-1.7,0.7-4.4,1.8-4.9c5.5-2.5,3.5-7.2,4.1-11.3c1.3-9.1,2.8-18.3,4.8-27.3c1.8-8.4,7.8-13.3,15.7-16c13.1-4.6,26.4-4,39.9-1.9\n" +
+    "		c7.9,1.3,16,1.9,24,2.8c-3.3,10.2-0.9,21.2,1.5,32.2c0.8,3.5,0.9,7.2,1.1,10.9c0.2,3.9-0.4,7.3,3.3,11c5.5,5.5,1.1,22.2-5.8,26.1\n" +
+    "		c-1,0.6-2.1,1.6-2.6,2.7c-3.8,9.9-9.2,18.8-17.1,26.2c3.7,7.6,10.2,10.7,17.8,11.9c4.3,0.7,8.9,0.6,12.7,2.3\n" +
+    "		c4.2,1.9,9,4.6,11.2,8.3c6.2,10.6,7.4,22.5,7,35C93.7,171.1,47.2,171.1,0.2,171.1z\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
     "");

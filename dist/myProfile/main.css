@@ -85,7 +85,7 @@ md-dialog.my-profile {
         -ms-flex-align: center;
             align-items: center; }
         md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon {
-          width: 35px;
+          width: 30px;
           stroke: #ffffff; }
         md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon * {
           fill: #ffffff; }
