@@ -8,6 +8,7 @@
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
             var translate = $filter('translate');
             var registerEvents = {};
+            var myTeachers = {};
             var httpConfig = {
                 headers: 'application/json',
                 timeout: ENV.promiseTimeOut
@@ -53,15 +54,15 @@
 
                     if (!registerEvents[userId][event]) {
                         registerEvents[userId][event] = {
-                            cb: []
+                            cb: [valueCB]
                         };
+                    } else {
+                        registerEvents[userId][event].cb.push(valueCB);
+
+                        var listenerData = getListenerData(userId, event);
+                        studentStorage.onEvent('child_added', listenerData.path, listenerData.cb);
+                        studentStorage.onEvent('child_removed', listenerData.path, listenerData.cb);
                     }
-
-                    registerEvents[userId][event].cb.push(valueCB);
-
-                    var listenerData = getListenerData(userId, event);
-                    studentStorage.onEvent('child_added', listenerData.path, listenerData.cb);
-                    studentStorage.onEvent('child_removed', listenerData.path, listenerData.cb);
                 });
             };
 
@@ -183,16 +184,16 @@
             }
 
             function userTeachersCB(teacher) {
-                if (!angular.isUndefined(teacher) && teacher.senderUid) {
-                    var userId = StudentContextSrv.getCurrUid();
+                if (angular.isDefined(teacher)) {
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                         teacher.zinkerzTeacher = profile.zinkerzTeacher;
                         teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
 
-                        angular.forEach(registerEvents[userId][self.listeners.USER_TEACHERS].cb, function (cb) {
+                        myTeachers[teacher.senderUid] = teacher;
+                        angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {
                             if (angular.isFunction(cb)) {
                                 $timeout(function () {
-                                    cb(teacher);
+                                    cb(myTeachers);
                                 });
                             }
                         });

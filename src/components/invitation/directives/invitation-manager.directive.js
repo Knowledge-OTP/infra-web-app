@@ -15,11 +15,9 @@
                     scope.userStatus = PresenceService.userStatus;
                     scope.deleteTeacherMode = false;
 
-                    function myTeachersCB(teacher){
-                        if (!angular.isObject(scope.myTeachers)) {
-                            scope.myTeachers = {};
-                        }
-                        scope.myTeachers[teacher.senderUid] = teacher;
+                    function invitationManagerMyTeachersCB(teachers){
+
+                        scope.myTeachers = teachers;
                         scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
                         startTrackTeachersPresence();
                     }
@@ -113,12 +111,12 @@
                         InvitationService.openInviteTeacherModal();
                     };
 
-                    InvitationService.registerListenerCB(InvitationService.listeners.USER_TEACHERS, myTeachersCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
                     InvitationService.registerListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
                     InvitationService.registerListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
                     var watcherDestroy = scope.$on('$destroy', function () {
-                        InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, myTeachersCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
                         InvitationService.offListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
                         InvitationService.offListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
