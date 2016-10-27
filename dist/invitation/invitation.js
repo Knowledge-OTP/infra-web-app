@@ -324,8 +324,8 @@
                         registerEvents[userId][event].cb.push(valueCB);
 
                         var listenerData = getListenerData(userId, event);
-                        studentStorage.onEvent('child_added', listenerData.path, listenerData.cb);
-                        studentStorage.onEvent('child_removed', listenerData.path, listenerData.cb);
+                        studentStorage.onEvent('child_added', listenerData.path, listenerData.childAddedHandler);
+                        studentStorage.onEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
                     }
                 });
             };
@@ -434,20 +434,23 @@
 
                 switch (event){
                     case self.listeners.USER_TEACHERS:
-                        listenerData.cb = userTeachersCB;
+                        listenerData.childAddedHandler = userTeachersChildAdded;
+                        listenerData.childRemoveHandler = userTeachersChildRemove;
                         break;
                     case self.listeners.NEW_INVITATIONS:
-                        listenerData.cb = newInvitationsCB;
+                        listenerData.childAddedHandler = newInvitationsCB;
+                        listenerData.childRemoveHandler = newInvitationsCB;
                         break;
                     case self.listeners.PENDING_CONFIRMATIONS:
-                        listenerData.cb = pendingConfirmationsCB;
+                        listenerData.childAddedHandler = pendingConfirmationsCB;
+                        listenerData.childRemoveHandler = pendingConfirmationsCB;
                         break;
                 }
 
                 return listenerData;
             }
 
-            function userTeachersCB(teacher) {
+            function userTeachersChildAdded(teacher) {
                 if (angular.isDefined(teacher)) {
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                         teacher.zinkerzTeacher = profile.zinkerzTeacher;
@@ -461,6 +464,19 @@
                                 });
                             }
                         });
+                    });
+                }
+            }
+
+            function userTeachersChildRemove(teacher) {
+                if (angular.isDefined(teacher)) {
+                    delete myTeachers[teacher.senderUid];
+                    angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {
+                        if (angular.isFunction(cb)) {
+                            $timeout(function () {
+                                cb(myTeachers);
+                            });
+                        }
                     });
                 }
             }
