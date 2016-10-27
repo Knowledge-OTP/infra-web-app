@@ -312,6 +312,8 @@
             this.registerListenerCB = function (event, valueCB) {
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     var userId = StudentContextSrv.getCurrUid();
+                    var listenerData = getListenerData(userId, event);
+
                     if (!registerEvents[userId]) {
                         registerEvents[userId] = {};
                     }
@@ -320,12 +322,14 @@
                         registerEvents[userId][event] = {
                             cb: [valueCB]
                         };
-                    } else {
-                        registerEvents[userId][event].cb.push(valueCB);
-
-                        var listenerData = getListenerData(userId, event);
                         studentStorage.onEvent('child_added', listenerData.path, listenerData.childAddedHandler);
                         studentStorage.onEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
+                    } else {
+                        // listener is register fot this event for current User
+                        // add cb to cb's array & return data
+                        registerEvents[userId][event].cb.push(valueCB);
+                        applyData(event, valueCB);
+
                     }
                 });
             };
@@ -501,6 +505,18 @@
                         });
                     }
                 });
+            }
+
+            function applyData(event, cb) {
+                switch (event){
+                    case self.listeners.USER_TEACHERS:
+                        cb(myTeachers);
+                        break;
+                    case self.listeners.NEW_INVITATIONS:
+                        break;
+                    case self.listeners.PENDING_CONFIRMATIONS:
+                        break;
+                }
             }
         }]
     );
