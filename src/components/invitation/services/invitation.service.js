@@ -19,7 +19,6 @@
                 NEW_INVITATIONS: 'sent',
                 PENDING_CONFIRMATIONS: 'received'
             };
-
             this.invitationStatus = {
                 pending: 0,
                 approved: 1,

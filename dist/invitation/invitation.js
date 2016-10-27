@@ -99,7 +99,6 @@
                     scope.deleteTeacherMode = false;
 
                     function invitationManagerMyTeachersCB(teachers){
-
                         scope.myTeachers = teachers;
                         scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
                         startTrackTeachersPresence();
@@ -283,7 +282,6 @@
                 NEW_INVITATIONS: 'sent',
                 PENDING_CONFIRMATIONS: 'received'
             };
-
             this.invitationStatus = {
                 pending: 0,
                 approved: 1,

@@ -16,7 +16,6 @@
                     scope.deleteTeacherMode = false;
 
                     function invitationManagerMyTeachersCB(teachers){
-
                         scope.myTeachers = teachers;
                         scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
                         startTrackTeachersPresence();
