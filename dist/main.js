@@ -2916,7 +2916,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScores();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScoresData();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -2944,14 +2944,16 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                                var estimatedScoreForSubject = estimatedScore[subjectId];
+                                var estimatedScoreForSubjectArr = estimatedScore[subjectId];
+                                var estimatedScoreForSubject = estimatedScoreForSubjectArr[estimatedScoreForSubjectArr.length - 1];
+                                var isSubjectExist = estimatedScoreForSubject && estimatedScoreForSubject.score;
                                 return {
                                     subjectId: subjectId,
-                                    estimatedScore: (scope.d.isDiagnosticComplete && (typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
-                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject.score) : 0,
+                                    estimatedScore: (scope.d.isDiagnosticComplete && (isSubjectExist && typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
+                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete && isSubjectExist) ? calcPercentage(estimatedScoreForSubject.score) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
-                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
+                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete && isSubjectExist) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
                                     showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
@@ -7002,7 +7004,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             env = newEnv;
         };
 
-        this.getEnv = function(){
+        this.getEnv = function () {
             return env;
         };
 
@@ -7094,24 +7096,20 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     appName = appName + '-educator';
                 }
 
-                var isParamsUrlToSend = false;
+                var urlParams = '';
 
                 var invitationKey = InvitationKeyService.getInvitationKey();
-                var invitationPostFix = '';
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                    invitationPostFix = '&iid=' + invitationKey;
-                    isParamsUrlToSend = true;
+                    urlParams = '?iid=' + invitationKey;
                 }
 
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
-                var promoCodePostFix = '';
                 if (angular.isDefined(promoCode) && promoCode !== null) {
-                    promoCodePostFix = '&pcid=' + promoCode;
-                    isParamsUrlToSend = true;
-                }
 
-                var parmasPrefix = isParamsUrlToSend ? '?' : '';
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
+                    urlParams = urlParams === '' ? '?pcid=' + promoCode : urlParams + '&pcid=' + promoCode;
+
+                }
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -7244,7 +7242,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
-                            _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
@@ -11848,7 +11845,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <div class=\"text3 get-zinkerz-pro-text\"\n" +
     "                 translate=\".GET_ZINKERZ_PRO\">\n" +
     "            </div>\n" +
-    "            <md-button class=\"upgrade-btn znk outline\">\n" +
+    "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -13260,7 +13257,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             $translatePartialLoader.addPart('znkTimelineWebWrapper');
 
             var vm = this;
-            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();
             var getGoalsProm = UserGoalsService.getGoals();
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();

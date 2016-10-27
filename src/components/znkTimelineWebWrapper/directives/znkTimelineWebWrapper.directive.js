@@ -13,7 +13,7 @@
             $translatePartialLoader.addPart('znkTimelineWebWrapper');
 
             var vm = this;
-            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();
             var getGoalsProm = UserGoalsService.getGoals();
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
