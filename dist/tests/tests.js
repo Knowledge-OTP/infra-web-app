@@ -17,24 +17,6 @@
     ]);  
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tests')
-        .config(
-            ["$translateProvider", function ($translateProvider) {
-                'ngInject';
-                $translateProvider.translations('en', {
-                        "NAVIGATION_PANE": {
-                            "TEST": "Test {{testNumber}}",
-                            "FULL_TEST_TITLE": "Full test",
-                            "MINI_TEST_TITLE": "Mini test"
-                        }
-                    }
-                );
-            }]);
-})(angular);
-
 /**
  * attrs:
  */

@@ -2,10 +2,8 @@ angular.module('demo', [
     'demoEnv',
     'znk.infra-web-app.estimatedScoreWidget'
 ])
-    .config(function ($translateProvider, SvgIconSrvProvider, ScoringServiceProvider) {
+    .config(function (SvgIconSrvProvider, ScoringServiceProvider) {
         'ngInject';
-        $translateProvider.preferredLanguage('en');
-        $translateProvider.useSanitizeValueStrategy(null);
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',

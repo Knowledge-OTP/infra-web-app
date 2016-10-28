@@ -19,10 +19,8 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
             "pixelGifSrc": "https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif"
         }
     })
-    .config(function ($translateProvider, znkHeaderSrvProvider, $stateProvider) {
+    .config(function (znkHeaderSrvProvider, $stateProvider) {
         'ngInject';
-        $translateProvider.preferredLanguage('en');
-        $translateProvider.useSanitizeValueStrategy(null);
         $stateProvider
             .state('item1', {
                 url: '/item1',

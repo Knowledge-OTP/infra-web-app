@@ -1,17 +1,10 @@
 angular.module('demo', [
-        'znk.infra-web-app.diagnosticExercise',
-        'pascalprecht.translate'])
-    .config(function ($translateProvider) {
-
-    })
-
+        'znk.infra-web-app.diagnosticExercise'])
     .config(function ($urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider,
-                      DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, $translateProvider,
+                      DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider,
                       WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
         'ngInject';
 
-        $translateProvider.preferredLanguage('en');
-        $translateProvider.useSanitizeValueStrategy(null);
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
             'verbal-icon': 'svg/verbal-icon.svg'

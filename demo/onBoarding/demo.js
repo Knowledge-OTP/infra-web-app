@@ -1,10 +1,8 @@
 angular.module('demo', ['znk.infra-web-app.onBoarding'])
-    .config(function ($stateProvider, $translateProvider, $urlRouterProvider, InfraConfigSrvProvider,
+    .config(function ($stateProvider,$urlRouterProvider, InfraConfigSrvProvider,
                       OnBoardingServiceProvider, DiagnosticIntroSrvProvider, UserGoalsServiceProvider,
                       SvgIconSrvProvider, ScoringServiceProvider) {
         'ngInject';
-        $translateProvider.preferredLanguage('en');
-        $translateProvider.useSanitizeValueStrategy(null);
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',

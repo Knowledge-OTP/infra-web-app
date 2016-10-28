@@ -1,11 +1,6 @@
 (function(angular) {
 
     angular.module('demo', ['znk.infra-web-app.znkSummary'])
-        .config(function($translateProvider) {
-            'ngInject';
-            $translateProvider.preferredLanguage('en');
-            $translateProvider.useSanitizeValueStrategy(null);
-        })
         .controller('Main', function ($scope) {
 
             $scope.exerciseResult = {

@@ -12,22 +12,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkTimelineWebWrapper')
-        .config(
-            ["$translateProvider", function ($translateProvider) {
-                'ngInject';
-                $translateProvider.translations('en', {
-                        "TIMELINE_WEB_WRAPPER": {
-                            "POINTS_LEFT": "{{points}} pts to go!"
-                        }
-                    }
-                );
-            }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {

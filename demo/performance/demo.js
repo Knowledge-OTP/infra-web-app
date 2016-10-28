@@ -3,10 +3,8 @@
 angular.module('demo', [
     'znk.infra-web-app.performance'
 ])
-    .config(function ($translateProvider, SvgIconSrvProvider) {
+    .config(function (SvgIconSrvProvider) {
         'ngInject';
-        $translateProvider.preferredLanguage('en');
-        $translateProvider.useSanitizeValueStrategy(null);
 
         var svgMap = {};
 

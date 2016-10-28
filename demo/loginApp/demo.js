@@ -1,14 +1,12 @@
 (function(angular) {
 
     angular.module('demo', ['znk.infra-web-app.loginApp', 'znk.infra-web-app.promoCode'])
-    .config(function ($translateProvider, $locationProvider, PromoCodeSrvProvider, AllEnvConfigSrvProvider, LoginAppSrvProvider) {
+    .config(function ($locationProvider, PromoCodeSrvProvider, AllEnvConfigSrvProvider, LoginAppSrvProvider) {
         'ngInject';
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
         });
-        $translateProvider.preferredLanguage('en');
-        $translateProvider.useSanitizeValueStrategy(null);
 
         var allEnvConfigObj = AllEnvConfigSrvProvider.getAllEnvJstringObj();
 

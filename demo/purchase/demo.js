@@ -18,11 +18,6 @@
                 "pixelGifSrc": "https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif"
             }
         })
-        .config(function ($translateProvider) {
-            'ngInject';
-            $translateProvider.preferredLanguage('en');
-            $translateProvider.useSanitizeValueStrategy(null);
-        })
         .controller('Main', function (purchaseService) {
             'ngInject';
             var vm = this;

@@ -5,11 +5,6 @@ angular.module('demo', [
     'znk.infra.exams',
     'demoEnv'
 ])
-    .config(function ($translateProvider) {
-        'ngInject';
-        $translateProvider.preferredLanguage('en');
-        $translateProvider.useSanitizeValueStrategy(null);
-    })
     .config(function (ScoringServiceProvider, UserGoalsServiceProvider) {
         ScoringServiceProvider.setScoringLimits({
             exam: {

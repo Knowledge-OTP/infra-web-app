@@ -4,11 +4,6 @@
         'znk.infra-web-app.webAppScreenSharing',
         'demoEnv'
     ])
-        .config(function ($translateProvider) {
-            'ngInject';
-            $translateProvider.preferredLanguage('en');
-            $translateProvider.useSanitizeValueStrategy(null);
-        })
         .run(function ($rootScope, BaseExerciseGetterSrv, ExerciseTypeEnum, ExerciseParentEnum, ScreenSharingSrv) {
             $rootScope.data = {};
 

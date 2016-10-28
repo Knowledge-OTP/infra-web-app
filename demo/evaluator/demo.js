@@ -2,11 +2,7 @@
 
     var isPro = true;
 
-    angular.module('demo', ['znk.infra-web-app.evaluator']).config(function($translateProvider) {
-            'ngInject';
-            $translateProvider.preferredLanguage('en');
-            $translateProvider.useSanitizeValueStrategy(null);
-        })
+    angular.module('demo', ['znk.infra-web-app.evaluator'])
         .service('purchaseService', function($q) { // mock for purchaseService
             this.hasProVersion = function() {
                 return $q.when(isPro);
