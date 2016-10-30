@@ -253,8 +253,8 @@ module.exports = function (grunt) {
             build: {
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.src %>/components',
-                    src: '*/locale/*.*',
+                    cwd: '<%= yeoman.src %>/locale',
+                    src: '*.*',
                     dest: '<%= yeoman.tmp %>'
                 }, {
                     expand: true,
@@ -276,14 +276,9 @@ module.exports = function (grunt) {
             serve:{
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.src %>/components',
-                    src: ['*/locale/*.json'],
-                    dest: 'tmpLocalization/'
-                },{
-                    expand: true,
-                    cwd: 'bower_components/infra/dist',
-                    src: ['*/locale/*.json'],
-                    dest: 'tmpLocalization/'
+                    cwd: '<%= yeoman.src %>/locale',
+                    src: '*.*',
+                    dest: '<%= yeoman.tmp %>'
                 }]
             },
             dist: {
@@ -431,7 +426,6 @@ module.exports = function (grunt) {
         'clean:html2JsTemplates',
         'concat:mainModule',
         'replace:allModulesInMainJs',
-        'concat:locale',
         'copy:build',
         'ngAnnotate'
     ]);
