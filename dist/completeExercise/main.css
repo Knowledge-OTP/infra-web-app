@@ -236,7 +236,7 @@ complete-exercise-progress-bar {
 
 .base-complete-exercise-container {
   width: 1060px;
-  height: calc(100vh - 75px);
+  height: calc(100vh - 95px);
   background: white;
   display: block;
   margin-top: 15px;
