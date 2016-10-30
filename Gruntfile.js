@@ -270,20 +270,17 @@ module.exports = function (grunt) {
                     }
                 }]
             },
-            serve:{
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.src %>/locale',
-                    src: '*.*',
-                    dest: '<%= yeoman.tmp %>'
-                }]
-            },
             dist: {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.tmp %>/',
                     src: ['**/*.*', '!assets/**/*.*'],
                     dest: '<%= yeoman.dist %>/'
+                }, {
+                    expand: true,
+                    cwd: '<%= yeoman.src %>/locale',
+                    src: '*.*',
+                    dest: '<%= yeoman.dist %>'
                 }]
             }
         },
