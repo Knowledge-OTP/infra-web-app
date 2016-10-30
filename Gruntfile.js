@@ -129,14 +129,16 @@ module.exports = function (grunt) {
                 }]
             },
             locale: {
-                src: ['<%= yeoman.src %>/components/**/locale/en.json'],
+                src: [
+                    'bower_components/infra/dist/locale-en.json',
+                    '<%= yeoman.src %>/locale/locale-en.json'
+                ],
                 dest: '<%= yeoman.tmp %>/locale-en.json',
                 options: {
                     // Added to the top of the file
                     banner: '{',
                     process: function(src) {
-                        src = JSON.parse(src);
-                        return '"' + Object.keys(src) + '": ' + JSON.stringify(src[Object.keys(src)[0]]);
+                        return src.slice(src.indexOf('{')+1, src.lastIndexOf('}')-1);
                     },
                     // Will be added at the end of the file
                     footer: '}',
@@ -253,11 +255,6 @@ module.exports = function (grunt) {
             build: {
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.src %>/locale',
-                    src: '*.*',
-                    dest: '<%= yeoman.tmp %>'
-                }, {
-                    expand: true,
                     cwd: '<%= yeoman.src %>/components',
                     src: '*/assets/**/*.*',
                     dest: '<%= yeoman.tmp %>'
@@ -357,7 +354,6 @@ module.exports = function (grunt) {
         console.log('serving from', grunt.config('connect').options.base);
         grunt.task.run([
             'build',
-            'copy:serve',
             'wiredep',
             'connect:serve',
             'watch'
@@ -426,6 +422,7 @@ module.exports = function (grunt) {
         'clean:html2JsTemplates',
         'concat:mainModule',
         'replace:allModulesInMainJs',
+        'concat:locale',
         'copy:build',
         'ngAnnotate'
     ]);
