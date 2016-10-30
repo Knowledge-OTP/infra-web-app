@@ -10918,15 +10918,22 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             var search = $location.search();
             var DIAGNOSTIC_STATE = 'app.workouts.roadmap.diagnostic';
             var WORKOUT_STATE = 'app.workouts.roadmap.workout';
+            var DIAGNOSTIC_PATH = '/workoutsRoadmap/diagnostic';
+            var WORKOUT_PATH = '/workoutsRoadmap/workout';
+            var isInit;
+
+            function shouldReplaceLocation() {
+                if (!isInit) {
+                    isInit = true;
+                    $location.replace();
+                }
+            }
 
             function getActiveWorkout() {
                 var i = 0;
                 for (; i < vm.workoutsProgress.length; i++) {
                     if (vm.workoutsProgress[i].status !== ExerciseStatusEnum.COMPLETED.enum) {
-                        if (angular.isDefined(vm.workoutsProgress[i].subjectId)) {
-                            return vm.workoutsProgress[i];
-                        }
-                        return data.diagnostic;
+                        return vm.workoutsProgress[i];
                     }
                 }
                 return vm.workoutsProgress[i - 1];
@@ -10975,6 +10982,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             var LEFT_ANIMATION = 'left-animation';
             var RIGHT_ANIMATION = 'right-animation';
             $scope.$watch('vm.selectedItem', function (newItem, oldItem) {
+
                 if (angular.isUndefined(newItem)) {
                     return;
                 }
@@ -10992,16 +11000,16 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 var currentStateName = $state.current.name;
                 if (newItem.workoutOrder === 0) {
                     if (currentStateName !== DIAGNOSTIC_STATE) {
-                        $state.go(DIAGNOSTIC_STATE);
+                        $location.path(DIAGNOSTIC_PATH);
+                        shouldReplaceLocation();
                     }
                 } else {
                     search = $location.search();
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        $state.go('app.workouts.roadmap.workout', {
-                            workout: newItem.workoutOrder
-                        });
+                        $location.path(WORKOUT_PATH).search('workout', newItem.workoutOrder);
+                        shouldReplaceLocation();
                     }
                 }
             });
