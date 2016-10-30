@@ -22,18 +22,12 @@
                     }
 
                     function newInvitationsCB(invitation){
-                        if (!angular.isObject(scope.invitations)) {
-                            scope.invitations = {};
-                        }
-                        scope.invitations[invitation.invitationId] = invitation;
+                        scope.invitations = invitation;
                         scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
                     }
 
                     function pendingConfirmationsCB(pendingConf){
-                        if (!angular.isObject(scope.conformations)) {
-                            scope.conformations = {};
-                        }
-                        scope.conformations[pendingConf.invitationId] = pendingConf;
+                        scope.conformations = pendingConf;
                         scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
                     }
 

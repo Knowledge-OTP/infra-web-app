@@ -5079,18 +5079,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     }
 
                     function newInvitationsCB(invitation){
-                        if (!angular.isObject(scope.invitations)) {
-                            scope.invitations = {};
-                        }
-                        scope.invitations[invitation.invitationId] = invitation;
+                        scope.invitations = invitation;
                         scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
                     }
 
                     function pendingConfirmationsCB(pendingConf){
-                        if (!angular.isObject(scope.conformations)) {
-                            scope.conformations = {};
-                        }
-                        scope.conformations[pendingConf.invitationId] = pendingConf;
+                        scope.conformations = pendingConf;
                         scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
                     }
 
@@ -5246,6 +5240,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             var translate = $filter('translate');
             var registerEvents = {};
             var myTeachers = {};
+            var newInvitations = {};
+            var pendingConfirmations = {};
             var httpConfig = {
                 headers: 'application/json',
                 timeout: ENV.promiseTimeOut
@@ -5300,7 +5296,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                         // listener is register fot this event for current User
                         // add cb to cb's array & return data
                         registerEvents[userId][event].cb.push(valueCB);
-                        applyData(event, valueCB);
+                        applyCallback(event, valueCB);
 
                     }
                 });
@@ -5414,12 +5410,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                         listenerData.childRemoveHandler = userTeachersChildRemove;
                         break;
                     case self.listeners.NEW_INVITATIONS:
-                        listenerData.childAddedHandler = newInvitationsCB;
-                        listenerData.childRemoveHandler = newInvitationsCB;
+                        listenerData.childAddedHandler = newInvitationsChildAdded;
+                        listenerData.childRemoveHandler = newInvitationsChildRemove;
                         break;
                     case self.listeners.PENDING_CONFIRMATIONS:
-                        listenerData.childAddedHandler = pendingConfirmationsCB;
-                        listenerData.childRemoveHandler = pendingConfirmationsCB;
+                        listenerData.childAddedHandler = pendingConfirmationsChildAdded;
+                        listenerData.childRemoveHandler = pendingConfirmationsChildRemove;
                         break;
                 }
 
@@ -5457,36 +5453,68 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 }
             }
 
-            function newInvitationsCB (data) {
+            function newInvitationsChildAdded (invitation) {
+                if (angular.isDefined(invitation)) {
+                    newInvitations[invitation.invitationId] = invitation;
+                    var userId = StudentContextSrv.getCurrUid();
+                    angular.forEach(registerEvents[userId][self.listeners.NEW_INVITATIONS].cb, function (cb) {
+                        if (angular.isFunction(cb)) {
+                            $timeout(function () {
+                                cb(newInvitations);
+                            });
+                        }
+                    });
+                }
+            }
+
+            function newInvitationsChildRemove (invitation) {
+                delete newInvitations[invitation.invitationId];
                 var userId = StudentContextSrv.getCurrUid();
                 angular.forEach(registerEvents[userId][self.listeners.NEW_INVITATIONS].cb, function (cb) {
                     if (angular.isFunction(cb)) {
                         $timeout(function () {
-                            cb(data);
+                            cb(newInvitations);
                         });
                     }
                 });
             }
 
-            function pendingConfirmationsCB (data) {
+            function pendingConfirmationsChildAdded (invitation) {
+                if (angular.isDefined(invitation)) {
+                    pendingConfirmations[invitation.invitationId] = invitation;
+                    var userId = StudentContextSrv.getCurrUid();
+                    angular.forEach(registerEvents[userId][self.listeners.PENDING_CONFIRMATIONS].cb, function (cb) {
+                        if (angular.isFunction(cb)) {
+                            $timeout(function () {
+                                cb(pendingConfirmations);
+                            });
+                        }
+                    });
+                }
+            }
+
+            function pendingConfirmationsChildRemove (invitation) {
+                delete pendingConfirmations[invitation.invitationId];
                 var userId = StudentContextSrv.getCurrUid();
                 angular.forEach(registerEvents[userId][self.listeners.PENDING_CONFIRMATIONS].cb, function (cb) {
                     if (angular.isFunction(cb)) {
                         $timeout(function () {
-                            cb(data);
+                            cb(pendingConfirmations);
                         });
                     }
                 });
             }
 
-            function applyData(event, cb) {
+            function applyCallback(event, cb) {
                 switch (event){
                     case self.listeners.USER_TEACHERS:
                         cb(myTeachers);
                         break;
                     case self.listeners.NEW_INVITATIONS:
+                        cb(newInvitations);
                         break;
                     case self.listeners.PENDING_CONFIRMATIONS:
+                        cb(pendingConfirmations);
                         break;
                 }
             }
