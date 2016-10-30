@@ -87,6 +87,26 @@
                                 viewChangeListener();
                                 break;
                         }
+
+                        function _updateBindExercise() {
+                            var objToUpdate = {};
+                            objToUpdate[question.id] = scope.d.toggleWrittenSln;
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', objToUpdate);
+                        }
+
+                        scope.d.close = function () {
+                            scope.d.toggleWrittenSln = false;
+                            _updateBindExercise();
+                        };
+
+                        scope.d.toggleAnswer = function () {
+                            scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                            _updateBindExercise();
+                        };
+
+                        questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
+                            scope.d.toggleWrittenSln = newVal[question.id];
+                        });
                     }
                 };
                 return directive;

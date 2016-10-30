@@ -4547,6 +4547,8 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         var functionsToBind = ['getViewMode','addQuestionChangeResolver','removeQuestionChangeResolver', 'getCurrentIndex'];
                         ZnkExerciseUtilitySrv.bindFunctions(questionBuilderCtrl, znkExerciseCtrl,functionsToBind);
 
+                        questionBuilderCtrl.bindExerciseEventManager = znkExerciseCtrl.bindExerciseEventManager;
+
                         element.append('<answer-explanation></answer-explanation>');
                     };
 
@@ -4647,6 +4649,26 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                                 viewChangeListener();
                                 break;
                         }
+
+                        function _updateBindExercise() {
+                            var objToUpdate = {};
+                            objToUpdate[question.id] = scope.d.toggleWrittenSln;
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', objToUpdate);
+                        }
+
+                        scope.d.close = function () {
+                            scope.d.toggleWrittenSln = false;
+                            _updateBindExercise();
+                        };
+
+                        scope.d.toggleAnswer = function () {
+                            scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                            _updateBindExercise();
+                        };
+
+                        questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
+                            scope.d.toggleWrittenSln = newVal[question.id];
+                        });
                     }
                 };
                 return directive;
@@ -4775,12 +4797,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
-    "         ng-if=\"d.showWrittenSln\">\n" +
+    "         ng-if=\"d.toggleWrittenSln\">\n" +
     "        <answer-explanation-content class=\"znk-scrollbar\"\n" +
-    "                                    on-close=\"d.showWrittenSln = false\">\n" +
+    "                                    on-close=\"d.close()\">\n" +
     "        </answer-explanation-content>\n" +
     "    </div>\n" +
-    "    <div class=\"answer-explanation-header\" ng-click=\"d.showWrittenSln = !d.showWrittenSln\">\n" +
+    "    <div class=\"answer-explanation-header\" ng-click=\"d.toggleAnswer()\">\n" +
     "        <div class=\"answer-explanation-btn\">\n" +
     "            <div class=\"main-content-wrapper\">\n" +
     "                <svg-icon class=\"lamp-icon\" name=\"answer-explanation-lamp-icon\"></svg-icon>\n" +
@@ -6839,13 +6861,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvConfigSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvConfigSrv) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
-                return AllEnvConfigSrv[env][appContext];
+                return AllEnvs[env][appContext];
             }
 
             function _getAppScopeName(userContext, appEnvConfig) {
@@ -10846,10 +10868,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 var i = 0;
                 for (; i < vm.workoutsProgress.length; i++) {
                     if (vm.workoutsProgress[i].status !== ExerciseStatusEnum.COMPLETED.enum) {
-                        if (angular.isDefined(vm.workoutsProgress[i].subjectId)) {
-                            return vm.workoutsProgress[i];
-                        }
-                        return data.diagnostic;
+                        return vm.workoutsProgress[i];
                     }
                 }
                 return vm.workoutsProgress[i - 1];
