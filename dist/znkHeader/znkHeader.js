@@ -23,11 +23,7 @@
                     'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }])
-        .run(["$translatePartialLoader", function ($translatePartialLoader) {
-            'ngInject';
-            $translatePartialLoader.addPart('znkHeader');
-        }]);
+            }]);
 })(angular);
 
 (function (angular) {

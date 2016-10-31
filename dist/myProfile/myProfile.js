@@ -158,10 +158,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.myProfile').controller('MyProfileController',
-            ["AuthService", "$mdDialog", "$timeout", "$translatePartialLoader", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, $translatePartialLoader, userProfile, timezonesList, localTimezone) {
+            ["AuthService", "$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, userProfile, timezonesList, localTimezone) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('myProfile');
 
                 var vm = this;
 

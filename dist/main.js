@@ -7842,10 +7842,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.myProfile').controller('MyProfileController',
-            ["AuthService", "$mdDialog", "$timeout", "$translatePartialLoader", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, $translatePartialLoader, userProfile, timezonesList, localTimezone) {
+            ["AuthService", "$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, userProfile, timezonesList, localTimezone) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('myProfile');
 
                 var vm = this;
 
@@ -13068,11 +13066,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                     'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }])
-        .run(["$translatePartialLoader", function ($translatePartialLoader) {
-            'ngInject';
-            $translatePartialLoader.addPart('znkHeader');
-        }]);
+            }]);
 })(angular);
 
 (function (angular) {
