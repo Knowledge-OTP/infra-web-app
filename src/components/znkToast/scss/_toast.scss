@@ -2,33 +2,31 @@ md-toast.toast-wrap{
     width: 400px;
     height: 60px;
     display: flex;
-    background-color: #FFFFFF;
-    border: 2px solid #87CA4D;
+    background-color: $bgColor1;
+    border: 2px solid $borderColor3;
     border-radius: 10px;
 
     .icon-wrap{
         width: 60px;
         margin: -8px;
         padding: 8px;
-        background: #87CA4D;
+        background: $bgColor7;
         display: flex;
         justify-content: center;
         align-items: center;
         svg-icon{
             width: 40px;
             height: 40px;
-            .complete-v-icon-svg{
-                .st1, .st3 {
-                    fill: #87CA4D;
-                }
+            .complete-v-icon-svg *{
+                fill: $bgColor7;
             }
         }
     }
 
     .md-toast-content{
-        background: #FFFFFF;
+        background: $bgColor1;
         box-shadow: none;
-        color: #4F4D4D;
+        color: $bgColor60;
         margin-left: 10px;
     }
 
@@ -40,7 +38,7 @@ md-toast.toast-wrap{
         .close-pop-svg{
             width: 10px;
             .st1 {
-                stroke: #4F4D4D;
+                stroke: $bgColor60;
             }
         }
     }
@@ -48,19 +46,16 @@ md-toast.toast-wrap{
 
 md-toast.toast-wrap-error{
     @extend md-toast.toast-wrap;
-    border: 2px solid #FF6766;
+    border: 2px solid $bgColor32;
     .icon-wrap{
-        background: #FF6766;
+        background: $bgColor32;
         svg-icon{
             width: 25px;
             height: 25px;
-            .close-pop-svg{
-                .st1 {
-                    stroke: #000000;
-                }
+            .close-pop-svg *{
+                stroke: $borderColor25;
             }
         }
 
     }
-
 }
