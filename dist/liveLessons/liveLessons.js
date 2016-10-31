@@ -47,10 +47,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('RescheduleLessonController',
-        ["$mdDialog", "lessonData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", "$translatePartialLoader", function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons, $translatePartialLoader) {
+        ["$mdDialog", "lessonData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons) {
             'ngInject';
-
-            $translatePartialLoader.addPart('liveLessons');
 
             var self = this;
             self.closeDialog = $mdDialog.cancel;
@@ -119,10 +117,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('UpcomingLessonToasterController',
-        ["$mdToast", "MyLiveLessons", "closestLiveLesson", "$timeout", "$translatePartialLoader", function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout, $translatePartialLoader) {
+        ["$mdToast", "MyLiveLessons", "closestLiveLesson", "$timeout", function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout) {
         'ngInject';
-
-            $translatePartialLoader.addPart('liveLessons');
 
             var self = this;
 

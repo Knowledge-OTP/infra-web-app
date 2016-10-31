@@ -9,15 +9,11 @@ The dist directory is the package content when used as a dependency used by othe
 ## Repo structure
 
 ## Localization
-    each component has its own locale file, this file loads via $translatePartialLoaderProvider.addPart
-    so make sure to declare $translatePartialLoader i.e: $translateProvider.useLoader('$translatePartialLoader', {
-                                                            urlTemplate: '/i18n/{part}/{lang}.json'
-                                                         });
-    and adding the following run block:   $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-                                            $translate.refresh();
-                                          });
-    and copy the locale files accrodingly.
-    for more info about this translation feature (look for using partialLoader part): https://angular-translate.github.io/docs/#/guide/12_asynchronous-loading
+    each component has its own locale file, this file loads via  $translateProvider.useStaticFilesLoader({
+                                                                        prefix: 'app/',
+                                                                        suffix: '.json'
+                                                                  });
+You need to include <script src="infra/demoShared/translate.config.js"></script> in the demo/index.html.
      
 ## You must provide locale for the following keys:
     under "SUBJECTS" provide all subject ids translations, i.e:

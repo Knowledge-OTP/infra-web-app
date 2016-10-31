@@ -1,7 +1,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode', []).config([
+    angular.module('znk.infra-web-app.promoCode', [])
+        .config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {

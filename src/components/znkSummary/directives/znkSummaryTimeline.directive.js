@@ -7,9 +7,8 @@
         bindings: {
             exerciseData: '<'
         },
-        controller: function($translatePartialLoader, SubjectEnum) {
+        controller: function(SubjectEnum) {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var vm = this;
 

@@ -2,10 +2,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.settings').controller('SettingsChangePasswordController',
-            function (AuthService, $mdDialog, $timeout, $translatePartialLoader) {
+            function (AuthService, $mdDialog, $timeout) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('settings');
 
                 var self = this;
                 this.saveTitle = 'SETTING.SAVE';

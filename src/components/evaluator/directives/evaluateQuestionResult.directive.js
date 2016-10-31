@@ -25,10 +25,8 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionResult.template.html',
             controllerAs: 'vm',
-            controller: function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: function (ZnkEvaluateResultSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var vm = this;
 

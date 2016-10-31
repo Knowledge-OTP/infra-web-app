@@ -199,12 +199,12 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticController', ["$state", "currentState", "$translatePartialLoader", function($state, currentState, $translatePartialLoader) {
+    angular.module('znk.infra-web-app.diagnosticExercise')
+        .controller('WorkoutsDiagnosticController', ["$state", "currentState", function($state, currentState) {
         'ngInject';
 
         var EXAM_STATE = 'app.diagnostic';
 
-        $translatePartialLoader.addPart('diagnosticExercise');
 
         $state.go(EXAM_STATE + currentState.state, currentState.params);
     }]);

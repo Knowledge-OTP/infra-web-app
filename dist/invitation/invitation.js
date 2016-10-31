@@ -14,11 +14,7 @@
 
                 var svgMap = {
                     'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
-                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
-                    'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
-                    'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
-                    'received-invitations-icon': 'components/invitation/svg/received-invitations-icon.svg',
-                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg'
+                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -85,7 +81,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", "StudentContextSrv", "$timeout", "PresenceService", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader, StudentContextSrv, $timeout, PresenceService) {
+        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv) {
             'ngInject';
 
            return {
@@ -93,63 +89,44 @@
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
-                    $translatePartialLoader.addPart('invitation');
+                    // if (!ENV.dashboardFeatureEnabled) {
+                    //    element.remove();
+                    //    return;
+                    // }
+
                     scope.translate = $filter('translate');
-                    scope.userStatus = PresenceService.userStatus;
-                    scope.deleteTeacherMode = false;
 
-                    function invitationManagerMyTeachersCB(teachers){
-                        scope.myTeachers = teachers;
-                        scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
-                        startTrackTeachersPresence();
-                    }
+                    scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
+                    scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
+                    scope.declinedTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.DECLINED_INVITATIONS');
 
-                    function newInvitationsCB(invitation){
-                        scope.invitations = invitation;
-                        scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
-                    }
+                    InvitationService.getReceived().then(function (invitations) {
+                        scope.invitations = invitations;
+                        scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
+                    });
 
-                    function pendingConfirmationsCB(pendingConf){
-                        scope.conformations = pendingConf;
-                        scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
-                    }
-
-                    function startTrackTeachersPresence() {
-                        if (startTrackTeachersPresence.isTracking) {
-                            return;
-                        }
-                        startTrackTeachersPresence.isTracking = true;
-                        angular.forEach(scope.myTeachers, function (teacher) {
-                            PresenceService.startTrackUserPresence(teacher.senderUid, trackUserPresenceCB.bind(null, teacher.senderUid));
+                    InvitationService.getPendingConformations().then(function (conformations) {
+                        angular.forEach(conformations, function (conformation, key) {
+                            conformation.invitationId = key;
                         });
-                    }
+                        scope.conformations = conformations;
+                        scope.pendingConformationsTitle += ' (' + (scope.getItemsCount(scope.conformations) || 0) + ')';
+                    });
 
-                    function trackUserPresenceCB(userId, newStatus) {
-                        $timeout(function () {
-                            angular.forEach(scope.myTeachers, function (teacher) {
-                                if (teacher.senderUid === userId) {
-                                    teacher.presence = newStatus;
-                                    teacher.callBtnData = angular.copy({
-                                        receiverId: teacher.senderUid,
-                                        isOffline: teacher.presence === PresenceService.userStatus.OFFLINE
-                                    });
-                                }
-                            });
-                        });
-                    }
+                    InvitationService.getDeclinedInvitations().then(function (declinedInvitations) {
+                        scope.declinedInvitations = declinedInvitations;
+                    });
 
-                    scope.toggleDeleteTeacher = function () {
-                        scope.deleteTeacherMode = !scope.deleteTeacherMode;
+                    InvitationService.getMyTeacher().then(function (teacherObj) {
+                        scope.myTeachers = teacherObj;
+                    });
+
+                    scope.hasItems = function (obj) {
+                        return !!scope.getItemsCount(obj);
                     };
 
                     scope.getItemsCount = function (obj) {
-                        return Object.keys(obj || {}).length;
-                    };
-
-                    scope.hasAnyItems = function () {
-                        return (Object.keys(scope.invitations || {}).length > 0 ||
-                        Object.keys(scope.conformations || {}).length > 0 ||
-                        Object.keys(scope.myTeachers || {}).length > 0);
+                        return Object.keys(obj).length;
                     };
 
                     scope.approve = function (invitation) {
@@ -187,15 +164,8 @@
                         InvitationService.openInviteTeacherModal();
                     };
 
-                    InvitationService.registerListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
-                    InvitationService.registerListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
-                    InvitationService.registerListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
-
                     var watcherDestroy = scope.$on('$destroy', function () {
-                        InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
-                        InvitationService.offListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
-                        InvitationService.offListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
-
+                        InvitationService.removeListeners();
                         watcherDestroy();
                     });
                 }
@@ -255,29 +225,133 @@
 
 })(angular);
 
+'use strict';
+
+angular.module('znk.infra-web-app.invitation').service('InvitationListenerService',
+    ["ENV", "InfraConfigSrv", "AuthService", "$timeout", "$q", "StorageSrv", function (ENV, InfraConfigSrv, AuthService, $timeout, $q, StorageSrv) {
+        'ngInject';
+
+        var NEW_INVITATION_PATH, SENT_INVITATION_PATH, MY_TEACHER_PATH;
+
+        var self = this;
+        self.receivedInvitations = {};
+        self.pendingConformations = {};
+        self.declinedInvitations = {};
+        self.myTeacher = {};
+
+
+        var pathsProm = $q.when().then(function () {
+            var STUDENT_INVITATION_PATH = StorageSrv.variables.appUserSpacePath + '/invitations';
+            NEW_INVITATION_PATH = STUDENT_INVITATION_PATH + '/received';
+            SENT_INVITATION_PATH = STUDENT_INVITATION_PATH + '/sent';
+            MY_TEACHER_PATH = STUDENT_INVITATION_PATH + '/approved/';
+           return $q.when();
+        });
+
+        this.removeListeners = function () {
+            $q.when(pathsProm).then(function(){
+                var receivedInvitationRef = firebaseListenerRef(NEW_INVITATION_PATH);
+                receivedInvitationRef.off('child_added', receivedInvitationsChildAdded);
+                receivedInvitationRef.off('child_removed', receivedInvitationsChildRemoved);
+
+                var myTeacherRef = firebaseListenerRef(MY_TEACHER_PATH);
+                myTeacherRef.off('child_added', myTeacherChildAdded);
+                myTeacherRef.off('child_removed', myTeacherChildRemoved);
+
+                var sentInvitationRef = firebaseListenerRef(SENT_INVITATION_PATH);
+                sentInvitationRef.off('child_added', sentInvitationsChildAdded);
+                sentInvitationRef.off('child_removed', sentInvitationsChildRemoved);
+            });
+        };
+
+
+        self.addListeners = function () {
+            $q.when(pathsProm).then(function(){
+                _childAddedOrRemovedListener(NEW_INVITATION_PATH, receivedInvitationsChildAdded, receivedInvitationsChildRemoved);
+                _childAddedOrRemovedListener(MY_TEACHER_PATH, myTeacherChildAdded, myTeacherChildRemoved);
+                _childAddedOrRemovedListener(SENT_INVITATION_PATH, sentInvitationsChildAdded, sentInvitationsChildRemoved);
+            });
+        };
+
+        function _childAddedOrRemovedListener(path, childAddedHandler, childRemovedHandler){
+            var ref = firebaseListenerRef(path);
+            ref.on('child_added', childAddedHandler);
+            ref.on('child_removed', childRemovedHandler);
+        }
+
+
+        function receivedInvitationsChildAdded(dataSnapshot) {
+            $timeout(function () {
+                if (dataSnapshot) {
+                    self.receivedInvitations[dataSnapshot.key()] = dataSnapshot.val();
+                }
+            });
+        }
+
+        function receivedInvitationsChildRemoved(dataSnapshot) {
+            $timeout(function () {
+                if (dataSnapshot) {
+                    delete self.receivedInvitations[dataSnapshot.key()];
+                }
+            });
+        }
+
+        function myTeacherChildAdded(dataSnapshot) {
+            $timeout(function () {
+                if (dataSnapshot) {
+                    self.myTeacher[dataSnapshot.key()] = dataSnapshot.val();
+                }
+            });
+        }
+
+        function myTeacherChildRemoved(dataSnapshot) {
+            $timeout(function () {
+                if (dataSnapshot) {
+                    delete self.myTeacher[dataSnapshot.key()];
+                }
+            });
+        }
+
+        function sentInvitationsChildAdded(dataSnapshot) {
+            $timeout(function () {
+                if (dataSnapshot) {
+                    self.pendingConformations[dataSnapshot.key()] = dataSnapshot.val();
+                }
+            });
+        }
+
+        function sentInvitationsChildRemoved(dataSnapshot) {
+            $timeout(function () {
+                if (dataSnapshot) {
+                    delete self.pendingConformations[dataSnapshot.key()];
+                }
+            });
+        }
+
+        function firebaseListenerRef(userPath) {
+            var authData = AuthService.getAuth();
+            var fullPath = ENV.fbDataEndPoint + ENV.firebaseAppScopeName + '/' + userPath;
+            var userFullPath = fullPath.replace('$$uid', authData.uid);
+            return new Firebase(userFullPath);
+        }
+
+    }]
+);
+
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "$timeout", "PopUpSrv", "$filter", "UserProfileService", "InfraConfigSrv", "StudentContextSrv", function ($mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
+        ["$mdDialog", "ENV", "AuthService", "$q", "$http", "PopUpSrv", "$filter", "UserProfileService", "InvitationListenerService", function ($mdDialog, ENV, AuthService, $q, $http, PopUpSrv, $filter, UserProfileService, InvitationListenerService) {
             'ngInject';
-            var self = this;
+
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
             var translate = $filter('translate');
-            var registerEvents = {};
-            var myTeachers = {};
-            var newInvitations = {};
-            var pendingConfirmations = {};
             var httpConfig = {
                 headers: 'application/json',
                 timeout: ENV.promiseTimeOut
             };
 
-            this.listeners = {
-                USER_TEACHERS: 'approved',
-                NEW_INVITATIONS: 'sent',
-                PENDING_CONFIRMATIONS: 'received'
-            };
             this.invitationStatus = {
                 pending: 0,
                 approved: 1,
@@ -288,44 +362,20 @@
                 receiverDelete: 6
             };
 
-            this.offListenerCB = function (event, valueCB) {
-                InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                    var userId = StudentContextSrv.getCurrUid();
-                    var listenerData = getListenerData(userId, event);
-                    studentStorage.offEvent('child_added', listenerData.path, listenerData.cb);
-                    studentStorage.offEvent('child_removed', listenerData.path, listenerData.cb);
-
-                    angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
-                        if (cb === valueCB) {
-                            registerEvents[userId][event].cb.splice(index, 1);
-                        }
-                    });
-                });
+            this.getMyTeacher = function () {
+                return $q.when(InvitationListenerService.myTeacher);
             };
 
-            this.registerListenerCB = function (event, valueCB) {
-                InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                    var userId = StudentContextSrv.getCurrUid();
-                    var listenerData = getListenerData(userId, event);
+            this.getReceived = function () {
+                return $q.when(InvitationListenerService.receivedInvitations);
+            };
 
-                    if (!registerEvents[userId]) {
-                        registerEvents[userId] = {};
-                    }
+            this.getPendingConformations = function () {
+                return $q.when(InvitationListenerService.pendingConformations);
+            };
 
-                    if (!registerEvents[userId][event]) {
-                        registerEvents[userId][event] = {
-                            cb: [valueCB]
-                        };
-                        studentStorage.onEvent('child_added', listenerData.path, listenerData.childAddedHandler);
-                        studentStorage.onEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
-                    } else {
-                        // listener is register fot this event for current User
-                        // add cb to cb's array & return data
-                        registerEvents[userId][event].cb.push(valueCB);
-                        applyCallback(event, valueCB);
-
-                    }
-                });
+            this.getDeclinedInvitations = function () {
+                return $q.when(InvitationListenerService.declinedInvitations);
             };
 
             this.showInvitationConfirm = function (invitationId) {
@@ -410,6 +460,10 @@
                 return updateStatus(invitation);
             };
 
+            this.removeListeners = function () {
+                InvitationListenerService.removeListeners();
+            };
+
             function updateStatus(invitation) {
                 var updateUrl = invitationEndpoint + '/' + invitation.invitationId;
                 return $http.put(updateUrl, invitation, httpConfig).then(
@@ -425,125 +479,7 @@
                     });
             }
 
-            function getListenerData(userId, event){
-                var listenerData = {
-                    path: 'users/' + userId + '/invitations/' + event
-                };
-
-                switch (event){
-                    case self.listeners.USER_TEACHERS:
-                        listenerData.childAddedHandler = userTeachersChildAdded;
-                        listenerData.childRemoveHandler = userTeachersChildRemove;
-                        break;
-                    case self.listeners.NEW_INVITATIONS:
-                        listenerData.childAddedHandler = newInvitationsChildAdded;
-                        listenerData.childRemoveHandler = newInvitationsChildRemove;
-                        break;
-                    case self.listeners.PENDING_CONFIRMATIONS:
-                        listenerData.childAddedHandler = pendingConfirmationsChildAdded;
-                        listenerData.childRemoveHandler = pendingConfirmationsChildRemove;
-                        break;
-                }
-
-                return listenerData;
-            }
-
-            function userTeachersChildAdded(teacher) {
-                if (angular.isDefined(teacher)) {
-                    UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
-                        teacher.zinkerzTeacher = profile.zinkerzTeacher;
-                        teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
-
-                        myTeachers[teacher.senderUid] = teacher;
-                        angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {
-                            if (angular.isFunction(cb)) {
-                                $timeout(function () {
-                                    cb(myTeachers);
-                                });
-                            }
-                        });
-                    });
-                }
-            }
-
-            function userTeachersChildRemove(teacher) {
-                if (angular.isDefined(teacher)) {
-                    delete myTeachers[teacher.senderUid];
-                    angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {
-                        if (angular.isFunction(cb)) {
-                            $timeout(function () {
-                                cb(myTeachers);
-                            });
-                        }
-                    });
-                }
-            }
-
-            function newInvitationsChildAdded (invitation) {
-                if (angular.isDefined(invitation)) {
-                    newInvitations[invitation.invitationId] = invitation;
-                    var userId = StudentContextSrv.getCurrUid();
-                    angular.forEach(registerEvents[userId][self.listeners.NEW_INVITATIONS].cb, function (cb) {
-                        if (angular.isFunction(cb)) {
-                            $timeout(function () {
-                                cb(newInvitations);
-                            });
-                        }
-                    });
-                }
-            }
-
-            function newInvitationsChildRemove (invitation) {
-                delete newInvitations[invitation.invitationId];
-                var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][self.listeners.NEW_INVITATIONS].cb, function (cb) {
-                    if (angular.isFunction(cb)) {
-                        $timeout(function () {
-                            cb(newInvitations);
-                        });
-                    }
-                });
-            }
-
-            function pendingConfirmationsChildAdded (invitation) {
-                if (angular.isDefined(invitation)) {
-                    pendingConfirmations[invitation.invitationId] = invitation;
-                    var userId = StudentContextSrv.getCurrUid();
-                    angular.forEach(registerEvents[userId][self.listeners.PENDING_CONFIRMATIONS].cb, function (cb) {
-                        if (angular.isFunction(cb)) {
-                            $timeout(function () {
-                                cb(pendingConfirmations);
-                            });
-                        }
-                    });
-                }
-            }
-
-            function pendingConfirmationsChildRemove (invitation) {
-                delete pendingConfirmations[invitation.invitationId];
-                var userId = StudentContextSrv.getCurrUid();
-                angular.forEach(registerEvents[userId][self.listeners.PENDING_CONFIRMATIONS].cb, function (cb) {
-                    if (angular.isFunction(cb)) {
-                        $timeout(function () {
-                            cb(pendingConfirmations);
-                        });
-                    }
-                });
-            }
-
-            function applyCallback(event, cb) {
-                switch (event){
-                    case self.listeners.USER_TEACHERS:
-                        cb(myTeachers);
-                        break;
-                    case self.listeners.NEW_INVITATIONS:
-                        cb(newInvitations);
-                        break;
-                    case self.listeners.PENDING_CONFIRMATIONS:
-                        cb(pendingConfirmations);
-                        break;
-                }
-            }
+            InvitationListenerService.addListeners();
         }]
     );
 })(angular);
@@ -665,78 +601,72 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "</md-dialog>\n" +
     "");
   $templateCache.put("components/invitation/directives/invitation-manager.template.html",
-    "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\" class=\"invitation-manager\">\n" +
-    "    <md-menu md-offset=\"-225 51\">\n" +
-    "        <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" ng-switch=\"hasTeachers\">\n" +
-    "            <div class=\"num-of-receive\" ng-if=\"hasInvitations\">{{getItemsCount(invitations)}}</div>\n" +
-    "            <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
-    "                <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
-    "            </section>\n" +
-    "            <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
-    "                <svg-icon name=\"invitation-teacher-active-icon\" class=\"teacher-active-icon\"></svg-icon>\n" +
-    "            </section>\n" +
+    "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\">\n" +
+    "<md-menu md-offset=\"-225 51\"  class=\"invitation-manager\">\n" +
+    "    <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" aria-label=\"Open Invite menu\" ng-switch=\"hasItems(myTeachers)\">\n" +
+    "        <div class=\"num-of-receive\" ng-if=\"hasItems(invitations)\">{{getItemsCount(invitations)}}</div>\n" +
+    "        <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
+    "            <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
+    "        </section>\n" +
+    "        <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
+    "            <svg-icon name=\"teacher-active-icon\"></svg-icon>\n" +
+    "        </section>\n" +
+    "    </div>\n" +
+    "    <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"(hasItems(invitations) || hasItems(myTeachers) || hasItems(declinedInvitations) || hasItems(conformations))\">\n" +
+    "        <div class=\"empty-invite\" ng-switch-when=\"false\">\n" +
+    "            <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
+    "            <div class=\"invite-action\">\n" +
+    "                <div class=\"md-button outline-blue invite-btn\" ng-click=\"openInviteModal()\">\n" +
+    "                    <div translate=\".INVITE_STUDENTS\"></div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
     "        </div>\n" +
-    "        <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"hasAnyItems()\">\n" +
-    "            <!-- My Teachers -->\n" +
-    "            <div class=\"my-teachers-wrap\">\n" +
-    "                <div ng-if=\"hasTeachers\" class=\"teachers-header\" >\n" +
-    "                    <span translate=\".MY_TEACHERS\"></span>\n" +
-    "                    <svg-icon name=\"tutors-list-edit-icon\" class=\"tutors-list-edit-icon\" ng-class=\"{'delete-techer-mode': deleteTeacherMode}\" ng-click=\"toggleDeleteTeacher()\" md-prevent-menu-close></svg-icon>\n" +
+    "        <div ng-if=\"hasItems(myTeachers)\" class=\"my-teacher-wrap\" ng-repeat=\"teacher in myTeachers\">\n" +
+    "            <div class=\"title\" translate=\".MY_TEACHER\"></div>\n" +
+    "            <div class=\"teacher-name\">{{::teacher.senderName}}</div>\n" +
+    "            <div class=\"teacher-email\">{{::teacher.senderEmail}}</div>\n" +
+    "            <svg-icon name=\"invitation-close-popup\" class=\"delete-teacher\" ng-click=\"deleteTeacher(teacher)\"></svg-icon>\n" +
+    "        </div>\n" +
+    "        <md-list ng-if=\"hasItems(declinedInvitations)\">\n" +
+    "            <md-subheader class=\"invite-sub-title\">{{::declinedTitle}}</md-subheader>\n" +
+    "            <md-list-item class=\"declined-invitation-list\" ng-repeat=\"declinedInvitation in declinedInvitations\">\n" +
+    "                <div class=\"declined-teacher-wrap\">\n" +
+    "                    <div class=\"teacher-name\">{{::declinedInvitation.teacherName}} </div>\n" +
+    "                    <span class=\"declined-your-invitation-text\" translate=\".DECLINED_YOR_INVITATION\"></span>\n" +
     "                </div>\n" +
-    "                <div ng-repeat=\"teacher in myTeachers\" class=\"teacher-item\">\n" +
-    "                    <div class=\"inner\">\n" +
-    "                        <div class=\"teacher-status\">\n" +
-    "                            <div class=\"online-indicator\"\n" +
-    "                                 ng-class=\"{'offline': teacher.presence === userStatus.OFFLINE,\n" +
-    "                                'online': teacher.presence === userStatus.ONLINE,\n" +
-    "                                'idle': teacher.presence === userStatus.IDLE}\"></div>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"teacher-name\">{{teacher.senderName}}\n" +
-    "                            <div class=\"teacher-subject\">{{teacher.zinkerzTeacherSubject}}</div>\n" +
-    "                            <div class=\"teacher-email\">{{teacher.senderEmail}}</div>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"actions\">\n" +
-    "                            <div class=\"delete-teacher\" ng-if=\"deleteTeacherMode\" ng-click=\"deleteTeacher(teacher)\">\n" +
-    "                                <span translate=\".REMOVE\"></span>\n" +
-    "                            </div>\n" +
-    "                            <call-btn ng-model=\"teacher.callBtnData\" ng-if=\"!deleteTeacherMode\"></call-btn>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
+    "            </md-list-item>\n" +
+    "        </md-list>\n" +
+    "        <md-list ng-if=\"hasItems(invitations)\" ng-switch-when=\"true\">\n" +
+    "            <md-subheader class=\"invite-sub-title\">{{::pendingTitle}}</md-subheader>\n" +
+    "            <md-list-item ng-repeat=\"invite in invitations\">\n" +
+    "                <svg-icon name=\"received-invitations-icon\" class=\"received-invitations\"></svg-icon>\n" +
+    "                <div class=\"teacher-wrap\">\n" +
+    "                    <div class=\"teacher-name\">{{::invite.senderName}}</div>\n" +
+    "                    <div class=\"creation-time\">{{::invite.creationTime | date : 'd MMM, h:mm a'}}</div>\n" +
     "                </div>\n" +
-    "            </div>\n" +
-    "            <!-- Pending Invitations -->\n" +
-    "            <md-list ng-if=\"hasInvitations\">\n" +
-    "                <md-subheader class=\"invite-sub-title decline-invite-count\" translate=\".PENDING_INVITATIONS\" translate-values=\"{count: getItemsCount(invitations)}\"></md-subheader>\n" +
-    "                <md-list-item ng-repeat=\"invite in invitations\" class=\"invite-list-wrap\">\n" +
-    "                    <div class=\"icon-wrap\">\n" +
-    "                        <svg-icon name=\"received-invitations-icon\" class=\"received-invitations\"></svg-icon>\n" +
-    "                        <div class=\"creation-time\">{{::invite.creationTime | date : 'MMM d'}}</div>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"teacher-wrap\">\n" +
-    "                        <div class=\"teacher-name\">{{::invite.senderName}}</div>\n" +
-    "                        <div class=\"teacher-email\">{{::invite.senderEmail}}</div>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"decline-invite\">\n" +
-    "                        <svg-icon name=\"invitation-close-popup\" class=\"decline-invite-btn\" ng-click=\"decline(invite)\"></svg-icon>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"approve-invite\">\n" +
-    "                        <svg-icon name=\"invitation-v-icon\" class=\"v-icon-btn\" ng-click=\"approve(invite)\"></svg-icon>\n" +
-    "                    </div>\n" +
-    "                </md-list-item>\n" +
-    "            </md-list>\n" +
-    "            <!-- Invite Teacher Btn -->\n" +
-    "            <div class=\"empty-invite\">\n" +
-    "                <div class=\"empty-msg\" translate=\".EMPTY_INVITE\" ng-if=\"!hasAnyItems()\"></div>\n" +
-    "                <div class=\"invite-action\">\n" +
-    "                    <div class=\"md-button outline-blue invite-btn\" ng-click=\"openInviteModal()\">\n" +
-    "                        <div translate=\".INVITE_STUDENTS\"></div>\n" +
-    "                    </div>\n" +
+    "                <div class=\"decline-invite\">\n" +
+    "                    <svg-icon name=\"invitation-close-popup\" class=\"decline-invite-btn\" ng-click=\"decline(invite)\"></svg-icon>\n" +
     "                </div>\n" +
-    "            </div>\n" +
-    "        </md-menu-content>\n" +
-    "    </md-menu>\n" +
+    "                <div class=\"approve-invite\">\n" +
+    "                    <svg-icon name=\"v-icon\" class=\"v-icon-btn\" ng-click=\"approve(invite)\"></svg-icon>\n" +
+    "                </div>\n" +
+    "            </md-list-item>\n" +
+    "        </md-list>\n" +
+    "        <md-list ng-if=\"hasItems(conformations)\">\n" +
+    "            <md-subheader class=\"invite-sub-title\">{{::pendingConformationsTitle}}</md-subheader>\n" +
+    "            <md-list-item ng-repeat=\"conformation in conformations\">\n" +
+    "                <svg-icon name=\"sent-invitations-icon\" class=\"sent-invitations\"></svg-icon>\n" +
+    "                <div class=\"teacher-wrap\">\n" +
+    "                    <div class=\"teacher-email\">{{::conformation.receiverName}}</div>\n" +
+    "                </div>\n" +
+    "                <div class=\"decline-conformation\">\n" +
+    "                    <svg-icon name=\"invitation-close-popup\" class=\"decline-conformation-btn\" ng-click=\"deletePendingConformations(conformation)\"></svg-icon>\n" +
+    "                </div>\n" +
+    "            </md-list-item>\n" +
+    "        </md-list>\n" +
+    "    </md-menu-content>\n" +
+    "</md-menu>\n" +
     "</div>\n" +
-    "\n" +
     "");
   $templateCache.put("components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html",
     "<md-dialog class=\"invite-teacher-modal-wrap\" ng-cloak translate-namespace=\"INVITE_TEACHER_MODAL\">\n" +
@@ -813,74 +743,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    </g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/invitation/svg/invitation-teacher-active-icon.svg",
-    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 193.7 145.6\" xml:space=\"preserve\" class=\"active-teacher-icon\">\n" +
-    "<style type=\"text/css\">\n" +
-    "	.active-teacher-icon .st0{display:none;fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-    "	.active-teacher-icon .st1{fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-    "	.active-teacher-icon .st2{display:none;}\n" +
-    "</style>\n" +
-    "<path class=\"st0\" d=\"M76.7,114.2H16c-1.6,0-3-1.3-3-3V9c0-1.7,1.4-3,3-3h134c1.6,0,3,1.3,3,3l0,45.9\"/>\n" +
-    "<path class=\"st1\" d=\"M135.7,103.2\"/>\n" +
-    "<path d=\"M83,137.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,137.2,83,137.2z\"/>\n" +
-    "<path d=\"M193.7,145.6c0.8-29.2-29.3-39.7-29.3-39.7l-0.8-0.1c7.1-4.2,11.8-11.9,11.8-20.8c0-12.7-9.8-23.2-22.3-24.1\n" +
-    "	c-0.6,0-1.2-0.1-1.8-0.1c-13.3,0-24.2,10.8-24.2,24.2c0,7.5,3.4,14.2,8.8,18.6l-0.9-0.1l-33.2,17.9c-1.8,0.9-3.9,0.3-4.9-1.4\n" +
-    "	L82.6,95.5c-0.9-1.6-3.1-3.4-4.9-3.9c-6.1-1.7-9.8,2.3-9.7,7.2c0,1.5,0.8,3.7,1.6,5c3.6,5.5,12.2,18.7,17.4,26.2\n" +
-    "	c4.3,6.2,8.4,8,10.8,8.5c1.1,0.2,2.2,0.2,3.3-0.2l9.3-3l-3.3,10.3H193.7z\"/>\n" +
-    "<path class=\"st2\" d=\"M65.8,105.8c-1.1-1.7-2.3-4.7-2.3-7.4c0-2.9,0.8-5.6,2.4-7.7l-24.6-34c-1-1.3-0.7-3.2,0.7-4.2\n" +
-    "	c1.3-1,3.2-0.7,4.2,0.7L70.7,87c2.5-1,5.3-1.1,8.3-0.2c2.9,0.8,6.1,3.3,7.6,6l12.2,21.3h6.4l23-12.4c-3.6-4.9-5.6-10.9-5.6-17.1\n" +
-    "	c0-15.8,12.9-28.7,28.7-28.7c0.6,0,1.2,0,1.8,0.1V9c0-1.6-1.3-3-3-3H16c-1.6,0-3,1.4-3,3v102.2c0,1.6,1.4,3,3,3h55.3\n" +
-    "	C69.1,110.8,67.1,107.7,65.8,105.8z M68,21.2h61c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3S66.3,21.2,68,21.2z M68,41.3h61\n" +
-    "	c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3S66.3,41.3,68,41.3z M68,61.5h46c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3\n" +
-    "	S66.3,61.5,68,61.5z\"/>\n" +
-    "<path d=\"M60,120.2H16c-5,0-9-4-9-9V9c0-5,4-9,9-9h134c5,0,9,4,9,9v41.2c0,3.3-2.7,6-6,6s-6-2.7-6-6V12H19v96.2h41c3.3,0,6,2.7,6,6\n" +
-    "	S63.3,120.2,60,120.2z\"/>\n" +
-    "<path d=\"M129,27.2H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,27.2,129,27.2z\"/>\n" +
-    "<path d=\"M129,47.3H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,47.3,129,47.3z\"/>\n" +
-    "<path d=\"M114,67.5H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h46c1.7,0,3,1.3,3,3S115.7,67.5,114,67.5z\"/>\n" +
-    "<path d=\"M70.7,95.2c-0.9,0-1.8-0.4-2.4-1.2L41.3,56.7c-1-1.3-0.7-3.2,0.7-4.2c1.3-1,3.2-0.7,4.2,0.7l26.9,37.2\n" +
-    "	c1,1.3,0.7,3.2-0.7,4.2C71.9,95,71.3,95.2,70.7,95.2z\"/>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/invitation/svg/invitation-v-icon.svg",
-    "<svg\n" +
-    "    version=\"1.1\"\n" +
-    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-    "    class=\"v-icon-wrapper\"\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"0 0 334.5 228.7\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .v-icon-wrapper .st0{\n" +
-    "            fill:#ffffff;\n" +
-    "            stroke:#ffffff;\n" +
-    "            stroke-width:26;\n" +
-    "            stroke-linecap:round;\n" +
-    "            stroke-linejoin:round;\n" +
-    "            stroke-miterlimit:10;\n" +
-    "        }\n" +
-    "        .v-icon-wrapper {\n" +
-    "            width: 100%;\n" +
-    "            height: auto;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "<g>\n" +
-    "	<line class=\"st0\" x1=\"13\" y1=\"109.9\" x2=\"118.8\" y2=\"215.7\"/>\n" +
-    "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
-    "</g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/invitation/svg/received-invitations-icon.svg",
-    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 76.3 56.3\" class=\"received-invitations-svg\">\n" +
-    "<style type=\"text/css\">\n" +
-    "	.received-invitations-svg .st0{fill:none;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-    "</style>\n" +
-    "<path class=\"st0\" d=\"M73.8,18.2v25.1c0,5.8-4.8,10.6-10.6,10.6H13.1c-5.8,0-10.6-4.8-10.6-10.6V18.2\"/>\n" +
-    "<line class=\"st0\" x1=\"38.2\" y1=\"2.5\" x2=\"38.2\" y2=\"38.8\"/>\n" +
-    "<line class=\"st0\" x1=\"38.2\" y1=\"40.2\" x2=\"54.5\" y2=\"23.9\"/>\n" +
-    "<line class=\"st0\" x1=\"38.2\" y1=\"40.2\" x2=\"21.9\" y2=\"23.9\"/>\n" +
-    "</svg>\n" +
-    "");
   $templateCache.put("components/invitation/svg/teacher-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -912,19 +774,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "<path d=\"M70.7,92.2c-0.9,0-1.8-0.4-2.4-1.2L41.3,53.7c-1-1.3-0.7-3.2,0.7-4.2c1.3-1,3.2-0.7,4.2,0.7l26.9,37.2\n" +
     "	c1,1.3,0.7,3.2-0.7,4.2C71.9,92,71.3,92.2,70.7,92.2z\"/>\n" +
     "<path d=\"M83,134.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,134.2,83,134.2z\"/>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/invitation/svg/tutors-list-edit-icon.svg",
-    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-    "	 viewBox=\"0 0 88.5 67.2\" xml:space=\"preserve\">\n" +
-    "<g>\n" +
-    "	<path d=\"M21.5,67.1c2.4-9.3,4.4-17.6,6.7-25.9c0.3-1.2,1.5-2.1,2.5-3.1c11.5-11.5,23-23.1,34.5-34.6c4.9-4.9,7.6-4.8,12.6,0.1\n" +
-    "		c2.7,2.7,5.5,5.4,8.1,8.1c3.4,3.6,3.5,7,0.1,10.4C73.8,34.6,61.6,46.8,49.3,59c-0.9,0.9-2.2,1.6-3.4,1.9\n" +
-    "		C38.3,62.9,30.5,64.8,21.5,67.1z M67.8,14.5c-9.2,9.2-18.1,18-26.9,26.8c2.1,2.1,4.5,4.5,6.3,6.3c8.9-8.8,17.8-17.7,26.4-26.2\n" +
-    "		C71.7,19.1,69.5,16.5,67.8,14.5z M30.8,44.6c-0.9,3.4-2.1,7-2.7,10.7c-0.5,2.7,3,5.8,5.7,5.2c3.5-0.8,6.9-1.8,10.3-2.7\n" +
-    "		C39.6,53.3,35.4,49.1,30.8,44.6z\"/>\n" +
-    "	<path d=\"M15.1,60.8c-0.4,2.4-0.8,4.3-1.2,6.4c-4.6,0-9,0-13.9,0c0-2.1,0-4.1,0-6.4C4.9,60.8,9.8,60.8,15.1,60.8z\"/>\n" +
-    "</g>\n" +
     "</svg>\n" +
     "");
 }]);

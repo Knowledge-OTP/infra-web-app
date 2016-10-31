@@ -96,16 +96,6 @@
 })(angular);
 
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tests').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('tests');
-    }]);
-})(angular);
-
-
 angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/tests/templates/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +

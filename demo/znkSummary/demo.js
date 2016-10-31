@@ -1,16 +1,6 @@
 (function(angular) {
 
-    angular.module('demo', ['znk.infra-web-app.znkSummary']).config(function($translateProvider) {
-            $translateProvider.useLoader('$translatePartialLoader', {
-                    urlTemplate: '/{part}/locale/{lang}.json'
-                })
-                .preferredLanguage('en');
-        })
-        .run(function ($rootScope, $translate) {
-            $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-                $translate.refresh();
-            });
-        })
+    angular.module('demo', ['znk.infra-web-app.znkSummary'])
         .controller('Main', function ($scope) {
 
             $scope.exerciseResult = {
