@@ -10,7 +10,6 @@
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
-                    $translatePartialLoader.addPart('invitation');
                     scope.translate = $filter('translate');
                     scope.userStatus = PresenceService.userStatus;
                     scope.deleteTeacherMode = false;
