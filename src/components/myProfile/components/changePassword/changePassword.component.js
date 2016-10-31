@@ -26,7 +26,7 @@
 
                     if (!authform.$invalid) {
                         AuthService.changePassword(vm.changePasswordData).then(function () {
-                            $timeout(function (res) {
+                            $timeout(function () {
                                 type = 'success';
                                 msg = 'MY_PROFILE.PASSWORD_SAVE_SUCCESS';
                                 showToast(type, msg);

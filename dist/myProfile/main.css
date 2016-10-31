@@ -215,7 +215,7 @@ md-dialog.my-profile {
         height: 30px;
         background: transparent;
         border-radius: 20px;
-        border-color: #0a9bad;
+        border: 2px solid #0a9bad;
         color: #0a9bad;
         outline: none; }
   md-dialog.my-profile .msg-wrap {
@@ -266,53 +266,6 @@ md-dialog.my-profile {
     -ms-flex-pack: center;
         justify-content: center; }
 
-md-toast.toast-wrap, md-toast.toast-wrap-error {
-  top: 100px !important;
-  right: calc(50% - 600px) !important;
-  width: 400px;
-  height: 60px;
-  display: -ms-flexbox;
-  display: flex;
-  background-color: #FFFFFF;
-  border: 2px solid #87CA4D;
-  border-radius: 10px; }
-  md-toast.toast-wrap .icon-wrap, md-toast.toast-wrap-error .icon-wrap {
-    width: 60px;
-    margin: -8px;
-    padding: 8px;
-    background: #87CA4D;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-pack: center;
-        justify-content: center;
-    -ms-flex-align: center;
-        align-items: center; }
-    md-toast.toast-wrap .icon-wrap svg-icon, md-toast.toast-wrap-error .icon-wrap svg-icon {
-      width: 40px;
-      height: 40px; }
-      md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg .st1, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg .st1, md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg .st3, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg .st3 {
-        fill: #87CA4D; }
-  md-toast.toast-wrap .md-toast-content, md-toast.toast-wrap-error .md-toast-content {
-    background: #FFFFFF;
-    box-shadow: none;
-    color: #4F4D4D;
-    margin-left: 10px; }
-  md-toast.toast-wrap .close-toast-wrap, md-toast.toast-wrap-error .close-toast-wrap {
-    position: absolute;
-    right: 3px;
-    top: -15px;
-    width: 20px; }
-    md-toast.toast-wrap .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg {
-      width: 10px; }
-      md-toast.toast-wrap .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg .st1 {
-        stroke: #4F4D4D; }
-
-md-toast.toast-wrap-error {
-  border: 2px solid #FF6766; }
-  md-toast.toast-wrap-error .icon-wrap {
-    background: #FF6766; }
-    md-toast.toast-wrap-error .icon-wrap svg-icon {
-      width: 25px;
-      height: 25px; }
-      md-toast.toast-wrap-error .icon-wrap svg-icon .close-pop-svg .st1 {
-        stroke: #000000; }
+md-toast.toast-wrap {
+  top: 100px;
+  right: calc(50% - 600px); }
