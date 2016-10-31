@@ -118,13 +118,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
+        ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
                 link: function (scope) {
-                    $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
@@ -513,17 +512,17 @@
             env = newEnv;
         };
 
-        this.getEnv = function(){
+        this.getEnv = function () {
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvConfigSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvConfigSrv) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
-                return AllEnvConfigSrv[env][appContext];
+                return AllEnvs[env][appContext];
             }
 
             function _getAppScopeName(userContext, appEnvConfig) {
@@ -605,24 +604,20 @@
                     appName = appName + '-educator';
                 }
 
-                var isParamsUrlToSend = false;
+                var urlParams = '';
 
                 var invitationKey = InvitationKeyService.getInvitationKey();
-                var invitationPostFix = '';
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                    invitationPostFix = '&iid=' + invitationKey;
-                    isParamsUrlToSend = true;
+                    urlParams = '?iid=' + invitationKey;
                 }
 
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
-                var promoCodePostFix = '';
                 if (angular.isDefined(promoCode) && promoCode !== null) {
-                    promoCodePostFix = '&pcid=' + promoCode;
-                    isParamsUrlToSend = true;
-                }
 
-                var parmasPrefix = isParamsUrlToSend ? '?' : '';
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + parmasPrefix + invitationPostFix + promoCodePostFix;
+                    urlParams = urlParams === '' ? '?pcid=' + promoCode : urlParams + '&pcid=' + promoCode;
+
+                }
+                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
@@ -755,7 +750,6 @@
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
-                            _addFirstRegistrationRecord(appContext, userContext);
                             return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);
                             });

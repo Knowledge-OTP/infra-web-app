@@ -319,16 +319,6 @@
         }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.userGoalsSelection').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('userGoalsSelection');
-    }]);
-})(angular);
-
-
 'use strict';
 
 angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q', '$mdDialog',

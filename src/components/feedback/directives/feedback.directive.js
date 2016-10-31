@@ -2,9 +2,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.feedback').directive('feedback',
-        function(feedbackSrv, $translatePartialLoader) {
+        function(feedbackSrv) {
             'ngInject';
-            $translatePartialLoader.addPart('feedback');
 
             var directive = {
                 restrict: 'E',

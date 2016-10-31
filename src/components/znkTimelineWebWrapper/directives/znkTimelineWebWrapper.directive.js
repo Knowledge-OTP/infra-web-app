@@ -7,13 +7,11 @@
             activeExerciseId: '=?'
         },
         controllerAs: 'vm',
-        controller: function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum, $translatePartialLoader) {
+        controller: function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
             'ngInject';
 
-            $translatePartialLoader.addPart('znkTimelineWebWrapper');
-
             var vm = this;
-            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();
             var getGoalsProm = UserGoalsService.getGoals();
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();

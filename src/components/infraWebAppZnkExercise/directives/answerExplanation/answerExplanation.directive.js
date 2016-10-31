@@ -12,7 +12,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })
         .directive('answerExplanation',
-            function ($translatePartialLoader, ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
                 'ngInject';
 
                 var directive = {
@@ -20,7 +20,6 @@
                     require: ['^questionBuilder', '^ngModel'],
                     templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
                     link: function link(scope, element, attrs, ctrls) {
-                        $translatePartialLoader.addPart('infraWebAppZnkExercise');
 
                         var questionBuilderCtrl = ctrls[0];
                         var ngModelCtrl = ctrls[1];
@@ -88,6 +87,26 @@
                                 viewChangeListener();
                                 break;
                         }
+
+                        function _updateBindExercise() {
+                            var objToUpdate = {};
+                            objToUpdate[question.id] = scope.d.toggleWrittenSln;
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', objToUpdate);
+                        }
+
+                        scope.d.close = function () {
+                            scope.d.toggleWrittenSln = false;
+                            _updateBindExercise();
+                        };
+
+                        scope.d.toggleAnswer = function () {
+                            scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                            _updateBindExercise();
+                        };
+
+                        questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
+                            scope.d.toggleWrittenSln = newVal[question.id];
+                        });
                     }
                 };
                 return directive;

@@ -1,11 +1,11 @@
 <div class="answer-explanation-wrapper" translate-namespace="ANSWER_EXPLANATION">
     <div class="answer-explanation-content-wrapper"
-         ng-if="d.showWrittenSln">
+         ng-if="d.toggleWrittenSln">
         <answer-explanation-content class="znk-scrollbar"
-                                    on-close="d.showWrittenSln = false">
+                                    on-close="d.close()">
         </answer-explanation-content>
     </div>
-    <div class="answer-explanation-header" ng-click="d.showWrittenSln = !d.showWrittenSln">
+    <div class="answer-explanation-header" ng-click="d.toggleAnswer()">
         <div class="answer-explanation-btn">
             <div class="main-content-wrapper">
                 <svg-icon class="lamp-icon" name="answer-explanation-lamp-icon"></svg-icon>

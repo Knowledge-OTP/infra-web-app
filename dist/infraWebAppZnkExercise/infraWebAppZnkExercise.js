@@ -36,6 +36,8 @@
                         var functionsToBind = ['getViewMode','addQuestionChangeResolver','removeQuestionChangeResolver', 'getCurrentIndex'];
                         ZnkExerciseUtilitySrv.bindFunctions(questionBuilderCtrl, znkExerciseCtrl,functionsToBind);
 
+                        questionBuilderCtrl.bindExerciseEventManager = znkExerciseCtrl.bindExerciseEventManager;
+
                         element.append('<answer-explanation></answer-explanation>');
                     };
 
@@ -61,7 +63,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function ($translatePartialLoader, ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
                 'ngInject';
 
                 var directive = {
@@ -69,7 +71,6 @@
                     require: ['^questionBuilder', '^ngModel'],
                     templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
                     link: function link(scope, element, attrs, ctrls) {
-                        $translatePartialLoader.addPart('infraWebAppZnkExercise');
 
                         var questionBuilderCtrl = ctrls[0];
                         var ngModelCtrl = ctrls[1];
@@ -137,6 +138,26 @@
                                 viewChangeListener();
                                 break;
                         }
+
+                        function _updateBindExercise() {
+                            var objToUpdate = {};
+                            objToUpdate[question.id] = scope.d.toggleWrittenSln;
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', objToUpdate);
+                        }
+
+                        scope.d.close = function () {
+                            scope.d.toggleWrittenSln = false;
+                            _updateBindExercise();
+                        };
+
+                        scope.d.toggleAnswer = function () {
+                            scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                            _updateBindExercise();
+                        };
+
+                        questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
+                            scope.d.toggleWrittenSln = newVal[question.id];
+                        });
                     }
                 };
                 return directive;
@@ -211,7 +232,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
-        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
+        ["$timeout", "SubjectEnum", function($timeout, SubjectEnum){
         'ngInject';
 
         return {
@@ -233,7 +254,6 @@
             require: '?ngModel',
             templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
             controller: function () {
-                $translatePartialLoader.addPart('infraWebAppZnkExercise');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
                     throw new Error('Error: exerciseHeaderController: subjectId is required!');
@@ -266,12 +286,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
-    "         ng-if=\"d.showWrittenSln\">\n" +
+    "         ng-if=\"d.toggleWrittenSln\">\n" +
     "        <answer-explanation-content class=\"znk-scrollbar\"\n" +
-    "                                    on-close=\"d.showWrittenSln = false\">\n" +
+    "                                    on-close=\"d.close()\">\n" +
     "        </answer-explanation-content>\n" +
     "    </div>\n" +
-    "    <div class=\"answer-explanation-header\" ng-click=\"d.showWrittenSln = !d.showWrittenSln\">\n" +
+    "    <div class=\"answer-explanation-header\" ng-click=\"d.toggleAnswer()\">\n" +
     "        <div class=\"answer-explanation-btn\">\n" +
     "            <div class=\"main-content-wrapper\">\n" +
     "                <svg-icon class=\"lamp-icon\" name=\"answer-explanation-lamp-icon\"></svg-icon>\n" +

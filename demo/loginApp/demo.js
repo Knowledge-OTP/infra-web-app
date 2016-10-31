@@ -1,44 +1,33 @@
 (function(angular) {
 
     angular.module('demo', ['znk.infra-web-app.loginApp', 'znk.infra-web-app.promoCode'])
-    .config(function ($translateProvider, $locationProvider, PromoCodeSrvProvider, AllEnvConfigSrvProvider, LoginAppSrvProvider) {
+    .config(function ($locationProvider, PromoCodeSrvProvider, AllEnvConfigSrvProvider, LoginAppSrvProvider) {
         'ngInject';
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
         });
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: '/{part}/locale/{lang}.json'
-        })
-            .preferredLanguage('en');
 
+        var allEnvConfigObj = AllEnvConfigSrvProvider.getAllEnvJstringObj();
 
-            var allEnvConfigObj = AllEnvConfigSrvProvider.getAllEnvJstringObj();
+        var envName = LoginAppSrvProvider.getEnv();
 
-            var envName = LoginAppSrvProvider.getEnv();
+        var allEnvConfKeys = Object.keys(allEnvConfigObj[envName]);
 
-            var allEnvConfKeys = Object.keys(allEnvConfigObj[envName]);
+        var promoCodeBackendData = {};
 
-            var promoCodeBackendData = {};
+        _buildBackendData(envName, allEnvConfKeys);
 
-            _buildBackendData(envName, allEnvConfKeys);
+        function _buildBackendData(envName, keys) {
+            angular.forEach(keys, function (key) {
+                promoCodeBackendData[key] = {
+                    backendEndpoint: allEnvConfigObj[envName][key].backendEndpoint,
+                    firebaseAppScopeName: allEnvConfigObj[envName][key].firebaseAppScopeName
+                };
+            });
+        }
 
-            function _buildBackendData(envName, keys) {
-                angular.forEach(keys, function (key) {
-                    promoCodeBackendData[key] = {
-                        backendEndpoint: allEnvConfigObj[envName][key].backendEndpoint,
-                        firebaseAppScopeName: allEnvConfigObj[envName][key].firebaseAppScopeName
-                    };
-                });
-            }
-
-            PromoCodeSrvProvider.setBackendData(promoCodeBackendData);
-    })
-    .run(function ($rootScope, $translate) {
-
-        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-            $translate.refresh();
-        });
+        PromoCodeSrvProvider.setBackendData(promoCodeBackendData);
     })
     .provider('AllEnvConfigSrv',
     function () {

@@ -19,6 +19,7 @@
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra.svgIcon',
+        'znk.infra.analytics',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.diagnostic'
@@ -60,7 +61,7 @@
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScores();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScoresData();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -88,14 +89,16 @@
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                                var estimatedScoreForSubject = estimatedScore[subjectId];
+                                var estimatedScoreForSubjectArr = estimatedScore[subjectId];
+                                var estimatedScoreForSubject = estimatedScoreForSubjectArr[estimatedScoreForSubjectArr.length - 1];
+                                var isSubjectExist = estimatedScoreForSubject && estimatedScoreForSubject.score;
                                 return {
                                     subjectId: subjectId,
-                                    estimatedScore: (scope.d.isDiagnosticComplete && (typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
-                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete) ? calcPercentage(estimatedScoreForSubject.score) : 0,
+                                    estimatedScore: (scope.d.isDiagnosticComplete && (isSubjectExist && typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
+                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete && isSubjectExist) ? calcPercentage(estimatedScoreForSubject.score) : 0,
                                     userGoal: userGoalForSubject,
                                     userGoalPercentage: calcPercentage(userGoalForSubject),
-                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
+                                    pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete && isSubjectExist) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
                                     showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
                             });
@@ -180,16 +183,6 @@
             };
         }]
     );
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.estimatedScoreWidget').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('estimatedScoreWidget');
-    }]);
 })(angular);
 
 

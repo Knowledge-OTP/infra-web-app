@@ -27,10 +27,8 @@
 
     angular.module('znk.infra-web-app.webAppScreenSharing').component('shViewer', {
         templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html',
-        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", "$translatePartialLoader", function (CompleteExerciseSrv, ENV, ScreenSharingSrv, $translatePartialLoader) {
+        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", function (CompleteExerciseSrv, ENV, ScreenSharingSrv) {
             'ngInject';
-
-            $translatePartialLoader.addPart('webAppScreenSharing');
 
             var $ctrl= this;
 
