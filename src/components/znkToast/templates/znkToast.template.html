@@ -1,9 +1,9 @@
-<md-toast ng-cloak  translate-namespace="MY_PROFILE"
+<md-toast ng-cloak
           ng-class="{'toast-wrap': vm.type === 'success',
                      'toast-wrap-error': vm.type === 'error'}">
     <div class="icon-wrap">
-        <svg-icon name="myProfile-completed-v-icon" ng-if="vm.type === 'success'"></svg-icon>
-        <svg-icon name="myProfile-close-popup" ng-if="vm.type === 'error'"></svg-icon>
+        <svg-icon name="znkToast-completed-v-icon" ng-if="vm.type === 'success'"></svg-icon>
+        <svg-icon name="znkToast-error-red-icon" ng-if="vm.type === 'error'"></svg-icon>
     </div>
 
     <div class="md-toast-content">
@@ -11,7 +11,7 @@
     </div>
 
     <md-button class="close-toast-wrap" ng-click="vm.closeToast()">
-        <svg-icon name="myProfile-close-popup"></svg-icon>
+        <svg-icon name="znkToast-close-popup"></svg-icon>
     </md-button>
 
 </md-toast>

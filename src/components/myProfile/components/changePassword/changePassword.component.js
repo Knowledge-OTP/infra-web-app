@@ -27,13 +27,11 @@
                     if (!authform.$invalid) {
                         AuthService.changePassword(vm.changePasswordData).then(function () {
                             $timeout(function (res) {
-                                console.log('res ', res);
                                 type = 'success';
                                 msg = 'MY_PROFILE.PASSWORD_SAVE_SUCCESS';
                                 showToast(type, msg);
                             }, 10);
                         }, function (err) {
-                            console.log('err: ', err);
                             $timeout(function () {
                                 type = 'error';
                                 if (err.code === 'INVALID_PASSWORD') {

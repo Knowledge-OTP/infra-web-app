@@ -151,7 +151,7 @@ md-dialog.my-profile {
                         content: '';
                         position: absolute;
                         border: {
-                            color: transparent;
+                            color: $transparent;
                             style: solid;
                             top-color: $bgColor32;
                             width: 10px;
@@ -195,11 +195,12 @@ md-dialog.my-profile {
                 margin: 0;
                 box-shadow: none;
                 height: 30px;
-                background: transparent;
+                background: $transparent;
                 border-radius: 20px;
-                border-color: $bsColor5;
+                border: 2px solid $bsColor5;
                 color: $fontColor6;
                 outline: none;
+
             }
         }
     }
@@ -255,3 +256,4 @@ md-dialog.my-profile {
         }
     }
 }
+

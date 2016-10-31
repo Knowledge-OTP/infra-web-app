@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.myProfile')
         .service('MyProfileSrv',
-            function ($mdDialog, $http, ENV, UserProfileService ,$q, $mdToast, StorageSrv, InfraConfigSrv) {
+            function ($mdDialog, $http, ENV, UserProfileService ,$q, $mdToast, StorageSrv, InfraConfigSrv, ZnkToastSrv) {
                 'ngInject';
 
                 function obj2Array(obj) {
@@ -12,6 +12,7 @@
 
                 var self = this;
                 var globalStorageProm = InfraConfigSrv.getGlobalStorage();
+                self.showToast = ZnkToastSrv.showToast;
 
                 self.getTimezonesList = function getTimezonesList() {
                     return globalStorageProm.then(function (globalStorage) {
@@ -67,16 +68,16 @@
                     });
                 };
 
-                self.showToast = function (type, msg) {
-                    $mdToast.show({
-                        locals:{ type: type,  msg: msg },
-                        templateUrl: 'components/myProfile/templates/toast.template.html',
-                        position: 'top right',
-                        hideDelay: 3000,
-                        controllerAs: 'vm',
-                        controller: 'ToastController'
-                    });
-                };
+                // self.showToast = function (type, msg) {
+                //     $mdToast.show({
+                //         locals:{ type: type,  msg: msg },
+                //         templateUrl: 'components/myProfile/templates/toast.template.html',
+                //         position: 'top right',
+                //         hideDelay: 3000,
+                //         controllerAs: 'vm',
+                //         controller: 'ToastController'
+                //     });
+                // };
             }
         );
 })(angular);

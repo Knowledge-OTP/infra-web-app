@@ -15,12 +15,6 @@
             $scope.openPopup = function() {
                 MyProfileSrv.showMyProfile();
             };
-
-            $scope.openToast = function() {
-                var type = 'success';
-                var msg = 'Your profile has been successfully saved.';
-                MyProfileSrv.showToast(type, msg);
-            };
         })
         .service('ENV', function() {
             this.firebaseAppScopeName = 'sat_app';

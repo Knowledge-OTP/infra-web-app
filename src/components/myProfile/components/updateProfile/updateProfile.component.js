@@ -35,7 +35,7 @@
                                 type = 'success';
                                 msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
                                 showToast(type, msg);
-                            }, 10);
+                            });
                         }, function (err) {
                             $timeout(function () {
                                 type = 'error';
@@ -46,7 +46,7 @@
                                     msg = 'MY_PROFILE.ERROR_OCCURRED';
                                     showToast(type, msg);
                                 }
-                            }, 10);
+                            });
                         });
                     }
                 };

@@ -4,5 +4,9 @@
         '../../scss/imports/inputs';
 
 @import './scss/myProfile';
-@import 'scss/_toast';
 
+
+md-toast.toast-wrap{
+    top: 100px;
+    right: calc(50% - 600px);
+}
