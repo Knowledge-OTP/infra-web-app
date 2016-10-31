@@ -117,10 +117,8 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var vm = this;
 
@@ -174,10 +172,8 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function (ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 function _changeEvaluateStatus(stateData) {
                     var evaluateStatusFnProm = ZnkEvaluatorSrv.getEvaluateStatusFn();
@@ -222,12 +218,10 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
 
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var starStatusMap = {
                     empty: 1,

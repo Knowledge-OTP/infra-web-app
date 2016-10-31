@@ -84,11 +84,6 @@
                 };
             }, true);
         })
-        .run(function ($timeout, $translatePartialLoader) {
-            $timeout(function () {
-                $translatePartialLoader.addPart('completeExerciseDemoLocale');
-            });
-        })
         .component('completeExerciseSummary',{
             template: '<div>Summary</div>'
         });

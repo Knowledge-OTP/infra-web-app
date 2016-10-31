@@ -1,18 +1,16 @@
 angular.module('demo', [
+    'demoEnv',
     'znk.infra-web-app.estimatedScoreWidget'
 ])
-    .config(function ($translateProvider, SvgIconSrvProvider, ScoringServiceProvider) {
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: '/{part}/locale/{lang}.json'
-        })
-            .preferredLanguage('en');
+    .config(function (SvgIconSrvProvider, ScoringServiceProvider) {
+        'ngInject';
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
             'verbal-icon': 'svg/verbal-icon.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
-        
+
         ScoringServiceProvider.setExamScoreFnGetter(function () {
             return function (scoresArr) {
                 var totalScores = 0;
@@ -104,12 +102,7 @@ angular.module('demo', [
             };
         });
     })
-    .run(function ($rootScope, $translate, $translatePartialLoader) {
-        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-            $translate.refresh();
-        });
-        $translatePartialLoader.addPart('demo');
-
+    .run(function ($rootScope) {
         $rootScope.showNavMenu = false;
         $rootScope.changeToNavView = function () {
             $rootScope.showNavMenu = !$rootScope.showNavMenu;

@@ -19,14 +19,8 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
             "pixelGifSrc": "https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif"
         }
     })
-    .config(function ($translateProvider, znkHeaderSrvProvider, $stateProvider) {
-
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: '/{part}/locale/{lang}.json'
-        })
-            .preferredLanguage('en');
-
-
+    .config(function (znkHeaderSrvProvider, $stateProvider) {
+        'ngInject';
         $stateProvider
             .state('item1', {
                 url: '/item1',
@@ -50,13 +44,5 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
         var additionalItems = [demoItem1, demoItem2];
 
         znkHeaderSrvProvider.addAdditionalNavMenuItems(additionalItems);
-    })
-
-    .run(function ($rootScope, $translate, $translatePartialLoader) {
-        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-            $translate.refresh();
-        });
-        $translatePartialLoader.addPart('demo');
-        $translatePartialLoader.addPart('feedback');
     });
 

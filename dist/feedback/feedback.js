@@ -12,9 +12,9 @@
             'znk.infra.user',
             'znk.infra.svgIcon'
         ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
+        .config(
+            ["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
                 var svgMap = {
                     'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
@@ -22,8 +22,7 @@
                     'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
+            }]);
 })(angular);
 
 (function (angular) {
@@ -87,9 +86,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.feedback').directive('feedback',
-        ["feedbackSrv", "$translatePartialLoader", function(feedbackSrv, $translatePartialLoader) {
+        ["feedbackSrv", function(feedbackSrv) {
             'ngInject';
-            $translatePartialLoader.addPart('feedback');
 
             var directive = {
                 restrict: 'E',

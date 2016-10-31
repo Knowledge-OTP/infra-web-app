@@ -13,12 +13,10 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             controllerAs: 'vm',
-            controller: function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: function (ZnkEvaluateResultSrv) {
                 'ngInject';
 
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var starStatusMap = {
                     empty: 1,

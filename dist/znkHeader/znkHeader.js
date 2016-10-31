@@ -138,16 +138,6 @@
 })(angular);
 
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkHeader').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('znkHeader');
-    }]);
-})(angular);
-
-
 /**
  *
  *   api:

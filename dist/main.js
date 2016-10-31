@@ -1129,16 +1129,6 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.completeExercise').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('completeExercise');
-    }]);
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
         ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
             'ngInject';
@@ -1662,12 +1652,12 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticController', ["$state", "currentState", "$translatePartialLoader", function($state, currentState, $translatePartialLoader) {
+    angular.module('znk.infra-web-app.diagnosticExercise')
+        .controller('WorkoutsDiagnosticController', ["$state", "currentState", function($state, currentState) {
         'ngInject';
 
         var EXAM_STATE = 'app.diagnostic';
 
-        $translatePartialLoader.addPart('diagnosticExercise');
 
         $state.go(EXAM_STATE + currentState.state, currentState.params);
     }]);
@@ -2776,16 +2766,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
         }];
 }]);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.diagnosticIntro').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('diagnosticIntro');
-    }]);
-})(angular);
-
-
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
@@ -2875,6 +2855,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
         'znk.infra.estimatedScore',
         'znk.infra.scoring',
         'znk.infra.svgIcon',
+        'znk.infra.analytics',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.diagnostic'
@@ -3038,16 +3019,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
             };
         }]
     );
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.estimatedScoreWidget').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('estimatedScoreWidget');
-    }]);
 })(angular);
 
 
@@ -3323,10 +3294,8 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var vm = this;
 
@@ -3380,10 +3349,8 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function (ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 function _changeEvaluateStatus(stateData) {
                     var evaluateStatusFnProm = ZnkEvaluatorSrv.getEvaluateStatusFn();
@@ -3428,12 +3395,10 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
 
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var starStatusMap = {
                     empty: 1,
@@ -3877,9 +3842,9 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
             'znk.infra.user',
             'znk.infra.svgIcon'
         ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
+        .config(
+            ["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
                 var svgMap = {
                     'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
@@ -3887,8 +3852,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
                     'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
+            }]);
 })(angular);
 
 (function (angular) {
@@ -3952,9 +3916,8 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
     'use strict';
 
     angular.module('znk.infra-web-app.feedback').directive('feedback',
-        ["feedbackSrv", "$translatePartialLoader", function(feedbackSrv, $translatePartialLoader) {
+        ["feedbackSrv", function(feedbackSrv) {
             'ngInject';
-            $translatePartialLoader.addPart('feedback');
 
             var directive = {
                 restrict: 'E',
@@ -4611,7 +4574,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function ($translatePartialLoader, ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
                 'ngInject';
 
                 var directive = {
@@ -4619,7 +4582,6 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                     require: ['^questionBuilder', '^ngModel'],
                     templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
                     link: function link(scope, element, attrs, ctrls) {
-                        $translatePartialLoader.addPart('infraWebAppZnkExercise');
 
                         var questionBuilderCtrl = ctrls[0];
                         var ngModelCtrl = ctrls[1];
@@ -4781,7 +4743,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
-        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
+        ["$timeout", "SubjectEnum", function($timeout, SubjectEnum){
         'ngInject';
 
         return {
@@ -4803,7 +4765,6 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
             require: '?ngModel',
             templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
             controller: function () {
-                $translatePartialLoader.addPart('infraWebAppZnkExercise');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
                     throw new Error('Error: exerciseHeaderController: subjectId is required!');
@@ -5077,7 +5038,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
+        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv) {
             'ngInject';
 
            return {
@@ -5091,8 +5052,6 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     // }
 
                     scope.translate = $filter('translate');
-                    $translatePartialLoader.addPart('invitation');
-
 
                     scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
                     scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
@@ -5825,10 +5784,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('RescheduleLessonController',
-        ["$mdDialog", "lessonData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", "$translatePartialLoader", function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons, $translatePartialLoader) {
+        ["$mdDialog", "lessonData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons) {
             'ngInject';
-
-            $translatePartialLoader.addPart('liveLessons');
 
             var self = this;
             self.closeDialog = $mdDialog.cancel;
@@ -5897,10 +5854,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('UpcomingLessonToasterController',
-        ["$mdToast", "MyLiveLessons", "closestLiveLesson", "$timeout", "$translatePartialLoader", function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout, $translatePartialLoader) {
+        ["$mdToast", "MyLiveLessons", "closestLiveLesson", "$timeout", function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout) {
         'ngInject';
-
-            $translatePartialLoader.addPart('liveLessons');
 
             var self = this;
 
@@ -6508,13 +6463,12 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        ["$translatePartialLoader", "LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
+        ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
                 link: function (scope) {
-                    $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
@@ -8031,16 +7985,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.onBoarding').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('onBoarding');
-    }]);
-})(angular);
-
-
 angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
@@ -8227,7 +8171,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode', []).config([
+    angular.module('znk.infra-web-app.promoCode', [])
+        .config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
@@ -8533,24 +8478,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             'znk.infra.storage',
             'znk.infra.auth',
             'znk.infra.analytics'
-        ])
-        .config([
-            'SvgIconSrvProvider',
-            function(SvgIconSrvProvider){
-
-                var svgMap = {
-                    'purchase-check-mark': 'components/purchase/svg/check-mark-icon.svg',
-                    'purchase-close-popup': 'components/purchase/svg/purchase-close-popup.svg',
-                    'purchase-popup-bullet-1-icon': 'components/purchase/svg/purchase-popup-bullet-1-icon.svg',
-                    'purchase-popup-bullet-2-icon': 'components/purchase/svg/purchase-popup-bullet-2-icon.svg',
-                    'purchase-popup-bullet-3-icon': 'components/purchase/svg/purchase-popup-bullet-3-icon.svg',
-                    'purchase-popup-bullet-4-icon': 'components/purchase/svg/purchase-popup-bullet-4-icon.svg',
-                    'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg',
-                    'purchase-raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-
+        ]);
 })(angular);
 
 
@@ -8564,11 +8492,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             },
             templateUrl:  'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "$translatePartialLoader", "znkAnalyticsSrv", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
-                                  $filter, PurchaseStateEnum, $log, $translatePartialLoader, znkAnalyticsSrv) {
+            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "znkAnalyticsSrv", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
+                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('purchase');
 
                 var vm = this;
 
@@ -8670,6 +8596,27 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                 }
             }]
         });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.purchase')
+        .config(
+            ["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
+                var svgMap = {
+                    'purchase-check-mark': 'components/purchase/svg/check-mark-icon.svg',
+                    'purchase-close-popup': 'components/purchase/svg/purchase-close-popup.svg',
+                    'purchase-popup-bullet-1-icon': 'components/purchase/svg/purchase-popup-bullet-1-icon.svg',
+                    'purchase-popup-bullet-2-icon': 'components/purchase/svg/purchase-popup-bullet-2-icon.svg',
+                    'purchase-popup-bullet-3-icon': 'components/purchase/svg/purchase-popup-bullet-3-icon.svg',
+                    'purchase-popup-bullet-4-icon': 'components/purchase/svg/purchase-popup-bullet-4-icon.svg',
+                    'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg',
+                    'purchase-raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
 })(angular);
 
 (function (angular) {
@@ -9393,10 +9340,8 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.settings').controller('SettingsChangePasswordController',
-            ["AuthService", "$mdDialog", "$timeout", "$translatePartialLoader", function (AuthService, $mdDialog, $timeout, $translatePartialLoader) {
+            ["AuthService", "$mdDialog", "$timeout", function (AuthService, $mdDialog, $timeout) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('settings');
 
                 var self = this;
                 this.saveTitle = 'SETTING.SAVE';
@@ -9785,16 +9730,6 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
             };
         }]
     );
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tests').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('tests');
-    }]);
 })(angular);
 
 
@@ -10280,16 +10215,6 @@ angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($t
         }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.userGoalsSelection').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('userGoalsSelection');
-    }]);
-})(angular);
-
-
 'use strict';
 
 angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q', '$mdDialog',
@@ -10652,10 +10577,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
     angular.module('znk.infra-web-app.webAppScreenSharing').component('shViewer', {
         templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html',
-        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", "$translatePartialLoader", function (CompleteExerciseSrv, ENV, ScreenSharingSrv, $translatePartialLoader) {
+        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", function (CompleteExerciseSrv, ENV, ScreenSharingSrv) {
             'ngInject';
-
-            $translatePartialLoader.addPart('webAppScreenSharing');
 
             var $ctrl= this;
 
@@ -11648,16 +11571,6 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             }]
         );
 })();
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.workoutsRoadmap').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('workoutsRoadmap');
-    }]);
-})(angular);
-
 
 (function (angular) {
     'use strict';
@@ -12770,16 +12683,6 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 })(angular);
 
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkHeader').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('znkHeader');
-    }]);
-})(angular);
-
-
 /**
  *
  *   api:
@@ -13021,9 +12924,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
         bindings: {
             exerciseResult: '<'
         },
-        controller: ["$translatePartialLoader", function($translatePartialLoader) {
+        controller: function() {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var PERCENTAGE = 100;
 
@@ -13050,7 +12952,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                     animation: false
                 }
             };
-        }],
+        },
         controllerAs: 'vm'
     });
 })(angular);
@@ -13065,9 +12967,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
         bindings: {
             exerciseData: '<'
         },
-        controller: ["$translatePartialLoader", "SubjectEnum", function($translatePartialLoader, SubjectEnum) {
+        controller: ["SubjectEnum", function(SubjectEnum) {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var vm = this;
 
@@ -13158,10 +13059,8 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             activeExerciseId: '=?'
         },
         controllerAs: 'vm',
-        controller: ["EstimatedScoreSrv", "UserGoalsService", "ScoringService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", "$translatePartialLoader", function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum, $translatePartialLoader) {
+        controller: ["EstimatedScoreSrv", "UserGoalsService", "ScoringService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
             'ngInject';
-
-            $translatePartialLoader.addPart('znkTimelineWebWrapper');
 
             var vm = this;
             var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();

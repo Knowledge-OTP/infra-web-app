@@ -63,7 +63,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function ($translatePartialLoader, ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
                 'ngInject';
 
                 var directive = {
@@ -71,7 +71,6 @@
                     require: ['^questionBuilder', '^ngModel'],
                     templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
                     link: function link(scope, element, attrs, ctrls) {
-                        $translatePartialLoader.addPart('infraWebAppZnkExercise');
 
                         var questionBuilderCtrl = ctrls[0];
                         var ngModelCtrl = ctrls[1];
@@ -233,7 +232,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
-        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
+        ["$timeout", "SubjectEnum", function($timeout, SubjectEnum){
         'ngInject';
 
         return {
@@ -255,7 +254,6 @@
             require: '?ngModel',
             templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
             controller: function () {
-                $translatePartialLoader.addPart('infraWebAppZnkExercise');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
                     throw new Error('Error: exerciseHeaderController: subjectId is required!');
