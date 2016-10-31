@@ -801,6 +801,7 @@ md-dialog.invite-teacher-modal-wrap {
     min-height: 35px;
     line-height: 35px;
     font-size: 14px;
+    text-decoration: none;
     text-transform: uppercase;
     font-weight: 300;
     cursor: pointer; }
