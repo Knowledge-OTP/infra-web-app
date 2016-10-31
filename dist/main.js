@@ -4584,6 +4584,8 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         var functionsToBind = ['getViewMode','addQuestionChangeResolver','removeQuestionChangeResolver', 'getCurrentIndex'];
                         ZnkExerciseUtilitySrv.bindFunctions(questionBuilderCtrl, znkExerciseCtrl,functionsToBind);
 
+                        questionBuilderCtrl.bindExerciseEventManager = znkExerciseCtrl.bindExerciseEventManager;
+
                         element.append('<answer-explanation></answer-explanation>');
                     };
 
@@ -4685,6 +4687,26 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                                 viewChangeListener();
                                 break;
                         }
+
+                        function _updateBindExercise() {
+                            var objToUpdate = {};
+                            objToUpdate[question.id] = scope.d.toggleWrittenSln;
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', objToUpdate);
+                        }
+
+                        scope.d.close = function () {
+                            scope.d.toggleWrittenSln = false;
+                            _updateBindExercise();
+                        };
+
+                        scope.d.toggleAnswer = function () {
+                            scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                            _updateBindExercise();
+                        };
+
+                        questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
+                            scope.d.toggleWrittenSln = newVal[question.id];
+                        });
                     }
                 };
                 return directive;
@@ -4814,12 +4836,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
-    "         ng-if=\"d.showWrittenSln\">\n" +
+    "         ng-if=\"d.toggleWrittenSln\">\n" +
     "        <answer-explanation-content class=\"znk-scrollbar\"\n" +
-    "                                    on-close=\"d.showWrittenSln = false\">\n" +
+    "                                    on-close=\"d.close()\">\n" +
     "        </answer-explanation-content>\n" +
     "    </div>\n" +
-    "    <div class=\"answer-explanation-header\" ng-click=\"d.showWrittenSln = !d.showWrittenSln\">\n" +
+    "    <div class=\"answer-explanation-header\" ng-click=\"d.toggleAnswer()\">\n" +
     "        <div class=\"answer-explanation-btn\">\n" +
     "            <div class=\"main-content-wrapper\">\n" +
     "                <svg-icon class=\"lamp-icon\" name=\"answer-explanation-lamp-icon\"></svg-icon>\n" +
@@ -7034,13 +7056,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvConfigSrv", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvConfigSrv) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
-                return AllEnvConfigSrv[env][appContext];
+                return AllEnvs[env][appContext];
             }
 
             function _getAppScopeName(userContext, appEnvConfig) {
@@ -11067,15 +11089,22 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             var search = $location.search();
             var DIAGNOSTIC_STATE = 'app.workouts.roadmap.diagnostic';
             var WORKOUT_STATE = 'app.workouts.roadmap.workout';
+            var DIAGNOSTIC_PATH = '/workoutsRoadmap/diagnostic';
+            var WORKOUT_PATH = '/workoutsRoadmap/workout';
+            var isInit;
+
+            function shouldReplaceLocation() {
+                if (!isInit) {
+                    isInit = true;
+                    $location.replace();
+                }
+            }
 
             function getActiveWorkout() {
                 var i = 0;
                 for (; i < vm.workoutsProgress.length; i++) {
                     if (vm.workoutsProgress[i].status !== ExerciseStatusEnum.COMPLETED.enum) {
-                        if (angular.isDefined(vm.workoutsProgress[i].subjectId)) {
-                            return vm.workoutsProgress[i];
-                        }
-                        return data.diagnostic;
+                        return vm.workoutsProgress[i];
                     }
                 }
                 return vm.workoutsProgress[i - 1];
@@ -11124,6 +11153,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             var LEFT_ANIMATION = 'left-animation';
             var RIGHT_ANIMATION = 'right-animation';
             $scope.$watch('vm.selectedItem', function (newItem, oldItem) {
+
                 if (angular.isUndefined(newItem)) {
                     return;
                 }
@@ -11141,16 +11171,16 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 var currentStateName = $state.current.name;
                 if (newItem.workoutOrder === 0) {
                     if (currentStateName !== DIAGNOSTIC_STATE) {
-                        $state.go(DIAGNOSTIC_STATE);
+                        $location.path(DIAGNOSTIC_PATH);
+                        shouldReplaceLocation();
                     }
                 } else {
                     search = $location.search();
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        $state.go('app.workouts.roadmap.workout', {
-                            workout: newItem.workoutOrder
-                        });
+                        $location.path(WORKOUT_PATH).search('workout', newItem.workoutOrder);
+                        shouldReplaceLocation();
                     }
                 }
             });
