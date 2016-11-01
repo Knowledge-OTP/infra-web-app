@@ -48,8 +48,8 @@
     font-family: Lato;
     font-weight: 400;
     text-align: left;
-    margin-top: -4px;
-    padding-left: 20px;
+    margin-top: 0;
+    padding-left: 40px;
     display: block; }
   .znk-input-group.invalid-input svg-icon svg * {
     stroke: #ff6766 !important; }

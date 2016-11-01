@@ -55,16 +55,16 @@
                             </ng-switch>
                         </md-list-item>
                         <md-list-item md-ink-ripple
-                            ng-disabled="!vm.isOnBoardingCompleted"
-                            disable-click-drv
-                            ng-click="vm.showGoalsEdit()">
+                                      ng-disabled="!vm.isOnBoardingCompleted"
+                                      disable-click-drv
+                                      ng-click="vm.showGoalsEdit()">
                             <div class="header-modal-item header-modal-item-uppercase links"
                                  translate=".PROFILE_GOALS"></div>
                         </md-list-item>
                         <md-list-item md-ink-ripple
-                            ng-click="vm.showChangePassword()">
+                                      ng-click="vm.showMyProfile()">
                             <div class="header-modal-item header-modal-item-uppercase links"
-                                 translate=".PROFILE_CHANGE_PASSWORD"></div>
+                                 translate=".MY_PROFILE"></div>
                         </md-list-item>
                         <md-list-item md-ink-ripple>
                             <a ui-sref="app.faq"
@@ -75,13 +75,13 @@
                         <md-list-item  md-ink-ripple
                                        ng-click="vm.showFeedbackDialog()">
                             <div class="header-modal-item header-modal-item-uppercase links"
-                                  translate=".PROFILE_SUPPORT"></div>
+                                 translate=".PROFILE_SUPPORT"></div>
                         </md-list-item>
                         <div class="divider"></div>
                         <md-list-item md-ink-ripple
-                            ng-click="vm.logout()">
+                                      ng-click="vm.logout()">
                             <div class="header-modal-item header-modal-item-uppercase logout"
-                                  translate=".PROFILE_LOGOUT"></div>
+                                 translate=".PROFILE_LOGOUT"></div>
                         </md-list-item>
                     </md-list>
                 </md-menu-content>
