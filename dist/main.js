@@ -457,6 +457,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                                $ctrl.znkExercise.actions.unbindExerciseView();
                             }
                         }
                     };
@@ -613,6 +614,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     this.goToSummary = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                        $ctrl.znkExercise.actions.unbindExerciseView();
                     };
                 };
 
