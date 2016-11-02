@@ -54,11 +54,11 @@ md-dialog.invitation-confirm-modal {
                 align-items: center;
                 .exclamation-mark-icon {
                     width: 14px;
-                    stroke: $bgColor20;
+                    stroke: $bgColor1;
                 }
 
                 .exclamation-mark-icon * {
-                    fill: $bgColor20;
+                    fill: $bgColor1;
                 }
             }
         }
@@ -74,6 +74,7 @@ md-dialog-content.invitation-confirm-modal-content {
 
     .main-title {
         margin-top: 20px;
+        text-align: center;
         @include text-style(24px, $fontColor2, Lato, $regularFontWeight);
     }
 
