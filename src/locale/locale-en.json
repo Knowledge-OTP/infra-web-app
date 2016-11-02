@@ -184,7 +184,7 @@
         "SUCCESS_DECLINE": "The invitation was declined",
         "SUCCESS_DISCONNECT": "You've successfully disconnected from your teacher",
         "DISCONNECT_ERROR": "We couldn't disconnected you from your teacher, please try again later.<br>If this persists please contact support@zinkerz.com",
-        "MY_TEACHER":"My Teacher",
+        "MY_TEACHERS":"My Teachers",
         "DECLINED_INVITATIONS": "DECLINED",
         "DECLINED_YOR_INVITATION": "declined your invitation",
         "DELETE_INVITATION": "Delete Invitation",

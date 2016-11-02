@@ -85,7 +85,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "StudentContextSrv", "$timeout", "PresenceService", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, StudentContextSrv, $timeout, PresenceService) {
+        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "StudentContextSrv", "$timeout", "PresenceService", "$log", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, StudentContextSrv, $timeout, PresenceService, $log) {
             'ngInject';
 
            return {
@@ -98,17 +98,20 @@
                     scope.deleteTeacherMode = false;
 
                     function invitationManagerMyTeachersCB(teachers){
+                        $log.debug('invitationManager:: teachers cb', teachers);
                         scope.myTeachers = teachers;
                         scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
                         startTrackTeachersPresence();
                     }
 
                     function newInvitationsCB(invitation){
+                        $log.debug('invitationManager:: new invitations cb', invitation);
                         scope.invitations = invitation;
                         scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
                     }
 
                     function pendingConfirmationsCB(pendingConf){
+                        $log.debug('invitationManager:: pending conf cb', pendingConf);
                         scope.conformations = pendingConf;
                         scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
                     }
