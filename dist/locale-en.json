@@ -162,7 +162,7 @@
         "DONE": "Done",
         "INVITE_ERROR_TITLE": "Invalid Invitation",
         "INVITE_ERROR_MSG": "The invitation you are trying to use is either invalid or expired. Please contact your educator to get a new invitation",
-        "GENERAL_ERROR": "An error has occurred, Please try again later",
+        "GENERAL_ERROR": "An error has occurred, Please try again later"
     },
 
     "INVITATION_MANAGER_DIRECTIVE": {
