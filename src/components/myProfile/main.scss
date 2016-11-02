@@ -1,0 +1,12 @@
+@import '../../scss/imports/variables',
+        '../../scss/imports/colors',
+        '../../../bower_components/infra/dist/mixins/mixins',
+        '../../scss/imports/inputs';
+
+@import './scss/myProfile';
+
+
+md-toast.toast-wrap{
+    top: 100px;
+    right: calc(50% - 600px);
+}

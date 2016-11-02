@@ -2,10 +2,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('RescheduleLessonController',
-        function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons, $translatePartialLoader) {
+        function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons) {
             'ngInject';
-
-            $translatePartialLoader.addPart('liveLessons');
 
             var self = this;
             self.closeDialog = $mdDialog.cancel;

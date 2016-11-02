@@ -148,9 +148,11 @@ invitation-manager .circle-invite-wrap {
   cursor: pointer; }
 
 invitation-manager .teacher-icon-wrap {
-  background-color: #f6f6f6; }
+  border: 1px solid #d3d0d0;
+  background-color: transparent; }
   invitation-manager .teacher-icon-wrap .teacher-icon {
-    width: 24px; }
+    width: 24px;
+    height: 16px; }
 
 invitation-manager +
 .teacher-active-icon-wrap {

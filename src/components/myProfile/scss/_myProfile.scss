@@ -1,0 +1,259 @@
+md-dialog.my-profile {
+    background-color: $bgColor3;
+    overflow: visible;
+    width: 800px;
+    height: auto;
+    border-radius: 20px;
+    padding-bottom: 20px;
+
+    .top-icon-wrap{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 40px;
+        .top-icon{
+            display: flex;
+            justify-content: center;
+
+            .round-icon-wrap{
+                width: 76px;
+                height: 76px;
+                border-radius: 38px;
+                background-color: $bgColor5;
+                z-index: 9;
+                margin-top: -15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .myProfile-icon{
+                    width: 30px;
+                    stroke: $bgColor3;
+                }
+
+                .myProfile-icon *{
+                    fill: $bgColor3;
+                }
+            }
+        }
+    }
+
+    .main-title {
+        @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
+        text-align: center;
+        padding-top: 20px;
+        margin: 20px;
+        background-color: $bgColor3;
+    }
+
+    md-toolbar {
+        height: 40px;
+        max-height: 40px;
+        min-height: 40px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+
+        &:not(.md-menu-toolbar){
+            background-color: $bgColor5;
+        }
+
+        .close-popup-wrap {
+            @include absolute-position(-35px, -35px);
+            height:14px;
+            width: 14px;
+            cursor: pointer;
+        }
+    }
+
+    .change-profile {
+            background-color: $bgColor27;
+            padding: 20px 20px 0 20px;
+            margin: 5px 40px;
+            height: 100%;
+            border-radius: 15px;
+    }
+
+    .change-password{
+        @extend .change-profile;
+        margin-bottom: 30px;
+
+        .container-title{
+            @include text-style(18px, $fontColor3, Quicksand, $semiBoldFontWeight);
+            text-align: center;
+        }
+    }
+
+    .auth-form{
+        margin: {
+            right: auto;
+            left: auto;
+            bottom: 10px;
+            top: 43px;
+        };
+
+        .znk-input-group {
+            width: 100%;
+            min-height:0;
+            display: flex;
+            margin: 10px -10px;
+            label{
+                width: 30%;
+                text-transform: uppercase;
+                text-align: right;
+                margin: auto;
+                color: $fontColor14;
+            }
+            .znk-input{
+                width: 70%;
+                display: flex;
+                flex-direction: column;
+                input ,select{
+                    width: 86%;
+                    display: block;
+                    border-radius: 0;
+                    padding-left: 20px;
+                    box-sizing:border-box;
+                    margin: 10px 50px 2px 30px;
+                    color: $fontColor2;
+                    font-size: 14px;
+                }
+                select{
+                    height: 40px;
+                    &[disabled]{
+                        color: $fontColor14;
+                }
+                }
+            }
+
+            .locked-icon {
+                width: 14px;
+                display: inline-block;
+                position: absolute;
+                left: 12px;
+                top: 16px;
+            }
+
+            .locked-icon *{
+                stroke: $fontColor18;
+            }
+
+            .validationBox {
+                span {
+                    width: 335px;
+                    padding: 3px 10px;
+                    position: absolute;
+                    right: 37px;
+                    top: -25px;
+                    background-color: $bgColor32;
+                    color: $fontColor1;
+                    font-size: 13px;
+                    line-height: 24px;
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        border: {
+                            color: $transparent;
+                            style: solid;
+                            top-color: $bgColor32;
+                            width: 10px;
+                        }
+                        bottom: -20px;
+                        left: 13px;
+                    }
+                    &.email-exist-massage {
+                        top: -55px;
+                    }
+                    &.no-email-massage {
+                        top: -58px;
+                    }
+                }
+            }
+            &.valid {
+                input, select {
+                    border-color: $borderColor1;
+                }
+            }
+            &.invalid {
+                input, select {
+                border-color: $borderColor22;
+                }
+            }
+
+        }
+
+        .timezone-manual {
+            margin: -10px 220px;
+            color: $fontColor16;
+        }
+
+        .btn-wrap{
+            display: flex;
+            justify-content: flex-end;
+            margin-right: 50px;
+            outline: none;
+            .save-pass-btn {
+                width: 15%;
+                margin: 0;
+                box-shadow: none;
+                height: 30px;
+                background: $transparent;
+                border-radius: 20px;
+                border: 2px solid $bsColor5;
+                color: $fontColor6;
+                outline: none;
+
+            }
+        }
+    }
+
+    .msg-wrap {
+        @include text-style(12px, $fontColor8, Lato, $regularFontWeight);
+        width: 342px;
+        margin: 0 auto;
+        display: flex;
+        margin-top: 10px;
+        max-height: 28px;
+        visibility: hidden;
+
+            &.show-error{
+                .error-msg {
+                    visibility: visible;
+                    width: 100%;
+                    height: 22px;
+                    display: flex;
+                    align-items: center;
+                    padding: 6px 0 6px 5px;
+                    @include text-style(14px, $fontColor17, Lato, $regularFontWeight);
+                }
+            }
+
+        .myProfile-danger-red-icon {
+            width: 20px;
+            margin-right: 17px;
+            * {
+                fill: $bgColor51;
+            }
+        }
+
+
+    }
+
+    .big-success-msg{
+        .completed-v-icon-wrap{
+            width: 120px;
+            margin: 25px auto;
+            display: block;
+        }
+        div{
+            @include text-style(16px, $fontColor13, Lato, $regularFontWeight);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .done-btn-wrap{
+            margin: 40px auto;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
+

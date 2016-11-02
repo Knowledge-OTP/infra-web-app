@@ -1,0 +1,91 @@
+<div class="app-header" translate-namespace="ZNK_HEADER">
+    <div class="main-content-header" layout="row" layout-align="start start">
+        <svg-icon class="raccoon-logo-icon"
+                  name="znkHeader-raccoon-logo-icon"
+                  ui-sref="app.workouts.roadmap"
+                  ui-sref-opts="{reload: true}">
+        </svg-icon>
+
+        <div class="app-states-list">
+            <md-list flex="grow" layout="row" layout-align="start center">
+                <div ng-repeat="headerItem in vm.additionalItems">
+                    <md-list-item md-ink-ripple
+                                  ui-sref-active="active">
+                        <span class="title" translate="{{headerItem.text}}"></span>
+                        <a ui-sref="{{headerItem.goToState}}"
+                           ui-sref-opts="{{headerItem.stateOpt}}"
+                           class="link-full-item">
+                        </a>
+                    </md-list-item>
+                </div>
+            </md-list>
+        </div>
+
+        <div class="app-user-area" layout="row" layout-align="center center">
+            <invitation-manager></invitation-manager>
+            <div class="profile-status" ng-click="vm.showPurchaseDialog()">
+                <div class="pending-purchase-icon-wrapper" ng-if="vm.purchaseState === 'pending'">
+                    <svg-icon name="pending-purchase-clock-icon"></svg-icon>
+                </div>
+                <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
+            </div>
+            <md-menu md-offset="-61 68">
+                <md-button ng-click="$mdOpenMenu($event); vm.znkOpenModal();"
+                           class="md-icon-button profile-open-modal-btn"
+                           aria-label="Open sample menu">
+                    <div>{{::vm.userProfile.username}}</div>
+                    <md-icon class="material-icons">{{vm.expandIcon}}</md-icon>
+                </md-button>
+                <md-menu-content class="md-menu-content-znk-header">
+                    <md-list>
+                        <md-list-item class="header-modal-item header-modal-item-profile">
+                            <span class="username">{{::vm.userProfile.username}}</span>
+                            <span class="email">{{::vm.userProfile.email}}</span>
+                        </md-list-item>
+                        <md-list-item md-ink-ripple class="header-modal-item header-modal-item-uppercase links purchase-status">
+                            <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
+                            <span class="link-full-item" ng-click="vm.showPurchaseDialog()"></span>
+                            <ng-switch on="vm.purchaseState">
+                                <div ng-switch-when="pending" class="pending-purchase-icon-wrapper">
+                                    <svg-icon name="pending-purchase-clock-icon"></svg-icon>
+                                </div>
+                                <div ng-switch-when="pro" class="check-mark-wrapper">
+                                    <svg-icon name="znkHeader-check-mark-icon"></svg-icon>
+                                </div>
+                            </ng-switch>
+                        </md-list-item>
+                        <md-list-item md-ink-ripple
+                                      ng-disabled="!vm.isOnBoardingCompleted"
+                                      disable-click-drv
+                                      ng-click="vm.showGoalsEdit()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                 translate=".PROFILE_GOALS"></div>
+                        </md-list-item>
+                        <md-list-item md-ink-ripple
+                                      ng-click="vm.showMyProfile()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                 translate=".MY_PROFILE"></div>
+                        </md-list-item>
+                        <md-list-item md-ink-ripple>
+                            <a ui-sref="app.faq"
+                               class="header-modal-item header-modal-item-uppercase links"
+                               translate=".WHAT_IS_THE_THIS_TEST">
+                            </a>
+                        </md-list-item>
+                        <md-list-item  md-ink-ripple
+                                       ng-click="vm.showFeedbackDialog()">
+                            <div class="header-modal-item header-modal-item-uppercase links"
+                                 translate=".PROFILE_SUPPORT"></div>
+                        </md-list-item>
+                        <div class="divider"></div>
+                        <md-list-item md-ink-ripple
+                                      ng-click="vm.logout()">
+                            <div class="header-modal-item header-modal-item-uppercase logout"
+                                 translate=".PROFILE_LOGOUT"></div>
+                        </md-list-item>
+                    </md-list>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
+</div>

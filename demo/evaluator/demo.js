@@ -2,25 +2,13 @@
 
     var isPro = true;
 
-    angular.module('demo', ['znk.infra-web-app.evaluator']).config(function($translateProvider) {
-            $translateProvider.useLoader('$translatePartialLoader', {
-                    urlTemplate: '/{part}/locale/{lang}.json'
-                })
-                .preferredLanguage('en');
-        })
-        .run(function ($rootScope, $translate) {
-            $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-                $translate.refresh();
-            });
-        })
+    angular.module('demo', ['znk.infra-web-app.evaluator'])
         .service('purchaseService', function($q) { // mock for purchaseService
             this.hasProVersion = function() {
                 return $q.when(isPro);
             };
         })
-        .controller('Main', function ($scope, $translatePartialLoader) {
-
-            $translatePartialLoader.addPart('demo');
+        .controller('Main', function ($scope) {
 
             function getRandom() {
                 return Math.floor(Math.random()*(2-1+1)+1);

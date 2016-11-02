@@ -931,16 +931,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.workoutsRoadmap').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('workoutsRoadmap');
-    }]);
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.workoutsRoadmap').provider('WorkoutsRoadmapSrv', [
         function () {
             var _newWorkoutGeneratorGetter;

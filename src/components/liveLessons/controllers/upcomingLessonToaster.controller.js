@@ -2,10 +2,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('UpcomingLessonToasterController',
-        function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout, $translatePartialLoader) {
+        function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout) {
         'ngInject';
-
-            $translatePartialLoader.addPart('liveLessons');
 
             var self = this;
 

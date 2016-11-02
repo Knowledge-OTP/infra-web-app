@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
-        function($timeout, SubjectEnum, $translatePartialLoader){
+        function($timeout, SubjectEnum){
         'ngInject';
 
         return {
@@ -23,7 +23,6 @@
             require: '?ngModel',
             templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
             controller: function () {
-                $translatePartialLoader.addPart('infraWebAppZnkExercise');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
                     throw new Error('Error: exerciseHeaderController: subjectId is required!');

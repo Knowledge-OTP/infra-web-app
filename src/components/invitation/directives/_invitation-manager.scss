@@ -32,9 +32,11 @@ invitation-manager {
     }
 
     .teacher-icon-wrap {
-        background-color: $bgColor33;
+        border: 1px solid $borderColor24;
+        background-color: $transparent;
         .teacher-icon {
             width: 24px;
+            height: 16px;
         }
     }
 +

@@ -6,13 +6,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        function ($translatePartialLoader, LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
+        function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
                 link: function (scope) {
-                    $translatePartialLoader.addPart('loginApp');
 
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,

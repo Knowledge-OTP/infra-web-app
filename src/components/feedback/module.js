@@ -12,9 +12,9 @@
             'znk.infra.user',
             'znk.infra.svgIcon'
         ])
-        .config([
-            'SvgIconSrvProvider',
+        .config(
             function (SvgIconSrvProvider) {
+                'ngInject';
                 var svgMap = {
                     'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
                     'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
@@ -22,6 +22,5 @@
                     'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
+            });
 })(angular);

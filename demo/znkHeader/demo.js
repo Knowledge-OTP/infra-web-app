@@ -1,17 +1,20 @@
-angular.module('demo', ['znk.infra-web-app.znkHeader'])
+(function (angular) {
+    'use strict';
+
+    angular.module('demo', ['znk.infra-web-app.znkHeader'])
     .constant('ENV', {
-        fbGlobalEndPoint: "https://znk-dev.firebaseio.com/",
-        backendEndpoint: "https://znk-web-backend-dev.azurewebsites.net/",
-        fbDataEndPoint: "https://act-dev.firebaseio.com/",
-        dataAuthSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM",
-        redirectLogin: "http://dev-act.zinkerz.com.s3-website-eu-west-1.amazonaws.com/",
         firebaseAppScopeName: "act_app",
-        redirectLogout: "http://localhost:9002",
+        fbDataEndPoint: "https://act-dev.firebaseio.com/",
         appContext: 'student',
         studentAppName: 'sat_app',
         dashboardAppName: 'sat_dashboard',
         videosEndPoint: "//dfz02hjbsqn5e.cloudfront.net/sat_app/",
         mediaEndPoint: "//dfz02hjbsqn5e.cloudfront.net/",
+        backendEndpoint: "https://znk-web-backend-dev.azurewebsites.net/",
+        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
+        dataAuthSecret: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM",
+        redirectLogin: "http://dev-act.zinkerz.com.s3-website-eu-west-1.amazonaws.com/",
+        redirectLogout: "http://localhost:9002",
         purchasePaypalParams: {
             "formAction": "https://www.sandbox.paypal.com/cgi-bin/webscr",
             "hostedButtonId": "J2J2GMDNZCMBU",
@@ -19,14 +22,8 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
             "pixelGifSrc": "https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif"
         }
     })
-    .config(function ($translateProvider, znkHeaderSrvProvider, $stateProvider) {
-
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: '/{part}/locale/{lang}.json'
-        })
-            .preferredLanguage('en');
-
-
+    .config(function (znkHeaderSrvProvider, $stateProvider) {
+        'ngInject';
         $stateProvider
             .state('item1', {
                 url: '/item1',
@@ -50,13 +47,6 @@ angular.module('demo', ['znk.infra-web-app.znkHeader'])
         var additionalItems = [demoItem1, demoItem2];
 
         znkHeaderSrvProvider.addAdditionalNavMenuItems(additionalItems);
-    })
-
-    .run(function ($rootScope, $translate, $translatePartialLoader) {
-        $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
-            $translate.refresh();
-        });
-        $translatePartialLoader.addPart('demo');
-        $translatePartialLoader.addPart('feedback');
     });
 
+})(angular);

@@ -81,7 +81,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "$translatePartialLoader", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, $translatePartialLoader) {
+        ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv) {
             'ngInject';
 
            return {
@@ -95,8 +95,6 @@
                     // }
 
                     scope.translate = $filter('translate');
-                    $translatePartialLoader.addPart('invitation');
-
 
                     scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
                     scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');

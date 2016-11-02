@@ -1081,16 +1081,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.completeExercise').run(["$translatePartialLoader", function ($translatePartialLoader) {
-        'ngInject';
-        $translatePartialLoader.addPart('completeExercise');
-    }]);
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
         ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
             'ngInject';
