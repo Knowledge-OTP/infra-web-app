@@ -1940,34 +1940,6 @@ md-dialog.invitation-confirm-modal {
       width: 14px;
       padding: 10px;
       cursor: pointer; }
-  md-dialog.invitation-confirm-modal md-dialog-content {
-    padding-top: 25px;
-    height: 100%;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .main-title {
-      margin-top: 20px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .teacher {
-      font-size: 16px;
-      color: #161616;
-      font-family: Lato;
-      font-weight: 400;
-      text-align: center;
-      margin: 35px 10px;
-      padding: 0 25px; }
-      md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
-        padding-left: 1px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-direction: row;
-          flex-direction: row;
-      -ms-flex-pack: center;
-          justify-content: center; }
-      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
-        margin: auto; }
-      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
-        color: #0a9bad; }
   md-dialog.invitation-confirm-modal .top-icon-wrap {
     position: absolute;
     top: 0;
@@ -1996,17 +1968,46 @@ md-dialog.invitation-confirm-modal {
           stroke: #067f8e; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon * {
           fill: #067f8e; }
-  md-dialog.invitation-confirm-modal .big-success-msg .completed-v-icon-wrap {
+
+md-dialog-content.invitation-confirm-modal-content {
+  padding-top: 25px;
+  height: 100%;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px; }
+  md-dialog-content.invitation-confirm-modal-content .main-title {
+    margin-top: 20px; }
+  md-dialog-content.invitation-confirm-modal-content .teacher {
+    font-size: 16px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400;
+    text-align: center;
+    margin: 35px 10px;
+    padding: 0 25px; }
+    md-dialog-content.invitation-confirm-modal-content .teacher .want-to-connect {
+      padding-left: 1px; }
+  md-dialog-content.invitation-confirm-modal-content .btn-wrap {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+        flex-direction: row;
+    -ms-flex-pack: center;
+        justify-content: center; }
+    md-dialog-content.invitation-confirm-modal-content .btn-wrap > button > span {
+      margin: auto; }
+    md-dialog-content.invitation-confirm-modal-content .btn-wrap .outline-blue {
+      color: #0a9bad; }
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
     width: 75px;
     margin: 8px auto; }
-  md-dialog.invitation-confirm-modal .big-success-msg div {
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
     font-size: 16px;
     color: #7d7d7d;
     font-family: Lato;
     font-weight: 400;
     text-align: center;
     margin: 10px; }
-  md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: center;
@@ -6168,34 +6169,6 @@ md-dialog.invitation-confirm-modal {
       width: 14px;
       padding: 10px;
       cursor: pointer; }
-  md-dialog.invitation-confirm-modal md-dialog-content {
-    padding-top: 25px;
-    height: 100%;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .main-title {
-      margin-top: 20px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .teacher {
-      font-size: 16px;
-      color: #161616;
-      font-family: Lato;
-      font-weight: 400;
-      text-align: center;
-      margin: 35px 10px;
-      padding: 0 25px; }
-      md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
-        padding-left: 1px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-direction: row;
-          flex-direction: row;
-      -ms-flex-pack: center;
-          justify-content: center; }
-      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
-        margin: auto; }
-      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
-        color: #0a9bad; }
   md-dialog.invitation-confirm-modal .top-icon-wrap {
     position: absolute;
     top: 0;
@@ -6224,17 +6197,46 @@ md-dialog.invitation-confirm-modal {
           stroke: #067f8e; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon * {
           fill: #067f8e; }
-  md-dialog.invitation-confirm-modal .big-success-msg .completed-v-icon-wrap {
+
+md-dialog-content.invitation-confirm-modal-content {
+  padding-top: 25px;
+  height: 100%;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px; }
+  md-dialog-content.invitation-confirm-modal-content .main-title {
+    margin-top: 20px; }
+  md-dialog-content.invitation-confirm-modal-content .teacher {
+    font-size: 16px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400;
+    text-align: center;
+    margin: 35px 10px;
+    padding: 0 25px; }
+    md-dialog-content.invitation-confirm-modal-content .teacher .want-to-connect {
+      padding-left: 1px; }
+  md-dialog-content.invitation-confirm-modal-content .btn-wrap {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+        flex-direction: row;
+    -ms-flex-pack: center;
+        justify-content: center; }
+    md-dialog-content.invitation-confirm-modal-content .btn-wrap > button > span {
+      margin: auto; }
+    md-dialog-content.invitation-confirm-modal-content .btn-wrap .outline-blue {
+      color: #0a9bad; }
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
     width: 75px;
     margin: 8px auto; }
-  md-dialog.invitation-confirm-modal .big-success-msg div {
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
     font-size: 16px;
     color: #7d7d7d;
     font-family: Lato;
     font-weight: 400;
     text-align: center;
     margin: 10px; }
-  md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: center;

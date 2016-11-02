@@ -5569,7 +5569,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            <svg-icon name=\"invitation-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
     "    </md-toolbar>\n" +
-    "    <md-dialog-content ng-switch=\"vm.requestMessage\">\n" +
+    "    <md-dialog-content ng-switch=\"vm.requestMessage\" class=\"invitation-confirm-modal-content\">\n" +
     "        <section ng-switch-when=\"false\">\n" +
     "            <div class=\"main-title md-subheader\" translate=\".YOU_HAVE_INVITE\"></div>\n" +
     "            <div class=\"teacher\">\n" +

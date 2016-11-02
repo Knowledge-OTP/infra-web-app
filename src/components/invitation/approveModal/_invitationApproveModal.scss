@@ -1,7 +1,7 @@
 @import '../../../../bower_components/infra/dist/mixins/mixins',
-        '../../../../src/scss/imports/variables';
+'../../../../src/scss/imports/variables';
 
-md-dialog.invitation-confirm-modal{
+md-dialog.invitation-confirm-modal {
     overflow: visible;
     width: 520px;
     max-width: 520px;
@@ -11,76 +11,38 @@ md-dialog.invitation-confirm-modal{
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    background:none;
+    background: none;
 
-    md-toolbar{
+    md-toolbar {
         height: 40px;
         max-height: 40px;
         min-height: 40px;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
 
-        &:not(.md-menu-toolbar){
+        &:not(.md-menu-toolbar) {
             background-color: $bgColor5;
         }
 
         .close-popup-wrap {
             @include absolute-position(-35px, -35px);
-            height:14px;
+            height: 14px;
             width: 14px;
             padding: 10px;
             cursor: pointer;
         }
     }
 
-    md-dialog-content {
-        //background-color: $bgColor2;
-        padding-top: 25px;
-        height: 100%;
-        @include border-bottom-radius(20px);
-
-        .main-title{
-            margin-top: 20px;
-        }
-
-        .teacher{
-            @include text-style(16px, $fontColor2, Lato, $regularFontWeight);
-            text-align: center;
-            margin: 35px 10px;
-            padding: 0 25px;
-
-            .want-to-connect{
-                padding-left: 1px;
-            }
-        }
-
-        .btn-wrap{
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            > button {
-              > span {
-                  margin: auto;
-              }
-            }
-
-            .outline-blue{
-                color: $fontColor6;
-            }
-
-        }
-    }
-
-    .top-icon-wrap{
+    .top-icon-wrap {
         position: absolute;
         top: 0;
         width: 100%;
         height: 40px;
-        .top-icon{
+        .top-icon {
             display: flex;
             justify-content: center;
 
-            .round-icon-wrap{
+            .round-icon-wrap {
                 width: 76px;
                 height: 76px;
                 border-radius: 38px;
@@ -90,30 +52,69 @@ md-dialog.invitation-confirm-modal{
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                .exclamation-mark-icon{
+                .exclamation-mark-icon {
                     width: 14px;
                     stroke: $bgColor20;
                 }
 
-                .exclamation-mark-icon *{
+                .exclamation-mark-icon * {
                     fill: $bgColor20;
                 }
             }
         }
     }
 
-    .big-success-msg{
-        .completed-v-icon-wrap{
+}
+
+md-dialog-content.invitation-confirm-modal-content {
+    //background-color: $bgColor2;
+    padding-top: 25px;
+    height: 100%;
+    @include border-bottom-radius(20px);
+
+    .main-title {
+        margin-top: 20px;
+    }
+
+    .teacher {
+        @include text-style(16px, $fontColor2, Lato, $regularFontWeight);
+        text-align: center;
+        margin: 35px 10px;
+        padding: 0 25px;
+
+        .want-to-connect {
+            padding-left: 1px;
+        }
+    }
+
+    .btn-wrap {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        > button {
+            > span {
+                margin: auto;
+            }
+        }
+
+        .outline-blue {
+            color: $fontColor6;
+        }
+
+    }
+
+    .big-success-msg {
+        .completed-v-icon-wrap {
             width: 75px;
             margin: 8px auto;
         }
-        div{
+        div {
             @include text-style(16px, $fontColor13, Lato, $regularFontWeight);
             text-align: center;
             margin: 10px;
         }
 
-        .done-btn-wrap{
+        .done-btn-wrap {
             display: flex;
             justify-content: center;
         }
