@@ -5247,7 +5247,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 senderDelete: 3,
                 resent: 4,
                 connectToUser: 5,
-                receiverDelete: 6
+                receiverDelete: 6,
+                senderDeletedAfterApproved: 7
             };
 
             this.offListenerCB = function (event, valueCB) {
@@ -5373,12 +5374,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             };
 
             this.sendInvitations = function (newInvitations) {
-                var serverUrl = ENV.backendEndpoint + 'invitation';
+
                 return UserProfileService.getProfile().then(function (profile) {
                     angular.forEach(newInvitations, function (invitation) {
                         addInvitationUserData(invitation, profile);
                     });
-                    return $http.post(serverUrl, newInvitations, httpConfig).then(
+                    return $http.post(invitationEndpoint, newInvitations, httpConfig).then(
                         function (response) {
                             return {
                                 data: response.data
@@ -5422,6 +5423,59 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     return storage.get('invitations/' + inviteId);
                 });
 
+            };
+
+            this.deletePendingInvitation = function (inviteId) {
+                return this.getInvitationObject(inviteId).then(function (invitation) {
+                    var authData = AuthService.getAuth();
+                    invitation.uid = authData.uid;
+                    invitation.status = self.invitationStatus.senderDelete;
+                    return self.updateInvitation(invitation).then(
+                        function (response) {
+                            return {
+                                data: response.data
+                            };
+                        },
+                        function (error) {
+                            return {
+                                data: error.data
+                            };
+                        });
+                });
+            };
+
+            this.approveInvitation = function (invitation) {
+                var oldInvitationStatus = invitation.status;
+                var authData = AuthService.getAuth();
+                invitation.uid = authData.uid;
+                invitation.status = self.invitationStatus.approved;
+                return updateStatus(invitation, oldInvitationStatus);
+            };
+
+            this.declineInvitation = function (invitation) {
+                var oldInvitationStatus = invitation.status;
+                var authData = AuthService.getAuth();
+                invitation.uid = authData.uid;
+                invitation.status = self.invitationStatus.receiverDeclined;
+                return updateStatus(invitation, oldInvitationStatus);
+            };
+
+            this.connectSupportToUser = function (userData) {
+                var config = {
+                    timeout: ENV.promiseTimeOut
+                };
+
+                return $http.post(invitationEndpoint + '/support', userData, config).then(
+                    function (response) {
+                        return {
+                            data: response.data
+                        };
+                    },
+                    function (error) {
+                        return {
+                            data: error.data
+                        };
+                    });
             };
 
             function addInvitationUserData(invitation, profile) {
