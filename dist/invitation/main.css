@@ -79,6 +79,7 @@ md-dialog-content.invitation-confirm-modal-content {
   md-dialog-content.invitation-confirm-modal-content .main-title {
     margin-top: 20px;
     text-align: center;
+    background-color: transparent;
     font-size: 24px;
     color: #161616;
     font-family: Lato;
