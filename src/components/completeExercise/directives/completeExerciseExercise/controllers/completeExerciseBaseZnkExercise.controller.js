@@ -101,19 +101,19 @@
                 });
             }
 
-            var _setZnkExerciseSettings = (function () {
-                function getNumOfUnansweredQuestions(questionsResults) {
-                    var numOfUnansweredQuestions = questionsResults.length;
-                    var keysArr = Object.keys(questionsResults);
-                    angular.forEach(keysArr, function (i) {
-                        var questionAnswer = questionsResults[i];
-                        if (angular.isDefined(questionAnswer.userAnswer)) {
-                            numOfUnansweredQuestions--;
-                        }
-                    });
-                    return numOfUnansweredQuestions;
-                }
+            function _getNumOfUnansweredQuestions(questionsResults) {
+                var numOfUnansweredQuestions = questionsResults.length;
+                var keysArr = Object.keys(questionsResults);
+                angular.forEach(keysArr, function (i) {
+                    var questionAnswer = questionsResults[i];
+                    if (angular.isDefined(questionAnswer.userAnswer)) {
+                        numOfUnansweredQuestions--;
+                    }
+                });
+                return numOfUnansweredQuestions;
+            }
 
+            var _setZnkExerciseSettings = (function () {
                 function _getAllowedTimeForExercise() {
                     if (!isNotLecture) {
                         return null;
@@ -153,7 +153,7 @@
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
-                            var numOfUnansweredQuestions = getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                            var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);
                             if (numOfUnansweredQuestions) {
@@ -212,6 +212,7 @@
                 $ctrl.exerciseContent = exerciseContent;
                 $ctrl.exerciseResult = exerciseResult;
                 $ctrl._finishExercise = _finishExercise;
+                $ctrl._getNumOfUnansweredQuestions = _getNumOfUnansweredQuestions;
             }
 
             _init();
