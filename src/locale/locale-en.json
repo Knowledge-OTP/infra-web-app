@@ -110,14 +110,6 @@
         "ERROR_TITLE": "Connect With {{provider}} Failed",
         "ERROR_CONTENT": "An error occurred while trying to connect with {{provider}}, please try again. If the problem persists please contact us at <a href='//www.zinkerz.com/contact/' target='_blank'>support@zinkerz.com</a>"
     },
-    "PROMO_CODE":{
-        "GOT_A_PROMO_CODE":"Got a Promo Code?",
-        "GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE": "Got a Zinkerz Educator Code?",
-        "ENTER_YOUR_CODE": "Enter your code...",
-        "ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED": "Zinkerz Educators Code Accepted",
-        "PROMO_CODE_ACCEPTED": "Promo code accepted",
-        "INVALID_CODE": "Invalid code, please contact support@zinkerz.com"
-    },
     "PURCHASE_POPUP": {
         "GET_ZINKERZ": "Zinkerz ",
         "PRO": "Pro",
@@ -169,7 +161,8 @@
         "SUCCESS_SEND_MSG": "You’ve successfully connected with your teacher.",
         "DONE": "Done",
         "INVITE_ERROR_TITLE": "Invalid Invitation",
-        "INVITE_ERROR_MSG": "The invitation you are trying to use is either invalid or expired. Please contact your educator to get a new invitation"
+        "INVITE_ERROR_MSG": "The invitation you are trying to use is either invalid or expired. Please contact your educator to get a new invitation",
+        "GENERAL_ERROR": "An error has occurred, Please try again later",
     },
 
     "INVITATION_MANAGER_DIRECTIVE": {

@@ -383,22 +383,22 @@
                 return UserProfileService.getProfile().then(function (profile) {
                     var authData = AuthService.getAuth();
                     var newInvitiation = [{
-                       receiverAppName: ENV.firebaseDashboardAppScopeName,
-                       receiverEmail: receiverEmail,
-                       receiverName: receiverName || receiverEmail,
-                       senderAppName: ENV.firebaseAppScopeName,
-                       senderEmail: profile.email,
-                       senderName: profile.nickname || profile.email,
-                       senderUid: authData.uid
+                        receiverAppName: ENV.firebaseDashboardAppScopeName,
+                        receiverEmail: receiverEmail,
+                        receiverName: receiverName || receiverEmail,
+                        senderAppName: ENV.firebaseAppScopeName,
+                        senderEmail: profile.email,
+                        senderName: profile.nickname || profile.email,
+                        senderUid: authData.uid
                     }];
                     return $http.post(invitationEndpoint, newInvitiation, httpConfig).then(function (response) {
-                       return {
-                           data: response.data[0]
-                       };
+                        return {
+                            data: response.data[0]
+                        };
                     }, function (error) {
-                       return {
-                           data: error.data
-                       };
+                        return {
+                            data: error.data
+                        };
                     });
                 });
             };
@@ -412,6 +412,43 @@
                 invitation.senderEmail = authData.password.email;
                 return updateStatus(invitation);
             };
+
+            this.sendInvitations = function (newInvitations) {
+                var serverUrl = ENV.backendEndpoint + 'invitation';
+                return UserProfileService.getProfile().then(function (profile) {
+                    angular.forEach(newInvitations, function (invitation) {
+                        addInvitationUserData(invitation, profile);
+                    });
+                    return $http.post(serverUrl, newInvitations, httpConfig).then(
+                        function (response) {
+                            return {
+                                data: response.data
+                            };
+                        }, function _error(error) {
+                            return {
+                                data: error.data || translate('INVITE_APPROVE_MODAL.GENERAL_ERROR')
+                            };
+                        });
+                });
+            };
+
+            function addInvitationUserData(invitation, profile) {
+                var senderEmail;
+                var authData = AuthService.getAuth();
+                if (authData.password && authData.password.email) {
+                    senderEmail = authData.password.email;
+                } else if (authData.auth && authData.auth.email) {
+                    senderEmail = authData.auth.email;
+                } else if (authData.token && authData.token.email) {
+                    senderEmail = authData.token.email;
+                }
+
+                invitation.senderUid = authData.uid;
+                invitation.senderName = profile.nickname || profile.email;
+                invitation.senderAppName = ENV.firebaseAppScopeName;
+                invitation.senderEmail = senderEmail;
+                invitation.receiverAppName = ENV.studentAppName;
+            }
 
             function updateStatus(invitation) {
                 var updateUrl = invitationEndpoint + '/' + invitation.invitationId;
@@ -428,12 +465,12 @@
                     });
             }
 
-            function getListenerData(userId, event){
+            function getListenerData(userId, event) {
                 var listenerData = {
                     path: 'users/' + userId + '/invitations/' + event
                 };
 
-                switch (event){
+                switch (event) {
                     case self.listeners.USER_TEACHERS:
                         listenerData.childAddedHandler = userTeachersChildAdded;
                         listenerData.childRemoveHandler = userTeachersChildRemove;
@@ -482,7 +519,7 @@
                 }
             }
 
-            function newInvitationsChildAdded (invitation) {
+            function newInvitationsChildAdded(invitation) {
                 if (angular.isDefined(invitation)) {
                     newInvitations[invitation.invitationId] = invitation;
                     var userId = StudentContextSrv.getCurrUid();
@@ -496,7 +533,7 @@
                 }
             }
 
-            function newInvitationsChildRemove (invitation) {
+            function newInvitationsChildRemove(invitation) {
                 delete newInvitations[invitation.invitationId];
                 var userId = StudentContextSrv.getCurrUid();
                 angular.forEach(registerEvents[userId][self.listeners.NEW_INVITATIONS].cb, function (cb) {
@@ -508,7 +545,7 @@
                 });
             }
 
-            function pendingConfirmationsChildAdded (invitation) {
+            function pendingConfirmationsChildAdded(invitation) {
                 if (angular.isDefined(invitation)) {
                     pendingConfirmations[invitation.invitationId] = invitation;
                     var userId = StudentContextSrv.getCurrUid();
@@ -522,7 +559,7 @@
                 }
             }
 
-            function pendingConfirmationsChildRemove (invitation) {
+            function pendingConfirmationsChildRemove(invitation) {
                 delete pendingConfirmations[invitation.invitationId];
                 var userId = StudentContextSrv.getCurrUid();
                 angular.forEach(registerEvents[userId][self.listeners.PENDING_CONFIRMATIONS].cb, function (cb) {
@@ -535,7 +572,7 @@
             }
 
             function applyCallback(event, cb) {
-                switch (event){
+                switch (event) {
                     case self.listeners.USER_TEACHERS:
                         cb(myTeachers);
                         break;

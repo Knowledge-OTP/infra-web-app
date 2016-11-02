@@ -5342,22 +5342,22 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 return UserProfileService.getProfile().then(function (profile) {
                     var authData = AuthService.getAuth();
                     var newInvitiation = [{
-                       receiverAppName: ENV.firebaseDashboardAppScopeName,
-                       receiverEmail: receiverEmail,
-                       receiverName: receiverName || receiverEmail,
-                       senderAppName: ENV.firebaseAppScopeName,
-                       senderEmail: profile.email,
-                       senderName: profile.nickname || profile.email,
-                       senderUid: authData.uid
+                        receiverAppName: ENV.firebaseDashboardAppScopeName,
+                        receiverEmail: receiverEmail,
+                        receiverName: receiverName || receiverEmail,
+                        senderAppName: ENV.firebaseAppScopeName,
+                        senderEmail: profile.email,
+                        senderName: profile.nickname || profile.email,
+                        senderUid: authData.uid
                     }];
                     return $http.post(invitationEndpoint, newInvitiation, httpConfig).then(function (response) {
-                       return {
-                           data: response.data[0]
-                       };
+                        return {
+                            data: response.data[0]
+                        };
                     }, function (error) {
-                       return {
-                           data: error.data
-                       };
+                        return {
+                            data: error.data
+                        };
                     });
                 });
             };
@@ -5371,6 +5371,43 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 invitation.senderEmail = authData.password.email;
                 return updateStatus(invitation);
             };
+
+            this.sendInvitations = function (newInvitations) {
+                var serverUrl = ENV.backendEndpoint + 'invitation';
+                return UserProfileService.getProfile().then(function (profile) {
+                    angular.forEach(newInvitations, function (invitation) {
+                        addInvitationUserData(invitation, profile);
+                    });
+                    return $http.post(serverUrl, newInvitations, httpConfig).then(
+                        function (response) {
+                            return {
+                                data: response.data
+                            };
+                        }, function _error(error) {
+                            return {
+                                data: error.data || translate('INVITE_APPROVE_MODAL.GENERAL_ERROR')
+                            };
+                        });
+                });
+            };
+
+            function addInvitationUserData(invitation, profile) {
+                var senderEmail;
+                var authData = AuthService.getAuth();
+                if (authData.password && authData.password.email) {
+                    senderEmail = authData.password.email;
+                } else if (authData.auth && authData.auth.email) {
+                    senderEmail = authData.auth.email;
+                } else if (authData.token && authData.token.email) {
+                    senderEmail = authData.token.email;
+                }
+
+                invitation.senderUid = authData.uid;
+                invitation.senderName = profile.nickname || profile.email;
+                invitation.senderAppName = ENV.firebaseAppScopeName;
+                invitation.senderEmail = senderEmail;
+                invitation.receiverAppName = ENV.studentAppName;
+            }
 
             function updateStatus(invitation) {
                 var updateUrl = invitationEndpoint + '/' + invitation.invitationId;
@@ -5387,12 +5424,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     });
             }
 
-            function getListenerData(userId, event){
+            function getListenerData(userId, event) {
                 var listenerData = {
                     path: 'users/' + userId + '/invitations/' + event
                 };
 
-                switch (event){
+                switch (event) {
                     case self.listeners.USER_TEACHERS:
                         listenerData.childAddedHandler = userTeachersChildAdded;
                         listenerData.childRemoveHandler = userTeachersChildRemove;
@@ -5441,7 +5478,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 }
             }
 
-            function newInvitationsChildAdded (invitation) {
+            function newInvitationsChildAdded(invitation) {
                 if (angular.isDefined(invitation)) {
                     newInvitations[invitation.invitationId] = invitation;
                     var userId = StudentContextSrv.getCurrUid();
@@ -5455,7 +5492,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 }
             }
 
-            function newInvitationsChildRemove (invitation) {
+            function newInvitationsChildRemove(invitation) {
                 delete newInvitations[invitation.invitationId];
                 var userId = StudentContextSrv.getCurrUid();
                 angular.forEach(registerEvents[userId][self.listeners.NEW_INVITATIONS].cb, function (cb) {
@@ -5467,7 +5504,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 });
             }
 
-            function pendingConfirmationsChildAdded (invitation) {
+            function pendingConfirmationsChildAdded(invitation) {
                 if (angular.isDefined(invitation)) {
                     pendingConfirmations[invitation.invitationId] = invitation;
                     var userId = StudentContextSrv.getCurrUid();
@@ -5481,7 +5518,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 }
             }
 
-            function pendingConfirmationsChildRemove (invitation) {
+            function pendingConfirmationsChildRemove(invitation) {
                 delete pendingConfirmations[invitation.invitationId];
                 var userId = StudentContextSrv.getCurrUid();
                 angular.forEach(registerEvents[userId][self.listeners.PENDING_CONFIRMATIONS].cb, function (cb) {
@@ -5494,7 +5531,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             }
 
             function applyCallback(event, cb) {
-                switch (event){
+                switch (event) {
                     case self.listeners.USER_TEACHERS:
                         cb(myTeachers);
                         break;
