@@ -175,7 +175,7 @@
                 }
 
                 function _finishExerciseWhenAllQuestionsAnswered() {
-                    var exerciseResult = this.completeExerciseCtrl.getExerciseResult();
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
                     var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
                     if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
