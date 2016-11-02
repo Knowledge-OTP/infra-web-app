@@ -771,7 +771,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "        </section>\n" +
     "\n" +
     "        <div class=\"big-success-msg switch-animation\" ng-switch-when=\"true\">\n" +
-    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
+    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"invitation-v-icon\"></svg-icon>\n" +
     "            <div ng-bind-html=\"vm.responseMessage\"></div>\n" +
     "            <div class=\"done-btn-wrap\">\n" +
     "                <md-button aria-label=\"{{'INVITE_APPROVE_MODAL.DONE' | translate}}\"\n" +
