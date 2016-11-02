@@ -4976,7 +4976,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
                     'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
                     'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
-                    'received-invitations-icon': 'components/invitation/svg/received-invitations-icon.svg',
+                    'invitations-received-icon': 'components/invitation/svg/invitations-received-icon.svg',
                     'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg',
                     'invitation-exclamation-mark-icon': 'components/invitation/svg/invitation-exclamation-mark-icon.svg'
                 };
@@ -5795,7 +5795,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                <md-subheader class=\"invite-sub-title decline-invite-count\" translate=\".PENDING_INVITATIONS\" translate-values=\"{count: getItemsCount(invitations)}\"></md-subheader>\n" +
     "                <md-list-item ng-repeat=\"invite in invitations\" class=\"invite-list-wrap\">\n" +
     "                    <div class=\"icon-wrap\">\n" +
-    "                        <svg-icon name=\"received-invitations-icon\" class=\"received-invitations\"></svg-icon>\n" +
+    "                        <svg-icon name=\"invitations-received-icon\" class=\"received-invitations\"></svg-icon>\n" +
     "                        <div class=\"creation-time\">{{::invite.creationTime | date : 'MMM d'}}</div>\n" +
     "                    </div>\n" +
     "                    <div class=\"teacher-wrap\">\n" +
@@ -5978,7 +5978,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/invitation/svg/received-invitations-icon.svg",
+  $templateCache.put("components/invitation/svg/invitations-received-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 76.3 56.3\" class=\"received-invitations-svg\">\n" +
     "<style type=\"text/css\">\n" +
     "	.received-invitations-svg .st0{fill:none;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
