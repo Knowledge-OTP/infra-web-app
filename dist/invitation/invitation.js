@@ -903,7 +903,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            </div>\n" +
     "        </form>\n" +
     "        <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
-    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
+    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"invitation-v-icon\"></svg-icon>\n" +
     "            <div translate=\".SUCCESS_INVITE\"></div>\n" +
     "            <div class=\"done-btn-wrap\">\n" +
     "                <md-button class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
