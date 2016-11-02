@@ -172,6 +172,39 @@
                 });
             };
 
+            this.resentInvitation = function (inviteId) {
+                return this.getInvitationObject(inviteId).then(function (invitation) {
+                    var authData = AuthService.getAuth();
+                    invitation.uid = authData.uid;
+                    invitation.status = self.invitationStatus.resent;
+                    return self.updateInvitation(invitation).then(
+                        function (response) {
+                            return {
+                                data: response.data
+                            };
+                        },
+                        function (error) {
+                            return {
+                                data: error.data
+                            };
+                        });
+                });
+            };
+
+            this.updateInvitation = function (invitation) {
+                return UserProfileService.getProfile().then(function (profile) {
+                    addInvitationUserData(invitation, profile);
+                    return self.updateStatus(invitation);
+                });
+            };
+
+            this.getInvitationObject = function (inviteId) {
+                return InfraConfigSrv.getGlobalStorage().then(function (storage) {
+                    return storage.get('invitations/' + inviteId);
+                });
+
+            };
+
             function addInvitationUserData(invitation, profile) {
                 var senderEmail;
                 var authData = AuthService.getAuth();
