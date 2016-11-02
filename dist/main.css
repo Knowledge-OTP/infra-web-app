@@ -1976,7 +1976,11 @@ md-dialog-content.invitation-confirm-modal-content {
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px; }
   md-dialog-content.invitation-confirm-modal-content .main-title {
-    margin-top: 20px; }
+    margin-top: 20px;
+    font-size: 24px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400; }
   md-dialog-content.invitation-confirm-modal-content .teacher {
     font-size: 16px;
     color: #161616;
@@ -6206,7 +6210,11 @@ md-dialog-content.invitation-confirm-modal-content {
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px; }
   md-dialog-content.invitation-confirm-modal-content .main-title {
-    margin-top: 20px; }
+    margin-top: 20px;
+    font-size: 24px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400; }
   md-dialog-content.invitation-confirm-modal-content .teacher {
     font-size: 16px;
     color: #161616;

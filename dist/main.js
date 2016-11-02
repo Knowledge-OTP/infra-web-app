@@ -4977,7 +4977,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
                     'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
                     'received-invitations-icon': 'components/invitation/svg/received-invitations-icon.svg',
-                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg'
+                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg',
+                    'invitation-exclamation-mark-icon': 'components/invitation/svg/invitation-exclamation-mark-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -5619,7 +5620,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    <div class=\"top-icon-wrap\">\n" +
     "        <div class=\"top-icon\">\n" +
     "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"exclamation-mark-icon\"></svg-icon>\n" +
+    "                <svg-icon name=\"invitation-exclamation-mark-icon\" class=\"exclamation-mark-icon\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -5772,6 +5773,28 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
     "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
     "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/invitation-exclamation-mark-icon.svg",
+    "<svg version=\"1.1\" class=\"invitation-exclamation-mark-icon\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-556.8 363.3 50.8 197.2\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.invitation-exclamation-mark-icon .st0 {\n" +
+    "        fill: none;\n" +
+    "        enable-background: new;\n" +
+    "    }\n" +
+    "    .invitation-exclamation-mark-icon {\n" +
+    "       width: 100%;\n" +
+    "        height: auto;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<path d=\"M-505.9,401.6c-0.4,19.5-5.2,38.2-8.7,57.1c-2.8,15.5-4.7,31.2-6.7,46.8c-0.3,2.6-1.1,4-3.7,4.3c-1.5,0.2-2.9,0.6-4.4,0.7\n" +
+    "		c-9.2,0.7-9.6,0.4-10.7-8.7c-3.4-29.6-8-58.9-14.6-87.9c-2.3-10.1-3.2-20.4-0.5-30.7c3.7-14.1,17.2-22.3,31.5-19.3\n" +
+    "		c9.2,1.9,14.7,8.8,16.2,20.9C-506.7,390.3-506.4,396-505.9,401.6z\"/>\n" +
+    "	<path d=\"M-528.9,525.7c10.9,0,16.8,5.3,16.9,15.2c0.1,11-9.3,19.7-21.4,19.6c-8.8,0-14.7-7-14.7-17.7\n" +
+    "		C-548.2,530.9-542.4,525.7-528.9,525.7z\"/>\n" +
+    "</g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/invitation/svg/invitation-teacher-active-icon.svg",

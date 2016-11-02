@@ -18,7 +18,8 @@
                     'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
                     'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
                     'received-invitations-icon': 'components/invitation/svg/received-invitations-icon.svg',
-                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg'
+                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg',
+                    'invitation-exclamation-mark-icon': 'components/invitation/svg/invitation-exclamation-mark-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);

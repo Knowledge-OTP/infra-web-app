@@ -74,6 +74,7 @@ md-dialog-content.invitation-confirm-modal-content {
 
     .main-title {
         margin-top: 20px;
+        @include text-style(24px, $fontColor2, Lato, $regularFontWeight);
     }
 
     .teacher {
