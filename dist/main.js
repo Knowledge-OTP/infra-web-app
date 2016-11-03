@@ -579,7 +579,15 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                 function _unregisterFromShModeChanges() {
                     $ctrl.completeExerciseCtrl.shModeEventManager.unregisterCb(_shModeChangedHandler);
+                }
 
+                function _finishExerciseWhenAllQuestionsAnswered() {
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
+                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
+                        $ctrl.znkExercise._finishExercise();
+                    }
                 }
 
                 this.$onInit = function () {
@@ -621,6 +629,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 this.$onDestroy = function () {
                     _unregisterFromShModeChanges();
                     _unbindExerciseFromShData();
+                    _finishExerciseWhenAllQuestionsAnswered();
                 };
             }]
         });
@@ -729,19 +738,19 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 });
             }
 
-            var _setZnkExerciseSettings = (function () {
-                function getNumOfUnansweredQuestions(questionsResults) {
-                    var numOfUnansweredQuestions = questionsResults.length;
-                    var keysArr = Object.keys(questionsResults);
-                    angular.forEach(keysArr, function (i) {
-                        var questionAnswer = questionsResults[i];
-                        if (angular.isDefined(questionAnswer.userAnswer)) {
-                            numOfUnansweredQuestions--;
-                        }
-                    });
-                    return numOfUnansweredQuestions;
-                }
+            function _getNumOfUnansweredQuestions(questionsResults) {
+                var numOfUnansweredQuestions = questionsResults.length;
+                var keysArr = Object.keys(questionsResults);
+                angular.forEach(keysArr, function (i) {
+                    var questionAnswer = questionsResults[i];
+                    if (angular.isDefined(questionAnswer.userAnswer)) {
+                        numOfUnansweredQuestions--;
+                    }
+                });
+                return numOfUnansweredQuestions;
+            }
 
+            var _setZnkExerciseSettings = (function () {
                 function _getAllowedTimeForExercise() {
                     if (!isNotLecture) {
                         return null;
@@ -781,7 +790,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
-                            var numOfUnansweredQuestions = getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                            var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);
                             if (numOfUnansweredQuestions) {
@@ -840,6 +849,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 $ctrl.exerciseContent = exerciseContent;
                 $ctrl.exerciseResult = exerciseResult;
                 $ctrl._finishExercise = _finishExercise;
+                $ctrl._getNumOfUnansweredQuestions = _getNumOfUnansweredQuestions;
             }
 
             _init();
