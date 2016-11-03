@@ -110,33 +110,39 @@
 
                     exerciseRebuildProm = $timeout(function () {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
-                        var exerciseParentContent = isExam ? BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) : null;
+                        var exerciseParentContentProm = isExam ? BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) : $q.when(null);
 
-                        var getDataPromMap = {
-                            exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
-                            exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
-                            exerciseParentContent: exerciseParentContent
-                        };
-                        return $q.all(getDataPromMap).then(function (data) {
-                            $ctrl.exerciseData = data;
-                            var newViewState;
-
-                            var exerciseTypeId = data.exerciseResult.exerciseTypeId;
-                            var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
-                            var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                            if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
-                                newViewState = VIEW_STATES.INTRO;
-                            } else {
-                                newViewState = VIEW_STATES.EXERCISE;
+                        return  exerciseParentContentProm.then(function(exerciseParentContent){
+                            if(isExam){
+                                exerciseDetails.examSectionsNum = exerciseParentContent.sections.length;
                             }
+                            var getDataPromMap = {
+                                exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
+                                exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
+                                exerciseParentContent: exerciseParentContent
+                            };
+                            return $q.all(getDataPromMap).then(function (data) {
+                                $ctrl.exerciseData = data;
+                                var newViewState;
 
-                            $ctrl.changeViewState(newViewState, true);
+                                var exerciseTypeId = data.exerciseResult.exerciseTypeId;
+                                var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
+                                var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
+                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                                    newViewState = VIEW_STATES.INTRO;
+                                } else {
+                                    newViewState = VIEW_STATES.EXERCISE;
+                                }
 
-                            if (isSharerMode) {
-                                $ctrl.exerciseData.exerciseResult.$save().then(function () {
-                                    _setShDataToCurrentExercise();
-                                });
-                            }
+                                $ctrl.changeViewState(newViewState, true);
+
+                                if (isSharerMode) {
+                                    $ctrl.exerciseData.exerciseResult.$save().then(function () {
+                                        _setShDataToCurrentExercise();
+                                    });
+                                }
+                            });
+
                         });
                     });
                 }
