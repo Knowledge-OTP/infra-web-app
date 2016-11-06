@@ -22,7 +22,7 @@
             'ngInject';
 
             var vm = this;
-            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
             var getGoalsProm = UserGoalsService.getGoals();
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
