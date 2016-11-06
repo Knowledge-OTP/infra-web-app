@@ -52,6 +52,7 @@
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                                $ctrl.znkExercise.actions.unbindExerciseView();
                             }
                         }
                     };
@@ -172,7 +173,15 @@
 
                 function _unregisterFromShModeChanges() {
                     $ctrl.completeExerciseCtrl.shModeEventManager.unregisterCb(_shModeChangedHandler);
+                }
 
+                function _finishExerciseWhenAllQuestionsAnswered() {
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
+                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
+                        $ctrl.znkExercise._finishExercise();
+                    }
                 }
 
                 this.$onInit = function () {
@@ -208,12 +217,14 @@
 
                     this.goToSummary = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                        $ctrl.znkExercise.actions.unbindExerciseView();
                     };
                 };
 
                 this.$onDestroy = function () {
                     _unregisterFromShModeChanges();
                     _unbindExerciseFromShData();
+                    _finishExerciseWhenAllQuestionsAnswered();
                 };
             }
         });
