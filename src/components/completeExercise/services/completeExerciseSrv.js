@@ -61,7 +61,8 @@
                         return ExerciseResultSrv.getExerciseResult(
                             exerciseDetails.exerciseTypeId,
                             exerciseDetails.exerciseId,
-                            exerciseDetails.exerciseParentId
+                            exerciseDetails.exerciseParentId,
+                            exerciseDetails.examSectionsNum
                         );
                 }
             };

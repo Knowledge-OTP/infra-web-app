@@ -185,33 +185,39 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     exerciseRebuildProm = $timeout(function () {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
-                        var exerciseParentContent = isExam ? BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) : null;
+                        var exerciseParentContentProm = isExam ? BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) : $q.when(null);
 
-                        var getDataPromMap = {
-                            exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
-                            exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
-                            exerciseParentContent: exerciseParentContent
-                        };
-                        return $q.all(getDataPromMap).then(function (data) {
-                            $ctrl.exerciseData = data;
-                            var newViewState;
-
-                            var exerciseTypeId = data.exerciseResult.exerciseTypeId;
-                            var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
-                            var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                            if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
-                                newViewState = VIEW_STATES.INTRO;
-                            } else {
-                                newViewState = VIEW_STATES.EXERCISE;
+                        return  exerciseParentContentProm.then(function(exerciseParentContent){
+                            if(isExam){
+                                exerciseDetails.examSectionsNum = exerciseParentContent.sections.length;
                             }
+                            var getDataPromMap = {
+                                exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
+                                exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
+                                exerciseParentContent: exerciseParentContent
+                            };
+                            return $q.all(getDataPromMap).then(function (data) {
+                                $ctrl.exerciseData = data;
+                                var newViewState;
 
-                            $ctrl.changeViewState(newViewState, true);
+                                var exerciseTypeId = data.exerciseResult.exerciseTypeId;
+                                var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
+                                var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
+                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                                    newViewState = VIEW_STATES.INTRO;
+                                } else {
+                                    newViewState = VIEW_STATES.EXERCISE;
+                                }
 
-                            if (isSharerMode) {
-                                $ctrl.exerciseData.exerciseResult.$save().then(function () {
-                                    _setShDataToCurrentExercise();
-                                });
-                            }
+                                $ctrl.changeViewState(newViewState, true);
+
+                                if (isSharerMode) {
+                                    $ctrl.exerciseData.exerciseResult.$save().then(function () {
+                                        _setShDataToCurrentExercise();
+                                    });
+                                }
+                            });
+
                         });
                     });
                 }
@@ -459,6 +465,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                                $ctrl.znkExercise.actions.unbindExerciseView();
                             }
                         }
                     };
@@ -579,7 +586,15 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                 function _unregisterFromShModeChanges() {
                     $ctrl.completeExerciseCtrl.shModeEventManager.unregisterCb(_shModeChangedHandler);
+                }
 
+                function _finishExerciseWhenAllQuestionsAnswered() {
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
+                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
+                        $ctrl.znkExercise._finishExercise();
+                    }
                 }
 
                 this.$onInit = function () {
@@ -615,12 +630,14 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     this.goToSummary = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                        $ctrl.znkExercise.actions.unbindExerciseView();
                     };
                 };
 
                 this.$onDestroy = function () {
                     _unregisterFromShModeChanges();
                     _unbindExerciseFromShData();
+                    _finishExerciseWhenAllQuestionsAnswered();
                 };
             }]
         });
@@ -729,19 +746,19 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 });
             }
 
-            var _setZnkExerciseSettings = (function () {
-                function getNumOfUnansweredQuestions(questionsResults) {
-                    var numOfUnansweredQuestions = questionsResults.length;
-                    var keysArr = Object.keys(questionsResults);
-                    angular.forEach(keysArr, function (i) {
-                        var questionAnswer = questionsResults[i];
-                        if (angular.isDefined(questionAnswer.userAnswer)) {
-                            numOfUnansweredQuestions--;
-                        }
-                    });
-                    return numOfUnansweredQuestions;
-                }
+            function _getNumOfUnansweredQuestions(questionsResults) {
+                var numOfUnansweredQuestions = questionsResults.length;
+                var keysArr = Object.keys(questionsResults);
+                angular.forEach(keysArr, function (i) {
+                    var questionAnswer = questionsResults[i];
+                    if (angular.isDefined(questionAnswer.userAnswer)) {
+                        numOfUnansweredQuestions--;
+                    }
+                });
+                return numOfUnansweredQuestions;
+            }
 
+            var _setZnkExerciseSettings = (function () {
                 function _getAllowedTimeForExercise() {
                     if (!isNotLecture) {
                         return null;
@@ -781,7 +798,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
-                            var numOfUnansweredQuestions = getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                            var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);
                             if (numOfUnansweredQuestions) {
@@ -840,6 +857,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 $ctrl.exerciseContent = exerciseContent;
                 $ctrl.exerciseResult = exerciseResult;
                 $ctrl._finishExercise = _finishExercise;
+                $ctrl._getNumOfUnansweredQuestions = _getNumOfUnansweredQuestions;
             }
 
             _init();
@@ -1191,7 +1209,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         return ExerciseResultSrv.getExerciseResult(
                             exerciseDetails.exerciseTypeId,
                             exerciseDetails.exerciseId,
-                            exerciseDetails.exerciseParentId
+                            exerciseDetails.exerciseParentId,
+                            exerciseDetails.examSectionsNum
                         );
                 }
             };
@@ -4653,9 +4672,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         }
 
                         function _updateBindExercise() {
-                            var objToUpdate = {};
-                            objToUpdate[question.id] = scope.d.toggleWrittenSln;
-                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', objToUpdate);
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', scope.d.toggleWrittenSln);
                         }
 
                         scope.d.close = function () {
@@ -4669,7 +4686,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         };
 
                         questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
-                            scope.d.toggleWrittenSln = newVal[question.id];
+                            scope.d.toggleWrittenSln = newVal.data;
                         });
                     }
                 };
