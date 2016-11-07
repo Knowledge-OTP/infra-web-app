@@ -2,7 +2,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').directive('invitationManager',
 
-        function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv) {
+        function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, StudentContextSrv, $timeout, PresenceService, $log) {
             'ngInject';
 
            return {
@@ -10,44 +10,65 @@
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
-                    // if (!ENV.dashboardFeatureEnabled) {
-                    //    element.remove();
-                    //    return;
-                    // }
-
                     scope.translate = $filter('translate');
+                    scope.userStatus = PresenceService.userStatus;
+                    scope.deleteTeacherMode = false;
 
-                    scope.pendingTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_INVITATIONS');
-                    scope.pendingConformationsTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.PENDING_CONFORMATIONS');
-                    scope.declinedTitle = scope.translate('INVITATION_MANAGER_DIRECTIVE.DECLINED_INVITATIONS');
+                    function invitationManagerMyTeachersCB(teachers){
+                        $log.debug('invitationManager:: teachers cb', teachers);
+                        scope.myTeachers = teachers;
+                        scope.hasTeachers = scope.getItemsCount(scope.myTeachers) > 0;
+                        startTrackTeachersPresence();
+                    }
 
-                    InvitationService.getReceived().then(function (invitations) {
-                        scope.invitations = invitations;
-                        scope.pendingTitle += ' (' + (scope.getItemsCount(scope.invitations) || 0) + ')';
-                    });
+                    function newInvitationsCB(invitation){
+                        $log.debug('invitationManager:: new invitations cb', invitation);
+                        scope.invitations = invitation;
+                        scope.hasInvitations = scope.getItemsCount(scope.invitations) > 0;
+                    }
 
-                    InvitationService.getPendingConformations().then(function (conformations) {
-                        angular.forEach(conformations, function (conformation, key) {
-                            conformation.invitationId = key;
+                    function pendingConfirmationsCB(pendingConf){
+                        $log.debug('invitationManager:: pending conf cb', pendingConf);
+                        scope.conformations = pendingConf;
+                        scope.hasConfirmations = scope.getItemsCount(scope.conformations) > 0;
+                    }
+
+                    function startTrackTeachersPresence() {
+                        if (startTrackTeachersPresence.isTracking) {
+                            return;
+                        }
+                        startTrackTeachersPresence.isTracking = true;
+                        angular.forEach(scope.myTeachers, function (teacher) {
+                            PresenceService.startTrackUserPresence(teacher.senderUid, trackUserPresenceCB.bind(null, teacher.senderUid));
                         });
-                        scope.conformations = conformations;
-                        scope.pendingConformationsTitle += ' (' + (scope.getItemsCount(scope.conformations) || 0) + ')';
-                    });
+                    }
 
-                    InvitationService.getDeclinedInvitations().then(function (declinedInvitations) {
-                        scope.declinedInvitations = declinedInvitations;
-                    });
+                    function trackUserPresenceCB(userId, newStatus) {
+                        $timeout(function () {
+                            angular.forEach(scope.myTeachers, function (teacher) {
+                                if (teacher.senderUid === userId) {
+                                    teacher.presence = newStatus;
+                                    teacher.callBtnData = angular.copy({
+                                        receiverId: teacher.senderUid,
+                                        isOffline: teacher.presence === PresenceService.userStatus.OFFLINE
+                                    });
+                                }
+                            });
+                        });
+                    }
 
-                    InvitationService.getMyTeacher().then(function (teacherObj) {
-                        scope.myTeachers = teacherObj;
-                    });
-
-                    scope.hasItems = function (obj) {
-                        return !!scope.getItemsCount(obj);
+                    scope.toggleDeleteTeacher = function () {
+                        scope.deleteTeacherMode = !scope.deleteTeacherMode;
                     };
 
                     scope.getItemsCount = function (obj) {
-                        return Object.keys(obj).length;
+                        return Object.keys(obj || {}).length;
+                    };
+
+                    scope.hasAnyItems = function () {
+                        return (Object.keys(scope.invitations || {}).length > 0 ||
+                        Object.keys(scope.conformations || {}).length > 0 ||
+                        Object.keys(scope.myTeachers || {}).length > 0);
                     };
 
                     scope.approve = function (invitation) {
@@ -85,8 +106,15 @@
                         InvitationService.openInviteTeacherModal();
                     };
 
+                    InvitationService.registerListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
+                    InvitationService.registerListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
+
                     var watcherDestroy = scope.$on('$destroy', function () {
-                        InvitationService.removeListeners();
+                        InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
+                        InvitationService.offListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
+
                         watcherDestroy();
                     });
                 }
