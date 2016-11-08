@@ -12,7 +12,7 @@
         <md-menu-content class="md-menu-content-invitation-manager" ng-switch="hasAnyItems()">
             <!-- My Teachers -->
             <div class="my-teachers-wrap">
-                <div ng-if="hasTeachers" class="teachers-header" >
+                <div class="teachers-header" >
                     <span translate=".MY_TEACHERS"></span>
                     <svg-icon name="tutors-list-edit-icon" class="tutors-list-edit-icon" ng-class="{'delete-techer-mode': deleteTeacherMode}" ng-click="toggleDeleteTeacher()" md-prevent-menu-close></svg-icon>
                 </div>
@@ -32,6 +32,7 @@
                             <div class="delete-teacher" ng-if="deleteTeacherMode" ng-click="deleteTeacher(teacher)">
                                 <span translate=".REMOVE"></span>
                             </div>
+                            <call-btn ng-model="teacher.callBtnData" ng-if="!deleteTeacherMode"></call-btn>
                         </div>
                     </div>
                 </div>
