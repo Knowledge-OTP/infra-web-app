@@ -181,7 +181,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                </div>\n" +
     "            </md-list>\n" +
     "        </div>\n" +
-    "\n" +
     "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
     "            <invitation-manager></invitation-manager>\n" +
     "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +
