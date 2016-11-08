@@ -65,12 +65,6 @@
                         return Object.keys(obj || {}).length;
                     };
 
-                    scope.hasAnyItems = function () {
-                        return (Object.keys(scope.invitations || {}).length > 0 ||
-                        Object.keys(scope.conformations || {}).length > 0 ||
-                        Object.keys(scope.myTeachers || {}).length > 0);
-                    };
-
                     scope.approve = function (invitation) {
                         InvitationHelperService.approve(invitation);
                     };
