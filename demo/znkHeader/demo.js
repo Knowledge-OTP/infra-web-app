@@ -22,7 +22,7 @@
             "pixelGifSrc": "https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif"
         }
     })
-    .config(function (znkHeaderSrvProvider, $stateProvider) {
+    .config(function (znkHeaderSrvProvider, $stateProvider, PresenceServiceProvider) {
         'ngInject';
         $stateProvider
             .state('item1', {
@@ -47,6 +47,8 @@
         var additionalItems = [demoItem1, demoItem2];
 
         znkHeaderSrvProvider.addAdditionalNavMenuItems(additionalItems);
+
+        PresenceServiceProvider.setAuthServiceName('AuthService');
     });
 
 })(angular);
