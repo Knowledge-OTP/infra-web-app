@@ -5472,6 +5472,9 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     });
             };
 
+            this.getMyTeachers = function () {
+                return myTeachers;
+            };
             function addInvitationUserData(invitation, profile) {
                 var senderEmail;
                 var authData = AuthService.getAuth();

@@ -496,6 +496,9 @@
                     });
             };
 
+            this.getMyTeachers = function () {
+                return myTeachers;
+            };
             function addInvitationUserData(invitation, profile) {
                 var senderEmail;
                 var authData = AuthService.getAuth();
