@@ -1,0 +1,71 @@
+<div translate-namespace="INVITATION_MANAGER_DIRECTIVE" class="invitation-manager">
+    <md-menu md-offset="-225 51">
+        <div ng-click="$mdOpenMenu($event);" class="md-icon-button invite-icon-btn" ng-switch="hasTeachers">
+            <div class="num-of-receive" ng-if="hasInvitations">{{getItemsCount(invitations)}}</div>
+            <section ng-switch-when="false" class="circle-invite-wrap teacher-icon-wrap">
+                <svg-icon name="invitation-teacher-icon"></svg-icon>
+            </section>
+            <section ng-switch-when="true" class="circle-invite-wrap teacher-active-icon-wrap">
+                <svg-icon name="invitation-teacher-active-icon" class="teacher-active-icon"></svg-icon>
+            </section>
+        </div>
+        <md-menu-content class="md-menu-content-invitation-manager" ng-switch="hasAnyItems()">
+            <!-- My Teachers -->
+            <div class="my-teachers-wrap">
+                <div ng-if="hasTeachers" class="teachers-header" >
+                    <span translate=".MY_TEACHERS"></span>
+                    <svg-icon name="tutors-list-edit-icon" class="tutors-list-edit-icon" ng-class="{'delete-techer-mode': deleteTeacherMode}" ng-click="toggleDeleteTeacher()" md-prevent-menu-close></svg-icon>
+                </div>
+                <div ng-repeat="teacher in myTeachers" class="teacher-item">
+                    <div class="inner">
+                        <div class="teacher-status">
+                            <div class="online-indicator"
+                                 ng-class="{'offline': teacher.presence === userStatus.OFFLINE,
+                                'online': teacher.presence === userStatus.ONLINE,
+                                'idle': teacher.presence === userStatus.IDLE}"></div>
+                        </div>
+                        <div class="teacher-name">{{teacher.senderName}}
+                            <div class="teacher-subject">{{teacher.zinkerzTeacherSubject}}</div>
+                            <div class="teacher-email">{{teacher.senderEmail}}</div>
+                        </div>
+                        <div class="actions">
+                            <div class="delete-teacher" ng-if="deleteTeacherMode" ng-click="deleteTeacher(teacher)">
+                                <span translate=".REMOVE"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pending Invitations -->
+            <md-list ng-if="hasInvitations">
+                <md-subheader class="invite-sub-title decline-invite-count" translate=".PENDING_INVITATIONS" translate-values="{count: getItemsCount(invitations)}"></md-subheader>
+                <md-list-item ng-repeat="invite in invitations" class="invite-list-wrap">
+                    <div class="icon-wrap">
+                        <svg-icon name="invitations-received-icon" class="received-invitations"></svg-icon>
+                        <div class="creation-time">{{::invite.creationTime | date : 'MMM d'}}</div>
+                    </div>
+                    <div class="teacher-wrap">
+                        <div class="teacher-name">{{::invite.senderName}}</div>
+                        <div class="teacher-email">{{::invite.senderEmail}}</div>
+                    </div>
+                    <div class="decline-invite">
+                        <svg-icon name="invitation-close-popup" class="decline-invite-btn" ng-click="decline(invite)"></svg-icon>
+                    </div>
+                    <div class="approve-invite">
+                        <svg-icon name="invitation-v-icon" class="v-icon-btn" ng-click="approve(invite)"></svg-icon>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <!-- Invite Teacher Btn -->
+            <div class="empty-invite">
+                <div class="empty-msg" translate=".EMPTY_INVITE" ng-if="!hasAnyItems()"></div>
+                <div class="invite-action">
+                    <div class="md-button outline-blue invite-btn" ng-click="openInviteModal()">
+                        <div translate=".INVITE_STUDENTS"></div>
+                    </div>
+                </div>
+            </div>
+        </md-menu-content>
+    </md-menu>
+</div>
+
