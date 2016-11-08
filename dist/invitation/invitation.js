@@ -90,7 +90,7 @@
             'ngInject';
 
            return {
-                templateUrl: 'components/invitation/directives/invitation-manager.template.html',
+                templateUrl: 'components/invitation/invitationManager/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
