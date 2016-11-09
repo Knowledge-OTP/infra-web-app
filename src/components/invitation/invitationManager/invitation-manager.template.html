@@ -9,10 +9,10 @@
                 <svg-icon name="invitation-teacher-active-icon" class="teacher-active-icon"></svg-icon>
             </section>
         </div>
-        <md-menu-content class="md-menu-content-invitation-manager" ng-switch="hasAnyItems()">
+        <md-menu-content class="md-menu-content-invitation-manager">
             <!-- My Teachers -->
-            <div class="my-teachers-wrap">
-                <div ng-if="hasTeachers" class="teachers-header" >
+            <div class="my-teachers-wrap" ng-if="hasTeachers">
+                <div class="teachers-header" >
                     <span translate=".MY_TEACHERS"></span>
                     <svg-icon name="tutors-list-edit-icon" class="tutors-list-edit-icon" ng-class="{'delete-techer-mode': deleteTeacherMode}" ng-click="toggleDeleteTeacher()" md-prevent-menu-close></svg-icon>
                 </div>
@@ -59,7 +59,7 @@
             </md-list>
             <!-- Invite Teacher Btn -->
             <div class="empty-invite">
-                <div class="empty-msg" translate=".EMPTY_INVITE" ng-if="!hasAnyItems()"></div>
+                <div class="empty-msg" translate=".EMPTY_INVITE"></div>
                 <div class="invite-action">
                     <div class="md-button outline-blue invite-btn" ng-click="openInviteModal()">
                         <div translate=".INVITE_STUDENTS"></div>
