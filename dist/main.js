@@ -2918,7 +2918,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScoresData();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -2946,8 +2946,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                                var estimatedScoreForSubjectArr = estimatedScore[subjectId];
-                                var estimatedScoreForSubject = estimatedScoreForSubjectArr[estimatedScoreForSubjectArr.length - 1];
+                                var estimatedScoreForSubject = estimatedScore[subjectId];
                                 var isSubjectExist = estimatedScoreForSubject && estimatedScoreForSubject.score;
                                 return {
                                     subjectId: subjectId,
@@ -13865,7 +13864,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             'ngInject';
 
             var vm = this;
-            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
             var getGoalsProm = UserGoalsService.getGoals();
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
