@@ -61,7 +61,7 @@
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScoresData();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -89,8 +89,7 @@
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                                var estimatedScoreForSubjectArr = estimatedScore[subjectId];
-                                var estimatedScoreForSubject = estimatedScoreForSubjectArr[estimatedScoreForSubjectArr.length - 1];
+                                var estimatedScoreForSubject = estimatedScore[subjectId];
                                 var isSubjectExist = estimatedScoreForSubject && estimatedScoreForSubject.score;
                                 return {
                                     subjectId: subjectId,
