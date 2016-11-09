@@ -64,6 +64,7 @@
 
                 vm.logout = function () {
                     AuthService.logout();
+                    $rootScope.$broadcast('auth:beforeLogout');
                     $window.location.replace(ENV.redirectLogout);
                 };
 
