@@ -63,7 +63,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", "ENV", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, ENV) {
+            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
                 'ngInject';
 
                 var directive = {
@@ -140,7 +140,7 @@
                         }
 
                         function _updateBindExercise() {
-                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln }, question.id, ENV.appContext);
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln }, question.id);
                         }
 
                         scope.d.close = function () {
@@ -155,7 +155,7 @@
 
                         questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
                             scope.d.toggleWrittenSln = newVal.data;
-                        }, question.id, ENV.appContext);
+                        }, question.id);
                     }
                 };
                 return directive;
