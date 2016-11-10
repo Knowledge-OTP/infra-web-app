@@ -12,7 +12,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })
         .directive('answerExplanation',
-            function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, ENV) {
                 'ngInject';
 
                 var directive = {
@@ -89,7 +89,7 @@
                         }
 
                         function _updateBindExercise() {
-                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln });
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln }, question.id, ENV.appContext);
                         }
 
                         scope.d.close = function () {
@@ -104,7 +104,7 @@
 
                         questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
                             scope.d.toggleWrittenSln = newVal.data;
-                        });
+                        }, question.id, ENV.appContext);
                     }
                 };
                 return directive;
