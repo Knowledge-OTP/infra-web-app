@@ -4594,7 +4594,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", "ENV", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, ENV) {
                 'ngInject';
 
                 var directive = {
@@ -4671,7 +4671,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         }
 
                         function _updateBindExercise() {
-                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln });
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln }, question.id, ENV.appContext);
                         }
 
                         scope.d.close = function () {
@@ -4686,7 +4686,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
 
                         questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
                             scope.d.toggleWrittenSln = newVal.data;
-                        });
+                        }, question.id, ENV.appContext);
                     }
                 };
                 return directive;
