@@ -4671,7 +4671,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         }
 
                         function _updateBindExercise() {
-                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', scope.d.toggleWrittenSln);
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln });
                         }
 
                         scope.d.close = function () {
