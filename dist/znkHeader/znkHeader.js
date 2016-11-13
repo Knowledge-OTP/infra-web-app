@@ -34,7 +34,7 @@
             bindings: {},
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "MyProfileSrv", "feedbackSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, MyProfileSrv, feedbackSrv,
+            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, MyProfileSrv, feedbackSrv, $rootScope,
                                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
                 'ngInject';
 
@@ -92,6 +92,7 @@
 
                 vm.logout = function () {
                     AuthService.logout();
+                    $rootScope.$broadcast('auth:beforeLogout');
                     $window.location.replace(ENV.redirectLogout);
                 };
 
