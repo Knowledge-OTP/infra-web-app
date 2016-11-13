@@ -4671,7 +4671,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         }
 
                         function _updateBindExercise() {
-                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', scope.d.toggleWrittenSln);
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln, update: true }, question.id);
                         }
 
                         scope.d.close = function () {
@@ -4686,7 +4686,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
 
                         questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
                             scope.d.toggleWrittenSln = newVal.data;
-                        });
+                        }, question.id);
                     }
                 };
                 return directive;
