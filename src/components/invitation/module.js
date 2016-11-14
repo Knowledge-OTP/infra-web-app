@@ -6,6 +6,8 @@
         'znk.infra.popUp',
         'znk.infra.svgIcon',
         'pascalprecht.translate',
+        'znk.infra.presence',
+        'znk.infra.userContext',
         'znk.infra-web-app.purchase',
         'znk.infra.user'])
         .config([

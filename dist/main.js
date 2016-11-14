@@ -4981,6 +4981,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
         'znk.infra.popUp',
         'znk.infra.svgIcon',
         'pascalprecht.translate',
+        'znk.infra.presence',
+        'znk.infra.userContext',
         'znk.infra-web-app.purchase',
         'znk.infra.user'])
         .config([
@@ -5781,7 +5783,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                            <div class=\"delete-teacher\" ng-if=\"deleteTeacherMode\" ng-click=\"deleteTeacher(teacher)\">\n" +
     "                                <span translate=\".REMOVE\"></span>\n" +
     "                            </div>\n" +
-    "                            <call-btn ng-model=\"teacher.callBtnData\" ng-if=\"!deleteTeacherMode\"></call-btn>\n" +
     "                        </div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -13521,7 +13522,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                </div>\n" +
     "            </md-list>\n" +
     "        </div>\n" +
-    "\n" +
     "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
     "            <invitation-manager></invitation-manager>\n" +
     "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +

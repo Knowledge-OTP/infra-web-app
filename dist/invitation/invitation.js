@@ -6,6 +6,8 @@
         'znk.infra.popUp',
         'znk.infra.svgIcon',
         'pascalprecht.translate',
+        'znk.infra.presence',
+        'znk.infra.userContext',
         'znk.infra-web-app.purchase',
         'znk.infra.user'])
         .config([
@@ -806,7 +808,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                            <div class=\"delete-teacher\" ng-if=\"deleteTeacherMode\" ng-click=\"deleteTeacher(teacher)\">\n" +
     "                                <span translate=\".REMOVE\"></span>\n" +
     "                            </div>\n" +
-    "                            <call-btn ng-model=\"teacher.callBtnData\" ng-if=\"!deleteTeacherMode\"></call-btn>\n" +
     "                        </div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
