@@ -5,7 +5,7 @@
              ng-if="vm.timeLineData.data.length">
             <div class="goal-wrapper">{{vm.goalPerSubject}}
                 <div class="timeline-plus"
-                     ng-if="vm.timelineLinePlus"
+                     ng-if="vm.timelineLinePlus && vm.showInduction"
                      ng-class="{ 'red-point': vm.isRed, 'green-point': !vm.isRed }">
                     {{vm.timelineLinePlus}}
                 </div>

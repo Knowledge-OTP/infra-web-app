@@ -4,7 +4,8 @@
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
-            activeExerciseId: '=?'
+            activeExerciseId: '=?',
+            showInduction: '<?'
         },
         controllerAs: 'vm',
         controller: function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
