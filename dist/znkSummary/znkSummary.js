@@ -127,6 +127,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     "    </div>\n" +
     "    <znk-timeline-web-wrapper\n" +
     "        subject-id=\"{{::vm.currentSubjectId}}\"\n" +
+    "        show-induction=\"true\"\n" +
     "        active-exercise-id=\"::vm.activeExerciseId\">\n" +
     "    </znk-timeline-web-wrapper>\n" +
     "</div>\n" +

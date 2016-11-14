@@ -15,7 +15,8 @@
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
-            activeExerciseId: '=?'
+            activeExerciseId: '=?',
+            showInduction: '<?'
         },
         controllerAs: 'vm',
         controller: ["EstimatedScoreSrv", "UserGoalsService", "ScoringService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
@@ -205,7 +206,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     "             ng-if=\"vm.timeLineData.data.length\">\n" +
     "            <div class=\"goal-wrapper\">{{vm.goalPerSubject}}\n" +
     "                <div class=\"timeline-plus\"\n" +
-    "                     ng-if=\"vm.timelineLinePlus\"\n" +
+    "                     ng-if=\"vm.timelineLinePlus && vm.showInduction\"\n" +
     "                     ng-class=\"{ 'red-point': vm.isRed, 'green-point': !vm.isRed }\">\n" +
     "                    {{vm.timelineLinePlus}}\n" +
     "                </div>\n" +
