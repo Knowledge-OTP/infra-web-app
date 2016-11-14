@@ -92,7 +92,7 @@
             'ngInject';
 
            return {
-                templateUrl: 'components/invitation/directives/invitation-manager.template.html',
+                templateUrl: 'components/invitation/invitationManager/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
@@ -149,12 +149,6 @@
 
                     scope.getItemsCount = function (obj) {
                         return Object.keys(obj || {}).length;
-                    };
-
-                    scope.hasAnyItems = function () {
-                        return (Object.keys(scope.invitations || {}).length > 0 ||
-                        Object.keys(scope.conformations || {}).length > 0 ||
-                        Object.keys(scope.myTeachers || {}).length > 0);
                     };
 
                     scope.approve = function (invitation) {
@@ -241,23 +235,6 @@
             };
         }]
     );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.invitation')
-        .run(["$location", "InvitationService", function($location, InvitationService){
-            'ngInject';
-            var search = $location.search();
-
-            if (angular.isDefined(search.iid)) {
-                InvitationService.showInvitationConfirm(search.iid);
-                delete search.iid;
-                $location.search(search);
-            }
-        }]);
-
 })(angular);
 
 (function (angular) {
@@ -521,6 +498,9 @@
                     });
             };
 
+            this.getMyTeachers = function () {
+                return myTeachers;
+            };
             function addInvitationUserData(invitation, profile) {
                 var senderEmail;
                 var authData = AuthService.getAuth();
@@ -793,7 +773,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    </div>\n" +
     "</md-dialog>\n" +
     "");
-  $templateCache.put("components/invitation/directives/invitation-manager.template.html",
+  $templateCache.put("components/invitation/invitationManager/invitation-manager.template.html",
     "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\" class=\"invitation-manager\">\n" +
     "    <md-menu md-offset=\"-225 51\">\n" +
     "        <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" ng-switch=\"hasTeachers\">\n" +
@@ -805,10 +785,10 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                <svg-icon name=\"invitation-teacher-active-icon\" class=\"teacher-active-icon\"></svg-icon>\n" +
     "            </section>\n" +
     "        </div>\n" +
-    "        <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"hasAnyItems()\">\n" +
+    "        <md-menu-content class=\"md-menu-content-invitation-manager\">\n" +
     "            <!-- My Teachers -->\n" +
-    "            <div class=\"my-teachers-wrap\">\n" +
-    "                <div ng-if=\"hasTeachers\" class=\"teachers-header\" >\n" +
+    "            <div class=\"my-teachers-wrap\" ng-if=\"hasTeachers\">\n" +
+    "                <div class=\"teachers-header\" >\n" +
     "                    <span translate=\".MY_TEACHERS\"></span>\n" +
     "                    <svg-icon name=\"tutors-list-edit-icon\" class=\"tutors-list-edit-icon\" ng-class=\"{'delete-techer-mode': deleteTeacherMode}\" ng-click=\"toggleDeleteTeacher()\" md-prevent-menu-close></svg-icon>\n" +
     "                </div>\n" +
@@ -854,7 +834,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            </md-list>\n" +
     "            <!-- Invite Teacher Btn -->\n" +
     "            <div class=\"empty-invite\">\n" +
-    "                <div class=\"empty-msg\" translate=\".EMPTY_INVITE\" ng-if=\"!hasAnyItems()\"></div>\n" +
+    "                <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
     "                <div class=\"invite-action\">\n" +
     "                    <div class=\"md-button outline-blue invite-btn\" ng-click=\"openInviteModal()\">\n" +
     "                        <div translate=\".INVITE_STUDENTS\"></div>\n" +

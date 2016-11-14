@@ -6,7 +6,7 @@
             'ngInject';
 
            return {
-                templateUrl: 'components/invitation/directives/invitation-manager.template.html',
+                templateUrl: 'components/invitation/invitationManager/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
@@ -63,12 +63,6 @@
 
                     scope.getItemsCount = function (obj) {
                         return Object.keys(obj || {}).length;
-                    };
-
-                    scope.hasAnyItems = function () {
-                        return (Object.keys(scope.invitations || {}).length > 0 ||
-                        Object.keys(scope.conformations || {}).length > 0 ||
-                        Object.keys(scope.myTeachers || {}).length > 0);
                     };
 
                     scope.approve = function (invitation) {

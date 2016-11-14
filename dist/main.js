@@ -2918,7 +2918,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                     var isNavMenuFlag = (scope.isNavMenu === 'true');
                     var scores;
 
-                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getEstimatedScoresData();
+                    var getLatestEstimatedScoreProm = EstimatedScoreSrv.getLatestEstimatedScore();
                     var getSubjectOrderProm = EstimatedScoreWidgetSrv.getSubjectOrder();
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
@@ -2946,8 +2946,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                             scope.d.userCompositeGoal = (userGoals) ? userGoals.totalScore : '-';
                             scope.d.widgetItems = subjectOrder.map(function (subjectId) {
                                 var userGoalForSubject = (userGoals) ? userGoals[subjectEnumToValMap[subjectId]] : 0;
-                                var estimatedScoreForSubjectArr = estimatedScore[subjectId];
-                                var estimatedScoreForSubject = estimatedScoreForSubjectArr[estimatedScoreForSubjectArr.length - 1];
+                                var estimatedScoreForSubject = estimatedScore[subjectId];
                                 var isSubjectExist = estimatedScoreForSubject && estimatedScoreForSubject.score;
                                 return {
                                     subjectId: subjectId,
@@ -4672,7 +4671,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                         }
 
                         function _updateBindExercise() {
-                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', scope.d.toggleWrittenSln);
+                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln, update: true }, question.id);
                         }
 
                         scope.d.close = function () {
@@ -4687,7 +4686,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
 
                         questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
                             scope.d.toggleWrittenSln = newVal.data;
-                        });
+                        }, question.id);
                     }
                 };
                 return directive;
@@ -5068,7 +5067,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             'ngInject';
 
            return {
-                templateUrl: 'components/invitation/directives/invitation-manager.template.html',
+                templateUrl: 'components/invitation/invitationManager/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
                 link: function linkFn(scope) {
@@ -5125,12 +5124,6 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
                     scope.getItemsCount = function (obj) {
                         return Object.keys(obj || {}).length;
-                    };
-
-                    scope.hasAnyItems = function () {
-                        return (Object.keys(scope.invitations || {}).length > 0 ||
-                        Object.keys(scope.conformations || {}).length > 0 ||
-                        Object.keys(scope.myTeachers || {}).length > 0);
                     };
 
                     scope.approve = function (invitation) {
@@ -5217,23 +5210,6 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             };
         }]
     );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.invitation')
-        .run(["$location", "InvitationService", function($location, InvitationService){
-            'ngInject';
-            var search = $location.search();
-
-            if (angular.isDefined(search.iid)) {
-                InvitationService.showInvitationConfirm(search.iid);
-                delete search.iid;
-                $location.search(search);
-            }
-        }]);
-
 })(angular);
 
 (function (angular) {
@@ -5497,6 +5473,9 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     });
             };
 
+            this.getMyTeachers = function () {
+                return myTeachers;
+            };
             function addInvitationUserData(invitation, profile) {
                 var senderEmail;
                 var authData = AuthService.getAuth();
@@ -5769,7 +5748,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "    </div>\n" +
     "</md-dialog>\n" +
     "");
-  $templateCache.put("components/invitation/directives/invitation-manager.template.html",
+  $templateCache.put("components/invitation/invitationManager/invitation-manager.template.html",
     "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\" class=\"invitation-manager\">\n" +
     "    <md-menu md-offset=\"-225 51\">\n" +
     "        <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" ng-switch=\"hasTeachers\">\n" +
@@ -5781,10 +5760,10 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "                <svg-icon name=\"invitation-teacher-active-icon\" class=\"teacher-active-icon\"></svg-icon>\n" +
     "            </section>\n" +
     "        </div>\n" +
-    "        <md-menu-content class=\"md-menu-content-invitation-manager\" ng-switch=\"hasAnyItems()\">\n" +
+    "        <md-menu-content class=\"md-menu-content-invitation-manager\">\n" +
     "            <!-- My Teachers -->\n" +
-    "            <div class=\"my-teachers-wrap\">\n" +
-    "                <div ng-if=\"hasTeachers\" class=\"teachers-header\" >\n" +
+    "            <div class=\"my-teachers-wrap\" ng-if=\"hasTeachers\">\n" +
+    "                <div class=\"teachers-header\" >\n" +
     "                    <span translate=\".MY_TEACHERS\"></span>\n" +
     "                    <svg-icon name=\"tutors-list-edit-icon\" class=\"tutors-list-edit-icon\" ng-class=\"{'delete-techer-mode': deleteTeacherMode}\" ng-click=\"toggleDeleteTeacher()\" md-prevent-menu-close></svg-icon>\n" +
     "                </div>\n" +
@@ -5830,7 +5809,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            </md-list>\n" +
     "            <!-- Invite Teacher Btn -->\n" +
     "            <div class=\"empty-invite\">\n" +
-    "                <div class=\"empty-msg\" translate=\".EMPTY_INVITE\" ng-if=\"!hasAnyItems()\"></div>\n" +
+    "                <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
     "                <div class=\"invite-action\">\n" +
     "                    <div class=\"md-button outline-blue invite-btn\" ng-click=\"openInviteModal()\">\n" +
     "                        <div translate=\".INVITE_STUDENTS\"></div>\n" +
@@ -13395,7 +13374,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             bindings: {},
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "MyProfileSrv", "feedbackSrv", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, MyProfileSrv, feedbackSrv,
+            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, MyProfileSrv, feedbackSrv, $rootScope,
                                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
                 'ngInject';
 
@@ -13453,6 +13432,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
                 vm.logout = function () {
                     AuthService.logout();
+                    $rootScope.$broadcast('auth:beforeLogout');
                     $window.location.replace(ENV.redirectLogout);
                 };
 
@@ -13865,7 +13845,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             'ngInject';
 
             var vm = this;
-            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScoresData();
+            var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
             var getGoalsProm = UserGoalsService.getGoals();
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
