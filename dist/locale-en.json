@@ -311,7 +311,7 @@
             "TYPE_1": "Workout {{exerciseParentId}}: {{exerciseContent.name}}",
             "TYPE_2": "Tips & Tricks: {{exerciseContent.name}}",
             "TYPE_3": "Exam {{exerciseParentContent.name}}: {{exerciseContent.name}}",
-            "TYPE_4": "{{exerciseContent.name}}"
+            "TYPE_4": "Lesson: {{exerciseContent.name}}"
         },
         "SECTION_INSTRUCTION":{
             "0":"Solve the following problems.",
