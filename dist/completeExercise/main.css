@@ -239,9 +239,7 @@ complete-exercise-progress-bar {
   height: calc(100vh - 95px);
   background: white;
   display: block;
-  margin-top: 15px;
-  margin-right: auto;
-  margin-left: auto;
+  margin: auto;
   box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
   border-radius: 15px; }
 
