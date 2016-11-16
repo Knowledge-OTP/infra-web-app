@@ -1,11 +1,11 @@
 {
     "name": "infra-web-app",
-    "version": "v0.0.23",
+    "version": "v0.0.51",
     "authors": [
         "Zinkerz"
     ],
     "dependencies": {
-        "infra": "https://github.com/Knowledge-OTP/infra.git#v5.0.63",
+        "infra": "https://github.com/Knowledge-OTP/infra.git#~v5.0.65",
         "ng-tags-input": "^3.0.0",
         "angular-chart.js": "^0.10.2",
         "v-accordion": "1.4.1",
