@@ -7603,7 +7603,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </md-menu>\n" +
     "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
     "        </div>\n" +
-    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId && d.appContext.className !== 'toefl'\"\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
     "           class=\"for-educators app-color\"\n" +
     "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
     "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
@@ -7691,7 +7691,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        </div>\n" +
     "    </div>\n" +
     "    <footer>\n" +
-    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId && d.appContext.className !== 'toefl'\">\n" +
+    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
     "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
     "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
     "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
