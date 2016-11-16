@@ -9942,6 +9942,29 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    x=\"0px\"\n" +
     "    y=\"0px\"\n" +
     "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 148.7 174.7\"\n" +
+    "    style=\"enable-background:new 0 0 148.7 174.7;\"\n" +
+    "    class=\"purchase-popup-bullet-5-icon\">\n" +
+    "    <style>\n" +
+    "\n" +
+    "        .purchase-popup-bullet-5-icon .st0{fill:none;stroke:#231F20;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-5-icon .st1{fill:none;stroke:#231F20;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M93.4,171.7H12.6c-5.3,0-9.6-4.3-9.6-9.6V81.3c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
+    "		C103,167.4,98.7,171.7,93.4,171.7z\"/>\n" +
+    "	<path class=\"st0\" d=\"M78.7,71.7V39.9C78.7,19.6,93.8,3,112.2,3h0c18.4,0,33.5,16.6,33.5,36.9v31.9\"/>\n" +
+    "	<path class=\"st1\" d=\"M53.2,101c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
+    "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,106.1,47.1,101,53.2,101\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/purchase-popup-bullet-5-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "    viewBox=\"0 0 208.1 203\" class=\"purchase-popup-bullet-4-icon\">\n" +
     "\n" +
     "    <style type=\"text/css\">\n" +
@@ -9981,29 +10004,6 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    <polygon class=\"st1\" points=\"102.6,22 113.1,43.4 136.6,46.8 119.6,63.4 123.6,86.9 102.6,75.8 81.5,86.9 85.5,63.4 68.5,46.8\n" +
     "	92,43.4 \"/>\n" +
     "    <line class=\"st2\" x1=\"66.6\" y1=\"193.9\" x2=\"143.6\" y2=\"193.9\"/>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/purchase/svg/purchase-popup-bullet-5-icon.svg",
-    "<svg\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-    "    viewBox=\"0 0 148.7 174.7\"\n" +
-    "    style=\"enable-background:new 0 0 148.7 174.7;\"\n" +
-    "    class=\"purchase-popup-bullet-5-icon\">\n" +
-    "    <style>\n" +
-    "\n" +
-    "        .purchase-popup-bullet-5-icon .st0{fill:none;stroke:#231F20;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-    "        .purchase-popup-bullet-5-icon .st1{fill:none;stroke:#231F20;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-    "\n" +
-    "    </style>\n" +
-    "<g>\n" +
-    "	<path class=\"st0\" d=\"M93.4,171.7H12.6c-5.3,0-9.6-4.3-9.6-9.6V81.3c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
-    "		C103,167.4,98.7,171.7,93.4,171.7z\"/>\n" +
-    "	<path class=\"st0\" d=\"M78.7,71.7V39.9C78.7,19.6,93.8,3,112.2,3h0c18.4,0,33.5,16.6,33.5,36.9v31.9\"/>\n" +
-    "	<path class=\"st1\" d=\"M53.2,101c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
-    "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,106.1,47.1,101,53.2,101\"/>\n" +
-    "</g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/purchase/svg/raccoon-logo.svg",
