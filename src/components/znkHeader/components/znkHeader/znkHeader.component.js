@@ -6,12 +6,13 @@
             bindings: {},
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
-            controller: function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, MyProfileSrv, feedbackSrv, $rootScope,
+            controller: function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
                                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
                 'ngInject';
 
                 var vm = this;
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;

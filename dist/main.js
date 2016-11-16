@@ -13354,6 +13354,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             'znk.infra-web-app.myProfile',
             'znk.infra.user',
             'znk.infra.general',
+            'znk.infra.activePanel',
             'znk.infra-web-app.invitation',
             'znk.infra-web-app.feedback'])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
@@ -13374,12 +13375,13 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             bindings: {},
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, MyProfileSrv, feedbackSrv, $rootScope,
+            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "ActivePanelSrv", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
                                   UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
                 'ngInject';
 
                 var vm = this;
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
