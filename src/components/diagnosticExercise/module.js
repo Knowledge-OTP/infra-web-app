@@ -23,7 +23,9 @@
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
         'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.workoutsRoadmap'
+        'znk.infra-web-app.workoutsRoadmap',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.uiTheme'
     ]).config(function(SvgIconSrvProvider) {
         'ngInject';
         var svgMap = {

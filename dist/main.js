@@ -1497,7 +1497,9 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
         'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.workoutsRoadmap'
+        'znk.infra-web-app.workoutsRoadmap',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.uiTheme'
     ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
         'ngInject';
         var svgMap = {
@@ -2073,7 +2075,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow) {
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService) {
         'ngInject';
 
             var self = this;
@@ -2174,6 +2176,14 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             });
 
             this.doughnutArray = dataArray;
+
+            this.showPurchaseDialog = function () {
+                purchaseService.showPurchaseDialog();
+            };
+
+            purchaseService.hasProVersion().then(function (isPro) {
+                self.showUpgradeBtn = !isPro && diagnosticSettings.summary && diagnosticSettings.summary.showUpgradeBtn;
+            });
     }]);
 })(angular);
 
@@ -2647,6 +2657,15 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            </div>\n" +
     "\n" +
     "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
+    "         ng-if=\"vm.showUpgradeBtn\">\n" +
+    "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
+    "        <md-button\n" +
+    "            class=\"znk outline\"\n" +
+    "            ng-click=\"vm.showPurchaseDialog()\"\n" +
+    "            translate=\".UPGRADE_BTN\">\n" +
+    "        </md-button>\n" +
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +

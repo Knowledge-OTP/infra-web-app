@@ -398,7 +398,8 @@
         "GREAT_START": "That’s a great start! You're on the path to an excellent score!",
         "GOOD_START": "Good work! We’ve personalized your roadmap to make you an expert in no time.",
         "BAD_START": "Nice start! We've just designed a special roadmap to help you improve in all four subjects.",
-        "GOAL_TOOLTIP": "{{ptsToGoal}} pts to go!"
+        "GOAL_TOOLTIP": "{{ptsToGoal}} pts to go!",
+        "UPGRADE_BTN": "Upgrade to Pro"
     },
     "WORKOUTS_DIAGNOSTIC_PRE_SUMMARY": {
         "READY": "Ready to see your scores?"

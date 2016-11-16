@@ -125,6 +125,27 @@
             }
         }
 
+    .upgrade-to-evaluate-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 60px;
+        margin-bottom: 210px;
+        span {
+            @include text-style(16px, $fontColor3, Quicksand, $boldFontWeight);
+        }
+
+        .md-button {
+            &.znk.outline {
+                margin-top: 20px;
+                @include text-style(14px, $fontColor23, Lato, $regularFontWeight);
+                text-transform: inherit;
+                padding-left: 35px;
+                padding-right: 35px;
+            }
+        }
+    }
+
 }
 
 md-tooltip.tooltip-for-diagnostic-summary {
