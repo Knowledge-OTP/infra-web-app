@@ -13995,6 +13995,9 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             }
 
             function _getRoundScore(estimatedScoresDatePerSubject) {
+                if (!estimatedScoresDatePerSubject.length) {
+                    return [];
+                }
                 return estimatedScoresDatePerSubject.map(function(scoreData) {
                     scoreData.score = Math.round(scoreData.score) || 0;
                     return scoreData;
