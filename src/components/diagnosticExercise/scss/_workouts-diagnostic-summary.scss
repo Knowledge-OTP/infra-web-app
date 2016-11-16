@@ -131,14 +131,18 @@
         align-items: center;
         margin-top: 60px;
         span {
-            @include text-style(16px, $fontColor8, Quicksand, $boldFontWeight);
+            @include text-style(16px, $fontColor3, Quicksand, $boldFontWeight);
         }
-        button {
-            margin-top: 20px;
-            @include text-style(14px, $fontColor23, Lato, $regularFontWeight);
-            text-transform: inherit;
-            padding-left: 15px;
-            padding-right: 15px;
+
+        .md-button {
+            &.znk.outline {
+                margin-top: 20px;
+                @include text-style(14px, $fontColor23, Lato, $regularFontWeight);
+                text-transform: inherit;
+                padding-left: 35px;
+                padding-right: 35px;
+                margin-bottom: 240px;
+            }
         }
     }
 

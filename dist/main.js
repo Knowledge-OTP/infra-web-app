@@ -2656,12 +2656,6 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
-    "    <button autofocus tabindex=\"1\"\n" +
-    "            class=\"start-button md-button znk md-primary\"\n" +
-    "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
-    "            translate=\".DONE\">DONE\n" +
-    "    </button>\n" +
     "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
     "         ng-if=\"vm.showUpgradeBtn\">\n" +
     "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
@@ -2671,6 +2665,12 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            translate=\".UPGRADE_BTN\">\n" +
     "        </md-button>\n" +
     "    </div>\n" +
+    "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
+    "    <button autofocus tabindex=\"1\"\n" +
+    "            class=\"start-button md-button znk md-primary\"\n" +
+    "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
+    "            translate=\".DONE\">DONE\n" +
+    "    </button>\n" +
     "</div>\n" +
     "");
 }]);

@@ -223,18 +223,19 @@
     margin-top: 60px; }
     .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
       font-size: 16px;
-      color: #ffffff;
+      color: #4f4d4d;
       font-family: Quicksand;
       font-weight: 700; }
-    .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper button {
+    .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper .md-button.znk.outline {
       margin-top: 20px;
       font-size: 14px;
       color: #64b61d;
       font-family: Lato;
       font-weight: 400;
       text-transform: inherit;
-      padding-left: 15px;
-      padding-right: 15px; }
+      padding-left: 35px;
+      padding-right: 35px;
+      margin-bottom: 240px; }
 
 md-tooltip.tooltip-for-diagnostic-summary {
   opacity: 0;

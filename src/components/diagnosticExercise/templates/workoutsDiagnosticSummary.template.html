@@ -53,12 +53,6 @@
 
         </div>
     </div>
-    <div class="footer-text" translate="{{vm.footerTranslatedText}}"></div>
-    <button autofocus tabindex="1"
-            class="start-button md-button znk md-primary"
-            ui-sref="app.workouts.roadmap.diagnostic"
-            translate=".DONE">DONE
-    </button>
     <div class="upgrade-to-evaluate-wrapper"
          ng-if="vm.showUpgradeBtn">
         <span translate=".UPGRADE_TEXT"></span>
@@ -68,4 +62,10 @@
             translate=".UPGRADE_BTN">
         </md-button>
     </div>
+    <div class="footer-text" translate="{{vm.footerTranslatedText}}"></div>
+    <button autofocus tabindex="1"
+            class="start-button md-button znk md-primary"
+            ui-sref="app.workouts.roadmap.diagnostic"
+            translate=".DONE">DONE
+    </button>
 </div>
