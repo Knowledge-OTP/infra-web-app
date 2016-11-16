@@ -3565,7 +3565,8 @@ md-dialog.my-profile {
   width: 800px;
   height: auto;
   border-radius: 20px;
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+  max-height: none; }
   md-dialog.my-profile .top-icon-wrap {
     position: absolute;
     top: 0;
