@@ -2,20 +2,43 @@
     x="0px"
     y="0px"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 148.7 174.7"
-    style="enable-background:new 0 0 148.7 174.7;"
-    class="purchase-popup-bullet-5-icon">
-    <style>
+    viewBox="0 0 208.1 203" class="purchase-popup-bullet-4-icon">
 
-        .purchase-popup-bullet-5-icon .st0{fill:none;stroke:#231F20;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-        .purchase-popup-bullet-5-icon .st1{fill:none;stroke:#231F20;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+    <style type="text/css">
+        .purchase-popup-bullet-4-icon .st0 {
+            fill: none;
+            stroke: #231F20;
+            stroke-width: 6;
+            stroke-miterlimit: 10;
+        }
 
+        .purchase-popup-bullet-4-icon .st1 {
+            fill: none;
+            stroke: #231F20;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-miterlimit: 10;
+        }
+
+        .purchase-popup-bullet-4-icon .st2 {
+            fill: none;
+            stroke: #231F20;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-miterlimit: 10;
+        }
     </style>
-<g>
-	<path class="st0" d="M93.4,171.7H12.6c-5.3,0-9.6-4.3-9.6-9.6V81.3c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8
-		C103,167.4,98.7,171.7,93.4,171.7z"/>
-	<path class="st0" d="M78.7,71.7V39.9C78.7,19.6,93.8,3,112.2,3h0c18.4,0,33.5,16.6,33.5,36.9v31.9"/>
-	<path class="st1" d="M53.2,101c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6
-		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,106.1,47.1,101,53.2,101"/>
-</g>
+    <g>
+        <path class="st0" d="M104.2,3h74c0,0-8.8,65.7-14.7,82.9c-5.3,15.6-13,32.6-36.7,43.2c-12.3,5.5-10.3,21.7-10.3,31.5
+		c0,11.2,5.4,16.7,13.3,20.4c3.7,1.7,8.3,3.2,14.3,4v15h-40"/>
+        <path class="st0" d="M104.2,3h-74c0,0,8.8,65.7,14.7,82.9c5.3,15.6,13,32.6,36.7,43.2c12.3,5.5,10.3,21.7,10.3,31.5
+		c0,11.2-5.4,16.7-13.3,20.4c-3.7,1.7-8.3,3.2-14.3,4v15h40"/>
+    </g>
+    <path class="st1" d="M176.8,20.4c0,0,71.3-1.5-12.2,67.5"/>
+    <path class="st1" d="M31.3,20.4c0,0-71.3-1.5,12.2,67.5"/>
+    <polygon class="st1" points="102.6,22 113.1,43.4 136.6,46.8 119.6,63.4 123.6,86.9 102.6,75.8 81.5,86.9 85.5,63.4 68.5,46.8
+	92,43.4 "/>
+    <line class="st2" x1="66.6" y1="193.9" x2="143.6" y2="193.9"/>
 </svg>

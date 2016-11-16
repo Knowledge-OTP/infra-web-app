@@ -4322,7 +4322,7 @@ md-dialog.purchase-popup {
       font-weight: 300;
       text-align: center; }
     md-dialog.purchase-popup .md-dialog-content .features-box {
-      width: 300px;
+      min-width: 330px;
       margin: 15px auto;
       padding: 25px 40px;
       background-color: #f9f9f9; }
@@ -6029,7 +6029,7 @@ md-dialog.purchase-popup {
       font-weight: 300;
       text-align: center; }
     md-dialog.purchase-popup .md-dialog-content .features-box {
-      width: 300px;
+      min-width: 330px;
       margin: 15px auto;
       padding: 25px 40px;
       background-color: #f9f9f9; }
