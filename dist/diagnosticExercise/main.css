@@ -213,6 +213,28 @@
     margin-right: auto;
     margin-top: 35px;
     margin-bottom: 35px; }
+  .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: center;
+        align-items: center;
+    margin-top: 60px; }
+    .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
+      font-size: 16px;
+      color: #ffffff;
+      font-family: Quicksand;
+      font-weight: 700; }
+    .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper button {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #64b61d;
+      font-family: Lato;
+      font-weight: 400;
+      text-transform: inherit;
+      padding-left: 15px;
+      padding-right: 15px; }
 
 md-tooltip.tooltip-for-diagnostic-summary {
   opacity: 0;
