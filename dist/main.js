@@ -8948,12 +8948,11 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        </div>\n" +
     "        <div class=\"sub-title\" translate=\".WE_ARE_HERE_TO_HELP\"></div>\n" +
     "        <div class=\"btn-wrap\">\n" +
-    "            <md-button autofocus tabindex=\"1\" class=\"md-primary znk inline-block\"\n" +
-    "                       ng-click=\"vm.nextStep()\" ng-cloak>\n" +
-    "                <span translate=\".CONTINUE\" class=\"continue-title\"></span>\n" +
-    "                <svg-icon name=\"on-boarding-dropdown-arrow-icon\"\n" +
-    "                          class=\"dropdown-arrow-icon inline-block\">\n" +
-    "                </svg-icon>\n" +
+    "            <md-button autofocus tabindex=\"1\" class=\"md-primary znk inline-block\" ng-click=\"vm.nextStep()\" ng-cloak>\n" +
+    "                <div class=\"btn-text\">\n" +
+    "                    <span translate=\".CONTINUE\" class=\"continue-title\"></span>\n" +
+    "                    <svg-icon name=\"on-boarding-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\"></svg-icon>\n" +
+    "                </div>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
     "    </div>\n" +

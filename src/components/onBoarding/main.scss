@@ -103,21 +103,19 @@
                     margin-top: 105px;
                     text-align: center;
 
-                    .continue-title {
-                        vertical-align: top;
-                        position: relative;
-                        top: 3px;
-                    }
-
                     .md-button {
                         padding-left: 52px;
                         padding-right: 52px;
                         height: 50px;
                         border-radius: 30px;
                         @include text-style(21px, $fontColor1, Lato, $regularFontWeight);
+                        .btn-text {
+                            display: flex;
                         .dropdown-arrow-icon{
+                            display: inline-flex;
                             svg {
                                 width: 16px;
+                                display: inline-flex;
                                 transform: rotate(-90deg);
                                 polyline {
                                     stroke: $bgColor3;
@@ -127,6 +125,7 @@
                     }
                 }
             }
+        }
 
             .goals{
                 .sub-title{
@@ -184,7 +183,7 @@
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-end;
-                    margin:{
+                    margin: {
                         top: 52px;
                         right: 20px;
                     }
