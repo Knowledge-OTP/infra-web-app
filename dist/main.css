@@ -575,7 +575,8 @@ complete-exercise-progress-bar {
         flex-direction: column;
     -ms-flex-align: center;
         align-items: center;
-    margin-top: 60px; }
+    margin-top: 60px;
+    margin-bottom: 210px; }
     .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
       font-size: 16px;
       color: #4f4d4d;
@@ -589,8 +590,7 @@ complete-exercise-progress-bar {
       font-weight: 400;
       text-transform: inherit;
       padding-left: 35px;
-      padding-right: 35px;
-      margin-bottom: 240px; }
+      padding-right: 35px; }
 
 md-tooltip.tooltip-for-diagnostic-summary {
   opacity: 0;

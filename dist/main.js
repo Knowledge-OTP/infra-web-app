@@ -2181,7 +2181,9 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 purchaseService.showPurchaseDialog();
             };
 
-            this.showUpgradeBtn = diagnosticSettings.summary &&  diagnosticSettings.summary.showUpgradeBtn;
+            purchaseService.hasProVersion().then(function (isPro) {
+                self.showUpgradeBtn = !isPro && diagnosticSettings.summary && diagnosticSettings.summary.showUpgradeBtn;
+            });
     }]);
 })(angular);
 
