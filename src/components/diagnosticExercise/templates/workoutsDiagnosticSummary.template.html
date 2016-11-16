@@ -59,4 +59,13 @@
             ui-sref="app.workouts.roadmap.diagnostic"
             translate=".DONE">DONE
     </button>
+    <div class="upgrade-to-evaluate-wrapper"
+         ng-if="vm.showUpgradeBtn">
+        <span translate=".UPGRADE_TEXT"></span>
+        <md-button
+            class="znk outline"
+            ng-click="vm.showPurchaseDialog()"
+            translate=".UPGRADE_BTN">
+        </md-button>
+    </div>
 </div>
