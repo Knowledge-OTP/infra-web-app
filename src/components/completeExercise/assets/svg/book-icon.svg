@@ -1,0 +1,41 @@
+<svg
+    version="1.1"
+    x="0px" y="0px"
+    viewBox="-246.4 90.8 76.2 73.6"
+    class="book-icon-svg">
+<style type="text/css">
+    .book-icon-svg .st0{
+        fill:none;
+        stroke:#231F20;
+        stroke-width:1.6393;
+        stroke-miterlimit:10;
+    }
+    .tutorial-icon .st1{
+        fill:none;
+        stroke:#231F20;
+        stroke-width:1.8504;
+        stroke-linecap:round;
+        stroke-miterlimit:10;
+    }
+</style>
+<g>
+	<g>
+		<path class="st0" d="M-245.5,91.6v62h26.5c0,0,10.4-0.8,10.7,9c0.3,9.8,0-63.7,0-63.7s-1.1-7.4-9.3-7.4
+			C-225.9,91.6-245.5,91.6-245.5,91.6z"/>
+		<path class="st0" d="M-171,91.6v62h-26.5c0,0-10.4-0.8-10.7,9c-0.3,9.8,0-63.7,0-63.7s1.1-7.4,9.3-7.4
+			C-190.7,91.6-171,91.6-171,91.6z"/>
+	</g>
+	<g>
+		<line class="st1" x1="-238.2" y1="105.9" x2="-216.7" y2="105.9"/>
+		<line class="st1" x1="-238.2" y1="117.7" x2="-216.7" y2="117.7"/>
+		<line class="st1" x1="-238.2" y1="129.5" x2="-216.7" y2="129.5"/>
+		<line class="st1" x1="-238.2" y1="141.4" x2="-216.7" y2="141.4"/>
+	</g>
+	<g>
+		<line class="st1" x1="-199.9" y1="105.9" x2="-178.3" y2="105.9"/>
+		<line class="st1" x1="-199.9" y1="117.7" x2="-178.3" y2="117.7"/>
+		<line class="st1" x1="-199.9" y1="129.5" x2="-178.3" y2="129.5"/>
+		<line class="st1" x1="-199.9" y1="141.4" x2="-178.3" y2="141.4"/>
+	</g>
+</g>
+</svg>

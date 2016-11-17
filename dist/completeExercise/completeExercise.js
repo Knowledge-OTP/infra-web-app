@@ -18,6 +18,14 @@
         'znk.infra.eventManager',
         'znk.infra.stats',
         'znk.infra.estimatedScore'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
     ]);
 })();
 
@@ -574,6 +582,10 @@
                                 });
                             });
                         }
+                    };
+
+                    this.openIntro = function() {
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.INTRO);
                     };
 
                     this.goToSummary = function () {
@@ -1167,6 +1179,49 @@
 })(angular);
 
 angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
+    "<svg\n" +
+    "    version=\"1.1\"\n" +
+    "    x=\"0px\" y=\"0px\"\n" +
+    "    viewBox=\"-246.4 90.8 76.2 73.6\"\n" +
+    "    class=\"book-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .book-icon-svg .st0{\n" +
+    "        fill:none;\n" +
+    "        stroke:#231F20;\n" +
+    "        stroke-width:1.6393;\n" +
+    "        stroke-miterlimit:10;\n" +
+    "    }\n" +
+    "    .tutorial-icon .st1{\n" +
+    "        fill:none;\n" +
+    "        stroke:#231F20;\n" +
+    "        stroke-width:1.8504;\n" +
+    "        stroke-linecap:round;\n" +
+    "        stroke-miterlimit:10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path class=\"st0\" d=\"M-245.5,91.6v62h26.5c0,0,10.4-0.8,10.7,9c0.3,9.8,0-63.7,0-63.7s-1.1-7.4-9.3-7.4\n" +
+    "			C-225.9,91.6-245.5,91.6-245.5,91.6z\"/>\n" +
+    "		<path class=\"st0\" d=\"M-171,91.6v62h-26.5c0,0-10.4-0.8-10.7,9c-0.3,9.8,0-63.7,0-63.7s1.1-7.4,9.3-7.4\n" +
+    "			C-190.7,91.6-171,91.6-171,91.6z\"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"105.9\" x2=\"-216.7\" y2=\"105.9\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"117.7\" x2=\"-216.7\" y2=\"117.7\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"129.5\" x2=\"-216.7\" y2=\"129.5\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"141.4\" x2=\"-216.7\" y2=\"141.4\"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"105.9\" x2=\"-178.3\" y2=\"105.9\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"117.7\" x2=\"-178.3\" y2=\"117.7\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"129.5\" x2=\"-178.3\" y2=\"129.5\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"141.4\" x2=\"-178.3\" y2=\"141.4\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html",
     "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <ng-switch on=\"$ctrl.currViewState\"\n" +
@@ -1198,6 +1253,9 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                   config=\"$ctrl.timerConfig\"\n" +
     "                   ng-change=\"$ctrl.durationChanged()\">\n" +
     "            </timer>\n" +
+    "            <div class=\"tutorial-icon-wrapper\" ng-if=\"$ctrl.completeExerciseCtrl.exerciseDetails.exerciseTypeId === 1\">\n" +
+    "                <svg-icon ng-click=\"$ctrl.openIntro()\" name=\"book-icon\" class=\"book-icon\"></svg-icon>\n" +
+    "            </div>\n" +
     "            <div class=\"summary\"\n" +
     "                 ng-click=\"$ctrl.goToSummary()\"\n" +
     "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete\">\n" +
