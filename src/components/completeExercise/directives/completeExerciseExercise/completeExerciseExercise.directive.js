@@ -215,6 +215,10 @@
                         }
                     };
 
+                    this.openIntro = function() {
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.INTRO);
+                    }
+
                     this.goToSummary = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                         $ctrl.znkExercise.actions.unbindExerciseView();
