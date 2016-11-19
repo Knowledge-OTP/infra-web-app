@@ -20,14 +20,17 @@
   width: 100%;
   height: calc(100vh - 95px);
   background-color: white;
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   position: relative; }
   .app-workouts-diagnostic .exercise-container znk-exercise {
-    -ms-flex-positive: 1;
-        flex-grow: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
     width: 100%; }
 
 .app-workouts-diagnostic .inline-block {
@@ -43,10 +46,12 @@
   box-shadow: none; }
 
 .app-workouts-diagnostic ui-view {
-  -ms-flex-align: center;
-      align-items: center;
-  -ms-flex-pack: start;
-      justify-content: flex-start; }
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start; }
 
 .app-workouts-diagnostic .md-button {
   display: block;
@@ -64,12 +69,15 @@
   transition: 0.6s; }
 
 .diagnostic-loading-wrapper {
-  -ms-flex-preferred-size: 100%;
-      flex-basis: 100%;
+  -webkit-flex-basis: 100%;
+      -ms-flex-preferred-size: 100%;
+          flex-basis: 100%;
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column; }
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column; }
   .diagnostic-loading-wrapper .loading-title {
     font-size: 32px;
     color: #4f4d4d;
@@ -79,15 +87,18 @@
     z-index: 1;
     margin-bottom: 19px; }
   .diagnostic-loading-wrapper .video-wrapper {
-    -ms-flex-positive: 1;
-        flex-grow: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
     position: relative;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex; }
     .diagnostic-loading-wrapper .video-wrapper video {
       width: 610px;
-      -ms-flex-item-align: end;
-          align-self: flex-end; }
+      -webkit-align-self: flex-end;
+          -ms-flex-item-align: end;
+              align-self: flex-end; }
 
 .diagnostic-summary-wrapper {
   padding-top: 50px; }
@@ -106,26 +117,33 @@
       font-family: Quicksand;
       font-weight: 800; }
   .diagnostic-summary-wrapper .doughnuts-container {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    -ms-flex-pack: center;
-        justify-content: center; }
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
     .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper {
       margin-left: 9px;
       margin-right: 9px; }
       .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper {
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-pack: center;
-            justify-content: center;
-        -ms-flex-align: center;
-            align-items: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
         text-align: center;
         display: flex;
-        -ms-flex-direction: column;
-            flex-direction: column;
+        -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+                flex-direction: column;
         border-radius: 13px;
         background-color: #f9f9f9;
         height: 250px; }
@@ -148,6 +166,12 @@
             background-color: #c9c9c9;
             border-radius: 50px;
             -webkit-animation: goal-point 2s; }
+
+@-webkit-keyframes goal-point {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
           .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .goal-point-bg {
             width: 6px;
             height: 6px;
@@ -166,12 +190,15 @@
           .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .znk-doughnut .white-bg-doughnut-score {
             width: 100px;
             height: 100px;
+            display: -webkit-flex;
             display: -ms-flexbox;
             display: flex;
-            -ms-flex-pack: center;
-                justify-content: center;
-            -ms-flex-align: center;
-                align-items: center;
+            -webkit-justify-content: center;
+                -ms-flex-pack: center;
+                    justify-content: center;
+            -webkit-align-items: center;
+                -ms-flex-align: center;
+                    align-items: center;
             text-align: center;
             font-size: 24px;
             color: #4f4d4d;
@@ -214,12 +241,15 @@
     margin-top: 35px;
     margin-bottom: 35px; }
   .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-direction: column;
-        flex-direction: column;
-    -ms-flex-align: center;
-        align-items: center;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     margin-top: 60px;
     margin-bottom: 210px; }
     .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
@@ -254,14 +284,16 @@ md-tooltip.tooltip-for-diagnostic-summary {
     white-space: normal; }
     md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
       opacity: 1;
-      transform: none;
+      -webkit-transform: none;
+              transform: none;
       transition: none;
       pointer-events: auto;
       will-change: auto; }
     md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
       transition: none; }
       md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
-        transform: none;
+        -webkit-transform: none;
+                transform: none;
         opacity: 0; }
   md-tooltip.tooltip-for-diagnostic-summary._md-hide {
     transition: opacity 0.4s;

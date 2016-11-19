@@ -21,12 +21,15 @@ on-boarding-bar {
   bottom: -70px;
   width: 100%; }
   on-boarding-bar .on-board-pager-wrap .on-board-pager {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-pack: center;
-        justify-content: center;
-    -ms-flex-align: center;
-        align-items: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     background-color: white;
     width: 30%;
     margin-left: auto;
@@ -78,12 +81,15 @@ on-boarding-bar {
     display: block; }
   .on-board .svg-wrapper {
     height: 100%;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-align: center;
-        align-items: center;
-    -ms-flex-pack: center;
-        justify-content: center; }
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center; }
   .on-board .clearfix:after {
     content: " ";
     display: block;
@@ -146,12 +152,15 @@ on-boarding-bar {
     box-sizing: border-box;
     position: relative; }
     .on-board .container .step {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-direction: column;
-          flex-direction: column;
-      -ms-flex-pack: center;
-          justify-content: center; }
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center; }
       .on-board .container .step .welcome .main-title {
         margin-bottom: 50px; }
       .on-board .container .step .welcome .sub-title {
@@ -179,16 +188,20 @@ on-boarding-bar {
           font-family: Lato;
           font-weight: 400; }
           .on-board .container .step .welcome .btn-wrap .md-button .btn-text {
+            display: -webkit-flex;
             display: -ms-flexbox;
             display: flex; }
             .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon {
+              display: -webkit-inline-flex;
               display: -ms-inline-flexbox;
               display: inline-flex; }
               .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg {
                 width: 16px;
+                display: -webkit-inline-flex;
                 display: -ms-inline-flexbox;
                 display: inline-flex;
-                transform: rotate(-90deg); }
+                -webkit-transform: rotate(-90deg);
+                        transform: rotate(-90deg); }
                 .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg polyline {
                   stroke: #ffffff; }
       .on-board .container .step .goals .sub-title {
@@ -222,8 +235,9 @@ on-boarding-bar {
         .on-board .container .step .bg-wrap .thinking-raccoon {
           display: block; }
       .on-board .container .step.make-padding {
-        -ms-flex-direction: row;
-            flex-direction: row;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row;
         padding-top: 61px;
         padding-bottom: 61px; }
       .on-board .container .step.diagnostic .diagnostic-title {
@@ -241,12 +255,15 @@ on-boarding-bar {
         text-align: center;
         margin-top: 15px; }
       .on-board .container .step.diagnostic .btn-wrap {
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-direction: row;
-            flex-direction: row;
-        -ms-flex-pack: end;
-            justify-content: flex-end;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row;
+        -webkit-justify-content: flex-end;
+            -ms-flex-pack: end;
+                justify-content: flex-end;
         margin-top: 52px;
         margin-right: 20px; }
         .on-board .container .step.diagnostic .btn-wrap button {

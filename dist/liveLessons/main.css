@@ -63,6 +63,7 @@ md-dialog.my-lessons-schedule-wrapper {
       text-align: center;
       margin-top: 25px; }
     md-dialog.my-lessons-schedule-wrapper .md-dialog-content .btn-wrapper {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; }
       md-dialog.my-lessons-schedule-wrapper .md-dialog-content .btn-wrapper .ok-button {
@@ -82,6 +83,7 @@ md-dialog.my-lessons-schedule-wrapper {
       padding-bottom: 20px; }
       md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater {
         position: relative;
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
         margin-top: 5px; }
@@ -89,20 +91,25 @@ md-dialog.my-lessons-schedule-wrapper {
           width: 435px;
           height: 42px;
           background-color: #f7f7f7;
+          display: -webkit-flex;
           display: -ms-flexbox;
           display: flex;
-          -ms-flex-align: center;
-              align-items: center;
+          -webkit-align-items: center;
+              -ms-flex-align: center;
+                  align-items: center;
           margin-left: auto;
           border: 1px solid #e1e1e1;
           border-radius: 5px; }
           md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .date, md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .hour, md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .educator-name {
+            display: -webkit-flex;
             display: -ms-flexbox;
             display: flex;
-            -ms-flex-align: center;
-                align-items: center;
-            -ms-flex-pack: center;
-                justify-content: center; }
+            -webkit-align-items: center;
+                -ms-flex-align: center;
+                    align-items: center;
+            -webkit-justify-content: center;
+                -ms-flex-pack: center;
+                    justify-content: center; }
           md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .date {
             width: 85px;
             height: 100%;
@@ -125,15 +132,18 @@ md-dialog.my-lessons-schedule-wrapper {
             color: #4f4d4d;
             font-family: Lato;
             font-weight: 400;
-            -ms-flex-pack: end;
-                justify-content: flex-end;
+            -webkit-justify-content: flex-end;
+                -ms-flex-pack: end;
+                    justify-content: flex-end;
             margin-right: 13px; }
         md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .reschedule-wrapper {
+          display: -webkit-flex;
           display: -ms-flexbox;
           display: flex;
           justify-items: center;
-          -ms-flex-pack: center;
-              justify-content: center;
+          -webkit-justify-content: center;
+              -ms-flex-pack: center;
+                  justify-content: center;
           width: 50px; }
           md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .reschedule-wrapper .reschedule-icon {
             cursor: pointer; }
@@ -243,10 +253,12 @@ md-dialog.my-lessons-schedule-wrapper {
         text-align: center;
         margin-top: 25px; }
       md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper {
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-pack: center;
-            justify-content: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
         margin-top: 15px; }
         md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .cancel-btn {
           background-color: #ffffff;
@@ -279,10 +291,12 @@ md-dialog.my-lessons-schedule-wrapper {
         text-align: center;
         margin-top: 20px; }
       md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg .done-btn-wrap {
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-pack: center;
-            justify-content: center; }
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center; }
         md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg .done-btn-wrap .md-button {
           margin: 6px auto; }
     md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg.ng-leave.ng-leave-active,
@@ -298,6 +312,7 @@ md-dialog.my-lessons-schedule-wrapper {
   box-shadow: 1px 1px 5px 0.5px rgba(0, 0, 0, 0.27);
   border: 1px solid #87ca4d;
   border-radius: 15px;
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   background-color: #ffffff;
@@ -325,12 +340,15 @@ md-dialog.my-lessons-schedule-wrapper {
     width: 57px;
     height: 100%;
     cursor: pointer;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-pack: center;
-        justify-content: center;
-    -ms-flex-align: center;
-        align-items: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     background-color: #87ca4d;
     border-radius: 15px 0 0 15px; }
     .upcoming-lesson-toast-wrapper .left-side-container .calendar-icon svg path {
@@ -369,6 +387,7 @@ md-dialog.my-lessons-schedule-wrapper {
       position: absolute;
       bottom: 10px;
       clear: both;
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; }
       .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .bottom-clickable-text {
@@ -379,6 +398,7 @@ md-dialog.my-lessons-schedule-wrapper {
         cursor: pointer; }
       .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .reschedule-wrapper {
         margin-left: 68px;
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex; }
         .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .reschedule-wrapper .reschedule-text {

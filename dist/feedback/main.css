@@ -19,10 +19,12 @@ md-dialog.base {
     width: 100%;
     height: 40px; }
     md-dialog.base .top-icon-wrap .top-icon {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-pack: center;
-          justify-content: center; }
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center; }
       md-dialog.base .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
@@ -30,12 +32,15 @@ md-dialog.base {
         background-color: #0a9bad;
         z-index: 9;
         margin-top: -15px;
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-pack: center;
-            justify-content: center;
-        -ms-flex-align: center;
-            align-items: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
         text-align: center; }
         md-dialog.base .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
           width: 35px; }
@@ -46,6 +51,7 @@ md-dialog.base {
     font-weight: 400;
     width: 318px;
     margin: 0 auto;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     margin-top: 10px;
@@ -55,12 +61,15 @@ md-dialog.base {
       visibility: visible;
       width: 100%;
       height: 22px;
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-pack: center;
-          justify-content: center;
-      -ms-flex-align: center;
-          align-items: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
       text-align: center;
       background-color: #ff6766; }
     md-dialog.base .msg-wrap.show-error .success-msg {
@@ -71,12 +80,15 @@ md-dialog.base {
       visibility: visible;
       width: 100%;
       height: 22px;
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-pack: center;
-          justify-content: center;
-      -ms-flex-align: center;
-          align-items: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
       text-align: center;
       background-color: #87ca4d; }
     md-dialog.base .msg-wrap .v-icon {
@@ -93,12 +105,15 @@ md-dialog.base {
         fill: #c95050; }
   md-dialog.base md-dialog-content .sub-title {
     margin: 15px auto 37px auto;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-pack: center;
-        justify-content: center;
-    -ms-flex-align: center;
-        align-items: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     text-align: center; }
   md-dialog.base .close-popup-wrap {
     position: absolute;
@@ -121,12 +136,15 @@ feedback .feedback-btn {
   border: 1px solid #c2c2c2;
   cursor: pointer;
   box-shadow: 0 1px 5px 0 rgba(63, 63, 63, 0.2);
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
-  -ms-flex-align: center;
-      align-items: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   border-radius: 50px;
   background-color: #ebebeb;
   z-index: 78; }
@@ -205,6 +223,7 @@ feedback .feedback-btn {
     .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon {
       margin: 36px auto 22px auto;
       width: 111px;
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex; }
       .feedback-dialog md-dialog.feedback-container md-dialog-content .success-feedback svg-icon.completed-v-feedback-icon .st0 {
