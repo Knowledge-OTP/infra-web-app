@@ -28,27 +28,33 @@ complete-exercise-intro .base-complete-exercise-container {
     vertical-align: middle; }
 
 complete-exercise-exercise .base-complete-exercise-container {
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   box-shadow: none; }
   complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part {
     border-right: 1px solid #ffffff;
     display: block;
     padding-right: 25px;
     margin-right: 25px;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .timer-type1 .clock-icon-svg * {
       stroke: white; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .tutorial-icon-wrapper {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-direction: column;
-          flex-direction: column;
-      -ms-flex-pack: center;
-          justify-content: center; }
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center; }
       complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .tutorial-icon-wrapper .book-icon {
         width: 20px;
         display: block;
@@ -63,10 +69,12 @@ complete-exercise-exercise .base-complete-exercise-container {
       border-radius: 15px;
       line-height: 30px;
       position: relative;
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-pack: center;
-          justify-content: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
       padding-right: 10px;
       padding-left: 10px; }
       complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .background-opacity {
@@ -82,8 +90,9 @@ complete-exercise-exercise .base-complete-exercise-container {
         font-family: Lato;
         font-weight: 300; }
   complete-exercise-exercise .base-complete-exercise-container znk-exercise {
-    -ms-flex-positive: 1;
-        flex-grow: 1; }
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1; }
     complete-exercise-exercise .base-complete-exercise-container znk-exercise questions-carousel {
       box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
     complete-exercise-exercise .base-complete-exercise-container znk-exercise questions-carousel, complete-exercise-exercise .base-complete-exercise-container znk-exercise .question-bottom-shadow {
@@ -97,10 +106,12 @@ complete-exercise-header {
   border-top-left-radius: 15px; }
   complete-exercise-header .header-container {
     height: 50px;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-align: center;
-        align-items: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     padding-right: 28px;
     padding-left: 28px;
     color: white;
@@ -108,10 +119,12 @@ complete-exercise-header {
     font-weight: 400;
     font-size: 16px; }
     complete-exercise-header .header-container .left-part, complete-exercise-header .header-container .center-part, complete-exercise-header .header-container .right-part {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-align: center;
-          align-items: center; }
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center; }
     complete-exercise-header .header-container .left-part {
       width: 400px;
       overflow: hidden; }
@@ -121,15 +134,18 @@ complete-exercise-header {
         overflow: hidden;
         text-overflow: ellipsis; }
     complete-exercise-header .header-container .center-part {
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-      -ms-flex-pack: center;
-          justify-content: center; }
+      -webkit-flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center; }
     complete-exercise-header .header-container .right-part {
       width: 400px;
       text-align: right;
-      -ms-flex-pack: end;
-          justify-content: flex-end; }
+      -webkit-justify-content: flex-end;
+          -ms-flex-pack: end;
+              justify-content: flex-end; }
       complete-exercise-header .header-container .right-part .exit {
         cursor: pointer; }
 
@@ -143,14 +159,17 @@ complete-exercise-intro-tutorial {
   complete-exercise-intro-tutorial .intro-container {
     padding-right: 180px;
     padding-left: 180px;
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-direction: column;
-        flex-direction: column;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
     height: 100%; }
     complete-exercise-intro-tutorial .intro-container > *:not(.content-wrapper) {
-      -ms-flex-negative: 0;
-          flex-shrink: 0; }
+      -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+              flex-shrink: 0; }
     complete-exercise-intro-tutorial .intro-container .video-wrapper {
       margin-top: 35px;
       text-align: center; }
@@ -174,16 +193,20 @@ complete-exercise-intro-section {
   bottom: 0;
   left: 0; }
   complete-exercise-intro-section .intro-container {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-direction: column;
-        flex-direction: column;
-    -ms-flex-align: center;
-        align-items: center;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     height: 100%; }
     complete-exercise-intro-section .intro-container > *:not(.instructions-text) {
-      -ms-flex-negative: 0;
-          flex-shrink: 0; }
+      -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+              flex-shrink: 0; }
     complete-exercise-intro-section .intro-container .title {
       color: #4f4d4d;
       font-family: Quicksand;
@@ -227,10 +250,12 @@ complete-exercise-intro-section {
       bottom: 36px;
       left: 0;
       text-align: center;
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-pack: center;
-          justify-content: center; }
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center; }
       complete-exercise-intro-section .intro-container .btn-section .md-button {
         padding-right: 45px;
         padding-left: 45px; }

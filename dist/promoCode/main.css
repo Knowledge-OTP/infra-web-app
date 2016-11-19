@@ -12,10 +12,12 @@ promo-code {
   display: block;
   height: 50px; }
   promo-code .promo-code-wrapper {
+    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-pack: center;
-        justify-content: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     position: relative; }
     promo-code .promo-code-wrapper .promo-code-title {
       width: auto;
@@ -25,12 +27,15 @@ promo-code {
       font-family: Lato;
       font-weight: 400;
       padding: 0 13px;
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-pack: center;
-          justify-content: center;
-      -ms-flex-align: center;
-          align-items: center;
+      -webkit-justify-content: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
       cursor: pointer;
       border-radius: 20px;
       background-color: #f7f7f7; }
@@ -73,12 +78,15 @@ promo-code {
       promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
         width: 35px;
         height: 34px;
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-pack: center;
-            justify-content: center;
-        -ms-flex-align: center;
-            align-items: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
         border-radius: 0 23px 23px 0;
         background-color: #0a9bad;
         position: absolute;

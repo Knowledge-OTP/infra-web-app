@@ -58,10 +58,12 @@ diagnostic-intro {
             width: 160px;
             height: 169px; } }
     diagnostic-intro .diagnostic-intro-drv .icons-section {
+      display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-pack: distribute;
-          justify-content: space-around;
+      -webkit-justify-content: space-around;
+          -ms-flex-pack: distribute;
+              justify-content: space-around;
       width: 40%;
       margin: 0 auto;
       min-height: 140px; }
@@ -79,12 +81,15 @@ diagnostic-intro {
           display: block; }
         diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
           height: 100%;
+          display: -webkit-flex;
           display: -ms-flexbox;
           display: flex;
-          -ms-flex-align: center;
-              align-items: center;
-          -ms-flex-pack: center;
-              justify-content: center;
+          -webkit-align-items: center;
+              -ms-flex-align: center;
+                  align-items: center;
+          -webkit-justify-content: center;
+              -ms-flex-pack: center;
+                  justify-content: center;
           vertical-align: top; }
           diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon {
             width: 45px; }
@@ -111,10 +116,12 @@ diagnostic-intro {
       diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions {
         margin-top: 40px;
         text-transform: none;
+        display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-direction: column;
-            flex-direction: column;
+        -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+                flex-direction: column;
         padding-right: 110px;
         padding-left: 110px; }
         diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title {
