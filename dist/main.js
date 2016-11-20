@@ -5243,9 +5243,9 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     InvitationService.registerListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
                     var watcherDestroy = scope.$on('$destroy', function () {
-                        InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
-                        InvitationService.offListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
-                        InvitationService.offListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
+                        // InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
+                        // InvitationService.offListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
+                        // InvitationService.offListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
                         watcherDestroy();
                     });
@@ -5327,9 +5327,9 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     var userId = StudentContextSrv.getCurrUid();
                     var listenerData = getListenerData(userId, event);
-                    studentStorage.offEvent('child_added', listenerData.path, listenerData.cb);
-                    studentStorage.offEvent('child_removed', listenerData.path, listenerData.cb);
-
+                    studentStorage.offEvent('child_added', listenerData.path, listenerData.childAddedHandler);
+                    studentStorage.offEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
+                    
                     angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
                             registerEvents[userId][event].cb.splice(index, 1);

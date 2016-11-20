@@ -36,9 +36,9 @@
                 InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     var userId = StudentContextSrv.getCurrUid();
                     var listenerData = getListenerData(userId, event);
-                    studentStorage.offEvent('child_added', listenerData.path, listenerData.cb);
-                    studentStorage.offEvent('child_removed', listenerData.path, listenerData.cb);
-
+                    studentStorage.offEvent('child_added', listenerData.path, listenerData.childAddedHandler);
+                    studentStorage.offEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
+                    
                     angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
                             registerEvents[userId][event].cb.splice(index, 1);
