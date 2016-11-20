@@ -110,6 +110,7 @@
 
                     exerciseRebuildProm = $timeout(function() {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
+                        var settings = $ctrl.settings;
                         var exerciseParentContentProm = isExam ?
                             BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
                             $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);

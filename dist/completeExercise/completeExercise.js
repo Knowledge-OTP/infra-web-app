@@ -29,7 +29,7 @@
     ]);
 })();
 
-(function (angular) {
+(function(angular) {
     'use strict';
 
     /**
@@ -62,9 +62,9 @@
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                                  ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
-                                  EventManagerSrv) {
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
+                EventManagerSrv) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -89,12 +89,12 @@
 
                 function _setShDataToCurrentExercise() {
                     syncUpdatesProm = syncUpdatesProm
-                        .then(function () {
+                        .then(function() {
                             var promMap = {
                                 exerciseRebuildProm: exerciseRebuildProm,
                                 activeShData: ScreenSharingSrv.getActiveScreenSharingData()
                             };
-                            return $q.all(promMap).then(function (data) {
+                            return $q.all(promMap).then(function(data) {
                                 var activeShData = data.activeShData;
 
                                 activeShData.activeExercise = {};
@@ -104,7 +104,7 @@
                                     'exerciseParentId',
                                     'exerciseParentTypeId'
                                 ];
-                                angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
+                                angular.forEach(propsToCopyFromCurrExerciseDetails, function(propName) {
                                     activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
                                 });
 
@@ -112,12 +112,12 @@
                                 activeShData.activeExercise.activeScreen = $ctrl.currViewState;
                                 shDataEventManager.updateValue(activeShData);
                                 var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
-                                return saveExerciseResultProm.then(function () {
+                                return saveExerciseResultProm.then(function() {
                                     return activeShData.$save();
                                 });
                             });
                         })
-                        .catch(function (err) {
+                        .catch(function(err) {
                             $log.error(err);
                         });
                 }
@@ -139,12 +139,15 @@
 
                     $ctrl.exerciseDetails = exerciseDetails;
 
-                    exerciseRebuildProm = $timeout(function () {
+                    exerciseRebuildProm = $timeout(function() {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
-                        var exerciseParentContentProm = isExam ? BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) : $q.when(null);
+                        var settings = $ctrl.settings;
+                        var exerciseParentContentProm = isExam ?
+                            BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
+                            $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);
 
-                        return  exerciseParentContentProm.then(function(exerciseParentContent){
-                            if(isExam){
+                        return exerciseParentContentProm.then(function(exerciseParentContent) {
+                            if (isExam) {
                                 exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
                             }
                             var getDataPromMap = {
@@ -152,7 +155,7 @@
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
                                 exerciseParentContent: exerciseParentContent
                             };
-                            return $q.all(getDataPromMap).then(function (data) {
+                            return $q.all(getDataPromMap).then(function(data) {
                                 $ctrl.exerciseData = data;
                                 var newViewState;
 
@@ -168,7 +171,7 @@
                                 $ctrl.changeViewState(newViewState, true);
 
                                 if (isSharerMode) {
-                                    $ctrl.exerciseData.exerciseResult.$save().then(function () {
+                                    $ctrl.exerciseData.exerciseResult.$save().then(function() {
                                         _setShDataToCurrentExercise();
                                     });
                                 }
@@ -183,20 +186,20 @@
                 }
 
                 function _createPropGetters(propArray, contextObjectName) {
-                    propArray.forEach(function (propName) {
+                    propArray.forEach(function(propName) {
                         var getterFnName = _getGetterFnName(propName);
-                        $ctrl[getterFnName] = function () {
+                        $ctrl[getterFnName] = function() {
                             return $ctrl[contextObjectName][propName];
                         };
                     });
                 }
 
                 function _updateActiveShDataActiveScreen(newViewState) {
-                    syncUpdatesProm = syncUpdatesProm.then(function () {
-                        return ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
+                    syncUpdatesProm = syncUpdatesProm.then(function() {
+                        return ScreenSharingSrv.getActiveScreenSharingData().then(function(activeShData) {
                             var activeExercise = activeShData.activeExercise;
 
-                            if(!activeExercise){
+                            if (!activeExercise) {
                                 return;
                             }
 
@@ -204,7 +207,7 @@
                             shDataEventManager.updateValue(activeShData);
                             return activeShData.$save();
                         });
-                    }).catch(function (err) {
+                    }).catch(function(err) {
                         $log.error(err);
                     });
                     return syncUpdatesProm;
@@ -226,14 +229,14 @@
                     shModeEventManager.updateValue(shMode);
                 }
 
-                var _activeShDataChangeHandler = (function(){
+                var _activeShDataChangeHandler = (function() {
                     var firstTrigger = true;
-                    return function (newShData) {
+                    return function(newShData) {
                         shDataEventManager.updateValue(newShData);
 
-                        if(firstTrigger){
+                        if (firstTrigger) {
                             firstTrigger = false;
-                            if(isSharerMode){
+                            if (isSharerMode) {
                                 return;
                             }
                         }
@@ -242,7 +245,7 @@
                         var activeExercise = newShData.activeExercise;
 
                         if (!activeExercise) {
-                            if(isViewerMode){
+                            if (isViewerMode) {
                                 _clearState();
                             }
                             return;
@@ -252,15 +255,15 @@
                         var isSameExerciseType = $ctrl.exerciseDetails && activeExercise.exerciseTypeId === $ctrl.exerciseDetails.exerciseTypeId;
                         var isDiffActiveScreen = $ctrl.currViewState !== activeExercise.activeScreen;
                         if (isSameExerciseId && isSameExerciseType) {
-                            if(isDiffActiveScreen){
+                            if (isDiffActiveScreen) {
                                 var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
                                 //active screen should never be none if in sharer mode
-                                if(!(newViewState === VIEW_STATES.NONE && isSharerMode)){
+                                if (!(newViewState === VIEW_STATES.NONE && isSharerMode)) {
                                     $ctrl.changeViewState(newViewState, true);
                                 }
                             }
                         } else {
-                            if(isViewerMode){
+                            if (isViewerMode) {
                                 _rebuildExercise(activeExercise);
                             }
                         }
@@ -299,19 +302,19 @@
                     ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(_userShStateChangeHandler);
                 }
 
-                this.changeViewState = function (newViewState, skipActiveScreenUpdate) {
+                this.changeViewState = function(newViewState, skipActiveScreenUpdate) {
                     if ($ctrl.currViewState === newViewState) {
                         return;
                     }
 
-                    if(shMode && !skipActiveScreenUpdate ){
+                    if (shMode && !skipActiveScreenUpdate) {
                         _updateActiveShDataActiveScreen(newViewState);
-                    }else{
+                    } else {
                         $ctrl.currViewState = newViewState;
                     }
                 };
 
-                this.$onInit = function () {
+                this.$onInit = function() {
                     var exerciseDetailsPropsToCreateGetters = [
                         'exerciseParentTypeId',
                         'exerciseParentId',
@@ -333,8 +336,8 @@
                     this.shDataEventManager = shDataEventManager;
                 };
 
-                this.$onChanges = function (changesObj) {
-                    if(isViewerMode){
+                this.$onChanges = function(changesObj) {
+                    if (isViewerMode) {
                         return;
                     }
 
@@ -348,12 +351,12 @@
                     _rebuildExercise(newExerciseDetails);
                 };
 
-                this.$onDestroy = function () {
+                this.$onDestroy = function() {
                     _unregisterFromUserShEvents();
                     _unregisterFromActiveShDataEvents();
 
-                    if(isSharerMode){
-                        ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
+                    if (isSharerMode) {
+                        ScreenSharingSrv.getActiveScreenSharingData().then(function(activeShData) {
                             if (!activeShData) {
                                 return;
                             }
