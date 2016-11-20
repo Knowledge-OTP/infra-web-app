@@ -671,7 +671,6 @@
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
                 }
-                // console.log(exerciseContent);
             }
 
             function _setExerciseContentQuestions() {
