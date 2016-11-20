@@ -1338,7 +1338,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "     context-attr=\"class,class\"\n" +
     "     suffix=\"bg,subject-pattern\">\n" +
     "    <div class=\"left-part\">\n" +
-    "        <div class=\"left-title\" ng-bind=\"$ctrl.leftTitle\" title=\"{{$ctrl.leftTitle}}\"></div>\n" +
+    "        <div class=\"left-title\" ng-bind-html=\"$ctrl.leftTitle\" title=\"{{$ctrl.leftTitle}}\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"center-part\">\n" +
     "        <div ng-transclude=\"centerPart\"></div>\n" +
