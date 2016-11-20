@@ -309,10 +309,10 @@
     },
     "COMPLETE_EXERCISE": {
         "EXERCISE_PARENT": {
-            "TYPE_1": "Workout {{exerciseParentId}}: {{exerciseContent.name}}",
+            "TYPE_1": "Workout {{exerciseParentId + ': ' + exerciseContent.name}}",
             "TYPE_2": "Tips & Tricks: {{exerciseContent.name}}",
-            "TYPE_3": "Exam {{exerciseParentContent.name}}: {{exerciseContent.name}}",
-            "TYPE_4": "Lesson: {{exerciseContent.name}}"
+            "TYPE_3": "{{exerciseParentContent.name + ': ' + exerciseContent.name}}",
+            "TYPE_4": "{{exerciseParentContent.name + ': ' + exerciseContent.name}}"
         },
         "SECTION_INSTRUCTION":{
             "0":"Solve the following problems.",
