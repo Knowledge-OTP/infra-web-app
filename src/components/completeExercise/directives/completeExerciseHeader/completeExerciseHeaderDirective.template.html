@@ -4,7 +4,7 @@
      context-attr="class,class"
      suffix="bg,subject-pattern">
     <div class="left-part">
-        <div class="left-title" ng-bind="$ctrl.leftTitle" title="{{$ctrl.leftTitle}}"></div>
+        <div class="left-title" ng-bind-html="$ctrl.leftTitle" title="{{$ctrl.leftTitle}}"></div>
     </div>
     <div class="center-part">
         <div ng-transclude="centerPart"></div>
