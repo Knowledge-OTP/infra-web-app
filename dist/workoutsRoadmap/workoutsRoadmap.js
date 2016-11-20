@@ -1018,12 +1018,12 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
     "                <span translate=\".SHARE\"></span>\n" +
     "            </md-button>\n" +
-    "            <div class=\"text3 get-zinkerz-pro-text\"\n" +
+    "            <!--<div class=\"text3 get-zinkerz-pro-text\"\n" +
     "                 translate=\".GET_ZINKERZ_PRO\">\n" +
     "            </div>\n" +
     "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
-    "            </md-button>\n" +
+    "            </md-button>-->\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"4\" class=\"no-pro\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +

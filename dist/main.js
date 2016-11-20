@@ -2735,7 +2735,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
+    "    <!--<div class=\"upgrade-to-evaluate-wrapper\"\n" +
     "         ng-if=\"vm.showUpgradeBtn\">\n" +
     "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
     "        <md-button\n" +
@@ -2743,7 +2743,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            ng-click=\"vm.showPurchaseDialog()\"\n" +
     "            translate=\".UPGRADE_BTN\">\n" +
     "        </md-button>\n" +
-    "    </div>\n" +
+    "    </div>-->\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
     "            class=\"start-button md-button znk md-primary\"\n" +
@@ -12557,12 +12557,12 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
     "                <span translate=\".SHARE\"></span>\n" +
     "            </md-button>\n" +
-    "            <div class=\"text3 get-zinkerz-pro-text\"\n" +
+    "            <!--<div class=\"text3 get-zinkerz-pro-text\"\n" +
     "                 translate=\".GET_ZINKERZ_PRO\">\n" +
     "            </div>\n" +
     "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
-    "            </md-button>\n" +
+    "            </md-button>-->\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"4\" class=\"no-pro\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
