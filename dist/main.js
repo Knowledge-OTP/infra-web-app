@@ -7338,7 +7338,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     urlParams = urlParams === '' ? '?pcid=' + promoCode : urlParams + '&pcid=' + promoCode;
 
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
+
+                $window.location.href = $window.location.host.indexOf('localhost') > -1 ? "//" + $window.location.host + urlParams : "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
