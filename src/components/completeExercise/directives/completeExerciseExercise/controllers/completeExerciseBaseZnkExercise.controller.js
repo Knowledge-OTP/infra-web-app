@@ -39,17 +39,34 @@
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
-                        return {
+                 return {
                             questionId: question.id,
                             categoryId: question.categoryId,
-                            manualEvaluation: question.manualEvaluation || false
+                            manualEvaluation: question.manualEvaluation || false,
+                            subjectId: question.subjectId,
+                            order: question.index,
+                            answerTypeId: question.answerTypeId,
+                            difficulty: question.difficulty,
+                            correctAnswerId: question.correctAnswerId,
+                            questionFormatId: question.questionFormatId,
                         };
                     });
                 }
 
+                exerciseResult.subjectId = exerciseContent.subjectId;
+                exerciseResult.exerciseName = exerciseContent.name;
+                exerciseResult.totalQuestionNum = exerciseContent.questions.length;
+                exerciseResult.calculator = exerciseContent.calculator;
+                exerciseResult.timePreference = exerciseContent.timePreference;
+                exerciseResult.categoryId = exerciseContent.categoryId;
+                exerciseResult.testScoreId = exerciseContent.testScoreId;
+                exerciseResult.moduleId = exerciseContent.moduleId;
+                exerciseResult.time = exerciseContent.time;
+
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
                 }
+                // console.log(exerciseContent);
             }
 
             function _setExerciseContentQuestions() {
