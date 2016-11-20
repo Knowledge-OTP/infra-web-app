@@ -112,7 +112,7 @@
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
                         var exerciseParentContentProm = isExam ?
                             BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
-                            $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);
+                            $q.when(settings );
 
                         return exerciseParentContentProm.then(function(exerciseParentContent){
                             if(isExam){
