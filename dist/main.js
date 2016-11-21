@@ -13533,8 +13533,8 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 };
 
                 vm.logout = function () {
-                    AuthService.logout();
                     $rootScope.$broadcast('auth:beforeLogout');
+                    AuthService.logout();
                     $window.location.replace(ENV.redirectLogout);
                 };
 
