@@ -74,8 +74,8 @@
                             init();
                         } else {
                             // $watch seems to work for sharer and viewer, while $viewChangeListeners
-                            // worked only for sharer. maybe because $viewChangeListeners watch against  
-                            // the $modalValue and not $viewValue
+                            // worked only for sharer. it's because $viewChangeListeners does not  
+                            // invoke when the $modalValue change, only when the $viewValue (via input and etc)
                             scope.$watch(function () {
                                 return ngModelCtrl.$viewValue;
                             }, function (newVal) {
