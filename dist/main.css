@@ -224,8 +224,6 @@ complete-exercise-intro-tutorial {
   bottom: 0;
   left: 0; }
   complete-exercise-intro-tutorial .intro-container {
-    padding-right: 180px;
-    padding-left: 180px;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: column;
@@ -245,7 +243,9 @@ complete-exercise-intro-tutorial {
         font-family: Lato;
         font-weight: 300;
         margin-top: 40px;
-        margin-bottom: 100px; }
+        margin-bottom: 100px;
+        padding-right: 180px;
+        padding-left: 180px; }
     complete-exercise-intro-tutorial .intro-container .btn-section {
       position: absolute;
       right: 15px;

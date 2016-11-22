@@ -3,10 +3,6 @@ complete-exercise-intro-tutorial {
     @include absolute-position(50px, 0, 0, 0);
 
     .intro-container {
-        padding: {
-            right: 180px;
-            left: 180px;
-        }
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -28,6 +24,10 @@ complete-exercise-intro-tutorial {
                 margin: {
                     top: 40px;
                     bottom: 100px;
+                }
+                padding: {
+                    right: 180px;
+                    left: 180px;
                 }
             }
         }
