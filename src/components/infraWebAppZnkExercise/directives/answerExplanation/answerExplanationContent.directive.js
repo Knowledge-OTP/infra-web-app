@@ -28,7 +28,7 @@
 
                     var writtenSlnContent = questionBuilderCtrl.question.writtenSln &&
                         questionBuilderCtrl.question.writtenSln.replace(/font\-family: \'Lato Regular\';/g, 'font-family: Lato;font-weight: 400;');
-                    scope.d.writtenSlnContent = writtenSlnContent;
+                    scope.d.writtenSlnContent = $sce.trustAsHtml(writtenSlnContent);
 
                     scope.d.videoSrc = $sce.trustAsResourceUrl(ENV.mediaEndPoint + ENV.firebaseAppScopeName + '/videos/questions' + '/' + question.id + '.mp4');
 
