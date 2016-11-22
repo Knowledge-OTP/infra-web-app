@@ -6307,7 +6307,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     userId = res[1];
                     return UserProfileService.getUserTeachWorksId(userId).then(function (teachworksIdObj) {
                         teachworksId = angular.isDefined(teachworksIdObj) ? teachworksIdObj.id : undefined;
-                        // teachworksId = 'Samantha Puterman';
                         if (teachworksId && dataAsString) {
                             teachworksId = teachworksId.replace(/\s/g, '').toLowerCase();
                             var allRecordsData = dataAsString.match(/.*DTSTART(.|[\r\n])*?UID/g);
@@ -6460,7 +6459,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             }
 
             function _convertDateToMilliseconds(startTimeString) {
-                var timeZone = self.getCdtOrCst();
+                var timeZone = 'CST';
                 var originalDate = _parseDate(startTimeString) + ' ' + timeZone;
                 var localFullDate = new Date(originalDate).toString();  // convert CST/CDT timezone to local timezone.
                 return new Date(localFullDate).getTime();
@@ -6478,25 +6477,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 var originalDate = month + '/' + day + '/' + year + ' ' + hour + ':' + minute + ':' + second;
                 return originalDate;
             }
-
-            self.getCdtOrCst = function () {
-                var today = new Date();
-                var date = $filter('date')(today, 'medium', 'CST'); // calculate by cst time zone.
-                var yr = new Date(date).getFullYear();
-
-                var cdtStart = new Date('March 13, ' + yr + ' 02:00:00'); // 2nd Sunday in March can't occur after the 14th
-                var cdtEnd = new Date('November 07, ' + yr + ' 02:00:00'); // 1st Sunday in November can't occur after the 7th
-
-                var day;
-                day = cdtStart.getDay(); // day of week of 14th
-                cdtStart.setDate(14 - day); // Calculate 2nd Sunday in March of this year
-                day = cdtEnd.getDay(); // day of the week of 7th
-                cdtEnd.setDate(7 - day); // Calculate first Sunday in November of this year
-                if (today.getTime() >= cdtStart.getTime() && today.getTime() < cdtEnd.getTime()) {
-                    return 'CDT';
-                }
-                return 'CST';
-            };
 
             self.getLocalTimeZone = function () {
                 var date = new Date();
