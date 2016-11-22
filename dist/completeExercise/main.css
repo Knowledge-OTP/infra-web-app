@@ -151,7 +151,8 @@ complete-exercise-intro-tutorial {
           flex-shrink: 0; }
     complete-exercise-intro-tutorial .intro-container .upper-wrapper {
       margin-top: 35px;
-      overflow: auto; }
+      overflow: auto;
+      height: 80%; }
       complete-exercise-intro-tutorial .intro-container .upper-wrapper .video-wrapper {
         text-align: center; }
       complete-exercise-intro-tutorial .intro-container .upper-wrapper .content-wrapper {
