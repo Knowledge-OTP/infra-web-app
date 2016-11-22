@@ -3,10 +3,6 @@ complete-exercise-intro-tutorial {
     @include absolute-position(50px, 0, 0, 0);
 
     .intro-container {
-        padding: {
-            right: 180px;
-            left: 180px;
-        }
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -15,18 +11,27 @@ complete-exercise-intro-tutorial {
             flex-shrink: 0;
         }
 
-        .video-wrapper {
+        .upper-wrapper {
             margin-top: 35px;
-            text-align: center;
+            overflow: auto;
+            height: 80%;
+            .video-wrapper {
+                text-align: center;
+            }
+
+            .content-wrapper {
+                @include text-style(16px, $fontColor2, Lato, $lightFontWeight);
+                margin: {
+                    top: 40px;
+                    bottom: 100px;
+                }
+                padding: {
+                    right: 180px;
+                    left: 180px;
+                }
+            }
         }
 
-        .content-wrapper {
-            margin: {
-                top: 40px;
-                bottom: 100px;
-            }
-            overflow: auto;
-        }
 
         .btn-section {
             position: absolute;
