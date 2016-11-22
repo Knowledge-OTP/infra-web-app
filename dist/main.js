@@ -1417,19 +1417,21 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "");
   $templateCache.put("components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorialDirective.template.html",
     "<div class=\"intro-container\">\n" +
-    "    <div class=\"video-wrapper\">\n" +
-    "        <video controls\n" +
-    "               video-ctrl-drv\n" +
-    "               on-play=\"vm.onVideoPlay()\"\n" +
-    "               on-ended=\"vm.onVideoEnded()\"\n" +
-    "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
-    "            <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
-    "        </video>\n" +
-    "    </div>\n" +
-    "    <div class=\"content-wrapper\">\n" +
-    "        <div ng-repeat=\"content in $ctrl.exerciseContent.content\">\n" +
-    "            <div ng-bind-html=\"::$ctrl.trustAsHtml(content.title)\"></div>\n" +
-    "            <div ng-bind-html=\"::$ctrl.trustAsHtml(content.body)\"></div>\n" +
+    "    <div class=\"upper-wrapper\">\n" +
+    "        <div class=\"video-wrapper\">\n" +
+    "            <video controls\n" +
+    "                   video-ctrl-drv\n" +
+    "                   on-play=\"vm.onVideoPlay()\"\n" +
+    "                   on-ended=\"vm.onVideoEnded()\"\n" +
+    "                   video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
+    "                <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
+    "            </video>\n" +
+    "        </div>\n" +
+    "        <div class=\"content-wrapper\">\n" +
+    "            <div ng-repeat=\"content in $ctrl.exerciseContent.content\">\n" +
+    "                <div ng-bind-html=\"::$ctrl.trustAsHtml(content.title)\"></div>\n" +
+    "                <div ng-bind-html=\"::$ctrl.trustAsHtml(content.body)\"></div>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"btn-section\">\n" +

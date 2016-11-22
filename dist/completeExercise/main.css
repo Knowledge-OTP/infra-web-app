@@ -151,13 +151,18 @@ complete-exercise-intro-tutorial {
     complete-exercise-intro-tutorial .intro-container > *:not(.content-wrapper) {
       -ms-flex-negative: 0;
           flex-shrink: 0; }
-    complete-exercise-intro-tutorial .intro-container .video-wrapper {
+    complete-exercise-intro-tutorial .intro-container .upper-wrapper {
       margin-top: 35px;
-      text-align: center; }
-    complete-exercise-intro-tutorial .intro-container .content-wrapper {
-      margin-top: 40px;
-      margin-bottom: 100px;
       overflow: auto; }
+      complete-exercise-intro-tutorial .intro-container .upper-wrapper .video-wrapper {
+        text-align: center; }
+      complete-exercise-intro-tutorial .intro-container .upper-wrapper .content-wrapper {
+        font-size: 16px;
+        color: #161616;
+        font-family: Lato;
+        font-weight: 300;
+        margin-top: 40px;
+        margin-bottom: 100px; }
     complete-exercise-intro-tutorial .intro-container .btn-section {
       position: absolute;
       right: 15px;
