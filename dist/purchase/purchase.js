@@ -797,31 +797,31 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                    <ul>\n" +
     "                        <li>\n" +
     "                            <div class=\"bullet\">\n" +
-    "                                <svg-icon name=\"{{'PURCHASE_POPUP.BULLET1ICON' | translate}}\"></svg-icon>\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET1ICON' | translate}}\"></svg-icon>\n" +
     "                            </div>\n" +
     "                            <span translate=\".BULLET1\"></span>\n" +
     "                        </li>\n" +
     "                        <li>\n" +
     "                            <div class=\"bullet\">\n" +
-    "                                <svg-icon name=\"{{'PURCHASE_POPUP.BULLET2ICON' | translate}}\"></svg-icon>\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET2ICON' | translate}}\"></svg-icon>\n" +
     "                            </div>\n" +
     "                            <span translate=\".BULLET2\"></span>\n" +
     "                        </li>\n" +
     "                        <li>\n" +
     "                            <div class=\"bullet\">\n" +
-    "                                <svg-icon name=\"{{'PURCHASE_POPUP.BULLET3ICON' | translate}}\"></svg-icon>\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET3ICON' | translate}}\"></svg-icon>\n" +
     "                            </div>\n" +
     "                            <span translate=\".BULLET3\"></span>\n" +
     "                        </li>\n" +
     "                        <li>\n" +
     "                            <div class=\"bullet\">\n" +
-    "                                <svg-icon name=\"{{'PURCHASE_POPUP.BULLET4ICON' | translate}}\"></svg-icon>\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET4ICON' | translate}}\"></svg-icon>\n" +
     "                            </div>\n" +
     "                            <span translate=\".BULLET4\"></span>\n" +
     "                        </li>\n" +
     "                        <li>\n" +
     "                            <div class=\"bullet\">\n" +
-    "                                <svg-icon name=\"{{'PURCHASE_POPUP.BULLET5ICON' | translate}}\"></svg-icon>\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET5ICON' | translate}}\"></svg-icon>\n" +
     "                            </div>\n" +
     "                            <span translate=\".BULLET5\"></span>\n" +
     "                        </li>\n" +
