@@ -122,7 +122,7 @@
                     appName = appName + '-educator';
                 }
 
-                var urlParams = '';
+                var urlParams = '#';
 
                 var invitationKey = InvitationKeyService.getInvitationKey();
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
@@ -131,9 +131,8 @@
 
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 if (angular.isDefined(promoCode) && promoCode !== null) {
-
-                    urlParams = urlParams === '' ? '?pcid=' + promoCode : urlParams + '&pcid=' + promoCode;
-
+                    urlParams += (urlParams === '#') ? '?' : '&';
+                    urlParams += 'pcid=' + promoCode;
                 }
 
                 $window.location.href = $window.location.host.indexOf('localhost') > -1 ? "//" + $window.location.host + urlParams : "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
