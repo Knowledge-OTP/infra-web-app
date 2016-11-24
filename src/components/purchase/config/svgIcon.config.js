@@ -8,11 +8,11 @@
                 var svgMap = {
                     'purchase-check-mark': 'components/purchase/svg/check-mark-icon.svg',
                     'purchase-close-popup': 'components/purchase/svg/purchase-close-popup.svg',
-                    'purchase-popup-bullet-1-icon': 'components/purchase/svg/purchase-popup-bullet-1-icon.svg',
-                    'purchase-popup-bullet-2-icon': 'components/purchase/svg/purchase-popup-bullet-2-icon.svg',
-                    'purchase-popup-bullet-3-icon': 'components/purchase/svg/purchase-popup-bullet-3-icon.svg',
-                    'purchase-popup-bullet-4-icon': 'components/purchase/svg/purchase-popup-bullet-4-icon.svg',
-                    'purchase-popup-bullet-5-icon': 'components/purchase/svg/purchase-popup-bullet-5-icon.svg',
+                    'sheet-icon': 'components/purchase/svg/sheet-icon.svg',
+                    'note-and-pencil': 'components/purchase/svg/note-and-pencil.svg',
+                    'question-mark-square': 'components/purchase/svg/question-mark-square.svg',
+                    'grail-icon': 'components/purchase/svg/grail-icon.svg',
+                    'open-lock-icon': 'components/purchase/svg/open-lock-icon.svg',
                     'purchase-raccoon-logo-icon': 'components/purchase/svg/raccoon-logo.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
