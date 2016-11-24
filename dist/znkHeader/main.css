@@ -150,7 +150,8 @@ md-dialog.purchase-popup {
           justify-content: center; }
       md-dialog.purchase-popup .md-dialog-content .features-box .feature-svg {
         width: 26px;
-        max-height: 50px; }
+        max-height: 50px;
+        display: block; }
       md-dialog.purchase-popup .md-dialog-content .features-box ul {
         padding: 0;
         margin: 0;
