@@ -138,9 +138,16 @@ md-dialog.purchase-popup {
       text-align: center; }
     md-dialog.purchase-popup .md-dialog-content .features-box {
       min-width: 330px;
+      width: 60%;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #f9f9f9; }
+      background-color: #f9f9f9;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
       md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon,
       md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon,
       md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon,
