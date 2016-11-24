@@ -62,6 +62,7 @@
                 exerciseResult.testScoreId = exerciseContent.testScoreId;
                 exerciseResult.moduleId = exerciseContent.moduleId;
                 exerciseResult.time = exerciseContent.time;
+                exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
