@@ -6,7 +6,7 @@
         function (PromoCodeSrv, PROMO_CODE_STATUS) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/promoCode.template.html',
+                templateUrl: 'components/promoCode/templates/promoCode.template.html',
                 restrict: 'E',
                 scope: {
                     userContext: '<',
@@ -17,6 +17,7 @@
                     var ENTER_KEY_CODE = 13;
                     scope.d = {};
                     scope.d.promoCodeStatusConst = PROMO_CODE_STATUS;
+
 
                     scope.d.sendPromoCode = function (promoCode) {
                         if (promoCode) {

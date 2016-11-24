@@ -139,41 +139,72 @@ promo-code {
                         padding-left: 20px;
                         margin-top: 6px;
                     }
-
-                    &.promo-code-accepted {
-                        .promo-code-status-text, input {
-                            color: $fontColor7;
-                        }
-
-                        .icon-wrapper {
-                            background-color: $bgColor7; // todo - check if correct color
-                            .correct-icon {
-                                display: block
-                            }
-                            .arrow-icon {
-                                display: none;
-                            }
-                        }
-                    }
-
-                    &.promo-code-invalid {
-                        .promo-code-status-text, input {
-                            color: $fontColor17;
-                        }
-
-                        .icon-wrapper {
-                            background-color: $bgColor32; // todo - check if correct color
-                            .close-icon {
-                                display: block;
-                            }
-
-                            .arrow-icon {
-                                display: none;
-                            }
-                        }
-                    }
                 }
+            }
+        }
+        &.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper {
+            .promo-code-status-text, input {
+                color: $fontColor7;
+            }
+
+            .icon-wrapper {
+                background-color: $bgColor7;
+                .correct-icon {
+                    display: block
+                }
+                .arrow-icon {
+                    display: none;
+                }
+            }
+        }
+
+        &.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper {
+            .promo-code-status-text, input {
+                color: $fontColor17;
+            }
+
+            .icon-wrapper {
+                background-color: $bgColor32;
+                .close-icon {
+                    display: block;
+                }
+
+                .arrow-icon {
+                    display: none;
+                }
+            }
+        }
+
+        .promo-code-title.accepted-title {
+            display: none;
+        }
+
+        &.promo-code-accepted {
+            .promo-code-title {
+                display: none;
+            }
+
+            .promo-code-title.accepted-title {
+                color: $fontColor7;
+                display: flex;
+            }
+
+            .promo-code-overlay {
+                transition: 1s;
+                height: 0;
+                padding: 0;
+                box-shadow: none;
+                border: 0;
+
+                .promo-code-input-wrapper {
+                    display: none;
+                }
+            }
+
+            .promo-code-overlay::before, .promo-code-overlay::after{
+                display: none;
             }
         }
     }
 }
+
