@@ -489,6 +489,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
+                    settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
@@ -722,6 +723,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 exerciseResult.testScoreId = exerciseContent.testScoreId;
                 exerciseResult.moduleId = exerciseContent.moduleId;
                 exerciseResult.time = exerciseContent.time;
+                exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
