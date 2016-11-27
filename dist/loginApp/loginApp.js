@@ -604,17 +604,22 @@
                     appName = appName + '-educator';
                 }
 
-                var urlParams = '#';
+                var urlParams = '';
+                var questionOrAmpersandSymbol = '?';
 
                 var invitationKey = InvitationKeyService.getInvitationKey();
                 if (angular.isDefined(invitationKey) && invitationKey !== null) {
-                    urlParams = '?iid=' + invitationKey;
+                    urlParams += (questionOrAmpersandSymbol + 'iid=' + invitationKey);
+                    questionOrAmpersandSymbol = '&';
                 }
 
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 if (angular.isDefined(promoCode) && promoCode !== null) {
-                    urlParams += (urlParams === '#') ? '?' : '&';
-                    urlParams += 'pcid=' + promoCode;
+                    urlParams +=  (questionOrAmpersandSymbol + 'pcid=' + promoCode);
+                }
+
+                if(urlParams !== ''){
+                    urlParams = '#' + urlParams;
                 }
 
                 $window.location.href = $window.location.host.indexOf('localhost') > -1 ? "//" + $window.location.host + urlParams : "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
