@@ -3,7 +3,7 @@ md-dialog.my-profile {
     overflow: visible;
     width: 800px;
     // height: auto;
-    height: calc(100vh - 85px);
+    height: calc(100vh - 65px);
     border-radius: 20px;
     padding-bottom: 20px;
     max-height: none;
@@ -59,14 +59,16 @@ md-dialog.my-profile {
         }
 
         .close-popup-wrap {
-            @include absolute-position(-35px, -35px);
+            @include absolute-position(-19px, -19px);
             height:14px;
             width: 14px;
             cursor: pointer;
         }
     }
-
+    .content-wrapper{
+        overflow: auto;
     .change-profile {
+            display: block;
             background-color: $bgColor27;
             padding: 20px 20px 0 20px;
             margin: 5px 40px;
@@ -77,13 +79,13 @@ md-dialog.my-profile {
     .change-password{
         @extend .change-profile;
         margin-bottom: 30px;
+        display: block;
 
         .container-title{
             @include text-style(18px, $fontColor3, Quicksand, $semiBoldFontWeight);
             text-align: center;
         }
     }
-
     .auth-form{
         margin: {
             right: auto;
@@ -205,6 +207,7 @@ md-dialog.my-profile {
 
             }
         }
+    }
     }
 
     .msg-wrap {

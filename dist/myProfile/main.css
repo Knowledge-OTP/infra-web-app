@@ -58,7 +58,7 @@ md-dialog.my-profile {
   background-color: #ffffff;
   overflow: visible;
   width: 800px;
-  height: auto;
+  height: calc(100vh - 65px);
   border-radius: 20px;
   padding-bottom: 20px;
   max-height: none; }
@@ -109,116 +109,126 @@ md-dialog.my-profile {
       background-color: #0a9bad; }
     md-dialog.my-profile md-toolbar .close-popup-wrap {
       position: absolute;
-      top: -35px;
-      right: -35px;
+      top: -19px;
+      right: -19px;
       height: 14px;
       width: 14px;
       cursor: pointer; }
-  md-dialog.my-profile .change-profile, md-dialog.my-profile .change-password {
-    background-color: #f9f9f9;
-    padding: 20px 20px 0 20px;
-    margin: 5px 40px;
-    height: 100%;
-    border-radius: 15px; }
-  md-dialog.my-profile .change-password {
-    margin-bottom: 30px; }
-    md-dialog.my-profile .change-password .container-title {
-      font-size: 18px;
-      color: #4f4d4d;
-      font-family: Quicksand;
-      font-weight: 600;
-      text-align: center; }
-  md-dialog.my-profile .auth-form {
-    margin-right: auto;
-    margin-left: auto;
-    margin-bottom: 10px;
-    margin-top: 43px; }
-    md-dialog.my-profile .auth-form .znk-input-group {
-      width: 100%;
-      min-height: 0;
-      display: -ms-flexbox;
-      display: flex;
-      margin: 10px -10px; }
-      md-dialog.my-profile .auth-form .znk-input-group label {
-        width: 30%;
-        text-transform: uppercase;
-        text-align: right;
-        margin: auto;
-        color: #acacac; }
-      md-dialog.my-profile .auth-form .znk-input-group .znk-input {
-        width: 70%;
+  md-dialog.my-profile .content-wrapper {
+    overflow: auto; }
+    md-dialog.my-profile .content-wrapper .change-profile, md-dialog.my-profile .content-wrapper .change-password {
+      display: block;
+      background-color: #f9f9f9;
+      padding: 20px 20px 0 20px;
+      margin: 5px 40px;
+      height: 100%;
+      border-radius: 15px; }
+    md-dialog.my-profile .content-wrapper .change-password {
+      margin-bottom: 30px;
+      display: block; }
+      md-dialog.my-profile .content-wrapper .change-password .container-title {
+        font-size: 18px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 600;
+        text-align: center; }
+    md-dialog.my-profile .content-wrapper .auth-form {
+      margin-right: auto;
+      margin-left: auto;
+      margin-bottom: 10px;
+      margin-top: 43px; }
+      md-dialog.my-profile .content-wrapper .auth-form .znk-input-group {
+        width: 100%;
+        min-height: 0;
         display: -ms-flexbox;
         display: flex;
-        -ms-flex-direction: column;
-            flex-direction: column; }
-        md-dialog.my-profile .auth-form .znk-input-group .znk-input input, md-dialog.my-profile .auth-form .znk-input-group .znk-input select {
-          width: 86%;
-          display: block;
-          border-radius: 0;
-          padding-left: 20px;
-          box-sizing: border-box;
-          margin: 10px 50px 2px 30px;
-          color: #161616;
-          font-size: 14px; }
-        md-dialog.my-profile .auth-form .znk-input-group .znk-input select {
-          height: 40px; }
-          md-dialog.my-profile .auth-form .znk-input-group .znk-input select[disabled] {
-            color: #acacac; }
-      md-dialog.my-profile .auth-form .znk-input-group .locked-icon {
-        width: 14px;
-        display: inline-block;
-        position: absolute;
-        left: 12px;
-        top: 16px; }
-      md-dialog.my-profile .auth-form .znk-input-group .locked-icon * {
-        stroke: #CACACA; }
-      md-dialog.my-profile .auth-form .znk-input-group .validationBox span {
-        width: 335px;
-        padding: 3px 10px;
-        position: absolute;
-        right: 37px;
-        top: -25px;
-        background-color: #ff6766;
-        color: white;
-        font-size: 13px;
-        line-height: 24px; }
-        md-dialog.my-profile .auth-form .znk-input-group .validationBox span:after {
-          content: '';
+        margin: 10px -10px; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group label {
+          width: 30%;
+          font-size: 14px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 300;
+          text-transform: uppercase;
+          text-align: right;
+          margin: auto; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input {
+          width: 70%;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-direction: column;
+              flex-direction: column; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select {
+            width: 86%;
+            display: block;
+            border-radius: 0;
+            padding-left: 20px;
+            box-sizing: border-box;
+            margin: 10px 50px 2px 30px;
+            color: #161616;
+            font-size: 14px; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select {
+            height: 40px; }
+            md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select[disabled] {
+              color: #acacac; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .locked-icon {
+          width: 14px;
+          display: inline-block;
           position: absolute;
-          border-color: transparent;
-          border-style: solid;
-          border-top-color: #ff6766;
-          border-width: 10px;
-          bottom: -20px;
-          left: 13px; }
-        md-dialog.my-profile .auth-form .znk-input-group .validationBox span.email-exist-massage {
-          top: -55px; }
-        md-dialog.my-profile .auth-form .znk-input-group .validationBox span.no-email-massage {
-          top: -58px; }
-      md-dialog.my-profile .auth-form .znk-input-group.valid input, md-dialog.my-profile .auth-form .znk-input-group.valid select {
-        border-color: #9a9797; }
-      md-dialog.my-profile .auth-form .znk-input-group.invalid input, md-dialog.my-profile .auth-form .znk-input-group.invalid select {
-        border-color: #ff6766; }
-    md-dialog.my-profile .auth-form .timezone-manual {
-      margin: -10px 220px;
-      color: #626060; }
-    md-dialog.my-profile .auth-form .btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-      margin-right: 50px;
-      outline: none; }
-      md-dialog.my-profile .auth-form .btn-wrap .save-pass-btn {
-        width: 15%;
-        margin: 0;
-        box-shadow: none;
-        height: 30px;
-        background: transparent;
-        border-radius: 20px;
-        border: 2px solid #0a9bad;
-        color: #0a9bad;
+          left: 12px;
+          top: 16px; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .locked-icon * {
+          stroke: #CACACA; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span {
+          width: 335px;
+          padding: 3px 10px;
+          position: absolute;
+          right: 37px;
+          top: -25px;
+          background-color: #ff6766;
+          color: white;
+          font-size: 13px;
+          line-height: 24px; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span:after {
+            content: '';
+            position: absolute;
+            border-color: transparent;
+            border-style: solid;
+            border-top-color: #ff6766;
+            border-width: 10px;
+            bottom: -20px;
+            left: 13px; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span.email-exist-massage {
+            top: -55px; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span.no-email-massage {
+            top: -58px; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.valid input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.valid select {
+          border-color: #9a9797; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid select {
+          border-color: #ff6766; }
+      md-dialog.my-profile .content-wrapper .auth-form .timezone-manual {
+        margin: -10px 220px;
+        font-size: 14px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 300; }
+      md-dialog.my-profile .content-wrapper .auth-form .btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+        margin-right: 50px;
         outline: none; }
+        md-dialog.my-profile .content-wrapper .auth-form .btn-wrap .save-pass-btn {
+          width: 15%;
+          margin: 0;
+          box-shadow: none;
+          height: 30px;
+          background: transparent;
+          border-radius: 20px;
+          border: 2px solid #0a9bad;
+          color: #0a9bad;
+          outline: none; }
   md-dialog.my-profile .msg-wrap {
     font-size: 12px;
     color: #ffffff;
