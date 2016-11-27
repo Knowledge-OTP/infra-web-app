@@ -4,8 +4,7 @@
     angular.module('demo',
         ['znk.infra-web-app.znkHeader',
             'demoEnv',
-            'znk.infra-web-app.invitation',
-            'znk.infra.activePanel'])
+            'znk.infra-web-app.invitation'])
     .config(function (znkHeaderSrvProvider, $stateProvider, PresenceServiceProvider) {
         'ngInject';
         PresenceServiceProvider.setAuthServiceName('AuthService');
