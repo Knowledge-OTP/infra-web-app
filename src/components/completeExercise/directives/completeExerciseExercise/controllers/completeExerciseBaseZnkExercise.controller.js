@@ -204,8 +204,10 @@
                                 }
                             });
                         },
-                        onExit: function () {
-                            exerciseResult.$save();
+                        onExit: function() {
+                            if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+                               exerciseResult.$save();
+                            }
                         },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
