@@ -204,7 +204,7 @@
                                 }
                             });
                         },
-                        onUpdateModel: function () {
+                        onExit: function () {
                             exerciseResult.$save();
                         },
                         viewMode: viewMode,
