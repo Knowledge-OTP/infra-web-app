@@ -393,7 +393,7 @@ complete-exercise-progress-bar {
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
 .app-workouts-diagnostic .exercise-container {
   width: 100%;
-  height: calc(100vh - 95px);
+  height: 100%;
   background-color: white;
   display: -ms-flexbox;
   display: flex;
