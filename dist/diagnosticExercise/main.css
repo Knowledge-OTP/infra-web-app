@@ -50,7 +50,7 @@
 
 .app-workouts-diagnostic .md-button {
   display: block;
-  margin: 15px auto;
+  margin: 15px auto 25px;
   border-radius: 30px; }
   .app-workouts-diagnostic .md-button.md {
     width: 180px; }
@@ -220,8 +220,7 @@
         flex-direction: column;
     -ms-flex-align: center;
         align-items: center;
-    margin-top: 60px;
-    margin-bottom: 210px; }
+    margin-top: 60px; }
     .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
       font-size: 16px;
       color: #4f4d4d;
