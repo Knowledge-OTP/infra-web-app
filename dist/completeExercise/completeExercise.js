@@ -813,6 +813,9 @@
                                 }
                             });
                         },
+                        onUpdateModel: function () {
+                            exerciseResult.$save();
+                        },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),

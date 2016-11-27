@@ -865,6 +865,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                 }
                             });
                         },
+                        onUpdateModel: function () {
+                            exerciseResult.$save();
+                        },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
