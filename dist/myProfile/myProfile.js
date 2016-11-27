@@ -464,7 +464,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "");
   $templateCache.put("components/myProfile/templates/myProfile.template.html",
     "<md-dialog ng-cloak class=\"my-profile\" translate-namespace=\"MY_PROFILE\">\n" +
-    "\n" +
     "    <div class=\"top-icon-wrap\">\n" +
     "        <div class=\"top-icon\">\n" +
     "            <div class=\"round-icon-wrap\">\n" +
@@ -478,18 +477,15 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <svg-icon name=\"myProfile-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
     "    </md-toolbar>\n" +
+    "    <div class=\"content-wrapper\">\n" +
+    "        <div class=\"main-title\" translate=\".MY_PROFILE\"></div>\n" +
     "\n" +
-    "    <div class=\"main-title\" translate=\".MY_PROFILE\"></div>\n" +
+    "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\" local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
     "\n" +
-    "    <update-profile user-profile=\"vm.userProfile\"\n" +
-    "                    timezones-list=\"vm.timezonesList\"\n" +
-    "                    local-timezone=\"vm.localTimezone\"\n" +
-    "                    class=\"change-profile\">\n" +
+    "        </update-profile>\n" +
     "\n" +
-    "    </update-profile>\n" +
-    "\n" +
-    "    <change-password class=\"change-password\"></change-password>\n" +
-    "\n" +
+    "        <change-password class=\"change-password\"></change-password>\n" +
+    "    </div>\n" +
     "</md-dialog>\n" +
     "");
 }]);

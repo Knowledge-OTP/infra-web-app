@@ -134,19 +134,37 @@ promo-code {
         font-weight: 400;
         padding-left: 20px;
         margin-top: 6px; }
-      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-accepted .promo-code-status-text, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-accepted input {
-        color: #87ca4d; }
-      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-accepted .icon-wrapper {
-        background-color: #87ca4d; }
-        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-accepted .icon-wrapper .correct-icon {
-          display: block; }
-        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-accepted .icon-wrapper .arrow-icon {
-          display: none; }
-      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-invalid .promo-code-status-text, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-invalid input {
-        color: #ff6766; }
-      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-invalid .icon-wrapper {
-        background-color: #ff6766; }
-        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-invalid .icon-wrapper .close-icon {
-          display: block; }
-        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper.promo-code-invalid .icon-wrapper .arrow-icon {
-          display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text, promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+      color: #87ca4d; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+      background-color: #87ca4d; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon {
+        display: block; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .arrow-icon {
+        display: none; }
+    promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text, promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+      color: #ff6766; }
+    promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+      background-color: #ff6766; }
+      promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon {
+        display: block; }
+      promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .arrow-icon {
+        display: none; }
+    promo-code .promo-code-wrapper .promo-code-title.accepted-title {
+      display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-title {
+      display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-title.accepted-title {
+      color: #87ca4d;
+      display: -ms-flexbox;
+      display: flex; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay {
+      transition: 1s;
+      height: 0;
+      padding: 0;
+      box-shadow: none;
+      border: 0; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper {
+        display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay::before, promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay::after {
+      display: none; }
