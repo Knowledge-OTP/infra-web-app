@@ -3,7 +3,6 @@
 
     angular.module('demo',
         ['znk.infra-web-app.znkHeader',
-            'znk.infra.general',
             'demoEnv',
             'znk.infra-web-app.invitation',
             'znk.infra.activePanel'])
