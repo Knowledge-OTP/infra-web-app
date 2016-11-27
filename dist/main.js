@@ -13452,9 +13452,6 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             'znk.infra-web-app.userGoalsSelection',
             'znk.infra-web-app.myProfile',
             'znk.infra.user',
-            'znk.infra.general',
-            'znk.infra.activePanel',
-            'znk.infra-web-app.invitation',
             'znk.infra-web-app.feedback'])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
                 'ngInject';
