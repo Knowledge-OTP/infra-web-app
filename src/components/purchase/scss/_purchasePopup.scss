@@ -75,17 +75,19 @@ md-dialog.purchase-popup {
 
         .features-box {
             min-width: 330px;
+            width: 60%;
             margin: 15px auto;
             padding: 25px 40px;
             background-color: $bgColor27;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
 
-            .purchase-popup-bullet-1-icon,
-            .purchase-popup-bullet-2-icon,
-            .purchase-popup-bullet-3-icon,
-            .purchase-popup-bullet-4-icon,
-            .purchase-popup-bullet-5-icon {
+
+            .feature-svg {
                 width: 26px;
                 max-height: 50px;
+                display: block;
             }
 
             ul {

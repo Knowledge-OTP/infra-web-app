@@ -119,6 +119,11 @@
         "BULLET3": "2000+ Practice Questions",
         "BULLET4": "Estimated Score",
         "BULLET5": "Unlimited lifetime access",
+        "BULLET1ICON": "sheet-icon",
+        "BULLET2ICON": "note-and-pencil",
+        "BULLET3ICON": "question-mark-square",
+        "BULLET4ICON": "grail-icon",
+        "BULLET5ICON": "open-lock-icon",
         "SAVE": "(save {{percent}})",
         "UPGRADE_NOW": "Upgrade Now",
         "UPGRADED_ON": "Upgraded on {{upgradeDate}}",
@@ -136,7 +141,7 @@
         "GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE": "Got a Zinkerz Educator Code",
         "ENTER_YOUR_CODE": "Enter your code...",
         "ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED": "Zinkerz Educators Code Accepted",
-        "PROMO_CODE_ACCEPTED": "Promo code accepted",
+        "PROMO_CODE_ACCEPTED": "Promo Code Accepted",
         "INVALID_CODE": "Invalid code, please contact support@zinkerz.com"
     },
     "ZNK_HEADER": {
