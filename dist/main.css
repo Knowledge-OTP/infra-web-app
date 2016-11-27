@@ -4369,16 +4369,20 @@ md-dialog.purchase-popup {
       text-align: center; }
     md-dialog.purchase-popup .md-dialog-content .features-box {
       min-width: 330px;
+      width: 60%;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #f9f9f9; }
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon,
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon,
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon,
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-4-icon,
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-5-icon {
+      background-color: #f9f9f9;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      md-dialog.purchase-popup .md-dialog-content .features-box .feature-svg {
         width: 26px;
-        max-height: 50px; }
+        max-height: 50px;
+        display: block; }
       md-dialog.purchase-popup .md-dialog-content .features-box ul {
         padding: 0;
         margin: 0;
@@ -6076,16 +6080,20 @@ md-dialog.purchase-popup {
       text-align: center; }
     md-dialog.purchase-popup .md-dialog-content .features-box {
       min-width: 330px;
+      width: 60%;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #f9f9f9; }
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon,
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon,
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon,
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-4-icon,
-      md-dialog.purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-5-icon {
+      background-color: #f9f9f9;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      md-dialog.purchase-popup .md-dialog-content .features-box .feature-svg {
         width: 26px;
-        max-height: 50px; }
+        max-height: 50px;
+        display: block; }
       md-dialog.purchase-popup .md-dialog-content .features-box ul {
         padding: 0;
         margin: 0;
