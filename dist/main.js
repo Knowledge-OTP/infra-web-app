@@ -865,7 +865,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                 }
                             });
                         },
-                        onUpdateModel: function () {
+                        onExit: function () {
                             exerciseResult.$save();
                         },
                         viewMode: viewMode,
