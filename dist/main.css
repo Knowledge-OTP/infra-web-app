@@ -393,7 +393,7 @@ complete-exercise-progress-bar {
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
 .app-workouts-diagnostic .exercise-container {
   width: 100%;
-  height: calc(100vh - 95px);
+  height: 100%;
   background-color: white;
   display: -ms-flexbox;
   display: flex;
@@ -425,7 +425,7 @@ complete-exercise-progress-bar {
 
 .app-workouts-diagnostic .md-button {
   display: block;
-  margin: 15px auto;
+  margin: 15px auto 25px;
   border-radius: 30px; }
   .app-workouts-diagnostic .md-button.md {
     width: 180px; }
@@ -579,7 +579,7 @@ complete-exercise-progress-bar {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 35px;
+    margin-top: 70px;
     line-height: 25px; }
   .diagnostic-summary-wrapper .start-button.md-button.primary {
     border-radius: 30px;
@@ -595,8 +595,7 @@ complete-exercise-progress-bar {
         flex-direction: column;
     -ms-flex-align: center;
         align-items: center;
-    margin-top: 60px;
-    margin-bottom: 210px; }
+    margin-top: 60px; }
     .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
       font-size: 16px;
       color: #4f4d4d;
