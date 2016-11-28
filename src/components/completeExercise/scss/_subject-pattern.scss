@@ -4,10 +4,12 @@
 
 .math-subject-pattern{
     @include background-image-url-retina('/assets/images/math-background-pattern');
+    background-size: 123px 134px;
 }
 
 .reading-subject-pattern{
     @include background-image-url-retina('/assets/images/reading-background-pattern');
+    background-size: 102px 95px;
 }
 
 .verbal-subject-pattern{
@@ -16,6 +18,7 @@
 
 .writing-subject-pattern{
     @include background-image-url-retina('/assets/images/writing-background-pattern');
+    background-size: 80px 84px;
 }
 
 .essay-subject-pattern{
