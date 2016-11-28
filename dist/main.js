@@ -865,8 +865,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                 }
                             });
                         },
-                        onExit: function () {
-                            exerciseResult.$save();
+                        onExit: function() {
+                            if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+                                exerciseResult.$save();
+                            }
                         },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
