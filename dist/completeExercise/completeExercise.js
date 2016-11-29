@@ -664,7 +664,7 @@
 
                 exerciseResult.subjectId = exerciseContent.subjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
-                exerciseResult.totalQuestionNum = exerciseContent.questions.length;
+                exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
                 exerciseResult.calculator = exerciseContent.calculator;
                 exerciseResult.timePreference = exerciseContent.timePreference;
                 exerciseResult.categoryId = exerciseContent.categoryId;
@@ -812,6 +812,11 @@
                                     url: $location.url() + '/index/' + indexPlusOne + '/questionId/' + (currQuestion.id || '')
                                 }
                             });
+                        },
+                        onExit: function() {
+                            if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+                                exerciseResult.$save();
+                            }
                         },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,

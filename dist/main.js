@@ -716,7 +716,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                 exerciseResult.subjectId = exerciseContent.subjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
-                exerciseResult.totalQuestionNum = exerciseContent.questions.length;
+                exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
                 exerciseResult.calculator = exerciseContent.calculator;
                 exerciseResult.timePreference = exerciseContent.timePreference;
                 exerciseResult.categoryId = exerciseContent.categoryId;
@@ -864,6 +864,11 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                     url: $location.url() + '/index/' + indexPlusOne + '/questionId/' + (currQuestion.id || '')
                                 }
                             });
+                        },
+                        onExit: function() {
+                            if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+                                exerciseResult.$save();
+                            }
                         },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
@@ -2739,7 +2744,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <!--<div class=\"upgrade-to-evaluate-wrapper\"\n" +
+    "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
     "         ng-if=\"vm.showUpgradeBtn\">\n" +
     "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
     "        <md-button\n" +
@@ -2747,7 +2752,7 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "            ng-click=\"vm.showPurchaseDialog()\"\n" +
     "            translate=\".UPGRADE_BTN\">\n" +
     "        </md-button>\n" +
-    "    </div>-->\n" +
+    "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
     "    <button autofocus tabindex=\"1\"\n" +
     "            class=\"start-button md-button znk md-primary\"\n" +
