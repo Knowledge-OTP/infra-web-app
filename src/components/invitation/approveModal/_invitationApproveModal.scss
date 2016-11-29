@@ -107,9 +107,14 @@ md-dialog-content.invitation-confirm-modal-content {
     }
 
     .big-success-msg {
+        text-align: center;
         .completed-v-icon-wrap {
             width: 75px;
             margin: 8px auto;
+
+            svg g {
+                stroke:green;
+            }
         }
         div {
             @include text-style(16px, $fontColor13, Lato, $regularFontWeight);

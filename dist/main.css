@@ -2045,21 +2045,25 @@ md-dialog-content.invitation-confirm-modal-content {
       margin: auto; }
     md-dialog-content.invitation-confirm-modal-content .btn-wrap .outline-blue {
       color: #0a9bad; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
-    width: 75px;
-    margin: 8px auto; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
-    font-size: 16px;
-    color: #7d7d7d;
-    font-family: Lato;
-    font-weight: 400;
-    text-align: center;
-    margin: 10px; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-pack: center;
-        justify-content: center; }
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg {
+    text-align: center; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
+      width: 75px;
+      margin: 8px auto; }
+      md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap svg g {
+        stroke: green; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
+      font-size: 16px;
+      color: #7d7d7d;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      margin: 10px; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -6340,21 +6344,25 @@ md-dialog-content.invitation-confirm-modal-content {
       margin: auto; }
     md-dialog-content.invitation-confirm-modal-content .btn-wrap .outline-blue {
       color: #0a9bad; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
-    width: 75px;
-    margin: 8px auto; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
-    font-size: 16px;
-    color: #7d7d7d;
-    font-family: Lato;
-    font-weight: 400;
-    text-align: center;
-    margin: 10px; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-pack: center;
-        justify-content: center; }
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg {
+    text-align: center; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
+      width: 75px;
+      margin: 8px auto; }
+      md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap svg g {
+        stroke: green; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
+      font-size: 16px;
+      color: #7d7d7d;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      margin: 10px; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
