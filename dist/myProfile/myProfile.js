@@ -85,7 +85,7 @@
             },
             templateUrl:  'components/myProfile/components/updateProfile/updateProfile.template.html',
             controllerAs: 'vm',
-            controller:  ["AuthService", "$mdDialog", "$timeout", "UserProfileService", "MyProfileSrv", function (AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
+            controller:  ["$rootScope", "AuthService", "$mdDialog", "$timeout", "UserProfileService", "MyProfileSrv", function ($rootScope, AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -110,6 +110,7 @@
                                 type = 'success';
                                 msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
                                 showToast(type, msg);
+                                $rootScope.$broadcast('profile-updated', { profile: vm.profileData });
                             });
                         }, function (err) {
                             $timeout(function () {

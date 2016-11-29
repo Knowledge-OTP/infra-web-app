@@ -8123,7 +8123,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
             },
             templateUrl:  'components/myProfile/components/updateProfile/updateProfile.template.html',
             controllerAs: 'vm',
-            controller:  ["AuthService", "$mdDialog", "$timeout", "UserProfileService", "MyProfileSrv", function (AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
+            controller:  ["$rootScope", "AuthService", "$mdDialog", "$timeout", "UserProfileService", "MyProfileSrv", function ($rootScope, AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -8148,6 +8148,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                                 type = 'success';
                                 msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
                                 showToast(type, msg);
+                                $rootScope.$broadcast('profile-updated', { profile: vm.profileData });
                             });
                         }, function (err) {
                             $timeout(function () {
@@ -13493,6 +13494,13 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
                 vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
 
+                $scope.$on('profile-updated', function(event, args) {
+                    vm.userProfile = {
+                        username: args.profile.nickname,
+                        email: args.profile.email
+                    };
+                });
+
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
                 });
@@ -13638,14 +13646,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                <md-button ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\"\n" +
     "                           class=\"md-icon-button profile-open-modal-btn\"\n" +
     "                           aria-label=\"Open sample menu\">\n" +
-    "                    <div>{{::vm.userProfile.username}}</div>\n" +
+    "                    <div>{{vm.userProfile.username}}</div>\n" +
     "                    <md-icon class=\"material-icons\">{{vm.expandIcon}}</md-icon>\n" +
     "                </md-button>\n" +
     "                <md-menu-content class=\"md-menu-content-znk-header\">\n" +
     "                    <md-list>\n" +
     "                        <md-list-item class=\"header-modal-item header-modal-item-profile\">\n" +
-    "                            <span class=\"username\">{{::vm.userProfile.username}}</span>\n" +
-    "                            <span class=\"email\">{{::vm.userProfile.email}}</span>\n" +
+    "                            <span class=\"username\">{{vm.userProfile.username}}</span>\n" +
+    "                            <span class=\"email\">{{vm.userProfile.email}}</span>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple class=\"header-modal-item header-modal-item-uppercase links purchase-status\">\n" +
     "                            <span translate=\"{{vm.subscriptionStatus}}\" translate-compile></span>\n" +

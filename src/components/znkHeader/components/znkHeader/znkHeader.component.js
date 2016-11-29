@@ -22,6 +22,13 @@
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
                 vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
 
+                $scope.$on('profile-updated', function(event, args) {
+                    vm.userProfile = {
+                        username: args.profile.nickname,
+                        email: args.profile.email
+                    };
+                });
+
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
                 });
