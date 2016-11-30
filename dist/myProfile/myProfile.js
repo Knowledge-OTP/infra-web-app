@@ -198,27 +198,32 @@
                 };
 
                 self.getLocalTimezone = function () {
+                    var localTimezone;
                     var dateArray = new Date().toString().split(' ');
                     var timezoneCity = dateArray.find(function (item) {
                         return (item.indexOf('(')!== -1);
                     });
-                    timezoneCity = timezoneCity.replace('(', '');
+
+                    timezoneCity = timezoneCity ? timezoneCity.replace('(', ''): null;
 
                     return self.getTimezonesList().then(function (timezonesList) {
-                        timezonesList = obj2Array(timezonesList);
-                        var localTimezone = timezonesList.find(function (timezone) {
-                            return (timezone.indexOf(timezoneCity)!== -1);
-                        });
-
-                        if (!localTimezone){
-                            var timezoneGMT = dateArray.find(function (item) {
-                                return (item.indexOf('GMT')!== -1);
-                            });
+                        if (timezoneCity) {
+                            timezonesList = obj2Array(timezonesList);
                             localTimezone = timezonesList.find(function (timezone) {
-                                timezone = timezone.replace(':', '');
-                                return (timezone.indexOf(timezoneGMT)!== -1);
+                                return (timezone.indexOf(timezoneCity)!== -1);
                             });
+                        } else {
+                            if (!localTimezone){
+                                var timezoneGMT = dateArray.find(function (item) {
+                                    return (item.indexOf('GMT')!== -1);
+                                });
+                                localTimezone = timezonesList.find(function (timezone) {
+                                    timezone = timezone.replace(':', '');
+                                    return (timezone.indexOf(timezoneGMT)!== -1);
+                                });
+                            }
                         }
+
                         return localTimezone;
                     });
                 };
@@ -244,17 +249,6 @@
                         });
                     });
                 };
-
-                // self.showToast = function (type, msg) {
-                //     $mdToast.show({
-                //         locals:{ type: type,  msg: msg },
-                //         templateUrl: 'components/myProfile/templates/toast.template.html',
-                //         position: 'top right',
-                //         hideDelay: 3000,
-                //         controllerAs: 'vm',
-                //         controller: 'ToastController'
-                //     });
-                // };
             }]
         );
 })(angular);
@@ -338,7 +332,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
     "        <div translate=\".PASSWORD_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
-    "            <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <md-button aria-label=\"{{'CHANGE_PASSWORD.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -349,7 +344,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <div translate=\"{{vm.generalError}}\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "</md-dialog-content>");
+    "</md-dialog-content>\n" +
+    "");
   $templateCache.put("components/myProfile/components/updateProfile/updateProfile.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
     "    <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\" ng-switch-when=\"false\">\n" +
@@ -417,7 +413,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
     "        <div translate=\".PROFILE_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
-    "            <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -428,7 +425,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <div translate=\"{{vm.generalError}}\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "</md-dialog-content>");
+    "</md-dialog-content>\n" +
+    "");
   $templateCache.put("components/myProfile/svg/myProfile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +

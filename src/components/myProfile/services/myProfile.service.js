@@ -21,6 +21,7 @@
                 };
 
                 self.getLocalTimezone = function () {
+                    var localTimezone;
                     var dateArray = new Date().toString().split(' ');
                     var timezoneCity = dateArray.find(function (item) {
                         return (item.indexOf('(')!== -1);
@@ -31,7 +32,7 @@
                     return self.getTimezonesList().then(function (timezonesList) {
                         if (timezoneCity) {
                             timezonesList = obj2Array(timezonesList);
-                            var localTimezone = timezonesList.find(function (timezone) {
+                            localTimezone = timezonesList.find(function (timezone) {
                                 return (timezone.indexOf(timezoneCity)!== -1);
                             });
                         } else {
