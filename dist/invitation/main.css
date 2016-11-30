@@ -531,23 +531,25 @@ md-dialog.invite-teacher-modal-wrap {
         color: #757a83;
         font-family: Lato;
         font-weight: 300; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
-      width: 138px;
-      margin: 0 auto; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
-      font-size: 16px;
-      color: #7d7d7d;
-      font-family: Lato;
-      font-weight: 400;
-      text-align: center;
-      margin-top: 20px; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: center;
-          justify-content: center; }
-      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
-        margin: 0 auto 65px; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg {
+      text-align: center; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
+        width: 138px;
+        margin: 0 auto; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
+        font-size: 16px;
+        color: #7d7d7d;
+        font-family: Lato;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 20px; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center; }
+        md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
+          margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
     position: absolute;
     top: 0;
