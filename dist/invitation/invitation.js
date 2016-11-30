@@ -693,7 +693,8 @@
                 invitation.status = InvitationService.invitationStatus.receiverDelete;
                 updateStatus(invitation).then(function (response) {
                     if (response.data && response.data.success) {
-                        PopUpSrv.success(self.translatedTitles.success, self.translatedTitles.successDisconnect);
+                        var name = invitation.senderName || invitation.senderEmail;
+                        PopUpSrv.success(self.translatedTitles.success, self.translatedTitles.successDisconnect + name);
                     } else {
                         PopUpSrv.error('', self.translatedTitles.errorDisconnect);
                     }
