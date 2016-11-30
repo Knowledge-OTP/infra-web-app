@@ -32,14 +32,14 @@
                 <md-button ng-click="$mdOpenMenu($event); vm.znkOpenModal();"
                            class="md-icon-button profile-open-modal-btn"
                            aria-label="Open sample menu">
-                    <div>{{::vm.userProfile.username}}</div>
+                    <div>{{vm.userProfile.username}}</div>
                     <md-icon class="material-icons">{{vm.expandIcon}}</md-icon>
                 </md-button>
                 <md-menu-content class="md-menu-content-znk-header">
                     <md-list>
                         <md-list-item class="header-modal-item header-modal-item-profile">
-                            <span class="username">{{::vm.userProfile.username}}</span>
-                            <span class="email">{{::vm.userProfile.email}}</span>
+                            <span class="username">{{vm.userProfile.username}}</span>
+                            <span class="email">{{vm.userProfile.email}}</span>
                         </md-list-item>
                         <md-list-item md-ink-ripple class="header-modal-item header-modal-item-uppercase links purchase-status">
                             <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
