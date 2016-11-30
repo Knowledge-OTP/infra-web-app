@@ -270,7 +270,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "                            <div translate=\".THANKS\"></div>\n" +
     "                            <div translate=\".OPINION\"></div>\n" +
     "                        </div>\n" +
-    "                        <md-button\n" +
+    "                        <md-button aria-label=\"{{'FEEDBACK_POPUP.DONE' | translate}}\"\n" +
     "                                class=\"success success-green drop-shadow\"\n" +
     "                                ng-click=\"vm.cancel();\">\n" +
     "                            <span translate=\".DONE\"></span>\n" +

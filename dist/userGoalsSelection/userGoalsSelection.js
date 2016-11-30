@@ -631,7 +631,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"save-btn-wrap\">\n" +
-    "        <md-button autofocus tabindex=\"1\"\n" +
+    "        <md-button aria-label=\"{{'USER_GOALS.SAVE' | translate}}\"\n" +
+    "                   autofocus tabindex=\"1\"\n" +
     "                   class=\"md-primary znk inline-block\"\n" +
     "                   ng-click=\"saveChanges()\"\n" +
     "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +

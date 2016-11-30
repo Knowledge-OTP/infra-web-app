@@ -1187,18 +1187,19 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
     "         ng-if=\"vm.showUpgradeBtn\">\n" +
     "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
-    "        <md-button\n" +
+    "        <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.UPGRADE_BTN' | translate}}\"\n" +
     "            class=\"znk outline\"\n" +
     "            ng-click=\"vm.showPurchaseDialog()\"\n" +
     "            translate=\".UPGRADE_BTN\">\n" +
     "        </md-button>\n" +
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
-    "    <button autofocus tabindex=\"1\"\n" +
+    "    <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.DONE' | translate}}\"\n" +
+    "            autofocus tabindex=\"1\"\n" +
     "            class=\"start-button md-button znk md-primary\"\n" +
     "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
-    "    </button>\n" +
+    "    </md-button>\n" +
     "</div>\n" +
     "");
 }]);
