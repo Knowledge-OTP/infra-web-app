@@ -156,7 +156,8 @@ angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($te
     "        <div class=\"md-toast-text\" flex>{{vm.msg | translate}}</div>\n" +
     "    </div>\n" +
     "\n" +
-    "    <md-button class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
+    "    <md-button aria-label=\"close popup\"\n" +
+    "        class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
     "        <svg-icon name=\"znkToast-close-popup\"></svg-icon>\n" +
     "    </md-button>\n" +
     "\n" +

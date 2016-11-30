@@ -485,7 +485,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "            <div class=\"current-time\" translate=\".CURRENT_TIME\"\n" +
     "                 translate-values=\"{ currentTime: {{'vm.currentTime'}} }\"></div>\n" +
     "            <div class=\"btn-wrapper\">\n" +
-    "                <md-button class=\"ok-button success drop-shadow\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <md-button aria-label=\"{{'MY_LIVE_LESSONS_POPUP.OK' | translate}}\"\n" +
+    "                    class=\"ok-button success drop-shadow\" ng-click=\"vm.closeDialog()\">\n" +
     "                    <span translate=\".OK\"></span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
@@ -528,13 +529,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "                </textarea>\n" +
     "                    <div class=\"bottom-lesson\" translate=\".WE_WILL_CONTACT_YOU\"></div>\n" +
     "                    <div class=\"buttons-wrapper\">\n" +
-    "                        <md-button\n" +
+    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.CANCEL' | translate}}\"\n" +
     "                            class=\"md-button cancel-btn\"\n" +
     "                            translate=\".CANCEL\"\n" +
     "                            ng-click=\"vm.closeDialog()\">\n" +
     "\n" +
     "                        </md-button>\n" +
-    "                        <md-button\n" +
+    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.SEND' | translate}}\"\n" +
     "                            class=\"md-button send-btn\"\n" +
     "                            translate=\".SEND\"\n" +
     "                            ng-click=\"vm.send()\">\n" +
@@ -546,7 +547,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "                    <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
     "                    <div translate=\".SUCCESS_SHARED\"></div>\n" +
     "                    <div class=\"done-btn-wrap\">\n" +
-    "                        <md-button class=\"success lg drop-shadow\"\n" +
+    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.DONE' | translate}}\"\n" +
+    "                                   class=\"success lg drop-shadow\"\n" +
     "                                   ng-click=\"vm.closeDialog()\">\n" +
     "                            <span translate=\".DONE\"></span>\n" +
     "                        </md-button>\n" +

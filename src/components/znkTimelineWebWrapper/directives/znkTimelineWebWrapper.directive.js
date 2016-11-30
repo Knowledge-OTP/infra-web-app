@@ -92,7 +92,7 @@
 
             function _getSummaryData(summeryScore) {
                 var x = summeryScore.lineTo.x;
-                var y = (summeryScore.lineTo.y < optionsPerDevice.upOrDown) ? summeryScore.lineTo.y + optionsPerDevice.yDown : summeryScore.lineTo.y - optionsPerDevice.yUp;
+                var y =  summeryScore.lineTo.y + optionsPerDevice.yDown;
                 var angleDeg;
                 if (summeryScore.next) {
                     angleDeg = Math.atan2(summeryScore.lineTo.y - summeryScore.next.y, summeryScore.lineTo.x - summeryScore.next.x) * 180 / Math.PI;

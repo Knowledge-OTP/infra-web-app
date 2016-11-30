@@ -887,7 +887,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            <svg-icon class=\"completed-v-icon-wrap\" name=\"invitation-v-icon\"></svg-icon>\n" +
     "            <div translate=\".SUCCESS_INVITE\"></div>\n" +
     "            <div class=\"done-btn-wrap\">\n" +
-    "                <md-button class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
+    "                <md-button aria-label=\"{{'INVITE_TEACHER_MODAL.DONE' | translate}}\"\n" +
+    "                    class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
     "                    <span translate=\".DONE\"></span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
