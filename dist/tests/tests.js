@@ -108,7 +108,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                        'done': miniExam.isCompleted,\n" +
     "                        'active': vm.activeId === miniExam.id\n" +
     "                      }\">\n" +
-    "            <md-button md-no-ink\n" +
+    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}\"\n" +
     "                       ng-click=\"vm.changeActive(miniExam.id)\">\n" +
     "                <span>{{miniExam.name}}</span>\n" +
     "                <div class=\"status-icon-wrapper\"\n" +
@@ -129,7 +129,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                        'done': fullExam.isCompleted,\n" +
     "                        'active': vm.activeId === fullExam.id\n" +
     "                      }\">\n" +
-    "            <md-button md-no-ink\n" +
+    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}\"\n" +
     "                       ng-click=\"vm.changeActive(fullExam.id)\">\n" +
     "                <span>{{fullExam.name}}</span>\n" +
     "                <div class=\"status-icon-wrapper\"\n" +

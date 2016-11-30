@@ -1415,6 +1415,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "\n" +
     "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk\"\n" +
+    "                   aria-label=\"{{'COMPLETE_EXERCISE.START' | translate}}\"\n" +
     "                   md-no-ink\n" +
     "                   translate=\".START\"\n" +
     "                   ng-click=\"$ctrl.start()\">\n" +
@@ -1443,6 +1444,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </div>\n" +
     "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk go-to-questions-btn\"\n" +
+    "                   aria-label=\"{{'COMPLETE_EXERCISE.GO_QST' | translate}}\"\n" +
     "                   md-no-ink\n" +
     "                   translate=\".GO_QST\"\n" +
     "                   ng-click=\"$ctrl.goToQuestions()\">\n" +
@@ -2747,18 +2749,19 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
     "         ng-if=\"vm.showUpgradeBtn\">\n" +
     "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
-    "        <md-button\n" +
+    "        <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.UPGRADE_BTN' | translate}}\"\n" +
     "            class=\"znk outline\"\n" +
     "            ng-click=\"vm.showPurchaseDialog()\"\n" +
     "            translate=\".UPGRADE_BTN\">\n" +
     "        </md-button>\n" +
     "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
-    "    <button autofocus tabindex=\"1\"\n" +
+    "    <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.DONE' | translate}}\"\n" +
+    "            autofocus tabindex=\"1\"\n" +
     "            class=\"start-button md-button znk md-primary\"\n" +
     "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
-    "    </button>\n" +
+    "    </md-button>\n" +
     "</div>\n" +
     "");
 }]);
@@ -4225,7 +4228,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     "                            <div translate=\".THANKS\"></div>\n" +
     "                            <div translate=\".OPINION\"></div>\n" +
     "                        </div>\n" +
-    "                        <md-button\n" +
+    "                        <md-button aria-label=\"{{'FEEDBACK_POPUP.DONE' | translate}}\"\n" +
     "                                class=\"success success-green drop-shadow\"\n" +
     "                                ng-click=\"vm.cancel();\">\n" +
     "                            <span translate=\".DONE\"></span>\n" +
@@ -5975,7 +5978,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "            <svg-icon class=\"completed-v-icon-wrap\" name=\"invitation-v-icon\"></svg-icon>\n" +
     "            <div translate=\".SUCCESS_INVITE\"></div>\n" +
     "            <div class=\"done-btn-wrap\">\n" +
-    "                <md-button class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
+    "                <md-button aria-label=\"{{'INVITE_TEACHER_MODAL.DONE' | translate}}\"\n" +
+    "                    class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
     "                    <span translate=\".DONE\"></span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
@@ -6062,30 +6066,25 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "");
   $templateCache.put("components/invitation/svg/invitation-v-icon.svg",
     "<svg\n" +
-    "    version=\"1.1\"\n" +
-    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-    "    class=\"v-icon-wrapper\"\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"0 0 334.5 228.7\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .v-icon-wrapper .st0{\n" +
-    "            fill:#ffffff;\n" +
-    "            stroke:#ffffff;\n" +
-    "            stroke-width:26;\n" +
-    "            stroke-linecap:round;\n" +
-    "            stroke-linejoin:round;\n" +
-    "            stroke-miterlimit:10;\n" +
-    "        }\n" +
-    "        .v-icon-wrapper {\n" +
-    "            width: 100%;\n" +
-    "            height: auto;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "<g>\n" +
-    "	<line class=\"st0\" x1=\"13\" y1=\"109.9\" x2=\"118.8\" y2=\"215.7\"/>\n" +
-    "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
-    "</g>\n" +
+    "class=\"v-icon-wrapper\"\n" +
+    "xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\"\n" +
+    "y=\"0px\"\n" +
+    "viewBox=\"-1040 834.9 220.4 220.4\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .v-icon-wrapper .st0{fill:none;enable-background:new    ;}\n" +
+    "    .v-icon-wrapper .st1{fill:#CACBCC;}\n" +
+    "    .v-icon-wrapper .st2{display:none;fill:none;}\n" +
+    "    .v-icon-wrapper .st3{fill:#D1D2D2;}\n" +
+    "    .v-icon-wrapper .st4{fill:none;stroke:#FFFFFF;stroke-width:11.9321;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "    .v-icon-wrapper {width: 100%; height: auto}\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/invitation/svg/invitations-received-icon.svg",
@@ -6634,7 +6633,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "            <div class=\"current-time\" translate=\".CURRENT_TIME\"\n" +
     "                 translate-values=\"{ currentTime: {{'vm.currentTime'}} }\"></div>\n" +
     "            <div class=\"btn-wrapper\">\n" +
-    "                <md-button class=\"ok-button success drop-shadow\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <md-button aria-label=\"{{'MY_LIVE_LESSONS_POPUP.OK' | translate}}\"\n" +
+    "                    class=\"ok-button success drop-shadow\" ng-click=\"vm.closeDialog()\">\n" +
     "                    <span translate=\".OK\"></span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
@@ -6677,13 +6677,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "                </textarea>\n" +
     "                    <div class=\"bottom-lesson\" translate=\".WE_WILL_CONTACT_YOU\"></div>\n" +
     "                    <div class=\"buttons-wrapper\">\n" +
-    "                        <md-button\n" +
+    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.CANCEL' | translate}}\"\n" +
     "                            class=\"md-button cancel-btn\"\n" +
     "                            translate=\".CANCEL\"\n" +
     "                            ng-click=\"vm.closeDialog()\">\n" +
     "\n" +
     "                        </md-button>\n" +
-    "                        <md-button\n" +
+    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.SEND' | translate}}\"\n" +
     "                            class=\"md-button send-btn\"\n" +
     "                            translate=\".SEND\"\n" +
     "                            ng-click=\"vm.send()\">\n" +
@@ -6695,7 +6695,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "                    <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
     "                    <div translate=\".SUCCESS_SHARED\"></div>\n" +
     "                    <div class=\"done-btn-wrap\">\n" +
-    "                        <md-button class=\"success lg drop-shadow\"\n" +
+    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.DONE' | translate}}\"\n" +
+    "                                   class=\"success lg drop-shadow\"\n" +
     "                                   ng-click=\"vm.closeDialog()\">\n" +
     "                            <span translate=\".DONE\"></span>\n" +
     "                        </md-button>\n" +
@@ -8376,7 +8377,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
     "        <div translate=\".PASSWORD_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
-    "            <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <md-button aria-label=\"{{'CHANGE_PASSWORD.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -8387,7 +8389,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <div translate=\"{{vm.generalError}}\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "</md-dialog-content>");
+    "</md-dialog-content>\n" +
+    "");
   $templateCache.put("components/myProfile/components/updateProfile/updateProfile.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
     "    <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\" ng-switch-when=\"false\">\n" +
@@ -8455,7 +8458,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
     "        <div translate=\".PROFILE_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
-    "            <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -8466,7 +8470,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <div translate=\"{{vm.generalError}}\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "</md-dialog-content>");
+    "</md-dialog-content>\n" +
+    "");
   $templateCache.put("components/myProfile/svg/myProfile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
@@ -8953,10 +8958,12 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <diagnostic-intro></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
+    "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "            tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
-    "        <md-button autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
+    "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.START_TEST' | translate}}\"\n" +
+    "            autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
@@ -9002,7 +9009,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        </div>\n" +
     "        <div class=\"sub-title\" translate=\".WE_ARE_HERE_TO_HELP\"></div>\n" +
     "        <div class=\"btn-wrap\">\n" +
-    "            <md-button autofocus tabindex=\"1\" class=\"md-primary znk inline-block\" ng-click=\"vm.nextStep()\" ng-cloak>\n" +
+    "            <md-button aria-label=\"{{'ON_BOARDING.WELCOME.CONTINUE' | translate}}\"\n" +
+    "                autofocus tabindex=\"1\" class=\"md-primary znk inline-block\" ng-click=\"vm.nextStep()\" ng-cloak>\n" +
     "                <div class=\"btn-text\">\n" +
     "                    <span translate=\".CONTINUE\" class=\"continue-title\"></span>\n" +
     "                    <svg-icon name=\"on-boarding-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\"></svg-icon>\n" +
@@ -10462,7 +10470,8 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     "            <svg-icon class=\"completed-v-icon-wrap\" name=\"settings-completed-v-icon\"></svg-icon>\n" +
     "            <div translate=\".SAVE_SUCCESS\"></div>\n" +
     "            <div class=\"done-btn-wrap\">\n" +
-    "                <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <md-button aria-label=\"{{'SETTING.DONE' | translate}}\"\n" +
+    "                    class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                    <span translate=\".DONE\"></span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
@@ -10641,7 +10650,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                        'done': miniExam.isCompleted,\n" +
     "                        'active': vm.activeId === miniExam.id\n" +
     "                      }\">\n" +
-    "            <md-button md-no-ink\n" +
+    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}\"\n" +
     "                       ng-click=\"vm.changeActive(miniExam.id)\">\n" +
     "                <span>{{miniExam.name}}</span>\n" +
     "                <div class=\"status-icon-wrapper\"\n" +
@@ -10662,7 +10671,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                        'done': fullExam.isCompleted,\n" +
     "                        'active': vm.activeId === fullExam.id\n" +
     "                      }\">\n" +
-    "            <md-button md-no-ink\n" +
+    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}\"\n" +
     "                       ng-click=\"vm.changeActive(fullExam.id)\">\n" +
     "                <span>{{fullExam.name}}</span>\n" +
     "                <div class=\"status-icon-wrapper\"\n" +
@@ -11423,7 +11432,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"save-btn-wrap\">\n" +
-    "        <md-button autofocus tabindex=\"1\"\n" +
+    "        <md-button aria-label=\"{{'USER_GOALS.SAVE' | translate}}\"\n" +
+    "                   autofocus tabindex=\"1\"\n" +
     "                   class=\"md-primary znk inline-block\"\n" +
     "                   ng-click=\"saveChanges()\"\n" +
     "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
@@ -12557,7 +12567,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <div class=\"text2\"\n" +
     "                 translate=\".TELL_FRIENDS\">\n" +
     "            </div>\n" +
-    "            <md-button class=\"share-btn md-primary znk\"\n" +
+    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"\n" +
+    "                       class=\"share-btn md-primary znk\"\n" +
     "                       md-no-ink>\n" +
     "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
     "                <span translate=\".SHARE\"></span>\n" +
@@ -12573,7 +12584,9 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
     "            <div class=\"description\" translate=\".MORE_PRACTICE\"></div>\n" +
     "            <div class=\"get-zinkerz-pro-text\" translate=\".GET_ZINKERZ_PRO\"></div>\n" +
-    "            <md-button class=\"upgrade-btn znk md-primary\" ng-click=\"vm.openPurchaseModal()\">\n" +
+    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.UPGRADE' | translate}}\"\n" +
+    "                       class=\"upgrade-btn znk md-primary\"\n" +
+    "                       ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -13259,7 +13272,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                total: vm.exerciseResult.totalQuestionNum\n" +
     "             }\">\n" +
     "        </div>\n" +
-    "        <md-button class=\"znk md-primary continue-btn\"\n" +
+    "        <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS.CONTINUE' | translate}}\"\n" +
+    "            class=\"znk md-primary continue-btn\"\n" +
     "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
     "            <span translate=\".CONTINUE\"></span>\n" +
     "        </md-button>\n" +
@@ -13318,7 +13332,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"start-btn-wrapper\">\n" +
-    "                <md-button class=\"md-primary znk\"\n" +
+    "                <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO.START' | translate}}\"\n" +
+    "                           class=\"md-primary znk\"\n" +
     "                           ng-click=\"vm.startExercise()\"\n" +
     "                           md-no-ink>\n" +
     "                    <span translate=\".START\"></span>\n" +
@@ -14323,7 +14338,8 @@ angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($te
     "        <div class=\"md-toast-text\" flex>{{vm.msg | translate}}</div>\n" +
     "    </div>\n" +
     "\n" +
-    "    <md-button class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
+    "    <md-button aria-label=\"close popup\"\n" +
+    "        class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
     "        <svg-icon name=\"znkToast-close-popup\"></svg-icon>\n" +
     "    </md-button>\n" +
     "\n" +
