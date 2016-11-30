@@ -8,7 +8,7 @@
                         'done': miniExam.isCompleted,
                         'active': vm.activeId === miniExam.id
                       }">
-            <md-button md-no-ink
+            <md-button md-no-ink aria-label="{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}"
                        ng-click="vm.changeActive(miniExam.id)">
                 <span>{{miniExam.name}}</span>
                 <div class="status-icon-wrapper"
@@ -29,7 +29,7 @@
                         'done': fullExam.isCompleted,
                         'active': vm.activeId === fullExam.id
                       }">
-            <md-button md-no-ink
+            <md-button md-no-ink aria-label="{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}"
                        ng-click="vm.changeActive(fullExam.id)">
                 <span>{{fullExam.name}}</span>
                 <div class="status-icon-wrapper"

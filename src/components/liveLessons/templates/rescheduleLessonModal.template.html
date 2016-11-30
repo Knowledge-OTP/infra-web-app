@@ -31,13 +31,13 @@
                 </textarea>
                     <div class="bottom-lesson" translate=".WE_WILL_CONTACT_YOU"></div>
                     <div class="buttons-wrapper">
-                        <md-button
+                        <md-button aria-label="{{'RESCHEDULE_LESSON_MODAL.CANCEL' | translate}}"
                             class="md-button cancel-btn"
                             translate=".CANCEL"
                             ng-click="vm.closeDialog()">
 
                         </md-button>
-                        <md-button
+                        <md-button aria-label="{{'RESCHEDULE_LESSON_MODAL.SEND' | translate}}"
                             class="md-button send-btn"
                             translate=".SEND"
                             ng-click="vm.send()">
@@ -49,7 +49,8 @@
                     <svg-icon class="completed-v-icon-wrap" name="completed-v-icon"></svg-icon>
                     <div translate=".SUCCESS_SHARED"></div>
                     <div class="done-btn-wrap">
-                        <md-button class="success lg drop-shadow"
+                        <md-button aria-label="{{'RESCHEDULE_LESSON_MODAL.DONE' | translate}}"
+                                   class="success lg drop-shadow"
                                    ng-click="vm.closeDialog()">
                             <span translate=".DONE"></span>
                         </md-button>

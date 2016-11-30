@@ -10,7 +10,8 @@
         <div class="md-toast-text" flex>{{vm.msg | translate}}</div>
     </div>
 
-    <md-button class="close-toast-wrap" ng-click="vm.closeToast()">
+    <md-button aria-label="close popup"
+        class="close-toast-wrap" ng-click="vm.closeToast()">
         <svg-icon name="znkToast-close-popup"></svg-icon>
     </md-button>
 

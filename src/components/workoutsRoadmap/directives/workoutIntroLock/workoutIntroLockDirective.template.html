@@ -22,7 +22,8 @@
             <div class="text2"
                  translate=".TELL_FRIENDS">
             </div>
-            <md-button class="share-btn md-primary znk"
+            <md-button aria-label="{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}"
+                       class="share-btn md-primary znk"
                        md-no-ink>
                 <svg-icon name="workouts-intro-lock-share-arrow"></svg-icon>
                 <span translate=".SHARE"></span>
@@ -38,7 +39,9 @@
             <svg-icon name="workouts-intro-lock-lock"></svg-icon>
             <div class="description" translate=".MORE_PRACTICE"></div>
             <div class="get-zinkerz-pro-text" translate=".GET_ZINKERZ_PRO"></div>
-            <md-button class="upgrade-btn znk md-primary" ng-click="vm.openPurchaseModal()">
+            <md-button aria-label="{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.UPGRADE' | translate}}"
+                       class="upgrade-btn znk md-primary"
+                       ng-click="vm.openPurchaseModal()">
                 <span translate=".UPGRADE"></span>
             </md-button>
         </div>
