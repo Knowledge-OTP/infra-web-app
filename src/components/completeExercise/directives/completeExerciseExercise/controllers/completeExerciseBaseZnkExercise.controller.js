@@ -153,6 +153,10 @@
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
+                            if(!isNotLecture){
+                                settings.actions.exitAction();
+                                return;
+                            }
                             var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);

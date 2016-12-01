@@ -466,7 +466,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                                 $ctrl.znkExercise.actions.unbindExerciseView();
-                            }
+                            },
+                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction
                         }
                     };
 
@@ -592,7 +593,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
                     var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
-                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
+                    var isNotLecture = exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
+
+                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete && isNotLecture) {
                         $ctrl.znkExercise._finishExercise();
                     }
                 }
@@ -798,6 +801,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
+                            if(!isNotLecture){
+                                settings.actions.exitAction();
+                                return;
+                            }
                             var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);
@@ -6041,7 +6048,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "");
   $templateCache.put("components/invitation/svg/tutors-list-edit-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-    "	 viewBox=\"0 0 88.5 67.2\" xml:space=\"preserve\">\n" +
+    "	 viewBox=\"0 0 88.5 67.2\" xml:space=\"preserve\" class=\"tutors-list-edit-svg\">\n" +
     "<g>\n" +
     "	<path d=\"M21.5,67.1c2.4-9.3,4.4-17.6,6.7-25.9c0.3-1.2,1.5-2.1,2.5-3.1c11.5-11.5,23-23.1,34.5-34.6c4.9-4.9,7.6-4.8,12.6,0.1\n" +
     "		c2.7,2.7,5.5,5.4,8.1,8.1c3.4,3.6,3.5,7,0.1,10.4C73.8,34.6,61.6,46.8,49.3,59c-0.9,0.9-2.2,1.6-3.4,1.9\n" +
