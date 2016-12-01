@@ -425,7 +425,8 @@
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                                 $ctrl.znkExercise.actions.unbindExerciseView();
-                            }
+                            },
+                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction
                         }
                     };
 
@@ -552,7 +553,9 @@
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
                     var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
-                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
+                    var isNotLecture = exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
+
+                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete && isNotLecture) {
                         $ctrl.znkExercise._finishExercise();
                     }
                 }
@@ -779,6 +782,10 @@
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
+                            if(!isNotLecture){
+                                settings.actions.exitAction();
+                                return;
+                            }
                             var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);
