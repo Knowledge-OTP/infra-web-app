@@ -1,0 +1,10 @@
+question-builder.answer-explanation-open{
+    .question-basic-style{
+        overflow: auto;
+        height: calc(100vh - 570px);
+
+        canvas{
+            height: calc(100vh - 570px);
+        }
+    }
+}
