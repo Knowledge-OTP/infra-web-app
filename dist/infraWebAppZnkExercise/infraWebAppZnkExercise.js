@@ -38,6 +38,14 @@
 
                         questionBuilderCtrl.bindExerciseEventManager = znkExerciseCtrl.bindExerciseEventManager;
 
+                        questionBuilderCtrl.updateAnswerExplnView = function(isAnswerExplanationOpen){
+                            if(isAnswerExplanationOpen){
+                                element.addClass('answer-explanation-open');
+                            } else {
+                                element.removeClass('answer-explanation-open');
+                            }
+                        };
+
                         element.append('<answer-explanation></answer-explanation>');
                     };
 
@@ -125,12 +133,12 @@
                             init();
                         } else {
                             // $watch seems to work for sharer and viewer, while $viewChangeListeners
-                            // worked only for sharer. it's because $viewChangeListeners does not  
+                            // worked only for sharer. it's because $viewChangeListeners does not
                             // invoke when the $modalValue change, only when the $viewValue (via input and etc)
                             scope.$watch(function () {
                                 return ngModelCtrl.$viewValue;
                             }, function (newVal) {
-                                // newVal undefined meens no answer yet, so must be protected 
+                                // newVal undefined meens no answer yet, so must be protected
                                 if (angular.isDefined(newVal)) {
                                     init();
                                 }
@@ -153,11 +161,13 @@
 
                     scope.d.close = function () {
                         scope.d.toggleWrittenSln = false;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
                         _updateBindExercise();
                     };
 
                     scope.d.toggleAnswer = function () {
                         scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
                         _updateBindExercise();
                     };
 

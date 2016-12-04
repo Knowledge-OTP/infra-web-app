@@ -24,6 +24,14 @@
 
                         questionBuilderCtrl.bindExerciseEventManager = znkExerciseCtrl.bindExerciseEventManager;
 
+                        questionBuilderCtrl.updateAnswerExplnView = function(isAnswerExplanationOpen){
+                            if(isAnswerExplanationOpen){
+                                element.addClass('answer-explanation-open');
+                            } else {
+                                element.removeClass('answer-explanation-open');
+                            }
+                        };
+
                         element.append('<answer-explanation></answer-explanation>');
                     };
 
