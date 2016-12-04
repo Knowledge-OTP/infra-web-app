@@ -1281,19 +1281,19 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 var exerciseCycleSrv = {};
 
                 exerciseCycleSrv.invoke = function (methodName, data) {                    
-                    var method = hooksObj[methodName];
+                    var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isFunction(method)) {
-                        data = angular.isArray(data) ? data : [data];
-                          
+                    if (angular.isDefined(hook)) {                      
                         try {
-                            fn = $injector.invoke(method);         
+                            fn = $injector.invoke(hook);         
                         } catch(e) {
-                            $log.error('exerciseCycleSrv invoke: faild to invoke method! methodName: ' + methodName);
+                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName);
                             return;
                         }
 
+                        data = angular.isArray(data) ? data : [data];
+                        
                         return fn.apply(null, data);
                     } 
                 };
