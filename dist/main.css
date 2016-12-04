@@ -1940,6 +1940,12 @@ md-tooltip.no-calc-tooltip {
     bottom: -9px;
     left: -9px; }
 
+question-builder.answer-explanation-open .question-basic-style {
+  overflow: auto;
+  height: calc(100vh - 570px); }
+  question-builder.answer-explanation-open .question-basic-style canvas {
+    height: calc(100vh - 570px); }
+
 /*border color*/
 /*background*/
 /* box shadow */
