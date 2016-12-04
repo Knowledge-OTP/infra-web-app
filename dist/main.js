@@ -1272,7 +1272,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         function () {
             var hooksObj = {};
 
-            this.extendHooks = function (_hooksObj) {
+            this.setHooks = function (_hooksObj) {
                 hooksObj = _hooksObj;
             };
 
@@ -1281,7 +1281,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 var exerciseCycleSrv = {};
 
                 exerciseCycleSrv.getHook = function (key) {    
-                    if (hooksObj && hooksObj[key]) {
+                    if (hooksObj && hooksObj[key] && angular.isObject(hooksObj[key])) {
                        return exerciseCycleSrv.invoke.bind(null, key);
                     }
                     return { invoke: angular.noop };
