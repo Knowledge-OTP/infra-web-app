@@ -28,7 +28,8 @@
   .app-workouts-diagnostic .exercise-container znk-exercise {
     -ms-flex-positive: 1;
         flex-grow: 1;
-    width: 100%; }
+    width: 100%;
+    height: calc(100vh - 95px); }
 
 .app-workouts-diagnostic .inline-block {
   display: inline-block; }
@@ -69,7 +70,8 @@
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
-      flex-direction: column; }
+      flex-direction: column;
+  height: calc(100vh - 95px); }
   .diagnostic-loading-wrapper .loading-title {
     font-size: 32px;
     color: #4f4d4d;
