@@ -335,7 +335,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('ci', function () {
         grunt.task.run([
-            'jshint:all',
+            //'jshint:all',
             'karma:ci'
         ]);
     });
@@ -425,7 +425,7 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('dist', [
-        'jshint:all',
+        //'jshint:all',
         'karma:build',
         'clean:dist',
         'build',
