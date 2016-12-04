@@ -162,6 +162,13 @@
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                                 var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                                 var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
+                                var isParentTutorial = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.TUTORIAL.enum;
+                                var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
+                                // skip intro
+                                if (isParentTutorial || isParentModule){
+                                    data.exerciseResult.seenIntro = true;
+                                }
+
                                 if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
                                     newViewState = VIEW_STATES.INTRO;
                                 } else {
@@ -628,9 +635,9 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv, 
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv) {
+                  UtilitySrv, ExerciseCycleSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -719,10 +726,12 @@
                             exerciseResult: exerciseResult,
                             exerciseParent: exerciseParentIsSectionOnly
                         });
+
                         if (shouldBroadcast) {
                             var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                             var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
                             $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                            ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
                         }
                     });
 
@@ -1208,6 +1217,45 @@
                 }
             };
         }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseCycleSrv',
+        function () {
+            var hooksObj = {};
+
+            this.setInvokeFunctions = function (_hooksObj) {
+                hooksObj = _hooksObj;
+            };
+
+            this.$get = ["$log", "$injector", function ($log, $injector) {
+                'ngInject';
+                var exerciseCycleSrv = {};
+
+                exerciseCycleSrv.invoke = function (methodName, data) {                    
+                    var hook = hooksObj[methodName];
+                    var fn;
+
+                    if (angular.isDefined(hook)) {                      
+                        try {
+                            fn = $injector.invoke(hook);         
+                        } catch(e) {
+                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName);
+                            return;
+                        }
+
+                        data = angular.isArray(data) ? data : [data];
+                        
+                        return fn.apply(null, data);
+                    } 
+                };
+
+                return exerciseCycleSrv;
+            }];
+        }
     );
 })(angular);
 
