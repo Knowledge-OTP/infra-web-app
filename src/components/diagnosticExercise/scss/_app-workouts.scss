@@ -35,19 +35,14 @@
             align-items: center;
             justify-content: flex-start;
         }
-        .znk.md-button {
+        .znk.md-button.md-primary {
             display: block;
             margin: 15px auto 25px;
             border-radius: 30px;
             padding-right: 0;
             padding-left: 0;
-            width: 200px;
-            &.md {
-                width: 180px;
-            }
-            &.primary {
-                text-transform: uppercase;
-            }
+            width: 180px;
+            text-transform: uppercase;
         }
         .answer-index-wrapper {
             cursor: pointer;

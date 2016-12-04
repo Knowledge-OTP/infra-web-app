@@ -427,17 +427,14 @@ complete-exercise-progress-bar {
   -ms-flex-pack: start;
       justify-content: flex-start; }
 
-.app-workouts-diagnostic .znk.md-button {
+.app-workouts-diagnostic .znk.md-button.md-primary {
   display: block;
   margin: 15px auto 25px;
   border-radius: 30px;
   padding-right: 0;
   padding-left: 0;
-  width: 200px; }
-  .app-workouts-diagnostic .znk.md-button.md {
-    width: 180px; }
-  .app-workouts-diagnostic .znk.md-button.primary {
-    text-transform: uppercase; }
+  width: 180px;
+  text-transform: uppercase; }
 
 .app-workouts-diagnostic .answer-index-wrapper {
   cursor: pointer; }
