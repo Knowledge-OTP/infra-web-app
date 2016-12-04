@@ -11,7 +11,7 @@
          znk-exercise {
              flex-grow: 1;
              width: 100%;
-             height: calc(100vh - 95px);
+             height: calc(100vh - 145px);
            }
          }
          .inline-block {
@@ -35,10 +35,13 @@
             align-items: center;
             justify-content: flex-start;
         }
-        .md-button {
+        .znk.md-button {
             display: block;
             margin: 15px auto 25px;
             border-radius: 30px;
+            padding-right: 0;
+            padding-left: 0;
+            width: 200px;
             &.md {
                 width: 180px;
             }

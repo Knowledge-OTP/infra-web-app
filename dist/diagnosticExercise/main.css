@@ -29,7 +29,7 @@
     -ms-flex-positive: 1;
         flex-grow: 1;
     width: 100%;
-    height: calc(100vh - 95px); }
+    height: calc(100vh - 145px); }
 
 .app-workouts-diagnostic .inline-block {
   display: inline-block; }
@@ -49,13 +49,16 @@
   -ms-flex-pack: start;
       justify-content: flex-start; }
 
-.app-workouts-diagnostic .md-button {
+.app-workouts-diagnostic .znk.md-button {
   display: block;
   margin: 15px auto 25px;
-  border-radius: 30px; }
-  .app-workouts-diagnostic .md-button.md {
+  border-radius: 30px;
+  padding-right: 0;
+  padding-left: 0;
+  width: 200px; }
+  .app-workouts-diagnostic .znk.md-button.md {
     width: 180px; }
-  .app-workouts-diagnostic .md-button.primary {
+  .app-workouts-diagnostic .znk.md-button.primary {
     text-transform: uppercase; }
 
 .app-workouts-diagnostic .answer-index-wrapper {
