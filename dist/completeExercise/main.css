@@ -42,20 +42,45 @@ complete-exercise-exercise .base-complete-exercise-container {
     display: flex; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .timer-type1 .clock-icon-svg * {
       stroke: white; }
+    complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .tutorial-icon-wrapper {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .tutorial-icon-wrapper .book-icon {
+        width: 20px;
+        display: block;
+        margin-right: 15px;
+        cursor: pointer; }
+        complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .tutorial-icon-wrapper .book-icon * {
+          stroke: white; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary {
       cursor: pointer;
       height: 30px;
-      background: #B33520;
       text-align: center;
       border-radius: 15px;
       line-height: 30px;
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
       padding-right: 10px;
       padding-left: 10px; }
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .background-opacity {
+        background: #ffffff;
+        opacity: 0.2;
+        height: 100%;
+        position: absolute;
+        width: 85px;
+        border-radius: inherit; }
       complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .summary-text {
         font-size: 16px;
         color: #ffffff;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
   complete-exercise-exercise .base-complete-exercise-container znk-exercise {
     -ms-flex-positive: 1;
         flex-grow: 1; }
@@ -116,8 +141,6 @@ complete-exercise-intro-tutorial {
   bottom: 0;
   left: 0; }
   complete-exercise-intro-tutorial .intro-container {
-    padding-right: 180px;
-    padding-left: 180px;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: column;
@@ -126,13 +149,21 @@ complete-exercise-intro-tutorial {
     complete-exercise-intro-tutorial .intro-container > *:not(.content-wrapper) {
       -ms-flex-negative: 0;
           flex-shrink: 0; }
-    complete-exercise-intro-tutorial .intro-container .video-wrapper {
+    complete-exercise-intro-tutorial .intro-container .upper-wrapper {
       margin-top: 35px;
-      text-align: center; }
-    complete-exercise-intro-tutorial .intro-container .content-wrapper {
-      margin-top: 40px;
-      margin-bottom: 100px;
-      overflow: auto; }
+      overflow: auto;
+      height: 80%; }
+      complete-exercise-intro-tutorial .intro-container .upper-wrapper .video-wrapper {
+        text-align: center; }
+      complete-exercise-intro-tutorial .intro-container .upper-wrapper .content-wrapper {
+        font-size: 16px;
+        color: #161616;
+        font-family: Lato;
+        font-weight: 300;
+        margin-top: 40px;
+        margin-bottom: 100px;
+        padding-right: 180px;
+        padding-left: 180px; }
     complete-exercise-intro-tutorial .intro-container .btn-section {
       position: absolute;
       right: 15px;
@@ -194,13 +225,18 @@ complete-exercise-intro-section {
       margin-bottom: 100px;
       margin-left: auto;
       width: 550px;
-      overflow: auto; }
+      overflow: auto;
+      text-align: center; }
     complete-exercise-intro-section .intro-container .btn-section {
       position: absolute;
       right: 0;
       bottom: 36px;
       left: 0;
-      text-align: center; }
+      text-align: center;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
       complete-exercise-intro-section .intro-container .btn-section .md-button {
         padding-right: 45px;
         padding-left: 45px; }
@@ -220,22 +256,30 @@ complete-exercise-progress-bar {
 
 .base-complete-exercise-container {
   width: 1060px;
-  height: calc(100vh - 75px);
+  height: calc(100vh - 95px);
   background: white;
   display: block;
-  margin-top: 15px;
-  margin-right: auto;
-  margin-left: auto;
+  margin: auto;
   box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
   border-radius: 15px; }
 
 [class*="-subject-pattern"] {
   background-repeat: repeat; }
 
+.math-subject-pattern {
+  /*CSS for basic styling and non-retina image path:*/
+  background-image: url("/assets/images/math-background-pattern.png");
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 123px 134px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+    .math-subject-pattern {
+      background-image: url("/assets/images/math-background-pattern@2x.png"); } }
+
 .reading-subject-pattern, .verbal-subject-pattern {
   /*CSS for basic styling and non-retina image path:*/
   background-image: url("/assets/images/reading-background-pattern.png");
-  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 102px 95px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
     .reading-subject-pattern, .verbal-subject-pattern {
       background-image: url("/assets/images/reading-background-pattern@2x.png"); } }
@@ -243,7 +287,8 @@ complete-exercise-progress-bar {
 .writing-subject-pattern, .essay-subject-pattern {
   /*CSS for basic styling and non-retina image path:*/
   background-image: url("/assets/images/writing-background-pattern.png");
-  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 80px 84px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
     .writing-subject-pattern, .essay-subject-pattern {
       background-image: url("/assets/images/writing-background-pattern@2x.png"); } }

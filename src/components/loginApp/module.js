@@ -3,11 +3,13 @@
 
     angular.module('znk.infra-web-app.loginApp', [
         'pascalprecht.translate',
+        'znk.infra.auth',
         'znk.infra.svgIcon',
         'ngMaterial',
-        'znk.infra.user',
         'satellizer',
-        'znk.infra.general'
+        'znk.infra.general',
+        'znk.infra.autofocus',
+        'znk.infra-web-app.promoCode'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -16,10 +18,45 @@
                 'form-lock': 'components/loginApp/svg/form-lock.svg',
                 'facebook-icon': 'components/loginApp/svg/facebook-icon.svg',
                 'google-icon': 'components/loginApp/svg/google-icon.svg',
-                'login-username-icon': 'components/loginApp/svg/login-username-icon.svg'
+                'login-username-icon': 'components/loginApp/svg/login-username-icon.svg',
+                'dropdown-arrow': 'components/loginApp/svg/dropdown-arrow.svg',
+                'v-icon': 'components/loginApp/svg/v-icon.svg',
+                'loginApp-arrow-icon': 'components/loginApp/svg/arrow-icon.svg',
+                'loginApp-close-icon': 'components/loginApp/svg/close-icon.svg',
+                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ]);
-
+    ])
+        .run(function ($location, InvitationKeyService) {
+            var search = $location.search();
+            var iid = search.iid;
+            if (angular.isDefined(iid) && iid !== null) {
+                InvitationKeyService.saveInvitationKey(iid);
+            }
+            //     var authObj = AuthService.getAuth();
+            //     if (authObj) {
+            //         InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
+            //             var invitation = res;
+            //             if (angular.equals(invitation, {})) {
+            //                 $log.error('Invitation object is empty');
+            //                 return;
+            //             }
+            //             var receiverEmail = invitation.receiverEmail;
+            //             if (receiverEmail === authObj.auth.token.email.toLowerCase()) {
+            //                 redirectToApp();
+            //             } else {
+            //                 logout();
+            //             }
+            //         });
+            //     }
+            // }
+            // function redirectToApp() {
+            //     InvitationKeyService.navigateWithInvitationKey();
+            // }
+            //
+            // function logout() {
+            //     AuthService.logout();
+            // }
+        });
 })(window, angular);

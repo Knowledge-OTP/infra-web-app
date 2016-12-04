@@ -35,10 +35,11 @@
             </div>
         </form>
         <div class="big-success-msg" ng-switch-when="true">
-            <svg-icon class="completed-v-icon-wrap" name="completed-v-icon"></svg-icon>
+            <svg-icon class="completed-v-icon-wrap" name="invitation-v-icon"></svg-icon>
             <div translate=".SUCCESS_INVITE"></div>
             <div class="done-btn-wrap">
-                <md-button class="success lg drop-shadow" ng-click="vm.closeModal()">
+                <md-button aria-label="{{'INVITE_TEACHER_MODAL.DONE' | translate}}"
+                    class="success lg drop-shadow" ng-click="vm.closeModal()">
                     <span translate=".DONE"></span>
                 </md-button>
             </div>

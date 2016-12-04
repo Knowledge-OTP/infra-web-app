@@ -1,0 +1,24 @@
+<md-dialog ng-cloak class="my-profile" translate-namespace="MY_PROFILE">
+    <div class="top-icon-wrap">
+        <div class="top-icon">
+            <div class="round-icon-wrap">
+                <svg-icon name="myProfile-icon"></svg-icon>
+            </div>
+        </div>
+    </div>
+
+    <md-toolbar>
+        <div class="close-popup-wrap" ng-click="vm.closeDialog()">
+            <svg-icon name="myProfile-close-popup"></svg-icon>
+        </div>
+    </md-toolbar>
+    <div class="content-wrapper">
+        <div class="main-title" translate=".MY_PROFILE"></div>
+
+        <update-profile user-profile="vm.userProfile" timezones-list="vm.timezonesList" local-timezone="vm.localTimezone" class="change-profile">
+
+        </update-profile>
+
+        <change-password class="change-password"></change-password>
+    </div>
+</md-dialog>

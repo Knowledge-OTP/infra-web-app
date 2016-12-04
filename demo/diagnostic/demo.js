@@ -1,7 +1,9 @@
 angular.module('demo', [
-        'znk.infra-web-app.diagnosticExercise',
-        'pascalprecht.translate'])
-    .config(function ($urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider, DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider, WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
+        'znk.infra-web-app.diagnosticExercise'])
+    .config(function ($urlRouterProvider, InfraConfigSrvProvider, $stateProvider, UserGoalsServiceProvider,
+                      DiagnosticIntroSrvProvider, SvgIconSrvProvider, QuestionTypesSrvProvider,
+                      WorkoutsDiagnosticFlowProvider, ScoringServiceProvider) {
+        'ngInject';
 
         var svgMap = {
             'math-section-icon': 'svg/math-section-icon.svg',
@@ -154,7 +156,8 @@ angular.module('demo', [
         this.SCIENCE = 2;
         this.ALL = 'all';
         this.NONE = 'none';
-    }).directive('simpleQuestion', function() {
+    })
+    .directive('simpleQuestion', function() {
         function compileFn() {
             function preFn(scope, element, attrs, questionBuilderCtrl) {
                 var content = questionBuilderCtrl.question.content.replace(/_/g, '');
@@ -174,7 +177,8 @@ angular.module('demo', [
             scope: {},
             compile: compileFn
         };
-    }).directive('customAnswerBuilderSat', function(ZnkExerciseViewModeEnum, AnswerTypeEnum) {
+    })
+    .directive('customAnswerBuilderSat', function(ZnkExerciseViewModeEnum, AnswerTypeEnum) {
         function compileFn() {
             function preFn(scope, element, attrs, ctrls) {
                 var questionBuilderCtrl = ctrls[0];

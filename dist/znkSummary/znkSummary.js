@@ -18,9 +18,8 @@
         bindings: {
             exerciseResult: '<'
         },
-        controller: ["$translatePartialLoader", function($translatePartialLoader) {
+        controller: function() {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var PERCENTAGE = 100;
 
@@ -47,7 +46,7 @@
                     animation: false
                 }
             };
-        }],
+        },
         controllerAs: 'vm'
     });
 })(angular);
@@ -62,9 +61,8 @@
         bindings: {
             exerciseData: '<'
         },
-        controller: ["$translatePartialLoader", "SubjectEnum", function($translatePartialLoader, SubjectEnum) {
+        controller: ["SubjectEnum", function(SubjectEnum) {
             'ngInject';
-            $translatePartialLoader.addPart('znkSummary');
 
             var vm = this;
 
@@ -129,6 +127,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     "    </div>\n" +
     "    <znk-timeline-web-wrapper\n" +
     "        subject-id=\"{{::vm.currentSubjectId}}\"\n" +
+    "        show-induction=\"true\"\n" +
     "        active-exercise-id=\"::vm.activeExerciseId\">\n" +
     "    </znk-timeline-web-wrapper>\n" +
     "</div>\n" +

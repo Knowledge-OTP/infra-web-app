@@ -1,4 +1,5 @@
 $oathLoginDrvHeight: 37px;
+$oathLoginDrvLineHeight: 32px;
 $facebookColor : #369;
 $facebookHoverColor : #2a547f;
 $gplusColor : #df4a31;
@@ -10,25 +11,50 @@ oath-login-drv {
         overflow: hidden;
         height: $oathLoginDrvHeight;
 
-        .facebook-btn,
-        .gplus-btn {
+        .social-btn {
             width:50%;
             height:100%;
             color: $bgColor3;
             float:left;
+            position: relative;
             padding-left: 25px;
             cursor: pointer;
             border: none;
+            &.gplus-btn {
+                border-top-right-radius: 25px;
+                border-bottom-right-radius: 25px;
+            }
             span {
                 display: block;
                 text-indent: -25px;
                 font-size: 14px;
+                &.loader {
+                    margin: 0;
+                    height: 12px;
+                    width: 12px;
+                    animation: rotate 0.8s infinite linear;
+                    border: 3px solid #fff;
+                    border-right-color: transparent;
+                    border-radius: 50%;
+                    position: absolute;
+                    top: 10px;
+                    right: 15px;
+                }
+
+                @keyframes rotate {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
             }
         }
 
         .facebook-btn {
             background-color: $facebookColor;
-            line-height: $oathLoginDrvHeight;
+            line-height: $oathLoginDrvLineHeight;
             &:hover {
                 background-color: $facebookHoverColor;
             }
@@ -44,7 +70,7 @@ oath-login-drv {
 
         .gplus-btn {
             background-color: $gplusColor;
-            line-height: $oathLoginDrvHeight;
+            line-height: $oathLoginDrvLineHeight;
             &:hover {
                 background-color: $gplusHoverColor;
             }

@@ -22,7 +22,7 @@
     text-align: center;
     margin-top: 40px; }
   #faq-container #faq-inner {
-    padding: 40px 55px 20px; }
+    padding: 20px 55px; }
   #faq-container v-accordion v-pane:not(.is-expanded) > v-pane-header .faq-icon {
     transform: rotate(-90deg); }
   #faq-container v-accordion v-pane v-pane-header {
@@ -45,7 +45,7 @@
     font-size: 16px;
     color: #4f4d4d;
     font-family: Lato;
-    font-weight: 200;
+    font-weight: 300;
     line-height: 24px;
     padding-left: 40px; }
   #faq-container v-accordion v-pane v-pane.is-expanded v-pane-header {

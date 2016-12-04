@@ -125,20 +125,45 @@ complete-exercise-exercise .base-complete-exercise-container {
     display: flex; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .timer-type1 .clock-icon-svg * {
       stroke: white; }
+    complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .tutorial-icon-wrapper {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .tutorial-icon-wrapper .book-icon {
+        width: 20px;
+        display: block;
+        margin-right: 15px;
+        cursor: pointer; }
+        complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .tutorial-icon-wrapper .book-icon * {
+          stroke: white; }
     complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary {
       cursor: pointer;
       height: 30px;
-      background: #B33520;
       text-align: center;
       border-radius: 15px;
       line-height: 30px;
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
       padding-right: 10px;
       padding-left: 10px; }
+      complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .background-opacity {
+        background: #ffffff;
+        opacity: 0.2;
+        height: 100%;
+        position: absolute;
+        width: 85px;
+        border-radius: inherit; }
       complete-exercise-exercise .base-complete-exercise-container complete-exercise-header pre-right-part .summary .summary-text {
         font-size: 16px;
         color: #ffffff;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
   complete-exercise-exercise .base-complete-exercise-container znk-exercise {
     -ms-flex-positive: 1;
         flex-grow: 1; }
@@ -199,8 +224,6 @@ complete-exercise-intro-tutorial {
   bottom: 0;
   left: 0; }
   complete-exercise-intro-tutorial .intro-container {
-    padding-right: 180px;
-    padding-left: 180px;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: column;
@@ -209,13 +232,21 @@ complete-exercise-intro-tutorial {
     complete-exercise-intro-tutorial .intro-container > *:not(.content-wrapper) {
       -ms-flex-negative: 0;
           flex-shrink: 0; }
-    complete-exercise-intro-tutorial .intro-container .video-wrapper {
+    complete-exercise-intro-tutorial .intro-container .upper-wrapper {
       margin-top: 35px;
-      text-align: center; }
-    complete-exercise-intro-tutorial .intro-container .content-wrapper {
-      margin-top: 40px;
-      margin-bottom: 100px;
-      overflow: auto; }
+      overflow: auto;
+      height: 80%; }
+      complete-exercise-intro-tutorial .intro-container .upper-wrapper .video-wrapper {
+        text-align: center; }
+      complete-exercise-intro-tutorial .intro-container .upper-wrapper .content-wrapper {
+        font-size: 16px;
+        color: #161616;
+        font-family: Lato;
+        font-weight: 300;
+        margin-top: 40px;
+        margin-bottom: 100px;
+        padding-right: 180px;
+        padding-left: 180px; }
     complete-exercise-intro-tutorial .intro-container .btn-section {
       position: absolute;
       right: 15px;
@@ -277,13 +308,18 @@ complete-exercise-intro-section {
       margin-bottom: 100px;
       margin-left: auto;
       width: 550px;
-      overflow: auto; }
+      overflow: auto;
+      text-align: center; }
     complete-exercise-intro-section .intro-container .btn-section {
       position: absolute;
       right: 0;
       bottom: 36px;
       left: 0;
-      text-align: center; }
+      text-align: center;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
       complete-exercise-intro-section .intro-container .btn-section .md-button {
         padding-right: 45px;
         padding-left: 45px; }
@@ -303,22 +339,30 @@ complete-exercise-progress-bar {
 
 .base-complete-exercise-container {
   width: 1060px;
-  height: calc(100vh - 75px);
+  height: calc(100vh - 95px);
   background: white;
   display: block;
-  margin-top: 15px;
-  margin-right: auto;
-  margin-left: auto;
+  margin: auto;
   box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
   border-radius: 15px; }
 
 [class*="-subject-pattern"] {
   background-repeat: repeat; }
 
+.math-subject-pattern {
+  /*CSS for basic styling and non-retina image path:*/
+  background-image: url("/assets/images/math-background-pattern.png");
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 123px 134px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+    .math-subject-pattern {
+      background-image: url("/assets/images/math-background-pattern@2x.png"); } }
+
 .reading-subject-pattern, .verbal-subject-pattern {
   /*CSS for basic styling and non-retina image path:*/
   background-image: url("/assets/images/reading-background-pattern.png");
-  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 102px 95px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
     .reading-subject-pattern, .verbal-subject-pattern {
       background-image: url("/assets/images/reading-background-pattern@2x.png"); } }
@@ -326,7 +370,8 @@ complete-exercise-progress-bar {
 .writing-subject-pattern, .essay-subject-pattern {
   /*CSS for basic styling and non-retina image path:*/
   background-image: url("/assets/images/writing-background-pattern.png");
-  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 80px 84px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
     .writing-subject-pattern, .essay-subject-pattern {
       background-image: url("/assets/images/writing-background-pattern@2x.png"); } }
@@ -351,7 +396,7 @@ complete-exercise-progress-bar {
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
 .app-workouts-diagnostic .exercise-container {
   width: 100%;
-  height: calc(100vh - 95px);
+  height: 100%;
   background-color: white;
   display: -ms-flexbox;
   display: flex;
@@ -383,7 +428,7 @@ complete-exercise-progress-bar {
 
 .app-workouts-diagnostic .md-button {
   display: block;
-  margin: 15px auto;
+  margin: 15px auto 25px;
   border-radius: 30px; }
   .app-workouts-diagnostic .md-button.md {
     width: 180px; }
@@ -533,11 +578,11 @@ complete-exercise-progress-bar {
     font-size: 18px;
     color: #4f4d4d;
     font-family: Lato;
-    font-weight: 200;
+    font-weight: 300;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 35px;
+    margin-top: 70px;
     line-height: 25px; }
   .diagnostic-summary-wrapper .start-button.md-button.primary {
     border-radius: 30px;
@@ -546,6 +591,28 @@ complete-exercise-progress-bar {
     margin-right: auto;
     margin-top: 35px;
     margin-bottom: 35px; }
+  .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: center;
+        align-items: center;
+    margin-top: 60px; }
+    .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 700; }
+    .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper .md-button.znk.outline {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #64b61d;
+      font-family: Lato;
+      font-weight: 400;
+      text-transform: inherit;
+      padding-left: 35px;
+      padding-right: 35px; }
 
 md-tooltip.tooltip-for-diagnostic-summary {
   opacity: 0;
@@ -623,7 +690,7 @@ diagnostic-intro {
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
-      font-weight: 200; }
+      font-weight: 300; }
     diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
       position: relative; }
       diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
@@ -717,7 +784,7 @@ diagnostic-intro {
           font-size: 16px;
           color: #4f4d4d;
           font-family: Lato;
-          font-weight: 200;
+          font-weight: 300;
           margin-top: 5px;
           min-height: 38px; }
 
@@ -786,7 +853,7 @@ estimated-score-widget .score-estimate-container {
     font-size: 11px;
     color: #757a83;
     font-family: Lato;
-    font-weight: 200;
+    font-weight: 300;
     width: 200px;
     position: relative;
     bottom: 43px;
@@ -996,7 +1063,8 @@ md-tooltip.tooltip-for-estimated-score-widget {
   -ms-flex-pack: center;
       justify-content: center;
   width: 100%;
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23); }
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23);
+  margin-top: -23px; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase {
     display: -ms-flexbox;
     display: flex;
@@ -1034,7 +1102,7 @@ md-tooltip.tooltip-for-estimated-score-widget {
       font-size: 12px;
       color: #757a83;
       font-family: Lato;
-      font-weight: 200; }
+      font-weight: 300; }
   .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated {
     display: -ms-flexbox;
     display: flex;
@@ -1141,7 +1209,7 @@ md-tooltip.tooltip-for-estimated-score-widget {
     text-align: center;
     margin-top: 40px; }
   #faq-container #faq-inner {
-    padding: 40px 55px 20px; }
+    padding: 20px 55px; }
   #faq-container v-accordion v-pane:not(.is-expanded) > v-pane-header .faq-icon {
     transform: rotate(-90deg); }
   #faq-container v-accordion v-pane v-pane-header {
@@ -1164,7 +1232,7 @@ md-tooltip.tooltip-for-estimated-score-widget {
     font-size: 16px;
     color: #4f4d4d;
     font-family: Lato;
-    font-weight: 200;
+    font-weight: 300;
     line-height: 24px;
     padding-left: 40px; }
   #faq-container v-accordion v-pane v-pane.is-expanded v-pane-header {
@@ -1288,24 +1356,28 @@ md-dialog.base {
       height: 19px; }
 
 feedback .feedback-btn {
+  width: 45px;
+  height: 45px;
   position: fixed;
-  right: 10px;
-  bottom: 0px;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  font-size: 18px;
-  color: #ffffff;
-  font-family: Lato;
-  font-weight: 400;
-  width: 150px;
-  height: 37px;
-  background-color: #252525;
-  opacity: 0.851;
-  line-height: 1.667;
-  z-index: 9999;
-  box-shadow: none;
-  border: none;
-  padding: 0; }
+  right: 30px;
+  bottom: 10px;
+  border: 1px solid #c2c2c2;
+  cursor: pointer;
+  box-shadow: 0 1px 5px 0 rgba(63, 63, 63, 0.2);
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+  border-radius: 50px;
+  background-color: #ebebeb;
+  z-index: 78; }
+  feedback .feedback-btn svg g {
+    fill: transparent; }
+  feedback .feedback-btn svg path, feedback .feedback-btn svg polyline {
+    stroke-width: 10px;
+    stroke: #757a83; }
 
 .feedback-dialog .popup-header {
   position: relative;
@@ -1669,7 +1741,7 @@ answer-explanation-content {
     color: #161616;
     font-family: Quicksand;
     font-weight: bold; }
-  answer-explanation-content svg-icon[name="close-popup"] svg line {
+  answer-explanation-content svg-icon[name="answer-explanation-close"] svg line {
     stroke: #161616; }
   answer-explanation-content .flex-wrap {
     display: -ms-flexbox;
@@ -1696,7 +1768,7 @@ answer-explanation-content {
         font-size: 16px;
         color: #4f4d4d;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
 
 .exercise-header {
   position: relative;
@@ -1911,34 +1983,6 @@ md-dialog.invitation-confirm-modal {
       width: 14px;
       padding: 10px;
       cursor: pointer; }
-  md-dialog.invitation-confirm-modal md-dialog-content {
-    padding-top: 25px;
-    height: 100%;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .main-title {
-      margin-top: 20px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .teacher {
-      font-size: 16px;
-      color: #161616;
-      font-family: Lato;
-      font-weight: 400;
-      text-align: center;
-      margin: 35px 10px;
-      padding: 0 25px; }
-      md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
-        padding-left: 1px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-direction: row;
-          flex-direction: row;
-      -ms-flex-pack: center;
-          justify-content: center; }
-      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
-        margin: auto; }
-      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
-        color: #0a9bad; }
   md-dialog.invitation-confirm-modal .top-icon-wrap {
     position: absolute;
     top: 0;
@@ -1964,24 +2008,62 @@ md-dialog.invitation-confirm-modal {
             align-items: center; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
           width: 14px;
-          stroke: #067f8e; }
+          stroke: white; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon * {
-          fill: #067f8e; }
-  md-dialog.invitation-confirm-modal .big-success-msg .completed-v-icon-wrap {
-    width: 75px;
-    margin: 8px auto; }
-  md-dialog.invitation-confirm-modal .big-success-msg div {
+          fill: white; }
+
+md-dialog-content.invitation-confirm-modal-content {
+  background-color: #ffffff;
+  padding-top: 25px;
+  height: 100%;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px; }
+  md-dialog-content.invitation-confirm-modal-content .main-title {
+    margin-top: 20px;
+    text-align: center;
+    background-color: transparent;
+    font-size: 24px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400; }
+  md-dialog-content.invitation-confirm-modal-content .teacher {
     font-size: 16px;
-    color: #7d7d7d;
+    color: #161616;
     font-family: Lato;
     font-weight: 400;
     text-align: center;
-    margin: 10px; }
-  md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
+    margin: 35px 10px;
+    padding: 0 25px; }
+    md-dialog-content.invitation-confirm-modal-content .teacher .want-to-connect {
+      padding-left: 1px; }
+  md-dialog-content.invitation-confirm-modal-content .btn-wrap {
     display: -ms-flexbox;
     display: flex;
+    -ms-flex-direction: row;
+        flex-direction: row;
     -ms-flex-pack: center;
         justify-content: center; }
+    md-dialog-content.invitation-confirm-modal-content .btn-wrap > button > span {
+      margin: auto; }
+    md-dialog-content.invitation-confirm-modal-content .btn-wrap .outline-blue {
+      color: #0a9bad; }
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg {
+    text-align: center; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
+      width: 75px;
+      margin: 8px auto; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
+      font-size: 16px;
+      color: #7d7d7d;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      margin: 10px; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -1989,53 +2071,53 @@ md-dialog.invitation-confirm-modal {
 /* general */
 /* paths */
 /* general */
-invitation-manager .invite-icon-btn {
-  margin-right: 5px;
-  position: relative; }
-  invitation-manager .invite-icon-btn .num-of-receive {
-    position: absolute;
-    top: 0;
-    right: 4px;
-    width: 14px;
-    height: 14px;
-    background: #ff6766;
-    font-size: 10px;
-    color: white;
-    border-radius: 7px;
-    text-align: center; }
-
-invitation-manager .circle-invite-wrap {
-  width: 33px;
-  height: 33px;
-  border-radius: 17px;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
-  -ms-flex-align: center;
-      align-items: center;
-  margin-right: 10px;
-  cursor: pointer; }
-
-invitation-manager .teacher-icon-wrap {
-  background-color: #f6f6f6; }
-  invitation-manager .teacher-icon-wrap .teacher-icon {
-    width: 24px; }
-
-invitation-manager +
-.teacher-active-icon-wrap {
-  border: 1px solid #0a9bad; }
-  invitation-manager +
-.teacher-active-icon-wrap .teacher-active-icon {
-    width: 23px;
-    height: 16px; }
-  invitation-manager +
-.teacher-active-icon-wrap .teacher-active-icon * {
-    fill: #0a9bad; }
+invitation-manager .invitation-manager {
+  display: block;
+  padding-right: 10px; }
+  invitation-manager .invitation-manager .invite-icon-btn {
+    position: relative; }
+    invitation-manager .invitation-manager .invite-icon-btn .num-of-receive {
+      position: absolute;
+      top: 0;
+      right: -5px;
+      width: 14px;
+      height: 14px;
+      background: #ff6766;
+      font-size: 10px;
+      color: white;
+      border-radius: 7px;
+      text-align: center; }
+    invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap {
+      width: 33px;
+      height: 33px;
+      border-radius: 17px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      cursor: pointer; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap {
+        background-color: #f6f6f6; }
+        invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap svg-icon.invitation-teacher-icon {
+          width: 24px; }
+          invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap svg-icon.invitation-teacher-icon svg {
+            width: 100%; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap {
+        border: 1px solid #0a9bad; }
+        invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap svg-icon.teacher-active-icon {
+          width: 23px;
+          height: 16px; }
+          invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap svg-icon.teacher-active-icon svg {
+            width: 100%; }
+            invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap svg-icon.teacher-active-icon svg * {
+              fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
   min-width: 280px;
-  overflow: hidden;
+  max-height: 400px;
+  border-radius: 6px;
   padding: 0; }
   md-menu-content.md-menu-content-invitation-manager md-list {
     padding-top: 0;
@@ -2049,29 +2131,55 @@ md-menu-content.md-menu-content-invitation-manager {
           flex-direction: row;
       -ms-flex-align: center;
           align-items: center; }
-      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item svg-icon.received-invitations {
         width: 14px;
         height: 14px;
-        stroke: #0a9bad; }
-      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations * {
-        stroke: #0a9bad; }
+        stroke: #f7f7f7;
+        margin-bottom: 5px; }
+        md-menu-content.md-menu-content-invitation-manager md-list md-list-item svg-icon.received-invitations svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list md-list-item svg-icon.received-invitations svg * {
+            stroke: #f7f7f7; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations {
         width: 14px;
         height: 14px;
         stroke: #92969d; }
-      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations * {
-        stroke: #92969d; }
+        md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations svg * {
+            stroke: #92969d; }
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item.invite-list-wrap {
+        margin-bottom: 10px;
+        padding-left: 6px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
       padding: 10px 0; }
-    md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
+    md-menu-content.md-menu-content-invitation-manager md-list .icon-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+      md-menu-content.md-menu-content-invitation-manager md-list .icon-wrap .creation-time {
+        font-size: 10px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 300; }
+    md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap,
+    md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       display: -ms-flexbox;
       display: flex;
       -ms-flex-direction: column;
           flex-direction: column;
-      padding: 10px 20px;
       -ms-flex-positive: 1;
-          flex-grow: 1; }
-      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+          flex-grow: 1;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 12px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name,
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email,
+      md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name,
+      md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 16px;
         color: #757a83;
         font-family: Lato;
@@ -2080,21 +2188,19 @@ md-menu-content.md-menu-content-invitation-manager {
         -ms-flex-positive: 1;
             flex-grow: 1;
         margin-bottom: 3px; }
-      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email,
+      md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+        font-size: 12px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: lowercase; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .declined-your-invitation-text,
+      md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .declined-your-invitation-text {
         font-size: 14px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 400; }
-      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .creation-time, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .creation-time {
-        font-size: 10px;
-        color: #757a83;
-        font-family: Lato;
-        font-weight: 200; }
-      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .declined-your-invitation-text, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .declined-your-invitation-text {
-        font-size: 14px;
-        color: #757a83;
-        font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
@@ -2110,8 +2216,37 @@ md-menu-content.md-menu-content-invitation-manager {
       font-family: Lato;
       font-weight: 400;
       text-transform: uppercase;
-      border-bottom: 1px solid #ebebeb; }
-    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
+      border-bottom: 1px solid #ebebeb;
+      padding: 10px; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite-count {
+      padding-top: 20px; }
+    md-menu-content.md-menu-content-invitation-manager md-list .conf-wrap {
+      padding-left: 14px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .conf-wrap .teacher-wrap {
+        padding-left: 20px; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
+      width: 25px;
+      height: 25px;
+      border: 1px solid #acacac;
+      border-radius: 13px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+      -ms-flex-align: center;
+          align-items: center; }
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-invite-btn,
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-conformation-btn {
+        width: 9px;
+        cursor: pointer;
+        margin-top: -2px; }
+        md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-invite-btn svg,
+        md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-conformation-btn svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-invite-btn svg *,
+          md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-conformation-btn svg * {
+            stroke: #92969d; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite {
       width: 25px;
       height: 25px;
       border: 1px solid #acacac;
@@ -2121,17 +2256,22 @@ md-menu-content.md-menu-content-invitation-manager {
       -ms-flex-pack: center;
           justify-content: center;
       -ms-flex-align: center;
-          align-items: center;
-      margin-right: 6px; }
-      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn {
-        height: 12px;
-        width: 12px;
+          align-items: center; }
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-invite-btn,
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-conformation-btn {
+        width: 9px;
         cursor: pointer;
         margin-top: -2px; }
-      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn * {
-        stroke: #acacac; }
+        md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-invite-btn svg,
+        md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-conformation-btn svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-invite-btn svg *,
+          md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-conformation-btn svg * {
+            stroke: #92969d; }
     md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
       border: none; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite {
+      margin-right: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .approve-invite {
       width: 25px;
       height: 25px;
@@ -2143,14 +2283,16 @@ md-menu-content.md-menu-content-invitation-manager {
           justify-content: center;
       -ms-flex-align: center;
           align-items: center; }
-      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
+      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite svg-icon.v-icon-btn {
         width: 14px;
         cursor: pointer; }
-      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn * {
-        stroke: #87ca4d; }
+        md-menu-content.md-menu-content-invitation-manager md-list .approve-invite svg-icon.v-icon-btn svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list .approve-invite svg-icon.v-icon-btn svg * {
+            stroke: #d67914; }
   md-menu-content.md-menu-content-invitation-manager .empty-invite .empty-msg {
     font-size: 16px;
-    color: #161616;
+    color: #4f4d4d;
     font-family: Lato;
     font-weight: 400;
     text-align: center;
@@ -2168,39 +2310,103 @@ md-menu-content.md-menu-content-invitation-manager {
     display: flex;
     -ms-flex-align: center;
         align-items: center;
-    height: 60px;
-    background: #fafafa; }
+    background: #fafafa;
+    padding: 10px; }
     md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
-      margin: 10px auto; }
-  md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap {
+      margin: 0 auto; }
+  md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap {
     font-size: 14px;
-    color: #161616;
+    color: #4f4d4d;
     font-family: Lato;
     font-weight: 400;
-    background-color: #fafafa;
     border-bottom: 1px solid #ebebeb;
-    padding: 15px;
     position: relative; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .title {
-      font-size: 12px;
-      text-transform: uppercase;
-      margin-bottom: 10px; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-name {
-      text-transform: capitalize;
-      line-height: 25px; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-email {
-      font-weight: 200;
-      color: #acacac; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher {
-      height: 12px;
-      width: 12px;
-      cursor: pointer;
-      margin-top: -2px;
-      position: absolute;
-      right: 10px;
-      top: 50%; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher * {
-      stroke: #acacac; }
+    md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header {
+      height: 34px;
+      line-height: 34px;
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 700;
+      text-align: center;
+      background-color: #fafafa; }
+      md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header .tutors-list-edit-icon {
+        width: 14px;
+        height: 14px;
+        fill: #b7b7b7;
+        float: right;
+        padding-right: 15px;
+        padding-top: 10px;
+        cursor: pointer; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header .tutors-list-edit-icon svg {
+          width: 14px;
+          height: 14px; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header .tutors-list-edit-icon.delete-techer-mode {
+          fill: #f7f7f7; }
+    md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item {
+      padding: 13px 10px;
+      border-bottom: 1px solid #ebebeb; }
+      md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item:last-child {
+        border-bottom: none; }
+      md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+            align-items: center; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status {
+          -ms-flex-preferred-size: 10%;
+              flex-basis: 10%;
+          padding: 5px;
+          position: relative; }
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status .online-indicator {
+            position: absolute;
+            top: -12px;
+            background: #B33520;
+            width: 7px;
+            height: 7px;
+            border: 2px solid #ebebeb;
+            border-radius: 6px; }
+            md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status .online-indicator.offline {
+              background: #e4841d; }
+            md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status .online-indicator.online {
+              background: #d67914; }
+            md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status .online-indicator.idle {
+              background: #edc811; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-name {
+          padding: 5px;
+          -ms-flex-preferred-size: 80%;
+              flex-basis: 80%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          box-sizing: border-box;
+          font-size: 18px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 700; }
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-name .teacher-subject,
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-name .teacher-email {
+            margin-top: 11px;
+            line-height: 12px;
+            font-size: 12px;
+            color: #757a83;
+            font-family: Lato;
+            font-weight: 400; }
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-name .teacher-email {
+            text-transform: lowercase; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .actions {
+          min-width: 47px;
+          -ms-flex-preferred-size: 10%;
+              flex-basis: 10%;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          padding-left: 5px;
+          padding-right: 0; }
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .actions .delete-teacher {
+            text-align: center;
+            cursor: pointer;
+            color: #ff6766;
+            padding-top: 10px; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -2264,24 +2470,26 @@ md-dialog.invite-teacher-modal-wrap {
         font-size: 12px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
-      width: 138px;
-      margin: 0 auto; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
-      font-size: 16px;
-      color: #7d7d7d;
-      font-family: Lato;
-      font-weight: 400;
-      text-align: center;
-      margin-top: 20px; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: center;
-          justify-content: center; }
-      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
-        margin: 0 auto 65px; }
+        font-weight: 300; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg {
+      text-align: center; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
+        width: 138px;
+        margin: 0 auto; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
+        font-size: 16px;
+        color: #7d7d7d;
+        font-family: Lato;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 20px; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center; }
+        md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
+          margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
     position: absolute;
     top: 0;
@@ -2330,6 +2538,398 @@ md-dialog.invite-teacher-modal-wrap {
               width: 45px;
               height: 42px; } }
 
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+md-dialog.my-lessons-schedule-wrapper {
+  width: 580px;
+  height: auto;
+  min-height: 465px;
+  border-radius: 15px; }
+  md-dialog.my-lessons-schedule-wrapper .top-icon-wrap {
+    width: 100%;
+    height: 40px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    position: relative;
+    top: 0;
+    background-color: #0a9bad; }
+    md-dialog.my-lessons-schedule-wrapper .top-icon-wrap .calendar-icon svg path {
+      fill: #ffffff; }
+  md-dialog.my-lessons-schedule-wrapper .md-dialog-content {
+    padding: 22px; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-title {
+      font-size: 32px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 700;
+      margin-top: 12px;
+      text-align: center; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .upcoming-lesson-title {
+      font-size: 14px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400;
+      display: block;
+      margin-top: 35px;
+      text-align: center; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .no-live-lessons-text {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400;
+      text-align: center;
+      margin-top: 110px;
+      display: none; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content.empty-list .no-live-lessons-text {
+      display: block; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content.empty-list .upcoming-lesson-title, md-dialog.my-lessons-schedule-wrapper .md-dialog-content.empty-list .time-zone {
+      display: none; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content.empty-list .ok-button {
+      margin-top: 95px;
+      display: block; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .current-time {
+      font-size: 12px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      margin-top: 25px; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .btn-wrapper {
+      display: -ms-flexbox;
+      display: flex; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .btn-wrapper .ok-button {
+        margin: 15px auto 0 auto;
+        box-shadow: none;
+        width: 320px;
+        border-radius: 25px;
+        background-color: #0a9bad;
+        color: white; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .btn-wrapper .ok-button:hover {
+        background-color: #0a8999; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper {
+      margin-top: 16px;
+      height: auto;
+      max-height: 290px;
+      overflow-y: auto;
+      padding-bottom: 20px; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        margin-top: 5px; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson {
+          width: 435px;
+          height: 42px;
+          background-color: #f7f7f7;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-align: center;
+              align-items: center;
+          margin-left: auto;
+          border: 1px solid #e1e1e1;
+          border-radius: 5px; }
+          md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .date, md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .hour, md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .educator-name {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+                align-items: center;
+            -ms-flex-pack: center;
+                justify-content: center; }
+          md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .date {
+            width: 85px;
+            height: 100%;
+            font-size: 19px;
+            color: #4f4d4d;
+            font-family: Quicksand;
+            font-weight: 700;
+            background-color: #ebebeb; }
+          md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .hour {
+            width: 100px;
+            height: 100%;
+            font-size: 16px;
+            color: #4f4d4d;
+            font-family: Quicksand;
+            font-weight: 400; }
+          md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .live-lesson .educator-name {
+            width: 237px;
+            height: 100%;
+            font-size: 14px;
+            color: #4f4d4d;
+            font-family: Lato;
+            font-weight: 400;
+            -ms-flex-pack: end;
+                justify-content: flex-end;
+            margin-right: 13px; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .reschedule-wrapper {
+          display: -ms-flexbox;
+          display: flex;
+          justify-items: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+          width: 50px; }
+          md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .reschedule-wrapper .reschedule-icon {
+            cursor: pointer; }
+            md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .reschedule-wrapper .reschedule-icon svg {
+              width: 16px; }
+              md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .reschedule-wrapper .reschedule-icon svg path, md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater .reschedule-wrapper .reschedule-icon svg polygon {
+                fill: #acacac; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater:first-child {
+          margin-top: 0;
+          margin-bottom: 36px; }
+          md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper .live-lesson-repeater:first-child:after {
+            content: '';
+            position: absolute;
+            top: 42px;
+            left: 37px;
+            width: 437px;
+            height: 1px;
+            display: block;
+            margin: 20px auto;
+            background-color: #f7f7f7; }
+
+md-tooltip.reschedule-tooltip {
+  width: 130px;
+  height: 36px;
+  padding: 0;
+  border-radius: 5px; }
+  md-tooltip.reschedule-tooltip .md-content {
+    padding: 2px;
+    border-radius: 5px;
+    background-color: #4f4d4d; }
+    md-tooltip.reschedule-tooltip .md-content div {
+      font-size: 12px;
+      color: white;
+      font-family: Quicksand;
+      font-weight: 400;
+      border-radius: 4px;
+      text-align: center; }
+
+md-dialog.my-lessons-schedule-wrapper {
+  width: 580px;
+  height: auto;
+  min-height: 465px;
+  border-radius: 15px; }
+  md-dialog.my-lessons-schedule-wrapper .top-icon-wrap {
+    width: 100%;
+    height: 40px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    position: relative;
+    top: 0;
+    background-color: #0a9bad; }
+    md-dialog.my-lessons-schedule-wrapper .top-icon-wrap .reschedule-icon svg {
+      width: 35px; }
+      md-dialog.my-lessons-schedule-wrapper .top-icon-wrap .reschedule-icon svg path, md-dialog.my-lessons-schedule-wrapper .top-icon-wrap .reschedule-icon svg polygon {
+        fill: #ffffff; }
+  md-dialog.my-lessons-schedule-wrapper .close-popup-wrap * {
+    stroke: #ffffff;
+    stroke-width: 8px; }
+  md-dialog.my-lessons-schedule-wrapper .md-dialog-content {
+    padding: 40px 22px 22px 22px; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .reschedule-lesson-title {
+      font-size: 32px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 700;
+      text-align: center; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container {
+      text-align: center; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .note-wrapper {
+        width: 470px;
+        height: 56px;
+        background-color: #fafafa;
+        margin: 17px auto 0 auto;
+        border: 1px solid #ff6766;
+        text-align: center;
+        padding-top: 9px;
+        box-sizing: border-box;
+        border-radius: 6px; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .note-wrapper .red-color-text {
+          font-size: 14px;
+          color: #ff6766;
+          font-family: Lato;
+          font-weight: 400; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .note-wrapper .warning-text {
+          font-size: 14px;
+          color: #757a83;
+          font-family: Lato;
+          font-weight: 400; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .reschedule-container {
+        width: 468px;
+        height: 205px;
+        font-size: 14px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400;
+        margin: 15px auto 0 auto;
+        border: 1px solid #acacac;
+        padding: 20px 17px;
+        box-sizing: border-box; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .reschedule-container .text-with-underline {
+          text-decoration: underline; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .bottom-lesson {
+        font-size: 14px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 300;
+        text-align: center;
+        margin-top: 25px; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        margin-top: 15px; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .cancel-btn {
+          background-color: #ffffff;
+          border: 1px solid #0a9bad;
+          color: #0a9bad;
+          width: 160px;
+          border-radius: 25px; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .cancel-btn:hover {
+          background-color: #e2f0f2; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .send-btn {
+          background-color: #0a9bad;
+          border: 1px solid #0a9bad;
+          color: white;
+          width: 160px;
+          border-radius: 25px; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .send-btn:hover {
+          background-color: #0a8999; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg {
+      margin-top: 40px;
+      text-align: center;
+      transition: 0.3s; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg .completed-v-icon-wrap {
+        width: 120px;
+        margin: 0 auto; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg div {
+        font-size: 16px;
+        color: #7d7d7d;
+        font-family: Lato;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 20px; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg .done-btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center; }
+        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg .done-btn-wrap .md-button {
+          margin: 6px auto; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg.ng-leave.ng-leave-active,
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg.ng-enter {
+      opacity: 0; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg.ng-leave,
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg.ng-enter.ng-enter-active {
+      opacity: 1; }
+
+.upcoming-lesson-toast-wrapper {
+  width: 375px;
+  height: 145px;
+  box-shadow: 1px 1px 5px 0.5px rgba(0, 0, 0, 0.27);
+  border: 1px solid #87ca4d;
+  border-radius: 15px;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #ffffff;
+  top: 63px;
+  z-index: 11;
+  transition: 1s;
+  position: absolute;
+  right: -400px; }
+  .upcoming-lesson-toast-wrapper.animate-toast {
+    right: 5px; }
+  .upcoming-lesson-toast-wrapper.ng-leave.ng-leave-active {
+    transition: 0.2s;
+    opacity: 0; }
+  .upcoming-lesson-toast-wrapper .close-popup {
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 6px;
+    top: 8px; }
+    .upcoming-lesson-toast-wrapper .close-popup svg line {
+      stroke: #4f4d4d;
+      stroke-width: 8px; }
+  .upcoming-lesson-toast-wrapper .left-side-container {
+    width: 57px;
+    height: 100%;
+    cursor: pointer;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    background-color: #87ca4d;
+    border-radius: 15px 0 0 15px; }
+    .upcoming-lesson-toast-wrapper .left-side-container .calendar-icon svg path {
+      fill: white; }
+  .upcoming-lesson-toast-wrapper .right-side-container {
+    width: 280px;
+    cursor: pointer;
+    padding: 16px 26px 16px 18px;
+    font-size: 0; }
+    .upcoming-lesson-toast-wrapper .right-side-container .closest-lesson-details .top-title {
+      font-size: 14px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400;
+      display: inline-block;
+      margin-right: 5px; }
+    .upcoming-lesson-toast-wrapper .right-side-container .closest-lesson-details .teacher-name {
+      font-size: 14px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 700;
+      display: inline-block; }
+    .upcoming-lesson-toast-wrapper .right-side-container .closest-lesson-details .lesson-date {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 700;
+      margin-top: 14px; }
+    .upcoming-lesson-toast-wrapper .right-side-container .closest-lesson-details .lesson-hour {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400;
+      margin-top: 9px; }
+    .upcoming-lesson-toast-wrapper .right-side-container .bottom-container {
+      position: absolute;
+      bottom: 10px;
+      clear: both;
+      display: -ms-flexbox;
+      display: flex; }
+      .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .bottom-clickable-text {
+        font-size: 13px;
+        color: #0a9bad;
+        font-family: Lato;
+        font-weight: 400;
+        cursor: pointer; }
+      .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .reschedule-wrapper {
+        margin-left: 68px;
+        display: -ms-flexbox;
+        display: flex; }
+        .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .reschedule-wrapper .reschedule-text {
+          font-size: 12px;
+          color: #acacac;
+          font-family: Lato;
+          font-weight: 400;
+          margin-left: 4px; }
+        .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .reschedule-wrapper svg path, .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .reschedule-wrapper svg polygon {
+          fill: #acacac; }
+
 /* fonts size */
 /* general */
 /* paths */
@@ -2344,23 +2944,42 @@ oath-login-drv .btn-wrap {
   border-radius: 25px;
   overflow: hidden;
   height: 37px; }
-  oath-login-drv .btn-wrap .facebook-btn,
-  oath-login-drv .btn-wrap .gplus-btn {
+  oath-login-drv .btn-wrap .social-btn {
     width: 50%;
     height: 100%;
     color: #ffffff;
     float: left;
+    position: relative;
     padding-left: 25px;
     cursor: pointer;
     border: none; }
-    oath-login-drv .btn-wrap .facebook-btn span,
-    oath-login-drv .btn-wrap .gplus-btn span {
+    oath-login-drv .btn-wrap .social-btn.gplus-btn {
+      border-top-right-radius: 25px;
+      border-bottom-right-radius: 25px; }
+    oath-login-drv .btn-wrap .social-btn span {
       display: block;
       text-indent: -25px;
       font-size: 14px; }
+      oath-login-drv .btn-wrap .social-btn span.loader {
+        margin: 0;
+        height: 12px;
+        width: 12px;
+        animation: rotate 0.8s infinite linear;
+        border: 3px solid #fff;
+        border-right-color: transparent;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        right: 15px; }
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
   oath-login-drv .btn-wrap .facebook-btn {
     background-color: #369;
-    line-height: 37px; }
+    line-height: 32px; }
     oath-login-drv .btn-wrap .facebook-btn:hover {
       background-color: #2a547f; }
     oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
@@ -2371,7 +2990,7 @@ oath-login-drv .btn-wrap {
         fill: #ffffff; }
   oath-login-drv .btn-wrap .gplus-btn {
     background-color: #df4a31;
-    line-height: 37px; }
+    line-height: 32px; }
     oath-login-drv .btn-wrap .gplus-btn:hover {
       background-color: #c5402a; }
     oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
@@ -2382,6 +3001,167 @@ oath-login-drv .btn-wrap {
         fill: #ffffff; }
   oath-login-drv .btn-wrap.reset-btn {
     margin-top: 20px; }
+
+promo-code {
+  display: block;
+  height: 50px; }
+  promo-code .promo-code-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    position: relative; }
+    promo-code .promo-code-wrapper .promo-code-title {
+      width: auto;
+      height: 27px;
+      font-size: 14px;
+      color: #898989;
+      font-family: Lato;
+      font-weight: 400;
+      padding: 0 13px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      cursor: pointer;
+      border-radius: 20px;
+      background-color: #f7f7f7; }
+    promo-code .promo-code-wrapper .promo-code-title:focus {
+      outline: none; }
+    promo-code .promo-code-wrapper .promo-code-title:hover {
+      background-color: #E8E8E8; }
+    promo-code .promo-code-wrapper .promo-code-overlay {
+      width: 340px;
+      height: 85px;
+      padding-top: 18px;
+      box-sizing: border-box;
+      box-shadow: 0 1px 2px 1px #e1e1e1;
+      position: absolute;
+      background-color: white;
+      border: 1px solid #e1e1e1;
+      border-radius: 20px;
+      top: 40px;
+      z-index: 5; }
+    promo-code .promo-code-wrapper .promo-code-overlay::before, promo-code .promo-code-wrapper .promo-code-overlay::after {
+      width: 0;
+      height: 0;
+      content: '';
+      position: absolute;
+      top: -9px;
+      left: calc(50% - 5px);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+      z-index: 2; }
+    promo-code .promo-code-wrapper .promo-code-overlay::after {
+      top: -10px;
+      border-bottom: 10px solid #e1e1e1;
+      z-index: 1; }
+    promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper {
+      width: 290px;
+      height: 43px;
+      margin: 0 auto;
+      position: relative; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+        width: 35px;
+        height: 34px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
+        border-radius: 0 23px 23px 0;
+        background-color: #0a9bad;
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        cursor: pointer; }
+        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper svg line {
+          stroke: white; }
+        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon {
+          display: none; }
+          promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon svg, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon svg {
+            width: 20px;
+            height: 15px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper:hover {
+        background-color: #088190; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .close-icon:hover {
+        opacity: 0.9; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .arrow-icon:focus, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .correct-icon:focus {
+        outline: none; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-spinner {
+        position: absolute;
+        z-index: 10;
+        right: 50px;
+        top: 5.5px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+        width: 100%;
+        height: 36px;
+        font-size: 14px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400;
+        box-sizing: border-box;
+        border-radius: 30px;
+        border: 1px solid #9a9797;
+        padding-left: 18px;
+        font-weight: 400;
+        font-size: 14px;
+        color: #161616; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper ::-webkit-input-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper :-moz-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper ::-moz-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper :-ms-input-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper input:focus {
+        outline: none; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text {
+        font-size: 12px;
+        color: #161616;
+        font-family: Lato;
+        font-weight: 400;
+        padding-left: 20px;
+        margin-top: 6px; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text, promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+      color: #87ca4d; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+      background-color: #87ca4d; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon {
+        display: block; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .arrow-icon {
+        display: none; }
+    promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text, promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+      color: #ff6766; }
+    promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+      background-color: #ff6766; }
+      promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon {
+        display: block; }
+      promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .arrow-icon {
+        display: none; }
+    promo-code .promo-code-wrapper .promo-code-title.accepted-title {
+      display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-title {
+      display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-title.accepted-title {
+      color: #87ca4d;
+      display: -ms-flexbox;
+      display: flex; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay {
+      transition: 1s;
+      height: 0;
+      padding: 0;
+      box-shadow: none;
+      border: 0; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper {
+        display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay::before, promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay::after {
+      display: none; }
 
 @font-face {
   font-family: "SourceSansPro";
@@ -2421,11 +3201,14 @@ oath-login-drv .btn-wrap {
       background-size: contain;
       padding: 0; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
-        background-image: url("/assets/images/sat-name@2x.png"); }
+        background-image: url("/assets/images/sat-name@2x.png");
+        width: 88px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
-        background-image: url("/assets/images/act-name@2x.png"); }
+        background-image: url("/assets/images/act-name@2x.png");
+        width: 95px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
-        background-image: url("/assets/images/toefl-name@2x.png"); }
+        background-image: url("/assets/images/toefl-name@2x.png");
+        width: 126px; }
 
 login-app {
   transition: all 0.5s; }
@@ -2441,7 +3224,7 @@ login-app {
     font-family: 'SourceSansPro', sans-serif;
     font-weight: 400; }
     login-app .login-app > header {
-      max-width: 1366px;
+      max-width: 95%;
       height: 84px;
       padding: 20px 0;
       margin: 0 auto;
@@ -2467,9 +3250,13 @@ login-app {
         text-align: center;
         position: absolute;
         left: calc(50% - 90px); }
+        login-app .login-app > header .app-select.no-dropdown {
+          left: 50%;
+          transform: translateX(-50%);
+          top: 28px; }
         login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
         login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
-          background-color: #dddddd; }
+          background-color: #ffffff; }
         login-app .login-app > header .app-select md-menu > button {
           width: 175px;
           height: auto;
@@ -2479,7 +3266,7 @@ login-app {
           login-app .login-app > header .app-select md-menu > button:hover {
             box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35); }
         login-app .login-app > header .app-select .app-img-holder {
-          width: calc(175px / 2);
+          width: 120px;
           height: calc(55px / 2);
           background-repeat: no-repeat;
           background-size: contain;
@@ -2493,14 +3280,15 @@ login-app {
         login-app .login-app > header .app-select .expand-menu {
           float: right; }
       login-app .login-app > header .for-educators {
+        position: relative;
+        top: 5px;
+        right: 100px;
         float: right;
         margin-top: 12px;
+        font-size: 16px;
         cursor: pointer;
         border-radius: 15px;
-        border: 1px solid;
         padding: 5px 8px; }
-        login-app .login-app > header .for-educators:hover {
-          text-decoration: underline; }
     login-app .login-app .main {
       position: relative;
       padding: 0; }
@@ -2513,11 +3301,19 @@ login-app {
         margin: 0;
         bottom: 40px;
         left: 40px; }
+        login-app .login-app .main .main-inner h2.banner-text .invitation-title {
+          font-size: 33px;
+          color: #ffffff;
+          font-family: "Source Sans Pro";
+          font-weight: 400; }
+          login-app .login-app .main .main-inner h2.banner-text .invitation-title .second-row {
+            font-size: 50px; }
       login-app .login-app .main img.main-banner {
-        min-height: 513px;
+        min-height: 545px;
         min-width: 1366px; }
       login-app .login-app .main .login-container,
-      login-app .login-app .main .signup-container {
+      login-app .login-app .main .signup-container,
+      login-app .login-app .main .change-password-container {
         position: absolute;
         top: 35px;
         right: 135px; }
@@ -2531,14 +3327,32 @@ login-app {
         login-app .login-app .main .go-to-signup a {
           text-decoration: underline;
           cursor: pointer; }
+      login-app .login-app .main .back-to-login-btn {
+        display: -ms-flexbox;
+        display: flex;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-left: -12px; }
+        login-app .login-app .main .back-to-login-btn .back-btn-icon {
+          width: 15px;
+          display: block;
+          transform: rotate(90deg); }
+          login-app .login-app .main .back-to-login-btn .back-btn-icon svg * {
+            stroke: #4f4d4d; }
+        login-app .login-app .main .back-to-login-btn .back-btn-label {
+          margin-left: 10px;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400; }
     login-app .login-app.sat .app-bg {
       background: #0a9bad; }
       login-app .login-app.sat .app-bg:hover {
-        background: #088E9E; }
+        background: #088190; }
     login-app .login-app.sat .app-color {
       color: #0a9bad; }
       login-app .login-app.sat .app-color:hover {
-        color: #088E9E; }
+        color: #088190; }
     login-app .login-app.act .app-bg {
       background: #87ca4d; }
       login-app .login-app.act .app-bg:hover {
@@ -2564,12 +3378,28 @@ login-app {
       padding-left: 30px;
       padding-bottom: 20px;
       padding-top: 25px; }
+      login-app .login-app .form-container .success-massage {
+        text-align: center; }
+        login-app .login-app .form-container .success-massage .v-icon-wrapper {
+          width: 31px;
+          height: 31px;
+          background-color: #89c650;
+          border-radius: 50%;
+          padding: 7px;
+          margin: auto; }
+        login-app .login-app .form-container .success-massage .massage-text {
+          font-size: 12px;
+          color: #4f4d4d;
+          font-family: Quicksand;
+          font-weight: 400;
+          margin: 20px auto; }
       login-app .login-app .form-container .title {
         text-align: center;
-        padding-bottom: 15px;
-        color: #161616;
-        font-weight: 200;
-        font-size: 25px; }
+        font-size: 25px;
+        color: #4f4d4d;
+        font-family: "Source Sans Pro";
+        font-weight: 400;
+        padding-bottom: 15px; }
       login-app .login-app .form-container .inputs-container .input-wrapper {
         position: relative;
         box-sizing: border-box;
@@ -2606,6 +3436,10 @@ login-app {
             border-width: 10px;
             bottom: -20px;
             left: 13px; }
+          login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span.email-exist-massage {
+            top: -55px; }
+          login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span.no-email-massage {
+            top: -58px; }
         login-app .login-app .form-container .inputs-container .input-wrapper.valid {
           border-color: #9a9797; }
         login-app .login-app .form-container .inputs-container .input-wrapper.invalid {
@@ -2632,19 +3466,19 @@ login-app {
           color: #161616; }
           login-app .login-app .form-container .inputs-container .input-wrapper input ::-webkit-input-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input :-moz-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input ::-moz-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input :-ms-input-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
       login-app .login-app .form-container .submit-btn-wrapper {
         text-align: center; }
@@ -2685,9 +3519,11 @@ login-app {
         margin-bottom: 5px;
         text-align: right;
         color: #757a83;
-        font-weight: 200;
+        font-weight: 300;
         font-size: 14px;
         font-family: 'SourceSansPro-Light'; }
+        login-app .login-app .form-container .forgot-pwd-wrapper .app-color {
+          cursor: pointer; }
       login-app .login-app .form-container .general-error {
         font-size: 12px;
         color: #ff6766;
@@ -2712,7 +3548,7 @@ login-app {
           padding-right: 15px;
           padding-left: 15px;
           color: #c2c2c2;
-          font-weight: 200;
+          font-weight: 300;
           font-size: 14px; }
       login-app .login-app .form-container.signup .signup-disclaimer {
         text-align: center;
@@ -2733,6 +3569,289 @@ login-app {
         login-app .login-app footer .switch-student-educator a {
           text-decoration: none;
           font-size: 16px; }
+
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+.znk-input-group {
+  position: relative;
+  min-height: 70px; }
+  .znk-input-group ::-webkit-input-placeholder {
+    color: #CACACA; }
+  .znk-input-group :-moz-placeholder {
+    color: #CACACA;
+    opacity: 1; }
+  .znk-input-group ::-moz-placeholder {
+    color: #CACACA;
+    opacity: 1; }
+  .znk-input-group :-ms-input-placeholder {
+    color: #CACACA; }
+  .znk-input-group input {
+    font-size: 14px;
+    color: #9a9797;
+    font-family: Lato;
+    font-weight: 400;
+    outline: none;
+    width: 290px;
+    height: 40px;
+    border: 1px solid #CACACA;
+    border-radius: 21px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding-left: 45px; }
+  .znk-input-group i {
+    position: absolute;
+    left: 20px;
+    top: 21px; }
+  .znk-input-group .error-msg {
+    display: none; }
+  .znk-input-group.invalid-input input {
+    border: 1px solid #ff6766; }
+  .znk-input-group.invalid-input .error-msg {
+    font-size: 12px;
+    color: #ff6766;
+    font-family: Lato;
+    font-weight: 400;
+    text-align: left;
+    margin-top: 0;
+    padding-left: 40px;
+    display: block; }
+  .znk-input-group.invalid-input svg-icon svg * {
+    stroke: #ff6766 !important; }
+
+md-dialog.my-profile {
+  background-color: #ffffff;
+  overflow: visible;
+  width: 800px;
+  height: calc(100vh - 65px);
+  border-radius: 20px;
+  padding-bottom: 20px;
+  max-height: none; }
+  md-dialog.my-profile .top-icon-wrap {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 40px; }
+    md-dialog.my-profile .top-icon-wrap .top-icon {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap {
+        width: 76px;
+        height: 76px;
+        border-radius: 38px;
+        background-color: #0a9bad;
+        z-index: 9;
+        margin-top: -15px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
+        md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon {
+          width: 30px;
+          stroke: #ffffff; }
+        md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon * {
+          fill: #ffffff; }
+  md-dialog.my-profile .main-title {
+    font-size: 32px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 20px;
+    margin: 20px;
+    background-color: #ffffff; }
+  md-dialog.my-profile md-toolbar {
+    height: 40px;
+    max-height: 40px;
+    min-height: 40px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px; }
+    md-dialog.my-profile md-toolbar:not(.md-menu-toolbar) {
+      background-color: #0a9bad; }
+    md-dialog.my-profile md-toolbar .close-popup-wrap {
+      position: absolute;
+      top: -19px;
+      right: -19px;
+      height: 14px;
+      width: 14px;
+      cursor: pointer; }
+  md-dialog.my-profile .content-wrapper {
+    overflow: auto; }
+    md-dialog.my-profile .content-wrapper .change-profile, md-dialog.my-profile .content-wrapper .change-password {
+      display: block;
+      background-color: #f9f9f9;
+      padding: 20px 20px 0 20px;
+      margin: 5px 40px;
+      height: 100%;
+      border-radius: 15px; }
+    md-dialog.my-profile .content-wrapper .change-password {
+      margin-bottom: 30px;
+      display: block; }
+      md-dialog.my-profile .content-wrapper .change-password .container-title {
+        font-size: 18px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 600;
+        text-align: center; }
+    md-dialog.my-profile .content-wrapper .auth-form {
+      margin-right: auto;
+      margin-left: auto;
+      margin-bottom: 10px;
+      margin-top: 43px; }
+      md-dialog.my-profile .content-wrapper .auth-form .znk-input-group {
+        width: 100%;
+        min-height: 0;
+        display: -ms-flexbox;
+        display: flex;
+        margin: 10px -10px; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group label {
+          width: 30%;
+          font-size: 14px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 300;
+          text-transform: uppercase;
+          text-align: right;
+          margin: auto; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input {
+          width: 70%;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-direction: column;
+              flex-direction: column; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select {
+            width: 86%;
+            display: block;
+            border-radius: 0;
+            padding-left: 20px;
+            box-sizing: border-box;
+            margin: 10px 50px 2px 30px;
+            color: #161616;
+            font-size: 14px; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select {
+            height: 40px; }
+            md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select[disabled] {
+              color: #acacac; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .locked-icon {
+          width: 14px;
+          display: inline-block;
+          position: absolute;
+          left: 12px;
+          top: 16px; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .locked-icon * {
+          stroke: #CACACA; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span {
+          width: 335px;
+          padding: 3px 10px;
+          position: absolute;
+          right: 37px;
+          top: -25px;
+          background-color: #ff6766;
+          color: white;
+          font-size: 13px;
+          line-height: 24px; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span:after {
+            content: '';
+            position: absolute;
+            border-color: transparent;
+            border-style: solid;
+            border-top-color: #ff6766;
+            border-width: 10px;
+            bottom: -20px;
+            left: 13px; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span.email-exist-massage {
+            top: -55px; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span.no-email-massage {
+            top: -58px; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.valid input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.valid select {
+          border-color: #9a9797; }
+        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid select {
+          border-color: #ff6766; }
+      md-dialog.my-profile .content-wrapper .auth-form .timezone-manual {
+        margin: -10px 220px;
+        font-size: 14px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 300; }
+      md-dialog.my-profile .content-wrapper .auth-form .btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+        margin-right: 50px;
+        outline: none; }
+        md-dialog.my-profile .content-wrapper .auth-form .btn-wrap .save-pass-btn {
+          width: 15%;
+          margin: 0;
+          box-shadow: none;
+          height: 30px;
+          background: transparent;
+          border-radius: 20px;
+          border: 2px solid #0a9bad;
+          color: #0a9bad;
+          outline: none; }
+  md-dialog.my-profile .msg-wrap {
+    font-size: 12px;
+    color: #ffffff;
+    font-family: Lato;
+    font-weight: 400;
+    width: 342px;
+    margin: 0 auto;
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 10px;
+    max-height: 28px;
+    visibility: hidden; }
+    md-dialog.my-profile .msg-wrap.show-error .error-msg {
+      visibility: visible;
+      width: 100%;
+      height: 22px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center;
+      padding: 6px 0 6px 5px;
+      font-size: 14px;
+      color: #ff6766;
+      font-family: Lato;
+      font-weight: 400; }
+    md-dialog.my-profile .msg-wrap .myProfile-danger-red-icon {
+      width: 20px;
+      margin-right: 17px; }
+      md-dialog.my-profile .msg-wrap .myProfile-danger-red-icon * {
+        fill: #c95050; }
+  md-dialog.my-profile .big-success-msg .completed-v-icon-wrap {
+    width: 120px;
+    margin: 25px auto;
+    display: block; }
+  md-dialog.my-profile .big-success-msg div {
+    font-size: 16px;
+    color: #7d7d7d;
+    font-family: Lato;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 20px; }
+  md-dialog.my-profile .big-success-msg .done-btn-wrap {
+    margin: 40px auto;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center; }
+
+md-toast.toast-wrap {
+  top: 20px;
+  right: 20px; }
 
 /* fonts size */
 /* general */
@@ -2785,7 +3904,7 @@ on-boarding-bar {
       -webkit-justify-content: center; }
       on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon {
         width: 30px;
-        margin: 6px auto 0; }
+        margin: auto; }
         on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon * {
           fill: #87ca4d; }
       on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected {
@@ -2905,10 +4024,6 @@ on-boarding-bar {
       .on-board .container .step .welcome .btn-wrap {
         margin-top: 105px;
         text-align: center; }
-        .on-board .container .step .welcome .btn-wrap .continue-title {
-          vertical-align: top;
-          position: relative;
-          top: 3px; }
         .on-board .container .step .welcome .btn-wrap .md-button {
           padding-left: 52px;
           padding-right: 52px;
@@ -2918,11 +4033,19 @@ on-boarding-bar {
           color: white;
           font-family: Lato;
           font-weight: 400; }
-          .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg {
-            width: 16px;
-            transform: rotate(-90deg); }
-            .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg polyline {
-              stroke: #ffffff; }
+          .on-board .container .step .welcome .btn-wrap .md-button .btn-text {
+            display: -ms-flexbox;
+            display: flex; }
+            .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon {
+              display: -ms-inline-flexbox;
+              display: inline-flex; }
+              .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg {
+                width: 16px;
+                display: -ms-inline-flexbox;
+                display: inline-flex;
+                transform: rotate(-90deg); }
+                .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg polyline {
+                  stroke: #ffffff; }
       .on-board .container .step .goals .sub-title {
         font-size: 24px;
         color: #161616;
@@ -2935,7 +4058,7 @@ on-boarding-bar {
         font-size: 12px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         text-align: center;
         margin-top: 15px;
         cursor: pointer;
@@ -2944,7 +4067,7 @@ on-boarding-bar {
         font-size: 16px;
         color: #161616;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         margin-bottom: 20px;
         text-align: center; }
       .on-board .container .step .bg-wrap {
@@ -2969,7 +4092,7 @@ on-boarding-bar {
         font-size: 16px;
         color: #4f4d4d;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         text-align: center;
         margin-top: 15px; }
       .on-board .container .step.diagnostic .btn-wrap {
@@ -2998,10 +4121,187 @@ on-boarding-bar {
       .on-board .container .step.diagnostic diagnostic-intro .section-question {
         margin-top: -25px; }
 
+/* fonts size */
+/* general */
+/* paths */
+/* general */
 /*border color*/
 /*background*/
 /* box shadow */
 /* font color*/
+/* full background image with retina */
+/* full background image with retina */
+promo-code {
+  display: block;
+  height: 50px; }
+  promo-code .promo-code-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    position: relative; }
+    promo-code .promo-code-wrapper .promo-code-title {
+      width: auto;
+      height: 27px;
+      font-size: 14px;
+      color: #898989;
+      font-family: Lato;
+      font-weight: 400;
+      padding: 0 13px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      cursor: pointer;
+      border-radius: 20px;
+      background-color: #f7f7f7; }
+    promo-code .promo-code-wrapper .promo-code-title:focus {
+      outline: none; }
+    promo-code .promo-code-wrapper .promo-code-title:hover {
+      background-color: #E8E8E8; }
+    promo-code .promo-code-wrapper .promo-code-overlay {
+      width: 340px;
+      height: 85px;
+      padding-top: 18px;
+      box-sizing: border-box;
+      box-shadow: 0 1px 2px 1px #e1e1e1;
+      position: absolute;
+      background-color: white;
+      border: 1px solid #e1e1e1;
+      border-radius: 20px;
+      top: 40px;
+      z-index: 5; }
+    promo-code .promo-code-wrapper .promo-code-overlay::before, promo-code .promo-code-wrapper .promo-code-overlay::after {
+      width: 0;
+      height: 0;
+      content: '';
+      position: absolute;
+      top: -9px;
+      left: calc(50% - 5px);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+      z-index: 2; }
+    promo-code .promo-code-wrapper .promo-code-overlay::after {
+      top: -10px;
+      border-bottom: 10px solid #e1e1e1;
+      z-index: 1; }
+    promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper {
+      width: 290px;
+      height: 43px;
+      margin: 0 auto;
+      position: relative; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+        width: 35px;
+        height: 34px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
+        border-radius: 0 23px 23px 0;
+        background-color: #0a9bad;
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        cursor: pointer; }
+        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper svg line {
+          stroke: white; }
+        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon {
+          display: none; }
+          promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon svg, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon svg {
+            width: 20px;
+            height: 15px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper:hover {
+        background-color: #088190; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .close-icon:hover {
+        opacity: 0.9; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .arrow-icon:focus, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .correct-icon:focus {
+        outline: none; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-spinner {
+        position: absolute;
+        z-index: 10;
+        right: 50px;
+        top: 5.5px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+        width: 100%;
+        height: 36px;
+        font-size: 14px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400;
+        box-sizing: border-box;
+        border-radius: 30px;
+        border: 1px solid #9a9797;
+        padding-left: 18px;
+        font-weight: 400;
+        font-size: 14px;
+        color: #161616; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper ::-webkit-input-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper :-moz-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper ::-moz-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper :-ms-input-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper input:focus {
+        outline: none; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text {
+        font-size: 12px;
+        color: #161616;
+        font-family: Lato;
+        font-weight: 400;
+        padding-left: 20px;
+        margin-top: 6px; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text, promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+      color: #87ca4d; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+      background-color: #87ca4d; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon {
+        display: block; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .arrow-icon {
+        display: none; }
+    promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text, promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+      color: #ff6766; }
+    promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+      background-color: #ff6766; }
+      promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon {
+        display: block; }
+      promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .arrow-icon {
+        display: none; }
+    promo-code .promo-code-wrapper .promo-code-title.accepted-title {
+      display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-title {
+      display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-title.accepted-title {
+      color: #87ca4d;
+      display: -ms-flexbox;
+      display: flex; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay {
+      transition: 1s;
+      height: 0;
+      padding: 0;
+      box-shadow: none;
+      border: 0; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper {
+        display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay::before, promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay::after {
+      display: none; }
+
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
 purchase-btn form img {
   display: block; }
 
@@ -3056,138 +4356,137 @@ purchase-btn .upgraded .text {
   line-height: 25px;
   display: inline-block; }
 
-/* full background image with retina */
-/* full background image with retina */
-/* fonts size */
-/* general */
-/* paths */
-/* general */
-.purchase-popup {
+md-dialog.purchase-popup {
   width: 585px;
   overflow: visible;
-  background: none; }
-  .purchase-popup form {
+  background: none;
+  border-radius: 15px; }
+  md-dialog.purchase-popup form {
     overflow: visible; }
-  .purchase-popup .close-popup-wrap {
+  md-dialog.purchase-popup .close-popup-wrap {
     position: absolute;
     top: -35px;
     right: -35px;
-    height: 24px;
-    width: 24px;
+    height: 14px;
+    width: 14px;
     padding: 0;
     margin: 10px;
     cursor: pointer; }
-    .purchase-popup .close-popup-wrap svg line {
-      stroke: white; }
-  .purchase-popup .popup-header {
+  md-dialog.purchase-popup .popup-header {
     position: relative;
     height: 40px;
     background-color: #0a9bad;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px; }
-    .purchase-popup .popup-header .raccoon {
+    md-dialog.purchase-popup .popup-header .raccoon {
       width: 75px;
       height: 75px;
       border-radius: 50%;
       margin: 0 auto;
       position: relative;
       bottom: 17.5px;
-      background-color: #0a9bad;
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: center;
-          justify-content: center;
-      -ms-flex-align: center;
-          align-items: center; }
-      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
+      background-color: #0a9bad; }
+      md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon, md-dialog.purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon {
         width: 45px;
-        height: 45px; }
-        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
+        height: 45px;
+        margin: 0 auto;
+        display: block;
+        padding-top: 20px; }
+        md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon *, md-dialog.purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon * {
           fill: white; }
-  .purchase-popup .md-dialog-content {
+  md-dialog.purchase-popup .md-dialog-content {
     padding: 20px 20px 60px;
     background-color: white;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px; }
-    .purchase-popup .md-dialog-content h2 {
+    md-dialog.purchase-popup .md-dialog-content h2 {
       font-size: 25px;
       color: #161616;
       font-family: Quicksand;
       font-weight: 700;
       text-align: center;
-      font-size: 25px;
-      color: #161616;
-      font-family: Quicksand;
-      font-weight: 700;
-      text-align: center;
-      margin: 15px 0 10px;
       margin: 15px 0 10px; }
-      .purchase-popup .md-dialog-content h2 .pro {
+      md-dialog.purchase-popup .md-dialog-content h2 .pro {
         font-size: 20px;
         padding: 2px 7px; }
-    .purchase-popup .md-dialog-content p {
+      md-dialog.purchase-popup .md-dialog-content h2 .pill {
+        background-color: #87ca4d;
+        color: #ffffff;
+        border-radius: 20px; }
+    md-dialog.purchase-popup .md-dialog-content p {
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
-      font-weight: 200;
+      font-weight: 300;
       text-align: center; }
-    .purchase-popup .md-dialog-content .features-box {
-      width: 300px;
+    md-dialog.purchase-popup .md-dialog-content .features-box {
+      min-width: 330px;
+      width: 60%;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #E4E0E0; }
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-4-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-5-icon svg {
+      background-color: #f9f9f9;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      md-dialog.purchase-popup .md-dialog-content .features-box .feature-svg {
         width: 26px;
-        height: auto;
-        max-height: 50px; }
-      .purchase-popup .md-dialog-content .features-box ul {
+        max-height: 50px;
+        display: block; }
+      md-dialog.purchase-popup .md-dialog-content .features-box ul {
         padding: 0;
         margin: 0;
         list-style: none; }
-        .purchase-popup .md-dialog-content .features-box ul li {
+        md-dialog.purchase-popup .md-dialog-content .features-box ul li {
           font-size: 18px;
           color: #4f4d4d;
           font-family: Quicksand;
           font-weight: normal;
-          font-size: 18px;
-          color: #4f4d4d;
-          font-family: Quicksand;
-          font-weight: normal;
-          line-height: 50px;
           line-height: 50px; }
-          .purchase-popup .md-dialog-content .features-box ul li .bullet {
+          md-dialog.purchase-popup .md-dialog-content .features-box ul li .bullet {
             float: left;
             margin-right: 30px;
             top: 8px;
             position: relative; }
-    .purchase-popup .md-dialog-content .price {
+    md-dialog.purchase-popup .md-dialog-content .price {
       font-size: 16px;
       color: #757a83;
       font-family: Lato;
-      font-weight: lighter;
+      font-weight: normal;
       text-align: center;
       margin-bottom: 15px; }
-      .purchase-popup .md-dialog-content .price b {
+      md-dialog.purchase-popup .md-dialog-content .price b {
         font-size: 20px;
         color: #4f4d4d;
         font-family: Lato;
         font-weight: normal;
         margin: 0 10px 0 15px; }
-    .purchase-popup .md-dialog-content .action .md-button {
+    md-dialog.purchase-popup .md-dialog-content .action .md-button {
       width: 300px;
       margin: 0 auto;
+      text-transform: none;
+      height: 42px;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      border-radius: 21px;
+      position: relative;
+      cursor: pointer;
       font-size: 20px;
       color: white;
       font-family: Lato;
       font-weight: normal; }
-    .purchase-popup .md-dialog-content .upgraded-container {
+      md-dialog.purchase-popup .md-dialog-content .action .md-button:not([disabled]).success {
+        background-color: #76b63e; }
+        md-dialog.purchase-popup .md-dialog-content .action .md-button:not([disabled]).success.drop-shadow {
+          box-shadow: 0 3px 0 0 #72ab40; }
+    md-dialog.purchase-popup .md-dialog-content .upgraded-container {
       text-align: center;
       font-size: 16px;
-      color: #757a83;
+      color: #4f4d4d;
       font-family: Lato;
       font-weight: 400;
       display: -ms-flexbox;
@@ -3197,14 +4496,37 @@ purchase-btn .upgraded .text {
       -ms-flex-align: center;
           align-items: center;
       text-align: center; }
-      .purchase-popup .md-dialog-content .upgraded-container svg-icon {
+      md-dialog.purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;
         margin-top: 2px; }
-  .purchase-popup .pill {
-    background-color: #87ca4d;
+    md-dialog.purchase-popup .md-dialog-content .base-border-radius {
+      border-radius: 15px; }
+
+md-toast.purchase-nudge {
+  position: static;
+  padding: 0;
+  transition: all 0s ease 0s; }
+  md-toast.purchase-nudge .close-toast {
+    float: right; }
+    md-toast.purchase-nudge .close-toast svg-icon[name="close-popup"] {
+      width: 15px; }
+  md-toast.purchase-nudge .md-toast-content {
+    max-width: none;
+    text-align: center;
+    font-size: 18px;
     color: white;
-    padding: 5px 15px;
-    border-radius: 20px; }
+    font-family: Lato;
+    font-weight: lighter; }
+  md-toast.purchase-nudge.first .md-toast-content {
+    background-color: #67a531; }
+  md-toast.purchase-nudge.all .md-toast-content {
+    background-color: #ff931e; }
+  md-toast.purchase-nudge .open-dialog {
+    cursor: pointer;
+    text-decoration: underline; }
+
+.inline-block {
+  display: inline-block; }
 
 /* fonts size */
 /* general */
@@ -3256,8 +4578,8 @@ purchase-btn .upgraded .text {
     font-family: Lato;
     font-weight: 400;
     text-align: left;
-    margin-top: -4px;
-    padding-left: 20px;
+    margin-top: 0;
+    padding-left: 40px;
     display: block; }
   .znk-input-group.invalid-input svg-icon svg * {
     stroke: #ff6766 !important; }
@@ -3297,6 +4619,9 @@ md-dialog.setting-change-password {
       width: 14px;
       padding: 10px;
       cursor: pointer; }
+      md-dialog.setting-change-password md-toolbar .close-popup-wrap * {
+        stroke: white;
+        stroke-width: 8px; }
   md-dialog.setting-change-password md-dialog-content {
     background-color: #ffffff;
     padding-top: 25px;
@@ -3633,7 +4958,7 @@ tags-input auto-complete ti-autocomplete-match .list-title {
   font-size: 12px;
   color: #757a83;
   font-family: Lato;
-  font-weight: 200;
+  font-weight: 300;
   text-transform: uppercase;
   padding-bottom: 25px; }
   tags-input auto-complete ti-autocomplete-match .list-title .list-left-panel {
@@ -3654,13 +4979,13 @@ tags-input auto-complete ti-autocomplete-match .left-panel {
     font-size: 12px;
     color: #b7b7b7;
     font-family: Lato;
-    font-weight: 200; }
+    font-weight: 300; }
 
 tags-input auto-complete ti-autocomplete-match .right-panel {
   font-size: 12px;
   color: #757a83;
   font-family: Lato;
-  font-weight: 200;
+  font-weight: 300;
   float: right; }
 
 user-goals {
@@ -3724,7 +5049,7 @@ user-goals {
       font-size: 16px;
       color: #757a83;
       font-family: Lato;
-      font-weight: 200;
+      font-weight: 300;
       padding-left: 3px; }
     user-goals .selected-schools .school:not(:last-child):after {
       content: ','; }
@@ -4031,7 +5356,7 @@ md-dialog.setting-edit-goals {
   font-size: 12px;
   color: #757a83;
   font-family: Lato;
-  font-weight: 200;
+  font-weight: 300;
   text-align: center;
   margin-top: 15px;
   cursor: pointer;
@@ -4041,7 +5366,7 @@ md-dialog.setting-edit-goals {
   font-size: 16px;
   color: #161616;
   font-family: Lato;
-  font-weight: 200;
+  font-weight: 300;
   margin-bottom: 20px;
   text-align: center; }
 
@@ -4106,7 +5431,7 @@ sh-viewer .sh-viewer-main-container {
         font-size: 20px; }
       sh-viewer .sh-viewer-main-container .none .texts-container .text2 {
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         font-size: 17px;
         margin-top: 25px; }
   sh-viewer .sh-viewer-main-container complete-exercise znk-exercise znk-exercise-tool-box {
@@ -4272,7 +5597,7 @@ workout-intro-lock {
       margin-top: 16px; }
     workout-intro-lock .lock-overlay-container .no-pro-social-sharing .text2 {
       font-size: 14px;
-      font-weight: 200;
+      font-weight: 300;
       margin-top: 12px; }
     workout-intro-lock .lock-overlay-container .no-pro-social-sharing .share-btn {
       margin-top: 15px;
@@ -4299,7 +5624,7 @@ workout-intro-lock {
         margin-top: 30px; }
       workout-intro-lock .lock-overlay-container .no-pro-social-sharing .get-zinkerz-pro-text, workout-intro-lock .lock-overlay-container .no-pro .get-zinkerz-pro-text {
         font-size: 16px;
-        font-weight: 200;
+        font-weight: 300;
         line-height: 30px; }
 
 .workouts-roadmap-container {
@@ -4325,7 +5650,8 @@ workout-intro-lock {
     .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container {
       -ms-flex-positive: 1;
           flex-grow: 1;
-      position: relative; }
+      position: relative;
+      overflow: hidden; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-leave, .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
         transition: all 0.5s ease-in-out; }
       .workouts-roadmap-container .workouts-roadmap-wrapper .workouts-container.left-animation .workouts-ui-view.ng-enter {
@@ -4428,7 +5754,7 @@ workout-intro-lock {
         font-size: 26.5px;
         color: #4f4d4d;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
         .workouts-roadmap-diagnostic-intro .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-intro .second-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-summary .first-row .subject-score .score-wrapper .score, .workouts-roadmap-diagnostic-summary .second-row .subject-score .score-wrapper .score {
           display: inline-block;
           text-transform: capitalize;
@@ -4462,7 +5788,7 @@ workout-intro-lock {
       animation: rotateAnimation 0.9s infinite linear; }
     .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .change-subject-container .change-subject-title {
       font-family: Lato;
-      font-weight: 200;
+      font-weight: 300;
       font-size: 12px; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .how-much-time-title {
     margin-top: 28px;
@@ -4680,6 +6006,12 @@ workout-intro-lock {
 /*background*/
 /* box shadow */
 /* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
 @import url(http://fonts.googleapis.com/icon?family=Material+Icons);
 purchase-btn form img {
   display: block; }
@@ -4735,138 +6067,137 @@ purchase-btn .upgraded .text {
   line-height: 25px;
   display: inline-block; }
 
-/* full background image with retina */
-/* full background image with retina */
-/* fonts size */
-/* general */
-/* paths */
-/* general */
-.purchase-popup {
+md-dialog.purchase-popup {
   width: 585px;
   overflow: visible;
-  background: none; }
-  .purchase-popup form {
+  background: none;
+  border-radius: 15px; }
+  md-dialog.purchase-popup form {
     overflow: visible; }
-  .purchase-popup .close-popup-wrap {
+  md-dialog.purchase-popup .close-popup-wrap {
     position: absolute;
     top: -35px;
     right: -35px;
-    height: 24px;
-    width: 24px;
+    height: 14px;
+    width: 14px;
     padding: 0;
     margin: 10px;
     cursor: pointer; }
-    .purchase-popup .close-popup-wrap svg line {
-      stroke: white; }
-  .purchase-popup .popup-header {
+  md-dialog.purchase-popup .popup-header {
     position: relative;
     height: 40px;
     background-color: #0a9bad;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px; }
-    .purchase-popup .popup-header .raccoon {
+    md-dialog.purchase-popup .popup-header .raccoon {
       width: 75px;
       height: 75px;
       border-radius: 50%;
       margin: 0 auto;
       position: relative;
       bottom: 17.5px;
-      background-color: #0a9bad;
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: center;
-          justify-content: center;
-      -ms-flex-align: center;
-          align-items: center; }
-      .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg {
+      background-color: #0a9bad; }
+      md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon, md-dialog.purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon {
         width: 45px;
-        height: 45px; }
-        .purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon svg * {
+        height: 45px;
+        margin: 0 auto;
+        display: block;
+        padding-top: 20px; }
+        md-dialog.purchase-popup .popup-header .raccoon .raccoon-logo-icon *, md-dialog.purchase-popup .popup-header .raccoon .purchase-raccoon-logo-icon * {
           fill: white; }
-  .purchase-popup .md-dialog-content {
+  md-dialog.purchase-popup .md-dialog-content {
     padding: 20px 20px 60px;
     background-color: white;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px; }
-    .purchase-popup .md-dialog-content h2 {
+    md-dialog.purchase-popup .md-dialog-content h2 {
       font-size: 25px;
       color: #161616;
       font-family: Quicksand;
       font-weight: 700;
       text-align: center;
-      font-size: 25px;
-      color: #161616;
-      font-family: Quicksand;
-      font-weight: 700;
-      text-align: center;
-      margin: 15px 0 10px;
       margin: 15px 0 10px; }
-      .purchase-popup .md-dialog-content h2 .pro {
+      md-dialog.purchase-popup .md-dialog-content h2 .pro {
         font-size: 20px;
         padding: 2px 7px; }
-    .purchase-popup .md-dialog-content p {
+      md-dialog.purchase-popup .md-dialog-content h2 .pill {
+        background-color: #87ca4d;
+        color: #ffffff;
+        border-radius: 20px; }
+    md-dialog.purchase-popup .md-dialog-content p {
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
-      font-weight: 200;
+      font-weight: 300;
       text-align: center; }
-    .purchase-popup .md-dialog-content .features-box {
-      width: 300px;
+    md-dialog.purchase-popup .md-dialog-content .features-box {
+      min-width: 330px;
+      width: 60%;
       margin: 15px auto;
       padding: 25px 40px;
-      background-color: #E4E0E0; }
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-1-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-2-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-3-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-4-icon svg,
-      .purchase-popup .md-dialog-content .features-box .purchase-popup-bullet-5-icon svg {
+      background-color: #f9f9f9;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      md-dialog.purchase-popup .md-dialog-content .features-box .feature-svg {
         width: 26px;
-        height: auto;
-        max-height: 50px; }
-      .purchase-popup .md-dialog-content .features-box ul {
+        max-height: 50px;
+        display: block; }
+      md-dialog.purchase-popup .md-dialog-content .features-box ul {
         padding: 0;
         margin: 0;
         list-style: none; }
-        .purchase-popup .md-dialog-content .features-box ul li {
+        md-dialog.purchase-popup .md-dialog-content .features-box ul li {
           font-size: 18px;
           color: #4f4d4d;
           font-family: Quicksand;
           font-weight: normal;
-          font-size: 18px;
-          color: #4f4d4d;
-          font-family: Quicksand;
-          font-weight: normal;
-          line-height: 50px;
           line-height: 50px; }
-          .purchase-popup .md-dialog-content .features-box ul li .bullet {
+          md-dialog.purchase-popup .md-dialog-content .features-box ul li .bullet {
             float: left;
             margin-right: 30px;
             top: 8px;
             position: relative; }
-    .purchase-popup .md-dialog-content .price {
+    md-dialog.purchase-popup .md-dialog-content .price {
       font-size: 16px;
       color: #757a83;
       font-family: Lato;
-      font-weight: lighter;
+      font-weight: normal;
       text-align: center;
       margin-bottom: 15px; }
-      .purchase-popup .md-dialog-content .price b {
+      md-dialog.purchase-popup .md-dialog-content .price b {
         font-size: 20px;
         color: #4f4d4d;
         font-family: Lato;
         font-weight: normal;
         margin: 0 10px 0 15px; }
-    .purchase-popup .md-dialog-content .action .md-button {
+    md-dialog.purchase-popup .md-dialog-content .action .md-button {
       width: 300px;
       margin: 0 auto;
+      text-transform: none;
+      height: 42px;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+      border-radius: 21px;
+      position: relative;
+      cursor: pointer;
       font-size: 20px;
       color: white;
       font-family: Lato;
       font-weight: normal; }
-    .purchase-popup .md-dialog-content .upgraded-container {
+      md-dialog.purchase-popup .md-dialog-content .action .md-button:not([disabled]).success {
+        background-color: #76b63e; }
+        md-dialog.purchase-popup .md-dialog-content .action .md-button:not([disabled]).success.drop-shadow {
+          box-shadow: 0 3px 0 0 #72ab40; }
+    md-dialog.purchase-popup .md-dialog-content .upgraded-container {
       text-align: center;
       font-size: 16px;
-      color: #757a83;
+      color: #4f4d4d;
       font-family: Lato;
       font-weight: 400;
       display: -ms-flexbox;
@@ -4876,14 +6207,37 @@ purchase-btn .upgraded .text {
       -ms-flex-align: center;
           align-items: center;
       text-align: center; }
-      .purchase-popup .md-dialog-content .upgraded-container svg-icon {
+      md-dialog.purchase-popup .md-dialog-content .upgraded-container svg-icon {
         margin-right: 15px;
         margin-top: 2px; }
-  .purchase-popup .pill {
-    background-color: #87ca4d;
+    md-dialog.purchase-popup .md-dialog-content .base-border-radius {
+      border-radius: 15px; }
+
+md-toast.purchase-nudge {
+  position: static;
+  padding: 0;
+  transition: all 0s ease 0s; }
+  md-toast.purchase-nudge .close-toast {
+    float: right; }
+    md-toast.purchase-nudge .close-toast svg-icon[name="close-popup"] {
+      width: 15px; }
+  md-toast.purchase-nudge .md-toast-content {
+    max-width: none;
+    text-align: center;
+    font-size: 18px;
     color: white;
-    padding: 5px 15px;
-    border-radius: 20px; }
+    font-family: Lato;
+    font-weight: lighter; }
+  md-toast.purchase-nudge.first .md-toast-content {
+    background-color: #67a531; }
+  md-toast.purchase-nudge.all .md-toast-content {
+    background-color: #ff931e; }
+  md-toast.purchase-nudge .open-dialog {
+    cursor: pointer;
+    text-decoration: underline; }
+
+.inline-block {
+  display: inline-block; }
 
 /*border color*/
 /*background*/
@@ -4928,34 +6282,6 @@ md-dialog.invitation-confirm-modal {
       width: 14px;
       padding: 10px;
       cursor: pointer; }
-  md-dialog.invitation-confirm-modal md-dialog-content {
-    padding-top: 25px;
-    height: 100%;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .main-title {
-      margin-top: 20px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .teacher {
-      font-size: 16px;
-      color: #161616;
-      font-family: Lato;
-      font-weight: 400;
-      text-align: center;
-      margin: 35px 10px;
-      padding: 0 25px; }
-      md-dialog.invitation-confirm-modal md-dialog-content .teacher .want-to-connect {
-        padding-left: 1px; }
-    md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-direction: row;
-          flex-direction: row;
-      -ms-flex-pack: center;
-          justify-content: center; }
-      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap > button > span {
-        margin: auto; }
-      md-dialog.invitation-confirm-modal md-dialog-content .btn-wrap .outline-blue {
-        color: #0a9bad; }
   md-dialog.invitation-confirm-modal .top-icon-wrap {
     position: absolute;
     top: 0;
@@ -4981,24 +6307,62 @@ md-dialog.invitation-confirm-modal {
             align-items: center; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon {
           width: 14px;
-          stroke: #067f8e; }
+          stroke: white; }
         md-dialog.invitation-confirm-modal .top-icon-wrap .top-icon .round-icon-wrap .exclamation-mark-icon * {
-          fill: #067f8e; }
-  md-dialog.invitation-confirm-modal .big-success-msg .completed-v-icon-wrap {
-    width: 75px;
-    margin: 8px auto; }
-  md-dialog.invitation-confirm-modal .big-success-msg div {
+          fill: white; }
+
+md-dialog-content.invitation-confirm-modal-content {
+  background-color: #ffffff;
+  padding-top: 25px;
+  height: 100%;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px; }
+  md-dialog-content.invitation-confirm-modal-content .main-title {
+    margin-top: 20px;
+    text-align: center;
+    background-color: transparent;
+    font-size: 24px;
+    color: #161616;
+    font-family: Lato;
+    font-weight: 400; }
+  md-dialog-content.invitation-confirm-modal-content .teacher {
     font-size: 16px;
-    color: #7d7d7d;
+    color: #161616;
     font-family: Lato;
     font-weight: 400;
     text-align: center;
-    margin: 10px; }
-  md-dialog.invitation-confirm-modal .big-success-msg .done-btn-wrap {
+    margin: 35px 10px;
+    padding: 0 25px; }
+    md-dialog-content.invitation-confirm-modal-content .teacher .want-to-connect {
+      padding-left: 1px; }
+  md-dialog-content.invitation-confirm-modal-content .btn-wrap {
     display: -ms-flexbox;
     display: flex;
+    -ms-flex-direction: row;
+        flex-direction: row;
     -ms-flex-pack: center;
         justify-content: center; }
+    md-dialog-content.invitation-confirm-modal-content .btn-wrap > button > span {
+      margin: auto; }
+    md-dialog-content.invitation-confirm-modal-content .btn-wrap .outline-blue {
+      color: #0a9bad; }
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg {
+    text-align: center; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
+      width: 75px;
+      margin: 8px auto; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
+      font-size: 16px;
+      color: #7d7d7d;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      margin: 10px; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -5006,53 +6370,53 @@ md-dialog.invitation-confirm-modal {
 /* general */
 /* paths */
 /* general */
-invitation-manager .invite-icon-btn {
-  margin-right: 5px;
-  position: relative; }
-  invitation-manager .invite-icon-btn .num-of-receive {
-    position: absolute;
-    top: 0;
-    right: 4px;
-    width: 14px;
-    height: 14px;
-    background: #ff6766;
-    font-size: 10px;
-    color: white;
-    border-radius: 7px;
-    text-align: center; }
-
-invitation-manager .circle-invite-wrap {
-  width: 33px;
-  height: 33px;
-  border-radius: 17px;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
-  -ms-flex-align: center;
-      align-items: center;
-  margin-right: 10px;
-  cursor: pointer; }
-
-invitation-manager .teacher-icon-wrap {
-  background-color: #f6f6f6; }
-  invitation-manager .teacher-icon-wrap .teacher-icon {
-    width: 24px; }
-
-invitation-manager +
-.teacher-active-icon-wrap {
-  border: 1px solid #0a9bad; }
-  invitation-manager +
-.teacher-active-icon-wrap .teacher-active-icon {
-    width: 23px;
-    height: 16px; }
-  invitation-manager +
-.teacher-active-icon-wrap .teacher-active-icon * {
-    fill: #0a9bad; }
+invitation-manager .invitation-manager {
+  display: block;
+  padding-right: 10px; }
+  invitation-manager .invitation-manager .invite-icon-btn {
+    position: relative; }
+    invitation-manager .invitation-manager .invite-icon-btn .num-of-receive {
+      position: absolute;
+      top: 0;
+      right: -5px;
+      width: 14px;
+      height: 14px;
+      background: #ff6766;
+      font-size: 10px;
+      color: white;
+      border-radius: 7px;
+      text-align: center; }
+    invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap {
+      width: 33px;
+      height: 33px;
+      border-radius: 17px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      cursor: pointer; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap {
+        background-color: #f6f6f6; }
+        invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap svg-icon.invitation-teacher-icon {
+          width: 24px; }
+          invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-icon-wrap svg-icon.invitation-teacher-icon svg {
+            width: 100%; }
+      invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap {
+        border: 1px solid #0a9bad; }
+        invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap svg-icon.teacher-active-icon {
+          width: 23px;
+          height: 16px; }
+          invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap svg-icon.teacher-active-icon svg {
+            width: 100%; }
+            invitation-manager .invitation-manager .invite-icon-btn .circle-invite-wrap.teacher-active-icon-wrap svg-icon.teacher-active-icon svg * {
+              fill: #0a9bad; }
 
 md-menu-content.md-menu-content-invitation-manager {
   min-width: 280px;
-  overflow: hidden;
+  max-height: 400px;
+  border-radius: 6px;
   padding: 0; }
   md-menu-content.md-menu-content-invitation-manager md-list {
     padding-top: 0;
@@ -5066,29 +6430,55 @@ md-menu-content.md-menu-content-invitation-manager {
           flex-direction: row;
       -ms-flex-align: center;
           align-items: center; }
-      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations {
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item svg-icon.received-invitations {
         width: 14px;
         height: 14px;
-        stroke: #0a9bad; }
-      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .received-invitations * {
-        stroke: #0a9bad; }
+        stroke: #f7f7f7;
+        margin-bottom: 5px; }
+        md-menu-content.md-menu-content-invitation-manager md-list md-list-item svg-icon.received-invitations svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list md-list-item svg-icon.received-invitations svg * {
+            stroke: #f7f7f7; }
       md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations {
         width: 14px;
         height: 14px;
         stroke: #92969d; }
-      md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations * {
-        stroke: #92969d; }
+        md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list md-list-item .sent-invitations svg * {
+            stroke: #92969d; }
+      md-menu-content.md-menu-content-invitation-manager md-list md-list-item.invite-list-wrap {
+        margin-bottom: 10px;
+        padding-left: 6px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-invitation-list {
       padding: 10px 0; }
-    md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
+    md-menu-content.md-menu-content-invitation-manager md-list .icon-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+      md-menu-content.md-menu-content-invitation-manager md-list .icon-wrap .creation-time {
+        font-size: 10px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 300; }
+    md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap,
+    md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       display: -ms-flexbox;
       display: flex;
       -ms-flex-direction: column;
           flex-direction: column;
-      padding: 10px 20px;
       -ms-flex-positive: 1;
-          flex-grow: 1; }
-      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+          flex-grow: 1;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 12px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-name,
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email,
+      md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-name,
+      md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
         font-size: 16px;
         color: #757a83;
         font-family: Lato;
@@ -5097,21 +6487,19 @@ md-menu-content.md-menu-content-invitation-manager {
         -ms-flex-positive: 1;
             flex-grow: 1;
         margin-bottom: 3px; }
-      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .teacher-email,
+      md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .teacher-email {
+        font-size: 12px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: lowercase; }
+      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .declined-your-invitation-text,
+      md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .declined-your-invitation-text {
         font-size: 14px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 400; }
-      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .creation-time, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .creation-time {
-        font-size: 10px;
-        color: #757a83;
-        font-family: Lato;
-        font-weight: 200; }
-      md-menu-content.md-menu-content-invitation-manager md-list .teacher-wrap .declined-your-invitation-text, md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap .declined-your-invitation-text {
-        font-size: 14px;
-        color: #757a83;
-        font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         margin-left: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .declined-teacher-wrap {
       padding: 10px 0 10px 13px;
@@ -5127,8 +6515,37 @@ md-menu-content.md-menu-content-invitation-manager {
       font-family: Lato;
       font-weight: 400;
       text-transform: uppercase;
-      border-bottom: 1px solid #ebebeb; }
-    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
+      border-bottom: 1px solid #ebebeb;
+      padding: 10px; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite-count {
+      padding-top: 20px; }
+    md-menu-content.md-menu-content-invitation-manager md-list .conf-wrap {
+      padding-left: 14px; }
+      md-menu-content.md-menu-content-invitation-manager md-list .conf-wrap .teacher-wrap {
+        padding-left: 20px; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
+      width: 25px;
+      height: 25px;
+      border: 1px solid #acacac;
+      border-radius: 13px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+      -ms-flex-align: center;
+          align-items: center; }
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-invite-btn,
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-conformation-btn {
+        width: 9px;
+        cursor: pointer;
+        margin-top: -2px; }
+        md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-invite-btn svg,
+        md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-conformation-btn svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-invite-btn svg *,
+          md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation svg-icon.decline-conformation-btn svg * {
+            stroke: #92969d; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite {
       width: 25px;
       height: 25px;
       border: 1px solid #acacac;
@@ -5138,17 +6555,22 @@ md-menu-content.md-menu-content-invitation-manager {
       -ms-flex-pack: center;
           justify-content: center;
       -ms-flex-align: center;
-          align-items: center;
-      margin-right: 6px; }
-      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn {
-        height: 12px;
-        width: 12px;
+          align-items: center; }
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-invite-btn,
+      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-conformation-btn {
+        width: 9px;
         cursor: pointer;
         margin-top: -2px; }
-      md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-invite-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-invite .decline-conformation-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-invite-btn *, md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation .decline-conformation-btn * {
-        stroke: #acacac; }
+        md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-invite-btn svg,
+        md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-conformation-btn svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-invite-btn svg *,
+          md-menu-content.md-menu-content-invitation-manager md-list .decline-invite svg-icon.decline-conformation-btn svg * {
+            stroke: #92969d; }
     md-menu-content.md-menu-content-invitation-manager md-list .decline-conformation {
       border: none; }
+    md-menu-content.md-menu-content-invitation-manager md-list .decline-invite {
+      margin-right: 3px; }
     md-menu-content.md-menu-content-invitation-manager md-list .approve-invite {
       width: 25px;
       height: 25px;
@@ -5160,14 +6582,16 @@ md-menu-content.md-menu-content-invitation-manager {
           justify-content: center;
       -ms-flex-align: center;
           align-items: center; }
-      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn {
+      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite svg-icon.v-icon-btn {
         width: 14px;
         cursor: pointer; }
-      md-menu-content.md-menu-content-invitation-manager md-list .approve-invite .v-icon-btn * {
-        stroke: #87ca4d; }
+        md-menu-content.md-menu-content-invitation-manager md-list .approve-invite svg-icon.v-icon-btn svg {
+          width: 100%; }
+          md-menu-content.md-menu-content-invitation-manager md-list .approve-invite svg-icon.v-icon-btn svg * {
+            stroke: #d67914; }
   md-menu-content.md-menu-content-invitation-manager .empty-invite .empty-msg {
     font-size: 16px;
-    color: #161616;
+    color: #4f4d4d;
     font-family: Lato;
     font-weight: 400;
     text-align: center;
@@ -5185,39 +6609,103 @@ md-menu-content.md-menu-content-invitation-manager {
     display: flex;
     -ms-flex-align: center;
         align-items: center;
-    height: 60px;
-    background: #fafafa; }
+    background: #fafafa;
+    padding: 10px; }
     md-menu-content.md-menu-content-invitation-manager .empty-invite .invite-action .invite-btn {
-      margin: 10px auto; }
-  md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap {
+      margin: 0 auto; }
+  md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap {
     font-size: 14px;
-    color: #161616;
+    color: #4f4d4d;
     font-family: Lato;
     font-weight: 400;
-    background-color: #fafafa;
     border-bottom: 1px solid #ebebeb;
-    padding: 15px;
     position: relative; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .title {
-      font-size: 12px;
-      text-transform: uppercase;
-      margin-bottom: 10px; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-name {
-      text-transform: capitalize;
-      line-height: 25px; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .teacher-email {
-      font-weight: 200;
-      color: #acacac; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher {
-      height: 12px;
-      width: 12px;
-      cursor: pointer;
-      margin-top: -2px;
-      position: absolute;
-      right: 10px;
-      top: 50%; }
-    md-menu-content.md-menu-content-invitation-manager .my-teacher-wrap .delete-teacher * {
-      stroke: #acacac; }
+    md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header {
+      height: 34px;
+      line-height: 34px;
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 700;
+      text-align: center;
+      background-color: #fafafa; }
+      md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header .tutors-list-edit-icon {
+        width: 14px;
+        height: 14px;
+        fill: #b7b7b7;
+        float: right;
+        padding-right: 15px;
+        padding-top: 10px;
+        cursor: pointer; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header .tutors-list-edit-icon svg {
+          width: 14px;
+          height: 14px; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header .tutors-list-edit-icon.delete-techer-mode {
+          fill: #f7f7f7; }
+    md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item {
+      padding: 13px 10px;
+      border-bottom: 1px solid #ebebeb; }
+      md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item:last-child {
+        border-bottom: none; }
+      md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+            align-items: center; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status {
+          -ms-flex-preferred-size: 10%;
+              flex-basis: 10%;
+          padding: 5px;
+          position: relative; }
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status .online-indicator {
+            position: absolute;
+            top: -12px;
+            background: #B33520;
+            width: 7px;
+            height: 7px;
+            border: 2px solid #ebebeb;
+            border-radius: 6px; }
+            md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status .online-indicator.offline {
+              background: #e4841d; }
+            md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status .online-indicator.online {
+              background: #d67914; }
+            md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-status .online-indicator.idle {
+              background: #edc811; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-name {
+          padding: 5px;
+          -ms-flex-preferred-size: 80%;
+              flex-basis: 80%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          box-sizing: border-box;
+          font-size: 18px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 700; }
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-name .teacher-subject,
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-name .teacher-email {
+            margin-top: 11px;
+            line-height: 12px;
+            font-size: 12px;
+            color: #757a83;
+            font-family: Lato;
+            font-weight: 400; }
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .teacher-name .teacher-email {
+            text-transform: lowercase; }
+        md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .actions {
+          min-width: 47px;
+          -ms-flex-preferred-size: 10%;
+              flex-basis: 10%;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          padding-left: 5px;
+          padding-right: 0; }
+          md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teacher-item .inner .actions .delete-teacher {
+            text-align: center;
+            cursor: pointer;
+            color: #ff6766;
+            padding-top: 10px; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -5281,24 +6769,26 @@ md-dialog.invite-teacher-modal-wrap {
         font-size: 12px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
-      width: 138px;
-      margin: 0 auto; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
-      font-size: 16px;
-      color: #7d7d7d;
-      font-family: Lato;
-      font-weight: 400;
-      text-align: center;
-      margin-top: 20px; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: center;
-          justify-content: center; }
-      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
-        margin: 0 auto 65px; }
+        font-weight: 300; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg {
+      text-align: center; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
+        width: 138px;
+        margin: 0 auto; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
+        font-size: 16px;
+        color: #7d7d7d;
+        font-family: Lato;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 20px; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center; }
+        md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
+          margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
     position: absolute;
     top: 0;
@@ -5355,7 +6845,7 @@ md-dialog.invite-teacher-modal-wrap {
   .app-header .main-content-header {
     margin: 0 auto;
     height: 100%;
-    width: 1060px; }
+    width: 1227px; }
     .app-header .main-content-header .raccoon-logo-icon svg {
       height: 37.5px;
       width: 57px;
@@ -5386,7 +6876,7 @@ md-dialog.invite-teacher-modal-wrap {
       .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
         padding: 0 12px 0 0;
-        border-right: 1px solid #ebebeb;
+        border-right: 1px solid #d3d0d0;
         cursor: pointer; }
         .app-header .main-content-header .app-user-area .profile-status .pending-purchase-icon-wrapper {
           width: 16px;
@@ -5408,86 +6898,86 @@ md-dialog.invite-teacher-modal-wrap {
       .app-header .main-content-header .app-user-area .md-button {
         background: white;
         width: auto;
-        display: -ms-flexbox !important;
-        display: flex !important;
-        -ms-flex-pack: center;
-            justify-content: center;
-        -ms-flex-align: center;
-            align-items: center; }
+        display: -ms-flexbox;
+        display: flex; }
         .app-header .main-content-header .app-user-area .md-button div {
           min-width: 40px; }
 
-._md-open-menu-container .header-modal-item {
+.md-open-menu-container .header-modal-item {
   font-family: Lato; }
-  ._md-open-menu-container .header-modal-item a {
+  .md-open-menu-container .header-modal-item::before {
+    min-height: 0; }
+  .md-open-menu-container .header-modal-item a {
     width: 100%;
     text-decoration: none;
     color: inherit; }
-  ._md-open-menu-container .header-modal-item:not(.purchase-status) span {
+  .md-open-menu-container .header-modal-item:not(.purchase-status) span {
     width: 100%; }
-  ._md-open-menu-container .header-modal-item.header-modal-item-profile {
+  .md-open-menu-container .header-modal-item.header-modal-item-profile {
     -ms-flex-direction: column;
         flex-direction: column;
     -ms-flex-align: start;
         align-items: flex-start;
     margin-bottom: 11px; }
-    ._md-open-menu-container .header-modal-item.header-modal-item-profile .username {
+    .md-open-menu-container .header-modal-item.header-modal-item-profile .username {
       margin-bottom: 5px; }
-    ._md-open-menu-container .header-modal-item.header-modal-item-profile .email {
+    .md-open-menu-container .header-modal-item.header-modal-item-profile .email {
       font-size: 14px;
       color: #acacac;
       font-family: Lato;
       font-weight: 300;
-      border-bottom: 1px solid #0a9bad;
+      border-bottom: 1px solid #ebebeb;
       width: 100%;
       padding-bottom: 15px; }
-  ._md-open-menu-container .header-modal-item.header-modal-item-uppercase {
+  .md-open-menu-container .header-modal-item.header-modal-item-uppercase {
     min-height: 35px;
     line-height: 35px;
     font-size: 14px;
+    text-decoration: none;
     text-transform: uppercase;
     font-weight: 300;
     cursor: pointer; }
-    ._md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
+    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.links {
       color: #161616; }
-    ._md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
+    .md-open-menu-container .header-modal-item.header-modal-item-uppercase.logout {
       color: #898989; }
-  ._md-open-menu-container .header-modal-item .check-mark-wrapper {
+  .md-open-menu-container .header-modal-item .check-mark-wrapper {
     position: relative;
     top: -2px;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: #cfcfcf;
+    background-color: #87ca4d;
     margin-left: 10px; }
-    ._md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
-      height: 100%; }
-    ._md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
+    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon {
+      height: 100%;
+      display: block; }
+    .md-open-menu-container .header-modal-item .check-mark-wrapper svg-icon svg {
       width: 75%;
       height: 100%;
       margin: auto;
       display: block; }
-  ._md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
+  .md-open-menu-container .header-modal-item:hover:not(.header-modal-item-profile) {
     background-color: #f8f8f8; }
 
-md-menu-content.md-menu-content-znk-header {
+.md-menu-content-znk-header {
   min-width: 270px;
   max-height: none;
   padding: 16px 0; }
-  md-menu-content.md-menu-content-znk-header md-list {
+  .md-menu-content-znk-header md-list {
     padding-top: 0;
     padding-bottom: 0; }
-    md-menu-content.md-menu-content-znk-header md-list .divider {
+    .md-menu-content-znk-header md-list .divider {
       height: 1px;
       margin: 10px 16px;
       border-top: 1px solid #ebebeb; }
-  md-menu-content.md-menu-content-znk-header .pending-purchase-icon-wrapper {
+  .md-menu-content-znk-header .pending-purchase-icon-wrapper {
     width: 16px;
     height: auto;
     margin-left: 10px;
     position: relative;
     top: 3px; }
-  md-menu-content.md-menu-content-znk-header [disabled="disabled"] {
+  .md-menu-content-znk-header [disabled="disabled"] {
     opacity: 0.5;
     cursor: default; }
 
@@ -5540,7 +7030,7 @@ znk-summary-results {
         font-size: 14px;
         color: #626060;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         position: relative;
         bottom: 2px; }
     znk-summary-results .gauge-row-wrapper .gauge-wrap .chart {
@@ -5607,7 +7097,7 @@ znk-summary-results {
         font-size: 10px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200; }
+        font-weight: 300; }
 
 znk-summary-timeline .time-line-wrapper {
   background-color: #fafafa; }
@@ -5654,7 +7144,7 @@ znk-summary-timeline .time-line-wrapper {
       color: #757a83;
       font-size: 12px;
       font-family: Lato;
-      font-weight: 200;
+      font-weight: 300;
       margin-top: 10px;
       min-width: 100px; }
     .znk-timeline-web-wrapper .progress-val .timeline-plus {
@@ -5668,3 +7158,62 @@ znk-summary-timeline .time-line-wrapper {
         color: #ff6766; }
       .znk-timeline-web-wrapper .progress-val .timeline-plus.green-point {
         color: #87ca4d; }
+
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+md-toast.toast-wrap, md-toast.toast-wrap-error {
+  width: 400px;
+  height: 60px;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: white;
+  border: 2px solid #87ca4d;
+  border-radius: 10px; }
+  md-toast.toast-wrap .icon-wrap, md-toast.toast-wrap-error .icon-wrap {
+    width: 60px;
+    margin: -8px;
+    padding: 8px;
+    background: #87ca4d;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
+    md-toast.toast-wrap .icon-wrap svg-icon, md-toast.toast-wrap-error .icon-wrap svg-icon {
+      width: 40px;
+      height: 40px; }
+      md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg *, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg * {
+        fill: #87ca4d; }
+  md-toast.toast-wrap .md-toast-content, md-toast.toast-wrap-error .md-toast-content {
+    background: white;
+    box-shadow: none;
+    color: #4f4d4d;
+    margin-left: 10px; }
+  md-toast.toast-wrap .close-toast-wrap, md-toast.toast-wrap-error .close-toast-wrap {
+    position: absolute;
+    right: 3px;
+    top: -15px;
+    width: 20px; }
+    md-toast.toast-wrap .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg {
+      width: 10px; }
+      md-toast.toast-wrap .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg .st1 {
+        stroke: #4f4d4d; }
+
+md-toast.toast-wrap-error {
+  border: 2px solid #ff6766; }
+  md-toast.toast-wrap-error .icon-wrap {
+    background: #ff6766; }
+    md-toast.toast-wrap-error .icon-wrap svg-icon {
+      width: 25px;
+      height: 25px; }
+      md-toast.toast-wrap-error .icon-wrap svg-icon .close-pop-svg * {
+        stroke: #000000; }

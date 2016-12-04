@@ -1,39 +1,40 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.purchase').controller('PurchaseDialogController',['$mdDialog', 'purchaseService','PurchaseStateEnum',
-        function($mdDialog, purchaseService, PurchaseStateEnum) {
+    angular.module('znk.infra-web-app.purchase')
+        .controller('PurchaseDialogController',
+            ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
+                'ngInject';
 
-            var self = this;
+                var vm = this;
+                var pendingPurchaseProm = purchaseService.getPendingPurchase();
+                vm.purchaseData = {};
+                vm.purchaseStateEnum = PurchaseStateEnum;
+                vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
+                vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
 
-            self.purchaseStateEnum = PurchaseStateEnum;
-
-            function _checkIfHasProVersion() {
-                purchaseService.hasProVersion().then(function (hasProVersion) {
-                    self.purchaseState = hasProVersion ? PurchaseStateEnum.PRO.enum : PurchaseStateEnum.NONE.enum;
+                purchaseService.getPurchaseData().then(function (purchaseData) {
+                    vm.purchaseData = purchaseData;
                 });
-            }
 
-            var pendingPurchaseProm = purchaseService.getPendingPurchase();
-            if (pendingPurchaseProm) {
-                self.purchaseState = PurchaseStateEnum.PENDING.enum;
-                pendingPurchaseProm.then(function () {
-                    _checkIfHasProVersion();
+                $scope.$watch('vm.purchaseData', function (newPurchaseState) {
+                    $timeout(function () {
+                        var hasProVersion = !(angular.equals(newPurchaseState, {}));
+                        if (hasProVersion){
+                            vm.purchaseState = PurchaseStateEnum.PRO.enum;
+                        }
+                    });
+                }, true);
+
+                purchaseService.getProduct().then(function (productPrice) {
+                    vm.productPrice = +productPrice.price;
+                    vm.productPreviousPrice = +productPrice.previousPrice;
+                    vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
                 });
-            } else {
-                _checkIfHasProVersion();
-            }
 
 
-
-            purchaseService.getProduct().then(function (prodObj) {
-                self.productPrice = +prodObj.price;
-                self.productPreviousPrice = +prodObj.previousPrice;
-                self.productDiscountPercentage = Math.floor(100 - ((self.productPrice / self.productPreviousPrice) * 100)) + '%';
-            });
-
-            this.close = function () {
-                $mdDialog.hide();
-            };
-        }]);
+                vm.close = function () {
+                    $mdDialog.cancel();
+                };
+            }]);
 })(angular);

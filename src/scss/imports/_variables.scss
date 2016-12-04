@@ -1,8 +1,8 @@
 /* fonts size */
 $extraLightFontWeight: 100;
 $ultraLightFontWeight: 100;
-$lightFontWeight: 200;
 $thinFontWeight: 200;
+$lightFontWeight: 300;
 $bookFontWeight: 300;
 $demiFontWeight: 300;
 $normalFontWeight: 400;
@@ -21,10 +21,11 @@ $ultraBlackFontWeight: 900;
 
 /* general */
 $baseBorderRadiusCorner: 15px;
+$mainHeaderWidth: 100%;
 
 /* paths */
 $googleFontCDN: '//fonts.googleapis.com/';
 $imagePath: '/assets/images';
 
 /* general */   // does we need that also in infra (taken from act and using that in znk header)
-$mainContentWidth: 1060px;
+$mainContentWidth: 100%;

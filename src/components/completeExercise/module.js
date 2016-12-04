@@ -18,5 +18,13 @@
         'znk.infra.eventManager',
         'znk.infra.stats',
         'znk.infra.estimatedScore'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
     ]);
 })();

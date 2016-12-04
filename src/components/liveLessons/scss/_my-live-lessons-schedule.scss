@@ -1,0 +1,178 @@
+md-dialog.my-lessons-schedule-wrapper {
+    @include dimension(580px, auto);
+    min-height: 465px;
+    border-radius: 15px;
+
+    .top-icon-wrap {
+        @include dimension(100%, 40px);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        position: relative;
+        top: 0;
+        background-color: $bgColor5;
+
+        .calendar-icon {
+            svg {
+                path {
+                    fill: $bgColor3,
+                }
+            }
+
+        }
+    }
+
+    .md-dialog-content {
+        padding: 22px;
+        .live-lessons-title {
+            @include text-style(32px, $fontColor3, Quicksand, $boldFontWeight);
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .upcoming-lesson-title {
+            @include text-style(14px, $fontColor3, Quicksand, $regularFontWeight);
+            display: block;
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .no-live-lessons-text {
+            @include text-style(16px, $fontColor3, Quicksand, $regularFontWeight);
+            text-align: center;
+            margin-top: 110px;
+            display: none;
+        }
+
+        &.empty-list {
+            .no-live-lessons-text {
+                display: block;
+            }
+            .upcoming-lesson-title, .time-zone {
+                display: none;
+            }
+
+            .ok-button {
+                margin-top: 95px;
+                display: block;
+            }
+        }
+
+        .current-time {
+            @include text-style(12px, $fontColor3, Lato, $regularFontWeight);
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn-wrapper {
+            display: flex;
+            .ok-button {
+                margin: 15px auto 0 auto;
+                box-shadow: none;
+                width: 320px;
+                border-radius: 25px;
+                background-color: $bgColor5;
+                color: $fontColor1;
+            }
+            .ok-button:hover {
+                background-color: $bgColor10;
+            }
+        }
+
+        .live-lessons-wrapper {
+            margin-top: 16px;
+            height: auto;
+            max-height: 290px;
+            overflow-y: auto;
+            padding-bottom: 20px;
+
+            .live-lesson-repeater {
+                position: relative;
+                display: flex;
+                margin-top: 5px;
+
+                .live-lesson {
+                    @include dimension(435px, 42px);
+                    background-color: $bgColor23;
+                    display: flex;
+                    align-items: center;
+                    margin-left: auto;
+                    border: 1px solid $borderColor21;
+                    border-radius: 5px;
+
+                    .date, .hour, .educator-name {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .date {
+                        @include dimension(85px, 100%);
+                        @include text-style(19px, $fontColor3, Quicksand, $boldFontWeight);
+                        background-color: $bgColor43;
+                    }
+
+                    .hour {
+                        @include dimension(100px, 100%);
+                        @include text-style(16px, $fontColor3, Quicksand, $regularFontWeight);
+                    }
+
+                    .educator-name {
+                        @include dimension(237px, 100%);
+                        @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
+                        justify-content: flex-end;
+                        margin-right: 13px;
+                    }
+                }
+
+                .reschedule-wrapper {
+                    display: flex;
+                    justify-items: center;
+                    justify-content: center;
+                    width: 50px;
+                    .reschedule-icon {
+
+                        cursor: pointer;
+                        svg {
+                            width:16px;
+                            path, polygon {
+                                fill: $bgColor31;
+                            }
+                        }
+                    }
+                }
+
+                &:first-child {
+                    margin-top: 0;
+                    margin-bottom: 36px;
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        top: 42px;
+                        left: 37px;
+                        @include dimension(437px, 1px);
+                        display: block;
+                        margin: 20px auto;
+                        background-color: $bgColor23;
+                    }
+                }
+            }
+        }
+    }
+}
+
+md-tooltip.reschedule-tooltip {
+    @include dimension(130px, 36px);
+    padding: 0;
+    border-radius: 5px;
+    .md-content {
+        padding: 2px;
+        border-radius: 5px;
+        background-color: $bgColor60;
+        div {
+            @include text-style(12px, $fontColor1, Quicksand, $regularFontWeight);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+    }
+}

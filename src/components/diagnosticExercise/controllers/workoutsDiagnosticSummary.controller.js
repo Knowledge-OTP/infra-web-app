@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow) {
+        function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService) {
         'ngInject';
 
             var self = this;
@@ -103,5 +103,13 @@
             });
 
             this.doughnutArray = dataArray;
+
+            this.showPurchaseDialog = function () {
+                purchaseService.showPurchaseDialog();
+            };
+
+            purchaseService.hasProVersion().then(function (isPro) {
+                self.showUpgradeBtn = !isPro && diagnosticSettings.summary && diagnosticSettings.summary.showUpgradeBtn;
+            });
     });
 })(angular);

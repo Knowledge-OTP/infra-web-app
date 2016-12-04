@@ -11,10 +11,14 @@
                    config="$ctrl.timerConfig"
                    ng-change="$ctrl.durationChanged()">
             </timer>
+            <div class="tutorial-icon-wrapper" ng-if="$ctrl.completeExerciseCtrl.exerciseDetails.exerciseTypeId === 1">
+                <svg-icon ng-click="$ctrl.openIntro()" name="book-icon" class="book-icon"></svg-icon>
+            </div>
             <div class="summary"
                  ng-click="$ctrl.goToSummary()"
                  ng-if="$ctrl.znkExercise.exerciseResult.isComplete">
                 <span translate=".SUMMARY" class="summary-text"></span>
+                <div class="background-opacity"></div>
             </div>
         </pre-right-part>
     </complete-exercise-header>

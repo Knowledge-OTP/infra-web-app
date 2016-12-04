@@ -49,7 +49,7 @@ on-boarding-bar {
       -webkit-justify-content: center; }
       on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon {
         width: 30px;
-        margin: 6px auto 0; }
+        margin: auto; }
         on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon * {
           fill: #87ca4d; }
       on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected {
@@ -169,10 +169,6 @@ on-boarding-bar {
       .on-board .container .step .welcome .btn-wrap {
         margin-top: 105px;
         text-align: center; }
-        .on-board .container .step .welcome .btn-wrap .continue-title {
-          vertical-align: top;
-          position: relative;
-          top: 3px; }
         .on-board .container .step .welcome .btn-wrap .md-button {
           padding-left: 52px;
           padding-right: 52px;
@@ -182,11 +178,19 @@ on-boarding-bar {
           color: white;
           font-family: Lato;
           font-weight: 400; }
-          .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg {
-            width: 16px;
-            transform: rotate(-90deg); }
-            .on-board .container .step .welcome .btn-wrap .md-button .dropdown-arrow-icon svg polyline {
-              stroke: #ffffff; }
+          .on-board .container .step .welcome .btn-wrap .md-button .btn-text {
+            display: -ms-flexbox;
+            display: flex; }
+            .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon {
+              display: -ms-inline-flexbox;
+              display: inline-flex; }
+              .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg {
+                width: 16px;
+                display: -ms-inline-flexbox;
+                display: inline-flex;
+                transform: rotate(-90deg); }
+                .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg polyline {
+                  stroke: #ffffff; }
       .on-board .container .step .goals .sub-title {
         font-size: 24px;
         color: #161616;
@@ -199,7 +203,7 @@ on-boarding-bar {
         font-size: 12px;
         color: #757a83;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         text-align: center;
         margin-top: 15px;
         cursor: pointer;
@@ -208,7 +212,7 @@ on-boarding-bar {
         font-size: 16px;
         color: #161616;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         margin-bottom: 20px;
         text-align: center; }
       .on-board .container .step .bg-wrap {
@@ -233,7 +237,7 @@ on-boarding-bar {
         font-size: 16px;
         color: #4f4d4d;
         font-family: Lato;
-        font-weight: 200;
+        font-weight: 300;
         text-align: center;
         margin-top: 15px; }
       .on-board .container .step.diagnostic .btn-wrap {

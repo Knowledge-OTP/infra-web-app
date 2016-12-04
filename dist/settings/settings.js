@@ -19,7 +19,7 @@
             var svgMap = {
                 'settings-change-password-icon': 'components/settings/svg/change-password-icon.svg',
                 'settings-danger-red-icon': 'components/settings/svg/error-icon.svg',
-                'settings-close-popup': 'components/settings/svg/close-popup.svg',
+                'settings-close-popup': 'components/settings/svg/setting-close-popup.svg',
                 'settings-completed-v-icon': 'components/settings/svg/completed-v.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
@@ -32,10 +32,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.settings').controller('SettingsChangePasswordController',
-            ["AuthService", "$mdDialog", "$timeout", "$translatePartialLoader", function (AuthService, $mdDialog, $timeout, $translatePartialLoader) {
+            ["AuthService", "$mdDialog", "$timeout", function (AuthService, $mdDialog, $timeout) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('settings');
 
                 var self = this;
                 this.saveTitle = 'SETTING.SAVE';
@@ -120,24 +118,6 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     "	v15h15v-7.5h7.5V60H30v-7.5h7.5V45h15C64.9,45,75,34.9,75,22.5S64.9,0,52.5,0z\"/>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/settings/svg/close-popup.svg",
-    "<svg\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"settings-close-popup\">\n" +
-    "    <style>\n" +
-    "        .settings-close-popup{\n" +
-    "        width:15px;\n" +
-    "        height:15px;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "<path class=\"st0\"/>\n" +
-    "<g>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-    "</g>\n" +
-    "</svg>\n" +
-    "");
   $templateCache.put("components/settings/svg/completed-v.svg",
     "<svg\n" +
     "	class=\"complete-v-icon-svg\"\n" +
@@ -194,6 +174,24 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     "	c0.7,0.7,1,1.5,1,2.4C30.8,41.4,30.5,42.2,29.8,42.9z M30.7,17.7l-1,11.2c-0.1,1.3-0.3,2.4-0.7,3.1c-0.3,0.7-0.9,1.1-1.7,1.1\n" +
     "	c-0.8,0-1.4-0.3-1.7-1c-0.3-0.7-0.5-1.7-0.7-3.1l-0.7-10.9C24,15.8,24,14.3,24,13.4c0-1.3,0.3-2.2,1-2.9s1.5-1.1,2.6-1.1\n" +
     "	c1.3,0,2.2,0.5,2.6,1.4c0.4,0.9,0.7,2.2,0.7,3.9C30.8,15.6,30.8,16.6,30.7,17.7z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/settings/svg/setting-close-popup.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"settings-close-popup\">\n" +
+    "    <style>\n" +
+    "        .settings-close-popup{\n" +
+    "        width:15px;\n" +
+    "        height:15px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/settings/templates/settingsChangePassword.template.html",
@@ -260,7 +258,8 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     "            <svg-icon class=\"completed-v-icon-wrap\" name=\"settings-completed-v-icon\"></svg-icon>\n" +
     "            <div translate=\".SAVE_SUCCESS\"></div>\n" +
     "            <div class=\"done-btn-wrap\">\n" +
-    "                <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <md-button aria-label=\"{{'SETTING.DONE' | translate}}\"\n" +
+    "                    class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                    <span translate=\".DONE\"></span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +

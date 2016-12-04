@@ -10,12 +10,12 @@
         </div>
         <div class="sub-title" translate=".WE_ARE_HERE_TO_HELP"></div>
         <div class="btn-wrap">
-            <md-button autofocus tabindex="1" class="md-primary znk inline-block"
-                       ng-click="vm.nextStep()" ng-cloak>
-                <span translate=".CONTINUE" class="continue-title"></span>
-                <svg-icon name="on-boarding-dropdown-arrow-icon"
-                          class="dropdown-arrow-icon inline-block">
-                </svg-icon>
+            <md-button aria-label="{{'ON_BOARDING.WELCOME.CONTINUE' | translate}}"
+                autofocus tabindex="1" class="md-primary znk inline-block" ng-click="vm.nextStep()" ng-cloak>
+                <div class="btn-text">
+                    <span translate=".CONTINUE" class="continue-title"></span>
+                    <svg-icon name="on-boarding-dropdown-arrow-icon" class="dropdown-arrow-icon"></svg-icon>
+                </div>
             </md-button>
         </div>
     </div>

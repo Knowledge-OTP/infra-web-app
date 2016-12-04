@@ -127,6 +127,23 @@ module.exports = function (grunt) {
                     src: ['<%= yeoman.src %>/core/module.js', '<%= yeoman.tmp %>/*/*.js'],
                     dest: '<%= yeoman.tmp %>/main.js'
                 }]
+            },
+            locale: {
+                src: [
+                    'bower_components/infra/dist/locale-en.json',
+                    '<%= yeoman.src %>/locale/locale-en.json'
+                ],
+                dest: '<%= yeoman.tmp %>/locale-en.json',
+                options: {
+                    // Added to the top of the file
+                    banner: '{',
+                    process: function(src) {
+                        return src.slice(src.indexOf('{')+1, src.lastIndexOf('}')-1);
+                    },
+                    // Will be added at the end of the file
+                    footer: '}',
+                    separator: ','
+                }
             }
         },
         uglify: {
@@ -239,11 +256,6 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.src %>/components',
-                    src: '*/locale/*.*',
-                    dest: '<%= yeoman.tmp %>'
-                }, {
-                    expand: true,
-                    cwd: '<%= yeoman.src %>/components',
                     src: '*/assets/**/*.*',
                     dest: '<%= yeoman.tmp %>'
                 }, {
@@ -258,25 +270,17 @@ module.exports = function (grunt) {
                     }
                 }]
             },
-            serve:{
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.src %>/components',
-                    src: ['*/locale/*.json'],
-                    dest: 'tmpLocalization/'
-                },{
-                    expand: true,
-                    cwd: 'bower_components/infra/dist',
-                    src: ['*/locale/*.json'],
-                    dest: 'tmpLocalization/'
-                }]
-            },
             dist: {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.tmp %>/',
                     src: ['**/*.*', '!assets/**/*.*'],
                     dest: '<%= yeoman.dist %>/'
+                }, {
+                    expand: true,
+                    cwd: '<%= yeoman.src %>/locale',
+                    src: '*.*',
+                    dest: '<%= yeoman.dist %>'
                 }]
             }
         },
@@ -347,7 +351,6 @@ module.exports = function (grunt) {
         console.log('serving from', grunt.config('connect').options.base);
         grunt.task.run([
             'build',
-            'copy:serve',
             'wiredep',
             'connect:serve',
             'watch'
@@ -416,6 +419,7 @@ module.exports = function (grunt) {
         'clean:html2JsTemplates',
         'concat:mainModule',
         'replace:allModulesInMainJs',
+        'concat:locale',
         'copy:build',
         'ngAnnotate'
     ]);

@@ -9,7 +9,7 @@
         </div>
         <div class="popup-header">
             <div class="close-popup-wrap" ng-click="vm.cancel();">
-                <svg-icon name="close-popup"></svg-icon>
+                <svg-icon name="feedback-close-popup"></svg-icon>
             </div>
         </div>
         <md-dialog-content>
@@ -70,7 +70,7 @@
                             <div translate=".THANKS"></div>
                             <div translate=".OPINION"></div>
                         </div>
-                        <md-button
+                        <md-button aria-label="{{'FEEDBACK_POPUP.DONE' | translate}}"
                                 class="success success-green drop-shadow"
                                 ng-click="vm.cancel();">
                             <span translate=".DONE"></span>

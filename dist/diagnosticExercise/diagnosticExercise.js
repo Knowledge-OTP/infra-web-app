@@ -23,12 +23,14 @@
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
         'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.workoutsRoadmap'
+        'znk.infra-web-app.workoutsRoadmap',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.uiTheme'
     ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
         'ngInject';
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
-            'diagnostic-check-mark': 'components/diagnosticExercise/svg/check-mark-icon.svg',
+            'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
             'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
@@ -199,12 +201,12 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticController', ["$state", "currentState", "$translatePartialLoader", function($state, currentState, $translatePartialLoader) {
+    angular.module('znk.infra-web-app.diagnosticExercise')
+        .controller('WorkoutsDiagnosticController', ["$state", "currentState", function($state, currentState) {
         'ngInject';
 
         var EXAM_STATE = 'app.diagnostic';
 
-        $translatePartialLoader.addPart('diagnosticExercise');
 
         $state.go(EXAM_STATE + currentState.state, currentState.params);
     }]);
@@ -599,7 +601,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow) {
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService) {
         'ngInject';
 
             var self = this;
@@ -700,6 +702,14 @@
             });
 
             this.doughnutArray = dataArray;
+
+            this.showPurchaseDialog = function () {
+                purchaseService.showPurchaseDialog();
+            };
+
+            purchaseService.hasProVersion().then(function (isPro) {
+                self.showUpgradeBtn = !isPro && diagnosticSettings.summary && diagnosticSettings.summary.showUpgradeBtn;
+            });
     }]);
 })(angular);
 
@@ -1016,14 +1026,14 @@
 
 
 angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/diagnosticExercise/svg/check-mark-icon.svg",
+  $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
     "     y=\"0px\"\n" +
     "	 viewBox=\"0 0 329.5 223.7\"\n" +
-    "	 class=\"check-mark-svg\">\n" +
+    "	 class=\"diagnostic-check-mark-svg\">\n" +
     "    <style type=\"text/css\">\n" +
-    "        .check-mark-svg .st0 {\n" +
+    "        .diagnostic-check-mark-svg .st0 {\n" +
     "            fill: none;\n" +
     "            stroke: #ffffff;\n" +
     "            stroke-width: 21;\n" +
@@ -1174,12 +1184,22 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "\n" +
     "        </div>\n" +
     "    </div>\n" +
+    "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
+    "         ng-if=\"vm.showUpgradeBtn\">\n" +
+    "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
+    "        <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.UPGRADE_BTN' | translate}}\"\n" +
+    "            class=\"znk outline\"\n" +
+    "            ng-click=\"vm.showPurchaseDialog()\"\n" +
+    "            translate=\".UPGRADE_BTN\">\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
     "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
-    "    <button autofocus tabindex=\"1\"\n" +
+    "    <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.DONE' | translate}}\"\n" +
+    "            autofocus tabindex=\"1\"\n" +
     "            class=\"start-button md-button znk md-primary\"\n" +
     "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
     "            translate=\".DONE\">DONE\n" +
-    "    </button>\n" +
+    "    </md-button>\n" +
     "</div>\n" +
     "");
 }]);

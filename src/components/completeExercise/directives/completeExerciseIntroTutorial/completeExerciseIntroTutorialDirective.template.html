@@ -1,21 +1,24 @@
 <div class="intro-container">
-    <div class="video-wrapper">
-        <video controls
-               video-ctrl-drv
-               on-play="vm.onVideoPlay()"
-               on-ended="vm.onVideoEnded()"
-               video-error-poster="assets/images/raccoon/video-is-not-available-img.png">
-            <source ng-src="{{::$ctrl.videoSrc}}" type="video/mp4">
-        </video>
-    </div>
-    <div class="content-wrapper">
-        <div ng-repeat="content in $ctrl.exerciseContent.content">
-            <div ng-bind-html="::$ctrl.trustAsHtml(content.title)"></div>
-            <div ng-bind-html="::$ctrl.trustAsHtml(content.body)"></div>
+    <div class="upper-wrapper">
+        <div class="video-wrapper">
+            <video controls
+                   video-ctrl-drv
+                   on-play="vm.onVideoPlay()"
+                   on-ended="vm.onVideoEnded()"
+                   video-error-poster="assets/images/raccoon/video-is-not-available-img.png">
+                <source ng-src="{{::$ctrl.videoSrc}}" type="video/mp4">
+            </video>
+        </div>
+        <div class="content-wrapper">
+            <div ng-repeat="content in $ctrl.exerciseContent.content">
+                <div ng-bind-html="::$ctrl.trustAsHtml(content.title)"></div>
+                <div ng-bind-html="::$ctrl.trustAsHtml(content.body)"></div>
+            </div>
         </div>
     </div>
     <div class="btn-section">
         <md-button class="md-primary znk go-to-questions-btn"
+                   aria-label="{{'COMPLETE_EXERCISE.GO_QST' | translate}}"
                    md-no-ink
                    translate=".GO_QST"
                    ng-click="$ctrl.goToQuestions()">

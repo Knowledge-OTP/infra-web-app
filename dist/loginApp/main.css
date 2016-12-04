@@ -12,23 +12,42 @@ oath-login-drv .btn-wrap {
   border-radius: 25px;
   overflow: hidden;
   height: 37px; }
-  oath-login-drv .btn-wrap .facebook-btn,
-  oath-login-drv .btn-wrap .gplus-btn {
+  oath-login-drv .btn-wrap .social-btn {
     width: 50%;
     height: 100%;
     color: #ffffff;
     float: left;
+    position: relative;
     padding-left: 25px;
     cursor: pointer;
     border: none; }
-    oath-login-drv .btn-wrap .facebook-btn span,
-    oath-login-drv .btn-wrap .gplus-btn span {
+    oath-login-drv .btn-wrap .social-btn.gplus-btn {
+      border-top-right-radius: 25px;
+      border-bottom-right-radius: 25px; }
+    oath-login-drv .btn-wrap .social-btn span {
       display: block;
       text-indent: -25px;
       font-size: 14px; }
+      oath-login-drv .btn-wrap .social-btn span.loader {
+        margin: 0;
+        height: 12px;
+        width: 12px;
+        animation: rotate 0.8s infinite linear;
+        border: 3px solid #fff;
+        border-right-color: transparent;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        right: 15px; }
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
   oath-login-drv .btn-wrap .facebook-btn {
     background-color: #369;
-    line-height: 37px; }
+    line-height: 32px; }
     oath-login-drv .btn-wrap .facebook-btn:hover {
       background-color: #2a547f; }
     oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
@@ -39,7 +58,7 @@ oath-login-drv .btn-wrap {
         fill: #ffffff; }
   oath-login-drv .btn-wrap .gplus-btn {
     background-color: #df4a31;
-    line-height: 37px; }
+    line-height: 32px; }
     oath-login-drv .btn-wrap .gplus-btn:hover {
       background-color: #c5402a; }
     oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
@@ -50,6 +69,167 @@ oath-login-drv .btn-wrap {
         fill: #ffffff; }
   oath-login-drv .btn-wrap.reset-btn {
     margin-top: 20px; }
+
+promo-code {
+  display: block;
+  height: 50px; }
+  promo-code .promo-code-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    position: relative; }
+    promo-code .promo-code-wrapper .promo-code-title {
+      width: auto;
+      height: 27px;
+      font-size: 14px;
+      color: #898989;
+      font-family: Lato;
+      font-weight: 400;
+      padding: 0 13px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      cursor: pointer;
+      border-radius: 20px;
+      background-color: #f7f7f7; }
+    promo-code .promo-code-wrapper .promo-code-title:focus {
+      outline: none; }
+    promo-code .promo-code-wrapper .promo-code-title:hover {
+      background-color: #E8E8E8; }
+    promo-code .promo-code-wrapper .promo-code-overlay {
+      width: 340px;
+      height: 85px;
+      padding-top: 18px;
+      box-sizing: border-box;
+      box-shadow: 0 1px 2px 1px #e1e1e1;
+      position: absolute;
+      background-color: white;
+      border: 1px solid #e1e1e1;
+      border-radius: 20px;
+      top: 40px;
+      z-index: 5; }
+    promo-code .promo-code-wrapper .promo-code-overlay::before, promo-code .promo-code-wrapper .promo-code-overlay::after {
+      width: 0;
+      height: 0;
+      content: '';
+      position: absolute;
+      top: -9px;
+      left: calc(50% - 5px);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+      z-index: 2; }
+    promo-code .promo-code-wrapper .promo-code-overlay::after {
+      top: -10px;
+      border-bottom: 10px solid #e1e1e1;
+      z-index: 1; }
+    promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper {
+      width: 290px;
+      height: 43px;
+      margin: 0 auto;
+      position: relative; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+        width: 35px;
+        height: 34px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
+        border-radius: 0 23px 23px 0;
+        background-color: #0a9bad;
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        cursor: pointer; }
+        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper svg line {
+          stroke: white; }
+        promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon {
+          display: none; }
+          promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon svg, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon svg {
+            width: 20px;
+            height: 15px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper:hover {
+        background-color: #088190; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .close-icon:hover {
+        opacity: 0.9; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .arrow-icon:focus, promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .correct-icon:focus {
+        outline: none; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-spinner {
+        position: absolute;
+        z-index: 10;
+        right: 50px;
+        top: 5.5px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+        width: 100%;
+        height: 36px;
+        font-size: 14px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400;
+        box-sizing: border-box;
+        border-radius: 30px;
+        border: 1px solid #9a9797;
+        padding-left: 18px;
+        font-weight: 400;
+        font-size: 14px;
+        color: #161616; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper ::-webkit-input-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper :-moz-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper ::-moz-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper :-ms-input-placeholder {
+        font-size: 14px; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper input:focus {
+        outline: none; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text {
+        font-size: 12px;
+        color: #161616;
+        font-family: Lato;
+        font-weight: 400;
+        padding-left: 20px;
+        margin-top: 6px; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text, promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+      color: #87ca4d; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+      background-color: #87ca4d; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .correct-icon {
+        display: block; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .arrow-icon {
+        display: none; }
+    promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .promo-code-status-text, promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper input {
+      color: #ff6766; }
+    promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
+      background-color: #ff6766; }
+      promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .close-icon {
+        display: block; }
+      promo-code .promo-code-wrapper.promo-code-invalid .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper .arrow-icon {
+        display: none; }
+    promo-code .promo-code-wrapper .promo-code-title.accepted-title {
+      display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-title {
+      display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-title.accepted-title {
+      color: #87ca4d;
+      display: -ms-flexbox;
+      display: flex; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay {
+      transition: 1s;
+      height: 0;
+      padding: 0;
+      box-shadow: none;
+      border: 0; }
+      promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay .promo-code-input-wrapper {
+        display: none; }
+    promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay::before, promo-code .promo-code-wrapper.promo-code-accepted .promo-code-overlay::after {
+      display: none; }
 
 @font-face {
   font-family: "SourceSansPro";
@@ -89,11 +269,14 @@ oath-login-drv .btn-wrap {
       background-size: contain;
       padding: 0; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
-        background-image: url("/assets/images/sat-name@2x.png"); }
+        background-image: url("/assets/images/sat-name@2x.png");
+        width: 88px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
-        background-image: url("/assets/images/act-name@2x.png"); }
+        background-image: url("/assets/images/act-name@2x.png");
+        width: 95px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
-        background-image: url("/assets/images/toefl-name@2x.png"); }
+        background-image: url("/assets/images/toefl-name@2x.png");
+        width: 126px; }
 
 login-app {
   transition: all 0.5s; }
@@ -109,7 +292,7 @@ login-app {
     font-family: 'SourceSansPro', sans-serif;
     font-weight: 400; }
     login-app .login-app > header {
-      max-width: 1366px;
+      max-width: 95%;
       height: 84px;
       padding: 20px 0;
       margin: 0 auto;
@@ -135,9 +318,13 @@ login-app {
         text-align: center;
         position: absolute;
         left: calc(50% - 90px); }
+        login-app .login-app > header .app-select.no-dropdown {
+          left: 50%;
+          transform: translateX(-50%);
+          top: 28px; }
         login-app .login-app > header .app-select md-menu .md-button.md-default-theme:not([disabled]).md-icon-button:hover,
         login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
-          background-color: #dddddd; }
+          background-color: #ffffff; }
         login-app .login-app > header .app-select md-menu > button {
           width: 175px;
           height: auto;
@@ -147,7 +334,7 @@ login-app {
           login-app .login-app > header .app-select md-menu > button:hover {
             box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35); }
         login-app .login-app > header .app-select .app-img-holder {
-          width: calc(175px / 2);
+          width: 120px;
           height: calc(55px / 2);
           background-repeat: no-repeat;
           background-size: contain;
@@ -161,14 +348,15 @@ login-app {
         login-app .login-app > header .app-select .expand-menu {
           float: right; }
       login-app .login-app > header .for-educators {
+        position: relative;
+        top: 5px;
+        right: 100px;
         float: right;
         margin-top: 12px;
+        font-size: 16px;
         cursor: pointer;
         border-radius: 15px;
-        border: 1px solid;
         padding: 5px 8px; }
-        login-app .login-app > header .for-educators:hover {
-          text-decoration: underline; }
     login-app .login-app .main {
       position: relative;
       padding: 0; }
@@ -181,11 +369,19 @@ login-app {
         margin: 0;
         bottom: 40px;
         left: 40px; }
+        login-app .login-app .main .main-inner h2.banner-text .invitation-title {
+          font-size: 33px;
+          color: #ffffff;
+          font-family: "Source Sans Pro";
+          font-weight: 400; }
+          login-app .login-app .main .main-inner h2.banner-text .invitation-title .second-row {
+            font-size: 50px; }
       login-app .login-app .main img.main-banner {
-        min-height: 513px;
+        min-height: 545px;
         min-width: 1366px; }
       login-app .login-app .main .login-container,
-      login-app .login-app .main .signup-container {
+      login-app .login-app .main .signup-container,
+      login-app .login-app .main .change-password-container {
         position: absolute;
         top: 35px;
         right: 135px; }
@@ -199,14 +395,32 @@ login-app {
         login-app .login-app .main .go-to-signup a {
           text-decoration: underline;
           cursor: pointer; }
+      login-app .login-app .main .back-to-login-btn {
+        display: -ms-flexbox;
+        display: flex;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-left: -12px; }
+        login-app .login-app .main .back-to-login-btn .back-btn-icon {
+          width: 15px;
+          display: block;
+          transform: rotate(90deg); }
+          login-app .login-app .main .back-to-login-btn .back-btn-icon svg * {
+            stroke: #4f4d4d; }
+        login-app .login-app .main .back-to-login-btn .back-btn-label {
+          margin-left: 10px;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400; }
     login-app .login-app.sat .app-bg {
       background: #0a9bad; }
       login-app .login-app.sat .app-bg:hover {
-        background: #088E9E; }
+        background: #088190; }
     login-app .login-app.sat .app-color {
       color: #0a9bad; }
       login-app .login-app.sat .app-color:hover {
-        color: #088E9E; }
+        color: #088190; }
     login-app .login-app.act .app-bg {
       background: #87ca4d; }
       login-app .login-app.act .app-bg:hover {
@@ -232,12 +446,28 @@ login-app {
       padding-left: 30px;
       padding-bottom: 20px;
       padding-top: 25px; }
+      login-app .login-app .form-container .success-massage {
+        text-align: center; }
+        login-app .login-app .form-container .success-massage .v-icon-wrapper {
+          width: 31px;
+          height: 31px;
+          background-color: #89c650;
+          border-radius: 50%;
+          padding: 7px;
+          margin: auto; }
+        login-app .login-app .form-container .success-massage .massage-text {
+          font-size: 12px;
+          color: #4f4d4d;
+          font-family: Quicksand;
+          font-weight: 400;
+          margin: 20px auto; }
       login-app .login-app .form-container .title {
         text-align: center;
-        padding-bottom: 15px;
-        color: #161616;
-        font-weight: 200;
-        font-size: 25px; }
+        font-size: 25px;
+        color: #4f4d4d;
+        font-family: "Source Sans Pro";
+        font-weight: 400;
+        padding-bottom: 15px; }
       login-app .login-app .form-container .inputs-container .input-wrapper {
         position: relative;
         box-sizing: border-box;
@@ -274,6 +504,10 @@ login-app {
             border-width: 10px;
             bottom: -20px;
             left: 13px; }
+          login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span.email-exist-massage {
+            top: -55px; }
+          login-app .login-app .form-container .inputs-container .input-wrapper .validationBox span.no-email-massage {
+            top: -58px; }
         login-app .login-app .form-container .inputs-container .input-wrapper.valid {
           border-color: #9a9797; }
         login-app .login-app .form-container .inputs-container .input-wrapper.invalid {
@@ -300,19 +534,19 @@ login-app {
           color: #161616; }
           login-app .login-app .form-container .inputs-container .input-wrapper input ::-webkit-input-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input :-moz-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input ::-moz-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
           login-app .login-app .form-container .inputs-container .input-wrapper input :-ms-input-placeholder {
             color: #4f4d4d;
-            font-weight: 200;
+            font-weight: 300;
             font-size: 14px; }
       login-app .login-app .form-container .submit-btn-wrapper {
         text-align: center; }
@@ -353,9 +587,11 @@ login-app {
         margin-bottom: 5px;
         text-align: right;
         color: #757a83;
-        font-weight: 200;
+        font-weight: 300;
         font-size: 14px;
         font-family: 'SourceSansPro-Light'; }
+        login-app .login-app .form-container .forgot-pwd-wrapper .app-color {
+          cursor: pointer; }
       login-app .login-app .form-container .general-error {
         font-size: 12px;
         color: #ff6766;
@@ -380,7 +616,7 @@ login-app {
           padding-right: 15px;
           padding-left: 15px;
           color: #c2c2c2;
-          font-weight: 200;
+          font-weight: 300;
           font-size: 14px; }
       login-app .login-app .form-container.signup .signup-disclaimer {
         text-align: center;

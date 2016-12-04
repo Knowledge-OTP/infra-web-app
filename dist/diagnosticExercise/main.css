@@ -18,7 +18,7 @@
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
 .app-workouts-diagnostic .exercise-container {
   width: 100%;
-  height: calc(100vh - 95px);
+  height: 100%;
   background-color: white;
   display: -ms-flexbox;
   display: flex;
@@ -50,7 +50,7 @@
 
 .app-workouts-diagnostic .md-button {
   display: block;
-  margin: 15px auto;
+  margin: 15px auto 25px;
   border-radius: 30px; }
   .app-workouts-diagnostic .md-button.md {
     width: 180px; }
@@ -200,11 +200,11 @@
     font-size: 18px;
     color: #4f4d4d;
     font-family: Lato;
-    font-weight: 200;
+    font-weight: 300;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 35px;
+    margin-top: 70px;
     line-height: 25px; }
   .diagnostic-summary-wrapper .start-button.md-button.primary {
     border-radius: 30px;
@@ -213,6 +213,28 @@
     margin-right: auto;
     margin-top: 35px;
     margin-bottom: 35px; }
+  .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: center;
+        align-items: center;
+    margin-top: 60px; }
+    .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 700; }
+    .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper .md-button.znk.outline {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #64b61d;
+      font-family: Lato;
+      font-weight: 400;
+      text-transform: inherit;
+      padding-left: 35px;
+      padding-right: 35px; }
 
 md-tooltip.tooltip-for-diagnostic-summary {
   opacity: 0;

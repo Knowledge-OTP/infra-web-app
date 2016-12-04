@@ -7,15 +7,15 @@
             name: 'SAT',
             className: 'sat'
         },
-        ACT: {
-            id: 'ACT',
-            name: 'ACT',
-            className: 'act'
-        },
         TOEFL: {
             id: 'TOEFL',
             name: 'TOEFL',
             className: 'toefl'
+        },
+        ACT: {
+            id: 'ACT',
+            name: 'ACT',
+            className: 'act'
         }
     };
 
@@ -24,93 +24,23 @@
         STUDENT: 2
     };
 
-    var ALL_ENV_CONFIG = {
-        'dev': {},
-        'prod': {}
-    };
-    ALL_ENV_CONFIG.dev[APPS.SAT.id] = {
-        fbDataEndPoint: 'https://sat-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        facebookAppId: '1624086287830120',
-        googleAppId: '1008364992567-hpchkt4nuo4eosjfrbpqrm1ruamg62nj.apps.googleusercontent.com',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'sat_app',
-        studentAppName: 'sat_app',
-        dashboardAppName: 'sat_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.SAT.id] = {
-        fbDataEndPoint: 'https://sat2-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        facebookAppId: '1576342295937853',
-        googleAppId: '1008364992567-gpi1psnhk0t41bf8jtm86kjc74c0if7c.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'sat_app',
-        studentAppName: 'sat_app',
-        dashboardAppName: 'sat_dashboard'
-    };
-    ALL_ENV_CONFIG.dev[APPS.ACT.id] = {
-        fbDataEndPoint: 'https://act-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        facebookAppId: '1557255967927879',
-        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'act_app',
-        studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.ACT.id] = {
-        fbDataEndPoint: 'https://act-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        facebookAppId: '1557254871261322',
-        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'act_app',
-        studentAppName: 'act_app',
-        dashboardAppName: 'act_dashboard'
-    };
-    ALL_ENV_CONFIG.dev[APPS.TOEFL.id] = {
-        fbDataEndPoint: 'https://znk-toefl-dev.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/',
-        facebookAppId: '1801767253393534',
-        googleAppId: '144375962953-sundkbnv8ptac26bsnokc74lo2pmo8sb.apps.googleusercontent.com',
-        backendEndpoint: 'https://znk-web-backend-dev.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'toefl_app',
-        studentAppName: 'toefl_app',
-        dashboardAppName: 'toefl_dashboard'
-    };
-    ALL_ENV_CONFIG.prod[APPS.TOEFL.id] = {
-        fbDataEndPoint: 'https://znk-toefl-prod.firebaseio.com/',
-        fbGlobalEndPoint: 'https://znk-prod.firebaseio.com/',
-        facebookAppId: '1658075334429394',
-        googleAppId: '144375962953-mga4p9d3qrgr59hpgunm2gmvi9b5p395.apps.googleusercontent.com',
-        redirectFacebook: '//www.zinkerz.com/',
-        backendEndpoint: 'https://znk-web-backend-prod.azurewebsites.net/',
-        dataAuthSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoicmFjY29vbnMifQ.mqdcwRt0W5v5QqfzVUBfUcQarD0IojEFNisP-SNIFLM',
-        firebaseAppScopeName: 'toefl_app',
-        studentAppName: 'toefl_app',
-        dashboardAppName: 'toefl_dashboard'
-    };
-
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
         var env = 'dev';
         this.setEnv = function (newEnv) {
             env = newEnv;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig) {
+        this.getEnv = function () {
+            return env;
+        };
+
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
-                return ALL_ENV_CONFIG[env][appContext];
+                return AllEnvs[env][appContext];
             }
 
             function _getAppScopeName(userContext, appEnvConfig) {
@@ -143,15 +73,15 @@
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
             }
 
-            function _getUserProfile(appContext, userContext){
+            function _getUserProfile(appContext, userContext) {
                 var appRef = _getAppRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
-                userProfileRef.on('value', function(snapshot) {
+                userProfileRef.on('value', function (snapshot) {
                     var userProfile = snapshot.val() || {};
                     deferred.resolve(userProfile);
-                }, function(err) {
+                }, function (err) {
                     $log.error('LoginAppSrv _getUserProfile: err=' + err);
                     deferred.reject(err);
                 });
@@ -164,16 +94,16 @@
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
                 if (customProfileFlag) {
-                    profile = { profile: formData };
+                    profile = {profile: formData};
                 } else {
-                    profile =  {
+                    profile = {
                         profile: {
                             email: formData.email,
                             nickname: formData.nickname
                         }
                     };
                 }
-                return userProfileRef.update(profile).catch(function(err){
+                return userProfileRef.update(profile).catch(function (err) {
                     $log.error(err);
                 });
             }
@@ -191,11 +121,30 @@
                 if (userContext === USER_CONTEXT.TEACHER) {
                     appName = appName + '-educator';
                 }
-                $window.location.href = "//" + $window.location.host + '/' + appName + '/web-app';
+
+                var urlParams = '';
+                var questionOrAmpersandSymbol = '?';
+
+                var invitationKey = InvitationKeyService.getInvitationKey();
+                if (angular.isDefined(invitationKey) && invitationKey !== null) {
+                    urlParams += (questionOrAmpersandSymbol + 'iid=' + invitationKey);
+                    questionOrAmpersandSymbol = '&';
+                }
+
+                var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
+                if (angular.isDefined(promoCode) && promoCode !== null) {
+                    urlParams +=  (questionOrAmpersandSymbol + 'pcid=' + promoCode);
+                }
+
+                if(urlParams !== ''){
+                    urlParams = '#' + urlParams;
+                }
+
+                $window.location.href = $window.location.host.indexOf('localhost') > -1 ? "//" + $window.location.host + urlParams : "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
             }
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
-                return refDB.authWithCustomToken(token).catch(function(error) {
+                return refDB.authWithCustomToken(token).catch(function (error) {
                     $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
                 });
             };
@@ -211,10 +160,6 @@
             };
 
             LoginAppSrv.APPS = APPS;
-            // Hide TOEFL app in production
-            if (env !== 'dev') {
-                delete LoginAppSrv.APPS.TOEFL;
-            }
 
             LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
 
@@ -230,9 +175,9 @@
             LoginAppSrv.writeUserProfile = _writeUserProfile;
             LoginAppSrv.redirectToPage = _redirectToPage;
 
-            LoginAppSrv.setSocialProvidersConfig = function(providers, appContent) {
+            LoginAppSrv.setSocialProvidersConfig = function (providers, appContent) {
                 var env = _getAppEnvConfig(appContent);
-                angular.forEach(providers, function(provider) {
+                angular.forEach(providers, function (provider) {
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
                     if (providerConfig) {
                         providerConfig.clientId = env[provider + 'AppId'];
@@ -241,6 +186,23 @@
                     if (provider === 'facebook') {
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
                     }
+                });
+            };
+
+            LoginAppSrv.resetPassword = function (appId, email, userContext) {
+                var globalRef = _getGlobalRef(appId, userContext);
+                return globalRef.resetPassword({
+                    email: email
+                }, function (error) {
+                    if (error === null) {
+                        $log.debug('Reset email was sent');
+                    } else {
+                        $log.debug('Email was not sent', error);
+                    }
+                }).then(function (res) {
+                    return res;
+                }).catch(function (error) {
+                    return error;
                 });
             };
 
@@ -311,8 +273,7 @@
                     return globalRef.createUser(formData).then(function () {
                         return LoginAppSrv.login(appContext, userContext, formData).then(function () {
                             isSignUpInProgress = false;
-                            _addFirstRegistrationRecord(appContext, userContext);
-                            return _writeUserProfile(formData, appContext, userContext).then(function(){
+                            return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
                         });

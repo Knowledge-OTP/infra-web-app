@@ -17,7 +17,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })
         .directive('workoutIntroLock',
-            function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv) {
+            function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv, purchaseService) {
                 'ngInject';
 
                 return {
@@ -83,6 +83,10 @@
                         setLockStateFlowControlProm.then(function(){
                             scope.vm.lockState = LOCK_STATES.NO_LOCK;
                         });
+
+                        scope.vm.openPurchaseModal = function () {
+                            purchaseService.showPurchaseDialog();
+                        };
                     }
                 };
             }

@@ -25,7 +25,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.tests').directive('navigationPane',
-        ["$translatePartialLoader", "ExamTypeEnum", "ExamSrv", "ExerciseResultSrv", "$q", function ($translatePartialLoader, ExamTypeEnum, ExamSrv, ExerciseResultSrv, $q) {
+        ["ExamTypeEnum", "ExamSrv", "ExerciseResultSrv", "$q", function (ExamTypeEnum, ExamSrv, ExerciseResultSrv, $q) {
             'ngInject';
             return {
                 scope: {},
@@ -33,7 +33,6 @@
                 templateUrl: 'components/tests/templates/navigationPane.template.html',
                 require: '?ngModel',
                 link: function (scope, element, attributes, ngModelCtrl) {
-                    $translatePartialLoader.addPart('tests');
 
                     scope.vm = {};
 
@@ -101,19 +100,17 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
   $templateCache.put("components/tests/templates/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
-    "   <div class=\"tests-navigation-title-header\"\n" +
-    "        translate=\".MINI_TEST_TITLE\"></div>\n" +
+    "    <div class=\"tests-navigation-title-header\"\n" +
+    "         translate=\".MINI_TEST_TITLE\"></div>\n" +
     "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
     "        <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum}\"\n" +
     "                      ng-class=\"{\n" +
     "                        'done': miniExam.isCompleted,\n" +
     "                        'active': vm.activeId === miniExam.id\n" +
     "                      }\">\n" +
-    "            <md-button md-no-ink\n" +
+    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}\"\n" +
     "                       ng-click=\"vm.changeActive(miniExam.id)\">\n" +
-    "                <span translate=\".TEST\"\n" +
-    "                      translate-values=\"{testNumber: $index+1}\">\n" +
-    "                </span>\n" +
+    "                <span>{{miniExam.name}}</span>\n" +
     "                <div class=\"status-icon-wrapper\"\n" +
     "                     ng-if=\"miniExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +
@@ -132,11 +129,9 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "                        'done': fullExam.isCompleted,\n" +
     "                        'active': vm.activeId === fullExam.id\n" +
     "                      }\">\n" +
-    "            <md-button md-no-ink\n" +
+    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}\"\n" +
     "                       ng-click=\"vm.changeActive(fullExam.id)\">\n" +
-    "                <span translate=\".TEST\"\n" +
-    "                      translate-values=\"{testNumber: $index+1}\">\n" +
-    "                </span>\n" +
+    "                <span>{{fullExam.name}}</span>\n" +
     "                <div class=\"status-icon-wrapper\"\n" +
     "                     ng-if=\"fullExam.isCompleted\">\n" +
     "                    <i class=\"material-icons\">check</i>\n" +

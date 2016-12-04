@@ -11,6 +11,8 @@
         'znk.infra.exerciseDataGetters'
     ])
         .config(function (QuestionTypesSrvProvider, $sceProvider) {
+            'ngInject';
+
             $sceProvider.enabled(false);
 
             var map = {

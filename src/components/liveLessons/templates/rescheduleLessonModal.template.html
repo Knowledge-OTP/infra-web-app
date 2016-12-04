@@ -1,0 +1,63 @@
+<md-dialog ng-cloak class="my-lessons-schedule-wrapper base" translate-namespace="RESCHEDULE_LESSON_MODAL">
+    <div class="top-icon-wrap">
+        <div class="top-icon">
+            <div class="round-icon-wrap">
+                <svg-icon name="reschedule-icon"></svg-icon>
+            </div>
+        </div>
+    </div>
+
+    <div class="close-popup-wrap">
+        <svg-icon name="close-popup" ng-click="vm.closeDialog()"></svg-icon>
+    </div>
+
+    <md-dialog-content>
+        <div ng-switch="!!vm.requestWasSent">
+            <div class="md-dialog-content">
+                <div class="reschedule-lesson-title" translate=".RESCHEDULE_LESSON"></div>
+
+                <div class="email-container" ng-switch-when="false">
+                    <div class="note-wrapper" ng-if="vm.islessonInNextFortyEightHours">
+                        <span class="red-color-text" translate=".NOTE"></span>
+                        <span class="warning-text" translate=".RESCHEDULING_FEE_PART1"></span>
+                        <span class="red-color-text" translate=".HOURS"></span>
+                        <div class="warning-text" translate=".RESCHEDULING_FEE_PART2"></div>
+                    </div>
+
+                    <textarea class="reschedule-container"
+                              required
+                              ng-model="vm.message"
+                              md-select-on-focus>
+                </textarea>
+                    <div class="bottom-lesson" translate=".WE_WILL_CONTACT_YOU"></div>
+                    <div class="buttons-wrapper">
+                        <md-button aria-label="{{'RESCHEDULE_LESSON_MODAL.CANCEL' | translate}}"
+                            class="md-button cancel-btn"
+                            translate=".CANCEL"
+                            ng-click="vm.closeDialog()">
+
+                        </md-button>
+                        <md-button aria-label="{{'RESCHEDULE_LESSON_MODAL.SEND' | translate}}"
+                            class="md-button send-btn"
+                            translate=".SEND"
+                            ng-click="vm.send()">
+                        </md-button>
+                    </div>
+                </div>
+
+                <div class="big-success-msg" ng-switch-when="true">
+                    <svg-icon class="completed-v-icon-wrap" name="completed-v-icon"></svg-icon>
+                    <div translate=".SUCCESS_SHARED"></div>
+                    <div class="done-btn-wrap">
+                        <md-button aria-label="{{'RESCHEDULE_LESSON_MODAL.DONE' | translate}}"
+                                   class="success lg drop-shadow"
+                                   ng-click="vm.closeDialog()">
+                            <span translate=".DONE"></span>
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+
+</md-dialog>

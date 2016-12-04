@@ -36,6 +36,8 @@
                         var functionsToBind = ['getViewMode','addQuestionChangeResolver','removeQuestionChangeResolver', 'getCurrentIndex'];
                         ZnkExerciseUtilitySrv.bindFunctions(questionBuilderCtrl, znkExerciseCtrl,functionsToBind);
 
+                        questionBuilderCtrl.bindExerciseEventManager = znkExerciseCtrl.bindExerciseEventManager;
+
                         element.append('<answer-explanation></answer-explanation>');
                     };
 
@@ -56,91 +58,116 @@
 
             var svgMap = {
                 'answer-explanation-lamp-icon': 'components/infraWebAppZnkExercise/svg/lamp-icon.svg',
-                'answer-explanation-close': 'components/infraWebAppZnkExercise/svg/close.svg'
+                'answer-explanation-close': 'components/infraWebAppZnkExercise/svg/answer-explanation-close.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["$translatePartialLoader", "ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function ($translatePartialLoader, ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
-                'ngInject';
+        ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+            'ngInject';
 
-                var directive = {
-                    scope: {},
-                    require: ['^questionBuilder', '^ngModel'],
-                    templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
-                    link: function link(scope, element, attrs, ctrls) {
-                        $translatePartialLoader.addPart('infraWebAppZnkExercise');
+            var directive = {
+                scope: {},
+                require: ['^questionBuilder', '^ngModel'],
+                templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
+                link: function link(scope, element, attrs, ctrls) {
 
-                        var questionBuilderCtrl = ctrls[0];
-                        var ngModelCtrl = ctrls[1];
-                        var viewMode = questionBuilderCtrl.getViewMode();
-                        var question = questionBuilderCtrl.question;
+                    var questionBuilderCtrl = ctrls[0];
+                    var ngModelCtrl = ctrls[1];
+                    var viewMode = questionBuilderCtrl.getViewMode();
+                    var question = questionBuilderCtrl.question;
 
-                        scope.d = {};
+                    scope.d = {};
 
-                        var init = (function () {
-                            var wasInit;
+                    var init = (function () {
+                        var wasInit;
 
-                            return function () {
-                                if (wasInit) {
-                                    return;
-                                }
-
-                                // add timeout to prevent showing visible answer explanation for a
-                                // second before it's hidden on slide that is not the current slide
-                                // (because the slider shifts from first slide to current)
-                                $timeout(function () {
-                                    element.addClass('answer-explanation-visible');
-                                }, 0, false);
-
-                                var analyticsProps = {
-                                    subjectType: question.subjectId,
-                                    questionId: question.id
-                                };
-
-                                scope.$watch('d.showWrittenSln', function (isVisible) {
-                                    if (isVisible || isVisible === false) {
-                                        if (isVisible) {
-                                            znkAnalyticsSrv.eventTrack({
-                                                eventName: 'writtenSolutionClicked',
-                                                props: analyticsProps
-                                            });
-                                            znkAnalyticsSrv.timeTrack({eventName: 'writtenSolutionClosed'});
-                                        } else {
-                                            znkAnalyticsSrv.eventTrack({
-                                                eventName: 'writtenSolutionClosed',
-                                                props: analyticsProps
-                                            });
-                                        }
-                                    }
-                                });
-
-                                wasInit = true;
-                            };
-                        })();
-
-                        function viewChangeListener() {
-                            if (ngModelCtrl.$viewValue) {           // user already answered
-                                init();
-                            } else {
-                                ngModelCtrl.$viewChangeListeners.push(function () {
-                                    init();
-                                });
+                        return function () {
+                            if (wasInit) {
+                                return;
                             }
-                        }
 
-                        switch (viewMode) {
-                            case ZnkExerciseViewModeEnum.REVIEW.enum:
-                                init();
-                                break;
-                            case ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum:
-                                viewChangeListener();
-                                break;
+                            // add timeout to prevent showing visible answer explanation for a
+                            // second before it's hidden on slide that is not the current slide
+                            // (because the slider shifts from first slide to current)
+                            $timeout(function () {
+                                element.addClass('answer-explanation-visible');
+                            }, 0, false);
+
+                            var analyticsProps = {
+                                subjectType: question.subjectId,
+                                questionId: question.id
+                            };
+
+                            scope.$watch('d.showWrittenSln', function (isVisible) {
+                                if (isVisible || isVisible === false) {
+                                    if (isVisible) {
+                                        znkAnalyticsSrv.eventTrack({
+                                            eventName: 'writtenSolutionClicked',
+                                            props: analyticsProps
+                                        });
+                                        znkAnalyticsSrv.timeTrack({ eventName: 'writtenSolutionClosed' });
+                                    } else {
+                                        znkAnalyticsSrv.eventTrack({
+                                            eventName: 'writtenSolutionClosed',
+                                            props: analyticsProps
+                                        });
+                                    }
+                                }
+                            });
+
+                            wasInit = true;
+                        };
+                    })();
+
+                    function viewChangeListener() {
+                        if (ngModelCtrl.$viewValue) {           // user already answered
+                            init();
+                        } else {
+                            // $watch seems to work for sharer and viewer, while $viewChangeListeners
+                            // worked only for sharer. it's because $viewChangeListeners does not  
+                            // invoke when the $modalValue change, only when the $viewValue (via input and etc)
+                            scope.$watch(function () {
+                                return ngModelCtrl.$viewValue;
+                            }, function (newVal) {
+                                // newVal undefined meens no answer yet, so must be protected 
+                                if (angular.isDefined(newVal)) {
+                                    init();
+                                }
+                            });
                         }
                     }
-                };
-                return directive;
-            }]
+
+                    switch (viewMode) {
+                        case ZnkExerciseViewModeEnum.REVIEW.enum:
+                            init();
+                            break;
+                        case ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum:
+                            viewChangeListener();
+                            break;
+                    }
+
+                    function _updateBindExercise() {
+                        questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln, update: true }, question.id);
+                    }
+
+                    scope.d.close = function () {
+                        scope.d.toggleWrittenSln = false;
+                        _updateBindExercise();
+                    };
+
+                    scope.d.toggleAnswer = function () {
+                        scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                        _updateBindExercise();
+                    };
+
+                    questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
+                        scope.d.toggleWrittenSln = newVal.data;
+                    }, question.id);
+                }
+            };
+            return directive;
+        }]
         );
 })(angular);
 
@@ -174,7 +201,7 @@
 
                     var writtenSlnContent = questionBuilderCtrl.question.writtenSln &&
                         questionBuilderCtrl.question.writtenSln.replace(/font\-family: \'Lato Regular\';/g, 'font-family: Lato;font-weight: 400;');
-                    scope.d.writtenSlnContent = writtenSlnContent;
+                    scope.d.writtenSlnContent = $sce.trustAsHtml(writtenSlnContent);
 
                     scope.d.videoSrc = $sce.trustAsResourceUrl(ENV.mediaEndPoint + ENV.firebaseAppScopeName + '/videos/questions' + '/' + question.id + '.mp4');
 
@@ -211,7 +238,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
-        ["$timeout", "SubjectEnum", "$translatePartialLoader", function($timeout, SubjectEnum, $translatePartialLoader){
+        ["$timeout", "SubjectEnum", function($timeout, SubjectEnum){
         'ngInject';
 
         return {
@@ -233,7 +260,6 @@
             require: '?ngModel',
             templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
             controller: function () {
-                $translatePartialLoader.addPart('infraWebAppZnkExercise');
                 // required: subjectId
                 if (angular.isUndefined(this.subjectId)) {
                     throw new Error('Error: exerciseHeaderController: subjectId is required!');
@@ -266,12 +292,12 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
-    "         ng-if=\"d.showWrittenSln\">\n" +
+    "         ng-if=\"d.toggleWrittenSln\">\n" +
     "        <answer-explanation-content class=\"znk-scrollbar\"\n" +
-    "                                    on-close=\"d.showWrittenSln = false\">\n" +
+    "                                    on-close=\"d.close()\">\n" +
     "        </answer-explanation-content>\n" +
     "    </div>\n" +
-    "    <div class=\"answer-explanation-header\" ng-click=\"d.showWrittenSln = !d.showWrittenSln\">\n" +
+    "    <div class=\"answer-explanation-header\" ng-click=\"d.toggleAnswer()\">\n" +
     "        <div class=\"answer-explanation-btn\">\n" +
     "            <div class=\"main-content-wrapper\">\n" +
     "                <svg-icon class=\"lamp-icon\" name=\"answer-explanation-lamp-icon\"></svg-icon>\n" +
@@ -341,7 +367,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "    <div class=\"quit-back-button\" translate=\".QUIT_BTN_TEXT\" ng-if=\"vm.options.showQuit\" ng-click=\"vm.onClickedQuit()\"></div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/infraWebAppZnkExercise/svg/close.svg",
+  $templateCache.put("components/infraWebAppZnkExercise/svg/answer-explanation-close.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +

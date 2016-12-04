@@ -18,10 +18,18 @@
         'znk.infra.eventManager',
         'znk.infra.stats',
         'znk.infra.estimatedScore'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
     ]);
 })();
 
-(function (angular) {
+(function(angular) {
     'use strict';
 
     /**
@@ -54,12 +62,10 @@
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "$translatePartialLoader", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                                  $translatePartialLoader, ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
-                                  EventManagerSrv) {
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
+                EventManagerSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('completeExercise');
 
                 var $ctrl = this;
 
@@ -83,12 +89,12 @@
 
                 function _setShDataToCurrentExercise() {
                     syncUpdatesProm = syncUpdatesProm
-                        .then(function () {
+                        .then(function() {
                             var promMap = {
                                 exerciseRebuildProm: exerciseRebuildProm,
                                 activeShData: ScreenSharingSrv.getActiveScreenSharingData()
                             };
-                            return $q.all(promMap).then(function (data) {
+                            return $q.all(promMap).then(function(data) {
                                 var activeShData = data.activeShData;
 
                                 activeShData.activeExercise = {};
@@ -98,7 +104,7 @@
                                     'exerciseParentId',
                                     'exerciseParentTypeId'
                                 ];
-                                angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
+                                angular.forEach(propsToCopyFromCurrExerciseDetails, function(propName) {
                                     activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
                                 });
 
@@ -106,12 +112,12 @@
                                 activeShData.activeExercise.activeScreen = $ctrl.currViewState;
                                 shDataEventManager.updateValue(activeShData);
                                 var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
-                                return saveExerciseResultProm.then(function () {
+                                return saveExerciseResultProm.then(function() {
                                     return activeShData.$save();
                                 });
                             });
                         })
-                        .catch(function (err) {
+                        .catch(function(err) {
                             $log.error(err);
                         });
                 }
@@ -133,35 +139,44 @@
 
                     $ctrl.exerciseDetails = exerciseDetails;
 
-                    exerciseRebuildProm = $timeout(function () {
+                    exerciseRebuildProm = $timeout(function() {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
-                        var exerciseParentContent = isExam ? BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) : null;
+                        var settings = $ctrl.settings;
+                        var exerciseParentContentProm = isExam ?
+                            BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
+                            $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);
 
-                        var getDataPromMap = {
-                            exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
-                            exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
-                            exerciseParentContent: exerciseParentContent
-                        };
-                        return $q.all(getDataPromMap).then(function (data) {
-                            $ctrl.exerciseData = data;
-                            var newViewState;
-
-                            var exerciseTypeId = data.exerciseResult.exerciseTypeId;
-                            var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
-                            var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                            if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
-                                newViewState = VIEW_STATES.INTRO;
-                            } else {
-                                newViewState = VIEW_STATES.EXERCISE;
+                        return exerciseParentContentProm.then(function(exerciseParentContent) {
+                            if (isExam) {
+                                exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
                             }
+                            var getDataPromMap = {
+                                exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
+                                exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
+                                exerciseParentContent: exerciseParentContent
+                            };
+                            return $q.all(getDataPromMap).then(function(data) {
+                                $ctrl.exerciseData = data;
+                                var newViewState;
 
-                            $ctrl.changeViewState(newViewState, true);
+                                var exerciseTypeId = data.exerciseResult.exerciseTypeId;
+                                var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
+                                var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
+                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                                    newViewState = VIEW_STATES.INTRO;
+                                } else {
+                                    newViewState = VIEW_STATES.EXERCISE;
+                                }
 
-                            if (isSharerMode) {
-                                $ctrl.exerciseData.exerciseResult.$save().then(function () {
-                                    _setShDataToCurrentExercise();
-                                });
-                            }
+                                $ctrl.changeViewState(newViewState, true);
+
+                                if (isSharerMode) {
+                                    $ctrl.exerciseData.exerciseResult.$save().then(function() {
+                                        _setShDataToCurrentExercise();
+                                    });
+                                }
+                            });
+
                         });
                     });
                 }
@@ -171,20 +186,20 @@
                 }
 
                 function _createPropGetters(propArray, contextObjectName) {
-                    propArray.forEach(function (propName) {
+                    propArray.forEach(function(propName) {
                         var getterFnName = _getGetterFnName(propName);
-                        $ctrl[getterFnName] = function () {
+                        $ctrl[getterFnName] = function() {
                             return $ctrl[contextObjectName][propName];
                         };
                     });
                 }
 
                 function _updateActiveShDataActiveScreen(newViewState) {
-                    syncUpdatesProm = syncUpdatesProm.then(function () {
-                        return ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
+                    syncUpdatesProm = syncUpdatesProm.then(function() {
+                        return ScreenSharingSrv.getActiveScreenSharingData().then(function(activeShData) {
                             var activeExercise = activeShData.activeExercise;
 
-                            if(!activeExercise){
+                            if (!activeExercise) {
                                 return;
                             }
 
@@ -192,7 +207,7 @@
                             shDataEventManager.updateValue(activeShData);
                             return activeShData.$save();
                         });
-                    }).catch(function (err) {
+                    }).catch(function(err) {
                         $log.error(err);
                     });
                     return syncUpdatesProm;
@@ -214,14 +229,14 @@
                     shModeEventManager.updateValue(shMode);
                 }
 
-                var _activeShDataChangeHandler = (function(){
+                var _activeShDataChangeHandler = (function() {
                     var firstTrigger = true;
-                    return function (newShData) {
+                    return function(newShData) {
                         shDataEventManager.updateValue(newShData);
 
-                        if(firstTrigger){
+                        if (firstTrigger) {
                             firstTrigger = false;
-                            if(isSharerMode){
+                            if (isSharerMode) {
                                 return;
                             }
                         }
@@ -230,7 +245,7 @@
                         var activeExercise = newShData.activeExercise;
 
                         if (!activeExercise) {
-                            if(isViewerMode){
+                            if (isViewerMode) {
                                 _clearState();
                             }
                             return;
@@ -240,15 +255,15 @@
                         var isSameExerciseType = $ctrl.exerciseDetails && activeExercise.exerciseTypeId === $ctrl.exerciseDetails.exerciseTypeId;
                         var isDiffActiveScreen = $ctrl.currViewState !== activeExercise.activeScreen;
                         if (isSameExerciseId && isSameExerciseType) {
-                            if(isDiffActiveScreen){
+                            if (isDiffActiveScreen) {
                                 var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
                                 //active screen should never be none if in sharer mode
-                                if(!(newViewState === VIEW_STATES.NONE && isSharerMode)){
+                                if (!(newViewState === VIEW_STATES.NONE && isSharerMode)) {
                                     $ctrl.changeViewState(newViewState, true);
                                 }
                             }
                         } else {
-                            if(isViewerMode){
+                            if (isViewerMode) {
                                 _rebuildExercise(activeExercise);
                             }
                         }
@@ -287,19 +302,19 @@
                     ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(_userShStateChangeHandler);
                 }
 
-                this.changeViewState = function (newViewState, skipActiveScreenUpdate) {
+                this.changeViewState = function(newViewState, skipActiveScreenUpdate) {
                     if ($ctrl.currViewState === newViewState) {
                         return;
                     }
 
-                    if(shMode && !skipActiveScreenUpdate ){
+                    if (shMode && !skipActiveScreenUpdate) {
                         _updateActiveShDataActiveScreen(newViewState);
-                    }else{
+                    } else {
                         $ctrl.currViewState = newViewState;
                     }
                 };
 
-                this.$onInit = function () {
+                this.$onInit = function() {
                     var exerciseDetailsPropsToCreateGetters = [
                         'exerciseParentTypeId',
                         'exerciseParentId',
@@ -321,8 +336,8 @@
                     this.shDataEventManager = shDataEventManager;
                 };
 
-                this.$onChanges = function (changesObj) {
-                    if(isViewerMode){
+                this.$onChanges = function(changesObj) {
+                    if (isViewerMode) {
                         return;
                     }
 
@@ -336,12 +351,12 @@
                     _rebuildExercise(newExerciseDetails);
                 };
 
-                this.$onDestroy = function () {
+                this.$onDestroy = function() {
                     _unregisterFromUserShEvents();
                     _unregisterFromActiveShDataEvents();
 
-                    if(isSharerMode){
-                        ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
+                    if (isSharerMode) {
+                        ScreenSharingSrv.getActiveScreenSharingData().then(function(activeShData) {
                             if (!activeShData) {
                                 return;
                             }
@@ -381,7 +396,7 @@
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time || exerciseResult.isComplete) {
+                    if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
                         return;
                     }
 
@@ -409,7 +424,9 @@
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
-                            }
+                                $ctrl.znkExercise.actions.unbindExerciseView();
+                            },
+                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction
                         }
                     };
 
@@ -421,6 +438,7 @@
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
+                    settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
@@ -529,7 +547,17 @@
 
                 function _unregisterFromShModeChanges() {
                     $ctrl.completeExerciseCtrl.shModeEventManager.unregisterCb(_shModeChangedHandler);
+                }
 
+                function _finishExerciseWhenAllQuestionsAnswered() {
+                    var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
+                    var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
+                    var isNotLecture = exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
+
+                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete && isNotLecture) {
+                        $ctrl.znkExercise._finishExercise();
+                    }
                 }
 
                 this.$onInit = function () {
@@ -563,14 +591,20 @@
                         }
                     };
 
+                    this.openIntro = function() {
+                        $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.INTRO);
+                    };
+
                     this.goToSummary = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
+                        $ctrl.znkExercise.actions.unbindExerciseView();
                     };
                 };
 
                 this.$onDestroy = function () {
                     _unregisterFromShModeChanges();
                     _unbindExerciseFromShData();
+                    _finishExerciseWhenAllQuestionsAnswered();
                 };
             }]
         });
@@ -617,12 +651,30 @@
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
-                        return {
+                 return {
                             questionId: question.id,
-                            categoryId: question.categoryId
+                            categoryId: question.categoryId,
+                            manualEvaluation: question.manualEvaluation || false,
+                            subjectId: question.subjectId,
+                            order: question.index,
+                            answerTypeId: question.answerTypeId,
+                            difficulty: question.difficulty,
+                            correctAnswerId: question.correctAnswerId,
+                            questionFormatId: question.questionFormatId,
                         };
                     });
                 }
+
+                exerciseResult.subjectId = exerciseContent.subjectId;
+                exerciseResult.exerciseName = exerciseContent.name;
+                exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
+                exerciseResult.calculator = exerciseContent.calculator;
+                exerciseResult.timePreference = exerciseContent.timePreference;
+                exerciseResult.categoryId = exerciseContent.categoryId;
+                exerciseResult.testScoreId = exerciseContent.testScoreId;
+                exerciseResult.moduleId = exerciseContent.moduleId;
+                exerciseResult.time = exerciseContent.time;
+                exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
@@ -678,19 +730,19 @@
                 });
             }
 
-            var _setZnkExerciseSettings = (function () {
-                function getNumOfUnansweredQuestions(questionsResults) {
-                    var numOfUnansweredQuestions = questionsResults.length;
-                    var keysArr = Object.keys(questionsResults);
-                    angular.forEach(keysArr, function (i) {
-                        var questionAnswer = questionsResults[i];
-                        if (angular.isDefined(questionAnswer.userAnswer)) {
-                            numOfUnansweredQuestions--;
-                        }
-                    });
-                    return numOfUnansweredQuestions;
-                }
+            function _getNumOfUnansweredQuestions(questionsResults) {
+                var numOfUnansweredQuestions = questionsResults.length;
+                var keysArr = Object.keys(questionsResults);
+                angular.forEach(keysArr, function (i) {
+                    var questionAnswer = questionsResults[i];
+                    if (angular.isDefined(questionAnswer.userAnswer)) {
+                        numOfUnansweredQuestions--;
+                    }
+                });
+                return numOfUnansweredQuestions;
+            }
 
+            var _setZnkExerciseSettings = (function () {
                 function _getAllowedTimeForExercise() {
                     if (!isNotLecture) {
                         return null;
@@ -730,7 +782,11 @@
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
-                            var numOfUnansweredQuestions = getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                            if(!isNotLecture){
+                                settings.actions.exitAction();
+                                return;
+                            }
+                            var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);
                             if (numOfUnansweredQuestions) {
@@ -764,6 +820,11 @@
                                 }
                             });
                         },
+                        onExit: function() {
+                            if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+                                exerciseResult.$save();
+                            }
+                        },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
@@ -789,6 +850,7 @@
                 $ctrl.exerciseContent = exerciseContent;
                 $ctrl.exerciseResult = exerciseResult;
                 $ctrl._finishExercise = _finishExercise;
+                $ctrl._getNumOfUnansweredQuestions = _getNumOfUnansweredQuestions;
             }
 
             _init();
@@ -897,10 +959,14 @@
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;
 
+                    var translateFilter = $filter('translate');
+                    this.subjectNameTranslateKey = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
+                    this.instructionsTranslateKey = translateFilter('COMPLETE_EXERCISE.SECTION_INSTRUCTION.' + exerciseContent.subjectId);
+
                     var timeDurationFilter = $filter('formatTimeDuration');
                     this.timeTranslateValue = {
-                        min: timeDurationFilter(exerciseContent .time, 'mm'),
-                        sec: timeDurationFilter(exerciseContent .time, 'rss')
+                        min: timeDurationFilter(exerciseContent.time, 'mm'),
+                        sec: timeDurationFilter(exerciseContent.time, 'rss')
                     };
 
                     this.start = function(){
@@ -1136,7 +1202,8 @@
                         return ExerciseResultSrv.getExerciseResult(
                             exerciseDetails.exerciseTypeId,
                             exerciseDetails.exerciseId,
-                            exerciseDetails.exerciseParentId
+                            exerciseDetails.exerciseParentId,
+                            exerciseDetails.examSectionsNum
                         );
                 }
             };
@@ -1145,6 +1212,49 @@
 })(angular);
 
 angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
+    "<svg\n" +
+    "    version=\"1.1\"\n" +
+    "    x=\"0px\" y=\"0px\"\n" +
+    "    viewBox=\"-246.4 90.8 76.2 73.6\"\n" +
+    "    class=\"book-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .book-icon-svg .st0{\n" +
+    "        fill:none;\n" +
+    "        stroke:#231F20;\n" +
+    "        stroke-width:1.6393;\n" +
+    "        stroke-miterlimit:10;\n" +
+    "    }\n" +
+    "    .tutorial-icon .st1{\n" +
+    "        fill:none;\n" +
+    "        stroke:#231F20;\n" +
+    "        stroke-width:1.8504;\n" +
+    "        stroke-linecap:round;\n" +
+    "        stroke-miterlimit:10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path class=\"st0\" d=\"M-245.5,91.6v62h26.5c0,0,10.4-0.8,10.7,9c0.3,9.8,0-63.7,0-63.7s-1.1-7.4-9.3-7.4\n" +
+    "			C-225.9,91.6-245.5,91.6-245.5,91.6z\"/>\n" +
+    "		<path class=\"st0\" d=\"M-171,91.6v62h-26.5c0,0-10.4-0.8-10.7,9c-0.3,9.8,0-63.7,0-63.7s1.1-7.4,9.3-7.4\n" +
+    "			C-190.7,91.6-171,91.6-171,91.6z\"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"105.9\" x2=\"-216.7\" y2=\"105.9\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"117.7\" x2=\"-216.7\" y2=\"117.7\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"129.5\" x2=\"-216.7\" y2=\"129.5\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"141.4\" x2=\"-216.7\" y2=\"141.4\"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"105.9\" x2=\"-178.3\" y2=\"105.9\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"117.7\" x2=\"-178.3\" y2=\"117.7\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"129.5\" x2=\"-178.3\" y2=\"129.5\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"141.4\" x2=\"-178.3\" y2=\"141.4\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html",
     "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <ng-switch on=\"$ctrl.currViewState\"\n" +
@@ -1176,10 +1286,14 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                   config=\"$ctrl.timerConfig\"\n" +
     "                   ng-change=\"$ctrl.durationChanged()\">\n" +
     "            </timer>\n" +
+    "            <div class=\"tutorial-icon-wrapper\" ng-if=\"$ctrl.completeExerciseCtrl.exerciseDetails.exerciseTypeId === 1\">\n" +
+    "                <svg-icon ng-click=\"$ctrl.openIntro()\" name=\"book-icon\" class=\"book-icon\"></svg-icon>\n" +
+    "            </div>\n" +
     "            <div class=\"summary\"\n" +
     "                 ng-click=\"$ctrl.goToSummary()\"\n" +
     "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete\">\n" +
     "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
+    "                <div class=\"background-opacity\"></div>\n" +
     "            </div>\n" +
     "        </pre-right-part>\n" +
     "    </complete-exercise-header>\n" +
@@ -1202,7 +1316,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "     context-attr=\"class,class\"\n" +
     "     suffix=\"bg,subject-pattern\">\n" +
     "    <div class=\"left-part\">\n" +
-    "        <div class=\"left-title\" ng-bind=\"$ctrl.leftTitle\" title=\"{{$ctrl.leftTitle}}\"></div>\n" +
+    "        <div class=\"left-title\" ng-bind-html=\"$ctrl.leftTitle\" title=\"{{$ctrl.leftTitle}}\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"center-part\">\n" +
     "        <div ng-transclude=\"centerPart\"></div>\n" +
@@ -1236,9 +1350,9 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "              suffix=\"icon\"\n" +
     "              class=\"subject-icon\">\n" +
     "    </svg-icon>\n" +
-    "    <div class=\"subject-text\"\n" +
-    "         translate=\"SUBJECTS.{{$ctrl.exerciseContent.subjectId}}\">\n" +
-    "    </div>\n" +
+    "   <div class=\"subject-text\" translate=\"{{$ctrl.subjectNameTranslateKey}}\"></div>\n" +
+    "\n" +
+    "\n" +
     "    <div class=\"section-data\">\n" +
     "        <span translate=\".QUESTIONS\"\n" +
     "              translate-values=\"{num: $ctrl.exerciseContent.questions.length}\">\n" +
@@ -1251,10 +1365,12 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "         translate=\".INSTRUCTIONS\">\n" +
     "    </div>\n" +
     "    <p class=\"instructions-text\"\n" +
-    "       translate=\"SECTION_INSTRUCTION.{{$ctrl.exerciseContent.subjectId}}\">\n" +
+    "       translate=\"{{$ctrl.instructionsTranslateKey}}\">\n" +
     "    </p>\n" +
+    "\n" +
     "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk\"\n" +
+    "                   aria-label=\"{{'COMPLETE_EXERCISE.START' | translate}}\"\n" +
     "                   md-no-ink\n" +
     "                   translate=\".START\"\n" +
     "                   ng-click=\"$ctrl.start()\">\n" +
@@ -1264,23 +1380,26 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "");
   $templateCache.put("components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorialDirective.template.html",
     "<div class=\"intro-container\">\n" +
-    "    <div class=\"video-wrapper\">\n" +
-    "        <video controls\n" +
-    "               video-ctrl-drv\n" +
-    "               on-play=\"vm.onVideoPlay()\"\n" +
-    "               on-ended=\"vm.onVideoEnded()\"\n" +
-    "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
-    "            <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
-    "        </video>\n" +
-    "    </div>\n" +
-    "    <div class=\"content-wrapper\">\n" +
-    "        <div ng-repeat=\"content in $ctrl.exerciseContent.content\">\n" +
-    "            <div ng-bind-html=\"::$ctrl.trustAsHtml(content.title)\"></div>\n" +
-    "            <div ng-bind-html=\"::$ctrl.trustAsHtml(content.body)\"></div>\n" +
+    "    <div class=\"upper-wrapper\">\n" +
+    "        <div class=\"video-wrapper\">\n" +
+    "            <video controls\n" +
+    "                   video-ctrl-drv\n" +
+    "                   on-play=\"vm.onVideoPlay()\"\n" +
+    "                   on-ended=\"vm.onVideoEnded()\"\n" +
+    "                   video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
+    "                <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
+    "            </video>\n" +
+    "        </div>\n" +
+    "        <div class=\"content-wrapper\">\n" +
+    "            <div ng-repeat=\"content in $ctrl.exerciseContent.content\">\n" +
+    "                <div ng-bind-html=\"::$ctrl.trustAsHtml(content.title)\"></div>\n" +
+    "                <div ng-bind-html=\"::$ctrl.trustAsHtml(content.body)\"></div>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk go-to-questions-btn\"\n" +
+    "                   aria-label=\"{{'COMPLETE_EXERCISE.GO_QST' | translate}}\"\n" +
     "                   md-no-ink\n" +
     "                   translate=\".GO_QST\"\n" +
     "                   ng-click=\"$ctrl.goToQuestions()\">\n" +

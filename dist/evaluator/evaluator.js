@@ -32,12 +32,29 @@
 
             ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
                 'ngInject';
-                return function(question) {
-                   return question.manualEvaluation &&
-                       question.__questionStatus.userAnswer &&
-                       question.__questionStatus.userAnswer !== true;
+                return function(question, skipCheckingUserAnswer) {
+                   return question.manualEvaluation && (
+                           skipCheckingUserAnswer ? true : question.__questionStatus.userAnswer &&
+                           question.__questionStatus.userAnswer !== true
+                       );
                 };
             });
+
+            ZnkEvaluatorSrvProvider.isEvaluateExerciseTypeFnGetter(["ZnkEvaluatorSrv", function (ZnkEvaluatorSrv) {
+                'ngInject';
+                var evaluateQuestionTypeFn = ZnkEvaluatorSrv.isEvaluateQuestionTypeFn();
+                return function(questions) {
+                    var isExerciseEvaluateType = false;
+                    // if even one question is evaluation type then return true
+                    for (var i = 0, ii = questions.length; i < ii; i++) {
+                        if (evaluateQuestionTypeFn(questions[i], true)) {
+                            isExerciseEvaluateType = true;
+                            break;
+                        }
+                    }
+                    return isExerciseEvaluateType;
+                };
+            }]);
 
             ZnkEvaluatorSrvProvider.getEvaluateStatusFnGetter(["EvaluatorStatesEnum", "purchaseService", function (EvaluatorStatesEnum, purchaseService) {
                 'ngInject';
@@ -45,7 +62,7 @@
                     return purchaseService.hasProVersion().then(function(isPro) {
                         if (!isPro) {
                             return EvaluatorStatesEnum.NOT_PURCHASE.enum;
-                        } else if (evaluatorData.points) {
+                        } else if (evaluatorData && evaluatorData.points) {
                             return EvaluatorStatesEnum.EVALUATED.enum;
                         } else {
                             return EvaluatorStatesEnum.PENDING.enum;
@@ -100,10 +117,8 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var vm = this;
 
@@ -157,10 +172,8 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateQuestionReviewStates.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluatorSrv", "ZnkEvaluateResultSrv", function (ZnkEvaluatorSrv, ZnkEvaluateResultSrv) {
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 function _changeEvaluateStatus(stateData) {
                     var evaluateStatusFnProm = ZnkEvaluatorSrv.getEvaluateStatusFn();
@@ -205,12 +218,10 @@
             },
             templateUrl: 'components/evaluator/templates/evaluateResult.template.html',
             controllerAs: 'vm',
-            controller: ["$translatePartialLoader", "ZnkEvaluateResultSrv", function ($translatePartialLoader, ZnkEvaluateResultSrv) {
+            controller: ["ZnkEvaluateResultSrv", function (ZnkEvaluateResultSrv) {
                 'ngInject';
 
                 var vm = this;
-
-                $translatePartialLoader.addPart('evaluator');
 
                 var starStatusMap = {
                     empty: 1,

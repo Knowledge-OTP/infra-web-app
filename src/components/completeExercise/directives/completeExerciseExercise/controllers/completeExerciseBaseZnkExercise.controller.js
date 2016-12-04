@@ -39,12 +39,30 @@
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
-                        return {
+                 return {
                             questionId: question.id,
-                            categoryId: question.categoryId
+                            categoryId: question.categoryId,
+                            manualEvaluation: question.manualEvaluation || false,
+                            subjectId: question.subjectId,
+                            order: question.index,
+                            answerTypeId: question.answerTypeId,
+                            difficulty: question.difficulty,
+                            correctAnswerId: question.correctAnswerId,
+                            questionFormatId: question.questionFormatId,
                         };
                     });
                 }
+
+                exerciseResult.subjectId = exerciseContent.subjectId;
+                exerciseResult.exerciseName = exerciseContent.name;
+                exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
+                exerciseResult.calculator = exerciseContent.calculator;
+                exerciseResult.timePreference = exerciseContent.timePreference;
+                exerciseResult.categoryId = exerciseContent.categoryId;
+                exerciseResult.testScoreId = exerciseContent.testScoreId;
+                exerciseResult.moduleId = exerciseContent.moduleId;
+                exerciseResult.time = exerciseContent.time;
+                exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
@@ -100,19 +118,19 @@
                 });
             }
 
-            var _setZnkExerciseSettings = (function () {
-                function getNumOfUnansweredQuestions(questionsResults) {
-                    var numOfUnansweredQuestions = questionsResults.length;
-                    var keysArr = Object.keys(questionsResults);
-                    angular.forEach(keysArr, function (i) {
-                        var questionAnswer = questionsResults[i];
-                        if (angular.isDefined(questionAnswer.userAnswer)) {
-                            numOfUnansweredQuestions--;
-                        }
-                    });
-                    return numOfUnansweredQuestions;
-                }
+            function _getNumOfUnansweredQuestions(questionsResults) {
+                var numOfUnansweredQuestions = questionsResults.length;
+                var keysArr = Object.keys(questionsResults);
+                angular.forEach(keysArr, function (i) {
+                    var questionAnswer = questionsResults[i];
+                    if (angular.isDefined(questionAnswer.userAnswer)) {
+                        numOfUnansweredQuestions--;
+                    }
+                });
+                return numOfUnansweredQuestions;
+            }
 
+            var _setZnkExerciseSettings = (function () {
                 function _getAllowedTimeForExercise() {
                     if (!isNotLecture) {
                         return null;
@@ -152,7 +170,11 @@
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
-                            var numOfUnansweredQuestions = getNumOfUnansweredQuestions(exerciseResult.questionResults);
+                            if(!isNotLecture){
+                                settings.actions.exitAction();
+                                return;
+                            }
+                            var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);
                             if (numOfUnansweredQuestions) {
@@ -186,6 +208,11 @@
                                 }
                             });
                         },
+                        onExit: function() {
+                            if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+                                exerciseResult.$save();
+                            }
+                        },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
@@ -211,6 +238,7 @@
                 $ctrl.exerciseContent = exerciseContent;
                 $ctrl.exerciseResult = exerciseResult;
                 $ctrl._finishExercise = _finishExercise;
+                $ctrl._getNumOfUnansweredQuestions = _getNumOfUnansweredQuestions;
             }
 
             _init();

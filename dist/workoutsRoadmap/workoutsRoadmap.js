@@ -208,10 +208,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", "$translatePartialLoader", function (data, $state, $scope, ExerciseStatusEnum, $location, $translatePartialLoader) {
+        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", function (data, $state, $scope, ExerciseStatusEnum, $location) {
             'ngInject';
-
-            $translatePartialLoader.addPart('workoutsRoadmap');
 
             var vm = this;
 
@@ -221,15 +219,22 @@
             var search = $location.search();
             var DIAGNOSTIC_STATE = 'app.workouts.roadmap.diagnostic';
             var WORKOUT_STATE = 'app.workouts.roadmap.workout';
+            var DIAGNOSTIC_PATH = '/workoutsRoadmap/diagnostic';
+            var WORKOUT_PATH = '/workoutsRoadmap/workout';
+            var isInit;
+
+            function shouldReplaceLocation() {
+                if (!isInit) {
+                    isInit = true;
+                    $location.replace();
+                }
+            }
 
             function getActiveWorkout() {
                 var i = 0;
                 for (; i < vm.workoutsProgress.length; i++) {
                     if (vm.workoutsProgress[i].status !== ExerciseStatusEnum.COMPLETED.enum) {
-                        if (angular.isDefined(vm.workoutsProgress[i].subjectId)) {
-                            return vm.workoutsProgress[i];
-                        }
-                        return data.diagnostic;
+                        return vm.workoutsProgress[i];
                     }
                 }
                 return vm.workoutsProgress[i - 1];
@@ -278,6 +283,7 @@
             var LEFT_ANIMATION = 'left-animation';
             var RIGHT_ANIMATION = 'right-animation';
             $scope.$watch('vm.selectedItem', function (newItem, oldItem) {
+
                 if (angular.isUndefined(newItem)) {
                     return;
                 }
@@ -295,16 +301,16 @@
                 var currentStateName = $state.current.name;
                 if (newItem.workoutOrder === 0) {
                     if (currentStateName !== DIAGNOSTIC_STATE) {
-                        $state.go(DIAGNOSTIC_STATE);
+                        $location.path(DIAGNOSTIC_PATH);
+                        shouldReplaceLocation();
                     }
                 } else {
                     search = $location.search();
                     // the current state can be "app.workouts.roadmap.workout.intro"
                     // while the direct link is "app.workouts.roadmap.workout?workout=20"  so no need to navigate...
                     if (currentStateName.indexOf(WORKOUT_STATE) === -1 || +search.workout !== +newItem.workoutOrder) {
-                        $state.go('app.workouts.roadmap.workout', {
-                            workout: newItem.workoutOrder
-                        });
+                        $location.path(WORKOUT_PATH).search('workout', newItem.workoutOrder);
+                        shouldReplaceLocation();
                     }
                 }
             });
@@ -600,7 +606,7 @@
                     delete vm.selectedTime;
 
                     $timeout(function(){
-                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder);
+                        var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
                             vm.rotate = false;
@@ -693,7 +699,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('workoutIntroLock',
-            ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv) {
+            ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", "purchaseService", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv, purchaseService) {
                 'ngInject';
 
                 return {
@@ -759,6 +765,10 @@
                         setLockStateFlowControlProm.then(function(){
                             scope.vm.lockState = LOCK_STATES.NO_LOCK;
                         });
+
+                        scope.vm.openPurchaseModal = function () {
+                            purchaseService.showPurchaseDialog();
+                        };
                     }
                 };
             }]
@@ -768,14 +778,14 @@
 
 (function () {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config([
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 var svgMap = {
                     'workouts-progress-flag': 'components/workoutsRoadmap/svg/flag-icon.svg',
-                    'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/check-mark-icon.svg',
+                    'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg',
                     'workouts-progress-tutorial-icon': 'components/workoutsRoadmap/svg/tutorial-icon.svg',
                     'workouts-progress-practice-icon': 'components/workoutsRoadmap/svg/practice-icon.svg',
                     'workouts-progress-game-icon': 'components/workoutsRoadmap/svg/game-icon.svg',
@@ -939,7 +949,7 @@
 
                 var WorkoutsRoadmapSrv = {};
 
-                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder){
+                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn){
                     if(!_newWorkoutGeneratorGetter){
                         var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
                         $log.error(errMsg);
@@ -951,7 +961,7 @@
                     }
 
                     var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
-                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder));
+                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder,clickedOnChangeSubjectBtn));
                 };
 
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes = function(){
@@ -1003,23 +1013,26 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <div class=\"text2\"\n" +
     "                 translate=\".TELL_FRIENDS\">\n" +
     "            </div>\n" +
-    "            <md-button class=\"share-btn md-primary znk\"\n" +
+    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"\n" +
+    "                       class=\"share-btn md-primary znk\"\n" +
     "                       md-no-ink>\n" +
     "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
     "                <span translate=\".SHARE\"></span>\n" +
     "            </md-button>\n" +
-    "            <div class=\"text3 get-zinkerz-pro-text\"\n" +
+    "            <!--<div class=\"text3 get-zinkerz-pro-text\"\n" +
     "                 translate=\".GET_ZINKERZ_PRO\">\n" +
     "            </div>\n" +
-    "            <md-button class=\"upgrade-btn znk outline\">\n" +
+    "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
-    "            </md-button>\n" +
+    "            </md-button>-->\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"4\" class=\"no-pro\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
     "            <div class=\"description\" translate=\".MORE_PRACTICE\"></div>\n" +
     "            <div class=\"get-zinkerz-pro-text\" translate=\".GET_ZINKERZ_PRO\"></div>\n" +
-    "            <md-button class=\"upgrade-btn znk md-primary\">\n" +
+    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.UPGRADE' | translate}}\"\n" +
+    "                       class=\"upgrade-btn znk md-primary\"\n" +
+    "                       ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -1107,34 +1120,6 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "	<path id=\"XMLID_68_\" class=\"st0\" d=\"M77.9,42.2c-3.2,16.3-17.5,28.6-34.7,28.6c-17.5,0-32-12.7-34.8-29.5\"/>\n" +
     "	<polyline id=\"XMLID_67_\" class=\"st0\" points=\"20.7,47.6 8.1,41.3 0.7,52.9 	\"/>\n" +
     "</g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/workoutsRoadmap/svg/check-mark-icon.svg",
-    "<svg version=\"1.1\"\n" +
-    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-    "     x=\"0px\"\n" +
-    "     y=\"0px\"\n" +
-    "	 viewBox=\"0 0 329.5 223.7\"\n" +
-    "	 class=\"check-mark-svg\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .check-mark-svg{\n" +
-    "            width: 30px;\n" +
-    "        }\n" +
-    "\n" +
-    "        .check-mark-svg .st0 {\n" +
-    "            fill: none;\n" +
-    "            stroke: #ffffff;\n" +
-    "            stroke-width: 21;\n" +
-    "            stroke-linecap: round;\n" +
-    "            stroke-linejoin: round;\n" +
-    "            stroke-miterlimit: 10;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "    <g>\n" +
-    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-    "    </g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg",
@@ -1608,6 +1593,33 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "    </g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"workout-roadmap-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .workout-roadmap-check-mark-svg{\n" +
+    "            width: 30px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workout-roadmap-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmap.template.html",
     "<div class=\"workouts-roadmap-container\">\n" +
     "    <div class=\"workouts-roadmap-wrapper base-border-radius base-box-shadow\">\n" +
@@ -1706,7 +1718,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                total: vm.exerciseResult.totalQuestionNum\n" +
     "             }\">\n" +
     "        </div>\n" +
-    "        <md-button class=\"znk md-primary continue-btn\"\n" +
+    "        <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS.CONTINUE' | translate}}\"\n" +
+    "            class=\"znk md-primary continue-btn\"\n" +
     "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
     "            <span translate=\".CONTINUE\"></span>\n" +
     "        </md-button>\n" +
@@ -1765,7 +1778,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"start-btn-wrapper\">\n" +
-    "                <md-button class=\"md-primary znk\"\n" +
+    "                <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO.START' | translate}}\"\n" +
+    "                           class=\"md-primary znk\"\n" +
     "                           ng-click=\"vm.startExercise()\"\n" +
     "                           md-no-ink>\n" +
     "                    <span translate=\".START\"></span>\n" +

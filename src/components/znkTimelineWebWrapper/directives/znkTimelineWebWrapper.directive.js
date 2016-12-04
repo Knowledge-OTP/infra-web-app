@@ -4,13 +4,12 @@
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
-            activeExerciseId: '=?'
+            activeExerciseId: '=?',
+            showInduction: '<?'
         },
         controllerAs: 'vm',
-        controller: function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum, $translatePartialLoader) {
+        controller: function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
             'ngInject';
-
-            $translatePartialLoader.addPart('znkTimelineWebWrapper');
 
             var vm = this;
             var estimatedScoresDataProm = EstimatedScoreSrv.getEstimatedScores();
@@ -93,7 +92,7 @@
 
             function _getSummaryData(summeryScore) {
                 var x = summeryScore.lineTo.x;
-                var y = (summeryScore.lineTo.y < optionsPerDevice.upOrDown) ? summeryScore.lineTo.y + optionsPerDevice.yDown : summeryScore.lineTo.y - optionsPerDevice.yUp;
+                var y =  summeryScore.lineTo.y + optionsPerDevice.yDown;
                 var angleDeg;
                 if (summeryScore.next) {
                     angleDeg = Math.atan2(summeryScore.lineTo.y - summeryScore.next.y, summeryScore.lineTo.x - summeryScore.next.x) * 180 / Math.PI;
@@ -159,6 +158,9 @@
             }
 
             function _getRoundScore(estimatedScoresDatePerSubject) {
+                if (!estimatedScoresDatePerSubject.length) {
+                    return [];
+                }
                 return estimatedScoresDatePerSubject.map(function(scoreData) {
                     scoreData.score = Math.round(scoreData.score) || 0;
                     return scoreData;

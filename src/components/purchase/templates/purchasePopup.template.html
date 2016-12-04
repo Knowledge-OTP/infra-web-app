@@ -19,37 +19,37 @@
                     <ul>
                         <li>
                             <div class="bullet">
-                                <svg-icon name="purchase-popup-bullet-1-icon"></svg-icon>
+                                <svg-icon class="feature-svg" name="{{'PURCHASE_POPUP.BULLET1ICON' | translate}}"></svg-icon>
                             </div>
                             <span translate=".BULLET1"></span>
                         </li>
                         <li>
                             <div class="bullet">
-                                <svg-icon name="purchase-popup-bullet-2-icon"></svg-icon>
+                                <svg-icon class="feature-svg" name="{{'PURCHASE_POPUP.BULLET2ICON' | translate}}"></svg-icon>
                             </div>
                             <span translate=".BULLET2"></span>
                         </li>
                         <li>
                             <div class="bullet">
-                                <svg-icon name="purchase-popup-bullet-3-icon"></svg-icon>
+                                <svg-icon class="feature-svg" name="{{'PURCHASE_POPUP.BULLET3ICON' | translate}}"></svg-icon>
                             </div>
                             <span translate=".BULLET3"></span>
                         </li>
                         <li>
                             <div class="bullet">
-                                <svg-icon name="purchase-popup-bullet-4-icon"></svg-icon>
+                                <svg-icon class="feature-svg" name="{{'PURCHASE_POPUP.BULLET4ICON' | translate}}"></svg-icon>
                             </div>
                             <span translate=".BULLET4"></span>
                         </li>
                         <li>
                             <div class="bullet">
-                                <svg-icon name="purchase-popup-bullet-5-icon"></svg-icon>
+                                <svg-icon class="feature-svg" name="{{'PURCHASE_POPUP.BULLET5ICON' | translate}}"></svg-icon>
                             </div>
                             <span translate=".BULLET5"></span>
                         </li>
                     </ul>
                 </div>
-                <div class="price ng-hide" ng-show="vm.purchaseState === vm.purchaseStateEnum.NONE.enum">
+                <div class="price" ng-show="vm.purchaseState === vm.purchaseStateEnum.NONE.enum">
                     <del>{{'$' + vm.productPreviousPrice}}</del>
                     <b>{{'$' + vm.productPrice}}</b>
                     <span translate=".SAVE" translate-values='{ percent: vm.productDiscountPercentage}'></span>

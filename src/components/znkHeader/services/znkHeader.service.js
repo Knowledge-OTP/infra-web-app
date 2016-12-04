@@ -37,8 +37,9 @@
 
                 addDefaultNavItem('ZNK_HEADER.WORKOUTS', 'app.workouts.roadmap', { reload: true });
                 addDefaultNavItem('ZNK_HEADER.TESTS', 'app.tests.roadmap');
-                addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials.roadmap');
+                // addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials.roadmap');
                 addDefaultNavItem('ZNK_HEADER.PERFORMANCE', 'app.performance');
+                addDefaultNavItem('ZNK_HEADER.ETUTORING', 'app.eTutoring');
 
                 return {
                     getAdditionalItems: function () {

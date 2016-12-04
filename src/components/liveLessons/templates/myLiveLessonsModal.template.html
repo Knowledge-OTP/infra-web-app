@@ -1,0 +1,47 @@
+<md-dialog ng-cloak class="my-lessons-schedule-wrapper base" translate-namespace="MY_LIVE_LESSONS_POPUP">
+    <div class="top-icon-wrap">
+        <div class="top-icon">
+            <div class="round-icon-wrap">
+                <svg-icon name="calendar-icon"></svg-icon>
+            </div>
+        </div>
+    </div>
+
+    <div class="close-popup-wrap">
+        <svg-icon name="close-popup" ng-click="vm.closeDialog()"></svg-icon>
+    </div>
+
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div class="live-lessons-title" translate=".LIVE_LESSONS_SCHEDULE"></div>
+            <div class="upcoming-lesson-title" translate=".UPCOMING_LESSON"></div>
+
+            <div class="live-lessons-wrapper znk-scrollbar">
+                <div class="live-lesson-repeater" ng-repeat="lesson in vm.liveLessonsArr | orderBy: 'startTime'">
+                    <div class="live-lesson" >
+                        <div class="date">{{lesson.startTime | date:'d MMM' | uppercase}}</div>
+                        <div class="hour">{{lesson.startTime | date:'h:mm a'}}</div>
+                        <div class="educator-name">{{lesson.educatorName}}</div>
+                    </div>
+                    <div class="reschedule-wrapper">
+                        <md-tooltip md-direction="top" class="reschedule-tooltip">
+                            <div translate=".RESCHEDULE_LESSON"></div>
+                        </md-tooltip>
+                        <svg-icon name="reschedule-icon" ng-click="vm.openRescheduleModal(lesson)"></svg-icon>
+                    </div>
+                </div>
+
+                <div class="no-live-lessons-text" translate=".NO_LIVE_LESSONS"></div>
+            </div>
+            <div class="current-time" translate=".CURRENT_TIME"
+                 translate-values="{ currentTime: {{'vm.currentTime'}} }"></div>
+            <div class="btn-wrapper">
+                <md-button aria-label="{{'MY_LIVE_LESSONS_POPUP.OK' | translate}}"
+                    class="ok-button success drop-shadow" ng-click="vm.closeDialog()">
+                    <span translate=".OK"></span>
+                </md-button>
+            </div>
+        </div>
+    </md-dialog-content>
+
+</md-dialog>

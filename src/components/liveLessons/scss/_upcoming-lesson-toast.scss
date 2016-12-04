@@ -1,0 +1,108 @@
+.upcoming-lesson-toast-wrapper {
+    @include dimension(375px, 145px);
+    box-shadow: 1px 1px 5px 0.5px $bsColor3;
+    border: 1px solid $borderColor3;
+    border-radius: 15px;
+    display: flex;
+    background-color: $bgColor3;
+    top: 63px;
+    z-index: 11;
+    transition: 1s;
+    position: absolute;
+    right: -400px;
+
+    &.animate-toast {
+        right: 5px;
+    }
+
+    &.ng-leave.ng-leave-active {
+        transition: 0.2s;
+        opacity: 0;
+    }
+
+    .close-popup {
+        @include dimension(10px, 10px);
+        cursor: pointer;
+        position: absolute;
+        right: 6px;
+        top: 8px;
+
+        svg line {
+            stroke: $fontColor3;
+            stroke-width: 8px;
+        }
+    }
+
+    .left-side-container {
+        @include dimension(57px, 100%);
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $bgColor7;
+        border-radius: 15px 0 0 15px;
+
+        .calendar-icon {
+            svg path {
+                fill: $fontColor1;
+            }
+        }
+    }
+
+    .right-side-container {
+        width: 280px;
+        cursor: pointer;
+        padding: 16px 26px 16px 18px;
+        font-size: 0;
+
+        .closest-lesson-details {
+            .top-title {
+                @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
+                display: inline-block;
+                margin-right: 5px;
+            }
+
+            .teacher-name {
+                @include text-style(14px, $fontColor3, Lato, $boldFontWeight);
+                display: inline-block;
+            }
+
+            .lesson-date {
+                @include text-style(16px, $fontColor3, Quicksand, $boldFontWeight);
+                margin-top: 14px;
+            }
+
+            .lesson-hour {
+                @include text-style(16px, $fontColor3, Quicksand, $regularFontWeight);
+                margin-top: 9px;
+            }
+        }
+
+        .bottom-container {
+            position: absolute;
+            bottom: 10px;
+            clear: both;
+            display: flex;
+            .bottom-clickable-text {
+                @include text-style(13px, $fontColor6, Lato, $regularFontWeight);
+                cursor: pointer;
+            }
+
+            .reschedule-wrapper {
+                margin-left: 68px;
+                display: flex;
+
+                .reschedule-text {
+                    @include text-style(12px, $fontColor14, Lato, $regularFontWeight);
+                    margin-left: 4px;
+                }
+
+                svg {
+                    path, polygon {
+                        fill: $fontColor14;
+                    }
+                }
+            }
+        }
+    }
+}

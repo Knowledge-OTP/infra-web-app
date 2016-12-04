@@ -19,10 +19,27 @@
 
             ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
                 'ngInject';
-                return function(question) {
-                   return question.manualEvaluation &&
-                       question.__questionStatus.userAnswer &&
-                       question.__questionStatus.userAnswer !== true;
+                return function(question, skipCheckingUserAnswer) {
+                   return question.manualEvaluation && (
+                           skipCheckingUserAnswer ? true : question.__questionStatus.userAnswer &&
+                           question.__questionStatus.userAnswer !== true
+                       );
+                };
+            });
+
+            ZnkEvaluatorSrvProvider.isEvaluateExerciseTypeFnGetter(function (ZnkEvaluatorSrv) {
+                'ngInject';
+                var evaluateQuestionTypeFn = ZnkEvaluatorSrv.isEvaluateQuestionTypeFn();
+                return function(questions) {
+                    var isExerciseEvaluateType = false;
+                    // if even one question is evaluation type then return true
+                    for (var i = 0, ii = questions.length; i < ii; i++) {
+                        if (evaluateQuestionTypeFn(questions[i], true)) {
+                            isExerciseEvaluateType = true;
+                            break;
+                        }
+                    }
+                    return isExerciseEvaluateType;
                 };
             });
 
@@ -32,7 +49,7 @@
                     return purchaseService.hasProVersion().then(function(isPro) {
                         if (!isPro) {
                             return EvaluatorStatesEnum.NOT_PURCHASE.enum;
-                        } else if (evaluatorData.points) {
+                        } else if (evaluatorData && evaluatorData.points) {
                             return EvaluatorStatesEnum.EVALUATED.enum;
                         } else {
                             return EvaluatorStatesEnum.PENDING.enum;

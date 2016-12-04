@@ -27,35 +27,37 @@
 
     angular.module('znk.infra-web-app.webAppScreenSharing').component('shViewer', {
         templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html',
-        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", "$translatePartialLoader", function (CompleteExerciseSrv, ENV, ScreenSharingSrv, $translatePartialLoader) {
+        require: {
+            screenSharing: '^screenSharing'
+        },
+        controller: ["CompleteExerciseSrv", "ENV", "ScreenSharingSrv", function (CompleteExerciseSrv, ENV, ScreenSharingSrv) {
             'ngInject';
 
-            $translatePartialLoader.addPart('webAppScreenSharing');
+            var $ctrl = this;
 
-            var $ctrl= this;
-
-            function _shDataChangeHandler(newShData){
+            function _shDataChangeHandler(newShData) {
                 $ctrl.activeScreen = newShData.activeExercise && newShData.activeExercise.activeScreen;
             }
 
-            function _registerToShDataChanges(){
+            function _registerToShDataChanges() {
                 ScreenSharingSrv.registerToActiveScreenSharingDataChanges(_shDataChangeHandler);
             }
 
-            function _unregisterFromShDataChanges(){
+            function _unregisterFromShDataChanges() {
                 ScreenSharingSrv.unregisterFromActiveScreenSharingDataChanges(_shDataChangeHandler);
             }
 
-            this.$onInit = function(){
+            this.$onInit = function () {
                 _registerToShDataChanges();
                 this.appContext = ENV.appContext.toUpperCase();
 
                 this.ceSettings = {
-                    mode: CompleteExerciseSrv.MODE_STATES.VIEWER
+                    mode: CompleteExerciseSrv.MODE_STATES.VIEWER,
+                    exitAction: $ctrl.screenSharing.onClose
                 };
             };
 
-            this.$onDestroy = function(){
+            this.$onDestroy = function () {
                 _unregisterFromShDataChanges();
             };
 

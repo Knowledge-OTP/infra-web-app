@@ -1,10 +1,10 @@
 <md-dialog ng-cloak class="invitation-confirm-modal" translate-namespace="INVITE_APPROVE_MODAL">
     <md-toolbar>
         <div class="close-popup-wrap" ng-click="vm.closeModal()">
-            <svg-icon name="close-popup"></svg-icon>
+            <svg-icon name="invitation-close-popup"></svg-icon>
         </div>
     </md-toolbar>
-    <md-dialog-content ng-switch="vm.requestMessage">
+    <md-dialog-content ng-switch="vm.requestMessage" class="invitation-confirm-modal-content">
         <section ng-switch-when="false">
             <div class="main-title md-subheader" translate=".YOU_HAVE_INVITE"></div>
             <div class="teacher">
@@ -40,7 +40,7 @@
         </section>
 
         <div class="big-success-msg switch-animation" ng-switch-when="true">
-            <svg-icon class="completed-v-icon-wrap" name="completed-v-icon"></svg-icon>
+            <svg-icon class="completed-v-icon-wrap" name="invitation-v-icon"></svg-icon>
             <div ng-bind-html="vm.responseMessage"></div>
             <div class="done-btn-wrap">
                 <md-button aria-label="{{'INVITE_APPROVE_MODAL.DONE' | translate}}"
@@ -54,7 +54,7 @@
     <div class="top-icon-wrap">
         <div class="top-icon">
             <div class="round-icon-wrap">
-                <svg-icon name="exclamation-mark-icon"></svg-icon>
+                <svg-icon name="invitation-exclamation-mark-icon" class="exclamation-mark-icon"></svg-icon>
             </div>
         </div>
     </div>

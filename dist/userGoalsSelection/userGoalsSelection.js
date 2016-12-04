@@ -97,7 +97,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.userGoalsSelection').directive('schoolSelect',
-        ["userGoalsSelectionService", "$translate", "UtilitySrv", "$timeout", "$q", "$translatePartialLoader", function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q, $translatePartialLoader) {
+        ["userGoalsSelectionService", "$translate", "UtilitySrv", "$timeout", "$q", function SchoolSelectDirective(userGoalsSelectionService, $translate, UtilitySrv, $timeout, $q) {
             'ngInject';
 
             var schoolList = [];
@@ -110,8 +110,6 @@
                     getSelectedSchools: '&?'
                 },
                 link: function link(scope, element, attrs) {
-                    $translatePartialLoader.addPart('userGoalsSelection');
-
                     var MIN_LENGTH_AUTO_COMPLETE = 3;
                     var MAX_SCHOOLS_SELECT = 3;
                     var userSchools;
@@ -231,8 +229,9 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',['UserGoalsService', '$timeout', 'userGoalsSelectionService', '$q', '$translatePartialLoader', 'ScoringService',
-        function UserGoalsDirective(UserGoalsService, $timeout, userGoalsSelectionService, $q, $translatePartialLoader, ScoringService) {
+    angular.module('znk.infra-web-app.userGoalsSelection').directive('userGoals',
+        ["UserGoalsService", "$timeout", "userGoalsSelectionService", "$q", "ScoringService", function UserGoalsDirective(UserGoalsService, $timeout, userGoalsSelectionService, $q, ScoringService) {
+            'ngInject';
             var directive = {
                 restrict: 'E',
                 templateUrl: 'components/userGoalsSelection/templates/userGoals.template.html',
@@ -241,7 +240,6 @@
                     setting: '='
                 },
                 link: function link(scope) {
-                    $translatePartialLoader.addPart('userGoalsSelection');
                     var userGoalRef;
                     scope.scoringLimits = ScoringService.getScoringLimits();
                     scope.goalsSettings = UserGoalsService.getGoalsSettings();
@@ -633,7 +631,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"save-btn-wrap\">\n" +
-    "        <md-button autofocus tabindex=\"1\"\n" +
+    "        <md-button aria-label=\"{{'USER_GOALS.SAVE' | translate}}\"\n" +
+    "                   autofocus tabindex=\"1\"\n" +
     "                   class=\"md-primary znk inline-block\"\n" +
     "                   ng-click=\"saveChanges()\"\n" +
     "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
