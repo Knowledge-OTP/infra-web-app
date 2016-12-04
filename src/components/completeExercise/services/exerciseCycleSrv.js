@@ -3,10 +3,10 @@
 
     angular.module('znk.infra-web-app.completeExercise').provider('ExerciseCycleSrv',
         function () {
-            var lifeCycleHooks = {};
+            var hooksObj = {};
 
-            this.extendHooks = function (hooksObj) {
-                lifeCycleHooks = hooksObj;
+            this.extendHooks = function (_hooksObj) {
+                hooksObj = _hooksObj;
             };
 
             this.$get = function ($log) {
@@ -32,7 +32,7 @@
                     $log.error('exerciseCycleSrv invoke: method is not a function! method: ' + methodName);
                 };
 
-                return completeExerciseBaseSrv;
+                return exerciseCycleSrv;
             };
         }
     );
