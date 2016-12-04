@@ -724,7 +724,7 @@
                             var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                             var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
                             $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
-                            ExerciseCycleSrv.getHook('finishExercise').invoke('shouldBroadcast', settings);
+                            ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
                         }
                     });
 
@@ -1220,31 +1220,30 @@
         function () {
             var hooksObj = {};
 
-            this.setHooks = function (_hooksObj) {
+            this.setInvokeFunctions = function (_hooksObj) {
                 hooksObj = _hooksObj;
             };
 
-            this.$get = ["$log", function ($log) {
+            this.$get = ["$log", "$injector", function ($log, $injector) {
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.getHook = function (key) {    
-                    if (hooksObj && hooksObj[key] && angular.isObject(hooksObj[key])) {
-                       return exerciseCycleSrv.invoke.bind(null, key);
-                    }
-                    return { invoke: angular.noop };
-                };
-
-                exerciseCycleSrv.invoke = function (key, methodName, data) {                    
-                    var hook = hooksObj[key];
-                    var method = hook[methodName];
+                exerciseCycleSrv.invoke = function (methodName, data) {                    
+                    var method = hooksObj[methodName];
+                    var fn;
 
                     if (angular.isFunction(method)) {
                         data = angular.isArray(data) ? data : [data];
-                        return method.apply(null, data);
-                    } 
+                          
+                        try {
+                            fn = $injector.invoke(method);         
+                        } catch(e) {
+                            $log.error('exerciseCycleSrv invoke: faild to invoke method! methodName: ' + methodName);
+                            return;
+                        }
 
-                    $log.error('exerciseCycleSrv invoke: method is not a function! method: ' + methodName);
+                        return fn.apply(null, data);
+                    } 
                 };
 
                 return exerciseCycleSrv;
