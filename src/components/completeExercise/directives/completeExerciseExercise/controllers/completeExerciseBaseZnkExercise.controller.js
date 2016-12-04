@@ -112,7 +112,7 @@
                             var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                             var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
                             $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
-                            ExerciseCycleSrv.getHook('finishExercise').invoke('shouldBroadcast', settings);
+                            ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
                         }
                     });
 
