@@ -121,6 +121,9 @@
             }
 
             function _getNumOfUnansweredQuestions(questionsResults) {
+                if (!questionsResults) {
+                    return false;
+                }
                 var numOfUnansweredQuestions = questionsResults.length;
                 var keysArr = Object.keys(questionsResults);
                 angular.forEach(keysArr, function (i) {
