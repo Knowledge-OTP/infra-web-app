@@ -2,6 +2,7 @@
     flex-basis: 100%;
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 95px);
 
     .loading-title {
         @include text-style(32px, $fontColor3, Quicksand, $boldFontWeight);

@@ -11,6 +11,7 @@
          znk-exercise {
              flex-grow: 1;
              width: 100%;
+             height: calc(100vh - 145px);
            }
          }
          .inline-block {
@@ -34,16 +35,14 @@
             align-items: center;
             justify-content: flex-start;
         }
-        .md-button {
+        .znk.md-button.md-primary {
             display: block;
             margin: 15px auto 25px;
             border-radius: 30px;
-            &.md {
-                width: 180px;
-            }
-            &.primary {
-                text-transform: uppercase;
-            }
+            padding-right: 0;
+            padding-left: 0;
+            width: 180px;
+            text-transform: uppercase;
         }
         .answer-index-wrapper {
             cursor: pointer;
