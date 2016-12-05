@@ -21,7 +21,7 @@
                         try {
                             fn = $injector.invoke(hook);         
                         } catch(e) {
-                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName);
+                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
