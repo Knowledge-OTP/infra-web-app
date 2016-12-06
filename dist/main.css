@@ -1612,14 +1612,14 @@ feedback .feedback-btn {
 /* full background image with retina */
 .zoom-image-modal {
   position: relative; }
-  .zoom-image-modal .close-popup {
+  .zoom-image-modal .image-zoomer-close-popup {
     width: 20px;
     height: 20px;
     cursor: pointer;
     position: absolute;
-    right: -45px;
-    top: -35px; }
-    .zoom-image-modal .close-popup .st1 {
+    right: -20px;
+    top: -20px; }
+    .zoom-image-modal .image-zoomer-close-popup .st1 {
       fill: none;
       stroke: #ffffff;
       stroke-width: 8;
@@ -1646,7 +1646,7 @@ feedback .feedback-btn {
   .zoom-icon-wrapper svg-icon {
     width: 21px;
     height: 21px; }
-    .zoom-icon-wrapper svg-icon svg line, .zoom-icon-wrapper svg-icon svg polyline {
+    .zoom-icon-wrapper svg-icon svg.full-screen-icon line, .zoom-icon-wrapper svg-icon svg.full-screen-icon polyline {
       stroke: #ffffff;
       stroke-width: 15px;
       fill: #ffffff; }
@@ -1947,6 +1947,12 @@ question-builder.answer-explanation-open .question-basic-style {
   height: calc(100vh - 570px); }
   question-builder.answer-explanation-open .question-basic-style canvas {
     height: calc(100vh - 570px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) .question-basic-style, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) .question-basic-style {
+  height: calc(100% - 60px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) answer-builder, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) answer-builder {
+  max-height: calc(100% - 60px); }
 
 /*border color*/
 /*background*/
