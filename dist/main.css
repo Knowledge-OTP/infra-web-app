@@ -1646,7 +1646,7 @@ feedback .feedback-btn {
   .zoom-icon-wrapper svg-icon {
     width: 21px;
     height: 21px; }
-    .zoom-icon-wrapper svg-icon svg line, .zoom-icon-wrapper svg-icon svg polyline {
+    .zoom-icon-wrapper svg-icon svg.full-screen-icon line, .zoom-icon-wrapper svg-icon svg.full-screen-icon polyline {
       stroke: #ffffff;
       stroke-width: 15px;
       fill: #ffffff; }

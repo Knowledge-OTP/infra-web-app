@@ -35,7 +35,7 @@
 
     svg-icon {
         @include dimension(21px, 21px);
-        svg {
+        svg.full-screen-icon {
             line, polyline {
                 stroke: $bgColor3;
                 stroke-width: 15px;
