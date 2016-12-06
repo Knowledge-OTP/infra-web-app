@@ -32,7 +32,7 @@
                 settings: '<'
             },
             controller: function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
+                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum, ZnkModuleService,
                 EventManagerSrv) {
                 'ngInject';
 
@@ -54,6 +54,24 @@
                     $ctrl.exerciseDetails = null;
 
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
+                }
+
+                function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
+                     var exerciseParentContentProm = $q.when(null);
+                    
+                     if (isExam) {
+                         exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
+                     } else if (settings && settings.exerciseParentContent) {
+                         exerciseParentContentProm = settings.exerciseParentContent;
+                     } else if (isModule) {
+                        exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
+                            return {
+                                name: moduleContent.name
+                            };
+                        });
+                     }
+                    
+                     return exerciseParentContentProm;
                 }
 
                 function _setShDataToCurrentExercise() {
@@ -110,10 +128,10 @@
 
                     exerciseRebuildProm = $timeout(function() {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
+                        var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                         var settings = $ctrl.settings;
-                        var exerciseParentContentProm = isExam ?
-                            BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
-                            $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);
+
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
 
                         return exerciseParentContentProm.then(function(exerciseParentContent) {
                             if (isExam) {
@@ -131,6 +149,13 @@
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                                 var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                                 var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
+                                var isParentTutorial = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.TUTORIAL.enum;
+                                var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
+                                // skip intro
+                                if (isParentTutorial || isParentModule){
+                                    data.exerciseResult.seenIntro = true;
+                                }
+
                                 if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
                                     newViewState = VIEW_STATES.INTRO;
                                 } else {
@@ -227,7 +252,7 @@
                             if (isDiffActiveScreen) {
                                 var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
                                 //active screen should never be none if in sharer mode
-                                if (!(newViewState === VIEW_STATES.NONE && isSharerMode)) {
+                                if (newViewState === VIEW_STATES.NONE && isSharerMode) {
                                     $ctrl.changeViewState(newViewState, true);
                                 }
                             }
