@@ -1610,14 +1610,14 @@ feedback .feedback-btn {
 /* full background image with retina */
 .zoom-image-modal {
   position: relative; }
-  .zoom-image-modal .close-popup {
+  .zoom-image-modal .image-zoomer-close-popup {
     width: 20px;
     height: 20px;
     cursor: pointer;
     position: absolute;
     right: -45px;
     top: -35px; }
-    .zoom-image-modal .close-popup .st1 {
+    .zoom-image-modal .image-zoomer-close-popup .st1 {
       fill: none;
       stroke: #ffffff;
       stroke-width: 8;
