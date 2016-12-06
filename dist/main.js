@@ -8317,18 +8317,17 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                             localTimezone = timezonesList.find(function (timezone) {
                                 return (timezone.indexOf(timezoneCity)!== -1);
                             });
-                        } else {
-                            if (!localTimezone){
-                                var timezoneGMT = dateArray.find(function (item) {
-                                    return (item.indexOf('GMT')!== -1);
-                                });
-                                localTimezone = timezonesList.find(function (timezone) {
-                                    timezone = timezone.replace(':', '');
-                                    return (timezone.indexOf(timezoneGMT)!== -1);
-                                });
-                            }
                         }
 
+                        if (!timezoneCity || !localTimezone){
+                            var timezoneGMT = dateArray.find(function (item) {
+                                return (item.indexOf('GMT')!== -1);
+                            });
+                            localTimezone = timezonesList.find(function (timezone) {
+                                timezone = timezone.replace(':', '');
+                                return (timezone.indexOf(timezoneGMT)!== -1);
+                            });
+                        }
                         return localTimezone;
                     });
                 };
