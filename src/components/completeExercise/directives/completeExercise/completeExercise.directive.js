@@ -58,7 +58,7 @@
 
                 function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
                      var exerciseParentContentProm = $q.when(null);
-                    
+
                      if (isExam) {
                          exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
                      } else if (settings && settings.exerciseParentContent) {
@@ -70,7 +70,7 @@
                             };
                         });
                      }
-                    
+
                      return exerciseParentContentProm;
                 }
 
@@ -149,10 +149,9 @@
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                                 var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                                 var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                                var isParentTutorial = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.TUTORIAL.enum;
                                 var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                                 // skip intro
-                                if (isParentTutorial || isParentModule){
+                                if (isParentModule){
                                     data.exerciseResult.seenIntro = true;
                                 }
 

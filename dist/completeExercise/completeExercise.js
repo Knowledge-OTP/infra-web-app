@@ -90,7 +90,7 @@
 
                 function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
                      var exerciseParentContentProm = $q.when(null);
-                    
+
                      if (isExam) {
                          exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
                      } else if (settings && settings.exerciseParentContent) {
@@ -102,7 +102,7 @@
                             };
                         });
                      }
-                    
+
                      return exerciseParentContentProm;
                 }
 
@@ -181,10 +181,9 @@
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                                 var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                                 var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                                var isParentTutorial = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.TUTORIAL.enum;
                                 var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                                 // skip intro
-                                if (isParentTutorial || isParentModule){
+                                if (isParentModule){
                                     data.exerciseResult.seenIntro = true;
                                 }
 
@@ -654,7 +653,7 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv, 
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
                   UtilitySrv, ExerciseCycleSrv) {
             'ngInject';
@@ -1257,22 +1256,22 @@
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {                    
+                exerciseCycleSrv.invoke = function (methodName, data) {
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {                      
+                    if (angular.isDefined(hook)) {
                         try {
-                            fn = $injector.invoke(hook);         
+                            fn = $injector.invoke(hook);
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-                        
+
                         return fn.apply(null, data);
-                    } 
+                    }
                 };
 
                 return exerciseCycleSrv;
