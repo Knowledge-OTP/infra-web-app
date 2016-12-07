@@ -214,10 +214,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                                 var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                                 var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                                var isParentTutorial = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.TUTORIAL.enum;
                                 var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                                 // skip intro
-                                if (isParentTutorial || isParentModule){
+                                if (isParentModule){
                                     data.exerciseResult.seenIntro = true;
                                 }
 
