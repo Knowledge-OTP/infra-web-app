@@ -302,7 +302,9 @@
                     }
 
                     if (shMode && !skipActiveScreenUpdate) {
-                        _updateActiveShDataActiveScreen(newViewState);
+                        _updateActiveShDataActiveScreen(newViewState).then(function () {
+                            $ctrl.currViewState = newViewState;
+                        });
                     } else {
                         $ctrl.currViewState = newViewState;
                     }
