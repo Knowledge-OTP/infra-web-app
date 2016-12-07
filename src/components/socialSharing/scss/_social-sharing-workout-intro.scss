@@ -1,0 +1,38 @@
+.workouts-container {
+    social-share-btn-drv {
+        margin-top: 20px;
+        .social-share-wrapper {
+            @include dimension(150px, 30px);
+            position: relative;
+            background-color: $bgColor5;
+            transition: 0.2s;
+            margin: 0 auto;
+            border-radius: 20px;
+
+            &:hover {
+                background-color: $bgColor10;
+            }
+
+            .share-icon-wrap {
+                border: none;
+
+                span {
+                    @include text-style(16px, $fontColor1, Lato, $regularFontWeight);
+                    text-transform: uppercase;
+                }
+                .share-icon {
+                    fill: $bgColor1;
+                    margin: 0;
+                    position: absolute;
+                    top: 7px;
+                    left: 16px;
+                }
+                .share-button {
+                    &.sharer-0 {
+                        right: -23px;
+                    }
+                }
+            }
+        }
+    }
+}

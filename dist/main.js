@@ -61,6 +61,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         'znk.infra.contentGetters',
         'znk.infra.userContext',
         'znk.infra.user',
+        'znk.infra.znkModule',
         'znk.infra.general',
         'znk.infra.filters',
         'znk.infra.znkExercise',
@@ -114,8 +115,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "ZnkModuleService", "EventManagerSrv", function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum, ZnkModuleService,
                 EventManagerSrv) {
                 'ngInject';
 
@@ -137,6 +138,24 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     $ctrl.exerciseDetails = null;
 
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
+                }
+
+                function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
+                     var exerciseParentContentProm = $q.when(null);
+                    
+                     if (isExam) {
+                         exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
+                     } else if (settings && settings.exerciseParentContent) {
+                         exerciseParentContentProm = settings.exerciseParentContent;
+                     } else if (isModule) {
+                        exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
+                            return {
+                                name: moduleContent.name
+                            };
+                        });
+                     }
+                    
+                     return exerciseParentContentProm;
                 }
 
                 function _setShDataToCurrentExercise() {
@@ -193,10 +212,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     exerciseRebuildProm = $timeout(function() {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
+                        var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                         var settings = $ctrl.settings;
-                        var exerciseParentContentProm = isExam ?
-                            BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
-                            $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);
+
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
 
                         return exerciseParentContentProm.then(function(exerciseParentContent) {
                             if (isExam) {
