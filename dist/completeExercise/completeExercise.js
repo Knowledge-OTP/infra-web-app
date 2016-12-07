@@ -700,6 +700,8 @@
                 exerciseResult.moduleId = exerciseContent.moduleId;
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
+                exerciseResult.parentTypeId = exerciseContent.parentTypeId;
+
 
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
