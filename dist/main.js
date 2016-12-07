@@ -386,7 +386,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     }
 
                     if (shMode && !skipActiveScreenUpdate) {
-                        _updateActiveShDataActiveScreen(newViewState);
+                        _updateActiveShDataActiveScreen(newViewState).then(function () {
+                            $ctrl.currViewState = newViewState;
+                        });
                     } else {
                         $ctrl.currViewState = newViewState;
                     }
