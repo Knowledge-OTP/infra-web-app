@@ -1,0 +1,24 @@
+question-builder.answer-explanation-open {
+    .question-basic-style {
+        overflow: auto;
+        height: calc(100vh - 570px);
+
+        canvas {
+            height: calc(100vh - 570px);
+        }
+    }
+}
+
+znk-exercise {
+    &.done-btn-show, &.pager-displayed {
+        question-builder:not(.answer-explanation-open) {
+            .question-basic-style {
+                height: calc(100% - 60px);
+            }
+
+            answer-builder {
+                max-height: calc(100% - 60px);
+            }
+        }
+    }
+}

@@ -281,3 +281,15 @@ md-tooltip.no-calc-tooltip {
     border-bottom: 9px solid #ffffff;
     bottom: -9px;
     left: -9px; }
+
+question-builder.answer-explanation-open .question-basic-style {
+  overflow: auto;
+  height: calc(100vh - 570px); }
+  question-builder.answer-explanation-open .question-basic-style canvas {
+    height: calc(100vh - 570px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) .question-basic-style, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) .question-basic-style {
+  height: calc(100% - 60px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) answer-builder, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) answer-builder {
+  max-height: calc(100% - 60px); }

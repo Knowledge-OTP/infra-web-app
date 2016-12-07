@@ -406,7 +406,8 @@ complete-exercise-progress-bar {
   .app-workouts-diagnostic .exercise-container znk-exercise {
     -ms-flex-positive: 1;
         flex-grow: 1;
-    width: 100%; }
+    width: 100%;
+    height: calc(100vh - 145px); }
 
 .app-workouts-diagnostic .inline-block {
   display: inline-block; }
@@ -426,14 +427,14 @@ complete-exercise-progress-bar {
   -ms-flex-pack: start;
       justify-content: flex-start; }
 
-.app-workouts-diagnostic .md-button {
+.app-workouts-diagnostic .znk.md-button.md-primary {
   display: block;
   margin: 15px auto 25px;
-  border-radius: 30px; }
-  .app-workouts-diagnostic .md-button.md {
-    width: 180px; }
-  .app-workouts-diagnostic .md-button.primary {
-    text-transform: uppercase; }
+  border-radius: 30px;
+  padding-right: 0;
+  padding-left: 0;
+  width: 180px;
+  text-transform: uppercase; }
 
 .app-workouts-diagnostic .answer-index-wrapper {
   cursor: pointer; }
@@ -447,7 +448,8 @@ complete-exercise-progress-bar {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
-      flex-direction: column; }
+      flex-direction: column;
+  height: calc(100vh - 95px); }
   .diagnostic-loading-wrapper .loading-title {
     font-size: 32px;
     color: #4f4d4d;
@@ -1610,14 +1612,14 @@ feedback .feedback-btn {
 /* full background image with retina */
 .zoom-image-modal {
   position: relative; }
-  .zoom-image-modal .close-popup {
+  .zoom-image-modal .image-zoomer-close-popup {
     width: 20px;
     height: 20px;
     cursor: pointer;
     position: absolute;
-    right: -45px;
-    top: -35px; }
-    .zoom-image-modal .close-popup .st1 {
+    right: -20px;
+    top: -20px; }
+    .zoom-image-modal .image-zoomer-close-popup .st1 {
       fill: none;
       stroke: #ffffff;
       stroke-width: 8;
@@ -1644,7 +1646,7 @@ feedback .feedback-btn {
   .zoom-icon-wrapper svg-icon {
     width: 21px;
     height: 21px; }
-    .zoom-icon-wrapper svg-icon svg line, .zoom-icon-wrapper svg-icon svg polyline {
+    .zoom-icon-wrapper svg-icon svg.full-screen-icon line, .zoom-icon-wrapper svg-icon svg.full-screen-icon polyline {
       stroke: #ffffff;
       stroke-width: 15px;
       fill: #ffffff; }
@@ -1939,6 +1941,18 @@ md-tooltip.no-calc-tooltip {
     border-bottom: 9px solid #ffffff;
     bottom: -9px;
     left: -9px; }
+
+question-builder.answer-explanation-open .question-basic-style {
+  overflow: auto;
+  height: calc(100vh - 570px); }
+  question-builder.answer-explanation-open .question-basic-style canvas {
+    height: calc(100vh - 570px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) .question-basic-style, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) .question-basic-style {
+  height: calc(100% - 60px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) answer-builder, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) answer-builder {
+  max-height: calc(100% - 60px); }
 
 /*border color*/
 /*background*/
@@ -4732,6 +4746,85 @@ md-dialog.setting-change-password {
     display: flex;
     -ms-flex-pack: center;
         justify-content: center; }
+
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+complete-exercise-summary social-sharing .social-share-wrapper {
+  width: 90px;
+  height: 25px;
+  background-color: white;
+  cursor: pointer;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+  margin: 0 auto;
+  border-radius: 20px;
+  border: 1px solid #0a9bad; }
+  complete-exercise-summary social-sharing .social-share-wrapper .share-icon-wrap {
+    transition: 0.5s;
+    border: none; }
+    complete-exercise-summary social-sharing .social-share-wrapper .share-icon-wrap span {
+      font-size: 16px;
+      color: #0a9bad;
+      font-family: Lato;
+      font-weight: 400;
+      position: relative; }
+    complete-exercise-summary social-sharing .social-share-wrapper .share-icon-wrap:hover {
+      background-color: #c7e0e3; }
+  complete-exercise-summary social-sharing .social-share-wrapper .share-icon {
+    width: 15px;
+    height: 15px;
+    fill: #0a9bad;
+    margin-bottom: 2px; }
+  complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 {
+    width: 8px;
+    z-index: 1;
+    font-size: 0;
+    padding: 0;
+    bottom: 30px;
+    right: -13px; }
+    complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 ul li:nth-child(1), complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 ul li:nth-child(6), complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 ul li:nth-child(7), complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 ul li:nth-child(8) {
+      display: none; }
+
+.workouts-container social-share-btn-drv {
+  margin-top: 20px; }
+  .workouts-container social-share-btn-drv .social-share-wrapper {
+    width: 150px;
+    height: 30px;
+    position: relative;
+    background-color: #0a9bad;
+    transition: 0.2s;
+    margin: 0 auto;
+    border-radius: 20px; }
+    .workouts-container social-share-btn-drv .social-share-wrapper:hover {
+      background-color: #0a8999; }
+    .workouts-container social-share-btn-drv .social-share-wrapper .share-icon-wrap {
+      border: none; }
+      .workouts-container social-share-btn-drv .social-share-wrapper .share-icon-wrap span {
+        font-size: 16px;
+        color: white;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: uppercase; }
+      .workouts-container social-share-btn-drv .social-share-wrapper .share-icon-wrap .share-icon {
+        fill: white;
+        margin: 0;
+        position: absolute;
+        top: 7px;
+        left: 16px; }
+      .workouts-container social-share-btn-drv .social-share-wrapper .share-icon-wrap .share-button.sharer-0 {
+        right: -23px; }
 
 /* fonts size */
 /* general */

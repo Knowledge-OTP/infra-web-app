@@ -61,6 +61,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         'znk.infra.contentGetters',
         'znk.infra.userContext',
         'znk.infra.user',
+        'znk.infra.znkModule',
         'znk.infra.general',
         'znk.infra.filters',
         'znk.infra.znkExercise',
@@ -114,8 +115,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "ZnkModuleService", "EventManagerSrv", function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum, ZnkModuleService,
                 EventManagerSrv) {
                 'ngInject';
 
@@ -137,6 +138,24 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     $ctrl.exerciseDetails = null;
 
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
+                }
+
+                function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
+                     var exerciseParentContentProm = $q.when(null);
+
+                     if (isExam) {
+                         exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
+                     } else if (settings && settings.exerciseParentContent) {
+                         exerciseParentContentProm = settings.exerciseParentContent;
+                     } else if (isModule) {
+                        exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
+                            return {
+                                name: moduleContent.name
+                            };
+                        });
+                     }
+
+                     return exerciseParentContentProm;
                 }
 
                 function _setShDataToCurrentExercise() {
@@ -193,10 +212,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     exerciseRebuildProm = $timeout(function() {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
+                        var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                         var settings = $ctrl.settings;
-                        var exerciseParentContentProm = isExam ?
-                            BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
-                            $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);
+
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
 
                         return exerciseParentContentProm.then(function(exerciseParentContent) {
                             if (isExam) {
@@ -316,7 +335,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             if (isDiffActiveScreen) {
                                 var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
                                 //active screen should never be none if in sharer mode
-                                if (!(newViewState === VIEW_STATES.NONE && isSharerMode)) {
+                                if (newViewState === VIEW_STATES.NONE && isSharerMode) {
                                     $ctrl.changeViewState(newViewState, true);
                                 }
                             }
@@ -686,9 +705,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv) {
+                  UtilitySrv, ExerciseCycleSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -777,10 +796,12 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             exerciseResult: exerciseResult,
                             exerciseParent: exerciseParentIsSectionOnly
                         });
+
                         if (shouldBroadcast) {
                             var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
                             var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
                             $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                            ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
                         }
                     });
 
@@ -789,6 +810,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             }
 
             function _getNumOfUnansweredQuestions(questionsResults) {
+                if (!questionsResults) {
+                    return false;
+                }
                 var numOfUnansweredQuestions = questionsResults.length;
                 var keysArr = Object.keys(questionsResults);
                 angular.forEach(keysArr, function (i) {
@@ -1269,6 +1293,45 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
     );
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseCycleSrv',
+        function () {
+            var hooksObj = {};
+
+            this.setInvokeFunctions = function (_hooksObj) {
+                hooksObj = _hooksObj;
+            };
+
+            this.$get = ["$log", "$injector", function ($log, $injector) {
+                'ngInject';
+                var exerciseCycleSrv = {};
+
+                exerciseCycleSrv.invoke = function (methodName, data) {
+                    var hook = hooksObj[methodName];
+                    var fn;
+
+                    if (angular.isDefined(hook)) {
+                        try {
+                            fn = $injector.invoke(hook);
+                        } catch(e) {
+                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
+                            return;
+                        }
+
+                        data = angular.isArray(data) ? data : [data];
+
+                        return fn.apply(null, data);
+                    }
+                };
+
+                return exerciseCycleSrv;
+            }];
+        }
+    );
+})(angular);
+
 angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
     "<svg\n" +
@@ -1504,7 +1567,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-        
+
     ]);
 })(angular);
 
@@ -2890,7 +2953,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -4264,7 +4327,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject'; 
+            'ngInject';
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -4293,7 +4356,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
 
 (function () {
     'use strict';
-    
+
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -4544,7 +4607,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-                    
+
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -4690,6 +4753,14 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
 
                         questionBuilderCtrl.bindExerciseEventManager = znkExerciseCtrl.bindExerciseEventManager;
 
+                        questionBuilderCtrl.updateAnswerExplnView = function(isAnswerExplanationOpen){
+                            if(isAnswerExplanationOpen){
+                                element.addClass('answer-explanation-open');
+                            } else {
+                                element.removeClass('answer-explanation-open');
+                            }
+                        };
+
                         element.append('<answer-explanation></answer-explanation>');
                     };
 
@@ -4777,12 +4848,12 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                             init();
                         } else {
                             // $watch seems to work for sharer and viewer, while $viewChangeListeners
-                            // worked only for sharer. it's because $viewChangeListeners does not  
+                            // worked only for sharer. it's because $viewChangeListeners does not
                             // invoke when the $modalValue change, only when the $viewValue (via input and etc)
                             scope.$watch(function () {
                                 return ngModelCtrl.$viewValue;
                             }, function (newVal) {
-                                // newVal undefined meens no answer yet, so must be protected 
+                                // newVal undefined meens no answer yet, so must be protected
                                 if (angular.isDefined(newVal)) {
                                     init();
                                 }
@@ -4805,11 +4876,13 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
 
                     scope.d.close = function () {
                         scope.d.toggleWrittenSln = false;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
                         _updateBindExercise();
                     };
 
                     scope.d.toggleAnswer = function () {
                         scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
                         _updateBindExercise();
                     };
 
@@ -5381,7 +5454,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     var listenerData = getListenerData(userId, event);
                     studentStorage.offEvent('child_added', listenerData.path, listenerData.childAddedHandler);
                     studentStorage.offEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
-                    
+
                     angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
                             registerEvents[userId][event].cb.splice(index, 1);
@@ -10506,13 +10579,13 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config' 
+        'znk.infra.config'
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -10564,7 +10637,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]);  
+    ]);
 })(angular);
 
 /**
@@ -11757,7 +11830,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
-            
+
             var svgMap = {
                 'workouts-roadmap-checkmark': 'components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg',
                 'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
@@ -12063,7 +12136,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
