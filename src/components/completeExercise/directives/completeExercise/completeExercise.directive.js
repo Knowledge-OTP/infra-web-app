@@ -250,10 +250,13 @@
                         if (isSameExerciseId && isSameExerciseType) {
                             if (isDiffActiveScreen) {
                                 var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
+
                                 //active screen should never be none if in sharer mode
                                 if (newViewState === VIEW_STATES.NONE && isSharerMode) {
-                                    $ctrl.changeViewState(newViewState, true);
+                                    newViewState = VIEW_STATES.EXERCISE;
                                 }
+
+                                $ctrl.changeViewState(newViewState, true);
                             }
                         } else {
                             if (isViewerMode) {
