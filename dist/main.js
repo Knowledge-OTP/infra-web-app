@@ -950,9 +950,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             })();
 
             function _init() {
-                _setExerciseResult();
-
                 _setExerciseContentQuestions();
+
+                _setExerciseResult();
 
                 _setZnkExerciseSettings();
 

@@ -898,9 +898,9 @@
             })();
 
             function _init() {
-                _setExerciseResult();
-
                 _setExerciseContentQuestions();
+
+                _setExerciseResult();
 
                 _setZnkExerciseSettings();
 
