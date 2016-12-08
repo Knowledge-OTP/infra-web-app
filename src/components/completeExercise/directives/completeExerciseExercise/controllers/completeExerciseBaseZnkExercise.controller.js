@@ -18,7 +18,7 @@
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseParentEnum) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -26,6 +26,7 @@
             var exerciseParentContent = settings.exerciseParentContent;
             var exerciseTypeId = exerciseResult.exerciseTypeId;
 
+            var isModule = settings.exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
             var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
@@ -76,6 +77,27 @@
                     exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
                         return a.order - b.order;
                     });
+
+                    if(isModule){
+                        var questionsOrderMap = {};
+                        var questions = exerciseContent.questions;
+                        for (var k = 0; k < questions.length; k++) {
+                            if (angular.isUndefined(questionsOrderMap[questions[k].order])) {
+                                questionsOrderMap[questions[k].order] = questions[k];
+                            } else {
+                                if (questionsOrderMap[questions[k].order].difficulty < questions[k].difficulty) {
+                                    questionsOrderMap[questions[k].order] = questions[k];
+                                }
+                            }
+                        }
+
+                        var sortedQuestionsByDifficulty = UtilitySrv.object.convertToArray(questionsOrderMap);
+                        sortedQuestionsByDifficulty = sortedQuestionsByDifficulty.sort(function (a, b) {
+                            return a.order - b.order;
+                        });
+
+                        exerciseContent.questions = sortedQuestionsByDifficulty;
+                    }
 
                     ZnkExerciseUtilitySrv.setQuestionsGroupData(
                         exerciseContent.questions,

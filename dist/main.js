@@ -708,9 +708,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseParentEnum", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseParentEnum) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -718,6 +718,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             var exerciseParentContent = settings.exerciseParentContent;
             var exerciseTypeId = exerciseResult.exerciseTypeId;
 
+            var isModule = settings.exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
             var shouldBroadCastExerciseProm = ZnkExerciseUtilitySrv.shouldBroadCastExercisePromFnGetter();
@@ -768,6 +769,27 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
                         return a.order - b.order;
                     });
+
+                    if(isModule){
+                        var questionsOrderMap = {};
+                        var questions = exerciseContent.questions;
+                        for (var k = 0; k < questions.length; k++) {
+                            if (angular.isUndefined(questionsOrderMap[questions[k].order])) {
+                                questionsOrderMap[questions[k].order] = questions[k];
+                            } else {
+                                if (questionsOrderMap[questions[k].order].difficulty < questions[k].difficulty) {
+                                    questionsOrderMap[questions[k].order] = questions[k];
+                                }
+                            }
+                        }
+
+                        var sortedQuestionsByDifficulty = UtilitySrv.object.convertToArray(questionsOrderMap);
+                        sortedQuestionsByDifficulty = sortedQuestionsByDifficulty.sort(function (a, b) {
+                            return a.order - b.order;
+                        });
+
+                        exerciseContent.questions = sortedQuestionsByDifficulty;
+                    }
 
                     ZnkExerciseUtilitySrv.setQuestionsGroupData(
                         exerciseContent.questions,
@@ -1313,22 +1335,22 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {
+                exerciseCycleSrv.invoke = function (methodName, data) {                    
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {
+                    if (angular.isDefined(hook)) {                      
                         try {
-                            fn = $injector.invoke(hook);
+                            fn = $injector.invoke(hook);         
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-
+                        
                         return fn.apply(null, data);
-                    }
+                    } 
                 };
 
                 return exerciseCycleSrv;
@@ -1572,7 +1594,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-
+        
     ]);
 })(angular);
 
@@ -2958,7 +2980,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -4332,7 +4354,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject';
+            'ngInject'; 
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -4361,7 +4383,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
 
 (function () {
     'use strict';
-
+    
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -4612,7 +4634,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-
+                    
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -5459,7 +5481,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     var listenerData = getListenerData(userId, event);
                     studentStorage.offEvent('child_added', listenerData.path, listenerData.childAddedHandler);
                     studentStorage.offEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
-
+                    
                     angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
                             registerEvents[userId][event].cb.splice(index, 1);
@@ -10584,13 +10606,13 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config'
+        'znk.infra.config' 
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -10642,7 +10664,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]);
+    ]);  
 })(angular);
 
 /**
@@ -11835,7 +11857,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
-
+            
             var svgMap = {
                 'workouts-roadmap-checkmark': 'components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg',
                 'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
@@ -12141,7 +12163,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
