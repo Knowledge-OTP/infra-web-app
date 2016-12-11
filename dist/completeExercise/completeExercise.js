@@ -79,6 +79,7 @@
                     syncUpdatesProm = $q.when(),
                     isSharerMode = false,
                     isViewerMode = false,
+                    isDataReady = false,
                     shModeEventManager = new EventManagerSrv(),
                     shDataEventManager = new EventManagerSrv();
 
@@ -176,6 +177,7 @@
                             };
                             return $q.all(getDataPromMap).then(function(data) {
                                 $ctrl.exerciseData = data;
+                                isDataReady = true;  
                                 var newViewState;
 
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
@@ -280,7 +282,7 @@
                         var isSameExerciseType = $ctrl.exerciseDetails && activeExercise.exerciseTypeId === $ctrl.exerciseDetails.exerciseTypeId;
                         var isDiffActiveScreen = $ctrl.currViewState !== activeExercise.activeScreen;
                         if (isSameExerciseId && isSameExerciseType) {
-                            if (isDiffActiveScreen) {
+                            if (isDiffActiveScreen && isDataReady) {
                                 var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
 
                                 //active screen should never be none if in sharer mode
