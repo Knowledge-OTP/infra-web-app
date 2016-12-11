@@ -1501,7 +1501,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
   $templateCache.put("components/completeExercise/directives/completeExerciseIntro/completeExerciseIntroDirective.template.html",
     "<div class=\"base-complete-exercise-container\">\n" +
     "    <complete-exercise-header></complete-exercise-header>\n" +
-    "    <ng-switch on=\"$ctrl.exerciseTypeId\" class=\"intro-container\">\n" +
+    "    <ng-switch on=\"$ctrl.exerciseTypeId\" class=\"intro-container\" image-zoomer>\n" +
     "        <complete-exercise-intro-tutorial ng-switch-when=\"1\">\n" +
     "        </complete-exercise-intro-tutorial>\n" +
     "        <complete-exercise-intro-section ng-switch-when=\"4\">\n" +
