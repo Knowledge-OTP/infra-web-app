@@ -5,7 +5,9 @@
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
-            showInduction: '<?'
+            showInduction: '<?',
+            showTooltips: '<?',
+            results: '<?'
         },
         controllerAs: 'vm',
         controller: function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
@@ -87,12 +89,14 @@
                     }
 
                     _scrolling();
+
+                    vm.toolTipArr = obj.data.lastLine.slice(1);
                 }
             };
 
             function _getSummaryData(summeryScore) {
                 var x = summeryScore.lineTo.x;
-                var y =  summeryScore.lineTo.y + optionsPerDevice.yDown;
+                var y = summeryScore.lineTo.y + optionsPerDevice.yDown;
                 var angleDeg;
                 if (summeryScore.next) {
                     angleDeg = Math.atan2(summeryScore.lineTo.y - summeryScore.next.y, summeryScore.lineTo.x - summeryScore.next.x) * 180 / Math.PI;
@@ -144,6 +148,35 @@
                 return (angular.isFunction(inProgressProm)) ? inProgressProm : $q.when(inProgressProm);
             }
 
+            function _extendData(dataPerSubject) {
+                if (!vm.showTooltips) {
+                    return addIconKey(dataPerSubject);
+                }
+
+                var newDataArr = [];
+                var exerciseResults;
+                angular.forEach(dataPerSubject, function (value, index) {
+                    // add icon key
+                    var type = subjectIdToIndexMap[value.exerciseType];
+                    if (index === 0 && type === 'section') {
+                        type = 'diagnostic';
+                    }
+                    value.iconKey = type || false;
+                    // add workout name and title
+                    if (vm.results && vm.results.exerciseResults) {
+                        exerciseResults = vm.results.exerciseResults;
+                        for (var i = 0, ii = exerciseResults.length; i < ii; i++) {
+                            if (value.exerciseId === exerciseResults[i].exerciseId) {
+                                value.workoutTitle = exerciseResults[i].exerciseName + ': ' + exerciseResults[i].exerciseDescription;
+                                break;
+                            }
+                        }
+                    }
+                    newDataArr.push(value);
+                });
+                return newDataArr;
+            }
+
             function addIconKey(dataPerSubject) {
                 var newDataArr = [];
                 angular.forEach(dataPerSubject, function (value, index) {
@@ -161,7 +194,7 @@
                 if (!estimatedScoresDatePerSubject.length) {
                     return [];
                 }
-                return estimatedScoresDatePerSubject.map(function(scoreData) {
+                return estimatedScoresDatePerSubject.map(function (scoreData) {
                     scoreData.score = Math.round(scoreData.score) || 0;
                     return scoreData;
                 });
@@ -179,7 +212,7 @@
                     vm.animation = true;
                     vm.timelineLinePlus = false;
                     vm.timeLineData = {
-                        data: addIconKey(estimatedScoresDatePerSubject),
+                        data: _extendData(estimatedScoresDatePerSubject),
                         id: currentSubjectId
                     };
                     vm.points = 0;

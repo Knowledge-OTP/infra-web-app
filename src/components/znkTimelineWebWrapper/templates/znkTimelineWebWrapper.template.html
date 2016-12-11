@@ -16,6 +16,20 @@
                  translate-values="{points: {{vm.points}} }">
             </div>
         </div>
+        <div class="tool-tip-area"
+             ng-if="vm.showTooltips"
+             ng-repeat="tooltip in vm.toolTipArr track by $index"
+             ng-class="{'last-item':$last === true}"
+             ng-style="{'top': $last === true ? (tooltip.lineTo.y+50) +'px' : (tooltip.lineTo.y+60) +'px', 'left': $last === true ? (tooltip.lineTo.x - 11) +'px' : (tooltip.lineTo.x-1)+'px'}">
+            <md-tooltip md-direction="top" class="tooltip-box md-whiteframe-2dp">
+                <div class="tooltip-content">
+                    <div class="exercise-date">{{tooltip.time | date: 'MMM dd'}}</div>
+                    <div class="exercise-title">{{tooltip.workoutTitle}}</div>
+                    <div class="score-title" translate-values="{subjectName: vm.subjectEnumToValMap[vm.currentSubjectId]}" translate=".ESTIMATED_SUBJECT_SCORE"></div>
+                    <div class="exercise-score">{{tooltip.score}}</div>
+                </div>
+            </md-tooltip>
+        </div>
         <canvas znk-timeline
                 timeline-data="vm.timeLineData"
                 timeline-settings="vm.options">
