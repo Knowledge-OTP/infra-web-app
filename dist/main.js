@@ -14077,7 +14077,9 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
-            showInduction: '<?'
+            showInduction: '<?',
+            showTooltips: '<?',
+            results: '<?'
         },
         controllerAs: 'vm',
         controller: ["EstimatedScoreSrv", "UserGoalsService", "ScoringService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
@@ -14159,12 +14161,14 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                     }
 
                     _scrolling();
+
+                    vm.toolTipArr = obj.data.lastLine.slice(1);
                 }
             };
 
             function _getSummaryData(summeryScore) {
                 var x = summeryScore.lineTo.x;
-                var y =  summeryScore.lineTo.y + optionsPerDevice.yDown;
+                var y = summeryScore.lineTo.y + optionsPerDevice.yDown;
                 var angleDeg;
                 if (summeryScore.next) {
                     angleDeg = Math.atan2(summeryScore.lineTo.y - summeryScore.next.y, summeryScore.lineTo.x - summeryScore.next.x) * 180 / Math.PI;
@@ -14216,6 +14220,35 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 return (angular.isFunction(inProgressProm)) ? inProgressProm : $q.when(inProgressProm);
             }
 
+            function _extendData(dataPerSubject) {
+                if (!vm.showTooltips) {
+                    return addIconKey(dataPerSubject);
+                }
+
+                var newDataArr = [];
+                var exerciseResults;
+                angular.forEach(dataPerSubject, function (value, index) {
+                    // add icon key
+                    var type = subjectIdToIndexMap[value.exerciseType];
+                    if (index === 0 && type === 'section') {
+                        type = 'diagnostic';
+                    }
+                    value.iconKey = type || false;
+                    // add workout name and title
+                    if (vm.results && vm.results.exerciseResults) {
+                        exerciseResults = vm.results.exerciseResults;
+                        for (var i = 0, ii = exerciseResults.length; i < ii; i++) {
+                            if (value.exerciseId === exerciseResults[i].exerciseId) {
+                                value.workoutTitle = exerciseResults[i].exerciseName + ': ' + exerciseResults[i].exerciseDescription;
+                                break;
+                            }
+                        }
+                    }
+                    newDataArr.push(value);
+                });
+                return newDataArr;
+            }
+
             function addIconKey(dataPerSubject) {
                 var newDataArr = [];
                 angular.forEach(dataPerSubject, function (value, index) {
@@ -14233,7 +14266,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 if (!estimatedScoresDatePerSubject.length) {
                     return [];
                 }
-                return estimatedScoresDatePerSubject.map(function(scoreData) {
+                return estimatedScoresDatePerSubject.map(function (scoreData) {
                     scoreData.score = Math.round(scoreData.score) || 0;
                     return scoreData;
                 });
@@ -14251,7 +14284,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                     vm.animation = true;
                     vm.timelineLinePlus = false;
                     vm.timeLineData = {
-                        data: addIconKey(estimatedScoresDatePerSubject),
+                        data: _extendData(estimatedScoresDatePerSubject),
                         id: currentSubjectId
                     };
                     vm.points = 0;
@@ -14280,6 +14313,20 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     "                 translate=\".POINTS_LEFT\"\n" +
     "                 translate-values=\"{points: {{vm.points}} }\">\n" +
     "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"tool-tip-area\"\n" +
+    "             ng-if=\"vm.showTooltips\"\n" +
+    "             ng-repeat=\"tooltip in vm.toolTipArr track by $index\"\n" +
+    "             ng-class=\"{'last-item':$last === true}\"\n" +
+    "             ng-style=\"{'top': $last === true ? (tooltip.lineTo.y+50) +'px' : (tooltip.lineTo.y+60) +'px', 'left': $last === true ? (tooltip.lineTo.x - 11) +'px' : (tooltip.lineTo.x-1)+'px'}\">\n" +
+    "            <md-tooltip md-direction=\"top\" class=\"tooltip-box md-whiteframe-2dp\">\n" +
+    "                <div class=\"tooltip-content\">\n" +
+    "                    <div class=\"exercise-date\">{{tooltip.time | date: 'MMM dd'}}</div>\n" +
+    "                    <div class=\"exercise-title\">{{tooltip.workoutTitle}}</div>\n" +
+    "                    <div class=\"score-title\" translate-values=\"{subjectName: vm.subjectEnumToValMap[vm.currentSubjectId]}\" translate=\".ESTIMATED_SUBJECT_SCORE\"></div>\n" +
+    "                    <div class=\"exercise-score\">{{tooltip.score}}</div>\n" +
+    "                </div>\n" +
+    "            </md-tooltip>\n" +
     "        </div>\n" +
     "        <canvas znk-timeline\n" +
     "                timeline-data=\"vm.timeLineData\"\n" +
