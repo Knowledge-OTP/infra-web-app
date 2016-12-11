@@ -7620,7 +7620,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             LoginAppSrv.login = (function () {
                 var isLoginInProgress;
 
-                return function (appContext, userContext, formData) {
+                return function (appContext, userContext, formData, signUp) {
                     if (isLoginInProgress) {
                         var errMsg = 'login already in progress';
                         $log.debug(errMsg);
@@ -7648,7 +7648,9 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                             var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage(appContext, userContext);
+                                if(!signUp){
+                                    _redirectToPage(appContext, userContext);
+                                }
                                 return res;
                             });
                         });
@@ -7676,7 +7678,8 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
-                        return LoginAppSrv.login(appContext, userContext, formData).then(function () {
+                        var signUp = true;
+                        return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function () {
                             isSignUpInProgress = false;
                             return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);

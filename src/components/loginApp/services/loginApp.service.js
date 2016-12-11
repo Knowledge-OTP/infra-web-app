@@ -103,7 +103,6 @@
                         }
                     };
                 }
-                console.log(auth.uid);
                 return userProfileRef.update(profile).catch(function (err) {
                     $log.error(err);
                 });
@@ -244,7 +243,6 @@
                             var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                debugger;
                                 if(!signUp){
                                     _redirectToPage(appContext, userContext);
                                 }
@@ -279,7 +277,6 @@
                         return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function () {
                             isSignUpInProgress = false;
                             return _writeUserProfile(formData, appContext, userContext).then(function () {
-                                debugger;
                                 _redirectToPage(appContext, userContext);
                             });
                         });
