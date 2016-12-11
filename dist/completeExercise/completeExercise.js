@@ -76,7 +76,11 @@
                 var VIEW_STATES = CompleteExerciseSrv.VIEW_STATES;
                 var SH_MODE_STATES = CompleteExerciseSrv.MODE_STATES;
 
-                var loadingAnimation = LoadingSrv || $ctrl.settings.loadingAnimation;
+                var loadingAnimation = LoadingSrv;
+
+                if( $ctrl.settings.loadingAnimation){
+                    loadingAnimation = $ctrl.settings.loadingAnimation;
+                }
 
                 var currUserShState = UserScreenSharingStateEnum.NONE.enum,
                     shMode,
