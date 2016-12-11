@@ -78,7 +78,7 @@
                         return a.order - b.order;
                     });
 
-                    if(isModule){
+                    if (exerciseContent.moduleId){
                         var questionsOrderMap = {};
                         var questions = exerciseContent.questions;
                         for (var k = 0; k < questions.length; k++) {
