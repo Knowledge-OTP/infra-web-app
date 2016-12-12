@@ -496,6 +496,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
+                    exerciseContent.parentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
 
                     if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
                         return;
