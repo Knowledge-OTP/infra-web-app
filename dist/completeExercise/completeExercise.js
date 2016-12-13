@@ -443,6 +443,7 @@
                 function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
+                    exerciseResult.parentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
 
                     if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
                         return;
@@ -723,8 +724,6 @@
                 exerciseResult.moduleId = exerciseContent.moduleId;
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
-                exerciseResult.parentTypeId = exerciseContent.parentTypeId;
-
 
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
