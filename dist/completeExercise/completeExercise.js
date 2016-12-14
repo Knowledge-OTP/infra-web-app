@@ -23,7 +23,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
+                'completeExercise-book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -1401,7 +1401,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                   ng-change=\"$ctrl.durationChanged()\">\n" +
     "            </timer>\n" +
     "            <div class=\"tutorial-icon-wrapper\" ng-if=\"$ctrl.completeExerciseCtrl.exerciseDetails.exerciseTypeId === 1\">\n" +
-    "                <svg-icon ng-click=\"$ctrl.openIntro()\" name=\"book-icon\" class=\"book-icon\"></svg-icon>\n" +
+    "                <svg-icon ng-click=\"$ctrl.openIntro()\" name=\"completeExercise-book-icon\" class=\"book-icon\"></svg-icon>\n" +
     "            </div>\n" +
     "            <div class=\"summary\"\n" +
     "                 ng-click=\"$ctrl.goToSummary()\"\n" +

@@ -23,7 +23,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
+                'completeExercise-book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
