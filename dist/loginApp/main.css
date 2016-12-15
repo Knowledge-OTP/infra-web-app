@@ -271,6 +271,9 @@ promo-code {
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
         background-image: url("/assets/images/sat-name@2x.png");
         width: 88px; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.satsm {
+        background-image: url("/assets/images/satsm-name@2x.png");
+        width: 88px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
         background-image: url("/assets/images/act-name@2x.png");
         width: 95px; }
@@ -341,6 +344,8 @@ login-app {
           float: left; }
           login-app .login-app > header .app-select .app-img-holder.sat {
             background-image: url("/assets/images/sat-name@2x.png"); }
+          login-app .login-app > header .app-select .app-img-holder.satsm {
+            background-image: url("/assets/images/satsm-name@2x.png"); }
           login-app .login-app > header .app-select .app-img-holder.act {
             background-image: url("/assets/images/act-name@2x.png"); }
           login-app .login-app > header .app-select .app-img-holder.toefl {
@@ -420,6 +425,14 @@ login-app {
     login-app .login-app.sat .app-color {
       color: #0a9bad; }
       login-app .login-app.sat .app-color:hover {
+        color: #088190; }
+    login-app .login-app.satsm .app-bg {
+      background: #0a9bad; }
+      login-app .login-app.satsm .app-bg:hover {
+        background: #088190; }
+    login-app .login-app.satsm .app-color {
+      color: #0a9bad; }
+      login-app .login-app.satsm .app-color:hover {
         color: #088190; }
     login-app .login-app.act .app-bg {
       background: #87ca4d; }

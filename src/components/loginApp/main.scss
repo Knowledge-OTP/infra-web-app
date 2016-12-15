@@ -50,6 +50,10 @@
                     background-image: url('/assets/images/sat-name@2x.png');
                     width: 88px;
                 }
+                &.satsm {
+                    background-image: url('/assets/images/satsm-name@2x.png');
+                    width: 88px;
+                }
                 &.act {
                     background-image: url('/assets/images/act-name@2x.png');
                     width: 95px;
@@ -146,6 +150,9 @@ login-app {
                     &.sat {
                         background-image: url('/assets/images/sat-name@2x.png');
                     }
+                    &.satsm {
+                        background-image: url('/assets/images/satsm-name@2x.png');
+                    }
                     &.act {
                         background-image: url('/assets/images/act-name@2x.png');
                     }
@@ -241,6 +248,20 @@ login-app {
             }
         }
         &.sat {
+            .app-bg {
+                background: $bgColor5;
+                &:hover {
+                    background: $bgColor55
+                }
+            }
+            .app-color {
+                color: $bgColor5;
+                &:hover {
+                    color: $bgColor55;
+                }
+            }
+        }
+        &.satsm {
             .app-bg {
                 background: $bgColor5;
                 &:hover {

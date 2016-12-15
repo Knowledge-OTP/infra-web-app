@@ -3227,6 +3227,9 @@ promo-code {
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
         background-image: url("/assets/images/sat-name@2x.png");
         width: 88px; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.satsm {
+        background-image: url("/assets/images/satsm-name@2x.png");
+        width: 88px; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
         background-image: url("/assets/images/act-name@2x.png");
         width: 95px; }
@@ -3297,6 +3300,8 @@ login-app {
           float: left; }
           login-app .login-app > header .app-select .app-img-holder.sat {
             background-image: url("/assets/images/sat-name@2x.png"); }
+          login-app .login-app > header .app-select .app-img-holder.satsm {
+            background-image: url("/assets/images/satsm-name@2x.png"); }
           login-app .login-app > header .app-select .app-img-holder.act {
             background-image: url("/assets/images/act-name@2x.png"); }
           login-app .login-app > header .app-select .app-img-holder.toefl {
@@ -3376,6 +3381,14 @@ login-app {
     login-app .login-app.sat .app-color {
       color: #0a9bad; }
       login-app .login-app.sat .app-color:hover {
+        color: #088190; }
+    login-app .login-app.satsm .app-bg {
+      background: #0a9bad; }
+      login-app .login-app.satsm .app-bg:hover {
+        background: #088190; }
+    login-app .login-app.satsm .app-color {
+      color: #0a9bad; }
+      login-app .login-app.satsm .app-color:hover {
         color: #088190; }
     login-app .login-app.act .app-bg {
       background: #87ca4d; }
@@ -4908,8 +4921,7 @@ complete-exercise-summary social-sharing .social-share-wrapper {
       border-style: solid;
       border-width: 10px 0 10px 10px;
       border-color: transparent transparent transparent #f2f2f2;
-      -webkit-filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
-              filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
       position: absolute;
       right: -9px;
       top: 18px; }
@@ -5671,8 +5683,7 @@ workout-intro-lock {
   display: block; }
   workout-intro-lock.lock .main-container {
     opacity: 0.23;
-    -webkit-filter: blur(7px);
-            filter: blur(7px); }
+    filter: blur(7px); }
   workout-intro-lock:not(.lock) .lock-overlay-container {
     display: none; }
   workout-intro-lock .lock-overlay-container {
