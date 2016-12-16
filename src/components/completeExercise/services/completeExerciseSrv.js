@@ -54,7 +54,8 @@
                                 uid,
                                 exerciseDetails.exerciseParentId,
                                 exerciseDetails.exerciseTypeId,
-                                exerciseDetails.exerciseId
+                                exerciseDetails.exerciseId,
+                                exerciseDetails.assignContentType
                             );
                         });
                     default:
