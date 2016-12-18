@@ -84,7 +84,7 @@
                   return;
             }
             
-            var fileName = blobOption ? _generateFileName() + '.' + blobOption.type : fileOption.name;
+            var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
             var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
             var filePath = _getFilePath(options.prefixPath, file);
 
