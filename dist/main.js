@@ -60,7 +60,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
     ]);
 })(angular);
 
-(function (angular, AWS) {
+(function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.aws').service('AwsSrv',
@@ -80,7 +80,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                };
             } 
 
-            AWS.config.update(config);
+            $window.AWS.config.update(config);
          }  
 
          function _init() {
@@ -117,7 +117,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
               this.filesNames = [];
 
-              this.bucketInstance = new AWS.S3({ 
+              this.bucketInstance = new $window.AWS.S3({ 
                    params: {
                       Bucket: this.bucketName
                    }
@@ -174,7 +174,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             if(this.filesNames.length) {
                 return this.filesNames[this.filesNames - 1];
             }
-            
+
             return false;
         };
 
@@ -187,7 +187,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
       }]
     );
-})(angular, AWS);
+})(angular);
 
 angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templateCache) {
 

@@ -1,4 +1,4 @@
-(function (angular, AWS) {
+(function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.aws').service('AwsSrv',
@@ -18,7 +18,7 @@
                };
             } 
 
-            AWS.config.update(config);
+            $window.AWS.config.update(config);
          }  
 
          function _init() {
@@ -55,7 +55,7 @@
 
               this.filesNames = [];
 
-              this.bucketInstance = new AWS.S3({ 
+              this.bucketInstance = new $window.AWS.S3({ 
                    params: {
                       Bucket: this.bucketName
                    }
@@ -112,7 +112,7 @@
             if(this.filesNames.length) {
                 return this.filesNames[this.filesNames - 1];
             }
-            
+
             return false;
         };
 
@@ -125,4 +125,4 @@
 
       }
     );
-})(angular, AWS);
+})(angular);
