@@ -3,14 +3,18 @@
     angular.module('demo', ['znk.infra-web-app.aws'])
         .controller('Main', function ($scope, AwsSrv) {
 
-            var awsS3 = AwsSrv.newAwsS3();
+            var awsS3 = AwsSrv.newAwsS3({
+                prefixPath: 'user-uploads'
+            });
 
             $scope.uploadFile = function() {
-                var file = document.querySelector('input[type=file]').value;
-
-                if (file && file !== '') {
+                var file = document.querySelector('input[type=file]');
+                var fileValue = file.value;
+                 
+                if (fileValue && fileValue !== '') {
+                    var fileData = file.files[0];
                     awsS3.upload({
-                        file: file  
+                        file: fileData  
                     }).then(function(data) {
                         console.log('data', data);
                     }).catch(function(err) {

@@ -5,16 +5,15 @@
         function (ENV, $log, $q, UtilitySrv) {
             'ngInject';
 
-         function _updateAwsConfig(options, _config) {
+         function _updateAwsConfig(config, options) {
             options = options || {}; 
+            config = config || false;
 
-            var config = _config || {};
-
-            if (!AWS.config) {
+            if (!config) {
                config = {
                    region: options.region || ENV.s3Region || 'us-east-1',
                    credentials: new AWS.CognitoIdentityCredentials({
-                       IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1_C3pCDpyrz'
+                       IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
                    }),
                };
             } 
@@ -36,8 +35,8 @@
               return new File([blob], filename);
           }
 
-          function _getFilePath(file) {
-             return ENV.appName + '/' + file.name;
+          function _getFilePath(prefixPath, file) {
+             return prefixPath + '/' + file.name;
           }
 
           function updateConfig(options, config) {
@@ -52,7 +51,9 @@
                   return;
               }
 
-              this.bucketName = options.bucketName || ENV.s3InMedieBucketName || 'inmedia.zinkerz.com.s3-website-eu-west-1.amazonaws.com';
+              this.bucketName = options.bucketName || ENV.s3InMedieBucketName || 'toefl-media';
+
+              this.prefixPath = options.prefixPath || ENV.appName || '';
 
               this.bucketInstance = new AWS.S3({ 
                    params: {
@@ -62,23 +63,29 @@
           }
          
         AwsS3.prototype.upload = function(options) {
+            var deferred = $q.defer();
+            var errMsg;
+
             if (!angular.isObject(options) || angular.isArray(options)) {
-                  $log.error('AwsSrv AwsS3 upload: options must be an object!! ie: { blob: blob}');
+                  errMsg = 'AwsSrv AwsS3 upload: options must be an object!! ie: { blob: blob}';
+                  $log.error(errMsg);
+                  deferred.reject(errMsg);
                   return;
             }
 
             var blobOption = options.blob;
             var fileOption = options.file;
 
-            if (!blobOption || !fileOption) {
-                  $log.error('AwsSrv AwsS3 upload: options must contian blob or file option!');
+            if (!blobOption && !fileOption) {
+                  errMsg = 'AwsSrv AwsS3 upload: options must contian blob or file option!';
+                  $log.error(errMsg);
+                  deferred.reject(errMsg);
                   return;
             }
             
-            var deferred = $q.defer();
             var fileName = _generateFileName();
             var file = blobOption ? _getFile(blobOption, filename) : fileOption;
-            var filePath = _getFilePath(file);
+            var filePath = _getFilePath(this.prefixPath, file);
 
             var params = {
                 Key: filePath,
