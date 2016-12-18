@@ -1,8 +1,16 @@
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.aws', [
+        'znk.infra.utility'
+    ]);
+})(angular);
+
 (function (angular, AWS) {
     'use strict';
 
     angular.module('znk.infra-web-app.aws').service('AwsSrv',
-        function (ENV, $log, $q, UtilitySrv, $window) {
+        ["ENV", "$log", "$q", "UtilitySrv", "$window", function (ENV, $log, $q, UtilitySrv, $window) {
             'ngInject';
 
          function _updateAwsConfig(config, options) {
@@ -112,6 +120,10 @@
             return new AwsS3(options);   
         };
 
-      }
+      }]
     );
 })(angular, AWS);
+
+angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templateCache) {
+
+}]);
