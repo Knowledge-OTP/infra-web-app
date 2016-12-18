@@ -53,7 +53,7 @@
 
               this.bucketName = options.bucketName || ENV.s3InMedieBucketName || 'toefl-media';
 
-              this.prefixPath = options.prefixPath || ENV.appName || '';
+              this.filesNames = [];
 
               this.bucketInstance = new AWS.S3({ 
                    params: {
@@ -65,6 +65,7 @@
         AwsS3.prototype.upload = function(options) {
             var deferred = $q.defer();
             var errMsg;
+            var self = this;
 
             if (!angular.isObject(options) || angular.isArray(options)) {
                   errMsg = 'AwsSrv AwsS3 upload: options must be an object!! ie: { blob: blob}';
@@ -83,9 +84,9 @@
                   return;
             }
             
-            var fileName = _generateFileName();
+            var fileName = blobOption ? _generateFileName() : fileOption.name;
             var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
-            var filePath = _getFilePath(this.prefixPath, file);
+            var filePath = _getFilePath(options.prefixPath, file);
 
             var params = {
                 Key: filePath,
@@ -98,12 +99,22 @@
                 if (err) {
                      deferred.reject(err);
                 } else {
+                     self.filesNames.push(fileName);
+
                      deferred.resolve(data);
                 }
             });
 
             return deferred.promise;
         };  
+
+        AwsS3.prototype.getCurrentFileName = function() {
+            if(this.filesNames.length) {
+                return this.filesNames[this.filesNames - 1];
+            }
+            
+            return false;
+        };
 
         this.updateConfig = updateConfig;
 
