@@ -12,7 +12,7 @@
                     var fileData = file.files[0];
                     awsS3.upload({
                         file: fileData,
-                        prefixPath: 'user-uploads' 
+                        prefixPath: 'toefl_app' 
                     }).then(function(data) {
                         console.log('data', data);
                     }).catch(function(err) {

@@ -51,7 +51,7 @@
                   return;
               }
 
-              this.bucketName = options.bucketName || ENV.s3InMedieBucketName || 'toefl-media';
+              this.bucketName = options.bucketName || ENV.s3InMedieBucketName || 'inmedia.zinkerz.com';
 
               this.filesNames = [];
 
