@@ -137,7 +137,7 @@
                     $ctrl.exerciseDetails = exerciseDetails;
 
                     exerciseRebuildProm = $timeout(function () {
-                        var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
+                        var isExam = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                         var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                         var settings = $ctrl.settings;
 
@@ -154,7 +154,7 @@
                             };
                             return $q.all(getDataPromMap).then(function (data) {
                                 $ctrl.exerciseData = data;
-                                isDataReady = true;  
+                                isDataReady = true;
                                 var newViewState;
 
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;

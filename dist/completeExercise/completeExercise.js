@@ -169,7 +169,7 @@
                     $ctrl.exerciseDetails = exerciseDetails;
 
                     exerciseRebuildProm = $timeout(function () {
-                        var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
+                        var isExam = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                         var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                         var settings = $ctrl.settings;
 
@@ -186,7 +186,7 @@
                             };
                             return $q.all(getDataPromMap).then(function (data) {
                                 $ctrl.exerciseData = data;
-                                isDataReady = true;  
+                                isDataReady = true;
                                 var newViewState;
 
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
@@ -725,7 +725,7 @@
                 exerciseResult.timePreference = exerciseContent.timePreference;
                 exerciseResult.categoryId = exerciseContent.categoryId;
                 exerciseResult.testScoreId = exerciseContent.testScoreId;
-                exerciseResult.moduleId = exerciseContent.moduleId;
+                exerciseResult.moduleId = !exerciseResult.moduleId ? exerciseContent.moduleId : exerciseResult.moduleId;
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
@@ -1229,9 +1229,11 @@
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
+        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", "BaseExerciseGetterSrv", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
+                  $log, $q, ExerciseParentEnum, BaseExerciseGetterSrv) {
             'ngInject';
 
+            var self = this;
             this.VIEW_STATES = {
                 NONE: 0,
                 INTRO: 1,
@@ -1256,8 +1258,8 @@
             this.getExerciseResult = function (exerciseDetails, shMode) {
                 var isLecture = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.LECTURE.enum;
 
-                if(shMode === this.MODE_STATES.VIEWER){
-                    if(!exerciseDetails.resultGuid){
+                if (shMode === this.MODE_STATES.VIEWER) {
+                    if (!exerciseDetails.resultGuid) {
                         var errMsg = 'completeExerciseSrv: exercise details is missing guid property';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
@@ -1268,7 +1270,7 @@
 
                 switch (exerciseDetails.exerciseParentTypeId) {
                     case ExerciseParentEnum.MODULE.enum:
-                        if(isLecture){
+                        if (isLecture) {
                             return ExerciseResultSrv.getExerciseResult(
                                 exerciseDetails.exerciseTypeId,
                                 exerciseDetails.exerciseId,
@@ -1276,13 +1278,23 @@
                             );
                         }
 
-                        return this.getContextUid().then(function (uid) {
-                            return ExerciseResultSrv.getModuleExerciseResult(
-                                uid,
-                                exerciseDetails.exerciseParentId,
-                                exerciseDetails.exerciseTypeId,
-                                exerciseDetails.exerciseId
-                            );
+                        var examIdProm = $q.when();
+                        if (exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
+                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
+                        }
+
+                        return examIdProm.then(function (examData) {
+                            return self.getContextUid().then(function (uid) {
+                                var examId = examData && examData.id ? examData.id : undefined;
+                                return ExerciseResultSrv.getModuleExerciseResult(
+                                    uid,
+                                    exerciseDetails.exerciseParentId,
+                                    exerciseDetails.exerciseTypeId,
+                                    exerciseDetails.exerciseId,
+                                    exerciseDetails.assignContentType,
+                                    examId
+                                );
+                            });
                         });
                     default:
                         return ExerciseResultSrv.getExerciseResult(
