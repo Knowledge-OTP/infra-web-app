@@ -23,6 +23,6 @@
             };
         }).constant('ENV', {
              appName: 'toefl_app',
-             s3InMedieBucketName: 'dev.inmedia.zinkerz.com'
+             s3InMedieBucketName: 'dev-inmedia.zinkerz.com'
         });
 })(angular);
