@@ -171,8 +171,10 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         };  
 
         AwsS3.prototype.getCurrentFileName = function() {
-            if(this.filesNames.length) {
-                return this.filesNames[this.filesNames - 1];
+            var filesLength = this.filesNames.length;
+
+            if (filesLength) {
+                return this.filesNames[filesLength - 1];
             }
 
             return false;
