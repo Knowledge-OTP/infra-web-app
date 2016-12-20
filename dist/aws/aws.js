@@ -43,8 +43,20 @@
               return new $window.File([blob], fileName);
           }
 
+          function _addSlashToPath(prefixPath) {
+              var prefixPathLength = prefixPath.length;
+
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
+
+              if (lastChar === '/') {
+                  return prefixPath;
+              }
+
+              return prefixPath + '/';
+          }
+
           function _getFilePath(prefixPath, file) {
-             return prefixPath + '/' + file.name;
+             return _addSlashToPath(prefixPath) + file.name;
           }
 
           function updateConfig(options, config) {
