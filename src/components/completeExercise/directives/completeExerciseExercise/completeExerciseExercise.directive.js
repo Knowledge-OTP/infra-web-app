@@ -44,11 +44,15 @@
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
+                    var exerciseParentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
+                    var exerciseParentId = $ctrl.completeExerciseCtrl.getExerciseParentId();
 
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
                         exerciseParentContent: exerciseParentContent,
+                        exerciseParentTypeId: exerciseParentTypeId,
+                        exerciseParentId: exerciseParentId,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);

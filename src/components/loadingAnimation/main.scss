@@ -1,0 +1,11 @@
+@import '../../../src/scss/imports/_colors';
+
+md-progress-linear.loading-container {
+    position: fixed;
+    top: 0;
+
+    .md-bar {
+        background: $bgColor7;
+    }
+}
+
