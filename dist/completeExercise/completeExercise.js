@@ -466,7 +466,6 @@
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
                     var exerciseParentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
                     var exerciseParentId = $ctrl.completeExerciseCtrl.getExerciseParentId();
-                    var exerciseReviewStatus = $ctrl.completeExerciseCtrl.exerciseDetails.exerciseReviewStatus;
 
                     var settings = {
                         exerciseContent: exerciseContent,
@@ -474,7 +473,6 @@
                         exerciseParentContent: exerciseParentContent,
                         exerciseParentTypeId: exerciseParentTypeId,
                         exerciseParentId: exerciseParentId,
-                        exerciseReviewStatus: exerciseReviewStatus,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
