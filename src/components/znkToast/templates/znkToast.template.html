@@ -9,7 +9,7 @@
     </div>
 
     <div class="md-toast-content">
-        <div class="md-toast-text" flex>{{vm.msg | translate}}</div>
+        <div class="md-toast-text" flex ng-bind-html="vm.msg | translate"></div>
     </div>
 
     <md-button aria-label="close popup"

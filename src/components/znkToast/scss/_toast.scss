@@ -74,4 +74,17 @@ md-toast.toast-wrap-progress{
         }
 
     }
+    .md-toast-content {
+        .md-toast-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 23px;
+            .progress-title {
+               font-size: 20px; 
+            }
+            .progress-content {
+               font-size: 15px; 
+            }
+        }
+    }
 }
