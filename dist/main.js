@@ -14579,6 +14579,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     angular.module('znk.infra-web-app.znkToast', [
         'ngMaterial',
         'pascalprecht.translate',
+        'ngSanitize',
         'znk.infra.svgIcon'
     ]);
 })(angular);
@@ -14603,12 +14604,12 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     'use strict';
 
     angular.module('znk.infra-web-app.znkToast').controller('ToastController',
-        ["$mdToast", "type", "msg", function ($mdToast, type, msg) {
+        ["$mdToast", "$sce", "type", "msg", function ($mdToast, $sce, type, msg) {
             'ngInject';
 
             var vm = this;
             vm.type = type;
-            vm.msg = msg;
+            vm.msg = $sce.trustAsHtml(msg);
 
             vm.closeToast = function () {
                 $mdToast.hide();
@@ -14736,7 +14737,7 @@ angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($te
     "    </div>\n" +
     "\n" +
     "    <div class=\"md-toast-content\">\n" +
-    "        <div class=\"md-toast-text\" flex>{{vm.msg | translate}}</div>\n" +
+    "        <div class=\"md-toast-text\" flex ng-bind-html=\"vm.msg | translate\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <md-button aria-label=\"close popup\"\n" +

@@ -63,3 +63,13 @@ md-toast.toast-wrap-progress {
     background: #ebebeb; }
     md-toast.toast-wrap-progress .icon-wrap .progress-icon svg * {
       stroke: #b7b7b7; }
+  md-toast.toast-wrap-progress .md-toast-content .md-toast-text {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    line-height: 23px; }
+    md-toast.toast-wrap-progress .md-toast-content .md-toast-text .progress-title {
+      font-size: 20px; }
+    md-toast.toast-wrap-progress .md-toast-content .md-toast-text .progress-content {
+      font-size: 15px; }
