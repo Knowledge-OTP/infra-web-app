@@ -787,7 +787,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 exerciseResult.timePreference = exerciseContent.timePreference;
                 exerciseResult.categoryId = exerciseContent.categoryId;
                 exerciseResult.testScoreId = exerciseContent.testScoreId;
-                exerciseResult.moduleId = exerciseContent.moduleId;
+                exerciseResult.moduleId = exerciseResult.moduleId ? exerciseContent.moduleId : exerciseResult.moduleId;
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
