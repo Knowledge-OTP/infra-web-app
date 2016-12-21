@@ -169,8 +169,9 @@
                     $ctrl.exerciseDetails = exerciseDetails;
 
                     exerciseRebuildProm = $timeout(function () {
-                        var isExam = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
+                        var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
                         var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
+                        var isSection = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                         var settings = $ctrl.settings;
 
                         var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
@@ -182,8 +183,13 @@
                             var getDataPromMap = {
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
-                                exerciseParentContent: exerciseParentContent
+                                exerciseParentContent: exerciseParentContent,
                             };
+
+                            if (isModule && isSection){
+                                getDataPromMap.moduleExamData = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
+                            }
+
                             return $q.all(getDataPromMap).then(function (data) {
                                 $ctrl.exerciseData = data;
                                 isDataReady = true;
@@ -372,7 +378,8 @@
                     var exerciseDataPropsToCreateGetters = [
                         'exerciseContent',
                         'exerciseParentContent',
-                        'exerciseResult'
+                        'exerciseResult',
+                        'moduleExamData'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
@@ -466,6 +473,7 @@
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
                     var exerciseParentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
                     var exerciseParentId = $ctrl.completeExerciseCtrl.getExerciseParentId();
+                    var moduleExamData = $ctrl.completeExerciseCtrl.getModuleExamData();
 
                     var settings = {
                         exerciseContent: exerciseContent,
@@ -473,6 +481,7 @@
                         exerciseParentContent: exerciseParentContent,
                         exerciseParentTypeId: exerciseParentTypeId,
                         exerciseParentId: exerciseParentId,
+                        moduleExamData: moduleExamData,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
@@ -1280,7 +1289,7 @@
 
                         var examIdProm = $q.when();
                         if (exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
-                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
+                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
                         }
 
                         return examIdProm.then(function (examData) {

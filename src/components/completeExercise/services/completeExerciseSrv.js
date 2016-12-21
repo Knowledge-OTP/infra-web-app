@@ -53,7 +53,7 @@
 
                         var examIdProm = $q.when();
                         if (exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
-                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
+                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
                         }
 
                         return examIdProm.then(function (examData) {
