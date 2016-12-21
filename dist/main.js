@@ -701,7 +701,6 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
-                    znkExerciseSettings.exerciseReviewStatus = $ctrl.completeExerciseCtrl.exerciseDetails.exerciseReviewStatus;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings

@@ -72,7 +72,6 @@
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
-                    znkExerciseSettings.exerciseReviewStatus = $ctrl.completeExerciseCtrl.exerciseDetails.exerciseReviewStatus;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
