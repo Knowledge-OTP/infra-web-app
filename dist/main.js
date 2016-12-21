@@ -692,6 +692,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     };
 
                     var defaultZnkExerciseSettings = {
+                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.exerciseReviewStatus,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
@@ -700,7 +701,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
-                    settings.exerciseReviewStatus = $ctrl.completeExerciseCtrl.exerciseDetails.exerciseReviewStatus;
+                    znkExerciseSettings.exerciseReviewStatus = $ctrl.completeExerciseCtrl.exerciseDetails.exerciseReviewStatus;
 
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
