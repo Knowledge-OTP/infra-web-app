@@ -286,6 +286,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 var SH_MODE_STATES = CompleteExerciseSrv.MODE_STATES;
 
                 var loadingAnimation = LoadingSrv;
+                $ctrl.settings.exerciseReviewStatus = $ctrl.exerciseDetails.exerciseReviewStatus;
 
                 if( $ctrl.settings.loadingAnimation){
                     loadingAnimation = $ctrl.settings.loadingAnimation;
@@ -395,7 +396,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                             };
                             return $q.all(getDataPromMap).then(function (data) {
                                 $ctrl.exerciseData = data;
-                                isDataReady = true;  
+                                isDataReady = true;
                                 var newViewState;
 
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
