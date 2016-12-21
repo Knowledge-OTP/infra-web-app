@@ -692,7 +692,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     };
 
                     var defaultZnkExerciseSettings = {
-                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.exerciseReviewStatus,
+                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.settings.exerciseReviewStatus,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
