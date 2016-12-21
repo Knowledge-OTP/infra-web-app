@@ -392,7 +392,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                             var getDataPromMap = {
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
-                                exerciseParentContent: exerciseParentContent,
+                                exerciseParentContent: exerciseParentContent
                             };
 
                             if (isModule && isSection){
@@ -943,7 +943,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 exerciseResult.timePreference = exerciseContent.timePreference;
                 exerciseResult.categoryId = exerciseContent.categoryId;
                 exerciseResult.testScoreId = exerciseContent.testScoreId;
-                exerciseResult.moduleId = exerciseResult.moduleId ? exerciseContent.moduleId : exerciseResult.moduleId;
+                exerciseResult.moduleId = !exerciseResult.moduleId ? exerciseContent.moduleId : exerciseResult.moduleId;
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
