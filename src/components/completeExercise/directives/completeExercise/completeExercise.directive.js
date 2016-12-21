@@ -45,7 +45,6 @@
                 var SH_MODE_STATES = CompleteExerciseSrv.MODE_STATES;
 
                 var loadingAnimation = LoadingSrv;
-                $ctrl.settings.exerciseReviewStatus = $ctrl.exerciseDetails.exerciseReviewStatus;
 
                 if( $ctrl.settings.loadingAnimation){
                     loadingAnimation = $ctrl.settings.loadingAnimation;

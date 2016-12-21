@@ -286,7 +286,6 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 var SH_MODE_STATES = CompleteExerciseSrv.MODE_STATES;
 
                 var loadingAnimation = LoadingSrv;
-                $ctrl.settings.exerciseReviewStatus = $ctrl.exerciseDetails.exerciseReviewStatus;
 
                 if( $ctrl.settings.loadingAnimation){
                     loadingAnimation = $ctrl.settings.loadingAnimation;
@@ -676,6 +675,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
                     var exerciseParentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
                     var exerciseParentId = $ctrl.completeExerciseCtrl.getExerciseParentId();
+                    var exerciseReviewStatus = $ctrl.completeExerciseCtrl.exerciseDetails.exerciseReviewStatus;
 
                     var settings = {
                         exerciseContent: exerciseContent,
@@ -683,6 +683,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         exerciseParentContent: exerciseParentContent,
                         exerciseParentTypeId: exerciseParentTypeId,
                         exerciseParentId: exerciseParentId,
+                        exerciseReviewStatus: exerciseReviewStatus,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
