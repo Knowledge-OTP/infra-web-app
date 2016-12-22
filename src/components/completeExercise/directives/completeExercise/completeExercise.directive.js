@@ -66,14 +66,12 @@
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
                 }
 
-                function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
+                function _getExerciseParentContentProm(exerciseDetails, isExam, isModule) {
                     var exerciseParentContentProm = $q.when(null);
 
                     if (isExam) {
                         exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
-                    } else if (settings && settings.exerciseParentContent) {
-                        exerciseParentContentProm = settings.exerciseParentContent;
-                    } else if (isModule) {
+                    }  else if (isModule) {
                         exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
                             return {
                                 name: moduleContent.name
@@ -140,9 +138,8 @@
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
                         var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                         var isSection = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
-                        var settings = $ctrl.settings;
 
-                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, isExam, isModule);
 
                         return exerciseParentContentProm.then(function (exerciseParentContent) {
                             if (isExam) {
