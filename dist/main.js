@@ -8078,24 +8078,26 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             }
 
             function _checkSessionDuration(liveSessionData) {
-                liveSessionInterval.interval = $interval(function () {
-                    var liveSessionDuration = (_getRoundTime() - liveSessionData.startTime)  / 60000; // convert to minutes
-                    var extendTimeMin = liveSessionData.extendTime / 60000;
-                    var maxSessionDuration = ENV.liveSession.sessionLength + extendTimeMin;
-                    var sessionTimeWithExtension = liveSessionDuration + extendTimeMin;
-                    var EndAlertTime = maxSessionDuration - ENV.liveSession.sessionEndAlertTime;
+                if (isTeacherApp) {
+                    liveSessionInterval.interval = $interval(function () {
+                        var liveSessionDuration = (_getRoundTime() - liveSessionData.startTime)  / 60000; // convert to minutes
+                        var extendTimeMin = liveSessionData.extendTime / 60000;
+                        var maxSessionDuration = ENV.liveSession.sessionLength + extendTimeMin;
+                        var sessionTimeWithExtension = liveSessionDuration + extendTimeMin;
+                        var EndAlertTime = maxSessionDuration - ENV.liveSession.sessionEndAlertTime;
 
-                    if (sessionTimeWithExtension >= maxSessionDuration) {
-                        _this.endLiveSession(liveSessionData.guid);
-                    } else if (sessionTimeWithExtension >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
-                        LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
-                            confirmExtendSession(liveSessionData);
-                        }, function updateIntervalAlertShown() {
-                            liveSessionInterval.isSessionAlertShown = true;
-                            $log.debug('Live session is continued without extend time.');
-                        });
-                    }
-                }, 60000);
+                        if (sessionTimeWithExtension >= maxSessionDuration) {
+                            _this.endLiveSession(liveSessionData.guid);
+                        } else if (sessionTimeWithExtension >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
+                            LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
+                                confirmExtendSession(liveSessionData);
+                            }, function updateIntervalAlertShown() {
+                                liveSessionInterval.isSessionAlertShown = true;
+                                $log.debug('Live session is continued without extend time.');
+                            });
+                        }
+                    }, 60000);
+                }
             }
 
             function confirmExtendSession(liveSessionData) {
