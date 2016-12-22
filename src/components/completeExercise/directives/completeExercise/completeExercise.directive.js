@@ -72,11 +72,7 @@
                     if (isExam) {
                         exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
                     }  else if (isModule) {
-                        exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
-                            return {
-                                name: moduleContent.name
-                            };
-                        });
+                        exerciseParentContentProm = ExerciseResultSrv.getModuleResultByGuid(exerciseDetails.moduleResultGuid);
                     }
 
                     return exerciseParentContentProm;
@@ -97,7 +93,8 @@
                                     'exerciseId',
                                     'exerciseTypeId',
                                     'exerciseParentId',
-                                    'exerciseParentTypeId'
+                                    'exerciseParentTypeId',
+                                    'moduleResultGuid'
                                 ];
                                 angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
                                     activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
@@ -105,6 +102,7 @@
 
                                 activeShData.activeExercise.resultGuid = $ctrl.exerciseData.exerciseResult.guid;
                                 activeShData.activeExercise.activeScreen = $ctrl.currViewState;
+
                                 shDataEventManager.updateValue(activeShData);
                                 var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
                                 return saveExerciseResultProm.then(function () {
