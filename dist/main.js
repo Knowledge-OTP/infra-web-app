@@ -227,7 +227,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
         'znk.infra.screenSharing',
         'znk.infra.eventManager',
         'znk.infra.stats',
-        'znk.infra.estimatedScore'
+        'znk.infra.estimatedScore',
+        'znk.infra.znkSessionData'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -891,9 +892,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -997,6 +998,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
             function _finishExercise() {
                 exerciseResult.isComplete = true;
+                $log.debug(znkSessionDataSrv);
+                $log.debug(ExerciseReviewStatusEnum);
+                // exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
                 exerciseResult.endedTime = Date.now();
                 exerciseResult.$save();
 

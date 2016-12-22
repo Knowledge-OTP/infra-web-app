@@ -18,7 +18,7 @@
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -122,6 +122,9 @@
 
             function _finishExercise() {
                 exerciseResult.isComplete = true;
+                $log.debug(znkSessionDataSrv);
+                $log.debug(ExerciseReviewStatusEnum);
+                // exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
                 exerciseResult.endedTime = Date.now();
                 exerciseResult.$save();
 
