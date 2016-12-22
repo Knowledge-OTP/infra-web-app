@@ -8,15 +8,21 @@
 
                 var self = this;
 
-                self.showToast = function (type, msg) {
+                self.showToast = function (type, msg, options) {
+                    options = options || {};
+
                     $mdToast.show({
                         locals:{ type: type,  msg: msg },
                         templateUrl: 'components/znkToast/templates/znkToast.template.html',
-                        position: 'top right',
-                        hideDelay: 3000,
+                        position: options.position || 'top right',
+                        hideDelay: angular.isDefined(options.hideDelay) ?  options.hideDelay : 3000,
                         controllerAs: 'vm',
                         controller: 'ToastController'
                     });
+                };
+
+                self.hideToast = function() {
+                    $mdToast.hide();
                 };
             }
         );

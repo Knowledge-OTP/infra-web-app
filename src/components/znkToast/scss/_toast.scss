@@ -59,3 +59,32 @@ md-toast.toast-wrap-error{
 
     }
 }
+
+md-toast.toast-wrap-progress{
+    @extend md-toast.toast-wrap;
+    border: 2px solid $borderColor7;
+    .icon-wrap{
+        background: $bgColor43;
+        .progress-icon { 
+             svg {
+                * {
+                    stroke: $bgColor24;
+                }
+            }
+        }
+
+    }
+    .md-toast-content {
+        .md-toast-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 23px;
+            .progress-title {
+               font-size: 20px; 
+            }
+            .progress-content {
+               font-size: 15px; 
+            }
+        }
+    }
+}
