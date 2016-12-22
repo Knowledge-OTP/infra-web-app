@@ -3,6 +3,7 @@
 
     angular.module('znk.infra-web-app', [
         "znk.infra-web-app.angularMaterialOverride",
+"znk.infra-web-app.aws",
 "znk.infra-web-app.completeExercise",
 "znk.infra-web-app.config",
 "znk.infra-web-app.diagnostic",
@@ -17,6 +18,7 @@
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
 "znk.infra-web-app.liveLessons",
+"znk.infra-web-app.loadingAnimation",
 "znk.infra-web-app.loginApp",
 "znk.infra-web-app.myProfile",
 "znk.infra-web-app.onBoarding",
@@ -50,6 +52,161 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
 }]);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.aws', [
+        'znk.infra.utility'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.aws').service('AwsSrv',
+        ["ENV", "$log", "$q", "UtilitySrv", "$window", function (ENV, $log, $q, UtilitySrv, $window) {
+            'ngInject';
+
+         function _updateAwsConfig(config, options) {
+            options = options || {}; 
+            config = config || false;
+
+            if (!config) {
+               config = {
+                   region: options.region || ENV.s3Region || 'us-east-1',
+                   credentials: new AWS.CognitoIdentityCredentials({
+                       IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
+                   }),
+               };
+            } 
+
+            $window.AWS.config.update(config);
+         }  
+
+         function _init() {
+              _updateAwsConfig();
+         }   
+           
+         _init();
+
+          function _generateFileName() {
+             return UtilitySrv.general.createGuid();  
+          } 
+
+          function _getFile(blob, fileName) {
+              return new $window.File([blob], fileName);
+          }
+
+          function _addSlashToPath(prefixPath) {
+              var prefixPathLength = prefixPath.length;
+
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
+
+              if (lastChar === '/') {
+                  return prefixPath;
+              }
+
+              return prefixPath + '/';
+          }
+
+          function _getFilePath(prefixPath, file) {
+             return _addSlashToPath(prefixPath) + file.name;
+          }
+
+          function updateConfig(options, config) {
+              _updateAwsConfig(options, config);
+          }
+
+          function AwsS3(options) {
+              options = options || {};
+
+              if (!angular.isObject(options) || angular.isArray(options)) {
+                  $log.error('AwsSrv Bucket newS3: options must be an object!!');
+                  return;
+              }
+
+              this.bucketName = options.bucketName || ENV.s3InMedieBucketName || 'inmedia.zinkerz.com';
+
+              this.filesNames = [];
+
+              this.bucketInstance = new $window.AWS.S3({ 
+                   params: {
+                      Bucket: this.bucketName
+                   }
+              });
+          }
+         
+        AwsS3.prototype.upload = function(options) {
+            var deferred = $q.defer();
+            var errMsg;
+            var self = this;
+
+            if (!angular.isObject(options) || angular.isArray(options)) {
+                  errMsg = 'AwsSrv AwsS3 upload: options must be an object!! ie: { blob: blob}';
+                  $log.error(errMsg);
+                  deferred.reject(errMsg);
+                  return;
+            }
+
+            var blobOption = options.blob;
+            var fileOption = options.file;
+
+            if (!blobOption && !fileOption) {
+                  errMsg = 'AwsSrv AwsS3 upload: options must contian blob or file option!';
+                  $log.error(errMsg);
+                  deferred.reject(errMsg);
+                  return;
+            }
+            
+            var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
+            var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
+            var filePath = _getFilePath(options.prefixPath, file);
+
+            var params = {
+                Key: filePath,
+                ContentType: file.type,
+                Body: file,
+                ACL: options.ACL || 'public-read'
+            };
+
+            this.bucketInstance.putObject(params, function(err, data) {
+                if (err) {
+                     deferred.reject(err);
+                } else {
+                     self.filesNames.push(fileName);
+
+                     deferred.resolve(data);
+                }
+            });
+
+            return deferred.promise;
+        };  
+
+        AwsS3.prototype.getCurrentFileName = function() {
+            var filesLength = this.filesNames.length;
+
+            if (filesLength) {
+                return this.filesNames[filesLength - 1];
+            }
+
+            return false;
+        };
+
+        this.updateConfig = updateConfig;
+
+        // factory for aws bucket instances 
+        this.newAwsS3 = function (options) {
+            return new AwsS3(options);   
+        };
+
+      }]
+    );
+})(angular);
+
+angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templateCache) {
+
+}]);
+
 (function(){
     'use strict';
 
@@ -61,6 +218,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         'znk.infra.contentGetters',
         'znk.infra.userContext',
         'znk.infra.user',
+        'znk.infra.znkModule',
         'znk.infra.general',
         'znk.infra.filters',
         'znk.infra.znkExercise',
@@ -74,14 +232,14 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
+                'completeExercise-book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
     ]);
 })();
 
-(function(angular) {
+(function (angular) {
     'use strict';
 
     /**
@@ -98,6 +256,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
      *      1: default, sensitive to sharer screen sharing state
      *      2: sensitive to viewer screen sharing state
      *   },
+     *   loadingAnimation: (optional) override the default loading animation, or to turn off the loading animation.
+     *                      in order to override - must have showLoading and hideLoading functions.
+     *                      in order to turn off - set as false;
      *   znkExerciseSettings: znk exercise settings
      *
      * ########
@@ -114,9 +275,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "EventManagerSrv", function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
-                EventManagerSrv) {
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "ZnkModuleService", "EventManagerSrv", "LoadingSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                                  ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum, ZnkModuleService,
+                                  EventManagerSrv, LoadingSrv) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -124,12 +285,19 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 var VIEW_STATES = CompleteExerciseSrv.VIEW_STATES;
                 var SH_MODE_STATES = CompleteExerciseSrv.MODE_STATES;
 
+                var loadingAnimation = LoadingSrv;
+
+                if( $ctrl.settings.loadingAnimation){
+                    loadingAnimation = $ctrl.settings.loadingAnimation;
+                }
+
                 var currUserShState = UserScreenSharingStateEnum.NONE.enum,
                     shMode,
                     exerciseRebuildProm = $q.when(),
                     syncUpdatesProm = $q.when(),
                     isSharerMode = false,
                     isViewerMode = false,
+                    isDataReady = false,
                     shModeEventManager = new EventManagerSrv(),
                     shDataEventManager = new EventManagerSrv();
 
@@ -139,14 +307,32 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
                 }
 
+                function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
+                    var exerciseParentContentProm = $q.when(null);
+
+                    if (isExam) {
+                        exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
+                    } else if (settings && settings.exerciseParentContent) {
+                        exerciseParentContentProm = settings.exerciseParentContent;
+                    } else if (isModule) {
+                        exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
+                            return {
+                                name: moduleContent.name
+                            };
+                        });
+                    }
+
+                    return exerciseParentContentProm;
+                }
+
                 function _setShDataToCurrentExercise() {
                     syncUpdatesProm = syncUpdatesProm
-                        .then(function() {
+                        .then(function () {
                             var promMap = {
                                 exerciseRebuildProm: exerciseRebuildProm,
                                 activeShData: ScreenSharingSrv.getActiveScreenSharingData()
                             };
-                            return $q.all(promMap).then(function(data) {
+                            return $q.all(promMap).then(function (data) {
                                 var activeShData = data.activeShData;
 
                                 activeShData.activeExercise = {};
@@ -156,7 +342,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                     'exerciseParentId',
                                     'exerciseParentTypeId'
                                 ];
-                                angular.forEach(propsToCopyFromCurrExerciseDetails, function(propName) {
+                                angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
                                     activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
                                 });
 
@@ -164,12 +350,12 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                 activeShData.activeExercise.activeScreen = $ctrl.currViewState;
                                 shDataEventManager.updateValue(activeShData);
                                 var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
-                                return saveExerciseResultProm.then(function() {
+                                return saveExerciseResultProm.then(function () {
                                     return activeShData.$save();
                                 });
                             });
                         })
-                        .catch(function(err) {
+                        .catch(function (err) {
                             $log.error(err);
                         });
                 }
@@ -191,14 +377,15 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                     $ctrl.exerciseDetails = exerciseDetails;
 
-                    exerciseRebuildProm = $timeout(function() {
+                    exerciseRebuildProm = $timeout(function () {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
+                        var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
+                        var isSection = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                         var settings = $ctrl.settings;
-                        var exerciseParentContentProm = isExam ?
-                            BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
-                            $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);
 
-                        return exerciseParentContentProm.then(function(exerciseParentContent) {
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
+
+                        return exerciseParentContentProm.then(function (exerciseParentContent) {
                             if (isExam) {
                                 exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
                             }
@@ -207,17 +394,22 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
                                 exerciseParentContent: exerciseParentContent
                             };
-                            return $q.all(getDataPromMap).then(function(data) {
+
+                            if (isModule && isSection){
+                                getDataPromMap.moduleExamData = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
+                            }
+
+                            return $q.all(getDataPromMap).then(function (data) {
                                 $ctrl.exerciseData = data;
+                                isDataReady = true;
                                 var newViewState;
 
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                                 var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                                 var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                                var isParentTutorial = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.TUTORIAL.enum;
                                 var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                                 // skip intro
-                                if (isParentTutorial || isParentModule){
+                                if (isParentModule) {
                                     data.exerciseResult.seenIntro = true;
                                 }
 
@@ -230,7 +422,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                                 $ctrl.changeViewState(newViewState, true);
 
                                 if (isSharerMode) {
-                                    $ctrl.exerciseData.exerciseResult.$save().then(function() {
+                                    $ctrl.exerciseData.exerciseResult.$save().then(function () {
                                         _setShDataToCurrentExercise();
                                     });
                                 }
@@ -245,17 +437,17 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 }
 
                 function _createPropGetters(propArray, contextObjectName) {
-                    propArray.forEach(function(propName) {
+                    propArray.forEach(function (propName) {
                         var getterFnName = _getGetterFnName(propName);
-                        $ctrl[getterFnName] = function() {
+                        $ctrl[getterFnName] = function () {
                             return $ctrl[contextObjectName][propName];
                         };
                     });
                 }
 
                 function _updateActiveShDataActiveScreen(newViewState) {
-                    syncUpdatesProm = syncUpdatesProm.then(function() {
-                        return ScreenSharingSrv.getActiveScreenSharingData().then(function(activeShData) {
+                    syncUpdatesProm = syncUpdatesProm.then(function () {
+                        return ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
                             var activeExercise = activeShData.activeExercise;
 
                             if (!activeExercise) {
@@ -266,7 +458,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             shDataEventManager.updateValue(activeShData);
                             return activeShData.$save();
                         });
-                    }).catch(function(err) {
+                    }).catch(function (err) {
                         $log.error(err);
                     });
                     return syncUpdatesProm;
@@ -288,9 +480,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     shModeEventManager.updateValue(shMode);
                 }
 
-                var _activeShDataChangeHandler = (function() {
+                var _activeShDataChangeHandler = (function () {
                     var firstTrigger = true;
-                    return function(newShData) {
+                    return function (newShData) {
                         shDataEventManager.updateValue(newShData);
 
                         if (firstTrigger) {
@@ -314,12 +506,15 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         var isSameExerciseType = $ctrl.exerciseDetails && activeExercise.exerciseTypeId === $ctrl.exerciseDetails.exerciseTypeId;
                         var isDiffActiveScreen = $ctrl.currViewState !== activeExercise.activeScreen;
                         if (isSameExerciseId && isSameExerciseType) {
-                            if (isDiffActiveScreen) {
+                            if (isDiffActiveScreen && isDataReady) {
                                 var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
+
                                 //active screen should never be none if in sharer mode
-                                if (!(newViewState === VIEW_STATES.NONE && isSharerMode)) {
-                                    $ctrl.changeViewState(newViewState, true);
+                                if (newViewState === VIEW_STATES.NONE && isSharerMode) {
+                                    newViewState = VIEW_STATES.EXERCISE;
                                 }
+
+                                $ctrl.changeViewState(newViewState, true);
                             }
                         } else {
                             if (isViewerMode) {
@@ -361,9 +556,17 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(_userShStateChangeHandler);
                 }
 
-                this.changeViewState = function(newViewState, skipActiveScreenUpdate) {
+                this.changeViewState = function (newViewState, skipActiveScreenUpdate) {
                     if ($ctrl.currViewState === newViewState) {
                         return;
+                    }
+
+                    if ($ctrl.settings.loadingAnimation !== false) {
+                        if (!newViewState || newViewState === VIEW_STATES.NONE) {
+                            loadingAnimation.showLoading();
+                        } else {
+                            loadingAnimation.hideLoading(true);
+                        }
                     }
 
                     if (shMode && !skipActiveScreenUpdate) {
@@ -373,7 +576,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     }
                 };
 
-                this.$onInit = function() {
+                this.$onInit = function () {
                     var exerciseDetailsPropsToCreateGetters = [
                         'exerciseParentTypeId',
                         'exerciseParentId',
@@ -384,7 +587,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     var exerciseDataPropsToCreateGetters = [
                         'exerciseContent',
                         'exerciseParentContent',
-                        'exerciseResult'
+                        'exerciseResult',
+                        'moduleExamData'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
@@ -395,7 +599,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     this.shDataEventManager = shDataEventManager;
                 };
 
-                this.$onChanges = function(changesObj) {
+                this.$onChanges = function (changesObj) {
+
                     if (isViewerMode) {
                         return;
                     }
@@ -410,12 +615,12 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     _rebuildExercise(newExerciseDetails);
                 };
 
-                this.$onDestroy = function() {
+                this.$onDestroy = function () {
                     _unregisterFromUserShEvents();
                     _unregisterFromActiveShDataEvents();
 
                     if (isSharerMode) {
-                        ScreenSharingSrv.getActiveScreenSharingData().then(function(activeShData) {
+                        ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
                             if (!activeShData) {
                                 return;
                             }
@@ -475,11 +680,17 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
+                    var exerciseParentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
+                    var exerciseParentId = $ctrl.completeExerciseCtrl.getExerciseParentId();
+                    var moduleExamData = $ctrl.completeExerciseCtrl.getModuleExamData();
 
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
                         exerciseParentContent: exerciseParentContent,
+                        exerciseParentTypeId: exerciseParentTypeId,
+                        exerciseParentId: exerciseParentId,
+                        moduleExamData: moduleExamData,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
@@ -687,7 +898,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv, 
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
                   UtilitySrv, ExerciseCycleSrv) {
             'ngInject';
@@ -696,6 +907,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             var exerciseResult = settings.exerciseResult;
             var exerciseParentContent = settings.exerciseParentContent;
             var exerciseTypeId = exerciseResult.exerciseTypeId;
+            var exerciseParentTypeId = settings.exerciseParentTypeId;
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
@@ -731,9 +943,16 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                 exerciseResult.timePreference = exerciseContent.timePreference;
                 exerciseResult.categoryId = exerciseContent.categoryId;
                 exerciseResult.testScoreId = exerciseContent.testScoreId;
-                exerciseResult.moduleId = exerciseContent.moduleId;
+                exerciseResult.moduleId = !exerciseResult.moduleId ? exerciseContent.moduleId : exerciseResult.moduleId;
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
+
+                if (exerciseParentTypeId){
+                    exerciseResult.parentTypeId = exerciseParentTypeId;
+                }
+                if (exerciseParentContent) {
+                    exerciseResult.parentName = exerciseParentContent.name;
+                }
 
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
@@ -745,6 +964,27 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                     exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
                         return a.order - b.order;
                     });
+
+                    if (exerciseContent.moduleId){
+                        var questionsOrderMap = {};
+                        var questions = exerciseContent.questions;
+                        for (var k = 0; k < questions.length; k++) {
+                            if (angular.isUndefined(questionsOrderMap[questions[k].order])) {
+                                questionsOrderMap[questions[k].order] = questions[k];
+                            } else {
+                                if (questionsOrderMap[questions[k].order].difficulty < questions[k].difficulty) {
+                                    questionsOrderMap[questions[k].order] = questions[k];
+                                }
+                            }
+                        }
+
+                        var sortedQuestionsByDifficulty = UtilitySrv.object.convertToArray(questionsOrderMap);
+                        sortedQuestionsByDifficulty = sortedQuestionsByDifficulty.sort(function (a, b) {
+                            return a.order - b.order;
+                        });
+
+                        exerciseContent.questions = sortedQuestionsByDifficulty;
+                    }
 
                     ZnkExerciseUtilitySrv.setQuestionsGroupData(
                         exerciseContent.questions,
@@ -792,6 +1032,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             }
 
             function _getNumOfUnansweredQuestions(questionsResults) {
+                if (!questionsResults) {
+                    return false;
+                }
                 var numOfUnansweredQuestions = questionsResults.length;
                 var keysArr = Object.keys(questionsResults);
                 angular.forEach(keysArr, function (i) {
@@ -902,9 +1145,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             })();
 
             function _init() {
-                _setExerciseResult();
-
                 _setExerciseContentQuestions();
+
+                _setExerciseResult();
 
                 _setZnkExerciseSettings();
 
@@ -1204,9 +1447,11 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
+        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", "BaseExerciseGetterSrv", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
+                  $log, $q, ExerciseParentEnum, BaseExerciseGetterSrv) {
             'ngInject';
 
+            var self = this;
             this.VIEW_STATES = {
                 NONE: 0,
                 INTRO: 1,
@@ -1231,8 +1476,8 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             this.getExerciseResult = function (exerciseDetails, shMode) {
                 var isLecture = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.LECTURE.enum;
 
-                if(shMode === this.MODE_STATES.VIEWER){
-                    if(!exerciseDetails.resultGuid){
+                if (shMode === this.MODE_STATES.VIEWER) {
+                    if (!exerciseDetails.resultGuid) {
                         var errMsg = 'completeExerciseSrv: exercise details is missing guid property';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
@@ -1243,7 +1488,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
                 switch (exerciseDetails.exerciseParentTypeId) {
                     case ExerciseParentEnum.MODULE.enum:
-                        if(isLecture){
+                        if (isLecture) {
                             return ExerciseResultSrv.getExerciseResult(
                                 exerciseDetails.exerciseTypeId,
                                 exerciseDetails.exerciseId,
@@ -1251,13 +1496,23 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                             );
                         }
 
-                        return this.getContextUid().then(function (uid) {
-                            return ExerciseResultSrv.getModuleExerciseResult(
-                                uid,
-                                exerciseDetails.exerciseParentId,
-                                exerciseDetails.exerciseTypeId,
-                                exerciseDetails.exerciseId
-                            );
+                        var examIdProm = $q.when();
+                        if (exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
+                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
+                        }
+
+                        return examIdProm.then(function (examData) {
+                            return self.getContextUid().then(function (uid) {
+                                var examId = examData && examData.id ? examData.id : undefined;
+                                return ExerciseResultSrv.getModuleExerciseResult(
+                                    uid,
+                                    exerciseDetails.exerciseParentId,
+                                    exerciseDetails.exerciseTypeId,
+                                    exerciseDetails.exerciseId,
+                                    exerciseDetails.assignContentType,
+                                    examId
+                                );
+                            });
                         });
                     default:
                         return ExerciseResultSrv.getExerciseResult(
@@ -1295,7 +1550,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                         try {
                             fn = $injector.invoke(hook);         
                         } catch(e) {
-                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName);
+                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
@@ -1387,7 +1642,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "                   ng-change=\"$ctrl.durationChanged()\">\n" +
     "            </timer>\n" +
     "            <div class=\"tutorial-icon-wrapper\" ng-if=\"$ctrl.completeExerciseCtrl.exerciseDetails.exerciseTypeId === 1\">\n" +
-    "                <svg-icon ng-click=\"$ctrl.openIntro()\" name=\"book-icon\" class=\"book-icon\"></svg-icon>\n" +
+    "                <svg-icon ng-click=\"$ctrl.openIntro()\" name=\"completeExercise-book-icon\" class=\"book-icon\"></svg-icon>\n" +
     "            </div>\n" +
     "            <div class=\"summary\"\n" +
     "                 ng-click=\"$ctrl.goToSummary()\"\n" +
@@ -1433,7 +1688,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
   $templateCache.put("components/completeExercise/directives/completeExerciseIntro/completeExerciseIntroDirective.template.html",
     "<div class=\"base-complete-exercise-container\">\n" +
     "    <complete-exercise-header></complete-exercise-header>\n" +
-    "    <ng-switch on=\"$ctrl.exerciseTypeId\" class=\"intro-container\">\n" +
+    "    <ng-switch on=\"$ctrl.exerciseTypeId\" class=\"intro-container\" image-zoomer>\n" +
     "        <complete-exercise-intro-tutorial ng-switch-when=\"1\">\n" +
     "        </complete-exercise-intro-tutorial>\n" +
     "        <complete-exercise-intro-section ng-switch-when=\"4\">\n" +
@@ -6802,6 +7057,57 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "");
 }]);
 
+angular.module('znk.infra-web-app.loadingAnimation', []);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loadingAnimation').service('LoadingSrv',
+        ["$document", "$rootScope", "$compile", function ($document, $rootScope, $compile) {
+        'ngInject';
+
+            var childScope = $rootScope.$new(true);
+
+            function _appendLoadingElementToBody() {
+                var bodyElement = angular.element($document[0].body);
+                var loadingElementTemplate = '' +
+                    '<md-progress-linear class="loading-container" ' +
+                    'md-mode="indeterminate" ' +
+                    'ng-if="showLoading">' +
+                    '</md-progress-linear>';
+                var loadingProgressElement = angular.element(loadingElementTemplate);
+                bodyElement.append(loadingProgressElement);
+                $compile(loadingProgressElement)(childScope);
+            }
+
+            _appendLoadingElementToBody();
+
+            var numOfShowLoadingRequests = 0;
+            this.showLoading = function () {
+                numOfShowLoadingRequests++;
+                childScope.showLoading = true;
+            };
+
+            this.hideLoading = function (force) {
+                numOfShowLoadingRequests--;
+
+                if (force) {
+                    numOfShowLoadingRequests = 0;
+                }
+
+                if (numOfShowLoadingRequests === 0) {
+                    childScope.showLoading = false;
+                }
+            };
+        }]
+    );
+})(angular);
+
+
+angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function($templateCache) {
+
+}]);
+
 (function (window, angular) {
     'use strict';
 
@@ -7501,7 +7807,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             LoginAppSrv.login = (function () {
                 var isLoginInProgress;
 
-                return function (appContext, userContext, formData) {
+                return function (appContext, userContext, formData, signUp) {
                     if (isLoginInProgress) {
                         var errMsg = 'login already in progress';
                         $log.debug(errMsg);
@@ -7529,7 +7835,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage(appContext, userContext);
+                                if(!signUp){
+                                    _redirectToPage(appContext, userContext);
+                                }
                                 return res;
                             });
                         });
@@ -7557,7 +7865,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
-                        return LoginAppSrv.login(appContext, userContext, formData).then(function () {
+                        var signUp = true;
+                        return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function () {
                             isSignUpInProgress = false;
                             return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);
@@ -9169,21 +9478,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
-        function(EnumSrv) {
-
-            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
-                ['FREE_LICENSE', 1, 'free license'],
-                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
-            ]);
-
-            return PromoCodeTypeEnum;
-        }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.promoCode').constant('PROMO_CODE_STATUS', {
         accepted: 0,
         invalid: 1
@@ -9282,6 +9576,21 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             }];
         }
     );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
+        function(EnumSrv) {
+
+            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
+                ['FREE_LICENSE', 1, 'free license'],
+                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
+            ]);
+
+            return PromoCodeTypeEnum;
+        }]);
 })(angular);
 
 angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
@@ -11588,8 +11897,6 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     "            <span class=\"you-are-viewing-text\"\n" +
     "                  translate=\".YOU_ARE_VIEWING\">\n" +
     "            </span>\n" +
-    "        <div class=\"user-connectivity-status\"></div>\n" +
-    "        <span class=\"user-name\">{{$ctrl.sharerName}}</span>\n" +
     "    </div>\n" +
     "    <ng-switch on=\"!!$ctrl.activeScreen\" class=\"sh-viewer-main-container\">\n" +
     "        <div ng-switch-when=\"false\" class=\"none\">\n" +
@@ -14026,7 +14333,9 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
-            showInduction: '<?'
+            showInduction: '<?',
+            showTooltips: '<?',
+            results: '<?'
         },
         controllerAs: 'vm',
         controller: ["EstimatedScoreSrv", "UserGoalsService", "ScoringService", "SubjectEnum", "$q", "$attrs", "$element", "ExerciseTypeEnum", function (EstimatedScoreSrv, UserGoalsService, ScoringService, SubjectEnum, $q, $attrs, $element, ExerciseTypeEnum) {
@@ -14108,12 +14417,14 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                     }
 
                     _scrolling();
+
+                    vm.toolTipArr = obj.data.lastLine.slice(1);
                 }
             };
 
             function _getSummaryData(summeryScore) {
                 var x = summeryScore.lineTo.x;
-                var y =  summeryScore.lineTo.y + optionsPerDevice.yDown;
+                var y = summeryScore.lineTo.y + optionsPerDevice.yDown;
                 var angleDeg;
                 if (summeryScore.next) {
                     angleDeg = Math.atan2(summeryScore.lineTo.y - summeryScore.next.y, summeryScore.lineTo.x - summeryScore.next.x) * 180 / Math.PI;
@@ -14165,6 +14476,35 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 return (angular.isFunction(inProgressProm)) ? inProgressProm : $q.when(inProgressProm);
             }
 
+            function _extendData(dataPerSubject) {
+                if (!vm.showTooltips) {
+                    return addIconKey(dataPerSubject);
+                }
+
+                var newDataArr = [];
+                var exerciseResults;
+                angular.forEach(dataPerSubject, function (value, index) {
+                    // add icon key
+                    var type = subjectIdToIndexMap[value.exerciseType];
+                    if (index === 0 && type === 'section') {
+                        type = 'diagnostic';
+                    }
+                    value.iconKey = type || false;
+                    // add workout name and title
+                    if (vm.results && vm.results.exerciseResults) {
+                        exerciseResults = vm.results.exerciseResults;
+                        for (var i = 0, ii = exerciseResults.length; i < ii; i++) {
+                            if (value.exerciseId === exerciseResults[i].exerciseId) {
+                                value.workoutTitle = exerciseResults[i].exerciseName + ': ' + exerciseResults[i].exerciseDescription;
+                                break;
+                            }
+                        }
+                    }
+                    newDataArr.push(value);
+                });
+                return newDataArr;
+            }
+
             function addIconKey(dataPerSubject) {
                 var newDataArr = [];
                 angular.forEach(dataPerSubject, function (value, index) {
@@ -14182,7 +14522,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 if (!estimatedScoresDatePerSubject.length) {
                     return [];
                 }
-                return estimatedScoresDatePerSubject.map(function(scoreData) {
+                return estimatedScoresDatePerSubject.map(function (scoreData) {
                     scoreData.score = Math.round(scoreData.score) || 0;
                     return scoreData;
                 });
@@ -14200,7 +14540,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                     vm.animation = true;
                     vm.timelineLinePlus = false;
                     vm.timeLineData = {
-                        data: addIconKey(estimatedScoresDatePerSubject),
+                        data: _extendData(estimatedScoresDatePerSubject),
                         id: currentSubjectId
                     };
                     vm.points = 0;
@@ -14230,6 +14570,20 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     "                 translate-values=\"{points: {{vm.points}} }\">\n" +
     "            </div>\n" +
     "        </div>\n" +
+    "        <div class=\"tool-tip-area\"\n" +
+    "             ng-if=\"vm.showTooltips\"\n" +
+    "             ng-repeat=\"tooltip in vm.toolTipArr track by $index\"\n" +
+    "             ng-class=\"{'last-item':$last === true}\"\n" +
+    "             ng-style=\"{'top': $last === true ? (tooltip.lineTo.y+50) +'px' : (tooltip.lineTo.y+60) +'px', 'left': $last === true ? (tooltip.lineTo.x - 11) +'px' : (tooltip.lineTo.x-1)+'px'}\">\n" +
+    "            <md-tooltip md-direction=\"top\" class=\"tooltip-box md-whiteframe-2dp\">\n" +
+    "                <div class=\"tooltip-content\">\n" +
+    "                    <div class=\"exercise-date\">{{tooltip.time | date: 'MMM dd'}}</div>\n" +
+    "                    <div class=\"exercise-title\">{{tooltip.workoutTitle}}</div>\n" +
+    "                    <div class=\"score-title\" translate-values=\"{subjectName: vm.subjectEnumToValMap[vm.currentSubjectId]}\" translate=\".ESTIMATED_SUBJECT_SCORE\"></div>\n" +
+    "                    <div class=\"exercise-score\">{{tooltip.score}}</div>\n" +
+    "                </div>\n" +
+    "            </md-tooltip>\n" +
+    "        </div>\n" +
     "        <canvas znk-timeline\n" +
     "                timeline-data=\"vm.timeLineData\"\n" +
     "                timeline-settings=\"vm.options\">\n" +
@@ -14245,6 +14599,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     angular.module('znk.infra-web-app.znkToast', [
         'ngMaterial',
         'pascalprecht.translate',
+        'ngSanitize',
         'znk.infra.svgIcon'
     ]);
 })(angular);
@@ -14269,12 +14624,12 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     'use strict';
 
     angular.module('znk.infra-web-app.znkToast').controller('ToastController',
-        ["$mdToast", "type", "msg", function ($mdToast, type, msg) {
+        ["$mdToast", "$sce", "type", "msg", function ($mdToast, $sce, type, msg) {
             'ngInject';
 
             var vm = this;
             vm.type = type;
-            vm.msg = msg;
+            vm.msg = $sce.trustAsHtml(msg);
 
             vm.closeToast = function () {
                 $mdToast.hide();
@@ -14294,15 +14649,21 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
 
                 var self = this;
 
-                self.showToast = function (type, msg) {
+                self.showToast = function (type, msg, options) {
+                    options = options || {};
+
                     $mdToast.show({
                         locals:{ type: type,  msg: msg },
                         templateUrl: 'components/znkToast/templates/znkToast.template.html',
-                        position: 'top right',
-                        hideDelay: 3000,
+                        position: options.position || 'top right',
+                        hideDelay: angular.isDefined(options.hideDelay) ?  options.hideDelay : 3000,
                         controllerAs: 'vm',
                         controller: 'ToastController'
                     });
+                };
+
+                self.hideToast = function() {
+                    $mdToast.hide();
                 };
             }]
         );
@@ -14387,14 +14748,16 @@ angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($te
   $templateCache.put("components/znkToast/templates/znkToast.template.html",
     "<md-toast ng-cloak\n" +
     "          ng-class=\"{'toast-wrap': vm.type === 'success',\n" +
+    "                     'toast-wrap-progress': vm.type === 'progress',\n" +
     "                     'toast-wrap-error': vm.type === 'error'}\">\n" +
-    "    <div class=\"icon-wrap\">\n" +
-    "        <svg-icon name=\"znkToast-completed-v-icon\" ng-if=\"vm.type === 'success'\"></svg-icon>\n" +
-    "        <svg-icon name=\"znkToast-error-red-icon\" ng-if=\"vm.type === 'error'\"></svg-icon>\n" +
+    "    <div class=\"icon-wrap\" ng-switch on=\"vm.type\">\n" +
+    "        <svg-icon name=\"znkToast-completed-v-icon\" ng-switch-when=\"success\"></svg-icon>\n" +
+    "        <svg-icon name=\"znkToast-error-red-icon\"ng-switch-when=\"error\"></svg-icon>\n" +
+    "        <md-progress-circular class=\"progress-icon\" md-mode=\"indeterminate\" md-diameter=\"35\" ng-switch-when=\"progress\"></md-progress-circular>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"md-toast-content\">\n" +
-    "        <div class=\"md-toast-text\" flex>{{vm.msg | translate}}</div>\n" +
+    "        <div class=\"md-toast-text\" flex ng-bind-html=\"vm.msg | translate\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <md-button aria-label=\"close popup\"\n" +

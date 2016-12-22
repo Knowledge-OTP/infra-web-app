@@ -1,13 +1,15 @@
 <md-toast ng-cloak
           ng-class="{'toast-wrap': vm.type === 'success',
+                     'toast-wrap-progress': vm.type === 'progress',
                      'toast-wrap-error': vm.type === 'error'}">
-    <div class="icon-wrap">
-        <svg-icon name="znkToast-completed-v-icon" ng-if="vm.type === 'success'"></svg-icon>
-        <svg-icon name="znkToast-error-red-icon" ng-if="vm.type === 'error'"></svg-icon>
+    <div class="icon-wrap" ng-switch on="vm.type">
+        <svg-icon name="znkToast-completed-v-icon" ng-switch-when="success"></svg-icon>
+        <svg-icon name="znkToast-error-red-icon"ng-switch-when="error"></svg-icon>
+        <md-progress-circular class="progress-icon" md-mode="indeterminate" md-diameter="35" ng-switch-when="progress"></md-progress-circular>
     </div>
 
     <div class="md-toast-content">
-        <div class="md-toast-text" flex>{{vm.msg | translate}}</div>
+        <div class="md-toast-text" flex ng-bind-html="vm.msg | translate"></div>
     </div>
 
     <md-button aria-label="close popup"

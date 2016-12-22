@@ -39,7 +39,7 @@ module.exports = function (config) {
             'bower_components/angular-ui-router/release/angular-ui-router.js',
             'bower_components/angular-svg-round-progressbar/build/roundProgress.js',
             'bower_components/infra/dist/main.js',
-            'bower_components/ng-tags-input/ng-tags-input.js',
+            'bower_components/ng-tags-input/ng-tags-input.min.js',
             'bower_components/Chart.js/Chart.js',
             'bower_components/angular-chart.js/dist/angular-chart.js',
             'bower_components/v-accordion/dist/v-accordion.js',
@@ -49,6 +49,7 @@ module.exports = function (config) {
             'bower_components/jasmine/lib/jasmine-core/jasmine.js',
             'bower_components/jquery/dist/jquery.js',
             'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+            'bower_components/aws-sdk/dist/aws-sdk.js',
             // endbower
 
             'test/jsonFixtures/config.js',

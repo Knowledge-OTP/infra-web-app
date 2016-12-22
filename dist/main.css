@@ -406,7 +406,8 @@ complete-exercise-progress-bar {
   .app-workouts-diagnostic .exercise-container znk-exercise {
     -ms-flex-positive: 1;
         flex-grow: 1;
-    width: 100%; }
+    width: 100%;
+    height: calc(100vh - 145px); }
 
 .app-workouts-diagnostic .inline-block {
   display: inline-block; }
@@ -426,14 +427,14 @@ complete-exercise-progress-bar {
   -ms-flex-pack: start;
       justify-content: flex-start; }
 
-.app-workouts-diagnostic .md-button {
+.app-workouts-diagnostic .znk.md-button.md-primary {
   display: block;
   margin: 15px auto 25px;
-  border-radius: 30px; }
-  .app-workouts-diagnostic .md-button.md {
-    width: 180px; }
-  .app-workouts-diagnostic .md-button.primary {
-    text-transform: uppercase; }
+  border-radius: 30px;
+  padding-right: 0;
+  padding-left: 0;
+  width: 180px;
+  text-transform: uppercase; }
 
 .app-workouts-diagnostic .answer-index-wrapper {
   cursor: pointer; }
@@ -447,7 +448,8 @@ complete-exercise-progress-bar {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
-      flex-direction: column; }
+      flex-direction: column;
+  height: calc(100vh - 95px); }
   .diagnostic-loading-wrapper .loading-title {
     font-size: 32px;
     color: #4f4d4d;
@@ -1610,14 +1612,14 @@ feedback .feedback-btn {
 /* full background image with retina */
 .zoom-image-modal {
   position: relative; }
-  .zoom-image-modal .close-popup {
+  .zoom-image-modal .image-zoomer-close-popup {
     width: 20px;
     height: 20px;
     cursor: pointer;
     position: absolute;
-    right: -45px;
-    top: -35px; }
-    .zoom-image-modal .close-popup .st1 {
+    right: -20px;
+    top: -20px; }
+    .zoom-image-modal .image-zoomer-close-popup .st1 {
       fill: none;
       stroke: #ffffff;
       stroke-width: 8;
@@ -1644,7 +1646,7 @@ feedback .feedback-btn {
   .zoom-icon-wrapper svg-icon {
     width: 21px;
     height: 21px; }
-    .zoom-icon-wrapper svg-icon svg line, .zoom-icon-wrapper svg-icon svg polyline {
+    .zoom-icon-wrapper svg-icon svg.full-screen-icon line, .zoom-icon-wrapper svg-icon svg.full-screen-icon polyline {
       stroke: #ffffff;
       stroke-width: 15px;
       fill: #ffffff; }
@@ -1945,6 +1947,12 @@ question-builder.answer-explanation-open .question-basic-style {
   height: calc(100vh - 570px); }
   question-builder.answer-explanation-open .question-basic-style canvas {
     height: calc(100vh - 570px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) .question-basic-style, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) .question-basic-style {
+  height: calc(100% - 60px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) answer-builder, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) answer-builder {
+  max-height: calc(100% - 60px); }
 
 /*border color*/
 /*background*/
@@ -2935,6 +2943,16 @@ md-dialog.my-lessons-schedule-wrapper {
           margin-left: 4px; }
         .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .reschedule-wrapper svg path, .upcoming-lesson-toast-wrapper .right-side-container .bottom-container .reschedule-wrapper svg polygon {
           fill: #acacac; }
+
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+md-progress-linear.loading-container {
+  position: fixed;
+  top: 0; }
+  md-progress-linear.loading-container .md-bar {
+    background: #87ca4d; }
 
 /* fonts size */
 /* general */
@@ -4738,6 +4756,85 @@ md-dialog.setting-change-password {
     display: flex;
     -ms-flex-pack: center;
         justify-content: center; }
+
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+complete-exercise-summary social-sharing .social-share-wrapper {
+  width: 90px;
+  height: 25px;
+  background-color: white;
+  cursor: pointer;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+  margin: 0 auto;
+  border-radius: 20px;
+  border: 1px solid #0a9bad; }
+  complete-exercise-summary social-sharing .social-share-wrapper .share-icon-wrap {
+    transition: 0.5s;
+    border: none; }
+    complete-exercise-summary social-sharing .social-share-wrapper .share-icon-wrap span {
+      font-size: 16px;
+      color: #0a9bad;
+      font-family: Lato;
+      font-weight: 400;
+      position: relative; }
+    complete-exercise-summary social-sharing .social-share-wrapper .share-icon-wrap:hover {
+      background-color: #c7e0e3; }
+  complete-exercise-summary social-sharing .social-share-wrapper .share-icon {
+    width: 15px;
+    height: 15px;
+    fill: #0a9bad;
+    margin-bottom: 2px; }
+  complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 {
+    width: 8px;
+    z-index: 1;
+    font-size: 0;
+    padding: 0;
+    bottom: 30px;
+    right: -13px; }
+    complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 ul li:nth-child(1), complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 ul li:nth-child(6), complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 ul li:nth-child(7), complete-exercise-summary social-sharing .social-share-wrapper .share-button.sharer-0 ul li:nth-child(8) {
+      display: none; }
+
+.workouts-container social-share-btn-drv {
+  margin-top: 20px; }
+  .workouts-container social-share-btn-drv .social-share-wrapper {
+    width: 150px;
+    height: 30px;
+    position: relative;
+    background-color: #0a9bad;
+    transition: 0.2s;
+    margin: 0 auto;
+    border-radius: 20px; }
+    .workouts-container social-share-btn-drv .social-share-wrapper:hover {
+      background-color: #0a8999; }
+    .workouts-container social-share-btn-drv .social-share-wrapper .share-icon-wrap {
+      border: none; }
+      .workouts-container social-share-btn-drv .social-share-wrapper .share-icon-wrap span {
+        font-size: 16px;
+        color: white;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: uppercase; }
+      .workouts-container social-share-btn-drv .social-share-wrapper .share-icon-wrap .share-icon {
+        fill: white;
+        margin: 0;
+        position: absolute;
+        top: 7px;
+        left: 16px; }
+      .workouts-container social-share-btn-drv .social-share-wrapper .share-icon-wrap .share-button.sharer-0 {
+        right: -23px; }
 
 /* fonts size */
 /* general */
@@ -7164,6 +7261,57 @@ znk-summary-timeline .time-line-wrapper {
         color: #ff6766; }
       .znk-timeline-web-wrapper .progress-val .timeline-plus.green-point {
         color: #87ca4d; }
+  .znk-timeline-web-wrapper .tool-tip-area {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; }
+    .znk-timeline-web-wrapper .tool-tip-area.last-item {
+      width: 50px;
+      height: 50px; }
+
+md-tooltip.tooltip-box {
+  overflow: visible;
+  height: 115px;
+  transform: translateY(-10px);
+  box-shadow: 0px 7px 17px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); }
+  md-tooltip.tooltip-box:after {
+    content: '';
+    border: 10px solid transparent;
+    border-top-color: white;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    margin-left: -10px; }
+  md-tooltip.tooltip-box .tooltip-content {
+    color: black;
+    background-color: white; }
+    md-tooltip.tooltip-box .tooltip-content .exercise-date {
+      margin: 5px auto;
+      font-size: 14px;
+      color: #757a83;
+      font-family: Quicksand;
+      font-weight: 700; }
+    md-tooltip.tooltip-box .tooltip-content .exercise-title {
+      text-transform: capitalize;
+      margin: 5px auto;
+      font-size: 14px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300; }
+    md-tooltip.tooltip-box .tooltip-content .score-title {
+      text-transform: capitalize;
+      font-size: 12px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300;
+      margin: 5px auto; }
+    md-tooltip.tooltip-box .tooltip-content .exercise-score {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400;
+      margin-bottom: 5px; }
 
 /* fonts size */
 /* general */
@@ -7175,7 +7323,7 @@ znk-summary-timeline .time-line-wrapper {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-md-toast.toast-wrap, md-toast.toast-wrap-error {
+md-toast.toast-wrap, md-toast.toast-wrap-error, md-toast.toast-wrap-progress {
   width: 400px;
   height: 60px;
   display: -ms-flexbox;
@@ -7183,7 +7331,7 @@ md-toast.toast-wrap, md-toast.toast-wrap-error {
   background-color: white;
   border: 2px solid #87ca4d;
   border-radius: 10px; }
-  md-toast.toast-wrap .icon-wrap, md-toast.toast-wrap-error .icon-wrap {
+  md-toast.toast-wrap .icon-wrap, md-toast.toast-wrap-error .icon-wrap, md-toast.toast-wrap-progress .icon-wrap {
     width: 60px;
     margin: -8px;
     padding: 8px;
@@ -7194,24 +7342,24 @@ md-toast.toast-wrap, md-toast.toast-wrap-error {
         justify-content: center;
     -ms-flex-align: center;
         align-items: center; }
-    md-toast.toast-wrap .icon-wrap svg-icon, md-toast.toast-wrap-error .icon-wrap svg-icon {
+    md-toast.toast-wrap .icon-wrap svg-icon, md-toast.toast-wrap-error .icon-wrap svg-icon, md-toast.toast-wrap-progress .icon-wrap svg-icon {
       width: 40px;
       height: 40px; }
-      md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg *, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg * {
+      md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg *, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg *, md-toast.toast-wrap-progress .icon-wrap svg-icon .complete-v-icon-svg * {
         fill: #87ca4d; }
-  md-toast.toast-wrap .md-toast-content, md-toast.toast-wrap-error .md-toast-content {
+  md-toast.toast-wrap .md-toast-content, md-toast.toast-wrap-error .md-toast-content, md-toast.toast-wrap-progress .md-toast-content {
     background: white;
     box-shadow: none;
     color: #4f4d4d;
     margin-left: 10px; }
-  md-toast.toast-wrap .close-toast-wrap, md-toast.toast-wrap-error .close-toast-wrap {
+  md-toast.toast-wrap .close-toast-wrap, md-toast.toast-wrap-error .close-toast-wrap, md-toast.toast-wrap-progress .close-toast-wrap {
     position: absolute;
     right: 3px;
     top: -15px;
     width: 20px; }
-    md-toast.toast-wrap .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg {
+    md-toast.toast-wrap .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-progress .close-toast-wrap .close-pop-svg {
       width: 10px; }
-      md-toast.toast-wrap .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg .st1 {
+      md-toast.toast-wrap .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-progress .close-toast-wrap .close-pop-svg .st1 {
         stroke: #4f4d4d; }
 
 md-toast.toast-wrap-error {
@@ -7223,3 +7371,20 @@ md-toast.toast-wrap-error {
       height: 25px; }
       md-toast.toast-wrap-error .icon-wrap svg-icon .close-pop-svg * {
         stroke: #000000; }
+
+md-toast.toast-wrap-progress {
+  border: 2px solid #ebebeb; }
+  md-toast.toast-wrap-progress .icon-wrap {
+    background: #ebebeb; }
+    md-toast.toast-wrap-progress .icon-wrap .progress-icon svg * {
+      stroke: #b7b7b7; }
+  md-toast.toast-wrap-progress .md-toast-content .md-toast-text {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    line-height: 23px; }
+    md-toast.toast-wrap-progress .md-toast-content .md-toast-text .progress-title {
+      font-size: 20px; }
+    md-toast.toast-wrap-progress .md-toast-content .md-toast-text .progress-content {
+      font-size: 15px; }

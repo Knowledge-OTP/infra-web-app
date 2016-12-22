@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
     <link rel="stylesheet" href="angular-material/angular-material.css" />
     <link rel="stylesheet" href="infra/dist/main.css" />
-    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.css" />
+    <link rel="stylesheet" href="ng-tags-input/ng-tags-input.min.css" />
     <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
     <link rel="stylesheet" href="v-accordion/dist/v-accordion.css" />
     <!-- endbower-->
@@ -18,13 +18,26 @@
             width: 1060px;
             margin: 0 auto;
             padding: 50px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .demo-wrap button {
+           width: 20%;
+           margin-top: 20px;
         }
     </style>
 </head>
 <body ng-app="demo" ng-controller="Main">
 
    <div class="demo-wrap">
-         <button ng-click="openToast()">Open Toaster</button>
+         <button ng-click="openToastSuccess()">Open Toaster success</button>
+
+         <button ng-click="openToastError()">Open Toaster error</button>
+
+         <button ng-click="openToastProgress()">Open Toaster progress</button>
+         
+         <button ng-click="closeToast()">Close Toaster</button>
    </div>
 
     <!-- bower:js -->
@@ -45,7 +58,7 @@
     <script src="angular-ui-router/release/angular-ui-router.js"></script>
     <script src="angular-svg-round-progressbar/build/roundProgress.js"></script>
     <script src="infra/dist/main.js"></script>
-    <script src="ng-tags-input/ng-tags-input.js"></script>
+    <script src="ng-tags-input/ng-tags-input.min.js"></script>
     <script src="Chart.js/Chart.js"></script>
     <script src="angular-chart.js/dist/angular-chart.js"></script>
     <script src="v-accordion/dist/v-accordion.js"></script>

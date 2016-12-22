@@ -438,7 +438,8 @@
         }
     },
     "TIMELINE_WEB_WRAPPER": {
-        "POINTS_LEFT": "{{points}} pts to go!"
+        "POINTS_LEFT": "{{points}} pts to go!",
+        "ESTIMATED_SUBJECT_SCORE": "Estimated {{subjectName}} Score:"
     },
     "ANSWER_EXPLANATION":{
         "ANSWER_EXPLANATION": "Answer explanation",

@@ -16,6 +16,7 @@
         "Swiper": false,
         "Firebase": false,
         "MockFirebase": false,
-        "content": false
+        "content": false,
+        "AWS": false
     }
 }
