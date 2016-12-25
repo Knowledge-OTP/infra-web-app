@@ -13554,7 +13554,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <ui-view class=\"workouts-ui-view\"></ui-view>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <estimated-score-widget is-nav-menu=\"false\" ng-model=\"currentSubjectId\"></estimated-score-widget>\n" +
+    "    <estimated-score-widget is-nav-menu=\"false\" widget-title=\".TITLE\" ng-model=\"currentSubjectId\"></estimated-score-widget>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html",
