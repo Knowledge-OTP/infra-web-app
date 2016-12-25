@@ -892,9 +892,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "$state", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -1128,6 +1128,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         },
                         onExit: function() {
                             if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+
                                 exerciseResult.$save();
                             }
                         },
@@ -1143,6 +1144,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         onReview: function onReview () {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                             exerciseResult.$save();
+                            $state.go('app.dashboard.roadmap.review');
                         }
                     };
 
