@@ -788,10 +788,15 @@
             }
 
             function _finishExercise() {
+                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionOn){
+                    if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
+                    } else {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
+                    }
+                    exerciseResult.$save();
+                });
                 exerciseResult.isComplete = true;
-                $log.debug(znkSessionDataSrv);
-                $log.debug(ExerciseReviewStatusEnum);
-                // exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
                 exerciseResult.endedTime = Date.now();
                 exerciseResult.$save();
 
@@ -925,6 +930,10 @@
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
+                        },
+                        onReview: function onReview () {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
+                            exerciseResult.$save();
                         }
                     };
 
