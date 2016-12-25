@@ -7592,15 +7592,18 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             },
             templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
             controllerAs: 'vm',
-            controller: ["$log", "$scope", "$mdDialog", "LiveSessionSrv", "StudentContextSrv", "PresenceService", "ENV", "LiveSessionStatusEnum", function ($log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv,
+            controller: ["$log", "$scope", "$mdDialog", "LiveSessionSrv", "StudentContextSrv", "TeacherContextSrv", "PresenceService", "ENV", "LiveSessionStatusEnum", function ($log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
                                   PresenceService, ENV, LiveSessionStatusEnum) {
                 'ngInject';
 
                 var vm = this;
                 var isTeacher = (ENV.appContext.toLowerCase()) === 'dashboard';
+                var isStudent = ENV.appContext.toLowerCase() === 'student';
 
-                function trackStudentPresenceCB(userId, newStatus) {
-                    vm.isOffline = newStatus === PresenceService.userStatus.OFFLINE;
+                function trackStudentOrTeacherPresenceCB(prevUid, uid) {
+                    PresenceService.getCurrentUserStatus(uid).then(function (currUserPresenceStatus) {
+                        vm.isOffline = currUserPresenceStatus === PresenceService.userStatus.OFFLINE;
+                    });
                 }
                 function liveSessionStateChanged(newLiveSessionData) {
                     vm.isLiveSessionActive = newLiveSessionData === LiveSessionStatusEnum.CONFIRMED.enum;
@@ -7617,10 +7620,12 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     vm.endSession = endSession;
                     vm.isOffline = true;
 
-                    if (isTeacher){
-                        var studentUid = StudentContextSrv.getCurrUid();
-                        vm.student = vm.student ? vm.student : { uid: studentUid };
-                        PresenceService.startTrackUserPresence(studentUid, trackStudentPresenceCB.bind(null, vm.student.uid));
+                    if (isTeacher) {
+                        StudentContextSrv.registerToStudentContextChange(trackStudentOrTeacherPresenceCB);
+                    } else if (isStudent) {
+                        TeacherContextSrv.registerToTeacherContextChange(trackStudentOrTeacherPresenceCB);
+                    } else {
+                        $log.error('appContext is not compatible with this component: ', ENV.appContext);
                     }
 
                     LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
