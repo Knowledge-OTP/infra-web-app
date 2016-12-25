@@ -63,6 +63,10 @@ md-toast.toast-wrap-error{
 md-toast.toast-wrap-progress{
     @extend md-toast.toast-wrap;
     border: 2px solid $borderColor7;
+    box-shadow: 0 1px 0px 1px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    transform: translate(0, 60px);
+
     .icon-wrap{
         background: $bgColor43;
         .progress-icon { 
@@ -79,11 +83,11 @@ md-toast.toast-wrap-progress{
             display: flex;
             flex-direction: column;
             line-height: 23px;
+            font-size: 14px;
+            font-family: Lato;
+
             .progress-title {
-               font-size: 20px; 
-            }
-            .progress-content {
-               font-size: 15px; 
+               text-transform: uppercase;
             }
         }
     }
