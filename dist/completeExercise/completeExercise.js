@@ -797,7 +797,8 @@
             }
 
             function _finishExercise() {
-                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionOn){
+                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData){
+                    var liveSessionOn = !angular.equals(liveSessionData, {});
                     if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
                         exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
                     } else {
