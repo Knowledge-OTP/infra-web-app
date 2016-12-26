@@ -1,0 +1,95 @@
+<div class="admin-esLink" translate-namespace="ADMIN">
+
+    <div class="admin-main-container-overlay">
+        <div class="admin-search-container">
+            <div class="admin-search-label" translate="ADMIN.ESLINK.SEARCH_STUDENT"></div>
+            <div class="admin-search-pane">
+                <div class="search-wrap">
+                    <div class="znk-input-group">
+                        <input type="search"
+                               minlength="3"
+                               placeholder="{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}"
+                               name="search-box"
+                               ng-model="vm.studentsSearchQuery">
+                    </div>
+                </div>
+                <button class="admin-search-btn" ng-click="vm.getStudentsSearchResults(vm.studentsSearchQuery)"
+                        ng-disabled="!vm.studentsSearchQuery" translate=".SEARCH">
+                </button>
+
+            </div>
+            <div class="admin-search-msg" translate="ADMIN.MIN_SEARCH_LENGTH"></div>
+            <div ui-grid-selection ui-grid="vm.gridStudentsOptions" class="admin-grid">
+                <div class="admin-ui-grid-msg" ng-if="vm.uiGridState.student.initial">
+                    <div class="admin-msg">
+                        <span translate="ADMIN.ESLINK.STUDENT_INITIAL_MSG"></span>
+                    </div>
+                </div>
+                <div class="admin-ui-grid-msg" ng-if="vm.uiGridState.student.noData">
+                    <div class="admin-msg">
+                        <span>{{'ADMIN.ESLINK.STUDENT_NODATA_MSG' | translate}} '{{vm.studentSearchNoData}}'</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <div class="admin-search-container">
+            <div class="admin-search-label" translate="ADMIN.ESLINK.SEARCH_EDUCATOR"></div>
+            <div class="admin-search-pane">
+                <div class="search-wrap">
+                    <div class="znk-input-group">
+                        <input type="search"
+                               minlength="3"
+                               placeholder="{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}"
+                               name="search-box"
+                               ng-model="vm.educatorSearchQuery">
+                    </div>
+                </div>
+                <button class="admin-search-btn" ng-click="vm.getEducatorsSearchResults(vm.educatorSearchQuery)"
+                        ng-disabled="!vm.educatorSearchQuery" translate=".SEARCH">
+                </button>
+
+            </div>
+            <div class="admin-search-msg" translate="ADMIN.MIN_SEARCH_LENGTH"></div>
+            <div ui-grid-selection ui-grid="vm.gridEducatorsOptions" class="admin-grid">
+                <div class="admin-ui-grid-msg" ng-if="vm.uiGridState.educator.initial">
+                    <div class="admin-msg">
+                        <div translate="ADMIN.ESLINK.EDUCATOR_INITIAL_MSG"></div>
+                        <div class="admin-msg-note" translate="ADMIN.ESLINK.EDUCATOR_INITIAL_MSG_NOTE"></div>
+                    </div>
+                </div>
+                <div class="admin-ui-grid-msg" ng-if="vm.uiGridState.educator.noData">
+                    <div class="admin-msg">
+                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+        </div>
+
+    </div>
+    <div class="esLink-link-container">
+        <div class="esLink-select-container">
+            <span class="esLink-link-text" translate="ADMIN.ESLINK.LINK_MSG"></span>
+            <app-select current-app="vm.currentAppKey"></app-select>
+        </div>
+
+        <div class="btn-wrap">
+            <button element-loader
+                    ng-disabled="!(vm.selectedStudent && vm.selectedEducator)"
+                    fill-loader="vm.fillLoader"
+                    show-loader="vm.startLoader"
+                    bg-loader="'#037684'"
+                    precentage="50"
+                    font-color="'#FFFFFF'"
+                    bg="'#0a9bad'"
+                    ng-click="vm.link()"
+                    class="md-button assign-lesson-btn drop-shadow"
+                    name="submit">
+                <span translate="ADMIN.ESLINK.LINK_BTN"></span>
+            </button>
+        </div>
+    </div>
+</div>

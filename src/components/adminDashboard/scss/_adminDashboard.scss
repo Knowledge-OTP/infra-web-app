@@ -1,0 +1,305 @@
+@mixin admin-padding() {
+    padding: {
+        right: 38px;
+        left: 38px;
+    }
+}
+
+.app-admin {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    position: relative;
+    .btn-wrap {
+        button span {
+            color: $fontColor8;
+        }
+    }
+    .admin-set-zinkerz-teacher {
+        color: $fontColor6;
+        text-decoration: none;
+    }
+    hr {
+        height: 5px;
+        width: 100%;
+        background-color: $bgColor61;
+        border: none;
+        margin-top: 4px;
+        margin-bottom: 0;
+    }
+    .admin-splitter {
+        width: 100%;
+        border: 1px dotted $borderColor26;
+        margin-top: 10px;
+    }
+    .admin-main-container-overlay {
+        height: 100%;
+        background-color: $bgColor3;
+        @include admin-padding();
+        z-index: 2;
+        display: flex;
+        //padding-top: 25px;
+        justify-content: flex-start;
+        background-repeat: no-repeat;
+        flex-direction: column;
+        .admin-search-container {
+            margin-top: 25px;
+            .admin-search-label {
+                @include text-style(16px, $fontColor2, Quicksand, $boldFontWeight);
+             //   margin:;
+            }
+            .admin-search-msg{
+                margin-left: 26px;
+                @include text-style(12px, $fontColor18, Lato, $regularFontWeight);
+            }
+        }
+
+        .admin-search-pane {
+            display: flex;
+            position: relative;
+            //    margin-top: 25px;
+            .admin-search-btn {
+                @include text-style(14px, $fontColor8, Lato, $regularFontWeight);
+                border-top-right-radius: 21px;
+                border-bottom-right-radius: 21px;
+                border-top: 1px solid $borderColor20;
+                border-bottom: 1px solid $borderColor20;
+                border-right: 1px solid $borderColor20;
+                height: 37px;
+                margin-top: 8px;
+                border: 0;
+                width: 75px;
+                background-color: $bgColor5;
+            }
+            .admin-search-btn[disabled] {
+                opacity: 0.7;
+            }
+            .search-wrap {
+                // padding: 0 18px;
+                .znk-input-group {
+                    min-height: 45px;
+                    input {
+                        height: 33px;
+                        padding-left: 25px;
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                    }
+
+                    .search-icon {
+                        width: 14px;
+                        position: absolute;
+                        top: 16px;
+                        left: 7px;
+                    }
+
+                    .search-icon * {
+                        stroke: $bgColor48;
+                    }
+                }
+            }
+        }
+
+    }
+    .app-admin-container {
+        background: $bgColor3;
+        width: 100%;
+        margin-left: 20px;
+        min-height: 850px;
+    }
+    .admin-header {
+        background-color: $bgColor27;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+
+        .admin-section {
+            .admin-details {
+                padding: 15px 38px;
+
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+                .first-row {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    position: relative;
+                    .admin-name {
+                        @include text-style(24px, $fontColor2, Quicksand, $boldFontWeight);
+                    }
+                    .right-section {
+                        display: flex;
+                        flex-direction: row-reverse;
+                        .section-wrapper {
+                            .edit-button {
+                                cursor: pointer;
+                                position: relative;
+                                .settings-btn {
+                                    display: inline-block;
+                                    padding: 2px 0 0 0;
+                                    margin: 0;
+                                    vertical-align: middle;
+                                    .settings-icon {
+                                        width: 20px;
+                                        display: inline-block;
+                                        vertical-align: middle;
+                                        fill: $bgColor48;
+                                    }
+                                }
+                            }
+                        }
+                        .seperator {
+                            width: 2px;
+                            height: 100%;
+                            background: $bgColor62;
+                        }
+                        call-btn {
+                            width: 50px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        .admin-section.ng-enter {
+            transition: 0.5s linear all;
+            opacity: 0;
+        }
+
+        .admin-section.ng-enter.ng-enter-active {
+            opacity: 1;
+        }
+
+        .admin-section.ng-leave {
+            transition: 0.5s linear all;
+            opacity: 1;
+        }
+
+        .admin-section.ng-leave.ng-leave-active {
+            opacity: 0;
+        }
+
+        .header-nav-wrap {
+            display: flex;
+            padding: 0 38px;
+
+            .nav-item {
+                @include text-style(16px, $fontColor24, Lato, $regularFontWeight);
+                margin-right: 40px;
+                padding-bottom: 9px;
+                cursor: pointer;
+                text-transform: uppercase;
+
+                &.active {
+                    border-bottom: 3px solid $borderColor3;
+                }
+            }
+        }
+    }
+    .ui-grid {
+        display: flex;
+        position: relative;
+        margin-top: 15px;
+        width: 100%;
+        height: 222px;
+        border: none;
+        overflow: hidden;
+        .ui-grid-header-cell-row > .ui-grid-header-cell:first-child {
+            .ui-grid-header-cell-label {
+                margin-left: 20px;
+            }
+        }
+        .admin-ui-grid-cell-text {
+            margin-left: 18px;
+        }
+        .admin-ui-grid-msg {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            .admin-msg {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                width: 100%;
+                text-align: center;
+                @include text-style(18px, $fontColor24, Quicksand, $regularFontWeight);
+                &-note {
+                    @include text-style(16px, $fontColor24, Lato, $regularFontWeight);
+                    margin-top: 10px;
+                }
+            }
+        }
+
+        .ui-grid-top-panel {
+            border-radius: 21px;
+            background-color: $bgColor61;
+        }
+        .ui-grid-row:not(:last-child) {
+            border-bottom: 1px solid $borderColor27;
+        }
+        .ui-grid-row:nth-child(even) .ui-grid-cell, .ui-grid-row:nth-child(odd) .ui-grid-cell {
+            background-color: $bgColor3;
+        }
+        .ui-grid-header-cell, .ui-grid-header, .ui-grid-cell {
+            border: none;
+        }
+        .ui-grid-row.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
+            background-color: $bgColor63;
+            .admin-eMetadata {
+                cursor: pointer;
+            }
+        }
+        .ui-grid-viewport {
+            margin-top: 5px;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+            //&::-webkit-scrollbar-track-piece {
+            //    background: $bgColor82
+            //}
+        }
+        .ui-grid-header-cell {
+            .ui-grid-cell-contents {
+                @include text-style(12px, $fontColor3, Lato, $regularFontWeight);
+                height: 37px;
+                display: flex;
+                align-items: center;
+            }
+        }
+        .ui-grid-row .ui-grid-cell-contents {
+            padding: 8px;
+            @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
+            input[type='radio'] {
+                -webkit-appearance: none;
+                width: 20px;
+                height: 20px;
+                border: 1px solid $borderColor7;
+                border-radius: 50%;
+                outline: none;
+                margin-top: 0px;
+
+            }
+
+            input[type='radio']:before {
+                content: '';
+                display: block;
+                width: 60%;
+                height: 60%;
+                margin: 20% auto;
+                border-radius: 50%;
+            }
+            input[type='radio']:checked:before {
+                background: $bgColor5;
+            }
+        }
+
+    }
+}
+
+

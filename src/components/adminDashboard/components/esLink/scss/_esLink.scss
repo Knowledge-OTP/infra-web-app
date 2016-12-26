@@ -1,0 +1,38 @@
+
+
+.admin-esLink {
+    .ui-grid{
+        .ui-grid-viewport {
+            height: 180px !important;
+        }
+    }
+    .esLink-link-container {
+        margin-bottom: 160px;
+        height: 65px;
+        background-color: $bgColor27;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @include admin-padding();
+        .esLink-select-container{
+            display: inline-flex;
+            align-items: center;
+
+            app-select{
+                width: 200px;
+                display: inline-flex;
+                align-items: center;
+            }
+        }
+        .esLink-link-text {
+            @include text-style(16px, $fontColor3, Lato, $regularFontWeight);
+        }
+    }
+
+
+}
+
+
+
+

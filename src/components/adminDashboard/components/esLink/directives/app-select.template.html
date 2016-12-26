@@ -1,0 +1,30 @@
+<div class="znk-app-select">
+    <div class="selected-item" ng-bind="vm.selectedApp"></div>
+    <md-menu md-offset="-150 60">
+        <md-button  ng-click="$mdOpenMenu($event); vm.znkOpenModal();"
+                   class="md-icon-button profile-open-modal-btn"
+                   aria-label="Open sample menu">
+            <div></div>
+            <md-icon class="material-icons">{{vm.expandIcon}}</md-icon>
+        </md-button>
+        <md-menu-content class="md-menu-content-znk-app-select">
+            <md-list>
+                <md-list-item md-ink-ripple class="app-select-item">
+                    <span  ng-click="vm.selectApp('SAT')" ng-class="{'selected':vm.selectedApp===vm.appName.SAT}"
+                          ng-bind="::vm.appName.SAT"></span>
+                </md-list-item>
+                <md-list-item
+                    md-ink-ripple
+                    class="app-select-item">
+                    <span ng-click="vm.selectApp('ACT')" ng-class="{'selected':vm.selectedApp===vm.appName.ACT}" ng-bind="::vm.appName.ACT"></span>
+                </md-list-item>
+                <md-list-item
+                    md-ink-ripple
+                    class="app-select-item">
+                    <span ng-click="vm.selectApp('TOFEL')" ng-class="{'selected':vm.selectedApp===vm.appName.TOFEL}" ng-bind="::vm.appName.TOFEL"></span>
+                </md-list-item>
+            </md-list>
+        </md-menu-content>
+    </md-menu>
+</div>
+
