@@ -58,7 +58,10 @@ md-toast.toast-wrap-error {
         stroke: #000000; }
 
 md-toast.toast-wrap-progress {
-  border: 2px solid #ebebeb; }
+  border: 2px solid #ebebeb;
+  box-shadow: 0 1px 0px 1px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  transform: translate(0, 60px); }
   md-toast.toast-wrap-progress .icon-wrap {
     background: #ebebeb; }
     md-toast.toast-wrap-progress .icon-wrap .progress-icon svg * {
@@ -68,8 +71,8 @@ md-toast.toast-wrap-progress {
     display: flex;
     -ms-flex-direction: column;
         flex-direction: column;
-    line-height: 23px; }
+    line-height: 23px;
+    font-size: 14px;
+    font-family: Lato; }
     md-toast.toast-wrap-progress .md-toast-content .md-toast-text .progress-title {
-      font-size: 20px; }
-    md-toast.toast-wrap-progress .md-toast-content .md-toast-text .progress-content {
-      font-size: 15px; }
+      text-transform: uppercase; }
