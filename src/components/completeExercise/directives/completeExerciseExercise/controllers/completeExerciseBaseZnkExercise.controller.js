@@ -18,7 +18,7 @@
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -121,6 +121,14 @@
             }
 
             function _finishExercise() {
+                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionOn){
+                    if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
+                    } else {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
+                    }
+                    exerciseResult.$save();
+                });
                 exerciseResult.isComplete = true;
                 exerciseResult.endedTime = Date.now();
                 exerciseResult.$save();
@@ -244,6 +252,7 @@
                         },
                         onExit: function() {
                             if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+
                                 exerciseResult.$save();
                             }
                         },
@@ -255,6 +264,11 @@
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
+                        },
+                        onReview: function onReview () {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
+                            exerciseResult.$save();
+                            $state.go('app.dashboard.roadmap.review');
                         }
                     };
 
