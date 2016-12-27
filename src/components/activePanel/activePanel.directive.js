@@ -24,12 +24,9 @@
                         activePanelVisibleClassName = 'activePanel-visible',
                         isStudent = ENV.appContext.toLowerCase() === 'student',
                         isTeacher = ENV.appContext.toLowerCase() === 'dashboard',
-                        prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum;
-
-
-                    var bodyDomElem = angular.element($window.document.body);
-
-                    var translateNamespace = 'ACTIVE_PANEL';
+                        prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
+                        bodyDomElem = angular.element($window.document.body),
+                        translateNamespace = 'ACTIVE_PANEL';
 
                     $translate([
                         translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
@@ -125,9 +122,17 @@
                                 if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                                     liveSessionData = newLiveSessionData;
                                 }
+
+                                if (isTeacher) {
+                                    studentOrTeacherContextChange(liveSessionData.studentId);
+                                } else if (isStudent) {
+                                    studentOrTeacherContextChange(liveSessionData.educatorId);
+                                } else {
+                                    $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
+                                }
+
                                 var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
                                 var isConfirmed = liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum;
-
                                 if (isEnded || isConfirmed) {
                                     if (isConfirmed) {
                                         liveSessionStatus = scope.d.states.LIVE_SESSION;
@@ -155,7 +160,7 @@
                         }
                     }
 
-                    function listenToStudentOrTeacherContextChange(prevUid, uid) {
+                    function studentOrTeacherContextChange(uid) {
                         receiverId = uid;
                         var currentUserStatus = PresenceService.getCurrentUserStatus(receiverId);
                         var CalleeName = CallsUiSrv.getCalleeName(receiverId);
@@ -196,14 +201,6 @@
                         ScreenSharingSrv.shareMyScreen(userData);
                     }
 
-
-                    if (isTeacher) {
-                        StudentContextSrv.registerToStudentContextChange(listenToStudentOrTeacherContextChange);
-                    } else if (isStudent) {
-                        TeacherContextSrv.registerToTeacherContextChange(listenToStudentOrTeacherContextChange);
-                    } else {
-                        $log.error('appContext is not compatible with this component: ', ENV.appContext);
-                    }
 
                     scope.d = {
                         states: {

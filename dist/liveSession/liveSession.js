@@ -363,11 +363,13 @@
                 });
             }
 
-            LiveSessionEventsSrv.activate = function () {
+            function activate() {
                 if (isEnabled) {
                     _startListening();
                 }
-            };
+            }
+
+            LiveSessionEventsSrv.activate = activate;
 
             return LiveSessionEventsSrv;
         }];
@@ -389,8 +391,142 @@
             var registeredCbToActiveLiveSessionDataChanges = [];
             var registeredCbToCurrUserLiveSessionStateChange = [];
             var liveSessionInterval = {};
-
             var isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+
+            this.startLiveSession = function (studentData, sessionSubject) {
+                return UserProfileService.getCurrUserId().then(function (currUserId) {
+                    var educatorData = {
+                        uid: currUserId,
+                        isTeacher: isTeacherApp,
+                        sessionSubject: sessionSubject
+                    };
+                    return _initiateLiveSession(educatorData, studentData, UserLiveSessionStateEnum.EDUCATOR.enum);
+                });
+            };
+
+            this.confirmLiveSession = function (liveSessionGuid) {
+                if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                    var errMsg = 'LiveSessionSrv: live session is already active!!!';
+                    $log.debug(errMsg);
+                    return $q.reject(errMsg);
+                }
+
+                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
+                    liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
+                    return liveSessionData.$save();
+                });
+            };
+
+            this.endLiveSession = function (liveSessionGuid) {
+                var getDataPromMap = {};
+                getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
+                getDataPromMap.currUid = UserProfileService.getCurrUserId();
+                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
+                getDataPromMap.storage = _getStorage();
+                return $q.all(getDataPromMap).then(function (data) {
+                    var dataToSave = {};
+
+                    data.liveSessionData.status = LiveSessionStatusEnum.ENDED.enum;
+                    data.liveSessionData.endTime = _getRoundTime();
+                    data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
+                    dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
+                    _destroyCheckDurationInterval();
+
+                    data.currUidLiveSessionRequests[data.liveSessionData.guid] = false;
+                    var activePath = data.currUidLiveSessionRequests.$$path;
+                    dataToSave[activePath] = {};
+                    var archivePath = activePath.replace('/active', '/archive');
+                    archivePath += '/' + liveSessionGuid;
+                    dataToSave[archivePath] = false;
+
+                    var otherUserLiveSessionRequestPath;
+                    if (data.liveSessionData.studentId !== data.currUid) {
+                        otherUserLiveSessionRequestPath = data.liveSessionData.studentPath;
+                    } else {
+                        otherUserLiveSessionRequestPath = data.liveSessionData.teacherPath;
+                    }
+                    var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
+                    dataToSave[otherUserActivePath] = {};
+                    var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
+                    otherUserArchivePath += '/' + liveSessionGuid;
+                    dataToSave[otherUserArchivePath] = false;
+
+                    return data.storage.update(dataToSave);
+                });
+            };
+
+            this.registerToActiveLiveSessionDataChanges = function (cb) {
+                registeredCbToActiveLiveSessionDataChanges.push(cb);
+                if (activeLiveSessionDataFromAdapter) {
+                    cb(activeLiveSessionDataFromAdapter);
+                }
+            };
+
+            this.unregisterFromActiveLiveSessionDataChanges = function(cb){
+                registeredCbToActiveLiveSessionDataChanges =_removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
+            };
+
+            this.registerToCurrUserLiveSessionStateChanges = function (cb) {
+                registeredCbToCurrUserLiveSessionStateChange.push(cb);
+                cb(currUserLiveSessionState);
+            };
+
+            this.unregisterFromCurrUserLiveSessionStateChanges = function (cb) {
+                _cleanRegisteredCbToActiveLiveSessionData();
+                registeredCbToCurrUserLiveSessionStateChange = _removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange,cb);
+            };
+
+            this.getActiveLiveSessionData = function () {
+                if (!activeLiveSessionDataFromAdapter) {
+                    return $q.when(null);
+                }
+
+                var dataPromMap = {
+                    liveSessionData: LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid),
+                    currUid: UserProfileService.getCurrUserId()
+                };
+                return $q.all(dataPromMap).then(function(dataMap){
+                    var orig$saveFn = dataMap.liveSessionData.$save;
+                    dataMap.liveSessionData.$save = function () {
+                        dataMap.liveSessionData.updatedBy = dataMap.currUid;
+                        return orig$saveFn.apply(dataMap.liveSessionData);
+                    };
+
+                    return dataMap.liveSessionData;
+                });
+            };
+
+            this._userLiveSessionStateChanged = function (newUserLiveSessionState, liveSessionData) {
+                if (!newUserLiveSessionState || (currUserLiveSessionState === newUserLiveSessionState)) {
+                    return;
+                }
+
+                currUserLiveSessionState = newUserLiveSessionState;
+
+                var isStudentState = newUserLiveSessionState === UserLiveSessionStateEnum.STUDENT.enum;
+                var isEducatorState = newUserLiveSessionState === UserLiveSessionStateEnum.EDUCATOR.enum;
+                if (isStudentState || isEducatorState) {
+                    activeLiveSessionDataFromAdapter = liveSessionData;
+                    LiveSessionUiSrv.activateLiveSession(newUserLiveSessionState).then(function () {
+                        _this.endLiveSession(liveSessionData.guid);
+                    });
+                } else {
+                    LiveSessionUiSrv.endLiveSession();
+                }
+
+                _invokeCurrUserLiveSessionStateChangedCb(currUserLiveSessionState);
+            };
+
+            this._liveSessionDataChanged = function (newLiveSessionData) {
+                if (!activeLiveSessionDataFromAdapter || activeLiveSessionDataFromAdapter.guid !== newLiveSessionData.guid) {
+                    return;
+                }
+
+                activeLiveSessionDataFromAdapter = newLiveSessionData;
+                _checkSessionDuration(newLiveSessionData);
+                _invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
+            };
+
 
             function _getRoundTime() {
                 return Math.floor(Date.now() / 1000) * 1000;
@@ -563,140 +699,6 @@
                 $interval.cancel(liveSessionInterval.interval);
                 liveSessionInterval = {};
             }
-
-            this.startLiveSession = function (studentData, sessionSubject) {
-                return UserProfileService.getCurrUserId().then(function (currUserId) {
-                    var educatorData = {
-                        uid: currUserId,
-                        isTeacher: isTeacherApp,
-                        sessionSubject: sessionSubject
-                    };
-                    return _initiateLiveSession(educatorData, studentData, UserLiveSessionStateEnum.EDUCATOR.enum);
-                });
-            };
-
-            this.confirmLiveSession = function (liveSessionGuid) {
-                if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                    var errMsg = 'LiveSessionSrv: live session is already active!!!';
-                    $log.debug(errMsg);
-                    return $q.reject(errMsg);
-                }
-
-                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
-                    liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
-                    return liveSessionData.$save();
-                });
-            };
-
-            this.endLiveSession = function (liveSessionGuid) {
-                var getDataPromMap = {};
-                getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
-                getDataPromMap.currUid = UserProfileService.getCurrUserId();
-                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
-                getDataPromMap.storage = _getStorage();
-                return $q.all(getDataPromMap).then(function (data) {
-                    var dataToSave = {};
-
-                    data.liveSessionData.status = LiveSessionStatusEnum.ENDED.enum;
-                    data.liveSessionData.endTime = _getRoundTime();
-                    data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
-                    dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
-                    _destroyCheckDurationInterval();
-
-                    data.currUidLiveSessionRequests[data.liveSessionData.guid] = false;
-                    var activePath = data.currUidLiveSessionRequests.$$path;
-                    dataToSave[activePath] = {};
-                    var archivePath = activePath.replace('/active', '/archive');
-                    archivePath += '/' + liveSessionGuid;
-                    dataToSave[archivePath] = false;
-
-                    var otherUserLiveSessionRequestPath;
-                    if (data.liveSessionData.studentId !== data.currUid) {
-                        otherUserLiveSessionRequestPath = data.liveSessionData.studentPath;
-                    } else {
-                        otherUserLiveSessionRequestPath = data.liveSessionData.teacherPath;
-                    }
-                    var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
-                    dataToSave[otherUserActivePath] = {};
-                    var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
-                    otherUserArchivePath += '/' + liveSessionGuid;
-                    dataToSave[otherUserArchivePath] = false;
-
-                    return data.storage.update(dataToSave);
-                });
-            };
-
-            this.registerToActiveLiveSessionDataChanges = function (cb) {
-                registeredCbToActiveLiveSessionDataChanges.push(cb);
-                if (activeLiveSessionDataFromAdapter) {
-                    cb(activeLiveSessionDataFromAdapter);
-                }
-            };
-
-            this.unregisterFromActiveLiveSessionDataChanges = function(cb){
-                registeredCbToActiveLiveSessionDataChanges =_removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
-            };
-
-            this.registerToCurrUserLiveSessionStateChanges = function (cb) {
-                registeredCbToCurrUserLiveSessionStateChange.push(cb);
-                cb(currUserLiveSessionState);
-            };
-
-            this.unregisterFromCurrUserLiveSessionStateChanges = function (cb) {
-                _cleanRegisteredCbToActiveLiveSessionData();
-                registeredCbToCurrUserLiveSessionStateChange = _removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange,cb);
-            };
-
-            this.getActiveLiveSessionData = function () {
-                if (!activeLiveSessionDataFromAdapter) {
-                    return $q.when(null);
-                }
-
-                var dataPromMap = {
-                    liveSessionData: LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid),
-                    currUid: UserProfileService.getCurrUserId()
-                };
-                return $q.all(dataPromMap).then(function(dataMap){
-                    var orig$saveFn = dataMap.liveSessionData.$save;
-                    dataMap.liveSessionData.$save = function () {
-                        dataMap.liveSessionData.updatedBy = dataMap.currUid;
-                        return orig$saveFn.apply(dataMap.liveSessionData);
-                    };
-
-                    return dataMap.liveSessionData;
-                });
-            };
-
-            this._userLiveSessionStateChanged = function (newUserLiveSessionState, liveSessionData) {
-                if (!newUserLiveSessionState || (currUserLiveSessionState === newUserLiveSessionState)) {
-                    return;
-                }
-
-                currUserLiveSessionState = newUserLiveSessionState;
-
-                var isStudentState = newUserLiveSessionState === UserLiveSessionStateEnum.STUDENT.enum;
-                var isEducatorState = newUserLiveSessionState === UserLiveSessionStateEnum.EDUCATOR.enum;
-                if (isStudentState || isEducatorState) {
-                    activeLiveSessionDataFromAdapter = liveSessionData;
-                    LiveSessionUiSrv.activateLiveSession(newUserLiveSessionState).then(function () {
-                        _this.endLiveSession(liveSessionData.guid);
-                    });
-                } else {
-                    LiveSessionUiSrv.endLiveSession();
-                }
-
-                _invokeCurrUserLiveSessionStateChangedCb(currUserLiveSessionState);
-            };
-
-            this._liveSessionDataChanged = function (newLiveSessionData) {
-                if (!activeLiveSessionDataFromAdapter || activeLiveSessionDataFromAdapter.guid !== newLiveSessionData.guid) {
-                    return;
-                }
-
-                activeLiveSessionDataFromAdapter = newLiveSessionData;
-                _checkSessionDuration(newLiveSessionData);
-                _invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
-            };
         }]
     );
 })(angular);
@@ -797,15 +799,15 @@
                 return defer.promise;
             }
 
-            LiveSessionUiSrv.activateLiveSession = function (userLiveSession) {
+            function activateLiveSession(userLiveSession) {
                 return _activateLiveSession(userLiveSession);
-            };
+            }
 
-            LiveSessionUiSrv.endLiveSession = function () {
+            function endLiveSession() {
                 _endLiveSession();
-            };
+            }
 
-            LiveSessionUiSrv.showStudentLiveSessionPopUp = function(){
+            function showStudentLiveSessionPopUp(){
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
@@ -827,9 +829,9 @@
                     $log.error('LiveSessionUiSrv: translate failure' + err);
                     return $q.reject(err);
                 });
-            };
+            }
 
-            LiveSessionUiSrv.showSessionEndAlertPopup = function () {
+            function showSessionEndAlertPopup() {
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
                 translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
@@ -851,10 +853,9 @@
                     $log.error('LiveSessionUiSrv: translate failure' + err);
                     return $q.reject(err);
                 });
-            };
+            }
 
-
-            LiveSessionUiSrv.showLiveSessionToast = function () {
+            function showLiveSessionToast() {
                 var options = {
                     hideDelay: false,
                     position: 'top left'
@@ -863,7 +864,18 @@
                 translationsProm.then(function (message) {
                     ZnkToastSrv.showToast('success', message, options);
                 });
-            };
+            }
+
+
+            LiveSessionUiSrv.activateLiveSession = activateLiveSession;
+
+            LiveSessionUiSrv.endLiveSession = endLiveSession;
+
+            LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
+
+            LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
+
+            LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
 
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
