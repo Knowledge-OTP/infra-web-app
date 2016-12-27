@@ -89,11 +89,13 @@
                 });
             }
 
-            LiveSessionEventsSrv.activate = function () {
+            function activate() {
                 if (isEnabled) {
                     _startListening();
                 }
-            };
+            }
+
+            LiveSessionEventsSrv.activate = activate;
 
             return LiveSessionEventsSrv;
         };

@@ -7,7 +7,9 @@
 
             var self = this;
 
-            this.loadActivePanel = function () {
+            self.loadActivePanel = loadActivePanel;
+
+            function loadActivePanel() {
                 var body = angular.element($document).find('body');
 
                 var canvasContainerElement = angular.element(
@@ -19,6 +21,6 @@
                     body.append(canvasContainerElement);
                     $compile(canvasContainerElement.contents())(self.scope);
                 }
-            };
+            }
         });
 })(angular);

@@ -59,15 +59,15 @@
                 return defer.promise;
             }
 
-            LiveSessionUiSrv.activateLiveSession = function (userLiveSession) {
+            function activateLiveSession(userLiveSession) {
                 return _activateLiveSession(userLiveSession);
-            };
+            }
 
-            LiveSessionUiSrv.endLiveSession = function () {
+            function endLiveSession() {
                 _endLiveSession();
-            };
+            }
 
-            LiveSessionUiSrv.showStudentLiveSessionPopUp = function(){
+            function showStudentLiveSessionPopUp(){
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
@@ -89,9 +89,9 @@
                     $log.error('LiveSessionUiSrv: translate failure' + err);
                     return $q.reject(err);
                 });
-            };
+            }
 
-            LiveSessionUiSrv.showSessionEndAlertPopup = function () {
+            function showSessionEndAlertPopup() {
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
                 translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
@@ -113,16 +113,29 @@
                     $log.error('LiveSessionUiSrv: translate failure' + err);
                     return $q.reject(err);
                 });
-            };
+            }
 
-
-            LiveSessionUiSrv.showLiveSessionToast = function () {
-                var options = { hideDelay: false };
+            function showLiveSessionToast() {
+                var options = {
+                    hideDelay: false,
+                    position: 'top left'
+                };
                 var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
                 translationsProm.then(function (message) {
                     ZnkToastSrv.showToast('success', message, options);
                 });
-            };
+            }
+
+
+            LiveSessionUiSrv.activateLiveSession = activateLiveSession;
+
+            LiveSessionUiSrv.endLiveSession = endLiveSession;
+
+            LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
+
+            LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
+
+            LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
 
 
             //was wrapped with timeout since angular will compile the dom after this service initialization

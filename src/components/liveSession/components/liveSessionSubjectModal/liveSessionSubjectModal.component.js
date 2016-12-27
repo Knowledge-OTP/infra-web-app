@@ -13,9 +13,13 @@
 
                 var vm = this;
 
-                vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
-                vm.closeModal = $mdDialog.cancel;
-                vm.startSession = function (sessionSubject) {
+                this.$onInit = function() {
+                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
+                    vm.closeModal = $mdDialog.cancel;
+                    vm.startSession = startSession;
+                };
+
+                function startSession(sessionSubject) {
                     var currStudent = vm.student;
                     if (!currStudent) {
                         return;
@@ -26,7 +30,7 @@
                         uid: currStudent.uid
                     };
                     LiveSessionSrv.startLiveSession(studentData, sessionSubject);
-                };
+                }
             }
         });
 })(angular);
