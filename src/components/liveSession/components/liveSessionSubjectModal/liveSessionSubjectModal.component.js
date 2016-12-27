@@ -20,16 +20,7 @@
                 };
 
                 function startSession(sessionSubject) {
-                    var currStudent = vm.student;
-                    if (!currStudent) {
-                        return;
-                    }
-
-                    var studentData = {
-                        isTeacher: false,
-                        uid: currStudent.uid
-                    };
-                    LiveSessionSrv.startLiveSession(studentData, sessionSubject);
+                    LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
                 }
             }
         });

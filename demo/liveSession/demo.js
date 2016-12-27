@@ -87,7 +87,18 @@
             'ngInject';
             var vm = this;
 
-            vm.student = { uid: 'e6a83840-01cc-4e15-af9b-26d9dbbd87d7' };
+            vm.student = {addedTime:1482404147410,
+                invitationId:"caab7c9b-6c3d-410d-3e29-f13c1d10b653",
+                invitationReceiverEmail:"ofir+actStu11@zinkerz.com",
+                invitationReceiverName:"ofir+actStu11",
+                name:"ofir+actStu11",
+                originalReceiverEmail:"ofir+actStu11@zinkerz.com",
+                originalReceiverName:"ofir+actStu11",
+                receiverEmail:"ofir+actStu11@zinkerz.com",
+                receiverUid:"e6a83840-01cc-4e15-af9b-26d9dbbd87d7",
+                uid:"e6a83840-01cc-4e15-af9b-26d9dbbd87d7",
+                presence:1
+            };
 
             $timeout(function () {
                 StudentContextSrv.setCurrentUid('e6a83840-01cc-4e15-af9b-26d9dbbd87d7');

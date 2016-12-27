@@ -13,9 +13,6 @@
             'znk.infra.general',
             'znk.infra.user',
             'znk.infra.svgIcon',
-            'znk.infra.mailSender',
-            'znk.infra.exerciseUtility',
-            'znk.infra.calls',
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast'
         ])

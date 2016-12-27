@@ -192,7 +192,7 @@
             function _initiateLiveSession(educatorData, studentData, initiator) {
                 var errMsg;
 
-                if (angular.isUndefined(studentData.isTeacher) || angular.isUndefined(educatorData.isTeacher)) {
+                if (angular.isUndefined(educatorData.isTeacher)) {
                     errMsg = 'LiveSessionSrv: isTeacher property was not provided!!!';
                     $log.error(errMsg);
                     return $q.reject(errMsg);

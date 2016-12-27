@@ -13,9 +13,6 @@
             'znk.infra.general',
             'znk.infra.user',
             'znk.infra.svgIcon',
-            'znk.infra.mailSender',
-            'znk.infra.exerciseUtility',
-            'znk.infra.calls',
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast'
         ])
@@ -133,16 +130,7 @@
                 };
 
                 function startSession(sessionSubject) {
-                    var currStudent = vm.student;
-                    if (!currStudent) {
-                        return;
-                    }
-
-                    var studentData = {
-                        isTeacher: false,
-                        uid: currStudent.uid
-                    };
-                    LiveSessionSrv.startLiveSession(studentData, sessionSubject);
+                    LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
                 }
             }]
         });
@@ -570,7 +558,7 @@
             function _initiateLiveSession(educatorData, studentData, initiator) {
                 var errMsg;
 
-                if (angular.isUndefined(studentData.isTeacher) || angular.isUndefined(educatorData.isTeacher)) {
+                if (angular.isUndefined(educatorData.isTeacher)) {
                     errMsg = 'LiveSessionSrv: isTeacher property was not provided!!!';
                     $log.error(errMsg);
                     return $q.reject(errMsg);
