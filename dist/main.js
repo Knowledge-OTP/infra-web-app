@@ -82,12 +82,9 @@
                         activePanelVisibleClassName = 'activePanel-visible',
                         isStudent = ENV.appContext.toLowerCase() === 'student',
                         isTeacher = ENV.appContext.toLowerCase() === 'dashboard',
-                        prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum;
-
-
-                    var bodyDomElem = angular.element($window.document.body);
-
-                    var translateNamespace = 'ACTIVE_PANEL';
+                        prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
+                        bodyDomElem = angular.element($window.document.body),
+                        translateNamespace = 'ACTIVE_PANEL';
 
                     $translate([
                         translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
@@ -183,9 +180,17 @@
                                 if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                                     liveSessionData = newLiveSessionData;
                                 }
+
+                                if (isTeacher) {
+                                    studentOrTeacherContextChange(liveSessionData.studentId);
+                                } else if (isStudent) {
+                                    studentOrTeacherContextChange(liveSessionData.educatorId);
+                                } else {
+                                    $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
+                                }
+
                                 var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
                                 var isConfirmed = liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum;
-
                                 if (isEnded || isConfirmed) {
                                     if (isConfirmed) {
                                         liveSessionStatus = scope.d.states.LIVE_SESSION;
@@ -213,7 +218,7 @@
                         }
                     }
 
-                    function listenToStudentOrTeacherContextChange(prevUid, uid) {
+                    function studentOrTeacherContextChange(uid) {
                         receiverId = uid;
                         var currentUserStatus = PresenceService.getCurrentUserStatus(receiverId);
                         var CalleeName = CallsUiSrv.getCalleeName(receiverId);
@@ -255,14 +260,6 @@
                     }
 
 
-                    if (isTeacher) {
-                        StudentContextSrv.registerToStudentContextChange(listenToStudentOrTeacherContextChange);
-                    } else if (isStudent) {
-                        TeacherContextSrv.registerToTeacherContextChange(listenToStudentOrTeacherContextChange);
-                    } else {
-                        $log.error('appContext is not compatible with this component: ', ENV.appContext);
-                    }
-
                     scope.d = {
                         states: {
                             NONE: 0,
@@ -299,7 +296,9 @@
 
             var self = this;
 
-            this.loadActivePanel = function () {
+            self.loadActivePanel = loadActivePanel;
+
+            function loadActivePanel() {
                 var body = angular.element($document).find('body');
 
                 var canvasContainerElement = angular.element(
@@ -311,7 +310,7 @@
                     body.append(canvasContainerElement);
                     $compile(canvasContainerElement.contents())(self.scope);
                 }
-            };
+            }
         }]);
 })(angular);
 
@@ -7615,48 +7614,38 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 'ngInject';
 
                 var vm = this;
-                var isTeacher = (ENV.appContext.toLowerCase()) === 'dashboard';
-                var isStudent = ENV.appContext.toLowerCase() === 'student';
 
-                function trackStudentOrTeacherPresenceCB(prevUid, uid) {
-                    PresenceService.getCurrentUserStatus(uid).then(function (currUserPresenceStatus) {
-                        vm.isOffline = currUserPresenceStatus === PresenceService.userStatus.OFFLINE;
+                this.$onInit = function() {
+                    vm.isLiveSessionActive = false;
+                    vm.isOffline = true;
+                    vm.endSession = endSession;
+                    vm.showSessionModal = showSessionModal;
+
+                    $scope.$watch('vm.student', function (newStudent) {
+                        if (newStudent && angular.isDefined(newStudent.presence)) {
+                            vm.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
+                        }
+                    }, true);
+
+                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
+                };
+
+                function showSessionModal() {
+                    $mdDialog.show({
+                        template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
+                        scope: $scope,
+                        preserveScope: true,
+                        clickOutsideToClose: true
                     });
                 }
                 function liveSessionStateChanged(newLiveSessionData) {
                     vm.isLiveSessionActive = newLiveSessionData === LiveSessionStatusEnum.CONFIRMED.enum;
                 }
-
                 function endSession() {
                     LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
                 }
-
-                this.$onInit = function() {
-                    vm.isLiveSessionActive = false;
-                    vm.endSession = endSession;
-                    vm.isOffline = true;
-
-                    if (isTeacher) {
-                        StudentContextSrv.registerToStudentContextChange(trackStudentOrTeacherPresenceCB);
-                    } else if (isStudent) {
-                        TeacherContextSrv.registerToTeacherContextChange(trackStudentOrTeacherPresenceCB);
-                    } else {
-                        $log.error('appContext is not compatible with this component: ', ENV.appContext);
-                    }
-
-                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
-
-                    vm.showSessionModal = function () {
-                        $mdDialog.show({
-                            template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
-                            scope: $scope,
-                            preserveScope: true,
-                            clickOutsideToClose: true
-                        });
-                    };
-                };
             }]
         });
 })(angular);
@@ -7676,9 +7665,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                 var vm = this;
 
-                vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
-                vm.closeModal = $mdDialog.cancel;
-                vm.startSession = function (sessionSubject) {
+                this.$onInit = function() {
+                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
+                    vm.closeModal = $mdDialog.cancel;
+                    vm.startSession = startSession;
+                };
+
+                function startSession(sessionSubject) {
                     var currStudent = vm.student;
                     if (!currStudent) {
                         return;
@@ -7689,31 +7682,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         uid: currStudent.uid
                     };
                     LiveSessionSrv.startLiveSession(studentData, sessionSubject);
-                };
-            }]
-        });
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveSession')
-        .component('liveSessionToast', {
-            bindings: {},
-            templateUrl: 'components/liveSession/components/liveSessionToast/liveSessionToast.template.html',
-            controllerAs: 'vm',
-            controller: ["$mdToast", function ($mdToast) {
-                'ngInject';
-
-                var vm = this;
-                vm.type = 'success';
-                vm.msg = 'baba';
-                vm.closeToast = function () {
-                    $mdToast.hide();
-                };
-                // this.$onInit = function () {
-                //
-                // };
+                }
             }]
         });
 })(angular);
@@ -7933,11 +7902,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 });
             }
 
-            LiveSessionEventsSrv.activate = function () {
+            function activate() {
                 if (isEnabled) {
                     _startListening();
                 }
-            };
+            }
+
+            LiveSessionEventsSrv.activate = activate;
 
             return LiveSessionEventsSrv;
         }];
@@ -7959,8 +7930,142 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             var registeredCbToActiveLiveSessionDataChanges = [];
             var registeredCbToCurrUserLiveSessionStateChange = [];
             var liveSessionInterval = {};
-
             var isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+
+            this.startLiveSession = function (studentData, sessionSubject) {
+                return UserProfileService.getCurrUserId().then(function (currUserId) {
+                    var educatorData = {
+                        uid: currUserId,
+                        isTeacher: isTeacherApp,
+                        sessionSubject: sessionSubject
+                    };
+                    return _initiateLiveSession(educatorData, studentData, UserLiveSessionStateEnum.EDUCATOR.enum);
+                });
+            };
+
+            this.confirmLiveSession = function (liveSessionGuid) {
+                if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                    var errMsg = 'LiveSessionSrv: live session is already active!!!';
+                    $log.debug(errMsg);
+                    return $q.reject(errMsg);
+                }
+
+                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
+                    liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
+                    return liveSessionData.$save();
+                });
+            };
+
+            this.endLiveSession = function (liveSessionGuid) {
+                var getDataPromMap = {};
+                getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
+                getDataPromMap.currUid = UserProfileService.getCurrUserId();
+                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
+                getDataPromMap.storage = _getStorage();
+                return $q.all(getDataPromMap).then(function (data) {
+                    var dataToSave = {};
+
+                    data.liveSessionData.status = LiveSessionStatusEnum.ENDED.enum;
+                    data.liveSessionData.endTime = _getRoundTime();
+                    data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
+                    dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
+                    _destroyCheckDurationInterval();
+
+                    data.currUidLiveSessionRequests[data.liveSessionData.guid] = false;
+                    var activePath = data.currUidLiveSessionRequests.$$path;
+                    dataToSave[activePath] = {};
+                    var archivePath = activePath.replace('/active', '/archive');
+                    archivePath += '/' + liveSessionGuid;
+                    dataToSave[archivePath] = false;
+
+                    var otherUserLiveSessionRequestPath;
+                    if (data.liveSessionData.studentId !== data.currUid) {
+                        otherUserLiveSessionRequestPath = data.liveSessionData.studentPath;
+                    } else {
+                        otherUserLiveSessionRequestPath = data.liveSessionData.teacherPath;
+                    }
+                    var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
+                    dataToSave[otherUserActivePath] = {};
+                    var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
+                    otherUserArchivePath += '/' + liveSessionGuid;
+                    dataToSave[otherUserArchivePath] = false;
+
+                    return data.storage.update(dataToSave);
+                });
+            };
+
+            this.registerToActiveLiveSessionDataChanges = function (cb) {
+                registeredCbToActiveLiveSessionDataChanges.push(cb);
+                if (activeLiveSessionDataFromAdapter) {
+                    cb(activeLiveSessionDataFromAdapter);
+                }
+            };
+
+            this.unregisterFromActiveLiveSessionDataChanges = function(cb){
+                registeredCbToActiveLiveSessionDataChanges =_removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
+            };
+
+            this.registerToCurrUserLiveSessionStateChanges = function (cb) {
+                registeredCbToCurrUserLiveSessionStateChange.push(cb);
+                cb(currUserLiveSessionState);
+            };
+
+            this.unregisterFromCurrUserLiveSessionStateChanges = function (cb) {
+                _cleanRegisteredCbToActiveLiveSessionData();
+                registeredCbToCurrUserLiveSessionStateChange = _removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange,cb);
+            };
+
+            this.getActiveLiveSessionData = function () {
+                if (!activeLiveSessionDataFromAdapter) {
+                    return $q.when(null);
+                }
+
+                var dataPromMap = {
+                    liveSessionData: LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid),
+                    currUid: UserProfileService.getCurrUserId()
+                };
+                return $q.all(dataPromMap).then(function(dataMap){
+                    var orig$saveFn = dataMap.liveSessionData.$save;
+                    dataMap.liveSessionData.$save = function () {
+                        dataMap.liveSessionData.updatedBy = dataMap.currUid;
+                        return orig$saveFn.apply(dataMap.liveSessionData);
+                    };
+
+                    return dataMap.liveSessionData;
+                });
+            };
+
+            this._userLiveSessionStateChanged = function (newUserLiveSessionState, liveSessionData) {
+                if (!newUserLiveSessionState || (currUserLiveSessionState === newUserLiveSessionState)) {
+                    return;
+                }
+
+                currUserLiveSessionState = newUserLiveSessionState;
+
+                var isStudentState = newUserLiveSessionState === UserLiveSessionStateEnum.STUDENT.enum;
+                var isEducatorState = newUserLiveSessionState === UserLiveSessionStateEnum.EDUCATOR.enum;
+                if (isStudentState || isEducatorState) {
+                    activeLiveSessionDataFromAdapter = liveSessionData;
+                    LiveSessionUiSrv.activateLiveSession(newUserLiveSessionState).then(function () {
+                        _this.endLiveSession(liveSessionData.guid);
+                    });
+                } else {
+                    LiveSessionUiSrv.endLiveSession();
+                }
+
+                _invokeCurrUserLiveSessionStateChangedCb(currUserLiveSessionState);
+            };
+
+            this._liveSessionDataChanged = function (newLiveSessionData) {
+                if (!activeLiveSessionDataFromAdapter || activeLiveSessionDataFromAdapter.guid !== newLiveSessionData.guid) {
+                    return;
+                }
+
+                activeLiveSessionDataFromAdapter = newLiveSessionData;
+                _checkSessionDuration(newLiveSessionData);
+                _invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
+            };
+
 
             function _getRoundTime() {
                 return Math.floor(Date.now() / 1000) * 1000;
@@ -8133,140 +8238,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 $interval.cancel(liveSessionInterval.interval);
                 liveSessionInterval = {};
             }
-
-            this.startLiveSession = function (studentData, sessionSubject) {
-                return UserProfileService.getCurrUserId().then(function (currUserId) {
-                    var educatorData = {
-                        uid: currUserId,
-                        isTeacher: isTeacherApp,
-                        sessionSubject: sessionSubject
-                    };
-                    return _initiateLiveSession(educatorData, studentData, UserLiveSessionStateEnum.EDUCATOR.enum);
-                });
-            };
-
-            this.confirmLiveSession = function (liveSessionGuid) {
-                if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                    var errMsg = 'LiveSessionSrv: live session is already active!!!';
-                    $log.debug(errMsg);
-                    return $q.reject(errMsg);
-                }
-
-                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
-                    liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
-                    return liveSessionData.$save();
-                });
-            };
-
-            this.endLiveSession = function (liveSessionGuid) {
-                var getDataPromMap = {};
-                getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
-                getDataPromMap.currUid = UserProfileService.getCurrUserId();
-                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
-                getDataPromMap.storage = _getStorage();
-                return $q.all(getDataPromMap).then(function (data) {
-                    var dataToSave = {};
-
-                    data.liveSessionData.status = LiveSessionStatusEnum.ENDED.enum;
-                    data.liveSessionData.endTime = _getRoundTime();
-                    data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
-                    dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
-                    _destroyCheckDurationInterval();
-
-                    data.currUidLiveSessionRequests[data.liveSessionData.guid] = false;
-                    var activePath = data.currUidLiveSessionRequests.$$path;
-                    dataToSave[activePath] = {};
-                    var archivePath = activePath.replace('/active', '/archive');
-                    archivePath += '/' + liveSessionGuid;
-                    dataToSave[archivePath] = false;
-
-                    var otherUserLiveSessionRequestPath;
-                    if (data.liveSessionData.studentId !== data.currUid) {
-                        otherUserLiveSessionRequestPath = data.liveSessionData.studentPath;
-                    } else {
-                        otherUserLiveSessionRequestPath = data.liveSessionData.teacherPath;
-                    }
-                    var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
-                    dataToSave[otherUserActivePath] = {};
-                    var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
-                    otherUserArchivePath += '/' + liveSessionGuid;
-                    dataToSave[otherUserArchivePath] = false;
-
-                    return data.storage.update(dataToSave);
-                });
-            };
-
-            this.registerToActiveLiveSessionDataChanges = function (cb) {
-                registeredCbToActiveLiveSessionDataChanges.push(cb);
-                if (activeLiveSessionDataFromAdapter) {
-                    cb(activeLiveSessionDataFromAdapter);
-                }
-            };
-
-            this.unregisterFromActiveLiveSessionDataChanges = function(cb){
-                registeredCbToActiveLiveSessionDataChanges =_removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
-            };
-
-            this.registerToCurrUserLiveSessionStateChanges = function (cb) {
-                registeredCbToCurrUserLiveSessionStateChange.push(cb);
-                cb(currUserLiveSessionState);
-            };
-
-            this.unregisterFromCurrUserLiveSessionStateChanges = function (cb) {
-                _cleanRegisteredCbToActiveLiveSessionData();
-                registeredCbToCurrUserLiveSessionStateChange = _removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange,cb);
-            };
-
-            this.getActiveLiveSessionData = function () {
-                if (!activeLiveSessionDataFromAdapter) {
-                    return $q.when(null);
-                }
-
-                var dataPromMap = {
-                    liveSessionData: LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid),
-                    currUid: UserProfileService.getCurrUserId()
-                };
-                return $q.all(dataPromMap).then(function(dataMap){
-                    var orig$saveFn = dataMap.liveSessionData.$save;
-                    dataMap.liveSessionData.$save = function () {
-                        dataMap.liveSessionData.updatedBy = dataMap.currUid;
-                        return orig$saveFn.apply(dataMap.liveSessionData);
-                    };
-
-                    return dataMap.liveSessionData;
-                });
-            };
-
-            this._userLiveSessionStateChanged = function (newUserLiveSessionState, liveSessionData) {
-                if (!newUserLiveSessionState || (currUserLiveSessionState === newUserLiveSessionState)) {
-                    return;
-                }
-
-                currUserLiveSessionState = newUserLiveSessionState;
-
-                var isStudentState = newUserLiveSessionState === UserLiveSessionStateEnum.STUDENT.enum;
-                var isEducatorState = newUserLiveSessionState === UserLiveSessionStateEnum.EDUCATOR.enum;
-                if (isStudentState || isEducatorState) {
-                    activeLiveSessionDataFromAdapter = liveSessionData;
-                    LiveSessionUiSrv.activateLiveSession(newUserLiveSessionState).then(function () {
-                        _this.endLiveSession(liveSessionData.guid);
-                    });
-                } else {
-                    LiveSessionUiSrv.endLiveSession();
-                }
-
-                _invokeCurrUserLiveSessionStateChangedCb(currUserLiveSessionState);
-            };
-
-            this._liveSessionDataChanged = function (newLiveSessionData) {
-                if (!activeLiveSessionDataFromAdapter || activeLiveSessionDataFromAdapter.guid !== newLiveSessionData.guid) {
-                    return;
-                }
-
-                activeLiveSessionDataFromAdapter = newLiveSessionData;
-                _checkSessionDuration(newLiveSessionData);
-                _invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
-            };
         }]
     );
 })(angular);
@@ -8367,15 +8338,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 return defer.promise;
             }
 
-            LiveSessionUiSrv.activateLiveSession = function (userLiveSession) {
+            function activateLiveSession(userLiveSession) {
                 return _activateLiveSession(userLiveSession);
-            };
+            }
 
-            LiveSessionUiSrv.endLiveSession = function () {
+            function endLiveSession() {
                 _endLiveSession();
-            };
+            }
 
-            LiveSessionUiSrv.showStudentLiveSessionPopUp = function(){
+            function showStudentLiveSessionPopUp(){
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
@@ -8397,9 +8368,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     $log.error('LiveSessionUiSrv: translate failure' + err);
                     return $q.reject(err);
                 });
-            };
+            }
 
-            LiveSessionUiSrv.showSessionEndAlertPopup = function () {
+            function showSessionEndAlertPopup() {
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
                 translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
@@ -8421,16 +8392,29 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     $log.error('LiveSessionUiSrv: translate failure' + err);
                     return $q.reject(err);
                 });
-            };
+            }
 
-
-            LiveSessionUiSrv.showLiveSessionToast = function () {
-                var options = { hideDelay: false };
+            function showLiveSessionToast() {
+                var options = {
+                    hideDelay: false,
+                    position: 'top left'
+                };
                 var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
                 translationsProm.then(function (message) {
                     ZnkToastSrv.showToast('success', message, options);
                 });
-            };
+            }
+
+
+            LiveSessionUiSrv.activateLiveSession = activateLiveSession;
+
+            LiveSessionUiSrv.endLiveSession = endLiveSession;
+
+            LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
+
+            LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
+
+            LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
 
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
@@ -8492,26 +8476,6 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "");
-  $templateCache.put("components/liveSession/components/liveSessionToast/liveSessionToast.template.html",
-    "<md-toast ng-cloak\n" +
-    "          ng-class=\"{'toast-wrap': vm.type === 'success',\n" +
-    "                     'toast-wrap-error': vm.type === 'error'}\">\n" +
-    "    <div class=\"icon-wrap\">\n" +
-    "        <svg-icon name=\"znkToast-completed-v-icon\" ng-if=\"vm.type === 'success'\"></svg-icon>\n" +
-    "        <svg-icon name=\"znkToast-error-red-icon\" ng-if=\"vm.type === 'error'\"></svg-icon>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"md-toast-content\">\n" +
-    "        <div class=\"md-toast-text\" flex>{{vm.msg | translate}}</div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <md-button aria-label=\"close popup\"\n" +
-    "               class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
-    "        <svg-icon name=\"znkToast-close-popup\"></svg-icon>\n" +
-    "    </md-button>\n" +
-    "\n" +
-    "</md-toast>\n" +
     "");
   $templateCache.put("components/liveSession/svg/liveSession-english-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
