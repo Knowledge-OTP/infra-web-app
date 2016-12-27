@@ -5,6 +5,68 @@
         function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
             'ngInject';
 
+            var self = this;
+            self.uiGridState = {
+                student: {
+                    initial: true,
+                    noData: false
+                },
+                educator: {
+                    initial: true,
+                    noData: false
+                }
+            };
+
+            var commonGridOptions = {
+                enableColumnMenus: false,
+                enableRowSelection: false,
+                enableRowHeaderSelection: false,
+                multiSelect: false,
+                rowHeight: 35,
+                selectionRowHeaderWidth: 35
+            };
+            var translateFilter = $filter('translate');
+
+            _initGrid();
+
+            self.selectEducatorRow = function (rowData) {
+                if (self.gridEducatorApi.selection.selectRow) {
+                    self.gridEducatorApi.selection.selectRow(rowData);
+                    self.selectedEducator = rowData;
+                }
+            };
+            self.selectStudentRow = function (rowData) {
+                if (self.gridStudentApi.selection.selectRow) {
+                    self.gridStudentApi.selection.selectRow(rowData);
+                    self.selectedStudent = rowData;
+                }
+            };
+            self.getEducatorsSearchResults = function (queryTerm) {
+                AdminSearchService.getSearchResultsByTerm(queryTerm).then(_educatorsSearchResults);
+            };
+            self.getStudentsSearchResults = function (queryTerm) {
+                AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
+            };
+
+            self.link = function () {
+                self.startLoader = true;
+                if (!(self.selectedEducator && self.selectedStudent)) {
+                    $log.error("Must select student and educator");
+                    return;
+                }
+                var studentEducatorAppNames = _getStudentEducatorAppNames();
+                if (!studentEducatorAppNames) {
+                    $log.error("Must provide educator and student app data");
+                    return;
+                }
+                var student = self.selectedStudent;
+                var educator = self.selectedEducator;
+                var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.name, student.email, educator.email, student.name,
+                    studentEducatorAppNames.educator, studentEducatorAppNames.student);
+
+                ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
+
+            };
             function _linkSuccess() {
                 _endLoading();
                 var msg = translateFilter('ADMIN.ESLINK.LINK_SUCCEEDED');
@@ -107,71 +169,6 @@
             function _showNotification(type, msg) {
                 ZnkToastSrv.showToast(type, msg);
             }
-
-
-            var self = this;
-            self.uiGridState = {
-                student: {
-                    initial: true,
-                    noData: false
-                },
-                educator: {
-                    initial: true,
-                    noData: false
-                }
-            };
-
-            var commonGridOptions = {
-                enableColumnMenus: false,
-                enableRowSelection: false,
-                enableRowHeaderSelection: false,
-                multiSelect: false,
-                rowHeight: 35,
-                selectionRowHeaderWidth: 35
-            };
-            var translateFilter = $filter('translate');
-
-            _initGrid();
-
-            self.selectEducatorRow = function (rowData) {
-                if (self.gridEducatorApi.selection.selectRow) {
-                    self.gridEducatorApi.selection.selectRow(rowData);
-                    self.selectedEducator = rowData;
-                }
-            };
-            self.selectStudentRow = function (rowData) {
-                if (self.gridStudentApi.selection.selectRow) {
-                    self.gridStudentApi.selection.selectRow(rowData);
-                    self.selectedStudent = rowData;
-                }
-            };
-            self.getEducatorsSearchResults = function (queryTerm) {
-                AdminSearchService.getSearchResultsByTerm(queryTerm).then(_educatorsSearchResults);
-            };
-            self.getStudentsSearchResults = function (queryTerm) {
-                AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
-            };
-
-            self.link = function () {
-                self.startLoader = true;
-                if (!(self.selectedEducator && self.selectedStudent)) {
-                    $log.error("Must select student and educator");
-                    return;
-                }
-                var studentEducatorAppNames = _getStudentEducatorAppNames();
-                if (!studentEducatorAppNames) {
-                    $log.error("Must provide educator and student app data");
-                    return;
-                }
-                var student = self.selectedStudent;
-                var educator = self.selectedEducator;
-                var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.name, student.email, educator.email, student.name,
-                    studentEducatorAppNames.educator, studentEducatorAppNames.student);
-
-                ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
-
-            };
-
 
         }
     );

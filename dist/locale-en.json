@@ -474,7 +474,7 @@
         "TIMEZONE": "Timezone",
         "SET_MANUALLY": "Set manually",
         "EMAIL_ERROR": "Email error"
-    }
+    },
     "ADMIN": {
         "EDUCATOR_STUDENT_LINK": "Educator-Student Link",
         "EDUCATORS_PROFILE": "Educators Profile",
@@ -509,5 +509,5 @@
         "ZINKERZ_EDUCATOR": "Zinkerz Educator",
         "SUBJECT": "Subject",
         "EDUCATOR_TEACH_WORKS_NAME": "Educator Teach Works Name"
-    },
+    }
 }

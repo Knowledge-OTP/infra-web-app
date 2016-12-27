@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticsearchSrv) {
+            function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv) {
                 'ngInject';
 
                 var sizeLimit = 10000;
@@ -30,7 +30,7 @@
                         }
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm));
-                    ElasticsearchSrv.search(query).then(function (response) {
+                    ElasticSearchSrv.search(query).then(function (response) {
                         deferred.resolve(_searchResults(response.hits));
                     }, function (err) {
                         $log.error(err.message);

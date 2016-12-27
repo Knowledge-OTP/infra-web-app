@@ -8,8 +8,12 @@
         'znk.infra.general',
         'znk.infra.storage',
         'znk.infra.user',
+        'ui.router',
         'znk.infra-web-app.znkToast',
-        'znk.infra-web-app.elasticSearch'
+        'znk.infra-web-app.elasticSearch',
+        'ui.grid',
+        'ui.grid.selection',
+        'ui.grid.autoResize'
     ])
         .config([
             '$stateProvider',

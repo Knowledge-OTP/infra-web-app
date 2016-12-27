@@ -307,6 +307,12 @@
 .admin-esLink .ui-grid .ui-grid-viewport {
   height: 180px !important; }
 
+.admin-esLink .md-button {
+  width: 170px;
+  height: 42px;
+  border-radius: 21px;
+  position: relative; }
+
 .admin-esLink .esLink-link-container {
   margin-bottom: 160px;
   height: 65px;
@@ -428,7 +434,7 @@ md-dialog.my-profile {
             align-items: center; }
         md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon {
           width: 30px;
-          stroke: #E8E8E8; }
+          stroke: rgba(0, 0, 0, 0.2); }
         md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon * {
           fill: #ffffff; }
   md-dialog.my-profile .main-title {
@@ -526,7 +532,7 @@ md-dialog.my-profile {
           right: 25px;
           top: -25px;
           background-color: #ff6766;
-          color: white;
+          color: #ffffff;
           font-size: 13px;
           line-height: 24px; }
           md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span:after {
@@ -546,7 +552,7 @@ md-dialog.my-profile {
           border-color: #9a9797; }
         md-dialog.my-profile .content-wrapper .auth-form .znk-input-group input[disabled], md-dialog.my-profile .content-wrapper .auth-form .znk-input-group select[disabled] {
           color: #acacac;
-          background-color: #acacac; }
+          background-color: #f9f9f9; }
         md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid select {
           border-color: #ff6766; }
       md-dialog.my-profile .content-wrapper .auth-form .timezone-manual {

@@ -1,7 +1,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.elasticSearch').service('ElasticSearchSrv',
+    angular.module('znk.infra-web-app.elasticSearch')
+        .service('ElasticSearchSrv',
         function (esFactory) {
             'ngInject';
 

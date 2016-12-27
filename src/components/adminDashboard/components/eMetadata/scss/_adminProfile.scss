@@ -45,7 +45,7 @@ md-dialog.my-profile {
                 align-items: center;
                 .myProfile-icon {
                     width: 30px;
-                    stroke: $bgColor18;
+                    stroke: $bgColor50;
                 }
 
                 .myProfile-icon * {
@@ -163,7 +163,7 @@ md-dialog.my-profile {
                         right: 25px;
                         top: -25px;
                         background-color: $bgColor32;
-                        color: $fontColor1;
+                        color: $fontColor8;
                         font-size: 13px;
                         line-height: 24px;
                         &:after {
@@ -172,7 +172,7 @@ md-dialog.my-profile {
                             border: {
                                 color: $transparent;
                                 style: solid;
-                                top-color: $fontColor17;
+                                top-color: $borderColor22;
                                 width: 10px;
                             }
                             bottom: -20px;
@@ -193,7 +193,7 @@ md-dialog.my-profile {
                 }
                 input[disabled], select[disabled] {
                     color: $fontColor14;
-                    background-color: $fontColor14;
+                    background-color: $bgColor27;
                 }
                 &.invalid {
                     input, select {

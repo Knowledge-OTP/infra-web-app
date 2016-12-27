@@ -10,7 +10,9 @@
     "angular-chart.js": "0.10.2",
     "v-accordion": "1.4.1",
     "satellizer": "0.13.4",
-    "angular-drag-and-drop-lists": "^1.4.0"
+    "angular-drag-and-drop-lists": "^1.4.0",
+    "angular-ui-grid": "3.1.1",
+    "elasticsearch": "^12.1.2"
   },
   "ignore": [
     ".*",
@@ -28,6 +30,14 @@
     "jasmine-jquery": "^2.1.1",
     "aws-sdk": "aws-sdk-js#^2.7.14"
   },
+    "overrides": {
+        "elasticsearch": {
+            "main": [
+                "elasticsearch.js",
+                "elasticsearch.angular.js"
+            ]
+        }
+    },
   "resolutions": {
     "angular": "1.5.8",
     "angular-translate": "2.12.0"

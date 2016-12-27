@@ -52,8 +52,12 @@
         'znk.infra.general',
         'znk.infra.storage',
         'znk.infra.user',
+        'ui.router',
         'znk.infra-web-app.znkToast',
-        'znk.infra-web-app.elasticSearch'
+        'znk.infra-web-app.elasticSearch',
+        'ui.grid',
+        'ui.grid.selection',
+        'ui.grid.autoResize'
     ])
         .config([
             '$stateProvider',
@@ -182,52 +186,6 @@
     angular.module('znk.infra-web-app.adminDashboard').controller('EMetadataController',
         ["$scope", "AdminSearchService", "$mdDialog", "$timeout", "$filter", "EMetadataService", function ($scope, AdminSearchService, $mdDialog, $timeout, $filter, EMetadataService) {
             'ngInject';
-
-            function _educatorsSearchResults(data) {
-                self.gridEducatorsOptions.data = data;
-                self.uiGridState.educator.initial = false;
-                if (!self.gridEducatorsOptions.data.length) {
-                    self.uiGridState.educator.noData = true;
-                    self.educatorSearchNoData = self.educatorSearchQuery;
-                }
-                else {
-                    self.uiGridState.educator.noData = false;
-                }
-            }
-
-
-            function _initGrid() {
-                self.gridEducatorsOptions = {
-                    columnDefs: [
-                        {
-                            field: 'name', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
-                            cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.name}}</div>'
-                        },
-                        {field: 'email', displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
-                        {field: 'uid', displayName: 'UID'},
-                        {
-                            field: 'zinkerzTeacher',
-                            width: 150,
-                            displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
-                            cellTemplate: '<div class="ui-grid-cell-contents" >' +
-                            '<div >' +
-                            '<span ng-if="row.entity.zinkerzTeacher" translate="ADMIN.ESLINK.ZINKERZ_EDUCATOR"></span></div>' +
-                            '</div>'
-                        }
-                    ]
-                };
-                angular.extend(self.gridEducatorsOptions, commonGridOptions);
-                self.gridEducatorsOptions.appScopeProvider = self;
-                self.gridEducatorsOptions.onRegisterApi = function (gridApi) {
-                    self.gridEducatorApi = gridApi;
-                    self.gridEducatorApi.selection.on.rowSelectionChanged($scope, _rowSelectedEvent);
-                };
-            }
-
-            function _rowSelectedEvent(row) {
-                EMetadataService.showEducatorProfile(row.entity);
-            }
-
             var self = this;
             var ROW_HEIGHT = 35;
 
@@ -262,7 +220,47 @@
                 };
             };
 
-
+            function _educatorsSearchResults(data) {
+                self.gridEducatorsOptions.data = data;
+                self.uiGridState.educator.initial = false;
+                if (!self.gridEducatorsOptions.data.length) {
+                    self.uiGridState.educator.noData = true;
+                    self.educatorSearchNoData = self.educatorSearchQuery;
+                }
+                else {
+                    self.uiGridState.educator.noData = false;
+                }
+            }
+            function _initGrid() {
+                self.gridEducatorsOptions = {
+                    columnDefs: [
+                        {
+                            field: 'name', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
+                            cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.name}}</div>'
+                        },
+                        {field: 'email', displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
+                        {field: 'uid', displayName: 'UID'},
+                        {
+                            field: 'zinkerzTeacher',
+                            width: 150,
+                            displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
+                            cellTemplate: '<div class="ui-grid-cell-contents" >' +
+                            '<div >' +
+                            '<span ng-if="row.entity.zinkerzTeacher" translate="ADMIN.ESLINK.ZINKERZ_EDUCATOR"></span></div>' +
+                            '</div>'
+                        }
+                    ]
+                };
+                angular.extend(self.gridEducatorsOptions, commonGridOptions);
+                self.gridEducatorsOptions.appScopeProvider = self;
+                self.gridEducatorsOptions.onRegisterApi = function (gridApi) {
+                    self.gridEducatorApi = gridApi;
+                    self.gridEducatorApi.selection.on.rowSelectionChanged($scope, _rowSelectedEvent);
+                };
+            }
+            function _rowSelectedEvent(row) {
+                EMetadataService.showEducatorProfile(row.entity);
+            }
         }]
     );
 })(angular);
@@ -391,6 +389,68 @@
         ["$filter", "AdminSearchService", "ESLinkService", "$log", "ZnkToastSrv", function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
             'ngInject';
 
+            var self = this;
+            self.uiGridState = {
+                student: {
+                    initial: true,
+                    noData: false
+                },
+                educator: {
+                    initial: true,
+                    noData: false
+                }
+            };
+
+            var commonGridOptions = {
+                enableColumnMenus: false,
+                enableRowSelection: false,
+                enableRowHeaderSelection: false,
+                multiSelect: false,
+                rowHeight: 35,
+                selectionRowHeaderWidth: 35
+            };
+            var translateFilter = $filter('translate');
+
+            _initGrid();
+
+            self.selectEducatorRow = function (rowData) {
+                if (self.gridEducatorApi.selection.selectRow) {
+                    self.gridEducatorApi.selection.selectRow(rowData);
+                    self.selectedEducator = rowData;
+                }
+            };
+            self.selectStudentRow = function (rowData) {
+                if (self.gridStudentApi.selection.selectRow) {
+                    self.gridStudentApi.selection.selectRow(rowData);
+                    self.selectedStudent = rowData;
+                }
+            };
+            self.getEducatorsSearchResults = function (queryTerm) {
+                AdminSearchService.getSearchResultsByTerm(queryTerm).then(_educatorsSearchResults);
+            };
+            self.getStudentsSearchResults = function (queryTerm) {
+                AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
+            };
+
+            self.link = function () {
+                self.startLoader = true;
+                if (!(self.selectedEducator && self.selectedStudent)) {
+                    $log.error("Must select student and educator");
+                    return;
+                }
+                var studentEducatorAppNames = _getStudentEducatorAppNames();
+                if (!studentEducatorAppNames) {
+                    $log.error("Must provide educator and student app data");
+                    return;
+                }
+                var student = self.selectedStudent;
+                var educator = self.selectedEducator;
+                var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.name, student.email, educator.email, student.name,
+                    studentEducatorAppNames.educator, studentEducatorAppNames.student);
+
+                ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
+
+            };
             function _linkSuccess() {
                 _endLoading();
                 var msg = translateFilter('ADMIN.ESLINK.LINK_SUCCEEDED');
@@ -494,71 +554,6 @@
                 ZnkToastSrv.showToast(type, msg);
             }
 
-
-            var self = this;
-            self.uiGridState = {
-                student: {
-                    initial: true,
-                    noData: false
-                },
-                educator: {
-                    initial: true,
-                    noData: false
-                }
-            };
-
-            var commonGridOptions = {
-                enableColumnMenus: false,
-                enableRowSelection: false,
-                enableRowHeaderSelection: false,
-                multiSelect: false,
-                rowHeight: 35,
-                selectionRowHeaderWidth: 35
-            };
-            var translateFilter = $filter('translate');
-
-            _initGrid();
-
-            self.selectEducatorRow = function (rowData) {
-                if (self.gridEducatorApi.selection.selectRow) {
-                    self.gridEducatorApi.selection.selectRow(rowData);
-                    self.selectedEducator = rowData;
-                }
-            };
-            self.selectStudentRow = function (rowData) {
-                if (self.gridStudentApi.selection.selectRow) {
-                    self.gridStudentApi.selection.selectRow(rowData);
-                    self.selectedStudent = rowData;
-                }
-            };
-            self.getEducatorsSearchResults = function (queryTerm) {
-                AdminSearchService.getSearchResultsByTerm(queryTerm).then(_educatorsSearchResults);
-            };
-            self.getStudentsSearchResults = function (queryTerm) {
-                AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
-            };
-
-            self.link = function () {
-                self.startLoader = true;
-                if (!(self.selectedEducator && self.selectedStudent)) {
-                    $log.error("Must select student and educator");
-                    return;
-                }
-                var studentEducatorAppNames = _getStudentEducatorAppNames();
-                if (!studentEducatorAppNames) {
-                    $log.error("Must provide educator and student app data");
-                    return;
-                }
-                var student = self.selectedStudent;
-                var educator = self.selectedEducator;
-                var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.name, student.email, educator.email, student.name,
-                    studentEducatorAppNames.educator, studentEducatorAppNames.student);
-
-                ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
-
-            };
-
-
         }]
     );
 })(angular);
@@ -568,7 +563,20 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').directive('appSelect', function () {
+    angular.module('znk.infra-web-app.adminDashboard').directive('appSelect', function () {
+
+
+
+        var directive = {
+            templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
+            restrict: 'E',
+            controllerAs: 'vm',
+            controller: AppSelectController,
+            scope: {
+                currentApp: "="
+            },
+            bindToController: true
+        };
 
         function AppSelectController($scope, $filter, ENV) {
             var self = this;
@@ -605,19 +613,6 @@
             });
 
         }
-
-        var directive = {
-            templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
-            restrict: 'E',
-            controllerAs: 'vm',
-            controller: AppSelectController,
-            scope: {
-                currentApp: "="
-            },
-            bindToController: true
-        };
-
-
 
         return directive;
     });
@@ -695,7 +690,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticsearchSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticsearchSrv) {
+            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv) {
                 'ngInject';
 
                 var sizeLimit = 10000;
@@ -722,7 +717,7 @@
                         }
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm));
-                    ElasticsearchSrv.search(query).then(function (response) {
+                    ElasticSearchSrv.search(query).then(function (response) {
                         deferred.resolve(_searchResults(response.hits));
                     }, function (err) {
                         $log.error(err.message);
@@ -4417,13 +4412,16 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.elasticSearch', []);
+    angular.module('znk.infra-web-app.elasticSearch', [
+        'elasticsearch'
+    ]);
 })(angular);
 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.elasticSearch').service('ElasticSearchSrv',
+    angular.module('znk.infra-web-app.elasticSearch')
+        .service('ElasticSearchSrv',
         ["esFactory", function (esFactory) {
             'ngInject';
 

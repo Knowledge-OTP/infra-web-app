@@ -1,0 +1,37 @@
+<div class="admin-eMetadata" translate-namespace="ADMIN">
+
+    <div class="admin-main-container-overlay">
+        <div class="admin-search-container">
+            <div class="admin-search-label" translate="ADMIN.ESLINK.SEARCH_EDUCATOR"></div>
+            <div class="admin-search-pane">
+                <div class="search-wrap">
+                    <div class="znk-input-group">
+                        <input type="search"
+                               minlength="3"
+                               placeholder="{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}"
+                               name="search-box"
+                               ng-model="vm.educatorSearchQuery">
+                    </div>
+                </div>
+                <button class="admin-search-btn" ng-click="vm.getEducatorsSearchResults(vm.educatorSearchQuery)"
+                        ng-disabled="!vm.educatorSearchQuery" translate=".SEARCH">
+                </button>
+
+            </div>
+            <div class="admin-search-msg" translate="ADMIN.MIN_SEARCH_LENGTH"></div>
+            <div   ui-grid-selection ui-grid="vm.gridEducatorsOptions" class="admin-grid" >
+                <div class="admin-ui-grid-msg" ng-if="vm.uiGridState.educator.initial">
+                    <div class="admin-msg">
+                        <div translate="ADMIN.ESLINK.EDUCATOR_INITIAL_MSG"></div>
+                    </div>
+                </div>
+                <div class="admin-ui-grid-msg" ng-if="vm.uiGridState.educator.noData">
+                    <div class="admin-msg">
+                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

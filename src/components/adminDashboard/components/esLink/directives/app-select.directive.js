@@ -3,7 +3,20 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').directive('appSelect', function () {
+    angular.module('znk.infra-web-app.adminDashboard').directive('appSelect', function () {
+
+
+
+        var directive = {
+            templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
+            restrict: 'E',
+            controllerAs: 'vm',
+            controller: AppSelectController,
+            scope: {
+                currentApp: "="
+            },
+            bindToController: true
+        };
 
         function AppSelectController($scope, $filter, ENV) {
             var self = this;
@@ -40,19 +53,6 @@
             });
 
         }
-
-        var directive = {
-            templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
-            restrict: 'E',
-            controllerAs: 'vm',
-            controller: AppSelectController,
-            scope: {
-                currentApp: "="
-            },
-            bindToController: true
-        };
-
-
 
         return directive;
     });
