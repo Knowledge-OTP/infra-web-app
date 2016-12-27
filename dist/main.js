@@ -8789,7 +8789,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "                        type=\"email\"\n" +
     "                        autocomplete=\"on\"\n" +
     "                        name=\"email\"\n" +
-    "                        ng-required=\"true\"\n" +
+    "                        ng-disabled=\"true\"\n" +
     "                        ng-model=\"vm.profileData.email\">\n" +
     "                <span ng-if=\"profileform.$submitted && profileform.email.$invalid\"\n" +
     "                      role=\"alert\">\n" +
@@ -9478,21 +9478,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
-        function(EnumSrv) {
-
-            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
-                ['FREE_LICENSE', 1, 'free license'],
-                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
-            ]);
-
-            return PromoCodeTypeEnum;
-        }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.promoCode').constant('PROMO_CODE_STATUS', {
         accepted: 0,
         invalid: 1
@@ -9591,6 +9576,21 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             }];
         }
     );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
+        function(EnumSrv) {
+
+            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
+                ['FREE_LICENSE', 1, 'free license'],
+                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
+            ]);
+
+            return PromoCodeTypeEnum;
+        }]);
 })(angular);
 
 angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {

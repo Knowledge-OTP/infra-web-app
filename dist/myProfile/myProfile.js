@@ -375,7 +375,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "                        type=\"email\"\n" +
     "                        autocomplete=\"on\"\n" +
     "                        name=\"email\"\n" +
-    "                        ng-required=\"true\"\n" +
+    "                        ng-disabled=\"true\"\n" +
     "                        ng-model=\"vm.profileData.email\">\n" +
     "                <span ng-if=\"profileform.$submitted && profileform.email.$invalid\"\n" +
     "                      role=\"alert\">\n" +
