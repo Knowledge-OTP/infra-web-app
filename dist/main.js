@@ -7615,48 +7615,38 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 'ngInject';
 
                 var vm = this;
-                var isTeacher = (ENV.appContext.toLowerCase()) === 'dashboard';
-                var isStudent = ENV.appContext.toLowerCase() === 'student';
 
-                function trackStudentOrTeacherPresenceCB(prevUid, uid) {
-                    PresenceService.getCurrentUserStatus(uid).then(function (currUserPresenceStatus) {
-                        vm.isOffline = currUserPresenceStatus === PresenceService.userStatus.OFFLINE;
+                this.$onInit = function() {
+                    vm.isLiveSessionActive = false;
+                    vm.isOffline = true;
+                    vm.endSession = endSession;
+                    vm.showSessionModal = showSessionModal;
+
+                    $scope.$watch('vm.student', function (newStudent) {
+                        if (newStudent && angular.isDefined(newStudent.presence)) {
+                            vm.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
+                        }
+                    }, true);
+
+                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
+                };
+
+                function showSessionModal() {
+                    $mdDialog.show({
+                        template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
+                        scope: $scope,
+                        preserveScope: true,
+                        clickOutsideToClose: true
                     });
                 }
                 function liveSessionStateChanged(newLiveSessionData) {
                     vm.isLiveSessionActive = newLiveSessionData === LiveSessionStatusEnum.CONFIRMED.enum;
                 }
-
                 function endSession() {
                     LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
                 }
-
-                this.$onInit = function() {
-                    vm.isLiveSessionActive = false;
-                    vm.endSession = endSession;
-                    vm.isOffline = true;
-
-                    if (isTeacher) {
-                        StudentContextSrv.registerToStudentContextChange(trackStudentOrTeacherPresenceCB);
-                    } else if (isStudent) {
-                        TeacherContextSrv.registerToTeacherContextChange(trackStudentOrTeacherPresenceCB);
-                    } else {
-                        $log.error('appContext is not compatible with this component: ', ENV.appContext);
-                    }
-
-                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
-
-                    vm.showSessionModal = function () {
-                        $mdDialog.show({
-                            template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
-                            scope: $scope,
-                            preserveScope: true,
-                            clickOutsideToClose: true
-                        });
-                    };
-                };
             }]
         });
 })(angular);
@@ -7676,9 +7666,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                 var vm = this;
 
-                vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
-                vm.closeModal = $mdDialog.cancel;
-                vm.startSession = function (sessionSubject) {
+                this.$onInit = function() {
+                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
+                    vm.closeModal = $mdDialog.cancel;
+                    vm.startSession = startSession;
+                };
+
+                function startSession(sessionSubject) {
                     var currStudent = vm.student;
                     if (!currStudent) {
                         return;
@@ -7689,31 +7683,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         uid: currStudent.uid
                     };
                     LiveSessionSrv.startLiveSession(studentData, sessionSubject);
-                };
-            }]
-        });
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveSession')
-        .component('liveSessionToast', {
-            bindings: {},
-            templateUrl: 'components/liveSession/components/liveSessionToast/liveSessionToast.template.html',
-            controllerAs: 'vm',
-            controller: ["$mdToast", function ($mdToast) {
-                'ngInject';
-
-                var vm = this;
-                vm.type = 'success';
-                vm.msg = 'baba';
-                vm.closeToast = function () {
-                    $mdToast.hide();
-                };
-                // this.$onInit = function () {
-                //
-                // };
+                }
             }]
         });
 })(angular);
@@ -8425,7 +8395,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
 
             LiveSessionUiSrv.showLiveSessionToast = function () {
-                var options = { hideDelay: false };
+                var options = {
+                    hideDelay: false,
+                    position: 'top left'
+                };
                 var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
                 translationsProm.then(function (message) {
                     ZnkToastSrv.showToast('success', message, options);
@@ -8492,26 +8465,6 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
-    "");
-  $templateCache.put("components/liveSession/components/liveSessionToast/liveSessionToast.template.html",
-    "<md-toast ng-cloak\n" +
-    "          ng-class=\"{'toast-wrap': vm.type === 'success',\n" +
-    "                     'toast-wrap-error': vm.type === 'error'}\">\n" +
-    "    <div class=\"icon-wrap\">\n" +
-    "        <svg-icon name=\"znkToast-completed-v-icon\" ng-if=\"vm.type === 'success'\"></svg-icon>\n" +
-    "        <svg-icon name=\"znkToast-error-red-icon\" ng-if=\"vm.type === 'error'\"></svg-icon>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"md-toast-content\">\n" +
-    "        <div class=\"md-toast-text\" flex>{{vm.msg | translate}}</div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <md-button aria-label=\"close popup\"\n" +
-    "               class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
-    "        <svg-icon name=\"znkToast-close-popup\"></svg-icon>\n" +
-    "    </md-button>\n" +
-    "\n" +
-    "</md-toast>\n" +
     "");
   $templateCache.put("components/liveSession/svg/liveSession-english-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +

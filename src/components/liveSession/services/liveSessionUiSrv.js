@@ -117,7 +117,10 @@
 
 
             LiveSessionUiSrv.showLiveSessionToast = function () {
-                var options = { hideDelay: false };
+                var options = {
+                    hideDelay: false,
+                    position: 'top left'
+                };
                 var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
                 translationsProm.then(function (message) {
                     ZnkToastSrv.showToast('success', message, options);
