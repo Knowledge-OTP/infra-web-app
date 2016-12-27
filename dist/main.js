@@ -8206,7 +8206,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             }
 
             function _checkSessionDuration(liveSessionData) {
-                if (isTeacherApp) {
+                if (isTeacherApp && liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum) {
                     liveSessionInterval.interval = $interval(function () {
                         var liveSessionDuration = (_getRoundTime() - liveSessionData.startTime)  / 60000; // convert to minutes
                         var extendTimeMin = liveSessionData.extendTime / 60000;
