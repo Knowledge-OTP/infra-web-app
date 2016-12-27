@@ -5,6 +5,20 @@
             '$stateProvider',
             'SvgIconSrvProvider',
             function ($stateProvider) {
+
+                var isTeacher = localStorage.getItem('isTeacher');
+
+                // localStorage.setItem('znkData', 'https://act-dev.firebaseio.com/');
+                // localStorage.setItem('znkStudentPath', '/act_app');
+                //
+                // if(isTeacher) {
+                //     localStorage.setItem('znkAuthToken', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2IjowLCJkIjp7InVpZCI6ImVlYmUyYjUzLTA4YjctNDI5Ni1iY2ZkLTYyYjY5YjUzMTQ3MyIsImVtYWlsIjoidGVhY2hlcis1NTg4QHppbmtlcnouY29tIn0sImlhdCI6MTQ2OTU1MTk4MH0.lTD8KvalrvncDXYr3PPu884ilFalunv-EIdSTDdmzWo');
+                //     localStorage.setItem('znkPwd', 123456);
+                //     localStorage.setItem('znkUser', 'teacher+5588@zinkerz.com');
+                // } else {
+                //     localStorage.setItem('znkAuthToken', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2IjowLCJkIjp7InVpZCI6IjIxNzk0ZTJiLTMwNTEtNDAxNi04NDkxLWIzZmU3MGU4MjEyZCIsImVtYWlsIjoidGVzdGVyQHppbmtlcnouY29tIn0sImlhdCI6MTQ2OTUyMTI4N30.hfEgjFMAQ1eAylEOWxSmkBc2ejAZ0KIL2rb6aS5KjLI');
+                // }
+
                 $stateProvider
                     .state('eslink', {
                         url: '/eslink',
@@ -21,16 +35,19 @@
             }
         ])
         .constant('ENV', {
-            firebaseAppScopeName: "sat_app",
-            fbDataEndPoint: "https://sat-dev.firebaseio.com/",
+            firebaseAppScopeName: "act_dashboard",
+            fbGlobalEndPoint: "https://znk-dev.firebaseio.com/",
+            fbDataEndPoint: "https://act-dev.firebaseio.com/",
             appContext: 'student',
             studentAppName: 'sat_app',
             dashboardAppName: 'sat_dashboard',
             videosEndPoint: "//dfz02hjbsqn5e.cloudfront.net/sat_app/",
             mediaEndPoint: "//dfz02hjbsqn5e.cloudfront.net/",
-            fbGlobalEndPoint: 'https://znk-dev.firebaseio.com/'
+            backendEndpoint: "https://znk-web-backend-dev.azurewebsites.net/",
+            teachworksDataUrl: 'teachworks',
+            "debug": true
         })
-        .service('DemoEMetadataService',function($mdDialog, $http, ENV, $q, InfraConfigSrv, $log){
+        .service('DemoEMetadataService', function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log) {
             'ngInject';
 
 
@@ -105,6 +122,7 @@
                     return globalStorage.get('timezones');
                 });
             }
+
             function getLocalTimezone() {
                 var localTimezone;
                 var dateArray = new Date().toString().split(' ');
@@ -391,7 +409,7 @@
                 DemoEMetadataService.showEducatorProfile(row.entity);
             }
         })
-        .controller('AdminProfileController', function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService, $filter) {
+        .controller('AdminProfileController', function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, DemoEMetadataService, $filter) {
             'ngInject';
             var self = this;
             var translateFilter = $filter('translate');
@@ -417,7 +435,7 @@
                 var type, msg;
 
                 if (profileform.$valid && profileform.$dirty) {
-                    EMetadataService.updateProfile(self.profileData).then(function () {
+                    DemoEMetadataService.updateProfile(self.profileData).then(function () {
                         $timeout(function () {
                             type = 'success';
                             msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
@@ -443,7 +461,7 @@
                 var type, msg;
 
                 if (profileZinkerzTeacherform.$valid && profileZinkerzTeacherform.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinekrzTeacherSubject,self.profileData.zinkerzTeacher).then(function () {
+                    DemoEMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinekrzTeacherSubject, self.profileData.zinkerzTeacher).then(function () {
                         $timeout(function () {
                             type = 'success';
                             msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';

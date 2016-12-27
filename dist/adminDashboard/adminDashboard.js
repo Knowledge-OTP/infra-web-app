@@ -824,18 +824,18 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "</div>\n" +
     "");
   $templateCache.put("components/adminDashboard/components/eMetadata/templates/educatorProfile.template.html",
-    "<md-dialog ng-cloak class=\"my-profile\" translate-namespace=\"ADMIN\">\n" +
+    "<md-dialog ng-cloak class=\"admin-profile\" translate-namespace=\"ADMIN\">\n" +
     "    <div class=\"top-icon-wrap\">\n" +
     "        <div class=\"top-icon\">\n" +
     "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"myProfile-icon\"></svg-icon>\n" +
+    "                <svg-icon name=\"adminProfile-icon\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <md-toolbar>\n" +
     "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeDialog()\">\n" +
-    "            <svg-icon name=\"myProfile-close-popup\"></svg-icon>\n" +
+    "            <svg-icon name=\"adminProfile-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
     "    </md-toolbar>\n" +
     "    <div class=\"content-wrapper\">\n" +
@@ -922,7 +922,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "            <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
     "                <div class=\"error-msg\">\n" +
-    "                    <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
+    "                    <svg-icon name=\"adminProfile-danger-red-icon\" class=\"adminProfile-danger-red-icon\"></svg-icon>\n" +
     "                    <div translate=\"{{vm.generalError}}\"></div>\n" +
     "                </div>\n" +
     "            </div>\n" +
@@ -969,7 +969,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "            <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
     "                <div class=\"error-msg\">\n" +
-    "                    <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
+    "                    <svg-icon name=\"adminProfile-danger-red-icon\" class=\"adminProfile-danger-red-icon\"></svg-icon>\n" +
     "                    <div translate=\"{{vm.generalError}}\"></div>\n" +
     "                </div>\n" +
     "            </div>\n" +

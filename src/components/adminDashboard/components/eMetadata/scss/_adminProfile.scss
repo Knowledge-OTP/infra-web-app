@@ -7,7 +7,7 @@
     display: block;
 }
 
-md-dialog.my-profile {
+md-dialog.admin-profile {
     md-dialog-content {
         background-color: $bgColor27;
         padding: 20px 20px 0;
@@ -43,12 +43,12 @@ md-dialog.my-profile {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                .myProfile-icon {
+                .adminProfile-icon {
                     width: 30px;
                     stroke: $bgColor50;
                 }
 
-                .myProfile-icon * {
+                .adminProfile-icon * {
                     fill: $bgColor3;
                 }
             }
@@ -157,11 +157,11 @@ md-dialog.my-profile {
 
                 .validationBox {
                     span {
-                        width: 335px;
+                        width: 389px;
                         padding: 3px 10px;
                         position: absolute;
-                        right: 25px;
-                        top: -25px;
+                        right: 37px;
+                        top: -23px;
                         background-color: $bgColor32;
                         color: $fontColor8;
                         font-size: 13px;
@@ -259,7 +259,7 @@ md-dialog.my-profile {
             }
         }
 
-        .myProfile-danger-red-icon {
+        .adminProfile-danger-red-icon {
             width: 20px;
             margin-right: 17px;
             * {

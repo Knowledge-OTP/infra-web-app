@@ -1,15 +1,15 @@
-<md-dialog ng-cloak class="my-profile" translate-namespace="ADMIN">
+<md-dialog ng-cloak class="admin-profile" translate-namespace="ADMIN">
     <div class="top-icon-wrap">
         <div class="top-icon">
             <div class="round-icon-wrap">
-                <svg-icon name="myProfile-icon"></svg-icon>
+                <svg-icon name="adminProfile-icon"></svg-icon>
             </div>
         </div>
     </div>
 
     <md-toolbar>
         <div class="close-popup-wrap" ng-click="vm.closeDialog()">
-            <svg-icon name="myProfile-close-popup"></svg-icon>
+            <svg-icon name="adminProfile-close-popup"></svg-icon>
         </div>
     </md-toolbar>
     <div class="content-wrapper">
@@ -96,7 +96,7 @@
 
             <div class="msg-wrap" ng-class="{'show-error': vm.showError}" ng-if="vm.showError">
                 <div class="error-msg">
-                    <svg-icon name="myProfile-danger-red-icon" class="myProfile-danger-red-icon"></svg-icon>
+                    <svg-icon name="adminProfile-danger-red-icon" class="adminProfile-danger-red-icon"></svg-icon>
                     <div translate="{{vm.generalError}}"></div>
                 </div>
             </div>
@@ -111,9 +111,9 @@
                 <div class="znk-input-group">
                     <label for="zinkerzTeacher">{{'ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR' | translate}}</label>
                     <div class="znk-input">
-                    <input type="checkbox"
-                           id="zinkerzTeacher" name="zinkerzTeacher"
-                           ng-model="vm.profileData.zinkerzTeacher">
+                        <input type="checkbox"
+                               id="zinkerzTeacher" name="zinkerzTeacher"
+                               ng-model="vm.profileData.zinkerzTeacher">
                     </div>
                 </div>
                 <div class="znk-input-group"
@@ -143,7 +143,7 @@
 
             <div class="msg-wrap" ng-class="{'show-error': vm.showError}" ng-if="vm.showError">
                 <div class="error-msg">
-                    <svg-icon name="myProfile-danger-red-icon" class="myProfile-danger-red-icon"></svg-icon>
+                    <svg-icon name="adminProfile-danger-red-icon" class="adminProfile-danger-red-icon"></svg-icon>
                     <div translate="{{vm.generalError}}"></div>
                 </div>
             </div>

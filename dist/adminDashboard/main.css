@@ -386,7 +386,7 @@ md-menu-content.md-menu-content-znk-app-select {
     .admin-eMetadata .ui-grid .ui-grid-row > [ui-grid-row] > .ui-grid-cell {
       cursor: pointer; }
 
-md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input textarea, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input input[type=checkbox] {
+md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input input, md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input select, md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input textarea, md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input input[type=checkbox] {
   border-radius: 0;
   padding-left: 20px;
   box-sizing: border-box;
@@ -394,7 +394,7 @@ md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input inp
   font-size: 14px;
   display: block; }
 
-md-dialog.my-profile {
+md-dialog.admin-profile {
   background-color: #ffffff;
   overflow: visible;
   width: 800px;
@@ -402,24 +402,24 @@ md-dialog.my-profile {
   border-radius: 20px;
   padding-bottom: 20px;
   max-height: none; }
-  md-dialog.my-profile md-dialog-content {
+  md-dialog.admin-profile md-dialog-content {
     background-color: #f9f9f9;
     padding: 20px 20px 0;
     margin: 5px 40px;
     height: 100%;
     border-radius: 15px;
     display: block; }
-  md-dialog.my-profile .top-icon-wrap {
+  md-dialog.admin-profile .top-icon-wrap {
     position: absolute;
     top: 0;
     width: 100%;
     height: 40px; }
-    md-dialog.my-profile .top-icon-wrap .top-icon {
+    md-dialog.admin-profile .top-icon-wrap .top-icon {
       display: -ms-flexbox;
       display: flex;
       -ms-flex-pack: center;
           justify-content: center; }
-      md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap {
+      md-dialog.admin-profile .top-icon-wrap .top-icon .round-icon-wrap {
         width: 76px;
         height: 76px;
         border-radius: 38px;
@@ -432,12 +432,12 @@ md-dialog.my-profile {
             justify-content: center;
         -ms-flex-align: center;
             align-items: center; }
-        md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon {
+        md-dialog.admin-profile .top-icon-wrap .top-icon .round-icon-wrap .adminProfile-icon {
           width: 30px;
           stroke: rgba(0, 0, 0, 0.2); }
-        md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon * {
+        md-dialog.admin-profile .top-icon-wrap .top-icon .round-icon-wrap .adminProfile-icon * {
           fill: #ffffff; }
-  md-dialog.my-profile .main-title {
+  md-dialog.admin-profile .main-title {
     font-size: 32px;
     color: #4f4d4d;
     font-family: Quicksand;
@@ -446,47 +446,47 @@ md-dialog.my-profile {
     padding-top: 20px;
     margin: 20px;
     background-color: #ffffff; }
-  md-dialog.my-profile md-toolbar {
+  md-dialog.admin-profile md-toolbar {
     height: 40px;
     max-height: 40px;
     min-height: 40px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px; }
-    md-dialog.my-profile md-toolbar:not(.md-menu-toolbar) {
+    md-dialog.admin-profile md-toolbar:not(.md-menu-toolbar) {
       background-color: #0a9bad; }
-    md-dialog.my-profile md-toolbar .close-popup-wrap {
+    md-dialog.admin-profile md-toolbar .close-popup-wrap {
       position: absolute;
       top: -19px;
       right: -19px;
       height: 14px;
       width: 14px;
       cursor: pointer; }
-  md-dialog.my-profile .content-wrapper {
+  md-dialog.admin-profile .content-wrapper {
     overflow: auto; }
-    md-dialog.my-profile .content-wrapper .change-profile {
+    md-dialog.admin-profile .content-wrapper .change-profile {
       display: block;
       background-color: #f9f9f9;
       padding: 20px 20px 0 20px;
       margin: 5px 40px;
       height: 100%;
       border-radius: 15px; }
-    md-dialog.my-profile .content-wrapper .container-title {
+    md-dialog.admin-profile .content-wrapper .container-title {
       font-size: 18px;
       color: #4f4d4d;
       font-family: Quicksand;
       font-weight: 600;
       text-align: center; }
-    md-dialog.my-profile .content-wrapper .auth-form {
+    md-dialog.admin-profile .content-wrapper .auth-form {
       margin-right: auto;
       margin-left: auto;
       margin-bottom: 10px; }
-      md-dialog.my-profile .content-wrapper .auth-form .znk-input-group {
+      md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group {
         width: 100%;
         min-height: 0;
         display: -ms-flexbox;
         display: flex;
         margin: 10px -10px; }
-        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group label {
+        md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group label {
           width: 30%;
           font-size: 14px;
           color: #4f4d4d;
@@ -495,37 +495,37 @@ md-dialog.my-profile {
           text-transform: uppercase;
           text-align: right;
           margin: auto; }
-        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input {
+        md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input {
           width: 70%;
           display: -ms-flexbox;
           display: flex;
           -ms-flex-direction: column;
               flex-direction: column; }
-          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input textarea {
+          md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input input, md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input select, md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input textarea {
             width: 86%;
             margin: 10px 50px 2px 30px; }
-          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input input[type=checkbox] {
+          md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input input[type=checkbox] {
             width: auto;
             margin: 0px 50px 0px 30px; }
-          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input textarea {
+          md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input textarea {
             resize: none;
             font-size: 14px;
             color: #4f4d4d;
             font-family: Quicksand;
             font-weight: 700; }
-          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select {
+          md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input select {
             height: 40px; }
-            md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select[disabled] {
+            md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .znk-input select[disabled] {
               color: #acacac; }
-        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .locked-icon {
+        md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .locked-icon {
           width: 14px;
           display: inline-block;
           position: absolute;
           left: 12px;
           top: 16px; }
-        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .locked-icon * {
+        md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .locked-icon * {
           stroke: #4f4d4d; }
-        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span {
+        md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .validationBox span {
           width: 335px;
           padding: 3px 10px;
           position: absolute;
@@ -535,7 +535,7 @@ md-dialog.my-profile {
           color: #ffffff;
           font-size: 13px;
           line-height: 24px; }
-          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span:after {
+          md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .validationBox span:after {
             content: '';
             position: absolute;
             border-color: transparent;
@@ -544,24 +544,24 @@ md-dialog.my-profile {
             border-width: 10px;
             bottom: -20px;
             left: 13px; }
-          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span.email-exist-massage {
+          md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .validationBox span.email-exist-massage {
             top: -55px; }
-          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .validationBox span.no-email-massage {
+          md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group .validationBox span.no-email-massage {
             top: -58px; }
-        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.valid input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.valid select, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.valid textarea {
+        md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group.valid input, md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group.valid select, md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group.valid textarea {
           border-color: #9a9797; }
-        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group input[disabled], md-dialog.my-profile .content-wrapper .auth-form .znk-input-group select[disabled] {
+        md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group input[disabled], md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group select[disabled] {
           color: #acacac;
           background-color: #f9f9f9; }
-        md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid select {
+        md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group.invalid input, md-dialog.admin-profile .content-wrapper .auth-form .znk-input-group.invalid select {
           border-color: #ff6766; }
-      md-dialog.my-profile .content-wrapper .auth-form .timezone-manual {
+      md-dialog.admin-profile .content-wrapper .auth-form .timezone-manual {
         margin: -10px 220px;
         font-size: 14px;
         color: #626060;
         font-family: Lato;
         font-weight: 300; }
-      md-dialog.my-profile .content-wrapper .auth-form .is-zinkerz-teacher label {
+      md-dialog.admin-profile .content-wrapper .auth-form .is-zinkerz-teacher label {
         width: 30%;
         font-size: 14px;
         color: #4f4d4d;
@@ -571,14 +571,14 @@ md-dialog.my-profile {
         text-align: right;
         margin: auto;
         display: inline-block; }
-      md-dialog.my-profile .content-wrapper .auth-form .btn-wrap {
+      md-dialog.admin-profile .content-wrapper .auth-form .btn-wrap {
         display: -ms-flexbox;
         display: flex;
         -ms-flex-pack: end;
             justify-content: flex-end;
         margin-right: 50px;
         outline: none; }
-        md-dialog.my-profile .content-wrapper .auth-form .btn-wrap .save-pass-btn {
+        md-dialog.admin-profile .content-wrapper .auth-form .btn-wrap .save-pass-btn {
           width: 15%;
           margin: 0;
           box-shadow: none;
@@ -588,7 +588,7 @@ md-dialog.my-profile {
           border: 2px solid #0a9bad;
           color: #0a9bad;
           outline: none; }
-  md-dialog.my-profile .msg-wrap {
+  md-dialog.admin-profile .msg-wrap {
     width: 342px;
     margin: 0 auto;
     display: -ms-flexbox;
@@ -596,7 +596,7 @@ md-dialog.my-profile {
     margin-top: 10px;
     max-height: 28px;
     visibility: hidden; }
-    md-dialog.my-profile .msg-wrap.show-error .error-msg {
+    md-dialog.admin-profile .msg-wrap.show-error .error-msg {
       visibility: visible;
       width: 100%;
       height: 22px;
@@ -605,19 +605,19 @@ md-dialog.my-profile {
       -ms-flex-align: center;
           align-items: center;
       padding: 6px 0 6px 5px; }
-    md-dialog.my-profile .msg-wrap .myProfile-danger-red-icon {
+    md-dialog.admin-profile .msg-wrap .adminProfile-danger-red-icon {
       width: 20px;
       margin-right: 17px; }
-      md-dialog.my-profile .msg-wrap .myProfile-danger-red-icon * {
+      md-dialog.admin-profile .msg-wrap .adminProfile-danger-red-icon * {
         fill: #0a8999; }
-  md-dialog.my-profile .big-success-msg .completed-v-icon-wrap {
+  md-dialog.admin-profile .big-success-msg .completed-v-icon-wrap {
     width: 120px;
     margin: 25px auto;
     display: block; }
-  md-dialog.my-profile .big-success-msg div {
+  md-dialog.admin-profile .big-success-msg div {
     text-align: center;
     margin-top: 20px; }
-  md-dialog.my-profile .big-success-msg .done-btn-wrap {
+  md-dialog.admin-profile .big-success-msg .done-btn-wrap {
     margin: 40px auto;
     display: -ms-flexbox;
     display: flex;
