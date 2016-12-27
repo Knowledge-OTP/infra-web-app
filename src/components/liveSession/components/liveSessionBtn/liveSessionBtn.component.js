@@ -13,14 +13,15 @@
                 'ngInject';
 
                 var vm = this;
-                var isTeacher = (ENV.appContext.toLowerCase()) === 'dashboard';
-                var isStudent = ENV.appContext.toLowerCase() === 'student';
 
-                function trackStudentOrTeacherPresenceCB(prevUid, uid) {
-                    PresenceService.getCurrentUserStatus(uid).then(function (currUserPresenceStatus) {
-                        vm.isOffline = currUserPresenceStatus === PresenceService.userStatus.OFFLINE;
-                    });
-                }
+                $scope.$watch(function () {
+                    return vm.student;
+                }, function (newStudent) {
+                    if (newStudent && angular.isDefined(newStudent.presence)) {
+                        vm.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
+                    }
+                }, true);
+
                 function liveSessionStateChanged(newLiveSessionData) {
                     vm.isLiveSessionActive = newLiveSessionData === LiveSessionStatusEnum.CONFIRMED.enum;
                 }
@@ -35,14 +36,6 @@
                     vm.isLiveSessionActive = false;
                     vm.endSession = endSession;
                     vm.isOffline = true;
-
-                    if (isTeacher) {
-                        StudentContextSrv.registerToStudentContextChange(trackStudentOrTeacherPresenceCB);
-                    } else if (isStudent) {
-                        TeacherContextSrv.registerToTeacherContextChange(trackStudentOrTeacherPresenceCB);
-                    } else {
-                        $log.error('appContext is not compatible with this component: ', ENV.appContext);
-                    }
 
                     LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
 
