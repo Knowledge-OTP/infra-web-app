@@ -1,7 +1,6 @@
 
-
 .admin-esLink {
-    .ui-grid{
+    .ui-grid {
         .ui-grid-viewport {
             height: 180px !important;
         }
@@ -21,21 +20,25 @@
         align-items: center;
         justify-content: space-between;
         @include admin-padding();
-        .esLink-select-container{
+        .esLink-select-container {
             display: inline-flex;
             align-items: center;
 
-            app-select{
+            app-select {
                 width: 200px;
                 display: inline-flex;
                 align-items: center;
+            }
+        }
+        .btn-wrap {
+            span{
+                color :$fontColor8;
             }
         }
         .esLink-link-text {
             @include text-style(16px, $fontColor3, Lato, $regularFontWeight);
         }
     }
-
 
 }
 
