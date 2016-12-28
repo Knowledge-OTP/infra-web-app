@@ -28,5 +28,9 @@
     "jasmine-jquery": "^2.1.1",
     "aws-sdk": "aws-sdk-js#^2.7.14",
     "angular-mocks": "1.5.5"
+  },
+  "resolutions": {
+    "angular": "1.5.8",
+    "angular-translate": "2.12.0"
   }
 }
