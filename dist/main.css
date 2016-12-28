@@ -254,6 +254,8 @@
       display: inline-flex;
       -ms-flex-align: center;
           align-items: center; }
+  .admin-esLink .esLink-link-container .btn-wrap span {
+    color: #ffffff; }
   .admin-esLink .esLink-link-container .esLink-link-text {
     font-size: 16px;
     color: #4f4d4d;
