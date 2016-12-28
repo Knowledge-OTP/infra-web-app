@@ -86,7 +86,6 @@
                 }
 
                 function _makeTerm(term) {
-
                     var newTerm = _escape(term);
                     if (!newTerm.match(/^\*/)) {
                         newTerm = '*' + newTerm;

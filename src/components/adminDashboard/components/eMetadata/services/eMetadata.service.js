@@ -8,8 +8,8 @@
 
 
                 var self = this;
-                //  var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
-                var profilePath = "http://localhost:3009/teachworks/zinkerzTeacher/all";
+                  var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
+             //   var profilePath = "http://localhost:3009/teachworks/zinkerzTeacher/all";
                 var globalStorageProm = InfraConfigSrv.getGlobalStorage();
 
                 var satURL = "https://sat-dev.firebaseio.com";
@@ -33,9 +33,9 @@
                                 timezonesList: obj2Array(timezonesList),
                                 localTimezone: localTimezone
                             },
-                            controller: 'AdminProfileController',
+                            controller: 'EducatorProfileController',
                             controllerAs: 'vm',
-                            templateUrl: 'app/admin/eMetadata/templates/educatorProfile.template.html',
+                            templateUrl: 'components/adminDashboard/components/eMetadata/templates/educatorProfile.template.html',
                             clickOutsideToClose: true,
                             escapeToClose: true
                         });

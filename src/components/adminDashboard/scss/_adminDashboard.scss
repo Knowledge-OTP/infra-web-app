@@ -5,15 +5,12 @@
     }
 }
 
-.app-admin {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    position: relative;
-    .btn-wrap {
-        button span {
-            color: $fontColor8;
-        }
-    }
+.admin-dashboard {
+    //.btn-wrap {
+    //    button span {
+    //        color: $fontColor8;
+    //    }
+    //}
     .admin-set-zinkerz-teacher {
         color: $fontColor6;
         text-decoration: none;
@@ -94,106 +91,6 @@
                     .search-icon * {
                         stroke: $bgColor48;
                     }
-                }
-            }
-        }
-
-    }
-    .app-admin-container {
-        background: $bgColor3;
-        width: 100%;
-        margin-left: 20px;
-        min-height: 850px;
-    }
-    .admin-header {
-        background-color: $bgColor27;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-
-        .admin-section {
-            .admin-details {
-                padding: 15px 38px;
-
-                border-top-left-radius: 15px;
-                border-top-right-radius: 15px;
-                .first-row {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    position: relative;
-                    .admin-name {
-                        @include text-style(24px, $fontColor2, Quicksand, $boldFontWeight);
-                    }
-                    .right-section {
-                        display: flex;
-                        flex-direction: row-reverse;
-                        .section-wrapper {
-                            .edit-button {
-                                cursor: pointer;
-                                position: relative;
-                                .settings-btn {
-                                    display: inline-block;
-                                    padding: 2px 0 0 0;
-                                    margin: 0;
-                                    vertical-align: middle;
-                                    .settings-icon {
-                                        width: 20px;
-                                        display: inline-block;
-                                        vertical-align: middle;
-                                        fill: $bgColor48;
-                                    }
-                                }
-                            }
-                        }
-                        .seperator {
-                            width: 2px;
-                            height: 100%;
-                            background: $bgColor62;
-                        }
-                        call-btn {
-                            width: 50px;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                    }
-
-                }
-
-            }
-        }
-
-        .admin-section.ng-enter {
-            transition: 0.5s linear all;
-            opacity: 0;
-        }
-
-        .admin-section.ng-enter.ng-enter-active {
-            opacity: 1;
-        }
-
-        .admin-section.ng-leave {
-            transition: 0.5s linear all;
-            opacity: 1;
-        }
-
-        .admin-section.ng-leave.ng-leave-active {
-            opacity: 0;
-        }
-
-        .header-nav-wrap {
-            display: flex;
-            padding: 0 38px;
-
-            .nav-item {
-                @include text-style(16px, $fontColor24, Lato, $regularFontWeight);
-                margin-right: 40px;
-                padding-bottom: 9px;
-                cursor: pointer;
-                text-transform: uppercase;
-
-                &.active {
-                    border-bottom: 3px solid $borderColor3;
                 }
             }
         }

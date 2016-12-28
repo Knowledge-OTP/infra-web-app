@@ -1,9 +1,8 @@
-
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.adminDashboard').controller('AdminProfileController',
-        function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService, $filter) {
+    angular.module('znk.infra-web-app.adminDashboard')
+        .controller('EducatorProfileController', function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService, $filter) {
             'ngInject';
             var self = this;
             var translateFilter = $filter('translate');
@@ -14,7 +13,6 @@
             self.profileData.timezone = localTimezone;
             self.profileData.educatorAvailabilityHours = translateFilter("ADMIN.EMETADATA.FROM_TO");
             self.isTimezoneManual = false;
-
 
             self.closeDialog = function () {
                 $mdDialog.cancel();
@@ -77,12 +75,9 @@
                 }
             };
 
-
             function _showNotification(type, msg) {
                 ZnkToastSrv.showToast(type, msg);
             }
-        }
-    );
+
+        });
 })(angular);
-
-
