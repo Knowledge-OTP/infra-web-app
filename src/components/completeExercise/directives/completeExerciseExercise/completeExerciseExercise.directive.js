@@ -65,10 +65,12 @@
                     };
 
                     var defaultZnkExerciseSettings = {
+                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.settings.exerciseReviewStatus,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
                     };
+
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;

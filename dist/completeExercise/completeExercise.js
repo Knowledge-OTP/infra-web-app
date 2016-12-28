@@ -18,7 +18,8 @@
         'znk.infra.screenSharing',
         'znk.infra.eventManager',
         'znk.infra.stats',
-        'znk.infra.estimatedScore'
+        'znk.infra.estimatedScore',
+        'znk.infra.znkSessionData'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -492,10 +493,12 @@
                     };
 
                     var defaultZnkExerciseSettings = {
+                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.settings.exerciseReviewStatus,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
                     };
+
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
@@ -689,9 +692,9 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "$state", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -794,6 +797,15 @@
             }
 
             function _finishExercise() {
+                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData){
+                    var liveSessionOn = !angular.equals(liveSessionData, {});
+                    if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
+                    } else {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
+                    }
+                    exerciseResult.$save();
+                });
                 exerciseResult.isComplete = true;
                 exerciseResult.endedTime = Date.now();
                 exerciseResult.$save();
@@ -917,6 +929,7 @@
                         },
                         onExit: function() {
                             if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+
                                 exerciseResult.$save();
                             }
                         },
@@ -928,6 +941,11 @@
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
+                        },
+                        onReview: function onReview () {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
+                            exerciseResult.$save();
+                            $state.go('app.dashboard.roadmap.review');
                         }
                     };
 

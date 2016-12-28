@@ -18,7 +18,8 @@
         'znk.infra.screenSharing',
         'znk.infra.eventManager',
         'znk.infra.stats',
-        'znk.infra.estimatedScore'
+        'znk.infra.estimatedScore',
+        'znk.infra.znkSessionData'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
