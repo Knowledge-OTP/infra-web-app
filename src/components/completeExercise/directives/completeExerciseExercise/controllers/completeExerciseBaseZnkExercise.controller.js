@@ -128,33 +128,34 @@
                     } else {
                         exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
                     }
+                    exerciseResult.isComplete = true;
+                    exerciseResult.endedTime = Date.now();
                     exerciseResult.$save();
-                });
-                exerciseResult.isComplete = true;
-                exerciseResult.endedTime = Date.now();
-                exerciseResult.$save();
 
-                //  stats exercise data
-                StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
-                    $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
-                    var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
+                    if (exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum) {
+                        //  stats exercise data
+                        StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
+                            $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
+                            var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                    shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
-                        var shouldBroadcast = shouldBroadcastFn({
-                            exercise: exerciseContent,
-                            exerciseResult: exerciseResult,
-                            exerciseParent: exerciseParentIsSectionOnly
+                            shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                                var shouldBroadcast = shouldBroadcastFn({
+                                    exercise: exerciseContent,
+                                    exerciseResult: exerciseResult,
+                                    exerciseParent: exerciseParentIsSectionOnly
+                                });
+
+                                if (shouldBroadcast) {
+                                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                                    ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
+                                }
+                            });
+
+                            settings.actions.done();
                         });
-
-                        if (shouldBroadcast) {
-                            var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                            var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
-                            ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
-                        }
-                    });
-
-                    settings.actions.done();
+                    }
                 });
             }
 
