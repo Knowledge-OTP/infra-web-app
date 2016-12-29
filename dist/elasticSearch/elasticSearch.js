@@ -11,16 +11,12 @@
 
     angular.module('znk.infra-web-app.elasticSearch')
         .service('ElasticSearchSrv',
-        ["esFactory", function (esFactory) {
-            'ngInject';
+            ["esFactory", "ENV", function (esFactory, ENV) {
+                'ngInject';
 
-            return esFactory({
-                host: 'znk-elastic-dev4891.cloudapp.net:9200',
-                apiVersion: '5.x',
-                log: 'trace'
-            });
-        }]
-    );
+                return esFactory(ENV.elasticSearch);
+            }]
+        );
 })(angular);
 
 angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function($templateCache) {

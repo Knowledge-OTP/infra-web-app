@@ -666,7 +666,7 @@
                             educatorTeachworksName: source.educatorTeachworksName,
                             educatorAvailabilityHours: source.educatorAvailabilityHours,
                             zinkerzTeacher: !!source.zinkerzTeacher,
-                            name: source.nickname
+                            name: source.nickname || source.name
                         };
                     });
                     return mappedData;

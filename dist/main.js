@@ -1172,7 +1172,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                             educatorTeachworksName: source.educatorTeachworksName,
                             educatorAvailabilityHours: source.educatorAvailabilityHours,
                             zinkerzTeacher: !!source.zinkerzTeacher,
-                            name: source.nickname
+                            name: source.nickname || source.name
                         };
                     });
                     return mappedData;
@@ -4849,16 +4849,12 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 
     angular.module('znk.infra-web-app.elasticSearch')
         .service('ElasticSearchSrv',
-        ["esFactory", function (esFactory) {
-            'ngInject';
+            ["esFactory", "ENV", function (esFactory, ENV) {
+                'ngInject';
 
-            return esFactory({
-                host: 'znk-elastic-dev4891.cloudapp.net:9200',
-                apiVersion: '5.x',
-                log: 'trace'
-            });
-        }]
-    );
+                return esFactory(ENV.elasticSearch);
+            }]
+        );
 })(angular);
 
 angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function($templateCache) {
