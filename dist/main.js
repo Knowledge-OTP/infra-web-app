@@ -517,6 +517,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
         'ui.router',
         'znk.infra-web-app.znkToast',
         'znk.infra-web-app.elasticSearch',
+        'znk.infra-web-app.myProfile',
         'ui.grid',
         'ui.grid.selection',
         'ui.grid.autoResize'
