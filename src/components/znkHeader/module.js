@@ -13,7 +13,7 @@
             'znk.infra-web-app.userGoalsSelection',
             'znk.infra-web-app.myProfile',
             'znk.infra.user',
-            'znk.infra.activePanel',
+            'znk.infra-web-app.activePanel',
             'znk.infra-web-app.feedback'])
         .config(function(SvgIconSrvProvider){
                 'ngInject';
