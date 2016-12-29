@@ -38,7 +38,7 @@
 
             self.timezonesList = timezonesList;
             self.profileData = userProfile;
-            self.profileData.educatorTeachworksName = self.profileData.educatorTeachworksName || self.profileData.name;
+            self.profileData.educatorTeachworksName = self.profileData.educatorTeachworksName || self.profileData.nickname;
             self.profileData.timezone = localTimezone;
             self.profileData.educatorAvailabilityHours = self.profileData.educatorAvailabilityHours || translateFilter("ADMIN.EMETADATA.FROM_TO");
             self.isTimezoneManual = false;
@@ -53,6 +53,7 @@
                 }
             };
             self.updateProfile = function (profileform) {
+
                 var type, msg;
 
                 if (profileform.$valid && profileform.$dirty) {
@@ -170,8 +171,8 @@
                     self.gridEducatorsOptions = {
                         columnDefs: [
                             {
-                                field: 'name', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
-                                cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.name}}</div>'
+                                field: 'nickname', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
+                                cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.nickname}}</div>'
                             },
                             {field: 'email', displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
                             {field: 'uid', displayName: 'UID'},
@@ -247,9 +248,14 @@
                 };
 
                 self.updateProfile = function (newProfile) {
-                    var fullPath = "users/" + newProfile.uid + "/profile";
+                    var copiedProfile =angular.copy(newProfile);
+                    var uid = copiedProfile.uid;
+                    if (uid) {
+                        delete copiedProfile.uid;
+                    }
+                    var fullPath = "users/" + uid + "/profile";
                     return InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                        return globalStorage.update(fullPath, newProfile);
+                        return globalStorage.update(fullPath, copiedProfile);
                     });
                 };
                 self.setZinkerzTeacher = function (uid, subject, isZinkerzTeacher) {
@@ -501,7 +507,7 @@
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectStudentRow(row.entity)" name="studentSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'name', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
+                            {field: 'nickname', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
                             {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
                             {field: 'uid', width: 300, displayName: 'UID'}
                             // {field: 'zinkerzTeacher', displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
@@ -656,18 +662,21 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        var source = item._source.profile || item._source;
+                        var source = item._source;
                         if (!source) {
                             return mappedData;
                         }
-                        return {
-                            uid: item._id,
-                            email: source.email,
-                            educatorTeachworksName: source.educatorTeachworksName,
-                            educatorAvailabilityHours: source.educatorAvailabilityHours,
-                            zinkerzTeacher: !!source.zinkerzTeacher,
-                            name: source.nickname || source.name
-                        };
+                        source.uid = item._id;
+                        source.zinkerzTeacher = !!source.zinkerzTeacher;
+                        return source;
+                        // {
+                        //     uid: item._id,
+                        //     email: source.email,
+                        //     educatorTeachworksName: source.educatorTeachworksName,
+                        //     educatorAvailabilityHours: source.educatorAvailabilityHours,
+                        //     zinkerzTeacher: !!source.zinkerzTeacher,
+                        //     name: source.nickname || source.name
+                        // };
                     });
                     return mappedData;
                 }
@@ -675,7 +684,7 @@
                 function _buildQueryBody(body, term) {
                     body.query = {
                         "query_string": {
-                            "fields": ["profile.zinkerzTeacher", "profile.nickname", "profile.email"],
+                            "fields": ["zinkerzTeacher", "nickname", "email"],
                             "query": term
                         }
                     };
@@ -690,7 +699,7 @@
                                 },
                                 {
                                     "query_string": {
-                                        "fields": ["profile.zinkerzTeacher", "profile.nickname", "profile.email"],
+                                        "fields": ["zinkerzTeacher", "nickname", "email"],
                                         "query": term
                                     }
                                 }]
@@ -912,20 +921,20 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"znk-input-group\"\n" +
-    "                     ng-class=\"profileZinkerzTeacherForm.zinekrzTeacherSubject.$invalid && profileZinkerzTeacherForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                     ng-class=\"profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid && profileZinkerzTeacherForm.$submitted ? 'invalid' : 'valid'\">\n" +
     "                    <label>{{'ADMIN.EMETADATA.SUBJECT' | translate}}</label>\n" +
     "                    <div class=\"znk-input\">\n" +
     "                        <input\n" +
     "                            type=\"text\"\n" +
     "                            autocomplete=\"on\"\n" +
-    "                            name=\"zinekrzTeacherSubject\"\n" +
+    "                            name=\"zinkerzTeacherSubject\"\n" +
     "                            ng-required=\"true\"\n" +
-    "                            ng-model=\"vm.profileData.zinekrzTeacherSubject\">\n" +
+    "                            ng-model=\"vm.profileData.zinkerzTeacherSubject\">\n" +
     "                        <span\n" +
-    "                            ng-if=\"profileZinkerzTeacherForm.$submitted && profileZinkerzTeacherForm.zinekrzTeacherSubject.$invalid\"\n" +
+    "                            ng-if=\"profileZinkerzTeacherForm.$submitted && profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid\"\n" +
     "                            role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"profileZinkerzTeacherForm.zinekrzTeacherSubject.$error.required\"\n" +
+    "                        <span ng-show=\"profileZinkerzTeacherForm.zinkerzTeacherSubject.$error.required\"\n" +
     "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
     "                    </span>\n" +
     "                </span>\n" +
