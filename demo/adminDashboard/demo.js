@@ -28,7 +28,12 @@
             mediaEndPoint: "//dfz02hjbsqn5e.cloudfront.net/",
             backendEndpoint: "https://znk-web-backend-dev.azurewebsites.net/",
             teachworksDataUrl: 'teachworks',
-            debug: true
+            debug: true,
+            "elasticSearch": {
+                "host": "znk-elastic-dev4891.cloudapp.net:9200",
+                "apiVersion": "5.x",
+                "log": "trace"
+            }
         })
         .controller('Main', function ($state) {
             var self = this;
