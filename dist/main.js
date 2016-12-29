@@ -4,6 +4,8 @@
     angular.module('znk.infra-web-app', [
         "znk.infra-web-app.adminDashboard",
 "znk.infra-web-app.angularMaterialOverride",
+        "znk.infra-web-app.activePanel",
+"znk.infra-web-app.angularMaterialOverride",
 "znk.infra-web-app.aws",
 "znk.infra-web-app.completeExercise",
 "znk.infra-web-app.config",
@@ -20,6 +22,7 @@
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
 "znk.infra-web-app.liveLessons",
+"znk.infra-web-app.liveSession",
 "znk.infra-web-app.loadingAnimation",
 "znk.infra-web-app.loginApp",
 "znk.infra-web-app.myProfile",
@@ -41,1086 +44,6 @@
 "znk.infra-web-app.znkToast"
     ]);
 })(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.adminDashboard', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.svgIcon',
-        'znk.infra.general',
-        'znk.infra.storage',
-        'znk.infra.user',
-        'ui.router',
-        'znk.infra-web-app.znkToast',
-        'znk.infra-web-app.elasticSearch',
-        'ui.grid',
-        'ui.grid.selection',
-        'ui.grid.autoResize'
-    ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
-                var svgMap = {
-                    'adminProfile-icon': 'components/adminDashboard/components/eMetadata/svg/admin-profile-icon.svg',
-                    'adminProfile-close-popup': 'components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.adminDashboard')
-        .controller('EducatorProfileController', ["$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", "ZnkToastSrv", "EMetadataService", "$filter", function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService, $filter) {
-            'ngInject';
-            var self = this;
-            var translateFilter = $filter('translate');
-
-            self.timezonesList = timezonesList;
-            self.profileData = userProfile;
-            self.profileData.educatorTeachworksName = self.profileData.name;
-            self.profileData.timezone = localTimezone;
-            self.profileData.educatorAvailabilityHours = translateFilter("ADMIN.EMETADATA.FROM_TO");
-            self.isTimezoneManual = false;
-
-            self.closeDialog = function () {
-                $mdDialog.cancel();
-            };
-
-            self.updateProfileTimezone = function () {
-                if (!self.profileData.isTimezoneManual) {
-                    self.profileData.timezone = localTimezone;
-                }
-            };
-            self.updateProfile = function (profileform) {
-                var type, msg;
-
-                if (profileform.$valid && profileform.$dirty) {
-                    EMetadataService.updateProfile(self.profileData).then(function () {
-                        $timeout(function () {
-                            type = 'success';
-                            msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
-                            _showNotification(type, msg);
-                        });
-                    }, function (err) {
-                        $timeout(function () {
-                            type = 'error';
-                            if (err.code === 'NETWORK_ERROR') {
-                                msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
-                                _showNotification(type, msg);
-                            } else {
-                                type = 'error';
-                                msg = 'MY_PROFILE.ERROR_OCCURRED';
-                                _showNotification(type, msg);
-                            }
-                        });
-                    });
-                }
-            };
-
-            self.setZinkerzTeacher = function (profileZinkerzTeacherform) {
-                var type, msg;
-
-                if (profileZinkerzTeacherform.$valid && profileZinkerzTeacherform.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinekrzTeacherSubject,self.profileData.zinkerzTeacher).then(function () {
-                        $timeout(function () {
-                            type = 'success';
-                            msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
-                            _showNotification(type, msg);
-                        });
-                    }, function (err) {
-                        $timeout(function () {
-                            type = 'error';
-                            if (err.code === 'NETWORK_ERROR') {
-                                msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
-                                _showNotification(type, msg);
-                            } else {
-                                type = 'error';
-                                msg = 'MY_PROFILE.ERROR_OCCURRED';
-                                _showNotification(type, msg);
-                            }
-                        });
-                    });
-                }
-            };
-
-            function _showNotification(type, msg) {
-                ZnkToastSrv.showToast(type, msg);
-            }
-
-        }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.adminDashboard')
-        .component('eMetadata', {
-            bindings: {},
-            templateUrl:  'components/adminDashboard/components/eMetadata/templates/eMetadata.template.html',
-            controllerAs: 'vm',
-            controller: ["$scope", "AdminSearchService", "$mdDialog", "$timeout", "$filter", "EMetadataService", function ($scope, AdminSearchService, $mdDialog, $timeout, $filter, EMetadataService) {
-                'ngInject';
-                var self = this;
-                var ROW_HEIGHT = 35;
-
-                var commonGridOptions = {
-                    enableColumnMenus: false,
-                    enableRowSelection: true,
-                    enableRowHeaderSelection: false,
-                    multiSelect: false,
-                    rowHeight: ROW_HEIGHT,
-                    selectionRowHeaderWidth: ROW_HEIGHT
-                };
-                var translateFilter = $filter('translate');
-
-
-                _initGrid();
-
-                self.uiGridState = {
-                    educator: {
-                        initial: true,
-                        noData: false
-                    }
-                };
-
-                self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResults(queryTerm).then(_educatorsSearchResults);
-                };
-                self.getTableHeight = function () {
-                    var rowHeight = ROW_HEIGHT;
-                    var headerHeight = ROW_HEIGHT;
-                    return {
-                        height: (self.gridEducatorsOptions.data.length * rowHeight + headerHeight) + "px"
-                    };
-                };
-
-                function _educatorsSearchResults(data) {
-                    self.gridEducatorsOptions.data = data;
-                    self.uiGridState.educator.initial = false;
-                    if (!self.gridEducatorsOptions.data.length) {
-                        self.uiGridState.educator.noData = true;
-                        self.educatorSearchNoData = self.educatorSearchQuery;
-                    }
-                    else {
-                        self.uiGridState.educator.noData = false;
-                    }
-                }
-                function _initGrid() {
-                    self.gridEducatorsOptions = {
-                        columnDefs: [
-                            {
-                                field: 'name', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
-                                cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.name}}</div>'
-                            },
-                            {field: 'email', displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
-                            {field: 'uid', displayName: 'UID'},
-                            {
-                                field: 'zinkerzTeacher',
-                                width: 150,
-                                displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
-                                cellTemplate: '<div class="ui-grid-cell-contents" >' +
-                                '<div >' +
-                                '<span ng-if="row.entity.zinkerzTeacher" translate="ADMIN.ESLINK.ZINKERZ_EDUCATOR"></span></div>' +
-                                '</div>'
-                            }
-                        ]
-                    };
-                    angular.extend(self.gridEducatorsOptions, commonGridOptions);
-                    self.gridEducatorsOptions.appScopeProvider = self;
-                    self.gridEducatorsOptions.onRegisterApi = function (gridApi) {
-                        self.gridEducatorApi = gridApi;
-                        self.gridEducatorApi.selection.on.rowSelectionChanged($scope, _rowSelectedEvent);
-                    };
-                }
-                function _rowSelectedEvent(row) {
-                    EMetadataService.showEducatorProfile(row.entity);
-                }
-
-            }]
-        });
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.adminDashboard')
-        .service('EMetadataService',
-            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log) {
-                'ngInject';
-
-
-                var self = this;
-                  var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
-             //   var profilePath = "http://localhost:3009/teachworks/zinkerzTeacher/all";
-                var globalStorageProm = InfraConfigSrv.getGlobalStorage();
-
-                var satURL = "https://sat-dev.firebaseio.com";
-                var actURL = "https://act-dev.firebaseio.com";
-                var tofelURL = "https://znk-toefl-dev.firebaseio.com";
-
-                if (!ENV.debug) {
-                    // satURL = "https://sat-dev.firebaseio.com/";
-                    // actURL = "https://act-dev.firebaseio.com/";
-                    // tofelURL = "https://znk-toefl-dev.firebaseio.com/";
-                }
-
-
-                self.showEducatorProfile = function (userProfile) {
-                    $q.all([getTimezonesList(), getLocalTimezone()]).then(function (values) {
-                        var timezonesList = values[0];
-                        var localTimezone = values[1];
-                        $mdDialog.show({
-                            locals: {
-                                userProfile: userProfile,
-                                timezonesList: obj2Array(timezonesList),
-                                localTimezone: localTimezone
-                            },
-                            controller: 'EducatorProfileController',
-                            controllerAs: 'vm',
-                            templateUrl: 'components/adminDashboard/components/eMetadata/templates/educatorProfile.template.html',
-                            clickOutsideToClose: true,
-                            escapeToClose: true
-                        });
-                    });
-
-                };
-
-                self.updateProfile = function (newProfile) {
-                    var fullPath = "users/" + newProfile.uid + "/profile";
-                    return InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                        return globalStorage.update(fullPath, newProfile);
-                    });
-                };
-                self.setZinkerzTeacher = function (uid, subject, isZinkerzTeacher) {
-                    if (!uid) {
-                        $log.error('setZinkerzTeacher: no uid');
-                        return;
-                    }
-                    if (!subject) {
-                        $log.error('setZinkerzTeacher: no subject');
-                        return;
-                    }
-                    var profile = {
-                        userId: uid,
-                        isZinkerzTeacher: !!isZinkerzTeacher,
-                        teachingSubject: subject,
-                        fbUrls: [satURL, actURL, tofelURL]
-                    };
-                    return $http.post(profilePath, profile);
-                };
-
-                function obj2Array(obj) {
-                    return Object.keys(obj).map(function (key) {
-                        return obj[key];
-                    });
-                }
-
-                function getTimezonesList() {
-                    return globalStorageProm.then(function (globalStorage) {
-                        return globalStorage.get('timezones');
-                    });
-                }
-                function getLocalTimezone() {
-                    var localTimezone;
-                    var dateArray = new Date().toString().split(' ');
-                    var timezoneCity = dateArray.find(function (item) {
-                        return (item.indexOf('(') !== -1);
-                    });
-
-                    timezoneCity = timezoneCity ? timezoneCity.replace('(', '') : null;
-
-                    return getTimezonesList().then(function (timezonesList) {
-                        if (timezoneCity) {
-                            timezonesList = obj2Array(timezonesList);
-                            localTimezone = timezonesList.find(function (timezone) {
-                                return (timezone.indexOf(timezoneCity) !== -1);
-                            });
-                        } else {
-                            if (!localTimezone) {
-                                var timezoneGMT = dateArray.find(function (item) {
-                                    return (item.indexOf('GMT') !== -1);
-                                });
-                                localTimezone = timezonesList.find(function (timezone) {
-                                    timezone = timezone.replace(':', '');
-                                    return (timezone.indexOf(timezoneGMT) !== -1);
-                                });
-                            }
-                        }
-
-                        return localTimezone;
-                    });
-                }
-
-            }]
-        );
-})(angular);
-
-
-
-/* eslint new-cap: 0 */
-
-
-(function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.adminDashboard').directive('appSelect', function () {
-
-
-
-        var directive = {
-            templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
-            restrict: 'E',
-            controllerAs: 'vm',
-            controller: AppSelectController,
-            scope: {
-                currentApp: "="
-            },
-            bindToController: true
-        };
-
-        function AppSelectController($scope, $filter, ENV) {
-            var self = this;
-            var currentAppName = ENV.firebaseAppScopeName;
-            var translateFilter = $filter('translate');
-
-            function _setCurrentAppName() {
-                var key = Object.keys(self.appName).filter(function (item) {
-                    return currentAppName.indexOf(item.toLowerCase()) > -1;
-                })[0];
-                self.selectedApp = self.appName[key];
-                self.currentApp = key;
-            }
-
-            self.appName = {
-                SAT: translateFilter('ADMIN.ESLINK.SAT'),
-                ACT: translateFilter('ADMIN.ESLINK.ACT'),
-                TOFEL: translateFilter('ADMIN.ESLINK.TOFEL')
-            };
-            _setCurrentAppName();
-
-            self.selectApp = function (key) {
-                self.selectedApp = self.appName[key];
-                self.currentApp = key;
-            };
-            self.expandIcon = 'expand_more';
-
-            self.znkOpenModal = function () {
-                self.expandIcon = 'expand_less';
-            };
-
-            $scope.$on('$mdMenuClose', function () {
-                self.expandIcon = 'expand_more';
-            });
-
-        }
-
-        return directive;
-    });
-
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.adminDashboard')
-        .component('esLink', {
-            bindings: {},
-            templateUrl:  'components/adminDashboard/components/esLink/templates/esLink.template.html',
-            controllerAs: 'vm',
-            controller: ["$filter", "AdminSearchService", "ESLinkService", "$log", "ZnkToastSrv", function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
-                'ngInject';
-                var self = this;
-                self.uiGridState = {
-                    student: {
-                        initial: true,
-                        noData: false
-                    },
-                    educator: {
-                        initial: true,
-                        noData: false
-                    }
-                };
-
-                var commonGridOptions = {
-                    enableColumnMenus: false,
-                    enableRowSelection: false,
-                    enableRowHeaderSelection: false,
-                    multiSelect: false,
-                    rowHeight: 35,
-                    selectionRowHeaderWidth: 35
-                };
-                var translateFilter = $filter('translate');
-
-                _initGrid();
-
-                self.selectEducatorRow = function (rowData) {
-                    if (self.gridEducatorApi.selection.selectRow) {
-                        self.gridEducatorApi.selection.selectRow(rowData);
-                        self.selectedEducator = rowData;
-                    }
-                };
-                self.selectStudentRow = function (rowData) {
-                    if (self.gridStudentApi.selection.selectRow) {
-                        self.gridStudentApi.selection.selectRow(rowData);
-                        self.selectedStudent = rowData;
-                    }
-                };
-                self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResultsByTerm(queryTerm).then(_educatorsSearchResults);
-                };
-                self.getStudentsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
-                };
-
-                self.link = function () {
-                    self.startLoader = true;
-                    if (!(self.selectedEducator && self.selectedStudent)) {
-                        $log.error("Must select student and educator");
-                        return;
-                    }
-                    var studentEducatorAppNames = _getStudentEducatorAppNames();
-                    if (!studentEducatorAppNames) {
-                        $log.error("Must provide educator and student app data");
-                        return;
-                    }
-                    var student = self.selectedStudent;
-                    var educator = self.selectedEducator;
-                    var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.name, student.email, educator.email, student.name,
-                        studentEducatorAppNames.educator, studentEducatorAppNames.student);
-
-                    ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
-
-                };
-                function _linkSuccess() {
-                    _endLoading();
-                    var msg = translateFilter('ADMIN.ESLINK.LINK_SUCCEEDED');
-                    _showNotification('success', msg);
-                }
-
-                function _linkError(err) {
-                    _endLoading();
-                    // var msg = "<span>translateFilter('ADMIN.ESLINK.LINK_FAILED')</span></br>+err";
-                    var msg = err;
-                    _showNotification('error', msg);
-                }
-
-                function _endLoading() {
-                    self.startLoader = self.fillLoader = false;
-                }
-
-                function _educatorsSearchResults(data) {
-                    self.gridEducatorsOptions.data = data;
-                    self.uiGridState.educator.initial = false;
-                    if (!self.gridEducatorsOptions.data.length) {
-                        self.uiGridState.educator.noData = true;
-                        self.educatorSearchNoData = self.educatorSearchQuery;
-                    }
-                    else {
-                        self.uiGridState.educator.noData = false;
-                    }
-                }
-
-                function _studentsSearchResults(data) {
-                    self.gridStudentsOptions.data = data;
-                    self.uiGridState.student.initial = false;
-                    if (!self.gridStudentsOptions.data.length) {
-                        self.uiGridState.student.noData = true;
-                        self.studentSearchNoData = self.studentsSearchQuery;
-                    }
-                    else {
-                        self.uiGridState.student.noData = false;
-                    }
-                }
-
-                function _initGrid() {
-                    self.gridStudentsOptions = {
-                        columnDefs: [
-                            {
-                                field: 'id',
-                                width: "60",
-                                displayName: '',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectStudentRow(row.entity)" name="studentSelection" value="{{row.entity.uid}}"></div>'
-                            },
-                            {field: 'name', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
-                            {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
-                            {field: 'uid', width: 300, displayName: 'UID'}
-                            // {field: 'zinkerzTeacher', displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
-                            //     cellTemplate: '<div class="ui-grid-cell-contents" >' +
-                            //     '<div  >' +
-                            //     '<span ng-if="row.entity.zinkerzTeacher" translate="ADMIN.ESLINK.ZINKERZ_EDUCATOR"></span>' +
-                            //     '<a ng-click="grid.appScope.setZinkerzTeacher(row.entity)" href= "#" ng-if="!row.entity.zinkerzTeacher" class="esLink-set-zinkerz-teacher" translate="ADMIN.ESLINK.SET_AS_ZINKERZ_EDUCATOR"></a>' +
-                            //     '</div>' +
-                            //     '</div>'
-                            // }
-                        ]
-                    };
-                    self.gridEducatorsOptions = {
-                        columnDefs: [
-                            {
-                                field: 'id',
-                                width: "60",
-                                displayName: '',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectEducatorRow(row.entity)" name="educatorSelection" value="{{row.entity.uid}}"></div>'
-                            },
-                            {field: 'name', width: 300, displayName: 'Name'},
-                            {field: 'email', width: 300, displayName: 'Email'},
-                            {field: 'uid', width: 300, displayName: 'UID'}
-                        ]
-                    };
-                    angular.extend(self.gridStudentsOptions, commonGridOptions);
-                    angular.extend(self.gridEducatorsOptions, commonGridOptions);
-                    self.gridStudentsOptions.appScopeProvider = self;
-                    self.gridEducatorsOptions.appScopeProvider = self;
-                    self.gridStudentsOptions.onRegisterApi = function (gridApi) {
-                        self.gridStudentApi = gridApi;
-                    };
-                    self.gridEducatorsOptions.onRegisterApi = function (gridApi) {
-                        self.gridEducatorApi = gridApi;
-                    };
-                }
-
-                function _getStudentEducatorAppNames() {
-                    if (!self.currentAppKey) {
-                        return null;
-                    }
-                    var appName = self.currentAppKey.toLowerCase();
-                    return {
-                        student: appName + "_app",
-                        educator: appName + "_dashboard"
-                    };
-                }
-
-                function _showNotification(type, msg) {
-                    ZnkToastSrv.showToast(type, msg);
-                }
-
-            }]
-        });
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.adminDashboard')
-        .service('ESLinkService',
-            ["$q", "$log", "$http", "ENV", function ($q, $log, $http, ENV) {
-                'ngInject';
-
-                var apiPath = ENV.backendEndpoint + "/invitation/assosciate_student";
-
-
-                this.createInvitationFactory = function (senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName) {
-                    return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
-                };
-                this.link = function (data) {
-                    var deferred = $q.defer();
-                    if (!(data && angular.isObject(data))) {
-                        $log.error('Invitation object is not defined');
-                        return;
-                    }
-                    if (!(data instanceof Invitation)) {
-                        $log.error('Invitation object must be an instance of class Invitation');
-                    }
-                    $http.post(apiPath, data).then(function (response) {
-                        deferred.resolve(response);
-                    }, function (err) {
-                        $log.error(err.data.error);
-                        deferred.reject(err.data.error);
-                    });
-                    return deferred.promise;
-                };
-
-                function Invitation(senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName) {
-                    this.senderUid = senderUid;
-                    this.receiverUid = receiverUid;
-                    this.senderName = _getName(senderName, senderEmail);
-                    this.receiverEmail = receiverEmail;
-                    this.receiverName = _getName(receiverName, receiverEmail);
-                    this.senderAppName = senderAppName;
-                    this.receiverAppName = receiverAppName;
-                    this.senderEmail = senderEmail;
-                }
-
-                function _getName(name, email) {
-                    return name || email.split("@")[0];
-                }
-            }]
-        );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.adminDashboard')
-        .service('AdminSearchService',
-            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv) {
-                'ngInject';
-
-                var sizeLimit = 10000;
-
-                this.getSearchResultsByTerm = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBodyByTerm);
-                };
-                this.getSearchResults = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBody);
-                };
-
-                function _getSearchResults(queryTerm, buildQuery) {
-                    var deferred = $q.defer();
-                    if (!angular.isFunction(buildQuery)) {
-                        $log.error('getSearchResults: buildQuery is not a function');
-                        return;
-                    }
-                    var query = {
-                        index: "firebase",
-                        type: "user",
-                        body: {
-                            "from": 0,
-                            "size": sizeLimit
-                        }
-                    };
-                    buildQuery.call(null, query.body, _makeTerm(queryTerm));
-                    ElasticSearchSrv.search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.hits));
-                    }, function (err) {
-                        $log.error(err.message);
-                        deferred.reject(err.message);
-                    });
-                    return deferred.promise;
-                }
-
-                function _searchResults(data) {
-                    var mappedData = [];
-                    if (!(data && data.hits)) {
-                        return mappedData;
-                    }
-                    mappedData = data.hits.map(function (item) {
-                        var source = item._source.profile || item._source;
-                        if (!source) {
-                            return mappedData;
-                        }
-                        return {
-                            uid: item._id,
-                            email: source.email,
-                            zinkerzTeacher: !!source.zinkerzTeacher,
-                            name: source.nickname
-                        };
-                    });
-                    return mappedData;
-                }
-
-                function _buildQueryBody(body, term) {
-                    body.query = {
-                        "query_string": {
-                            "fields": ["profile.zinkerzTeacher", "profile.nickname", "profile.email"],
-                            "query": term
-                        }
-                    };
-                }
-
-                function _buildQueryBodyByTerm(query, term) {
-                    query.query = {
-                        "bool": {
-                            "must": [
-                                {
-                                    "term": {"profile.zinkerzTeacher": "true"}
-                                },
-                                {
-                                    "query_string": {
-                                        "fields": ["profile.zinkerzTeacher", "profile.nickname", "profile.email"],
-                                        "query": term
-                                    }
-                                }]
-                        }
-                    };
-                }
-
-                function _makeTerm(term) {
-                    var newTerm = _escape(term);
-                    if (!newTerm.match(/^\*/)) {
-                        newTerm = '*' + newTerm;
-                    }
-                    if (!newTerm.match(/\*$/)) {
-                        newTerm += '*';
-                    }
-                    return newTerm;
-                }
-
-                function _escape(text) {
-                    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-                }
-
-
-            }]
-        );
-})(angular);
-
-angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
-    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
-    "<style type=\"text/css\">\n" +
-    "	.close-pop-svg {width: 100%; height: auto;}\n" +
-    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-    "</style>\n" +
-    "<path class=\"st0\"/>\n" +
-    "<g>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-    "</g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-icon.svg",
-    "<svg version=\"1.1\" id=\"Layer_1\"\n" +
-    "     xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-    "	 viewBox=\"0 0 140.7 171.1\" xml:space=\"preserve\" class=\"profile-svg\">\n" +
-    "<style type=\"text/css\">\n" +
-    "	.profile-svg {width: 100%; height: auto;}\n" +
-    "	.profile-svg .st0{fill:#000000;}\n" +
-    "</style>\n" +
-    "\n" +
-    "<g>\n" +
-    "	<path class=\"st0\" d=\"M0.2,171.1c-0.9-10.2,0.8-19.6,3.6-28.9c2.9-9.6,9.3-14.6,19.1-15.7c4.1-0.5,8.3-1.1,12.3-2.1c6.1-1.5,10.7-5.1,13.7-11.2\n" +
-    "		c-7.7-7.5-13.2-16.5-16.9-26.6c-0.3-0.7-0.9-1.7-1.5-1.8c-6.2-0.8-7.3-5.8-8.4-10.4c-0.9-3.7-0.9-7.6-0.9-11.4\n" +
-    "		c0-1.7,0.7-4.4,1.8-4.9c5.5-2.5,3.5-7.2,4.1-11.3c1.3-9.1,2.8-18.3,4.8-27.3c1.8-8.4,7.8-13.3,15.7-16c13.1-4.6,26.4-4,39.9-1.9\n" +
-    "		c7.9,1.3,16,1.9,24,2.8c-3.3,10.2-0.9,21.2,1.5,32.2c0.8,3.5,0.9,7.2,1.1,10.9c0.2,3.9-0.4,7.3,3.3,11c5.5,5.5,1.1,22.2-5.8,26.1\n" +
-    "		c-1,0.6-2.1,1.6-2.6,2.7c-3.8,9.9-9.2,18.8-17.1,26.2c3.7,7.6,10.2,10.7,17.8,11.9c4.3,0.7,8.9,0.6,12.7,2.3\n" +
-    "		c4.2,1.9,9,4.6,11.2,8.3c6.2,10.6,7.4,22.5,7,35C93.7,171.1,47.2,171.1,0.2,171.1z\"/>\n" +
-    "</g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/adminDashboard/components/eMetadata/templates/eMetadata.template.html",
-    "<div class=\"admin-dashboard admin-eMetadata\" translate-namespace=\"ADMIN\">\n" +
-    "\n" +
-    "    <div class=\"admin-main-container-overlay\">\n" +
-    "        <div class=\"admin-search-container\">\n" +
-    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-    "            <div class=\"admin-search-pane\">\n" +
-    "                <div class=\"search-wrap\">\n" +
-    "                    <div class=\"znk-input-group\">\n" +
-    "                        <input type=\"search\"\n" +
-    "                               minlength=\"3\"\n" +
-    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
-    "                               name=\"search-box\"\n" +
-    "                               ng-model=\"vm.educatorSearchQuery\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button class=\"admin-search-btn\" ng-click=\"vm.getEducatorsSearchResults(vm.educatorSearchQuery)\"\n" +
-    "                        ng-disabled=\"!vm.educatorSearchQuery\" translate=\".SEARCH\">\n" +
-    "                </button>\n" +
-    "\n" +
-    "            </div>\n" +
-    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/adminDashboard/components/eMetadata/templates/educatorProfile.template.html",
-    "<md-dialog ng-cloak class=\"admin-dashboard admin-profile\" translate-namespace=\"ADMIN\">\n" +
-    "    <div class=\"top-icon-wrap\">\n" +
-    "        <div class=\"top-icon\">\n" +
-    "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"adminProfile-icon\"></svg-icon>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <md-toolbar>\n" +
-    "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeDialog()\">\n" +
-    "            <svg-icon name=\"adminProfile-close-popup\"></svg-icon>\n" +
-    "        </div>\n" +
-    "    </md-toolbar>\n" +
-    "    <div class=\"content-wrapper\">\n" +
-    "        <div class=\"main-title\" translate=\".EMETADATA.EDUCATOR_PROFILE\"></div>\n" +
-    "\n" +
-    "        <md-dialog-content>\n" +
-    "            <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\"\n" +
-    "            >\n" +
-    "                <div class=\"znk-input-group\"\n" +
-    "                     ng-class=\"profileform.educatorTeachworksName.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                    <label>{{'ADMIN.EMETADATA.EDUCATOR_TEACH_WORKS_NAME' | translate}}</label>\n" +
-    "                    <div class=\"znk-input\">\n" +
-    "                        <input\n" +
-    "                            type=\"text\"\n" +
-    "                            autocomplete=\"on\"\n" +
-    "                            name=\"educatorTeachworksName\"\n" +
-    "                            ng-required=\"true\"\n" +
-    "                            ng-model=\"vm.profileData.educatorTeachworksName\">\n" +
-    "                        <span ng-if=\"profileform.$submitted && profileform.educatorTeachworksName.$invalid\"\n" +
-    "                              role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"profileform.educatorTeachworksName.$error.required\"\n" +
-    "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"znk-input-group\"\n" +
-    "                     ng-class=\"profileform.email.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                    <label>{{'MY_PROFILE.EMAIL' | translate}}</label>\n" +
-    "                    <div class=\"znk-input\">\n" +
-    "                        <input\n" +
-    "                            type=\"email\"\n" +
-    "                            autocomplete=\"on\"\n" +
-    "                            name=\"email\"\n" +
-    "                            ng-required=\"true\"\n" +
-    "                            disabled=\"true\"\n" +
-    "                            ng-model=\"vm.profileData.email\">\n" +
-    "\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"znk-input-group\">\n" +
-    "                    <label for=\"timezone\">{{'MY_PROFILE.TIMEZONE' | translate}}</label>\n" +
-    "                    <div class=\"znk-input\">\n" +
-    "                        <select id=\"timezone\" name=\"timezone\"\n" +
-    "                                ng-options=\"time as time for time in vm.timezonesList\"\n" +
-    "                                ng-model=\"vm.profileData.timezone\"\n" +
-    "                                ng-disabled=\"!vm.profileData.isTimezoneManual\">\n" +
-    "                        </select>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"timezone-manual\">\n" +
-    "                    <input type=\"checkbox\"\n" +
-    "                           id=\"timezoneManual\" name=\"timezoneManual\"\n" +
-    "                           ng-model=\"vm.profileData.isTimezoneManual\"\n" +
-    "                           ng-change=\"vm.updateProfileTimezone()\">\n" +
-    "                    <label for=\"timezoneManual\">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>\n" +
-    "                </div>\n" +
-    "                <div class=\"znk-input-group\"\n" +
-    "                     ng-class=\"profileform.educatorAvailabilityHours.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                    <label>{{'ADMIN.EMETADATA.AVAILABILITY_HOURS' | translate}}</label>\n" +
-    "                    <div class=\"znk-input\">\n" +
-    "                        <textarea\n" +
-    "                            type=\"text\"\n" +
-    "                            autocomplete=\"on\"\n" +
-    "                            name=\"educatorAvailabilityHours\"\n" +
-    "                            ng-required=\"true\"\n" +
-    "                            rows=\"4\" cols=\"50\"\n" +
-    "                            ng-model=\"vm.profileData.educatorAvailabilityHours\">\n" +
-    "                        </textarea>\n" +
-    "                        <span ng-if=\"profileform.$submitted && profileform.educatorAvailabilityHours.$invalid\"\n" +
-    "                              role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"profileform.educatorAvailabilityHours.$error.required\"\n" +
-    "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"btn-wrap\">\n" +
-    "                    <button class=\"save-pass-btn\"><span translate=\"MY_PROFILE.SAVE\"></span></button>\n" +
-    "                </div>\n" +
-    "            </form>\n" +
-    "\n" +
-    "            <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
-    "                <div class=\"error-msg\">\n" +
-    "                    <svg-icon name=\"adminProfile-danger-red-icon\" class=\"adminProfile-danger-red-icon\"></svg-icon>\n" +
-    "                    <div translate=\"{{vm.generalError}}\"></div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </md-dialog-content>\n" +
-    "    </div>\n" +
-    "    <div class=\"content-wrapper\">\n" +
-    "\n" +
-    "        <md-dialog-content>\n" +
-    "            <div class=\"container-title md-subheader\" translate=\".EMETADATA.ZINKERZ_EDUCATOR\"></div>\n" +
-    "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\"\n" +
-    "                  ng-submit=\"vm.setZinkerzTeacher(profileZinkerzTeacherForm)\">\n" +
-    "                <div class=\"znk-input-group\">\n" +
-    "                    <label for=\"zinkerzTeacher\">{{'ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR' | translate}}</label>\n" +
-    "                    <div class=\"znk-input\">\n" +
-    "                        <input type=\"checkbox\"\n" +
-    "                               id=\"zinkerzTeacher\" name=\"zinkerzTeacher\"\n" +
-    "                               ng-model=\"vm.profileData.zinkerzTeacher\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"znk-input-group\"\n" +
-    "                     ng-class=\"profileZinkerzTeacherForm.zinekrzTeacherSubject.$invalid && profileZinkerzTeacherForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                    <label>{{'ADMIN.EMETADATA.SUBJECT' | translate}}</label>\n" +
-    "                    <div class=\"znk-input\">\n" +
-    "                        <input\n" +
-    "                            type=\"text\"\n" +
-    "                            autocomplete=\"on\"\n" +
-    "                            name=\"zinekrzTeacherSubject\"\n" +
-    "                            ng-required=\"true\"\n" +
-    "                            ng-model=\"vm.profileData.zinekrzTeacherSubject\">\n" +
-    "                        <span\n" +
-    "                            ng-if=\"profileZinkerzTeacherForm.$submitted && profileZinkerzTeacherForm.zinekrzTeacherSubject.$invalid\"\n" +
-    "                            role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"profileZinkerzTeacherForm.zinekrzTeacherSubject.$error.required\"\n" +
-    "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"btn-wrap\">\n" +
-    "                    <button class=\"save-pass-btn\"><span translate=\"MY_PROFILE.SAVE\"></span></button>\n" +
-    "                </div>\n" +
-    "            </form>\n" +
-    "\n" +
-    "            <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
-    "                <div class=\"error-msg\">\n" +
-    "                    <svg-icon name=\"adminProfile-danger-red-icon\" class=\"adminProfile-danger-red-icon\"></svg-icon>\n" +
-    "                    <div translate=\"{{vm.generalError}}\"></div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </md-dialog-content>\n" +
-    "    </div>\n" +
-    "</md-dialog>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "");
-  $templateCache.put("components/adminDashboard/components/esLink/directives/app-select.template.html",
-    "<div class=\"znk-app-select\">\n" +
-    "    <div class=\"selected-item\" ng-bind=\"vm.selectedApp\"></div>\n" +
-    "    <md-menu md-offset=\"-150 60\">\n" +
-    "        <md-button  ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\"\n" +
-    "                   class=\"md-icon-button profile-open-modal-btn\"\n" +
-    "                   aria-label=\"Open sample menu\">\n" +
-    "            <div></div>\n" +
-    "            <md-icon class=\"material-icons\">{{vm.expandIcon}}</md-icon>\n" +
-    "        </md-button>\n" +
-    "        <md-menu-content class=\"md-menu-content-znk-app-select\">\n" +
-    "            <md-list>\n" +
-    "                <md-list-item md-ink-ripple class=\"app-select-item\">\n" +
-    "                    <span  ng-click=\"vm.selectApp('SAT')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.SAT}\"\n" +
-    "                          ng-bind=\"::vm.appName.SAT\"></span>\n" +
-    "                </md-list-item>\n" +
-    "                <md-list-item\n" +
-    "                    md-ink-ripple\n" +
-    "                    class=\"app-select-item\">\n" +
-    "                    <span ng-click=\"vm.selectApp('ACT')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.ACT}\" ng-bind=\"::vm.appName.ACT\"></span>\n" +
-    "                </md-list-item>\n" +
-    "                <md-list-item\n" +
-    "                    md-ink-ripple\n" +
-    "                    class=\"app-select-item\">\n" +
-    "                    <span ng-click=\"vm.selectApp('TOFEL')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.TOFEL}\" ng-bind=\"::vm.appName.TOFEL\"></span>\n" +
-    "                </md-list-item>\n" +
-    "            </md-list>\n" +
-    "        </md-menu-content>\n" +
-    "    </md-menu>\n" +
-    "</div>\n" +
-    "\n" +
-    "");
-  $templateCache.put("components/adminDashboard/components/esLink/templates/esLink.template.html",
-    "<div class=\"admin-dashboard admin-esLink\" translate-namespace=\"ADMIN\">\n" +
-    "\n" +
-    "    <div class=\"admin-main-container-overlay\">\n" +
-    "        <div class=\"admin-search-container\">\n" +
-    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_STUDENT\"></div>\n" +
-    "            <div class=\"admin-search-pane\">\n" +
-    "                <div class=\"search-wrap\">\n" +
-    "                    <div class=\"znk-input-group\">\n" +
-    "                        <input type=\"search\"\n" +
-    "                               minlength=\"3\"\n" +
-    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}\"\n" +
-    "                               name=\"search-box\"\n" +
-    "                               ng-model=\"vm.studentsSearchQuery\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button class=\"admin-search-btn\" ng-click=\"vm.getStudentsSearchResults(vm.studentsSearchQuery)\"\n" +
-    "                        ng-disabled=\"!vm.studentsSearchQuery\" translate=\".SEARCH\">\n" +
-    "                </button>\n" +
-    "\n" +
-    "            </div>\n" +
-    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-    "            <div ui-grid-selection ui-grid=\"vm.gridStudentsOptions\" class=\"admin-grid\">\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.student.initial\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <span translate=\"ADMIN.ESLINK.STUDENT_INITIAL_MSG\"></span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.student.noData\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <span>{{'ADMIN.ESLINK.STUDENT_NODATA_MSG' | translate}} '{{vm.studentSearchNoData}}'</span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <hr>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"admin-search-container\">\n" +
-    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-    "            <div class=\"admin-search-pane\">\n" +
-    "                <div class=\"search-wrap\">\n" +
-    "                    <div class=\"znk-input-group\">\n" +
-    "                        <input type=\"search\"\n" +
-    "                               minlength=\"3\"\n" +
-    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
-    "                               name=\"search-box\"\n" +
-    "                               ng-model=\"vm.educatorSearchQuery\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button class=\"admin-search-btn\" ng-click=\"vm.getEducatorsSearchResults(vm.educatorSearchQuery)\"\n" +
-    "                        ng-disabled=\"!vm.educatorSearchQuery\" translate=\".SEARCH\">\n" +
-    "                </button>\n" +
-    "\n" +
-    "            </div>\n" +
-    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-    "            <div ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\">\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
-    "                        <div class=\"admin-msg-note\" translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG_NOTE\"></div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <hr>\n" +
-    "\n" +
-    "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
-    "    <div class=\"esLink-link-container\">\n" +
-    "        <div class=\"esLink-select-container\">\n" +
-    "            <span class=\"esLink-link-text\" translate=\"ADMIN.ESLINK.LINK_MSG\"></span>\n" +
-    "            <app-select current-app=\"vm.currentAppKey\"></app-select>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"btn-wrap\">\n" +
-    "            <button element-loader\n" +
-    "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
-    "                    fill-loader=\"vm.fillLoader\"\n" +
-    "                    show-loader=\"vm.startLoader\"\n" +
-    "                    bg-loader=\"'#037684'\"\n" +
-    "                    precentage=\"50\"\n" +
-    "                    font-color=\"'#FFFFFF'\"\n" +
-    "                    bg=\"'#0a9bad'\"\n" +
-    "                    ng-click=\"vm.link()\"\n" +
-    "                    class=\"md-button assign-lesson-btn drop-shadow\"\n" +
-    "                    name=\"submit\">\n" +
-    "                <span translate=\"ADMIN.ESLINK.LINK_BTN\"></span>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "");
-}]);
 
 (function (angular) {
     'use strict';
@@ -1150,7 +73,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             'ngInject';
 
          function _updateAwsConfig(config, options) {
-            options = options || {}; 
+            options = options || {};
             config = config || false;
 
             if (!config) {
@@ -1160,20 +83,20 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                        IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
                    }),
                };
-            } 
+            }
 
             $window.AWS.config.update(config);
-         }  
+         }
 
          function _init() {
               _updateAwsConfig();
-         }   
-           
+         }
+
          _init();
 
           function _generateFileName() {
-             return UtilitySrv.general.createGuid();  
-          } 
+             return UtilitySrv.general.createGuid();
+          }
 
           function _getFile(blob, fileName) {
               return new $window.File([blob], fileName);
@@ -1182,7 +105,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
           function _addSlashToPath(prefixPath) {
               var prefixPathLength = prefixPath.length;
 
-              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength);
 
               if (lastChar === '/') {
                   return prefixPath;
@@ -1211,13 +134,13 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
               this.filesNames = [];
 
-              this.bucketInstance = new $window.AWS.S3({ 
+              this.bucketInstance = new $window.AWS.S3({
                    params: {
                       Bucket: this.bucketName
                    }
               });
           }
-         
+
         AwsS3.prototype.upload = function(options) {
             var deferred = $q.defer();
             var errMsg;
@@ -1239,7 +162,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                   deferred.reject(errMsg);
                   return;
             }
-            
+
             var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
             var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
             var filePath = _getFilePath(options.prefixPath, file);
@@ -1262,7 +185,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             });
 
             return deferred.promise;
-        };  
+        };
 
         AwsS3.prototype.getCurrentFileName = function() {
             var filesLength = this.filesNames.length;
@@ -1276,9 +199,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
         this.updateConfig = updateConfig;
 
-        // factory for aws bucket instances 
+        // factory for aws bucket instances
         this.newAwsS3 = function (options) {
-            return new AwsS3(options);   
+            return new AwsS3(options);
         };
 
       }]
@@ -1309,7 +232,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
         'znk.infra.screenSharing',
         'znk.infra.eventManager',
         'znk.infra.stats',
-        'znk.infra.estimatedScore'
+        'znk.infra.estimatedScore',
+        'znk.infra.znkSessionData'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -1783,10 +707,12 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     };
 
                     var defaultZnkExerciseSettings = {
+                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.settings.exerciseReviewStatus,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
                     };
+
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
@@ -1980,9 +906,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "$state", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -2085,6 +1011,15 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
             }
 
             function _finishExercise() {
+                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData){
+                    var liveSessionOn = !angular.equals(liveSessionData, {});
+                    if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
+                    } else {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
+                    }
+                    exerciseResult.$save();
+                });
                 exerciseResult.isComplete = true;
                 exerciseResult.endedTime = Date.now();
                 exerciseResult.$save();
@@ -2208,6 +1143,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         },
                         onExit: function() {
                             if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+
                                 exerciseResult.$save();
                             }
                         },
@@ -2219,6 +1155,11 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
+                        },
+                        onReview: function onReview () {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
+                            exerciseResult.$save();
+                            $state.go('app.dashboard.roadmap.review');
                         }
                     };
 
@@ -2624,22 +1565,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {                    
+                exerciseCycleSrv.invoke = function (methodName, data) {
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {                      
+                    if (angular.isDefined(hook)) {
                         try {
-                            fn = $injector.invoke(hook);         
+                            fn = $injector.invoke(hook);
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-                        
+
                         return fn.apply(null, data);
-                    } 
+                    }
                 };
 
                 return exerciseCycleSrv;
@@ -2883,7 +1824,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-        
+
     ]);
 })(angular);
 
@@ -4269,7 +3210,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -5672,7 +4613,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject'; 
+            'ngInject';
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -5701,7 +4642,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
 
 (function () {
     'use strict';
-    
+
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -5952,7 +4893,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-                    
+
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -6799,7 +5740,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     var listenerData = getListenerData(userId, event);
                     studentStorage.offEvent('child_added', listenerData.path, listenerData.childAddedHandler);
                     studentStorage.offEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
-                    
+
                     angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
                             registerEvents[userId][event].cb.splice(index, 1);
@@ -8165,6 +7106,1072 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
+    "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession',
+        [
+            'ngMaterial',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'znk.infra.auth',
+            'znk.infra.userContext',
+            'znk.infra.utility',
+            'znk.infra.analytics',
+            'znk.infra.general',
+            'znk.infra.user',
+            'znk.infra.svgIcon',
+            'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.znkToast'
+        ])
+        .config([
+            'SvgIconSrvProvider',
+            function (SvgIconSrvProvider) {
+                var svgMap = {
+                    'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
+                    'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
+                    'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }
+        ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').component('liveSession', {
+            templateUrl: 'components/liveSession/components/liveSession/liveSession.template.html',
+            bindings: {
+                userLiveSessionState: '<',
+                onClose: '&'
+            },
+            controllerAs: 'vm',
+            controller: ["UserLiveSessionStateEnum", "$log", function (UserLiveSessionStateEnum, $log) {
+                'ngInject';
+
+                var vm = this;
+
+                this.$onInit = function () {
+                    if (vm.userLiveSessionState) {
+                        vm.liveSessionCls = 'active-state';
+                    } else {
+                        $log.error('liveSessionComponent: invalid state was provided');
+                    }
+                };
+            }]
+        }
+    );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession')
+        .component('liveSessionBtn', {
+            bindings: {
+                student: '='
+            },
+            templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
+            controllerAs: 'vm',
+            controller: ["$log", "$scope", "$mdDialog", "LiveSessionSrv", "StudentContextSrv", "TeacherContextSrv", "PresenceService", "ENV", "LiveSessionStatusEnum", function ($log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
+                                  PresenceService, ENV, LiveSessionStatusEnum) {
+                'ngInject';
+
+                var vm = this;
+
+                this.$onInit = function() {
+                    vm.isLiveSessionActive = false;
+                    vm.isOffline = true;
+                    vm.endSession = endSession;
+                    vm.showSessionModal = showSessionModal;
+
+                    $scope.$watch('vm.student', function (newStudent) {
+                        if (newStudent && angular.isDefined(newStudent.presence)) {
+                            vm.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
+                        }
+                    }, true);
+
+                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
+                };
+
+                function showSessionModal() {
+                    $mdDialog.show({
+                        template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
+                        scope: $scope,
+                        preserveScope: true,
+                        clickOutsideToClose: true
+                    });
+                }
+                function liveSessionStateChanged(newLiveSessionData) {
+                    vm.isLiveSessionActive = newLiveSessionData === LiveSessionStatusEnum.CONFIRMED.enum;
+                }
+                function endSession() {
+                    LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                    });
+                }
+            }]
+        });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession')
+        .component('liveSessionSubjectModal', {
+            bindings: {
+                student: '='
+            },
+            templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
+            controllerAs: 'vm',
+            controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv) {
+                'ngInject';
+
+                var vm = this;
+
+                this.$onInit = function() {
+                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
+                    vm.closeModal = $mdDialog.cancel;
+                    vm.startSession = startSession;
+                };
+
+                function startSession(sessionSubject) {
+                    LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                }
+            }]
+        });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').factory('LiveSessionStatusEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['PENDING_STUDENT', 1, 'pending student'],
+                ['PENDING_EDUCATOR', 2, 'pending educator'],
+                ['CONFIRMED', 3, 'confirmed'],
+                ['ENDED', 4, 'ended']
+            ]);
+        }]
+    );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    var subjectEnum = {
+        MATH: 0,
+        ENGLISH: 5
+    };
+
+    angular.module('znk.infra-web-app.liveSession').constant('LiveSessionSubjectEnumConst', subjectEnum);
+
+    angular.module('znk.infra-web-app.liveSession').factory('LiveSessionSubjectEnum', [
+        'EnumSrv',
+        function (EnumSrv) {
+
+            return new EnumSrv.BaseEnum([
+                ['MATH', subjectEnum.MATH, 'math'],
+                ['ENGLISH', subjectEnum.ENGLISH, 'english']
+            ]);
+        }
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').factory('UserLiveSessionStateEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['NONE', 1, 'none'],
+                ['STUDENT', 2, 'student'],
+                ['EDUCATOR', 3, 'educator']
+            ]);
+        }]
+    );
+})(angular);
+
+
+(function(){
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').run(
+        ["ActivePanelSrv", "LiveSessionEventsSrv", function(ActivePanelSrv, LiveSessionEventsSrv){
+            'ngInject';
+            ActivePanelSrv.loadActivePanel();
+            LiveSessionEventsSrv.activate();
+        }]
+    );
+})();
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').service('LiveSessionDataGetterSrv',
+        ["InfraConfigSrv", "$q", "ENV", "UserProfileService", function (InfraConfigSrv, $q, ENV, UserProfileService) {
+            'ngInject';
+
+            function _getStorage() {
+                return InfraConfigSrv.getGlobalStorage();
+            }
+
+            this.getLiveSessionDataPath = function (guid) {
+                var LIVE_SESSION_ROOT_PATH = ENV.studentAppName + '/liveSession/';
+                return LIVE_SESSION_ROOT_PATH + guid;
+            };
+
+            this.getUserLiveSessionRequestsPath  = function (userData) {
+                var appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
+                var USER_DATA_PATH = appName  + '/users/' + userData.uid;
+                return USER_DATA_PATH + '/liveSession';
+            };
+
+            this.getLiveSessionData = function (liveSessionGuid) {
+                var liveSessionDataPath = this.getLiveSessionDataPath(liveSessionGuid);
+                return _getStorage().then(function (storage) {
+                    return storage.getAndBindToServer(liveSessionDataPath);
+                });
+            };
+
+            this.getCurrUserLiveSessionRequests = function(){
+                return UserProfileService.getCurrUserId().then(function(currUid){
+                    return _getStorage().then(function(storage){
+                        var currUserLiveSessionDataPath = ENV.firebaseAppScopeName + '/users/' + currUid + '/liveSession/active';
+                        return storage.getAndBindToServer(currUserLiveSessionDataPath);
+                    });
+                });
+            };
+
+            this.getCurrUserLiveSessionData = function () {
+                var self = this;
+                return self.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
+                    var liveSessionDataPromMap = {};
+                    angular.forEach(currUserLiveSessionRequests, function(isActive, guid){
+                        if(isActive){
+                            liveSessionDataPromMap[guid] = self.getLiveSessionData(guid);
+                        }
+                    });
+
+                    return $q.all(liveSessionDataPromMap);
+                });
+            };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
+        var isEnabled = true;
+
+        this.enabled = function (_isEnabled) {
+            isEnabled = _isEnabled;
+        };
+
+        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv) {
+            'ngInject';
+
+            var LiveSessionEventsSrv = {};
+
+            function _listenToLiveSessionData(guid) {
+                var liveSessionDataPath = ENV.studentAppName + '/liveSession/' + guid;
+
+                function _cb(liveSessionData) {
+                    if (!liveSessionData) {
+                        return;
+                    }
+
+                    UserProfileService.getCurrUserId().then(function (currUid) {
+                        switch (liveSessionData.status) {
+                            case LiveSessionStatusEnum.PENDING_STUDENT.enum:
+                                if (liveSessionData.studentId !== currUid) {
+                                    return;
+                                }
+
+                                LiveSessionUiSrv.showLiveSessionToast();
+                                LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                break;
+                            case LiveSessionStatusEnum.PENDING_EDUCATOR.enum:
+                                if (liveSessionData.educatorId !== currUid) {
+                                    return;
+                                }
+
+                                LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                break;
+                            case LiveSessionStatusEnum.CONFIRMED.enum:
+                                var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+
+                                if (liveSessionData.studentId === currUid) {
+                                    userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
+                                }
+
+                                if (liveSessionData.educatorId === currUid) {
+                                    userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                                }
+
+                                if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                                    LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
+                                }
+
+                                break;
+                            case LiveSessionStatusEnum.ENDED.enum:
+                                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                                break;
+                            default:
+                                $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
+                        }
+
+                        LiveSessionSrv._liveSessionDataChanged(liveSessionData);
+                    });
+                }
+
+                InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                    globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
+                });
+            }
+
+            function _startListening() {
+                UserProfileService.getCurrUserId().then(function (currUid) {
+                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                        var appName = ENV.firebaseAppScopeName;
+                        var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
+                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
+                            if (userLiveSessionGuids) {
+                                angular.forEach(userLiveSessionGuids, function (isActive, guid) {
+                                    if(isActive){
+                                        _listenToLiveSessionData(guid);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+
+            function activate() {
+                if (isEnabled) {
+                    _startListening();
+                }
+            }
+
+            LiveSessionEventsSrv.activate = activate;
+
+            return LiveSessionEventsSrv;
+        }];
+    });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
+        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval) {
+            'ngInject';
+
+            var _this = this;
+
+            var activeLiveSessionDataFromAdapter = null;
+            var currUserLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+            var registeredCbToActiveLiveSessionDataChanges = [];
+            var registeredCbToCurrUserLiveSessionStateChange = [];
+            var liveSessionInterval = {};
+            var isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+
+            this.startLiveSession = function (studentData, sessionSubject) {
+                return UserProfileService.getCurrUserId().then(function (currUserId) {
+                    var educatorData = {
+                        uid: currUserId,
+                        isTeacher: isTeacherApp,
+                        sessionSubject: sessionSubject
+                    };
+                    return _initiateLiveSession(educatorData, studentData, UserLiveSessionStateEnum.EDUCATOR.enum);
+                });
+            };
+
+            this.confirmLiveSession = function (liveSessionGuid) {
+                if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                    var errMsg = 'LiveSessionSrv: live session is already active!!!';
+                    $log.debug(errMsg);
+                    return $q.reject(errMsg);
+                }
+
+                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
+                    liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
+                    return liveSessionData.$save();
+                });
+            };
+
+            this.endLiveSession = function (liveSessionGuid) {
+                var getDataPromMap = {};
+                getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
+                getDataPromMap.currUid = UserProfileService.getCurrUserId();
+                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
+                getDataPromMap.storage = _getStorage();
+                return $q.all(getDataPromMap).then(function (data) {
+                    var dataToSave = {};
+
+                    data.liveSessionData.status = LiveSessionStatusEnum.ENDED.enum;
+                    data.liveSessionData.endTime = _getRoundTime();
+                    data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
+                    dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
+                    _destroyCheckDurationInterval();
+
+                    data.currUidLiveSessionRequests[data.liveSessionData.guid] = false;
+                    var activePath = data.currUidLiveSessionRequests.$$path;
+                    dataToSave[activePath] = {};
+                    var archivePath = activePath.replace('/active', '/archive');
+                    archivePath += '/' + liveSessionGuid;
+                    dataToSave[archivePath] = false;
+
+                    var otherUserLiveSessionRequestPath;
+                    if (data.liveSessionData.studentId !== data.currUid) {
+                        otherUserLiveSessionRequestPath = data.liveSessionData.studentPath;
+                    } else {
+                        otherUserLiveSessionRequestPath = data.liveSessionData.teacherPath;
+                    }
+                    var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
+                    dataToSave[otherUserActivePath] = {};
+                    var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
+                    otherUserArchivePath += '/' + liveSessionGuid;
+                    dataToSave[otherUserArchivePath] = false;
+
+                    return data.storage.update(dataToSave);
+                });
+            };
+
+            this.registerToActiveLiveSessionDataChanges = function (cb) {
+                registeredCbToActiveLiveSessionDataChanges.push(cb);
+                if (activeLiveSessionDataFromAdapter) {
+                    cb(activeLiveSessionDataFromAdapter);
+                }
+            };
+
+            this.unregisterFromActiveLiveSessionDataChanges = function(cb){
+                registeredCbToActiveLiveSessionDataChanges =_removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
+            };
+
+            this.registerToCurrUserLiveSessionStateChanges = function (cb) {
+                registeredCbToCurrUserLiveSessionStateChange.push(cb);
+                cb(currUserLiveSessionState);
+            };
+
+            this.unregisterFromCurrUserLiveSessionStateChanges = function (cb) {
+                _cleanRegisteredCbToActiveLiveSessionData();
+                registeredCbToCurrUserLiveSessionStateChange = _removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange,cb);
+            };
+
+            this.getActiveLiveSessionData = function () {
+                if (!activeLiveSessionDataFromAdapter) {
+                    return $q.when(null);
+                }
+
+                var dataPromMap = {
+                    liveSessionData: LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid),
+                    currUid: UserProfileService.getCurrUserId()
+                };
+                return $q.all(dataPromMap).then(function(dataMap){
+                    var orig$saveFn = dataMap.liveSessionData.$save;
+                    dataMap.liveSessionData.$save = function () {
+                        dataMap.liveSessionData.updatedBy = dataMap.currUid;
+                        return orig$saveFn.apply(dataMap.liveSessionData);
+                    };
+
+                    return dataMap.liveSessionData;
+                });
+            };
+
+            this._userLiveSessionStateChanged = function (newUserLiveSessionState, liveSessionData) {
+                if (!newUserLiveSessionState || (currUserLiveSessionState === newUserLiveSessionState)) {
+                    return;
+                }
+
+                currUserLiveSessionState = newUserLiveSessionState;
+
+                var isStudentState = newUserLiveSessionState === UserLiveSessionStateEnum.STUDENT.enum;
+                var isEducatorState = newUserLiveSessionState === UserLiveSessionStateEnum.EDUCATOR.enum;
+                if (isStudentState || isEducatorState) {
+                    activeLiveSessionDataFromAdapter = liveSessionData;
+                    LiveSessionUiSrv.activateLiveSession(newUserLiveSessionState).then(function () {
+                        _this.endLiveSession(liveSessionData.guid);
+                    });
+                } else {
+                    LiveSessionUiSrv.endLiveSession();
+                }
+
+                _invokeCurrUserLiveSessionStateChangedCb(currUserLiveSessionState);
+            };
+
+            this._liveSessionDataChanged = function (newLiveSessionData) {
+                if (!activeLiveSessionDataFromAdapter || activeLiveSessionDataFromAdapter.guid !== newLiveSessionData.guid) {
+                    return;
+                }
+
+                activeLiveSessionDataFromAdapter = newLiveSessionData;
+                _checkSessionDuration(newLiveSessionData);
+                _invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
+            };
+
+
+            function _getRoundTime() {
+                return Math.floor(Date.now() / 1000) * 1000;
+            }
+
+            function _getStorage() {
+                return InfraConfigSrv.getGlobalStorage();
+            }
+
+            function _getLiveSessionInitStatusByInitiator(initiator) {
+                var initiatorToInitStatusMap = {};
+                initiatorToInitStatusMap[UserLiveSessionStateEnum.STUDENT.enum] = LiveSessionStatusEnum.PENDING_EDUCATOR.enum;
+                initiatorToInitStatusMap[UserLiveSessionStateEnum.EDUCATOR.enum] = LiveSessionStatusEnum.PENDING_STUDENT.enum;
+
+                return initiatorToInitStatusMap[initiator] || null;
+            }
+
+            function _isLiveSessionAlreadyInitiated(educatorId, studentId) {
+                return LiveSessionDataGetterSrv.getCurrUserLiveSessionData().then(function (liveSessionDataMap) {
+                    var isInitiated = false;
+                    var liveSessionDataMapKeys = Object.keys(liveSessionDataMap);
+                    for (var i in liveSessionDataMapKeys) {
+                        var liveSessionDataKey = liveSessionDataMapKeys[i];
+                        var liveSessionData = liveSessionDataMap[liveSessionDataKey];
+
+                        var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
+                        if (isEnded) {
+                            _this.endLiveSession(liveSessionData.guid);
+                            continue;
+                        }
+
+                        isInitiated = liveSessionData.educatorId === educatorId && liveSessionData.studentId === studentId;
+                        if (isInitiated) {
+                            break;
+                        }
+                    }
+                    return isInitiated;
+                });
+            }
+
+            function _initiateLiveSession(educatorData, studentData, initiator) {
+                var errMsg;
+
+                if (angular.isUndefined(educatorData.isTeacher)) {
+                    errMsg = 'LiveSessionSrv: isTeacher property was not provided!!!';
+                    $log.error(errMsg);
+                    return $q.reject(errMsg);
+                }
+
+                if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                    errMsg = 'LiveSessionSrv: live session is already active!!!';
+                    $log.debug(errMsg);
+                    return $q.reject(errMsg);
+                }
+
+                var initLiveSessionStatus = _getLiveSessionInitStatusByInitiator(initiator);
+                if (!initLiveSessionStatus) {
+                    errMsg = 'LiveSessionSrv: initiator was not provided';
+                    $log.error(errMsg);
+                    return $q.reject(errMsg);
+                }
+
+                return _isLiveSessionAlreadyInitiated(educatorData.uid, studentData.uid).then(function (isInitiated) {
+                    if (isInitiated) {
+                        var errMsg = 'LiveSessionSrv: live session was already initiated';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
+
+                    var getDataPromMap = {};
+
+                    getDataPromMap.currUserLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
+
+                    var newLiveSessionGuid = UtilitySrv.general.createGuid();
+                    getDataPromMap.newLiveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(newLiveSessionGuid);
+
+                    getDataPromMap.currUid = UserProfileService.getCurrUserId();
+
+                    return $q.all(getDataPromMap).then(function (data) {
+                        var dataToSave = {};
+
+                        var startTime = _getRoundTime();
+                        var studentPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(studentData, newLiveSessionGuid);
+                        var educatorPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(educatorData, newLiveSessionGuid);
+                        var newLiveSessionData = {
+                            guid: newLiveSessionGuid,
+                            educatorId: educatorData.uid,
+                            studentId: studentData.uid,
+                            status: initLiveSessionStatus,
+                            studentPath: studentPath,
+                            educatorPath: educatorPath,
+                            appName: ENV.firebaseAppScopeName.split('_')[0],
+                            extendTime: 0,
+                            startTime: startTime,
+                            endTime: null,
+                            duration: null,
+                            sessionSubject: educatorData.sessionSubject.id
+                        };
+                        _checkSessionDuration(newLiveSessionData);
+                        angular.extend(data.newLiveSessionData, newLiveSessionData);
+
+                        dataToSave[data.newLiveSessionData.$$path] = data.newLiveSessionData;
+                        //educator live session requests object update
+                        data.currUserLiveSessionRequests[newLiveSessionGuid] = true;
+                        var educatorLiveSessionDataGuidPath = educatorPath + '/active';
+                        dataToSave[educatorLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
+                        //student live session requests object update
+                        var studentLiveSessionDataGuidPath = studentPath + '/active';
+                        dataToSave[studentLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
+
+                        return _getStorage().then(function (StudentStorage) {
+                            return StudentStorage.update(dataToSave);
+                        });
+                    });
+
+                });
+            }
+
+            function _cleanRegisteredCbToActiveLiveSessionData() {
+                activeLiveSessionDataFromAdapter = null;
+                registeredCbToActiveLiveSessionDataChanges = [];
+            }
+
+            function _invokeCurrUserLiveSessionStateChangedCb() {
+                _invokeCbs(registeredCbToCurrUserLiveSessionStateChange, [currUserLiveSessionState]);
+            }
+
+            function _removeCbFromCbArr(cbArr, cb){
+                return cbArr.filter(function (iterationCb) {
+                    return iterationCb !== cb;
+                });
+            }
+
+            function _invokeCbs(cbArr, args){
+                cbArr.forEach(function(cb){
+                    cb.apply(null, args);
+                });
+            }
+
+            function _checkSessionDuration(liveSessionData) {
+                if (isTeacherApp && liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum) {
+                    liveSessionInterval.interval = $interval(function () {
+                        var liveSessionDuration = (_getRoundTime() - liveSessionData.startTime)  / 60000; // convert to minutes
+                        var extendTimeMin = liveSessionData.extendTime / 60000;
+                        var maxSessionDuration = ENV.liveSession.sessionLength + extendTimeMin;
+                        var sessionTimeWithExtension = liveSessionDuration + extendTimeMin;
+                        var EndAlertTime = maxSessionDuration - ENV.liveSession.sessionEndAlertTime;
+
+                        if (sessionTimeWithExtension >= maxSessionDuration) {
+                            _this.endLiveSession(liveSessionData.guid);
+                        } else if (sessionTimeWithExtension >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
+                            LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
+                                confirmExtendSession(liveSessionData);
+                            }, function updateIntervalAlertShown() {
+                                liveSessionInterval.isSessionAlertShown = true;
+                                $log.debug('Live session is continued without extend time.');
+                            });
+                        }
+                    }, 60000);
+                }
+            }
+
+            function confirmExtendSession(liveSessionData) {
+                liveSessionData.extendTime += ENV.liveSession.sessionExtendTime * 60000;  // minutes to milliseconds
+                _this._liveSessionDataChanged(liveSessionData);
+                $log.debug('Live session is extend by ' + ENV.liveSession.sessionExtendTime + ' minutes.');
+            }
+
+            function _destroyCheckDurationInterval() {
+                $interval.cancel(liveSessionInterval.interval);
+                liveSessionInterval = {};
+            }
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectEnumConst", function (LiveSessionSubjectEnumConst) {
+        var subjects = [LiveSessionSubjectEnumConst.MATH, LiveSessionSubjectEnumConst.ENGLISH];
+
+        this.setLiveSessionSubjects = function(_subjects) {
+            if (angular.isArray(_subjects) && _subjects.length) {
+                subjects = _subjects;
+            }
+        };
+
+        this.$get = ["UtilitySrv", function (UtilitySrv) {
+            'ngInject';
+
+            var LiveSessionSubjectSrv = {};
+
+            function _getLiveSessionSubjects() {
+                return subjects.map(function (subjectEnum) {
+                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectEnumConst, subjectEnum).toLowerCase();
+                    return {
+                        id: subjectEnum,
+                        name: subjectName,
+                        iconName: 'liveSession-' + subjectName + '-icon'
+                    };
+                });
+            }
+
+            LiveSessionSubjectSrv.getLiveSessionSubjects = _getLiveSessionSubjects;
+
+            return LiveSessionSubjectSrv;
+        }];
+    }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv',function(){
+
+        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV, ZnkToastSrv) {
+            'ngInject';
+
+            var childScope, liveSessionPhElement, readyProm;
+            var LiveSessionUiSrv = {};
+
+            function _init() {
+                var bodyElement = angular.element(document.body);
+
+                liveSessionPhElement = angular.element('<div class="live-session-ph"></div>');
+
+                bodyElement.append(liveSessionPhElement);
+            }
+
+            function _endLiveSession() {
+                if(childScope){
+                    childScope.$destroy();
+                }
+
+                if(liveSessionPhElement){
+                    var hasContents = !!liveSessionPhElement.contents().length;
+                    if(hasContents){
+                        $animate.leave(liveSessionPhElement.contents());
+                    }
+                }
+            }
+
+            function _activateLiveSession(userLiveSessionState) {
+                _endLiveSession();
+
+                var defer = $q.defer();
+
+                readyProm.then(function(){
+                    childScope = $rootScope.$new(true);
+                    childScope.d = {
+                        userLiveSessionState: userLiveSessionState,
+                        onClose: function(){
+                            defer.resolve('closed');
+                        }
+                    };
+
+                    var liveSessionHtmlTemplate =
+                        '<div class="show-hide-animation">' +
+                        '<live-session user-live-session-state="d.userLiveSessionState" ' +
+                        'on-close="d.onClose()">' +
+                        '</live-session>' +
+                        '</div>';
+                    var liveSessionElement = angular.element(liveSessionHtmlTemplate);
+                    liveSessionPhElement.append(liveSessionElement);
+                    $animate.enter(liveSessionElement[0], liveSessionPhElement[0]);
+                    $compile(liveSessionPhElement)(childScope);
+                });
+
+                return defer.promise;
+            }
+
+            function activateLiveSession(userLiveSession) {
+                return _activateLiveSession(userLiveSession);
+            }
+
+            function endLiveSession() {
+                _endLiveSession();
+            }
+
+            function showStudentLiveSessionPopUp(){
+                var translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
+                translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
+                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.REJECT');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.ACCEPT');
+                return $q.all(translationsPromMap).then(function(translations){
+                    var popUpInstance = PopUpSrv.warning(
+                        translations.title,
+                        translations.content,
+                        translations.acceptBtnTitle,
+                        translations.cancelBtnTitle
+                    );
+                    return popUpInstance.promise.then(function(res){
+                        return $q.reject(res);
+                    },function(res){
+                        return $q.resolve(res);
+                    });
+                },function(err){
+                    $log.error('LiveSessionUiSrv: translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
+            function showSessionEndAlertPopup() {
+                var translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
+                translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
+                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.REJECT');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.ACCEPT');
+                return $q.all(translationsPromMap).then(function(translations){
+                    var popUpInstance = PopUpSrv.warning(
+                        translations.title,
+                        translations.content,
+                        translations.acceptBtnTitle,
+                        translations.cancelBtnTitle
+                    );
+                    return popUpInstance.promise.then(function(res){
+                        return $q.reject(res);
+                    },function(res){
+                        return $q.resolve(res);
+                    });
+                },function(err){
+                    $log.error('LiveSessionUiSrv: translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
+            function showLiveSessionToast() {
+                var options = {
+                    hideDelay: false,
+                    position: 'top left'
+                };
+                var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
+                translationsProm.then(function (message) {
+                    ZnkToastSrv.showToast('success', message, options);
+                });
+            }
+
+
+            LiveSessionUiSrv.activateLiveSession = activateLiveSession;
+
+            LiveSessionUiSrv.endLiveSession = endLiveSession;
+
+            LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
+
+            LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
+
+            LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
+
+
+            //was wrapped with timeout since angular will compile the dom after this service initialization
+            readyProm = $timeout(function(){
+                _init();
+            });
+
+            return LiveSessionUiSrv;
+        }];
+    });
+})(angular);
+
+angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/liveSession/components/liveSession/liveSession.template.html",
+    "<div ng-if=\"vm.userLiveSessionState\"\n" +
+    "     ng-class=\"vm.liveSessionCls\">\n" +
+    "    <div class=\"active-state-container\">\n" +
+    "        <div class=\"square-side top\"></div>\n" +
+    "        <div class=\"square-side right\"></div>\n" +
+    "        <div class=\"square-side bottom\"></div>\n" +
+    "        <div class=\"square-side left\"></div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
+    "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline\"\n" +
+    "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
+    "           ng-class=\"{'offline': vm.isOffline, 'end-session': vm.isLiveSessionActive}\"\n" +
+    "           ng-click=\"!vm.isLiveSessionActive ? vm.showSessionModal() : vm.endSession()\">\n" +
+    "    <span ng-if=\"!vm.isLiveSessionActive\">{{'LIVE_SESSION.START_SESSION' | translate}}</span>\n" +
+    "    <span ng-if=\"vm.isLiveSessionActive\">{{'LIVE_SESSION.END_SESSION' | translate}}</span>\n" +
+    "</md-button>\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html",
+    "<div class=\"live-session-subject-modal\">\n" +
+    "    <div class=\"base base-border-radius session-container\" translate-namespace=\"LIVE_SESSION\">\n" +
+    "        <div class=\"popup-header\">\n" +
+    "            <div class=\"top-icon-wrap\">\n" +
+    "                <div class=\"top-icon\">\n" +
+    "                    <div class=\"round-icon-wrap\">\n" +
+    "                        <svg-icon name=\"liveSession-start-lesson-popup-icon\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"popup-content\">\n" +
+    "            <div class=\"main-title\" translate=\".START_SESSION\"></div>\n" +
+    "            <div class=\"sub-title\" translate=\".SESSION_SUBJECT\"></div>\n" +
+    "            <div class=\"subjects-btns\">\n" +
+    "                <button class=\"subject-icon-wrap\"\n" +
+    "                        ng-repeat=\"subject in ::vm.sessionSubjects\"\n" +
+    "                        ng-class=\"subject.name\"\n" +
+    "                        ng-click=\"vm.startSession(subject); vm.closeModal();\">\n" +
+    "                    <svg-icon name={{subject.iconName}}></svg-icon>\n" +
+    "                    <span>{{subject.name}}</span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-english-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xml:space=\"preserve\" x=\"0px\" y=\"0px\"\n" +
+    "     viewBox=\"0 0 80 80\" class=\"reading-svg\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .reading-svg {\n" +
+    "        width: 100%;\n" +
+    "        height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "    <g>\n" +
+    "        <path d=\"M4.2,11.3c0.3,0,0.5-0.1,0.7-0.1c3.5,0.2,6.9-0.4,10.3-1.5c6.6-2.1,13.1-1,19.6,0.9c3.8,1.1,7.7,1.1,11.5,0\n" +
+    "		c7.8-2.3,15.5-3,23.1,0.4c0.5,0.2,1.1,0.2,1.6,0.2c1.8,0,3.6,0,5.5,0c0,17.3,0,34.5,0,51.8c-10,0-20.1,0-30.1,0\n" +
+    "		c-0.1,0.8-0.1,1.4-0.2,2.1c-3.6,0-7.2,0-11,0c0-0.6-0.1-1.3-0.2-2.1c-10.3,0-20.5,0-30.9,0C4.2,45.7,4.2,28.6,4.2,11.3z M39.4,60.5\n" +
+    "		c0-1.1,0-1.8,0-2.5c0-13.2,0.1-26.4,0.1-39.6c0-4.2,0-4.2-4-5.6c-8.5-2.9-17-3.6-25.3,0.6c-1.2,0.6-1.7,1.3-1.7,2.8\n" +
+    "		c0.1,13.9,0,27.9,0,41.8c0,0.6,0,1.2,0,1.9C18.8,57.6,29,56.7,39.4,60.5z M72.2,60c0-0.8,0-1.5,0-2.1c0-12.8,0-25.6,0-38.5\n" +
+    "		c0-5.6,0-5.7-5.5-7.5c-8.1-2.8-15.8-1.2-23.4,1.8c-1.4,0.5-1.8,1.3-1.8,2.7c0,14.1,0,28.1,0,42.2c0,0.6,0,1.2,0,2\n" +
+    "		C51.7,56.8,61.9,57.6,72.2,60z\"/>\n" +
+    "        <path d=\"M33.2,25.1c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,24.8,33.7,25.1,33.2,25.1z\"/>\n" +
+    "        <path d=\"M33.2,33.2c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,33,33.7,33.2,33.2,33.2z\"/>\n" +
+    "        <path d=\"M33.2,41.4c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,41.1,33.7,41.4,33.2,41.4z\"/>\n" +
+    "        <path d=\"M33.2,49.5c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,49.3,33.7,49.5,33.2,49.5z\"/>\n" +
+    "        <path d=\"M66.5,24.7c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,24.5,67.1,24.7,66.5,24.7z\"/>\n" +
+    "        <path d=\"M66.5,32.9c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,32.6,67.1,32.9,66.5,32.9z\"/>\n" +
+    "        <path d=\"M66.5,41c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,40.7,67.1,41,66.5,41z\"/>\n" +
+    "        <path d=\"M66.5,49.2c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,48.9,67.1,49.2,66.5,49.2z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-math-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xml:space=\"preserve\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "     class=\"math-icon-svg\"\n" +
+    "	 viewBox=\"-554 409.2 90 83.8\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .math-icon-svg{\n" +
+    "            width: 100%;\n" +
+    "            height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "<g>\n" +
+    "	<path d=\"M-491.4,447.3c-3,0-6.1,0-9.1,0c-2.9,0-4.7-1.8-4.7-4.7c0-6.1,0-12.1,0-18.2c0-2.9,1.8-4.7,4.7-4.7c6,0,12,0,18,0\n" +
+    "		c2.8,0,4.7,1.9,4.7,4.7c0,6.1,0,12.1,0,18.2c0,2.8-1.8,4.6-4.6,4.6C-485.4,447.4-488.4,447.3-491.4,447.3z M-491.4,435.5\n" +
+    "		c2.5,0,5,0,7.5,0c1.6,0,2.5-0.8,2.4-2c-0.1-1.5-1.1-1.9-2.4-1.9c-5,0-10.1,0-15.1,0c-1.6,0-2.6,0.8-2.5,2c0.2,1.4,1.1,1.9,2.5,1.9\n" +
+    "		C-496.5,435.5-494,435.5-491.4,435.5z\"/>\n" +
+    "	<path d=\"M-526.6,447.3c-3,0-6,0-8.9,0c-3,0-4.7-1.8-4.8-4.8c0-6,0-11.9,0-17.9c0-3,1.9-4.8,4.9-4.8c5.9,0,11.8,0,17.7,0\n" +
+    "		c3.1,0,4.9,1.8,4.9,4.8c0,6,0,11.9,0,17.9c0,3.1-1.8,4.8-4.9,4.8C-520.6,447.4-523.6,447.3-526.6,447.3z M-526.4,443.5\n" +
+    "		c1.3-0.1,2-0.9,2-2.2c0.1-1.5,0.1-3,0-4.5c0-1.1,0.4-1.4,1.4-1.4c1.4,0.1,2.8,0,4.1,0c1.3,0,2.2-0.5,2.2-1.9c0.1-1.3-0.8-2-2.3-2\n" +
+    "		c-1.4,0-2.8-0.1-4.1,0c-1.2,0.1-1.6-0.4-1.5-1.6c0.1-1.4,0-2.8,0-4.1c0-1.3-0.6-2.2-1.9-2.2c-1.4,0-2,0.8-2,2.2c0,1.5,0,3,0,4.5\n" +
+    "		c0,1-0.3,1.3-1.3,1.3c-1.5,0-3,0-4.5,0c-1.3,0-2.2,0.6-2.2,2c0,1.4,0.9,1.9,2.2,1.9c1.5,0,3,0,4.5,0c1.1,0,1.4,0.4,1.4,1.4\n" +
+    "		c-0.1,1.5,0,3,0,4.5C-528.4,442.6-527.8,443.3-526.4,443.5z\"/>\n" +
+    "	<path d=\"M-526.5,454.9c3,0,6,0,8.9,0c3,0,4.8,1.8,4.8,4.8c0,6,0,12,0,18c0,2.9-1.8,4.7-4.7,4.7c-6.1,0-12.1,0-18.2,0\n" +
+    "		c-2.8,0-4.6-1.9-4.6-4.6c0-6.1,0-12.1,0-18.2c0-2.9,1.8-4.6,4.7-4.7C-532.5,454.8-529.5,454.9-526.5,454.9z M-526.7,471.1\n" +
+    "		c1.6,1.7,2.9,3,4.2,4.3c0.9,0.9,1.9,1.2,3,0.3c1-0.8,0.9-1.9-0.2-3.1c-1-1.1-2.1-2.1-3.2-3.2c-0.6-0.6-0.6-1.1,0-1.7\n" +
+    "		c1-1,2-1.9,2.9-2.9c1.3-1.3,1.4-2.4,0.4-3.3c-0.9-0.8-2-0.7-3.2,0.5c-1.2,1.3-2.3,2.6-3.8,4.3c-1.5-1.7-2.6-3-3.8-4.2\n" +
+    "		c-1.2-1.3-2.4-1.4-3.3-0.5c-1,0.9-0.8,2,0.5,3.3c1.2,1.2,2.4,2.4,3.8,3.8c-1.4,1.4-2.7,2.6-3.9,3.8c-1.2,1.2-1.3,2.3-0.3,3.2\n" +
+    "		c0.9,0.9,2,0.8,3.2-0.4C-529.2,473.9-528.1,472.6-526.7,471.1z\"/>\n" +
+    "	<path d=\"M-505.2,468.5c0-3,0-6,0-8.9c0-2.9,1.7-4.7,4.7-4.7c6.1,0,12.1,0,18.2,0c2.9,0,4.6,1.8,4.7,4.7c0,6,0,12,0,18\n" +
+    "		c0,2.8-1.9,4.7-4.7,4.7c-6.1,0-12.1,0-18.2,0c-2.8,0-4.6-1.8-4.6-4.6C-505.3,474.7-505.2,471.6-505.2,468.5z M-491.4,476\n" +
+    "		c2.5,0,5,0,7.5,0c1.3,0,2.3-0.5,2.4-1.9c0.1-1.3-0.8-2.1-2.4-2.1c-5,0-10.1,0-15.1,0c-1.6,0-2.6,0.9-2.5,2.1\n" +
+    "		c0.2,1.4,1.1,1.9,2.5,1.9C-496.5,476-494,476-491.4,476z M-491.4,461.2c-2.5,0-5.1,0-7.6,0c-1.6,0-2.6,0.8-2.5,2\n" +
+    "		c0.2,1.4,1.1,1.9,2.5,1.9c5,0,10.1,0,15.1,0c1.3,0,2.3-0.4,2.4-1.9c0.1-1.3-0.8-2-2.4-2C-486.4,461.2-488.9,461.2-491.4,461.2z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-start-lesson-popup-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 170.1 126.2\" xml:space=\"preserve\" class=\"start-lesson-icon-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "	.start-lesson-icon-svg {width: 100%; height: auto;}\n" +
+    "	.start-lesson-icon-svg .st0{fill:#ffffff;enable-background:new;}\n" +
+    "</style>\n" +
+    "<g class=\"st0\">\n" +
+    "	<path d=\"M63.6,90.4c0,11.8,0,23.6,0,35.8c-21.1,0-42,0-63.2,0c-0.1-1.5-0.3-2.9-0.3-4.4c0-14.7-0.1-29.3,0-44\n" +
+    "		c0.1-14.4,6.9-21,21.2-21c8,0,16,0,24,0c7.6,0.1,14.3,2.6,19.7,8.2c4.8,4.9,9.6,9.7,14.5,14.5C83.1,83,87,83,90.7,79.4\n" +
+    "		c5.3-5.3,10.5-10.7,15.9-15.9c4.9-4.7,10.4-4.1,14.1,1.1c2.6,3.7,2.2,7.4-0.8,10.5c-8.7,9.2-17.5,18.3-26.5,27.1\n" +
+    "		c-5.4,5.2-10.8,5.1-16.4-0.1c-4.2-3.9-7.9-8.5-11.8-12.8C64.6,89.6,64.1,90,63.6,90.4z\"/>\n" +
+    "	<path d=\"M161.5,117.4c0-36.7,0-72.4,0-108.4c-25.6,0-51,0-76.8,0c0,17.3,0,34.4,0,51.9c-3.1,0-5.8,0-8.8,0c0-20.1,0-40.2,0-60.6\n" +
+    "		c31.4,0,62.6,0,94.2,0c0,41.8,0,83.5,0,125.6c-31.3,0-62.6,0-94.3,0c0-2.7,0-5.3,0-8.5C104.3,117.4,132.7,117.4,161.5,117.4z\"/>\n" +
+    "	<path d=\"M6.6,25.3C6.6,11,17.9-0.2,32,0c13.7,0.2,25.1,11.7,25.1,25.4c0,13.9-11.7,25.5-25.6,25.3C17.8,50.6,6.6,39.2,6.6,25.3z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-verbal-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\" y=\"0px\" viewBox=\"-586.4 16.3 301.4 213.6\" xml:space=\"preserve\"\n" +
+    "    class=\"verbal-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .verbal-icon-svg {width: 100%; height: auto;}\n" +
+    "    .verbal-icon-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "</style>\n" +
+    "<path d=\"M-546.8,113.1c0-20.2,0-40.3,0-60.5c0-7.8,0.9-9.1,8.7-8c11.5,1.5,22.9,3.7,34.3,6.1c3.5,0.7,6.8,2.7,10,4.3\n" +
+    "	c6.3,3.2,9.2,7.7,9.1,15.5c-0.5,36.6-0.2,73.3-0.2,110c0,8.6-1.3,9.5-9.4,6.7c-15.1-5.2-30.4-8.6-46.5-5.6c-3.6,0.7-5.4-1.1-5.9-4.4\n" +
+    "	c-0.2-1.5-0.1-3-0.1-4.5C-546.8,152.7-546.8,132.9-546.8,113.1z M-526.4,142.5c-1.7,0-2.5,0-3.3,0c-3.2,0-6.4,0.2-6.5,4.3\n" +
+    "	c-0.1,4.1,3,4.6,6.3,4.5c9.9-0.2,18.9,2.8,27.4,7.8c2.6,1.6,5.1,1.8,6.9-1c1.8-3,0.1-5-2.4-6.5C-507.1,146.2-516.7,143-526.4,142.5z\n" +
+    "	 M-529.3,66.9c0.2,0-0.3,0-0.8,0c-3.1,0.2-6.3,0.6-6.1,4.8c0.2,3.9,3.2,4,6.2,4c9.7-0.1,18.6,2.8,26.9,7.7c2.6,1.6,5.4,2.5,7.4-0.7\n" +
+    "	c2.1-3.3-0.1-5.2-2.7-6.8C-507.8,70.4-517.8,67.2-529.3,66.9z M-526.6,117.3c-1.8,0-2.6,0-3.5,0c-3.2,0-6.3,0.5-6.2,4.6\n" +
+    "	c0.1,3.8,3,4.1,6.1,4.1c9.9,0,18.9,2.8,27.4,7.8c2.8,1.7,5.5,2,7.2-1.2c1.6-3.1-0.4-4.9-2.9-6.4C-507.4,121-517.1,117.7-526.6,117.3\n" +
+    "	z M-527.2,92.3c-1.5,0-3-0.1-4.5,0c-2.9,0.2-5.2,1.8-4.4,4.7c0.4,1.6,3.1,3.7,4.7,3.7c10.3,0.1,19.7,2.8,28.5,8\n" +
+    "	c2.8,1.6,5.5,2.1,7.3-1.1c1.7-3.1-0.4-5-2.9-6.4C-507.3,95.9-516.8,92.6-527.2,92.3z\"/>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<path d=\"M-391.9,156.9l-20,5c-1.1,0.3-2-0.5-1.7-1.7l5-20c0.4-1.5,2.2-2.3,3.1-1.4l15.1,15.1C-389.6,154.7-390.5,156.5-391.9,156.9\n" +
+    "		z\"/>\n" +
+    "	<path d=\"M-299.8,34.6l13.9,13.9c1.2,1.2,1.2,3.2,0,4.5l-5.9,5.9c-1.2,1.2-3.2,1.2-4.5,0l-13.9-13.9c-1.2-1.2-1.2-3.2,0-4.5l5.9-5.9\n" +
+    "		C-303,33.3-301,33.3-299.8,34.6z\"/>\n" +
+    "	<path d=\"M-384.3,150.6l85.5-85.5c1-1,1.2-2.5,0.5-3.2l-15.5-15.5c-0.8-0.8-2.2-0.5-3.2,0.5l-85.5,85.5c-1,1-1.2,2.5-0.5,3.2\n" +
+    "		l15.5,15.5C-386.7,151.8-385.3,151.6-384.3,150.6z\"/>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "	<path d=\"M-355.7,129.9c-0.6,0.6-0.9,1.3-0.9,2.1c0,19.4-0.1,38.8,0.1,58.1c0.1,5.5-1.4,7.1-7.1,7.5c-31.1,2-61.3,8.9-90.6,19.6\n" +
+    "		c-3.8,1.4-7,1.5-10.9,0.1c-29.9-10.8-60.7-17.9-92.5-19.8c-4.3-0.3-5.5-1.7-5.5-5.7c0.1-52.7,0.1-105.5,0-158.2\n" +
+    "		c0-4.5,1.6-6.1,6-6.1c30.5-0.2,60.1,4,88.6,15.5c4.1,1.7,4.5,4.1,4.5,7.9c-0.1,46.5-0.1,93.1-0.1,139.6c0,1.7-0.5,3.7,0.1,5.1\n" +
+    "		c0.9,1.8,2.6,3.3,4,4.9c1.6-1.7,3.5-3.1,4.5-5c0.7-1.3,0.2-3.4,0.2-5.1c0-46.3,0.1-92.6-0.1-138.9c0-4.8,1.3-7,5.9-8.8\n" +
+    "		c27.7-11.2,56.5-15,86.1-15.1c5.4,0,6.9,1.9,6.9,7.1c-0.1,9.7-0.2,33.9-0.2,39.7c0,0.8,0.9,1.3,1.5,0.8l21.8-20.9\n" +
+    "		c0.7-0.5,1.1-1.3,1.1-2.1c0-11.1-0.9-11.6-13.4-13.1c0-2.8,0.1-5.7,0-8.6c-0.2-7.9-4-12.9-11.9-13.2c-11.7-0.5-23.5-0.2-35.3,0.7\n" +
+    "		c-21.9,1.7-42.9,7.2-63.3,15.4c-2.4,1-5.9,0.5-8.4-0.5c-27.3-11.3-55.9-15.6-85.2-16.4c-3.6-0.1-7.3,0.1-10.9,0.6\n" +
+    "		c-9.1,1.2-12.8,5.3-13,14.3c-0.1,2.5,0,5,0,7.7c-4.7,0.5-8.6,1-12.6,1.5v181.4c3.6,0.3,7.2,1,10.8,1c28.1,0.1,56.2-0.3,84.2,0.3\n" +
+    "		c7.7,0.2,15.5,2.4,22.9,5c6,2.1,11.3,2.9,17.1,0c8.6-4.2,17.7-5.5,27.4-5.3c26.8,0.4,53.6,0.1,80.4,0.1c9.4,0,11.3-1.9,11.4-11.2\n" +
+    "		c0-31.6-1.6-68.3-1.7-100.3c0-1.4-1.6-2-2.6-1.1C-341.7,115.3-352.5,126.8-355.7,129.9z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
     "");
 }]);
 
@@ -11977,13 +11984,13 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config' 
+        'znk.infra.config'
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -12035,7 +12042,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]);  
+    ]);
 })(angular);
 
 /**
@@ -13226,7 +13233,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
-            
+
             var svgMap = {
                 'workouts-roadmap-checkmark': 'components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg',
                 'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
@@ -13532,7 +13539,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
@@ -14950,7 +14957,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             'znk.infra-web-app.userGoalsSelection',
             'znk.infra-web-app.myProfile',
             'znk.infra.user',
-            'znk.infra.activePanel',
+            'znk.infra-web-app.activePanel',
             'znk.infra-web-app.feedback'])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
                 'ngInject';

@@ -1,0 +1,27 @@
+live-session-btn {
+    .session-btn {
+        @include text-style(14px, #ffffff, Lato, $regularFontWeight, null, none);
+        background-color: #ff931e;
+        height: 30px;
+        width: 140px;
+        min-height: 30px;
+        min-width: 80px;
+        line-height: 28px;
+        border-radius: 15px;
+        outline: none;
+        &:not([disabled]):hover {
+            background-color: #ff931e;
+            border: 1px solid #b7b7b7;
+        }
+    }
+    .end-session {
+        background-color: #ff6766;
+        &:not([disabled]):hover {
+            background-color: #ff6766;
+        }
+    }
+
+    .offline {
+        border: 1px solid #b7b7b7;
+    }
+}
