@@ -1201,7 +1201,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         "bool": {
                             "must": [
                                 {
-                                    "term": {"profile.zinkerzTeacher": "true"}
+                                    "term": {"zinkerzTeacher": "true"}
                                 },
                                 {
                                     "query_string": {

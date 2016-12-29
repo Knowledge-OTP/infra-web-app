@@ -78,7 +78,7 @@
                         "bool": {
                             "must": [
                                 {
-                                    "term": {"profile.zinkerzTeacher": "true"}
+                                    "term": {"zinkerzTeacher": "true"}
                                 },
                                 {
                                     "query_string": {
