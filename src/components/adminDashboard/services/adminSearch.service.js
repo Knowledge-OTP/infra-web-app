@@ -52,6 +52,8 @@
                         return {
                             uid: item._id,
                             email: source.email,
+                            educatorTeachworksName: source.educatorTeachworksName,
+                            educatorAvailabilityHours: source.educatorAvailabilityHours,
                             zinkerzTeacher: !!source.zinkerzTeacher,
                             name: source.nickname
                         };

@@ -9,9 +9,9 @@
 
             self.timezonesList = timezonesList;
             self.profileData = userProfile;
-            self.profileData.educatorTeachworksName = self.profileData.name;
+            self.profileData.educatorTeachworksName = self.profileData.educatorTeachworksName || self.profileData.name;
             self.profileData.timezone = localTimezone;
-            self.profileData.educatorAvailabilityHours = translateFilter("ADMIN.EMETADATA.FROM_TO");
+            self.profileData.educatorAvailabilityHours = self.profileData.educatorAvailabilityHours || translateFilter("ADMIN.EMETADATA.FROM_TO");
             self.isTimezoneManual = false;
 
             self.closeDialog = function () {
@@ -53,7 +53,7 @@
                 var type, msg;
 
                 if (profileZinkerzTeacherform.$valid && profileZinkerzTeacherform.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinekrzTeacherSubject,self.profileData.zinkerzTeacher).then(function () {
+                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinekrzTeacherSubject, self.profileData.zinkerzTeacher).then(function () {
                         $timeout(function () {
                             type = 'success';
                             msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
