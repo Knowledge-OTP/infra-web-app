@@ -44,9 +44,14 @@
                 };
 
                 self.updateProfile = function (newProfile) {
-                    var fullPath = "users/" + newProfile.uid + "/profile";
+                    var copiedProfile =angular.copy(newProfile);
+                    var uid = copiedProfile.uid;
+                    if (uid) {
+                        delete copiedProfile.uid;
+                    }
+                    var fullPath = "users/" + uid + "/profile";
                     return InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                        return globalStorage.update(fullPath, newProfile);
+                        return globalStorage.update(fullPath, copiedProfile);
                     });
                 };
                 self.setZinkerzTeacher = function (uid, subject, isZinkerzTeacher) {

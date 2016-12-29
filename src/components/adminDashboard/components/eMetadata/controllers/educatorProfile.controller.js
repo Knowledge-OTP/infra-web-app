@@ -9,7 +9,7 @@
 
             self.timezonesList = timezonesList;
             self.profileData = userProfile;
-            self.profileData.educatorTeachworksName = self.profileData.educatorTeachworksName || self.profileData.name;
+            self.profileData.educatorTeachworksName = self.profileData.educatorTeachworksName || self.profileData.nickname;
             self.profileData.timezone = localTimezone;
             self.profileData.educatorAvailabilityHours = self.profileData.educatorAvailabilityHours || translateFilter("ADMIN.EMETADATA.FROM_TO");
             self.isTimezoneManual = false;
@@ -24,6 +24,7 @@
                 }
             };
             self.updateProfile = function (profileform) {
+
                 var type, msg;
 
                 if (profileform.$valid && profileform.$dirty) {
@@ -53,7 +54,7 @@
                 var type, msg;
 
                 if (profileZinkerzTeacherform.$valid && profileZinkerzTeacherform.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinekrzTeacherSubject, self.profileData.zinkerzTeacher).then(function () {
+                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.profileData.zinkerzTeacher).then(function () {
                         $timeout(function () {
                             type = 'success';
                             msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';

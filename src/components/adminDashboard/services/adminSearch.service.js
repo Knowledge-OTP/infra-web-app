@@ -45,18 +45,21 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        var source = item._source.profile || item._source;
+                        var source = item._source;
                         if (!source) {
                             return mappedData;
                         }
-                        return {
-                            uid: item._id,
-                            email: source.email,
-                            educatorTeachworksName: source.educatorTeachworksName,
-                            educatorAvailabilityHours: source.educatorAvailabilityHours,
-                            zinkerzTeacher: !!source.zinkerzTeacher,
-                            name: source.nickname || source.name
-                        };
+                        source.uid = item._id;
+                        source.zinkerzTeacher = !!source.zinkerzTeacher;
+                        return source;
+                        // {
+                        //     uid: item._id,
+                        //     email: source.email,
+                        //     educatorTeachworksName: source.educatorTeachworksName,
+                        //     educatorAvailabilityHours: source.educatorAvailabilityHours,
+                        //     zinkerzTeacher: !!source.zinkerzTeacher,
+                        //     name: source.nickname || source.name
+                        // };
                     });
                     return mappedData;
                 }
@@ -64,7 +67,7 @@
                 function _buildQueryBody(body, term) {
                     body.query = {
                         "query_string": {
-                            "fields": ["profile.zinkerzTeacher", "profile.nickname", "profile.email"],
+                            "fields": ["zinkerzTeacher", "nickname", "email"],
                             "query": term
                         }
                     };
@@ -79,7 +82,7 @@
                                 },
                                 {
                                     "query_string": {
-                                        "fields": ["profile.zinkerzTeacher", "profile.nickname", "profile.email"],
+                                        "fields": ["zinkerzTeacher", "nickname", "email"],
                                         "query": term
                                     }
                                 }]

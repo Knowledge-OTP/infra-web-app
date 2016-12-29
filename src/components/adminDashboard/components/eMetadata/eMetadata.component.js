@@ -57,8 +57,8 @@
                     self.gridEducatorsOptions = {
                         columnDefs: [
                             {
-                                field: 'name', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
-                                cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.name}}</div>'
+                                field: 'nickname', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
+                                cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.nickname}}</div>'
                             },
                             {field: 'email', displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
                             {field: 'uid', displayName: 'UID'},

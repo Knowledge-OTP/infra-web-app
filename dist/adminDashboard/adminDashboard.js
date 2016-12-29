@@ -82,7 +82,7 @@
                 var type, msg;
 
                 if (profileZinkerzTeacherform.$valid && profileZinkerzTeacherform.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinekrzTeacherSubject, self.profileData.zinkerzTeacher).then(function () {
+                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.profileData.zinkerzTeacher).then(function () {
                         $timeout(function () {
                             type = 'success';
                             msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';

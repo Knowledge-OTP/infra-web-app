@@ -117,20 +117,20 @@
                     </div>
                 </div>
                 <div class="znk-input-group"
-                     ng-class="profileZinkerzTeacherForm.zinekrzTeacherSubject.$invalid && profileZinkerzTeacherForm.$submitted ? 'invalid' : 'valid'">
+                     ng-class="profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid && profileZinkerzTeacherForm.$submitted ? 'invalid' : 'valid'">
                     <label>{{'ADMIN.EMETADATA.SUBJECT' | translate}}</label>
                     <div class="znk-input">
                         <input
                             type="text"
                             autocomplete="on"
-                            name="zinekrzTeacherSubject"
+                            name="zinkerzTeacherSubject"
                             ng-required="true"
-                            ng-model="vm.profileData.zinekrzTeacherSubject">
+                            ng-model="vm.profileData.zinkerzTeacherSubject">
                         <span
-                            ng-if="profileZinkerzTeacherForm.$submitted && profileZinkerzTeacherForm.zinekrzTeacherSubject.$invalid"
+                            ng-if="profileZinkerzTeacherForm.$submitted && profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid"
                             role="alert">
                     <span class="validationBox">
-                        <span ng-show="profileZinkerzTeacherForm.zinekrzTeacherSubject.$error.required"
+                        <span ng-show="profileZinkerzTeacherForm.zinkerzTeacherSubject.$error.required"
                               translate="MY_PROFILE.REQUIRED_FIELD"></span>
                     </span>
                 </span>
