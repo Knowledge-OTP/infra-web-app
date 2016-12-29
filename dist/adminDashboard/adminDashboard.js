@@ -207,28 +207,26 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('EMetadataService',
-            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log) {
+            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", "MyProfileSrv", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv) {
                 'ngInject';
 
 
                 var self = this;
-                  var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
-             //   var profilePath = "http://localhost:3009/teachworks/zinkerzTeacher/all";
-                var globalStorageProm = InfraConfigSrv.getGlobalStorage();
+                var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
 
                 var satURL = "https://sat-dev.firebaseio.com";
                 var actURL = "https://act-dev.firebaseio.com";
                 var tofelURL = "https://znk-toefl-dev.firebaseio.com";
 
                 if (!ENV.debug) {
-                    // satURL = "https://sat-dev.firebaseio.com/";
-                    // actURL = "https://act-dev.firebaseio.com/";
-                    // tofelURL = "https://znk-toefl-dev.firebaseio.com/";
+                    satURL = "https://sat-prod.firebaseio.com/";
+                    actURL = "https://act-prod.firebaseio.com/";
+                    tofelURL = "https://znk-toefl-prod.firebaseio.com/";
                 }
 
 
                 self.showEducatorProfile = function (userProfile) {
-                    $q.all([getTimezonesList(), getLocalTimezone()]).then(function (values) {
+                    $q.all([MyProfileSrv.getTimezonesList(), MyProfileSrv.getLocalTimezone()]).then(function (values) {
                         var timezonesList = values[0];
                         var localTimezone = values[1];
                         $mdDialog.show({
@@ -248,7 +246,7 @@
                 };
 
                 self.updateProfile = function (newProfile) {
-                    var copiedProfile =angular.copy(newProfile);
+                    var copiedProfile = angular.copy(newProfile);
                     var uid = copiedProfile.uid;
                     if (uid) {
                         delete copiedProfile.uid;
@@ -281,43 +279,6 @@
                         return obj[key];
                     });
                 }
-
-                function getTimezonesList() {
-                    return globalStorageProm.then(function (globalStorage) {
-                        return globalStorage.get('timezones');
-                    });
-                }
-                function getLocalTimezone() {
-                    var localTimezone;
-                    var dateArray = new Date().toString().split(' ');
-                    var timezoneCity = dateArray.find(function (item) {
-                        return (item.indexOf('(') !== -1);
-                    });
-
-                    timezoneCity = timezoneCity ? timezoneCity.replace('(', '') : null;
-
-                    return getTimezonesList().then(function (timezonesList) {
-                        if (timezoneCity) {
-                            timezonesList = obj2Array(timezonesList);
-                            localTimezone = timezonesList.find(function (timezone) {
-                                return (timezone.indexOf(timezoneCity) !== -1);
-                            });
-                        } else {
-                            if (!localTimezone) {
-                                var timezoneGMT = dateArray.find(function (item) {
-                                    return (item.indexOf('GMT') !== -1);
-                                });
-                                localTimezone = timezonesList.find(function (timezone) {
-                                    timezone = timezone.replace(':', '');
-                                    return (timezone.indexOf(timezoneGMT) !== -1);
-                                });
-                            }
-                        }
-
-                        return localTimezone;
-                    });
-                }
-
             }]
         );
 })(angular);
