@@ -812,7 +812,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
             self.appName = {
                 SAT: translateFilter('ADMIN.ESLINK.SAT'),
                 ACT: translateFilter('ADMIN.ESLINK.ACT'),
-                TOFEL: translateFilter('ADMIN.ESLINK.TOFEL'),
+                TOEFL: translateFilter('ADMIN.ESLINK.TOEFL'),
                 SATSM: translateFilter('ADMIN.ESLINK.SATSM')
             };
             _setCurrentAppName();
@@ -1031,7 +1031,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     if (!(data instanceof Invitation)) {
                         $log.error('Invitation object must be an instance of class Invitation');
                     }
-                    $http.post(apiPath, data);
+                    return $http.post(apiPath, data);
                 };
 
                 function Invitation(senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName) {
@@ -1419,7 +1419,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                <md-list-item\n" +
     "                    md-ink-ripple\n" +
     "                    class=\"app-select-item\">\n" +
-    "                    <span ng-click=\"vm.selectApp('TOFEL')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.TOFEL}\" ng-bind=\"::vm.appName.TOFEL\"></span>\n" +
+    "                    <span ng-click=\"vm.selectApp('TOEFL')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.TOEFL}\" ng-bind=\"::vm.appName.TOEFL\"></span>\n" +
     "                </md-list-item>\n" +
     "                <md-list-item\n" +
     "                    md-ink-ripple\n" +
@@ -1513,7 +1513,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"btn-wrap\">\n" +
     "            <button element-loader\n" +
-    "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
+    "                    ng-disabled=\"!(vm.selectedStudent || vm.selectedEducator)\"\n" +
     "                    fill-loader=\"vm.fillLoader\"\n" +
     "                    show-loader=\"vm.startLoader\"\n" +
     "                    bg-loader=\"'#037684'\"\n" +
@@ -1521,7 +1521,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    font-color=\"'#FFFFFF'\"\n" +
     "                    bg=\"'#0a9bad'\"\n" +
     "                    ng-click=\"vm.link()\"\n" +
-    "                    class=\"md-button assign-lesson-btn drop-shadow\"\n" +
+    "                    class=\"md-button link-btn drop-shadow\"\n" +
     "                    name=\"submit\">\n" +
     "                <span translate=\"ADMIN.ESLINK.LINK_BTN\"></span>\n" +
     "            </button>\n" +

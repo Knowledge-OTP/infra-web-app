@@ -230,6 +230,9 @@
   border-radius: 21px;
   position: relative; }
 
+.admin-esLink .link-btn[disabled] {
+  opacity: 0.7; }
+
 .admin-esLink .esLink-link-container {
   margin-bottom: 160px;
   height: 65px;
