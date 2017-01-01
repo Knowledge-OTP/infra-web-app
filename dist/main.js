@@ -770,19 +770,13 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
                 }
 
-                function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
+                function _getExerciseParentContentProm(exerciseDetails, isExam, isModule) {
                     var exerciseParentContentProm = $q.when(null);
 
                     if (isExam) {
                         exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
-                    } else if (settings && settings.exerciseParentContent) {
-                        exerciseParentContentProm = settings.exerciseParentContent;
-                    } else if (isModule) {
-                        exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
-                            return {
-                                name: moduleContent.name
-                            };
-                        });
+                    }  else if (isModule) {
+                        exerciseParentContentProm = ExerciseResultSrv.getModuleResultByGuid(exerciseDetails.moduleResultGuid);
                     }
 
                     return exerciseParentContentProm;
@@ -803,7 +797,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                                     'exerciseId',
                                     'exerciseTypeId',
                                     'exerciseParentId',
-                                    'exerciseParentTypeId'
+                                    'exerciseParentTypeId',
+                                    'moduleResultGuid'
                                 ];
                                 angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
                                     activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
@@ -811,6 +806,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                                 activeShData.activeExercise.resultGuid = $ctrl.exerciseData.exerciseResult.guid;
                                 activeShData.activeExercise.activeScreen = $ctrl.currViewState;
+
                                 shDataEventManager.updateValue(activeShData);
                                 var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
                                 return saveExerciseResultProm.then(function () {
@@ -844,9 +840,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
                         var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
                         var isSection = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
-                        var settings = $ctrl.settings;
 
-                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, isExam, isModule);
 
                         return exerciseParentContentProm.then(function (exerciseParentContent) {
                             if (isExam) {
@@ -11023,6 +11018,21 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
+        function(EnumSrv) {
+
+            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
+                ['FREE_LICENSE', 1, 'free license'],
+                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
+            ]);
+
+            return PromoCodeTypeEnum;
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.promoCode').constant('PROMO_CODE_STATUS', {
         accepted: 0,
         invalid: 1
@@ -11121,21 +11131,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             }];
         }
     );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
-        function(EnumSrv) {
-
-            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
-                ['FREE_LICENSE', 1, 'free license'],
-                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
-            ]);
-
-            return PromoCodeTypeEnum;
-        }]);
 })(angular);
 
 angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
