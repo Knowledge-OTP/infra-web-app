@@ -495,5 +495,41 @@
         "EXTEND_SESSION": "Want to extend the Session in {{extendTime}} minutes.",
         "REJECT": "REJECT",
         "ACCEPT": "ACCEPT"
+    },
+    "ADMIN": {
+        "EDUCATOR_STUDENT_LINK": "Educator-Student Link",
+        "EDUCATORS_PROFILE": "Educators Profile",
+        "SEARCH": "Search",
+        "MIN_SEARCH_LENGTH": "* please enter at least 3 characters"
+    },
+    "ADMIN.ESLINK": {
+        "LINK_BTN": "Link",
+        "LINK_SUCCEEDED": "LINK SUCCEEDED",
+        "LINK_FAILED": "LINK FAILED",
+        "IS_ZINKERZ_EDUCATOR": "Is Zinkerz Educator",
+        "ZINKERZ_EDUCATOR": "Zinkerz Educator",
+        "SET_AS_ZINKERZ_EDUCATOR": "Set As Zinkerz Educator",
+        "UIGRID_NAME": "Name",
+        "UIGRID_EMAIL": "Email",
+        "SEARCH_STUDENT": "Search Student",
+        "SEARCH_EDUCATOR": "Search Zinkerz Educator",
+        "STUDENT_INITIAL_MSG": "Your users search results will appear here",
+        "STUDENT_NODATA_MSG": "No matching users found for",
+        "EDUCATOR_INITIAL_MSG": "Your Zinkerz Educator search results will appear here",
+        "EDUCATOR_INITIAL_MSG_NOTE": "Note: Only Zinkerz Educators are visible here",
+        "EDUCATOR_NODATA_MSG": "No matching Zinkerz Educators found for",
+        "LINK_MSG": "Link selected and educator in app",
+        "SAT": "SAT Test Prep",
+        "ACT": "ACT Test prep",
+        "TOFEL": "TOFEL Test Prep",
+        "SATSM": "SATSM Test Prep"
+    },
+    "ADMIN.EMETADATA": {
+        "EDUCATOR_PROFILE": "Educator Profile",
+        "AVAILABILITY_HOURS": "AVAILABILITY HOURS",
+        "FROM_TO": "From HH:MM to HH:mm",
+        "ZINKERZ_EDUCATOR": "Zinkerz Educator",
+        "SUBJECT": "Subject",
+        "EDUCATOR_TEACH_WORKS_NAME": "Educator Teach Works Name"
     }
 }

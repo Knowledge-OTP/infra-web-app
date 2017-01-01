@@ -1,0 +1,41 @@
+md-menu-content.md-menu-content-znk-app-select {
+    min-width: 185px;
+    md-list-item.app-select-item {
+        @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
+        cursor: pointer;
+        span {
+            width: 100%;
+            display: block;
+            min-height: 18px;
+            &.selected {
+                color: $fontColor6;
+            }
+        }
+
+    }
+}
+
+.znk-app-select {
+    width: 180px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid $borderColor1;
+    border-radius: 21px;
+    margin-left: 15px;
+    background-color: $bgColor3;
+    justify-content: space-between;
+
+    .md-button {
+        background-color: $bgColor3;
+        &.md-icon-button {
+            width: 30px;
+            padding: 0;
+            margin: 0 5px;
+        }
+    }
+    .selected-item {
+        margin-left: 15px
+    }
+
+}
+

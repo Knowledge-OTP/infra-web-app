@@ -1,0 +1,155 @@
+<md-dialog ng-cloak class="admin-dashboard admin-profile" translate-namespace="ADMIN">
+    <div class="top-icon-wrap">
+        <div class="top-icon">
+            <div class="round-icon-wrap">
+                <svg-icon name="adminProfile-icon"></svg-icon>
+            </div>
+        </div>
+    </div>
+
+    <md-toolbar>
+        <div class="close-popup-wrap" ng-click="vm.closeDialog()">
+            <svg-icon name="adminProfile-close-popup"></svg-icon>
+        </div>
+    </md-toolbar>
+    <div class="content-wrapper">
+        <div class="main-title" translate=".EMETADATA.EDUCATOR_PROFILE"></div>
+
+        <md-dialog-content>
+            <form name="profileform" novalidate class="auth-form" ng-submit="vm.updateProfile(profileform)"
+            >
+                <div class="znk-input-group"
+                     ng-class="profileform.educatorTeachworksName.$invalid && profileform.$submitted ? 'invalid' : 'valid'">
+                    <label>{{'ADMIN.EMETADATA.EDUCATOR_TEACH_WORKS_NAME' | translate}}</label>
+                    <div class="znk-input">
+                        <input
+                            type="text"
+                            autocomplete="on"
+                            name="educatorTeachworksName"
+                            ng-required="true"
+                            ng-model="vm.profileData.educatorTeachworksName">
+                        <span ng-if="profileform.$submitted && profileform.educatorTeachworksName.$invalid"
+                              role="alert">
+                    <span class="validationBox">
+                        <span ng-show="profileform.educatorTeachworksName.$error.required"
+                              translate="MY_PROFILE.REQUIRED_FIELD"></span>
+                    </span>
+                </span>
+                    </div>
+                </div>
+                <div class="znk-input-group"
+                     ng-class="profileform.email.$invalid && profileform.$submitted ? 'invalid' : 'valid'">
+                    <label>{{'MY_PROFILE.EMAIL' | translate}}</label>
+                    <div class="znk-input">
+                        <input
+                            type="email"
+                            autocomplete="on"
+                            name="email"
+                            ng-required="true"
+                            disabled="true"
+                            ng-model="vm.profileData.email">
+
+                    </div>
+                </div>
+                <div class="znk-input-group">
+                    <label for="timezone">{{'MY_PROFILE.TIMEZONE' | translate}}</label>
+                    <div class="znk-input">
+                        <select id="timezone" name="timezone"
+                                ng-options="time as time for time in vm.timezonesList"
+                                ng-model="vm.profileData.timezone"
+                                ng-disabled="!vm.profileData.isTimezoneManual">
+                        </select>
+                    </div>
+                </div>
+                <div class="timezone-manual">
+                    <input type="checkbox"
+                           id="timezoneManual" name="timezoneManual"
+                           ng-model="vm.profileData.isTimezoneManual"
+                           ng-change="vm.updateProfileTimezone()">
+                    <label for="timezoneManual">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>
+                </div>
+                <div class="znk-input-group"
+                     ng-class="profileform.educatorAvailabilityHours.$invalid && profileform.$submitted ? 'invalid' : 'valid'">
+                    <label>{{'ADMIN.EMETADATA.AVAILABILITY_HOURS' | translate}}</label>
+                    <div class="znk-input">
+                        <textarea
+                            type="text"
+                            autocomplete="on"
+                            name="educatorAvailabilityHours"
+                            ng-required="true"
+                            rows="4" cols="50"
+                            ng-model="vm.profileData.educatorAvailabilityHours">
+                        </textarea>
+                        <span ng-if="profileform.$submitted && profileform.educatorAvailabilityHours.$invalid"
+                              role="alert">
+                    <span class="validationBox">
+                        <span ng-show="profileform.educatorAvailabilityHours.$error.required"
+                              translate="MY_PROFILE.REQUIRED_FIELD"></span>
+                    </span>
+                </span>
+                    </div>
+                </div>
+                <div class="btn-wrap">
+                    <button class="save-pass-btn"><span translate="MY_PROFILE.SAVE"></span></button>
+                </div>
+            </form>
+
+            <div class="msg-wrap" ng-class="{'show-error': vm.showError}" ng-if="vm.showError">
+                <div class="error-msg">
+                    <svg-icon name="adminProfile-danger-red-icon" class="adminProfile-danger-red-icon"></svg-icon>
+                    <div translate="{{vm.generalError}}"></div>
+                </div>
+            </div>
+        </md-dialog-content>
+    </div>
+    <div class="content-wrapper">
+
+        <md-dialog-content>
+            <div class="container-title md-subheader" translate=".EMETADATA.ZINKERZ_EDUCATOR"></div>
+            <form name="profileZinkerzTeacherForm" novalidate class="auth-form"
+                  ng-submit="vm.setZinkerzTeacher(profileZinkerzTeacherForm)">
+                <div class="znk-input-group">
+                    <label for="zinkerzTeacher">{{'ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR' | translate}}</label>
+                    <div class="znk-input">
+                        <input type="checkbox"
+                               id="zinkerzTeacher" name="zinkerzTeacher"
+                               ng-model="vm.profileData.zinkerzTeacher">
+                    </div>
+                </div>
+                <div class="znk-input-group"
+                     ng-class="profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid && profileZinkerzTeacherForm.$submitted ? 'invalid' : 'valid'">
+                    <label>{{'ADMIN.EMETADATA.SUBJECT' | translate}}</label>
+                    <div class="znk-input">
+                        <input
+                            type="text"
+                            autocomplete="on"
+                            name="zinkerzTeacherSubject"
+                            ng-required="true"
+                            ng-model="vm.profileData.zinkerzTeacherSubject">
+                        <span
+                            ng-if="profileZinkerzTeacherForm.$submitted && profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid"
+                            role="alert">
+                    <span class="validationBox">
+                        <span ng-show="profileZinkerzTeacherForm.zinkerzTeacherSubject.$error.required"
+                              translate="MY_PROFILE.REQUIRED_FIELD"></span>
+                    </span>
+                </span>
+                    </div>
+                </div>
+                <div class="btn-wrap">
+                    <button class="save-pass-btn"><span translate="MY_PROFILE.SAVE"></span></button>
+                </div>
+            </form>
+
+            <div class="msg-wrap" ng-class="{'show-error': vm.showError}" ng-if="vm.showError">
+                <div class="error-msg">
+                    <svg-icon name="adminProfile-danger-red-icon" class="adminProfile-danger-red-icon"></svg-icon>
+                    <div translate="{{vm.generalError}}"></div>
+                </div>
+            </div>
+        </md-dialog-content>
+    </div>
+</md-dialog>
+
+
+
