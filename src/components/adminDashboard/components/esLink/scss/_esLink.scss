@@ -11,6 +11,9 @@
         border-radius: 21px;
         position: relative;
     }
+    .link-btn[disabled] {
+        opacity: 0.7;
+    }
     .esLink-link-container {
         margin-bottom: 160px;
         height: 65px;
@@ -34,6 +37,7 @@
             span{
                 color :$fontColor8;
             }
+
         }
         .esLink-link-text {
             @include text-style(16px, $fontColor3, Lato, $regularFontWeight);

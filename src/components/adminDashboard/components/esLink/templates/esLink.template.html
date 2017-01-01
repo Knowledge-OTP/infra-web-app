@@ -78,7 +78,7 @@
 
         <div class="btn-wrap">
             <button element-loader
-                    ng-disabled="!(vm.selectedStudent && vm.selectedEducator)"
+                    ng-disabled="!(vm.selectedStudent || vm.selectedEducator)"
                     fill-loader="vm.fillLoader"
                     show-loader="vm.startLoader"
                     bg-loader="'#037684'"
@@ -86,7 +86,7 @@
                     font-color="'#FFFFFF'"
                     bg="'#0a9bad'"
                     ng-click="vm.link()"
-                    class="md-button assign-lesson-btn drop-shadow"
+                    class="md-button link-btn drop-shadow"
                     name="submit">
                 <span translate="ADMIN.ESLINK.LINK_BTN"></span>
             </button>
