@@ -9,6 +9,7 @@
         'znk.infra.storage',
         'znk.infra.user',
         'ui.router',
+        'znk.infra.utility',
         'znk.infra-web-app.znkToast',
         'znk.infra-web-app.elasticSearch',
         'znk.infra-web-app.myProfile',

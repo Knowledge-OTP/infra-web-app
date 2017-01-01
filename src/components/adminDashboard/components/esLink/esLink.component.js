@@ -78,7 +78,6 @@
 
                 function _linkError(err) {
                     _endLoading();
-                    // var msg = "<span>translateFilter('ADMIN.ESLINK.LINK_FAILED')</span></br>+err";
                     var msg = err;
                     _showNotification('error', msg);
                 }
@@ -123,14 +122,6 @@
                             {field: 'nickname', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
                             {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
                             {field: 'uid', width: 300, displayName: 'UID'}
-                            // {field: 'zinkerzTeacher', displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
-                            //     cellTemplate: '<div class="ui-grid-cell-contents" >' +
-                            //     '<div  >' +
-                            //     '<span ng-if="row.entity.zinkerzTeacher" translate="ADMIN.ESLINK.ZINKERZ_EDUCATOR"></span>' +
-                            //     '<a ng-click="grid.appScope.setZinkerzTeacher(row.entity)" href= "#" ng-if="!row.entity.zinkerzTeacher" class="esLink-set-zinkerz-teacher" translate="ADMIN.ESLINK.SET_AS_ZINKERZ_EDUCATOR"></a>' +
-                            //     '</div>' +
-                            //     '</div>'
-                            // }
                         ]
                     };
                     self.gridEducatorsOptions = {

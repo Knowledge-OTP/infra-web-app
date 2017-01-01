@@ -9,6 +9,7 @@
         'znk.infra.storage',
         'znk.infra.user',
         'ui.router',
+        'znk.infra.utility',
         'znk.infra-web-app.znkToast',
         'znk.infra-web-app.elasticSearch',
         'znk.infra-web-app.myProfile',
@@ -53,58 +54,37 @@
                     self.profileData.timezone = localTimezone;
                 }
             };
-            self.updateProfile = function (profileform) {
-
-                var type, msg;
-
-                if (profileform.$valid && profileform.$dirty) {
-                    EMetadataService.updateProfile(self.profileData).then(function () {
-                        $timeout(function () {
-                            type = 'success';
-                            msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
-                            _showNotification(type, msg);
-                        });
-                    }, function (err) {
-                        $timeout(function () {
-                            type = 'error';
-                            if (err.code === 'NETWORK_ERROR') {
-                                msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
-                                _showNotification(type, msg);
-                            } else {
-                                type = 'error';
-                                msg = 'MY_PROFILE.ERROR_OCCURRED';
-                                _showNotification(type, msg);
-                            }
-                        });
-                    });
+            self.updateProfile = function (profileForm) {
+                if (profileForm.$valid && profileForm.$dirty) {
+                    EMetadataService.updateProfile(self.profileData).then(_profileSuccess, _profileError);
                 }
             };
 
-            self.setZinkerzTeacher = function (profileZinkerzTeacherform) {
-                var type, msg;
-
-                if (profileZinkerzTeacherform.$valid && profileZinkerzTeacherform.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.profileData.zinkerzTeacher).then(function () {
-                        $timeout(function () {
-                            type = 'success';
-                            msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
-                            _showNotification(type, msg);
-                        });
-                    }, function (err) {
-                        $timeout(function () {
-                            type = 'error';
-                            if (err.code === 'NETWORK_ERROR') {
-                                msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
-                                _showNotification(type, msg);
-                            } else {
-                                type = 'error';
-                                msg = 'MY_PROFILE.ERROR_OCCURRED';
-                                _showNotification(type, msg);
-                            }
-                        });
-                    });
+            self.setZinkerzTeacher = function (profileZinkerzTeacherForm) {
+                if (profileZinkerzTeacherForm.$valid && profileZinkerzTeacherForm.$dirty) {
+                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.profileData.zinkerzTeacher).then(_profileSuccess, _profileError);
                 }
             };
+            function _profileSuccess() {
+                var type, msg;
+                type = 'success';
+                msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
+                _showNotification(type, msg);
+            }
+
+            function _profileError(error) {
+                var type, msg;
+
+                type = 'error';
+                if (error.code === 'NETWORK_ERROR') {
+                    msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
+                    _showNotification(type, msg);
+                } else {
+                    type = 'error';
+                    msg = 'MY_PROFILE.ERROR_OCCURRED';
+                    _showNotification(type, msg);
+                }
+            }
 
             function _showNotification(type, msg) {
                 ZnkToastSrv.showToast(type, msg);
@@ -208,7 +188,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('EMetadataService',
-            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", "MyProfileSrv", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv) {
+            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", "MyProfileSrv", "UtilitySrv", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv,UtilitySrv) {
                 'ngInject';
 
 
@@ -227,13 +207,17 @@
 
 
                 self.showEducatorProfile = function (userProfile) {
+                    if(!userProfile){
+                        $log.error('showEducatorProfile: userProfile object is not undefined');
+                        return;
+                    }
                     $q.all([MyProfileSrv.getTimezonesList(), MyProfileSrv.getLocalTimezone()]).then(function (values) {
                         var timezonesList = values[0];
                         var localTimezone = values[1];
                         $mdDialog.show({
                             locals: {
                                 userProfile: userProfile,
-                                timezonesList: obj2Array(timezonesList),
+                                timezonesList: UtilitySrv.object.convertToArray(timezonesList),
                                 localTimezone: localTimezone
                             },
                             controller: 'EducatorProfileController',
@@ -247,15 +231,21 @@
                 };
 
                 self.updateProfile = function (newProfile) {
+                    var deferred = $q.defer();
                     var copiedProfile = angular.copy(newProfile);
                     var uid = copiedProfile.uid;
                     if (uid) {
                         delete copiedProfile.uid;
                     }
                     var fullPath = "users/" + uid + "/profile";
-                    return InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                        return globalStorage.update(fullPath, copiedProfile);
+                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                        globalStorage.update(fullPath, copiedProfile).then(function (data) {
+                            deferred.resolve(data);
+                        }).catch(function (error) {
+                            deferred.reject(error);
+                        });
                     });
+                    return deferred.promise;
                 };
                 self.setZinkerzTeacher = function (uid, subject, isZinkerzTeacher) {
                     if (!uid) {
@@ -274,12 +264,6 @@
                     };
                     return $http.post(profilePath, profile);
                 };
-
-                function obj2Array(obj) {
-                    return Object.keys(obj).map(function (key) {
-                        return obj[key];
-                    });
-                }
             }]
         );
 })(angular);
@@ -322,7 +306,8 @@
             self.appName = {
                 SAT: translateFilter('ADMIN.ESLINK.SAT'),
                 ACT: translateFilter('ADMIN.ESLINK.ACT'),
-                TOFEL: translateFilter('ADMIN.ESLINK.TOFEL')
+                TOFEL: translateFilter('ADMIN.ESLINK.TOFEL'),
+                SATSM: translateFilter('ADMIN.ESLINK.SATSM')
             };
             _setCurrentAppName();
 
@@ -427,7 +412,6 @@
 
                 function _linkError(err) {
                     _endLoading();
-                    // var msg = "<span>translateFilter('ADMIN.ESLINK.LINK_FAILED')</span></br>+err";
                     var msg = err;
                     _showNotification('error', msg);
                 }
@@ -472,14 +456,6 @@
                             {field: 'nickname', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
                             {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
                             {field: 'uid', width: 300, displayName: 'UID'}
-                            // {field: 'zinkerzTeacher', displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
-                            //     cellTemplate: '<div class="ui-grid-cell-contents" >' +
-                            //     '<div  >' +
-                            //     '<span ng-if="row.entity.zinkerzTeacher" translate="ADMIN.ESLINK.ZINKERZ_EDUCATOR"></span>' +
-                            //     '<a ng-click="grid.appScope.setZinkerzTeacher(row.entity)" href= "#" ng-if="!row.entity.zinkerzTeacher" class="esLink-set-zinkerz-teacher" translate="ADMIN.ESLINK.SET_AS_ZINKERZ_EDUCATOR"></a>' +
-                            //     '</div>' +
-                            //     '</div>'
-                            // }
                         ]
                     };
                     self.gridEducatorsOptions = {
@@ -542,7 +518,6 @@
                     return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
                 };
                 this.link = function (data) {
-                    var deferred = $q.defer();
                     if (!(data && angular.isObject(data))) {
                         $log.error('Invitation object is not defined');
                         return;
@@ -550,13 +525,7 @@
                     if (!(data instanceof Invitation)) {
                         $log.error('Invitation object must be an instance of class Invitation');
                     }
-                    $http.post(apiPath, data).then(function (response) {
-                        deferred.resolve(response);
-                    }, function (err) {
-                        $log.error(err.data.error);
-                        deferred.reject(err.data.error);
-                    });
-                    return deferred.promise;
+                    $http.post(apiPath, data);
                 };
 
                 function Invitation(senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName) {
@@ -945,6 +914,11 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    md-ink-ripple\n" +
     "                    class=\"app-select-item\">\n" +
     "                    <span ng-click=\"vm.selectApp('TOFEL')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.TOFEL}\" ng-bind=\"::vm.appName.TOFEL\"></span>\n" +
+    "                </md-list-item>\n" +
+    "                <md-list-item\n" +
+    "                    md-ink-ripple\n" +
+    "                    class=\"app-select-item\">\n" +
+    "                    <span ng-click=\"vm.selectApp('SATSM')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.SATSM}\" ng-bind=\"::vm.appName.SATSM\"></span>\n" +
     "                </md-list-item>\n" +
     "            </md-list>\n" +
     "        </md-menu-content>\n" +

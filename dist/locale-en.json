@@ -521,7 +521,8 @@
         "LINK_MSG": "Link selected and educator in app",
         "SAT": "SAT Test Prep",
         "ACT": "ACT Test prep",
-        "TOFEL": "TOFEL Test Prep"
+        "TOFEL": "TOFEL Test Prep",
+        "SATSM": "SATSM Test Prep"
     },
     "ADMIN.EMETADATA": {
         "EDUCATOR_PROFILE": "Educator Profile",

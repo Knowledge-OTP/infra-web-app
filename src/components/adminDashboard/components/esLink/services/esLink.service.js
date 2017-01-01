@@ -13,7 +13,6 @@
                     return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
                 };
                 this.link = function (data) {
-                    var deferred = $q.defer();
                     if (!(data && angular.isObject(data))) {
                         $log.error('Invitation object is not defined');
                         return;
@@ -21,13 +20,7 @@
                     if (!(data instanceof Invitation)) {
                         $log.error('Invitation object must be an instance of class Invitation');
                     }
-                    $http.post(apiPath, data).then(function (response) {
-                        deferred.resolve(response);
-                    }, function (err) {
-                        $log.error(err.data.error);
-                        deferred.reject(err.data.error);
-                    });
-                    return deferred.promise;
+                    $http.post(apiPath, data);
                 };
 
                 function Invitation(senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName) {

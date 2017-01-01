@@ -34,7 +34,8 @@
             self.appName = {
                 SAT: translateFilter('ADMIN.ESLINK.SAT'),
                 ACT: translateFilter('ADMIN.ESLINK.ACT'),
-                TOFEL: translateFilter('ADMIN.ESLINK.TOFEL')
+                TOFEL: translateFilter('ADMIN.ESLINK.TOFEL'),
+                SATSM: translateFilter('ADMIN.ESLINK.SATSM')
             };
             _setCurrentAppName();
 
