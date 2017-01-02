@@ -5,7 +5,7 @@
     "Zinkerz"
   ],
   "dependencies": {
-    "infra": "https://github.com/Knowledge-OTP/infra.git#>=6.0.0",
+    "infra": "https://github.com/Knowledge-OTP/infra.git#>=6.0.1",
     "ng-tags-input": "3.0.0",
     "angular-chart.js": "0.10.2",
     "v-accordion": "1.4.1",
@@ -29,7 +29,16 @@
     "mockfirebase": "~0.11.0",
     "jasmine-jquery": "^2.1.1",
     "aws-sdk": "aws-sdk-js#^2.7.14",
-    "angular-mocks": "1.5.5"
+    "angular-mocks": "1.5.8",
+    "angular-messages": "1.5.8"
+  },
+  "overrides": {
+    "elasticsearch": {
+      "main": [
+        "elasticsearch.js",
+        "elasticsearch.angular.js"
+      ]
+    }
   },
     "overrides": {
         "elasticsearch": {
@@ -41,6 +50,6 @@
     },
   "resolutions": {
     "angular": "1.5.8",
-    "angular-translate": "2.12.0"
+    "angular-messages": "1.5.8"
   }
 }
