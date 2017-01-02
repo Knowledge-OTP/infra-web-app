@@ -7,7 +7,7 @@
         function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate) {
+                  $translate, ExerciseReviewStatusEnum) {
             'ngInject';
             var self = this;
             this.subjectId = exerciseData.questionsData.subjectId;
@@ -54,6 +54,7 @@
             }
 
             function _onDoneSaveResultsData() {
+                exerciseData.resultsData.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                 exerciseData.resultsData.isComplete = true;
                 exerciseData.resultsData.endedTime = Date.now();
                 exerciseData.resultsData.subjectId = exerciseData.questionsData.subjectId;

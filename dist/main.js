@@ -706,7 +706,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                 var tofelURL = "https://znk-toefl-dev.firebaseio.com";
 
                 if (!ENV.debug) {
-                    satURL = "https://sat-prod.firebaseio.com/";
+                    satURL = "https://sat2-prod.firebaseio.com/";
                     actURL = "https://act-prod.firebaseio.com/";
                     tofelURL = "https://znk-toefl-prod.firebaseio.com/";
                 }
@@ -1513,7 +1513,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"btn-wrap\">\n" +
     "            <button element-loader\n" +
-    "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
+    "                    ng-disabled=\"!(vm.selectedStudent || vm.selectedEducator)\"\n" +
     "                    fill-loader=\"vm.fillLoader\"\n" +
     "                    show-loader=\"vm.startLoader\"\n" +
     "                    bg-loader=\"'#037684'\"\n" +
@@ -1521,7 +1521,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    font-color=\"'#FFFFFF'\"\n" +
     "                    bg=\"'#0a9bad'\"\n" +
     "                    ng-click=\"vm.link()\"\n" +
-    "                    class=\"md-button assign-lesson-btn drop-shadow\"\n" +
+    "                    class=\"md-button link-btn drop-shadow\"\n" +
     "                    name=\"submit\">\n" +
     "                <span translate=\"ADMIN.ESLINK.LINK_BTN\"></span>\n" +
     "            </button>\n" +
@@ -3594,10 +3594,10 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate) {
+                  $translate, ExerciseReviewStatusEnum) {
             'ngInject';
             var self = this;
             this.subjectId = exerciseData.questionsData.subjectId;
@@ -3644,6 +3644,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             }
 
             function _onDoneSaveResultsData() {
+                exerciseData.resultsData.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                 exerciseData.resultsData.isComplete = true;
                 exerciseData.resultsData.endedTime = Date.now();
                 exerciseData.resultsData.subjectId = exerciseData.questionsData.subjectId;

@@ -200,7 +200,7 @@
                 var tofelURL = "https://znk-toefl-dev.firebaseio.com";
 
                 if (!ENV.debug) {
-                    satURL = "https://sat-prod.firebaseio.com/";
+                    satURL = "https://sat2-prod.firebaseio.com/";
                     actURL = "https://act-prod.firebaseio.com/";
                     tofelURL = "https://znk-toefl-prod.firebaseio.com/";
                 }
@@ -1007,7 +1007,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"btn-wrap\">\n" +
     "            <button element-loader\n" +
-    "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
+    "                    ng-disabled=\"!(vm.selectedStudent || vm.selectedEducator)\"\n" +
     "                    fill-loader=\"vm.fillLoader\"\n" +
     "                    show-loader=\"vm.startLoader\"\n" +
     "                    bg-loader=\"'#037684'\"\n" +
@@ -1015,7 +1015,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    font-color=\"'#FFFFFF'\"\n" +
     "                    bg=\"'#0a9bad'\"\n" +
     "                    ng-click=\"vm.link()\"\n" +
-    "                    class=\"md-button assign-lesson-btn drop-shadow\"\n" +
+    "                    class=\"md-button link-btn drop-shadow\"\n" +
     "                    name=\"submit\">\n" +
     "                <span translate=\"ADMIN.ESLINK.LINK_BTN\"></span>\n" +
     "            </button>\n" +
