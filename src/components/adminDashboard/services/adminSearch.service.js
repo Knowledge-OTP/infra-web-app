@@ -22,7 +22,7 @@
                         return;
                     }
                     if (!angular.isString(queryTerm)) {
-                        $log.error('getSearchResults: queryTerm is not a string');git
+                        $log.error('getSearchResults: queryTerm is not a string');
                         return;
                     }
                     var query = {
