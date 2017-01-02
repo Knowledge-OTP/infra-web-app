@@ -200,7 +200,7 @@
                 var tofelURL = "https://znk-toefl-dev.firebaseio.com";
 
                 if (!ENV.debug) {
-                    satURL = "https://sat-prod.firebaseio.com/";
+                    satURL = "https://sat2-prod.firebaseio.com/";
                     actURL = "https://act-prod.firebaseio.com/";
                     tofelURL = "https://znk-toefl-prod.firebaseio.com/";
                 }
@@ -569,6 +569,10 @@
                         $log.error('getSearchResults: buildQuery is not a function');
                         return;
                     }
+                    if (!angular.isString(queryTerm)) {
+                        $log.error('getSearchResults: queryTerm is not a string');
+                        return;
+                    }
                     var query = {
                         index: "firebase",
                         type: "user",
@@ -577,7 +581,7 @@
                             "size": sizeLimit
                         }
                     };
-                    buildQuery.call(null, query.body, _makeTerm(queryTerm));
+                    buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
                     ElasticSearchSrv.search(query).then(function (response) {
                         deferred.resolve(_searchResults(response.hits));
                     }, function (err) {
