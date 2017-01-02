@@ -21,6 +21,10 @@
                         $log.error('getSearchResults: buildQuery is not a function');
                         return;
                     }
+                    if (!angular.isString(queryTerm)) {
+                        $log.error('getSearchResults: queryTerm is not a string');git
+                        return;
+                    }
                     var query = {
                         index: "firebase",
                         type: "user",
@@ -29,7 +33,7 @@
                             "size": sizeLimit
                         }
                     };
-                    buildQuery.call(null, query.body, _makeTerm(queryTerm));
+                    buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
                     ElasticSearchSrv.search(query).then(function (response) {
                         deferred.resolve(_searchResults(response.hits));
                     }, function (err) {
