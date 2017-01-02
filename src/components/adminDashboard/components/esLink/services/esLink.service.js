@@ -20,7 +20,7 @@
                     if (!(data instanceof Invitation)) {
                         $log.error('Invitation object must be an instance of class Invitation');
                     }
-                    $http.post(apiPath, data);
+                    return $http.post(apiPath, data);
                 };
 
                 function Invitation(senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName) {
