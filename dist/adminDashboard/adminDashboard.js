@@ -306,7 +306,7 @@
             self.appName = {
                 SAT: translateFilter('ADMIN.ESLINK.SAT'),
                 ACT: translateFilter('ADMIN.ESLINK.ACT'),
-                TOFEL: translateFilter('ADMIN.ESLINK.TOFEL'),
+                TOEFL: translateFilter('ADMIN.ESLINK.TOEFL'),
                 SATSM: translateFilter('ADMIN.ESLINK.SATSM')
             };
             _setCurrentAppName();
@@ -525,7 +525,7 @@
                     if (!(data instanceof Invitation)) {
                         $log.error('Invitation object must be an instance of class Invitation');
                     }
-                    $http.post(apiPath, data);
+                    return $http.post(apiPath, data);
                 };
 
                 function Invitation(senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName) {
@@ -569,6 +569,10 @@
                         $log.error('getSearchResults: buildQuery is not a function');
                         return;
                     }
+                    if (!angular.isString(queryTerm)) {
+                        $log.error('getSearchResults: queryTerm is not a string');
+                        return;
+                    }
                     var query = {
                         index: "firebase",
                         type: "user",
@@ -577,7 +581,7 @@
                             "size": sizeLimit
                         }
                     };
-                    buildQuery.call(null, query.body, _makeTerm(queryTerm));
+                    buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
                     ElasticSearchSrv.search(query).then(function (response) {
                         deferred.resolve(_searchResults(response.hits));
                     }, function (err) {
@@ -913,7 +917,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                <md-list-item\n" +
     "                    md-ink-ripple\n" +
     "                    class=\"app-select-item\">\n" +
-    "                    <span ng-click=\"vm.selectApp('TOFEL')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.TOFEL}\" ng-bind=\"::vm.appName.TOFEL\"></span>\n" +
+    "                    <span ng-click=\"vm.selectApp('TOEFL')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.TOEFL}\" ng-bind=\"::vm.appName.TOEFL\"></span>\n" +
     "                </md-list-item>\n" +
     "                <md-list-item\n" +
     "                    md-ink-ripple\n" +
