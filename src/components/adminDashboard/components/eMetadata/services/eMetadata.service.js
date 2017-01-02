@@ -15,7 +15,7 @@
                 var tofelURL = "https://znk-toefl-dev.firebaseio.com";
 
                 if (!ENV.debug) {
-                    satURL = "https://sat-prod.firebaseio.com/";
+                    satURL = "https://sat2-prod.firebaseio.com/";
                     actURL = "https://act-prod.firebaseio.com/";
                     tofelURL = "https://znk-toefl-prod.firebaseio.com/";
                 }

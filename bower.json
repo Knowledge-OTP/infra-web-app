@@ -40,14 +40,6 @@
       ]
     }
   },
-    "overrides": {
-        "elasticsearch": {
-            "main": [
-                "elasticsearch.js",
-                "elasticsearch.angular.js"
-            ]
-        }
-    },
   "resolutions": {
     "angular": "1.5.8",
     "angular-messages": "1.5.8"
