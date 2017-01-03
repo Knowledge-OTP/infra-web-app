@@ -200,6 +200,21 @@ md-dialog.my-lessons-schedule-wrapper {
       font-family: Quicksand;
       font-weight: 700;
       text-align: center; }
+    md-dialog.my-lessons-schedule-wrapper .md-dialog-content .availability-hours {
+      text-align: center;
+      width: 470px;
+      margin: 20px auto 0 auto; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .availability-hours .name {
+        font-size: 14px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400; }
+      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .availability-hours .date {
+        font-size: 14px;
+        color: #acacac;
+        font-family: Lato;
+        font-weight: 400;
+        padding-top: 5px; }
     md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container {
       text-align: center; }
       md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .note-wrapper {

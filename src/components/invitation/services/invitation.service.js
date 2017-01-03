@@ -38,7 +38,7 @@
                     var listenerData = getListenerData(userId, event);
                     studentStorage.offEvent('child_added', listenerData.path, listenerData.childAddedHandler);
                     studentStorage.offEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
-                    
+
                     angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
                             registerEvents[userId][event].cb.splice(index, 1);
@@ -323,6 +323,8 @@
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                         teacher.zinkerzTeacher = profile.zinkerzTeacher;
                         teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
+                        teacher.educatorTeachworksName = profile.educatorTeachworksName;
+                        teacher.educatorAvailabilityHours = profile.educatorAvailabilityHours;
 
                         myTeachers[teacher.senderUid] = teacher;
                         angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {

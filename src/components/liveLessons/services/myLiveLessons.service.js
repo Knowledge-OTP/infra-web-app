@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').service('MyLiveLessons',
-        function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter) {
+        function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter, InfraConfigSrv, StudentContextSrv, InvitationService) {
             'ngInject';
 
             var self = this;
@@ -47,6 +47,22 @@
                 });
             }
 
+            function _getEducatorProfileByTeachworksName(name) {
+                var connectedEducatorsList = _getApprovedEducatorsProfile();
+                var educators = Object.keys(connectedEducatorsList).map(function (keyItem) {
+                    return connectedEducatorsList[keyItem];
+                }).filter(function (EducatorObj) {
+                    return EducatorObj.educatorTeachworksName === name;
+                });
+                return educators.length ? educators[0] : {};
+            }
+
+
+            function _getApprovedEducatorsProfile() {
+                return InvitationService.getMyTeachers();
+
+            }
+
             self.getRelevantLiveLessons = function () {
                 return getLiveLessonsSchedule().then(function (liveLessonsArr) {
                     var currentTimestamp = new Date().getTime();
@@ -57,6 +73,12 @@
                             relevantLiveLessonsArr.push(value);
                         }
                     });
+                    // relevantLiveLessonsArr.push({
+                    //     "startTime": 1482181200000,
+                    //     "originStartTime": "12/19/2017 16:00:00",
+                    //     "endTime": "20161219T170000",
+                    //     "educatorName": "Alex Choroshin"
+                    // });
                     return relevantLiveLessonsArr;
                 });
             };
@@ -76,8 +98,8 @@
 
             self.liveLessonsScheduleModal = function () {
                 return self.getRelevantLiveLessons().then(function (liveLessonsArr) {
-                    function ctrl() {
-                        /*jshint validthis: true */
+
+                    var liveLessonsScheduleController = function () {
                         this.liveLessonsArr = liveLessonsArr;
                         this.closeDialog = $mdDialog.cancel;
                         var currDate = new Date();
@@ -85,30 +107,31 @@
                         this.openRescheduleModal = function (lessonObj) {
                             self.rescheduleModal(lessonObj);
                         };
-                    }
-
+                    };
                     return $mdDialog.show({
-                        templateUrl: 'components/liveLessons/templates/myLiveLessonsModal.template.html',
+                        templateUrl: 'app/components/liveLessons/templates/myLiveLessonsModal.template.html',
                         disableParentScroll: false,
                         clickOutsideToClose: true,
                         fullscreen: false,
-                        controller: ctrl,
+                        controller: liveLessonsScheduleController,
                         controllerAs: 'vm'
                     });
                 });
             };
 
             self.rescheduleModal = function (lessonObj) {
+                var educatorProfile = _getEducatorProfileByTeachworksName(lessonObj.educatorName);
                 UserProfileService.getProfile().then(function (studentProfile) {
                     $mdDialog.show({
-                        templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
+                        templateUrl: 'app/components/liveLessons/templates/rescheduleLessonModal.template.html',
                         disableParentScroll: false,
                         clickOutsideToClose: true,
                         fullscreen: false,
-                        controller: 'RescheduleLessonController',
+                        controller: 'rescheduleLessonController',
                         controllerAs: 'vm',
                         locals: {
                             lessonData: lessonObj,
+                            educatorProfileData: educatorProfile,
                             studentData: {
                                 studentProfile: studentProfile,
                                 userId: userId
@@ -170,7 +193,7 @@
             }
 
             function _convertDateToMilliseconds(startTimeString) {
-                var timeZone = 'CST';
+                var timeZone = 'CDT';
                 var originalDate = _parseDate(startTimeString) + ' ' + timeZone;
                 var localFullDate = new Date(originalDate).toString();  // convert CST/CDT timezone to local timezone.
                 return new Date(localFullDate).getTime();
@@ -199,6 +222,9 @@
                 return localTimeZone;
             };
 
+            self.getCdtOrCst = function () {
+                return 'CDT';
+            };
             // -------------------------------------parsing data------------------------------- //
         }
     );

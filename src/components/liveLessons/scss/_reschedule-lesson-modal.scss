@@ -35,7 +35,18 @@ md-dialog.my-lessons-schedule-wrapper {
             @include text-style(32px, $fontColor3, Quicksand, $boldFontWeight);
             text-align: center;
         }
-
+        .availability-hours {
+            text-align: center;
+            width: 470px;
+            margin: 20px auto 0 auto;
+            .name {
+                @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
+            }
+            .date {
+                @include text-style(14px, $fontColor14, Lato, $regularFontWeight);
+                padding-top: 5px;
+            }
+        }
 
         .email-container {
             text-align: center;
