@@ -153,7 +153,7 @@ md-dialog.my-lessons-schedule-wrapper {
 }
 
 md-tooltip.reschedule-tooltip {
-    @include dimension(130px, 36px);
+    @include dimension(130px, 25px);
     padding: 0;
     border-radius: 5px;
     .md-content {
