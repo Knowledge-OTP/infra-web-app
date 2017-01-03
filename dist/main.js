@@ -8284,7 +8284,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         disableParentScroll: false,
                         clickOutsideToClose: true,
                         fullscreen: false,
-                        controller: 'rescheduleLessonController',
+                        controller: 'RescheduleLessonController',
                         controllerAs: 'vm',
                         locals: {
                             lessonData: lessonObj,

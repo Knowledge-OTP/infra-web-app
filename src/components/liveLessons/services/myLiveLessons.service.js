@@ -127,7 +127,7 @@
                         disableParentScroll: false,
                         clickOutsideToClose: true,
                         fullscreen: false,
-                        controller: 'rescheduleLessonController',
+                        controller: 'RescheduleLessonController',
                         controllerAs: 'vm',
                         locals: {
                             lessonData: lessonObj,
