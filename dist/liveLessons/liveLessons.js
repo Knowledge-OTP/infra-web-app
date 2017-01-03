@@ -262,7 +262,7 @@
                         };
                     };
                     return $mdDialog.show({
-                        templateUrl: 'app/components/liveLessons/templates/myLiveLessonsModal.template.html',
+                        templateUrl: 'components/liveLessons/templates/myLiveLessonsModal.template.html',
                         disableParentScroll: false,
                         clickOutsideToClose: true,
                         fullscreen: false,
@@ -276,7 +276,7 @@
                 var educatorProfile = _getEducatorProfileByTeachworksName(lessonObj.educatorName);
                 UserProfileService.getProfile().then(function (studentProfile) {
                     $mdDialog.show({
-                        templateUrl: 'app/components/liveLessons/templates/rescheduleLessonModal.template.html',
+                        templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
                         disableParentScroll: false,
                         clickOutsideToClose: true,
                         fullscreen: false,

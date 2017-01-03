@@ -3360,13 +3360,7 @@ md-dialog.my-lessons-schedule-wrapper {
       display: flex; }
       md-dialog.my-lessons-schedule-wrapper .md-dialog-content .btn-wrapper .ok-button {
         margin: 15px auto 0 auto;
-        box-shadow: none;
-        width: 320px;
-        border-radius: 25px;
-        background-color: #0a9bad;
-        color: white; }
-      md-dialog.my-lessons-schedule-wrapper .md-dialog-content .btn-wrapper .ok-button:hover {
-        background-color: #0a8999; }
+        box-shadow: none; }
     md-dialog.my-lessons-schedule-wrapper .md-dialog-content .live-lessons-wrapper {
       margin-top: 16px;
       height: auto;
@@ -3482,9 +3476,6 @@ md-dialog.my-lessons-schedule-wrapper {
       width: 35px; }
       md-dialog.my-lessons-schedule-wrapper .top-icon-wrap .reschedule-icon svg path, md-dialog.my-lessons-schedule-wrapper .top-icon-wrap .reschedule-icon svg polygon {
         fill: #ffffff; }
-  md-dialog.my-lessons-schedule-wrapper .close-popup-wrap * {
-    stroke: #ffffff;
-    stroke-width: 8px; }
   md-dialog.my-lessons-schedule-wrapper .md-dialog-content {
     padding: 40px 22px 22px 22px; }
     md-dialog.my-lessons-schedule-wrapper .md-dialog-content .reschedule-lesson-title {
@@ -3559,19 +3550,11 @@ md-dialog.my-lessons-schedule-wrapper {
         md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .cancel-btn {
           background-color: #ffffff;
           border: 1px solid #0a9bad;
-          color: #0a9bad;
-          width: 160px;
-          border-radius: 25px; }
-        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .cancel-btn:hover {
-          background-color: #e2f0f2; }
+          color: #0a9bad; }
         md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .send-btn {
           background-color: #0a9bad;
           border: 1px solid #0a9bad;
-          color: white;
-          width: 160px;
-          border-radius: 25px; }
-        md-dialog.my-lessons-schedule-wrapper .md-dialog-content .email-container .buttons-wrapper .send-btn:hover {
-          background-color: #0a8999; }
+          color: white; }
     md-dialog.my-lessons-schedule-wrapper .md-dialog-content .big-success-msg {
       margin-top: 40px;
       text-align: center;
@@ -3627,8 +3610,7 @@ md-dialog.my-lessons-schedule-wrapper {
     right: 6px;
     top: 8px; }
     .upcoming-lesson-toast-wrapper .close-popup svg line {
-      stroke: #4f4d4d;
-      stroke-width: 8px; }
+      stroke: #4f4d4d; }
   .upcoming-lesson-toast-wrapper .left-side-container {
     width: 57px;
     height: 100%;

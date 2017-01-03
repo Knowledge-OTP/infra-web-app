@@ -1,11 +1,11 @@
-(function(angular) {
+(function (angular) {
     'use strict';
     angular.module('demo', [
         'demoEnv',
         'znk.infra.auth',
         'pascalprecht.translate',
         'znk.infra-web-app.liveSession'
-        ])
+    ])
         .config(function () {
             // Replace storageConfig parameters through localStorage
             localStorage.setItem('email', 'ofir+actEdu@zinkerz.com');
@@ -18,7 +18,7 @@
 
             PresenceServiceProvider.setAuthServiceName('AuthService');
 
-            LiveSessionSubjectSrvProvider.setLiveSessionSubjects( [0, 5] );
+            LiveSessionSubjectSrvProvider.setLiveSessionSubjects([0, 5]);
 
             znkAnalyticsSrvProvider.setEventsHandler(function () {
                 return {
@@ -79,26 +79,13 @@
             'ngInject';
 
             $delegate.getAuth = function () {
-                return { uid: 'cf656635-b44c-4fcc-82ef-72fe566d5540' };
+                return {uid: 'cf656635-b44c-4fcc-82ef-72fe566d5540'};
             };
             return $delegate;
         })
         .controller('Main', function ($timeout, TeacherContextSrv, StudentContextSrv) {
             'ngInject';
             var vm = this;
-
-            vm.student = {addedTime:1482404147410,
-                invitationId:"caab7c9b-6c3d-410d-3e29-f13c1d10b653",
-                invitationReceiverEmail:"ofir+actStu11@zinkerz.com",
-                invitationReceiverName:"ofir+actStu11",
-                name:"ofir+actStu11",
-                originalReceiverEmail:"ofir+actStu11@zinkerz.com",
-                originalReceiverName:"ofir+actStu11",
-                receiverEmail:"ofir+actStu11@zinkerz.com",
-                receiverUid:"e6a83840-01cc-4e15-af9b-26d9dbbd87d7",
-                uid:"e6a83840-01cc-4e15-af9b-26d9dbbd87d7",
-                presence:1
-            };
 
             $timeout(function () {
                 StudentContextSrv.setCurrentUid('e6a83840-01cc-4e15-af9b-26d9dbbd87d7');
