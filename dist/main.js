@@ -8213,8 +8213,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 });
                 return educators.length ? educators[0] : {};
             }
-
-
             function _getApprovedEducatorsProfile() {
                 return InvitationService.getMyTeachers();
 
@@ -8230,12 +8228,6 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                             relevantLiveLessonsArr.push(value);
                         }
                     });
-                    // relevantLiveLessonsArr.push({
-                    //     "startTime": 1482181200000,
-                    //     "originStartTime": "12/19/2017 16:00:00",
-                    //     "endTime": "20161219T170000",
-                    //     "educatorName": "Alex Choroshin"
-                    // });
                     return relevantLiveLessonsArr;
                 });
             };
@@ -8350,7 +8342,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             }
 
             function _convertDateToMilliseconds(startTimeString) {
-                var timeZone = 'CDT';
+                var timeZone = self.getCdtOrCst();
                 var originalDate = _parseDate(startTimeString) + ' ' + timeZone;
                 var localFullDate = new Date(originalDate).toString();  // convert CST/CDT timezone to local timezone.
                 return new Date(localFullDate).getTime();
