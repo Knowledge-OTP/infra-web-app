@@ -37,9 +37,11 @@
     },
     "LOGIN_APP": {
         "SAT_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the SAT® test with Zinkerz!",
+        "SATSM_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the SAT® Subject Math test with Zinkerz!",
         "ACT_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the ACT® test with Zinkerz!",
         "TOEFL_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the TOEFL® test with Zinkerz!",
         "SAT_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>SAT® desktop app for educators.",
+        "SATSM_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>SAT® Subject Math desktop app for educators.",
         "ACT_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>ACT® desktop app for educators.",
         "TOEFL_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>TOEFL® desktop app for educators.",
         "SIGN_UP_FOR_ZINKERZ_TEST_PREP": "Sign Up for Zinkerz Test Prep",

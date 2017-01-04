@@ -489,6 +489,11 @@
             name: 'SAT',
             className: 'sat'
         },
+        SATSM: {
+            id: 'SATSM',
+            name: 'SATSM',
+            className: 'satsm'
+        },
         TOEFL: {
             id: 'TOEFL',
             name: 'TOEFL',
@@ -940,6 +945,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        student: d.userContext === d.userContextObj.STUDENT,\n" +
     "        educator: d.userContext === d.userContextObj.TEACHER,\n" +
     "        sat: d.appContext === d.availableApps.SAT,\n" +
+    "        satsm: d.appContext === d.availableApps.SATSM,\n" +
     "        act: d.appContext === d.availableApps.ACT,\n" +
     "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
     "    }\">\n" +
@@ -1033,6 +1039,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
     "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
     "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SATSM_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
     "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
     "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
     "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
@@ -1041,6 +1049,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
     "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
     "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SATSM_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
     "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
     "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
     "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +

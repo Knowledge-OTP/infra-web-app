@@ -7,6 +7,11 @@
             name: 'SAT',
             className: 'sat'
         },
+        SATSM: {
+            id: 'SATSM',
+            name: 'SATSM',
+            className: 'satsm'
+        },
         TOEFL: {
             id: 'TOEFL',
             name: 'TOEFL',
