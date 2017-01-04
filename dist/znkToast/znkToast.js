@@ -4,6 +4,7 @@
     angular.module('znk.infra-web-app.znkToast', [
         'ngMaterial',
         'pascalprecht.translate',
+        'ngSanitize',
         'znk.infra.svgIcon'
     ]);
 })(angular);
@@ -28,12 +29,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkToast').controller('ToastController',
-        ["$mdToast", "type", "msg", function ($mdToast, type, msg) {
+        ["$mdToast", "$sce", "type", "msg", function ($mdToast, $sce, type, msg) {
             'ngInject';
 
             var vm = this;
             vm.type = type;
-            vm.msg = msg;
+            vm.msg = $sce.trustAsHtml(msg);
 
             vm.closeToast = function () {
                 $mdToast.hide();
@@ -53,15 +54,21 @@
 
                 var self = this;
 
-                self.showToast = function (type, msg) {
+                self.showToast = function (type, msg, options) {
+                    options = options || {};
+
                     $mdToast.show({
                         locals:{ type: type,  msg: msg },
                         templateUrl: 'components/znkToast/templates/znkToast.template.html',
-                        position: 'top right',
-                        hideDelay: 3000,
+                        position: options.position || 'top right',
+                        hideDelay: angular.isDefined(options.hideDelay) ?  options.hideDelay : 3000,
                         controllerAs: 'vm',
                         controller: 'ToastController'
                     });
+                };
+
+                self.hideToast = function() {
+                    $mdToast.hide();
                 };
             }]
         );
@@ -146,14 +153,16 @@ angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($te
   $templateCache.put("components/znkToast/templates/znkToast.template.html",
     "<md-toast ng-cloak\n" +
     "          ng-class=\"{'toast-wrap': vm.type === 'success',\n" +
+    "                     'toast-wrap-progress': vm.type === 'progress',\n" +
     "                     'toast-wrap-error': vm.type === 'error'}\">\n" +
-    "    <div class=\"icon-wrap\">\n" +
-    "        <svg-icon name=\"znkToast-completed-v-icon\" ng-if=\"vm.type === 'success'\"></svg-icon>\n" +
-    "        <svg-icon name=\"znkToast-error-red-icon\" ng-if=\"vm.type === 'error'\"></svg-icon>\n" +
+    "    <div class=\"icon-wrap\" ng-switch on=\"vm.type\">\n" +
+    "        <svg-icon name=\"znkToast-completed-v-icon\" ng-switch-when=\"success\"></svg-icon>\n" +
+    "        <svg-icon name=\"znkToast-error-red-icon\"ng-switch-when=\"error\"></svg-icon>\n" +
+    "        <md-progress-circular class=\"progress-icon\" md-mode=\"indeterminate\" md-diameter=\"35\" ng-switch-when=\"progress\"></md-progress-circular>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"md-toast-content\">\n" +
-    "        <div class=\"md-toast-text\" flex>{{vm.msg | translate}}</div>\n" +
+    "        <div class=\"md-toast-text\" flex ng-bind-html=\"vm.msg | translate\"></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <md-button aria-label=\"close popup\"\n" +

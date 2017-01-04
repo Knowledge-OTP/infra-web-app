@@ -1,0 +1,116 @@
+.app-admin .app-admin-container {
+    background: #ffffff;
+    width: 100%;
+    margin-left: 20px;
+    min-height: 850px;
+}
+
+.app-admin .admin-header {
+    background-color: #f9f9f9;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.app-admin .admin-header .admin-section .admin-details {
+    padding: 15px 38px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.app-admin .admin-header .admin-section .admin-details .first-row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    position: relative;
+}
+
+.app-admin .admin-header .admin-section .admin-details .first-row .admin-name {
+    font-size: 24px;
+    color: #161616;
+    font-family: Quicksand;
+    font-weight: 700;
+}
+
+.app-admin .admin-header .admin-section .admin-details .first-row .right-section {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+}
+
+.app-admin .admin-header .admin-section .admin-details .first-row .right-section .section-wrapper .edit-button {
+    cursor: pointer;
+    position: relative;
+}
+
+.app-admin .admin-header .admin-section .admin-details .first-row .right-section .section-wrapper .edit-button .settings-btn {
+    display: inline-block;
+    padding: 2px 0 0 0;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.app-admin .admin-header .admin-section .admin-details .first-row .right-section .section-wrapper .edit-button .settings-btn .settings-icon {
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    fill: #c2c2c2;
+}
+
+.app-admin .admin-header .admin-section .admin-details .first-row .right-section .seperator {
+    width: 2px;
+    height: 100%;
+    background: #e1e1e1;
+}
+
+.app-admin .admin-header .admin-section .admin-details .first-row .right-section call-btn {
+    width: 50px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.app-admin .admin-header .admin-section.ng-enter {
+    transition: 0.5s linear all;
+    opacity: 0;
+}
+
+.app-admin .admin-header .admin-section.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+
+.app-admin .admin-header .admin-section.ng-leave {
+    transition: 0.5s linear all;
+    opacity: 1;
+}
+
+.app-admin .admin-header .admin-section.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+
+.app-admin .admin-header .header-nav-wrap {
+    display: -ms-flexbox;
+    display: flex;
+    padding: 0 38px;
+}
+
+.app-admin .admin-header .header-nav-wrap .nav-item {
+    font-size: 16px;
+    color: #95959c;
+    font-family: Lato;
+    font-weight: 400;
+    margin-right: 40px;
+    padding-bottom: 9px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.app-admin .admin-header .header-nav-wrap .nav-item.active {
+    border-bottom: 3px solid #87ca4d;
+}

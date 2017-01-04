@@ -18,7 +18,8 @@
         'znk.infra.screenSharing',
         'znk.infra.eventManager',
         'znk.infra.stats',
-        'znk.infra.estimatedScore'
+        'znk.infra.estimatedScore',
+        'znk.infra.znkSessionData'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -98,19 +99,13 @@
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
                 }
 
-                function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
+                function _getExerciseParentContentProm(exerciseDetails, isExam, isModule) {
                     var exerciseParentContentProm = $q.when(null);
 
                     if (isExam) {
                         exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
-                    } else if (settings && settings.exerciseParentContent) {
-                        exerciseParentContentProm = settings.exerciseParentContent;
-                    } else if (isModule) {
-                        exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
-                            return {
-                                name: moduleContent.name
-                            };
-                        });
+                    }  else if (isModule) {
+                        exerciseParentContentProm = ExerciseResultSrv.getModuleResultByGuid(exerciseDetails.moduleResultGuid);
                     }
 
                     return exerciseParentContentProm;
@@ -131,7 +126,8 @@
                                     'exerciseId',
                                     'exerciseTypeId',
                                     'exerciseParentId',
-                                    'exerciseParentTypeId'
+                                    'exerciseParentTypeId',
+                                    'moduleResultGuid'
                                 ];
                                 angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
                                     activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
@@ -139,6 +135,7 @@
 
                                 activeShData.activeExercise.resultGuid = $ctrl.exerciseData.exerciseResult.guid;
                                 activeShData.activeExercise.activeScreen = $ctrl.currViewState;
+
                                 shDataEventManager.updateValue(activeShData);
                                 var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
                                 return saveExerciseResultProm.then(function () {
@@ -171,9 +168,9 @@
                     exerciseRebuildProm = $timeout(function () {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
                         var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
-                        var settings = $ctrl.settings;
+                        var isSection = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
 
-                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, isExam, isModule);
 
                         return exerciseParentContentProm.then(function (exerciseParentContent) {
                             if (isExam) {
@@ -184,9 +181,14 @@
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
                                 exerciseParentContent: exerciseParentContent
                             };
+
+                            if (isModule && isSection){
+                                getDataPromMap.moduleExamData = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
+                            }
+
                             return $q.all(getDataPromMap).then(function (data) {
                                 $ctrl.exerciseData = data;
-                                isDataReady = true;  
+                                isDataReady = true;
                                 var newViewState;
 
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
@@ -372,7 +374,8 @@
                     var exerciseDataPropsToCreateGetters = [
                         'exerciseContent',
                         'exerciseParentContent',
-                        'exerciseResult'
+                        'exerciseResult',
+                        'moduleExamData'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
@@ -466,6 +469,7 @@
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
                     var exerciseParentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
                     var exerciseParentId = $ctrl.completeExerciseCtrl.getExerciseParentId();
+                    var moduleExamData = $ctrl.completeExerciseCtrl.getModuleExamData();
 
                     var settings = {
                         exerciseContent: exerciseContent,
@@ -473,6 +477,7 @@
                         exerciseParentContent: exerciseParentContent,
                         exerciseParentTypeId: exerciseParentTypeId,
                         exerciseParentId: exerciseParentId,
+                        moduleExamData: moduleExamData,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
@@ -483,10 +488,12 @@
                     };
 
                     var defaultZnkExerciseSettings = {
+                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.settings.exerciseReviewStatus,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
                     };
+
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
@@ -605,9 +612,7 @@
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
                     var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
-                    var isNotLecture = exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
-
-                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete && isNotLecture) {
+                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
                         $ctrl.znkExercise._finishExercise();
                     }
                 }
@@ -680,9 +685,9 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "$state", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
                   $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv) {
+                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -725,7 +730,7 @@
                 exerciseResult.timePreference = exerciseContent.timePreference;
                 exerciseResult.categoryId = exerciseContent.categoryId;
                 exerciseResult.testScoreId = exerciseContent.testScoreId;
-                exerciseResult.moduleId = exerciseContent.moduleId;
+                exerciseResult.moduleId = !exerciseResult.moduleId ? exerciseContent.moduleId : exerciseResult.moduleId;
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
@@ -785,31 +790,41 @@
             }
 
             function _finishExercise() {
-                exerciseResult.isComplete = true;
-                exerciseResult.endedTime = Date.now();
-                exerciseResult.$save();
+                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData){
+                    var liveSessionOn = !angular.equals(liveSessionData, {});
+                    if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
+                    } else {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
+                    }
+                    exerciseResult.isComplete = true;
+                    exerciseResult.endedTime = Date.now();
+                    exerciseResult.$save();
 
-                //  stats exercise data
-                StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
-                    $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
-                    var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
+                    if (exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum) {
+                        //  stats exercise data
+                        StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
+                            $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
+                            var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                    shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
-                        var shouldBroadcast = shouldBroadcastFn({
-                            exercise: exerciseContent,
-                            exerciseResult: exerciseResult,
-                            exerciseParent: exerciseParentIsSectionOnly
+                            shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                                var shouldBroadcast = shouldBroadcastFn({
+                                    exercise: exerciseContent,
+                                    exerciseResult: exerciseResult,
+                                    exerciseParent: exerciseParentIsSectionOnly
+                                });
+
+                                if (shouldBroadcast) {
+                                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                                    ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
+                                }
+                            });
+
+                            settings.actions.done();
                         });
-
-                        if (shouldBroadcast) {
-                            var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                            var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
-                            ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
-                        }
-                    });
-
-                    settings.actions.done();
+                    }
                 });
             }
 
@@ -908,6 +923,7 @@
                         },
                         onExit: function() {
                             if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+
                                 exerciseResult.$save();
                             }
                         },
@@ -919,6 +935,11 @@
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
+                        },
+                        onReview: function onReview () {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
+                            exerciseResult.$save();
+                            $state.go('app.dashboard.roadmap.review');
                         }
                     };
 
@@ -1229,9 +1250,11 @@
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
+        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", "BaseExerciseGetterSrv", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
+                  $log, $q, ExerciseParentEnum, BaseExerciseGetterSrv) {
             'ngInject';
 
+            var self = this;
             this.VIEW_STATES = {
                 NONE: 0,
                 INTRO: 1,
@@ -1256,8 +1279,8 @@
             this.getExerciseResult = function (exerciseDetails, shMode) {
                 var isLecture = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.LECTURE.enum;
 
-                if(shMode === this.MODE_STATES.VIEWER){
-                    if(!exerciseDetails.resultGuid){
+                if (shMode === this.MODE_STATES.VIEWER) {
+                    if (!exerciseDetails.resultGuid) {
                         var errMsg = 'completeExerciseSrv: exercise details is missing guid property';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
@@ -1268,7 +1291,7 @@
 
                 switch (exerciseDetails.exerciseParentTypeId) {
                     case ExerciseParentEnum.MODULE.enum:
-                        if(isLecture){
+                        if (isLecture) {
                             return ExerciseResultSrv.getExerciseResult(
                                 exerciseDetails.exerciseTypeId,
                                 exerciseDetails.exerciseId,
@@ -1276,13 +1299,23 @@
                             );
                         }
 
-                        return this.getContextUid().then(function (uid) {
-                            return ExerciseResultSrv.getModuleExerciseResult(
-                                uid,
-                                exerciseDetails.exerciseParentId,
-                                exerciseDetails.exerciseTypeId,
-                                exerciseDetails.exerciseId
-                            );
+                        var examIdProm = $q.when();
+                        if (exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
+                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
+                        }
+
+                        return examIdProm.then(function (examData) {
+                            return self.getContextUid().then(function (uid) {
+                                var examId = examData && examData.id ? examData.id : undefined;
+                                return ExerciseResultSrv.getModuleExerciseResult(
+                                    uid,
+                                    exerciseDetails.exerciseParentId,
+                                    exerciseDetails.exerciseTypeId,
+                                    exerciseDetails.exerciseId,
+                                    exerciseDetails.assignContentType,
+                                    examId
+                                );
+                            });
                         });
                     default:
                         return ExerciseResultSrv.getExerciseResult(

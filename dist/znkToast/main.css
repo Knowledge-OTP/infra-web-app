@@ -8,7 +8,7 @@
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-md-toast.toast-wrap, md-toast.toast-wrap-error {
+md-toast.toast-wrap, md-toast.toast-wrap-error, md-toast.toast-wrap-progress {
   width: 400px;
   height: 60px;
   display: -ms-flexbox;
@@ -16,7 +16,7 @@ md-toast.toast-wrap, md-toast.toast-wrap-error {
   background-color: white;
   border: 2px solid #87ca4d;
   border-radius: 10px; }
-  md-toast.toast-wrap .icon-wrap, md-toast.toast-wrap-error .icon-wrap {
+  md-toast.toast-wrap .icon-wrap, md-toast.toast-wrap-error .icon-wrap, md-toast.toast-wrap-progress .icon-wrap {
     width: 60px;
     margin: -8px;
     padding: 8px;
@@ -27,24 +27,24 @@ md-toast.toast-wrap, md-toast.toast-wrap-error {
         justify-content: center;
     -ms-flex-align: center;
         align-items: center; }
-    md-toast.toast-wrap .icon-wrap svg-icon, md-toast.toast-wrap-error .icon-wrap svg-icon {
+    md-toast.toast-wrap .icon-wrap svg-icon, md-toast.toast-wrap-error .icon-wrap svg-icon, md-toast.toast-wrap-progress .icon-wrap svg-icon {
       width: 40px;
       height: 40px; }
-      md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg *, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg * {
+      md-toast.toast-wrap .icon-wrap svg-icon .complete-v-icon-svg *, md-toast.toast-wrap-error .icon-wrap svg-icon .complete-v-icon-svg *, md-toast.toast-wrap-progress .icon-wrap svg-icon .complete-v-icon-svg * {
         fill: #87ca4d; }
-  md-toast.toast-wrap .md-toast-content, md-toast.toast-wrap-error .md-toast-content {
+  md-toast.toast-wrap .md-toast-content, md-toast.toast-wrap-error .md-toast-content, md-toast.toast-wrap-progress .md-toast-content {
     background: white;
     box-shadow: none;
     color: #4f4d4d;
     margin-left: 10px; }
-  md-toast.toast-wrap .close-toast-wrap, md-toast.toast-wrap-error .close-toast-wrap {
+  md-toast.toast-wrap .close-toast-wrap, md-toast.toast-wrap-error .close-toast-wrap, md-toast.toast-wrap-progress .close-toast-wrap {
     position: absolute;
     right: 3px;
     top: -15px;
     width: 20px; }
-    md-toast.toast-wrap .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg {
+    md-toast.toast-wrap .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg, md-toast.toast-wrap-progress .close-toast-wrap .close-pop-svg {
       width: 10px; }
-      md-toast.toast-wrap .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg .st1 {
+      md-toast.toast-wrap .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-error .close-toast-wrap .close-pop-svg .st1, md-toast.toast-wrap-progress .close-toast-wrap .close-pop-svg .st1 {
         stroke: #4f4d4d; }
 
 md-toast.toast-wrap-error {
@@ -56,3 +56,23 @@ md-toast.toast-wrap-error {
       height: 25px; }
       md-toast.toast-wrap-error .icon-wrap svg-icon .close-pop-svg * {
         stroke: #000000; }
+
+md-toast.toast-wrap-progress {
+  border: 2px solid #ebebeb;
+  box-shadow: 0 1px 0px 1px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  transform: translate(0, 60px); }
+  md-toast.toast-wrap-progress .icon-wrap {
+    background: #ebebeb; }
+    md-toast.toast-wrap-progress .icon-wrap .progress-icon svg * {
+      stroke: #b7b7b7; }
+  md-toast.toast-wrap-progress .md-toast-content .md-toast-text {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    line-height: 23px;
+    font-size: 14px;
+    font-family: Lato; }
+    md-toast.toast-wrap-progress .md-toast-content .md-toast-text .progress-title {
+      text-transform: uppercase; }

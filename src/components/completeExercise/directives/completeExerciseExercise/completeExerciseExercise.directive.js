@@ -46,6 +46,7 @@
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
                     var exerciseParentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
                     var exerciseParentId = $ctrl.completeExerciseCtrl.getExerciseParentId();
+                    var moduleExamData = $ctrl.completeExerciseCtrl.getModuleExamData();
 
                     var settings = {
                         exerciseContent: exerciseContent,
@@ -53,6 +54,7 @@
                         exerciseParentContent: exerciseParentContent,
                         exerciseParentTypeId: exerciseParentTypeId,
                         exerciseParentId: exerciseParentId,
+                        moduleExamData: moduleExamData,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
@@ -63,10 +65,12 @@
                     };
 
                     var defaultZnkExerciseSettings = {
+                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.settings.exerciseReviewStatus,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
                     };
+
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
@@ -185,9 +189,7 @@
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
                     var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
-                    var isNotLecture = exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
-
-                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete && isNotLecture) {
+                    if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
                         $ctrl.znkExercise._finishExercise();
                     }
                 }

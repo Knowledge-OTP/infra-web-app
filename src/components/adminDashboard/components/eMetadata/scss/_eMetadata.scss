@@ -1,0 +1,15 @@
+.admin-eMetadata{
+    height: 100%;
+
+    .ui-grid{
+        height: 600px !important;
+        .ui-grid-viewport {
+            //height: 100% !important;
+        }
+        .ui-grid-row > [ui-grid-row] > .ui-grid-cell {
+            cursor: pointer;
+        }
+    }
+
+
+}

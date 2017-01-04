@@ -1,0 +1,11 @@
+@import '../../scss/imports/variables',
+        '../../scss/imports/colors',
+        '../../../bower_components/infra/dist/mixins/mixins',
+        '../../scss/imports/inputs';
+
+@import './scss/adminDashboard',
+        './components/esLink/scss/esLink',
+        './components/esLink/scss/app-select',
+        './components/eMetadata/scss/eMetadata',
+        './components/eMetadata/scss/adminProfile';
+

@@ -1,15 +1,18 @@
 {
   "name": "infra-web-app",
-  "version": "v0.0.74",
+  "version": "v0.0.82",
   "authors": [
     "Zinkerz"
   ],
   "dependencies": {
-    "infra": "https://github.com/Knowledge-OTP/infra.git#~v5.0.80",
+    "infra": "https://github.com/Knowledge-OTP/infra.git#>=6.0.1",
     "ng-tags-input": "3.0.0",
     "angular-chart.js": "0.10.2",
     "v-accordion": "1.4.1",
-    "satellizer": "0.13.4"
+    "satellizer": "0.13.4",
+    "angular-drag-and-drop-lists": "^1.4.0",
+    "angular-ui-grid": "3.1.1",
+    "elasticsearch": "^12.1.2"
   },
   "ignore": [
     ".*",
@@ -24,10 +27,24 @@
   "devDependencies": {
     "es5-shim": "~4.4.1",
     "mockfirebase": "~0.11.0",
-    "jasmine-jquery": "^2.1.1"
+    "jasmine-jquery": "^2.1.1",
+    "aws-sdk": "aws-sdk-js#^2.7.14",
+    "angular-mocks": "1.5.8",
+    "angular-messages": "1.5.8"
+  },
+  "overrides": {
+    "elasticsearch": {
+      "main": [
+        "elasticsearch.js",
+        "elasticsearch.angular.js"
+      ]
+    }
   },
   "resolutions": {
     "angular": "1.5.8",
-    "angular-translate": "2.12.0"
+    "angular-messages": "1.5.8",
+    "all-envs-config": "~v0.0.10",
+    "angular-translate": "2.13.1",
+    "angular-translate-loader-static-files": "2.13.1"
   }
 }

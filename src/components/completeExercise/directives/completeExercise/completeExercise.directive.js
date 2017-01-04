@@ -66,19 +66,13 @@
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
                 }
 
-                function _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule) {
+                function _getExerciseParentContentProm(exerciseDetails, isExam, isModule) {
                     var exerciseParentContentProm = $q.when(null);
 
                     if (isExam) {
                         exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
-                    } else if (settings && settings.exerciseParentContent) {
-                        exerciseParentContentProm = settings.exerciseParentContent;
-                    } else if (isModule) {
-                        exerciseParentContentProm = ZnkModuleService.getModuleById(exerciseDetails.exerciseParentId).then(function (moduleContent) {
-                            return {
-                                name: moduleContent.name
-                            };
-                        });
+                    }  else if (isModule) {
+                        exerciseParentContentProm = ExerciseResultSrv.getModuleResultByGuid(exerciseDetails.moduleResultGuid);
                     }
 
                     return exerciseParentContentProm;
@@ -99,7 +93,8 @@
                                     'exerciseId',
                                     'exerciseTypeId',
                                     'exerciseParentId',
-                                    'exerciseParentTypeId'
+                                    'exerciseParentTypeId',
+                                    'moduleResultGuid'
                                 ];
                                 angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
                                     activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
@@ -107,6 +102,7 @@
 
                                 activeShData.activeExercise.resultGuid = $ctrl.exerciseData.exerciseResult.guid;
                                 activeShData.activeExercise.activeScreen = $ctrl.currViewState;
+
                                 shDataEventManager.updateValue(activeShData);
                                 var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
                                 return saveExerciseResultProm.then(function () {
@@ -139,9 +135,9 @@
                     exerciseRebuildProm = $timeout(function () {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
                         var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
-                        var settings = $ctrl.settings;
+                        var isSection = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
 
-                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, settings, isExam, isModule);
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, isExam, isModule);
 
                         return exerciseParentContentProm.then(function (exerciseParentContent) {
                             if (isExam) {
@@ -152,9 +148,14 @@
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
                                 exerciseParentContent: exerciseParentContent
                             };
+
+                            if (isModule && isSection){
+                                getDataPromMap.moduleExamData = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
+                            }
+
                             return $q.all(getDataPromMap).then(function (data) {
                                 $ctrl.exerciseData = data;
-                                isDataReady = true;  
+                                isDataReady = true;
                                 var newViewState;
 
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
@@ -340,7 +341,8 @@
                     var exerciseDataPropsToCreateGetters = [
                         'exerciseContent',
                         'exerciseParentContent',
-                        'exerciseResult'
+                        'exerciseResult',
+                        'moduleExamData'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
