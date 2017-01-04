@@ -33,8 +33,8 @@
             bindings: {},
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "ActivePanelSrv", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
-                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
+            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "ActivePanelSrv", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", "MyLiveLessons", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
+                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout,MyLiveLessons) {
                 'ngInject';
 
                 var vm = this;
@@ -44,6 +44,7 @@
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
+                vm.showMyLiveLessonsSchedule = MyLiveLessons.liveLessonsScheduleModal;
                 vm.showFeedbackDialog = feedbackSrv.showFeedbackDialog;
                 vm.purchaseData = {};
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
@@ -210,7 +211,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                            <span class=\"username\">{{vm.userProfile.username}}</span>\n" +
     "                            <span class=\"email\">{{vm.userProfile.email}}</span>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item md-ink-ripple class=\"header-modal-item header-modal-item-uppercase links purchase-status\">\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      class=\"header-modal-item header-modal-item-uppercase links purchase-status\">\n" +
     "                            <span translate=\"{{vm.subscriptionStatus}}\" translate-compile></span>\n" +
     "                            <span class=\"link-full-item\" ng-click=\"vm.showPurchaseDialog()\"></span>\n" +
     "                            <ng-switch on=\"vm.purchaseState\">\n" +
@@ -221,6 +223,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                                    <svg-icon name=\"znkHeader-check-mark-icon\"></svg-icon>\n" +
     "                                </div>\n" +
     "                            </ng-switch>\n" +
+    "                        </md-list-item>\n" +
+    "                        <md-list-item\n" +
+    "                            md-ink-ripple\n" +
+    "                            ng-class=\"{'no-live-lessons': vm.noLiveLessons}\"\n" +
+    "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
+    "                            <span\n" +
+    "                                ng-click=\"vm.showMyLiveLessonsSchedule()\"\n" +
+    "                                translate=\".MY_LIVE_LESSONS\"></span>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple\n" +
     "                                      ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
@@ -240,8 +250,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                               translate=\".WHAT_IS_THE_THIS_TEST\">\n" +
     "                            </a>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item  md-ink-ripple\n" +
-    "                                       ng-click=\"vm.showFeedbackDialog()\">\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      ng-click=\"vm.showFeedbackDialog()\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
     "                                 translate=\".PROFILE_SUPPORT\"></div>\n" +
     "                        </md-list-item>\n" +

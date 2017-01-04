@@ -157,7 +157,8 @@
         "PROFILE_GOALS": "my goals",
         "PROFILE_CHANGE_PASSWORD": "change password",
         "PROFILE_SUPPORT": "support",
-        "PROFILE_LOGOUT": "log out"
+        "PROFILE_LOGOUT": "log out",
+        "MY_LIVE_LESSONS": "MY LIVE LESSONS SCHEDULE"
     },
     "INVITE_APPROVE_MODAL":{
         "YOU_HAVE_INVITE": "You have an invitation",

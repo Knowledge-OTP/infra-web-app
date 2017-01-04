@@ -3444,7 +3444,7 @@ md-dialog.my-lessons-schedule-wrapper {
 
 md-tooltip.reschedule-tooltip {
   width: 130px;
-  height: 36px;
+  height: 25px;
   padding: 0;
   border-radius: 5px; }
   md-tooltip.reschedule-tooltip .md-content {
@@ -3477,7 +3477,7 @@ md-dialog.my-lessons-schedule-wrapper {
       md-dialog.my-lessons-schedule-wrapper .top-icon-wrap .reschedule-icon svg path, md-dialog.my-lessons-schedule-wrapper .top-icon-wrap .reschedule-icon svg polygon {
         fill: #ffffff; }
   md-dialog.my-lessons-schedule-wrapper .md-dialog-content {
-    padding: 40px 22px 22px 22px; }
+    padding: 80px 22px 22px 22px; }
     md-dialog.my-lessons-schedule-wrapper .md-dialog-content .reschedule-lesson-title {
       font-size: 32px;
       color: #4f4d4d;
