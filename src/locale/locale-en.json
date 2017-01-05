@@ -383,7 +383,7 @@
         "SEND": "SEND",
         "SUCCESS_SHARED": "Successfully sent",
         "DONE": "Done",
-        "MESSAGE": "Hello,\r\n\r\nI would like to reschedule my lesson with {{teacherName}}\r\nschedules for {{lessonDate}}\r\n\r\nThanks,\r\n{{studentName}}."
+        "MESSAGE": "Hello,\r\n\r\nI would like to reschedule my lesson with {{teacherName}}\r\nscheduled for {{lessonDate}} to one of the following times:\r\n\r\n1. MM/DD/YYYY  HH:MM \r\n2. MM/DD/YYYY  HH:MM \r\n3. MM/DD/YYYY  HH:MM \r\n\r\nThanks,\r\n{{studentName}}."
     },
 
     "UPCOMING_LESSON_TOAST":{
