@@ -7221,7 +7221,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     var listenerData = getListenerData(userId, event);
                     studentStorage.offEvent('child_added', listenerData.path, listenerData.childAddedHandler);
                     studentStorage.offEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
-                    
+
                     angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
                             registerEvents[userId][event].cb.splice(index, 1);
@@ -7506,6 +7506,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                         teacher.zinkerzTeacher = profile.zinkerzTeacher;
                         teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
+                        teacher.educatorTeachworksName = profile.educatorTeachworksName;
+                        teacher.educatorAvailabilityHours = profile.educatorAvailabilityHours;
 
                         myTeachers[teacher.senderUid] = teacher;
                         angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {
@@ -8049,11 +8051,13 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('RescheduleLessonController',
-        ["$mdDialog", "lessonData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons) {
+        ["$mdDialog", "lessonData", "educatorProfileData", "studentData", "$filter", "ENV", "$translate", "MailSenderService", "MyLiveLessons", function ($mdDialog, lessonData, educatorProfileData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons) {
             'ngInject';
 
             var self = this;
             self.closeDialog = $mdDialog.cancel;
+            self.teacherAvailabilityHours = educatorProfileData.educatorAvailabilityHours;
+            self.teacherName = lessonData.educatorName;
 
             var currentTimeStamp = new Date().getTime();
             var FORTY_EIGHT_HOURS = 172800000;
@@ -8065,7 +8069,9 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             }
 
             var localTimeZone = MyLiveLessons.getLocalTimeZone();
-            var studentName = studentData.studentProfile.nickname;
+
+            var studentName = studentData.studentProfile.nickname || '';
+            var studentEmail = studentData.studentProfile.email || '';
             var localStartTimeLesson = $filter('date')(lessonData.startTime, 'MMMM d, h:mma') + localTimeZone;
             var emailBodyMessageVars = {
                 teacherName: lessonData.educatorName,
@@ -8104,7 +8110,9 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     message: message,
                     subject: emailSubject,
                     appName: ENV.firebaseAppScopeName,
-                    templateKey: TEMPLATE_KEY
+                    templateKey: TEMPLATE_KEY,
+                    fromEmail: studentEmail,
+                    fromName: studentName
                 };
 
                 MailSenderService.postMailRequest(dataToSend).then(function () {
@@ -8151,7 +8159,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').service('MyLiveLessons',
-        ["$mdDialog", "UserProfileService", "$http", "$q", "$log", "ENV", "$filter", function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter) {
+        ["$mdDialog", "UserProfileService", "$http", "$q", "$log", "ENV", "$filter", "InfraConfigSrv", "StudentContextSrv", "InvitationService", function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter, InfraConfigSrv, StudentContextSrv, InvitationService) {
             'ngInject';
 
             var self = this;
@@ -8196,6 +8204,20 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 });
             }
 
+            function _getEducatorProfileByTeachworksName(name) {
+                var connectedEducatorsList = _getApprovedEducatorsProfile();
+                var educators = Object.keys(connectedEducatorsList).map(function (keyItem) {
+                    return connectedEducatorsList[keyItem];
+                }).filter(function (EducatorObj) {
+                    return EducatorObj.educatorTeachworksName === name;
+                });
+                return educators.length ? educators[0] : {};
+            }
+            function _getApprovedEducatorsProfile() {
+                return InvitationService.getMyTeachers();
+
+            }
+
             self.getRelevantLiveLessons = function () {
                 return getLiveLessonsSchedule().then(function (liveLessonsArr) {
                     var currentTimestamp = new Date().getTime();
@@ -8225,8 +8247,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
             self.liveLessonsScheduleModal = function () {
                 return self.getRelevantLiveLessons().then(function (liveLessonsArr) {
-                    function ctrl() {
-                        /*jshint validthis: true */
+
+                    var liveLessonsScheduleController = function () {
                         this.liveLessonsArr = liveLessonsArr;
                         this.closeDialog = $mdDialog.cancel;
                         var currDate = new Date();
@@ -8234,20 +8256,20 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         this.openRescheduleModal = function (lessonObj) {
                             self.rescheduleModal(lessonObj);
                         };
-                    }
-
+                    };
                     return $mdDialog.show({
                         templateUrl: 'components/liveLessons/templates/myLiveLessonsModal.template.html',
                         disableParentScroll: false,
                         clickOutsideToClose: true,
                         fullscreen: false,
-                        controller: ctrl,
+                        controller: liveLessonsScheduleController,
                         controllerAs: 'vm'
                     });
                 });
             };
 
             self.rescheduleModal = function (lessonObj) {
+                var educatorProfile = _getEducatorProfileByTeachworksName(lessonObj.educatorName);
                 UserProfileService.getProfile().then(function (studentProfile) {
                     $mdDialog.show({
                         templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
@@ -8258,6 +8280,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                         controllerAs: 'vm',
                         locals: {
                             lessonData: lessonObj,
+                            educatorProfileData: educatorProfile,
                             studentData: {
                                 studentProfile: studentProfile,
                                 userId: userId
@@ -8319,7 +8342,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
             }
 
             function _convertDateToMilliseconds(startTimeString) {
-                var timeZone = 'CST';
+                var timeZone = self.getCdtOrCst();
                 var originalDate = _parseDate(startTimeString) + ' ' + timeZone;
                 var localFullDate = new Date(originalDate).toString();  // convert CST/CDT timezone to local timezone.
                 return new Date(localFullDate).getTime();
@@ -8348,6 +8371,9 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 return localTimeZone;
             };
 
+            self.getCdtOrCst = function () {
+                return 'CDT';
+            };
             // -------------------------------------parsing data------------------------------- //
         }]
     );
@@ -8487,8 +8513,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "            <div class=\"current-time\" translate=\".CURRENT_TIME\"\n" +
     "                 translate-values=\"{ currentTime: {{'vm.currentTime'}} }\"></div>\n" +
     "            <div class=\"btn-wrapper\">\n" +
-    "                <md-button aria-label=\"{{'MY_LIVE_LESSONS_POPUP.OK' | translate}}\"\n" +
-    "                    class=\"ok-button success drop-shadow\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <md-button\n" +
+    "                    aria-label=\"{{'MY_LIVE_LESSONS_POPUP.OK' | translate}}\"\n" +
+    "                    class=\"ok-button success drop-shadow\"\n" +
+    "                    ng-click=\"vm.closeDialog()\">\n" +
     "                    <span translate=\".OK\"></span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
@@ -8515,7 +8543,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "        <div ng-switch=\"!!vm.requestWasSent\">\n" +
     "            <div class=\"md-dialog-content\">\n" +
     "                <div class=\"reschedule-lesson-title\" translate=\".RESCHEDULE_LESSON\"></div>\n" +
-    "\n" +
+    "                <div class=\"availability-hours\">\n" +
+    "                    <div class=\"name\">{{vm.teacherName}}</div>\n" +
+    "                    <div class=\"date\">{{vm.teacherAvailabilityHours}}</div>\n" +
+    "                </div>\n" +
     "                <div class=\"email-container\" ng-switch-when=\"false\">\n" +
     "                    <div class=\"note-wrapper\" ng-if=\"vm.islessonInNextFortyEightHours\">\n" +
     "                        <span class=\"red-color-text\" translate=\".NOTE\"></span>\n" +
@@ -8531,13 +8562,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "                </textarea>\n" +
     "                    <div class=\"bottom-lesson\" translate=\".WE_WILL_CONTACT_YOU\"></div>\n" +
     "                    <div class=\"buttons-wrapper\">\n" +
-    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.CANCEL' | translate}}\"\n" +
+    "                        <md-button\n" +
+    "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.CANCEL' | translate}}\"\n" +
     "                            class=\"md-button cancel-btn\"\n" +
     "                            translate=\".CANCEL\"\n" +
     "                            ng-click=\"vm.closeDialog()\">\n" +
-    "\n" +
     "                        </md-button>\n" +
-    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.SEND' | translate}}\"\n" +
+    "                        <md-button\n" +
+    "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.SEND' | translate}}\"\n" +
     "                            class=\"md-button send-btn\"\n" +
     "                            translate=\".SEND\"\n" +
     "                            ng-click=\"vm.send()\">\n" +
@@ -8549,9 +8581,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     "                    <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
     "                    <div translate=\".SUCCESS_SHARED\"></div>\n" +
     "                    <div class=\"done-btn-wrap\">\n" +
-    "                        <md-button aria-label=\"{{'RESCHEDULE_LESSON_MODAL.DONE' | translate}}\"\n" +
-    "                                   class=\"success lg drop-shadow\"\n" +
-    "                                   ng-click=\"vm.closeDialog()\">\n" +
+    "                        <md-button\n" +
+    "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.DONE' | translate}}\"\n" +
+    "                            class=\"success lg drop-shadow\"\n" +
+    "                            ng-click=\"vm.closeDialog()\">\n" +
     "                            <span translate=\".DONE\"></span>\n" +
     "                        </md-button>\n" +
     "                    </div>\n" +
@@ -16468,8 +16501,8 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             bindings: {},
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "ActivePanelSrv", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
-                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
+            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "ActivePanelSrv", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", "MyLiveLessons", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
+                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout,MyLiveLessons) {
                 'ngInject';
 
                 var vm = this;
@@ -16479,6 +16512,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
+                vm.showMyLiveLessonsSchedule = MyLiveLessons.liveLessonsScheduleModal;
                 vm.showFeedbackDialog = feedbackSrv.showFeedbackDialog;
                 vm.purchaseData = {};
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
@@ -16645,7 +16679,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                            <span class=\"username\">{{vm.userProfile.username}}</span>\n" +
     "                            <span class=\"email\">{{vm.userProfile.email}}</span>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item md-ink-ripple class=\"header-modal-item header-modal-item-uppercase links purchase-status\">\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      class=\"header-modal-item header-modal-item-uppercase links purchase-status\">\n" +
     "                            <span translate=\"{{vm.subscriptionStatus}}\" translate-compile></span>\n" +
     "                            <span class=\"link-full-item\" ng-click=\"vm.showPurchaseDialog()\"></span>\n" +
     "                            <ng-switch on=\"vm.purchaseState\">\n" +
@@ -16656,6 +16691,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                                    <svg-icon name=\"znkHeader-check-mark-icon\"></svg-icon>\n" +
     "                                </div>\n" +
     "                            </ng-switch>\n" +
+    "                        </md-list-item>\n" +
+    "                        <md-list-item\n" +
+    "                            md-ink-ripple\n" +
+    "                            ng-class=\"{'no-live-lessons': vm.noLiveLessons}\"\n" +
+    "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
+    "                            <span\n" +
+    "                                ng-click=\"vm.showMyLiveLessonsSchedule()\"\n" +
+    "                                translate=\".MY_LIVE_LESSONS\"></span>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple\n" +
     "                                      ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
@@ -16675,8 +16718,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                               translate=\".WHAT_IS_THE_THIS_TEST\">\n" +
     "                            </a>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item  md-ink-ripple\n" +
-    "                                       ng-click=\"vm.showFeedbackDialog()\">\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      ng-click=\"vm.showFeedbackDialog()\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
     "                                 translate=\".PROFILE_SUPPORT\"></div>\n" +
     "                        </md-list-item>\n" +

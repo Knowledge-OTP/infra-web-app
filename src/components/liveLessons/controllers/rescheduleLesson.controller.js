@@ -2,11 +2,13 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').controller('RescheduleLessonController',
-        function ($mdDialog, lessonData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons) {
+        function ($mdDialog, lessonData, educatorProfileData, studentData, $filter, ENV, $translate, MailSenderService, MyLiveLessons) {
             'ngInject';
 
             var self = this;
             self.closeDialog = $mdDialog.cancel;
+            self.teacherAvailabilityHours = educatorProfileData.educatorAvailabilityHours;
+            self.teacherName = lessonData.educatorName;
 
             var currentTimeStamp = new Date().getTime();
             var FORTY_EIGHT_HOURS = 172800000;
@@ -18,7 +20,9 @@
             }
 
             var localTimeZone = MyLiveLessons.getLocalTimeZone();
-            var studentName = studentData.studentProfile.nickname;
+
+            var studentName = studentData.studentProfile.nickname || '';
+            var studentEmail = studentData.studentProfile.email || '';
             var localStartTimeLesson = $filter('date')(lessonData.startTime, 'MMMM d, h:mma') + localTimeZone;
             var emailBodyMessageVars = {
                 teacherName: lessonData.educatorName,
@@ -57,7 +61,9 @@
                     message: message,
                     subject: emailSubject,
                     appName: ENV.firebaseAppScopeName,
-                    templateKey: TEMPLATE_KEY
+                    templateKey: TEMPLATE_KEY,
+                    fromEmail: studentEmail,
+                    fromName: studentName
                 };
 
                 MailSenderService.postMailRequest(dataToSend).then(function () {

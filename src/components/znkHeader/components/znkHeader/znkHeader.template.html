@@ -41,7 +41,8 @@
                             <span class="username">{{vm.userProfile.username}}</span>
                             <span class="email">{{vm.userProfile.email}}</span>
                         </md-list-item>
-                        <md-list-item md-ink-ripple class="header-modal-item header-modal-item-uppercase links purchase-status">
+                        <md-list-item md-ink-ripple
+                                      class="header-modal-item header-modal-item-uppercase links purchase-status">
                             <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
                             <span class="link-full-item" ng-click="vm.showPurchaseDialog()"></span>
                             <ng-switch on="vm.purchaseState">
@@ -52,6 +53,14 @@
                                     <svg-icon name="znkHeader-check-mark-icon"></svg-icon>
                                 </div>
                             </ng-switch>
+                        </md-list-item>
+                        <md-list-item
+                            md-ink-ripple
+                            ng-class="{'no-live-lessons': vm.noLiveLessons}"
+                            class="header-modal-item header-modal-item-uppercase links">
+                            <span
+                                ng-click="vm.showMyLiveLessonsSchedule()"
+                                translate=".MY_LIVE_LESSONS"></span>
                         </md-list-item>
                         <md-list-item md-ink-ripple
                                       ng-disabled="!vm.isOnBoardingCompleted"
@@ -71,8 +80,8 @@
                                translate=".WHAT_IS_THE_THIS_TEST">
                             </a>
                         </md-list-item>
-                        <md-list-item  md-ink-ripple
-                                       ng-click="vm.showFeedbackDialog()">
+                        <md-list-item md-ink-ripple
+                                      ng-click="vm.showFeedbackDialog()">
                             <div class="header-modal-item header-modal-item-uppercase links"
                                  translate=".PROFILE_SUPPORT"></div>
                         </md-list-item>
