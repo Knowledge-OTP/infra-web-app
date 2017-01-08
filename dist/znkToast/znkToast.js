@@ -61,6 +61,7 @@
                         locals:{ type: type,  msg: msg },
                         templateUrl: 'components/znkToast/templates/znkToast.template.html',
                         position: options.position || 'top right',
+                        toastClass: (options.toastClass) ? options.toastClass + ' znk-toast-genreal' : 'znk-toast-genreal',
                         hideDelay: angular.isDefined(options.hideDelay) ?  options.hideDelay : 3000,
                         controllerAs: 'vm',
                         controller: 'ToastController'
