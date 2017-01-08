@@ -9074,7 +9074,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
             this.registerToCurrUserLiveSessionStateChanges = function (cb) {
                 registeredCbToCurrUserLiveSessionStateChange.push(cb);
-                cb(currUserLiveSessionState);
             };
 
             this.unregisterFromCurrUserLiveSessionStateChanges = function (cb) {
