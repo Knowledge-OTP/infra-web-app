@@ -105,20 +105,12 @@
                                 bodyDomElem.removeClass(activePanelVisibleClassName);
                                 scope.d.shareScreenBtnsEnable = true;
                                 destroyTimer();
-                                if (scope.d.callBtnModel) {
-                                    scope.d.callBtnModel.toggleAutoCall = toggleAutoCallEnum.DISABLE.enum;
-                                    scope.d.callBtnModel = angular.copy(scope.d.callBtnModel);
-                                }
                                 endScreenSharing();
                                 break;
                             case scope.d.states.LIVE_SESSION :
                                 $log.debug('ActivePanel State: LIVE_SESSION');
                                 bodyDomElem.addClass(activePanelVisibleClassName);
                                 startTimer();
-                                if (scope.d.callBtnModel) {
-                                    scope.d.callBtnModel.toggleAutoCall = toggleAutoCallEnum.ACTIVATE.enum;
-                                    scope.d.callBtnModel = angular.copy(scope.d.callBtnModel);
-                                }
                                 break;
                             default :
                                 $log.error('currStatus is in an unknown state', scope.d.currStatus);
@@ -138,9 +130,9 @@
                                 }
 
                                 if (isTeacher) {
-                                    studentOrTeacherContextChange(liveSessionData.studentId);
+                                    studentOrTeacherContextChange(liveSessionData.studentId, liveSessionData);
                                 } else if (isStudent) {
-                                    studentOrTeacherContextChange(liveSessionData.educatorId);
+                                    studentOrTeacherContextChange(liveSessionData.educatorId, liveSessionData);
                                 } else {
                                     $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                                 }
@@ -174,7 +166,7 @@
                         }
                     }
 
-                    function studentOrTeacherContextChange(uid) {
+                    function studentOrTeacherContextChange(uid, liveSessionData) {
                         receiverId = uid;
                         var currentUserStatus = PresenceService.getCurrentUserStatus(receiverId);
                         var CalleeName = CallsUiSrv.getCalleeName(receiverId);
@@ -189,7 +181,8 @@
                             scope.d.callBtnModel = {
                                 isOffline: isOffline,
                                 receiverId: uid,
-                                toggleAutoCall: toggleAutoCallEnum.DISABLE.enum
+                                toggleAutoCall: (liveSessionData.status === LiveSessionStatusEnum.ENDED.enum) ?
+                                    toggleAutoCallEnum.DISABLE.enum : toggleAutoCallEnum.ACTIVATE.enum
                             };
                         }).catch(function (err) {
                             $log.debug('error caught at listenToStudentOrTeacherContextChange', err);

@@ -151,20 +151,12 @@
                                 bodyDomElem.removeClass(activePanelVisibleClassName);
                                 scope.d.shareScreenBtnsEnable = true;
                                 destroyTimer();
-                                if (scope.d.callBtnModel) {
-                                    scope.d.callBtnModel.toggleAutoCall = toggleAutoCallEnum.DISABLE.enum;
-                                    scope.d.callBtnModel = angular.copy(scope.d.callBtnModel);
-                                }
                                 endScreenSharing();
                                 break;
                             case scope.d.states.LIVE_SESSION :
                                 $log.debug('ActivePanel State: LIVE_SESSION');
                                 bodyDomElem.addClass(activePanelVisibleClassName);
                                 startTimer();
-                                if (scope.d.callBtnModel) {
-                                    scope.d.callBtnModel.toggleAutoCall = toggleAutoCallEnum.ACTIVATE.enum;
-                                    scope.d.callBtnModel = angular.copy(scope.d.callBtnModel);
-                                }
                                 break;
                             default :
                                 $log.error('currStatus is in an unknown state', scope.d.currStatus);
@@ -184,9 +176,9 @@
                                 }
 
                                 if (isTeacher) {
-                                    studentOrTeacherContextChange(liveSessionData.studentId);
+                                    studentOrTeacherContextChange(liveSessionData.studentId, liveSessionData);
                                 } else if (isStudent) {
-                                    studentOrTeacherContextChange(liveSessionData.educatorId);
+                                    studentOrTeacherContextChange(liveSessionData.educatorId, liveSessionData);
                                 } else {
                                     $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                                 }
@@ -220,7 +212,7 @@
                         }
                     }
 
-                    function studentOrTeacherContextChange(uid) {
+                    function studentOrTeacherContextChange(uid, liveSessionData) {
                         receiverId = uid;
                         var currentUserStatus = PresenceService.getCurrentUserStatus(receiverId);
                         var CalleeName = CallsUiSrv.getCalleeName(receiverId);
@@ -235,7 +227,8 @@
                             scope.d.callBtnModel = {
                                 isOffline: isOffline,
                                 receiverId: uid,
-                                toggleAutoCall: toggleAutoCallEnum.DISABLE.enum
+                                toggleAutoCall: (liveSessionData.status === LiveSessionStatusEnum.ENDED.enum) ?
+                                    toggleAutoCallEnum.DISABLE.enum : toggleAutoCallEnum.ACTIVATE.enum
                             };
                         }).catch(function (err) {
                             $log.debug('error caught at listenToStudentOrTeacherContextChange', err);
@@ -1203,6 +1196,45 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "</g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/adminDashboard/components/eMetadata/templates/eMetadata.template.html",
+    "<div class=\"admin-dashboard admin-eMetadata\" translate-namespace=\"ADMIN\">\n" +
+    "\n" +
+    "    <div class=\"admin-main-container-overlay\">\n" +
+    "        <div class=\"admin-search-container\">\n" +
+    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
+    "            <div class=\"admin-search-pane\">\n" +
+    "                <div class=\"search-wrap\">\n" +
+    "                    <div class=\"znk-input-group\">\n" +
+    "                        <input type=\"search\"\n" +
+    "                               minlength=\"3\"\n" +
+    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
+    "                               name=\"search-box\"\n" +
+    "                               ng-model=\"vm.educatorSearchQuery\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <button class=\"admin-search-btn\" ng-click=\"vm.getEducatorsSearchResults(vm.educatorSearchQuery)\"\n" +
+    "                        ng-disabled=\"!vm.educatorSearchQuery\" translate=\".SEARCH\">\n" +
+    "                </button>\n" +
+    "\n" +
+    "            </div>\n" +
+    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
+    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/adminDashboard/components/eMetadata/templates/educatorProfile.template.html",
     "<md-dialog ng-cloak class=\"admin-dashboard admin-profile\" translate-namespace=\"ADMIN\">\n" +
     "    <div class=\"top-icon-wrap\">\n" +
@@ -1359,45 +1391,6 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "\n" +
     "\n" +
-    "");
-  $templateCache.put("components/adminDashboard/components/eMetadata/templates/eMetadata.template.html",
-    "<div class=\"admin-dashboard admin-eMetadata\" translate-namespace=\"ADMIN\">\n" +
-    "\n" +
-    "    <div class=\"admin-main-container-overlay\">\n" +
-    "        <div class=\"admin-search-container\">\n" +
-    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-    "            <div class=\"admin-search-pane\">\n" +
-    "                <div class=\"search-wrap\">\n" +
-    "                    <div class=\"znk-input-group\">\n" +
-    "                        <input type=\"search\"\n" +
-    "                               minlength=\"3\"\n" +
-    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
-    "                               name=\"search-box\"\n" +
-    "                               ng-model=\"vm.educatorSearchQuery\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button class=\"admin-search-btn\" ng-click=\"vm.getEducatorsSearchResults(vm.educatorSearchQuery)\"\n" +
-    "                        ng-disabled=\"!vm.educatorSearchQuery\" translate=\".SEARCH\">\n" +
-    "                </button>\n" +
-    "\n" +
-    "            </div>\n" +
-    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
     "");
   $templateCache.put("components/adminDashboard/components/esLink/directives/app-select.template.html",
     "<div class=\"znk-app-select\">\n" +
@@ -12087,6 +12080,21 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
+        function(EnumSrv) {
+
+            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
+                ['FREE_LICENSE', 1, 'free license'],
+                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
+            ]);
+
+            return PromoCodeTypeEnum;
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.promoCode').constant('PROMO_CODE_STATUS', {
         accepted: 0,
         invalid: 1
@@ -12185,21 +12193,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             }];
         }
     );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
-        function(EnumSrv) {
-
-            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
-                ['FREE_LICENSE', 1, 'free license'],
-                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
-            ]);
-
-            return PromoCodeTypeEnum;
-        }]);
 })(angular);
 
 angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
