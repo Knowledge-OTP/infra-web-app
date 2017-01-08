@@ -456,7 +456,6 @@
 
             this.registerToCurrUserLiveSessionStateChanges = function (cb) {
                 registeredCbToCurrUserLiveSessionStateChange.push(cb);
-                cb(currUserLiveSessionState);
             };
 
             this.unregisterFromCurrUserLiveSessionStateChanges = function (cb) {
