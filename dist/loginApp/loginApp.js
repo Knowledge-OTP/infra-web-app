@@ -491,7 +491,7 @@
         },
         SATSM: {
             id: 'SATSM',
-            name: 'SATSM',
+            name: 'SAT Math',
             className: 'satsm'
         },
         TOEFL: {
@@ -957,17 +957,25 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            </span>\n" +
     "        </div>\n" +
     "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
-    "            <md-menu md-offset=\"-50 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
+    "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
     "                <md-button aria-label=\"Open App Select Menu\"\n" +
     "                           class=\"md-icon-button\"\n" +
     "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
+    "                    <div class=\"app-img-holder {{d.appContext.className}}\">{{d.appContext.name}}<span class=\"trademark\">&reg;</span></div>\n" +
+    "                        <div class=\"square {{d.appContext.className}}\">\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
+    "                        </div>\n" +
     "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
-    "                    <div class=\"app-img-holder {{d.appContext.className}}\"></div>\n" +
     "                </md-button>\n" +
     "                <md-menu-content id=\"app-select-menu\">\n" +
     "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
     "                                  ng-click=\"selectApp(app)\">\n" +
-    "                        <div class=\"app-img-holder {{app.className}}\"></div>\n" +
+    "                        <div class=\"app-img-holder {{app.className}}\">{{app.name}}<span class=\"trademark\">&reg;</span></div>\n" +
+    "                        <div class=\"square {{app.className}}\">\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
+    "                        </div>\n" +
     "                    </md-menu-item>\n" +
     "                </md-menu-content>\n" +
     "            </md-menu>\n" +

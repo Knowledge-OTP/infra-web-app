@@ -52,6 +52,8 @@
         "EDUCATORS_CLICK_HERE": "Educators Click Here",
         "SIGNUP_OR_LOGIN": "Please Sign Up or Log In to",
         "ACCEPT_INVITATION": "Accept The Invitation",
+        "TEST": "test",
+        "PREP": "prep",
         "FORM_VALIDATION": {
             "FIELD_IS_EMPTY": "Required field is empty",
             "PASSWORD_TOO_SHORT": "Password is too short, must be between 6-25 characters",

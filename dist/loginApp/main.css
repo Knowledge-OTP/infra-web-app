@@ -244,42 +244,63 @@ promo-code {
   font-style: normal; }
 
 .md-open-menu-container.app-select-menu-open {
-  border-radius: 20px;
+  border-radius: 10px;
   overflow: hidden; }
 
 .md-open-menu-container md-menu-content#app-select-menu {
-  -ms-flex-direction: row;
-      flex-direction: row;
+  -ms-flex-direction: column;
+      flex-direction: column;
   padding: 8px 20px; }
   .md-open-menu-container md-menu-content#app-select-menu md-menu-item {
     -ms-flex-align: center;
         align-items: center;
     cursor: pointer;
-    padding-right: 15px;
     margin-right: 15px;
-    border-right: 1px solid #cccccc; }
+    margin: 5px 0px; }
     .md-open-menu-container md-menu-content#app-select-menu md-menu-item:last-child {
       border-right: none;
       margin-right: 0;
       padding-right: 0; }
     .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder {
-      width: calc(175px / 2);
-      height: calc(55px / 2);
+      width: auto;
+      height: calc(80px / 2);
       background-repeat: no-repeat;
       background-size: contain;
-      padding: 0; }
-      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
-        background-image: url("/assets/images/sat-name@2x.png");
-        width: 88px; }
-      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.satsm {
-        background-image: url("/assets/images/satsm-name@2x.png");
-        width: 88px; }
-      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
-        background-image: url("/assets/images/act-name@2x.png");
-        width: 95px; }
-      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
-        background-image: url("/assets/images/toefl-name@2x.png");
-        width: 126px; }
+      padding: 0;
+      font-size: 32px;
+      color: #4f4d4d;
+      font-family: SourceSansPro;
+      font-weight: 700;
+      margin-right: 5px; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder .trademark {
+        font-size: 18px;
+        vertical-align: super;
+        font-weight: 400; }
+    .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center;
+      text-align: center; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square .text {
+        font-size: 9px;
+        color: white;
+        font-family: SourceSansPro;
+        font-weight: 400;
+        text-transform: uppercase; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.sat {
+        background-color: #0a9bad; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.satsm {
+        background-color: #AF89D2; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.act {
+        background-color: #87ca4d; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.toefl {
+        background-color: #ff931e; }
 
 login-app {
   transition: all 0.5s; }
@@ -329,27 +350,57 @@ login-app {
         login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
           background-color: #ffffff; }
         login-app .login-app > header .app-select md-menu > button {
-          width: 175px;
+          width: auto;
           height: auto;
           padding: 8px 15px;
           background-color: #fbfcfc;
-          border-radius: 30px; }
+          border-radius: 30px;
+          display: -ms-flexbox;
+          display: flex; }
           login-app .login-app > header .app-select md-menu > button:hover {
             box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35); }
         login-app .login-app > header .app-select .app-img-holder {
-          width: 120px;
-          height: calc(55px / 2);
+          width: auto;
+          height: calc(80px / 2);
           background-repeat: no-repeat;
           background-size: contain;
-          float: left; }
-          login-app .login-app > header .app-select .app-img-holder.sat {
-            background-image: url("/assets/images/sat-name@2x.png"); }
-          login-app .login-app > header .app-select .app-img-holder.satsm {
-            background-image: url("/assets/images/satsm-name@2x.png"); }
-          login-app .login-app > header .app-select .app-img-holder.act {
-            background-image: url("/assets/images/act-name@2x.png"); }
-          login-app .login-app > header .app-select .app-img-holder.toefl {
-            background-image: url("/assets/images/toefl-name@2x.png"); }
+          padding: 0;
+          font-size: 32px;
+          color: #4f4d4d;
+          font-family: SourceSansPro;
+          font-weight: 700;
+          text-transform: none;
+          margin-right: 5px; }
+          login-app .login-app > header .app-select .app-img-holder .trademark {
+            font-size: 18px;
+            vertical-align: super;
+            font-weight: 400; }
+        login-app .login-app > header .app-select .square {
+          width: 30px;
+          height: 30px;
+          padding: 0;
+          display: -ms-flexbox;
+          display: flex;
+          line-height: normal;
+          -ms-flex-direction: column;
+              flex-direction: column;
+          -ms-flex-pack: center;
+              justify-content: center;
+          text-align: center; }
+          login-app .login-app > header .app-select .square .text {
+            font-size: 9px;
+            color: white;
+            font-family: SourceSansPro;
+            font-weight: 400;
+            text-transform: uppercase; }
+          login-app .login-app > header .app-select .square.sat {
+            background-color: #0a9bad; }
+          login-app .login-app > header .app-select .square.satsm {
+            background-color: #AF89D2; }
+          login-app .login-app > header .app-select .square.act {
+            background-color: #87ca4d; }
+          login-app .login-app > header .app-select .square.toefl {
+            background-color: #ff931e; }
         login-app .login-app > header .app-select .expand-menu {
           float: right; }
       login-app .login-app > header .for-educators {
@@ -427,13 +478,13 @@ login-app {
       login-app .login-app.sat .app-color:hover {
         color: #088190; }
     login-app .login-app.satsm .app-bg {
-      background: #0a9bad; }
+      background: #AF89D2; }
       login-app .login-app.satsm .app-bg:hover {
-        background: #088190; }
+        background: #9675b5; }
     login-app .login-app.satsm .app-color {
-      color: #0a9bad; }
+      color: #AF89D2; }
       login-app .login-app.satsm .app-color:hover {
-        color: #088190; }
+        color: #9675b5; }
     login-app .login-app.act .app-bg {
       background: #87ca4d; }
       login-app .login-app.act .app-bg:hover {
