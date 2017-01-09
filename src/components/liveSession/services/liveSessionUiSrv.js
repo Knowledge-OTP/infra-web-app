@@ -118,7 +118,8 @@
             function showLiveSessionToast() {
                 var options = {
                     hideDelay: false,
-                    position: 'top left'
+                    position: 'top right',
+                    toastClass: 'live-session-success-toast'
                 };
                 var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
                 translationsProm.then(function (message) {

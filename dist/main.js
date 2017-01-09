@@ -9463,7 +9463,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             function showLiveSessionToast() {
                 var options = {
                     hideDelay: false,
-                    position: 'top left'
+                    position: 'top right',
+                    toastClass: 'live-session-success-toast'
                 };
                 var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
                 translationsProm.then(function (message) {
@@ -17300,6 +17301,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
                         locals:{ type: type,  msg: msg },
                         templateUrl: 'components/znkToast/templates/znkToast.template.html',
                         position: options.position || 'top right',
+                        toastClass: (options.toastClass) ? options.toastClass + ' znk-toast-genreal' : 'znk-toast-genreal',
                         hideDelay: angular.isDefined(options.hideDelay) ?  options.hideDelay : 3000,
                         controllerAs: 'vm',
                         controller: 'ToastController'
