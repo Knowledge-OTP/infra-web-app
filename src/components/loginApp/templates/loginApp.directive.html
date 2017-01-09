@@ -14,17 +14,25 @@
             </span>
         </div>
         <div class="app-select" ng-cloak ng-class="{'no-dropdown': d.invitationId}">
-            <md-menu md-offset="-50 80" md-no-ink ng-if="!d.invitationId">
+            <md-menu md-offset="-10 80" md-no-ink ng-if="!d.invitationId">
                 <md-button aria-label="Open App Select Menu"
                            class="md-icon-button"
                            ng-click="openMenu($mdOpenMenu, $event)">
+                    <div class="app-img-holder {{d.appContext.className}}">{{d.appContext.name}}<span class="trademark">&reg;</span></div>
+                        <div class="square {{d.appContext.className}}">
+                            <div class="text" translate="LOGIN_APP.TEST"></div>
+                            <div class="text" translate="LOGIN_APP.PREP"></div>
+                        </div>
                     <md-icon class="material-icons expand-menu">expand_more</md-icon>
-                    <div class="app-img-holder {{d.appContext.className}}"></div>
                 </md-button>
                 <md-menu-content id="app-select-menu">
                     <md-menu-item ng-repeat="app in d.availableApps track by app.id"
                                   ng-click="selectApp(app)">
-                        <div class="app-img-holder {{app.className}}"></div>
+                        <div class="app-img-holder {{app.className}}">{{app.name}}<span class="trademark">&reg;</span></div>
+                        <div class="square {{app.className}}">
+                            <div class="text" translate="LOGIN_APP.TEST"></div>
+                            <div class="text" translate="LOGIN_APP.PREP"></div>
+                        </div>
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>

@@ -9,7 +9,7 @@
         },
         SATSM: {
             id: 'SATSM',
-            name: 'SATSM',
+            name: 'SAT Math',
             className: 'satsm'
         },
         TOEFL: {
