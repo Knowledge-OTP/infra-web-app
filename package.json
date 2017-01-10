@@ -1,5 +1,5 @@
 {
-  "name": "znskinfra",
+  "name": "znkinfra",
   "private": true,
   "devDependencies": {
     "grunt": "^1.0.1",
