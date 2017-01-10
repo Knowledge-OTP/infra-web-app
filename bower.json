@@ -5,7 +5,7 @@
     "Zinkerz"
   ],
   "dependencies": {
-    "infra": "https://github.com/Knowledge-OTP/infra.git#>=6.0.1",
+    "infra": "https://443652e0ead234894187f351c61bbe15af527410:x-oauth-basic@github.com/Knowledge-OTP/infra.git#>=6.0.1",
     "ng-tags-input": "3.0.0",
     "angular-chart.js": "0.10.2",
     "v-accordion": "1.4.1",
@@ -42,9 +42,6 @@
   },
   "resolutions": {
     "angular": "1.5.8",
-    "angular-messages": "1.5.8",
-    "all-envs-config": "~v0.0.10",
-    "angular-translate": "2.13.1",
-    "angular-translate-loader-static-files": "2.13.1"
+    "angular-messages": "1.5.8"
   }
 }
