@@ -42,9 +42,6 @@
   },
   "resolutions": {
     "angular": "1.5.8",
-    "angular-messages": "1.5.8",
-    "all-envs-config": "~v0.0.10",
-    "angular-translate": "2.13.1",
-    "angular-translate-loader-static-files": "2.13.1"
+    "angular-messages": "1.5.8"
   }
 }
