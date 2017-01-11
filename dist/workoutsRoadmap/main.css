@@ -117,7 +117,8 @@ workout-intro-lock {
   display: block; }
   workout-intro-lock.lock .main-container {
     opacity: 0.23;
-    filter: blur(7px); }
+    -webkit-filter: blur(7px);
+            filter: blur(7px); }
   workout-intro-lock:not(.lock) .lock-overlay-container {
     display: none; }
   workout-intro-lock .lock-overlay-container {
