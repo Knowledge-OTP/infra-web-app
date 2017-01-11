@@ -7,16 +7,19 @@
         margin: 0 auto;
         height: 100%;
         width: 1227px;
-        .raccoon-logo-icon {
-            svg {
-                height: 37.5px;
-                width: 57px;
-                margin-top: 10px;
-                cursor: pointer;
+        .znkHeader-app-logo-wrap{
+            display: flex;
+            height: 100%;
+            align-items: center;
+            svg-icon.znkHeader-app-name-logo{
+                width: 100px;
+                svg{
+                    width: 100%;
+                }
             }
         }
         .app-states-list {
-            margin-left: 20px;
+            margin-left: 0;
             md-list {
                 padding-top: 5px;
                 padding-bottom: 0;

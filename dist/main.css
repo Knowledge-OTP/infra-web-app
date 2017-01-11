@@ -8023,13 +8023,18 @@ md-dialog.invite-teacher-modal-wrap {
     margin: 0 auto;
     height: 100%;
     width: 1227px; }
-    .app-header .main-content-header .raccoon-logo-icon svg {
-      height: 37.5px;
-      width: 57px;
-      margin-top: 10px;
-      cursor: pointer; }
+    .app-header .main-content-header .znkHeader-app-logo-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      height: 100%;
+      -ms-flex-align: center;
+          align-items: center; }
+      .app-header .main-content-header .znkHeader-app-logo-wrap svg-icon.znkHeader-app-name-logo {
+        width: 100px; }
+        .app-header .main-content-header .znkHeader-app-logo-wrap svg-icon.znkHeader-app-name-logo svg {
+          width: 100%; }
     .app-header .main-content-header .app-states-list {
-      margin-left: 20px; }
+      margin-left: 0; }
       .app-header .main-content-header .app-states-list md-list {
         padding-top: 5px;
         padding-bottom: 0; }

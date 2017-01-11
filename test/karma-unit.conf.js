@@ -44,7 +44,7 @@ module.exports = function (config) {
             'bower_components/Chart.js/Chart.js',
             'bower_components/angular-chart.js/dist/angular-chart.js',
             'bower_components/v-accordion/dist/v-accordion.js',
-            'bower_components/satellizer/satellizer.js',
+            'bower_components/satellizer/dist/satellizer.js',
             'bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js',
             'bower_components/angular-ui-grid/ui-grid.js',
             'bower_components/elasticsearch/elasticsearch.js',
