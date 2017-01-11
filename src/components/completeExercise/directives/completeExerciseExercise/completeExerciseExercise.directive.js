@@ -66,6 +66,7 @@
 
                     var defaultZnkExerciseSettings = {
                         exerciseReviewStatus: $ctrl.completeExerciseCtrl.exerciseData.exerciseResult.isReviewed,
+                        isComplete: $ctrl.completeExerciseCtrl.exerciseData.exerciseResult.isComplete,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
