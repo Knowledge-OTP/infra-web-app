@@ -4,6 +4,7 @@
     angular.module('demo',
         ['znk.infra-web-app.znkHeader',
             'demoEnv',
+            'znk.infra-web-app.liveLessons',
             'znk.infra-web-app.invitation'])
     .config(function (znkHeaderSrvProvider, $stateProvider, PresenceServiceProvider) {
         'ngInject';
