@@ -9,14 +9,15 @@
         'znk.infra.svgIcon',
         'ui.router',
         'znk.infra-web-app.diagnostic',
-        // 'znk.infra.storage',
+        'znk.infra-web-app.completeExercise',
+        'znk.infra.scoring',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.loadingAnimation',
         'znk.infra.exerciseResult',
         'znk.infra.contentAvail',
         'znk.infra.contentGetters',
         'znk.infra.exerciseUtility',
         'znk.infra-web-app.purchase'
-        // 'znk.infra.analytics'
-        // 'znk.infra.content'
 
     ]).config([
         'SvgIconSrvProvider',
@@ -76,7 +77,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialListItem', {
             vm.tutorialClick = function (tutorialId) {
                 if (!isDiagnosticComplete) { return; }
                 if (vm.tutorial.isAvail) {
-                    $state.go('app.tutorials.tutorial', {
+                    $state.go('app.tutorial', {
                         exerciseId: tutorialId
                     });
                 } else {
@@ -133,21 +134,60 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         function ($stateProvider) {
             $stateProvider
                 .state('app.tutorials', {
-                        url: '/tipsAndTricks',
-                        templateUrl: 'components/tutorials/templates/tutorialsRoadmap.template.html',
-                        controller: 'TutorialsRoadmapController',
-                        controllerAs: 'vm',
-                        resolve: {
-                            tutorials: ["TutorialsSrv", function tutorials(TutorialsSrv) {
-                               return TutorialsSrv.getAllTutorials().then(function(tutorialsArrs){
-                                   return tutorialsArrs;
-                                });
-                            }]
-                        }
+                    url: '/tipsAndTricks',
+                    templateUrl: 'components/tutorials/templates/tutorialsRoadmap.template.html',
+                    controller: 'TutorialsRoadmapController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        tutorials: ["TutorialsSrv", function tutorials(TutorialsSrv) {
+                            return TutorialsSrv.getAllTutorials().then(function (tutorialsArrs) {
+                                return tutorialsArrs;
+                            });
+                        }]
                     }
-                );
+                })
+            .state('app.tutorial', {
+                url: '/tipsAndTricks/tutorial/:exerciseId',
+                templateUrl: 'components/tutorials/templates/tutorialWorkout.template.html',
+                controller: 'TutorialWorkoutController',
+                controllerAs: 'vm',
+                resolve: {
+                    exerciseData: ["TutorialsSrv", "$stateParams", "$state", "ExerciseTypeEnum", "ExerciseParentEnum", function (TutorialsSrv, $stateParams, $state, ExerciseTypeEnum, ExerciseParentEnum) {
+                        var tutorialId = +$stateParams.exerciseId;
+                        return TutorialsSrv.getTutorial(tutorialId).then(function () {
+                            return {
+                                exerciseId: tutorialId,
+                                exerciseTypeId: ExerciseTypeEnum.TUTORIAL.enum,
+                                exerciseParentTypeId: ExerciseParentEnum.TUTORIAL.enum,
+                                exitAction: function () {
+                                    $state.go('app.tutorials');
+                                }
+                            };
+                        });
+                    }]
+                }
+            });
         }
     ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tutorials').controller('TutorialWorkoutController',
+        ["exerciseData", function(exerciseData) {
+            'ngInject';
+            this.completeExerciseDetails = {
+            exerciseId: exerciseData.exerciseId,
+            exerciseTypeId: exerciseData.exerciseTypeId,
+            exerciseParentTypeId: exerciseData.exerciseParentTypeId
+        };
+
+        this.completeExerciseSettings = {
+            exitAction: exerciseData.exitAction
+        };
+        }]
+    );
 })(angular);
 
 (function (angular) {
@@ -182,6 +222,12 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
                 TutorialsSrv.getTutorialHeaders = function () {
                     return StorageRevSrv.getContent({
                         exerciseId: null, exerciseType: 'tutorialheaders'
+                    });
+                };
+
+                TutorialsSrv.getTutorial = function (tutorialId) {
+                    return StorageRevSrv.getContent({
+                        exerciseId: tutorialId, exerciseType: 'tutorial'
                     });
                 };
 
@@ -298,6 +344,12 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "</g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",
+    "<div class=\"complete-exercise-container base-border-radius\">\n" +
+    "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
+    "                       settings=\"vm.completeExerciseSettings\">\n" +
+    "    </complete-exercise>\n" +
+    "</div>");
   $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
     "<div class=\"main-container\">\n" +
     "    <tutorial-pane ng-model=\"vm.activeSubject\" ng-change=\"vm.activeSubjectChanged()\"></tutorial-pane>\n" +

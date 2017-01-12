@@ -17,7 +17,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialListItem', {
             vm.tutorialClick = function (tutorialId) {
                 if (!isDiagnosticComplete) { return; }
                 if (vm.tutorial.isAvail) {
-                    $state.go('app.tutorials.tutorial', {
+                    $state.go('app.tutorial', {
                         exerciseId: tutorialId
                     });
                 } else {

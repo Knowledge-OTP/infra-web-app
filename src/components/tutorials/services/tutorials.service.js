@@ -17,6 +17,12 @@
                     });
                 };
 
+                TutorialsSrv.getTutorial = function (tutorialId) {
+                    return StorageRevSrv.getContent({
+                        exerciseId: tutorialId, exerciseType: 'tutorial'
+                    });
+                };
+
                 TutorialsSrv.getAllTutorials = function() {
                     return TutorialsSrv.getTutorialHeaders().then(function (tutorialHeaders) {
                         if (!tutorialHeaders) {
