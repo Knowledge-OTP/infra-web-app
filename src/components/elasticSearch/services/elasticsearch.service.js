@@ -9,31 +9,26 @@
                 var elasticObject;
                 var elasticsearch = elasticsearch || {client: {}};
                 var isScriptLoaded = loadResourceSrv.isResourceLoaded(SRC_PATH, loadResourceEnum.SCRIPT);
-                _initElastic();
 
                 this.getElastic = function () {
-                    return elasticObject;
+                    return $q.when(_initElastic());
                 };
 
                 function _initElastic() {
+                    var deferred = $q.defer();
                     if (isScriptLoaded) {
                         elasticObject = new elasticsearch.Client(ENV.elasticSearch);
+                        deferred.resolve(elasticObject);
                     }
                     else {
-                        elasticObject = _searchFakeFactory();
+                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT).then(function () {
+                            isScriptLoaded = true;
+                            elasticObject = new elasticsearch.Client(ENV.elasticSearch);
+                            deferred.resolve(elasticObject);
+                        });
                     }
+                    return deferred.promise;
                 }
-
-                function _searchFakeFactory() {
-                    return {
-                        search: function () {
-                            return $q.reject(
-                                {message: 'ElasticSearchSrv: ElasticSearch script is not loaded'}
-                            );
-                        }
-                    };
-                }
-
             }
         );
 })(angular);

@@ -1082,11 +1082,13 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         }
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.getElastic().search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.hits));
-                    }, function (err) {
-                        $log.error(err.message);
-                        deferred.reject(err.message);
+                    ElasticSearchSrv.getElastic().then(function (elastic) {
+                        elastic.search(query).then(function (response) {
+                            deferred.resolve(_searchResults(response.hits));
+                        }, function (err) {
+                            $log.error(err.message);
+                            deferred.reject(err.message);
+                        });
                     });
                     return deferred.promise;
                 }
@@ -4793,31 +4795,26 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                 var elasticObject;
                 var elasticsearch = elasticsearch || {client: {}};
                 var isScriptLoaded = loadResourceSrv.isResourceLoaded(SRC_PATH, loadResourceEnum.SCRIPT);
-                _initElastic();
 
                 this.getElastic = function () {
-                    return elasticObject;
+                    return $q.when(_initElastic());
                 };
 
                 function _initElastic() {
+                    var deferred = $q.defer();
                     if (isScriptLoaded) {
                         elasticObject = new elasticsearch.Client(ENV.elasticSearch);
+                        deferred.resolve(elasticObject);
                     }
                     else {
-                        elasticObject = _searchFakeFactory();
+                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT).then(function () {
+                            isScriptLoaded = true;
+                            elasticObject = new elasticsearch.Client(ENV.elasticSearch);
+                            deferred.resolve(elasticObject);
+                        });
                     }
+                    return deferred.promise;
                 }
-
-                function _searchFakeFactory() {
-                    return {
-                        search: function () {
-                            return $q.reject(
-                                {message: 'ElasticSearchSrv: ElasticSearch script is not loaded'}
-                            );
-                        }
-                    };
-                }
-
             }]
         );
 })(angular);

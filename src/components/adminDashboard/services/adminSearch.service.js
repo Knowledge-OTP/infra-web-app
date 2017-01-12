@@ -34,11 +34,13 @@
                         }
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.getElastic().search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.hits));
-                    }, function (err) {
-                        $log.error(err.message);
-                        deferred.reject(err.message);
+                    ElasticSearchSrv.getElastic().then(function (elastic) {
+                        elastic.search(query).then(function (response) {
+                            deferred.resolve(_searchResults(response.hits));
+                        }, function (err) {
+                            $log.error(err.message);
+                            deferred.reject(err.message);
+                        });
                     });
                     return deferred.promise;
                 }
