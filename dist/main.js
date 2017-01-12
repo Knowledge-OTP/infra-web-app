@@ -16621,7 +16621,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
                 addDefaultNavItem('ZNK_HEADER.WORKOUTS', 'app.workouts.roadmap', { reload: true });
                 addDefaultNavItem('ZNK_HEADER.TESTS', 'app.tests.roadmap');
-                // addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials.roadmap');
+                addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials.roadmap');
                 addDefaultNavItem('ZNK_HEADER.PERFORMANCE', 'app.performance');
                 addDefaultNavItem('ZNK_HEADER.ETUTORING', 'app.eTutoring');
 
@@ -16641,11 +16641,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
-    "       <!-- <svg-icon class=\"znkHeader-app-logo-wrap\"\n" +
-    "                  name=\"znkHeader-app-name-logo\"\n" +
-    "                  ui-sref=\"app.workouts.roadmap\"\n" +
-    "                  ui-sref-opts=\"{reload: true}\">\n" +
-    "        </svg-icon>-->\n" +
     "        <div class=\"znkHeader-app-logo-wrap\">\n" +
     "            <svg-icon class=\"znkHeader-app-name-logo\"\n" +
     "                      name=\"znkHeader-app-name-logo\"\n" +
