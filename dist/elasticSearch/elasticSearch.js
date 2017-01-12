@@ -1,20 +1,19 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.elasticSearch', [
-        'elasticsearch'
-    ]);
+    angular.module('znk.infra-web-app.elasticSearch', []);
 })(angular);
 
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.elasticSearch')
-        .service('ElasticSearchSrv', ["esFactory", "ENV", "loadResourceSrv", "loadResourceEnum", "$q", function (esFactory, ENV, loadResourceSrv, loadResourceEnum, $q) {
+        .service('ElasticSearchSrv', ["ENV", "loadResourceSrv", "loadResourceEnum", "$q", function (ENV, loadResourceSrv, loadResourceEnum, $q) {
                 'ngInject';
 
                 var SRC_PATH = '/bower_components/elasticsearch/elasticsearch.js';
                 var elasticObject;
+                var elasticsearch = elasticsearch || {client: {}};
                 var isScriptLoaded = loadResourceSrv.isResourceLoaded(SRC_PATH, loadResourceEnum.SCRIPT);
                 _initElastic();
 
@@ -24,7 +23,7 @@
 
                 function _initElastic() {
                     if (isScriptLoaded) {
-                        elasticObject = esFactory(ENV.elasticSearch);
+                        elasticObject = new elasticsearch.Client(ENV.elasticSearch);
                     }
                     else {
                         elasticObject = _searchFakeFactory();
@@ -34,7 +33,9 @@
                 function _searchFakeFactory() {
                     return {
                         search: function () {
-                            return $q.reject({message: 'ElasticSearchSrv: elastic search script is not loaded'});
+                            return $q.reject(
+                                {message: 'ElasticSearchSrv: ElasticSearch script is not loaded'}
+                            );
                         }
                     };
                 }

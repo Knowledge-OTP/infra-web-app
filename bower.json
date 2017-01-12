@@ -35,8 +35,7 @@
   "overrides": {
     "elasticsearch": {
       "main": [
-        "elasticsearch.js",
-        "elasticsearch.angular.js"
+        "elasticsearch.js"
       ]
     }
   },
