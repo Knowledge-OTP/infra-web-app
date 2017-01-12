@@ -4781,7 +4781,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.elasticSearch', []);
+    angular.module('znk.infra-web-app.elasticSearch', ['znk.infra-web-app.lazyLoadResource']);
 })(angular);
 
 (function (angular) {
@@ -4802,7 +4802,6 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                 function _initElastic() {
                     var deferred = $q.defer();
                     if (isScriptLoaded) {
-                        elasticObject = new $window.elasticsearch.Client(ENV.elasticSearch);
                         deferred.resolve(elasticObject);
                     }
                     else {

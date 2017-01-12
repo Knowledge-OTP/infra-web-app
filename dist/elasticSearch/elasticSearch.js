@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.elasticSearch', []);
+    angular.module('znk.infra-web-app.elasticSearch', ['znk.infra-web-app.lazyLoadResource']);
 })(angular);
 
 (function (angular) {
@@ -22,7 +22,6 @@
                 function _initElastic() {
                     var deferred = $q.defer();
                     if (isScriptLoaded) {
-                        elasticObject = new $window.elasticsearch.Client(ENV.elasticSearch);
                         deferred.resolve(elasticObject);
                     }
                     else {
