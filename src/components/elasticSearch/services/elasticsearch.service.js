@@ -16,7 +16,6 @@
                 function _initElastic() {
                     var deferred = $q.defer();
                     if (isScriptLoaded) {
-                        elasticObject = new $window.elasticsearch.Client(ENV.elasticSearch);
                         deferred.resolve(elasticObject);
                     }
                     else {
