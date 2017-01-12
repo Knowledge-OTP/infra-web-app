@@ -1,0 +1,29 @@
+.tutorials-list-pane {
+    width: 810px;
+    height: 100%;
+    overflow: auto;
+    text-align: center;
+    .diagnostic-overlay {
+        position: absolute;
+        width: 810px;
+        height: 983px;
+        z-index: 10;
+        .overlay-text {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            @include text-style(18px, $fontColor4, Quicksand);
+        }
+    }
+    .tutorials-list-container {
+        padding: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        &.blur {
+            filter: blur(7px);
+            opacity: 0.5;
+        }
+    }
+}

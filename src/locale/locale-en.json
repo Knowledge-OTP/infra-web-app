@@ -61,6 +61,17 @@
             "EMAIL_TAKEN": "Email is already taken, please choose another"
         }
     },
+    "TUTORIAL_LIST_COMPONENTS": {
+        "DIAGNOSTIC_OVERLAY": "Please complete the diagnostic test in order to access the tutorials"
+    },
+    "TUTORIAL_PANE_COMPONENTS": {
+        "TITLE": "Subjects"
+    },
+    "SUBJECTS": {
+        "7": "Verbal",
+        "0": "Math",
+        "8": "Essay"
+    },
     "CHANGE_PASSOWRD_FORM": {
         "BACK_TO_LOGIN": "Back to Login",
         "RESET_PASSWORD": "Reset Password",

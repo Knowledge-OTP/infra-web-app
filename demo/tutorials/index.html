@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" style="height: 100%;background: rgba(43, 43, 191, 0.08);">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <!-- bower:css -->
+    <title>Tutorials Demo</title>
+    <!-- Bower:css -->
     <link rel="stylesheet" href="Swiper/dist/css/swiper.css" />
     <link rel="stylesheet" href="angular-material/angular-material.css" />
     <link rel="stylesheet" href="infra/dist/main.css" />
@@ -11,54 +11,18 @@
     <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css" />
     <link rel="stylesheet" href="v-accordion/dist/v-accordion.css" />
     <link rel="stylesheet" href="angular-ui-grid/ui-grid.css" />
-    <!-- endbower-->
+    <!-- endBower -->
 
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="demo.css">
-    <style>
-        body {
-            background: #E6E5E5;
-        }
 
-        .math-bg{
-            background: #AF89D2;
-        }
-
-        .verbal-bg {
-            background: #F9D41B;
-        }
-
-        .essay-bg {
-            background: #FF5895;
-        }
-
-        workouts-progress .items-container .item-container .item.selected.math-bg:after {
-            border-color: #AF89D2;
-        }
-
-        workouts-progress .items-container .item-container .item.selected.verbal-bg:after {
-            border-color: #F9D41B;
-        }
-
-        workouts-progress .items-container .item-container .item.selected.essay-bg:after {
-            border-color: #FF5895;
-        }
-
-        .workouts-roadmap-diagnostic-summary .first-row .math .icon-wrapper {
-            margin-top: -2px;
-        }
-
-        .workouts-roadmap-diagnostic-summary .first-row .math .icon-wrapper svg {
-            height: auto;
-            width: 45px;
-        }
-    </style>
 </head>
 <body ng-app="demo">
-<button ui-sref="app.workouts.roadmap">Go To Roadmap</button>
+
+<!--<button ui-sref="app.tutorials">go to tutorials</button>-->
 <ui-view></ui-view>
 
-<!-- bower:js -->
+<!-- Bower:js -->
 <script src="angular/angular.js"></script>
 <script src="angular-animate/angular-animate.js"></script>
 <script src="angular-aria/angular-aria.js"></script>
@@ -86,25 +50,19 @@
 <script src="angular-ui-grid/ui-grid.js"></script>
 <script src="elasticsearch/elasticsearch.js"></script>
 <script src="elasticsearch/elasticsearch.angular.js"></script>
-<!-- endbower-->
-
-<script src="main.js"></script>
+<!-- endBower -->
 
 <script src="demo.js"></script>
+<script src="main.js"></script>
 
-<script src="infra/demoShared/translate.config.js"></script>
-<script src="infra/demoShared/contentConfig.js"></script>
-<script src="infra/demoShared/storagesConfig.js"></script>
+<script src="contentConfig.js"></script>
+<script src="storagesConfig.js"></script>
 <script src="infra/demoShared/infraSrvUserDataConfig.js"></script>
-<script src="infra/demoShared/analyticsConfig.js"></script>
-
 <script src="env.service.js"></script>
-<script src="workouts.config.js"></script>
-<script src="subject.decorator.js"></script>
-<script src="svgIcon/svgIcon.config.js"></script>
+<script src="tutorials.config.js"></script>
+<script src="translate.config.js"></script>
 <script src="diagnostic.config.js"></script>
-<script src="diagnosticIntro/diagnosticIntro.config.js"></script>
-<script src="estimatedScoreWidget.config.js"></script>
+<script src="infra/demoShared/analyticsConfig.js"></script>
 
 </body>
 </html>

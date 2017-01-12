@@ -1,0 +1,6 @@
+<div class="tutorial-item" ng-click="vm.tutorialClick(vm.tutorial.id)" ng-class="[vm.subjectsMap[vm.activeSubject], {'locked': !vm.tutorial.isAvail, 'base-box-shadow': vm.tutorial.isAvail}]">
+    <svg-icon name="locked-icon" ng-if="!vm.tutorial.isAvail"></svg-icon>
+    <div class="tutorial-name">{{vm.tutorial.name}}</div>
+    <div class="tutorial-category-name">{{vm.tutorial.categoryName}}</div>
+</div>
+

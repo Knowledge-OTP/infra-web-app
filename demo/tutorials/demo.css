@@ -1,0 +1,52 @@
+.tutorial-navigation-pane .subjects-list .verbal {
+    border-left-color: #F9D41B;
+}
+
+.tutorial-navigation-pane .subjects-list .math {
+    border-left-color: #AF89D2;
+}
+
+.tutorial-navigation-pane .subjects-list .essay {
+    border-left-color: #FF5895;
+}
+
+.tutorial-navigation-pane .subjects-list .subject-item .verbal {
+    background-color: #F9D41B;
+}
+
+.tutorial-navigation-pane .subjects-list .subject-item .math {
+    background-color: #AF89D2;
+}
+
+.tutorial-navigation-pane .subjects-list .subject-item .essay {
+    background-color: #FF5895;
+}
+
+.tutorial-item.essay {
+    background-color: #FF5895;
+}
+.tutorial-item.essay.locked {
+    background-color: #db4c81;
+}
+
+.tutorial-item.verbal {
+    background-color: #F9D41B;
+}
+.tutorial-item.verbal.locked {
+    background-color: #c8b369;
+}
+
+.tutorial-item.math {
+    background-color: #AF89D2;
+}
+.tutorial-item.math.locked {
+    background-color: #a48bbb;
+}
+
+.tutorial-item.locked .tutorial-category-name {
+    background-color: #f3f2f2;
+}
+.tutorial-item .tutorial-category-name {
+    background-color: #ffffff;
+    /*background-color: red;*/
+}
