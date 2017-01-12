@@ -20,6 +20,7 @@
 "znk.infra-web-app.imageZoomer",
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
+"znk.infra-web-app.lazyLoadResource",
 "znk.infra-web-app.liveLessons",
 "znk.infra-web-app.liveSession",
 "znk.infra-web-app.loadingAnimation",
@@ -7994,6 +7995,110 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "</g>\n" +
     "</svg>\n" +
     "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource', []);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource')
+        .service('loadResourceSrv', ["loadResourceEnum", "$log", "$q", "$window", "$document", function (loadResourceEnum, $log, $q, $window, $document) {
+                var bodyElement = $document.find('body').eq(0);
+
+                this.addResource = function (src, type) {
+                    if (type === loadResourceEnum.SCRIPT) {
+                        return _addScript(src);
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        return _addStyle(src);
+                    }
+                    $log.error('loadResourceSrv: enum type is not defined');
+                };
+                this.removeResource = function (src, type) {
+                    if (type === loadResourceEnum.SCRIPT) {
+                        return _removeScript(src);
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        return _removeStyle(src);
+                    }
+                    $log.error('loadResourceSrv: enum type is not defined');
+                };
+
+                function _addScript(src) {
+                    var deferred = $q.defer();
+                    var script = $window.document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = src;
+                    bodyElement.append(script);
+                    script.onload = function (event) {
+                        deferred.resolve(event);
+                    };
+                    return deferred.promise;
+                }
+
+                function _addStyle(src) {
+                    var deferred = $q.defer();
+                    var link = $window.document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = src;
+                    bodyElement.append(link);
+                    link.onload = function (event) {
+                        deferred.resolve(event);
+                    };
+                    return deferred.promise;
+                }
+
+                function _removeScript(src) {
+                    var scriptNodes = $window.document.querySelector('script[src="' + src + '"]');
+                    var scriptItem = Array.prototype.slice.call(scriptNodes);
+                    if (scriptItem.length) {
+                        var scriptElement = angular.element(scriptItem[0]);
+                        scriptElement.remove();
+                    }
+                    else {
+                        $log.error('loadResourceSrv: script resource is not found');
+                    }
+                }
+
+                function _removeStyle(src) {
+                    var styleNodes = $window.document.querySelector('link[href="' + src + '"]');
+                    var styleItem = Array.prototype.slice.call(styleNodes);
+                    if (styleItem.length) {
+                        var styleElement = angular.element(styleItem[0]);
+                        styleElement.remove();
+                    }
+                    else {
+                        $log.error('loadResourceSrv: style resource is not found');
+                    }
+                }
+            }]
+        );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource')
+        .factory('loadResourceEnum', function () {
+                var loadResourceType = {
+                    CSS: 'css',
+                    SCRIPT: 'script'
+                };
+
+                return {
+                    loadResourceType: loadResourceType
+                };
+            }
+        );
+})(angular);
+
+angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function($templateCache) {
+
 }]);
 
 (function (window, angular) {
@@ -16641,11 +16746,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
-    "       <!-- <svg-icon class=\"znkHeader-app-logo-wrap\"\n" +
-    "                  name=\"znkHeader-app-name-logo\"\n" +
-    "                  ui-sref=\"app.workouts.roadmap\"\n" +
-    "                  ui-sref-opts=\"{reload: true}\">\n" +
-    "        </svg-icon>-->\n" +
     "        <div class=\"znkHeader-app-logo-wrap\">\n" +
     "            <svg-icon class=\"znkHeader-app-name-logo\"\n" +
     "                      name=\"znkHeader-app-name-logo\"\n" +

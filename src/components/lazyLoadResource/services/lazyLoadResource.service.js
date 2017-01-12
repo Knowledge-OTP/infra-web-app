@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.lazyLoadResource')
-        .service('loadResourceSrv', function (loadResourceEnum, $log) {
+        .service('loadResourceSrv', function (loadResourceEnum, $log, $q, $window, $document) {
                 var bodyElement = $document.find('body').eq(0);
 
                 this.addResource = function (src, type) {
@@ -13,7 +13,7 @@
                         return _addStyle(src);
                     }
                     $log.error('loadResourceSrv: enum type is not defined');
-                }
+                };
                 this.removeResource = function (src, type) {
                     if (type === loadResourceEnum.SCRIPT) {
                         return _removeScript(src);
@@ -22,7 +22,7 @@
                         return _removeStyle(src);
                     }
                     $log.error('loadResourceSrv: enum type is not defined');
-                }
+                };
 
                 function _addScript(src) {
                     var deferred = $q.defer();
@@ -41,7 +41,7 @@
                     var link = $window.document.createElement('link');
                     link.rel = 'stylesheet';
                     link.href = src;
-                    bodyElement.append(script);
+                    bodyElement.append(link);
                     link.onload = function (event) {
                         deferred.resolve(event);
                     };
@@ -72,5 +72,5 @@
                     }
                 }
             }
-        )
+        );
 })(angular);

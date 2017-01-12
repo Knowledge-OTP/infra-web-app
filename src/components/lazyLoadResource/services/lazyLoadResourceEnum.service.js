@@ -6,11 +6,11 @@
                 var loadResourceType = {
                     CSS: 'css',
                     SCRIPT: 'script'
-                }
+                };
 
                 return {
                     loadResourceType: loadResourceType
-                }
+                };
             }
-        )
+        );
 })(angular);
