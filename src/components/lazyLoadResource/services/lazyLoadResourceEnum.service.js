@@ -5,7 +5,11 @@
         .factory('loadResourceEnum', function () {
                 var loadResourceType = {
                     CSS: 'css',
-                    SCRIPT: 'script'
+                    SCRIPT: 'script',
+                    LOCATION: {
+                        HEAD: 'head',
+                        BODY: 'body'
+                    }
                 };
 
                 return loadResourceType;

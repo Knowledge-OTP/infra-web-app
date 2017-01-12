@@ -27,7 +27,7 @@
                         deferred.resolve(elasticObject);
                     }
                     else {
-                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT).then(function () {
+                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT,loadResourceEnum.LOCATION.HEAD).then(function () {
                             isScriptLoaded = true;
                             elasticObject = new elasticsearch.Client(ENV.elasticSearch);
                             deferred.resolve(elasticObject);

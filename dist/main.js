@@ -4807,7 +4807,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                         deferred.resolve(elasticObject);
                     }
                     else {
-                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT).then(function () {
+                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT,loadResourceEnum.LOCATION.HEAD).then(function () {
                             isScriptLoaded = true;
                             elasticObject = new elasticsearch.Client(ENV.elasticSearch);
                             deferred.resolve(elasticObject);
@@ -8030,11 +8030,11 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.lazyLoadResource')
         .service('loadResourceSrv', ["loadResourceEnum", "$log", "$q", "$window", "$document", function (loadResourceEnum, $log, $q, $window, $document) {
-                var bodyElement = $document.find('body').eq(0);
 
-                this.addResource = function (src, type) {
+
+                this.addResource = function (src, type, loc) {
                     if (type === loadResourceEnum.SCRIPT) {
-                        return _addScript(src);
+                        return _addScript(src, loc);
                     }
                     if (type === loadResourceEnum.CSS) {
                         return _addStyle(src);
@@ -8054,12 +8054,14 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     return _getResourceList(src, type).length > 0;
                 };
 
-                function _addScript(src) {
+                function _addScript(src, loc) {
+                    var location = loc || 'body';
                     var deferred = $q.defer();
+                    var element = $document.find(location).eq(0);
                     var script = $window.document.createElement('script');
                     script.type = 'text/javascript';
                     script.src = src;
-                    bodyElement.append(script);
+                    element.append(script);
                     script.onload = function (event) {
                         deferred.resolve(event);
                     };
@@ -8068,10 +8070,11 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
 
                 function _addStyle(src) {
                     var deferred = $q.defer();
+                    var headElement = $document.find('head').eq(0);
                     var link = $window.document.createElement('link');
                     link.rel = 'stylesheet';
                     link.href = src;
-                    bodyElement.append(link);
+                    headElement.append(link);
                     link.onload = function (event) {
                         deferred.resolve(event);
                     };
@@ -8108,10 +8111,10 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     if (type === loadResourceEnum.CSS) {
                         resourceList = $window.document.querySelector('link[href="' + src + '"]');
                     }
-                    if(resourceList){
+                    if (resourceList) {
                         return Array.prototype.slice.call(resourceList);
                     }
-                   return [];
+                    return [];
                 }
             }]
         );
@@ -8124,7 +8127,11 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         .factory('loadResourceEnum', function () {
                 var loadResourceType = {
                     CSS: 'css',
-                    SCRIPT: 'script'
+                    SCRIPT: 'script',
+                    LOCATION: {
+                        HEAD: 'head',
+                        BODY: 'body'
+                    }
                 };
 
                 return loadResourceType;
