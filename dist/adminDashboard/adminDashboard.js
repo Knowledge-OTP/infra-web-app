@@ -582,7 +582,7 @@
                         }
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.search(query).then(function (response) {
+                    ElasticSearchSrv.getElastic().search(query).then(function (response) {
                         deferred.resolve(_searchResults(response.hits));
                     }, function (err) {
                         $log.error(err.message);

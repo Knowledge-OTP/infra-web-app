@@ -8,9 +8,7 @@
                     SCRIPT: 'script'
                 };
 
-                return {
-                    loadResourceType: loadResourceType
-                };
+                return loadResourceType;
             }
         );
 })(angular);

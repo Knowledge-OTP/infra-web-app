@@ -1082,7 +1082,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         }
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.search(query).then(function (response) {
+                    ElasticSearchSrv.getElastic().search(query).then(function (response) {
                         deferred.resolve(_searchResults(response.hits));
                     }, function (err) {
                         $log.error(err.message);
@@ -4788,11 +4788,35 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     'use strict';
 
     angular.module('znk.infra-web-app.elasticSearch')
-        .service('ElasticSearchSrv',
-            ["esFactory", "ENV", function (esFactory, ENV) {
+        .service('ElasticSearchSrv', ["esFactory", "ENV", "loadResourceSrv", "loadResourceEnum", "$q", function (esFactory, ENV, loadResourceSrv, loadResourceEnum, $q) {
                 'ngInject';
 
-                return esFactory(ENV.elasticSearch);
+                var SRC_PATH = '/bower_components/elasticsearch/elasticsearch.js';
+                var elasticObject;
+                var isScriptLoaded = loadResourceSrv.isResourceLoaded(SRC_PATH, loadResourceEnum.SCRIPT);
+                _initElastic();
+
+                this.getElastic = function () {
+                    return elasticObject;
+                };
+
+                function _initElastic() {
+                    if (isScriptLoaded) {
+                        elasticObject = esFactory(ENV.elasticSearch);
+                    }
+                    else {
+                        elasticObject = _searchFakeFactory();
+                    }
+                }
+
+                function _searchFakeFactory() {
+                    return {
+                        search: function () {
+                            return $q.reject({message: 'ElasticSearchSrv: elastic search script is not loaded'});
+                        }
+                    };
+                }
+
             }]
         );
 })(angular);
@@ -8021,12 +8045,15 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                 };
                 this.removeResource = function (src, type) {
                     if (type === loadResourceEnum.SCRIPT) {
-                        return _removeScript(src);
+                        return _removeScript(src, type);
                     }
                     if (type === loadResourceEnum.CSS) {
-                        return _removeStyle(src);
+                        return _removeStyle(src, type);
                     }
                     $log.error('loadResourceSrv: enum type is not defined');
+                };
+                this.isResourceLoaded = function (src, type) {
+                    return _getResourceList(src, type).length > 0;
                 };
 
                 function _addScript(src) {
@@ -8053,9 +8080,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     return deferred.promise;
                 }
 
-                function _removeScript(src) {
-                    var scriptNodes = $window.document.querySelector('script[src="' + src + '"]');
-                    var scriptItem = Array.prototype.slice.call(scriptNodes);
+                function _removeScript(src, type) {
+                    var scriptItem = _getResourceList(src, type);
                     if (scriptItem.length) {
                         var scriptElement = angular.element(scriptItem[0]);
                         scriptElement.remove();
@@ -8065,9 +8091,8 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     }
                 }
 
-                function _removeStyle(src) {
-                    var styleNodes = $window.document.querySelector('link[href="' + src + '"]');
-                    var styleItem = Array.prototype.slice.call(styleNodes);
+                function _removeStyle(src, type) {
+                    var styleItem = _getResourceList(src, type);
                     if (styleItem.length) {
                         var styleElement = angular.element(styleItem[0]);
                         styleElement.remove();
@@ -8075,6 +8100,20 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     else {
                         $log.error('loadResourceSrv: style resource is not found');
                     }
+                }
+
+                function _getResourceList(src, type) {
+                    var resourceList;
+                    if (type === loadResourceEnum.SCRIPT) {
+                        resourceList = $window.document.querySelector('script[src="' + src + '"]');
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        resourceList = $window.document.querySelector('link[href="' + src + '"]');
+                    }
+                    if(resourceList){
+                        return Array.prototype.slice.call(resourceList);
+                    }
+                   return [];
                 }
             }]
         );
@@ -8090,9 +8129,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
                     SCRIPT: 'script'
                 };
 
-                return {
-                    loadResourceType: loadResourceType
-                };
+                return loadResourceType;
             }
         );
 })(angular);

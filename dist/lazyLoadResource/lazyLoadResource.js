@@ -22,12 +22,15 @@
                 };
                 this.removeResource = function (src, type) {
                     if (type === loadResourceEnum.SCRIPT) {
-                        return _removeScript(src);
+                        return _removeScript(src, type);
                     }
                     if (type === loadResourceEnum.CSS) {
-                        return _removeStyle(src);
+                        return _removeStyle(src, type);
                     }
                     $log.error('loadResourceSrv: enum type is not defined');
+                };
+                this.isResourceLoaded = function (src, type) {
+                    return _getResourceList(src, type).length > 0;
                 };
 
                 function _addScript(src) {
@@ -54,9 +57,8 @@
                     return deferred.promise;
                 }
 
-                function _removeScript(src) {
-                    var scriptNodes = $window.document.querySelector('script[src="' + src + '"]');
-                    var scriptItem = Array.prototype.slice.call(scriptNodes);
+                function _removeScript(src, type) {
+                    var scriptItem = _getResourceList(src, type);
                     if (scriptItem.length) {
                         var scriptElement = angular.element(scriptItem[0]);
                         scriptElement.remove();
@@ -66,9 +68,8 @@
                     }
                 }
 
-                function _removeStyle(src) {
-                    var styleNodes = $window.document.querySelector('link[href="' + src + '"]');
-                    var styleItem = Array.prototype.slice.call(styleNodes);
+                function _removeStyle(src, type) {
+                    var styleItem = _getResourceList(src, type);
                     if (styleItem.length) {
                         var styleElement = angular.element(styleItem[0]);
                         styleElement.remove();
@@ -76,6 +77,20 @@
                     else {
                         $log.error('loadResourceSrv: style resource is not found');
                     }
+                }
+
+                function _getResourceList(src, type) {
+                    var resourceList;
+                    if (type === loadResourceEnum.SCRIPT) {
+                        resourceList = $window.document.querySelector('script[src="' + src + '"]');
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        resourceList = $window.document.querySelector('link[href="' + src + '"]');
+                    }
+                    if(resourceList){
+                        return Array.prototype.slice.call(resourceList);
+                    }
+                   return [];
                 }
             }]
         );
@@ -91,9 +106,7 @@
                     SCRIPT: 'script'
                 };
 
-                return {
-                    loadResourceType: loadResourceType
-                };
+                return loadResourceType;
             }
         );
 })(angular);

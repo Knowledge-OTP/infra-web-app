@@ -10,11 +10,35 @@
     'use strict';
 
     angular.module('znk.infra-web-app.elasticSearch')
-        .service('ElasticSearchSrv',
-            ["esFactory", "ENV", function (esFactory, ENV) {
+        .service('ElasticSearchSrv', ["esFactory", "ENV", "loadResourceSrv", "loadResourceEnum", "$q", function (esFactory, ENV, loadResourceSrv, loadResourceEnum, $q) {
                 'ngInject';
 
-                return esFactory(ENV.elasticSearch);
+                var SRC_PATH = '/bower_components/elasticsearch/elasticsearch.js';
+                var elasticObject;
+                var isScriptLoaded = loadResourceSrv.isResourceLoaded(SRC_PATH, loadResourceEnum.SCRIPT);
+                _initElastic();
+
+                this.getElastic = function () {
+                    return elasticObject;
+                };
+
+                function _initElastic() {
+                    if (isScriptLoaded) {
+                        elasticObject = esFactory(ENV.elasticSearch);
+                    }
+                    else {
+                        elasticObject = _searchFakeFactory();
+                    }
+                }
+
+                function _searchFakeFactory() {
+                    return {
+                        search: function () {
+                            return $q.reject({message: 'ElasticSearchSrv: elastic search script is not loaded'});
+                        }
+                    };
+                }
+
             }]
         );
 })(angular);
