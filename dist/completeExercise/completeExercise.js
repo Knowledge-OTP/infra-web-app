@@ -1251,11 +1251,10 @@
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", "BaseExerciseGetterSrv", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
-                  $log, $q, ExerciseParentEnum, BaseExerciseGetterSrv) {
+        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
+                  $log, $q) {
             'ngInject';
 
-            var self = this;
             this.VIEW_STATES = {
                 NONE: 0,
                 INTRO: 1,
@@ -1278,7 +1277,6 @@
             };
 
             this.getExerciseResult = function (exerciseDetails, shMode) {
-                var isLecture = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.LECTURE.enum;
 
                 if (shMode === this.MODE_STATES.VIEWER) {
                     if (!exerciseDetails.resultGuid) {
@@ -1290,42 +1288,14 @@
                     return ExerciseResultSrv.getExerciseResultByGuid(exerciseDetails.resultGuid);
                 }
 
-                switch (exerciseDetails.exerciseParentTypeId) {
-                    case ExerciseParentEnum.MODULE.enum:
-                        if (isLecture) {
-                            return ExerciseResultSrv.getExerciseResult(
-                                exerciseDetails.exerciseTypeId,
-                                exerciseDetails.exerciseId,
-                                exerciseDetails.exerciseParentId
-                            );
-                        }
-
-                        var examIdProm = $q.when();
-                        if (exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
-                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
-                        }
-
-                        return examIdProm.then(function (examData) {
-                            return self.getContextUid().then(function (uid) {
-                                var examId = examData && examData.id ? examData.id : undefined;
-                                return ExerciseResultSrv.getModuleExerciseResult(
-                                    uid,
-                                    exerciseDetails.exerciseParentId,
-                                    exerciseDetails.exerciseTypeId,
-                                    exerciseDetails.exerciseId,
-                                    exerciseDetails.assignContentType,
-                                    examId
-                                );
-                            });
-                        });
-                    default:
-                        return ExerciseResultSrv.getExerciseResult(
-                            exerciseDetails.exerciseTypeId,
-                            exerciseDetails.exerciseId,
-                            exerciseDetails.exerciseParentId,
-                            exerciseDetails.examSectionsNum
-                        );
-                }
+                var dontInit = false;
+                return ExerciseResultSrv.getExerciseResult(
+                    exerciseDetails.exerciseTypeId, 
+                    exerciseDetails.exerciseId, 
+                    exerciseDetails.examId, 
+                    exerciseDetails.examSectionsNum, 
+                    dontInit, 
+                    exerciseDetails.exerciseParentId);
             };
         }]
     );
