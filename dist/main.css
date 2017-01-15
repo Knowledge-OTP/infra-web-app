@@ -6012,16 +6012,6 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-.main-container {
-  width: 1060px;
-  height: 100%;
-  margin: 18px auto;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: row;
-      flex-direction: row;
-  padding: 2px 3px 10px 3px; }
-
 .tutorials-list-pane {
   width: 810px;
   height: 100%;
