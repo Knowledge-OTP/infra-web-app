@@ -111,6 +111,7 @@
     "OATH_SOCIAL": {
         "CONNECT_WITH_FB": "Facebook",
         "CONNECT_WITH_GOOGLE": "Google",
+        "CONNECT_WITH_LIVE": "Microsoft Live",
         "ERROR_TITLE": "Connect With {{provider}} Failed",
         "ERROR_CONTENT": "An error occurred while trying to connect with {{provider}}, please try again. If the problem persists please contact us at <a href='//www.zinkerz.com/contact/' target='_blank'>support@zinkerz.com</a>"
     },

@@ -1,16 +1,35 @@
 <div class="btn-wrap" translate-namespace="OATH_SOCIAL">
     <button class="social-btn facebook-btn"
             ng-click="vm.socialAuth('facebook')"
-            ng-if="vm.providers.facebook">
+            ng-if="vm.providers.facebook"
+            title="{{'OATH_SOCIAL.CONNECT_WITH_FB' | translate}}">
+            <span class="loader"
+                 ng-class="{
+                   'active-loader': vm.loading.facebook.showSpinner   
+                 }">
+            </span>
         <svg-icon name="facebook-icon"></svg-icon>
-        <span class="loader ng-hide" ng-show="vm.loading.facebook.showSpinner"></span>
-        <span translate=".CONNECT_WITH_FB"></span>
     </button>
     <button class="social-btn gplus-btn"
             ng-click="vm.socialAuth('google')"
-            ng-if="vm.providers.google">
+            ng-if="vm.providers.google"
+            title="{{'OATH_SOCIAL.CONNECT_WITH_GOOGLE' | translate}}">
+            <span class="loader"
+                 ng-class="{
+                   'active-loader': vm.loading.google.showSpinner   
+                 }">
+            </span>
         <svg-icon name="google-icon"></svg-icon>
-        <span class="loader ng-hide" ng-show="vm.loading.google.showSpinner"></span>
-        <span translate=".CONNECT_WITH_GOOGLE"></span>
+    </button>
+     <button class="social-btn live-btn"
+            ng-click="vm.socialAuth('live')"
+            ng-if="vm.providers.live"            
+            title="{{'OATH_SOCIAL.CONNECT_WITH_LIVE' | translate}}">
+            <span class="loader"
+                 ng-class="{
+                   'active-loader': vm.loading.live.showSpinner   
+                 }">
+            </span>
+        <svg-icon name="microsoft-icon"></svg-icon>
     </button>
 </div>

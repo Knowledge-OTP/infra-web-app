@@ -23,7 +23,8 @@
                 'v-icon': 'components/loginApp/svg/v-icon.svg',
                 'loginApp-arrow-icon': 'components/loginApp/svg/arrow-icon.svg',
                 'loginApp-close-icon': 'components/loginApp/svg/close-icon.svg',
-                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg'
+                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg',
+                'microsoft-icon': 'components/loginApp/svg/microsoft.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
