@@ -8,6 +8,10 @@
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
+.main-container {
+  display: -ms-flexbox;
+  display: flex; }
+
 .tutorials-list-pane {
   width: 810px;
   height: 100%;
