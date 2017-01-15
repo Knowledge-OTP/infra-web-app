@@ -23,7 +23,8 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
         var svgMap = {
-            'locked-icon': 'components/tutorials/svg/subject-locked-icon.svg'
+            'locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
+            'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
         };
             SvgIconSrvProvider.registerSvgSources(svgMap);
 

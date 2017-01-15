@@ -9,6 +9,19 @@
     justify-content: space-between;
     position: relative;
     overflow: hidden;
+    &.completed {
+        &.tutorial-name {
+            font-size: 16px;
+        }
+    }
+    .tutorials-check-mark-icon {
+        display: block;
+        width: 35px;
+        margin: 15px auto -10px;
+        * {
+            stroke-width: 32px;
+        }
+    }
     .tutorial-name {
         margin: auto;
         @include text-style(18px, $fontColor8, Quicksand, $boldFontWeight);

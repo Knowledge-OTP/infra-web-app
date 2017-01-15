@@ -23,7 +23,8 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
         var svgMap = {
-            'locked-icon': 'components/tutorials/svg/subject-locked-icon.svg'
+            'locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
+            'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
         };
             SvgIconSrvProvider.registerSvgSources(svgMap);
 
@@ -295,12 +296,12 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "</div>\n" +
     "");
   $templateCache.put("components/tutorials/components/tutorialListItem/tutorialListItem.template.html",
-    "<div class=\"tutorial-item\" ng-click=\"vm.tutorialClick(vm.tutorial.id)\" ng-class=\"[vm.subjectsMap[vm.activeSubject], {'locked': !vm.tutorial.isAvail, 'base-box-shadow': vm.tutorial.isAvail}]\">\n" +
+    "<div class=\"tutorial-item\" ng-click=\"vm.tutorialClick(vm.tutorial.id)\" ng-class=\"[vm.subjectsMap[vm.activeSubject], {'locked': !vm.tutorial.isAvail, 'base-box-shadow': vm.tutorial.isAvail}, {'completed': vm.tutorial.isComplete}]\">\n" +
     "    <svg-icon name=\"locked-icon\" ng-if=\"!vm.tutorial.isAvail\"></svg-icon>\n" +
+    "    <svg-icon name=\"tutorials-check-mark-icon\" ng-if=\"vm.tutorial.isComplete\"></svg-icon>\n" +
     "    <div class=\"tutorial-name\">{{vm.tutorial.name}}</div>\n" +
     "    <div class=\"tutorial-category-name\">{{vm.tutorial.categoryName}}</div>\n" +
     "</div>\n" +
-    "\n" +
     "");
   $templateCache.put("components/tutorials/components/tutorialPane/tutorialPane.template.html",
     "<div class=\"tutorial-navigation-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_PANE_COMPONENTS\">\n" +
@@ -342,6 +343,27 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "			C60.9,149.8,65.9,149.8,71.3,149.8z\"/>\n" +
     "	</g>\n" +
     "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/tutorials/svg/tutorials-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"tutorials-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .tutorials-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",

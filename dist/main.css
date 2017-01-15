@@ -6062,6 +6062,14 @@ complete-exercise-summary social-sharing .social-share-wrapper {
       justify-content: space-between;
   position: relative;
   overflow: hidden; }
+  .tutorial-item.completed.tutorial-name {
+    font-size: 16px; }
+  .tutorial-item .tutorials-check-mark-icon {
+    display: block;
+    width: 35px;
+    margin: 15px auto -10px; }
+    .tutorial-item .tutorials-check-mark-icon * {
+      stroke-width: 32px; }
   .tutorial-item .tutorial-name {
     margin: auto;
     font-size: 18px;
