@@ -351,7 +351,7 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "    </complete-exercise>\n" +
     "</div>");
   $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
-    "<div class=\"main-container\">\n" +
+    "<div class=\"tutorials-main-container\">\n" +
     "    <tutorial-pane ng-model=\"vm.activeSubject\" ng-change=\"vm.activeSubjectChanged()\"></tutorial-pane>\n" +
     "    <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
     "</div>\n" +
