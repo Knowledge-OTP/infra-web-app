@@ -3,7 +3,6 @@
 
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', function (LiveSessionSubjectConst) {
-        'ngInject'
         var subjects = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
         this.setLiveSessionSubjects = function(_subjects) {

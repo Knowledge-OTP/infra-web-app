@@ -14,7 +14,9 @@
             'znk.infra.user',
             'znk.infra.svgIcon',
             'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.znkToast'
+            'znk.infra-web-app.znkToast',
+            'znk.infra-web-app.liveSession',
+            'znk.infra.exerciseUtility'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -153,28 +155,6 @@
     );
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    var subjectEnum = {
-        MATH: 0,
-        ENGLISH: 5
-    };
-
-    angular.module('znk.infra-web-app.liveSession').constant('LiveSessionSubjectEnumConst', subjectEnum);
-
-    angular.module('znk.infra-web-app.liveSession').factory('LiveSessionSubjectEnum', [
-        'EnumSrv',
-        function (EnumSrv) {
-
-            return new EnumSrv.BaseEnum([
-                ['MATH', subjectEnum.MATH, 'math'],
-                ['ENGLISH', subjectEnum.ENGLISH, 'english']
-            ]);
-        }
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -693,8 +673,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectEnumConst", function (LiveSessionSubjectEnumConst) {
-        var subjects = [LiveSessionSubjectEnumConst.MATH, LiveSessionSubjectEnumConst.ENGLISH];
+
+    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
+        var subjects = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
         this.setLiveSessionSubjects = function(_subjects) {
             if (angular.isArray(_subjects) && _subjects.length) {
@@ -709,7 +690,7 @@
 
             function _getLiveSessionSubjects() {
                 return subjects.map(function (subjectEnum) {
-                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectEnumConst, subjectEnum).toLowerCase();
+                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, subjectEnum).toLowerCase();
                     return {
                         id: subjectEnum,
                         name: subjectName,
