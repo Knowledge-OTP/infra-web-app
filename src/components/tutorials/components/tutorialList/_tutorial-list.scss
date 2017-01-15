@@ -21,6 +21,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
+        background-color: $bgColor1;
         &.blur {
             filter: blur(7px);
             opacity: 0.5;

@@ -6041,7 +6041,8 @@ complete-exercise-summary social-sharing .social-share-wrapper {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     -ms-flex-pack: start;
-        justify-content: flex-start; }
+        justify-content: flex-start;
+    background-color: white; }
     .tutorials-list-pane .tutorials-list-container.blur {
       -webkit-filter: blur(7px);
               filter: blur(7px);
@@ -6104,6 +6105,7 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 .tutorial-navigation-pane {
   width: 225px;
   height: 100%;
+  background-color: white;
   margin-right: 10px;
   text-align: center; }
   .tutorial-navigation-pane .pane-title {
