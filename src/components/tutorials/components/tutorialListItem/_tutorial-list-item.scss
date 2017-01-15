@@ -1,0 +1,73 @@
+.tutorial-item {
+    cursor: pointer;
+    width: 215px;
+    height: 180px;
+    margin: 24px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    &.completed {
+        &.tutorial-name {
+            font-size: 16px;
+        }
+    }
+    .tutorials-check-mark-icon {
+        display: block;
+        width: 35px;
+        margin: 15px auto -10px;
+        * {
+            stroke-width: 32px;
+        }
+    }
+    .tutorial-name {
+        margin: auto;
+        @include text-style(18px, $fontColor8, Quicksand, $boldFontWeight);
+    }
+    .tutorial-category-name {
+        line-height: 59px;
+        @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
+        font-size: 13px;
+        transition: 0.2s line-height linear;
+        background-color: $bgColor3;
+    }
+    &.locked {
+        .tutorial-category-name {
+            background-color: $bgColor66;
+        }
+    }
+    .locked-icon {
+        width: 13px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        * {
+            fill: $fontColor8;
+        }
+    }
+}
+
+.tutorial-item:hover {
+    .tutorial-category-name {
+        transition: 0.2s line-height linear;
+        line-height: 50px;
+    }
+}
+
+.tutorial-item.ng-enter {
+    transition: 0.5s linear all;
+    opacity: 0;
+}
+.tutorial-item.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+
+.tutorial-item.ng-leave {
+    transition: 0.5s linear all;
+    opacity: 1;
+}
+.tutorial-item.ng-leave.ng-leave-active {
+    opacity: 0;
+}
