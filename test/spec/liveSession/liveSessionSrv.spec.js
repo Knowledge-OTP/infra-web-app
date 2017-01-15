@@ -1,7 +1,7 @@
 describe('testing service "LiveSessionSrv":', function () {
     'use strict';
 
-    beforeEach(module('znk.infra-web-app.liveSession', 'htmlTemplates', 'storage.mock', 'testUtility', 'user.mock', 'env.mock'));
+    beforeEach(module('znk.infra-web-app.liveSession', 'znk.infra.exerciseUtility', 'htmlTemplates', 'storage.mock', 'testUtility', 'user.mock', 'env.mock'));
 
     beforeEach(module('znk.infra-web-app.liveSession', function($provide, PresenceServiceProvider, LiveSessionSubjectSrvProvider, znkAnalyticsSrvProvider, CallsUiSrvProvider) {
         localStorage.setItem('email', 'ofir+actEdu@zinkerz.com');
@@ -12,7 +12,7 @@ describe('testing service "LiveSessionSrv":', function () {
 
         PresenceServiceProvider.setAuthServiceName('AuthService');
 
-        LiveSessionSubjectSrvProvider.setLiveSessionSubjects( [0, 5] );
+        LiveSessionSubjectSrvProvider.setLiveSessionSubjects( [0, 1] );
 
         znkAnalyticsSrvProvider.setEventsHandler(function () {
             return {
