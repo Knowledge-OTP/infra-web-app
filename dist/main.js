@@ -9759,7 +9759,8 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 'v-icon': 'components/loginApp/svg/v-icon.svg',
                 'loginApp-arrow-icon': 'components/loginApp/svg/arrow-icon.svg',
                 'loginApp-close-icon': 'components/loginApp/svg/close-icon.svg',
-                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg'
+                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg',
+                'microsoft-icon': 'components/loginApp/svg/microsoft.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -9869,7 +9870,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         changePassword: false
                     };
 
-                    var socialProvidersArr = ['facebook', 'google'];
+                    var socialProvidersArr = ['facebook', 'google', 'live'];
                     var invitationKey = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
@@ -10409,6 +10410,11 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     if (provider === 'facebook') {
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
                     }
+                    if (provider === 'live') {
+                        providerConfig.redirectUri = (env.redirectLive) ? $window.location.protocol + env.redirectLive : $window.location.origin + '/';
+                        // emails supose to be default scope, add it just to make sure, it still microsoft ;)
+                        providerConfig.scope = ['wl.emails'];
+                    }
                 });
             };
 
@@ -10520,17 +10526,36 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
     "    <button class=\"social-btn facebook-btn\"\n" +
     "            ng-click=\"vm.socialAuth('facebook')\"\n" +
-    "            ng-if=\"vm.providers.facebook\">\n" +
+    "            ng-if=\"vm.providers.facebook\"\n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_FB' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.facebook.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
     "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
-    "        <span class=\"loader ng-hide\" ng-show=\"vm.loading.facebook.showSpinner\"></span>\n" +
-    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
     "    </button>\n" +
     "    <button class=\"social-btn gplus-btn\"\n" +
     "            ng-click=\"vm.socialAuth('google')\"\n" +
-    "            ng-if=\"vm.providers.google\">\n" +
+    "            ng-if=\"vm.providers.google\"\n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_GOOGLE' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.google.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
     "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
-    "        <span class=\"loader ng-hide\" ng-show=\"vm.loading.google.showSpinner\"></span>\n" +
-    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
+    "    </button>\n" +
+    "     <button class=\"social-btn live-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('live')\"\n" +
+    "            ng-if=\"vm.providers.live\"            \n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_LIVE' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.live.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
+    "        <svg-icon name=\"microsoft-icon\"></svg-icon>\n" +
     "    </button>\n" +
     "</div>\n" +
     "");
@@ -10656,6 +10681,53 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "		c-1.8-0.4-3.6,0-5.1,0.9c-15.9,10.1-44.2,10.1-60,0c-1.5-1-3.4-1.3-5.1-0.9c-7.6,1.7-27.8,8.3-36.3,32.1c-1.5,4.1-3,12-3.7,18.2\n" +
     "		c-0.5,4,2.7,7.5,6.7,7.5H77.7z\"/>\n" +
     "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/microsoft.svg",
+    "<svg class=\"microsoft-icon\"\n" +
+    "     x=\"0px\" \n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 22.884 22.884\" >\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path d=\"M13.045,1.997l-1.969,7.872C8.68,8.867,5.479,8.429,2.642,9.307c0.574-2.522,1.97-7.31,1.97-7.31\n" +
+    "			C6.698,0.289,10.756,0.902,13.045,1.997z\"/>\n" +
+    "		<path d=\"M14.184,3.145c2.147,1.257,5.943,1.645,8.7,0.822l-2.251,7.589c-2.313,1.224-6.735,1.133-8.433-0.563L14.184,3.145z\"/>\n" +
+    "		<path d=\"M10.398,11.513l-1.967,7.87C5.953,18.243,2.794,17.481,0,18.82c0,0,1.297-5.069,1.966-7.588\n" +
+    "			C4.131,9.889,8.444,10.286,10.398,11.513z\"/>\n" +
+    "		<path d=\"M11.746,12.641c2.147,1.518,5.796,1.764,8.493,0.72l-2.247,7.592c-2.176,1.479-6.433,1.252-8.435-0.281L11.746,12.641z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/loginApp/svg/v-icon.svg",
@@ -10840,7 +10912,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            <oath-login-drv\n" +
     "                app-context=\"appContext\"\n" +
     "                user-context=\"userContext\"\n" +
-    "                providers=\"{facebook:true,google:true}\">\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -10977,7 +11049,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            <oath-login-drv\n" +
     "                app-context=\"appContext\"\n" +
     "                user-context=\"userContext\"\n" +
-    "                providers=\"{facebook:true,google:true}\">\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -16641,11 +16713,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
-    "       <!-- <svg-icon class=\"znkHeader-app-logo-wrap\"\n" +
-    "                  name=\"znkHeader-app-name-logo\"\n" +
-    "                  ui-sref=\"app.workouts.roadmap\"\n" +
-    "                  ui-sref-opts=\"{reload: true}\">\n" +
-    "        </svg-icon>-->\n" +
     "        <div class=\"znkHeader-app-logo-wrap\">\n" +
     "            <svg-icon class=\"znkHeader-app-name-logo\"\n" +
     "                      name=\"znkHeader-app-name-logo\"\n" +
