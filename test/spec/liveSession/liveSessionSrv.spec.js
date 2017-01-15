@@ -12,7 +12,7 @@ describe('testing service "LiveSessionSrv":', function () {
 
         PresenceServiceProvider.setAuthServiceName('AuthService');
 
-        LiveSessionSubjectSrvProvider.setLiveSessionSubjects( [0, 1] );
+        LiveSessionSubjectSrvProvider.setLiveSessionSubjects( [1, 2] );
 
         znkAnalyticsSrvProvider.setEventsHandler(function () {
             return {
