@@ -6075,7 +6075,10 @@ complete-exercise-summary social-sharing .social-share-wrapper {
     font-family: Lato;
     font-weight: 400;
     font-size: 13px;
-    transition: 0.2s line-height linear; }
+    transition: 0.2s line-height linear;
+    background-color: #ffffff; }
+  .tutorial-item.locked .tutorial-category-name {
+    background-color: #f3f2f2; }
   .tutorial-item .locked-icon {
     width: 13px;
     position: absolute;

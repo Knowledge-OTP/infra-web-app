@@ -18,6 +18,12 @@
         @include text-style(14px, $fontColor4, Lato, $regularFontWeight);
         font-size: 13px;
         transition: 0.2s line-height linear;
+        background-color: $bgColor3;
+    }
+    &.locked {
+        .tutorial-category-name {
+            background-color: $bgColor66;
+        }
     }
     .locked-icon {
         width: 13px;
