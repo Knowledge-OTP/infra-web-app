@@ -30,6 +30,7 @@
 "znk.infra-web-app.purchase",
 "znk.infra-web-app.settings",
 "znk.infra-web-app.socialSharing",
+"znk.infra-web-app.subjectsOrder",
 "znk.infra-web-app.tests",
 "znk.infra-web-app.tutorials",
 "znk.infra-web-app.uiTheme",
@@ -13555,6 +13556,44 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
 
 (function (angular) {
     'use strict';
+    angular.module('znk.infra-web-app.subjectsOrder', [
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.subjectsOrder').provider('SubjectsSrv', [
+        function () {
+            var _subjectOrderGetter;
+            this.setSubjectOrder = function (subjectOrderGetter) {
+                _subjectOrderGetter = subjectOrderGetter;
+            };
+
+            this.$get = ["$q", "$log", "$injector", function ($q, $log, $injector) {
+                'ngInject';
+                var SubjectsSrv = {};
+                SubjectsSrv.getSubjectOrder = function () {
+                    if (!_subjectOrderGetter) {
+                        var errMsg = 'subjectOrder Service: subjectOrderGetter was not set.';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
+                    if (angular.isFunction(_subjectOrderGetter)) {
+                        return $q.when($injector.invoke(_subjectOrderGetter));
+                    }
+                };
+                return SubjectsSrv;
+            }];
+        }
+    ]);
+})(angular);
+
+angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {
+
+}]);
+
+(function (angular) {
+    'use strict';
 
     angular.module('znk.infra-web-app.tests', [
         'znk.infra.svgIcon',
@@ -13710,14 +13749,14 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
         'ui.router',
         'znk.infra-web-app.diagnostic',
         'znk.infra-web-app.completeExercise',
-        'znk.infra.scoring',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.loadingAnimation',
         'znk.infra.exerciseResult',
         'znk.infra.contentAvail',
         'znk.infra.contentGetters',
         'znk.infra.exerciseUtility',
-        'znk.infra-web-app.purchase'
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.subjectsOrder'
 
     ]).config([
         'SvgIconSrvProvider',
@@ -13807,15 +13846,15 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         $translatePartialLoader.addPart('tutorials');
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
-
+        
         vm.$onInit = function () {
             $q.all([
                 subjectOrderProm
             ]).then(function (res) {
                 vm.subjecstOrder = res[0];
                 if (!vm.activeSubject) {
-                    vm.activeSubject = res[0][0];
-                    vm.ngModelCtrl.$setViewValue(+res[0][0]);
+                    vm.activeSubject = vm.subjecstOrder[0];
+                    vm.ngModelCtrl.$setViewValue(+vm.subjecstOrder[0]);
                 }
             });
 
@@ -13900,85 +13939,73 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
             $translatePartialLoader.addPart('tutorials');
             var vm = this;
             vm.tutorials = tutorials;
-            vm.activeSubjectChanged = function () {
-
-            };
         }]
     );
 })(angular);
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.tutorials').provider('TutorialsSrv', [
-        function () {
-            var _subjectOrderGetter;
-            this.setSubjectOrder = function (subjectOrderGetter) {
-                _subjectOrderGetter = subjectOrderGetter;
+    angular.module('znk.infra-web-app.tutorials').service('TutorialsSrv',
+        ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", "SubjectsSrv", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum, SubjectsSrv) {
+            'ngInject';
+        
+            this.getSubjectOrder = function () {
+                return SubjectsSrv.getSubjectOrder();
             };
 
-            this.$get = ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum) {
-                'ngInject';
-                var TutorialsSrv = {};
 
-                TutorialsSrv.getTutorialHeaders = function () {
-                    return StorageRevSrv.getContent({
-                        exerciseId: null, exerciseType: 'tutorialheaders'
-                    });
-                };
+            this.getTutorialHeaders = function () {
+                return StorageRevSrv.getContent({
+                    exerciseId: null,
+                    exerciseType: 'tutorialheaders'
+                });
+            };
 
-                TutorialsSrv.getTutorial = function (tutorialId) {
-                    return StorageRevSrv.getContent({
-                        exerciseId: tutorialId, exerciseType: 'tutorial'
-                    });
-                };
 
-                TutorialsSrv.getAllTutorials = function() {
-                    return TutorialsSrv.getTutorialHeaders().then(function (tutorialHeaders) {
-                        if (!tutorialHeaders) {
-                            return $q.reject('No tutorial headers were found');
-                        }
-
-                        var allProm = [];
-
-                        angular.forEach(tutorialHeaders, function (tutorialsForSubject) {
-                            angular.forEach(tutorialsForSubject, function (tutorial, tutorialId) {
-                                tutorialId = +tutorialId;
-                                var getExerciseProm = ExerciseResultSrv.getExerciseStatus(ExerciseTypeEnum.TUTORIAL.enum, tutorialId)
-                                    .then(function (data) {
-                                        tutorial.isComplete = data.status === ExerciseStatusEnum.COMPLETED.enum;
-                                    });
-                                allProm.push(getExerciseProm);
-
-                                var isTutorialAvailProm = ContentAvailSrv.isTutorialAvail(tutorialId).then(function (isAvail) {
-                                    tutorial.isAvail = isAvail;
-                                });
-                                allProm.push(isTutorialAvailProm);
-
-                                var getParentCategoryProm = CategoryService.getParentCategory(tutorial.categoryId).then(function (generalCategory) {
-                                    tutorial.categoryName = generalCategory.name;
-                                });
-                                allProm.push(getParentCategoryProm);
-                            });
-                        });
-
-                        return $q.all(allProm).then(function () {
-                            return tutorialHeaders;
-                        });
-                    });
-                };
-
-                TutorialsSrv.getSubjectOrder = function () {
-                    if (!_subjectOrderGetter) {
-                        var errMsg = 'Tutorials Service: subjectOrderGetter was not set.';
-                        $log.error(errMsg);
-                        return $q.reject(errMsg);
+            this.getAllTutorials = function () {
+                return this.getTutorialHeaders().then(function (tutorialHeaders) {
+                    if (!tutorialHeaders) {
+                        return $q.reject('No tutorial headers were found');
                     }
-                    return $q.when($injector.invoke(_subjectOrderGetter));
-                };
-                return TutorialsSrv;
-            }];
-        }
-    ]);
+
+                    var allProm = [];
+
+                    angular.forEach(tutorialHeaders, function (tutorialsForSubject) {
+                        angular.forEach(tutorialsForSubject, function (tutorial, tutorialId) {
+                            tutorialId = +tutorialId;
+                            var getExerciseProm = ExerciseResultSrv.getExerciseStatus(ExerciseTypeEnum.TUTORIAL.enum, tutorialId)
+                                .then(function (data) {
+                                    tutorial.isComplete = data.status === ExerciseStatusEnum.COMPLETED.enum;
+                                });
+                            allProm.push(getExerciseProm);
+
+                            var isTutorialAvailProm = ContentAvailSrv.isTutorialAvail(tutorialId).then(function (isAvail) {
+                                tutorial.isAvail = isAvail;
+                            });
+                            allProm.push(isTutorialAvailProm);
+
+                            var getParentCategoryProm = CategoryService.getParentCategory(tutorial.categoryId).then(function (generalCategory) {
+                                tutorial.categoryName = generalCategory.name;
+                            });
+                            allProm.push(getParentCategoryProm);
+                        });
+                    });
+
+                    return $q.all(allProm).then(function () {
+                        return tutorialHeaders;
+                    });
+                });
+            };
+
+            this.getTutorial = function (tutorialId) {
+                return StorageRevSrv.getContent({
+                    exerciseId: tutorialId,
+                    exerciseType: 'tutorial'
+                });
+            };
+
+        }]
+    );
 })(angular);
 
 angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
@@ -14074,7 +14101,7 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "</div>");
   $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
     "<div class=\"tutorials-main-container\">\n" +
-    "    <tutorial-pane ng-model=\"vm.activeSubject\" ng-change=\"vm.activeSubjectChanged()\"></tutorial-pane>\n" +
+    "    <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
     "    <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
     "</div>\n" +
     "");

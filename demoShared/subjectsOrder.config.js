@@ -1,7 +1,8 @@
+
 (function (angular) {
     'use strict';
 
-    angular.module('demo').config(function (TutorialsSrvProvider) {
+    angular.module('demo').config(function (SubjectsSrvProvider) {
 
         function subjectToIndexMapGetter(SubjectEnum) {
             return [
@@ -11,7 +12,7 @@
             ];
         }
 
-        TutorialsSrvProvider.setSubjectOrder(subjectToIndexMapGetter);
+        SubjectsSrvProvider.setSubjectOrder(subjectToIndexMapGetter);
     });
 })(angular);
 

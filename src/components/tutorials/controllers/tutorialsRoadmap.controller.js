@@ -7,9 +7,6 @@
             $translatePartialLoader.addPart('tutorials');
             var vm = this;
             vm.tutorials = tutorials;
-            vm.activeSubjectChanged = function () {
-
-            };
         }
     );
 })(angular);

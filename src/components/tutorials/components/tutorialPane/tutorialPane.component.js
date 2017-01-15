@@ -10,15 +10,15 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         $translatePartialLoader.addPart('tutorials');
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
-
+        
         vm.$onInit = function () {
             $q.all([
                 subjectOrderProm
             ]).then(function (res) {
                 vm.subjecstOrder = res[0];
                 if (!vm.activeSubject) {
-                    vm.activeSubject = res[0][0];
-                    vm.ngModelCtrl.$setViewValue(+res[0][0]);
+                    vm.activeSubject = vm.subjecstOrder[0];
+                    vm.ngModelCtrl.$setViewValue(+vm.subjecstOrder[0]);
                 }
             });
 
