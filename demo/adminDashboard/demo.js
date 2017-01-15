@@ -10,7 +10,8 @@
         'znk.infra.auth',
         'znk.infra.presence',
         'znk.infra.analytics',
-        'pascalprecht.translate'
+        'pascalprecht.translate',
+        'znk.infra-web-app.lazyLoadResource'
     ])
         .config([
             '$stateProvider',

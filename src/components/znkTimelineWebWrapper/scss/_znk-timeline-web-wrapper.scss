@@ -1,12 +1,12 @@
 .znk-timeline-web-wrapper {
-    height: 280px;
+    height: auto;
     overflow-x: auto;
     position: relative;
     &::-webkit-scrollbar {
         height: 10px;
     }
     .time-line-wrapper {
-        margin-top: 75px;
+        margin: 30px 0;
     }
     .progress-val {
         position: absolute;

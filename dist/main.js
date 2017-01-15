@@ -20,6 +20,7 @@
 "znk.infra-web-app.imageZoomer",
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
+"znk.infra-web-app.lazyLoadResource",
 "znk.infra-web-app.liveLessons",
 "znk.infra-web-app.liveSession",
 "znk.infra-web-app.loadingAnimation",
@@ -1081,11 +1082,13 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         }
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.hits));
-                    }, function (err) {
-                        $log.error(err.message);
-                        deferred.reject(err.message);
+                    ElasticSearchSrv.getElastic().then(function (elastic) {
+                        elastic.search(query).then(function (response) {
+                            deferred.resolve(_searchResults(response.hits));
+                        }, function (err) {
+                            $log.error(err.message);
+                            deferred.reject(err.message);
+                        });
                     });
                     return deferred.promise;
                 }
@@ -4778,20 +4781,38 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.elasticSearch', [
-        'elasticsearch'
-    ]);
+    angular.module('znk.infra-web-app.elasticSearch', ['znk.infra-web-app.lazyLoadResource']);
 })(angular);
 
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.elasticSearch')
-        .service('ElasticSearchSrv',
-            ["esFactory", "ENV", function (esFactory, ENV) {
+        .service('ElasticSearchSrv', ["ENV", "loadResourceSrv", "loadResourceEnum", "$q", "$window", function (ENV, loadResourceSrv, loadResourceEnum, $q,$window) {
                 'ngInject';
 
-                return esFactory(ENV.elasticSearch);
+                var SRC_PATH = '/bower_components/elasticsearch/elasticsearch.js';
+                var elasticObject;
+                var isScriptLoaded = loadResourceSrv.isResourceLoaded(SRC_PATH, loadResourceEnum.SCRIPT);
+
+                this.getElastic = function () {
+                    return $q.when(_initElastic());
+                };
+
+                function _initElastic() {
+                    var deferred = $q.defer();
+                    if (isScriptLoaded) {
+                        deferred.resolve(elasticObject);
+                    }
+                    else {
+                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT,loadResourceEnum.LOCATION.BODY).then(function () {
+                            isScriptLoaded = true;
+                            elasticObject = new $window.elasticsearch.Client(ENV.elasticSearch);
+                            deferred.resolve(elasticObject);
+                        });
+                    }
+                    return deferred.promise;
+                }
             }]
         );
 })(angular);
@@ -7996,6 +8017,130 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "");
 }]);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource', []);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource')
+        .service('loadResourceSrv', ["loadResourceEnum", "$log", "$q", "$window", "$document", function (loadResourceEnum, $log, $q, $window, $document) {
+
+
+                this.addResource = function (src, type, loc) {
+                    if (type === loadResourceEnum.SCRIPT) {
+                        return _addScript(src, loc);
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        return _addStyle(src);
+                    }
+                    $log.error('loadResourceSrv: enum type is not defined');
+                };
+                this.removeResource = function (src, type) {
+                    if (type === loadResourceEnum.SCRIPT) {
+                        return _removeScript(src, type);
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        return _removeStyle(src, type);
+                    }
+                    $log.error('loadResourceSrv: enum type is not defined');
+                };
+                this.isResourceLoaded = function (src, type) {
+                    return _getResourceList(src, type).length > 0;
+                };
+
+                function _addScript(src, loc) {
+                    var location = loc || 'body';
+                    var deferred = $q.defer();
+                    var element = $document.find(location).eq(0);
+                    var script = $window.document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = src;
+                    element.append(script);
+                    script.onload = function (event) {
+                        deferred.resolve(event);
+                    };
+                    return deferred.promise;
+                }
+
+                function _addStyle(src) {
+                    var deferred = $q.defer();
+                    var headElement = $document.find('head').eq(0);
+                    var link = $window.document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = src;
+                    headElement.append(link);
+                    link.onload = function (event) {
+                        deferred.resolve(event);
+                    };
+                    return deferred.promise;
+                }
+
+                function _removeScript(src, type) {
+                    var scriptItem = _getResourceList(src, type);
+                    if (scriptItem.length) {
+                        var scriptElement = angular.element(scriptItem[0]);
+                        scriptElement.remove();
+                    }
+                    else {
+                        $log.error('loadResourceSrv: script resource is not found');
+                    }
+                }
+
+                function _removeStyle(src, type) {
+                    var styleItem = _getResourceList(src, type);
+                    if (styleItem.length) {
+                        var styleElement = angular.element(styleItem[0]);
+                        styleElement.remove();
+                    }
+                    else {
+                        $log.error('loadResourceSrv: style resource is not found');
+                    }
+                }
+
+                function _getResourceList(src, type) {
+                    var resourceList;
+                    if (type === loadResourceEnum.SCRIPT) {
+                        resourceList = $window.document.querySelector('script[src="' + src + '"]');
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        resourceList = $window.document.querySelector('link[href="' + src + '"]');
+                    }
+                    if (resourceList) {
+                        return Array.prototype.slice.call(resourceList);
+                    }
+                    return [];
+                }
+            }]
+        );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource')
+        .factory('loadResourceEnum', function () {
+                var loadResourceType = {
+                    CSS: 'css',
+                    SCRIPT: 'script',
+                    LOCATION: {
+                        HEAD: 'head',
+                        BODY: 'body'
+                    }
+                };
+
+                return loadResourceType;
+            }
+        );
+})(angular);
+
+angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function($templateCache) {
+
+}]);
+
 (function (window, angular) {
     'use strict';
 
@@ -8633,7 +8778,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             'znk.infra.user',
             'znk.infra.svgIcon',
             'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.znkToast'
+            'znk.infra-web-app.znkToast',
+            'znk.infra.exerciseUtility'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -8772,28 +8918,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     );
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    var subjectEnum = {
-        MATH: 0,
-        ENGLISH: 5
-    };
-
-    angular.module('znk.infra-web-app.liveSession').constant('LiveSessionSubjectEnumConst', subjectEnum);
-
-    angular.module('znk.infra-web-app.liveSession').factory('LiveSessionSubjectEnum', [
-        'EnumSrv',
-        function (EnumSrv) {
-
-            return new EnumSrv.BaseEnum([
-                ['MATH', subjectEnum.MATH, 'math'],
-                ['ENGLISH', subjectEnum.ENGLISH, 'english']
-            ]);
-        }
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -9312,8 +9436,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectEnumConst", function (LiveSessionSubjectEnumConst) {
-        var subjects = [LiveSessionSubjectEnumConst.MATH, LiveSessionSubjectEnumConst.ENGLISH];
+
+    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
+        var subjects = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
         this.setLiveSessionSubjects = function(_subjects) {
             if (angular.isArray(_subjects) && _subjects.length) {
@@ -9328,7 +9453,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
             function _getLiveSessionSubjects() {
                 return subjects.map(function (subjectEnum) {
-                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectEnumConst, subjectEnum).toLowerCase();
+                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, subjectEnum).toLowerCase();
                     return {
                         id: subjectEnum,
                         name: subjectName,
@@ -10412,6 +10537,10 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     }
                     if (provider === 'live') {
                         providerConfig.redirectUri = (env.redirectLive) ? $window.location.protocol + env.redirectLive : $window.location.origin + '/';
+                        /* hard coded until a microsoft app will be open for each one on zinkerz account, 
+                           and then move remove it, and add the clientId in all-env-config ie: liveAppId: ''
+                        */
+                        providerConfig.clientId = 'af360138-b120-40d9-9bc5-1b20b3fbc25e';
                         // emails supose to be default scope, add it just to make sure, it still microsoft ;)
                         providerConfig.scope = ['wl.emails'];
                     }
