@@ -15,7 +15,6 @@
             'znk.infra.svgIcon',
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
-            'znk.infra-web-app.liveSession',
             'znk.infra.exerciseUtility'
         ])
         .config([
