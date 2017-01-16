@@ -1076,7 +1076,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         return;
                     }
                     var query = {
-                        index: "firebase",
+                        index: ENV.elasticSearchIndex,
                         type: "user",
                         body: {
                             "from": 0,
@@ -1084,13 +1084,11 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         }
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.getElastic().then(function (elastic) {
-                        elastic.search(query).then(function (response) {
-                            deferred.resolve(_searchResults(response.hits));
-                        }, function (err) {
-                            $log.error(err.message);
-                            deferred.reject(err.message);
-                        });
+                    ElasticSearchSrv.search(query).then(function (response) {
+                        deferred.resolve(_searchResults(response.data.hits));
+                    }, function (err) {
+                        $log.error(err.message);
+                        deferred.reject(err.message);
                     });
                     return deferred.promise;
                 }
@@ -4761,31 +4759,19 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     'use strict';
 
     angular.module('znk.infra-web-app.elasticSearch')
-        .service('ElasticSearchSrv', ["ENV", "loadResourceSrv", "loadResourceEnum", "$q", "$window", function (ENV, loadResourceSrv, loadResourceEnum, $q,$window) {
+        .service('ElasticSearchSrv',
+            ["ENV", "$log", "$http", function (ENV,$log,$http) {
                 'ngInject';
 
-                var SRC_PATH = '/bower_components/elasticsearch/elasticsearch.js';
-                var elasticObject;
-                var isScriptLoaded = loadResourceSrv.isResourceLoaded(SRC_PATH, loadResourceEnum.SCRIPT);
+                var apiPath = ENV.backendEndpoint + "/search";
 
-                this.getElastic = function () {
-                    return $q.when(_initElastic());
+                this.search = function (query) {
+                    if (!query && !angular.isObject(query)) {
+                        $log.error('ElasticSearchSrv: query is empty or not an object');
+                        return;
+                    }
+                    return $http.post(apiPath, query);
                 };
-
-                function _initElastic() {
-                    var deferred = $q.defer();
-                    if (isScriptLoaded) {
-                        deferred.resolve(elasticObject);
-                    }
-                    else {
-                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT,loadResourceEnum.LOCATION.BODY).then(function () {
-                            isScriptLoaded = true;
-                            elasticObject = new $window.elasticsearch.Client(ENV.elasticSearch);
-                            deferred.resolve(elasticObject);
-                        });
-                    }
-                    return deferred.promise;
-                }
             }]
         );
 })(angular);

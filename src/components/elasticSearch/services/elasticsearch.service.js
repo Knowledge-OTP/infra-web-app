@@ -2,31 +2,19 @@
     'use strict';
 
     angular.module('znk.infra-web-app.elasticSearch')
-        .service('ElasticSearchSrv', function (ENV, loadResourceSrv, loadResourceEnum, $q,$window) {
+        .service('ElasticSearchSrv',
+            function (ENV,$log,$http) {
                 'ngInject';
 
-                var SRC_PATH = '/bower_components/elasticsearch/elasticsearch.js';
-                var elasticObject;
-                var isScriptLoaded = loadResourceSrv.isResourceLoaded(SRC_PATH, loadResourceEnum.SCRIPT);
+                var apiPath = ENV.backendEndpoint + "/search";
 
-                this.getElastic = function () {
-                    return $q.when(_initElastic());
+                this.search = function (query) {
+                    if (!query && !angular.isObject(query)) {
+                        $log.error('ElasticSearchSrv: query is empty or not an object');
+                        return;
+                    }
+                    return $http.post(apiPath, query);
                 };
-
-                function _initElastic() {
-                    var deferred = $q.defer();
-                    if (isScriptLoaded) {
-                        deferred.resolve(elasticObject);
-                    }
-                    else {
-                        loadResourceSrv.addResource(SRC_PATH, loadResourceEnum.SCRIPT,loadResourceEnum.LOCATION.BODY).then(function () {
-                            isScriptLoaded = true;
-                            elasticObject = new $window.elasticsearch.Client(ENV.elasticSearch);
-                            deferred.resolve(elasticObject);
-                        });
-                    }
-                    return deferred.promise;
-                }
             }
         );
 })(angular);
