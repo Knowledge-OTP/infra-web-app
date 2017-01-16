@@ -193,10 +193,6 @@
                     }
                     if (provider === 'live') {
                         providerConfig.redirectUri = (env.redirectLive) ? $window.location.protocol + env.redirectLive : $window.location.origin + '/';
-                        /* hard coded until a microsoft app will be open for each one on zinkerz account, 
-                           and then move remove it, and add the clientId in all-env-config ie: liveAppId: ''
-                        */
-                        providerConfig.clientId = 'af360138-b120-40d9-9bc5-1b20b3fbc25e';
                         // emails supose to be default scope, add it just to make sure, it still microsoft ;)
                         providerConfig.scope = ['wl.emails'];
                     }
