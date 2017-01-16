@@ -17058,7 +17058,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 var svgMap = {
                     'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
                     'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg',
-                    'znkHeader-app-name-logo': 'components/znkHeader/svg/znk-app-name-logo.svg'
+                    'znkHeader-app-name-logo': 'assets/svg/znk-app-name-logo.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
