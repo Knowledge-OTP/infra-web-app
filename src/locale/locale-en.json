@@ -176,7 +176,8 @@
         "PROFILE_LOGOUT": "log out",
         "MY_LIVE_LESSONS": "MY LIVE LESSONS SCHEDULE",
         "EDUCATOR_ADMIN": "Educator Admin",
-        "ZOE_STUDENTS": "ZOE Students"
+        "ZOE_STUDENTS": "ZOE Students",
+        "APP_LOGO":"znkHeader-app-name-logo"
     },
     "INVITE_APPROVE_MODAL":{
         "YOU_HAVE_INVITE": "You have an invitation",
