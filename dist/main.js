@@ -1201,6 +1201,45 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "</g>\n" +
     "</svg>\n" +
     "");
+  $templateCache.put("components/adminDashboard/components/eMetadata/templates/eMetadata.template.html",
+    "<div class=\"admin-dashboard admin-eMetadata\" translate-namespace=\"ADMIN\">\n" +
+    "\n" +
+    "    <div class=\"admin-main-container-overlay\">\n" +
+    "        <div class=\"admin-search-container\">\n" +
+    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
+    "            <div class=\"admin-search-pane\">\n" +
+    "                <div class=\"search-wrap\">\n" +
+    "                    <div class=\"znk-input-group\">\n" +
+    "                        <input type=\"search\"\n" +
+    "                               minlength=\"3\"\n" +
+    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
+    "                               name=\"search-box\"\n" +
+    "                               ng-model=\"vm.educatorSearchQuery\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <button class=\"admin-search-btn\" ng-click=\"vm.getEducatorsSearchResults(vm.educatorSearchQuery)\"\n" +
+    "                        ng-disabled=\"!vm.educatorSearchQuery\" translate=\".SEARCH\">\n" +
+    "                </button>\n" +
+    "\n" +
+    "            </div>\n" +
+    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
+    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/adminDashboard/components/eMetadata/templates/educatorProfile.template.html",
     "<md-dialog ng-cloak class=\"admin-dashboard admin-profile\" translate-namespace=\"ADMIN\">\n" +
     "    <div class=\"top-icon-wrap\">\n" +
@@ -1357,45 +1396,6 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "\n" +
     "\n" +
-    "");
-  $templateCache.put("components/adminDashboard/components/eMetadata/templates/eMetadata.template.html",
-    "<div class=\"admin-dashboard admin-eMetadata\" translate-namespace=\"ADMIN\">\n" +
-    "\n" +
-    "    <div class=\"admin-main-container-overlay\">\n" +
-    "        <div class=\"admin-search-container\">\n" +
-    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-    "            <div class=\"admin-search-pane\">\n" +
-    "                <div class=\"search-wrap\">\n" +
-    "                    <div class=\"znk-input-group\">\n" +
-    "                        <input type=\"search\"\n" +
-    "                               minlength=\"3\"\n" +
-    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
-    "                               name=\"search-box\"\n" +
-    "                               ng-model=\"vm.educatorSearchQuery\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button class=\"admin-search-btn\" ng-click=\"vm.getEducatorsSearchResults(vm.educatorSearchQuery)\"\n" +
-    "                        ng-disabled=\"!vm.educatorSearchQuery\" translate=\".SEARCH\">\n" +
-    "                </button>\n" +
-    "\n" +
-    "            </div>\n" +
-    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
-    "                    <div class=\"admin-msg\">\n" +
-    "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
     "");
   $templateCache.put("components/adminDashboard/components/esLink/directives/app-select.template.html",
     "<div class=\"znk-app-select\">\n" +
@@ -10510,10 +10510,6 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     }
                     if (provider === 'live') {
                         providerConfig.redirectUri = (env.redirectLive) ? $window.location.protocol + env.redirectLive : $window.location.origin + '/';
-                        /* hard coded until a microsoft app will be open for each one on zinkerz account, 
-                           and then move remove it, and add the clientId in all-env-config ie: liveAppId: ''
-                        */
-                        providerConfig.clientId = 'af360138-b120-40d9-9bc5-1b20b3fbc25e';
                         // emails supose to be default scope, add it just to make sure, it still microsoft ;)
                         providerConfig.scope = ['wl.emails'];
                     }
@@ -12296,6 +12292,21 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
+        function(EnumSrv) {
+
+            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
+                ['FREE_LICENSE', 1, 'free license'],
+                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
+            ]);
+
+            return PromoCodeTypeEnum;
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.promoCode').constant('PROMO_CODE_STATUS', {
         accepted: 0,
         invalid: 1
@@ -12394,21 +12405,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             }];
         }
     );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
-        function(EnumSrv) {
-
-            var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
-                ['FREE_LICENSE', 1, 'free license'],
-                ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],
-            ]);
-
-            return PromoCodeTypeEnum;
-        }]);
 })(angular);
 
 angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
@@ -14086,19 +14082,6 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.tutorials').controller('TutorialsRoadmapController',
-        ["$translatePartialLoader", "tutorials", function ($translatePartialLoader, tutorials) {
-            'ngInject';
-            $translatePartialLoader.addPart('tutorials');
-            var vm = this;
-            vm.tutorials = tutorials;
-        }]
-    );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.tutorials').controller('TutorialWorkoutController',
         ["exerciseData", function(exerciseData) {
             'ngInject';
@@ -14111,6 +14094,19 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         this.completeExerciseSettings = {
             exitAction: exerciseData.exitAction
         };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tutorials').controller('TutorialsRoadmapController',
+        ["$translatePartialLoader", "tutorials", function ($translatePartialLoader, tutorials) {
+            'ngInject';
+            $translatePartialLoader.addPart('tutorials');
+            var vm = this;
+            vm.tutorials = tutorials;
         }]
     );
 })(angular);
@@ -14265,18 +14261,18 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "    </g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
-    "<div class=\"tutorials-main-container\">\n" +
-    "    <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
-    "    <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
-    "</div>\n" +
-    "");
   $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",
     "<div class=\"complete-exercise-container base-border-radius\">\n" +
     "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
     "                       settings=\"vm.completeExerciseSettings\">\n" +
     "    </complete-exercise>\n" +
     "</div>");
+  $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
+    "<div class=\"tutorials-main-container\">\n" +
+    "    <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
+    "    <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
