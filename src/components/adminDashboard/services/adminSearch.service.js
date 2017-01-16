@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv,ENV) {
+            function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv) {
                 'ngInject';
 
                 var sizeLimit = 10000;
