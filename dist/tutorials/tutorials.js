@@ -175,6 +175,19 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.tutorials').controller('TutorialsRoadmapController',
+        ["$translatePartialLoader", "tutorials", function ($translatePartialLoader, tutorials) {
+            'ngInject';
+            $translatePartialLoader.addPart('tutorials');
+            var vm = this;
+            vm.tutorials = tutorials;
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.tutorials').controller('TutorialWorkoutController',
         ["exerciseData", function(exerciseData) {
             'ngInject';
@@ -187,19 +200,6 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         this.completeExerciseSettings = {
             exitAction: exerciseData.exitAction
         };
-        }]
-    );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tutorials').controller('TutorialsRoadmapController',
-        ["$translatePartialLoader", "tutorials", function ($translatePartialLoader, tutorials) {
-            'ngInject';
-            $translatePartialLoader.addPart('tutorials');
-            var vm = this;
-            vm.tutorials = tutorials;
         }]
     );
 })(angular);
@@ -354,16 +354,16 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "    </g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",
-    "<div class=\"complete-exercise-container base-border-radius\">\n" +
-    "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
-    "                       settings=\"vm.completeExerciseSettings\">\n" +
-    "    </complete-exercise>\n" +
-    "</div>");
   $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
     "<div class=\"tutorials-main-container\">\n" +
     "    <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
     "    <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
     "</div>\n" +
     "");
+  $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",
+    "<div class=\"complete-exercise-container base-border-radius\">\n" +
+    "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
+    "                       settings=\"vm.completeExerciseSettings\">\n" +
+    "    </complete-exercise>\n" +
+    "</div>");
 }]);
