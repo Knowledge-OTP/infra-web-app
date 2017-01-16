@@ -20,6 +20,7 @@
 "znk.infra-web-app.imageZoomer",
 "znk.infra-web-app.infraWebAppZnkExercise",
 "znk.infra-web-app.invitation",
+"znk.infra-web-app.lazyLoadResource",
 "znk.infra-web-app.liveLessons",
 "znk.infra-web-app.liveSession",
 "znk.infra-web-app.loadingAnimation",
@@ -30,7 +31,9 @@
 "znk.infra-web-app.purchase",
 "znk.infra-web-app.settings",
 "znk.infra-web-app.socialSharing",
+"znk.infra-web-app.subjectsOrder",
 "znk.infra-web-app.tests",
+"znk.infra-web-app.tutorials",
 "znk.infra-web-app.uiTheme",
 "znk.infra-web-app.userGoals",
 "znk.infra-web-app.userGoalsSelection",
@@ -1084,7 +1087,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         return;
                     }
                     var query = {
-                        index: "firebase",
+                        index: ENV.elasticSearchIndex,
                         type: "user",
                         body: {
                             "from": 0,
@@ -1093,7 +1096,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
                     ElasticSearchSrv.search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.hits));
+                        deferred.resolve(_searchResults(response.data.hits));
                     }, function (err) {
                         $log.error(err.message);
                         deferred.reject(err.message);
@@ -1883,6 +1886,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         return exerciseParentContentProm.then(function (exerciseParentContent) {
                             if (isExam) {
                                 exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
+                                exerciseDetails.examId = exerciseDetails.exerciseParentId;
                             }
                             var getDataPromMap = {
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
@@ -2959,11 +2963,10 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", "ExerciseParentEnum", "BaseExerciseGetterSrv", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
-                  $log, $q, ExerciseParentEnum, BaseExerciseGetterSrv) {
+        ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
+                  $log, $q) {
             'ngInject';
 
-            var self = this;
             this.VIEW_STATES = {
                 NONE: 0,
                 INTRO: 1,
@@ -2986,7 +2989,6 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
             };
 
             this.getExerciseResult = function (exerciseDetails, shMode) {
-                var isLecture = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.LECTURE.enum;
 
                 if (shMode === this.MODE_STATES.VIEWER) {
                     if (!exerciseDetails.resultGuid) {
@@ -2998,42 +3000,14 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     return ExerciseResultSrv.getExerciseResultByGuid(exerciseDetails.resultGuid);
                 }
 
-                switch (exerciseDetails.exerciseParentTypeId) {
-                    case ExerciseParentEnum.MODULE.enum:
-                        if (isLecture) {
-                            return ExerciseResultSrv.getExerciseResult(
-                                exerciseDetails.exerciseTypeId,
-                                exerciseDetails.exerciseId,
-                                exerciseDetails.exerciseParentId
-                            );
-                        }
-
-                        var examIdProm = $q.when();
-                        if (exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum) {
-                            examIdProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
-                        }
-
-                        return examIdProm.then(function (examData) {
-                            return self.getContextUid().then(function (uid) {
-                                var examId = examData && examData.id ? examData.id : undefined;
-                                return ExerciseResultSrv.getModuleExerciseResult(
-                                    uid,
-                                    exerciseDetails.exerciseParentId,
-                                    exerciseDetails.exerciseTypeId,
-                                    exerciseDetails.exerciseId,
-                                    exerciseDetails.assignContentType,
-                                    examId
-                                );
-                            });
-                        });
-                    default:
-                        return ExerciseResultSrv.getExerciseResult(
-                            exerciseDetails.exerciseTypeId,
-                            exerciseDetails.exerciseId,
-                            exerciseDetails.exerciseParentId,
-                            exerciseDetails.examSectionsNum
-                        );
-                }
+                var dontInit = false;
+                return ExerciseResultSrv.getExerciseResult(
+                    exerciseDetails.exerciseTypeId, 
+                    exerciseDetails.exerciseId, 
+                    exerciseDetails.examId, 
+                    exerciseDetails.examSectionsNum, 
+                    dontInit, 
+                    exerciseDetails.exerciseParentId);
             };
         }]
     );
@@ -4789,9 +4763,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.elasticSearch', [
-        'elasticsearch'
-    ]);
+    angular.module('znk.infra-web-app.elasticSearch', ['znk.infra-web-app.lazyLoadResource']);
 })(angular);
 
 (function (angular) {
@@ -4799,10 +4771,30 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 
     angular.module('znk.infra-web-app.elasticSearch')
         .service('ElasticSearchSrv',
-            ["esFactory", "ENV", function (esFactory, ENV) {
+            ["ENV", "$log", "$http", "AuthService", function (ENV, $log, $http, AuthService) {
                 'ngInject';
+                var uidObj = AuthService.getAuth();
 
-                return esFactory(ENV.elasticSearch);
+                var apiPath = ENV.backendEndpoint + "/search";
+
+                this.search = function (query) {
+                    var uid =uidObj.uid;
+
+                    if (!angular.isString(uid)) {
+                        $log.error('ElasticSearchSrv: uid is not a string or not exist');
+                        return;
+                    }
+                    if (!query && !angular.isObject(query)) {
+                        $log.error('ElasticSearchSrv: query is empty or not an object');
+                        return;
+                    }
+                    var searchObj = {
+                        query: query,
+                        uid: uid,
+                        appName: ENV.firebaseAppScopeName
+                    };
+                    return $http.post(apiPath, searchObj);
+                };
             }]
         );
 })(angular);
@@ -8007,6 +7999,130 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
     "");
 }]);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource', []);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource')
+        .service('loadResourceSrv', ["loadResourceEnum", "$log", "$q", "$window", "$document", function (loadResourceEnum, $log, $q, $window, $document) {
+
+
+                this.addResource = function (src, type, loc) {
+                    if (type === loadResourceEnum.SCRIPT) {
+                        return _addScript(src, loc);
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        return _addStyle(src);
+                    }
+                    $log.error('loadResourceSrv: enum type is not defined');
+                };
+                this.removeResource = function (src, type) {
+                    if (type === loadResourceEnum.SCRIPT) {
+                        return _removeScript(src, type);
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        return _removeStyle(src, type);
+                    }
+                    $log.error('loadResourceSrv: enum type is not defined');
+                };
+                this.isResourceLoaded = function (src, type) {
+                    return _getResourceList(src, type).length > 0;
+                };
+
+                function _addScript(src, loc) {
+                    var location = loc || 'body';
+                    var deferred = $q.defer();
+                    var element = $document.find(location).eq(0);
+                    var script = $window.document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = src;
+                    element.append(script);
+                    script.onload = function (event) {
+                        deferred.resolve(event);
+                    };
+                    return deferred.promise;
+                }
+
+                function _addStyle(src) {
+                    var deferred = $q.defer();
+                    var headElement = $document.find('head').eq(0);
+                    var link = $window.document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = src;
+                    headElement.append(link);
+                    link.onload = function (event) {
+                        deferred.resolve(event);
+                    };
+                    return deferred.promise;
+                }
+
+                function _removeScript(src, type) {
+                    var scriptItem = _getResourceList(src, type);
+                    if (scriptItem.length) {
+                        var scriptElement = angular.element(scriptItem[0]);
+                        scriptElement.remove();
+                    }
+                    else {
+                        $log.error('loadResourceSrv: script resource is not found');
+                    }
+                }
+
+                function _removeStyle(src, type) {
+                    var styleItem = _getResourceList(src, type);
+                    if (styleItem.length) {
+                        var styleElement = angular.element(styleItem[0]);
+                        styleElement.remove();
+                    }
+                    else {
+                        $log.error('loadResourceSrv: style resource is not found');
+                    }
+                }
+
+                function _getResourceList(src, type) {
+                    var resourceList;
+                    if (type === loadResourceEnum.SCRIPT) {
+                        resourceList = $window.document.querySelector('script[src="' + src + '"]');
+                    }
+                    if (type === loadResourceEnum.CSS) {
+                        resourceList = $window.document.querySelector('link[href="' + src + '"]');
+                    }
+                    if (resourceList) {
+                        return Array.prototype.slice.call(resourceList);
+                    }
+                    return [];
+                }
+            }]
+        );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.lazyLoadResource')
+        .factory('loadResourceEnum', function () {
+                var loadResourceType = {
+                    CSS: 'css',
+                    SCRIPT: 'script',
+                    LOCATION: {
+                        HEAD: 'head',
+                        BODY: 'body'
+                    }
+                };
+
+                return loadResourceType;
+            }
+        );
+})(angular);
+
+angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function($templateCache) {
+
+}]);
+
 (function (window, angular) {
     'use strict';
 
@@ -8644,7 +8760,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             'znk.infra.user',
             'znk.infra.svgIcon',
             'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.znkToast'
+            'znk.infra-web-app.znkToast',
+            'znk.infra.exerciseUtility'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -8783,28 +8900,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     );
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    var subjectEnum = {
-        MATH: 0,
-        ENGLISH: 5
-    };
-
-    angular.module('znk.infra-web-app.liveSession').constant('LiveSessionSubjectEnumConst', subjectEnum);
-
-    angular.module('znk.infra-web-app.liveSession').factory('LiveSessionSubjectEnum', [
-        'EnumSrv',
-        function (EnumSrv) {
-
-            return new EnumSrv.BaseEnum([
-                ['MATH', subjectEnum.MATH, 'math'],
-                ['ENGLISH', subjectEnum.ENGLISH, 'english']
-            ]);
-        }
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -9323,8 +9418,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectEnumConst", function (LiveSessionSubjectEnumConst) {
-        var subjects = [LiveSessionSubjectEnumConst.MATH, LiveSessionSubjectEnumConst.ENGLISH];
+
+    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
+        var subjects = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
         this.setLiveSessionSubjects = function(_subjects) {
             if (angular.isArray(_subjects) && _subjects.length) {
@@ -9339,7 +9435,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
             function _getLiveSessionSubjects() {
                 return subjects.map(function (subjectEnum) {
-                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectEnumConst, subjectEnum).toLowerCase();
+                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, subjectEnum).toLowerCase();
                     return {
                         id: subjectEnum,
                         name: subjectName,
@@ -9770,7 +9866,8 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 'v-icon': 'components/loginApp/svg/v-icon.svg',
                 'loginApp-arrow-icon': 'components/loginApp/svg/arrow-icon.svg',
                 'loginApp-close-icon': 'components/loginApp/svg/close-icon.svg',
-                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg'
+                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg',
+                'microsoft-icon': 'components/loginApp/svg/microsoft.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
@@ -9880,7 +9977,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         changePassword: false
                     };
 
-                    var socialProvidersArr = ['facebook', 'google'];
+                    var socialProvidersArr = ['facebook', 'google', 'live'];
                     var invitationKey = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
@@ -10420,6 +10517,11 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     if (provider === 'facebook') {
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
                     }
+                    if (provider === 'live') {
+                        providerConfig.redirectUri = (env.redirectLive) ? $window.location.protocol + env.redirectLive : $window.location.origin + '/';
+                        // emails supose to be default scope, add it just to make sure, it still microsoft ;)
+                        providerConfig.scope = ['wl.emails'];
+                    }
                 });
             };
 
@@ -10531,17 +10633,36 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
     "    <button class=\"social-btn facebook-btn\"\n" +
     "            ng-click=\"vm.socialAuth('facebook')\"\n" +
-    "            ng-if=\"vm.providers.facebook\">\n" +
+    "            ng-if=\"vm.providers.facebook\"\n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_FB' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.facebook.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
     "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
-    "        <span class=\"loader ng-hide\" ng-show=\"vm.loading.facebook.showSpinner\"></span>\n" +
-    "        <span translate=\".CONNECT_WITH_FB\"></span>\n" +
     "    </button>\n" +
     "    <button class=\"social-btn gplus-btn\"\n" +
     "            ng-click=\"vm.socialAuth('google')\"\n" +
-    "            ng-if=\"vm.providers.google\">\n" +
+    "            ng-if=\"vm.providers.google\"\n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_GOOGLE' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.google.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
     "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
-    "        <span class=\"loader ng-hide\" ng-show=\"vm.loading.google.showSpinner\"></span>\n" +
-    "        <span translate=\".CONNECT_WITH_GOOGLE\"></span>\n" +
+    "    </button>\n" +
+    "     <button class=\"social-btn live-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('live')\"\n" +
+    "            ng-if=\"vm.providers.live\"            \n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_LIVE' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.live.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
+    "        <svg-icon name=\"microsoft-icon\"></svg-icon>\n" +
     "    </button>\n" +
     "</div>\n" +
     "");
@@ -10667,6 +10788,53 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "		c-1.8-0.4-3.6,0-5.1,0.9c-15.9,10.1-44.2,10.1-60,0c-1.5-1-3.4-1.3-5.1-0.9c-7.6,1.7-27.8,8.3-36.3,32.1c-1.5,4.1-3,12-3.7,18.2\n" +
     "		c-0.5,4,2.7,7.5,6.7,7.5H77.7z\"/>\n" +
     "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/microsoft.svg",
+    "<svg class=\"microsoft-icon\"\n" +
+    "     x=\"0px\" \n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 22.884 22.884\" >\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path d=\"M13.045,1.997l-1.969,7.872C8.68,8.867,5.479,8.429,2.642,9.307c0.574-2.522,1.97-7.31,1.97-7.31\n" +
+    "			C6.698,0.289,10.756,0.902,13.045,1.997z\"/>\n" +
+    "		<path d=\"M14.184,3.145c2.147,1.257,5.943,1.645,8.7,0.822l-2.251,7.589c-2.313,1.224-6.735,1.133-8.433-0.563L14.184,3.145z\"/>\n" +
+    "		<path d=\"M10.398,11.513l-1.967,7.87C5.953,18.243,2.794,17.481,0,18.82c0,0,1.297-5.069,1.966-7.588\n" +
+    "			C4.131,9.889,8.444,10.286,10.398,11.513z\"/>\n" +
+    "		<path d=\"M11.746,12.641c2.147,1.518,5.796,1.764,8.493,0.72l-2.247,7.592c-2.176,1.479-6.433,1.252-8.435-0.281L11.746,12.641z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
     "</svg>\n" +
     "");
   $templateCache.put("components/loginApp/svg/v-icon.svg",
@@ -10851,7 +11019,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            <oath-login-drv\n" +
     "                app-context=\"appContext\"\n" +
     "                user-context=\"userContext\"\n" +
-    "                providers=\"{facebook:true,google:true}\">\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -10988,7 +11156,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            <oath-login-drv\n" +
     "                app-context=\"appContext\"\n" +
     "                user-context=\"userContext\"\n" +
-    "                providers=\"{facebook:true,google:true}\">\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
     "            </oath-login-drv>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -13565,6 +13733,44 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
 
 (function (angular) {
     'use strict';
+    angular.module('znk.infra-web-app.subjectsOrder', [
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.subjectsOrder').provider('SubjectsSrv', [
+        function () {
+            var _subjectOrderGetter;
+            this.setSubjectOrder = function (subjectOrderGetter) {
+                _subjectOrderGetter = subjectOrderGetter;
+            };
+
+            this.$get = ["$q", "$log", "$injector", function ($q, $log, $injector) {
+                'ngInject';
+                var SubjectsSrv = {};
+                SubjectsSrv.getSubjectOrder = function () {
+                    if (!_subjectOrderGetter) {
+                        var errMsg = 'subjectOrder Service: subjectOrderGetter was not set.';
+                        $log.error(errMsg);
+                        return $q.reject(errMsg);
+                    }
+                    if (angular.isFunction(_subjectOrderGetter)) {
+                        return $q.when($injector.invoke(_subjectOrderGetter));
+                    }
+                };
+                return SubjectsSrv;
+            }];
+        }
+    ]);
+})(angular);
+
+angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {
+
+}]);
+
+(function (angular) {
+    'use strict';
 
     angular.module('znk.infra-web-app.tests', [
         'znk.infra.svgIcon',
@@ -13706,6 +13912,376 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "    </md-list>\n" +
     "</div>\n" +
     "");
+}]);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.tutorials', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.enum',
+        'znk.infra.config',
+        'znk.infra.general',
+        'znk.infra.svgIcon',
+        'ui.router',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra-web-app.completeExercise',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.loadingAnimation',
+        'znk.infra.exerciseResult',
+        'znk.infra.contentAvail',
+        'znk.infra.contentGetters',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.subjectsOrder'
+
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+        var svgMap = {
+            'locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
+            'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
+        };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+
+        }
+    ]);
+})(angular);
+
+'use strict';
+angular.module('znk.infra-web-app.tutorials').component('tutorialList', {
+    templateUrl: 'components/tutorials/components/tutorialList/tutorialList.template.html',
+    require: {
+        ngModelCtrl: 'ngModel'
+    },
+    bindings: {
+        tutorials: '<'
+    },
+    controllerAs: 'vm',
+    controller: ["SubjectEnum", "DiagnosticSrv", "ExerciseStatusEnum", function (SubjectEnum, DiagnosticSrv, ExerciseStatusEnum) {
+        var vm = this;
+        vm.subjectsMap = SubjectEnum.getEnumMap();
+        vm.isDiagnosticComplete = true;
+        DiagnosticSrv.getDiagnosticStatus().then(function (diagnosticStatus) {
+            vm.isDiagnosticComplete = diagnosticStatus === ExerciseStatusEnum.COMPLETED.enum;
+        });
+        vm.tutorialsArrs = vm.tutorials;
+
+        vm.$onInit = function () {
+            vm.ngModelCtrl.$render = function () {
+                vm.activeSubject = vm.ngModelCtrl.$modelValue;
+            };
+        };
+    }]
+});
+
+'use strict';
+angular.module('znk.infra-web-app.tutorials').component('tutorialListItem', {
+    templateUrl: 'components/tutorials/components/tutorialListItem/tutorialListItem.template.html',
+    require: {
+        ngModelCtrl: '^ngModel'
+    },
+    bindings: {
+        tutorial: "<"
+    },
+    controllerAs: 'vm',
+    controller: ["SubjectEnum", "DiagnosticSrv", "ExerciseStatusEnum", "purchaseService", "$state", function (SubjectEnum, DiagnosticSrv, ExerciseStatusEnum, purchaseService, $state) {
+        var vm = this;
+        vm.subjectsMap = SubjectEnum.getEnumMap();
+
+        DiagnosticSrv.getDiagnosticStatus().then(function (diagnosticStatus) {
+            var isDiagnosticComplete = diagnosticStatus === ExerciseStatusEnum.COMPLETED.enum;
+            vm.tutorialClick = function (tutorialId) {
+                if (!isDiagnosticComplete) { return; }
+                if (vm.tutorial.isAvail) {
+                    $state.go('app.tutorial', {
+                        exerciseId: tutorialId
+                    });
+                } else {
+                    purchaseService.showPurchaseDialog();
+                }
+            };
+        });
+
+        vm.$onInit = function () {
+            vm.ngModelCtrl.$render = function () {
+                vm.activeSubject = vm.ngModelCtrl.$viewValue;
+            };
+        };
+    }]
+});
+
+'use strict';
+angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
+    templateUrl: 'components/tutorials/components/tutorialPane/tutorialPane.template.html',
+    require: {
+        ngModelCtrl: '^ngModel'
+    },
+    controllerAs: 'vm',
+    controller: ["$translatePartialLoader", "TutorialsSrv", "$q", "SubjectEnum", function ($translatePartialLoader, TutorialsSrv, $q, SubjectEnum) {
+        var vm = this;
+        $translatePartialLoader.addPart('tutorials');
+        var subjectOrderProm = TutorialsSrv.getSubjectOrder();
+        vm.subjectsMap = SubjectEnum.getEnumMap();
+        
+        vm.$onInit = function () {
+            $q.all([
+                subjectOrderProm
+            ]).then(function (res) {
+                vm.subjecstOrder = res[0];
+                if (!vm.activeSubject) {
+                    vm.activeSubject = vm.subjecstOrder[0];
+                    vm.ngModelCtrl.$setViewValue(+vm.subjecstOrder[0]);
+                }
+            });
+
+            vm.changeActiveSubject = function (subjectId) {
+                vm.ngModelCtrl.$setViewValue(+subjectId);
+                vm.activeSubject = vm.ngModelCtrl.$viewValue;
+            };
+        };
+    }]
+});
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tutorials').config([
+        '$stateProvider',
+        function ($stateProvider) {
+            $stateProvider
+                .state('app.tutorials', {
+                    url: '/tipsAndTricks',
+                    templateUrl: 'components/tutorials/templates/tutorialsRoadmap.template.html',
+                    controller: 'TutorialsRoadmapController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        tutorials: ["TutorialsSrv", function tutorials(TutorialsSrv) {
+                            return TutorialsSrv.getAllTutorials().then(function (tutorialsArrs) {
+                                return tutorialsArrs;
+                            });
+                        }]
+                    }
+                })
+            .state('app.tutorial', {
+                url: '/tipsAndTricks/tutorial/:exerciseId',
+                templateUrl: 'components/tutorials/templates/tutorialWorkout.template.html',
+                controller: 'TutorialWorkoutController',
+                controllerAs: 'vm',
+                resolve: {
+                    exerciseData: ["TutorialsSrv", "$stateParams", "$state", "ExerciseTypeEnum", "ExerciseParentEnum", function (TutorialsSrv, $stateParams, $state, ExerciseTypeEnum, ExerciseParentEnum) {
+                        var tutorialId = +$stateParams.exerciseId;
+                        return TutorialsSrv.getTutorial(tutorialId).then(function () {
+                            return {
+                                exerciseId: tutorialId,
+                                exerciseTypeId: ExerciseTypeEnum.TUTORIAL.enum,
+                                exerciseParentTypeId: ExerciseParentEnum.TUTORIAL.enum,
+                                exitAction: function () {
+                                    $state.go('app.tutorials');
+                                }
+                            };
+                        });
+                    }]
+                }
+            });
+        }
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tutorials').controller('TutorialsRoadmapController',
+        ["$translatePartialLoader", "tutorials", function ($translatePartialLoader, tutorials) {
+            'ngInject';
+            $translatePartialLoader.addPart('tutorials');
+            var vm = this;
+            vm.tutorials = tutorials;
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tutorials').controller('TutorialWorkoutController',
+        ["exerciseData", function(exerciseData) {
+            'ngInject';
+            this.completeExerciseDetails = {
+            exerciseId: exerciseData.exerciseId,
+            exerciseTypeId: exerciseData.exerciseTypeId,
+            exerciseParentTypeId: exerciseData.exerciseParentTypeId
+        };
+
+        this.completeExerciseSettings = {
+            exitAction: exerciseData.exitAction
+        };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.tutorials').service('TutorialsSrv',
+        ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", "SubjectsSrv", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum, SubjectsSrv) {
+            'ngInject';
+        
+            this.getSubjectOrder = function () {
+                return SubjectsSrv.getSubjectOrder();
+            };
+
+
+            this.getTutorialHeaders = function () {
+                return StorageRevSrv.getContent({
+                    exerciseId: null,
+                    exerciseType: 'tutorialheaders'
+                });
+            };
+
+
+            this.getAllTutorials = function () {
+                return this.getTutorialHeaders().then(function (tutorialHeaders) {
+                    if (!tutorialHeaders) {
+                        return $q.reject('No tutorial headers were found');
+                    }
+
+                    var allProm = [];
+
+                    angular.forEach(tutorialHeaders, function (tutorialsForSubject) {
+                        angular.forEach(tutorialsForSubject, function (tutorial, tutorialId) {
+                            tutorialId = +tutorialId;
+                            var getExerciseProm = ExerciseResultSrv.getExerciseStatus(ExerciseTypeEnum.TUTORIAL.enum, tutorialId)
+                                .then(function (data) {
+                                    tutorial.isComplete = data.status === ExerciseStatusEnum.COMPLETED.enum;
+                                });
+                            allProm.push(getExerciseProm);
+
+                            var isTutorialAvailProm = ContentAvailSrv.isTutorialAvail(tutorialId).then(function (isAvail) {
+                                tutorial.isAvail = isAvail;
+                            });
+                            allProm.push(isTutorialAvailProm);
+
+                            var getParentCategoryProm = CategoryService.getParentCategory(tutorial.categoryId).then(function (generalCategory) {
+                                tutorial.categoryName = generalCategory.name;
+                            });
+                            allProm.push(getParentCategoryProm);
+                        });
+                    });
+
+                    return $q.all(allProm).then(function () {
+                        return tutorialHeaders;
+                    });
+                });
+            };
+
+            this.getTutorial = function (tutorialId) {
+                return StorageRevSrv.getContent({
+                    exerciseId: tutorialId,
+                    exerciseType: 'tutorial'
+                });
+            };
+
+        }]
+    );
+})(angular);
+
+angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/tutorials/components/tutorialList/tutorialList.template.html",
+    "<div class=\"tutorials-list-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_LIST_COMPONENTS\">\n" +
+    "    <div class=\"diagnostic-overlay\" ng-if=\"!vm.isDiagnosticComplete\">\n" +
+    "        <div class=\"overlay-text\" translate=\".DIAGNOSTIC_OVERLAY\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"tutorials-list-container\" ng-class=\"{blur: !vm.isDiagnosticComplete}\">\n" +
+    "        <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
+    "                            tutorial=\"tutorial\"\n" +
+    "                            ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
+    "        </tutorial-list-item>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/tutorials/components/tutorialListItem/tutorialListItem.template.html",
+    "<div class=\"tutorial-item\" ng-click=\"vm.tutorialClick(vm.tutorial.id)\" ng-class=\"[vm.subjectsMap[vm.activeSubject], {'locked': !vm.tutorial.isAvail, 'base-box-shadow': vm.tutorial.isAvail}, {'completed': vm.tutorial.isComplete}]\">\n" +
+    "    <svg-icon name=\"locked-icon\" ng-if=\"!vm.tutorial.isAvail\"></svg-icon>\n" +
+    "    <svg-icon name=\"tutorials-check-mark-icon\" ng-if=\"vm.tutorial.isComplete\"></svg-icon>\n" +
+    "    <div class=\"tutorial-name\">{{vm.tutorial.name}}</div>\n" +
+    "    <div class=\"tutorial-category-name\">{{vm.tutorial.categoryName}}</div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/tutorials/components/tutorialPane/tutorialPane.template.html",
+    "<div class=\"tutorial-navigation-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_PANE_COMPONENTS\">\n" +
+    "    <div class=\"pane-title\" translate=\".TITLE\"></div>\n" +
+    "    <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
+    "        <md-list-item\n" +
+    "            md-no-ink\n" +
+    "            ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
+    "            ng-click=\"vm.changeActiveSubject(subject)\"\n" +
+    "            class=\"subject-item\"\n" +
+    "            ng-repeat=\"subject in vm.subjecstOrder\">\n" +
+    "            <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
+    "            <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
+    "        </md-list-item>\n" +
+    "    </md-list>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/tutorials/svg/subject-locked-icon.svg",
+    "<svg\n" +
+    "    class=\"subject-locked-svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 127.4 180\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .subject-locked-svg {\n" +
+    "            width: 100%;\n" +
+    "            height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path class=\"st0\" d=\"M57.4,0c4,0,8,0,12,0c1.3,0.4,2.5,0.8,3.8,1.1c20,4.5,34.7,15.3,40.5,35.6c2.1,7.5,2.1,15.8,2.4,23.7\n" +
+    "			c0.4,9.1,0.1,18.2,0.1,27.3c4.1,0.5,7.7,1,11.2,1.4c0,30.3,0,60.7,0,91C85,180,42.6,180,0,180c0-30.9,0-61.1,0-91.6\n" +
+    "			c3.7-0.2,7.1-0.4,10.7-0.6c0-12.2-0.2-23.8,0-35.5c0.4-21.6,10-37.7,29.7-46.9C45.8,2.9,51.8,1.8,57.4,0z M98.5,87.9\n" +
+    "			c0-11.5,0-22.5,0-33.4c0-20.3-9.9-32.2-30-36.1C52,15.2,32.1,26.9,29.8,43c-2,14.7-1.4,29.8-1.9,44.9\n" +
+    "			C51.9,87.9,74.9,87.9,98.5,87.9z M71.3,149.8c-0.6-4.1-1.2-7.7-1.6-11.4c-0.5-4-1.3-7.7,2.1-11.5c3.2-3.6,1.7-9.3-2.1-12.4\n" +
+    "			c-3.5-2.9-8.9-2.9-12.4,0c-3.8,3.1-5.4,8.9-2.2,12.4c3.5,3.9,2.5,7.8,2,12c-0.4,3.6-1,7.1-1.5,10.9\n" +
+    "			C60.9,149.8,65.9,149.8,71.3,149.8z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/tutorials/svg/tutorials-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"tutorials-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .tutorials-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
+    "<div class=\"tutorials-main-container\">\n" +
+    "    <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
+    "    <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",
+    "<div class=\"complete-exercise-container base-border-radius\">\n" +
+    "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
+    "                       settings=\"vm.completeExerciseSettings\">\n" +
+    "    </complete-exercise>\n" +
+    "</div>");
 }]);
 
 (function (angular) {
@@ -16632,7 +17208,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
                 addDefaultNavItem('ZNK_HEADER.WORKOUTS', 'app.workouts.roadmap', { reload: true });
                 addDefaultNavItem('ZNK_HEADER.TESTS', 'app.tests.roadmap');
-                // addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials.roadmap');
+                addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials');
                 addDefaultNavItem('ZNK_HEADER.PERFORMANCE', 'app.performance');
                 addDefaultNavItem('ZNK_HEADER.ETUTORING', 'app.eTutoring');
 

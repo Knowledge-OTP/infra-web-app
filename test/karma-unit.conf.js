@@ -47,8 +47,6 @@ module.exports = function (config) {
             'bower_components/satellizer/dist/satellizer.js',
             'bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js',
             'bower_components/angular-ui-grid/ui-grid.js',
-            'bower_components/elasticsearch/elasticsearch.js',
-            'bower_components/elasticsearch/elasticsearch.angular.js',
             'bower_components/es5-shim/es5-shim.js',
             'bower_components/mockfirebase/browser/mockfirebase.js',
             'bower_components/jasmine/lib/jasmine-core/jasmine.js',

@@ -21,7 +21,7 @@
                         changePassword: false
                     };
 
-                    var socialProvidersArr = ['facebook', 'google'];
+                    var socialProvidersArr = ['facebook', 'google', 'live'];
                     var invitationKey = InvitationKeyService.getInvitationKey();
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);

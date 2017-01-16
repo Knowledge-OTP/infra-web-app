@@ -11,8 +11,7 @@
     "v-accordion": "1.4.1",
     "satellizer": "0.15.5",
     "angular-drag-and-drop-lists": "^1.4.0",
-    "angular-ui-grid": "3.1.1",
-    "elasticsearch": "^12.1.2"
+    "angular-ui-grid": "3.1.1"
   },
   "ignore": [
     ".*",
@@ -32,14 +31,7 @@
     "angular-mocks": "1.5.8",
     "angular-messages": "1.5.8"
   },
-  "overrides": {
-    "elasticsearch": {
-      "main": [
-        "elasticsearch.js",
-        "elasticsearch.angular.js"
-      ]
-    }
-  },
+
   "resolutions": {
     "angular": "1.5.8",
     "angular-messages": "1.5.8"

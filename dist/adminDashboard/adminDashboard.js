@@ -574,7 +574,7 @@
                         return;
                     }
                     var query = {
-                        index: "firebase",
+                        index: ENV.elasticSearchIndex,
                         type: "user",
                         body: {
                             "from": 0,
@@ -583,7 +583,7 @@
                     };
                     buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
                     ElasticSearchSrv.search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.hits));
+                        deferred.resolve(_searchResults(response.data.hits));
                     }, function (err) {
                         $log.error(err.message);
                         deferred.reject(err.message);

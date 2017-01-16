@@ -9,13 +9,13 @@
 /* full background image with retina */
 /* full background image with retina */
 .znk-timeline-web-wrapper {
-  height: 280px;
+  height: auto;
   overflow-x: auto;
   position: relative; }
   .znk-timeline-web-wrapper::-webkit-scrollbar {
     height: 10px; }
   .znk-timeline-web-wrapper .time-line-wrapper {
-    margin-top: 75px; }
+    margin: 30px 0; }
   .znk-timeline-web-wrapper .progress-val {
     position: absolute;
     color: #4f4d4d;

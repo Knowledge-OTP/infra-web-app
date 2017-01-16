@@ -61,6 +61,17 @@
             "EMAIL_TAKEN": "Email is already taken, please choose another"
         }
     },
+    "TUTORIAL_LIST_COMPONENTS": {
+        "DIAGNOSTIC_OVERLAY": "Please complete the diagnostic test in order to access the tutorials"
+    },
+    "TUTORIAL_PANE_COMPONENTS": {
+        "TITLE": "Subjects"
+    },
+    "SUBJECTS": {
+        "7": "Verbal",
+        "0": "Math",
+        "8": "Essay"
+    },
     "CHANGE_PASSOWRD_FORM": {
         "BACK_TO_LOGIN": "Back to Login",
         "RESET_PASSWORD": "Reset Password",
@@ -111,6 +122,7 @@
     "OATH_SOCIAL": {
         "CONNECT_WITH_FB": "Facebook",
         "CONNECT_WITH_GOOGLE": "Google",
+        "CONNECT_WITH_LIVE": "Microsoft Live",
         "ERROR_TITLE": "Connect With {{provider}} Failed",
         "ERROR_CONTENT": "An error occurred while trying to connect with {{provider}}, please try again. If the problem persists please contact us at <a href='//www.zinkerz.com/contact/' target='_blank'>support@zinkerz.com</a>"
     },
