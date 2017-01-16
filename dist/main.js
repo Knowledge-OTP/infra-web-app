@@ -4764,8 +4764,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                 'ngInject';
                 var uidObj = AuthService.getAuth();
 
-              //  var apiPath = ENV.backendEndpoint + "/search";
-                var apiPath ="http://localhost:3009/search";
+                var apiPath = ENV.backendEndpoint + "/search";
+
                 this.search = function (query) {
                     var uid =uidObj.uid;
 
