@@ -20,7 +20,7 @@
                 var svgMap = {
                     'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
                     'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg',
-                    'znkHeader-app-name-logo': 'components/znkHeader/svg/znk-app-name-logo.svg'
+                    'znkHeader-app-name-logo': 'components/assets/svg/znk-app-name-logo.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }]);
@@ -172,8 +172,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
     "        <div class=\"znkHeader-app-logo-wrap\">\n" +
-    "            <svg-icon class=\"znkHeader-app-name-logo\"\n" +
-    "                      name=\"znkHeader-app-name-logo\"\n" +
+    "            <svg-icon class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\"\n" +
+    "                      name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\"\n" +
     "                      ui-sref=\"app.workouts.roadmap\"\n" +
     "                      ui-sref-opts=\"{reload: true}\">\n" +
     "            </svg-icon>\n" +
