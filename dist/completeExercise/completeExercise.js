@@ -175,6 +175,7 @@
                         return exerciseParentContentProm.then(function (exerciseParentContent) {
                             if (isExam) {
                                 exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
+                                exerciseDetails.examId = exerciseDetails.exerciseParentId;
                             }
                             var getDataPromMap = {
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
