@@ -111,6 +111,8 @@
                         $timeout(function () {
                             scope.d.currentUserPresenceStatus = newStatus;
                             scope.d.callBtnModel.isOffline = scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE;
+                            scope.d.callBtnModel.toggleAutoCall = null;
+                            scope.d.callBtnModel = angular.copy(scope.d.callBtnModel);
                         });
                     }
 
