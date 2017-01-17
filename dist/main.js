@@ -8827,7 +8827,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                 function getLiveSessionStatus() {
                     LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
-                        liveSessionStateChanged(liveSessionData.status);
+                        if (liveSessionData) {
+                            liveSessionStateChanged(liveSessionData.status);
+                        }
                     });
                 }
 

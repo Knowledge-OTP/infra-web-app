@@ -92,7 +92,9 @@
 
                 function getLiveSessionStatus() {
                     LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
-                        liveSessionStateChanged(liveSessionData.status);
+                        if (liveSessionData) {
+                            liveSessionStateChanged(liveSessionData.status);
+                        }
                     });
                 }
 
