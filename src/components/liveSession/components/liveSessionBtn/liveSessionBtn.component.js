@@ -19,6 +19,7 @@
                     vm.isOffline = true;
                     vm.endSession = endSession;
                     vm.showSessionModal = showSessionModal;
+                    getLiveSessionStatus();
 
                     $scope.$watch('vm.student', function (newStudent) {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
@@ -29,6 +30,12 @@
                     LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
                 };
 
+                function getLiveSessionStatus() {
+                    LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                        liveSessionStateChanged(liveSessionData.status);
+                    });
+                }
+
                 function showSessionModal() {
                     $mdDialog.show({
                         template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
@@ -37,8 +44,8 @@
                         clickOutsideToClose: true
                     });
                 }
-                function liveSessionStateChanged(newLiveSessionData) {
-                    vm.isLiveSessionActive = newLiveSessionData === LiveSessionStatusEnum.CONFIRMED.enum;
+                function liveSessionStateChanged(newLiveSessionState) {
+                    vm.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
                 }
                 function endSession() {
                     LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
