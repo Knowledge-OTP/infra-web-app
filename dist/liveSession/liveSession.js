@@ -869,7 +869,7 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "</div>\n" +
     "");
   $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
-    "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline\"\n" +
+    "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
     "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
     "           ng-class=\"{'offline': vm.isOffline, 'end-session': vm.isLiveSessionActive}\"\n" +
     "           ng-click=\"!vm.isLiveSessionActive ? vm.showSessionModal() : vm.endSession()\">\n" +

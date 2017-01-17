@@ -18,10 +18,10 @@
 
     angular.module('znk.infra-web-app.activePanel')
         .directive('activePanel',
-            ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "toggleAutoCallEnum", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
+            ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "toggleAutoCallEnum", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "$timeout", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
                          PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
                          $translate, toggleAutoCallEnum, LiveSessionSrv, LiveSessionStatusEnum,
-                        UserScreenSharingStateEnum, UserLiveSessionStateEnum) {
+                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, $timeout) {
                 'ngInject';
                 return {
                 templateUrl: 'components/activePanel/activePanel.template.html',
@@ -121,6 +121,15 @@
                         return Math.floor(Date.now() / 1000) * 1000;
                     }
 
+                    function trackUserPresenceCB(userId, newStatus) {
+                        $timeout(function () {
+                            scope.d.currentUserPresenceStatus = newStatus;
+                            scope.d.callBtnModel.isOffline = scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE;
+                            scope.d.callBtnModel.toggleAutoCall = null;
+                            scope.d.callBtnModel = angular.copy(scope.d.callBtnModel);
+                        });
+                    }
+
                     function listenToLiveSessionStatus(newLiveSessionStatus) {
                         if (prevLiveSessionStatus !== newLiveSessionStatus){
                             prevLiveSessionStatus = newLiveSessionStatus;
@@ -131,8 +140,10 @@
 
                                 if (isTeacher) {
                                     studentOrTeacherContextChange(liveSessionData.studentId, liveSessionData);
+                                    PresenceService.startTrackUserPresence(liveSessionData.studentId, trackUserPresenceCB.bind(null, liveSessionData.studentId));
                                 } else if (isStudent) {
                                     studentOrTeacherContextChange(liveSessionData.educatorId, liveSessionData);
+                                    PresenceService.startTrackUserPresence(liveSessionData.educatorId, trackUserPresenceCB.bind(null, liveSessionData.educatorId));
                                 } else {
                                     $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                                 }
