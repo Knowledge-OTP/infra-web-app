@@ -8814,7 +8814,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     vm.isOffline = true;
                     vm.endSession = endSession;
                     vm.showSessionModal = showSessionModal;
-                    getLiveSessionStatus();
+                    initializeLiveSessionStatus();
 
                     $scope.$watch('vm.student', function (newStudent) {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
@@ -8825,7 +8825,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
                 };
 
-                function getLiveSessionStatus() {
+                function initializeLiveSessionStatus() {
                     LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
                         if (liveSessionData) {
                             liveSessionStateChanged(liveSessionData.status);

@@ -79,7 +79,7 @@
                     vm.isOffline = true;
                     vm.endSession = endSession;
                     vm.showSessionModal = showSessionModal;
-                    getLiveSessionStatus();
+                    initializeLiveSessionStatus();
 
                     $scope.$watch('vm.student', function (newStudent) {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
@@ -90,7 +90,7 @@
                     LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
                 };
 
-                function getLiveSessionStatus() {
+                function initializeLiveSessionStatus() {
                     LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
                         if (liveSessionData) {
                             liveSessionStateChanged(liveSessionData.status);
