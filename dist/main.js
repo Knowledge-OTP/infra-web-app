@@ -14126,9 +14126,8 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     'use strict';
 
     angular.module('znk.infra-web-app.tutorials').controller('TutorialsRoadmapController',
-        ["$translatePartialLoader", "tutorials", function ($translatePartialLoader, tutorials) {
+        ["tutorials", function (tutorials) {
             'ngInject';
-            $translatePartialLoader.addPart('tutorials');
             var vm = this;
             vm.tutorials = tutorials;
         }]
