@@ -7,7 +7,7 @@
             function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
                          PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
                          $translate, toggleAutoCallEnum, LiveSessionSrv, LiveSessionStatusEnum,
-                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, $timeout) {
+                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
                 'ngInject';
                 return {
                 templateUrl: 'components/activePanel/activePanel.template.html',
@@ -108,12 +108,11 @@
                     }
 
                     function trackUserPresenceCB(userId, newStatus) {
-                        $timeout(function () {
-                            scope.d.currentUserPresenceStatus = newStatus;
-                            scope.d.callBtnModel.isOffline = scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE;
-                            scope.d.callBtnModel.toggleAutoCall = null;
-                            scope.d.callBtnModel = angular.copy(scope.d.callBtnModel);
-                        });
+                        scope.d.currentUserPresenceStatus = newStatus;
+                        scope.d.callBtnModel = {
+                            isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
+                            receiverId: userId
+                        };
                     }
 
                     function listenToLiveSessionStatus(newLiveSessionStatus) {
@@ -213,6 +212,7 @@
                         },
                         toggleAutoCall: {},
                         shareScreenBtnsEnable: true,
+                        disableAllBtns: false,
                         isTeacher: isTeacher,
                         presenceStatusMap: PresenceService.userStatus,
                         endScreenSharing: endScreenSharing,
@@ -225,9 +225,15 @@
                         destroyTimer();
                     });
 
+                    function listenToCallsStatus(newCallsStatus) {
+                        scope.d.disableAllBtns = newCallsStatus && newCallsStatus.status === CallsStatusEnum.PENDING_CALL.enum;
+                    }
+
                     ScreenSharingSrv.registerToCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
 
                     LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
+
+                    CallsEventsSrv.registerToCurrUserCallStateChanges(listenToCallsStatus);
                 }
             };
         });
