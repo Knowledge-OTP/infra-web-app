@@ -5,9 +5,8 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         ngModelCtrl: '^ngModel'
     },
     controllerAs: 'vm',
-    controller: function ($translatePartialLoader, TutorialsSrv, $q, SubjectEnum) {
+    controller: function (TutorialsSrv, $q, SubjectEnum) {
         var vm = this;
-        $translatePartialLoader.addPart('tutorials');
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
         
