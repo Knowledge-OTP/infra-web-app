@@ -40,7 +40,9 @@
                             allProm.push(isTutorialAvailProm);
 
                             var getParentCategoryProm = CategoryService.getParentCategory(tutorial.categoryId).then(function (generalCategory) {
-                                tutorial.categoryName = generalCategory.name;
+                                if(generalCategory && generalCategory.name){
+                                    tutorial.categoryName = generalCategory.name;
+                                }
                             });
                             allProm.push(getParentCategoryProm);
                         });
