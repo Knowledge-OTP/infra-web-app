@@ -24,7 +24,7 @@
        translate="{{$ctrl.instructionsTranslateKey}}">
     </p>
 
-    <div class="btn-section">
+    <div ng-if="$ctrl.showBtn" class="btn-section">
         <md-button class="md-primary znk"
                    aria-label="{{'COMPLETE_EXERCISE.START' | translate}}"
                    md-no-ink
