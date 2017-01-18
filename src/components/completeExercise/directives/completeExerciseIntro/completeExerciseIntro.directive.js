@@ -24,8 +24,6 @@
 
                     this.exerciseTypeId = this.completeExerciseCtrl.exerciseDetails.exerciseTypeId;
 
-                    this.showBtn = this.exerciseContent.questions.length > 0;
-
                     this.goToQuestions = function () {
                         var exerciseResult = this.completeExerciseCtrl.getExerciseResult();
                         exerciseResult.seenIntro = true;

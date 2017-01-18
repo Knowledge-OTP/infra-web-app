@@ -1037,8 +1037,6 @@
 
                     this.exerciseTypeId = this.completeExerciseCtrl.exerciseDetails.exerciseTypeId;
 
-                    this.showBtn = this.exerciseContent.questions.length > 0;
-
                     this.goToQuestions = function () {
                         var exerciseResult = this.completeExerciseCtrl.getExerciseResult();
                         exerciseResult.seenIntro = true;
@@ -1111,6 +1109,8 @@
                     this.trustAsHtml = function (html) {
                         return $sce.trustAsHtml(html);
                     };
+
+                    this.showBtn = this.exerciseContent ? this.exerciseContent.questions.length > 0 : false;
 
                     this.goToQuestions = function(){
                         this.completeExerciseIntroCtrl.goToQuestions();
@@ -1500,7 +1500,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "       translate=\"{{$ctrl.instructionsTranslateKey}}\">\n" +
     "    </p>\n" +
     "\n" +
-    "    <div ng-if=\"$ctrl.showBtn\" class=\"btn-section\">\n" +
+    "    <div class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk\"\n" +
     "                   aria-label=\"{{'COMPLETE_EXERCISE.START' | translate}}\"\n" +
     "                   md-no-ink\n" +
@@ -1529,7 +1529,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"btn-section\">\n" +
+    "    <div ng-if=\"$ctrl.showBtn\" class=\"btn-section\">\n" +
     "        <md-button class=\"md-primary znk go-to-questions-btn\"\n" +
     "                   aria-label=\"{{'COMPLETE_EXERCISE.GO_QST' | translate}}\"\n" +
     "                   md-no-ink\n" +
