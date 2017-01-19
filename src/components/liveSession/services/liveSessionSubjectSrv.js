@@ -3,31 +3,31 @@
 
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', function (LiveSessionSubjectConst) {
-        var subjects = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
+        var topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
-        this.setLiveSessionSubjects = function(_subjects) {
-            if (angular.isArray(_subjects) && _subjects.length) {
-                subjects = _subjects;
+        this.setLiveSessionTopics = function(_topics) {
+            if (angular.isArray(_topics) && _topics.length) {
+                topics = _topics;
             }
         };
 
-        this.$get = function (UtilitySrv) {
+        this.$get = function (UtilitySrv, SessionSubjectEnum) {
             'ngInject';
 
             var LiveSessionSubjectSrv = {};
 
-            function _getLiveSessionSubjects() {
-                return subjects.map(function (subjectEnum) {
-                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, subjectEnum).toLowerCase();
+            function _getLiveSessionTopics() {
+                return topics.map(function (topicId) {
+                    var topicName = SessionSubjectEnum.getValByEnum(topicId);
                     return {
-                        id: subjectEnum,
-                        name: subjectName,
-                        iconName: 'liveSession-' + subjectName + '-icon'
+                        id: topicId,
+                        name: topicName,
+                        iconName: 'liveSession-' + topicName + '-icon'
                     };
                 });
             }
 
-            LiveSessionSubjectSrv.getLiveSessionSubjects = _getLiveSessionSubjects;
+            LiveSessionSubjectSrv.getLiveSessionTopics = _getLiveSessionTopics;
 
             return LiveSessionSubjectSrv;
         };

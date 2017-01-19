@@ -18,7 +18,7 @@
 
             PresenceServiceProvider.setAuthServiceName('AuthService');
 
-            LiveSessionSubjectSrvProvider.setLiveSessionSubjects( [0, 5] );
+            LiveSessionSubjectSrvProvider.setLiveSessionTopics( [0, 5] );
 
             znkAnalyticsSrvProvider.setEventsHandler(function () {
                 return {
