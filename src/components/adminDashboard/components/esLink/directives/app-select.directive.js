@@ -3,9 +3,9 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.adminDashboard').directive('appSelect', function () {
-
-
+    angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
+        function () {
+        'ngInject';
 
         var directive = {
             templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
@@ -52,7 +52,6 @@
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
             });
-
         }
 
         return directive;
