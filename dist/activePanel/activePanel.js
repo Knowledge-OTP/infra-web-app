@@ -361,7 +361,11 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                <md-button class=\"end-session-btn\"\n" +
     "                            aria-label=\"{{'ACTIVE_PANEL.END_SESSION' | translate}}\"\n" +
     "                            ng-click=\"d.endSession()\">\n" +
-    "                <span>{{'ACTIVE_PANEL.END_SESSION' | translate}}</span>\n" +
+    "                    <md-tooltip class=\"md-fab\">\n" +
+    "                        <div class=\"arrow-up\"></div>\n" +
+    "                        {{'ACTIVE_PANEL.END_SESSION' | translate}}\n" +
+    "                    </md-tooltip>\n" +
+    "                <span>{{'ACTIVE_PANEL.END_BTN' | translate}}</span>\n" +
     "                </md-button>\n" +
     "            </div>\n" +
     "        </div>\n" +

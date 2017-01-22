@@ -500,7 +500,8 @@
         "SHOW_TEACHER_SCREEN": "Show Teacher Screen",
         "END_SCREEN_SHARING": "End Screen Sharing",
         "SHARE_MY_SCREEN": "Share my screen",
-        "END_SESSION": "END"
+        "END_BTN": "END",
+        "END_SESSION": "End Session"
     },
     "LIVE_SESSION":{
         "START_SESSION":  "Start Session",
