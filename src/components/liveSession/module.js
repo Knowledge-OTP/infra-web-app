@@ -17,7 +17,7 @@
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
             'znk.infra.exerciseUtility',
-            'znk.infra-web-app.znkTooltip'
+            'znk.infra.znkTooltip'
         ])
         .config([
             'SvgIconSrvProvider',
