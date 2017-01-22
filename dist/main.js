@@ -8776,7 +8776,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             'znk.infra.svgIcon',
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
-            'znk.infra.exerciseUtility'
+            'znk.infra.exerciseUtility',
+            'znk.infra-web-app.znkTooltip'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -18146,7 +18147,18 @@ angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($te
             function () {
                 'ngInject';
                 return {
-                link: function() {}
+                link: function(scope, element) {
+                    console.log('scope: ', scope);
+                    console.log('element: ', element);
+
+                    var divElm = document.createElement('div');
+                    divElm.classList.add('arrow');
+
+                    var mdContent = angular.element(document.querySelector('.md-content'));
+                    console.log('mdContent: ', mdContent);
+
+                    mdContent.append(divElm);
+                }
             };
         });
 })(angular);

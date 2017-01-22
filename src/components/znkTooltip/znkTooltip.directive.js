@@ -14,7 +14,10 @@
                     var divElm = document.createElement('div');
                     divElm.classList.add('arrow');
 
-                    element.appendChild(divElm);
+                    var mdContent = angular.element(document.querySelector('.md-content'));
+                    console.log('mdContent: ', mdContent);
+
+                    mdContent.append(divElm);
                 }
             };
         });
