@@ -43,8 +43,7 @@
 "znk.infra-web-app.znkHeader",
 "znk.infra-web-app.znkSummary",
 "znk.infra-web-app.znkTimelineWebWrapper",
-"znk.infra-web-app.znkToast",
-"znk.infra-web-app.znkTooltip"
+"znk.infra-web-app.znkToast"
     ]);
 })(angular);
 
@@ -58,6 +57,7 @@
         'pascalprecht.translate',
         'znk.infra.screenSharing',
         'znk.infra.presence',
+        'znk.infra.znkTooltip',
         'znk.infra-web-app.liveSession'
     ]);
 })(angular);
@@ -378,10 +378,16 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                            <svg-icon ng-switch-when=\"true\"\n" +
     "                                      name=\"active-panel-track-student-icon\"\n" +
     "                                      title=\"{{d.translatedStrings.SHOW_STUDENT_SCREEN}}\">\n" +
+    "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                                    {{d.translatedStrings.SHOW_STUDENT_SCREEN}}\n" +
+    "                                </md-tooltip>\n" +
     "                            </svg-icon>\n" +
     "                            <svg-icon ng-switch-default\n" +
     "                                      name=\"active-panel-track-teacher-icon\"\n" +
     "                                      title=\"{{d.translatedStrings.SHOW_TEACHER_SCREEN}}\">\n" +
+    "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                                    {{d.translatedStrings.SHOW_TEACHER_SCREEN}}\n" +
+    "                                </md-tooltip>\n" +
     "                            </svg-icon>\n" +
     "                        </ng-switch>\n" +
     "                    </div>\n" +
@@ -392,6 +398,9 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                              name=\"active-panel-share-screen-icon\"\n" +
     "                              class=\"share-my-screen\"\n" +
     "                              title=\"{{d.translatedStrings.SHARE_MY_SCREEN}}\">\n" +
+    "                        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                            {{d.translatedStrings.SHARE_MY_SCREEN}}\n" +
+    "                        </md-tooltip>\n" +
     "                    </svg-icon>\n" +
     "                </div>\n" +
     "\n" +
@@ -401,6 +410,9 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                          ng-click=\"d.endScreenSharing()\"\n" +
     "                          name=\"active-panel-stop-sharing-icon\"\n" +
     "                          title=\"{{d.translatedStrings.END_SCREEN_SHARING}}\">\n" +
+    "                    <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                        {{d.translatedStrings.END_SCREEN_SHARING}}\n" +
+    "                    </md-tooltip>\n" +
     "                </svg-icon>\n" +
     "            </ng-switch>\n" +
     "\n" +
@@ -411,8 +423,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                <md-button class=\"end-session-btn\"\n" +
     "                            aria-label=\"{{'ACTIVE_PANEL.END_SESSION' | translate}}\"\n" +
     "                            ng-click=\"d.endSession()\">\n" +
-    "                    <md-tooltip class=\"md-fab\">\n" +
-    "                        <div class=\"arrow-up\"></div>\n" +
+    "                    <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "                        {{'ACTIVE_PANEL.END_SESSION' | translate}}\n" +
     "                    </md-tooltip>\n" +
     "                <span>{{'ACTIVE_PANEL.END_BTN' | translate}}</span>\n" +
@@ -8777,7 +8788,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
             'znk.infra.exerciseUtility',
-            'znk.infra-web-app.znkTooltip'
+            'znk.infra.znkTooltip'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -9646,8 +9657,7 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "           ng-click=\"!vm.isLiveSessionActive ? vm.showSessionModal() : vm.endSession()\">\n" +
     "\n" +
     "    <span ng-if=\"!vm.isLiveSessionActive\">\n" +
-    "        <md-tooltip class=\"md-fab znk-tooltip\" md-direction=\"bottom\"  md-visible=\"true\">\n" +
-    "            <div class=\"arrow\"></div>\n" +
+    "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "            {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
     "        </md-tooltip>\n" +
     "        {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
@@ -18126,43 +18136,4 @@ angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($te
     "\n" +
     "</md-toast>\n" +
     "");
-}]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkTooltip', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'ngSanitize'
-    ]);
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkTooltip')
-        .directive('znkTooltip',
-            function () {
-                'ngInject';
-                return {
-                link: function(scope, element) {
-                    console.log('scope: ', scope);
-                    console.log('element: ', element);
-
-                    var divElm = document.createElement('div');
-                    divElm.classList.add('arrow');
-
-                    var mdContent = angular.element(document.querySelector('.md-content'));
-                    console.log('mdContent: ', mdContent);
-
-                    mdContent.append(divElm);
-                }
-            };
-        });
-})(angular);
-
-angular.module('znk.infra-web-app.znkTooltip').run(['$templateCache', function($templateCache) {
-
 }]);

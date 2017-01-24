@@ -17,7 +17,7 @@
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
             'znk.infra.exerciseUtility',
-            'znk.infra-web-app.znkTooltip'
+            'znk.infra.znkTooltip'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -886,8 +886,7 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "           ng-click=\"!vm.isLiveSessionActive ? vm.showSessionModal() : vm.endSession()\">\n" +
     "\n" +
     "    <span ng-if=\"!vm.isLiveSessionActive\">\n" +
-    "        <md-tooltip class=\"md-fab znk-tooltip\" md-direction=\"bottom\"  md-visible=\"true\">\n" +
-    "            <div class=\"arrow\"></div>\n" +
+    "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "            {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
     "        </md-tooltip>\n" +
     "        {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
