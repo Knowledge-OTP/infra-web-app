@@ -4,18 +4,20 @@
     angular.module('znk.infra-web-app.liveSession',
         [
             'ngMaterial',
+            'znk.infra.znkSessionData',
             'znk.infra.popUp',
             'pascalprecht.translate',
             'znk.infra.auth',
             'znk.infra.userContext',
+            'znk.infra.user',
             'znk.infra.utility',
             'znk.infra.analytics',
             'znk.infra.general',
-            'znk.infra.user',
             'znk.infra.svgIcon',
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
-            'znk.infra.exerciseUtility'
+            'znk.infra.exerciseUtility',
+            'znk.infra.znkTooltip'
         ])
         .config([
             'SvgIconSrvProvider',

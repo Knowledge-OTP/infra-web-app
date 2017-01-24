@@ -4,18 +4,20 @@
     angular.module('znk.infra-web-app.liveSession',
         [
             'ngMaterial',
+            'znk.infra.znkSessionData',
             'znk.infra.popUp',
             'pascalprecht.translate',
             'znk.infra.auth',
             'znk.infra.userContext',
+            'znk.infra.user',
             'znk.infra.utility',
             'znk.infra.analytics',
             'znk.infra.general',
-            'znk.infra.user',
             'znk.infra.svgIcon',
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
-            'znk.infra.exerciseUtility'
+            'znk.infra.exerciseUtility',
+            'znk.infra.znkTooltip'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -134,7 +136,7 @@
                 var vm = this;
 
                 this.$onInit = function() {
-                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
+                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
                     vm.closeModal = $mdDialog.cancel;
                     vm.startSession = startSession;
                 };
@@ -683,31 +685,31 @@
 
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
-        var subjects = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
+        var topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
-        this.setLiveSessionSubjects = function(_subjects) {
-            if (angular.isArray(_subjects) && _subjects.length) {
-                subjects = _subjects;
+        this.setLiveSessionTopics = function(_topics) {
+            if (angular.isArray(_topics) && _topics.length) {
+                topics = _topics;
             }
         };
 
-        this.$get = ["UtilitySrv", function (UtilitySrv) {
+        this.$get = ["UtilitySrv", "SessionSubjectEnum", function (UtilitySrv, SessionSubjectEnum) {
             'ngInject';
 
             var LiveSessionSubjectSrv = {};
 
-            function _getLiveSessionSubjects() {
-                return subjects.map(function (subjectEnum) {
-                    var subjectName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, subjectEnum).toLowerCase();
+            function _getLiveSessionTopics() {
+                return topics.map(function (topicId) {
+                    var topicName = SessionSubjectEnum.getValByEnum(topicId);
                     return {
-                        id: subjectEnum,
-                        name: subjectName,
-                        iconName: 'liveSession-' + subjectName + '-icon'
+                        id: topicId,
+                        name: topicName,
+                        iconName: 'liveSession-' + topicName + '-icon'
                     };
                 });
             }
 
-            LiveSessionSubjectSrv.getLiveSessionSubjects = _getLiveSessionSubjects;
+            LiveSessionSubjectSrv.getLiveSessionTopics = _getLiveSessionTopics;
 
             return LiveSessionSubjectSrv;
         }];
@@ -882,8 +884,21 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
     "           ng-class=\"{'offline': vm.isOffline, 'end-session': vm.isLiveSessionActive}\"\n" +
     "           ng-click=\"!vm.isLiveSessionActive ? vm.showSessionModal() : vm.endSession()\">\n" +
-    "    <span ng-if=\"!vm.isLiveSessionActive\">{{'LIVE_SESSION.START_SESSION' | translate}}</span>\n" +
-    "    <span ng-if=\"vm.isLiveSessionActive\">{{'LIVE_SESSION.END_SESSION' | translate}}</span>\n" +
+    "\n" +
+    "    <span ng-if=\"!vm.isLiveSessionActive\">\n" +
+    "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "            {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
+    "        </md-tooltip>\n" +
+    "        {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
+    "    </span>\n" +
+    "\n" +
+    "    <span ng-if=\"vm.isLiveSessionActive\" title=\"{{'LIVE_SESSION.END_SESSION' | translate}}\">\n" +
+    "        <md-tooltip class=\"md-fab\">\n" +
+    "                        <div class=\"arrow-up\"></div>\n" +
+    "                        {{'LIVE_SESSION.END_SESSION' | translate}}\n" +
+    "        </md-tooltip>\n" +
+    "        {{'LIVE_SESSION.END_SESSION' | translate}}\n" +
+    "    </span>\n" +
     "</md-button>\n" +
     "\n" +
     "");

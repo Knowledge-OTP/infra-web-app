@@ -14,7 +14,7 @@
                 var vm = this;
 
                 this.$onInit = function() {
-                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionSubjects();
+                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
                     vm.closeModal = $mdDialog.cancel;
                     vm.startSession = startSession;
                 };

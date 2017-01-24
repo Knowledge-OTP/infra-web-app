@@ -31,50 +31,6 @@ md-input-container:not(.md-input-invalid) .md-input {
 md-input-container:not(.md-input-invalid) label {
   color: #161616; }
 
-md-tooltip {
-  opacity: 0;
-  width: auto;
-  height: 87px;
-  background: white;
-  padding: 0 5px; }
-  md-tooltip .md-content {
-    height: auto;
-    text-align: center;
-    background: white;
-    white-space: normal; }
-    md-tooltip .md-content.md-show {
-      opacity: 1;
-      transform: none;
-      transition: none;
-      pointer-events: auto;
-      will-change: auto; }
-    md-tooltip .md-content.md-show-remove {
-      transition: none; }
-      md-tooltip .md-content.md-show-remove.md-show-remove-active {
-        transform: none;
-        opacity: 0; }
-    md-tooltip .md-content .top-text {
-      margin-top: 22px;
-      margin-bottom: 12px;
-      font-size: 16px;
-      color: #4f4d4d;
-      font-family: Lato;
-      font-weight: 400; }
-    md-tooltip .md-content .bottom-text {
-      line-height: 12px;
-      font-size: 12px;
-      color: #4f4d4d;
-      font-family: Lato;
-      font-weight: 300; }
-  md-tooltip.md-hide {
-    transition: opacity 0.4s;
-    opacity: 0; }
-  md-tooltip.md-show {
-    opacity: 1;
-    transition: opacity 0.4s;
-    pointer-events: auto;
-    will-change: opacity; }
-
 md-dialog .close-popup {
   width: 16px; }
 
