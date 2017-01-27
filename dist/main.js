@@ -811,9 +811,9 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.adminDashboard').directive('appSelect', function () {
-
-
+    angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
+        function () {
+        'ngInject';
 
         var directive = {
             templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
@@ -860,7 +860,6 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
             $scope.$on('$mdMenuClose', function () {
                 self.expandIcon = 'expand_more';
             });
-
         }
 
         return directive;
@@ -1080,6 +1079,58 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                 }
             }]
         );
+})(angular);
+
+/* eslint new-cap: 0 */
+
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.adminDashboard').directive('adminSearch',
+        function () {
+            'ngInject';
+
+            var directive = {
+                templateUrl: 'components/adminDashboard/directives/admin-search.template.html',
+                restrict: 'EA',
+                controllerAs: 'vm',
+                controller: AdminSearchController,
+                scope: {
+                    searchQuery: "=",
+                    searchResults: "=",
+                    state: "=",
+                    data: "=",
+                    key: "@",
+                    placeholder: "@",
+                    minlength: "@"
+                },
+                bindToController: true,
+                link: linkFunc
+            };
+
+            function linkFunc(scope, elm, attr, ctrl) {
+                var currentElement = angular.element(elm);
+                var input = currentElement.find('input');
+                input.on('input', function (e) {
+                    if (e.target.value === "") {
+                        scope.$apply(function () {
+                            ctrl.data = [];
+                            ctrl.state[ctrl.key].initial = true;
+                        });
+                    }
+
+                });
+            }
+
+            function AdminSearchController() {
+                var self = this;
+                self.minlength = self.minlength || '3';
+
+            }
+
+            return directive;
+        });
+
 })(angular);
 
 (function (angular) {
@@ -1396,21 +1447,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "    <div class=\"admin-main-container-overlay\">\n" +
     "        <div class=\"admin-search-container\">\n" +
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-    "            <div class=\"admin-search-pane\">\n" +
-    "                <div class=\"search-wrap\">\n" +
-    "                    <div class=\"znk-input-group\">\n" +
-    "                        <input type=\"search\"\n" +
-    "                               minlength=\"3\"\n" +
-    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
-    "                               name=\"search-box\"\n" +
-    "                               ng-model=\"vm.educatorSearchQuery\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button class=\"admin-search-btn\" ng-click=\"vm.getEducatorsSearchResults(vm.educatorSearchQuery)\"\n" +
-    "                        ng-disabled=\"!vm.educatorSearchQuery\" translate=\".SEARCH\">\n" +
-    "                </button>\n" +
-    "\n" +
-    "            </div>\n" +
+    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
     "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
     "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
     "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
@@ -1472,21 +1509,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "    <div class=\"admin-main-container-overlay\">\n" +
     "        <div class=\"admin-search-container\">\n" +
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_STUDENT\"></div>\n" +
-    "            <div class=\"admin-search-pane\">\n" +
-    "                <div class=\"search-wrap\">\n" +
-    "                    <div class=\"znk-input-group\">\n" +
-    "                        <input type=\"search\"\n" +
-    "                               minlength=\"3\"\n" +
-    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}\"\n" +
-    "                               name=\"search-box\"\n" +
-    "                               ng-model=\"vm.studentsSearchQuery\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button class=\"admin-search-btn\" ng-click=\"vm.getStudentsSearchResults(vm.studentsSearchQuery)\"\n" +
-    "                        ng-disabled=\"!vm.studentsSearchQuery\" translate=\".SEARCH\">\n" +
-    "                </button>\n" +
-    "\n" +
-    "            </div>\n" +
+    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}\" data=\"vm.gridStudentsOptions.data\" minlength=\"3\" key=\"student\" state=\"vm.uiGridState\" search-query=\"vm.studentsSearchQuery\" search-results=\"vm.getStudentsSearchResults\"></div>\n" +
     "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
     "            <div ui-grid-selection ui-grid=\"vm.gridStudentsOptions\" class=\"admin-grid\">\n" +
     "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.student.initial\">\n" +
@@ -1505,21 +1528,8 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"admin-search-container\">\n" +
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-    "            <div class=\"admin-search-pane\">\n" +
-    "                <div class=\"search-wrap\">\n" +
-    "                    <div class=\"znk-input-group\">\n" +
-    "                        <input type=\"search\"\n" +
-    "                               minlength=\"3\"\n" +
-    "                               placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
-    "                               name=\"search-box\"\n" +
-    "                               ng-model=\"vm.educatorSearchQuery\">\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <button class=\"admin-search-btn\" ng-click=\"vm.getEducatorsSearchResults(vm.educatorSearchQuery)\"\n" +
-    "                        ng-disabled=\"!vm.educatorSearchQuery\" translate=\".SEARCH\">\n" +
-    "                </button>\n" +
+    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
     "\n" +
-    "            </div>\n" +
     "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
     "            <div ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\">\n" +
     "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
@@ -1561,6 +1571,23 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "            </button>\n" +
     "        </div>\n" +
     "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/adminDashboard/directives/admin-search.template.html",
+    "<div class=\"admin-search-pane\">\n" +
+    "    <div class=\"search-wrap\">\n" +
+    "        <div class=\"znk-input-group\">\n" +
+    "            <input type=\"search\"\n" +
+    "                   minlength=\"{{::vm.minlength}}\"\n" +
+    "                   placeholder=\"{{::vm.placeholder}}\"\n" +
+    "                   name=\"search-box\"\n" +
+    "                   ng-model=\"vm.searchQuery\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <button class=\"admin-search-btn\" ng-click=\"vm.searchResults(vm.searchQuery)\"\n" +
+    "            ng-disabled=\"!vm.searchQuery\" translate=\".SEARCH\">\n" +
+    "    </button>\n" +
+    "\n" +
     "</div>\n" +
     "");
 }]);

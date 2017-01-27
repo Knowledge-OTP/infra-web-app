@@ -29,7 +29,7 @@
                 var currentElement = angular.element(elm);
                 var input = currentElement.find('input');
                 input.on('input', function (e) {
-                    if (e.target.value == "") {
+                    if (e.target.value === "") {
                         scope.$apply(function () {
                             ctrl.data = [];
                             ctrl.state[ctrl.key].initial = true;
