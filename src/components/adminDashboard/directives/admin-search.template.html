@@ -1,0 +1,15 @@
+<div class="admin-search-pane">
+    <div class="search-wrap">
+        <div class="znk-input-group">
+            <input type="search"
+                   minlength="{{::vm.minlength}}"
+                   placeholder="{{::vm.placeholder}}"
+                   name="search-box"
+                   ng-model="vm.searchQuery">
+        </div>
+    </div>
+    <button class="admin-search-btn" ng-click="vm.searchResults(vm.searchQuery)"
+            ng-disabled="!vm.searchQuery" translate=".SEARCH">
+    </button>
+
+</div>
