@@ -337,7 +337,7 @@
     angular.module('znk.infra-web-app.adminDashboard')
         .component('esLink', {
             bindings: {},
-            templateUrl:  'components/adminDashboard/components/esLink/templates/esLink.template.html',
+            templateUrl: 'components/adminDashboard/components/esLink/templates/esLink.template.html',
             controllerAs: 'vm',
             controller: ["$filter", "AdminSearchService", "ESLinkService", "$log", "ZnkToastSrv", function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
                 'ngInject';
@@ -386,6 +386,7 @@
 
                 self.link = function () {
                     self.startLoader = true;
+                    self.fillLoader = undefined;
                     if (!(self.selectedEducator && self.selectedStudent)) {
                         $log.error("Must select student and educator");
                         return;
@@ -411,12 +412,13 @@
 
                 function _linkError(err) {
                     _endLoading();
-                    var msg = err;
+                    var msg = err.data.error;
                     _showNotification('error', msg);
                 }
 
                 function _endLoading() {
-                    self.startLoader = self.fillLoader = false;
+                    self.fillLoader = false;
+                    self.startLoader = false;
                 }
 
                 function _educatorsSearchResults(data) {
@@ -1021,7 +1023,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"btn-wrap\">\n" +
     "            <button element-loader\n" +
-    "                    ng-disabled=\"!(vm.selectedStudent || vm.selectedEducator)\"\n" +
+    "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
     "                    fill-loader=\"vm.fillLoader\"\n" +
     "                    show-loader=\"vm.startLoader\"\n" +
     "                    bg-loader=\"'#037684'\"\n" +
