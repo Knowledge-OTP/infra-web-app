@@ -408,6 +408,10 @@
                     _endLoading();
                     var msg = translateFilter('ADMIN.ESLINK.LINK_SUCCEEDED');
                     _showNotification('success', msg);
+                    self.selectedStudent = null;
+                    self.selectedEducator = null;
+                    self.studentsSearchQuery = "";
+                    self.educatorSearchQuery = "";
                 }
 
                 function _linkError(err) {
