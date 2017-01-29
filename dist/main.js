@@ -9497,14 +9497,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             }
         };
 
-        this.$get = ["UtilitySrv", "SessionSubjectEnum", function (UtilitySrv, SessionSubjectEnum) {
+        this.$get = ["UtilitySrv", function (UtilitySrv) {
             'ngInject';
 
             var LiveSessionSubjectSrv = {};
 
             function _getLiveSessionTopics() {
                 return topics.map(function (topicId) {
-                    var topicName = SessionSubjectEnum.getValByEnum(topicId);
+                    var topicName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, topicId).toLowerCase();
                     return {
                         id: topicId,
                         name: topicName,
