@@ -67,13 +67,12 @@
             $delegate.userIdleTime = 30;
             $delegate.idleTimeout = 0;
             $delegate.idleKeepalive = 2;
-            $delegate.plivoUsername = "ZinkerzDev160731091034";
-            $delegate.plivoPassword = "zinkerz$9999";
+            $delegate.elasticSearchIndex = "firebase_dev",
             $delegate.elasticSearch = {
-                "host": "znk-elastic-dev4891.cloudapp.net:9200",
-                "apiVersion": "5.x",
-                "log": "trace"
-            }
+                    "host": "https://search-zinkerz-6dswvvkm2zqqypw2aui6yhpfpa.us-east-1.es.amazonaws.com",
+                    "apiVersion": "5.x",
+                    "log": "trace"
+                }
 
             return $delegate;
         })
@@ -81,7 +80,7 @@
             'ngInject';
 
             $delegate.getCurrUid = function () {
-                return 'e6a83840-01cc-4e15-af9b-26d9dbbd87d7';
+                return 'a844bf16-97f2-449a-a996-bbf229640a01';
             };
             return $delegate;
         })
@@ -89,7 +88,7 @@
             'ngInject';
 
             $delegate.getAuth = function () {
-                return {uid: 'cf656635-b44c-4fcc-82ef-72fe566d5540'};
+                return {uid: 'a844bf16-97f2-449a-a996-bbf229640a01'};
             };
             return $delegate;
         })
