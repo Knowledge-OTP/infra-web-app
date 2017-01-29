@@ -178,29 +178,28 @@
                     }
 
                     function handelAutocall(isOffline, receiverId, liveSessionData) {
-                        if (liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum){
-                            scope.d.callBtnModel = {
-                                isOffline: isOffline,
-                                receiverId: receiverId,
-                                toggleAutoCall: toggleAutoCallEnum.DISABLE.enum
-                            };
+                        scope.d.callBtnModel = {
+                            isOffline: isOffline,
+                            receiverId: receiverId,
+                            toggleAutoCall: toggleAutoCallEnum.DISABLE.enum
+                        };
 
+                        if (liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum){
                             // Get saved data from sessionStorage
-                            var autoCallData = sessionStorage.getItem('liveSessionAutoCall');
+                            var autoCallData = $window.sessionStorage.getItem('liveSessionAutoCall');
                             autoCallData = JSON.parse(autoCallData);
                             if (!autoCallData || autoCallData[liveSessionData.guid] !== 'disable') {
 
-                                scope.d.callBtnModel.toggleAutoCall = (liveSessionData.status === LiveSessionStatusEnum.ENDED.enum) ?
-                                    toggleAutoCallEnum.DISABLE.enum : toggleAutoCallEnum.ACTIVATE.enum;
+                                scope.d.callBtnModel.toggleAutoCall = toggleAutoCallEnum.ACTIVATE.enum;
 
                                 var dataToSave = {};
                                 dataToSave[liveSessionData.guid] = 'disable';
                                 // Save data to sessionStorage
-                                sessionStorage.setItem('liveSessionAutoCall', JSON.stringify(dataToSave));
+                                $window.sessionStorage.setItem('liveSessionAutoCall', JSON.stringify(dataToSave));
                             }
                         } else if (liveSessionData.status === LiveSessionStatusEnum.ENDED.enum) {
                             // Remove saved data from sessionStorage
-                            sessionStorage.removeItem('liveSessionAutoCall');
+                            $window.sessionStorage.removeItem('liveSessionAutoCall');
                         }
 
                     }
