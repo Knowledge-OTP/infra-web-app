@@ -95,8 +95,8 @@
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
                 translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
-                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.REJECT');
-                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.ACCEPT');
+                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.EXTEND');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
                     var popUpInstance = PopUpSrv.warning(
                         translations.title,
