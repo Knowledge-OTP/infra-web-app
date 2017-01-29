@@ -51,7 +51,7 @@
 
         <div class="btn-wrap">
             <button element-loader
-                    ng-disabled="!(vm.selectedStudent || vm.selectedEducator)"
+                    ng-disabled="!(vm.selectedStudent && vm.selectedEducator)"
                     fill-loader="vm.fillLoader"
                     show-loader="vm.startLoader"
                     bg-loader="'#037684'"
