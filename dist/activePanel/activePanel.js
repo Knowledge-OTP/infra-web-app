@@ -177,6 +177,34 @@
                         }
                     }
 
+                    function handelAutocall(isOffline, receiverId, liveSessionData) {
+                        if (liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum){
+                            scope.d.callBtnModel = {
+                                isOffline: isOffline,
+                                receiverId: receiverId,
+                                toggleAutoCall: toggleAutoCallEnum.DISABLE.enum
+                            };
+
+                            // Get saved data from sessionStorage
+                            var autoCallData = sessionStorage.getItem('liveSessionAutoCall');
+                            autoCallData = JSON.parse(autoCallData);
+                            if (!autoCallData || autoCallData[liveSessionData.guid] !== 'disable') {
+
+                                scope.d.callBtnModel.toggleAutoCall = (liveSessionData.status === LiveSessionStatusEnum.ENDED.enum) ?
+                                    toggleAutoCallEnum.DISABLE.enum : toggleAutoCallEnum.ACTIVATE.enum;
+
+                                var dataToSave = {};
+                                dataToSave[liveSessionData.guid] = 'disable';
+                                // Save data to sessionStorage
+                                sessionStorage.setItem('liveSessionAutoCall', JSON.stringify(dataToSave));
+                            }
+                        } else if (liveSessionData.status === LiveSessionStatusEnum.ENDED.enum) {
+                            // Remove saved data from sessionStorage
+                            sessionStorage.removeItem('liveSessionAutoCall');
+                        }
+
+                    }
+
                     function studentOrTeacherContextChange(uid, liveSessionData) {
                         receiverId = uid;
                         var currentUserStatus = PresenceService.getCurrentUserStatus(receiverId);
@@ -189,12 +217,7 @@
                             scope.d.currentUserPresenceStatus = res[0];
                             isOffline = scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE;
                             scope.d.calleeName = (res[1]) ? (res[1]) : '';
-                            scope.d.callBtnModel = {
-                                isOffline: isOffline,
-                                receiverId: uid,
-                                toggleAutoCall: (liveSessionData.status === LiveSessionStatusEnum.ENDED.enum) ?
-                                    toggleAutoCallEnum.DISABLE.enum : toggleAutoCallEnum.ACTIVATE.enum
-                            };
+                            handelAutocall(isOffline, receiverId, liveSessionData);
                         }).catch(function (err) {
                             $log.debug('error caught at listenToStudentOrTeacherContextChange', err);
                         });
