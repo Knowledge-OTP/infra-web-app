@@ -17776,7 +17776,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
 
             // options
             var optionsPerDevice = {
-                width: 705,
+                width: 685,
                 height: 150,
                 distance: 90,
                 upOrDown: 100,
