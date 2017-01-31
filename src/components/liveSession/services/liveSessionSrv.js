@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
         function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval) {
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
             'ngInject';
 
             var _this = this;
@@ -36,6 +36,15 @@
                 return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
                     liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
                     return liveSessionData.$save();
+                });
+            };
+
+            this.makeAutoCall = function (receiverId) {
+                CallsSrv.callsStateChanged(receiverId).then(function (data) {
+                    $log.debug('_makeAutoCall: success in callsStateChanged, data: ', data);
+                }).catch(function (err) {
+                    $log.error('_makeAutoCall: error in callsStateChanged, err: ' + err);
+                    CallsErrorSrv.showErrorModal(err);
                 });
             };
 

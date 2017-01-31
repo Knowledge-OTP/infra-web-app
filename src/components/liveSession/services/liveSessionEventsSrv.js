@@ -26,20 +26,15 @@
                         switch (liveSessionData.status) {
                             case LiveSessionStatusEnum.PENDING_STUDENT.enum:
                                 if (liveSessionData.studentId !== currUid) {
-                                    return;
+                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
-
-                                LiveSessionUiSrv.showLiveSessionToast();
-                                LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                break;
-                            case LiveSessionStatusEnum.PENDING_EDUCATOR.enum:
-                                if (liveSessionData.educatorId !== currUid) {
-                                    return;
-                                }
-
-                                LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                                 break;
                             case LiveSessionStatusEnum.CONFIRMED.enum:
+                                if (liveSessionData.studentId === currUid) {
+                                    LiveSessionUiSrv.showLiveSessionToast();
+                                }
+
                                 var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
 
                                 if (liveSessionData.studentId === currUid) {
