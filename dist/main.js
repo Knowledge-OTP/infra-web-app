@@ -78,7 +78,6 @@
                 scope: {},
                 link: function(scope, element) {
                     var receiverId,
-                        isOffline,
                         durationToDisplay,
                         timerInterval,
                         liveSessionData,
@@ -188,10 +187,8 @@
                                 }
 
                                 if (isTeacher) {
-                                    studentOrTeacherContextChange(liveSessionData.studentId, liveSessionData);
                                     PresenceService.startTrackUserPresence(liveSessionData.studentId, trackUserPresenceCB.bind(null, liveSessionData.studentId));
                                 } else if (isStudent) {
-                                    studentOrTeacherContextChange(liveSessionData.educatorId, liveSessionData);
                                     PresenceService.startTrackUserPresence(liveSessionData.educatorId, trackUserPresenceCB.bind(null, liveSessionData.educatorId));
                                 } else {
                                     $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
@@ -224,52 +221,6 @@
                                 scope.d.shareScreenBtnsEnable = true;
                             }
                         }
-                    }
-
-                    function handelAutocall(isOffline, receiverId, liveSessionData) {
-                        scope.d.callBtnModel = {
-                            isOffline: isOffline,
-                            receiverId: receiverId,
-                            toggleAutoCall: toggleAutoCallEnum.DISABLE.enum
-                        };
-
-                        if (liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum){
-                            // Get saved data from sessionStorage
-                            var autoCallData = $window.sessionStorage.getItem('liveSessionAutoCall');
-                            autoCallData = JSON.parse(autoCallData);
-                            if (!autoCallData || autoCallData[liveSessionData.guid] !== 'disable') {
-
-                                scope.d.callBtnModel.toggleAutoCall = toggleAutoCallEnum.ACTIVATE.enum;
-
-                                var dataToSave = {};
-                                dataToSave[liveSessionData.guid] = 'disable';
-                                // Save data to sessionStorage
-                                $window.sessionStorage.setItem('liveSessionAutoCall', JSON.stringify(dataToSave));
-                            }
-                        } else if (liveSessionData.status === LiveSessionStatusEnum.ENDED.enum) {
-                            // Remove saved data from sessionStorage
-                            $window.sessionStorage.removeItem('liveSessionAutoCall');
-                        }
-
-                    }
-
-                    function studentOrTeacherContextChange(uid, liveSessionData) {
-                        receiverId = uid;
-                        var currentUserStatus = PresenceService.getCurrentUserStatus(receiverId);
-                        var CalleeName = CallsUiSrv.getCalleeName(receiverId);
-                        var promsArr = [
-                            currentUserStatus,
-                            CalleeName
-                        ];
-                        $q.all(promsArr).then(function (res) {
-                            scope.d.currentUserPresenceStatus = res[0];
-                            isOffline = scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE;
-                            scope.d.calleeName = (res[1]) ? (res[1]) : '';
-                            handelAutocall(isOffline, receiverId, liveSessionData);
-                        }).catch(function (err) {
-                            $log.debug('error caught at listenToStudentOrTeacherContextChange', err);
-                        });
-                        $log.debug('student or teacher context changed: ', receiverId);
                     }
 
                     function viewOtherUserScreen() {
@@ -8843,7 +8794,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
             'znk.infra.exerciseUtility',
-            'znk.infra.znkTooltip'
+            'znk.infra.znkTooltip',
+            'znk.infra.calls'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -9104,20 +9056,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         switch (liveSessionData.status) {
                             case LiveSessionStatusEnum.PENDING_STUDENT.enum:
                                 if (liveSessionData.studentId !== currUid) {
-                                    return;
+                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
-
-                                LiveSessionUiSrv.showLiveSessionToast();
-                                LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                break;
-                            case LiveSessionStatusEnum.PENDING_EDUCATOR.enum:
-                                if (liveSessionData.educatorId !== currUid) {
-                                    return;
-                                }
-
-                                LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                                 break;
                             case LiveSessionStatusEnum.CONFIRMED.enum:
+                                if (liveSessionData.studentId === currUid) {
+                                    LiveSessionUiSrv.showLiveSessionToast();
+                                }
+
                                 var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
 
                                 if (liveSessionData.studentId === currUid) {
@@ -9184,8 +9131,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
-        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval) {
+        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
             'ngInject';
 
             var _this = this;
@@ -9218,6 +9165,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
                     liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
                     return liveSessionData.$save();
+                });
+            };
+
+            this.makeAutoCall = function (receiverId) {
+                CallsSrv.callsStateChanged(receiverId).then(function (data) {
+                    $log.debug('_makeAutoCall: success in callsStateChanged, data: ', data);
+                }).catch(function (err) {
+                    $log.error('_makeAutoCall: error in callsStateChanged, err: ' + err);
+                    CallsErrorSrv.showErrorModal(err);
                 });
             };
 
