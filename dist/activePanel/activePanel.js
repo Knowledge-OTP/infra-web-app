@@ -28,8 +28,7 @@
                 templateUrl: 'components/activePanel/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
-                    var receiverId,
-                        durationToDisplay,
+                    var durationToDisplay,
                         timerInterval,
                         liveSessionData,
                         liveSessionStatus = 0,
@@ -123,10 +122,10 @@
 
                     function trackUserPresenceCB(userId, newStatus) {
                         scope.d.currentUserPresenceStatus = newStatus;
-                        scope.d.callBtnModel = {
-                            isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
-                            receiverId: userId
-                        };
+                        // scope.d.callBtnModel = {
+                        //     isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
+                        //     receiverId: userId
+                        // };
                     }
 
                     function listenToLiveSessionStatus(newLiveSessionStatus) {
@@ -175,21 +174,21 @@
                     }
 
                     function viewOtherUserScreen() {
-                        var userData = {
-                            isTeacher: !scope.d.isTeacher,
-                            uid: receiverId
+                        var sharerData = {
+                            isTeacher: !isTeacher,
+                            uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
                         };
-                        $log.debug('viewOtherUserScreen: ', userData);
-                        ScreenSharingSrv.viewOtherUserScreen(userData);
+                        $log.debug('viewOtherUserScreen: ', sharerData);
+                        ScreenSharingSrv.viewOtherUserScreen(sharerData);
                     }
 
                     function shareMyScreen() {
-                        var userData = {
-                            isTeacher: !scope.d.isTeacher,
-                            uid: receiverId
+                        var viewerData = {
+                            isTeacher: !isTeacher,
+                            uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
                         };
-                        $log.debug('shareMyScreen: ', userData);
-                        ScreenSharingSrv.shareMyScreen(userData);
+                        $log.debug('shareMyScreen: ', viewerData);
+                        ScreenSharingSrv.shareMyScreen(viewerData);
                     }
 
 

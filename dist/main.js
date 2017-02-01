@@ -77,8 +77,7 @@
                 templateUrl: 'components/activePanel/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
-                    var receiverId,
-                        durationToDisplay,
+                    var durationToDisplay,
                         timerInterval,
                         liveSessionData,
                         liveSessionStatus = 0,
@@ -172,10 +171,10 @@
 
                     function trackUserPresenceCB(userId, newStatus) {
                         scope.d.currentUserPresenceStatus = newStatus;
-                        scope.d.callBtnModel = {
-                            isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
-                            receiverId: userId
-                        };
+                        // scope.d.callBtnModel = {
+                        //     isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
+                        //     receiverId: userId
+                        // };
                     }
 
                     function listenToLiveSessionStatus(newLiveSessionStatus) {
@@ -224,21 +223,21 @@
                     }
 
                     function viewOtherUserScreen() {
-                        var userData = {
-                            isTeacher: !scope.d.isTeacher,
-                            uid: receiverId
+                        var sharerData = {
+                            isTeacher: !isTeacher,
+                            uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
                         };
-                        $log.debug('viewOtherUserScreen: ', userData);
-                        ScreenSharingSrv.viewOtherUserScreen(userData);
+                        $log.debug('viewOtherUserScreen: ', sharerData);
+                        ScreenSharingSrv.viewOtherUserScreen(sharerData);
                     }
 
                     function shareMyScreen() {
-                        var userData = {
-                            isTeacher: !scope.d.isTeacher,
-                            uid: receiverId
+                        var viewerData = {
+                            isTeacher: !isTeacher,
+                            uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
                         };
-                        $log.debug('shareMyScreen: ', userData);
-                        ScreenSharingSrv.shareMyScreen(userData);
+                        $log.debug('shareMyScreen: ', viewerData);
+                        ScreenSharingSrv.shareMyScreen(viewerData);
                     }
 
 
@@ -9081,6 +9080,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                                 break;
                             case LiveSessionStatusEnum.ENDED.enum:
+                                LiveSessionUiSrv.showEndSessionPopup();
+                                LiveSessionSrv._destroyCheckDurationInterval();
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                                 break;
                             default:
@@ -9190,7 +9191,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     data.liveSessionData.endTime = _getRoundTime();
                     data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
                     dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
-                    _destroyCheckDurationInterval();
 
                     data.currUidLiveSessionRequests[data.liveSessionData.guid] = false;
                     var activePath = data.currUidLiveSessionRequests.$$path;
@@ -9282,8 +9282,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 }
 
                 activeLiveSessionDataFromAdapter = newLiveSessionData;
-                _checkSessionDuration(newLiveSessionData);
+                _checkSessionDuration();
                 _invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
+            };
+
+            this._destroyCheckDurationInterval = function() {
+                $interval.cancel(liveSessionInterval.interval);
+                liveSessionInterval = liveSessionInterval.isSessionAlertShown ? liveSessionInterval : {};
             };
 
 
@@ -9384,7 +9389,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             duration: null,
                             sessionSubject: educatorData.sessionSubject.id
                         };
-                        _checkSessionDuration(newLiveSessionData);
+
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
 
                         dataToSave[data.newLiveSessionData.$$path] = data.newLiveSessionData;
@@ -9425,20 +9430,23 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 });
             }
 
-            function _checkSessionDuration(liveSessionData) {
-                if (isTeacherApp && liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum) {
+            function _checkSessionDuration() {
+                if (isTeacherApp && activeLiveSessionDataFromAdapter.status === LiveSessionStatusEnum.CONFIRMED.enum) {
+                    if (liveSessionInterval.interval){
+                        _this._destroyCheckDurationInterval();
+                    }
+
                     liveSessionInterval.interval = $interval(function () {
-                        var liveSessionDuration = (_getRoundTime() - liveSessionData.startTime)  / 60000; // convert to minutes
-                        var extendTimeMin = liveSessionData.extendTime / 60000;
+                        var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime)  / 60000; // convert to minutes
+                        var extendTimeMin = activeLiveSessionDataFromAdapter.extendTime / 60000;
                         var maxSessionDuration = ENV.liveSession.sessionLength + extendTimeMin;
-                        var sessionTimeWithExtension = liveSessionDuration + extendTimeMin;
                         var EndAlertTime = maxSessionDuration - ENV.liveSession.sessionEndAlertTime;
 
-                        if (sessionTimeWithExtension >= maxSessionDuration) {
-                            _this.endLiveSession(liveSessionData.guid);
-                        } else if (sessionTimeWithExtension >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
+                        if (liveSessionDuration >= maxSessionDuration) {
+                            _this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
+                        } else if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
                             LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
-                                confirmExtendSession(liveSessionData);
+                                confirmExtendSession();
                             }, function updateIntervalAlertShown() {
                                 liveSessionInterval.isSessionAlertShown = true;
                                 $log.debug('Live session is continued without extend time.');
@@ -9448,15 +9456,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 }
             }
 
-            function confirmExtendSession(liveSessionData) {
-                liveSessionData.extendTime += ENV.liveSession.sessionExtendTime * 60000;  // minutes to milliseconds
-                _this._liveSessionDataChanged(liveSessionData);
-                $log.debug('Live session is extend by ' + ENV.liveSession.sessionExtendTime + ' minutes.');
-            }
-
-            function _destroyCheckDurationInterval() {
-                $interval.cancel(liveSessionInterval.interval);
-                liveSessionInterval = {};
+            function confirmExtendSession() {
+                LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid).then(function (liveSessionData) {
+                    liveSessionData.extendTime += ENV.liveSession.sessionExtendTime * 60000;  // minutes to milliseconds
+                    return liveSessionData.$save();
+                }).then(function () {
+                    $log.debug('confirmExtendSession: Live session is extend by ' + ENV.liveSession.sessionExtendTime + ' minutes.');
+                }).catch(function () {
+                    $log.debug('confirmExtendSession: Failed to save extend live session in guid: ' + activeLiveSessionDataFromAdapter.guid);
+                });
             }
         }]
     );
@@ -9586,7 +9594,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         return $q.resolve(res);
                     });
                 },function(err){
-                    $log.error('LiveSessionUiSrv: translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showStudentLiveSessionPopUp translate failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -9595,14 +9603,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
                 translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
-                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.EXTEND');
+                translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
                     var popUpInstance = PopUpSrv.warning(
                         translations.title,
                         translations.content,
-                        translations.acceptBtnTitle,
-                        translations.cancelBtnTitle
+                        translations.cancelBtnTitle,
+                        translations.extendBtnTitle
                     );
                     return popUpInstance.promise.then(function(res){
                         return $q.reject(res);
@@ -9610,14 +9618,29 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         return $q.resolve(res);
                     });
                 },function(err){
-                    $log.error('LiveSessionUiSrv: translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
+            function showEndSessionPopup() {
+                var translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.END_SESSION');
+                translationsPromMap.content= $translate('LIVE_SESSION.END_POPUP');
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.info(
+                        translations.title,
+                        translations.content
+                    );
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
                     return $q.reject(err);
                 });
             }
 
             function showLiveSessionToast() {
                 var options = {
-                    hideDelay: false,
+                    hideDelay: 5000,
                     position: 'top right',
                     toastClass: 'live-session-success-toast'
                 };
@@ -9635,6 +9658,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
 
             LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
+
+            LiveSessionUiSrv.showEndSessionPopup = showEndSessionPopup;
 
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
 
