@@ -51,6 +51,8 @@
 
                                 break;
                             case LiveSessionStatusEnum.ENDED.enum:
+                                LiveSessionUiSrv.showEndSessionPopup();
+                                LiveSessionSrv._destroyCheckDurationInterval();
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                                 break;
                             default:
