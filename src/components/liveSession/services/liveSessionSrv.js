@@ -152,33 +152,8 @@
                 }
 
                 activeLiveSessionDataFromAdapter = newLiveSessionData;
+                _checkSessionDuration();
                 _invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
-            };
-
-            this._checkSessionDuration = function() {
-                if (isTeacherApp && activeLiveSessionDataFromAdapter.status === LiveSessionStatusEnum.CONFIRMED.enum) {
-                    if (liveSessionInterval.interval){
-                        _this._destroyCheckDurationInterval();
-                    }
-
-                    liveSessionInterval.interval = $interval(function () {
-                        var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime)  / 60000; // convert to minutes
-                        var extendTimeMin = activeLiveSessionDataFromAdapter.extendTime / 60000;
-                        var maxSessionDuration = ENV.liveSession.sessionLength + extendTimeMin;
-                        var EndAlertTime = maxSessionDuration - ENV.liveSession.sessionEndAlertTime;
-
-                        if (liveSessionDuration >= maxSessionDuration) {
-                            _this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
-                        } else if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
-                            LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
-                                confirmExtendSession();
-                            }, function updateIntervalAlertShown() {
-                                liveSessionInterval.isSessionAlertShown = true;
-                                $log.debug('Live session is continued without extend time.');
-                            });
-                        }
-                    }, 60000);
-                }
             };
 
             this._destroyCheckDurationInterval = function() {
@@ -323,6 +298,32 @@
                 cbArr.forEach(function(cb){
                     cb.apply(null, args);
                 });
+            }
+
+            function _checkSessionDuration() {
+                if (isTeacherApp && activeLiveSessionDataFromAdapter.status === LiveSessionStatusEnum.CONFIRMED.enum) {
+                    if (liveSessionInterval.interval){
+                        _this._destroyCheckDurationInterval();
+                    }
+
+                    liveSessionInterval.interval = $interval(function () {
+                        var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime)  / 60000; // convert to minutes
+                        var extendTimeMin = activeLiveSessionDataFromAdapter.extendTime / 60000;
+                        var maxSessionDuration = ENV.liveSession.sessionLength + extendTimeMin;
+                        var EndAlertTime = maxSessionDuration - ENV.liveSession.sessionEndAlertTime;
+
+                        if (liveSessionDuration >= maxSessionDuration) {
+                            _this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
+                        } else if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
+                            LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
+                                confirmExtendSession();
+                            }, function updateIntervalAlertShown() {
+                                liveSessionInterval.isSessionAlertShown = true;
+                                $log.debug('Live session is continued without extend time.');
+                            });
+                        }
+                    }, 60000);
+                }
             }
 
             function confirmExtendSession() {

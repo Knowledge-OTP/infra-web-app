@@ -46,7 +46,6 @@
                                 }
 
                                 if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                                    LiveSessionSrv._checkSessionDuration();
                                     LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
                                 }
 
