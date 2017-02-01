@@ -512,7 +512,7 @@
 
             this._destroyCheckDurationInterval = function() {
                 $interval.cancel(liveSessionInterval.interval);
-                liveSessionInterval = liveSessionInterval.isSessionAlertShown ? liveSessionInterval : {};
+                liveSessionInterval = {};
             };
 
 
