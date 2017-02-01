@@ -277,7 +277,7 @@
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
                 exerciseData.resultsData.$save();
                 exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
-                shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                shouldBroadCastExerciseProm.then(function (shouldBroadcastFn) {
                     var shouldBroadcast = shouldBroadcastFn({
                         exercise: exerciseData.questionsData,
                         exerciseResult: exerciseData.resultsData,
@@ -395,31 +395,33 @@
                 }
             }
 
-            function _setHeaderTitle(){
+            function _setHeaderTitle() {
                 var subjectTranslateKey = 'SUBJECTS.' + exerciseData.questionsData.subjectId;
-                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                $translate(subjectTranslateKey).then(function (subjectTranslation) {
                     var translateFilter = $filter('translate');
-                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE',{
+                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE', {
                         subject: $filter('capitalize')(subjectTranslation)
                     });
-                },function(err){
+                }, function (err) {
                     $log.error('WorkoutsDiagnosticIntroController: ' + err);
                 });
             }
 
             _setNumSlideForNgModel(numQuestionCounter);
 
-            if (exerciseData.questionsData.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
-                var groupDataTypeTitle = {};
-                var PASSAGE = translateFilter('ZNK_EXERCISE.PASSAGE');
-                var groupDataCounter = 0;
-                for (var i = 0; i < questions.length; i++) {
-                    var groupDataId = questions[i].groupDataId;
-                    if (angular.isUndefined(groupDataTypeTitle[groupDataId])) {
-                        groupDataCounter++;
-                        groupDataTypeTitle[groupDataId] = PASSAGE + groupDataCounter;
+            if (SubjectEnum.READING) {
+                if (exerciseData.questionsData.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
+                    var groupDataTypeTitle = {};
+                    var PASSAGE = translateFilter('ZNK_EXERCISE.PASSAGE');
+                    var groupDataCounter = 0;
+                    for (var i = 0; i < questions.length; i++) {
+                        var groupDataId = questions[i].groupDataId;
+                        if (angular.isUndefined(groupDataTypeTitle[groupDataId])) {
+                            groupDataCounter++;
+                            groupDataTypeTitle[groupDataId] = PASSAGE + groupDataCounter;
+                        }
+                        questions[i].passageTitle = groupDataTypeTitle[groupDataId];
                     }
-                    questions[i].passageTitle = groupDataTypeTitle[groupDataId];
                 }
             }
 
