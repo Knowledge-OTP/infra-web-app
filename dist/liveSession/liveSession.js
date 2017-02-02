@@ -203,6 +203,8 @@
         ["InfraConfigSrv", "$q", "ENV", "UserProfileService", function (InfraConfigSrv, $q, ENV, UserProfileService) {
             'ngInject';
 
+            var _this = this;
+
             function _getStorage() {
                 return InfraConfigSrv.getGlobalStorage();
             }
@@ -212,6 +214,10 @@
                 return LIVE_SESSION_ROOT_PATH + guid;
             };
 
+            this.getLiveSessionDurationPath = function () {
+                return ENV.studentAppName + '/liveSessionDuration/';
+            };
+
             this.getUserLiveSessionRequestsPath  = function (userData) {
                 var appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
                 var USER_DATA_PATH = appName  + '/users/' + userData.uid;
@@ -219,9 +225,16 @@
             };
 
             this.getLiveSessionData = function (liveSessionGuid) {
-                var liveSessionDataPath = this.getLiveSessionDataPath(liveSessionGuid);
+                var liveSessionDataPath = _this.getLiveSessionDataPath(liveSessionGuid);
                 return _getStorage().then(function (storage) {
                     return storage.getAndBindToServer(liveSessionDataPath);
+                });
+            };
+
+            this.getLiveSessionDuration = function () {
+                var liveSessionDurationPath = _this.getLiveSessionDurationPath();
+                return _getStorage().then(function (storage) {
+                    return storage.get(liveSessionDurationPath);
                 });
             };
 
@@ -235,12 +248,11 @@
             };
 
             this.getCurrUserLiveSessionData = function () {
-                var self = this;
-                return self.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
+                return _this.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
                     var liveSessionDataPromMap = {};
                     angular.forEach(currUserLiveSessionRequests, function(isActive, guid){
                         if(isActive){
-                            liveSessionDataPromMap[guid] = self.getLiveSessionData(guid);
+                            liveSessionDataPromMap[guid] = _this.getLiveSessionData(guid);
                         }
                     });
 
@@ -361,6 +373,12 @@
             'ngInject';
 
             var _this = this;
+
+            var SESSION_DURATION =  {
+                length: ENV.liveSession.sessionLength,
+                extendTime: ENV.liveSession.sessionExtendTime,
+                endAlertTime: ENV.liveSession.sessionEndAlertTime
+            };
 
             var activeLiveSessionDataFromAdapter = null;
             var currUserLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
@@ -659,33 +677,37 @@
                     if (liveSessionInterval.interval){
                         _this._destroyCheckDurationInterval();
                     }
-
-                    liveSessionInterval.interval = $interval(function () {
-                        var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime)  / 60000; // convert to minutes
-                        var extendTimeMin = activeLiveSessionDataFromAdapter.extendTime / 60000;
-                        var maxSessionDuration = ENV.liveSession.sessionLength + extendTimeMin;
-                        var EndAlertTime = maxSessionDuration - ENV.liveSession.sessionEndAlertTime;
-
-                        if (liveSessionDuration >= maxSessionDuration) {
-                            _this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
-                        } else if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
-                            LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
-                                confirmExtendSession();
-                            }, function updateIntervalAlertShown() {
-                                liveSessionInterval.isSessionAlertShown = true;
-                                $log.debug('Live session is continued without extend time.');
-                            });
+                    LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {
+                        if (liveSessionDuration) {
+                            SESSION_DURATION = liveSessionDuration;
                         }
-                    }, 60000);
+                        liveSessionInterval.interval = $interval(function () {
+                            var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime)  / 60000; // convert to minutes
+                            var extendTimeMin = activeLiveSessionDataFromAdapter.extendTime / 60000;
+                            var maxSessionDuration = SESSION_DURATION.length + extendTimeMin;
+                            var EndAlertTime = maxSessionDuration - SESSION_DURATION.endAlertTime;
+
+                            if (liveSessionDuration >= maxSessionDuration) {
+                                _this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
+                            } else if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
+                                LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
+                                    confirmExtendSession();
+                                }, function updateIntervalAlertShown() {
+                                    liveSessionInterval.isSessionAlertShown = true;
+                                    $log.debug('Live session is continued without extend time.');
+                                });
+                            }
+                        }, 60000);
+                    });
                 }
             }
 
             function confirmExtendSession() {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid).then(function (liveSessionData) {
-                    liveSessionData.extendTime += ENV.liveSession.sessionExtendTime * 60000;  // minutes to milliseconds
+                    liveSessionData.extendTime += SESSION_DURATION.extendTime * 60000;  // minutes to milliseconds
                     return liveSessionData.$save();
                 }).then(function () {
-                    $log.debug('confirmExtendSession: Live session is extend by ' + ENV.liveSession.sessionExtendTime + ' minutes.');
+                    $log.debug('confirmExtendSession: Live session is extend by ' + SESSION_DURATION.extendTime + ' minutes.');
                 }).catch(function () {
                     $log.debug('confirmExtendSession: Failed to save extend live session in guid: ' + activeLiveSessionDataFromAdapter.guid);
                 });

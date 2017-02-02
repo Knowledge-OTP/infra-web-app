@@ -8,6 +8,12 @@
 
             var _this = this;
 
+            var SESSION_DURATION =  {
+                length: ENV.liveSession.sessionLength,
+                extendTime: ENV.liveSession.sessionExtendTime,
+                endAlertTime: ENV.liveSession.sessionEndAlertTime
+            };
+
             var activeLiveSessionDataFromAdapter = null;
             var currUserLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
             var registeredCbToActiveLiveSessionDataChanges = [];
@@ -305,33 +311,37 @@
                     if (liveSessionInterval.interval){
                         _this._destroyCheckDurationInterval();
                     }
-
-                    liveSessionInterval.interval = $interval(function () {
-                        var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime)  / 60000; // convert to minutes
-                        var extendTimeMin = activeLiveSessionDataFromAdapter.extendTime / 60000;
-                        var maxSessionDuration = ENV.liveSession.sessionLength + extendTimeMin;
-                        var EndAlertTime = maxSessionDuration - ENV.liveSession.sessionEndAlertTime;
-
-                        if (liveSessionDuration >= maxSessionDuration) {
-                            _this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
-                        } else if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
-                            LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
-                                confirmExtendSession();
-                            }, function updateIntervalAlertShown() {
-                                liveSessionInterval.isSessionAlertShown = true;
-                                $log.debug('Live session is continued without extend time.');
-                            });
+                    LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {
+                        if (liveSessionDuration) {
+                            SESSION_DURATION = liveSessionDuration;
                         }
-                    }, 60000);
+                        liveSessionInterval.interval = $interval(function () {
+                            var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime)  / 60000; // convert to minutes
+                            var extendTimeMin = activeLiveSessionDataFromAdapter.extendTime / 60000;
+                            var maxSessionDuration = SESSION_DURATION.length + extendTimeMin;
+                            var EndAlertTime = maxSessionDuration - SESSION_DURATION.endAlertTime;
+
+                            if (liveSessionDuration >= maxSessionDuration) {
+                                _this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
+                            } else if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
+                                LiveSessionUiSrv.showSessionEndAlertPopup().then(function () {
+                                    confirmExtendSession();
+                                }, function updateIntervalAlertShown() {
+                                    liveSessionInterval.isSessionAlertShown = true;
+                                    $log.debug('Live session is continued without extend time.');
+                                });
+                            }
+                        }, 60000);
+                    });
                 }
             }
 
             function confirmExtendSession() {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid).then(function (liveSessionData) {
-                    liveSessionData.extendTime += ENV.liveSession.sessionExtendTime * 60000;  // minutes to milliseconds
+                    liveSessionData.extendTime += SESSION_DURATION.extendTime * 60000;  // minutes to milliseconds
                     return liveSessionData.$save();
                 }).then(function () {
-                    $log.debug('confirmExtendSession: Live session is extend by ' + ENV.liveSession.sessionExtendTime + ' minutes.');
+                    $log.debug('confirmExtendSession: Live session is extend by ' + SESSION_DURATION.extendTime + ' minutes.');
                 }).catch(function () {
                     $log.debug('confirmExtendSession: Failed to save extend live session in guid: ' + activeLiveSessionDataFromAdapter.guid);
                 });
