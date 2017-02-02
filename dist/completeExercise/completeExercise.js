@@ -711,9 +711,10 @@
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
-                 return {
+                        return {
                             questionId: question.id,
                             categoryId: question.categoryId,
+                            categoryId2: question.categoryId2,
                             manualEvaluation: question.manualEvaluation || false,
                             subjectId: question.subjectId,
                             order: question.index,
@@ -736,7 +737,7 @@
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
-                if (exerciseParentTypeId){
+                if (exerciseParentTypeId) {
                     exerciseResult.parentTypeId = exerciseParentTypeId;
                 }
                 if (exerciseParentContent) {
@@ -754,7 +755,7 @@
                         return a.order - b.order;
                     });
 
-                    if (exerciseContent.moduleId){
+                    if (exerciseContent.moduleId) {
                         var questionsOrderMap = {};
                         var questions = exerciseContent.questions;
                         for (var k = 0; k < questions.length; k++) {
@@ -792,7 +793,7 @@
             }
 
             function _finishExercise() {
-                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData){
+                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData) {
                     var liveSessionOn = !angular.equals(liveSessionData, {});
                     if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
                         exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
@@ -809,7 +810,7 @@
                             $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
                             var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
 
-                            shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                            shouldBroadCastExerciseProm.then(function (shouldBroadcastFn) {
                                 var shouldBroadcast = shouldBroadcastFn({
                                     exercise: exerciseContent,
                                     exerciseResult: exerciseResult,
@@ -885,7 +886,7 @@
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
-                            if(!isNotLecture){
+                            if (!isNotLecture) {
                                 settings.actions.exitAction();
                                 return;
                             }
@@ -923,7 +924,7 @@
                                 }
                             });
                         },
-                        onExit: function() {
+                        onExit: function () {
                             if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
 
                                 exerciseResult.$save();
@@ -938,7 +939,7 @@
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
                         },
-                        onReview: function onReview () {
+                        onReview: function onReview() {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                             exerciseResult.$save();
                             $state.go('app.dashboard.roadmap.review');
