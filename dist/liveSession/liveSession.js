@@ -849,8 +849,8 @@
 
             function showEndSessionPopup() {
                 var translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.END_SESSION');
-                translationsPromMap.content= $translate('LIVE_SESSION.END_POPUP');
+                translationsPromMap.title = $translate('LIVE_SESSION.END_POPUP_TITLE');
+                translationsPromMap.content= $translate('LIVE_SESSION.END_POPUP_CONTENT');
                 return $q.all(translationsPromMap).then(function(translations){
                     PopUpSrv.info(
                         translations.title,
