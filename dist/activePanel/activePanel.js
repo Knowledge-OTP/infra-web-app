@@ -299,15 +299,13 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                         ng-class=\"{disabled: !d.shareScreenBtnsEnable}\">\n" +
     "                        <ng-switch on=\"d.isTeacher\">\n" +
     "                            <svg-icon ng-switch-when=\"true\"\n" +
-    "                                      name=\"active-panel-track-student-icon\"\n" +
-    "                                      title=\"{{d.translatedStrings.SHOW_STUDENT_SCREEN}}\">\n" +
+    "                                      name=\"active-panel-track-student-icon\">\n" +
     "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "                                    {{d.translatedStrings.SHOW_STUDENT_SCREEN}}\n" +
     "                                </md-tooltip>\n" +
     "                            </svg-icon>\n" +
     "                            <svg-icon ng-switch-default\n" +
-    "                                      name=\"active-panel-track-teacher-icon\"\n" +
-    "                                      title=\"{{d.translatedStrings.SHOW_TEACHER_SCREEN}}\">\n" +
+    "                                      name=\"active-panel-track-teacher-icon\"\">\n" +
     "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "                                    {{d.translatedStrings.SHOW_TEACHER_SCREEN}}\n" +
     "                                </md-tooltip>\n" +

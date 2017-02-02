@@ -14,11 +14,9 @@
             localStorage.setItem('studentPath', '/act_app');
             localStorage.setItem('teacherPath', '/act_dashboard');
         })
-        .config(function (PresenceServiceProvider, LiveSessionSubjectSrvProvider, znkAnalyticsSrvProvider, CallsUiSrvProvider) {
+        .config(function (PresenceServiceProvider, znkAnalyticsSrvProvider, CallsUiSrvProvider) {
 
             PresenceServiceProvider.setAuthServiceName('AuthService');
-
-            LiveSessionSubjectSrvProvider.setLiveSessionTopics( [0, 5] );
 
             znkAnalyticsSrvProvider.setEventsHandler(function () {
                 return {
