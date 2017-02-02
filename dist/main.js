@@ -171,6 +171,10 @@
 
                     function trackUserPresenceCB(userId, newStatus) {
                         scope.d.currentUserPresenceStatus = newStatus;
+                        scope.d.callBtnModel = {
+                            isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
+                            receiverId: userId
+                        };
                     }
 
                     function listenToLiveSessionStatus(newLiveSessionStatus) {
@@ -9284,7 +9288,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
             this._destroyCheckDurationInterval = function() {
                 $interval.cancel(liveSessionInterval.interval);
-                liveSessionInterval = liveSessionInterval.isSessionAlertShown ? liveSessionInterval : {};
+                liveSessionInterval = {};
             };
 
 
