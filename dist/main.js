@@ -68,9 +68,9 @@
 
     angular.module('znk.infra-web-app.activePanel')
         .directive('activePanel',
-            ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "toggleAutoCallEnum", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
+            ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
                          PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
-                         $translate, toggleAutoCallEnum, LiveSessionSrv, LiveSessionStatusEnum,
+                         $translate, LiveSessionSrv, LiveSessionStatusEnum,
                         UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
                 'ngInject';
                 return {
@@ -171,10 +171,14 @@
 
                     function trackUserPresenceCB(userId, newStatus) {
                         scope.d.currentUserPresenceStatus = newStatus;
-                        scope.d.callBtnModel = {
-                            isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
-                            receiverId: userId
-                        };
+
+                        CallsUiSrv.getCalleeName(userId).then(function (calleeName) {
+                            scope.d.calleeName = calleeName;
+                            scope.d.callBtnModel = {
+                                isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
+                                receiverId: userId
+                            };
+                        });
                     }
 
                     function listenToLiveSessionStatus(newLiveSessionStatus) {
@@ -246,7 +250,6 @@
                             NONE: 0,
                             LIVE_SESSION: 1
                         },
-                        toggleAutoCall: {},
                         shareScreenBtnsEnable: true,
                         disableAllBtns: false,
                         isTeacher: isTeacher,
