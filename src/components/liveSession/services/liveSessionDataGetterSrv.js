@@ -5,6 +5,8 @@
         function (InfraConfigSrv, $q, ENV, UserProfileService) {
             'ngInject';
 
+            var _this = this;
+
             function _getStorage() {
                 return InfraConfigSrv.getGlobalStorage();
             }
@@ -14,6 +16,10 @@
                 return LIVE_SESSION_ROOT_PATH + guid;
             };
 
+            this.getLiveSessionDurationPath = function () {
+                return ENV.studentAppName + '/liveSessionDuration/';
+            };
+
             this.getUserLiveSessionRequestsPath  = function (userData) {
                 var appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
                 var USER_DATA_PATH = appName  + '/users/' + userData.uid;
@@ -21,9 +27,16 @@
             };
 
             this.getLiveSessionData = function (liveSessionGuid) {
-                var liveSessionDataPath = this.getLiveSessionDataPath(liveSessionGuid);
+                var liveSessionDataPath = _this.getLiveSessionDataPath(liveSessionGuid);
                 return _getStorage().then(function (storage) {
                     return storage.getAndBindToServer(liveSessionDataPath);
+                });
+            };
+
+            this.getLiveSessionDuration = function () {
+                var liveSessionDurationPath = _this.getLiveSessionDurationPath();
+                return _getStorage().then(function (storage) {
+                    return storage.get(liveSessionDurationPath);
                 });
             };
 
@@ -37,12 +50,11 @@
             };
 
             this.getCurrUserLiveSessionData = function () {
-                var self = this;
-                return self.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
+                return _this.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
                     var liveSessionDataPromMap = {};
                     angular.forEach(currUserLiveSessionRequests, function(isActive, guid){
                         if(isActive){
-                            liveSessionDataPromMap[guid] = self.getLiveSessionData(guid);
+                            liveSessionDataPromMap[guid] = _this.getLiveSessionData(guid);
                         }
                     });
 
