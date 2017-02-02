@@ -12682,7 +12682,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                 vm.translate = $filter('translate');
 
                 vm.saveAnalytics = function () {
-                    vm.purchaseState = PurchaseStateEnum.PENDING.enum;
+                    $timeout(function(){
+                        vm.purchaseState = PurchaseStateEnum.PENDING.enum;
+                    },0);
                     znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
                 };
 
