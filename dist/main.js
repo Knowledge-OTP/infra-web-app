@@ -171,10 +171,6 @@
 
                     function trackUserPresenceCB(userId, newStatus) {
                         scope.d.currentUserPresenceStatus = newStatus;
-                        scope.d.callBtnModel = {
-                            isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
-                            receiverId: userId
-                        };
                     }
 
                     function listenToLiveSessionStatus(newLiveSessionStatus) {
