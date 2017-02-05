@@ -1,0 +1,13 @@
+<section class="step diagnostic" translate-namespace="ON_BOARDING.TEST_TO_TAKE">
+    <div class="diagnostic-title" translate=".FIGURE_OUT"></div>
+
+
+    <div class="btn-wrap">
+        <md-button aria-label="{{'.START_TEST' | translate}}"
+                   autofocus tabindex="1" class="md-sm znk md-primary"
+                   ng-click="vm.setOnboardingCompleted('app.diagnostic', 'Start Test')">
+            <span translate=".START_TEST"></span>
+        </md-button>
+    </div>
+</section>
+<on-boarding-bar step="diagnostic"></on-boarding-bar>
