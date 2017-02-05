@@ -11915,7 +11915,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 })
                 .state('app.onBoarding.testToTake', {
                     templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
-                    controller: 'OnBoardingRecommendedTestController',
+                    controller: 'OnBoardingIntroTestToTakeController',
                     controllerAs: 'vm'
                 });
         }
@@ -11986,11 +11986,11 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function($state, OnBoardingService, znkAnalyticsSrv) {
+        function ($state, OnBoardingService, znkAnalyticsSrv) {
 
 
-            this.goToMathDiagnostic = function () {
-                znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingGoalsStep' });
+            this.goToTestToTake = function () {
+                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingIntroTestToTakeStep'});
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE);
                 $state.go('app.onBoarding.testToTake');
             };
@@ -12352,7 +12352,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"btn-wrap\">\n" +
     "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +
     "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
-    "                   ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
+    "                   ng-click=\"vm.goToTestToTake()\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +

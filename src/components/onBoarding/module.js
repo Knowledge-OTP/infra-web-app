@@ -68,7 +68,7 @@
                 })
                 .state('app.onBoarding.testToTake', {
                     templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
-                    controller: 'OnBoardingRecommendedTestController',
+                    controller: 'OnBoardingIntroTestToTakeController',
                     controllerAs: 'vm'
                 });
         }

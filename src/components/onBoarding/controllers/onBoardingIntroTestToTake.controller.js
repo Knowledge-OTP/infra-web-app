@@ -4,13 +4,10 @@
         function ($state, OnBoardingService, znkAnalyticsSrv) {
 
 
-            this.goToMathDiagnostic = function () {
-
-            };
             this.goToTestToTake = function () {
                 znkAnalyticsSrv.eventTrack({eventName: 'onBoardingIntroTestToTakeStep'});
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE);
                 $state.go('app.onBoarding.testToTake');
-            }
+            };
         }]);
 })(angular);
