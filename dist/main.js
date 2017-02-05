@@ -11910,12 +11910,12 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 })
                 .state('app.onBoarding.introTestToTake', {
                     templateUrl: 'components/onBoarding/templates/onBoardingIntroTestToTake.template.html',
-                    controller: 'OnBoardingTestToTakeController',
+                    controller: 'OnBoardingIntroTestToTakeController',
                     controllerAs: 'vm'
                 })
                 .state('app.onBoarding.testToTake', {
                     templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
-                    controller: 'OnBoardingIntroTestToTakeController',
+                    controller: 'OnBoardingTestToTakeController',
                     controllerAs: 'vm'
                 });
         }
@@ -12044,6 +12044,14 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: 43,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum
+            };
+            this.completeExerciseSettings = {
+                // exitAction: exerciseData.exitAction,
+                // exerciseParentContent: exerciseParentContentProm.then(function (moduleContent) {
+                //     return {
+                //         name: moduleContent.name
+                //     };
+                // })
             };
         }]);
 })(angular);
@@ -12379,7 +12387,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
   $templateCache.put("components/onBoarding/templates/onBoardingTestToTake.template.html",
     "<div class=\"complete-exercise-container base-border-radius\">\n" +
     "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
-    "                       >\n" +
+    "                       settings=\"vm.completeExerciseSettings\">\n" +
     "    </complete-exercise>\n" +
     "</div>\n" +
     "");

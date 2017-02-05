@@ -63,12 +63,12 @@
                 })
                 .state('app.onBoarding.introTestToTake', {
                     templateUrl: 'components/onBoarding/templates/onBoardingIntroTestToTake.template.html',
-                    controller: 'OnBoardingTestToTakeController',
+                    controller: 'OnBoardingIntroTestToTakeController',
                     controllerAs: 'vm'
                 })
                 .state('app.onBoarding.testToTake', {
                     templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
-                    controller: 'OnBoardingIntroTestToTakeController',
+                    controller: 'OnBoardingTestToTakeController',
                     controllerAs: 'vm'
                 });
         }

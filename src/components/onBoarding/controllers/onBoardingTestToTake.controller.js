@@ -8,5 +8,13 @@
                 exerciseParentId: 43,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum
             };
+            this.completeExerciseSettings = {
+                // exitAction: exerciseData.exitAction,
+                // exerciseParentContent: exerciseParentContentProm.then(function (moduleContent) {
+                //     return {
+                //         name: moduleContent.name
+                //     };
+                // })
+            };
         }]);
 })(angular);
