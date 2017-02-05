@@ -9108,6 +9108,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                 LiveSessionUiSrv.showEndSessionPopup();
                                 LiveSessionSrv._destroyCheckDurationInterval();
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                                // Security check to insure there isn't active session
+                                LiveSessionSrv._moveToArchive(liveSessionData);
                                 break;
                             default:
                                 $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
@@ -9212,8 +9214,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             this.endLiveSession = function (liveSessionGuid) {
                 var getDataPromMap = {};
                 getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
-                getDataPromMap.currUid = UserProfileService.getCurrUserId();
-                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
                 getDataPromMap.storage = _getStorage();
                 return $q.all(getDataPromMap).then(function (data) {
                     var dataToSave = {};
@@ -9223,26 +9223,44 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
                     dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
 
-                    data.currUidLiveSessionRequests[data.liveSessionData.guid] = false;
-                    var activePath = data.currUidLiveSessionRequests.$$path;
-                    dataToSave[activePath] = {};
-                    var archivePath = activePath.replace('/active', '/archive');
-                    archivePath += '/' + liveSessionGuid;
-                    dataToSave[archivePath] = false;
-
-                    var otherUserLiveSessionRequestPath;
-                    if (data.liveSessionData.studentId !== data.currUid) {
-                        otherUserLiveSessionRequestPath = data.liveSessionData.studentPath;
-                    } else {
-                        otherUserLiveSessionRequestPath = data.liveSessionData.teacherPath;
-                    }
-                    var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
-                    dataToSave[otherUserActivePath] = {};
-                    var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
-                    otherUserArchivePath += '/' + liveSessionGuid;
-                    dataToSave[otherUserArchivePath] = false;
+                    _this._moveToArchive(data.liveSessionData);
 
                     return data.storage.update(dataToSave);
+                });
+            };
+
+            this._moveToArchive = function (liveSessionData) {
+                var getDataPromMap = {};
+                getDataPromMap.currUid = UserProfileService.getCurrUserId();
+                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
+                getDataPromMap.storage = _getStorage();
+                return $q.all(getDataPromMap).then(function (data) {
+                    var dataToSave = {};
+
+                    if (data.currUidLiveSessionRequests){
+                        data.currUidLiveSessionRequests[liveSessionData.guid] = false;
+                        var activePath = data.currUidLiveSessionRequests.$$path;
+                        dataToSave[activePath] = {};
+                        var archivePath = activePath.replace('/active', '/archive');
+                        archivePath += '/' + liveSessionData.guid;
+                        dataToSave[archivePath] = false;
+
+                        var otherUserLiveSessionRequestPath;
+                        if (liveSessionData.studentId !== data.currUid) {
+                            otherUserLiveSessionRequestPath = liveSessionData.studentPath;
+                        } else {
+                            otherUserLiveSessionRequestPath = liveSessionData.teacherPath;
+                        }
+                        if (otherUserLiveSessionRequestPath){
+                            var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
+                            dataToSave[otherUserActivePath] = {};
+                            var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
+                            otherUserArchivePath += '/' + liveSessionData.guid;
+                            dataToSave[otherUserArchivePath] = false;
+                        }
+
+                        return data.storage.update(dataToSave);
+                    }
                 });
             };
 
