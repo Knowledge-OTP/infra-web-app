@@ -484,7 +484,8 @@
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                                 $ctrl.znkExercise.actions.unbindExerciseView();
                             },
-                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction
+                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction,
+                            reviewAction: $ctrl.completeExerciseCtrl.settings.reviewAction
                         }
                     };
 
@@ -687,9 +688,9 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "$state", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -941,10 +942,17 @@
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
                         },
-                        onReview: function onReview() {
+                        onReview: function onReview () {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
-                            exerciseResult.$save();
-                            $state.go('app.dashboard.roadmap.review');
+                            var saveProm=exerciseResult.$save();
+                            saveProm.then(function(){
+                                if (angular.isFunction(settings.actions.reviewAction)){
+                                    settings.actions.reviewAction();
+                                }
+                            })
+                            .catch(function (err){
+                                $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
+                            });
                         }
                     };
 
