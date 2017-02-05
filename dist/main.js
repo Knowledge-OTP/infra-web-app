@@ -11907,6 +11907,16 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                     templateUrl: 'components/onBoarding/templates/onBoardingDiagnostic.template.html',
                     controller: 'OnBoardingDiagnosticController',
                     controllerAs: 'vm'
+                })
+                .state('app.onBoarding.introTestToTake', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingIntroTestToTake.template.html',
+                    controller: 'OnBoardingTestToTakeController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.testToTake', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
+                    controller: 'OnBoardingRecommendedTestController',
+                    controllerAs: 'vm'
                 });
         }
     ]);
@@ -11943,7 +11953,9 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function($state, OnBoardingService, znkAnalyticsSrv) {
+        function ($state, OnBoardingService, znkAnalyticsSrv) {
+
+            var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
                 recommendedGoalsTitle: true,
                 saveBtn: {
@@ -11953,9 +11965,34 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             };
 
             this.saveGoals = function () {
+                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
+                var nextStep;
+                var nextState;
+
+                if (onBoardingSettings.showTestToTake) {
+                    nextStep = OnBoardingService.steps.INTRO_TEST_TO_TAKE;
+                    nextState = 'app.onBoarding.introTestToTake';
+                } else {
+                    nextStep = OnBoardingService.steps.DIAGNOSTIC;
+                    nextState = 'app.onBoarding.diagnostic';
+                }
+
+                OnBoardingService.setOnBoardingStep(nextStep);
+                $state.go(nextState);
+            };
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
+        function($state, OnBoardingService, znkAnalyticsSrv) {
+
+
+            this.goToMathDiagnostic = function () {
                 znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingGoalsStep' });
-                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                $state.go('app.onBoarding.diagnostic');
+                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE);
+                $state.go('app.onBoarding.testToTake');
             };
         }]);
 })(angular);
@@ -11997,6 +12034,19 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     }]);
 })(angular);
 
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv', 'ExerciseTypeEnum', 'ExerciseParentEnum',
+        function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum) {
+            this.completeExerciseDetails = {
+                exerciseId: 1173,
+                exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
+                exerciseParentId: 43,
+                exerciseParentTypeId: ExerciseParentEnum.EXAM.enum
+            };
+        }]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -12081,8 +12131,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function() {
-        this.$get = ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
+    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
+        this.$get = ['InfraConfigSrv', 'StorageSrv', function (InfraConfigSrv, StorageSrv) {
             var self = this;
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
@@ -12092,7 +12142,9 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 2: 'app.onBoarding.schools',
                 3: 'app.onBoarding.goals',
                 4: 'app.onBoarding.diagnostic',
-                5: 'app.workouts.roadmap'
+                5: 'app.workouts.roadmap',
+                6: 'app.onBoarding.testToTake',
+                7: 'app.onBoarding.recommendedTest'
             };
 
             onBoardingServiceObj.steps = {
@@ -12100,7 +12152,9 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 SCHOOLS: 2,
                 GOALS: 3,
                 DIAGNOSTIC: 4,
-                ROADMAP: 5
+                ROADMAP: 5,
+                INTRO_TEST_TO_TAKE: 6,
+                TEST_TO_TAKE: 7
             };
 
             onBoardingServiceObj.getOnBoardingStep = function () {
@@ -12119,7 +12173,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             };
 
             function getProgress() {
-                return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(ONBOARDING_PATH).then(function (progress) {
                         if (!progress.step) {
                             progress.step = 1;
@@ -12130,7 +12184,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             }
 
             function setProgress(progress) {
-                return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
@@ -12141,7 +12195,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 });
             };
 
-            onBoardingServiceObj.getOnBoardingSettings = function() {
+            onBoardingServiceObj.getOnBoardingSettings = function () {
                 return self.settings;
             };
 
@@ -12290,6 +12344,21 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "</section>\n" +
     "<on-boarding-bar step=\"goals\"></on-boarding-bar>\n" +
     "");
+  $templateCache.put("components/onBoarding/templates/onBoardingIntroTestToTake.template.html",
+    "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.TEST_TO_TAKE\">\n" +
+    "    <div class=\"diagnostic-title\" translate=\".FIGURE_OUT\"></div>\n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"btn-wrap\">\n" +
+    "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +
+    "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
+    "                   ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
+    "            <span translate=\".START_TEST\"></span>\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "</section>\n" +
+    "<on-boarding-bar step=\"diagnostic\"></on-boarding-bar>\n" +
+    "");
   $templateCache.put("components/onBoarding/templates/onBoardingSchools.template.html",
     "<section class=\"step\" translate-namespace=\"ON_BOARDING.GOALS\">\n" +
     "    <div class=\"goals\">\n" +
@@ -12306,6 +12375,13 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    </div>\n" +
     "</section>\n" +
     "<on-boarding-bar step=\"goals\"></on-boarding-bar>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoardingTestToTake.template.html",
+    "<div class=\"complete-exercise-container base-border-radius\">\n" +
+    "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
+    "                       >\n" +
+    "    </complete-exercise>\n" +
+    "</div>\n" +
     "");
   $templateCache.put("components/onBoarding/templates/onBoardingWelcome.template.html",
     "<section class=\"step make-padding\" translate-namespace=\"ON_BOARDING.WELCOME\">\n" +
