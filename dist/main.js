@@ -12151,8 +12151,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 3: 'app.onBoarding.goals',
                 4: 'app.onBoarding.diagnostic',
                 5: 'app.workouts.roadmap',
-                6: 'app.onBoarding.testToTake',
-                7: 'app.onBoarding.recommendedTest'
+                6: 'app.onBoarding.introTestToTake',
+                7: 'app.onBoarding.testToTake'
             };
 
             onBoardingServiceObj.steps = {
