@@ -60,7 +60,8 @@
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                                 $ctrl.znkExercise.actions.unbindExerciseView();
                             },
-                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction
+                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction,
+                            reviewAction: $ctrl.completeExerciseCtrl.settings.reviewAction
                         }
                     };
 

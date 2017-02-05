@@ -18,7 +18,7 @@
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -270,10 +270,17 @@
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
                         },
-                        onReview: function onReview() {
+                        onReview: function onReview () {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
-                            exerciseResult.$save();
-                            $state.go('app.dashboard.roadmap.review');
+                            var saveProm=exerciseResult.$save();
+                            saveProm.then(function(){
+                                if (angular.isFunction(settings.actions.reviewAction)){
+                                    settings.actions.reviewAction();
+                                };
+                            })
+                            .catch(function (err)){
+                                $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
+                            };
                         }
                     };
 
