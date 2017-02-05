@@ -2428,8 +2428,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "$state", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
+            $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -2526,25 +2526,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     });
                     for (var i = 0; i < exerciseContent.content.length; i++) {
                         exerciseContent.content[i].exerciseTypeId = exerciseTypeId;
-                        exerciseContent.content[i].id = exerciseTypeId + '_' + exerciseContent.id + '_' + exerciseContent.content[i].order;// mandatory for drawing tool
+                        exerciseContent.content[i].id = exerciseTypeId + '_' + exerciseContent.id + '_' + exerciseContent.content[i].order; // mandatory for drawing tool
                     }
-                    exerciseContent.questions = exerciseContent.content;  // lecture question type has content property instead of questions.
+                    exerciseContent.questions = exerciseContent.content; // lecture question type has content property instead of questions.
                 }
             }
 
             function _finishExercise() {
                 znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData) {
-                    var liveSessionOn = !angular.equals(liveSessionData, {});
-                    if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
-                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
-                    } else {
-                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
-                    }
-                    exerciseResult.isComplete = true;
-                    exerciseResult.endedTime = Date.now();
-                    exerciseResult.$save();
-
                     if (exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum) {
+                        var liveSessionOn = !angular.equals(liveSessionData, {});
+                        if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
+                        } else {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
+                        }
+
                         //  stats exercise data
                         StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
                             $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
@@ -2567,7 +2564,12 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                             settings.actions.done();
                         });
+                    } else {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                     }
+                    exerciseResult.isComplete = true;
+                    exerciseResult.endedTime = Date.now();
+                    exerciseResult.$save();
                 });
             }
 
