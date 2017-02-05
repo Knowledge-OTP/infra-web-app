@@ -276,11 +276,11 @@
                             saveProm.then(function(){
                                 if (angular.isFunction(settings.actions.reviewAction)){
                                     settings.actions.reviewAction();
-                                };
+                                }
                             })
-                            .catch(function (err)){
+                            .catch(function (err){
                                 $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
-                            };
+                            });
                         }
                     };
 
