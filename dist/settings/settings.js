@@ -105,7 +105,7 @@
         );
 })(angular);
 
-angular.module('znk.infra-web-app.settings').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/settings/svg/change-password-icon.svg",
     "<svg class=\"change-password-icon-wrap\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 75 75\">\n" +
     "    <style type=\"text/css\">\n" +
