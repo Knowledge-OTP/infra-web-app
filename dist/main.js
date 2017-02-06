@@ -9014,7 +9014,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             };
 
             this.getLiveSessionDurationPath = function () {
-                return ENV.studentAppName + '/liveSessionDuration/';
+                return '/settings/liveSessionDuration/';
             };
 
             this.getUserLiveSessionRequestsPath  = function (userData) {

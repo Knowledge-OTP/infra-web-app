@@ -17,7 +17,7 @@
             };
 
             this.getLiveSessionDurationPath = function () {
-                return ENV.studentAppName + '/liveSessionDuration/';
+                return '/settings/liveSessionDuration/';
             };
 
             this.getUserLiveSessionRequestsPath  = function (userData) {
