@@ -56,7 +56,9 @@
 
             this.hangCall = function () {
                 CallsDataGetterSrv.getCurrUserCallsData().then(function (userCallData) {
-                    CallsSrv.forceDisconnect(userCallData);
+                    if (userCallData) {
+                        CallsSrv.forceDisconnect(userCallData);
+                    }
                 });
             };
 
