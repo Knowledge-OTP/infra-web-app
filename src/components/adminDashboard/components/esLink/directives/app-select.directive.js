@@ -5,7 +5,7 @@
     'use strict';
     angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
         function () {
-        'ngInject';
+
 
         var directive = {
             templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
@@ -19,6 +19,8 @@
         };
 
         function AppSelectController($scope, $filter, ENV) {
+            'ngInject';
+
             var self = this;
             var currentAppName = ENV.firebaseAppScopeName;
             var translateFilter = $filter('translate');
