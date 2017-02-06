@@ -16,7 +16,7 @@
             </div>
             <div class="summary"
                  ng-click="$ctrl.goToSummary()"
-                 ng-if="$ctrl.znkExercise.exerciseResult.isComplete && $ctrl.znkExercise.exerciseResult.exerciseTypeId != $ctrl.ExerciseTypeEnum.LECTURE.enum">
+                 ng-if="$ctrl.znkExercise.exerciseResult.isComplete && $ctrl.znkExercise.exerciseResult.exerciseTypeId !== $ctrl.ExerciseTypeEnum.LECTURE.enum">
                 <span translate=".SUMMARY" class="summary-text"></span>
                 <div class="background-opacity"></div>
             </div>

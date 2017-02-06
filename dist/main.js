@@ -3175,7 +3175,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "            </div>\n" +
     "            <div class=\"summary\"\n" +
     "                 ng-click=\"$ctrl.goToSummary()\"\n" +
-    "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete && $ctrl.znkExercise.exerciseResult.exerciseTypeId != $ctrl.ExerciseTypeEnum.LECTURE.enum\">\n" +
+    "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete && $ctrl.znkExercise.exerciseResult.exerciseTypeId !== $ctrl.ExerciseTypeEnum.LECTURE.enum\">\n" +
     "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
     "                <div class=\"background-opacity\"></div>\n" +
     "            </div>\n" +
