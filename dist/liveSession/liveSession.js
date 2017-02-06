@@ -428,7 +428,7 @@
 
             this.hangCall = function () {
                 CallsDataGetterSrv.getCurrUserCallsData().then(function (userCallData) {
-                    if (userCallData) {
+                    if (userCallData && !angular.equals(userCallData, {})) {
                         CallsSrv.forceDisconnect(userCallData);
                     }
                 });
