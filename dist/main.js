@@ -786,7 +786,6 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     'use strict';
     angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
         function () {
-   //     'ngInject';
 
         AppSelectController.$inject = ["$scope", "$filter", "ENV"];
         var directive = {
