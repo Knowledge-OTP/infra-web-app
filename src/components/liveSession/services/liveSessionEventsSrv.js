@@ -51,8 +51,12 @@
 
                                 break;
                             case LiveSessionStatusEnum.ENDED.enum:
+                                if (liveSessionData.studentId !== currUid) {
+                                    LiveSessionSrv.hangCall();
+                                    LiveSessionSrv._destroyCheckDurationInterval();
+                                }
+
                                 LiveSessionUiSrv.showEndSessionPopup();
-                                LiveSessionSrv._destroyCheckDurationInterval();
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                                 // Security check to insure there isn't active session
                                 LiveSessionSrv._moveToArchive(liveSessionData);
