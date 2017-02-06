@@ -6,9 +6,11 @@
                 exerciseId: 1173,
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: 43,
-                exerciseParentTypeId: ExerciseParentEnum.EXAM.enum
+                exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
+                ignoreIntro: true
             };
             this.completeExerciseSettings = {
+
                 // exitAction: exerciseData.exitAction,
                 // exerciseParentContent: exerciseParentContentProm.then(function (moduleContent) {
                 //     return {

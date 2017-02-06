@@ -1941,7 +1941,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                                     data.exerciseResult.seenIntro = true;
                                 }
 
-                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro && !$ctrl.exerciseDetails.ignoreIntro) {
                                     newViewState = VIEW_STATES.INTRO;
                                 } else {
                                     newViewState = VIEW_STATES.EXERCISE;
@@ -12043,9 +12043,11 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 exerciseId: 1173,
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: 43,
-                exerciseParentTypeId: ExerciseParentEnum.EXAM.enum
+                exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
+                ignoreIntro: true
             };
             this.completeExerciseSettings = {
+
                 // exitAction: exerciseData.exitAction,
                 // exerciseParentContent: exerciseParentContentProm.then(function (moduleContent) {
                 //     return {
