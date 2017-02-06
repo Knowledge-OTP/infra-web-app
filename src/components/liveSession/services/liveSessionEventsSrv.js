@@ -54,6 +54,8 @@
                                 LiveSessionUiSrv.showEndSessionPopup();
                                 LiveSessionSrv._destroyCheckDurationInterval();
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                                // Security check to insure there isn't active session
+                                LiveSessionSrv._moveToArchive(liveSessionData);
                                 break;
                             default:
                                 $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);

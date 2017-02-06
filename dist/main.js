@@ -2224,7 +2224,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                                 $ctrl.znkExercise.actions.unbindExerciseView();
                             },
-                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction
+                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction,
+                            reviewAction: $ctrl.completeExerciseCtrl.settings.reviewAction
                         }
                     };
 
@@ -2427,9 +2428,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "$state", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, $state) {
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+            $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -2526,25 +2527,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     });
                     for (var i = 0; i < exerciseContent.content.length; i++) {
                         exerciseContent.content[i].exerciseTypeId = exerciseTypeId;
-                        exerciseContent.content[i].id = exerciseTypeId + '_' + exerciseContent.id + '_' + exerciseContent.content[i].order;// mandatory for drawing tool
+                        exerciseContent.content[i].id = exerciseTypeId + '_' + exerciseContent.id + '_' + exerciseContent.content[i].order; // mandatory for drawing tool
                     }
-                    exerciseContent.questions = exerciseContent.content;  // lecture question type has content property instead of questions.
+                    exerciseContent.questions = exerciseContent.content; // lecture question type has content property instead of questions.
                 }
             }
 
             function _finishExercise() {
                 znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData) {
-                    var liveSessionOn = !angular.equals(liveSessionData, {});
-                    if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
-                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
-                    } else {
-                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
-                    }
-                    exerciseResult.isComplete = true;
-                    exerciseResult.endedTime = Date.now();
-                    exerciseResult.$save();
-
                     if (exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum) {
+                        var liveSessionOn = !angular.equals(liveSessionData, {});
+                        if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
+                        } else {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
+                        }
+
                         //  stats exercise data
                         StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
                             $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
@@ -2567,7 +2565,12 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                             settings.actions.done();
                         });
+                    } else {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                     }
+                    exerciseResult.isComplete = true;
+                    exerciseResult.endedTime = Date.now();
+                    exerciseResult.$save();
                 });
             }
 
@@ -2679,10 +2682,17 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
                         },
-                        onReview: function onReview() {
+                        onReview: function onReview () {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
-                            exerciseResult.$save();
-                            $state.go('app.dashboard.roadmap.review');
+                            var saveProm=exerciseResult.$save();
+                            saveProm.then(function(){
+                                if (angular.isFunction(settings.actions.reviewAction)){
+                                    settings.actions.reviewAction();
+                                }
+                            })
+                            .catch(function (err){
+                                $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
+                            });
                         }
                     };
 
@@ -9004,7 +9014,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             };
 
             this.getLiveSessionDurationPath = function () {
-                return ENV.studentAppName + '/liveSessionDuration/';
+                return '/settings/liveSessionDuration/';
             };
 
             this.getUserLiveSessionRequestsPath  = function (userData) {
@@ -9108,6 +9118,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                 LiveSessionUiSrv.showEndSessionPopup();
                                 LiveSessionSrv._destroyCheckDurationInterval();
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                                // Security check to insure there isn't active session
+                                LiveSessionSrv._moveToArchive(liveSessionData);
                                 break;
                             default:
                                 $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
@@ -9212,8 +9224,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             this.endLiveSession = function (liveSessionGuid) {
                 var getDataPromMap = {};
                 getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
-                getDataPromMap.currUid = UserProfileService.getCurrUserId();
-                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
                 getDataPromMap.storage = _getStorage();
                 return $q.all(getDataPromMap).then(function (data) {
                     var dataToSave = {};
@@ -9223,26 +9233,44 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
                     dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
 
-                    data.currUidLiveSessionRequests[data.liveSessionData.guid] = false;
-                    var activePath = data.currUidLiveSessionRequests.$$path;
-                    dataToSave[activePath] = {};
-                    var archivePath = activePath.replace('/active', '/archive');
-                    archivePath += '/' + liveSessionGuid;
-                    dataToSave[archivePath] = false;
-
-                    var otherUserLiveSessionRequestPath;
-                    if (data.liveSessionData.studentId !== data.currUid) {
-                        otherUserLiveSessionRequestPath = data.liveSessionData.studentPath;
-                    } else {
-                        otherUserLiveSessionRequestPath = data.liveSessionData.teacherPath;
-                    }
-                    var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
-                    dataToSave[otherUserActivePath] = {};
-                    var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
-                    otherUserArchivePath += '/' + liveSessionGuid;
-                    dataToSave[otherUserArchivePath] = false;
+                    _this._moveToArchive(data.liveSessionData);
 
                     return data.storage.update(dataToSave);
+                });
+            };
+
+            this._moveToArchive = function (liveSessionData) {
+                var getDataPromMap = {};
+                getDataPromMap.currUid = UserProfileService.getCurrUserId();
+                getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
+                getDataPromMap.storage = _getStorage();
+                return $q.all(getDataPromMap).then(function (data) {
+                    var dataToSave = {};
+
+                    if (data.currUidLiveSessionRequests){
+                        data.currUidLiveSessionRequests[liveSessionData.guid] = false;
+                        var activePath = data.currUidLiveSessionRequests.$$path;
+                        dataToSave[activePath] = {};
+                        var archivePath = activePath.replace('/active', '/archive');
+                        archivePath += '/' + liveSessionData.guid;
+                        dataToSave[archivePath] = false;
+
+                        var otherUserLiveSessionRequestPath;
+                        if (liveSessionData.studentId !== data.currUid) {
+                            otherUserLiveSessionRequestPath = liveSessionData.studentPath;
+                        } else {
+                            otherUserLiveSessionRequestPath = liveSessionData.teacherPath;
+                        }
+                        if (otherUserLiveSessionRequestPath){
+                            var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
+                            dataToSave[otherUserActivePath] = {};
+                            var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
+                            otherUserArchivePath += '/' + liveSessionData.guid;
+                            dataToSave[otherUserArchivePath] = false;
+                        }
+
+                        return data.storage.update(dataToSave);
+                    }
                 });
             };
 
