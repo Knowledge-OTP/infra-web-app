@@ -786,8 +786,9 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     'use strict';
     angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
         function () {
-        'ngInject';
+   //     'ngInject';
 
+        AppSelectController.$inject = ["$scope", "$filter", "ENV"];
         var directive = {
             templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
             restrict: 'E',
@@ -800,6 +801,8 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
         };
 
         function AppSelectController($scope, $filter, ENV) {
+            'ngInject';
+
             var self = this;
             var currentAppName = ENV.firebaseAppScopeName;
             var translateFilter = $filter('translate');
