@@ -319,7 +319,7 @@
                     status: this.invitationStatus.connectToUser,
                     invitationId: invitationId,
                     receiverAppName: ENV.firebaseAppScopeName,
-                    senderAppName: ENV.firebaseDashboardAppScopeName
+                    senderAppName: ENV.dashboardAppName
                 };
                 return this.updateInvitationStatus(invitation).then(function (response) {
                     if (response.data.success) {
@@ -344,7 +344,8 @@
             this.updateInvitationStatus = function (invitation) {
                 var authData = AuthService.getAuth();
                 invitation.uid = authData.uid;
-                invitation.senderAppName = ENV.firebaseDashboardAppScopeName;
+                invitation.senderAppName = ENV.dashboardAppName;
+                invitation.receiverAppName = ENV.studentAppName;
                 invitation.senderEmail = authData.password.email;
                 return updateStatus(invitation);
             };
@@ -363,7 +364,7 @@
                 return UserProfileService.getProfile().then(function (profile) {
                     var authData = AuthService.getAuth();
                     var newInvitiation = [{
-                        receiverAppName: ENV.firebaseDashboardAppScopeName,
+                        receiverAppName: ENV.dashboardAppName,
                         receiverEmail: receiverEmail,
                         receiverName: receiverName || receiverEmail,
                         senderAppName: ENV.firebaseAppScopeName,
@@ -387,7 +388,7 @@
                 var authData = AuthService.getAuth();
                 invitation.uid = authData.uid;
                 invitation.status = this.invitationStatus.senderDelete;
-                invitation.receiverAppName = ENV.firebaseDashboardAppScopeName;
+                invitation.receiverAppName = ENV.dashboardAppName;
                 invitation.senderAppName = ENV.firebaseAppScopeName;
                 invitation.senderEmail = authData.password.email;
                 return updateStatus(invitation);
