@@ -274,7 +274,7 @@
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/activePanel/activePanel.template.html",
     "<div class=\"active-panel ng-hide\"\n" +
     "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
