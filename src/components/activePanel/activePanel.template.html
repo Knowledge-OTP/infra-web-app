@@ -42,8 +42,7 @@
                               ng-class="{disabled: !d.shareScreenBtnsEnable}"
                               ng-click="d.shareMyScreen()"
                               name="active-panel-share-screen-icon"
-                              class="share-my-screen"
-                              title="{{d.translatedStrings.SHARE_MY_SCREEN}}">
+                              class="share-my-screen">
                         <md-tooltip znk-tooltip class="md-fab">
                             {{d.translatedStrings.SHARE_MY_SCREEN}}
                         </md-tooltip>
@@ -54,8 +53,7 @@
                           class="end-share-screen"
                           ng-class="{ 'isViewer' : d.shareScreenViewer }"
                           ng-click="d.endScreenSharing()"
-                          name="active-panel-stop-sharing-icon"
-                          title="{{d.translatedStrings.END_SCREEN_SHARING}}">
+                          name="active-panel-stop-sharing-icon">
                     <md-tooltip znk-tooltip class="md-fab">
                         {{d.translatedStrings.END_SCREEN_SHARING}}
                     </md-tooltip>

@@ -316,8 +316,12 @@
 
                                 break;
                             case LiveSessionStatusEnum.ENDED.enum:
+                                if (liveSessionData.studentId !== currUid) {
+                                    LiveSessionSrv.hangCall();
+                                    LiveSessionSrv._destroyCheckDurationInterval();
+                                }
+
                                 LiveSessionUiSrv.showEndSessionPopup();
-                                LiveSessionSrv._destroyCheckDurationInterval();
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                                 // Security check to insure there isn't active session
                                 LiveSessionSrv._moveToArchive(liveSessionData);
@@ -370,8 +374,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
-        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
+        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", "CallsDataGetterSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv, CallsDataGetterSrv) {
             'ngInject';
 
             var _this = this;
@@ -422,6 +426,14 @@
                 });
             };
 
+            this.hangCall = function () {
+                CallsDataGetterSrv.getCurrUserCallsData().then(function (userCallData) {
+                    if (userCallData) {
+                        CallsSrv.forceDisconnect(userCallData);
+                    }
+                });
+            };
+
             this.endLiveSession = function (liveSessionGuid) {
                 var getDataPromMap = {};
                 getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
@@ -433,6 +445,8 @@
                     data.liveSessionData.endTime = _getRoundTime();
                     data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
                     dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
+
+                    _this.hangCall();
 
                     _this._moveToArchive(data.liveSessionData);
 
@@ -700,9 +714,8 @@
                             SESSION_DURATION = liveSessionDuration;
                         }
                         liveSessionInterval.interval = $interval(function () {
-                            var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime)  / 60000; // convert to minutes
-                            var extendTimeMin = activeLiveSessionDataFromAdapter.extendTime / 60000;
-                            var maxSessionDuration = SESSION_DURATION.length + extendTimeMin;
+                            var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime);
+                            var maxSessionDuration = SESSION_DURATION.length + activeLiveSessionDataFromAdapter.extendTime;
                             var EndAlertTime = maxSessionDuration - SESSION_DURATION.endAlertTime;
 
                             if (liveSessionDuration >= maxSessionDuration) {
@@ -722,10 +735,11 @@
 
             function confirmExtendSession() {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid).then(function (liveSessionData) {
-                    liveSessionData.extendTime += SESSION_DURATION.extendTime * 60000;  // minutes to milliseconds
+                    liveSessionData.extendTime += SESSION_DURATION.extendTime;
                     return liveSessionData.$save();
                 }).then(function () {
-                    $log.debug('confirmExtendSession: Live session is extend by ' + SESSION_DURATION.extendTime + ' minutes.');
+                    var extendTimeInMin = SESSION_DURATION.extendTime / 60000; // convert to minutes
+                    $log.debug('confirmExtendSession: Live session is extend by ' + extendTimeInMin + ' minutes.');
                 }).catch(function () {
                     $log.debug('confirmExtendSession: Failed to save extend live session in guid: ' + activeLiveSessionDataFromAdapter.guid);
                 });
@@ -964,7 +978,7 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "    </span>\n" +
     "\n" +
     "    <span ng-if=\"vm.isLiveSessionActive\" title=\"{{'LIVE_SESSION.END_SESSION' | translate}}\">\n" +
-    "        <md-tooltip class=\"md-fab\">\n" +
+    "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "                        <div class=\"arrow-up\"></div>\n" +
     "                        {{'LIVE_SESSION.END_SESSION' | translate}}\n" +
     "        </md-tooltip>\n" +
