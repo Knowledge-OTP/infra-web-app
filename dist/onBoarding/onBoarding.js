@@ -190,12 +190,12 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv', 'ExerciseTypeEnum', 'ExerciseParentEnum',
-        function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum) {
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv', 'ExerciseTypeEnum', 'ExerciseParentEnum', 'ENV',
+        function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             this.completeExerciseDetails = {
                 exerciseId: 1173,
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
-                exerciseParentId: 43,
+                exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
                 ignoreIntro: true
             };

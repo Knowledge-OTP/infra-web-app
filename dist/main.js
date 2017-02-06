@@ -786,7 +786,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     'use strict';
     angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
         function () {
-   //     'ngInject';
+
 
         AppSelectController.$inject = ["$scope", "$filter", "ENV"];
         var directive = {
@@ -12068,12 +12068,12 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv', 'ExerciseTypeEnum', 'ExerciseParentEnum',
-        function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum) {
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv', 'ExerciseTypeEnum', 'ExerciseParentEnum', 'ENV',
+        function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             this.completeExerciseDetails = {
                 exerciseId: 1173,
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
-                exerciseParentId: 43,
+                exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
                 ignoreIntro: true
             };
