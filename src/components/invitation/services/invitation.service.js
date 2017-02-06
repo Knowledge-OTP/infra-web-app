@@ -106,6 +106,7 @@
                 var authData = AuthService.getAuth();
                 invitation.uid = authData.uid;
                 invitation.senderAppName = ENV.dashboardAppName;
+                invitation.receiverAppName = ENV.studentAppName;
                 invitation.senderEmail = authData.password.email;
                 return updateStatus(invitation);
             };
