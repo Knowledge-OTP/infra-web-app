@@ -193,20 +193,17 @@
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv', 'ExerciseTypeEnum', 'ExerciseParentEnum', 'ENV',
         function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             this.completeExerciseDetails = {
-                exerciseId: 1173,
+                exerciseId: ENV.testToTakeExerciseId,
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
-
-                // exitAction: exerciseData.exitAction,
-                // exerciseParentContent: exerciseParentContentProm.then(function (moduleContent) {
-                //     return {
-                //         name: moduleContent.name
-                //     };
-                // })
+                continueAction: function () {
+                    OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
+                    $state.go('app.onBoarding.diagnostic');
+                }
             };
         }]);
 })(angular);
@@ -300,6 +297,7 @@
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
 
+            //TODO(alex) check if someone uses onBoarding states, if not, change the order of states for logical consistency.
             var onBoardingStates = {
                 1: 'app.onBoarding.welcome',
                 2: 'app.onBoarding.schools',
@@ -511,7 +509,13 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.TEST_TO_TAKE\">\n" +
     "    <div class=\"diagnostic-title\" translate=\".FIGURE_OUT\"></div>\n" +
     "\n" +
-    "\n" +
+    "    <div class=\"diagnostic-intro-drv\">\n" +
+    "        <div class=\"description\">\n" +
+    "            <div class=\"diagnostic-text\"\n" +
+    "                 translate=\"{{'.FIGURE_OUT_DESC' | translate}}\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
     "    <div class=\"btn-wrap\">\n" +
     "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +
     "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +

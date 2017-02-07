@@ -231,6 +231,11 @@
         "WE_ARE_HERE_TO_HELP": "We'll show you how to earn your highest possible score!",
         "CONTINUE": "CONTINUE"
     },
+    "ON_BOARDING.TEST_TO_TAKE": {
+        "FIGURE_OUT": "Let's Figure Out Which Test Level You Should Take",
+        "START_TEST": "START TEST",
+        "FIGURE_OUT_DESC":"Solve a set of questions, built specifically to help us identify your proficiency level</br>and recommend the test level you should study for."
+    },
     "ON_BOARDING.GOALS": {
         "SET_SCORE_GOALS": "Set Your Score Goals",
         "WHATS_YOUR_DREAM_SCHOOL": "What is your dream school?",
