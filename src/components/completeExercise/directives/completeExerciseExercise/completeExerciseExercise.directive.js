@@ -19,6 +19,7 @@
                     lastShDataReceived;
 
                 $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
+                $ctrl.ExerciseTypeEnum = ExerciseTypeEnum;
 
                 function _initTimersVitalData() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();

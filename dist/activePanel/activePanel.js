@@ -320,8 +320,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                              ng-class=\"{disabled: !d.shareScreenBtnsEnable}\"\n" +
     "                              ng-click=\"d.shareMyScreen()\"\n" +
     "                              name=\"active-panel-share-screen-icon\"\n" +
-    "                              class=\"share-my-screen\"\n" +
-    "                              title=\"{{d.translatedStrings.SHARE_MY_SCREEN}}\">\n" +
+    "                              class=\"share-my-screen\">\n" +
     "                        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "                            {{d.translatedStrings.SHARE_MY_SCREEN}}\n" +
     "                        </md-tooltip>\n" +
@@ -332,8 +331,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                          class=\"end-share-screen\"\n" +
     "                          ng-class=\"{ 'isViewer' : d.shareScreenViewer }\"\n" +
     "                          ng-click=\"d.endScreenSharing()\"\n" +
-    "                          name=\"active-panel-stop-sharing-icon\"\n" +
-    "                          title=\"{{d.translatedStrings.END_SCREEN_SHARING}}\">\n" +
+    "                          name=\"active-panel-stop-sharing-icon\">\n" +
     "                    <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "                        {{d.translatedStrings.END_SCREEN_SHARING}}\n" +
     "                    </md-tooltip>\n" +

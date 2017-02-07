@@ -278,7 +278,6 @@
     angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
         function () {
 
-
         AppSelectController.$inject = ["$scope", "$filter", "ENV"];
         var directive = {
             templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
