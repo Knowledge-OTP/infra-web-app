@@ -9620,7 +9620,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     }
                 },function(err){
                     $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
-                    return $q.reject(err);
                 });
             }
 

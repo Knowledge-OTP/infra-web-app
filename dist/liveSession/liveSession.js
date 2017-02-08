@@ -819,7 +819,6 @@
                     }
                 },function(err){
                     $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
-                    return $q.reject(err);
                 });
             }
 
