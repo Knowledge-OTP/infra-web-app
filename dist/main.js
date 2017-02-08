@@ -1599,7 +1599,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             'ngInject';
 
          function _updateAwsConfig(config, options) {
-            options = options || {};
+            options = options || {}; 
             config = config || false;
 
             if (!config) {
@@ -1609,20 +1609,20 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                        IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
                    }),
                };
-            }
+            } 
 
             $window.AWS.config.update(config);
-         }
+         }  
 
          function _init() {
               _updateAwsConfig();
-         }
-
+         }   
+           
          _init();
 
           function _generateFileName() {
-             return UtilitySrv.general.createGuid();
-          }
+             return UtilitySrv.general.createGuid();  
+          } 
 
           function _getFile(blob, fileName) {
               return new $window.File([blob], fileName);
@@ -1631,7 +1631,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
           function _addSlashToPath(prefixPath) {
               var prefixPathLength = prefixPath.length;
 
-              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength);
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
 
               if (lastChar === '/') {
                   return prefixPath;
@@ -1660,13 +1660,13 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
               this.filesNames = [];
 
-              this.bucketInstance = new $window.AWS.S3({
+              this.bucketInstance = new $window.AWS.S3({ 
                    params: {
                       Bucket: this.bucketName
                    }
               });
           }
-
+         
         AwsS3.prototype.upload = function(options) {
             var deferred = $q.defer();
             var errMsg;
@@ -1688,7 +1688,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                   deferred.reject(errMsg);
                   return;
             }
-
+            
             var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
             var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
             var filePath = _getFilePath(options.prefixPath, file);
@@ -1711,7 +1711,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             });
 
             return deferred.promise;
-        };
+        };  
 
         AwsS3.prototype.getCurrentFileName = function() {
             var filesLength = this.filesNames.length;
@@ -1725,9 +1725,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
         this.updateConfig = updateConfig;
 
-        // factory for aws bucket instances
+        // factory for aws bucket instances 
         this.newAwsS3 = function (options) {
-            return new AwsS3(options);
+            return new AwsS3(options);   
         };
 
       }]
@@ -3045,11 +3045,11 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                 var dontInit = false;
                 return ExerciseResultSrv.getExerciseResult(
-                    exerciseDetails.exerciseTypeId,
-                    exerciseDetails.exerciseId,
-                    exerciseDetails.examId,
-                    exerciseDetails.examSectionsNum,
-                    dontInit,
+                    exerciseDetails.exerciseTypeId, 
+                    exerciseDetails.exerciseId, 
+                    exerciseDetails.examId, 
+                    exerciseDetails.examSectionsNum, 
+                    dontInit, 
                     exerciseDetails.exerciseParentId);
             };
         }]
@@ -3071,22 +3071,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {
+                exerciseCycleSrv.invoke = function (methodName, data) {                    
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {
+                    if (angular.isDefined(hook)) {                      
                         try {
-                            fn = $injector.invoke(hook);
+                            fn = $injector.invoke(hook);         
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-
+                        
                         return fn.apply(null, data);
-                    }
+                    } 
                 };
 
                 return exerciseCycleSrv;
@@ -3330,7 +3330,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-
+        
     ]);
 })(angular);
 
@@ -4728,7 +4728,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -6145,7 +6145,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject';
+            'ngInject'; 
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -6174,7 +6174,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
 
 (function () {
     'use strict';
-
+    
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -6425,7 +6425,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-
+                    
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -9118,7 +9118,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                 break;
                             case LiveSessionStatusEnum.ENDED.enum:
                                 if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.hangCall();
+                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
                                     LiveSessionSrv._destroyCheckDurationInterval();
                                 }
 
@@ -9175,8 +9175,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
-        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", "CallsDataGetterSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv, CallsDataGetterSrv) {
+        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
             'ngInject';
 
             var _this = this;
@@ -9220,17 +9220,22 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
             this.makeAutoCall = function (receiverId) {
                 CallsSrv.callsStateChanged(receiverId).then(function (data) {
-                    $log.debug('_makeAutoCall: success in callsStateChanged, data: ', data);
+                    $log.debug('makeAutoCall: success in callsStateChanged, data: ', data);
                 }).catch(function (err) {
-                    $log.error('_makeAutoCall: error in callsStateChanged, err: ' + err);
+                    $log.error('makeAutoCall: error in callsStateChanged, err: ' + err);
                     CallsErrorSrv.showErrorModal(err);
                 });
             };
 
-            this.hangCall = function () {
-                CallsDataGetterSrv.getCurrUserCallsData().then(function (userCallData) {
-                    if (userCallData && !angular.equals(userCallData, {})) {
-                        CallsSrv.forceDisconnect(userCallData);
+            this.hangCall = function (receiverId) {
+                CallsSrv.isUserInActiveCall().then(function (isInActiveCall) {
+                    if (isInActiveCall) {
+                        CallsSrv.callsStateChanged(receiverId).then(function (data) {
+                            $log.debug('hangCall: success in callsStateChanged, data: ', data);
+                        }).catch(function (err) {
+                            $log.error('hangCall: error in callsStateChanged, err: ' + err);
+                            CallsErrorSrv.showErrorModal(err);
+                        });
                     }
                 });
             };
@@ -9590,11 +9595,18 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv',function(){
 
-        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV, ZnkToastSrv) {
+        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", "LiveSessionDataGetterSrv", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
+                              ZnkToastSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
             var childScope, liveSessionPhElement, readyProm;
             var LiveSessionUiSrv = {};
+
+            var SESSION_DURATION =  {
+                length: ENV.liveSession.sessionLength,
+                extendTime: ENV.liveSession.sessionExtendTime,
+                endAlertTime: ENV.liveSession.sessionEndAlertTime
+            };
 
             function _init() {
                 var bodyElement = angular.element(document.body);
@@ -9679,25 +9691,34 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             }
 
             function showSessionEndAlertPopup() {
-                var translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
-                translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
-                translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
-                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
-                return $q.all(translationsPromMap).then(function(translations){
-                    var popUpInstance = PopUpSrv.warning(
-                        translations.title,
-                        translations.content,
-                        translations.cancelBtnTitle,
-                        translations.extendBtnTitle
-                    );
-                    return popUpInstance.promise.then(function(res){
-                        return $q.reject(res);
-                    },function(res){
-                        return $q.resolve(res);
+                return LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {
+                    if (liveSessionDuration) {
+                        SESSION_DURATION = liveSessionDuration;
+                    }
+
+                    var translationsPromMap = {};
+                    translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
+                    translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: SESSION_DURATION.extendTime / 60000 });
+                    translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
+                    translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
+                    return $q.all(translationsPromMap).then(function(translations){
+                        var popUpInstance = PopUpSrv.warning(
+                            translations.title,
+                            translations.content,
+                            translations.cancelBtnTitle,
+                            translations.extendBtnTitle
+                        );
+                        return popUpInstance.promise.then(function(res){
+                            return $q.reject(res);
+                        },function(res){
+                            return $q.resolve(res);
+                        });
+                    },function(err){
+                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
+                        return $q.reject(err);
                     });
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showSessionEndAlertPopup getLiveSessionDuration failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -13855,13 +13876,13 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config'
+        'znk.infra.config' 
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -13951,7 +13972,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]);
+    ]);  
 })(angular);
 
 /**
@@ -14188,7 +14209,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         var vm = this;
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
-
+        
         vm.$onInit = function () {
             $q.all([
                 subjectOrderProm
@@ -14289,7 +14310,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     angular.module('znk.infra-web-app.tutorials').service('TutorialsSrv',
         ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", "SubjectsSrv", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum, SubjectsSrv) {
             'ngInject';
-
+        
             this.getSubjectOrder = function () {
                 return SubjectsSrv.getSubjectOrder();
             };
@@ -15512,7 +15533,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
-
+            
             var svgMap = {
                 'workouts-roadmap-checkmark': 'components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg',
                 'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
@@ -15818,7 +15839,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
