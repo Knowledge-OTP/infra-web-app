@@ -3,11 +3,18 @@
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv',function(){
 
-        this.$get = function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV, ZnkToastSrv) {
+        this.$get = function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
+                              ZnkToastSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
             var childScope, liveSessionPhElement, readyProm;
             var LiveSessionUiSrv = {};
+
+            var SESSION_DURATION =  {
+                length: ENV.liveSession.sessionLength,
+                extendTime: ENV.liveSession.sessionExtendTime,
+                endAlertTime: ENV.liveSession.sessionEndAlertTime
+            };
 
             function _init() {
                 var bodyElement = angular.element(document.body);
@@ -92,25 +99,34 @@
             }
 
             function showSessionEndAlertPopup() {
-                var translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
-                translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
-                translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
-                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
-                return $q.all(translationsPromMap).then(function(translations){
-                    var popUpInstance = PopUpSrv.warning(
-                        translations.title,
-                        translations.content,
-                        translations.cancelBtnTitle,
-                        translations.extendBtnTitle
-                    );
-                    return popUpInstance.promise.then(function(res){
-                        return $q.reject(res);
-                    },function(res){
-                        return $q.resolve(res);
+                return LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {
+                    if (liveSessionDuration) {
+                        SESSION_DURATION = liveSessionDuration;
+                    }
+
+                    var translationsPromMap = {};
+                    translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
+                    translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: SESSION_DURATION.extendTime / 60000 });
+                    translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
+                    translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
+                    return $q.all(translationsPromMap).then(function(translations){
+                        var popUpInstance = PopUpSrv.warning(
+                            translations.title,
+                            translations.content,
+                            translations.cancelBtnTitle,
+                            translations.extendBtnTitle
+                        );
+                        return popUpInstance.promise.then(function(res){
+                            return $q.reject(res);
+                        },function(res){
+                            return $q.resolve(res);
+                        });
+                    },function(err){
+                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
+                        return $q.reject(err);
                     });
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showSessionEndAlertPopup getLiveSessionDuration failure' + err);
                     return $q.reject(err);
                 });
             }

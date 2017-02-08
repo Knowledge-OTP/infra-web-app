@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
         function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv, CallsDataGetterSrv) {
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
             'ngInject';
 
             var _this = this;
@@ -47,17 +47,22 @@
 
             this.makeAutoCall = function (receiverId) {
                 CallsSrv.callsStateChanged(receiverId).then(function (data) {
-                    $log.debug('_makeAutoCall: success in callsStateChanged, data: ', data);
+                    $log.debug('makeAutoCall: success in callsStateChanged, data: ', data);
                 }).catch(function (err) {
-                    $log.error('_makeAutoCall: error in callsStateChanged, err: ' + err);
+                    $log.error('makeAutoCall: error in callsStateChanged, err: ' + err);
                     CallsErrorSrv.showErrorModal(err);
                 });
             };
 
-            this.hangCall = function () {
-                CallsDataGetterSrv.getCurrUserCallsData().then(function (userCallData) {
-                    if (userCallData && !angular.equals(userCallData, {})) {
-                        CallsSrv.forceDisconnect(userCallData);
+            this.hangCall = function (receiverId) {
+                CallsSrv.isUserInActiveCall().then(function (isInActiveCall) {
+                    if (isInActiveCall) {
+                        CallsSrv.callsStateChanged(receiverId).then(function (data) {
+                            $log.debug('hangCall: success in callsStateChanged, data: ', data);
+                        }).catch(function (err) {
+                            $log.error('hangCall: error in callsStateChanged, err: ' + err);
+                            CallsErrorSrv.showErrorModal(err);
+                        });
                     }
                 });
             };
@@ -73,8 +78,6 @@
                     data.liveSessionData.endTime = _getRoundTime();
                     data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
                     dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
-
-                    _this.hangCall();
 
                     _this._moveToArchive(data.liveSessionData);
 
