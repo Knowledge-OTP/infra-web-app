@@ -13,6 +13,7 @@ znk-exercise {
     &.done-btn-show, &.pager-displayed {
         question-builder:not(.answer-explanation-open) {
             .question-basic-style {
+                overflow: auto;
                 height: calc(100% - 60px);
             }
 
