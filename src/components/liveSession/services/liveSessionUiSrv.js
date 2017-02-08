@@ -22,6 +22,15 @@
                 liveSessionPhElement = angular.element('<div class="live-session-ph"></div>');
 
                 bodyElement.append(liveSessionPhElement);
+
+                //load liveSessionDuration from firebase
+                LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {
+                    if (liveSessionDuration) {
+                        SESSION_DURATION = liveSessionDuration;
+                    }
+                },function(err){
+                    $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
+                });
             }
 
             function _endLiveSession() {
@@ -99,34 +108,25 @@
             }
 
             function showSessionEndAlertPopup() {
-                return LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {
-                    if (liveSessionDuration) {
-                        SESSION_DURATION = liveSessionDuration;
-                    }
-
-                    var translationsPromMap = {};
-                    translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
-                    translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: SESSION_DURATION.extendTime / 60000 });
-                    translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
-                    translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
-                    return $q.all(translationsPromMap).then(function(translations){
-                        var popUpInstance = PopUpSrv.warning(
-                            translations.title,
-                            translations.content,
-                            translations.cancelBtnTitle,
-                            translations.extendBtnTitle
-                        );
-                        return popUpInstance.promise.then(function(res){
-                            return $q.reject(res);
-                        },function(res){
-                            return $q.resolve(res);
-                        });
-                    },function(err){
-                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
-                        return $q.reject(err);
+                var translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
+                translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: SESSION_DURATION.extendTime / 60000 });
+                translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
+                return $q.all(translationsPromMap).then(function(translations){
+                    var popUpInstance = PopUpSrv.warning(
+                        translations.title,
+                        translations.content,
+                        translations.cancelBtnTitle,
+                        translations.extendBtnTitle
+                    );
+                    return popUpInstance.promise.then(function(res){
+                        return $q.reject(res);
+                    },function(res){
+                        return $q.resolve(res);
                     });
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showSessionEndAlertPopup getLiveSessionDuration failure' + err);
+                    $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
                     return $q.reject(err);
                 });
             }
