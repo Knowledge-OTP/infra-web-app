@@ -76,6 +76,10 @@
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
                 }
+
+                if(exerciseContent.categoryId2) {
+                    exerciseResult.categoryId2 = exerciseContent.categoryId2;
+                }
             }
 
             function _setExerciseContentQuestions() {
