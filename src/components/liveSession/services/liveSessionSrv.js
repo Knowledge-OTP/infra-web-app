@@ -79,8 +79,6 @@
                     data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
                     dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
 
-                    _this.hangCall();
-
                     _this._moveToArchive(data.liveSessionData);
 
                     return data.storage.update(dataToSave);
