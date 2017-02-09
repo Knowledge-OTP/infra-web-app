@@ -243,8 +243,10 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
                             });
                             allProm.push(isTutorialAvailProm);
 
-                            var getParentCategoryProm = CategoryService.getParentCategory(tutorial.categoryId).then(function (generalCategory) {
-                                if(generalCategory && generalCategory.name){
+                            var categoryId = tutorial.categoryId || tutorial.categoryId2;
+
+                            var getParentCategoryProm = CategoryService.getParentCategory(categoryId).then(function (generalCategory) {
+                                if(generalCategory && generalCategory.name) {
                                     tutorial.categoryName = generalCategory.name;
                                 }
                             });
