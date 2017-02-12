@@ -603,7 +603,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "                <md-tooltip md-visible=\"vm.showTooltip\" md-direction=\"top\" class=\"goals-info md-whiteframe-2dp\">\n" +
     "                    <div translate=\".GOALS_INFO\" class=\"top-text\"></div>\n" +
     "                </md-tooltip>\n" +
-    "                <svg-icon class=\"info-icon\" name=\"user-goals-info-icon\" ng-mouseover=\"vm.showTooltip=true\" ng-mouseleave=\"vm.showTooltip=false\"></svg-icon>\n" +
+    "                <svg-icon class=\"info-icon\" name=\"user-goals-info-icon\" ng-mouseover=\"vm.showTooltip=true\"\n" +
+    "                          ng-mouseleave=\"vm.showTooltip=false\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"subject-goal-wrap\">\n" +
@@ -623,7 +624,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"composite-wrap\">\n" +
+    "        <div class=\"composite-wrap\" ng-if=\"!setting.hideTotalScore\">\n" +
     "            <div class=\"composite-score\">\n" +
     "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
     "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +
@@ -638,7 +639,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
     "            <svg-icon name=\"user-goals-v-icon\" class=\"v-icon\" ng-show=\"showVIcon\"></svg-icon>\n" +
     "            <span translate=\"{{saveTitle}}\"></span>\n" +
-    "            <svg-icon name=\"user-goals-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\" ng-show=\"setting.saveBtn.showSaveIcon\"></svg-icon>\n" +
+    "            <svg-icon name=\"user-goals-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\"\n" +
+    "                      ng-show=\"setting.saveBtn.showSaveIcon\"></svg-icon>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
     "    <div class=\"school-selector-wrap animate-if\"\n" +

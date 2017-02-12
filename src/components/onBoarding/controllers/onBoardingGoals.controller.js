@@ -6,6 +6,7 @@
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
                 recommendedGoalsTitle: true,
+                hideTotalScore: onBoardingSettings ? onBoardingSettings.hideTotalScore : false,
                 saveBtn: {
                     title: '.SAVE_AND_CONTINUE',
                     showSaveIcon: true
