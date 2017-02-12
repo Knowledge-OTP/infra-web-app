@@ -194,7 +194,7 @@
                     .raccoon-img-wrapper {
                         .diagnostic-raccoon {
                             position: relative;
-                            //top: -48px;
+                            top: -48px;
                             background-size: contain;
                             @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon@2x', 164px, 166px);
                         }

@@ -254,6 +254,7 @@ on-boarding-bar {
         text-align: center; }
         .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
           position: relative;
+          top: -48px;
           background-size: contain;
           /*CSS for basic styling and non-retina image path:*/
           background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");

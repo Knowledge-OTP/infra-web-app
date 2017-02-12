@@ -17,7 +17,7 @@
                 var nextStep;
                 var nextState;
 
-                if (onBoardingSettings.showTestToTake) {
+                if (onBoardingSettings && onBoardingSettings.showTestToTake) {
                     nextStep = OnBoardingService.steps.INTRO_TEST_TO_TAKE;
                     nextState = 'app.onBoarding.introTestToTake';
                 } else {

@@ -12038,7 +12038,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 var nextStep;
                 var nextState;
 
-                if (onBoardingSettings.showTestToTake) {
+                if (onBoardingSettings && onBoardingSettings.showTestToTake) {
                     nextStep = OnBoardingService.steps.INTRO_TEST_TO_TAKE;
                     nextState = 'app.onBoarding.introTestToTake';
                 } else {
@@ -12127,7 +12127,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController', ['userProfile', 'OnBoardingService', '$state', 'znkAnalyticsSrv',
-        function(userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
+        function (userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
 
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.username = userProfile.nickname || '';
@@ -12135,8 +12135,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             this.nextStep = function () {
                 var nextStep;
                 var nextState;
-                znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingWelcomeStep' });
-                if (onBoardingSettings.showSchoolStep) {
+                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingWelcomeStep'});
+                if (onBoardingSettings && onBoardingSettings.showSchoolStep) {
                     nextStep = OnBoardingService.steps.SCHOOLS;
                     nextState = 'app.onBoarding.schools';
                 } else {
@@ -12146,7 +12146,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 OnBoardingService.setOnBoardingStep(nextStep);
                 $state.go(nextState);
             };
-    }]);
+        }]);
 })(angular);
 
 (function (angular) {
@@ -12567,6 +12567,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"icons-section\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
     "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-1\"></svg-icon>\n" +
+    "            <span translate=\".OR\">or</span>\n" +
     "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-2\"></svg-icon>\n" +
     "        </div>\n" +
     "    </div>\n" +
