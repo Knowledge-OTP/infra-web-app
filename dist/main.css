@@ -5198,6 +5198,13 @@ on-boarding-bar {
               display: inline-block;
               width: 164px;
               height: 166px; } }
+      .on-board .container .step.diagnostic .diagnostic-text-or {
+        width: 100px;
+        text-align: center;
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400; }
       .on-board .container .step.diagnostic .icons-section {
         display: -ms-flexbox;
         display: flex;
@@ -5229,13 +5236,6 @@ on-boarding-bar {
             display: none; }
           .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
             display: inline-block; }
-        .on-board .container .step.diagnostic .icons-section diagnostic-text-or {
-          width: 100px;
-          text-align: center;
-          font-size: 16px;
-          color: #4f4d4d;
-          font-family: Lato;
-          font-weight: 400; }
       .on-board .container .step.diagnostic .section-question {
         font-size: 18px;
         color: #757a83;

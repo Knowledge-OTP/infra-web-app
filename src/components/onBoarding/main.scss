@@ -201,7 +201,11 @@
                         }
                     }
                 }
-
+                .diagnostic-text-or {
+                    width: 100px;
+                    text-align: center;
+                    @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
+                }
                 .icons-section {
                     display: flex;
                     justify-content: space-around;
@@ -245,11 +249,7 @@
                             }
                         }
                     }
-                    diagnostic-text-or {
-                        width: 100px;
-                        text-align: center;
-                        @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
-                    }
+
                 }
 
                 .section-question {
