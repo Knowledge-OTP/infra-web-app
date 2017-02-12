@@ -12554,7 +12554,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "<on-boarding-bar step=\"goals\"></on-boarding-bar>\n" +
     "");
   $templateCache.put("components/onBoarding/templates/onBoardingIntroTestToTake.template.html",
-    "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.TEST_TO_TAKE\">\n" +
+    "<section class=\"step testToTake\" translate-namespace=\"ON_BOARDING.TEST_TO_TAKE\">\n" +
     "    <div class=\"diagnostic-title\" translate=\".FIGURE_OUT\"></div>\n" +
     "\n" +
     "    <div class=\"diagnostic-intro-drv\">\n" +

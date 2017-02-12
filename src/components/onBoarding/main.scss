@@ -1,7 +1,8 @@
 @import './src/scss/imports/variables',
-'./src/scss/imports/colors',
-'./bower_components/infra/dist/mixins/mixins',
-'./scss/onboarding-bar-directive';
+        './src/scss/imports/colors',
+        './bower_components/infra/dist/mixins/mixins',
+        './scss/onboarding-bar-directive';
+
 /**
 *  FONTS
 */
@@ -17,6 +18,7 @@
 /* Material+Icons */
 @import url(#{$googleFontCDN}icon?family=Material+Icons);
 
+
 @mixin set-on-boarding-btn {
     padding-right: 45px;
     padding-left: 45px;
@@ -26,11 +28,11 @@
 }
 
 .on-board {
-    /**
-    *  SVG
-    */
+     /**
+     *  SVG
+     */
     svg-icon {
-        display: block;
+      display:block;
     }
     .svg-wrapper {
         height: 100%;
@@ -47,7 +49,7 @@
     }
 
     .main-title {
-        @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
+        @include text-style(32px, $fontColor3,Quicksand,$semiBoldFontWeight);
         text-align: center;
         margin-top: 20px;
     }
@@ -82,85 +84,84 @@
         box-sizing: border-box;
         position: relative;
 
-        .step {
+        .step{
             display: flex;
             flex-direction: column;
             justify-content: center;
 
-            .welcome {
-                .main-title {
+            .welcome{
+                .main-title{
                     margin-bottom: 50px;
                 }
-                .sub-title {
+                .sub-title{
                     @include text-style(22px, $fontColor2, Lato, $demiFontWeight);
                     margin-bottom: 8px;
-                    div {
+                    div{
                         display: inline-block;
                     }
-                    span {
+                    span{
                         color: $fontColor6;
                         font-weight: $regularFontWeight;
                         margin-left: 4px;
                     }
                 }
 
-                .btn-wrap {
+                .btn-wrap{
                     margin-top: 105px;
                     text-align: center;
 
                     .md-button {
-                        @include set-on-boarding-btn();
+                      @include set-on-boarding-btn();
                         .btn-text {
                             display: flex;
-                            .dropdown-arrow-icon {
+                        .dropdown-arrow-icon{
+                            display: inline-flex;
+                            svg {
+                                width: 14px;
                                 display: inline-flex;
-                                svg {
-                                    width: 14px;
-                                    display: inline-flex;
-                                    margin-left: 10px;
-                                    transform: rotate(-90deg);
-                                    polyline {
-                                        stroke: $bgColor3;
-                                    }
+                                transform: rotate(-90deg);
+                                polyline {
+                                    stroke: $bgColor3;
                                 }
                             }
                         }
                     }
                 }
             }
+        }
 
-            .goals {
-                .sub-title {
+            .goals{
+                .sub-title{
                     @include text-style(24px, $fontColor2, Quicksand, $regularFontWeight);
                     text-align: center;
                     margin-top: 32px;
                     margin-bottom: 10px;
                 }
 
-                .light-title {
+                .light-title{
                     @include text-style(12px, $fontColor4, Lato, $lightFontWeight);
                     text-align: center;
                     margin-top: 15px;
                     cursor: pointer;
                     outline: none;
                 }
-                .select-schools-title {
+                .select-schools-title{
                     @include text-style(16px, $fontColor2, Lato, $lightFontWeight);
                     margin-bottom: 20px;
                     text-align: center;
                 }
             }
 
-            .bg-wrap {
+            .bg-wrap{
                 position: absolute;
                 bottom: 0;
                 left: calc(50% - 180px);
                 .thinking-raccoon {
-                    display: block;
+                    display:block;
                 }
             }
 
-            &.make-padding {
+            &.make-padding{
                 flex-direction: row;
                 padding: {
                     top: 61px;
@@ -168,7 +169,106 @@
                 }
             }
 
-            &.diagnostic {
+            &.diagnostic{
+                .diagnostic-title{
+                    @include text-style(32px, $fontColor3,Quicksand,$semiBoldFontWeight);
+                    text-align: center;
+                    margin-top: 20px;
+                }
+                .diagnostic-intro-drv {
+                    text-align: center;
+
+                    .diagnostic-text {
+                        margin: 20px auto;
+                        max-height: 45px;
+                        @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+                    }
+
+
+                }
+                .diagnostic-sub-title{
+                    @include text-style(16px, $fontColor3,Lato,$lightFontWeight);
+                    text-align: center;
+                    margin-top: 15px;
+                }
+                .raccoon-img-container{
+                    position: relative;
+
+                    .raccoon-img-wrapper {
+                        .diagnostic-raccoon {
+                            position: relative;
+                            top: -48px;
+                            background-size: contain;
+                            @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon@2x', 160px, 169px);
+                        }
+                    }
+                }
+
+                .icons-section {
+                    display: flex;
+                    justify-content: space-around;
+                    width: 40%;
+                    margin: 0 auto;
+                    min-height: 140px;
+
+                }
+
+                .section-question {
+                    @include text-style(18px, $fontColor4, Lato, $regularFontWeight);
+                    text-transform: uppercase;
+                    .diagnostic-instructions {
+                        margin-top: 40px;
+                        text-transform: none;
+                        display: flex;
+                        flex-direction: column;
+                        padding: {
+                            right: 110px;
+                            left: 110px;
+                        };
+                        .diagnostic-instructions-title {
+                            @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
+                        }
+                        .diagnostic-instructions-text {
+                            @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+                            margin-top: 5px;
+                            min-height: 38px;
+                        }
+                    }
+                }
+                .btn-wrap{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    margin: {
+                        top: 52px;
+                        right: 20px;
+                    }
+
+                    button{
+                        display: inline-block;
+                        padding-right: 45px;
+                        padding-left: 45px;
+                        height: 38px;
+                        &.default {
+                            color: $fontColor6;
+                            border: none;
+                            padding: 0;
+                            width: 130px;
+                            text-transform: none;
+                            font-family: Lato;
+                            font-weight: $regularFontWeight;
+                            font-size: 16px;
+                        }
+                    }
+                }
+
+                diagnostic-intro {
+                    .section-question {
+                        margin-top: -25px;
+                    }
+                }
+            }
+            &.testToTake {
                 .diagnostic-title {
                     @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
                     text-align: center;
@@ -280,7 +380,6 @@
                     flex-direction: row;
                     justify-content: flex-end;
                     margin: {
-                        top: 52px;
                         right: 20px;
                     }
 
@@ -300,11 +399,6 @@
                     }
                 }
 
-                diagnostic-intro {
-                    .section-question {
-                        margin-top: -25px;
-                    }
-                }
             }
         }
     }

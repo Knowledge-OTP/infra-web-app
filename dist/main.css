@@ -4994,8 +4994,8 @@ on-boarding-bar {
 /* Material+Icons */
 .on-board {
   /**
-    *  SVG
-    */
+     *  SVG
+     */
   position: relative; }
   .on-board svg-icon {
     display: block; }
@@ -5111,7 +5111,6 @@ on-boarding-bar {
                 width: 14px;
                 display: -ms-inline-flexbox;
                 display: inline-flex;
-                margin-left: 10px;
                 transform: rotate(-90deg); }
                 .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg polyline {
                   stroke: #ffffff; }
@@ -5174,11 +5173,10 @@ on-boarding-bar {
         text-align: center;
         margin-top: 15px; }
       .on-board .container .step.diagnostic .raccoon-img-container {
-        position: relative;
-        text-align: center; }
+        position: relative; }
         .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
           position: relative;
-          top: -34px;
+          top: -48px;
           background-size: contain;
           /*CSS for basic styling and non-retina image path:*/
           background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");
@@ -5186,8 +5184,8 @@ on-boarding-bar {
           background-position: center;
           background-size: cover;
           display: inline-block;
-          width: 164px;
-          height: 166px;
+          width: 160px;
+          height: 169px;
           /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
           @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
             .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
@@ -5196,15 +5194,8 @@ on-boarding-bar {
               background-position: center;
               background-size: cover;
               display: inline-block;
-              width: 164px;
-              height: 166px; } }
-      .on-board .container .step.diagnostic .diagnostic-text-or {
-        width: 100px;
-        text-align: center;
-        font-size: 16px;
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 400; }
+              width: 160px;
+              height: 169px; } }
       .on-board .container .step.diagnostic .icons-section {
         display: -ms-flexbox;
         display: flex;
@@ -5213,29 +5204,6 @@ on-boarding-bar {
         width: 40%;
         margin: 0 auto;
         min-height: 140px; }
-        .on-board .container .step.diagnostic .icons-section .icon-wrapper {
-          height: 100%;
-          display: -ms-flexbox;
-          display: flex;
-          -ms-flex-align: center;
-              align-items: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-          vertical-align: top; }
-          .on-board .container .step.diagnostic .icons-section .icon-wrapper svg-icon.on-boarding-bubble {
-            width: 146px;
-            height: 104px; }
-            .on-board .container .step.diagnostic .icons-section .icon-wrapper svg-icon.on-boarding-bubble svg line {
-              stroke: #AF89D2;
-              stroke-width: 30px; }
-          .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
-            display: none; }
-          .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlySubjectIcon .subject-icon {
-            display: inline-block; }
-          .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlyDoneIcon .subject-icon {
-            display: none; }
-          .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
-            display: inline-block; }
       .on-board .container .step.diagnostic .section-question {
         font-size: 18px;
         color: #757a83;
@@ -5283,6 +5251,143 @@ on-boarding-bar {
             padding: 0;
             width: 130px;
             text-transform: none;
+            font-family: Lato;
+            font-weight: 400;
+            font-size: 16px; }
+      .on-board .container .step.diagnostic diagnostic-intro .section-question {
+        margin-top: -25px; }
+      .on-board .container .step.testToTake .diagnostic-title {
+        font-size: 32px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 600;
+        text-align: center;
+        margin-top: 20px; }
+      .on-board .container .step.testToTake .diagnostic-intro-drv {
+        text-align: center; }
+        .on-board .container .step.testToTake .diagnostic-intro-drv .diagnostic-text {
+          margin: 20px auto;
+          max-height: 45px;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 300; }
+      .on-board .container .step.testToTake .diagnostic-sub-title {
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 300;
+        text-align: center;
+        margin-top: 15px; }
+      .on-board .container .step.testToTake .raccoon-img-container {
+        position: relative;
+        text-align: center; }
+        .on-board .container .step.testToTake .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+          position: relative;
+          top: -34px;
+          background-size: contain;
+          /*CSS for basic styling and non-retina image path:*/
+          background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          display: inline-block;
+          width: 164px;
+          height: 166px;
+          /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+          @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+            .on-board .container .step.testToTake .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+              background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x@2x.png");
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: cover;
+              display: inline-block;
+              width: 164px;
+              height: 166px; } }
+      .on-board .container .step.testToTake .diagnostic-text-or {
+        width: 100px;
+        text-align: center;
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400; }
+      .on-board .container .step.testToTake .icons-section {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
+        width: 40%;
+        margin: 0 auto;
+        min-height: 140px; }
+        .on-board .container .step.testToTake .icons-section .icon-wrapper {
+          height: 100%;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-align: center;
+              align-items: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+          vertical-align: top; }
+          .on-board .container .step.testToTake .icons-section .icon-wrapper svg-icon.on-boarding-bubble {
+            width: 146px;
+            height: 104px; }
+            .on-board .container .step.testToTake .icons-section .icon-wrapper svg-icon.on-boarding-bubble svg line {
+              stroke: #AF89D2;
+              stroke-width: 30px; }
+          .on-board .container .step.testToTake .icons-section .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
+            display: none; }
+          .on-board .container .step.testToTake .icons-section .icon-wrapper.onlySubjectIcon .subject-icon {
+            display: inline-block; }
+          .on-board .container .step.testToTake .icons-section .icon-wrapper.onlyDoneIcon .subject-icon {
+            display: none; }
+          .on-board .container .step.testToTake .icons-section .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
+            display: inline-block; }
+      .on-board .container .step.testToTake .section-question {
+        font-size: 18px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: uppercase; }
+        .on-board .container .step.testToTake .section-question .diagnostic-instructions {
+          margin-top: 40px;
+          text-transform: none;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-direction: column;
+              flex-direction: column;
+          padding-right: 110px;
+          padding-left: 110px; }
+          .on-board .container .step.testToTake .section-question .diagnostic-instructions .diagnostic-instructions-title {
+            font-size: 16px;
+            color: #4f4d4d;
+            font-family: Lato;
+            font-weight: 400; }
+          .on-board .container .step.testToTake .section-question .diagnostic-instructions .diagnostic-instructions-text {
+            font-size: 16px;
+            color: #4f4d4d;
+            font-family: Lato;
+            font-weight: 300;
+            margin-top: 5px;
+            min-height: 38px; }
+      .on-board .container .step.testToTake .btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: row;
+            flex-direction: row;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+        margin-right: 20px; }
+        .on-board .container .step.testToTake .btn-wrap button {
+          display: inline-block;
+          padding-right: 45px;
+          padding-left: 45px;
+          height: 38px; }
+          .on-board .container .step.testToTake .btn-wrap button.default {
+            color: #0a9bad;
+            border: none;
+            padding: 0;
+            width: 130px;
+            text-transform: none;
             padding-right: 45px;
             padding-left: 45px;
             height: 38px;
@@ -5291,8 +5396,6 @@ on-boarding-bar {
             color: white;
             font-family: Lato;
             font-weight: 400; }
-      .on-board .container .step.diagnostic diagnostic-intro .section-question {
-        margin-top: -25px; }
 
 /* fonts size */
 /* general */
