@@ -2489,6 +2489,10 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
                 }
+
+                if(exerciseContent.categoryId2) {
+                    exerciseResult.categoryId2 = exerciseContent.categoryId2;
+                }
             }
 
             function _setExerciseContentQuestions() {
@@ -9118,7 +9122,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                 break;
                             case LiveSessionStatusEnum.ENDED.enum:
                                 if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.hangCall();
+                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
                                     LiveSessionSrv._destroyCheckDurationInterval();
                                 }
 
@@ -9175,8 +9179,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
-        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", "CallsDataGetterSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv, CallsDataGetterSrv) {
+        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
             'ngInject';
 
             var _this = this;
@@ -9220,17 +9224,22 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
             this.makeAutoCall = function (receiverId) {
                 CallsSrv.callsStateChanged(receiverId).then(function (data) {
-                    $log.debug('_makeAutoCall: success in callsStateChanged, data: ', data);
+                    $log.debug('makeAutoCall: success in callsStateChanged, data: ', data);
                 }).catch(function (err) {
-                    $log.error('_makeAutoCall: error in callsStateChanged, err: ' + err);
+                    $log.error('makeAutoCall: error in callsStateChanged, err: ' + err);
                     CallsErrorSrv.showErrorModal(err);
                 });
             };
 
-            this.hangCall = function () {
-                CallsDataGetterSrv.getCurrUserCallsData().then(function (userCallData) {
-                    if (userCallData && !angular.equals(userCallData, {})) {
-                        CallsSrv.forceDisconnect(userCallData);
+            this.hangCall = function (receiverId) {
+                CallsSrv.isUserInActiveCall().then(function (isInActiveCall) {
+                    if (isInActiveCall) {
+                        CallsSrv.callsStateChanged(receiverId).then(function (data) {
+                            $log.debug('hangCall: success in callsStateChanged, data: ', data);
+                        }).catch(function (err) {
+                            $log.error('hangCall: error in callsStateChanged, err: ' + err);
+                            CallsErrorSrv.showErrorModal(err);
+                        });
                     }
                 });
             };
@@ -9246,8 +9255,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     data.liveSessionData.endTime = _getRoundTime();
                     data.liveSessionData.duration = data.liveSessionData.endTime - data.liveSessionData.startTime;
                     dataToSave [data.liveSessionData.$$path] = data.liveSessionData;
-
-                    _this.hangCall();
 
                     _this._moveToArchive(data.liveSessionData);
 
@@ -9590,11 +9597,18 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv',function(){
 
-        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV, ZnkToastSrv) {
+        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", "LiveSessionDataGetterSrv", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
+                              ZnkToastSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
             var childScope, liveSessionPhElement, readyProm;
             var LiveSessionUiSrv = {};
+
+            var SESSION_DURATION =  {
+                length: ENV.liveSession.sessionLength,
+                extendTime: ENV.liveSession.sessionExtendTime,
+                endAlertTime: ENV.liveSession.sessionEndAlertTime
+            };
 
             function _init() {
                 var bodyElement = angular.element(document.body);
@@ -9602,6 +9616,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 liveSessionPhElement = angular.element('<div class="live-session-ph"></div>');
 
                 bodyElement.append(liveSessionPhElement);
+
+                //load liveSessionDuration from firebase
+                LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {
+                    if (liveSessionDuration) {
+                        SESSION_DURATION = liveSessionDuration;
+                    }
+                },function(err){
+                    $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
+                });
             }
 
             function _endLiveSession() {
@@ -9680,8 +9703,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
             function showSessionEndAlertPopup() {
                 var translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
-                translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
+                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
+                translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: SESSION_DURATION.extendTime / 60000 });
                 translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
@@ -14415,8 +14438,10 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
                             });
                             allProm.push(isTutorialAvailProm);
 
-                            var getParentCategoryProm = CategoryService.getParentCategory(tutorial.categoryId).then(function (generalCategory) {
-                                if(generalCategory && generalCategory.name){
+                            var categoryId = tutorial.categoryId || tutorial.categoryId2;
+
+                            var getParentCategoryProm = CategoryService.getParentCategory(categoryId).then(function (generalCategory) {
+                                if(generalCategory && generalCategory.name) {
                                     tutorial.categoryName = generalCategory.name;
                                 }
                             });

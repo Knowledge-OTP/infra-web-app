@@ -3,11 +3,18 @@
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv',function(){
 
-        this.$get = function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV, ZnkToastSrv) {
+        this.$get = function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
+                              ZnkToastSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
             var childScope, liveSessionPhElement, readyProm;
             var LiveSessionUiSrv = {};
+
+            var SESSION_DURATION =  {
+                length: ENV.liveSession.sessionLength,
+                extendTime: ENV.liveSession.sessionExtendTime,
+                endAlertTime: ENV.liveSession.sessionEndAlertTime
+            };
 
             function _init() {
                 var bodyElement = angular.element(document.body);
@@ -15,6 +22,15 @@
                 liveSessionPhElement = angular.element('<div class="live-session-ph"></div>');
 
                 bodyElement.append(liveSessionPhElement);
+
+                //load liveSessionDuration from firebase
+                LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {
+                    if (liveSessionDuration) {
+                        SESSION_DURATION = liveSessionDuration;
+                    }
+                },function(err){
+                    $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
+                });
             }
 
             function _endLiveSession() {
@@ -93,8 +109,8 @@
 
             function showSessionEndAlertPopup() {
                 var translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: ENV.liveSession.sessionEndAlertTime });
-                translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: ENV.liveSession.sessionExtendTime });
+                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
+                translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: SESSION_DURATION.extendTime / 60000 });
                 translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){

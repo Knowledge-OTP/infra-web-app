@@ -52,7 +52,7 @@
                                 break;
                             case LiveSessionStatusEnum.ENDED.enum:
                                 if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.hangCall();
+                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
                                     LiveSessionSrv._destroyCheckDurationInterval();
                                 }
 
