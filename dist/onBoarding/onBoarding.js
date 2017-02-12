@@ -653,7 +653,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"icons-section\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
     "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-1\"></svg-icon>\n" +
-    "            <span translate=\".OR\">or</span>\n" +
+    "            <span class=\"diagnostic-text-or\" translate=\".OR\">or</span>\n" +
     "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-2\"></svg-icon>\n" +
     "        </div>\n" +
     "    </div>\n" +

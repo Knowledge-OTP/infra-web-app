@@ -203,7 +203,8 @@ user-goals {
             &.znk.md-primary {
                 padding-right: 45px;
                 padding-left: 45px;
-                height: 40px;
+                height: 38px;
+                @include text-style(14px, $fontColor1, Lato, $regularFontWeight);
             }
         }
 
@@ -216,7 +217,7 @@ user-goals {
             top: -2px;
 
             svg {
-                width: 15px;
+                width: 14px;
                 transform: rotate(-90deg);
 
                 polyline {

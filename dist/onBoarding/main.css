@@ -71,8 +71,8 @@ on-boarding-bar {
 /* Material+Icons */
 .on-board {
   /**
-     *  SVG
-     */
+    *  SVG
+    */
   position: relative; }
   .on-board svg-icon {
     display: block; }
@@ -170,11 +170,11 @@ on-boarding-bar {
         margin-top: 105px;
         text-align: center; }
         .on-board .container .step .welcome .btn-wrap .md-button {
-          padding-left: 52px;
-          padding-right: 52px;
-          height: 50px;
-          border-radius: 30px;
-          font-size: 21px;
+          padding-right: 45px;
+          padding-left: 45px;
+          height: 38px;
+          border-radius: 50px;
+          font-size: 14px;
           color: white;
           font-family: Lato;
           font-weight: 400; }
@@ -185,9 +185,10 @@ on-boarding-bar {
               display: -ms-inline-flexbox;
               display: inline-flex; }
               .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg {
-                width: 16px;
+                width: 14px;
                 display: -ms-inline-flexbox;
                 display: inline-flex;
+                margin-left: 10px;
                 transform: rotate(-90deg); }
                 .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg polyline {
                   stroke: #ffffff; }
@@ -254,7 +255,7 @@ on-boarding-bar {
         text-align: center; }
         .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
           position: relative;
-          top: -48px;
+          top: -34px;
           background-size: contain;
           /*CSS for basic styling and non-retina image path:*/
           background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");
@@ -305,6 +306,13 @@ on-boarding-bar {
             display: none; }
           .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
             display: inline-block; }
+        .on-board .container .step.diagnostic .icons-section diagnostic-text-or {
+          width: 100px;
+          text-align: center;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400; }
       .on-board .container .step.diagnostic .section-question {
         font-size: 18px;
         color: #757a83;
@@ -342,18 +350,20 @@ on-boarding-bar {
         margin-top: 52px;
         margin-right: 20px; }
         .on-board .container .step.diagnostic .btn-wrap button {
-          display: inline-block;
-          padding-right: 66px;
-          padding-left: 66px;
-          height: 42px; }
+          display: inline-block; }
           .on-board .container .step.diagnostic .btn-wrap button.default {
             color: #0a9bad;
             border: none;
             padding: 0;
             width: 130px;
             text-transform: none;
+            padding-right: 45px;
+            padding-left: 45px;
+            height: 38px;
+            border-radius: 50px;
+            font-size: 14px;
+            color: white;
             font-family: Lato;
-            font-weight: 400;
-            font-size: 16px; }
+            font-weight: 400; }
       .on-board .container .step.diagnostic diagnostic-intro .section-question {
         margin-top: -25px; }
