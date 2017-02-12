@@ -22,20 +22,20 @@
 @import url(//fonts.googleapis.com/css?family=Quicksand:700);
 /* Material+Icons */
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
-diagnostic-intro, .diagnostic-intro {
+diagnostic-intro {
   width: 100%; }
-  diagnostic-intro .diagnostic-intro-drv, .diagnostic-intro .diagnostic-intro-drv {
+  diagnostic-intro .diagnostic-intro-drv {
     text-align: center; }
-    diagnostic-intro .diagnostic-intro-drv .diagnostic-text, .diagnostic-intro .diagnostic-intro-drv .diagnostic-text {
+    diagnostic-intro .diagnostic-intro-drv .diagnostic-text {
       margin: 20px auto;
       max-height: 45px;
       font-size: 16px;
       color: #4f4d4d;
       font-family: Lato;
       font-weight: 300; }
-    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container, .diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
+    diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
       position: relative; }
-      diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon, .diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+      diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
         position: relative;
         top: -48px;
         background-size: contain;
@@ -49,7 +49,7 @@ diagnostic-intro, .diagnostic-intro {
         height: 169px;
         /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
         @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-          diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon, .diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+          diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
             background-image: url("/assets/images/diagnostic-raccoon@2x.png");
             background-repeat: no-repeat;
             background-position: center;
@@ -57,7 +57,7 @@ diagnostic-intro, .diagnostic-intro {
             display: inline-block;
             width: 160px;
             height: 169px; } }
-    diagnostic-intro .diagnostic-intro-drv .icons-section, .diagnostic-intro .diagnostic-intro-drv .icons-section {
+    diagnostic-intro .diagnostic-intro-drv .icons-section {
       display: -ms-flexbox;
       display: flex;
       -ms-flex-pack: distribute;
@@ -65,7 +65,7 @@ diagnostic-intro, .diagnostic-intro {
       width: 40%;
       margin: 0 auto;
       min-height: 140px; }
-      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle {
+      diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle {
         width: 65px;
         height: 65px;
         border-radius: 50%;
@@ -73,11 +73,11 @@ diagnostic-intro, .diagnostic-intro {
         border: 2px solid;
         border-color: #cccccc;
         position: relative; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.subject-icon, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.subject-icon {
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.subject-icon {
           display: none; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete {
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete {
           display: block; }
-        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
+        diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper {
           height: 100%;
           display: -ms-flexbox;
           display: flex;
@@ -86,29 +86,29 @@ diagnostic-intro, .diagnostic-intro {
           -ms-flex-pack: center;
               justify-content: center;
           vertical-align: top; }
-          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon {
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper .subject-icon {
             width: 45px; }
-          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete {
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete {
             display: none;
             width: 65%; }
-            diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete svg line, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete svg line {
+            diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper svg-icon.section-complete svg line {
               stroke: white;
               stroke-width: 30px; }
-          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon svg-icon.section-complete, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
             display: none; }
-          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon .subject-icon, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon .subject-icon {
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlySubjectIcon .subject-icon {
             display: inline-block; }
-          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon .subject-icon, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon .subject-icon {
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon .subject-icon {
             display: none; }
-          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon svg-icon.section-complete, .diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
+          diagnostic-intro .diagnostic-intro-drv .icons-section .icon-circle .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
             display: inline-block; }
-    diagnostic-intro .diagnostic-intro-drv .section-question, .diagnostic-intro .diagnostic-intro-drv .section-question {
+    diagnostic-intro .diagnostic-intro-drv .section-question {
       font-size: 18px;
       color: #757a83;
       font-family: Lato;
       font-weight: 400;
       text-transform: uppercase; }
-      diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions, .diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions {
+      diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions {
         margin-top: 40px;
         text-transform: none;
         display: -ms-flexbox;
@@ -117,12 +117,12 @@ diagnostic-intro, .diagnostic-intro {
             flex-direction: column;
         padding-right: 110px;
         padding-left: 110px; }
-        diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title, .diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title {
+        diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-title {
           font-size: 16px;
           color: #4f4d4d;
           font-family: Lato;
           font-weight: 400; }
-        diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-text, .diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-text {
+        diagnostic-intro .diagnostic-intro-drv .section-question .diagnostic-instructions .diagnostic-instructions-text {
           font-size: 16px;
           color: #4f4d4d;
           font-family: Lato;

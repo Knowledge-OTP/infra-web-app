@@ -1,6 +1,7 @@
 @import './src/scss/imports/variables',
-'./src/scss/imports/colors',
-'./bower_components/infra/dist/mixins/mixins';
+        './src/scss/imports/colors',
+        './bower_components/infra/dist/mixins/mixins';
+
 /**
 *  FONTS
 */
@@ -16,18 +17,18 @@
 /* Material+Icons */
 @import url(#{$googleFontCDN}icon?family=Material+Icons);
 
-diagnostic-intro, .diagnostic-intro {
+diagnostic-intro {
     width: 100%;
     .diagnostic-intro-drv {
         text-align: center;
 
-        .diagnostic-text {
-            margin: 20px auto;
-            max-height: 45px;
-            @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
-        }
+            .diagnostic-text {
+                margin: 20px auto;
+                max-height: 45px;
+                @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+            }
 
-        .raccoon-img-container {
+        .raccoon-img-container{
             position: relative;
 
             .raccoon-img-wrapper {
@@ -40,77 +41,78 @@ diagnostic-intro, .diagnostic-intro {
             }
         }
 
+
         .icons-section {
-            display: flex;
-            justify-content: space-around;
-            width: 40%;
-            margin: 0 auto;
-            min-height: 140px;
-            .icon-circle {
-                width: 65px;
-                height: 65px;
-                border-radius: 50%;
-                display: inline-block;
-                border: 2px solid;
-                border-color: $borderColor8;
-                position: relative;
+                display: flex;
+                justify-content: space-around;
+                width: 40%;
+                margin: 0 auto;
+                min-height: 140px;
+                .icon-circle {
+                    width: 65px;
+                    height: 65px;
+                    border-radius: 50%;
+                    display: inline-block;
+                    border: 2px solid;
+                    border-color: $borderColor8;
+                    position: relative;
 
-                &.done {
-                    .icon-wrapper {
-                        svg-icon {
-                            &.subject-icon {
-                                display: none;
-                            }
+                    &.done {
+                        .icon-wrapper {
+                            svg-icon{
+                                &.subject-icon{
+                                    display: none;
+                                }
 
-                            &.section-complete {
-                                display: block;
-                            }
-                        }
-                    }
-                }
-
-                .icon-wrapper {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    vertical-align: top;
-
-                    .subject-icon {
-                        width: 45px;
-                    }
-
-                    svg-icon {
-                        &.section-complete {
-                            display: none;
-                            width: 65%;
-                            svg {
-                                line {
-                                    stroke: $bgColor1;
-                                    stroke-width: 30px;
+                                &.section-complete {
+                                    display: block;
                                 }
                             }
                         }
                     }
 
-                    &.onlySubjectIcon {
-                        svg-icon.section-complete {
-                            display: none;
-                        }
+                    .icon-wrapper {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        vertical-align: top;
+
                         .subject-icon {
-                            display: inline-block;
+                            width: 45px;
                         }
-                    }
-                    &.onlyDoneIcon {
-                        .subject-icon {
-                            display: none;
+
+                        svg-icon {
+                            &.section-complete {
+                                display: none;
+                                width: 65%;
+                                svg {
+                                    line {
+                                        stroke: $bgColor1;
+                                        stroke-width: 30px;
+                                    }
+                                }
+                            }
                         }
-                        svg-icon.section-complete {
-                            display: inline-block;
+
+                        &.onlySubjectIcon {
+                            svg-icon.section-complete {
+                                display: none;
+                            }
+                            .subject-icon {
+                                display: inline-block;
+                            }
+                        }
+                        &.onlyDoneIcon {
+                            .subject-icon {
+                                display: none;
+                            }
+                            svg-icon.section-complete {
+                                display: inline-block;
+                            }
                         }
                     }
                 }
-            }
         }
 
         .section-question {
@@ -124,8 +126,7 @@ diagnostic-intro, .diagnostic-intro {
                 padding: {
                     right: 110px;
                     left: 110px;
-                }
-            ;
+                };
                 .diagnostic-instructions-title {
                     @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
                 }
