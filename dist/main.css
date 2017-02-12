@@ -5173,10 +5173,10 @@ on-boarding-bar {
         text-align: center;
         margin-top: 15px; }
       .on-board .container .step.diagnostic .raccoon-img-container {
-        position: relative; }
+        position: relative;
+        text-align: center; }
         .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
           position: relative;
-          top: -48px;
           background-size: contain;
           /*CSS for basic styling and non-retina image path:*/
           background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");
@@ -5184,8 +5184,8 @@ on-boarding-bar {
           background-position: center;
           background-size: cover;
           display: inline-block;
-          width: 160px;
-          height: 169px;
+          width: 164px;
+          height: 166px;
           /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
           @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
             .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
@@ -5194,8 +5194,8 @@ on-boarding-bar {
               background-position: center;
               background-size: cover;
               display: inline-block;
-              width: 160px;
-              height: 169px; } }
+              width: 164px;
+              height: 166px; } }
       .on-board .container .step.diagnostic .icons-section {
         display: -ms-flexbox;
         display: flex;
@@ -5214,7 +5214,8 @@ on-boarding-bar {
               justify-content: center;
           vertical-align: top; }
           .on-board .container .step.diagnostic .icons-section .icon-wrapper svg-icon.on-boarding-bubble {
-            width: 45px; }
+            width: 146px;
+            height: 104px; }
             .on-board .container .step.diagnostic .icons-section .icon-wrapper svg-icon.on-boarding-bubble svg line {
               stroke: #AF89D2;
               stroke-width: 30px; }

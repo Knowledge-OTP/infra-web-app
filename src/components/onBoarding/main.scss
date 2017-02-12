@@ -190,13 +190,13 @@
                 }
                 .raccoon-img-container{
                     position: relative;
-
+                    text-align: center;
                     .raccoon-img-wrapper {
                         .diagnostic-raccoon {
                             position: relative;
-                            top: -48px;
+                            //top: -48px;
                             background-size: contain;
-                            @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon@2x', 160px, 169px);
+                            @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon@2x', 164px, 166px);
                         }
                     }
                 }
@@ -216,7 +216,8 @@
 
                         svg-icon {
                             &.on-boarding-bubble {
-                                width: 45px;
+                                width: 146px;
+                                height: 104px;
                                 svg {
                                     line {
                                         stroke: $bgColor64;
