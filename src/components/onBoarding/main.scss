@@ -286,6 +286,9 @@
 
                     button {
                         display: inline-block;
+                        padding-right: 45px;
+                        padding-left: 45px;
+                        height: 38px;
                         &.default {
                             color: $fontColor6;
                             border: none;

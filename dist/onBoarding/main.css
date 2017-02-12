@@ -350,7 +350,10 @@ on-boarding-bar {
         margin-top: 52px;
         margin-right: 20px; }
         .on-board .container .step.diagnostic .btn-wrap button {
-          display: inline-block; }
+          display: inline-block;
+          padding-right: 45px;
+          padding-left: 45px;
+          height: 38px; }
           .on-board .container .step.diagnostic .btn-wrap button.default {
             color: #0a9bad;
             border: none;
