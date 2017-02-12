@@ -5257,6 +5257,15 @@ on-boarding-bar {
             font-size: 16px; }
       .on-board .container .step.diagnostic diagnostic-intro .section-question {
         margin-top: -25px; }
+      .on-board .container .step.intro-test-to-take .diagnostic-intro-drv {
+        text-align: center; }
+        .on-board .container .step.intro-test-to-take .diagnostic-intro-drv .diagnostic-text {
+          margin: 20px auto;
+          max-height: 45px;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 300; }
       .on-board .container .step.intro-test-to-take .raccoon-img-container {
         position: relative;
         text-align: center; }

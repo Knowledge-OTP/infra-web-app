@@ -270,6 +270,16 @@
                 }
             }
             &.intro-test-to-take {
+                .diagnostic-intro-drv {
+                    text-align: center;
+
+                    .diagnostic-text {
+                        margin: 20px auto;
+                        max-height: 45px;
+                        @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+                    }
+
+                }
                 .raccoon-img-container {
                     position: relative;
                     text-align: center;
