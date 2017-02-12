@@ -214,6 +214,34 @@
                         justify-content: center;
                         vertical-align: top;
 
+                        svg-icon {
+                            &.on-boarding-bubble {
+                                width: 45px;
+                                svg {
+                                    line {
+                                        stroke: $bgColor64;
+                                        stroke-width: 30px;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.onlySubjectIcon {
+                            svg-icon.section-complete {
+                                display: none;
+                            }
+                            .subject-icon {
+                                display: inline-block;
+                            }
+                        }
+                        &.onlyDoneIcon {
+                            .subject-icon {
+                                display: none;
+                            }
+                            svg-icon.section-complete {
+                                display: inline-block;
+                            }
+                        }
                     }
                 }
 

@@ -290,6 +290,19 @@ on-boarding-bar {
           -ms-flex-pack: center;
               justify-content: center;
           vertical-align: top; }
+          .on-board .container .step.diagnostic .icons-section .icon-wrapper svg-icon.on-boarding-bubble {
+            width: 45px; }
+            .on-board .container .step.diagnostic .icons-section .icon-wrapper svg-icon.on-boarding-bubble svg line {
+              stroke: #AF89D2;
+              stroke-width: 30px; }
+          .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
+            display: none; }
+          .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlySubjectIcon .subject-icon {
+            display: inline-block; }
+          .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlyDoneIcon .subject-icon {
+            display: none; }
+          .on-board .container .step.diagnostic .icons-section .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
+            display: inline-block; }
       .on-board .container .step.diagnostic .section-question {
         font-size: 18px;
         color: #757a83;
