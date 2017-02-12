@@ -116,6 +116,7 @@
                             display: flex;
                         .dropdown-arrow-icon{
                             display: inline-flex;
+                            margin-left: 10px;
                             svg {
                                 width: 14px;
                                 display: inline-flex;
@@ -268,27 +269,7 @@
                     }
                 }
             }
-            &.testToTake {
-                .diagnostic-title {
-                    @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
-                    text-align: center;
-                    margin-top: 20px;
-                }
-                .diagnostic-intro-drv {
-                    text-align: center;
-
-                    .diagnostic-text {
-                        margin: 20px auto;
-                        max-height: 45px;
-                        @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
-                    }
-
-                }
-                .diagnostic-sub-title {
-                    @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
-                    text-align: center;
-                    margin-top: 15px;
-                }
+            &.intro-test-to-take {
                 .raccoon-img-container {
                     position: relative;
                     text-align: center;
@@ -350,30 +331,6 @@
                         }
                     }
 
-                }
-
-                .section-question {
-                    @include text-style(18px, $fontColor4, Lato, $regularFontWeight);
-                    text-transform: uppercase;
-                    .diagnostic-instructions {
-                        margin-top: 40px;
-                        text-transform: none;
-                        display: flex;
-                        flex-direction: column;
-                        padding: {
-                            right: 110px;
-                            left: 110px;
-                        }
-                    ;
-                        .diagnostic-instructions-title {
-                            @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
-                        }
-                        .diagnostic-instructions-text {
-                            @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
-                            margin-top: 5px;
-                            min-height: 38px;
-                        }
-                    }
                 }
                 .btn-wrap {
                     display: flex;
