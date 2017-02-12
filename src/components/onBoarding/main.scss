@@ -270,6 +270,11 @@
                 }
             }
             &.intro-test-to-take {
+                .diagnostic-title {
+                    @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
+                    text-align: center;
+                    margin-top: 20px;
+                }
                 .diagnostic-intro-drv {
                     text-align: center;
 

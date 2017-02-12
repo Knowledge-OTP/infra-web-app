@@ -334,6 +334,13 @@ on-boarding-bar {
             font-size: 16px; }
       .on-board .container .step.diagnostic diagnostic-intro .section-question {
         margin-top: -25px; }
+      .on-board .container .step.intro-test-to-take .diagnostic-title {
+        font-size: 32px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 600;
+        text-align: center;
+        margin-top: 20px; }
       .on-board .container .step.intro-test-to-take .diagnostic-intro-drv {
         text-align: center; }
         .on-board .container .step.intro-test-to-take .diagnostic-intro-drv .diagnostic-text {
