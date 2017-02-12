@@ -207,70 +207,13 @@
                     width: 40%;
                     margin: 0 auto;
                     min-height: 140px;
-                    .icon-circle {
-                        width: 65px;
-                        height: 65px;
-                        border-radius: 50%;
-                        display: inline-block;
-                        border: 2px solid;
-                        border-color: $borderColor8;
-                        position: relative;
+                    .icon-wrapper {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        vertical-align: top;
 
-                        &.done {
-                            .icon-wrapper {
-                                svg-icon{
-                                    &.subject-icon{
-                                        display: none;
-                                    }
-
-                                    &.section-complete {
-                                        display: block;
-                                    }
-                                }
-                            }
-                        }
-
-                        .icon-wrapper {
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            vertical-align: top;
-
-                            .subject-icon {
-                                width: 45px;
-                            }
-
-                            svg-icon {
-                                &.section-complete {
-                                    display: none;
-                                    width: 65%;
-                                    svg {
-                                        line {
-                                            stroke: $bgColor1;
-                                            stroke-width: 30px;
-                                        }
-                                    }
-                                }
-                            }
-
-                            &.onlySubjectIcon {
-                                svg-icon.section-complete {
-                                    display: none;
-                                }
-                                .subject-icon {
-                                    display: inline-block;
-                                }
-                            }
-                            &.onlyDoneIcon {
-                                .subject-icon {
-                                    display: none;
-                                }
-                                svg-icon.section-complete {
-                                    display: inline-block;
-                                }
-                            }
-                        }
                     }
                 }
 

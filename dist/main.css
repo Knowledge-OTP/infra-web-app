@@ -1390,7 +1390,8 @@ diagnostic-intro {
       font-family: Lato;
       font-weight: 300; }
     diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
-      position: relative; }
+      position: relative;
+      text-align: center; }
       diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
         position: relative;
         top: -48px;
@@ -5203,43 +5204,15 @@ on-boarding-bar {
         width: 40%;
         margin: 0 auto;
         min-height: 140px; }
-        .on-board .container .step.diagnostic .icons-section .icon-circle {
-          width: 65px;
-          height: 65px;
-          border-radius: 50%;
-          display: inline-block;
-          border: 2px solid;
-          border-color: #cccccc;
-          position: relative; }
-          .on-board .container .step.diagnostic .icons-section .icon-circle.done .icon-wrapper svg-icon.subject-icon {
-            display: none; }
-          .on-board .container .step.diagnostic .icons-section .icon-circle.done .icon-wrapper svg-icon.section-complete {
-            display: block; }
-          .on-board .container .step.diagnostic .icons-section .icon-circle .icon-wrapper {
-            height: 100%;
-            display: -ms-flexbox;
-            display: flex;
-            -ms-flex-align: center;
-                align-items: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-            vertical-align: top; }
-            .on-board .container .step.diagnostic .icons-section .icon-circle .icon-wrapper .subject-icon {
-              width: 45px; }
-            .on-board .container .step.diagnostic .icons-section .icon-circle .icon-wrapper svg-icon.section-complete {
-              display: none;
-              width: 65%; }
-              .on-board .container .step.diagnostic .icons-section .icon-circle .icon-wrapper svg-icon.section-complete svg line {
-                stroke: white;
-                stroke-width: 30px; }
-            .on-board .container .step.diagnostic .icons-section .icon-circle .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
-              display: none; }
-            .on-board .container .step.diagnostic .icons-section .icon-circle .icon-wrapper.onlySubjectIcon .subject-icon {
-              display: inline-block; }
-            .on-board .container .step.diagnostic .icons-section .icon-circle .icon-wrapper.onlyDoneIcon .subject-icon {
-              display: none; }
-            .on-board .container .step.diagnostic .icons-section .icon-circle .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
-              display: inline-block; }
+        .on-board .container .step.diagnostic .icons-section .icon-wrapper {
+          height: 100%;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-align: center;
+              align-items: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+          vertical-align: top; }
       .on-board .container .step.diagnostic .section-question {
         font-size: 18px;
         color: #757a83;
