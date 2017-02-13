@@ -3213,6 +3213,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "        <div ng-transclude=\"preRightPart\"></div>\n" +
     "        <div class=\"exit\"\n" +
     "             translate=\".EXIT\"\n" +
+    "             ng-if=\"$ctrl.completeExerciseCtrl.exerciseDetails.hideQuit\"\n" +
     "             ng-click=\"$ctrl.completeExerciseCtrl.settings.exitAction()\">\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -12114,7 +12115,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
-                showQuit:false,
+                hideQuit:true,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {

@@ -200,7 +200,7 @@
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
-                showQuit:false,
+                hideQuit:true,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
