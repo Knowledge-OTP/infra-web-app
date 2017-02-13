@@ -12120,6 +12120,10 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 continueAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                     $state.go('app.onBoarding.diagnostic');
+                },
+                exitAction: function () {
+                    OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE_SUMMARY);
+                    $state.go('app.onBoarding.testToTakeSummary');
                 }
             };
         }]);
@@ -12222,7 +12226,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 4: 'app.onBoarding.diagnostic',
                 5: 'app.workouts.roadmap',
                 6: 'app.onBoarding.introTestToTake',
-                7: 'app.onBoarding.testToTake'
+                7: 'app.onBoarding.testToTake',
+                8: 'app.onBoarding.testToTakeSummary'
             };
 
             onBoardingServiceObj.steps = {
@@ -12232,7 +12237,9 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 DIAGNOSTIC: 4,
                 ROADMAP: 5,
                 INTRO_TEST_TO_TAKE: 6,
-                TEST_TO_TAKE: 7
+                TEST_TO_TAKE: 7,
+                TEST_TO_TAKE_SUMMARY: 8
+
             };
 
             onBoardingServiceObj.getOnBoardingStep = function () {

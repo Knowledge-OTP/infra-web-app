@@ -14,7 +14,8 @@
                 4: 'app.onBoarding.diagnostic',
                 5: 'app.workouts.roadmap',
                 6: 'app.onBoarding.introTestToTake',
-                7: 'app.onBoarding.testToTake'
+                7: 'app.onBoarding.testToTake',
+                8: 'app.onBoarding.testToTakeSummary'
             };
 
             onBoardingServiceObj.steps = {
@@ -24,7 +25,9 @@
                 DIAGNOSTIC: 4,
                 ROADMAP: 5,
                 INTRO_TEST_TO_TAKE: 6,
-                TEST_TO_TAKE: 7
+                TEST_TO_TAKE: 7,
+                TEST_TO_TAKE_SUMMARY: 8
+
             };
 
             onBoardingServiceObj.getOnBoardingStep = function () {
