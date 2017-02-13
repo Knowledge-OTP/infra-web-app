@@ -12332,7 +12332,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
 
-            //TODO(alex) check if someone uses onBoarding states, if not, change the order of states for logical consistency.
             var onBoardingStates = {
                 1: 'app.onBoarding.welcome',
                 2: 'app.onBoarding.schools',
