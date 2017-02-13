@@ -4756,7 +4756,7 @@ md-dialog.my-profile {
       cursor: pointer; }
   md-dialog.my-profile .content-wrapper {
     overflow: auto; }
-    md-dialog.my-profile .content-wrapper .change-profile, md-dialog.my-profile .content-wrapper .change-password {
+    md-dialog.my-profile .content-wrapper .change-profile, md-dialog.my-profile .content-wrapper .selected-test-level, md-dialog.my-profile .content-wrapper .change-password {
       display: block;
       background-color: #f9f9f9;
       padding: 20px 20px 0 20px;

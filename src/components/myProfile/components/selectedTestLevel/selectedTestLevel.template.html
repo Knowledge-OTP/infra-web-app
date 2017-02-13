@@ -1,0 +1,33 @@
+<md-dialog-content ng-switch="!!vm.showSuccess">
+    <div class="container-title md-subheader" translate=".SELECTED_TEST_LEVEL"></div>
+    <form name="authform" novalidate class="auth-form" ng-submit="vm.changeTestLevel(authform)" ng-switch-when="false">
+        <div class="znk-input-group">
+            <label for="selectedTestLevel">{{'.TEST_LEVEL' | translate}}</label>
+            <div class="znk-input">
+                <select id="selectedTestLevel" name="selectedTestLevel"
+                        ng-options="selectedTest.name for selectedTest in vm.testLevelList"
+                        ng-model="vm.selectedTestLevel">
+                </select>
+            </div>
+        </div>
+        <div class="btn-wrap">
+            <button class="save-pass-btn"><span translate="{{vm.saveTitle}}"></span></button>
+        </div>
+    </form>
+    <div class="big-success-msg" ng-switch-when="true">
+        <svg-icon class="completed-v-icon-wrap" name="myProfile-completed-v-icon"></svg-icon>
+        <div translate=".TEST_LEVEL_SAVE_SUCCESS"></div>
+        <div class="done-btn-wrap">
+            <md-button aria-label="{{'CHANGE_PASSWORD.DONE' | translate}}"
+                class="success drop-shadow md-primary green znk" ng-click="vm.closeDialog()">
+                <span translate=".DONE"></span>
+            </md-button>
+        </div>
+    </div>
+    <div class="msg-wrap" ng-class="{'show-error': vm.showError}" ng-if="vm.showError">
+        <div class="error-msg">
+            <svg-icon name="myProfile-danger-red-icon" class="myProfile-danger-red-icon"></svg-icon>
+            <div translate="{{vm.generalError}}"></div>
+        </div>
+    </div>
+</md-dialog-content>
