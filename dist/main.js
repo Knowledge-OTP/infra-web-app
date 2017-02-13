@@ -12114,6 +12114,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
+                showQuit:false,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
@@ -12121,7 +12122,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                     $state.go('app.onBoarding.diagnostic');
                 },
-                done: function () {
+                onExit: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                 }
             };
