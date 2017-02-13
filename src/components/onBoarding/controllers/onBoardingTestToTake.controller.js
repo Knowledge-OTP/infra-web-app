@@ -15,7 +15,7 @@
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                     $state.go('app.onBoarding.diagnostic');
                 },
-                onSummaryAction: function () {
+                setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                 }
             };
