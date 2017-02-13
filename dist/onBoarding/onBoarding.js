@@ -207,9 +207,8 @@
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                     $state.go('app.onBoarding.diagnostic');
                 },
-                exitAction: function () {
-                    OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE_SUMMARY);
-                    $state.go('app.onBoarding.testToTakeSummary');
+                done: function () {
+                    OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                 }
             };
         }]);
@@ -312,8 +311,7 @@
                 4: 'app.onBoarding.diagnostic',
                 5: 'app.workouts.roadmap',
                 6: 'app.onBoarding.introTestToTake',
-                7: 'app.onBoarding.testToTake',
-                8: 'app.onBoarding.testToTakeSummary'
+                7: 'app.onBoarding.testToTake'
             };
 
             onBoardingServiceObj.steps = {
@@ -323,9 +321,7 @@
                 DIAGNOSTIC: 4,
                 ROADMAP: 5,
                 INTRO_TEST_TO_TAKE: 6,
-                TEST_TO_TAKE: 7,
-                TEST_TO_TAKE_SUMMARY: 8
-
+                TEST_TO_TAKE: 7
             };
 
             onBoardingServiceObj.getOnBoardingStep = function () {
