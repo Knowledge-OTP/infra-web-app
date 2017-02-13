@@ -12122,7 +12122,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                     $state.go('app.onBoarding.diagnostic');
                 },
-                onExit: function () {
+                exitAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                 }
             };
