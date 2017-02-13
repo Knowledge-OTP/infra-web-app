@@ -2,7 +2,7 @@
     <div class="container-title md-subheader" translate=".SELECTED_TEST_LEVEL"></div>
     <form name="authform" novalidate class="auth-form" ng-submit="vm.changeTestLevel(authform)" ng-switch-when="false">
         <div class="znk-input-group">
-            <label for="selectedTestLevel">{{'.TEST_LEVEL' | translate}}</label>
+            <label for="selectedTestLevel">{{'MY_PROFILE.TEST_LEVEL' | translate}}</label>
             <div class="znk-input">
                 <select id="selectedTestLevel" name="selectedTestLevel"
                         ng-options="selectedTest.name for selectedTest in vm.testLevelList"

@@ -11520,7 +11520,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                     },
                     {
                         subjectId: SubjectEnumConst.MATHLVL2,
-                        name: translateFilter('MY_PROFILE.MATH_LEVEL_1')
+                        name: translateFilter('MY_PROFILE.MATH_LEVEL_2')
                     }
                 ];
 
@@ -11535,7 +11535,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                     var type, msg;
 
                     if (!authform.$invalid) {
-                        _setStudentSelectedData(vm.selectedTestLevel).then(function () {
+                        _setStudentSelectedData(vm.selectedTestLevel.subjectId).then(function () {
                             $timeout(function () {
                                 type = 'success';
                                 msg = 'MY_PROFILE.TEST_LEVEL_SAVE_SUCCESS';
@@ -11852,7 +11852,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "    <div class=\"container-title md-subheader\" translate=\".SELECTED_TEST_LEVEL\"></div>\n" +
     "    <form name=\"authform\" novalidate class=\"auth-form\" ng-submit=\"vm.changeTestLevel(authform)\" ng-switch-when=\"false\">\n" +
     "        <div class=\"znk-input-group\">\n" +
-    "            <label for=\"selectedTestLevel\">{{'.TEST_LEVEL' | translate}}</label>\n" +
+    "            <label for=\"selectedTestLevel\">{{'MY_PROFILE.TEST_LEVEL' | translate}}</label>\n" +
     "            <div class=\"znk-input\">\n" +
     "                <select id=\"selectedTestLevel\" name=\"selectedTestLevel\"\n" +
     "                        ng-options=\"selectedTest.name for selectedTest in vm.testLevelList\"\n" +

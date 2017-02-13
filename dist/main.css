@@ -4763,6 +4763,12 @@ md-dialog.my-profile {
       margin: 5px 40px;
       height: 100%;
       border-radius: 15px; }
+      md-dialog.my-profile .content-wrapper .change-profile .container-title, md-dialog.my-profile .content-wrapper .selected-test-level .container-title, md-dialog.my-profile .content-wrapper .change-password .container-title {
+        font-size: 18px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 600;
+        text-align: center; }
     md-dialog.my-profile .content-wrapper .change-password {
       margin-bottom: 30px;
       display: block; }

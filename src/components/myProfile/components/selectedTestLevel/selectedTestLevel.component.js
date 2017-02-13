@@ -20,7 +20,7 @@
                     },
                     {
                         subjectId: SubjectEnumConst.MATHLVL2,
-                        name: translateFilter('MY_PROFILE.MATH_LEVEL_1')
+                        name: translateFilter('MY_PROFILE.MATH_LEVEL_2')
                     }
                 ];
 
@@ -35,7 +35,7 @@
                     var type, msg;
 
                     if (!authform.$invalid) {
-                        _setStudentSelectedData(vm.selectedTestLevel).then(function () {
+                        _setStudentSelectedData(vm.selectedTestLevel.subjectId).then(function () {
                             $timeout(function () {
                                 type = 'success';
                                 msg = 'MY_PROFILE.TEST_LEVEL_SAVE_SUCCESS';

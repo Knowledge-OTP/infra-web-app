@@ -74,6 +74,10 @@ md-dialog.my-profile {
             margin: 5px 40px;
             height: 100%;
             border-radius: 15px;
+            .container-title {
+                @include text-style(18px, $fontColor3, Quicksand, $semiBoldFontWeight);
+                text-align: center;
+            }
         }
         .selected-test-level {
             @extend .change-profile;
