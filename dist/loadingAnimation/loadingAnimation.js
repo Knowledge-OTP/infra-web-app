@@ -45,6 +45,6 @@ angular.module('znk.infra-web-app.loadingAnimation', []);
 })(angular);
 
 
-angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function ($templateCache) {
 
 }]);

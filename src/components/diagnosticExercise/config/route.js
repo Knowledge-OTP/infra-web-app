@@ -45,7 +45,11 @@
 
                                     if (!sectionResult.questionResults.length) {
                                         sectionResult.questionResults = diagnosticSettings.isFixed ? section.questions.map(function (question) {
-                                            return {questionId: question.id};
+                                            return {
+                                                questionId: question.id,
+                                                categoryId: question.categoryId,
+                                                categoryId2: question.categoryId2
+                                            };
                                         }) : [];
                                         sectionResult.duration = 0;
                                     }
