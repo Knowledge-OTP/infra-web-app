@@ -479,10 +479,6 @@
     "MY_PROFILE": {
         "MY_PROFILE": "My Profile",
         "CHANGE_PASSWORD": "Change Password",
-        "SELECTED_TEST_LEVEL": "Selected Test Level",
-        "MATH_LEVEL_1": "Math Level 1",
-        "MATH_LEVEL_2": "Math Level 2",
-        "TEST_LEVEL": "Test Level",
         "SAVE": "Save",
         "CURRENT_PASSWORD": "Current Password",
         "NEW_PASSWORD": "New Password",
@@ -492,7 +488,6 @@
         "PASSWORD_NOT_MATCH": "New Password doesn't match.",
         "ERROR_OCCURRED": "An error has occurred, Please try again.",
         "PASSWORD_SAVE_SUCCESS": "Your password has been changed successfully.",
-        "TEST_LEVEL_SAVE_SUCCESS": "Your test level has been changed successfully.",
         "PROFILE_SAVE_SUCCESS": "Your profile has been successfully saved.",
         "INCORRECT_PASSWORD": "Incorrect password.",
         "NO_INTERNET_CONNECTION_ERR": "No internet connection. Please try again later.",
