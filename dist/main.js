@@ -11872,7 +11872,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
     "        <div translate=\".TEST_LEVEL_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
-    "            <md-button aria-label=\"{{'CHANGE_PASSWORD.DONE' | translate}}\"\n" +
+    "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
     "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +
@@ -12232,7 +12232,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
-                hideQuit:true,
+                hideQuit: true,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
@@ -12414,7 +12414,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "");
   $templateCache.put("components/onBoarding/svg/onboarding-bubble-1.svg",
     "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-    "<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n" +
+    "\n" +
     "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"0 0 294.6 215.3\" style=\"enable-background:new 0 0 294.6 215.3;\" xml:space=\"preserve\">\n" +
     "<style type=\"text/css\">\n" +
@@ -12484,7 +12484,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "");
   $templateCache.put("components/onBoarding/svg/onboarding-bubble-2.svg",
     "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-    "<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n" +
+    "\n" +
     "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"0 0 294.6 215.3\" style=\"enable-background:new 0 0 294.6 215.3;\" xml:space=\"preserve\">\n" +
     "<style type=\"text/css\">\n" +
@@ -12689,7 +12689,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"icons-section\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
     "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-1\"></svg-icon>\n" +
-    "            <span class=\"diagnostic-text-or\" translate=\".OR\">or</span>\n" +
+    "            <span class=\"diagnostic-text-or\" translate=\".OR\"></span>\n" +
     "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-2\"></svg-icon>\n" +
     "        </div>\n" +
     "    </div>\n" +

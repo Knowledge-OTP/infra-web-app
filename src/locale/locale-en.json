@@ -495,7 +495,8 @@
         "EMAIL": "Email",
         "TIMEZONE": "Timezone",
         "SET_MANUALLY": "Set manually",
-        "EMAIL_ERROR": "Email error"
+        "EMAIL_ERROR": "Email error",
+        "DONE": "Done"
     },
     "ACTIVE_PANEL": {
         "SHOW_STUDENT_SCREEN": "Show Student Screen",
