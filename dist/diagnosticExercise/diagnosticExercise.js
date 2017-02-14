@@ -84,7 +84,11 @@
 
                                     if (!sectionResult.questionResults.length) {
                                         sectionResult.questionResults = diagnosticSettings.isFixed ? section.questions.map(function (question) {
-                                            return {questionId: question.id};
+                                            return {
+                                                questionId: question.id,
+                                                categoryId: question.categoryId,
+                                                categoryId2: question.categoryId2
+                                            };
                                         }) : [];
                                         sectionResult.duration = 0;
                                     }
@@ -1037,7 +1041,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
