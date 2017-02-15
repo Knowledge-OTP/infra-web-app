@@ -34,7 +34,8 @@ diagnostic-intro {
       font-family: Lato;
       font-weight: 300; }
     diagnostic-intro .diagnostic-intro-drv .raccoon-img-container {
-      position: relative; }
+      position: relative;
+      text-align: center; }
       diagnostic-intro .diagnostic-intro-drv .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
         position: relative;
         top: -48px;

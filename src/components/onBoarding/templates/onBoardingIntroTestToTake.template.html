@@ -1,0 +1,33 @@
+
+<section class="step intro-test-to-take" translate-namespace="ON_BOARDING.TEST_TO_TAKE">
+    <div class="diagnostic-title" translate=".FIGURE_OUT"></div>
+
+    <div class="diagnostic-intro-drv">
+        <div class="description">
+            <div class="diagnostic-text"
+                 translate="{{'.FIGURE_OUT_DESC' | translate}}">
+            </div>
+        </div>
+    </div>
+    <div class="icons-section">
+        <div class="icon-wrapper">
+            <svg-icon class="on-boarding-bubble"  name="on-boarding-bubble-1"></svg-icon>
+            <span class="diagnostic-text-or" translate=".OR"></span>
+            <svg-icon class="on-boarding-bubble"  name="on-boarding-bubble-2"></svg-icon>
+        </div>
+    </div>
+    <div class="raccoon-img-container">
+        <div class="raccoon-img-wrapper">
+            <div class="diagnostic-raccoon"></div>
+        </div>
+    </div>
+    <div class="btn-wrap">
+
+        <md-button aria-label="{{'.START_TEST' | translate}}"
+                   autofocus tabindex="1" class="md-sm znk md-primary"
+                   ng-click="vm.goToTestToTake()">
+            <span translate=".START_TEST"></span>
+        </md-button>
+    </div>
+</section>
+<on-boarding-bar step="diagnostic"></on-boarding-bar>

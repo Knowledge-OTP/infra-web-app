@@ -13,6 +13,7 @@
         <div ng-transclude="preRightPart"></div>
         <div class="exit"
              translate=".EXIT"
+             ng-if="!$ctrl.completeExerciseCtrl.exerciseDetails.hideQuit"
              ng-click="$ctrl.completeExerciseCtrl.settings.exitAction()">
         </div>
     </div>

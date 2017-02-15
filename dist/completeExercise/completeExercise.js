@@ -201,7 +201,7 @@
                                     data.exerciseResult.seenIntro = true;
                                 }
 
-                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro && !$ctrl.exerciseDetails.ignoreIntro) {
                                     newViewState = VIEW_STATES.INTRO;
                                 } else {
                                     newViewState = VIEW_STATES.EXERCISE;
@@ -1359,7 +1359,7 @@
     );
 })(angular);
 
-angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
     "<svg\n" +
     "    version=\"1.1\"\n" +
@@ -1473,6 +1473,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "        <div ng-transclude=\"preRightPart\"></div>\n" +
     "        <div class=\"exit\"\n" +
     "             translate=\".EXIT\"\n" +
+    "             ng-if=\"!$ctrl.completeExerciseCtrl.exerciseDetails.hideQuit\"\n" +
     "             ng-click=\"$ctrl.completeExerciseCtrl.settings.exitAction()\">\n" +
     "        </div>\n" +
     "    </div>\n" +

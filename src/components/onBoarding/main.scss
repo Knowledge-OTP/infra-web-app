@@ -19,6 +19,13 @@
 @import url(#{$googleFontCDN}icon?family=Material+Icons);
 
 
+@mixin set-on-boarding-btn {
+    padding-right: 45px;
+    padding-left: 45px;
+    height: 38px;
+    border-radius: 50px;
+    @include text-style(14px, $fontColor1, Lato, $regularFontWeight);
+}
 
 .on-board {
      /**
@@ -104,17 +111,14 @@
                     text-align: center;
 
                     .md-button {
-                        padding-left: 52px;
-                        padding-right: 52px;
-                        height: 50px;
-                        border-radius: 30px;
-                        @include text-style(21px, $fontColor1, Lato, $regularFontWeight);
+                      @include set-on-boarding-btn();
                         .btn-text {
                             display: flex;
                         .dropdown-arrow-icon{
                             display: inline-flex;
+                            margin-left: 10px;
                             svg {
-                                width: 16px;
+                                width: 14px;
                                 display: inline-flex;
                                 transform: rotate(-90deg);
                                 polyline {
@@ -172,13 +176,66 @@
                     text-align: center;
                     margin-top: 20px;
                 }
+                .diagnostic-intro-drv {
+                    text-align: center;
 
+                    .diagnostic-text {
+                        margin: 20px auto;
+                        max-height: 45px;
+                        @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+                    }
+
+
+                }
                 .diagnostic-sub-title{
                     @include text-style(16px, $fontColor3,Lato,$lightFontWeight);
                     text-align: center;
                     margin-top: 15px;
                 }
+                .raccoon-img-container{
+                    position: relative;
 
+                    .raccoon-img-wrapper {
+                        .diagnostic-raccoon {
+                            position: relative;
+                            top: -48px;
+                            background-size: contain;
+                            @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon@2x', 160px, 169px);
+                        }
+                    }
+                }
+
+                .icons-section {
+                    display: flex;
+                    justify-content: space-around;
+                    width: 40%;
+                    margin: 0 auto;
+                    min-height: 140px;
+
+                }
+
+                .section-question {
+                    @include text-style(18px, $fontColor4, Lato, $regularFontWeight);
+                    text-transform: uppercase;
+                    .diagnostic-instructions {
+                        margin-top: 40px;
+                        text-transform: none;
+                        display: flex;
+                        flex-direction: column;
+                        padding: {
+                            right: 110px;
+                            left: 110px;
+                        };
+                        .diagnostic-instructions-title {
+                            @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
+                        }
+                        .diagnostic-instructions-text {
+                            @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+                            margin-top: 5px;
+                            min-height: 38px;
+                        }
+                    }
+                }
                 .btn-wrap{
                     display: flex;
                     flex-direction: row;
@@ -190,9 +247,9 @@
 
                     button{
                         display: inline-block;
-                        padding-right: 66px;
-                        padding-left: 66px;
-                        height: 42px;
+                        padding-right: 45px;
+                        padding-left: 45px;
+                        height: 38px;
                         &.default {
                             color: $fontColor6;
                             border: none;
@@ -211,6 +268,109 @@
                         margin-top: -25px;
                     }
                 }
+            }
+            &.intro-test-to-take {
+                .diagnostic-title {
+                    @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
+                    text-align: center;
+                    margin-top: 20px;
+                }
+                .diagnostic-intro-drv {
+                    text-align: center;
+
+                    .diagnostic-text {
+                        margin: 20px auto;
+                        max-height: 45px;
+                        @include text-style(16px, $fontColor3, Lato, $lightFontWeight);
+                    }
+
+                }
+                .raccoon-img-container {
+                    position: relative;
+                    text-align: center;
+                    .raccoon-img-wrapper {
+                        .diagnostic-raccoon {
+                            position: relative;
+                            top: -34px;
+                            background-size: contain;
+                            @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon@2x', 164px, 166px);
+                        }
+                    }
+                }
+                .diagnostic-text-or {
+                    width: 100px;
+                    text-align: center;
+                    @include text-style(16px, $fontColor3, Lato, $normalFontWeight);
+                }
+                .icons-section {
+                    display: flex;
+                    justify-content: space-around;
+                    width: 40%;
+                    margin: 0 auto;
+                    min-height: 140px;
+                    .icon-wrapper {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        vertical-align: top;
+
+                        svg-icon {
+                            &.on-boarding-bubble {
+                                width: 146px;
+                                height: 104px;
+                                svg {
+                                    line {
+                                        stroke: $bgColor64;
+                                        stroke-width: 30px;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.onlySubjectIcon {
+                            svg-icon.section-complete {
+                                display: none;
+                            }
+                            .subject-icon {
+                                display: inline-block;
+                            }
+                        }
+                        &.onlyDoneIcon {
+                            .subject-icon {
+                                display: none;
+                            }
+                            svg-icon.section-complete {
+                                display: inline-block;
+                            }
+                        }
+                    }
+
+                }
+                .btn-wrap {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    margin: {
+                        right: 20px;
+                    }
+
+                    button {
+                        display: inline-block;
+                        padding-right: 45px;
+                        padding-left: 45px;
+                        height: 38px;
+                        &.default {
+                            color: $fontColor6;
+                            border: none;
+                            padding: 0;
+                            width: 130px;
+                            text-transform: none;
+                            @include set-on-boarding-btn();
+                        }
+                    }
+                }
+
             }
         }
     }

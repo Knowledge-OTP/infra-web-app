@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function() {
-        this.$get = ['InfraConfigSrv', 'StorageSrv', function(InfraConfigSrv, StorageSrv) {
+    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
+        this.$get = ['InfraConfigSrv', 'StorageSrv', function (InfraConfigSrv, StorageSrv) {
             var self = this;
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
@@ -11,7 +11,9 @@
                 2: 'app.onBoarding.schools',
                 3: 'app.onBoarding.goals',
                 4: 'app.onBoarding.diagnostic',
-                5: 'app.workouts.roadmap'
+                5: 'app.workouts.roadmap',
+                6: 'app.onBoarding.introTestToTake',
+                7: 'app.onBoarding.testToTake'
             };
 
             onBoardingServiceObj.steps = {
@@ -19,7 +21,9 @@
                 SCHOOLS: 2,
                 GOALS: 3,
                 DIAGNOSTIC: 4,
-                ROADMAP: 5
+                ROADMAP: 5,
+                INTRO_TEST_TO_TAKE: 6,
+                TEST_TO_TAKE: 7
             };
 
             onBoardingServiceObj.getOnBoardingStep = function () {
@@ -38,7 +42,7 @@
             };
 
             function getProgress() {
-                return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(ONBOARDING_PATH).then(function (progress) {
                         if (!progress.step) {
                             progress.step = 1;
@@ -49,7 +53,7 @@
             }
 
             function setProgress(progress) {
-                return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
@@ -60,7 +64,7 @@
                 });
             };
 
-            onBoardingServiceObj.getOnBoardingSettings = function() {
+            onBoardingServiceObj.getOnBoardingSettings = function () {
                 return self.settings;
             };
 
