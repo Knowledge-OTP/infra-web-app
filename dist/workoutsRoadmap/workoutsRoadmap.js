@@ -564,7 +564,7 @@
             var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
             //set times workouts
-            function setWorkoutsTimes(){
+            function setWorkoutsTimes() {
                 var getPersonalizedWorkoutsByTimeProm;
                 var subjectsToIgnore;
 
@@ -605,7 +605,7 @@
                     delete currWorkout.personalizedTimes;
                     delete vm.selectedTime;
 
-                    $timeout(function(){
+                    $timeout(function () {
                         var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
@@ -618,7 +618,7 @@
 
             })();
 
-            vm.startExercise = function(){
+            vm.startExercise = function () {
                 var selectedWorkout = angular.copy(vm.selectedWorkout);
                 var isWorkoutGenerated = selectedWorkout &&
                     angular.isDefined(selectedWorkout.subjectId) &&
@@ -658,8 +658,8 @@
                 });
             };
 
-            vm.selectTime = function(workoutTime){
-                if(!vm.workoutsByTime[workoutTime]){
+            vm.selectTime = function (workoutTime) {
+                if (!vm.workoutsByTime[workoutTime]) {
                     return;
                 }
 
