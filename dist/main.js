@@ -3134,6 +3134,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         return fn.apply(exerciseTypeId, catIds);
                     } else {
                         $log.error('exerciseCycleSrv: getSubjectIdFn is not a function !');
+                        return;
                     }
                 };
 
