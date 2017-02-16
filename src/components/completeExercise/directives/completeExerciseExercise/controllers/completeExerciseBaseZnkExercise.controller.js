@@ -18,7 +18,7 @@
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, exerciseSubjectSrv) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, ExerciseSubjectSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -36,7 +36,7 @@
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
-            $ctrl.exeriseSubjectId = exerciseSubjectSrv.getSubjectId([exerciseContent.categoryId, exerciseContent.categoryId2]);
+            $ctrl.exeriseSubjectId = ExerciseSubjectSrv.getSubjectId([exerciseContent.categoryId, exerciseContent.categoryId2]);
 
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;

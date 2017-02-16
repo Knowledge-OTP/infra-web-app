@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.completeExercise').provider('exerciseSubjectSrv',
+    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseSubjectSrv',
         function () {
             var getSubjectIdFn = function (CategoryService){
                 'ngInject';
@@ -16,9 +16,9 @@
 
             this.$get = function ($log, $injector) {
                 'ngInject';
-                var exerciseSubjectSrv = {};
+                var ExerciseSubjectSrv = {};
 
-                exerciseSubjectSrv.getSubjectId = function(catIds) {
+                ExerciseSubjectSrv.getSubjectId = function(catIds) {
                     var fn;
                     if (angular.isDefined(getSubjectIdFn)) {
                         try {
@@ -32,7 +32,7 @@
                     }
                 };
 
-                return exerciseSubjectSrv;
+                return ExerciseSubjectSrv;
             };
         }
     );
