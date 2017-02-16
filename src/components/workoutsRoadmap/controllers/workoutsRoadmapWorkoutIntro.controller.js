@@ -2,7 +2,7 @@
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv) {
+        function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv, CategoryService) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -50,7 +50,8 @@
                 if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
                     if (!currWorkout.personalizedTimes) {
                         if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                            subjectsToIgnore = prevWorkout.subjectId;
+                            var prevWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(prevWorkout);
+                            subjectsToIgnore = prevWorkoutSubjectId;
                         }
                         getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
                     } else {
@@ -76,7 +77,8 @@
                 var subjectNum = SubjectEnum.getEnumArr().length;
 
                 return function () {
-                    usedSubjects.push(currWorkout.subjectId);
+                    var currentWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(currWorkout);
+                    usedSubjects.push(currentWorkoutSubjectId);
                     if (usedSubjects.length === subjectNum) {
                         usedSubjects = [];
                     }
@@ -99,6 +101,8 @@
 
             vm.startExercise = function(){
                 var selectedWorkout = angular.copy(vm.selectedWorkout);
+                var selectedWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(selectedWorkout);
+                selectedWorkout.subjectId = selectedWorkoutSubjectId;
                 var isWorkoutGenerated = selectedWorkout &&
                     angular.isDefined(selectedWorkout.subjectId) &&
                     angular.isDefined(selectedWorkout.exerciseTypeId) &&
@@ -152,7 +156,8 @@
 
                 if (vm.workoutsByTime) {
                     vm.selectedWorkout = vm.workoutsByTime[newSelectedTime];
-                    currWorkout.subjectId = vm.selectedWorkout.subjectId;
+                    var selectedWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(vm.selectedWorkout);
+                    currWorkout.subjectId = selectedWorkoutSubjectId;
                 }
             });
         }

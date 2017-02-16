@@ -7,10 +7,12 @@
         function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate, ExerciseReviewStatusEnum) {
+                  $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
-            this.subjectId = exerciseData.questionsData.subjectId;
+            var questionCategoryForSubjectId = exerciseData.questionsData.categoryId || exerciseData.questionsData.categoryId2;
+
+            this.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId);
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;

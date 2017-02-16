@@ -689,9 +689,9 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -706,6 +706,10 @@
 
             var $ctrl = this;
 
+            var exerciseCategoryForSubject = exerciseContent.categoryId || exerciseContent.categoryId2;
+
+            $ctrl.exeriseSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(exerciseCategoryForSubject);
+
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
@@ -713,12 +717,13 @@
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
+                        var questionCategorForSubject = question.categoryId || question.categoryId2;
                         return {
                             questionId: question.id,
                             categoryId: question.categoryId,
                             categoryId2: question.categoryId2,
                             manualEvaluation: question.manualEvaluation || false,
-                            subjectId: question.subjectId,
+                            subjectId: CategoryService.getCategoryLevel1ParentByIdSync(questionCategorForSubject),
                             order: question.index,
                             answerTypeId: question.answerTypeId,
                             difficulty: question.difficulty,
@@ -727,8 +732,7 @@
                         };
                     });
                 }
-
-                exerciseResult.subjectId = exerciseContent.subjectId;
+                exerciseResult.subjectId = $ctrl.exeriseSubjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
                 exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
                 exerciseResult.calculator = exerciseContent.calculator;
@@ -1074,19 +1078,22 @@
             require: {
                 completeExerciseIntroCtrl: '^completeExerciseIntro'
             },
-            controller: ["$filter", function ($filter) {
+            controller: ["$filter", "CategoryService", function ($filter, CategoryService) {
                 'ngInject';
 
                 this.$onInit = function(){
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
+                    var categoryIdForSubjectId = exerciseContent.catgoryId || exerciseContent.catgoryId2;
+                    
+                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(categoryIdForSubjectId);
 
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;
 
                     var translateFilter = $filter('translate');
-                    this.subjectNameTranslateKey = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + exerciseContent.subjectId);
-                    this.instructionsTranslateKey = translateFilter('COMPLETE_EXERCISE.SECTION_INSTRUCTION.' + exerciseContent.subjectId);
+                    this.subjectNameTranslateKey = translateFilter('COMPLETE_EXERCISE.SUBJECTS.' + this.exerciseSubjectId);
+                    this.instructionsTranslateKey = translateFilter('COMPLETE_EXERCISE.SECTION_INSTRUCTION.' + this.exerciseSubjectId);
 
                     var timeDurationFilter = $filter('formatTimeDuration');
                     this.timeTranslateValue = {
@@ -1359,7 +1366,7 @@
     );
 })(angular);
 
-angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
     "<svg\n" +
     "    version=\"1.1\"\n" +
@@ -1460,7 +1467,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
   $templateCache.put("components/completeExercise/directives/completeExerciseHeader/completeExerciseHeaderDirective.template.html",
     "<div class=\"header-container\"\n" +
     "     translate-namespace=\"COMPLETE_EXERCISE\"\n" +
-    "     subject-id-to-attr-drv=\"$ctrl.exerciseContent.subjectId\"\n" +
+    "     subject-id-to-attr-drv=\"$ctrl.exerciseSubjectId\"\n" +
     "     context-attr=\"class,class\"\n" +
     "     suffix=\"bg,subject-pattern\">\n" +
     "    <div class=\"left-part\">\n" +
@@ -1493,7 +1500,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "<div class=\"intro-container\"\n" +
     "     translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <div class=\"title\" ng-bind=\"$ctrl.exerciseParentContent.name\"></div>\n" +
-    "    <svg-icon subject-id-to-attr-drv=\"$ctrl.exerciseContent.subjectId\"\n" +
+    "    <svg-icon subject-id-to-attr-drv=\"$ctrl.exerciseSubjectId\"\n" +
     "              context-attr=\"name\"\n" +
     "              suffix=\"icon\"\n" +
     "              class=\"subject-icon\">\n" +

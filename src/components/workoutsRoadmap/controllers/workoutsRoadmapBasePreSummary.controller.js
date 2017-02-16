@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapBasePreSummaryController',
         function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
-                  WorkoutsRoadmapSrv, purchaseService) {
+                  WorkoutsRoadmapSrv, purchaseService, CategoryService) {
             'ngInject';
 
             var DIAGNOSTIC_ORDER = 0;
@@ -17,10 +17,12 @@
                 data.roadmapCtrlActions.freezeWorkoutProgressComponent(true);
 
                 var currentWorkout = data.exercise;
+                var currentWorkoutCategoryId = currentWorkout.categoryId || currentWorkout.categoryId2;
+                var currentWorkoutSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentWorkoutCategoryId);
 
                 var subjectToIgnoreForNextDaily;
                 if (currentWorkout.workoutOrder !== DIAGNOSTIC_ORDER) {
-                    subjectToIgnoreForNextDaily = currentWorkout.subjectId;
+                    subjectToIgnoreForNextDaily = currentWorkoutSubjectId;
                     currentWorkout.status = ExerciseStatusEnum.COMPLETED.enum;
                     WorkoutsSrv.setWorkout(currentWorkout.workoutOrder, currentWorkout);
                 }

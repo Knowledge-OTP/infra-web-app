@@ -208,7 +208,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", function (data, $state, $scope, ExerciseStatusEnum, $location) {
+        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", "CategoryService", function (data, $state, $scope, ExerciseStatusEnum, $location, CategoryService) {
             'ngInject';
 
             var vm = this;
@@ -242,7 +242,9 @@
 
             function _isFirstWorkoutStarted() {
                 var firstWorkout = vm.workoutsProgress[0];
-                return angular.isDefined(firstWorkout.subjectId);
+                var workoutCategoryForSubjectId = firstWorkout.categoryId || firstWorkout.categoryId2;
+                var workoutSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(workoutCategoryForSubjectId);
+                return angular.isDefined(workoutSubjectId);
             }
 
             //set selected item
@@ -322,8 +324,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapBasePreSummaryController',
-        ["$timeout", "WorkoutsSrv", "SubjectEnum", "data", "ExerciseStatusEnum", "$filter", "WorkoutsRoadmapSrv", "purchaseService", function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
-                  WorkoutsRoadmapSrv, purchaseService) {
+        ["$timeout", "WorkoutsSrv", "SubjectEnum", "data", "ExerciseStatusEnum", "$filter", "WorkoutsRoadmapSrv", "purchaseService", "CategoryService", function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
+                  WorkoutsRoadmapSrv, purchaseService, CategoryService) {
             'ngInject';
 
             var DIAGNOSTIC_ORDER = 0;
@@ -337,10 +339,12 @@
                 data.roadmapCtrlActions.freezeWorkoutProgressComponent(true);
 
                 var currentWorkout = data.exercise;
+                var currentWorkoutCategoryId = currentWorkout.categoryId || currentWorkout.categoryId2;
+                var currentWorkoutSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentWorkoutCategoryId);
 
                 var subjectToIgnoreForNextDaily;
                 if (currentWorkout.workoutOrder !== DIAGNOSTIC_ORDER) {
-                    subjectToIgnoreForNextDaily = currentWorkout.subjectId;
+                    subjectToIgnoreForNextDaily = currentWorkoutSubjectId;
                     currentWorkout.status = ExerciseStatusEnum.COMPLETED.enum;
                     WorkoutsSrv.setWorkout(currentWorkout.workoutOrder, currentWorkout);
                 }
@@ -386,13 +390,14 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticController',
-        ["$state", "ExerciseStatusEnum", "data", "$timeout", function ($state, ExerciseStatusEnum, data, $timeout) {
+        ["$state", "ExerciseStatusEnum", "data", "$timeout", "CategoryService", function ($state, ExerciseStatusEnum, data, $timeout, CategoryService) {
             'ngInject';
             //  fixing page not rendered in the first app entrance issue
             $timeout(function () {
                 switch (data.diagnostic.status) {
                     case ExerciseStatusEnum.COMPLETED.enum:
-                        var isFirstWorkoutStarted = angular.isDefined(data.workoutsProgress[0].subjectId);
+                        var workoutSubjectId = CategoryService.getCategoryLevel1ParentSync(data.workoutsProgress[0]);
+                        var isFirstWorkoutStarted = angular.isDefined(workoutSubjectId);
                         if (isFirstWorkoutStarted) {
                             $state.go('.summary');
                         } else {
@@ -523,7 +528,7 @@
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", "WorkoutsSrv", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv) {
+        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", "WorkoutsSrv", "CategoryService", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv, CategoryService) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -571,7 +576,8 @@
                 if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
                     if (!currWorkout.personalizedTimes) {
                         if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                            subjectsToIgnore = prevWorkout.subjectId;
+                            var prevWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(prevWorkout);
+                            subjectsToIgnore = prevWorkoutSubjectId;
                         }
                         getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
                     } else {
@@ -597,7 +603,8 @@
                 var subjectNum = SubjectEnum.getEnumArr().length;
 
                 return function () {
-                    usedSubjects.push(currWorkout.subjectId);
+                    var currentWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(currWorkout);
+                    usedSubjects.push(currentWorkoutSubjectId);
                     if (usedSubjects.length === subjectNum) {
                         usedSubjects = [];
                     }
@@ -620,6 +627,8 @@
 
             vm.startExercise = function(){
                 var selectedWorkout = angular.copy(vm.selectedWorkout);
+                var selectedWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(selectedWorkout);
+                selectedWorkout.subjectId = selectedWorkoutSubjectId;
                 var isWorkoutGenerated = selectedWorkout &&
                     angular.isDefined(selectedWorkout.subjectId) &&
                     angular.isDefined(selectedWorkout.exerciseTypeId) &&
@@ -673,7 +682,8 @@
 
                 if (vm.workoutsByTime) {
                     vm.selectedWorkout = vm.workoutsByTime[newSelectedTime];
-                    currWorkout.subjectId = vm.selectedWorkout.subjectId;
+                    var selectedWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(vm.selectedWorkout);
+                    currWorkout.subjectId = selectedWorkoutSubjectId;
                 }
             });
         }]
@@ -987,7 +997,7 @@
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html",
     "<div ng-transclude class=\"main-container\"></div>\n" +
     "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +

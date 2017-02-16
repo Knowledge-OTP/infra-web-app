@@ -61,13 +61,14 @@
         bindings: {
             exerciseData: '<'
         },
-        controller: ["SubjectEnum", function(SubjectEnum) {
+        controller: ["SubjectEnum", "CategoryService", function(SubjectEnum, CategoryService) {
             'ngInject';
 
             var vm = this;
 
             vm.seenSummary = vm.exerciseData.exerciseResult.seenSummary;
-            vm.currentSubjectId = vm.exerciseData.exercise.subjectId;
+            
+            vm.currentSubjectId = CategoryService.getCategoryLevel1ParentSync(vm.exerciseData.exercise);
             vm.activeExerciseId = vm.exerciseData.exercise.id;
 
             vm.subjectName = SubjectEnum.getValByEnum(vm.currentSubjectId);
@@ -77,7 +78,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkSummary/templates/znkSummaryResults.template.html",
     "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
     "    <div class=\"overflowWrap\">\n" +
