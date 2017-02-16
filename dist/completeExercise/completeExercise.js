@@ -689,9 +689,9 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "exerciseSubjectSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, exerciseSubjectSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -709,6 +709,8 @@
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
+            $ctrl.exeriseSubjectId = exerciseSubjectSrv.getSubjectId([exerciseContent.categoryId, exerciseContent.categoryId2]);
+
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
@@ -718,17 +720,17 @@
                             categoryId: question.categoryId,
                             categoryId2: question.categoryId2,
                             manualEvaluation: question.manualEvaluation || false,
-                            subjectId: question.subjectId,
+                            subjectId: $ctrl.exeriseSubjectId,
                             order: question.index,
                             answerTypeId: question.answerTypeId,
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
-                            questionFormatId: question.questionFormatId,
+                            questionFormatId: question.questionFormatId
                         };
                     });
                 }
 
-                exerciseResult.subjectId = exerciseContent.subjectId;
+                exerciseResult.subjectId = $ctrl.exeriseSubjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
                 exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
                 exerciseResult.calculator = exerciseContent.calculator;
@@ -1354,6 +1356,47 @@
                 };
 
                 return exerciseCycleSrv;
+            }];
+        }
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.completeExercise').provider('exerciseSubjectSrv',
+        function () {
+            var getSubjectIdFn = function (CategoryService){
+                'ngInject';
+                return function(catIds) {
+                    CategoryService.getCategoryLevel1ParentSync(catIds);
+                };
+            };
+            getSubjectIdFn.$inject = ["CategoryService"];
+
+            this.setGetSubjectIdFn = function (_getSubjectIdFn) {
+                getSubjectIdFn = _getSubjectIdFn;
+            };
+
+            this.$get = ["$log", "$injector", function ($log, $injector) {
+                'ngInject';
+                var exerciseSubjectSrv = {};
+
+                exerciseSubjectSrv.getSubjectId = function(catIds) {
+                    var fn;
+                    if (angular.isDefined(getSubjectIdFn)) {
+                        try {
+                            fn = $injector.invoke(getSubjectIdFn);
+                        } catch(e) {
+                            $log.error('exerciseCycleSrv invoke: failed to invoke getSubjectIdFn! e: '+ e);
+                            return;
+                        }
+
+                        return fn.apply(catIds);
+                    }
+                };
+
+                return exerciseSubjectSrv;
             }];
         }
     );
