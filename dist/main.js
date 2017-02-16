@@ -2429,9 +2429,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "ExerciseSubjectSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, ExerciseSubjectSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -2446,32 +2446,32 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
             var $ctrl = this;
 
-            var exerciseCategoryForSubject = exerciseContent.categoryId || exerciseContent.categoryId2;
-
-            $ctrl.exeriseSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(exerciseCategoryForSubject);
-
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
+
+            var exerciseCategoryForSubject = [exerciseContent.categoryId, exerciseContent.categoryId2];
+            $ctrl.exeriseSubjectId = ExerciseSubjectSrv.getSubjectId(exerciseContent.exerciseTypeId, exerciseCategoryForSubject);
 
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
-                        var questionCategorForSubject = question.categoryId || question.categoryId2;
+                        var questionCategorForSubject = [question.categoryId, question.categoryId2];
                         return {
                             questionId: question.id,
                             categoryId: question.categoryId,
                             categoryId2: question.categoryId2,
                             manualEvaluation: question.manualEvaluation || false,
-                            subjectId: CategoryService.getCategoryLevel1ParentByIdSync(questionCategorForSubject),
+                            subjectId: ExerciseSubjectSrv.getSubjectId(exerciseContent.exerciseTypeId, questionCategorForSubject),
                             order: question.index,
                             answerTypeId: question.answerTypeId,
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
-                            questionFormatId: question.questionFormatId,
+                            questionFormatId: question.questionFormatId
                         };
                     });
                 }
+
                 exerciseResult.subjectId = $ctrl.exeriseSubjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
                 exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
@@ -3100,6 +3100,45 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 };
 
                 return exerciseCycleSrv;
+            }];
+        }
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseSubjectSrv',
+        function () {
+            var getSubjectIdFn = function (CategoryService){
+                'ngInject';
+                return function(exerciseTypeId, catIds) {
+                    // The exerciseTypeId is for the fn we set in satsmInfraConfig
+                    CategoryService.getCategoryLevel1ParentSync(catIds);
+                };
+            };
+            getSubjectIdFn.$inject = ["CategoryService"];
+
+            this.setGetSubjectIdFn = function (_getSubjectIdFn) {
+                getSubjectIdFn = _getSubjectIdFn;
+            };
+
+            this.$get = ["$log", "$injector", function ($log, $injector) {
+                'ngInject';
+                var ExerciseSubjectSrv = {};
+
+                ExerciseSubjectSrv.getSubjectId = function(exerciseTypeId, catIds) {
+                    var fn;
+                    if (angular.isFunction(getSubjectIdFn)) {
+                        fn = $injector.invoke(getSubjectIdFn);
+                        return fn.apply(exerciseTypeId, catIds);
+                    } else {
+                        $log.error('exerciseCycleSrv: getSubjectIdFn is not a function !');
+                        return;
+                    }
+                };
+
+                return ExerciseSubjectSrv;
             }];
         }
     );
