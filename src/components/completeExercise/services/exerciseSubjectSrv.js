@@ -26,6 +26,7 @@
                         return fn.apply(exerciseTypeId, catIds);
                     } else {
                         $log.error('exerciseCycleSrv: getSubjectIdFn is not a function !');
+                        return;
                     }
                 };
 
