@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        function (data, $state, $scope, ExerciseStatusEnum, $location, CategoryService) {
+        function (data, $state, $scope, ExerciseStatusEnum, $location) {
             'ngInject';
 
             var vm = this;
@@ -36,9 +36,7 @@
 
             function _isFirstWorkoutStarted() {
                 var firstWorkout = vm.workoutsProgress[0];
-                var workoutCategoryForSubjectId = firstWorkout.categoryId || firstWorkout.categoryId2;
-                var workoutSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(workoutCategoryForSubjectId);
-                return angular.isDefined(workoutSubjectId);
+                return angular.isDefined(firstWorkout.subjectId);
             }
 
             //set selected item

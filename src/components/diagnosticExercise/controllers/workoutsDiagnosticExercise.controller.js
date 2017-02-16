@@ -10,9 +10,7 @@
                   $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
-            var questionCategoryForSubjectId = exerciseData.questionsData.categoryId || exerciseData.questionsData.categoryId2;
-
-            this.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId);
+            this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;

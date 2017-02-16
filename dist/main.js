@@ -2824,9 +2824,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 this.$onInit = function(){
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
-                    var categoryIdForSubjectId = exerciseContent.catgoryId || exerciseContent.catgoryId2;
                     
-                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(categoryIdForSubjectId);
+                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.catgoryId, exerciseContent.catgoryId2]);
 
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;
@@ -3642,9 +3641,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                   $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
-            var questionCategoryForSubjectId = exerciseData.questionsData.categoryId || exerciseData.questionsData.categoryId2;
-
-            this.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId);
+            this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
@@ -3978,7 +3975,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             vm.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
 
             function _setHeaderTitle(){
-                var subjectTranslateKey = 'SUBJECTS.' + vm.params.subjectId;
+                var subjectTranslateKey = 'SUBJECTS.' + 'DIAGNOSTIC_TITLE.' + vm.params.subjectId;
                 $translate(subjectTranslateKey).then(function(subjectTranslation){
                     var translateFilter = $filter('translate');
                     vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE',{
@@ -6635,8 +6632,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
-                    var questionCategoryForSubjectId = question.categoryId || question.categoryId2;
-                    var questionSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId);
+                    var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
 
                     scope.d = {};
 
@@ -15572,7 +15568,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapController',
-        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", "CategoryService", function (data, $state, $scope, ExerciseStatusEnum, $location, CategoryService) {
+        ["data", "$state", "$scope", "ExerciseStatusEnum", "$location", function (data, $state, $scope, ExerciseStatusEnum, $location) {
             'ngInject';
 
             var vm = this;
@@ -15606,9 +15602,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
             function _isFirstWorkoutStarted() {
                 var firstWorkout = vm.workoutsProgress[0];
-                var workoutCategoryForSubjectId = firstWorkout.categoryId || firstWorkout.categoryId2;
-                var workoutSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(workoutCategoryForSubjectId);
-                return angular.isDefined(workoutSubjectId);
+                return angular.isDefined(firstWorkout.subjectId);
             }
 
             //set selected item
@@ -15688,8 +15682,8 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapBasePreSummaryController',
-        ["$timeout", "WorkoutsSrv", "SubjectEnum", "data", "ExerciseStatusEnum", "$filter", "WorkoutsRoadmapSrv", "purchaseService", "CategoryService", function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
-                  WorkoutsRoadmapSrv, purchaseService, CategoryService) {
+        ["$timeout", "WorkoutsSrv", "SubjectEnum", "data", "ExerciseStatusEnum", "$filter", "WorkoutsRoadmapSrv", "purchaseService", function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
+                  WorkoutsRoadmapSrv, purchaseService) {
             'ngInject';
 
             var DIAGNOSTIC_ORDER = 0;
@@ -15703,12 +15697,10 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 data.roadmapCtrlActions.freezeWorkoutProgressComponent(true);
 
                 var currentWorkout = data.exercise;
-                var currentWorkoutCategoryId = currentWorkout.categoryId || currentWorkout.categoryId2;
-                var currentWorkoutSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentWorkoutCategoryId);
 
                 var subjectToIgnoreForNextDaily;
                 if (currentWorkout.workoutOrder !== DIAGNOSTIC_ORDER) {
-                    subjectToIgnoreForNextDaily = currentWorkoutSubjectId;
+                    subjectToIgnoreForNextDaily = currentWorkout.subjectId;
                     currentWorkout.status = ExerciseStatusEnum.COMPLETED.enum;
                     WorkoutsSrv.setWorkout(currentWorkout.workoutOrder, currentWorkout);
                 }
@@ -15754,14 +15746,13 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticController',
-        ["$state", "ExerciseStatusEnum", "data", "$timeout", "CategoryService", function ($state, ExerciseStatusEnum, data, $timeout, CategoryService) {
+        ["$state", "ExerciseStatusEnum", "data", "$timeout", function ($state, ExerciseStatusEnum, data, $timeout) {
             'ngInject';
             //  fixing page not rendered in the first app entrance issue
             $timeout(function () {
                 switch (data.diagnostic.status) {
                     case ExerciseStatusEnum.COMPLETED.enum:
-                        var workoutSubjectId = CategoryService.getCategoryLevel1ParentSync(data.workoutsProgress[0]);
-                        var isFirstWorkoutStarted = angular.isDefined(workoutSubjectId);
+                        var isFirstWorkoutStarted = angular.isDefined(data.workoutsProgress[0].subjectId);
                         if (isFirstWorkoutStarted) {
                             $state.go('.summary');
                         } else {
@@ -15892,7 +15883,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function () {
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutIntroController',
-        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", "WorkoutsSrv", "CategoryService", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv, CategoryService) {
+        ["data", "$state", "WorkoutsRoadmapSrv", "$q", "$scope", "ExerciseStatusEnum", "ExerciseTypeEnum", "SubjectEnum", "$timeout", "WorkoutsSrv", function (data, $state, WorkoutsRoadmapSrv, $q, $scope, ExerciseStatusEnum, ExerciseTypeEnum, SubjectEnum, $timeout, WorkoutsSrv) {
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
@@ -15933,15 +15924,14 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
             //set times workouts
-            function setWorkoutsTimes(){
+            function setWorkoutsTimes() {
                 var getPersonalizedWorkoutsByTimeProm;
                 var subjectsToIgnore;
 
                 if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
                     if (!currWorkout.personalizedTimes) {
                         if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                            var prevWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(prevWorkout);
-                            subjectsToIgnore = prevWorkoutSubjectId;
+                            subjectsToIgnore = prevWorkout.subjectId;
                         }
                         getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
                     } else {
@@ -15967,8 +15957,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 var subjectNum = SubjectEnum.getEnumArr().length;
 
                 return function () {
-                    var currentWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(currWorkout);
-                    usedSubjects.push(currentWorkoutSubjectId);
+                    usedSubjects.push(currWorkout.subjectId);
                     if (usedSubjects.length === subjectNum) {
                         usedSubjects = [];
                     }
@@ -15976,7 +15965,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                     delete currWorkout.personalizedTimes;
                     delete vm.selectedTime;
 
-                    $timeout(function(){
+                    $timeout(function () {
                         var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
                         setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
                         getPersonalizedWorkoutsByTimeProm.then(function () {
@@ -15989,10 +15978,8 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
             })();
 
-            vm.startExercise = function(){
+            vm.startExercise = function () {
                 var selectedWorkout = angular.copy(vm.selectedWorkout);
-                var selectedWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(selectedWorkout);
-                selectedWorkout.subjectId = selectedWorkoutSubjectId;
                 var isWorkoutGenerated = selectedWorkout &&
                     angular.isDefined(selectedWorkout.subjectId) &&
                     angular.isDefined(selectedWorkout.exerciseTypeId) &&
@@ -16031,8 +16018,8 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 });
             };
 
-            vm.selectTime = function(workoutTime){
-                if(!vm.workoutsByTime[workoutTime]){
+            vm.selectTime = function (workoutTime) {
+                if (!vm.workoutsByTime[workoutTime]) {
                     return;
                 }
 
@@ -16046,8 +16033,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
                 if (vm.workoutsByTime) {
                     vm.selectedWorkout = vm.workoutsByTime[newSelectedTime];
-                    var selectedWorkoutSubjectId = CategoryService.getCategoryLevel1ParentSync(vm.selectedWorkout);
-                    currWorkout.subjectId = selectedWorkoutSubjectId;
+                    currWorkout.subjectId = vm.selectedWorkout.subjectId;
                 }
             });
         }]
@@ -17784,14 +17770,13 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
         bindings: {
             exerciseData: '<'
         },
-        controller: ["SubjectEnum", "CategoryService", function(SubjectEnum, CategoryService) {
+        controller: ["SubjectEnum", function(SubjectEnum) {
             'ngInject';
 
             var vm = this;
 
             vm.seenSummary = vm.exerciseData.exerciseResult.seenSummary;
-            
-            vm.currentSubjectId = CategoryService.getCategoryLevel1ParentSync(vm.exerciseData.exercise);
+            vm.currentSubjectId = vm.exerciseData.exercise.subjectId; 
             vm.activeExerciseId = vm.exerciseData.exercise.id;
 
             vm.subjectName = SubjectEnum.getValByEnum(vm.currentSubjectId);

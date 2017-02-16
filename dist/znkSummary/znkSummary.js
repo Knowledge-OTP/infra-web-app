@@ -61,14 +61,13 @@
         bindings: {
             exerciseData: '<'
         },
-        controller: ["SubjectEnum", "CategoryService", function(SubjectEnum, CategoryService) {
+        controller: ["SubjectEnum", function(SubjectEnum) {
             'ngInject';
 
             var vm = this;
 
             vm.seenSummary = vm.exerciseData.exerciseResult.seenSummary;
-            
-            vm.currentSubjectId = CategoryService.getCategoryLevel1ParentSync(vm.exerciseData.exercise);
+            vm.currentSubjectId = vm.exerciseData.exercise.subjectId; 
             vm.activeExerciseId = vm.exerciseData.exercise.id;
 
             vm.subjectName = SubjectEnum.getValByEnum(vm.currentSubjectId);

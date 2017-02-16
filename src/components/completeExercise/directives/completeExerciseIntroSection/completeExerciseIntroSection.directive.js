@@ -14,9 +14,8 @@
                 this.$onInit = function(){
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
-                    var categoryIdForSubjectId = exerciseContent.catgoryId || exerciseContent.catgoryId2;
                     
-                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(categoryIdForSubjectId);
+                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.catgoryId, exerciseContent.catgoryId2]);
 
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;
