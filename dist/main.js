@@ -2449,7 +2449,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
-            $ctrl.exeriseSubjectId = ExerciseSubjectSrv.getSubjectId([exerciseContent.categoryId, exerciseContent.categoryId2]);
+            var categoriesIds = [exerciseContent.categoryId, exerciseContent.categoryId2];
+            $ctrl.exeriseSubjectId = ExerciseSubjectSrv.getSubjectId(exerciseContent.exerciseTypeId, categoriesIds);
 
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
@@ -3108,7 +3109,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
         function () {
             var getSubjectIdFn = function (CategoryService){
                 'ngInject';
-                return function(catIds) {
+                return function(exerciseTypeId, catIds) {
                     CategoryService.getCategoryLevel1ParentSync(catIds);
                 };
             };
@@ -3122,7 +3123,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 'ngInject';
                 var ExerciseSubjectSrv = {};
 
-                ExerciseSubjectSrv.getSubjectId = function(catIds) {
+                ExerciseSubjectSrv.getSubjectId = function(exerciseTypeId, catIds) {
                     var fn;
                     if (angular.isDefined(getSubjectIdFn)) {
                         try {

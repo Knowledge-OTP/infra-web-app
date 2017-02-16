@@ -36,7 +36,8 @@
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
-            $ctrl.exeriseSubjectId = ExerciseSubjectSrv.getSubjectId([exerciseContent.categoryId, exerciseContent.categoryId2]);
+            var categoriesIds = [exerciseContent.categoryId, exerciseContent.categoryId2];
+            $ctrl.exeriseSubjectId = ExerciseSubjectSrv.getSubjectId(exerciseContent.exerciseTypeId, categoriesIds);
 
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;

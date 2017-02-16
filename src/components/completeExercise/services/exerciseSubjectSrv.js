@@ -5,7 +5,7 @@
         function () {
             var getSubjectIdFn = function (CategoryService){
                 'ngInject';
-                return function(catIds) {
+                return function(exerciseTypeId, catIds) {
                     CategoryService.getCategoryLevel1ParentSync(catIds);
                 };
             };
@@ -18,7 +18,7 @@
                 'ngInject';
                 var ExerciseSubjectSrv = {};
 
-                ExerciseSubjectSrv.getSubjectId = function(catIds) {
+                ExerciseSubjectSrv.getSubjectId = function(exerciseTypeId, catIds) {
                     var fn;
                     if (angular.isDefined(getSubjectIdFn)) {
                         try {
