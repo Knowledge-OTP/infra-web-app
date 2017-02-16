@@ -1373,6 +1373,7 @@
             var getSubjectIdFn = function (CategoryService){
                 'ngInject';
                 return function(exerciseTypeId, catIds) {
+                    // The exerciseTypeId is for the fn we set in satsmInfraConfig
                     CategoryService.getCategoryLevel1ParentSync(catIds);
                 };
             };
@@ -1388,15 +1389,11 @@
 
                 ExerciseSubjectSrv.getSubjectId = function(exerciseTypeId, catIds) {
                     var fn;
-                    if (angular.isDefined(getSubjectIdFn)) {
-                        try {
-                            fn = $injector.invoke(getSubjectIdFn);
-                        } catch(e) {
-                            $log.error('exerciseCycleSrv invoke: failed to invoke getSubjectIdFn! e: '+ e);
-                            return;
-                        }
-
-                        return fn.apply(catIds);
+                    if (angular.isFunction(getSubjectIdFn)) {
+                        fn = $injector.invoke(getSubjectIdFn);
+                        return fn.apply(exerciseTypeId, catIds);
+                    } else {
+                        $log.error('exerciseCycleSrv: getSubjectIdFn is not a function !');
                     }
                 };
 
