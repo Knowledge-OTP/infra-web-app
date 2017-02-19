@@ -18,7 +18,7 @@
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, ExerciseSubjectSrv) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -36,8 +36,7 @@
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
-            var exerciseCategoryForSubject = [exerciseContent.categoryId, exerciseContent.categoryId2];
-            $ctrl.exeriseSubjectId = ExerciseSubjectSrv.getSubjectId(exerciseContent.exerciseTypeId, exerciseCategoryForSubject);
+            $ctrl.exeriseSubjectId = exerciseResult.subjectId;
 
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
@@ -49,17 +48,16 @@
                             categoryId: question.categoryId,
                             categoryId2: question.categoryId2,
                             manualEvaluation: question.manualEvaluation || false,
-                            subjectId: ExerciseSubjectSrv.getSubjectId(exerciseContent.exerciseTypeId, questionCategorForSubject),
                             order: question.index,
                             answerTypeId: question.answerTypeId,
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
-                            questionFormatId: question.questionFormatId
+                            questionFormatId: question.questionFormatId,
+                            subjectId: _getQuestionSubjectId(questionCategorForSubject)
                         };
                     });
                 }
 
-                exerciseResult.subjectId = $ctrl.exeriseSubjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
                 exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
                 exerciseResult.calculator = exerciseContent.calculator;
@@ -83,6 +81,14 @@
 
                 if(exerciseContent.categoryId2) {
                     exerciseResult.categoryId2 = exerciseContent.categoryId2;
+                }
+            }
+
+            function _getQuestionSubjectId(questionCategorForSubject) {
+                if (isSection || !exerciseResult.subjectId){
+                    return CategoryService.getCategoryLevel1ParentSync(questionCategorForSubject);
+                } else  {
+                    return exerciseResult.subjectId;
                 }
             }
 

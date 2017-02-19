@@ -1807,9 +1807,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "ZnkModuleService", "EventManagerSrv", "LoadingSrv", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+            controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "ZnkModuleService", "EventManagerSrv", "LoadingSrv", "CategoryService", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
                                   ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum, ZnkModuleService,
-                                  EventManagerSrv, LoadingSrv) {
+                                  EventManagerSrv, LoadingSrv, CategoryService) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -1917,10 +1917,13 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                                 exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
                                 exerciseDetails.examId = exerciseDetails.exerciseParentId;
                             }
+
+
                             var getDataPromMap = {
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
-                                exerciseParentContent: exerciseParentContent
+                                exerciseParentContent: exerciseParentContent,
+                                level1Id: CategoryService.getUserSelectedLevel1Category()
                             };
 
                             if (isModule && isSection){
@@ -1936,6 +1939,14 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                                 var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                                 var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
                                 var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
+
+                                var exerciseCategoryForSubject = [data.exerciseContent.categoryId, data.exerciseContent.categoryId2];
+                                if (isSection || !data.level1Id){
+                                    $ctrl.exerciseData.exerciseResult.subjectId = CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject);
+                                } else  {
+                                    $ctrl.exerciseData.exerciseResult.subjectId = data.level1Id;
+                                }
+
                                 // skip intro
                                 if (isParentModule) {
                                     data.exerciseResult.seenIntro = true;
@@ -2116,7 +2127,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         'exerciseContent',
                         'exerciseParentContent',
                         'exerciseResult',
-                        'moduleExamData'
+                        'moduleExamData',
+                        'level1Id'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
@@ -2429,9 +2441,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "ExerciseSubjectSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, ExerciseSubjectSrv) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -2449,8 +2461,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
-            var exerciseCategoryForSubject = [exerciseContent.categoryId, exerciseContent.categoryId2];
-            $ctrl.exeriseSubjectId = ExerciseSubjectSrv.getSubjectId(exerciseContent.exerciseTypeId, exerciseCategoryForSubject);
+            $ctrl.exeriseSubjectId = exerciseResult.subjectId;
 
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
@@ -2462,17 +2473,16 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                             categoryId: question.categoryId,
                             categoryId2: question.categoryId2,
                             manualEvaluation: question.manualEvaluation || false,
-                            subjectId: ExerciseSubjectSrv.getSubjectId(exerciseContent.exerciseTypeId, questionCategorForSubject),
                             order: question.index,
                             answerTypeId: question.answerTypeId,
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
-                            questionFormatId: question.questionFormatId
+                            questionFormatId: question.questionFormatId,
+                            subjectId: _getQuestionSubjectId(questionCategorForSubject)
                         };
                     });
                 }
 
-                exerciseResult.subjectId = $ctrl.exeriseSubjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
                 exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
                 exerciseResult.calculator = exerciseContent.calculator;
@@ -2496,6 +2506,14 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                 if(exerciseContent.categoryId2) {
                     exerciseResult.categoryId2 = exerciseContent.categoryId2;
+                }
+            }
+
+            function _getQuestionSubjectId(questionCategorForSubject) {
+                if (isSection || !exerciseResult.subjectId){
+                    return CategoryService.getCategoryLevel1ParentSync(questionCategorForSubject);
+                } else  {
+                    return exerciseResult.subjectId;
                 }
             }
 
@@ -3100,44 +3118,6 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 };
 
                 return exerciseCycleSrv;
-            }];
-        }
-    );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseSubjectSrv',
-        function () {
-            var getSubjectIdFn = function (CategoryService){
-                'ngInject';
-                return function(exerciseTypeId, catIds) {
-                    // The exerciseTypeId is for the fn we set in satsmInfraConfig
-                    CategoryService.getCategoryLevel1ParentSync(catIds);
-                };
-            };
-            getSubjectIdFn.$inject = ["CategoryService"];
-
-            this.setGetSubjectIdFn = function (_getSubjectIdFn) {
-                getSubjectIdFn = _getSubjectIdFn;
-            };
-
-            this.$get = ["$log", "$injector", function ($log, $injector) {
-                'ngInject';
-                var ExerciseSubjectSrv = {};
-
-                ExerciseSubjectSrv.getSubjectId = function(exerciseTypeId, catIds) {
-                    var fn;
-                    if (angular.isFunction(getSubjectIdFn)) {
-                        fn = $injector.invoke(getSubjectIdFn);
-                        return fn.apply(exerciseTypeId, catIds);
-                    } else {
-                        $log.error('exerciseCycleSrv: getSubjectIdFn is not a function !');
-                    }
-                };
-
-                return ExerciseSubjectSrv;
             }];
         }
     );
