@@ -1102,7 +1102,7 @@
                 this.$onInit = function(){
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
-                    
+
                     this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.catgoryId, exerciseContent.catgoryId2]);
 
                     this.exerciseContent = exerciseContent;
@@ -1333,11 +1333,11 @@
 
                 var dontInit = false;
                 return ExerciseResultSrv.getExerciseResult(
-                    exerciseDetails.exerciseTypeId, 
-                    exerciseDetails.exerciseId, 
-                    exerciseDetails.examId, 
-                    exerciseDetails.examSectionsNum, 
-                    dontInit, 
+                    exerciseDetails.exerciseTypeId,
+                    exerciseDetails.exerciseId,
+                    exerciseDetails.examId,
+                    exerciseDetails.examSectionsNum,
+                    dontInit,
                     exerciseDetails.exerciseParentId);
             };
         }]
@@ -1359,22 +1359,22 @@
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {                    
+                exerciseCycleSrv.invoke = function (methodName, data) {
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {                      
+                    if (angular.isDefined(hook)) {
                         try {
-                            fn = $injector.invoke(hook);         
+                            fn = $injector.invoke(hook);
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-                        
+
                         return fn.apply(null, data);
-                    } 
+                    }
                 };
 
                 return exerciseCycleSrv;
