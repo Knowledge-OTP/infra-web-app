@@ -2839,7 +2839,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
                     
-                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.catgoryId, exerciseContent.catgoryId2]);
+                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.categoryId, exerciseContent.categoryId2]);
 
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;
