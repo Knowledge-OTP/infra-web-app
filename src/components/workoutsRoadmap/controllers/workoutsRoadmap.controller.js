@@ -61,10 +61,9 @@
             }
 
             data.exercise = vm.selectedItem;
-
             data.roadmapCtrlActions = {};
             data.roadmapCtrlActions.setCurrWorkout = function (_workoutOrder) {
-                if (!_workoutOrder) {
+                if (angular.isUndefined(_workoutOrder) || _workoutOrder === null || isNaN(_workoutOrder)) {
                     vm.selectedItem = vm.diagnostic;
                 } else {
                     vm.selectedItem = vm.workoutsProgress[_workoutOrder - 1];
