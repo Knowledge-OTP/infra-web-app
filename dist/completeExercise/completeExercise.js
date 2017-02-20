@@ -191,6 +191,7 @@
                             }
 
                             return $q.all(getDataPromMap).then(function (data) {
+                                data.level1CategoryId = !angular.equals(data.level1CategoryId, {}) ? data.level1CategoryId : null;
                                 $ctrl.exerciseData = data;
                                 isDataReady = true;
                                 var newViewState;
