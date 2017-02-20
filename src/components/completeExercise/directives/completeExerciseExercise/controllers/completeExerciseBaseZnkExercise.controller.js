@@ -18,7 +18,7 @@
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -42,7 +42,6 @@
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
-                        var questionCategorForSubject = [question.categoryId, question.categoryId2];
                         return {
                             questionId: question.id,
                             categoryId: question.categoryId,
@@ -53,7 +52,7 @@
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
                             questionFormatId: question.questionFormatId,
-                            subjectId: _getQuestionSubjectId(questionCategorForSubject)
+                            subjectId: question.subjectId
                         };
                     });
                 }
@@ -81,14 +80,6 @@
 
                 if(exerciseContent.categoryId2) {
                     exerciseResult.categoryId2 = exerciseContent.categoryId2;
-                }
-            }
-
-            function _getQuestionSubjectId(questionCategorForSubject) {
-                if (isSection || !exerciseResult.subjectId){
-                    return CategoryService.getCategoryLevel1ParentSync(questionCategorForSubject);
-                } else  {
-                    return exerciseResult.subjectId;
                 }
             }
 

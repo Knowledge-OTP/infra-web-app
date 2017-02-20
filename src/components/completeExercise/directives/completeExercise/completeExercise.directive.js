@@ -150,7 +150,7 @@
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
                                 exerciseParentContent: exerciseParentContent,
-                                level1Id: CategoryService.getUserSelectedLevel1Category()
+                                level1CategoryId: CategoryService.getUserSelectedLevel1Category()
                             };
 
                             if (isModule && isSection){
@@ -168,11 +168,16 @@
                                 var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
 
                                 var exerciseCategoryForSubject = [data.exerciseContent.categoryId, data.exerciseContent.categoryId2];
-                                if (isSection || !data.level1Id){
+                                if (isSection || !data.level1CategoryId){
                                     $ctrl.exerciseData.exerciseResult.subjectId = CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject);
                                 } else  {
-                                    $ctrl.exerciseData.exerciseResult.subjectId = data.level1Id;
+                                    $ctrl.exerciseData.exerciseResult.subjectId = data.level1CategoryId;
                                 }
+
+                                $ctrl.exerciseData.exerciseContent.questions.forEach(function (question) {
+                                    var questionCategoriesForSubject = [question.categoryId, question.categoryId2];
+                                    question.subjectId =  data.level1CategoryId ? data.level1CategoryId : CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject);
+                                });
 
                                 // skip intro
                                 if (isParentModule) {
@@ -355,7 +360,7 @@
                         'exerciseParentContent',
                         'exerciseResult',
                         'moduleExamData',
-                        'level1Id'
+                        'level1CategoryId'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 

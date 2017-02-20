@@ -183,7 +183,7 @@
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
                                 exerciseParentContent: exerciseParentContent,
-                                level1Id: CategoryService.getUserSelectedLevel1Category()
+                                level1CategoryId: CategoryService.getUserSelectedLevel1Category()
                             };
 
                             if (isModule && isSection){
@@ -201,11 +201,16 @@
                                 var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
 
                                 var exerciseCategoryForSubject = [data.exerciseContent.categoryId, data.exerciseContent.categoryId2];
-                                if (isSection || !data.level1Id){
+                                if (isSection || !data.level1CategoryId){
                                     $ctrl.exerciseData.exerciseResult.subjectId = CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject);
                                 } else  {
-                                    $ctrl.exerciseData.exerciseResult.subjectId = data.level1Id;
+                                    $ctrl.exerciseData.exerciseResult.subjectId = data.level1CategoryId;
                                 }
+
+                                $ctrl.exerciseData.exerciseContent.questions.forEach(function (question) {
+                                    var questionCategoriesForSubject = [question.categoryId, question.categoryId2];
+                                    question.subjectId =  data.level1CategoryId ? data.level1CategoryId : CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject);
+                                });
 
                                 // skip intro
                                 if (isParentModule) {
@@ -388,7 +393,7 @@
                         'exerciseParentContent',
                         'exerciseResult',
                         'moduleExamData',
-                        'level1Id'
+                        'level1CategoryId'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
@@ -701,9 +706,9 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -727,7 +732,6 @@
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
-                        var questionCategorForSubject = [question.categoryId, question.categoryId2];
                         return {
                             questionId: question.id,
                             categoryId: question.categoryId,
@@ -738,7 +742,7 @@
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
                             questionFormatId: question.questionFormatId,
-                            subjectId: _getQuestionSubjectId(questionCategorForSubject)
+                            subjectId: question.subjectId
                         };
                     });
                 }
@@ -766,14 +770,6 @@
 
                 if(exerciseContent.categoryId2) {
                     exerciseResult.categoryId2 = exerciseContent.categoryId2;
-                }
-            }
-
-            function _getQuestionSubjectId(questionCategorForSubject) {
-                if (isSection || !exerciseResult.subjectId){
-                    return CategoryService.getCategoryLevel1ParentSync(questionCategorForSubject);
-                } else  {
-                    return exerciseResult.subjectId;
                 }
             }
 
@@ -1102,7 +1098,7 @@
                 this.$onInit = function(){
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
-
+                    
                     this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.catgoryId, exerciseContent.catgoryId2]);
 
                     this.exerciseContent = exerciseContent;
@@ -1333,11 +1329,11 @@
 
                 var dontInit = false;
                 return ExerciseResultSrv.getExerciseResult(
-                    exerciseDetails.exerciseTypeId,
-                    exerciseDetails.exerciseId,
-                    exerciseDetails.examId,
-                    exerciseDetails.examSectionsNum,
-                    dontInit,
+                    exerciseDetails.exerciseTypeId, 
+                    exerciseDetails.exerciseId, 
+                    exerciseDetails.examId, 
+                    exerciseDetails.examSectionsNum, 
+                    dontInit, 
                     exerciseDetails.exerciseParentId);
             };
         }]
@@ -1359,22 +1355,22 @@
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {
+                exerciseCycleSrv.invoke = function (methodName, data) {                    
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {
+                    if (angular.isDefined(hook)) {                      
                         try {
-                            fn = $injector.invoke(hook);
+                            fn = $injector.invoke(hook);         
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-
+                        
                         return fn.apply(null, data);
-                    }
+                    } 
                 };
 
                 return exerciseCycleSrv;
