@@ -174,11 +174,6 @@
                                     $ctrl.exerciseData.exerciseResult.subjectId = data.level1CategoryId;
                                 }
 
-                                $ctrl.exerciseData.exerciseContent.questions.forEach(function (question) {
-                                    var questionCategoriesForSubject = [question.categoryId, question.categoryId2];
-                                    question.subjectId =  data.level1CategoryId ? data.level1CategoryId : CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject);
-                                });
-
                                 // skip intro
                                 if (isParentModule) {
                                     data.exerciseResult.seenIntro = true;
