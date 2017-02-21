@@ -352,7 +352,9 @@
             "5": "Following is a passage with 15 questions. Some portions of text are highlighted to indicate a grammatical or stylistic error. Select the best choice from the four possible options.",
             "6": "Answer the following questions based on the information presented in the passages.",
             "7": "",
-            "8": "After reading the persuasive essay, assess the essay by answering the following questions."
+            "8": "After reading the persuasive essay, assess the essay by answering the following questions.",
+            "9": "Solve the following problems.",
+            "10": "Solve the following problems." 
         },
         "SUBJECTS": {
             "0": "Mathematics",
@@ -363,7 +365,9 @@
             "5": "English",
             "6": "Science",
             "7": "Verbal",
-            "8": "Essay"
+            "8": "Essay",
+            "9": "Math level 1",
+            "10": "Math level 2" 
         },
         "EXIT": "Exit",
         "GO_QST": "Go To Questions",
@@ -479,10 +483,6 @@
     "MY_PROFILE": {
         "MY_PROFILE": "My Profile",
         "CHANGE_PASSWORD": "Change Password",
-        "SELECTED_TEST_LEVEL": "Selected Test Level",
-        "MATH_LEVEL_1": "Math Level 1",
-        "MATH_LEVEL_2": "Math Level 2",
-        "TEST_LEVEL": "Test Level",
         "SAVE": "Save",
         "CURRENT_PASSWORD": "Current Password",
         "NEW_PASSWORD": "New Password",
@@ -492,7 +492,6 @@
         "PASSWORD_NOT_MATCH": "New Password doesn't match.",
         "ERROR_OCCURRED": "An error has occurred, Please try again.",
         "PASSWORD_SAVE_SUCCESS": "Your password has been changed successfully.",
-        "TEST_LEVEL_SAVE_SUCCESS": "Your test level has been changed successfully.",
         "PROFILE_SAVE_SUCCESS": "Your profile has been successfully saved.",
         "INCORRECT_PASSWORD": "Incorrect password.",
         "NO_INTERNET_CONNECTION_ERR": "No internet connection. Please try again later.",
@@ -500,7 +499,8 @@
         "EMAIL": "Email",
         "TIMEZONE": "Timezone",
         "SET_MANUALLY": "Set manually",
-        "EMAIL_ERROR": "Email error"
+        "EMAIL_ERROR": "Email error",
+        "DONE": "Done"
     },
     "ACTIVE_PANEL": {
         "SHOW_STUDENT_SCREEN": "Show Student Screen",

@@ -443,7 +443,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
     "        <div translate=\".TEST_LEVEL_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
-    "            <md-button aria-label=\"{{'CHANGE_PASSWORD.DONE' | translate}}\"\n" +
+    "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
     "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +

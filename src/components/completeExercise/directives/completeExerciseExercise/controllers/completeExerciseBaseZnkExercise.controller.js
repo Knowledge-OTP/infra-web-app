@@ -18,7 +18,7 @@
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
             $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv) {
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -36,26 +36,28 @@
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
+            $ctrl.exeriseSubjectId = exerciseResult.subjectId;
+
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
+                        var questionCategoriesForSubject = [question.categoryId, question.categoryId2];
                         return {
                             questionId: question.id,
                             categoryId: question.categoryId,
                             categoryId2: question.categoryId2,
                             manualEvaluation: question.manualEvaluation || false,
-                            subjectId: question.subjectId,
                             order: question.index,
                             answerTypeId: question.answerTypeId,
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
                             questionFormatId: question.questionFormatId,
+                            subjectId: $ctrl.exeriseSubjectId ? $ctrl.exeriseSubjectId : CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject)
                         };
                     });
                 }
 
-                exerciseResult.subjectId = exerciseContent.subjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
                 exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
                 exerciseResult.calculator = exerciseContent.calculator;

@@ -12,7 +12,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })
         .directive('answerExplanation',
-        function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+        function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, CategoryService) {
             'ngInject';
 
             var directive = {
@@ -25,6 +25,7 @@
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
+                    var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
 
                     scope.d = {};
 
@@ -44,7 +45,7 @@
                             }, 0, false);
 
                             var analyticsProps = {
-                                subjectType: question.subjectId,
+                                subjectType: questionSubjectId,
                                 questionId: question.id
                             };
 

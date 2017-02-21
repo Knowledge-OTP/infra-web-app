@@ -13,7 +13,7 @@
             var vm = this;
 
             vm.seenSummary = vm.exerciseData.exerciseResult.seenSummary;
-            vm.currentSubjectId = vm.exerciseData.exercise.subjectId;
+            vm.currentSubjectId = vm.exerciseData.exercise.subjectId; 
             vm.activeExerciseId = vm.exerciseData.exercise.id;
 
             vm.subjectName = SubjectEnum.getValByEnum(vm.currentSubjectId);

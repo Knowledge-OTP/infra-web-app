@@ -357,10 +357,14 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "</svg>\n" +
     "");
   $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
-    "<div class=\"tutorials-main-container\">\n" +
-    "    <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
-    "    <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
+    "<div class=\"app-tests-roadmap layout-row flex-grow\" layout=\"row\" flex=\"grow\">\n" +
+    "    <div class=\"tutorials-main-container\">\n" +
+    "        <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
+    "        <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
+    "    </div>\n" +
     "</div>\n" +
+    "\n" +
+    "\n" +
     "");
   $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",
     "<div class=\"complete-exercise-container base-border-radius\">\n" +
