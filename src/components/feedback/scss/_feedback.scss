@@ -1,4 +1,6 @@
 feedback {
+    position: fixed;
+    z-index: 100;
     .feedback-btn {
         @include dimension(45px, 45px);
         @include misc-pos(fixed, null, 30px, 10px, null);

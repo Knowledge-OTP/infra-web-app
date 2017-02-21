@@ -2054,29 +2054,32 @@ md-dialog.base {
       width: 14px;
       height: 19px; }
 
-feedback .feedback-btn {
-  width: 45px;
-  height: 45px;
+feedback {
   position: fixed;
-  right: 30px;
-  bottom: 10px;
-  border: 1px solid #c2c2c2;
-  cursor: pointer;
-  box-shadow: 0 1px 5px 0 rgba(63, 63, 63, 0.2);
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
-  -ms-flex-align: center;
-      align-items: center;
-  border-radius: 50px;
-  background-color: #ebebeb;
-  z-index: 78; }
-  feedback .feedback-btn svg g {
-    fill: transparent; }
-  feedback .feedback-btn svg path, feedback .feedback-btn svg polyline {
-    stroke-width: 10px;
-    stroke: #757a83; }
+  z-index: 100; }
+  feedback .feedback-btn {
+    width: 45px;
+    height: 45px;
+    position: fixed;
+    right: 30px;
+    bottom: 10px;
+    border: 1px solid #c2c2c2;
+    cursor: pointer;
+    box-shadow: 0 1px 5px 0 rgba(63, 63, 63, 0.2);
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    border-radius: 50px;
+    background-color: #ebebeb;
+    z-index: 78; }
+    feedback .feedback-btn svg g {
+      fill: transparent; }
+    feedback .feedback-btn svg path, feedback .feedback-btn svg polyline {
+      stroke-width: 10px;
+      stroke: #757a83; }
 
 .feedback-dialog .popup-header {
   position: relative;
