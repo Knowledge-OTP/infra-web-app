@@ -509,11 +509,11 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "</md-dialog>\n" +
     "");
   $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
-    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-show=\"target > minScore\">\n" +
+    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-class=\"{'hideSign':target > minScore}\" >\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "<div class=\"goal\">{{target}}</div>\n" +
-    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-show=\"target < maxScore\">\n" +
+    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-class=\"{'hideSign':target < maxScore}\">\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "");

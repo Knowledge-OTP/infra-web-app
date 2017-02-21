@@ -6693,6 +6693,8 @@ goal-select {
       flex-direction: row;
   -ms-flex-align: center;
       align-items: center; }
+  goal-select .hideSign {
+    visibility: hidden; }
   goal-select .goal {
     width: 45px;
     text-align: center; }
