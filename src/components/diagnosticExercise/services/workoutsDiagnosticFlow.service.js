@@ -9,8 +9,8 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector) {
+        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
+            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var countDifficultySafeCheckErrors = 0;
@@ -158,16 +158,16 @@
 
                             if (angular.isUndefined(currentQuestionResults) && !skipIntroBool) {
                                 currentState.state = '.intro';
-                                currentState.subjectId = currentSection.subjectId;
+                                currentState.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId);
                                 currentState.params = {
                                     id: exam.id,
+                                    subjectId: currentState.subjectId,
                                     sectionId: currentSection.id,
-                                    subjectId: currentSection.subjectId,
                                     order: currentSection.order
                                 };
                             } else {
                                 currentState.state = '.exercise';
-                                currentState.subjectId = currentSection.subjectId;
+                                currentState.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId);
                                 currentState.params = {id: exam.id, sectionId: currentSection.id};
                             }
                             return currentState;

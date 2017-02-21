@@ -20,6 +20,7 @@
         'znk.infra.scoring',
         'znk.infra.general',
         'znk.infra.filters',
+        'znk.infra.contentGetters',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
         'znk.infra-web-app.infraWebAppZnkExercise',
