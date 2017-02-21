@@ -2206,8 +2206,6 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         return;
                     }
 
-                    $ctrl.timeEnabled = true;
-
                     if (angular.isUndefined(exerciseResult.duration)) {
                         exerciseResult.duration = 0;
                     }
@@ -2255,7 +2253,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
-
+                    var timeEnabledSetting = settings.exerciseDetails.timeEnabled;
+                    $ctrl.timeEnabled = angular.isDefined(timeEnabledSetting) ? timeEnabledSetting : true;
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
                     });
@@ -2368,7 +2367,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 function _finishExerciseWhenAllQuestionsAnswered() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
-                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
+                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
                     if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
                         $ctrl.znkExercise._finishExercise();
                     }
@@ -2405,7 +2404,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         }
                     };
 
-                    this.openIntro = function() {
+                    this.openIntro = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.INTRO);
                     };
 
