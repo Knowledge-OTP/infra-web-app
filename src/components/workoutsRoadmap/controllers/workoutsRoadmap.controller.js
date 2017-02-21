@@ -59,7 +59,6 @@
                         vm.selectedItem = vm.diagnostic;
                     }
             }
-
             data.exercise = vm.selectedItem;
             data.roadmapCtrlActions = {};
             data.roadmapCtrlActions.setCurrWorkout = function (_workoutOrder) {
@@ -76,11 +75,9 @@
             var LEFT_ANIMATION = 'left-animation';
             var RIGHT_ANIMATION = 'right-animation';
             $scope.$watch('vm.selectedItem', function (newItem, oldItem) {
-
                 if (angular.isUndefined(newItem)) {
                     return;
                 }
-
                 if (newItem !== oldItem) {
                     if (newItem.workoutOrder > oldItem.workoutOrder) {
                         vm.workoutSwitchAnimation = LEFT_ANIMATION;
