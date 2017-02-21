@@ -6693,8 +6693,6 @@ goal-select {
       flex-direction: row;
   -ms-flex-align: center;
       align-items: center; }
-  goal-select .show-sign {
-    visibility: visible; }
   goal-select .goal {
     width: 45px;
     text-align: center; }
@@ -6716,6 +6714,8 @@ goal-select {
         stroke: #0a9bad; }
     goal-select .action-btn.minus .st0 {
       display: none; }
+    goal-select .action-btn.show-sign {
+      visibility: visible; }
 
 school-select .school-selector .selector .tag-input-wrap {
   width: 560px;
