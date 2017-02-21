@@ -8,6 +8,7 @@
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
                 hideQuit: true,
+                timeEnabled:false,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {

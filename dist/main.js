@@ -12255,6 +12255,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
                 hideQuit: true,
+                timeEnabled:false,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
