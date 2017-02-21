@@ -15600,7 +15600,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"composite-wrap\" ng-if=\"!setting.hideTotalScore\">\n" +
+    "        <div class=\"composite-wrap\" ng-if=\"!(setting.hideTotalScore || goalsSettings.hideTotalScore)\">\n" +
     "            <div class=\"composite-score\">\n" +
     "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
     "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +

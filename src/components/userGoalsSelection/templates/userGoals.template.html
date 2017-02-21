@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div class="composite-wrap" ng-if="!setting.hideTotalScore">
+        <div class="composite-wrap" ng-if="!(setting.hideTotalScore || goalsSettings.hideTotalScore)">
             <div class="composite-score">
                 <div class="score-title" translate=".TOTAL_SCORE"></div>
                 <div class="score">{{userGoals.totalScore}}</div>
