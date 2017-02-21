@@ -1,7 +1,7 @@
-<div class="action-btn minus" ng-click="updateGoal(false)" ng-show="target > minScore">
+<div class="action-btn minus" ng-click="updateGoal(false)" ng-class="{'hideSign':target > minScore}" >
     <svg-icon name="user-goals-plus-icon"></svg-icon>
 </div>
 <div class="goal">{{target}}</div>
-<div class="action-btn plus" ng-click="updateGoal(true)" ng-show="target < maxScore">
+<div class="action-btn plus" ng-click="updateGoal(true)" ng-class="{'hideSign':target < maxScore}">
     <svg-icon name="user-goals-plus-icon"></svg-icon>
 </div>

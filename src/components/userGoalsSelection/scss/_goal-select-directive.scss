@@ -3,6 +3,10 @@ goal-select{
     @include display-flex;
     @include flex-direction(row);
     @include align-items(center);
+
+    .hideSign{
+        visibility: hidden;
+    }
     .goal{
         width: 45px;
         text-align: center;
