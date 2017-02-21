@@ -155,10 +155,10 @@
                             var stateResults = _getStateDataByExamAndExerciseResult(exam, exerciseResult);
                             var currentQuestionResults = stateResults.currentQuestionResults;
                             var currentSection = stateResults.currentSection;
+                            currentState.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId);
 
                             if (angular.isUndefined(currentQuestionResults) && !skipIntroBool) {
                                 currentState.state = '.intro';
-                                currentState.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId);
                                 currentState.params = {
                                     id: exam.id,
                                     subjectId: currentState.subjectId,
@@ -167,7 +167,6 @@
                                 };
                             } else {
                                 currentState.state = '.exercise';
-                                currentState.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId);
                                 currentState.params = {id: exam.id, sectionId: currentSection.id};
                             }
                             return currentState;
