@@ -6170,7 +6170,8 @@ complete-exercise-summary social-sharing .social-share-wrapper {
   width: 810px;
   height: 100%;
   overflow: auto;
-  text-align: center; }
+  text-align: center;
+  background-color: white; }
   .tutorials-list-pane .diagnostic-overlay {
     position: absolute;
     width: 810px;
@@ -6221,6 +6222,7 @@ complete-exercise-summary social-sharing .social-share-wrapper {
       stroke-width: 32px; }
   .tutorial-item .tutorial-name {
     margin: auto;
+    padding: 0 5px;
     font-size: 18px;
     color: #ffffff;
     font-family: Quicksand;
