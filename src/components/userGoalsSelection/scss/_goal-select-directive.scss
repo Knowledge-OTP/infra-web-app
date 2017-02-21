@@ -4,8 +4,8 @@ goal-select{
     @include flex-direction(row);
     @include align-items(center);
 
-    .hide-sign{
-        visibility: hidden;
+    .show-sign{
+        visibility: visible;
     }
     .goal{
         width: 45px;
@@ -17,6 +17,7 @@ goal-select{
         font-size:120%;
         text-align: center;
         cursor: pointer;
+        visibility: hidden;
         @include display-flex;
         @include align-items(center);
         svg {

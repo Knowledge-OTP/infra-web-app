@@ -6693,8 +6693,8 @@ goal-select {
       flex-direction: row;
   -ms-flex-align: center;
       align-items: center; }
-  goal-select .hide-sign {
-    visibility: hidden; }
+  goal-select .show-sign {
+    visibility: visible; }
   goal-select .goal {
     width: 45px;
     text-align: center; }
@@ -6704,6 +6704,7 @@ goal-select {
     font-size: 120%;
     text-align: center;
     cursor: pointer;
+    visibility: hidden;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
