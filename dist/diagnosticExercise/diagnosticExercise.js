@@ -610,7 +610,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService) {
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log) {
         'ngInject';
 
             var self = this;
@@ -630,7 +630,11 @@
                 if(scoringLimits.subjects && scoringLimits.subjects.max) {
                     return scoringLimits.subjects.max;
                 }
-                return scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max;
+                else if (scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max) {
+                    return scoringLimits.subjects[subjectId].max;
+                } else {
+                    $log.debug('WorkoutsDiagnosticSummaryController: getMaxScore error');
+                }
             }
 
             var GOAL = 'Goal';
@@ -664,6 +668,7 @@
             }
 
             this.compositeScore = diagnosticResultObj.compositeScore;
+            this.hideCompositeScore = diagnosticSettings.summary.hideCompositeScore;
 
             var doughnutValues = {};
             for (var subjectId in diagnosticResultObj.userStats) {
@@ -1072,7 +1077,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
@@ -1179,9 +1184,10 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "<div class=\"diagnostic-summary-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_SUMMARY\">\n" +
     "    <div class=\"title\" ng-switch on=\"vm.isSubjectsWaitToBeEvaluated\">\n" +
     "        <div ng-switch-when=\"false\">\n" +
-    "            <div translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
-    "            <span translate=\".COMPOSITE_SCORE\"></span>\n" +
-    "            <span> {{::vm.compositeScore}}</span>\n" +
+    "            <div class=\"main-title\" translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
+    "            <div class=\"sub-title\" translate=\".COMPOSITE_SCORE\" ng-hide=\"::vm.hideCompositeScore\">\n" +
+    "                {{::vm.compositeScore}}\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"true\">\n" +
     "            <span translate=\".ESTIMATED_SCORE\"></span>\n" +
@@ -1211,9 +1217,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "                            chart-options=\"doughnut.options\"\n" +
     "                            chart-legend=\"false\">\n" +
     "                    </canvas>\n" +
-    "                    <md-tooltip\n" +
+    "                    <md-tooltip znk-tooltip class=\"md-fab\"\n" +
     "                        ng-if=\"doughnut.scoreGoal > doughnut.score\"\n" +
-    "                        class=\"tooltip-for-diagnostic-summary md-whiteframe-2dp\"\n" +
     "                        md-direction=\"top\">\n" +
     "                        <span\n" +
     "                            translate=\".GOAL_TOOLTIP\"\n" +
