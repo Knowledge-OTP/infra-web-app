@@ -31,9 +31,6 @@
      /**
      *  SVG
      */
-    svg-icon {
-      display:block;
-    }
     .svg-wrapper {
         height: 100%;
         display: flex;
@@ -317,6 +314,7 @@
 
                         svg-icon {
                             &.on-boarding-bubble {
+                                display: block;
                                 width: 146px;
                                 height: 104px;
                                 svg {
