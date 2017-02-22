@@ -1169,31 +1169,26 @@ complete-exercise-progress-bar {
           align-self: flex-end; }
 
 .diagnostic-summary-wrapper {
-  padding-top: 50px; }
+  padding-top: 55px; }
   .diagnostic-summary-wrapper .title {
     text-align: center;
     margin-bottom: 52px; }
-    .diagnostic-summary-wrapper .title div {
+    .diagnostic-summary-wrapper .title .main-title {
       font-size: 20px;
       color: #4f4d4d;
       font-family: Quicksand;
-      font-weight: 400;
+      font-weight: 600;
       margin-bottom: 35px; }
-    .diagnostic-summary-wrapper .title span {
+    .diagnostic-summary-wrapper .title .sub-title {
       font-size: 22px;
       color: #4f4d4d;
       font-family: Quicksand;
       font-weight: 800; }
   .diagnostic-summary-wrapper .doughnuts-container {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    -ms-flex-pack: center;
-        justify-content: center; }
+    margin: 0 auto; }
     .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper {
-      margin-left: 9px;
-      margin-right: 9px; }
+      margin: 0 25px;
+      display: inline-block; }
       .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper {
         display: -ms-flexbox;
         display: flex;
@@ -1207,7 +1202,8 @@ complete-exercise-progress-bar {
             flex-direction: column;
         border-radius: 13px;
         background-color: #f9f9f9;
-        height: 250px; }
+        height: 250px;
+        width: 215px; }
         .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .subject-name {
           font-size: 15px;
           color: #757a83;
@@ -1281,17 +1277,14 @@ complete-exercise-progress-bar {
     font-family: Lato;
     font-weight: 300;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 70px;
+    width: 390px;
+    margin: 70px auto 0 auto;
     line-height: 25px; }
   .diagnostic-summary-wrapper .start-button.md-button.primary {
-    border-radius: 30px;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 35px;
-    margin-bottom: 35px; }
+    margin-top: 40px; }
   .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper {
     display: -ms-flexbox;
     display: flex;
@@ -1314,41 +1307,6 @@ complete-exercise-progress-bar {
       text-transform: inherit;
       padding-left: 35px;
       padding-right: 35px; }
-
-md-tooltip.tooltip-for-diagnostic-summary {
-  opacity: 0;
-  width: auto;
-  height: auto;
-  background: white;
-  padding: 0 5px; }
-  md-tooltip.tooltip-for-diagnostic-summary ._md-content {
-    font-size: 14px;
-    color: #4f4d4d;
-    font-family: Lato;
-    font-weight: 400;
-    height: auto;
-    text-align: center;
-    background: white;
-    white-space: normal; }
-    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
-      opacity: 1;
-      transform: none;
-      transition: none;
-      pointer-events: auto;
-      will-change: auto; }
-    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
-      transition: none; }
-      md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
-        transform: none;
-        opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary._md-hide {
-    transition: opacity 0.4s;
-    opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary._md-show {
-    opacity: 1;
-    transition: opacity 0.4s;
-    pointer-events: auto;
-    will-change: opacity; }
 
 /**
 *  FONTS
@@ -5006,8 +4964,6 @@ on-boarding-bar {
      *  SVG
      */
   position: relative; }
-  .on-board svg-icon {
-    display: block; }
   .on-board .svg-wrapper {
     height: 100%;
     display: -ms-flexbox;
@@ -5332,6 +5288,7 @@ on-boarding-bar {
               justify-content: center;
           vertical-align: top; }
           .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper svg-icon.on-boarding-bubble {
+            display: block;
             width: 146px;
             height: 104px; }
             .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper svg-icon.on-boarding-bubble svg line {
@@ -6173,7 +6130,8 @@ complete-exercise-summary social-sharing .social-share-wrapper {
   width: 810px;
   height: 100%;
   overflow: auto;
-  text-align: center; }
+  text-align: center;
+  background-color: white; }
   .tutorials-list-pane .diagnostic-overlay {
     position: absolute;
     width: 810px;
@@ -6224,6 +6182,7 @@ complete-exercise-summary social-sharing .social-share-wrapper {
       stroke-width: 32px; }
   .tutorial-item .tutorial-name {
     margin: auto;
+    padding: 0 5px;
     font-size: 18px;
     color: #ffffff;
     font-family: Quicksand;
@@ -6705,6 +6664,7 @@ goal-select {
     font-size: 120%;
     text-align: center;
     cursor: pointer;
+    visibility: hidden;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
@@ -6716,6 +6676,8 @@ goal-select {
         stroke: #0a9bad; }
     goal-select .action-btn.minus .st0 {
       display: none; }
+    goal-select .action-btn.show-sign {
+      visibility: visible; }
 
 school-select .school-selector .selector .tag-input-wrap {
   width: 560px;

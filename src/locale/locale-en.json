@@ -352,7 +352,9 @@
             "5": "Following is a passage with 15 questions. Some portions of text are highlighted to indicate a grammatical or stylistic error. Select the best choice from the four possible options.",
             "6": "Answer the following questions based on the information presented in the passages.",
             "7": "",
-            "8": "After reading the persuasive essay, assess the essay by answering the following questions."
+            "8": "After reading the persuasive essay, assess the essay by answering the following questions.",
+            "9": "Solve the following problems.",
+            "10": "Solve the following problems." 
         },
         "SUBJECTS": {
             "0": "Mathematics",
@@ -363,7 +365,9 @@
             "5": "English",
             "6": "Science",
             "7": "Verbal",
-            "8": "Essay"
+            "8": "Essay",
+            "9": "Math level 1",
+            "10": "Math level 2" 
         },
         "EXIT": "Exit",
         "GO_QST": "Go To Questions",

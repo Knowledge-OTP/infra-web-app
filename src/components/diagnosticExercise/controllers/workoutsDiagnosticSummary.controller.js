@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService) {
+        function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log) {
         'ngInject';
 
             var self = this;
@@ -22,7 +22,11 @@
                 if(scoringLimits.subjects && scoringLimits.subjects.max) {
                     return scoringLimits.subjects.max;
                 }
-                return scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max;
+                else if (scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max) {
+                    return scoringLimits.subjects[subjectId].max;
+                } else {
+                    $log.debug('WorkoutsDiagnosticSummaryController: getMaxScore error');
+                }
             }
 
             var GOAL = 'Goal';
@@ -56,6 +60,7 @@
             }
 
             this.compositeScore = diagnosticResultObj.compositeScore;
+            this.hideCompositeScore = diagnosticSettings.summary.hideCompositeScore;
 
             var doughnutValues = {};
             for (var subjectId in diagnosticResultObj.userStats) {

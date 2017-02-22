@@ -20,6 +20,7 @@
         'znk.infra.scoring',
         'znk.infra.general',
         'znk.infra.filters',
+        'znk.infra.contentGetters',
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.diagnosticIntro',
         'znk.infra-web-app.infraWebAppZnkExercise',
@@ -163,6 +164,7 @@
                             'ngInject';// jshint ignore:line
                             var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
                                 var estimatedScores = {};
+                                
                                 angular.forEach(latestScores, function (estimatedScore, subjectId) {
                                     estimatedScores[subjectId] = estimatedScore.score ? Math.round(estimatedScore.score) : null;
                                 });
@@ -223,13 +225,13 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate, ExerciseReviewStatusEnum) {
+                  $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
-            this.subjectId = exerciseData.questionsData.subjectId;
+            this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
@@ -563,7 +565,7 @@
             vm.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
 
             function _setHeaderTitle(){
-                var subjectTranslateKey = 'SUBJECTS.' + vm.params.subjectId;
+                var subjectTranslateKey = 'SUBJECTS.' + 'DIAGNOSTIC_TITLE.' + vm.params.subjectId;
                 $translate(subjectTranslateKey).then(function(subjectTranslation){
                     var translateFilter = $filter('translate');
                     vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE',{
@@ -608,7 +610,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService) {
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log) {
         'ngInject';
 
             var self = this;
@@ -628,7 +630,11 @@
                 if(scoringLimits.subjects && scoringLimits.subjects.max) {
                     return scoringLimits.subjects.max;
                 }
-                return scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max;
+                else if (scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max) {
+                    return scoringLimits.subjects[subjectId].max;
+                } else {
+                    $log.debug('WorkoutsDiagnosticSummaryController: getMaxScore error');
+                }
             }
 
             var GOAL = 'Goal';
@@ -662,6 +668,7 @@
             }
 
             this.compositeScore = diagnosticResultObj.compositeScore;
+            this.hideCompositeScore = diagnosticSettings.summary.hideCompositeScore;
 
             var doughnutValues = {};
             for (var subjectId in diagnosticResultObj.userStats) {
@@ -760,8 +767,8 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector) {
+        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
+            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var countDifficultySafeCheckErrors = 0;
@@ -906,19 +913,18 @@
                             var stateResults = _getStateDataByExamAndExerciseResult(exam, exerciseResult);
                             var currentQuestionResults = stateResults.currentQuestionResults;
                             var currentSection = stateResults.currentSection;
+                            currentState.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId);
 
                             if (angular.isUndefined(currentQuestionResults) && !skipIntroBool) {
                                 currentState.state = '.intro';
-                                currentState.subjectId = currentSection.subjectId;
                                 currentState.params = {
                                     id: exam.id,
+                                    subjectId: currentState.subjectId,
                                     sectionId: currentSection.id,
-                                    subjectId: currentSection.subjectId,
                                     order: currentSection.order
                                 };
                             } else {
                                 currentState.state = '.exercise';
-                                currentState.subjectId = currentSection.subjectId;
                                 currentState.params = {id: exam.id, sectionId: currentSection.id};
                             }
                             return currentState;
@@ -1148,9 +1154,10 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "<div class=\"diagnostic-summary-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_SUMMARY\">\n" +
     "    <div class=\"title\" ng-switch on=\"vm.isSubjectsWaitToBeEvaluated\">\n" +
     "        <div ng-switch-when=\"false\">\n" +
-    "            <div translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
-    "            <span translate=\".COMPOSITE_SCORE\"></span>\n" +
-    "            <span> {{::vm.compositeScore}}</span>\n" +
+    "            <div class=\"main-title\" translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
+    "            <div class=\"sub-title\" translate=\".COMPOSITE_SCORE\" ng-hide=\"::vm.hideCompositeScore\">\n" +
+    "                {{::vm.compositeScore}}\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"true\">\n" +
     "            <span translate=\".ESTIMATED_SCORE\"></span>\n" +
@@ -1180,9 +1187,8 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "                            chart-options=\"doughnut.options\"\n" +
     "                            chart-legend=\"false\">\n" +
     "                    </canvas>\n" +
-    "                    <md-tooltip\n" +
+    "                    <md-tooltip znk-tooltip class=\"md-fab\"\n" +
     "                        ng-if=\"doughnut.scoreGoal > doughnut.score\"\n" +
-    "                        class=\"tooltip-for-diagnostic-summary md-whiteframe-2dp\"\n" +
     "                        md-direction=\"top\">\n" +
     "                        <span\n" +
     "                            translate=\".GOAL_TOOLTIP\"\n" +

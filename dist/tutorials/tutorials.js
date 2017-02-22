@@ -23,7 +23,7 @@
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
         var svgMap = {
-            'locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
+            'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
             'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
         };
             SvgIconSrvProvider.registerSvgSources(svgMap);
@@ -286,8 +286,11 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "</div>\n" +
     "");
   $templateCache.put("components/tutorials/components/tutorialListItem/tutorialListItem.template.html",
-    "<div class=\"tutorial-item\" ng-click=\"vm.tutorialClick(vm.tutorial.id)\" ng-class=\"[vm.subjectsMap[vm.activeSubject], {'locked': !vm.tutorial.isAvail, 'base-box-shadow': vm.tutorial.isAvail}, {'completed': vm.tutorial.isComplete}]\">\n" +
-    "    <svg-icon name=\"locked-icon\" ng-if=\"!vm.tutorial.isAvail\"></svg-icon>\n" +
+    "<div class=\"tutorial-item\" ng-click=\"vm.tutorialClick(vm.tutorial.id)\"\n" +
+    "     ng-class=\"[vm.subjectsMap[vm.activeSubject], {\n" +
+    "     'locked': !vm.tutorial.isAvail,\n" +
+    "     'base-box-shadow': vm.tutorial.isAvail}, {'completed': vm.tutorial.isComplete}]\">\n" +
+    "    <svg-icon name=\"tutorials-locked-icon\" ng-if=\"!vm.tutorial.isAvail\"></svg-icon>\n" +
     "    <svg-icon name=\"tutorials-check-mark-icon\" ng-if=\"vm.tutorial.isComplete\"></svg-icon>\n" +
     "    <div class=\"tutorial-name\">{{vm.tutorial.name}}</div>\n" +
     "    <div class=\"tutorial-category-name\">{{vm.tutorial.categoryName}}</div>\n" +

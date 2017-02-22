@@ -113,7 +113,6 @@
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
                 recommendedGoalsTitle: true,
-                hideTotalScore: onBoardingSettings ? onBoardingSettings.hideTotalScore : false,
                 saveBtn: {
                     title: '.SAVE_AND_CONTINUE',
                     showSaveIcon: true
@@ -142,11 +141,10 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function ($state, OnBoardingService, znkAnalyticsSrv) {
+        function ($state, OnBoardingService) {
 
 
             this.goToTestToTake = function () {
-                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingIntroTestToTakeStep'});
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE);
                 $state.go('app.onBoarding.testToTake');
             };
@@ -201,6 +199,7 @@
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
                 hideQuit: true,
+                timeEnabled:false,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
