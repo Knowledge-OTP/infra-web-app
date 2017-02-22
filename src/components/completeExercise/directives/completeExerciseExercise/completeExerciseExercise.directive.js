@@ -200,7 +200,6 @@
                 }
 
                 this.$onInit = function () {
-                    //   _initTimersVitalData();
 
                     _invokeExerciseCtrl();
 

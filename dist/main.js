@@ -2377,7 +2377,6 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 }
 
                 this.$onInit = function () {
-                    //   _initTimersVitalData();
 
                     _invokeExerciseCtrl();
 
