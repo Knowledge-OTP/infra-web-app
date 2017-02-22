@@ -458,13 +458,16 @@
                 $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
                 $ctrl.ExerciseTypeEnum = ExerciseTypeEnum;
 
-                function _initTimersVitalData() {
+                function _initTimersVitalData(timeEnabled) {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
+                    if (timeEnabled && (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum)) {
                         return;
                     }
+
+
+                    $ctrl.timeEnabled = true;
 
                     if (angular.isUndefined(exerciseResult.duration)) {
                         exerciseResult.duration = 0;
@@ -513,8 +516,9 @@
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
-                    var timeEnabledSetting = settings.exerciseDetails.timeEnabled;
-                    $ctrl.timeEnabled = angular.isDefined(timeEnabledSetting) ? timeEnabledSetting : true;
+                    var timeEnabledSettings = settings.exerciseDetails.timeEnabled;
+                    var timeEnabled = angular.isBoolean(timeEnabledSettings) ? timeEnabledSettings : true;
+                    _initTimersVitalData(timeEnabled);
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
                     });
@@ -634,7 +638,7 @@
                 }
 
                 this.$onInit = function () {
-                    _initTimersVitalData();
+                    //   _initTimersVitalData();
 
                     _invokeExerciseCtrl();
 
