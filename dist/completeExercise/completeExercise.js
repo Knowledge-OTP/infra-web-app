@@ -466,7 +466,6 @@
                         return;
                     }
 
-
                     $ctrl.timeEnabled = true;
 
                     if (angular.isUndefined(exerciseResult.duration)) {
@@ -517,7 +516,7 @@
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
                     var timeEnabledSettings = settings.exerciseDetails.timeEnabled;
-                    var timeEnabled = angular.isBoolean(timeEnabledSettings) ? timeEnabledSettings : true;
+                    var timeEnabled = typeof(timeEnabledSettings) === "boolean" ? timeEnabledSettings : true;
                     _initTimersVitalData(timeEnabled);
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
