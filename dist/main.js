@@ -3660,6 +3660,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             'ngInject';
             var self = this;
             this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
+            exerciseData.questionsData.subjectId = this.subjectId;
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
@@ -3830,7 +3831,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             }
 
             function _setHeaderTitle() {
-                var subjectTranslateKey = 'SUBJECTS.' + exerciseData.questionsData.subjectId;
+                var subjectTranslateKey = 'SUBJECTS.'  + 'DIAGNOSTIC_TITLE.' + exerciseData.questionsData.subjectId;
                 $translate(subjectTranslateKey).then(function (subjectTranslation) {
                     var translateFilter = $filter('translate');
                     self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE', {
