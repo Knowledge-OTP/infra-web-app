@@ -386,7 +386,7 @@
     });
 })(angular);
 
-angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/evaluator/svg/star.svg",
     "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\"\n" +
