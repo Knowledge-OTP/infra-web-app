@@ -5003,8 +5003,6 @@ on-boarding-bar {
      *  SVG
      */
   position: relative; }
-  .on-board svg-icon {
-    display: block; }
   .on-board .svg-wrapper {
     height: 100%;
     display: -ms-flexbox;
@@ -5329,6 +5327,7 @@ on-boarding-bar {
               justify-content: center;
           vertical-align: top; }
           .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper svg-icon.on-boarding-bubble {
+            display: block;
             width: 146px;
             height: 104px; }
             .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper svg-icon.on-boarding-bubble svg line {
