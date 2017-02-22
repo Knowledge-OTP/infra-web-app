@@ -24,18 +24,16 @@
                 vm.workoutAvailTimes = workoutAvailTimes;
             });
 
-            function setTimesWorkouts(getPersonalizedWorkoutsByTimeProm) {
-                getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
-                    vm.workoutsByTime = workoutsByTime;
-                    WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function (workoutAvailTimes) {
-                        for (var i in workoutAvailTimes) {
-                            var time = workoutAvailTimes[i];
-                            if (workoutsByTime[time]) {
-                                vm.selectedTime = time;
-                                break;
-                            }
+            function setTimesWorkouts(workoutsByTime) {
+                vm.workoutsByTime = workoutsByTime;
+                WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function (workoutAvailTimes) {
+                    for (var i in workoutAvailTimes) {
+                        var time = workoutAvailTimes[i];
+                        if (workoutsByTime[time]) {
+                            vm.selectedTime = time;
+                            break;
                         }
-                    });
+                    }
                 });
             }
 
@@ -48,18 +46,17 @@
                 var subjectsToIgnore;
 
                 if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
-                    if (!currWorkout.personalizedTimes) {
-                        if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                            subjectsToIgnore = prevWorkout.subjectId;
-                        }
-                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
-                    } else {
-                        getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
+                    if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
+                        subjectsToIgnore = prevWorkout.subjectId;
                     }
-
-                    setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
+                    getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
+                    getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                        setTimesWorkouts(workoutsByTime);
+                    }, function () {
+                    });
                 }
             }
+
             setWorkoutsTimes();
 
             vm.getWorkoutIcon = function (workoutLength) {
@@ -81,13 +78,12 @@
                         usedSubjects = [];
                     }
 
-                    delete currWorkout.personalizedTimes;
                     delete vm.selectedTime;
 
                     $timeout(function () {
                         var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
-                        setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
-                        getPersonalizedWorkoutsByTimeProm.then(function () {
+                        getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                            setTimesWorkouts(workoutsByTime);
                             vm.rotate = false;
                         }, function () {
                             vm.rotate = false;
@@ -111,7 +107,6 @@
                     currWorkout[prop] = selectedWorkout[prop];
                 });
                 currWorkout.status = ExerciseStatusEnum.ACTIVE.enum;
-                delete currWorkout.personalizedTimes;
                 delete currWorkout.$$hashKey;
                 delete currWorkout.isAvail;
 

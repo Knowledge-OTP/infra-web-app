@@ -458,11 +458,11 @@
                 $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
                 $ctrl.ExerciseTypeEnum = ExerciseTypeEnum;
 
-                function _initTimersVitalData() {
+                function _initTimersVitalData(timeEnabled) {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
+                    if (!timeEnabled || !exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
                         return;
                     }
 
@@ -515,7 +515,9 @@
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
-
+                    var timeEnabledSettings = settings.exerciseDetails.timeEnabled;
+                    var timeEnabled = typeof(timeEnabledSettings) === "boolean" ? timeEnabledSettings : true;
+                    _initTimersVitalData(timeEnabled);
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
                     });
@@ -628,14 +630,13 @@
                 function _finishExerciseWhenAllQuestionsAnswered() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
-                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
+                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
                     if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
                         $ctrl.znkExercise._finishExercise();
                     }
                 }
 
                 this.$onInit = function () {
-                    _initTimersVitalData();
 
                     _invokeExerciseCtrl();
 
@@ -665,7 +666,7 @@
                         }
                     };
 
-                    this.openIntro = function() {
+                    this.openIntro = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.INTRO);
                     };
 

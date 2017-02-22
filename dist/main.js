@@ -2198,11 +2198,11 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
                 $ctrl.ExerciseTypeEnum = ExerciseTypeEnum;
 
-                function _initTimersVitalData() {
+                function _initTimersVitalData(timeEnabled) {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
+                    if (!timeEnabled || !exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
                         return;
                     }
 
@@ -2255,7 +2255,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
-
+                    var timeEnabledSettings = settings.exerciseDetails.timeEnabled;
+                    var timeEnabled = typeof(timeEnabledSettings) === "boolean" ? timeEnabledSettings : true;
+                    _initTimersVitalData(timeEnabled);
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
                     });
@@ -2368,14 +2370,13 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 function _finishExerciseWhenAllQuestionsAnswered() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
-                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
+                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
                     if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
                         $ctrl.znkExercise._finishExercise();
                     }
                 }
 
                 this.$onInit = function () {
-                    _initTimersVitalData();
 
                     _invokeExerciseCtrl();
 
@@ -2405,7 +2406,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         }
                     };
 
-                    this.openIntro = function() {
+                    this.openIntro = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.INTRO);
                     };
 
@@ -12175,7 +12176,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
                 recommendedGoalsTitle: true,
-                hideTotalScore: onBoardingSettings ? onBoardingSettings.hideTotalScore : false,
                 saveBtn: {
                     title: '.SAVE_AND_CONTINUE',
                     showSaveIcon: true
@@ -12204,11 +12204,10 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function ($state, OnBoardingService, znkAnalyticsSrv) {
+        function ($state, OnBoardingService) {
 
 
             this.goToTestToTake = function () {
-                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingIntroTestToTakeStep'});
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE);
                 $state.go('app.onBoarding.testToTake');
             };
@@ -12263,6 +12262,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
                 hideQuit: true,
+                timeEnabled:false,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
@@ -15493,11 +15493,11 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "</md-dialog>\n" +
     "");
   $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
-    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-show=\"target > minScore\">\n" +
+    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-class=\"{'show-sign':target > minScore}\" >\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "<div class=\"goal\">{{target}}</div>\n" +
-    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-show=\"target < maxScore\">\n" +
+    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-class=\"{'show-sign':target < maxScore}\">\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "");
@@ -15608,7 +15608,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"composite-wrap\" ng-if=\"!setting.hideTotalScore\">\n" +
+    "        <div class=\"composite-wrap\" ng-if=\"!(setting.hideTotalScore || goalsSettings.hideTotalScore)\">\n" +
     "            <div class=\"composite-score\">\n" +
     "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
     "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +
@@ -16002,12 +16002,10 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                         vm.selectedItem = vm.diagnostic;
                     }
             }
-
             data.exercise = vm.selectedItem;
-
             data.roadmapCtrlActions = {};
             data.roadmapCtrlActions.setCurrWorkout = function (_workoutOrder) {
-                if (!_workoutOrder) {
+                if (angular.isUndefined(_workoutOrder) || _workoutOrder === null || isNaN(_workoutOrder)) {
                     vm.selectedItem = vm.diagnostic;
                 } else {
                     vm.selectedItem = vm.workoutsProgress[_workoutOrder - 1];
@@ -16020,11 +16018,9 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
             var LEFT_ANIMATION = 'left-animation';
             var RIGHT_ANIMATION = 'right-animation';
             $scope.$watch('vm.selectedItem', function (newItem, oldItem) {
-
                 if (angular.isUndefined(newItem)) {
                     return;
                 }
-
                 if (newItem !== oldItem) {
                     if (newItem.workoutOrder > oldItem.workoutOrder) {
                         vm.workoutSwitchAnimation = LEFT_ANIMATION;
@@ -16282,18 +16278,16 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 vm.workoutAvailTimes = workoutAvailTimes;
             });
 
-            function setTimesWorkouts(getPersonalizedWorkoutsByTimeProm) {
-                getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
-                    vm.workoutsByTime = workoutsByTime;
-                    WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function (workoutAvailTimes) {
-                        for (var i in workoutAvailTimes) {
-                            var time = workoutAvailTimes[i];
-                            if (workoutsByTime[time]) {
-                                vm.selectedTime = time;
-                                break;
-                            }
+            function setTimesWorkouts(workoutsByTime) {
+                vm.workoutsByTime = workoutsByTime;
+                WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function (workoutAvailTimes) {
+                    for (var i in workoutAvailTimes) {
+                        var time = workoutAvailTimes[i];
+                        if (workoutsByTime[time]) {
+                            vm.selectedTime = time;
+                            break;
                         }
-                    });
+                    }
                 });
             }
 
@@ -16306,18 +16300,17 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 var subjectsToIgnore;
 
                 if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
-                    if (!currWorkout.personalizedTimes) {
-                        if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                            subjectsToIgnore = prevWorkout.subjectId;
-                        }
-                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
-                    } else {
-                        getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
+                    if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
+                        subjectsToIgnore = prevWorkout.subjectId;
                     }
-
-                    setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
+                    getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
+                    getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                        setTimesWorkouts(workoutsByTime);
+                    }, function () {
+                    });
                 }
             }
+
             setWorkoutsTimes();
 
             vm.getWorkoutIcon = function (workoutLength) {
@@ -16339,13 +16332,12 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                         usedSubjects = [];
                     }
 
-                    delete currWorkout.personalizedTimes;
                     delete vm.selectedTime;
 
                     $timeout(function () {
                         var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
-                        setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
-                        getPersonalizedWorkoutsByTimeProm.then(function () {
+                        getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                            setTimesWorkouts(workoutsByTime);
                             vm.rotate = false;
                         }, function () {
                             vm.rotate = false;
@@ -16369,7 +16361,6 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                     currWorkout[prop] = selectedWorkout[prop];
                 });
                 currWorkout.status = ExerciseStatusEnum.ACTIVE.enum;
-                delete currWorkout.personalizedTimes;
                 delete currWorkout.$$hashKey;
                 delete currWorkout.isAvail;
 

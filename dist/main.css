@@ -6661,6 +6661,7 @@ goal-select {
     font-size: 120%;
     text-align: center;
     cursor: pointer;
+    visibility: hidden;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
@@ -6672,6 +6673,8 @@ goal-select {
         stroke: #0a9bad; }
     goal-select .action-btn.minus .st0 {
       display: none; }
+    goal-select .action-btn.show-sign {
+      visibility: visible; }
 
 school-select .school-selector .selector .tag-input-wrap {
   width: 560px;

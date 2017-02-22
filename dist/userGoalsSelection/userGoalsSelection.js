@@ -509,11 +509,11 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "</md-dialog>\n" +
     "");
   $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
-    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-show=\"target > minScore\">\n" +
+    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-class=\"{'show-sign':target > minScore}\" >\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "<div class=\"goal\">{{target}}</div>\n" +
-    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-show=\"target < maxScore\">\n" +
+    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-class=\"{'show-sign':target < maxScore}\">\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "");
@@ -624,7 +624,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"composite-wrap\" ng-if=\"!setting.hideTotalScore\">\n" +
+    "        <div class=\"composite-wrap\" ng-if=\"!(setting.hideTotalScore || goalsSettings.hideTotalScore)\">\n" +
     "            <div class=\"composite-score\">\n" +
     "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
     "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +

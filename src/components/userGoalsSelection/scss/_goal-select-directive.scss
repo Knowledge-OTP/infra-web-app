@@ -1,18 +1,20 @@
-goal-select{
+goal-select {
     @include text-style(26px, $fontColor3, Quicksand, $regularFontWeight);
     @include display-flex;
     @include flex-direction(row);
     @include align-items(center);
-    .goal{
+
+    .goal {
         width: 45px;
         text-align: center;
     }
-    .action-btn{
+    .action-btn {
         width: 40px;
         height: 40px;
-        font-size:120%;
+        font-size: 120%;
         text-align: center;
         cursor: pointer;
+        visibility: hidden;
         @include display-flex;
         @include align-items(center);
         svg {
@@ -24,8 +26,11 @@ goal-select{
         }
         &.minus {
             .st0 {
-                display:none;
+                display: none;
             }
+        }
+        &.show-sign {
+            visibility: visible;
         }
     }
 }
