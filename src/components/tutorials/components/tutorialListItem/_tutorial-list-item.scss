@@ -24,6 +24,7 @@
     }
     .tutorial-name {
         margin: auto;
+        padding: 0 5px;
         @include text-style(18px, $fontColor8, Quicksand, $boldFontWeight);
     }
     .tutorial-category-name {
