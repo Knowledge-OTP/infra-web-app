@@ -3861,7 +3861,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
             //  current slide data (should be initialize in every slide)
             var currentDifficulty = diagnosticSettings.levels.medium.num;
-
+            WorkoutsDiagnosticFlow.initQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions);
             var initSlideIndex;
             var mediumLevelNum = diagnosticSettings.levels.medium.num;
 
@@ -4414,7 +4414,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: no callback function');
                     }
                 };
-                workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder = function (questions) {
+                workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder = function (questions) {
                     questionsByOrderAndDifficultyArr = [];
                     angular.forEach(questions, function (question) {
                         questionsByOrderAndDifficultyArr[question.order] = questionsByOrderAndDifficultyArr[question.order] || {};

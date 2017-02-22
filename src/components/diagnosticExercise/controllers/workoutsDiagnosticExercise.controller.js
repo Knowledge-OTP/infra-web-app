@@ -212,7 +212,7 @@
 
             //  current slide data (should be initialize in every slide)
             var currentDifficulty = diagnosticSettings.levels.medium.num;
-
+            WorkoutsDiagnosticFlow.initQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions);
             var initSlideIndex;
             var mediumLevelNum = diagnosticSettings.levels.medium.num;
 

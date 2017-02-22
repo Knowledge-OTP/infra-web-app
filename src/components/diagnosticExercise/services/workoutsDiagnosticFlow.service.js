@@ -228,7 +228,7 @@
                         $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: no callback function');
                     }
                 };
-                workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder = function (questions) {
+                workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder = function (questions) {
                     questionsByOrderAndDifficultyArr = [];
                     angular.forEach(questions, function (question) {
                         questionsByOrderAndDifficultyArr[question.order] = questionsByOrderAndDifficultyArr[question.order] || {};
