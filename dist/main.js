@@ -4398,8 +4398,20 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         cb(diagnosticFlowResults);
                     }
                 };
+                /**
+                 * get Question By Difficulty And Order
+                 * @function
+                 * @param difficulty
+                 * @param order
+                 * @param cb
+                 */
                 workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder = function (difficulty, order, cb) {
+                    $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: initial func', arguments);
                     var diagnosticFlowResults = {};
+                    if (questionsByOrderAndDifficultyArr && questionsByOrderAndDifficultyArr.length > 0) {
+                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is empty or not initialized.');
+                        return;
+                    }
                     var question = questionsByOrderAndDifficultyArr[order][difficulty];
                     diagnosticFlowResults.question = question;
                     diagnosticFlowResults.result = {
@@ -4414,6 +4426,11 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: no callback function');
                     }
                 };
+                /**
+                 * init Question map object By Difficulty And Order
+                 * @function
+                 * @param questions
+                 */
                 workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder = function (questions) {
                     questionsByOrderAndDifficultyArr = [];
                     angular.forEach(questions, function (question) {
@@ -4421,7 +4438,6 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
                         var questionByOrderObj = questionsByOrderAndDifficultyArr[question.order];
 
-                        questionByOrderObj.maxDifficultyQuestion = questionByOrderObj.maxDifficultyQuestion || {};
                         questionByOrderObj[question.difficulty] = questionByOrderObj[question.difficulty] || {};
                         questionByOrderObj[question.difficulty] = question;
 
