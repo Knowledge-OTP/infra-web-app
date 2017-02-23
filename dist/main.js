@@ -3870,7 +3870,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             // init question and questionResults for znk-exercise
             if (!diagnosticSettings.isFixed) {
                 if (resultsData.questionResults.length === 0) {
-                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                         self.questions = [diagnosticFlowResults.question];
                         resultsData.questionResults = [diagnosticFlowResults.result];
                     });
@@ -3883,7 +3883,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         return prevValue;
                     }, []);
                     if (_isUndefinedUserAnswer(resultsData.questionResults).length === 0) {
-                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                             self.questions.push(diagnosticFlowResults.question);
                             resultsData.questionResults.push(diagnosticFlowResults.result);
                         });
@@ -3927,7 +3927,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         var newDifficulty = WorkoutsDiagnosticFlow.getDifficulty(currentDifficulty, isAnswerCorrectly,
                             self.resultsData.questionResults[currentIndex].timeSpent);
                         currentDifficulty = newDifficulty;
-                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(newDifficulty, numQuestionCounter + 1, function (newQuestion) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, newDifficulty, numQuestionCounter + 1, function (newQuestion) {
                             _handleNewSlide(newQuestion);
                         });
                     }
@@ -4201,7 +4201,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 var currentSectionData = {};
                 var countDifficultySafeCheckErrors = 0;
                 var countQuestionsByDifficultyAndOrderErrors = 0;
-                var questionsByOrderAndDifficultyArr = [];
+                var questionsByOrderAndDifficultyArr = null;
                 var currentState;
 
                 workoutsDiagnosticFlowObjApi.getDiagnosticSettings = function () {
@@ -4405,14 +4405,33 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                  * @param order
                  * @param cb
                  */
-                workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder = function (difficulty, order, cb) {
+                workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder = function (questions, difficulty, order, cb) {
                     $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: initial func', arguments);
                     var diagnosticFlowResults = {};
-                    if (questionsByOrderAndDifficultyArr && questionsByOrderAndDifficultyArr.length > 0) {
+
+                    //in case initQuestionsByDifficultyAndOrder function was not called.
+                    if (!questionsByOrderAndDifficultyArr) {
+                        $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is null, calling initQuestionsByDifficultyAndOrder function');
+                        workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder(questions);
+                    }
+                    if (angular.isArray(questionsByOrderAndDifficultyArr) && questionsByOrderAndDifficultyArr.length === 0) {
                         $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is empty or not initialized.');
                         return;
                     }
-                    var question = questionsByOrderAndDifficultyArr[order][difficulty];
+                    var question = null;
+                    if (questionsByOrderAndDifficultyArr[order]) {
+                        if (questionsByOrderAndDifficultyArr[order][difficulty]) {
+                            question = questionsByOrderAndDifficultyArr[order][difficulty];
+                        }
+                        else {
+                            $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no difficulty key:', questionsByOrderAndDifficultyArr[order], difficulty);
+                            return;
+                        }
+                    }
+                    else {
+                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no order key:', questionsByOrderAndDifficultyArr, order);
+                        return;
+                    }
                     diagnosticFlowResults.question = question;
                     diagnosticFlowResults.result = {
                         questionId: question.id,
@@ -4423,7 +4442,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         cb(diagnosticFlowResults);
                     }
                     else {
-                        $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: no callback function');
+                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: no callback function passed as argument');
                     }
                 };
                 /**
@@ -4432,6 +4451,10 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                  * @param questions
                  */
                 workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder = function (questions) {
+                    if (!angular.isArray(questions) || questions.length === 0) {
+                        $log.error('WorkoutsDiagnosticFlow initQuestionsByDifficultyAndOrder: questions array is empty or not defined');
+                        return;
+                    }
                     questionsByOrderAndDifficultyArr = [];
                     angular.forEach(questions, function (question) {
                         questionsByOrderAndDifficultyArr[question.order] = questionsByOrderAndDifficultyArr[question.order] || {};

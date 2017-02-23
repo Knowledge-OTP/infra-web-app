@@ -221,7 +221,7 @@
             // init question and questionResults for znk-exercise
             if (!diagnosticSettings.isFixed) {
                 if (resultsData.questionResults.length === 0) {
-                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                         self.questions = [diagnosticFlowResults.question];
                         resultsData.questionResults = [diagnosticFlowResults.result];
                     });
@@ -234,7 +234,7 @@
                         return prevValue;
                     }, []);
                     if (_isUndefinedUserAnswer(resultsData.questionResults).length === 0) {
-                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                             self.questions.push(diagnosticFlowResults.question);
                             resultsData.questionResults.push(diagnosticFlowResults.result);
                         });
@@ -278,7 +278,7 @@
                         var newDifficulty = WorkoutsDiagnosticFlow.getDifficulty(currentDifficulty, isAnswerCorrectly,
                             self.resultsData.questionResults[currentIndex].timeSpent);
                         currentDifficulty = newDifficulty;
-                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(newDifficulty, numQuestionCounter + 1, function (newQuestion) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, newDifficulty, numQuestionCounter + 1, function (newQuestion) {
                             _handleNewSlide(newQuestion);
                         });
                     }
