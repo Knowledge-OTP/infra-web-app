@@ -191,8 +191,11 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv', 'ExerciseTypeEnum', 'ExerciseParentEnum', 'ENV',
-        function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
+        ["$state", "OnBoardingService", "znkAnalyticsSrv", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
+            'ngInject';
+            var onBordingSettings = OnBoardingService.getOnBoardingSettings();
+
             this.completeExerciseDetails = {
                 exerciseId: ENV.testToTakeExerciseId,
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
@@ -205,7 +208,11 @@
             this.completeExerciseSettings = {
                 continueAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                    $state.go('app.onBoarding.diagnostic');
+                    if (onBordingSettings.ignoreDiagnosticIntro){
+                        $state.go('app.diagnostic');
+                    } else {
+                        $state.go('app.onBoarding.diagnostic');
+                    }
                 },
                 setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
@@ -370,7 +377,7 @@
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
     "<style type=\"text/css\">\n" +
