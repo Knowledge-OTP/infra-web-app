@@ -57,7 +57,7 @@
                 exerciseData.resultsData.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                 exerciseData.resultsData.isComplete = true;
                 exerciseData.resultsData.endedTime = Date.now();
-                exerciseData.resultsData.subjectId = exerciseData.questionsData.subjectId;
+                exerciseData.resultsData.subjectId = self.subjectId;
                 exerciseData.resultsData.exerciseDescription = exerciseData.exam.name;
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
                 exerciseData.resultsData.$save();
@@ -181,7 +181,7 @@
             }
 
             function _setHeaderTitle() {
-                var subjectTranslateKey = 'SUBJECTS.' + exerciseData.questionsData.subjectId;
+                var subjectTranslateKey = 'SUBJECTS.'  + 'DIAGNOSTIC_TITLE.' + self.subjectId;
                 $translate(subjectTranslateKey).then(function (subjectTranslation) {
                     var translateFilter = $filter('translate');
                     self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE', {
@@ -195,7 +195,7 @@
             _setNumSlideForNgModel(numQuestionCounter);
 
             if (SubjectEnum.READING) {
-                if (exerciseData.questionsData.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
+                if (self.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
                     var groupDataTypeTitle = {};
                     var PASSAGE = translateFilter('ZNK_EXERCISE.PASSAGE');
                     var groupDataCounter = 0;
@@ -293,7 +293,7 @@
                             props: {
                                 sectionId: exerciseData.questionsData.id,
                                 order: exerciseData.questionsData.order,
-                                subjectId: exerciseData.questionsData.subjectId
+                                subjectId: self.subjectId
                             }
                         });
                         if (isLastSubject) {
