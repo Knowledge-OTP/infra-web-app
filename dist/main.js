@@ -12311,8 +12311,11 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv', 'ExerciseTypeEnum', 'ExerciseParentEnum', 'ENV',
-        function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
+        ["$state", "OnBoardingService", "znkAnalyticsSrv", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
+            'ngInject';
+            var onBordingSettings = OnBoardingService.getOnBoardingSettings();
+
             this.completeExerciseDetails = {
                 exerciseId: ENV.testToTakeExerciseId,
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
@@ -12325,7 +12328,11 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             this.completeExerciseSettings = {
                 continueAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                    $state.go('app.onBoarding.diagnostic');
+                    if (onBordingSettings.ignoreDiagnosticIntro){
+                        $state.go('app.diagnostic');
+                    } else {
+                        $state.go('app.onBoarding.diagnostic');
+                    }
                 },
                 setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
