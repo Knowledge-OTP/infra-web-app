@@ -433,7 +433,6 @@
 
             //  current slide data (should be initialize in every slide)
             var currentDifficulty = diagnosticSettings.levels.medium.num;
-            WorkoutsDiagnosticFlow.initQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions);
             var initSlideIndex;
             var mediumLevelNum = diagnosticSettings.levels.medium.num;
 
@@ -441,6 +440,8 @@
 
             // init question and questionResults for znk-exercise
             if (!diagnosticSettings.isFixed) {
+                WorkoutsDiagnosticFlow.initQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions);
+
                 if (resultsData.questionResults.length === 0) {
                     WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                         self.questions = [diagnosticFlowResults.question];
