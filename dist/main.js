@@ -4281,6 +4281,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         currentSection: currentSection
                     };
                 }
+
                 function _getNextDifficulty(difficulty, type) {
                     var veryEasyNumLevel = diagnosticSettings.levels.very_easy.num;
                     var veryHardNumLevel = diagnosticSettings.levels.very_hard.num;
@@ -4294,6 +4295,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                     }
                     return nextDifficulty;
                 }
+
                 function _tryGetDifficulty(questionsByOrder) {
                     var sortedDiagnosticKeys = Object.keys(diagnosticSettings.levels).sort(function (a, b) {
                         return diagnosticSettings.levels[a].num < diagnosticSettings.levels[b].num;
@@ -4390,7 +4392,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         }
                         //could not find question by difficulty
                         else {
-                            $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no difficulty key:' + difficulty + ", questionsByOrderAndDifficultyArr:" + questionsByOrderAndDifficultyArr[order]);
+                            $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no difficulty key:' + difficulty);
                             //try find new difficulty
                             var newDifficulty = _tryGetDifficulty(questionsByOrderAndDifficultyArr[order]);
                             if (newDifficulty !== null) {
@@ -4405,7 +4407,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                     }
                     //could not find question by order, return
                     else {
-                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no order key:' + order + ", questionsByOrderAndDifficultyArr:" + questionsByOrderAndDifficultyArr);
+                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no order key:' + order);
                         return;
                     }
                     diagnosticFlowResults.question = question;
