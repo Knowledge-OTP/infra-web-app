@@ -13,8 +13,6 @@
             function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
-                var countDifficultySafeCheckErrors = 0;
-                var countQuestionsByDifficultyAndOrderErrors = 0;
                 var questionsByOrderAndDifficultyArr = null;
                 var currentState;
 
@@ -96,7 +94,6 @@
                         currentSection: currentSection
                     };
                 }
-
                 function _getNextDifficulty(difficulty, type) {
                     var veryEasyNumLevel = diagnosticSettings.levels.very_easy.num;
                     var veryHardNumLevel = diagnosticSettings.levels.very_hard.num;
@@ -110,17 +107,20 @@
                     }
                     return nextDifficulty;
                 }
-
-                function _getDifficultySafeCheck(difficulty, type, cb) {
-                    var safeDifficulty = _getNextDifficulty(difficulty, type);
-                    if (safeDifficulty === difficulty) {
-                        countDifficultySafeCheckErrors += 1;
-                        if (countDifficultySafeCheckErrors < 10) {
-                            _getDifficultySafeCheck(difficulty, (type === 'increment') ? 'decrement' : 'increment', cb);
+                function _tryGetDifficulty(questionsByOrder) {
+                    var sortedDiagnosticKeys = Object.keys(diagnosticSettings.levels).sort(function (a, b) {
+                        return diagnosticSettings.levels[a].num < diagnosticSettings.levels[b].num;
+                    });
+                    var selectedDifficulty = null;
+                    for (var i = 0; i < sortedDiagnosticKeys.length; i++) {
+                        var key = sortedDiagnosticKeys[i];
+                        var difficultyKey = diagnosticSettings.levels[key].num;
+                        if (angular.isObject(questionsByOrder[difficultyKey])) {
+                            selectedDifficulty = difficultyKey;
+                            break;
                         }
-                    } else {
-                        cb(safeDifficulty, type);
                     }
+                    return selectedDifficulty;
                 }
 
                 workoutsDiagnosticFlowObjApi.getDiagnosticFlowCurrentState = function (flagForPreSummery, skipIntroBool) {
@@ -175,43 +175,7 @@
                     });
                 };
 
-                workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder1 = function (questions, results, difficulty, order, cb, difficultyType) {
-                    difficultyType = difficultyType || 'increment';
-                    var diagnosticFlowResults = {};
-                    $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: initial func', arguments);
-                    for (var i = 0, ii = questions.length; i < ii; i++) {
-                        var dirty = false;
-                        if (questions[i].difficulty === difficulty && questions[i].order === order) {
-                            for (var resultsIndex = 0, resultsArr = results.length; resultsIndex < resultsArr; resultsIndex++) {
-                                if (questions[i].id === results[resultsIndex].questionId) {
-                                    dirty = true;
-                                    break;
-                                }
-                            }
-                            if (!dirty) {
-                                diagnosticFlowResults.question = questions[i];
-                                diagnosticFlowResults.result = {
-                                    questionId: questions[i].id,
-                                    categoryId: questions[i].categoryId,
-                                    categoryId2: questions[i].categoryId2
-                                };
-                                dirty = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (Object.keys(diagnosticFlowResults).length === 0) {
-                        $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: diagnosticFlowResults can not get the value from arguments', arguments);
-                        _getDifficultySafeCheck(difficulty, difficultyType, function (difficultySafe, type) {
-                            countQuestionsByDifficultyAndOrderErrors += 1;
-                            if (countQuestionsByDifficultyAndOrderErrors < 10) {
-                                workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder(questions, results, difficultySafe, order, cb, type);
-                            }
-                        });
-                    } else {
-                        cb(diagnosticFlowResults);
-                    }
-                };
+
                 /**
                  * get Question By Difficulty And Order
                  * @function
@@ -228,7 +192,7 @@
                         $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is null, calling initQuestionsByDifficultyAndOrder function');
                         workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder(questions);
                     }
-                    if (angular.isArray(questionsByOrderAndDifficultyArr) && questionsByOrderAndDifficultyArr.length === 0) {
+                    if (!questionsByOrderAndDifficultyArr || (angular.isArray(questionsByOrderAndDifficultyArr) && questionsByOrderAndDifficultyArr.length === 0)) {
                         $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is empty or not initialized.');
                         return;
                     }
@@ -237,13 +201,24 @@
                         if (questionsByOrderAndDifficultyArr[order][difficulty]) {
                             question = questionsByOrderAndDifficultyArr[order][difficulty];
                         }
+                        //could not find question by difficulty
                         else {
-                            $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no difficulty key:', questionsByOrderAndDifficultyArr[order], difficulty);
-                            return;
+                            $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no difficulty key:' + difficulty + ", questionsByOrderAndDifficultyArr:" + questionsByOrderAndDifficultyArr[order]);
+                            //try find new difficulty
+                            var newDifficulty = _tryGetDifficulty(questionsByOrderAndDifficultyArr[order]);
+                            if (newDifficulty !== null) {
+                                question = questionsByOrderAndDifficultyArr[order][newDifficulty];
+                            }
+                            //did not find a new difficulty, return
+                            else {
+                                $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: _getDifficultySafeCheck could not find new difficulty.');
+                                return;
+                            }
                         }
                     }
+                    //could not find question by order, return
                     else {
-                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no order key:', questionsByOrderAndDifficultyArr, order);
+                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no order key:' + order + ", questionsByOrderAndDifficultyArr:" + questionsByOrderAndDifficultyArr);
                         return;
                     }
                     diagnosticFlowResults.question = question;
