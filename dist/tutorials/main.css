@@ -84,12 +84,12 @@
     background-color: #ffffff; }
   .tutorial-item.locked .tutorial-category-name {
     background-color: #f3f2f2; }
-  .tutorial-item .locked-icon {
+  .tutorial-item .tutorials-locked-icon {
     width: 13px;
     position: absolute;
     right: 10px;
     top: 10px; }
-    .tutorial-item .locked-icon * {
+    .tutorial-item .tutorials-locked-icon * {
       fill: #ffffff; }
 
 .tutorial-item:hover .tutorial-category-name {
