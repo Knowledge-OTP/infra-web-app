@@ -473,8 +473,8 @@
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectEducatorRow(row.entity)" name="educatorSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: 'nickname'},
-                            {field: 'email', width: 300, displayName: 'Email'},
+                            {field: 'nickname', width: 300, displayName:  translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
+                            {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
                             {field: 'uid', width: 300, displayName: 'UID'}
                         ]
                     };
