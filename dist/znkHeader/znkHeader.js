@@ -235,6 +235,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "                                translate=\".MY_LIVE_LESSONS\"></span>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple\n" +
+    "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_GOALS' | translate}}\"\n" +
     "                                      ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
     "                                      disable-click-drv\n" +
     "                                      ng-click=\"vm.showGoalsEdit()\">\n" +
@@ -242,6 +243,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "                                 translate=\".PROFILE_GOALS\"></div>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple\n" +
+    "                                      aria-label=\"{{'ZNK_HEADER.MY_PROFILE' | translate}}\"\n" +
     "                                      ng-click=\"vm.showMyProfile()\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
     "                                 translate=\".MY_PROFILE\"></div>\n" +
@@ -253,12 +255,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "                            </a>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple\n" +
+    "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_SUPPORT' | translate}}\"\n" +
     "                                      ng-click=\"vm.showFeedbackDialog()\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
     "                                 translate=\".PROFILE_SUPPORT\"></div>\n" +
     "                        </md-list-item>\n" +
     "                        <div class=\"divider\"></div>\n" +
     "                        <md-list-item md-ink-ripple\n" +
+    "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_LOGOUT' | translate}}\"\n" +
     "                                      ng-click=\"vm.logout()\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase logout\"\n" +
     "                                 translate=\".PROFILE_LOGOUT\"></div>\n" +

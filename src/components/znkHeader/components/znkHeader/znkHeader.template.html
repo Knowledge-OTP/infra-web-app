@@ -65,6 +65,7 @@
                                 translate=".MY_LIVE_LESSONS"></span>
                         </md-list-item>
                         <md-list-item md-ink-ripple
+                                      aria-label="{{'ZNK_HEADER.PROFILE_GOALS' | translate}}"
                                       ng-disabled="!vm.isOnBoardingCompleted"
                                       disable-click-drv
                                       ng-click="vm.showGoalsEdit()">
@@ -72,6 +73,7 @@
                                  translate=".PROFILE_GOALS"></div>
                         </md-list-item>
                         <md-list-item md-ink-ripple
+                                      aria-label="{{'ZNK_HEADER.MY_PROFILE' | translate}}"
                                       ng-click="vm.showMyProfile()">
                             <div class="header-modal-item header-modal-item-uppercase links"
                                  translate=".MY_PROFILE"></div>
@@ -83,12 +85,14 @@
                             </a>
                         </md-list-item>
                         <md-list-item md-ink-ripple
+                                      aria-label="{{'ZNK_HEADER.PROFILE_SUPPORT' | translate}}"
                                       ng-click="vm.showFeedbackDialog()">
                             <div class="header-modal-item header-modal-item-uppercase links"
                                  translate=".PROFILE_SUPPORT"></div>
                         </md-list-item>
                         <div class="divider"></div>
                         <md-list-item md-ink-ripple
+                                      aria-label="{{'ZNK_HEADER.PROFILE_LOGOUT' | translate}}"
                                       ng-click="vm.logout()">
                             <div class="header-modal-item header-modal-item-uppercase logout"
                                  translate=".PROFILE_LOGOUT"></div>
