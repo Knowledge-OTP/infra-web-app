@@ -3864,14 +3864,14 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             var initSlideIndex;
             var mediumLevelNum = diagnosticSettings.levels.medium.num;
 
-            ZnkExerciseUtilitySrv.setQuestionsGroupData(exerciseData.questionsData.questions, exerciseData.questionsData.questionsGroupData, exerciseData.resultsData.playedAudioArticles);
+            ZnkExerciseUtilitySrv.setQuestionsGroupData(questions, exerciseData.questionsData.questionsGroupData, exerciseData.resultsData.playedAudioArticles);
 
             // init question and questionResults for znk-exercise
             if (!diagnosticSettings.isFixed) {
                 WorkoutsDiagnosticFlow.initQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions);
 
                 if (resultsData.questionResults.length === 0) {
-                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                         self.questions = [diagnosticFlowResults.question];
                         resultsData.questionResults = [diagnosticFlowResults.result];
                     });
@@ -3884,7 +3884,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         return prevValue;
                     }, []);
                     if (_isUndefinedUserAnswer(resultsData.questionResults).length === 0) {
-                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                             self.questions.push(diagnosticFlowResults.question);
                             resultsData.questionResults.push(diagnosticFlowResults.result);
                         });
@@ -15562,7 +15562,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "</md-dialog>\n" +
     "");
   $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
-    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-class=\"{'hide-sign':target < minScore}\" >\n" +
+    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-class=\"{'hide-sign':target < minScore}\">\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "<div class=\"goal\">{{target}}</div>\n" +

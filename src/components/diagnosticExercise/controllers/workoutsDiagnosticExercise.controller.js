@@ -215,14 +215,14 @@
             var initSlideIndex;
             var mediumLevelNum = diagnosticSettings.levels.medium.num;
 
-            ZnkExerciseUtilitySrv.setQuestionsGroupData(exerciseData.questionsData.questions, exerciseData.questionsData.questionsGroupData, exerciseData.resultsData.playedAudioArticles);
+            ZnkExerciseUtilitySrv.setQuestionsGroupData(questions, exerciseData.questionsData.questionsGroupData, exerciseData.resultsData.playedAudioArticles);
 
             // init question and questionResults for znk-exercise
             if (!diagnosticSettings.isFixed) {
                 WorkoutsDiagnosticFlow.initQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions);
 
                 if (resultsData.questionResults.length === 0) {
-                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                         self.questions = [diagnosticFlowResults.question];
                         resultsData.questionResults = [diagnosticFlowResults.result];
                     });
@@ -235,7 +235,7 @@
                         return prevValue;
                     }, []);
                     if (_isUndefinedUserAnswer(resultsData.questionResults).length === 0) {
-                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                             self.questions.push(diagnosticFlowResults.question);
                             resultsData.questionResults.push(diagnosticFlowResults.result);
                         });
