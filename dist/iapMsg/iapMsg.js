@@ -138,7 +138,7 @@
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/iapMsg/svg/close-msg.svg",
     "<svg class=\"iap-msg-close-msg-svg\"\n" +
     "     x=\"0px\"\n" +
