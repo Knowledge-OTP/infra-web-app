@@ -4939,7 +4939,8 @@ on-boarding-bar {
       -webkit-justify-content: center; }
       on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon {
         width: 30px;
-        margin: auto; }
+        margin: auto;
+        display: block; }
         on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon * {
           fill: #87ca4d; }
       on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected {
