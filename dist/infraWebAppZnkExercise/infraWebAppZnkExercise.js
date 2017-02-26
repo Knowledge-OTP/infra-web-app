@@ -216,6 +216,8 @@
                         questionBuilderCtrl.question.writtenSln.replace(/font\-family: \'Lato Regular\';/g, 'font-family: Lato;font-weight: 400;');
                     scope.d.writtenSlnContent = $sce.trustAsHtml(writtenSlnContent);
 
+                    ENV.mediaEndpoint = ENV.mediaEndpoint.slice(-1) === '/' ? ENV.mediaEndpoint : ENV.mediaEndpoint + '/';
+
                     scope.d.videoSrc = $sce.trustAsResourceUrl(ENV.mediaEndpoint + ENV.firebaseAppScopeName + '/videos/questions' + '/' + question.id + '.mp4');
 
                     scope.d.quid = question.quid || question.id;
