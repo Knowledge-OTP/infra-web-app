@@ -394,7 +394,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "<style type=\"text/css\">\n" +
     "	.st0{fill:#FFFFFF;}\n" +
     "	.st1{fill:#B899C8;}\n" +
-    "	.st2{fill:#B99AD6;}\n" +
+    "	.st2{fill:#8E6FAB;}\n" +
     "</style>\n" +
     "<g>\n" +
     "	<path class=\"st0\" d=\"M247.3,59.3c-0.9,0-1.8,0-2.7,0.1c-7.8-19.1-26.6-32.6-48.5-32.6c-7,0-13.7,1.4-19.8,3.9\n" +
