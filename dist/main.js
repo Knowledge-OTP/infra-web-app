@@ -12211,19 +12211,27 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController', ['OnBoardingService', '$state', 'znkAnalyticsSrv',
-        function(OnBoardingService, $state, znkAnalyticsSrv) {
-        this.setOnboardingCompleted = function (nextState, eventText) {
-            znkAnalyticsSrv.eventTrack({
-                eventName: 'onBoardingDiagnosticStep',
-                props: {
-                    clicked: eventText
-                }
-            });
-            OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
-                $state.go(nextState);
-            });
-        };
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
+        ["OnBoardingService", "$state", "znkAnalyticsSrv", function(OnBoardingService, $state, znkAnalyticsSrv) {
+            'ngInject';
+
+            var onBordingSettings = OnBoardingService.getOnBoardingSettings();
+
+            this.setOnboardingCompleted = function (nextState, eventText) {
+                znkAnalyticsSrv.eventTrack({
+                    eventName: 'onBoardingDiagnosticStep',
+                    props: {
+                        clicked: eventText
+                    }
+                });
+                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
+                    if (nextState === 'app.diagnostic' && onBordingSettings.ignoreDiagnosticIntro) {
+                        $state.go(nextState, { skipIntro: true });
+                    } else {
+                        $state.go(nextState);
+                    }
+                });
+            };
     }]);
 })(angular);
 
@@ -12316,7 +12324,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
         ["$state", "OnBoardingService", "znkAnalyticsSrv", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             'ngInject';
-            var onBordingSettings = OnBoardingService.getOnBoardingSettings();
 
             this.completeExerciseDetails = {
                 exerciseId: ENV.testToTakeExerciseId,
@@ -12330,11 +12337,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             this.completeExerciseSettings = {
                 continueAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                    if (onBordingSettings.ignoreDiagnosticIntro){
-                        $state.go('app.diagnostic');
-                    } else {
-                        $state.go('app.onBoarding.diagnostic');
-                    }
+                    $state.go('app.onBoarding.diagnostic');
                 },
                 setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
