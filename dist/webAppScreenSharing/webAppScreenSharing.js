@@ -76,6 +76,10 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     "    </div>\n" +
     "    <ng-switch on=\"!!$ctrl.activeScreen\" class=\"sh-viewer-main-container\">\n" +
     "        <div ng-switch-when=\"false\" class=\"none\">\n" +
+    "            <div class=\"exit-btn\"\n" +
+    "                 ng-click=\"$ctrl.ceSettings.exitAction()\"\n" +
+    "                 translate=\".EXIT\">\n" +
+    "            </div>\n" +
     "            <div class=\"texts-container\">\n" +
     "                <div class=\"text1\"\n" +
     "                     translate=\".NO_OPENED_EXERCISES\">\n" +
