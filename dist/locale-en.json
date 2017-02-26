@@ -354,7 +354,7 @@
             "7": "",
             "8": "After reading the persuasive essay, assess the essay by answering the following questions.",
             "9": "Solve the following problems.",
-            "10": "Solve the following problems." 
+            "10": "Solve the following problems."
         },
         "SUBJECTS": {
             "0": "Mathematics",
@@ -367,7 +367,7 @@
             "7": "Verbal",
             "8": "Essay",
             "9": "Math level 1",
-            "10": "Math level 2" 
+            "10": "Math level 2"
         },
         "EXIT": "Exit",
         "GO_QST": "Go To Questions",
@@ -455,12 +455,14 @@
         "STUDENT": {
             "YOU_ARE_VIEWING": "Your are viewing your teacher's screen: ",
             "NO_OPENED_EXERCISES": "Your teacher does not have any exercises open.",
-            "ONCE_OPEN": "Once your teacher opens an exercise, you will be able to view it here."
+            "ONCE_OPEN": "Once your teacher opens an exercise, you will be able to view it here.",
+            "EXIT": "EXIT"
         },
         "DASHBOARD": {
             "YOU_ARE_VIEWING": "Your are viewing your student's screen: ",
             "NO_OPENED_EXERCISES": "Your student does not have any exercises open.",
-            "ONCE_OPEN": "Once your student opens an exercise, you will be able to view it here."
+            "ONCE_OPEN": "Once your student opens an exercise, you will be able to view it here.",
+            "EXIT": "EXIT"
         }
     },
     "TIMELINE_WEB_WRAPPER": {

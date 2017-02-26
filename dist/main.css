@@ -6857,6 +6857,14 @@ sh-viewer .sh-viewer-main-container {
     @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
       sh-viewer .sh-viewer-main-container .none {
         background-image: url("/assets/images/bg/etutoring-empty-sharing@2x.png"); } }
+    sh-viewer .sh-viewer-main-container .none .exit-btn {
+      color: #4f4d4d;
+      text-align: right;
+      margin: 10px 20px;
+      cursor: pointer;
+      font-family: Quicksand;
+      font-weight: 400;
+      font-size: 20px; }
     sh-viewer .sh-viewer-main-container .none .texts-container {
       color: #4f4d4d;
       margin-top: 245px; }

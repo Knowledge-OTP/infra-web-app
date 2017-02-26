@@ -51,6 +51,17 @@ sh-viewer{
             @include background-image-retina("/assets/images/bg/etutoring-empty-sharing", 1060px, 657px);
             @include dimension(1060px, 657px);
             text-align: center;
+            .exit-btn {
+                color: $fontColor3;
+                text-align: right;
+                margin: 10px 20px;
+                cursor: pointer;
+                font:{
+                    family: Quicksand;
+                    weight: $regularFontWeight;
+                    size: 20px;
+                }
+            }
             .texts-container{
                 color: $fontColor3;
                 margin: {
