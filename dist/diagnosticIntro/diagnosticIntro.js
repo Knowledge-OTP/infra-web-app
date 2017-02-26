@@ -28,7 +28,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
         var directive = {
             restrict: 'E',
             scope: {
-                showInstructions: '=?'
+                showInstructions: '=?',
+                showIconsSection: '=?'
             },
             templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
             link: function link(scope) {
@@ -135,7 +136,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "             translate=\"{{d.currMapData.diagDesc}}\">\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"icons-section\">\n" +
+    "    <div class=\"icons-section\" ng-if=\"showIconsSection\">\n" +
     "        <div ng-repeat=\"subject in d.subjects\"\n" +
     "             class=\"icon-circle {{subject.subjectNameAlias}}-color\"\n" +
     "             ng-class=\"{\n" +
@@ -151,7 +152,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "    </div>\n" +
     "    <div class=\"raccoon-img-container\">\n" +
     "        <div class=\"raccoon-img-wrapper\">\n" +
-    "            <div class=\"diagnostic-raccoon\" ng-class=\"'diagnostic-raccoon-'+d.currMapData.subjectNameAlias\"></div>\n" +
+    "            <div ng-class=\"d.currMapData.subjectNameAlias ? 'diagnostic-raccoon-'+d.currMapData.subjectNameAlias : diagnostic-raccoon\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"section-question\" ng-if=\"d.currMapData && !d.currMapData.hideSectionQuestion\">\n" +

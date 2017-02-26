@@ -89,19 +89,31 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController', ['OnBoardingService', '$state', 'znkAnalyticsSrv',
-        function(OnBoardingService, $state, znkAnalyticsSrv) {
-        this.setOnboardingCompleted = function (nextState, eventText) {
-            znkAnalyticsSrv.eventTrack({
-                eventName: 'onBoardingDiagnosticStep',
-                props: {
-                    clicked: eventText
-                }
-            });
-            OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
-                $state.go(nextState);
-            });
-        };
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
+        ["OnBoardingService", "$state", "znkAnalyticsSrv", function(OnBoardingService, $state, znkAnalyticsSrv) {
+            'ngInject';
+
+            var vm = this;
+            var onBordingSettings = OnBoardingService.getOnBoardingSettings();
+
+            vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
+            vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
+
+            this.setOnboardingCompleted = function (nextState, eventText) {
+                znkAnalyticsSrv.eventTrack({
+                    eventName: 'onBoardingDiagnosticStep',
+                    props: {
+                        clicked: eventText
+                    }
+                });
+                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
+                    if (nextState === 'app.diagnostic' && onBordingSettings.ignoreDiagnosticIntro) {
+                        $state.go(nextState, { skipIntro: true });
+                    } else {
+                        $state.go(nextState);
+                    }
+                });
+            };
     }]);
 })(angular);
 
@@ -194,7 +206,6 @@
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
         ["$state", "OnBoardingService", "znkAnalyticsSrv", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             'ngInject';
-            var onBordingSettings = OnBoardingService.getOnBoardingSettings();
 
             this.completeExerciseDetails = {
                 exerciseId: ENV.testToTakeExerciseId,
@@ -208,11 +219,7 @@
             this.completeExerciseSettings = {
                 continueAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                    if (onBordingSettings.ignoreDiagnosticIntro){
-                        $state.go('app.diagnostic');
-                    } else {
-                        $state.go('app.onBoarding.diagnostic');
-                    }
+                    $state.go('app.onBoarding.diagnostic');
                 },
                 setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
@@ -626,7 +633,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
   $templateCache.put("components/onBoarding/templates/onBoardingDiagnostic.template.html",
     "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.DIAGNOSTIC\">\n" +
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
-    "    <diagnostic-intro></diagnostic-intro>\n" +
+    "    <diagnostic-intro show-instructions=\"vm.showInstructions\" show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
     "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
     "            tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +

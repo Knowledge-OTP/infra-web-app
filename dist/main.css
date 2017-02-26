@@ -5144,25 +5144,7 @@ on-boarding-bar {
         .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
           position: relative;
           top: -48px;
-          background-size: contain;
-          /*CSS for basic styling and non-retina image path:*/
-          background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: cover;
-          display: inline-block;
-          width: 160px;
-          height: 169px;
-          /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
-          @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-            .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
-              background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x@2x.png");
-              background-repeat: no-repeat;
-              background-position: center;
-              background-size: cover;
-              display: inline-block;
-              width: 160px;
-              height: 169px; } }
+          background-size: contain; }
       .on-board .container .step.diagnostic .icons-section {
         display: -ms-flexbox;
         display: flex;
@@ -5205,8 +5187,7 @@ on-boarding-bar {
             flex-direction: row;
         -ms-flex-pack: end;
             justify-content: flex-end;
-        margin-top: 52px;
-        margin-right: 20px; }
+        margin: 0 20px 15px 0; }
         .on-board .container .step.diagnostic .btn-wrap button {
           display: inline-block;
           padding-right: 45px;
@@ -5222,7 +5203,7 @@ on-boarding-bar {
             font-weight: 400;
             font-size: 16px; }
       .on-board .container .step.diagnostic diagnostic-intro .section-question {
-        margin-top: -25px; }
+        margin-top: 10px; }
       .on-board .container .step.intro-test-to-take .diagnostic-title {
         font-size: 32px;
         color: #4f4d4d;
@@ -5310,7 +5291,7 @@ on-boarding-bar {
             flex-direction: row;
         -ms-flex-pack: end;
             justify-content: flex-end;
-        margin-right: 20px; }
+        margin: 0 20px 15px 0; }
         .on-board .container .step.intro-test-to-take .btn-wrap button {
           display: inline-block;
           padding-right: 45px;

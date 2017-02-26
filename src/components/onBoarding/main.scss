@@ -197,7 +197,6 @@
                             position: relative;
                             top: -48px;
                             background-size: contain;
-                            @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon@2x', 160px, 169px);
                         }
                     }
                 }
@@ -237,10 +236,7 @@
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-end;
-                    margin: {
-                        top: 52px;
-                        right: 20px;
-                    }
+                    margin: 0 20px 15px 0;
 
                     button{
                         display: inline-block;
@@ -262,7 +258,7 @@
 
                 diagnostic-intro {
                     .section-question {
-                        margin-top: -25px;
+                        margin-top: 10px;
                     }
                 }
             }
@@ -349,9 +345,7 @@
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-end;
-                    margin: {
-                        right: 20px;
-                    }
+                    margin: 0 20px 15px 0;
 
                     button {
                         display: inline-block;

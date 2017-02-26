@@ -4743,7 +4743,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
         var directive = {
             restrict: 'E',
             scope: {
-                showInstructions: '=?'
+                showInstructions: '=?',
+                showIconsSection: '=?'
             },
             templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
             link: function link(scope) {
@@ -4850,7 +4851,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "             translate=\"{{d.currMapData.diagDesc}}\">\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"icons-section\">\n" +
+    "    <div class=\"icons-section\" ng-if=\"showIconsSection\">\n" +
     "        <div ng-repeat=\"subject in d.subjects\"\n" +
     "             class=\"icon-circle {{subject.subjectNameAlias}}-color\"\n" +
     "             ng-class=\"{\n" +
@@ -4866,7 +4867,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
     "    </div>\n" +
     "    <div class=\"raccoon-img-container\">\n" +
     "        <div class=\"raccoon-img-wrapper\">\n" +
-    "            <div class=\"diagnostic-raccoon\" ng-class=\"'diagnostic-raccoon-'+d.currMapData.subjectNameAlias\"></div>\n" +
+    "            <div ng-class=\"d.currMapData.subjectNameAlias ? 'diagnostic-raccoon-'+d.currMapData.subjectNameAlias : diagnostic-raccoon\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"section-question\" ng-if=\"d.currMapData && !d.currMapData.hideSectionQuestion\">\n" +
@@ -12211,19 +12212,31 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController', ['OnBoardingService', '$state', 'znkAnalyticsSrv',
-        function(OnBoardingService, $state, znkAnalyticsSrv) {
-        this.setOnboardingCompleted = function (nextState, eventText) {
-            znkAnalyticsSrv.eventTrack({
-                eventName: 'onBoardingDiagnosticStep',
-                props: {
-                    clicked: eventText
-                }
-            });
-            OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
-                $state.go(nextState);
-            });
-        };
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
+        ["OnBoardingService", "$state", "znkAnalyticsSrv", function(OnBoardingService, $state, znkAnalyticsSrv) {
+            'ngInject';
+
+            var vm = this;
+            var onBordingSettings = OnBoardingService.getOnBoardingSettings();
+
+            vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
+            vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
+
+            this.setOnboardingCompleted = function (nextState, eventText) {
+                znkAnalyticsSrv.eventTrack({
+                    eventName: 'onBoardingDiagnosticStep',
+                    props: {
+                        clicked: eventText
+                    }
+                });
+                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
+                    if (nextState === 'app.diagnostic' && onBordingSettings.ignoreDiagnosticIntro) {
+                        $state.go(nextState, { skipIntro: true });
+                    } else {
+                        $state.go(nextState);
+                    }
+                });
+            };
     }]);
 })(angular);
 
@@ -12316,7 +12329,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
         ["$state", "OnBoardingService", "znkAnalyticsSrv", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             'ngInject';
-            var onBordingSettings = OnBoardingService.getOnBoardingSettings();
 
             this.completeExerciseDetails = {
                 exerciseId: ENV.testToTakeExerciseId,
@@ -12330,11 +12342,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             this.completeExerciseSettings = {
                 continueAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                    if (onBordingSettings.ignoreDiagnosticIntro){
-                        $state.go('app.diagnostic');
-                    } else {
-                        $state.go('app.onBoarding.diagnostic');
-                    }
+                    $state.go('app.onBoarding.diagnostic');
                 },
                 setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
@@ -12748,7 +12756,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
   $templateCache.put("components/onBoarding/templates/onBoardingDiagnostic.template.html",
     "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.DIAGNOSTIC\">\n" +
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
-    "    <diagnostic-intro></diagnostic-intro>\n" +
+    "    <diagnostic-intro show-instructions=\"vm.showInstructions\" show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
     "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
     "            tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
