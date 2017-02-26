@@ -7,7 +7,8 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
         var directive = {
             restrict: 'E',
             scope: {
-                showInstructions: '=?'
+                showInstructions: '=?',
+                showIconsSection: '=?'
             },
             templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
             link: function link(scope) {

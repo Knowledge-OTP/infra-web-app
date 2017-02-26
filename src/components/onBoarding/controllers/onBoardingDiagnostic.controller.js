@@ -4,7 +4,11 @@
         function(OnBoardingService, $state, znkAnalyticsSrv) {
             'ngInject';
 
+            var vm = this;
             var onBordingSettings = OnBoardingService.getOnBoardingSettings();
+
+            vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
+            vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
 
             this.setOnboardingCompleted = function (nextState, eventText) {
                 znkAnalyticsSrv.eventTrack({
