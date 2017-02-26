@@ -57,9 +57,9 @@
                                 return {
                                     subjectId: subjectId,
                                     estimatedScore: (scope.d.isDiagnosticComplete && (isSubjectExist && typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
-                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete && isSubjectExist) ? calcPercentage(estimatedScoreForSubject.score) : 0,
+                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete && isSubjectExist) ? calcPercentage(estimatedScoreForSubject.score, subjectId) : 0,
                                     userGoal: userGoalForSubject,
-                                    userGoalPercentage: calcPercentage(userGoalForSubject),
+                                    userGoalPercentage: calcPercentage(userGoalForSubject, subjectId),
                                     pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete && isSubjectExist) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
                                     showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
@@ -67,7 +67,7 @@
 
                             scores = createAndCountScoresArray(scope.d.widgetItems);
 
-                            scope.d.estimatedCompositeScore = scores.scoresArr.length === scores.subjectsToShow ? examScoresFn(scores.scoresArr): '-';
+                            scope.d.estimatedCompositeScore = scores.scoresArr.length === scores.subjectsToShow ? examScoresFn(scores.scoresArr) : '-';
 
                             function filterSubjects(widgetItem) {
                                 return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
@@ -113,9 +113,9 @@
                         return scores;
                     }
 
-                    function calcPercentage(correct) {
+                    function calcPercentage(correct, subjectId) {
                         var scoringLimits = ScoringService.getScoringLimits();
-                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max : scoringLimits.subjects.max;
+                        var maxEstimatedScore = typeof scoringLimits.subjects[subjectId] !== 'undefined' ? scoringLimits.subjects[subjectId].max : scoringLimits.subjects.max;
                         return (correct / maxEstimatedScore) * 100;
                     }
 
