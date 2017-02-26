@@ -41,7 +41,7 @@ describe('testing service "LiveSessionSrv":', function () {
         $delegate.studentAppName = 'act_app';
         $delegate.dashboardAppName = 'act_dashboard';
         $delegate.videosEndPoint = '//dfz02hjbsqn5e.cloudfront.net/act_app/';
-        $delegate.mediaEndPoint = '//dfz02hjbsqn5e.cloudfront.net/';
+        $delegate.mediaEndpoint = '//dfz02hjbsqn5e.cloudfront.net/';
         $delegate.fbGlobalEndPoint = '//znk-dev.firebaseio.com/';
         $delegate.backendEndpoint = '//znk-web-backend-dev.azurewebsites.net/';
         $delegate.teachworksDataUrl = 'teachworks';
