@@ -103,7 +103,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "    <div class=\"tests-navigation-title-header\"\n" +
     "         translate=\".MINI_TEST_TITLE\"></div>\n" +
     "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-    "        <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum}\"\n" +
+    "        <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum} | orderBy:'order'\"\n" +
     "                      ng-class=\"{\n" +
     "                        'done': miniExam.isCompleted,\n" +
     "                        'active': vm.activeId === miniExam.id\n" +
@@ -124,7 +124,7 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "             flex=\"grow\"\n" +
     "             layout=\"column\"\n" +
     "             layout-align=\"start center\">\n" +
-    "        <md-list-item ng-repeat=\"fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum}\"\n" +
+    "        <md-list-item ng-repeat=\"fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum} | orderBy:'order'\"\n" +
     "                      ng-class=\"{\n" +
     "                        'done': fullExam.isCompleted,\n" +
     "                        'active': vm.activeId === fullExam.id\n" +

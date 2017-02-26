@@ -3,7 +3,7 @@
     <div class="tests-navigation-title-header"
          translate=".MINI_TEST_TITLE"></div>
     <md-list flex="grow" layout="column" layout-align="start center">
-        <md-list-item ng-repeat="miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum}"
+        <md-list-item ng-repeat="miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum} | orderBy:'order'"
                       ng-class="{
                         'done': miniExam.isCompleted,
                         'active': vm.activeId === miniExam.id
@@ -24,7 +24,7 @@
              flex="grow"
              layout="column"
              layout-align="start center">
-        <md-list-item ng-repeat="fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum}"
+        <md-list-item ng-repeat="fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum} | orderBy:'order'"
                       ng-class="{
                         'done': fullExam.isCompleted,
                         'active': vm.activeId === fullExam.id
