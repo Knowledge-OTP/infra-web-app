@@ -47,12 +47,12 @@
 
             $stateProvider
                 .state('app.diagnostic', {
-                    url: '/diagnostic?skipIntro',
+                    url: '/diagnostic/:skipIntro/:forceSkipIntro',
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnostic.template.html',
                     resolve: {
                         currentState: ["WorkoutsDiagnosticFlow", "$stateParams", function currentState(WorkoutsDiagnosticFlow, $stateParams) {
                             'ngInject';// jshint ignore:line
-                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro);
+                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro );
                         }]
                     },
                     controller: 'WorkoutsDiagnosticController',
@@ -164,7 +164,7 @@
                             'ngInject';// jshint ignore:line
                             var userStatsProm = EstimatedScoreSrv.getLatestEstimatedScore().then(function (latestScores) {
                                 var estimatedScores = {};
-                                
+
                                 angular.forEach(latestScores, function (estimatedScore, subjectId) {
                                     estimatedScores[subjectId] = estimatedScore.score ? Math.round(estimatedScore.score) : null;
                                 });
@@ -884,7 +884,7 @@
                     return selectedDifficulty;
                 }
 
-                workoutsDiagnosticFlowObjApi.getDiagnosticFlowCurrentState = function (flagForPreSummery, skipIntroBool) {
+                workoutsDiagnosticFlowObjApi.getDiagnosticFlowCurrentState = function (flagForPreSummery, skipIntroBool, forceSkipIntro) {
                     $log.debug('WorkoutsDiagnosticFlow getDiagnosticFlowCurrentState: initial func', arguments);
                     currentState = {state: '', params: '', subjectId: ''};
                     var getDataProm = _getDataProm();
@@ -910,6 +910,8 @@
                             skipIntroBool = false;
                             examResults.$save();
                         }
+
+                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
 
                         var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
 

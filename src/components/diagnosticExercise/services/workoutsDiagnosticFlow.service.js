@@ -125,7 +125,7 @@
                     return selectedDifficulty;
                 }
 
-                workoutsDiagnosticFlowObjApi.getDiagnosticFlowCurrentState = function (flagForPreSummery, skipIntroBool) {
+                workoutsDiagnosticFlowObjApi.getDiagnosticFlowCurrentState = function (flagForPreSummery, skipIntroBool, forceSkipIntro) {
                     $log.debug('WorkoutsDiagnosticFlow getDiagnosticFlowCurrentState: initial func', arguments);
                     currentState = {state: '', params: '', subjectId: ''};
                     var getDataProm = _getDataProm();
@@ -151,6 +151,8 @@
                             skipIntroBool = false;
                             examResults.$save();
                         }
+
+                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
 
                         var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
 

@@ -18,8 +18,8 @@
                     }
                 });
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
-                    if (nextState === 'app.diagnostic' && onBordingSettings.ignoreDiagnosticIntro) {
-                        $state.go(nextState, { skipIntro: true });
+                    if (nextState === 'app.diagnostic' && onBordingSettings.forceSkipIntro) {
+                        $state.go(nextState, { forceSkipIntro: true });
                     } else {
                         $state.go(nextState);
                     }

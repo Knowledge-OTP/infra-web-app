@@ -406,10 +406,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticIntroController',
-        ["isDiagnosticStarted", function (isDiagnosticStarted) {
+        ["isDiagnosticStarted", "DiagnosticSrv", function (isDiagnosticStarted, DiagnosticSrv) {
             'ngInject';
 
             var vm = this;
+
+            vm.forceSkipIntro = DiagnosticSrv.forceSkipIntro ? DiagnosticSrv.forceSkipIntro : false;
 
             vm.buttonTitle = isDiagnosticStarted ? '.CONTINUE_TEST' : '.START_TEST' ;
         }]);
@@ -1651,7 +1653,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "        <md-button  class=\"md-primary znk\"\n" +
     "                    autofocus\n" +
     "                    tabindex=\"1\"\n" +
-    "                    ui-sref=\"app.diagnostic({ skipIntro: true })\"\n" +
+    "                    ui-sref=\"app.diagnostic({ skipIntro: true, forceSkipIntro: vm.forceSkipIntro })\"\n" +
     "                    aria-label=\"{{::vm.buttonTitle}}\"\n" +
     "                    translate=\"{{vm.buttonTitle}}\"\n" +
     "                    md-no-ink>\n" +
