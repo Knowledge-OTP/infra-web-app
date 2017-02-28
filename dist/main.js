@@ -3,47 +3,47 @@
 
     angular.module('znk.infra-web-app', [
         "znk.infra-web-app.activePanel",
-        "znk.infra-web-app.adminDashboard",
-        "znk.infra-web-app.angularMaterialOverride",
-        "znk.infra-web-app.aws",
-        "znk.infra-web-app.completeExercise",
-        "znk.infra-web-app.config",
-        "znk.infra-web-app.diagnostic",
-        "znk.infra-web-app.diagnosticExercise",
-        "znk.infra-web-app.diagnosticIntro",
-        "znk.infra-web-app.elasticSearch",
-        "znk.infra-web-app.estimatedScoreWidget",
-        "znk.infra-web-app.evaluator",
-        "znk.infra-web-app.faq",
-        "znk.infra-web-app.feedback",
-        "znk.infra-web-app.iapMsg",
-        "znk.infra-web-app.imageZoomer",
-        "znk.infra-web-app.infraWebAppZnkExercise",
-        "znk.infra-web-app.invitation",
-        "znk.infra-web-app.lazyLoadResource",
-        "znk.infra-web-app.liveLessons",
-        "znk.infra-web-app.liveSession",
-        "znk.infra-web-app.loadingAnimation",
-        "znk.infra-web-app.loginApp",
-        "znk.infra-web-app.myProfile",
-        "znk.infra-web-app.onBoarding",
-        "znk.infra-web-app.promoCode",
-        "znk.infra-web-app.purchase",
-        "znk.infra-web-app.settings",
-        "znk.infra-web-app.socialSharing",
-        "znk.infra-web-app.subjectsOrder",
-        "znk.infra-web-app.tests",
-        "znk.infra-web-app.tutorials",
-        "znk.infra-web-app.uiTheme",
-        "znk.infra-web-app.userGoals",
-        "znk.infra-web-app.userGoalsSelection",
-        "znk.infra-web-app.webAppScreenSharing",
-        "znk.infra-web-app.workoutsRoadmap",
-        "znk.infra-web-app.znkExerciseStatesUtility",
-        "znk.infra-web-app.znkHeader",
-        "znk.infra-web-app.znkSummary",
-        "znk.infra-web-app.znkTimelineWebWrapper",
-        "znk.infra-web-app.znkToast"
+"znk.infra-web-app.adminDashboard",
+"znk.infra-web-app.angularMaterialOverride",
+"znk.infra-web-app.aws",
+"znk.infra-web-app.completeExercise",
+"znk.infra-web-app.config",
+"znk.infra-web-app.diagnostic",
+"znk.infra-web-app.diagnosticExercise",
+"znk.infra-web-app.diagnosticIntro",
+"znk.infra-web-app.elasticSearch",
+"znk.infra-web-app.estimatedScoreWidget",
+"znk.infra-web-app.evaluator",
+"znk.infra-web-app.faq",
+"znk.infra-web-app.feedback",
+"znk.infra-web-app.iapMsg",
+"znk.infra-web-app.imageZoomer",
+"znk.infra-web-app.infraWebAppZnkExercise",
+"znk.infra-web-app.invitation",
+"znk.infra-web-app.lazyLoadResource",
+"znk.infra-web-app.liveLessons",
+"znk.infra-web-app.liveSession",
+"znk.infra-web-app.loadingAnimation",
+"znk.infra-web-app.loginApp",
+"znk.infra-web-app.myProfile",
+"znk.infra-web-app.onBoarding",
+"znk.infra-web-app.promoCode",
+"znk.infra-web-app.purchase",
+"znk.infra-web-app.settings",
+"znk.infra-web-app.socialSharing",
+"znk.infra-web-app.subjectsOrder",
+"znk.infra-web-app.tests",
+"znk.infra-web-app.tutorials",
+"znk.infra-web-app.uiTheme",
+"znk.infra-web-app.userGoals",
+"znk.infra-web-app.userGoalsSelection",
+"znk.infra-web-app.webAppScreenSharing",
+"znk.infra-web-app.workoutsRoadmap",
+"znk.infra-web-app.znkExerciseStatesUtility",
+"znk.infra-web-app.znkHeader",
+"znk.infra-web-app.znkSummary",
+"znk.infra-web-app.znkTimelineWebWrapper",
+"znk.infra-web-app.znkToast"
     ]);
 })(angular);
 
@@ -69,213 +69,213 @@
     angular.module('znk.infra-web-app.activePanel')
         .directive('activePanel',
             ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
-                                                                                                                                                                                                                                                                                                                                      PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
-                                                                                                                                                                                                                                                                                                                                      $translate, LiveSessionSrv, LiveSessionStatusEnum,
-                                                                                                                                                                                                                                                                                                                                      UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
+                         PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
+                         $translate, LiveSessionSrv, LiveSessionStatusEnum,
+                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
                 'ngInject';
                 return {
-                    templateUrl: 'components/activePanel/activePanel.template.html',
-                    scope: {},
-                    link: function(scope, element) {
-                        var durationToDisplay,
-                            timerInterval,
-                            liveSessionData,
-                            liveSessionStatus = 0,
-                            liveSessionDuration = 0,
-                            timerSecondInterval = 1000,
-                            activePanelVisibleClassName = 'activePanel-visible',
-                            isStudent = ENV.appContext.toLowerCase() === 'student',
-                            isTeacher = ENV.appContext.toLowerCase() === 'dashboard',
-                            prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
-                            bodyDomElem = angular.element($window.document.body),
-                            translateNamespace = 'ACTIVE_PANEL';
+                templateUrl: 'components/activePanel/activePanel.template.html',
+                scope: {},
+                link: function(scope, element) {
+                    var durationToDisplay,
+                        timerInterval,
+                        liveSessionData,
+                        liveSessionStatus = 0,
+                        liveSessionDuration = 0,
+                        timerSecondInterval = 1000,
+                        activePanelVisibleClassName = 'activePanel-visible',
+                        isStudent = ENV.appContext.toLowerCase() === 'student',
+                        isTeacher = ENV.appContext.toLowerCase() === 'dashboard',
+                        prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
+                        bodyDomElem = angular.element($window.document.body),
+                        translateNamespace = 'ACTIVE_PANEL';
 
-                        $translate([
-                            translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
-                            translateNamespace + '.' + 'SHOW_TEACHER_SCREEN',
-                            translateNamespace + '.' + 'SHARE_MY_SCREEN',
-                            translateNamespace + '.' + 'END_SCREEN_SHARING'
-                        ]).then(function (translation) {
-                            scope.d.translatedStrings = {
-                                SHOW_STUDENT_SCREEN: translation[translateNamespace + '.' + 'SHOW_STUDENT_SCREEN'],
-                                SHOW_TEACHER_SCREEN: translation[translateNamespace + '.' + 'SHOW_TEACHER_SCREEN'],
-                                SHARE_MY_SCREEN: translation[translateNamespace + '.' + 'SHARE_MY_SCREEN'],
-                                END_SCREEN_SHARING: translation[translateNamespace + '.' + 'END_SCREEN_SHARING']
-                            };
-                        }).catch(function (err) {
-                            $log.debug('Could not fetch translation', err);
-                        });
+                    $translate([
+                        translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
+                        translateNamespace + '.' + 'SHOW_TEACHER_SCREEN',
+                        translateNamespace + '.' + 'SHARE_MY_SCREEN',
+                        translateNamespace + '.' + 'END_SCREEN_SHARING'
+                    ]).then(function (translation) {
+                        scope.d.translatedStrings = {
+                            SHOW_STUDENT_SCREEN: translation[translateNamespace + '.' + 'SHOW_STUDENT_SCREEN'],
+                            SHOW_TEACHER_SCREEN: translation[translateNamespace + '.' + 'SHOW_TEACHER_SCREEN'],
+                            SHARE_MY_SCREEN: translation[translateNamespace + '.' + 'SHARE_MY_SCREEN'],
+                            END_SCREEN_SHARING: translation[translateNamespace + '.' + 'END_SCREEN_SHARING']
+                        };
+                    }).catch(function (err) {
+                        $log.debug('Could not fetch translation', err);
+                    });
 
-                        function endLiveSession() {
-                            if (liveSessionData) {
-                                LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                            } else {
-                                LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
-                                    if (liveSessionData) {
-                                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                                    }
-                                });
-                            }
-                        }
-
-                        function startTimer() {
-                            $log.debug('call timer started');
-                            timerInterval = $interval(function () {
-                                liveSessionDuration += timerSecondInterval;
-                                durationToDisplay = $filter('formatDuration')(liveSessionDuration / 1000, 'hh:MM:SS', true);
-                                angular.element(element[0].querySelector('.live-session-duration')).text(durationToDisplay);
-                            }, 1000, 0, false);
-                        }
-
-                        function destroyTimer() {
-                            $interval.cancel(timerInterval);
-                            liveSessionDuration = 0;
-                            durationToDisplay = 0;
-                        }
-
-                        function endScreenSharing(){
-                            if (scope.d.screenShareStatus !== UserScreenSharingStateEnum.NONE.enum) {
-                                ScreenSharingSrv.getActiveScreenSharingData().then(function (screenSharingData) {
-                                    if (screenSharingData) {
-                                        ScreenSharingSrv.endSharing(screenSharingData.guid);
-                                    }
-                                });
-                            }
-                        }
-
-                        function updateStatus() {
-                            scope.d.currStatus = liveSessionStatus;
-                            $log.debug('ActivePanel d.currStatus: ', scope.d.currStatus);
-
-                            switch (scope.d.currStatus) {
-                                case scope.d.states.NONE :
-                                    $log.debug('ActivePanel State: NONE');
-                                    bodyDomElem.removeClass(activePanelVisibleClassName);
-                                    scope.d.shareScreenBtnsEnable = true;
-                                    destroyTimer();
-                                    endScreenSharing();
-                                    break;
-                                case scope.d.states.LIVE_SESSION :
-                                    $log.debug('ActivePanel State: LIVE_SESSION');
-                                    bodyDomElem.addClass(activePanelVisibleClassName);
-                                    startTimer();
-                                    break;
-                                default :
-                                    $log.error('currStatus is in an unknown state', scope.d.currStatus);
-                            }
-                        }
-
-                        function getRoundTime() {
-                            return Math.floor(Date.now() / 1000) * 1000;
-                        }
-
-                        function trackUserPresenceCB(userId, newStatus) {
-                            scope.d.currentUserPresenceStatus = newStatus;
-
-                            CallsUiSrv.getCalleeName(userId).then(function (calleeName) {
-                                scope.d.calleeName = calleeName;
-                                scope.d.callBtnModel = {
-                                    isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
-                                    receiverId: userId
-                                };
+                    function endLiveSession() {
+                        if (liveSessionData) {
+                            LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                        } else {
+                            LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                                if (liveSessionData) {
+                                    LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                                }
                             });
                         }
-
-                        function listenToLiveSessionStatus(newLiveSessionStatus) {
-                            if (prevLiveSessionStatus !== newLiveSessionStatus){
-                                prevLiveSessionStatus = newLiveSessionStatus;
-                                LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
-                                    if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
-                                        liveSessionData = newLiveSessionData;
-                                    }
-
-                                    if (isTeacher) {
-                                        PresenceService.startTrackUserPresence(liveSessionData.studentId, trackUserPresenceCB.bind(null, liveSessionData.studentId));
-                                    } else if (isStudent) {
-                                        PresenceService.startTrackUserPresence(liveSessionData.educatorId, trackUserPresenceCB.bind(null, liveSessionData.educatorId));
-                                    } else {
-                                        $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
-                                    }
-
-                                    var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
-                                    var isConfirmed = liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum;
-                                    if (isEnded || isConfirmed) {
-                                        if (isConfirmed) {
-                                            liveSessionStatus = scope.d.states.LIVE_SESSION;
-                                            liveSessionDuration = getRoundTime() - liveSessionData.startTime;
-                                        } else {
-                                            liveSessionStatus = scope.d.states.NONE;
-                                        }
-                                        updateStatus();
-                                    }
-                                });
-                            }
-                        }
-
-                        // Listen to status changes in ScreenSharing
-                        function listenToScreenShareStatus(screenSharingStatus) {
-                            if (screenSharingStatus) {
-                                if (screenSharingStatus !== UserScreenSharingStateEnum.NONE.enum) {
-                                    scope.d.screenShareStatus = screenSharingStatus;
-                                    scope.d.shareScreenBtnsEnable = false;
-                                    scope.d.shareScreenViewer = (screenSharingStatus === UserScreenSharingStateEnum.VIEWER.enum);
-                                } else {
-                                    scope.d.screenShareStatus = UserScreenSharingStateEnum.NONE.enum;
-                                    scope.d.shareScreenBtnsEnable = true;
-                                }
-                            }
-                        }
-
-                        function viewOtherUserScreen() {
-                            var sharerData = {
-                                isTeacher: !isTeacher,
-                                uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
-                            };
-                            $log.debug('viewOtherUserScreen: ', sharerData);
-                            ScreenSharingSrv.viewOtherUserScreen(sharerData);
-                        }
-
-                        function shareMyScreen() {
-                            var viewerData = {
-                                isTeacher: !isTeacher,
-                                uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
-                            };
-                            $log.debug('shareMyScreen: ', viewerData);
-                            ScreenSharingSrv.shareMyScreen(viewerData);
-                        }
-
-
-                        scope.d = {
-                            states: {
-                                NONE: 0,
-                                LIVE_SESSION: 1
-                            },
-                            shareScreenBtnsEnable: true,
-                            disableAllBtns: false,
-                            isTeacher: isTeacher,
-                            presenceStatusMap: PresenceService.userStatus,
-                            endScreenSharing: endScreenSharing,
-                            endSession: endLiveSession,
-                            viewOtherUserScreen: viewOtherUserScreen,
-                            shareMyScreen: shareMyScreen
-                        };
-
-                        element.on('$destroy', function() {
-                            destroyTimer();
-                        });
-
-                        function listenToCallsStatus(newCallsStatus) {
-                            scope.d.disableAllBtns = newCallsStatus && newCallsStatus.status === CallsStatusEnum.PENDING_CALL.enum;
-                        }
-
-                        ScreenSharingSrv.registerToCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
-
-                        LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
-
-                        CallsEventsSrv.registerToCurrUserCallStateChanges(listenToCallsStatus);
                     }
-                };
-            }]);
+
+                    function startTimer() {
+                        $log.debug('call timer started');
+                        timerInterval = $interval(function () {
+                            liveSessionDuration += timerSecondInterval;
+                            durationToDisplay = $filter('formatDuration')(liveSessionDuration / 1000, 'hh:MM:SS', true);
+                            angular.element(element[0].querySelector('.live-session-duration')).text(durationToDisplay);
+                        }, 1000, 0, false);
+                    }
+
+                    function destroyTimer() {
+                        $interval.cancel(timerInterval);
+                        liveSessionDuration = 0;
+                        durationToDisplay = 0;
+                    }
+
+                    function endScreenSharing(){
+                        if (scope.d.screenShareStatus !== UserScreenSharingStateEnum.NONE.enum) {
+                            ScreenSharingSrv.getActiveScreenSharingData().then(function (screenSharingData) {
+                                if (screenSharingData) {
+                                    ScreenSharingSrv.endSharing(screenSharingData.guid);
+                                }
+                            });
+                        }
+                    }
+
+                    function updateStatus() {
+                        scope.d.currStatus = liveSessionStatus;
+                        $log.debug('ActivePanel d.currStatus: ', scope.d.currStatus);
+
+                        switch (scope.d.currStatus) {
+                            case scope.d.states.NONE :
+                                $log.debug('ActivePanel State: NONE');
+                                bodyDomElem.removeClass(activePanelVisibleClassName);
+                                scope.d.shareScreenBtnsEnable = true;
+                                destroyTimer();
+                                endScreenSharing();
+                                break;
+                            case scope.d.states.LIVE_SESSION :
+                                $log.debug('ActivePanel State: LIVE_SESSION');
+                                bodyDomElem.addClass(activePanelVisibleClassName);
+                                startTimer();
+                                break;
+                            default :
+                                $log.error('currStatus is in an unknown state', scope.d.currStatus);
+                        }
+                    }
+
+                    function getRoundTime() {
+                        return Math.floor(Date.now() / 1000) * 1000;
+                    }
+
+                    function trackUserPresenceCB(userId, newStatus) {
+                        scope.d.currentUserPresenceStatus = newStatus;
+
+                        CallsUiSrv.getCalleeName(userId).then(function (calleeName) {
+                            scope.d.calleeName = calleeName;
+                            scope.d.callBtnModel = {
+                                isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
+                                receiverId: userId
+                            };
+                        });
+                    }
+
+                    function listenToLiveSessionStatus(newLiveSessionStatus) {
+                        if (prevLiveSessionStatus !== newLiveSessionStatus){
+                            prevLiveSessionStatus = newLiveSessionStatus;
+                            LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
+                                if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
+                                    liveSessionData = newLiveSessionData;
+                                }
+
+                                if (isTeacher) {
+                                    PresenceService.startTrackUserPresence(liveSessionData.studentId, trackUserPresenceCB.bind(null, liveSessionData.studentId));
+                                } else if (isStudent) {
+                                    PresenceService.startTrackUserPresence(liveSessionData.educatorId, trackUserPresenceCB.bind(null, liveSessionData.educatorId));
+                                } else {
+                                    $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
+                                }
+
+                                var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
+                                var isConfirmed = liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum;
+                                if (isEnded || isConfirmed) {
+                                    if (isConfirmed) {
+                                        liveSessionStatus = scope.d.states.LIVE_SESSION;
+                                        liveSessionDuration = getRoundTime() - liveSessionData.startTime;
+                                    } else {
+                                        liveSessionStatus = scope.d.states.NONE;
+                                    }
+                                    updateStatus();
+                                }
+                            });
+                        }
+                    }
+
+                    // Listen to status changes in ScreenSharing
+                    function listenToScreenShareStatus(screenSharingStatus) {
+                        if (screenSharingStatus) {
+                            if (screenSharingStatus !== UserScreenSharingStateEnum.NONE.enum) {
+                                scope.d.screenShareStatus = screenSharingStatus;
+                                scope.d.shareScreenBtnsEnable = false;
+                                scope.d.shareScreenViewer = (screenSharingStatus === UserScreenSharingStateEnum.VIEWER.enum);
+                            } else {
+                                scope.d.screenShareStatus = UserScreenSharingStateEnum.NONE.enum;
+                                scope.d.shareScreenBtnsEnable = true;
+                            }
+                        }
+                    }
+
+                    function viewOtherUserScreen() {
+                        var sharerData = {
+                            isTeacher: !isTeacher,
+                            uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
+                        };
+                        $log.debug('viewOtherUserScreen: ', sharerData);
+                        ScreenSharingSrv.viewOtherUserScreen(sharerData);
+                    }
+
+                    function shareMyScreen() {
+                        var viewerData = {
+                            isTeacher: !isTeacher,
+                            uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
+                        };
+                        $log.debug('shareMyScreen: ', viewerData);
+                        ScreenSharingSrv.shareMyScreen(viewerData);
+                    }
+
+
+                    scope.d = {
+                        states: {
+                            NONE: 0,
+                            LIVE_SESSION: 1
+                        },
+                        shareScreenBtnsEnable: true,
+                        disableAllBtns: false,
+                        isTeacher: isTeacher,
+                        presenceStatusMap: PresenceService.userStatus,
+                        endScreenSharing: endScreenSharing,
+                        endSession: endLiveSession,
+                        viewOtherUserScreen: viewOtherUserScreen,
+                        shareMyScreen: shareMyScreen
+                    };
+
+                    element.on('$destroy', function() {
+                        destroyTimer();
+                    });
+
+                    function listenToCallsStatus(newCallsStatus) {
+                        scope.d.disableAllBtns = newCallsStatus && newCallsStatus.status === CallsStatusEnum.PENDING_CALL.enum;
+                    }
+
+                    ScreenSharingSrv.registerToCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
+
+                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
+
+                    CallsEventsSrv.registerToCurrUserCallStateChanges(listenToCallsStatus);
+                }
+            };
+        }]);
 })(angular);
 
 (function (angular) {
@@ -324,185 +324,185 @@
 })(angular);
 
 angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/activePanel/activePanel.template.html",
-        "<div class=\"active-panel ng-hide\"\n" +
-        "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
-        "     translate-namespace=\"ACTIVE_PANEL\">\n" +
-        "    <div class=\"flex-container\">\n" +
-        "        <div class=\"callee-status flex-col\">\n" +
-        "            <div class=\"online-indicator\"\n" +
-        "                 ng-class=\"{\n" +
-        "                    'offline': d.currentUserPresenceStatus === d.presenceStatusMap.OFFLINE,\n" +
-        "                    'online': d.currentUserPresenceStatus === d.presenceStatusMap.ONLINE,\n" +
-        "                    'idle': d.currentUserPresenceStatus === d.presenceStatusMap.IDLE\n" +
-        "                 }\">\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"callee-name flex-col\">\n" +
-        "            {{d.calleeName ? d.calleeName : d.isTeacher ? 'Educator' : 'Student'}}\n" +
-        "            <div class=\"live-session-duration\">&nbsp;</div>\n" +
-        "        </div>\n" +
-        "        <div class=\"call-controls flex-col\">\n" +
-        "            <ng-switch class=\"share-screen-icon-wrap\" on=\"d.shareScreenBtnsEnable\">\n" +
-        "                <div class=\"active-share-screen\" ng-switch-default>\n" +
-        "                    <div ng-click=\"d.viewOtherUserScreen()\"\n" +
-        "                         class=\"show-other-screen\"\n" +
-        "                         disable-click-drv=\"d.shareScreenBtnsEnable\"\n" +
-        "                         ng-class=\"{disabled: !d.shareScreenBtnsEnable}\">\n" +
-        "                        <ng-switch on=\"d.isTeacher\">\n" +
-        "                            <svg-icon ng-switch-when=\"true\"\n" +
-        "                                      name=\"active-panel-track-student-icon\">\n" +
-        "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
-        "                                    {{d.translatedStrings.SHOW_STUDENT_SCREEN}}\n" +
-        "                                </md-tooltip>\n" +
-        "                            </svg-icon>\n" +
-        "                            <svg-icon ng-switch-default\n" +
-        "                                      name=\"active-panel-track-teacher-icon\"\">\n" +
-        "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
-        "                                    {{d.translatedStrings.SHOW_TEACHER_SCREEN}}\n" +
-        "                                </md-tooltip>\n" +
-        "                            </svg-icon>\n" +
-        "                        </ng-switch>\n" +
-        "                    </div>\n" +
-        "\n" +
-        "                    <svg-icon disable-click-drv=\"d.shareScreenBtnsEnable\"\n" +
-        "                              ng-class=\"{disabled: !d.shareScreenBtnsEnable}\"\n" +
-        "                              ng-click=\"d.shareMyScreen()\"\n" +
-        "                              name=\"active-panel-share-screen-icon\"\n" +
-        "                              class=\"share-my-screen\">\n" +
-        "                        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
-        "                            {{d.translatedStrings.SHARE_MY_SCREEN}}\n" +
-        "                        </md-tooltip>\n" +
-        "                    </svg-icon>\n" +
-        "                </div>\n" +
-        "\n" +
-        "                <svg-icon ng-switch-when=\"false\"\n" +
-        "                          class=\"end-share-screen\"\n" +
-        "                          ng-class=\"{ 'isViewer' : d.shareScreenViewer }\"\n" +
-        "                          ng-click=\"d.endScreenSharing()\"\n" +
-        "                          name=\"active-panel-stop-sharing-icon\">\n" +
-        "                    <md-tooltip znk-tooltip class=\"md-fab\">\n" +
-        "                        {{d.translatedStrings.END_SCREEN_SHARING}}\n" +
-        "                    </md-tooltip>\n" +
-        "                </svg-icon>\n" +
-        "            </ng-switch>\n" +
-        "\n" +
-        "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
-        "\n" +
-        "            <div class=\"end-session-wrap\" ng-if=\"d.isTeacher\">\n" +
-        "                <div class=\"seperator\"></div>\n" +
-        "                <md-button class=\"end-session-btn\"\n" +
-        "                            aria-label=\"{{'ACTIVE_PANEL.END_SESSION' | translate}}\"\n" +
-        "                            ng-click=\"d.endSession()\">\n" +
-        "                    <md-tooltip znk-tooltip class=\"md-fab\">\n" +
-        "                        {{'ACTIVE_PANEL.END_SESSION' | translate}}\n" +
-        "                    </md-tooltip>\n" +
-        "                <span>{{'ACTIVE_PANEL.END_BTN' | translate}}</span>\n" +
-        "                </md-button>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"active-panel-overlay\" ng-if=\"d.disableAllBtns\"></div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/activePanel/svg/share-screen-icon.svg",
-        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     class=\"active-panel-share-screen-icon\"\n" +
-        "	 viewBox=\"0 0 138 141.3\"\n" +
-        "     xml:space=\"preserve\">\n" +
-        "<path d=\"M113.2,0H24.8C11.2,0,0,11.2,0,24.8v55.4C0,93.8,11.2,105,24.8,105h88.4c13.6,0,24.8-11.2,24.8-24.8V24.8\n" +
-        "	C138,11.2,126.8,0,113.2,0z M71.1,82V63.4c0,0-28.8-4-42.7,15.3c0,0-5.1-34.6,42.9-40.4l-0.3-20L114.3,50L71.1,82z\"/>\n" +
-        "<path d=\"M57.4,118.6h22.7c1,0,1.9,0.4,2.4,1.1c2.2,3.1,8.8,11.9,15.3,17.3c1.8,1.5,0.6,4.2-1.9,4.2H42.2c-2.5,0-3.8-2.7-1.9-4.2\n" +
-        "	c4.9-4,11.6-10.4,14.5-16.9C55.2,119.2,56.2,118.6,57.4,118.6z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/activePanel/svg/stop-sharing-icon.svg",
-        "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 208.9 208.9\" xml:space=\"preserve\" class=\"stop-sharing-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "    	.stop-sharing-icon-svg {width: 100%; height: auto;}\n" +
-        "	    .stop-sharing-icon-svg .st0{fill:#FFFFFF; enable-background:new;}\n" +
-        "	    .stop-sharing-icon-svg .st1{fill:#231F20;}\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<circle class=\"st0\" cx=\"104.4\" cy=\"104.4\" r=\"101.9\"/>\n" +
-        "	<path class=\"st1\" d=\"M104.4,208.9C46.8,208.9,0,162,0,104.4C0,46.8,46.8,0,104.4,0s104.4,46.8,104.4,104.4\n" +
-        "		C208.9,162,162,208.9,104.4,208.9z M104.4,5C49.6,5,5,49.6,5,104.4s44.6,99.4,99.4,99.4s99.4-44.6,99.4-99.4S159.3,5,104.4,5z\"/>\n" +
-        "</g>\n" +
-        "<g id=\"RKT7w7.tif_1_\">\n" +
-        "	<g>\n" +
-        "		<path class=\"st1\" d=\"M199.6,104.6c-10.1,10.2-21.1,18.6-33.1,25.8c-21.1,12.7-43.5,20.5-68.6,19c-13.8-0.9-26.8-4.7-39.3-10.4\n" +
-        "			c-17.4-8-32.9-18.8-46.8-31.9c-0.8-0.8-1.5-1.7-2.5-2.8c10-10.1,21.1-18.6,33.1-25.8c21.2-12.8,43.9-20.7,69.1-19\n" +
-        "			c13.8,0.9,26.8,4.8,39.2,10.6c16.8,7.7,31.7,18.1,45.3,30.7C197.1,101.9,198.2,103.1,199.6,104.6z M104.4,72\n" +
-        "			C86.2,72,71.9,86.4,72,104.7c0.1,17.9,14.4,32.1,32.5,32.1c17.9,0,32.4-14.4,32.6-32.2C137.2,86.7,122.5,72,104.4,72z\"/>\n" +
-        "		<path class=\"st1\" d=\"M110.5,82.8c-2.2,4.7-2.4,9,1.6,12.5c4.2,3.6,8.5,2.9,12.6-0.4c5,8.6,2.7,20.1-5.5,27.1c-8.5,7.3-21,7.3-29.7,0\n" +
-        "			c-8.4-7-10.4-19.4-5-29C89.5,84.2,101.7,79,110.5,82.8z\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "<rect x=\"3.6\" y=\"102.1\" transform=\"matrix(0.7454 0.6666 -0.6666 0.7454 96.4389 -43.3856)\" class=\"st1\" width=\"202.8\" height=\"5\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/activePanel/svg/track-student-icon.svg",
-        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "	 y=\"0px\"\n" +
-        "     class=\"active-panel-track-student-icon\"\n" +
-        "     viewBox=\"0 0 138 141.3\"\n" +
-        "     xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	svg.active-panel-track-student-icon .st0{fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path d=\"M57.4,118.6h22.7c1,0,1.9,0.4,2.4,1.1c2.2,3.1,8.8,11.9,15.3,17.3c1.8,1.5,0.6,4.2-1.9,4.2H42.2c-2.5,0-3.8-2.7-1.9-4.2\n" +
-        "	c4.9-4,11.6-10.4,14.5-16.9C55.2,119.2,56.2,118.6,57.4,118.6z\"/>\n" +
-        "<path class=\"st0\" d=\"M110.2,28.8\"/>\n" +
-        "<path d=\"M113.2,0H24.8C11.2,0,0,11.2,0,24.8v55.4C0,93.8,11.2,105,24.8,105h88.4c13.6,0,24.8-11.2,24.8-24.8V24.8\n" +
-        "	C138,11.2,126.8,0,113.2,0z M44.4,20.6c8-3.8,16-7.4,24-11.1c0.7-0.3,1.5-0.6,2.2-0.8C71.3,9,72,9.2,72.7,9.5c8,3.7,16,7.3,24,11.1\n" +
-        "	c1,0.5,1.7,1.6,2.5,2.4c-0.8,0.7-1.5,1.7-2.5,2.1c-7.9,3.7-15.8,7.4-23.8,10.9c-1.3,0.6-3.2,0.6-4.5,0c-8.1-3.5-16.1-7.3-24-11\n" +
-        "	c-0.9-0.4-1.6-1.5-2.4-2.2C42.8,22.1,43.5,21,44.4,20.6z M92.5,52.8c-2.1,0-2.2-1.2-2.2-2.8c0-3.5-0.2-6.9,0.1-10.4\n" +
-        "	c0.2-2.8,0.8-5.5,1.3-8.2c0.1-0.4,0.8-0.7,1.9-1.6c0.4,7.3,0.7,13.8,1,20.3C94.7,51.5,94.7,52.8,92.5,52.8z M80.6,52.6\n" +
-        "	c-6.1,4.7-14.5,5-20.7,0.6c-6.4-4.5-8.9-12.4-6.1-20.3c3,1.4,6.3,2.5,9,4.3c5.3,3.4,10.4,3.3,15.7,0c2.3-1.5,5-2.4,7.7-3.6\n" +
-        "	C88.7,40.1,86.4,48.1,80.6,52.6z M99.3,88.5c-3.7,2.8-8,4-12.4,4.8c-5.6,1-11.3,1.6-14.6,2c-10.5-0.3-18.5-1.2-26.1-4\n" +
-        "	c-8.2-3-9.5-5.8-6.6-13.9c3-8.2,8.3-14.2,16.4-17.5c1.6-0.6,3.8-0.8,5.4-0.2c5.9,2.1,11.5,2.1,17.4,0c1.5-0.6,3.7-0.4,5.2,0.3\n" +
-        "	c10,4.2,15.5,12.1,17.8,22.6C102.3,85.1,101.3,87,99.3,88.5z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/activePanel/svg/track-teacher-icon.svg",
-        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "	 y=\"0px\"\n" +
-        "     class=\"active-panel-track-teacher-icon\"\n" +
-        "     viewBox=\"-326 51.7 138 141.3\"\n" +
-        "     xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	svg.active-panel-track-teacher-icon .st0{fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path d=\"M-268.6,170.3h22.7c1,0,1.9,0.4,2.4,1.1c2.2,3.1,8.8,11.9,15.3,17.3c1.8,1.5,0.6,4.2-1.9,4.2h-53.7c-2.5,0-3.8-2.7-1.9-4.2\n" +
-        "	c4.9-4,11.6-10.4,14.5-16.9C-270.8,170.9-269.8,170.3-268.6,170.3z\"/>\n" +
-        "<path class=\"st0\" d=\"M-215.8,80.5\"/>\n" +
-        "<path d=\"M-212.8,51.7h-88.4c-13.6,0-24.8,11.2-24.8,24.8v55.4c0,13.6,11.2,24.8,24.8,24.8h88.4c13.6,0,24.8-11.2,24.8-24.8V76.5\n" +
-        "	C-188,62.9-199.2,51.7-212.8,51.7z M-306.4,69.9c0-2.7,2.2-5,5-5h73.9c2.7,0,5,2.2,5,5v22.7c0,1.8-1.5,3.3-3.3,3.3s-3.3-1.5-3.3-3.3\n" +
-        "	v-21h-70.7v53h22.6c1.8,0,3.3,1.5,3.3,3.3c0,1.8-1.5,3.3-3.3,3.3h-24.2c-2.7,0-5-2.2-5-5V69.9z M-272.8,91c-0.9,0-1.7-0.7-1.7-1.7\n" +
-        "	c0-0.9,0.7-1.7,1.7-1.7h33.6c0.9,0,1.7,0.7,1.7,1.7c0,0.9-0.7,1.7-1.7,1.7H-272.8z M-245.8,100.5c0,0.9-0.7,1.7-1.7,1.7h-25.3\n" +
-        "	c-0.9,0-1.7-0.7-1.7-1.7s0.7-1.7,1.7-1.7h25.4C-246.5,98.8-245.8,99.6-245.8,100.5z M-239.2,79.9h-33.6c-0.9,0-1.7-0.7-1.7-1.7\n" +
-        "	s0.7-1.7,1.7-1.7h33.6c0.9,0,1.7,0.7,1.7,1.7S-238.2,79.9-239.2,79.9z M-264.5,140.5h-44.1c-0.9,0-1.7-0.7-1.7-1.7s0.7-1.7,1.7-1.7\n" +
-        "	h44.1c0.9,0,1.7,0.7,1.7,1.7S-263.6,140.5-264.5,140.5z M-251.3,145.2l1.8-5.7l-5.1,1.6c-0.6,0.2-1.2,0.2-1.8,0.1\n" +
-        "	c-1.3-0.3-3.6-1.3-5.9-4.7c-2.9-4.1-7.6-11.4-9.6-14.4c-0.5-0.7-0.9-1.9-0.9-2.8c0-0.8,0.2-1.6,0.5-2.3c-0.1-0.1-0.3-0.2-0.4-0.4\n" +
-        "	l-14.8-20.4c-0.5-0.7-0.4-1.8,0.4-2.3c0.7-0.5,1.8-0.4,2.3,0.4l14.8,20.5c0.1,0.2,0.2,0.3,0.2,0.5c0.7-0.1,1.4-0.1,2.3,0.2\n" +
-        "	c1,0.3,2.2,1.3,2.7,2.1l7.8,13.6c0.5,1,1.7,1.3,2.7,0.8l18.3-9.9h0.5c-3-2.4-4.8-6.1-4.8-10.3c0-7.4,6-13.3,13.3-13.3\n" +
-        "	c0.3,0,0.7,0,1,0c6.9,0.5,12.3,6.3,12.3,13.3c0,4.9-2.6,9.1-6.5,11.4h0.4c0,0,16.6,5.8,16.2,21.9L-251.3,145.2L-251.3,145.2z\"/>\n" +
-        "</svg>\n" +
-        "");
+  $templateCache.put("components/activePanel/activePanel.template.html",
+    "<div class=\"active-panel ng-hide\"\n" +
+    "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
+    "     translate-namespace=\"ACTIVE_PANEL\">\n" +
+    "    <div class=\"flex-container\">\n" +
+    "        <div class=\"callee-status flex-col\">\n" +
+    "            <div class=\"online-indicator\"\n" +
+    "                 ng-class=\"{\n" +
+    "                    'offline': d.currentUserPresenceStatus === d.presenceStatusMap.OFFLINE,\n" +
+    "                    'online': d.currentUserPresenceStatus === d.presenceStatusMap.ONLINE,\n" +
+    "                    'idle': d.currentUserPresenceStatus === d.presenceStatusMap.IDLE\n" +
+    "                 }\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"callee-name flex-col\">\n" +
+    "            {{d.calleeName ? d.calleeName : d.isTeacher ? 'Educator' : 'Student'}}\n" +
+    "            <div class=\"live-session-duration\">&nbsp;</div>\n" +
+    "        </div>\n" +
+    "        <div class=\"call-controls flex-col\">\n" +
+    "            <ng-switch class=\"share-screen-icon-wrap\" on=\"d.shareScreenBtnsEnable\">\n" +
+    "                <div class=\"active-share-screen\" ng-switch-default>\n" +
+    "                    <div ng-click=\"d.viewOtherUserScreen()\"\n" +
+    "                         class=\"show-other-screen\"\n" +
+    "                         disable-click-drv=\"d.shareScreenBtnsEnable\"\n" +
+    "                         ng-class=\"{disabled: !d.shareScreenBtnsEnable}\">\n" +
+    "                        <ng-switch on=\"d.isTeacher\">\n" +
+    "                            <svg-icon ng-switch-when=\"true\"\n" +
+    "                                      name=\"active-panel-track-student-icon\">\n" +
+    "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                                    {{d.translatedStrings.SHOW_STUDENT_SCREEN}}\n" +
+    "                                </md-tooltip>\n" +
+    "                            </svg-icon>\n" +
+    "                            <svg-icon ng-switch-default\n" +
+    "                                      name=\"active-panel-track-teacher-icon\"\">\n" +
+    "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                                    {{d.translatedStrings.SHOW_TEACHER_SCREEN}}\n" +
+    "                                </md-tooltip>\n" +
+    "                            </svg-icon>\n" +
+    "                        </ng-switch>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <svg-icon disable-click-drv=\"d.shareScreenBtnsEnable\"\n" +
+    "                              ng-class=\"{disabled: !d.shareScreenBtnsEnable}\"\n" +
+    "                              ng-click=\"d.shareMyScreen()\"\n" +
+    "                              name=\"active-panel-share-screen-icon\"\n" +
+    "                              class=\"share-my-screen\">\n" +
+    "                        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                            {{d.translatedStrings.SHARE_MY_SCREEN}}\n" +
+    "                        </md-tooltip>\n" +
+    "                    </svg-icon>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <svg-icon ng-switch-when=\"false\"\n" +
+    "                          class=\"end-share-screen\"\n" +
+    "                          ng-class=\"{ 'isViewer' : d.shareScreenViewer }\"\n" +
+    "                          ng-click=\"d.endScreenSharing()\"\n" +
+    "                          name=\"active-panel-stop-sharing-icon\">\n" +
+    "                    <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                        {{d.translatedStrings.END_SCREEN_SHARING}}\n" +
+    "                    </md-tooltip>\n" +
+    "                </svg-icon>\n" +
+    "            </ng-switch>\n" +
+    "\n" +
+    "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
+    "\n" +
+    "            <div class=\"end-session-wrap\" ng-if=\"d.isTeacher\">\n" +
+    "                <div class=\"seperator\"></div>\n" +
+    "                <md-button class=\"end-session-btn\"\n" +
+    "                            aria-label=\"{{'ACTIVE_PANEL.END_SESSION' | translate}}\"\n" +
+    "                            ng-click=\"d.endSession()\">\n" +
+    "                    <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                        {{'ACTIVE_PANEL.END_SESSION' | translate}}\n" +
+    "                    </md-tooltip>\n" +
+    "                <span>{{'ACTIVE_PANEL.END_BTN' | translate}}</span>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"active-panel-overlay\" ng-if=\"d.disableAllBtns\"></div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/activePanel/svg/share-screen-icon.svg",
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     class=\"active-panel-share-screen-icon\"\n" +
+    "	 viewBox=\"0 0 138 141.3\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<path d=\"M113.2,0H24.8C11.2,0,0,11.2,0,24.8v55.4C0,93.8,11.2,105,24.8,105h88.4c13.6,0,24.8-11.2,24.8-24.8V24.8\n" +
+    "	C138,11.2,126.8,0,113.2,0z M71.1,82V63.4c0,0-28.8-4-42.7,15.3c0,0-5.1-34.6,42.9-40.4l-0.3-20L114.3,50L71.1,82z\"/>\n" +
+    "<path d=\"M57.4,118.6h22.7c1,0,1.9,0.4,2.4,1.1c2.2,3.1,8.8,11.9,15.3,17.3c1.8,1.5,0.6,4.2-1.9,4.2H42.2c-2.5,0-3.8-2.7-1.9-4.2\n" +
+    "	c4.9-4,11.6-10.4,14.5-16.9C55.2,119.2,56.2,118.6,57.4,118.6z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/activePanel/svg/stop-sharing-icon.svg",
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 208.9 208.9\" xml:space=\"preserve\" class=\"stop-sharing-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    	.stop-sharing-icon-svg {width: 100%; height: auto;}\n" +
+    "	    .stop-sharing-icon-svg .st0{fill:#FFFFFF; enable-background:new;}\n" +
+    "	    .stop-sharing-icon-svg .st1{fill:#231F20;}\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<circle class=\"st0\" cx=\"104.4\" cy=\"104.4\" r=\"101.9\"/>\n" +
+    "	<path class=\"st1\" d=\"M104.4,208.9C46.8,208.9,0,162,0,104.4C0,46.8,46.8,0,104.4,0s104.4,46.8,104.4,104.4\n" +
+    "		C208.9,162,162,208.9,104.4,208.9z M104.4,5C49.6,5,5,49.6,5,104.4s44.6,99.4,99.4,99.4s99.4-44.6,99.4-99.4S159.3,5,104.4,5z\"/>\n" +
+    "</g>\n" +
+    "<g id=\"RKT7w7.tif_1_\">\n" +
+    "	<g>\n" +
+    "		<path class=\"st1\" d=\"M199.6,104.6c-10.1,10.2-21.1,18.6-33.1,25.8c-21.1,12.7-43.5,20.5-68.6,19c-13.8-0.9-26.8-4.7-39.3-10.4\n" +
+    "			c-17.4-8-32.9-18.8-46.8-31.9c-0.8-0.8-1.5-1.7-2.5-2.8c10-10.1,21.1-18.6,33.1-25.8c21.2-12.8,43.9-20.7,69.1-19\n" +
+    "			c13.8,0.9,26.8,4.8,39.2,10.6c16.8,7.7,31.7,18.1,45.3,30.7C197.1,101.9,198.2,103.1,199.6,104.6z M104.4,72\n" +
+    "			C86.2,72,71.9,86.4,72,104.7c0.1,17.9,14.4,32.1,32.5,32.1c17.9,0,32.4-14.4,32.6-32.2C137.2,86.7,122.5,72,104.4,72z\"/>\n" +
+    "		<path class=\"st1\" d=\"M110.5,82.8c-2.2,4.7-2.4,9,1.6,12.5c4.2,3.6,8.5,2.9,12.6-0.4c5,8.6,2.7,20.1-5.5,27.1c-8.5,7.3-21,7.3-29.7,0\n" +
+    "			c-8.4-7-10.4-19.4-5-29C89.5,84.2,101.7,79,110.5,82.8z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "<rect x=\"3.6\" y=\"102.1\" transform=\"matrix(0.7454 0.6666 -0.6666 0.7454 96.4389 -43.3856)\" class=\"st1\" width=\"202.8\" height=\"5\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/activePanel/svg/track-student-icon.svg",
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "	 y=\"0px\"\n" +
+    "     class=\"active-panel-track-student-icon\"\n" +
+    "     viewBox=\"0 0 138 141.3\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	svg.active-panel-track-student-icon .st0{fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path d=\"M57.4,118.6h22.7c1,0,1.9,0.4,2.4,1.1c2.2,3.1,8.8,11.9,15.3,17.3c1.8,1.5,0.6,4.2-1.9,4.2H42.2c-2.5,0-3.8-2.7-1.9-4.2\n" +
+    "	c4.9-4,11.6-10.4,14.5-16.9C55.2,119.2,56.2,118.6,57.4,118.6z\"/>\n" +
+    "<path class=\"st0\" d=\"M110.2,28.8\"/>\n" +
+    "<path d=\"M113.2,0H24.8C11.2,0,0,11.2,0,24.8v55.4C0,93.8,11.2,105,24.8,105h88.4c13.6,0,24.8-11.2,24.8-24.8V24.8\n" +
+    "	C138,11.2,126.8,0,113.2,0z M44.4,20.6c8-3.8,16-7.4,24-11.1c0.7-0.3,1.5-0.6,2.2-0.8C71.3,9,72,9.2,72.7,9.5c8,3.7,16,7.3,24,11.1\n" +
+    "	c1,0.5,1.7,1.6,2.5,2.4c-0.8,0.7-1.5,1.7-2.5,2.1c-7.9,3.7-15.8,7.4-23.8,10.9c-1.3,0.6-3.2,0.6-4.5,0c-8.1-3.5-16.1-7.3-24-11\n" +
+    "	c-0.9-0.4-1.6-1.5-2.4-2.2C42.8,22.1,43.5,21,44.4,20.6z M92.5,52.8c-2.1,0-2.2-1.2-2.2-2.8c0-3.5-0.2-6.9,0.1-10.4\n" +
+    "	c0.2-2.8,0.8-5.5,1.3-8.2c0.1-0.4,0.8-0.7,1.9-1.6c0.4,7.3,0.7,13.8,1,20.3C94.7,51.5,94.7,52.8,92.5,52.8z M80.6,52.6\n" +
+    "	c-6.1,4.7-14.5,5-20.7,0.6c-6.4-4.5-8.9-12.4-6.1-20.3c3,1.4,6.3,2.5,9,4.3c5.3,3.4,10.4,3.3,15.7,0c2.3-1.5,5-2.4,7.7-3.6\n" +
+    "	C88.7,40.1,86.4,48.1,80.6,52.6z M99.3,88.5c-3.7,2.8-8,4-12.4,4.8c-5.6,1-11.3,1.6-14.6,2c-10.5-0.3-18.5-1.2-26.1-4\n" +
+    "	c-8.2-3-9.5-5.8-6.6-13.9c3-8.2,8.3-14.2,16.4-17.5c1.6-0.6,3.8-0.8,5.4-0.2c5.9,2.1,11.5,2.1,17.4,0c1.5-0.6,3.7-0.4,5.2,0.3\n" +
+    "	c10,4.2,15.5,12.1,17.8,22.6C102.3,85.1,101.3,87,99.3,88.5z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/activePanel/svg/track-teacher-icon.svg",
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "	 y=\"0px\"\n" +
+    "     class=\"active-panel-track-teacher-icon\"\n" +
+    "     viewBox=\"-326 51.7 138 141.3\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	svg.active-panel-track-teacher-icon .st0{fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path d=\"M-268.6,170.3h22.7c1,0,1.9,0.4,2.4,1.1c2.2,3.1,8.8,11.9,15.3,17.3c1.8,1.5,0.6,4.2-1.9,4.2h-53.7c-2.5,0-3.8-2.7-1.9-4.2\n" +
+    "	c4.9-4,11.6-10.4,14.5-16.9C-270.8,170.9-269.8,170.3-268.6,170.3z\"/>\n" +
+    "<path class=\"st0\" d=\"M-215.8,80.5\"/>\n" +
+    "<path d=\"M-212.8,51.7h-88.4c-13.6,0-24.8,11.2-24.8,24.8v55.4c0,13.6,11.2,24.8,24.8,24.8h88.4c13.6,0,24.8-11.2,24.8-24.8V76.5\n" +
+    "	C-188,62.9-199.2,51.7-212.8,51.7z M-306.4,69.9c0-2.7,2.2-5,5-5h73.9c2.7,0,5,2.2,5,5v22.7c0,1.8-1.5,3.3-3.3,3.3s-3.3-1.5-3.3-3.3\n" +
+    "	v-21h-70.7v53h22.6c1.8,0,3.3,1.5,3.3,3.3c0,1.8-1.5,3.3-3.3,3.3h-24.2c-2.7,0-5-2.2-5-5V69.9z M-272.8,91c-0.9,0-1.7-0.7-1.7-1.7\n" +
+    "	c0-0.9,0.7-1.7,1.7-1.7h33.6c0.9,0,1.7,0.7,1.7,1.7c0,0.9-0.7,1.7-1.7,1.7H-272.8z M-245.8,100.5c0,0.9-0.7,1.7-1.7,1.7h-25.3\n" +
+    "	c-0.9,0-1.7-0.7-1.7-1.7s0.7-1.7,1.7-1.7h25.4C-246.5,98.8-245.8,99.6-245.8,100.5z M-239.2,79.9h-33.6c-0.9,0-1.7-0.7-1.7-1.7\n" +
+    "	s0.7-1.7,1.7-1.7h33.6c0.9,0,1.7,0.7,1.7,1.7S-238.2,79.9-239.2,79.9z M-264.5,140.5h-44.1c-0.9,0-1.7-0.7-1.7-1.7s0.7-1.7,1.7-1.7\n" +
+    "	h44.1c0.9,0,1.7,0.7,1.7,1.7S-263.6,140.5-264.5,140.5z M-251.3,145.2l1.8-5.7l-5.1,1.6c-0.6,0.2-1.2,0.2-1.8,0.1\n" +
+    "	c-1.3-0.3-3.6-1.3-5.9-4.7c-2.9-4.1-7.6-11.4-9.6-14.4c-0.5-0.7-0.9-1.9-0.9-2.8c0-0.8,0.2-1.6,0.5-2.3c-0.1-0.1-0.3-0.2-0.4-0.4\n" +
+    "	l-14.8-20.4c-0.5-0.7-0.4-1.8,0.4-2.3c0.7-0.5,1.8-0.4,2.3,0.4l14.8,20.5c0.1,0.2,0.2,0.3,0.2,0.5c0.7-0.1,1.4-0.1,2.3,0.2\n" +
+    "	c1,0.3,2.2,1.3,2.7,2.1l7.8,13.6c0.5,1,1.7,1.3,2.7,0.8l18.3-9.9h0.5c-3-2.4-4.8-6.1-4.8-10.3c0-7.4,6-13.3,13.3-13.3\n" +
+    "	c0.3,0,0.7,0,1,0c6.9,0.5,12.3,6.3,12.3,13.3c0,4.9-2.6,9.1-6.5,11.4h0.4c0,0,16.6,5.8,16.2,21.9L-251.3,145.2L-251.3,145.2z\"/>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -785,58 +785,58 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
         function () {
 
-            AppSelectController.$inject = ["$scope", "$filter", "ENV"];
-            var directive = {
-                templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
-                restrict: 'E',
-                controllerAs: 'vm',
-                controller: AppSelectController,
-                scope: {
-                    currentApp: "="
-                },
-                bindToController: true
-            };
+        AppSelectController.$inject = ["$scope", "$filter", "ENV"];
+        var directive = {
+            templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
+            restrict: 'E',
+            controllerAs: 'vm',
+            controller: AppSelectController,
+            scope: {
+                currentApp: "="
+            },
+            bindToController: true
+        };
 
-            function AppSelectController($scope, $filter, ENV) {
-                'ngInject';
+        function AppSelectController($scope, $filter, ENV) {
+            'ngInject';
 
-                var self = this;
-                var currentAppName = ENV.firebaseAppScopeName;
-                var translateFilter = $filter('translate');
+            var self = this;
+            var currentAppName = ENV.firebaseAppScopeName;
+            var translateFilter = $filter('translate');
 
-                function _setCurrentAppName() {
-                    var key = Object.keys(self.appName).filter(function (item) {
-                        return currentAppName.indexOf(item.toLowerCase()) > -1;
-                    })[0];
-                    self.selectedApp = self.appName[key];
-                    self.currentApp = key;
-                }
-
-                self.appName = {
-                    SAT: translateFilter('ADMIN.ESLINK.SAT'),
-                    ACT: translateFilter('ADMIN.ESLINK.ACT'),
-                    TOEFL: translateFilter('ADMIN.ESLINK.TOEFL'),
-                    SATSM: translateFilter('ADMIN.ESLINK.SATSM')
-                };
-                _setCurrentAppName();
-
-                self.selectApp = function (key) {
-                    self.selectedApp = self.appName[key];
-                    self.currentApp = key;
-                };
-                self.expandIcon = 'expand_more';
-
-                self.znkOpenModal = function () {
-                    self.expandIcon = 'expand_less';
-                };
-
-                $scope.$on('$mdMenuClose', function () {
-                    self.expandIcon = 'expand_more';
-                });
+            function _setCurrentAppName() {
+                var key = Object.keys(self.appName).filter(function (item) {
+                    return currentAppName.indexOf(item.toLowerCase()) > -1;
+                })[0];
+                self.selectedApp = self.appName[key];
+                self.currentApp = key;
             }
 
-            return directive;
-        });
+            self.appName = {
+                SAT: translateFilter('ADMIN.ESLINK.SAT'),
+                ACT: translateFilter('ADMIN.ESLINK.ACT'),
+                TOEFL: translateFilter('ADMIN.ESLINK.TOEFL'),
+                SATSM: translateFilter('ADMIN.ESLINK.SATSM')
+            };
+            _setCurrentAppName();
+
+            self.selectApp = function (key) {
+                self.selectedApp = self.appName[key];
+                self.currentApp = key;
+            };
+            self.expandIcon = 'expand_more';
+
+            self.znkOpenModal = function () {
+                self.expandIcon = 'expand_less';
+            };
+
+            $scope.$on('$mdMenuClose', function () {
+                self.expandIcon = 'expand_more';
+            });
+        }
+
+        return directive;
+    });
 
 })(angular);
 
@@ -1229,346 +1229,346 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
 })(angular);
 
 angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.close-pop-svg {width: 100%; height: auto;}\n" +
-        "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-        "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-icon.svg",
-        "<svg version=\"1.1\" id=\"Layer_1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 140.7 171.1\" xml:space=\"preserve\" class=\"profile-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.profile-svg {width: 100%; height: auto;}\n" +
-        "	.profile-svg .st0{fill:#000000;}\n" +
-        "</style>\n" +
-        "\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M0.2,171.1c-0.9-10.2,0.8-19.6,3.6-28.9c2.9-9.6,9.3-14.6,19.1-15.7c4.1-0.5,8.3-1.1,12.3-2.1c6.1-1.5,10.7-5.1,13.7-11.2\n" +
-        "		c-7.7-7.5-13.2-16.5-16.9-26.6c-0.3-0.7-0.9-1.7-1.5-1.8c-6.2-0.8-7.3-5.8-8.4-10.4c-0.9-3.7-0.9-7.6-0.9-11.4\n" +
-        "		c0-1.7,0.7-4.4,1.8-4.9c5.5-2.5,3.5-7.2,4.1-11.3c1.3-9.1,2.8-18.3,4.8-27.3c1.8-8.4,7.8-13.3,15.7-16c13.1-4.6,26.4-4,39.9-1.9\n" +
-        "		c7.9,1.3,16,1.9,24,2.8c-3.3,10.2-0.9,21.2,1.5,32.2c0.8,3.5,0.9,7.2,1.1,10.9c0.2,3.9-0.4,7.3,3.3,11c5.5,5.5,1.1,22.2-5.8,26.1\n" +
-        "		c-1,0.6-2.1,1.6-2.6,2.7c-3.8,9.9-9.2,18.8-17.1,26.2c3.7,7.6,10.2,10.7,17.8,11.9c4.3,0.7,8.9,0.6,12.7,2.3\n" +
-        "		c4.2,1.9,9,4.6,11.2,8.3c6.2,10.6,7.4,22.5,7,35C93.7,171.1,47.2,171.1,0.2,171.1z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/adminDashboard/components/eMetadata/templates/educatorProfile.template.html",
-        "<md-dialog ng-cloak class=\"admin-dashboard admin-profile\" translate-namespace=\"ADMIN\">\n" +
-        "    <div class=\"top-icon-wrap\">\n" +
-        "        <div class=\"top-icon\">\n" +
-        "            <div class=\"round-icon-wrap\">\n" +
-        "                <svg-icon name=\"adminProfile-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <md-toolbar>\n" +
-        "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeDialog()\">\n" +
-        "            <svg-icon name=\"adminProfile-close-popup\"></svg-icon>\n" +
-        "        </div>\n" +
-        "    </md-toolbar>\n" +
-        "    <div class=\"content-wrapper\">\n" +
-        "        <div class=\"main-title\" translate=\".EMETADATA.EDUCATOR_PROFILE\"></div>\n" +
-        "\n" +
-        "        <md-dialog-content>\n" +
-        "            <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\"\n" +
-        "            >\n" +
-        "                <div class=\"znk-input-group\"\n" +
-        "                     ng-class=\"profileform.educatorTeachworksName.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                    <label>{{'ADMIN.EMETADATA.EDUCATOR_TEACH_WORKS_NAME' | translate}}</label>\n" +
-        "                    <div class=\"znk-input\">\n" +
-        "                        <input\n" +
-        "                            type=\"text\"\n" +
-        "                            autocomplete=\"on\"\n" +
-        "                            name=\"educatorTeachworksName\"\n" +
-        "                            ng-required=\"true\"\n" +
-        "                            ng-model=\"vm.profileData.educatorTeachworksName\">\n" +
-        "                        <span ng-if=\"profileform.$submitted && profileform.educatorTeachworksName.$invalid\"\n" +
-        "                              role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"profileform.educatorTeachworksName.$error.required\"\n" +
-        "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"znk-input-group\"\n" +
-        "                     ng-class=\"profileform.email.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                    <label>{{'MY_PROFILE.EMAIL' | translate}}</label>\n" +
-        "                    <div class=\"znk-input\">\n" +
-        "                        <input\n" +
-        "                            type=\"email\"\n" +
-        "                            autocomplete=\"on\"\n" +
-        "                            name=\"email\"\n" +
-        "                            ng-required=\"true\"\n" +
-        "                            disabled=\"true\"\n" +
-        "                            ng-model=\"vm.profileData.email\">\n" +
-        "\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"znk-input-group\">\n" +
-        "                    <label for=\"timezone\">{{'MY_PROFILE.TIMEZONE' | translate}}</label>\n" +
-        "                    <div class=\"znk-input\">\n" +
-        "                        <select id=\"timezone\" name=\"timezone\"\n" +
-        "                                ng-options=\"time as time for time in vm.timezonesList\"\n" +
-        "                                ng-model=\"vm.profileData.timezone\"\n" +
-        "                                ng-disabled=\"!vm.profileData.isTimezoneManual\">\n" +
-        "                        </select>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"timezone-manual\">\n" +
-        "                    <input type=\"checkbox\"\n" +
-        "                           id=\"timezoneManual\" name=\"timezoneManual\"\n" +
-        "                           ng-model=\"vm.profileData.isTimezoneManual\"\n" +
-        "                           ng-change=\"vm.updateProfileTimezone()\">\n" +
-        "                    <label for=\"timezoneManual\">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>\n" +
-        "                </div>\n" +
-        "                <div class=\"znk-input-group\"\n" +
-        "                     ng-class=\"profileform.educatorAvailabilityHours.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                    <label>{{'ADMIN.EMETADATA.AVAILABILITY_HOURS' | translate}}</label>\n" +
-        "                    <div class=\"znk-input\">\n" +
-        "                        <textarea\n" +
-        "                            type=\"text\"\n" +
-        "                            autocomplete=\"on\"\n" +
-        "                            name=\"educatorAvailabilityHours\"\n" +
-        "                            ng-required=\"true\"\n" +
-        "                            rows=\"4\" cols=\"50\"\n" +
-        "                            ng-model=\"vm.profileData.educatorAvailabilityHours\">\n" +
-        "                        </textarea>\n" +
-        "                        <span ng-if=\"profileform.$submitted && profileform.educatorAvailabilityHours.$invalid\"\n" +
-        "                              role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"profileform.educatorAvailabilityHours.$error.required\"\n" +
-        "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"btn-wrap\">\n" +
-        "                    <button class=\"save-pass-btn\"><span translate=\"MY_PROFILE.SAVE\"></span></button>\n" +
-        "                </div>\n" +
-        "            </form>\n" +
-        "\n" +
-        "            <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
-        "                <div class=\"error-msg\">\n" +
-        "                    <svg-icon name=\"adminProfile-danger-red-icon\" class=\"adminProfile-danger-red-icon\"></svg-icon>\n" +
-        "                    <div translate=\"{{vm.generalError}}\"></div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </md-dialog-content>\n" +
-        "    </div>\n" +
-        "    <div class=\"content-wrapper\">\n" +
-        "\n" +
-        "        <md-dialog-content>\n" +
-        "            <div class=\"container-title md-subheader\" translate=\".EMETADATA.ZINKERZ_EDUCATOR\"></div>\n" +
-        "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\"\n" +
-        "                  ng-submit=\"vm.setZinkerzTeacher(profileZinkerzTeacherForm)\">\n" +
-        "                <div class=\"znk-input-group\">\n" +
-        "                    <label for=\"zinkerzTeacher\">{{'ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR' | translate}}</label>\n" +
-        "                    <div class=\"znk-input\">\n" +
-        "                        <input type=\"checkbox\"\n" +
-        "                               id=\"zinkerzTeacher\" name=\"zinkerzTeacher\"\n" +
-        "                               ng-model=\"vm.profileData.zinkerzTeacher\">\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"znk-input-group\"\n" +
-        "                     ng-class=\"profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid && profileZinkerzTeacherForm.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                    <label>{{'ADMIN.EMETADATA.SUBJECT' | translate}}</label>\n" +
-        "                    <div class=\"znk-input\">\n" +
-        "                        <input\n" +
-        "                            type=\"text\"\n" +
-        "                            autocomplete=\"on\"\n" +
-        "                            name=\"zinkerzTeacherSubject\"\n" +
-        "                            ng-required=\"true\"\n" +
-        "                            ng-model=\"vm.profileData.zinkerzTeacherSubject\">\n" +
-        "                        <span\n" +
-        "                            ng-if=\"profileZinkerzTeacherForm.$submitted && profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid\"\n" +
-        "                            role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"profileZinkerzTeacherForm.zinkerzTeacherSubject.$error.required\"\n" +
-        "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"btn-wrap\">\n" +
-        "                    <button class=\"save-pass-btn\"><span translate=\"MY_PROFILE.SAVE\"></span></button>\n" +
-        "                </div>\n" +
-        "            </form>\n" +
-        "\n" +
-        "            <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
-        "                <div class=\"error-msg\">\n" +
-        "                    <svg-icon name=\"adminProfile-danger-red-icon\" class=\"adminProfile-danger-red-icon\"></svg-icon>\n" +
-        "                    <div translate=\"{{vm.generalError}}\"></div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </md-dialog-content>\n" +
-        "    </div>\n" +
-        "</md-dialog>\n" +
-        "\n" +
-        "\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/adminDashboard/components/eMetadata/templates/eMetadata.template.html",
-        "<div class=\"admin-dashboard admin-eMetadata\" translate-namespace=\"ADMIN\">\n" +
-        "\n" +
-        "    <div class=\"admin-main-container-overlay\">\n" +
-        "        <div class=\"admin-search-container\">\n" +
-        "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-        "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
-        "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-        "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
-        "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
-        "                    <div class=\"admin-msg\">\n" +
-        "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
-        "                    <div class=\"admin-msg\">\n" +
-        "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/adminDashboard/components/esLink/directives/app-select.template.html",
-        "<div class=\"znk-app-select\">\n" +
-        "    <div class=\"selected-item\" ng-bind=\"vm.selectedApp\"></div>\n" +
-        "    <md-menu md-offset=\"-150 60\">\n" +
-        "        <md-button  ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\"\n" +
-        "                   class=\"md-icon-button profile-open-modal-btn\"\n" +
-        "                   aria-label=\"Open sample menu\">\n" +
-        "            <div></div>\n" +
-        "            <md-icon class=\"material-icons\">{{vm.expandIcon}}</md-icon>\n" +
-        "        </md-button>\n" +
-        "        <md-menu-content class=\"md-menu-content-znk-app-select\">\n" +
-        "            <md-list>\n" +
-        "                <md-list-item md-ink-ripple class=\"app-select-item\">\n" +
-        "                    <span  ng-click=\"vm.selectApp('SAT')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.SAT}\"\n" +
-        "                          ng-bind=\"::vm.appName.SAT\"></span>\n" +
-        "                </md-list-item>\n" +
-        "                <md-list-item\n" +
-        "                    md-ink-ripple\n" +
-        "                    class=\"app-select-item\">\n" +
-        "                    <span ng-click=\"vm.selectApp('ACT')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.ACT}\" ng-bind=\"::vm.appName.ACT\"></span>\n" +
-        "                </md-list-item>\n" +
-        "                <md-list-item\n" +
-        "                    md-ink-ripple\n" +
-        "                    class=\"app-select-item\">\n" +
-        "                    <span ng-click=\"vm.selectApp('TOEFL')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.TOEFL}\" ng-bind=\"::vm.appName.TOEFL\"></span>\n" +
-        "                </md-list-item>\n" +
-        "                <md-list-item\n" +
-        "                    md-ink-ripple\n" +
-        "                    class=\"app-select-item\">\n" +
-        "                    <span ng-click=\"vm.selectApp('SATSM')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.SATSM}\" ng-bind=\"::vm.appName.SATSM\"></span>\n" +
-        "                </md-list-item>\n" +
-        "            </md-list>\n" +
-        "        </md-menu-content>\n" +
-        "    </md-menu>\n" +
-        "</div>\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/adminDashboard/components/esLink/templates/esLink.template.html",
-        "<div class=\"admin-dashboard admin-esLink\" translate-namespace=\"ADMIN\">\n" +
-        "\n" +
-        "    <div class=\"admin-main-container-overlay\">\n" +
-        "        <div class=\"admin-search-container\">\n" +
-        "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_STUDENT\"></div>\n" +
-        "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}\" data=\"vm.gridStudentsOptions.data\" minlength=\"3\" key=\"student\" state=\"vm.uiGridState\" search-query=\"vm.studentsSearchQuery\" search-results=\"vm.getStudentsSearchResults\"></div>\n" +
-        "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-        "            <div ui-grid-selection ui-grid=\"vm.gridStudentsOptions\" class=\"admin-grid\">\n" +
-        "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.student.initial\">\n" +
-        "                    <div class=\"admin-msg\">\n" +
-        "                        <span translate=\"ADMIN.ESLINK.STUDENT_INITIAL_MSG\"></span>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.student.noData\">\n" +
-        "                    <div class=\"admin-msg\">\n" +
-        "                        <span>{{'ADMIN.ESLINK.STUDENT_NODATA_MSG' | translate}} '{{vm.studentSearchNoData}}'</span>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "            <hr>\n" +
-        "        </div>\n" +
-        "\n" +
-        "        <div class=\"admin-search-container\">\n" +
-        "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-        "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
-        "\n" +
-        "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-        "            <div ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\">\n" +
-        "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
-        "                    <div class=\"admin-msg\">\n" +
-        "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
-        "                        <div class=\"admin-msg-note\" translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG_NOTE\"></div>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
-        "                    <div class=\"admin-msg\">\n" +
-        "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "            <hr>\n" +
-        "\n" +
-        "        </div>\n" +
-        "\n" +
-        "    </div>\n" +
-        "    <div class=\"esLink-link-container\">\n" +
-        "        <div class=\"esLink-select-container\">\n" +
-        "            <span class=\"esLink-link-text\" translate=\"ADMIN.ESLINK.LINK_MSG\"></span>\n" +
-        "            <app-select current-app=\"vm.currentAppKey\"></app-select>\n" +
-        "        </div>\n" +
-        "\n" +
-        "        <div class=\"btn-wrap\">\n" +
-        "            <button element-loader\n" +
-        "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
-        "                    fill-loader=\"vm.fillLoader\"\n" +
-        "                    show-loader=\"vm.startLoader\"\n" +
-        "                    bg-loader=\"'#037684'\"\n" +
-        "                    precentage=\"50\"\n" +
-        "                    font-color=\"'#FFFFFF'\"\n" +
-        "                    bg=\"'#0a9bad'\"\n" +
-        "                    ng-click=\"vm.link()\"\n" +
-        "                    class=\"md-button link-btn drop-shadow\"\n" +
-        "                    name=\"submit\">\n" +
-        "                <span translate=\"ADMIN.ESLINK.LINK_BTN\"></span>\n" +
-        "            </button>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/adminDashboard/directives/admin-search.template.html",
-        "<div class=\"admin-search-pane\">\n" +
-        "    <div class=\"search-wrap\">\n" +
-        "        <div class=\"znk-input-group\">\n" +
-        "            <input type=\"search\"\n" +
-        "                   minlength=\"{{::vm.minlength}}\"\n" +
-        "                   placeholder=\"{{::vm.placeholder}}\"\n" +
-        "                   name=\"search-box\"\n" +
-        "                   ng-model=\"vm.searchQuery\">\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <button class=\"admin-search-btn\" ng-click=\"vm.searchResults(vm.searchQuery)\"\n" +
-        "            ng-disabled=\"!vm.searchQuery\" translate=\".SEARCH\">\n" +
-        "    </button>\n" +
-        "\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-icon.svg",
+    "<svg version=\"1.1\" id=\"Layer_1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 140.7 171.1\" xml:space=\"preserve\" class=\"profile-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.profile-svg {width: 100%; height: auto;}\n" +
+    "	.profile-svg .st0{fill:#000000;}\n" +
+    "</style>\n" +
+    "\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M0.2,171.1c-0.9-10.2,0.8-19.6,3.6-28.9c2.9-9.6,9.3-14.6,19.1-15.7c4.1-0.5,8.3-1.1,12.3-2.1c6.1-1.5,10.7-5.1,13.7-11.2\n" +
+    "		c-7.7-7.5-13.2-16.5-16.9-26.6c-0.3-0.7-0.9-1.7-1.5-1.8c-6.2-0.8-7.3-5.8-8.4-10.4c-0.9-3.7-0.9-7.6-0.9-11.4\n" +
+    "		c0-1.7,0.7-4.4,1.8-4.9c5.5-2.5,3.5-7.2,4.1-11.3c1.3-9.1,2.8-18.3,4.8-27.3c1.8-8.4,7.8-13.3,15.7-16c13.1-4.6,26.4-4,39.9-1.9\n" +
+    "		c7.9,1.3,16,1.9,24,2.8c-3.3,10.2-0.9,21.2,1.5,32.2c0.8,3.5,0.9,7.2,1.1,10.9c0.2,3.9-0.4,7.3,3.3,11c5.5,5.5,1.1,22.2-5.8,26.1\n" +
+    "		c-1,0.6-2.1,1.6-2.6,2.7c-3.8,9.9-9.2,18.8-17.1,26.2c3.7,7.6,10.2,10.7,17.8,11.9c4.3,0.7,8.9,0.6,12.7,2.3\n" +
+    "		c4.2,1.9,9,4.6,11.2,8.3c6.2,10.6,7.4,22.5,7,35C93.7,171.1,47.2,171.1,0.2,171.1z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/adminDashboard/components/eMetadata/templates/educatorProfile.template.html",
+    "<md-dialog ng-cloak class=\"admin-dashboard admin-profile\" translate-namespace=\"ADMIN\">\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"adminProfile-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <md-toolbar>\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <svg-icon name=\"adminProfile-close-popup\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </md-toolbar>\n" +
+    "    <div class=\"content-wrapper\">\n" +
+    "        <div class=\"main-title\" translate=\".EMETADATA.EDUCATOR_PROFILE\"></div>\n" +
+    "\n" +
+    "        <md-dialog-content>\n" +
+    "            <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\"\n" +
+    "            >\n" +
+    "                <div class=\"znk-input-group\"\n" +
+    "                     ng-class=\"profileform.educatorTeachworksName.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                    <label>{{'ADMIN.EMETADATA.EDUCATOR_TEACH_WORKS_NAME' | translate}}</label>\n" +
+    "                    <div class=\"znk-input\">\n" +
+    "                        <input\n" +
+    "                            type=\"text\"\n" +
+    "                            autocomplete=\"on\"\n" +
+    "                            name=\"educatorTeachworksName\"\n" +
+    "                            ng-required=\"true\"\n" +
+    "                            ng-model=\"vm.profileData.educatorTeachworksName\">\n" +
+    "                        <span ng-if=\"profileform.$submitted && profileform.educatorTeachworksName.$invalid\"\n" +
+    "                              role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"profileform.educatorTeachworksName.$error.required\"\n" +
+    "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"znk-input-group\"\n" +
+    "                     ng-class=\"profileform.email.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                    <label>{{'MY_PROFILE.EMAIL' | translate}}</label>\n" +
+    "                    <div class=\"znk-input\">\n" +
+    "                        <input\n" +
+    "                            type=\"email\"\n" +
+    "                            autocomplete=\"on\"\n" +
+    "                            name=\"email\"\n" +
+    "                            ng-required=\"true\"\n" +
+    "                            disabled=\"true\"\n" +
+    "                            ng-model=\"vm.profileData.email\">\n" +
+    "\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"znk-input-group\">\n" +
+    "                    <label for=\"timezone\">{{'MY_PROFILE.TIMEZONE' | translate}}</label>\n" +
+    "                    <div class=\"znk-input\">\n" +
+    "                        <select id=\"timezone\" name=\"timezone\"\n" +
+    "                                ng-options=\"time as time for time in vm.timezonesList\"\n" +
+    "                                ng-model=\"vm.profileData.timezone\"\n" +
+    "                                ng-disabled=\"!vm.profileData.isTimezoneManual\">\n" +
+    "                        </select>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"timezone-manual\">\n" +
+    "                    <input type=\"checkbox\"\n" +
+    "                           id=\"timezoneManual\" name=\"timezoneManual\"\n" +
+    "                           ng-model=\"vm.profileData.isTimezoneManual\"\n" +
+    "                           ng-change=\"vm.updateProfileTimezone()\">\n" +
+    "                    <label for=\"timezoneManual\">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>\n" +
+    "                </div>\n" +
+    "                <div class=\"znk-input-group\"\n" +
+    "                     ng-class=\"profileform.educatorAvailabilityHours.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                    <label>{{'ADMIN.EMETADATA.AVAILABILITY_HOURS' | translate}}</label>\n" +
+    "                    <div class=\"znk-input\">\n" +
+    "                        <textarea\n" +
+    "                            type=\"text\"\n" +
+    "                            autocomplete=\"on\"\n" +
+    "                            name=\"educatorAvailabilityHours\"\n" +
+    "                            ng-required=\"true\"\n" +
+    "                            rows=\"4\" cols=\"50\"\n" +
+    "                            ng-model=\"vm.profileData.educatorAvailabilityHours\">\n" +
+    "                        </textarea>\n" +
+    "                        <span ng-if=\"profileform.$submitted && profileform.educatorAvailabilityHours.$invalid\"\n" +
+    "                              role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"profileform.educatorAvailabilityHours.$error.required\"\n" +
+    "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"btn-wrap\">\n" +
+    "                    <button class=\"save-pass-btn\"><span translate=\"MY_PROFILE.SAVE\"></span></button>\n" +
+    "                </div>\n" +
+    "            </form>\n" +
+    "\n" +
+    "            <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
+    "                <div class=\"error-msg\">\n" +
+    "                    <svg-icon name=\"adminProfile-danger-red-icon\" class=\"adminProfile-danger-red-icon\"></svg-icon>\n" +
+    "                    <div translate=\"{{vm.generalError}}\"></div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </md-dialog-content>\n" +
+    "    </div>\n" +
+    "    <div class=\"content-wrapper\">\n" +
+    "\n" +
+    "        <md-dialog-content>\n" +
+    "            <div class=\"container-title md-subheader\" translate=\".EMETADATA.ZINKERZ_EDUCATOR\"></div>\n" +
+    "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\"\n" +
+    "                  ng-submit=\"vm.setZinkerzTeacher(profileZinkerzTeacherForm)\">\n" +
+    "                <div class=\"znk-input-group\">\n" +
+    "                    <label for=\"zinkerzTeacher\">{{'ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR' | translate}}</label>\n" +
+    "                    <div class=\"znk-input\">\n" +
+    "                        <input type=\"checkbox\"\n" +
+    "                               id=\"zinkerzTeacher\" name=\"zinkerzTeacher\"\n" +
+    "                               ng-model=\"vm.profileData.zinkerzTeacher\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"znk-input-group\"\n" +
+    "                     ng-class=\"profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid && profileZinkerzTeacherForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                    <label>{{'ADMIN.EMETADATA.SUBJECT' | translate}}</label>\n" +
+    "                    <div class=\"znk-input\">\n" +
+    "                        <input\n" +
+    "                            type=\"text\"\n" +
+    "                            autocomplete=\"on\"\n" +
+    "                            name=\"zinkerzTeacherSubject\"\n" +
+    "                            ng-required=\"true\"\n" +
+    "                            ng-model=\"vm.profileData.zinkerzTeacherSubject\">\n" +
+    "                        <span\n" +
+    "                            ng-if=\"profileZinkerzTeacherForm.$submitted && profileZinkerzTeacherForm.zinkerzTeacherSubject.$invalid\"\n" +
+    "                            role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"profileZinkerzTeacherForm.zinkerzTeacherSubject.$error.required\"\n" +
+    "                              translate=\"MY_PROFILE.REQUIRED_FIELD\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"btn-wrap\">\n" +
+    "                    <button class=\"save-pass-btn\"><span translate=\"MY_PROFILE.SAVE\"></span></button>\n" +
+    "                </div>\n" +
+    "            </form>\n" +
+    "\n" +
+    "            <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
+    "                <div class=\"error-msg\">\n" +
+    "                    <svg-icon name=\"adminProfile-danger-red-icon\" class=\"adminProfile-danger-red-icon\"></svg-icon>\n" +
+    "                    <div translate=\"{{vm.generalError}}\"></div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </md-dialog-content>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/adminDashboard/components/eMetadata/templates/eMetadata.template.html",
+    "<div class=\"admin-dashboard admin-eMetadata\" translate-namespace=\"ADMIN\">\n" +
+    "\n" +
+    "    <div class=\"admin-main-container-overlay\">\n" +
+    "        <div class=\"admin-search-container\">\n" +
+    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
+    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
+    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
+    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/adminDashboard/components/esLink/directives/app-select.template.html",
+    "<div class=\"znk-app-select\">\n" +
+    "    <div class=\"selected-item\" ng-bind=\"vm.selectedApp\"></div>\n" +
+    "    <md-menu md-offset=\"-150 60\">\n" +
+    "        <md-button  ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\"\n" +
+    "                   class=\"md-icon-button profile-open-modal-btn\"\n" +
+    "                   aria-label=\"Open sample menu\">\n" +
+    "            <div></div>\n" +
+    "            <md-icon class=\"material-icons\">{{vm.expandIcon}}</md-icon>\n" +
+    "        </md-button>\n" +
+    "        <md-menu-content class=\"md-menu-content-znk-app-select\">\n" +
+    "            <md-list>\n" +
+    "                <md-list-item md-ink-ripple class=\"app-select-item\">\n" +
+    "                    <span  ng-click=\"vm.selectApp('SAT')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.SAT}\"\n" +
+    "                          ng-bind=\"::vm.appName.SAT\"></span>\n" +
+    "                </md-list-item>\n" +
+    "                <md-list-item\n" +
+    "                    md-ink-ripple\n" +
+    "                    class=\"app-select-item\">\n" +
+    "                    <span ng-click=\"vm.selectApp('ACT')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.ACT}\" ng-bind=\"::vm.appName.ACT\"></span>\n" +
+    "                </md-list-item>\n" +
+    "                <md-list-item\n" +
+    "                    md-ink-ripple\n" +
+    "                    class=\"app-select-item\">\n" +
+    "                    <span ng-click=\"vm.selectApp('TOEFL')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.TOEFL}\" ng-bind=\"::vm.appName.TOEFL\"></span>\n" +
+    "                </md-list-item>\n" +
+    "                <md-list-item\n" +
+    "                    md-ink-ripple\n" +
+    "                    class=\"app-select-item\">\n" +
+    "                    <span ng-click=\"vm.selectApp('SATSM')\" ng-class=\"{'selected':vm.selectedApp===vm.appName.SATSM}\" ng-bind=\"::vm.appName.SATSM\"></span>\n" +
+    "                </md-list-item>\n" +
+    "            </md-list>\n" +
+    "        </md-menu-content>\n" +
+    "    </md-menu>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/adminDashboard/components/esLink/templates/esLink.template.html",
+    "<div class=\"admin-dashboard admin-esLink\" translate-namespace=\"ADMIN\">\n" +
+    "\n" +
+    "    <div class=\"admin-main-container-overlay\">\n" +
+    "        <div class=\"admin-search-container\">\n" +
+    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_STUDENT\"></div>\n" +
+    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}\" data=\"vm.gridStudentsOptions.data\" minlength=\"3\" key=\"student\" state=\"vm.uiGridState\" search-query=\"vm.studentsSearchQuery\" search-results=\"vm.getStudentsSearchResults\"></div>\n" +
+    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
+    "            <div ui-grid-selection ui-grid=\"vm.gridStudentsOptions\" class=\"admin-grid\">\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.student.initial\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <span translate=\"ADMIN.ESLINK.STUDENT_INITIAL_MSG\"></span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.student.noData\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <span>{{'ADMIN.ESLINK.STUDENT_NODATA_MSG' | translate}} '{{vm.studentSearchNoData}}'</span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <hr>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"admin-search-container\">\n" +
+    "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
+    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
+    "\n" +
+    "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
+    "            <div ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\">\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
+    "                        <div class=\"admin-msg-note\" translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG_NOTE\"></div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.noData\">\n" +
+    "                    <div class=\"admin-msg\">\n" +
+    "                        <span>{{'ADMIN.ESLINK.EDUCATOR_NODATA_MSG' | translate}} '{{vm.educatorSearchNoData}}'</span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <hr>\n" +
+    "\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "    <div class=\"esLink-link-container\">\n" +
+    "        <div class=\"esLink-select-container\">\n" +
+    "            <span class=\"esLink-link-text\" translate=\"ADMIN.ESLINK.LINK_MSG\"></span>\n" +
+    "            <app-select current-app=\"vm.currentAppKey\"></app-select>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"btn-wrap\">\n" +
+    "            <button element-loader\n" +
+    "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
+    "                    fill-loader=\"vm.fillLoader\"\n" +
+    "                    show-loader=\"vm.startLoader\"\n" +
+    "                    bg-loader=\"'#037684'\"\n" +
+    "                    precentage=\"50\"\n" +
+    "                    font-color=\"'#FFFFFF'\"\n" +
+    "                    bg=\"'#0a9bad'\"\n" +
+    "                    ng-click=\"vm.link()\"\n" +
+    "                    class=\"md-button link-btn drop-shadow\"\n" +
+    "                    name=\"submit\">\n" +
+    "                <span translate=\"ADMIN.ESLINK.LINK_BTN\"></span>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/adminDashboard/directives/admin-search.template.html",
+    "<div class=\"admin-search-pane\">\n" +
+    "    <div class=\"search-wrap\">\n" +
+    "        <div class=\"znk-input-group\">\n" +
+    "            <input type=\"search\"\n" +
+    "                   minlength=\"{{::vm.minlength}}\"\n" +
+    "                   placeholder=\"{{::vm.placeholder}}\"\n" +
+    "                   name=\"search-box\"\n" +
+    "                   ng-model=\"vm.searchQuery\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <button class=\"admin-search-btn\" ng-click=\"vm.searchResults(vm.searchQuery)\"\n" +
+    "            ng-disabled=\"!vm.searchQuery\" translate=\".SEARCH\">\n" +
+    "    </button>\n" +
+    "\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -1598,139 +1598,139 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
         ["ENV", "$log", "$q", "UtilitySrv", "$window", function (ENV, $log, $q, UtilitySrv, $window) {
             'ngInject';
 
-            function _updateAwsConfig(config, options) {
-                options = options || {};
-                config = config || false;
+         function _updateAwsConfig(config, options) {
+            options = options || {}; 
+            config = config || false;
 
-                if (!config) {
-                    config = {
-                        region: options.region || ENV.s3Region || 'us-east-1',
-                        credentials: new AWS.CognitoIdentityCredentials({
-                            IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
-                        }),
-                    };
-                }
+            if (!config) {
+               config = {
+                   region: options.region || ENV.s3Region || 'us-east-1',
+                   credentials: new AWS.CognitoIdentityCredentials({
+                       IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
+                   }),
+               };
+            } 
 
-                $window.AWS.config.update(config);
+            $window.AWS.config.update(config);
+         }  
+
+         function _init() {
+              _updateAwsConfig();
+         }   
+           
+         _init();
+
+          function _generateFileName() {
+             return UtilitySrv.general.createGuid();  
+          } 
+
+          function _getFile(blob, fileName) {
+              return new $window.File([blob], fileName);
+          }
+
+          function _addSlashToPath(prefixPath) {
+              var prefixPathLength = prefixPath.length;
+
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
+
+              if (lastChar === '/') {
+                  return prefixPath;
+              }
+
+              return prefixPath + '/';
+          }
+
+          function _getFilePath(prefixPath, file) {
+             return _addSlashToPath(prefixPath) + file.name;
+          }
+
+          function updateConfig(options, config) {
+              _updateAwsConfig(options, config);
+          }
+
+          function AwsS3(options) {
+              options = options || {};
+
+              if (!angular.isObject(options) || angular.isArray(options)) {
+                  $log.error('AwsSrv Bucket newS3: options must be an object!!');
+                  return;
+              }
+
+              this.bucketName = options.bucketName || ENV.s3InMedieBucketName || 'inmedia.zinkerz.com';
+
+              this.filesNames = [];
+
+              this.bucketInstance = new $window.AWS.S3({ 
+                   params: {
+                      Bucket: this.bucketName
+                   }
+              });
+          }
+         
+        AwsS3.prototype.upload = function(options) {
+            var deferred = $q.defer();
+            var errMsg;
+            var self = this;
+
+            if (!angular.isObject(options) || angular.isArray(options)) {
+                  errMsg = 'AwsSrv AwsS3 upload: options must be an object!! ie: { blob: blob}';
+                  $log.error(errMsg);
+                  deferred.reject(errMsg);
+                  return;
             }
 
-            function _init() {
-                _updateAwsConfig();
+            var blobOption = options.blob;
+            var fileOption = options.file;
+
+            if (!blobOption && !fileOption) {
+                  errMsg = 'AwsSrv AwsS3 upload: options must contian blob or file option!';
+                  $log.error(errMsg);
+                  deferred.reject(errMsg);
+                  return;
             }
+            
+            var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
+            var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
+            var filePath = _getFilePath(options.prefixPath, file);
 
-            _init();
-
-            function _generateFileName() {
-                return UtilitySrv.general.createGuid();
-            }
-
-            function _getFile(blob, fileName) {
-                return new $window.File([blob], fileName);
-            }
-
-            function _addSlashToPath(prefixPath) {
-                var prefixPathLength = prefixPath.length;
-
-                var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength);
-
-                if (lastChar === '/') {
-                    return prefixPath;
-                }
-
-                return prefixPath + '/';
-            }
-
-            function _getFilePath(prefixPath, file) {
-                return _addSlashToPath(prefixPath) + file.name;
-            }
-
-            function updateConfig(options, config) {
-                _updateAwsConfig(options, config);
-            }
-
-            function AwsS3(options) {
-                options = options || {};
-
-                if (!angular.isObject(options) || angular.isArray(options)) {
-                    $log.error('AwsSrv Bucket newS3: options must be an object!!');
-                    return;
-                }
-
-                this.bucketName = options.bucketName || ENV.s3InMedieBucketName || 'inmedia.zinkerz.com';
-
-                this.filesNames = [];
-
-                this.bucketInstance = new $window.AWS.S3({
-                    params: {
-                        Bucket: this.bucketName
-                    }
-                });
-            }
-
-            AwsS3.prototype.upload = function(options) {
-                var deferred = $q.defer();
-                var errMsg;
-                var self = this;
-
-                if (!angular.isObject(options) || angular.isArray(options)) {
-                    errMsg = 'AwsSrv AwsS3 upload: options must be an object!! ie: { blob: blob}';
-                    $log.error(errMsg);
-                    deferred.reject(errMsg);
-                    return;
-                }
-
-                var blobOption = options.blob;
-                var fileOption = options.file;
-
-                if (!blobOption && !fileOption) {
-                    errMsg = 'AwsSrv AwsS3 upload: options must contian blob or file option!';
-                    $log.error(errMsg);
-                    deferred.reject(errMsg);
-                    return;
-                }
-
-                var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
-                var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
-                var filePath = _getFilePath(options.prefixPath, file);
-
-                var params = {
-                    Key: filePath,
-                    ContentType: file.type,
-                    Body: file,
-                    ACL: options.ACL || 'public-read'
-                };
-
-                this.bucketInstance.putObject(params, function(err, data) {
-                    if (err) {
-                        deferred.reject(err);
-                    } else {
-                        self.filesNames.push(fileName);
-
-                        deferred.resolve(data);
-                    }
-                });
-
-                return deferred.promise;
+            var params = {
+                Key: filePath,
+                ContentType: file.type,
+                Body: file,
+                ACL: options.ACL || 'public-read'
             };
 
-            AwsS3.prototype.getCurrentFileName = function() {
-                var filesLength = this.filesNames.length;
+            this.bucketInstance.putObject(params, function(err, data) {
+                if (err) {
+                     deferred.reject(err);
+                } else {
+                     self.filesNames.push(fileName);
 
-                if (filesLength) {
-                    return this.filesNames[filesLength - 1];
+                     deferred.resolve(data);
                 }
+            });
 
-                return false;
-            };
+            return deferred.promise;
+        };  
 
-            this.updateConfig = updateConfig;
+        AwsS3.prototype.getCurrentFileName = function() {
+            var filesLength = this.filesNames.length;
 
-            // factory for aws bucket instances
-            this.newAwsS3 = function (options) {
-                return new AwsS3(options);
-            };
+            if (filesLength) {
+                return this.filesNames[filesLength - 1];
+            }
 
-        }]
+            return false;
+        };
+
+        this.updateConfig = updateConfig;
+
+        // factory for aws bucket instances 
+        this.newAwsS3 = function (options) {
+            return new AwsS3(options);   
+        };
+
+      }]
     );
 })(angular);
 
@@ -1808,8 +1808,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 settings: '<'
             },
             controller: ["$log", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "BaseExerciseGetterSrv", "CompleteExerciseSrv", "ExerciseParentEnum", "$timeout", "ScreenSharingSrv", "UserScreenSharingStateEnum", "ZnkModuleService", "EventManagerSrv", "LoadingSrv", "CategoryService", function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                                                                                                                                                                                                                                                                                                      ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum, ZnkModuleService,
-                                                                                                                                                                                                                                                                                                      EventManagerSrv, LoadingSrv, CategoryService) {
+                                  ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum, ZnkModuleService,
+                                  EventManagerSrv, LoadingSrv, CategoryService) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -2186,7 +2186,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 completeExerciseCtrl: '^completeExercise'
             },
             controller: ["$controller", "CompleteExerciseSrv", "$q", "$translate", "PopUpSrv", "InfraConfigSrv", "$scope", "UserProfileService", "ScreenSharingSrv", "ExerciseTypeEnum", "StatsEventsHandlerSrv", "exerciseEventsConst", "$rootScope", "ZnkExerciseViewModeEnum", function ($controller, CompleteExerciseSrv, $q, $translate, PopUpSrv, InfraConfigSrv, $scope, UserProfileService, ScreenSharingSrv, ExerciseTypeEnum,
-                                                                                                                                                                                                                                                                                            StatsEventsHandlerSrv, exerciseEventsConst, $rootScope, ZnkExerciseViewModeEnum) {
+                                  StatsEventsHandlerSrv, exerciseEventsConst, $rootScope, ZnkExerciseViewModeEnum) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -2444,8 +2444,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                                                                                                                                                                                                                                                                                                                                                                            $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                                                                                                                                                                                                                                                                                                                                                                            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
+            $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -2711,9 +2711,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                                     settings.actions.reviewAction();
                                 }
                             })
-                                .catch(function (err){
-                                    $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
-                                });
+                            .catch(function (err){
+                                $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
+                            });
                         }
                     };
 
@@ -2840,7 +2840,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 this.$onInit = function(){
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
-
+                    
                     this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.categoryId, exerciseContent.categoryId2]);
 
                     this.exerciseContent = exerciseContent;
@@ -3033,7 +3033,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
         ["ENV", "UserProfileService", "TeacherContextSrv", "ExerciseTypeEnum", "ExerciseResultSrv", "$log", "$q", function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
-                                                                                                                            $log, $q) {
+                  $log, $q) {
             'ngInject';
 
             this.VIEW_STATES = {
@@ -3071,11 +3071,11 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                 var dontInit = false;
                 return ExerciseResultSrv.getExerciseResult(
-                    exerciseDetails.exerciseTypeId,
-                    exerciseDetails.exerciseId,
-                    exerciseDetails.examId,
-                    exerciseDetails.examSectionsNum,
-                    dontInit,
+                    exerciseDetails.exerciseTypeId, 
+                    exerciseDetails.exerciseId, 
+                    exerciseDetails.examId, 
+                    exerciseDetails.examSectionsNum, 
+                    dontInit, 
                     exerciseDetails.exerciseParentId);
             };
         }]
@@ -3097,22 +3097,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {
+                exerciseCycleSrv.invoke = function (methodName, data) {                    
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {
+                    if (angular.isDefined(hook)) {                      
                         try {
-                            fn = $injector.invoke(hook);
+                            fn = $injector.invoke(hook);         
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-
+                        
                         return fn.apply(null, data);
-                    }
+                    } 
                 };
 
                 return exerciseCycleSrv;
@@ -3122,206 +3122,206 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 })(angular);
 
 angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
-        "<svg\n" +
-        "    version=\"1.1\"\n" +
-        "    x=\"0px\" y=\"0px\"\n" +
-        "    viewBox=\"-246.4 90.8 76.2 73.6\"\n" +
-        "    class=\"book-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "    .book-icon-svg .st0{\n" +
-        "        fill:none;\n" +
-        "        stroke:#231F20;\n" +
-        "        stroke-width:1.6393;\n" +
-        "        stroke-miterlimit:10;\n" +
-        "    }\n" +
-        "    .tutorial-icon .st1{\n" +
-        "        fill:none;\n" +
-        "        stroke:#231F20;\n" +
-        "        stroke-width:1.8504;\n" +
-        "        stroke-linecap:round;\n" +
-        "        stroke-miterlimit:10;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<g>\n" +
-        "		<path class=\"st0\" d=\"M-245.5,91.6v62h26.5c0,0,10.4-0.8,10.7,9c0.3,9.8,0-63.7,0-63.7s-1.1-7.4-9.3-7.4\n" +
-        "			C-225.9,91.6-245.5,91.6-245.5,91.6z\"/>\n" +
-        "		<path class=\"st0\" d=\"M-171,91.6v62h-26.5c0,0-10.4-0.8-10.7,9c-0.3,9.8,0-63.7,0-63.7s1.1-7.4,9.3-7.4\n" +
-        "			C-190.7,91.6-171,91.6-171,91.6z\"/>\n" +
-        "	</g>\n" +
-        "	<g>\n" +
-        "		<line class=\"st1\" x1=\"-238.2\" y1=\"105.9\" x2=\"-216.7\" y2=\"105.9\"/>\n" +
-        "		<line class=\"st1\" x1=\"-238.2\" y1=\"117.7\" x2=\"-216.7\" y2=\"117.7\"/>\n" +
-        "		<line class=\"st1\" x1=\"-238.2\" y1=\"129.5\" x2=\"-216.7\" y2=\"129.5\"/>\n" +
-        "		<line class=\"st1\" x1=\"-238.2\" y1=\"141.4\" x2=\"-216.7\" y2=\"141.4\"/>\n" +
-        "	</g>\n" +
-        "	<g>\n" +
-        "		<line class=\"st1\" x1=\"-199.9\" y1=\"105.9\" x2=\"-178.3\" y2=\"105.9\"/>\n" +
-        "		<line class=\"st1\" x1=\"-199.9\" y1=\"117.7\" x2=\"-178.3\" y2=\"117.7\"/>\n" +
-        "		<line class=\"st1\" x1=\"-199.9\" y1=\"129.5\" x2=\"-178.3\" y2=\"129.5\"/>\n" +
-        "		<line class=\"st1\" x1=\"-199.9\" y1=\"141.4\" x2=\"-178.3\" y2=\"141.4\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html",
-        "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
-        "    <ng-switch on=\"$ctrl.currViewState\"\n" +
-        "               class=\"main-container\">\n" +
-        "        <div ng-switch-when=\"1\" class=\"animate-view-state\">\n" +
-        "            <complete-exercise-intro></complete-exercise-intro>\n" +
-        "        </div>\n" +
-        "        <div ng-switch-when=\"2\" class=\"animate-view-state\">\n" +
-        "            <complete-exercise-exercise></complete-exercise-exercise>\n" +
-        "        </div>\n" +
-        "        <div ng-switch-when=\"3\" class=\"animate-view-state\">\n" +
-        "            <complete-exercise-summary></complete-exercise-summary>\n" +
-        "        </div>\n" +
-        "    </ng-switch>\n" +
-        "</div>\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/completeExercise/directives/completeExerciseExercise/completeExerciseExerciseDirective.template.html",
-        "<div class=\"base-complete-exercise-container\">\n" +
-        "    <complete-exercise-header>\n" +
-        "        <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>\n" +
-        "        <pre-right-part>\n" +
-        "            <timer ng-if=\"$ctrl.timeEnabled &&\n" +
-        "                   $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum\"\n" +
-        "                   ng-model=\"$ctrl.znkExercise.exerciseResult.duration\"\n" +
-        "                   complete-exercise-timer-parser\n" +
-        "                   type=\"1\"\n" +
-        "                   play=\"true\"\n" +
-        "                   config=\"$ctrl.timerConfig\"\n" +
-        "                   ng-change=\"$ctrl.durationChanged()\">\n" +
-        "            </timer>\n" +
-        "            <div class=\"tutorial-icon-wrapper\" ng-if=\"$ctrl.completeExerciseCtrl.exerciseDetails.exerciseTypeId === 1\">\n" +
-        "                <svg-icon ng-click=\"$ctrl.openIntro()\" name=\"completeExercise-book-icon\" class=\"book-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "            <div class=\"summary\"\n" +
-        "                 ng-click=\"$ctrl.goToSummary()\"\n" +
-        "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete && $ctrl.znkExercise.exerciseResult.exerciseTypeId !== $ctrl.ExerciseTypeEnum.LECTURE.enum\">\n" +
-        "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
-        "                <div class=\"background-opacity\"></div>\n" +
-        "            </div>\n" +
-        "        </pre-right-part>\n" +
-        "    </complete-exercise-header>\n" +
-        "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled &&\n" +
-        "                                    $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum\"\n" +
-        "                                    total-time=\"{{$ctrl.znkExercise.exerciseContent.time}}\"\n" +
-        "                                    duration=\"$ctrl.znkExercise.exerciseResult.duration\">\n" +
-        "    </complete-exercise-progress-bar>\n" +
-        "    <znk-exercise questions=\"$ctrl.znkExercise.exerciseContent.questions\"\n" +
-        "                  ng-model=\"$ctrl.znkExercise.exerciseResult.questionResults\"\n" +
-        "                  settings=\"$ctrl.znkExercise.settings\"\n" +
-        "                  actions=\"$ctrl.znkExercise.actions\">\n" +
-        "    </znk-exercise>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/completeExercise/directives/completeExerciseHeader/completeExerciseHeaderDirective.template.html",
-        "<div class=\"header-container\"\n" +
-        "     translate-namespace=\"COMPLETE_EXERCISE\"\n" +
-        "     subject-id-to-attr-drv=\"$ctrl.exerciseSubjectId\"\n" +
-        "     context-attr=\"class,class\"\n" +
-        "     suffix=\"bg,subject-pattern\">\n" +
-        "    <div class=\"left-part\">\n" +
-        "        <div class=\"left-title\" ng-bind-html=\"$ctrl.leftTitle\" title=\"{{$ctrl.leftTitle}}\"></div>\n" +
-        "    </div>\n" +
-        "    <div class=\"center-part\">\n" +
-        "        <div ng-transclude=\"centerPart\"></div>\n" +
-        "    </div>\n" +
-        "    <div class=\"right-part\">\n" +
-        "        <div ng-transclude=\"preRightPart\"></div>\n" +
-        "        <div class=\"exit\"\n" +
-        "             translate=\".EXIT\"\n" +
-        "             ng-if=\"!$ctrl.completeExerciseCtrl.exerciseDetails.hideQuit\"\n" +
-        "             ng-click=\"$ctrl.completeExerciseCtrl.settings.exitAction()\">\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/completeExercise/directives/completeExerciseIntro/completeExerciseIntroDirective.template.html",
-        "<div class=\"base-complete-exercise-container\">\n" +
-        "    <complete-exercise-header></complete-exercise-header>\n" +
-        "    <ng-switch on=\"$ctrl.exerciseTypeId\" class=\"intro-container\" image-zoomer>\n" +
-        "        <complete-exercise-intro-tutorial ng-switch-when=\"1\">\n" +
-        "        </complete-exercise-intro-tutorial>\n" +
-        "        <complete-exercise-intro-section ng-switch-when=\"4\">\n" +
-        "        </complete-exercise-intro-section>\n" +
-        "    </ng-switch>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSectionDirective.template.html",
-        "<div class=\"intro-container\"\n" +
-        "     translate-namespace=\"COMPLETE_EXERCISE\">\n" +
-        "    <div class=\"title\" ng-bind=\"$ctrl.exerciseParentContent.name\"></div>\n" +
-        "    <svg-icon subject-id-to-attr-drv=\"$ctrl.exerciseSubjectId\"\n" +
-        "              context-attr=\"name\"\n" +
-        "              suffix=\"icon\"\n" +
-        "              class=\"subject-icon\">\n" +
-        "    </svg-icon>\n" +
-        "   <div class=\"subject-text\" translate=\"{{$ctrl.subjectNameTranslateKey}}\"></div>\n" +
-        "\n" +
-        "\n" +
-        "    <div class=\"section-data\">\n" +
-        "        <span translate=\".QUESTIONS\"\n" +
-        "              translate-values=\"{num: $ctrl.exerciseContent.questions.length}\">\n" +
-        "        </span>\n" +
-        "        <span translate=\".TIME\"\n" +
-        "              translate-values=\"$ctrl.timeTranslateValue\">\n" +
-        "        </span>\n" +
-        "    </div>\n" +
-        "    <div class=\"instructions-title\"\n" +
-        "         translate=\".INSTRUCTIONS\">\n" +
-        "    </div>\n" +
-        "    <p class=\"instructions-text\"\n" +
-        "       translate=\"{{$ctrl.instructionsTranslateKey}}\">\n" +
-        "    </p>\n" +
-        "\n" +
-        "    <div class=\"btn-section\">\n" +
-        "        <md-button class=\"md-primary znk\"\n" +
-        "                   aria-label=\"{{'COMPLETE_EXERCISE.START' | translate}}\"\n" +
-        "                   md-no-ink\n" +
-        "                   translate=\".START\"\n" +
-        "                   ng-click=\"$ctrl.start()\">\n" +
-        "        </md-button>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorialDirective.template.html",
-        "<div class=\"intro-container\">\n" +
-        "    <div class=\"upper-wrapper\">\n" +
-        "        <div class=\"video-wrapper\">\n" +
-        "            <video controls\n" +
-        "                   video-ctrl-drv\n" +
-        "                   on-play=\"vm.onVideoPlay()\"\n" +
-        "                   on-ended=\"vm.onVideoEnded()\"\n" +
-        "                   video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
-        "                <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
-        "            </video>\n" +
-        "        </div>\n" +
-        "        <div class=\"content-wrapper\">\n" +
-        "            <div ng-repeat=\"content in $ctrl.exerciseContent.content\">\n" +
-        "                <div ng-bind-html=\"::$ctrl.trustAsHtml(content.title)\"></div>\n" +
-        "                <div ng-bind-html=\"::$ctrl.trustAsHtml(content.body)\"></div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div ng-if=\"$ctrl.showBtn\" class=\"btn-section\">\n" +
-        "        <md-button class=\"md-primary znk go-to-questions-btn\"\n" +
-        "                   aria-label=\"{{'COMPLETE_EXERCISE.GO_QST' | translate}}\"\n" +
-        "                   md-no-ink\n" +
-        "                   translate=\".GO_QST\"\n" +
-        "                   ng-click=\"$ctrl.goToQuestions()\">\n" +
-        "        </md-button>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBarDirective.template.html",
-        "<div class=\"progress-bar\"></div>\n" +
-        "\n" +
-        "");
+  $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
+    "<svg\n" +
+    "    version=\"1.1\"\n" +
+    "    x=\"0px\" y=\"0px\"\n" +
+    "    viewBox=\"-246.4 90.8 76.2 73.6\"\n" +
+    "    class=\"book-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .book-icon-svg .st0{\n" +
+    "        fill:none;\n" +
+    "        stroke:#231F20;\n" +
+    "        stroke-width:1.6393;\n" +
+    "        stroke-miterlimit:10;\n" +
+    "    }\n" +
+    "    .tutorial-icon .st1{\n" +
+    "        fill:none;\n" +
+    "        stroke:#231F20;\n" +
+    "        stroke-width:1.8504;\n" +
+    "        stroke-linecap:round;\n" +
+    "        stroke-miterlimit:10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path class=\"st0\" d=\"M-245.5,91.6v62h26.5c0,0,10.4-0.8,10.7,9c0.3,9.8,0-63.7,0-63.7s-1.1-7.4-9.3-7.4\n" +
+    "			C-225.9,91.6-245.5,91.6-245.5,91.6z\"/>\n" +
+    "		<path class=\"st0\" d=\"M-171,91.6v62h-26.5c0,0-10.4-0.8-10.7,9c-0.3,9.8,0-63.7,0-63.7s1.1-7.4,9.3-7.4\n" +
+    "			C-190.7,91.6-171,91.6-171,91.6z\"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"105.9\" x2=\"-216.7\" y2=\"105.9\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"117.7\" x2=\"-216.7\" y2=\"117.7\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"129.5\" x2=\"-216.7\" y2=\"129.5\"/>\n" +
+    "		<line class=\"st1\" x1=\"-238.2\" y1=\"141.4\" x2=\"-216.7\" y2=\"141.4\"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"105.9\" x2=\"-178.3\" y2=\"105.9\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"117.7\" x2=\"-178.3\" y2=\"117.7\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"129.5\" x2=\"-178.3\" y2=\"129.5\"/>\n" +
+    "		<line class=\"st1\" x1=\"-199.9\" y1=\"141.4\" x2=\"-178.3\" y2=\"141.4\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html",
+    "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
+    "    <ng-switch on=\"$ctrl.currViewState\"\n" +
+    "               class=\"main-container\">\n" +
+    "        <div ng-switch-when=\"1\" class=\"animate-view-state\">\n" +
+    "            <complete-exercise-intro></complete-exercise-intro>\n" +
+    "        </div>\n" +
+    "        <div ng-switch-when=\"2\" class=\"animate-view-state\">\n" +
+    "            <complete-exercise-exercise></complete-exercise-exercise>\n" +
+    "        </div>\n" +
+    "        <div ng-switch-when=\"3\" class=\"animate-view-state\">\n" +
+    "            <complete-exercise-summary></complete-exercise-summary>\n" +
+    "        </div>\n" +
+    "    </ng-switch>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/completeExercise/directives/completeExerciseExercise/completeExerciseExerciseDirective.template.html",
+    "<div class=\"base-complete-exercise-container\">\n" +
+    "    <complete-exercise-header>\n" +
+    "        <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>\n" +
+    "        <pre-right-part>\n" +
+    "            <timer ng-if=\"$ctrl.timeEnabled &&\n" +
+    "                   $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum\"\n" +
+    "                   ng-model=\"$ctrl.znkExercise.exerciseResult.duration\"\n" +
+    "                   complete-exercise-timer-parser\n" +
+    "                   type=\"1\"\n" +
+    "                   play=\"true\"\n" +
+    "                   config=\"$ctrl.timerConfig\"\n" +
+    "                   ng-change=\"$ctrl.durationChanged()\">\n" +
+    "            </timer>\n" +
+    "            <div class=\"tutorial-icon-wrapper\" ng-if=\"$ctrl.completeExerciseCtrl.exerciseDetails.exerciseTypeId === 1\">\n" +
+    "                <svg-icon ng-click=\"$ctrl.openIntro()\" name=\"completeExercise-book-icon\" class=\"book-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "            <div class=\"summary\"\n" +
+    "                 ng-click=\"$ctrl.goToSummary()\"\n" +
+    "                 ng-if=\"$ctrl.znkExercise.exerciseResult.isComplete && $ctrl.znkExercise.exerciseResult.exerciseTypeId !== $ctrl.ExerciseTypeEnum.LECTURE.enum\">\n" +
+    "                <span translate=\".SUMMARY\" class=\"summary-text\"></span>\n" +
+    "                <div class=\"background-opacity\"></div>\n" +
+    "            </div>\n" +
+    "        </pre-right-part>\n" +
+    "    </complete-exercise-header>\n" +
+    "    <complete-exercise-progress-bar ng-if=\"$ctrl.timeEnabled &&\n" +
+    "                                    $ctrl.znkExercise.settings.viewMode !== $ctrl.znkExerciseViewModeEnum.REVIEW.enum\"\n" +
+    "                                    total-time=\"{{$ctrl.znkExercise.exerciseContent.time}}\"\n" +
+    "                                    duration=\"$ctrl.znkExercise.exerciseResult.duration\">\n" +
+    "    </complete-exercise-progress-bar>\n" +
+    "    <znk-exercise questions=\"$ctrl.znkExercise.exerciseContent.questions\"\n" +
+    "                  ng-model=\"$ctrl.znkExercise.exerciseResult.questionResults\"\n" +
+    "                  settings=\"$ctrl.znkExercise.settings\"\n" +
+    "                  actions=\"$ctrl.znkExercise.actions\">\n" +
+    "    </znk-exercise>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/completeExercise/directives/completeExerciseHeader/completeExerciseHeaderDirective.template.html",
+    "<div class=\"header-container\"\n" +
+    "     translate-namespace=\"COMPLETE_EXERCISE\"\n" +
+    "     subject-id-to-attr-drv=\"$ctrl.exerciseSubjectId\"\n" +
+    "     context-attr=\"class,class\"\n" +
+    "     suffix=\"bg,subject-pattern\">\n" +
+    "    <div class=\"left-part\">\n" +
+    "        <div class=\"left-title\" ng-bind-html=\"$ctrl.leftTitle\" title=\"{{$ctrl.leftTitle}}\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"center-part\">\n" +
+    "        <div ng-transclude=\"centerPart\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"right-part\">\n" +
+    "        <div ng-transclude=\"preRightPart\"></div>\n" +
+    "        <div class=\"exit\"\n" +
+    "             translate=\".EXIT\"\n" +
+    "             ng-if=\"!$ctrl.completeExerciseCtrl.exerciseDetails.hideQuit\"\n" +
+    "             ng-click=\"$ctrl.completeExerciseCtrl.settings.exitAction()\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntro/completeExerciseIntroDirective.template.html",
+    "<div class=\"base-complete-exercise-container\">\n" +
+    "    <complete-exercise-header></complete-exercise-header>\n" +
+    "    <ng-switch on=\"$ctrl.exerciseTypeId\" class=\"intro-container\" image-zoomer>\n" +
+    "        <complete-exercise-intro-tutorial ng-switch-when=\"1\">\n" +
+    "        </complete-exercise-intro-tutorial>\n" +
+    "        <complete-exercise-intro-section ng-switch-when=\"4\">\n" +
+    "        </complete-exercise-intro-section>\n" +
+    "    </ng-switch>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSectionDirective.template.html",
+    "<div class=\"intro-container\"\n" +
+    "     translate-namespace=\"COMPLETE_EXERCISE\">\n" +
+    "    <div class=\"title\" ng-bind=\"$ctrl.exerciseParentContent.name\"></div>\n" +
+    "    <svg-icon subject-id-to-attr-drv=\"$ctrl.exerciseSubjectId\"\n" +
+    "              context-attr=\"name\"\n" +
+    "              suffix=\"icon\"\n" +
+    "              class=\"subject-icon\">\n" +
+    "    </svg-icon>\n" +
+    "   <div class=\"subject-text\" translate=\"{{$ctrl.subjectNameTranslateKey}}\"></div>\n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"section-data\">\n" +
+    "        <span translate=\".QUESTIONS\"\n" +
+    "              translate-values=\"{num: $ctrl.exerciseContent.questions.length}\">\n" +
+    "        </span>\n" +
+    "        <span translate=\".TIME\"\n" +
+    "              translate-values=\"$ctrl.timeTranslateValue\">\n" +
+    "        </span>\n" +
+    "    </div>\n" +
+    "    <div class=\"instructions-title\"\n" +
+    "         translate=\".INSTRUCTIONS\">\n" +
+    "    </div>\n" +
+    "    <p class=\"instructions-text\"\n" +
+    "       translate=\"{{$ctrl.instructionsTranslateKey}}\">\n" +
+    "    </p>\n" +
+    "\n" +
+    "    <div class=\"btn-section\">\n" +
+    "        <md-button class=\"md-primary znk\"\n" +
+    "                   aria-label=\"{{'COMPLETE_EXERCISE.START' | translate}}\"\n" +
+    "                   md-no-ink\n" +
+    "                   translate=\".START\"\n" +
+    "                   ng-click=\"$ctrl.start()\">\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorialDirective.template.html",
+    "<div class=\"intro-container\">\n" +
+    "    <div class=\"upper-wrapper\">\n" +
+    "        <div class=\"video-wrapper\">\n" +
+    "            <video controls\n" +
+    "                   video-ctrl-drv\n" +
+    "                   on-play=\"vm.onVideoPlay()\"\n" +
+    "                   on-ended=\"vm.onVideoEnded()\"\n" +
+    "                   video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
+    "                <source ng-src=\"{{::$ctrl.videoSrc}}\" type=\"video/mp4\">\n" +
+    "            </video>\n" +
+    "        </div>\n" +
+    "        <div class=\"content-wrapper\">\n" +
+    "            <div ng-repeat=\"content in $ctrl.exerciseContent.content\">\n" +
+    "                <div ng-bind-html=\"::$ctrl.trustAsHtml(content.title)\"></div>\n" +
+    "                <div ng-bind-html=\"::$ctrl.trustAsHtml(content.body)\"></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div ng-if=\"$ctrl.showBtn\" class=\"btn-section\">\n" +
+    "        <md-button class=\"md-primary znk go-to-questions-btn\"\n" +
+    "                   aria-label=\"{{'COMPLETE_EXERCISE.GO_QST' | translate}}\"\n" +
+    "                   md-no-ink\n" +
+    "                   translate=\".GO_QST\"\n" +
+    "                   ng-click=\"$ctrl.goToQuestions()\">\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBarDirective.template.html",
+    "<div class=\"progress-bar\"></div>\n" +
+    "\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -3357,7 +3357,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-
+        
     ]);
 })(angular);
 
@@ -3513,12 +3513,12 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
                                     if (!sectionResult.questionResults.length) {
                                         sectionResult.questionResults = diagnosticSettings.isFixed ? section.questions.map(function (question) {
-                                                return {
-                                                    questionId: question.id,
-                                                    categoryId: question.categoryId,
-                                                    categoryId2: question.categoryId2
-                                                };
-                                            }) : [];
+                                            return {
+                                                questionId: question.id,
+                                                categoryId: question.categoryId,
+                                                categoryId2: question.categoryId2
+                                            };
+                                        }) : [];
                                         sectionResult.duration = 0;
                                     }
 
@@ -3637,13 +3637,13 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.diagnosticExercise')
         .controller('WorkoutsDiagnosticController', ["$state", "currentState", function($state, currentState) {
-            'ngInject';
+        'ngInject';
 
-            var EXAM_STATE = 'app.diagnostic';
+        var EXAM_STATE = 'app.diagnostic';
 
 
-            $state.go(EXAM_STATE + currentState.state, currentState.params);
-        }]);
+        $state.go(EXAM_STATE + currentState.state, currentState.params);
+    }]);
 })(angular);
 
 
@@ -3654,9 +3654,9 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
-                                                                                                                                                                                                                                                                                                                                                                                                                                    $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                                                                                                                                                                                                                                                                                                                                                                                                                                    $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                                                                                                                                                                                                                                                                                                                                                                                                                                    $translate, ExerciseReviewStatusEnum, CategoryService) {
+                  $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
             this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
@@ -3987,7 +3987,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
         ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv, $translate, $filter, $rootScope) {
-            'ngInject';
+        'ngInject';
             var vm = this;
 
             vm.params = WorkoutsDiagnosticFlow.getCurrentState().params;
@@ -4032,7 +4032,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             $rootScope.$on('$translateChangeSuccess', function () {
                 _setHeaderTitle();
             });
-        }]);
+    }]);
 })(angular);
 
 (function (angular) {
@@ -4040,7 +4040,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
         ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log) {
-            'ngInject';
+        'ngInject';
 
             var self = this;
 
@@ -4153,7 +4153,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             purchaseService.hasProVersion().then(function (isPro) {
                 self.showUpgradeBtn = !isPro && diagnosticSettings.summary && diagnosticSettings.summary.showUpgradeBtn;
             });
-        }]);
+    }]);
 })(angular);
 
 (function (angular) {
@@ -4537,182 +4537,182 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
 
 angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 329.5 223.7\"\n" +
-        "	 class=\"diagnostic-check-mark-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .diagnostic-check-mark-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #ffffff;\n" +
-        "            stroke-width: 21;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-        "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/diagnosticExercise/svg/dropdown-arrow.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/diagnosticExercise/svg/flag-icon.svg",
-        "<svg x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"-145 277 60 60\"\n" +
-        "	 class=\"flag-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .flag-svg .st0 {\n" +
-        "            fill: #ffffff;\n" +
-        "            stroke-width: 5;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "            width:25px;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g id=\"kUxrE9.tif\">\n" +
-        "	<g>\n" +
-        "		<path class=\"st0\" id=\"XMLID_93_\" d=\"M-140.1,287c0.6-1.1,1.7-1.7,2.9-1.4c1.3,0.3,2,1.1,2.3,2.3c1.1,4,2.1,8,3.2,12c2.4,9.3,4.9,18.5,7.3,27.8\n" +
-        "			c0.1,0.3,0.2,0.6,0.2,0.9c0.3,1.7-0.6,3-2.1,3.3c-1.4,0.3-2.8-0.5-3.3-2.1c-1-3.6-2-7.3-2.9-10.9c-2.5-9.5-5-19-7.6-28.6\n" +
-        "			C-140.1,290-140.8,288.3-140.1,287z\"/>\n" +
-        "		<path class=\"st0\" id=\"XMLID_92_\" d=\"M-89.6,289.1c-1,6.8-2.9,13-10,16c-3.2,1.4-6.5,1.6-9.9,0.9c-2-0.4-4-0.7-6-0.6c-4.2,0.3-7.1,2.7-9,6.4\n" +
-        "			c-0.3,0.5-0.5,1.1-0.9,2c-0.3-1-0.5-1.7-0.8-2.5c-2-7-3.9-14.1-5.9-21.2c-0.3-1-0.1-1.7,0.5-2.4c4.5-6,11-7.4,17.5-3.6\n" +
-        "			c3.4,2,6.7,4.2,10.2,6.1c1.9,1,3.9,1.9,5.9,2.4c3.2,0.9,5.9,0,7.9-2.6C-90,289.7-89.8,289.4-89.6,289.1z\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnostic.template.html",
-        "<div class=\"app-workouts-diagnostic\">\n" +
-        "    <ui-view class=\"exercise-container base-border-radius base-box-shadow\"></ui-view>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html",
-        "<znk-exercise-header\n" +
-        "    subject-id=\"vm.subjectId\"\n" +
-        "    side-text=\"vm.headerTitle\"\n" +
-        "    options=\"{ showQuit: true, showNumSlide: true }\"\n" +
-        "    on-clicked-quit=\"vm.onClickedQuit()\"\n" +
-        "    ng-model=\"vm.numSlide\"\n" +
-        "    total-slide-num=\"{{vm.questionsPerSubject}}\"></znk-exercise-header>\n" +
-        "<znk-exercise\n" +
-        "    questions=\"vm.questions\"\n" +
-        "    ng-model=\"vm.resultsData.questionResults\"\n" +
-        "    settings=\"vm.settings\"\n" +
-        "    actions=\"vm.actions\"\n" +
-        "    audio-manager=\"vm.resultsForAudioManager\">\n" +
-        "</znk-exercise>\n" +
-        "");
-    $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html",
-        "<znk-exercise-header\n" +
-        "    subject-id=\"vm.params.subjectId\"\n" +
-        "    side-text=\"vm.headerTitle\"\n" +
-        "    options=\"{ showQuit: true }\"\n" +
-        "    on-clicked-quit=\"vm.onClickedQuit()\">\n" +
-        "</znk-exercise-header>\n" +
-        "<diagnostic-intro show-instructions=\"true\"></diagnostic-intro>\n" +
-        "<div class=\"btn-wrap\">\n" +
-        "    <button autofocus tabindex=\"1\" class=\"md-button znk md-primary\" ng-click=\"vm.goToExercise()\" translate=\"{{::vm.buttonTitle}}\" aria-label=\"{{::vm.buttonTitle}}\">\n" +
-        "        <svg-icon name=\"diagnostic-dropdown-arrow-icon\"></svg-icon>\n" +
-        "    </button>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html",
-        "<div class=\"diagnostic-loading-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_PRE_SUMMARY\">\n" +
-        "    <p class=\"loading-title\" translate=\".READY\"></p>\n" +
-        "    <div class=\"video-wrapper\">\n" +
-        "        <video loop autoplay\n" +
-        "               preload=\"auto\"\n" +
-        "               poster=\"/assets/images/poster/diagnostic-pre-summary.png\">\n" +
-        "            <source src=\"/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
-        "        </video>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html",
-        "<div class=\"diagnostic-summary-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_SUMMARY\">\n" +
-        "    <div class=\"title\" ng-switch on=\"vm.isSubjectsWaitToBeEvaluated\">\n" +
-        "        <div ng-switch-when=\"false\">\n" +
-        "            <div class=\"main-title\" translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
-        "            <div class=\"sub-title\" translate=\".COMPOSITE_SCORE\" ng-hide=\"::vm.hideCompositeScore\">\n" +
-        "                {{::vm.compositeScore}}\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div ng-switch-when=\"true\">\n" +
-        "            <span translate=\".ESTIMATED_SCORE\"></span>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"doughnuts-container\">\n" +
-        "        <div class=\"all-doughnuts-wrapper\" ng-repeat=\"doughnut in vm.doughnutArray track by $index\">\n" +
-        "            <div class=\"doughnut-wrapper\">\n" +
-        "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
-        "                <div class=\"znk-doughnut\">\n" +
-        "                    <div class=\"white-bg-doughnut-score\">\n" +
-        "                        {{!doughnut.score ? '-' : doughnut.score }}\n" +
-        "                    </div>\n" +
-        "                    <div class=\"goal-point\"\n" +
-        "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +
-        "                        <div class=\"goal-point-bg\">\n" +
-        "                            <div ng-style=\"::{'background': ''+ doughnut.colors[0]}\"\n" +
-        "                                 class=\"goal-point-subject-color\"></div>\n" +
-        "                        </div>\n" +
-        "                    </div>\n" +
-        "                    <canvas id=\"doughnut\"\n" +
-        "                            class=\"chart chart-doughnut\"\n" +
-        "                            chart-colours=\"doughnut.colors\"\n" +
-        "                            chart-data=\"doughnut.data\"\n" +
-        "                            chart-labels=\"doughnut.labels\"\n" +
-        "                            chart-options=\"doughnut.options\"\n" +
-        "                            chart-legend=\"false\">\n" +
-        "                    </canvas>\n" +
-        "                    <md-tooltip znk-tooltip class=\"md-fab\"\n" +
-        "                        ng-if=\"doughnut.scoreGoal > doughnut.score\"\n" +
-        "                        md-direction=\"top\">\n" +
-        "                        <span\n" +
-        "                            translate=\".GOAL_TOOLTIP\"\n" +
-        "                            translate-values=\"{ ptsToGoal: {{doughnut.scoreGoal - doughnut.score}} }\">\n" +
-        "                        </span>\n" +
-        "                    </md-tooltip>\n" +
-        "                </div>\n" +
-        "                <div class=\"your-goal-wrapper\">\n" +
-        "                    <span class=\"score-goal\" translate=\".YOUR_GOAL\"></span>\n" +
-        "                    <span class=\"score-value\">\n" +
-        "                        {{::doughnut.scoreGoal}}\n" +
-        "                    </span>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
-        "         ng-if=\"vm.showUpgradeBtn\">\n" +
-        "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
-        "        <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.UPGRADE_BTN' | translate}}\"\n" +
-        "            class=\"znk outline\"\n" +
-        "            ng-click=\"vm.showPurchaseDialog()\"\n" +
-        "            translate=\".UPGRADE_BTN\">\n" +
-        "        </md-button>\n" +
-        "    </div>\n" +
-        "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
-        "    <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.DONE' | translate}}\"\n" +
-        "            autofocus tabindex=\"1\"\n" +
-        "            class=\"start-button md-button znk md-primary\"\n" +
-        "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
-        "            translate=\".DONE\">DONE\n" +
-        "    </md-button>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"diagnostic-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .diagnostic-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/svg/dropdown-arrow.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/svg/flag-icon.svg",
+    "<svg x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"-145 277 60 60\"\n" +
+    "	 class=\"flag-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .flag-svg .st0 {\n" +
+    "            fill: #ffffff;\n" +
+    "            stroke-width: 5;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "            width:25px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g id=\"kUxrE9.tif\">\n" +
+    "	<g>\n" +
+    "		<path class=\"st0\" id=\"XMLID_93_\" d=\"M-140.1,287c0.6-1.1,1.7-1.7,2.9-1.4c1.3,0.3,2,1.1,2.3,2.3c1.1,4,2.1,8,3.2,12c2.4,9.3,4.9,18.5,7.3,27.8\n" +
+    "			c0.1,0.3,0.2,0.6,0.2,0.9c0.3,1.7-0.6,3-2.1,3.3c-1.4,0.3-2.8-0.5-3.3-2.1c-1-3.6-2-7.3-2.9-10.9c-2.5-9.5-5-19-7.6-28.6\n" +
+    "			C-140.1,290-140.8,288.3-140.1,287z\"/>\n" +
+    "		<path class=\"st0\" id=\"XMLID_92_\" d=\"M-89.6,289.1c-1,6.8-2.9,13-10,16c-3.2,1.4-6.5,1.6-9.9,0.9c-2-0.4-4-0.7-6-0.6c-4.2,0.3-7.1,2.7-9,6.4\n" +
+    "			c-0.3,0.5-0.5,1.1-0.9,2c-0.3-1-0.5-1.7-0.8-2.5c-2-7-3.9-14.1-5.9-21.2c-0.3-1-0.1-1.7,0.5-2.4c4.5-6,11-7.4,17.5-3.6\n" +
+    "			c3.4,2,6.7,4.2,10.2,6.1c1.9,1,3.9,1.9,5.9,2.4c3.2,0.9,5.9,0,7.9-2.6C-90,289.7-89.8,289.4-89.6,289.1z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnostic.template.html",
+    "<div class=\"app-workouts-diagnostic\">\n" +
+    "    <ui-view class=\"exercise-container base-border-radius base-box-shadow\"></ui-view>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticExercise.template.html",
+    "<znk-exercise-header\n" +
+    "    subject-id=\"vm.subjectId\"\n" +
+    "    side-text=\"vm.headerTitle\"\n" +
+    "    options=\"{ showQuit: true, showNumSlide: true }\"\n" +
+    "    on-clicked-quit=\"vm.onClickedQuit()\"\n" +
+    "    ng-model=\"vm.numSlide\"\n" +
+    "    total-slide-num=\"{{vm.questionsPerSubject}}\"></znk-exercise-header>\n" +
+    "<znk-exercise\n" +
+    "    questions=\"vm.questions\"\n" +
+    "    ng-model=\"vm.resultsData.questionResults\"\n" +
+    "    settings=\"vm.settings\"\n" +
+    "    actions=\"vm.actions\"\n" +
+    "    audio-manager=\"vm.resultsForAudioManager\">\n" +
+    "</znk-exercise>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticIntro.template.html",
+    "<znk-exercise-header\n" +
+    "    subject-id=\"vm.params.subjectId\"\n" +
+    "    side-text=\"vm.headerTitle\"\n" +
+    "    options=\"{ showQuit: true }\"\n" +
+    "    on-clicked-quit=\"vm.onClickedQuit()\">\n" +
+    "</znk-exercise-header>\n" +
+    "<diagnostic-intro show-instructions=\"true\"></diagnostic-intro>\n" +
+    "<div class=\"btn-wrap\">\n" +
+    "    <button autofocus tabindex=\"1\" class=\"md-button znk md-primary\" ng-click=\"vm.goToExercise()\" translate=\"{{::vm.buttonTitle}}\" aria-label=\"{{::vm.buttonTitle}}\">\n" +
+    "        <svg-icon name=\"diagnostic-dropdown-arrow-icon\"></svg-icon>\n" +
+    "    </button>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html",
+    "<div class=\"diagnostic-loading-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_PRE_SUMMARY\">\n" +
+    "    <p class=\"loading-title\" translate=\".READY\"></p>\n" +
+    "    <div class=\"video-wrapper\">\n" +
+    "        <video loop autoplay\n" +
+    "               preload=\"auto\"\n" +
+    "               poster=\"/assets/images/poster/diagnostic-pre-summary.png\">\n" +
+    "            <source src=\"/assets/videos/hoping-raccoon.mp4\" type=\"video/mp4\">\n" +
+    "        </video>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnosticSummary.template.html",
+    "<div class=\"diagnostic-summary-wrapper\" translate-namespace=\"WORKOUTS_DIAGNOSTIC_SUMMARY\">\n" +
+    "    <div class=\"title\" ng-switch on=\"vm.isSubjectsWaitToBeEvaluated\">\n" +
+    "        <div ng-switch-when=\"false\">\n" +
+    "            <div class=\"main-title\" translate=\".YOUR_INITIAL_SCORE_ESTIMATE\"></div>\n" +
+    "            <div class=\"sub-title\" translate=\".COMPOSITE_SCORE\" ng-hide=\"::vm.hideCompositeScore\">\n" +
+    "                {{::vm.compositeScore}}\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div ng-switch-when=\"true\">\n" +
+    "            <span translate=\".ESTIMATED_SCORE\"></span>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"doughnuts-container\">\n" +
+    "        <div class=\"all-doughnuts-wrapper\" ng-repeat=\"doughnut in vm.doughnutArray track by $index\">\n" +
+    "            <div class=\"doughnut-wrapper\">\n" +
+    "                <p class=\"subject-name\" translate=\"{{doughnut.subjectName}}\"></p>\n" +
+    "                <div class=\"znk-doughnut\">\n" +
+    "                    <div class=\"white-bg-doughnut-score\">\n" +
+    "                        {{!doughnut.score ? '-' : doughnut.score }}\n" +
+    "                    </div>\n" +
+    "                    <div class=\"goal-point\"\n" +
+    "                         ng-style=\"::{top:doughnut.goalPoint.y + 'px', left:doughnut.goalPoint.x + 'px'}\">\n" +
+    "                        <div class=\"goal-point-bg\">\n" +
+    "                            <div ng-style=\"::{'background': ''+ doughnut.colors[0]}\"\n" +
+    "                                 class=\"goal-point-subject-color\"></div>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                    <canvas id=\"doughnut\"\n" +
+    "                            class=\"chart chart-doughnut\"\n" +
+    "                            chart-colours=\"doughnut.colors\"\n" +
+    "                            chart-data=\"doughnut.data\"\n" +
+    "                            chart-labels=\"doughnut.labels\"\n" +
+    "                            chart-options=\"doughnut.options\"\n" +
+    "                            chart-legend=\"false\">\n" +
+    "                    </canvas>\n" +
+    "                    <md-tooltip znk-tooltip class=\"md-fab\"\n" +
+    "                        ng-if=\"doughnut.scoreGoal > doughnut.score\"\n" +
+    "                        md-direction=\"top\">\n" +
+    "                        <span\n" +
+    "                            translate=\".GOAL_TOOLTIP\"\n" +
+    "                            translate-values=\"{ ptsToGoal: {{doughnut.scoreGoal - doughnut.score}} }\">\n" +
+    "                        </span>\n" +
+    "                    </md-tooltip>\n" +
+    "                </div>\n" +
+    "                <div class=\"your-goal-wrapper\">\n" +
+    "                    <span class=\"score-goal\" translate=\".YOUR_GOAL\"></span>\n" +
+    "                    <span class=\"score-value\">\n" +
+    "                        {{::doughnut.scoreGoal}}\n" +
+    "                    </span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"upgrade-to-evaluate-wrapper\"\n" +
+    "         ng-if=\"vm.showUpgradeBtn\">\n" +
+    "        <span translate=\".UPGRADE_TEXT\"></span>\n" +
+    "        <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.UPGRADE_BTN' | translate}}\"\n" +
+    "            class=\"znk outline\"\n" +
+    "            ng-click=\"vm.showPurchaseDialog()\"\n" +
+    "            translate=\".UPGRADE_BTN\">\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "    <div class=\"footer-text\" translate=\"{{vm.footerTranslatedText}}\"></div>\n" +
+    "    <md-button aria-label=\"{{'WORKOUTS_DIAGNOSTIC_SUMMARY.DONE' | translate}}\"\n" +
+    "            autofocus tabindex=\"1\"\n" +
+    "            class=\"start-button md-button znk md-primary\"\n" +
+    "            ui-sref=\"app.workouts.roadmap.diagnostic\"\n" +
+    "            translate=\".DONE\">DONE\n" +
+    "    </md-button>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -4827,7 +4827,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -4843,74 +4843,74 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
                 }
             };
         }];
-    }]);
+}]);
 
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
-        "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
-        "    <div class=\"description\">\n" +
-        "        <div class=\"diagnostic-text\"\n" +
-        "             translate=\"{{d.currMapData.diagDesc}}\">\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"icons-section\" ng-if=\"showIconsSection\">\n" +
-        "        <div ng-repeat=\"subject in d.subjects\"\n" +
-        "             class=\"icon-circle {{subject.subjectNameAlias}}-color\"\n" +
-        "             ng-class=\"{\n" +
-        "                    active: subject.mapId === d.currMapIndex,\n" +
-        "                    done: subject.mapId < d.currMapIndex,\n" +
-        "                    pristine: d.currMapIndex === -1\n" +
-        "            }\">\n" +
-        "            <div class=\"icon-wrapper\">\n" +
-        "                <svg-icon class=\"subject-icon\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
-        "                <svg-icon class=\"section-complete\" name=\"diagnostic-intro-check-mark\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"raccoon-img-container\">\n" +
-        "        <div class=\"raccoon-img-wrapper\">\n" +
-        "            <div ng-class=\"d.currMapData.subjectNameAlias ? 'diagnostic-raccoon-'+d.currMapData.subjectNameAlias : diagnostic-raccoon\"></div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"section-question\" ng-if=\"d.currMapData && !d.currMapData.hideSectionQuestion\">\n" +
-        "            <div>\n" +
-        "                <span translate=\"{{d.currMapData.diagSubjectText}}\" ng-cloak></span>\n" +
-        "                <span\n" +
-        "                    class=\"{{d.currMapData.subjectNameAlias}}\"\n" +
-        "                    translate=\"{{d.currMapData.diagSubjectName}}\">\n" +
-        "                </span>\n" +
-        "                <span translate=\".QUESTIONS\"></span>\n" +
-        "                <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
-        "                    <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
-        "                    <span class=\"diagnostic-instructions-text\" translate=\"{{d.currMapData.diagIns}}\"></span>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/diagnosticIntro/svg/diagnostic-intro-check-mark-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 329.5 223.7\"\n" +
-        "	 class=\"diagnostic-intro-check-mark-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .diagnostic-intro-check-mark-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #ffffff;\n" +
-        "            stroke-width: 21;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-        "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
+  $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
+    "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
+    "    <div class=\"description\">\n" +
+    "        <div class=\"diagnostic-text\"\n" +
+    "             translate=\"{{d.currMapData.diagDesc}}\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"icons-section\" ng-if=\"showIconsSection\">\n" +
+    "        <div ng-repeat=\"subject in d.subjects\"\n" +
+    "             class=\"icon-circle {{subject.subjectNameAlias}}-color\"\n" +
+    "             ng-class=\"{\n" +
+    "                    active: subject.mapId === d.currMapIndex,\n" +
+    "                    done: subject.mapId < d.currMapIndex,\n" +
+    "                    pristine: d.currMapIndex === -1\n" +
+    "            }\">\n" +
+    "            <div class=\"icon-wrapper\">\n" +
+    "                <svg-icon class=\"subject-icon\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
+    "                <svg-icon class=\"section-complete\" name=\"diagnostic-intro-check-mark\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"raccoon-img-container\">\n" +
+    "        <div class=\"raccoon-img-wrapper\">\n" +
+    "            <div ng-class=\"d.currMapData.subjectNameAlias ? 'diagnostic-raccoon-'+d.currMapData.subjectNameAlias : diagnostic-raccoon\"></div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"section-question\" ng-if=\"d.currMapData && !d.currMapData.hideSectionQuestion\">\n" +
+    "            <div>\n" +
+    "                <span translate=\"{{d.currMapData.diagSubjectText}}\" ng-cloak></span>\n" +
+    "                <span\n" +
+    "                    class=\"{{d.currMapData.subjectNameAlias}}\"\n" +
+    "                    translate=\"{{d.currMapData.diagSubjectName}}\">\n" +
+    "                </span>\n" +
+    "                <span translate=\".QUESTIONS\"></span>\n" +
+    "                <div class=\"diagnostic-instructions\" ng-if=\"showInstructions\">\n" +
+    "                    <span class=\"diagnostic-instructions-title\" translate=\".INSTRUCTIONS_TITLE\"></span>\n" +
+    "                    <span class=\"diagnostic-instructions-text\" translate=\"{{d.currMapData.diagIns}}\"></span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/diagnosticIntro/svg/diagnostic-intro-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"diagnostic-intro-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .diagnostic-intro-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -5001,7 +5001,8 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
+                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -5024,10 +5025,27 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
+                    scope.d.showGoalsEdit = showGoalsEdit;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');
+                        scope.d.onSubjectClick = function (subjectId) {
+                            ngModelCtrl.$setViewValue(+subjectId);
+                            scope.d.currentSubject = subjectId;
+                        };
+
+                        ngModelCtrl.$render = function () {
+                            scope.d.currentSubject = ngModelCtrl.$viewValue;
+                        };
                     }
+
+                    UserGoalsService.getGoals().then(function (userGoals) {
+                        scope.$watchCollection(function () {
+                            return userGoals;
+                        }, function (newVal) {
+                            adjustWidgetData(newVal);
+                        });
+                    });
 
                     function adjustWidgetData(userGoals) {
                         $q.all([
@@ -5114,28 +5132,9 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
                         return (correct / maxEstimatedScore) * 100;
                     }
 
-                    scope.d.showGoalsEdit = function () {
+                    function showGoalsEdit() {
                         userGoalsSelectionService.openEditGoalsDialog();
-                    };
-
-                    if (isNavMenuFlag) {
-                        scope.d.onSubjectClick = function (subjectId) {
-                            ngModelCtrl.$setViewValue(+subjectId);
-                            scope.d.currentSubject = subjectId;
-                        };
-
-                        ngModelCtrl.$render = function () {
-                            scope.d.currentSubject = ngModelCtrl.$viewValue;
-                        };
                     }
-
-                    UserGoalsService.getGoals().then(function (userGoals) {
-                        scope.$watchCollection(function () {
-                            return userGoals;
-                        }, function (newVal) {
-                            adjustWidgetData(newVal);
-                        });
-                    });
                 }
             };
         }]
@@ -5175,125 +5174,125 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
 })(angular);
 
 angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg",
-        "<svg\n" +
-        "    class=\"estimated-score-widget-close-popup-svg\"\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"-596.6 492.3 133.2 133.5\">\n" +
-        "\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .estimated-score-widget-close-popup-svg .st1{\n" +
-        "            fill:none;\n" +
-        "            stroke: white;\n" +
-        "            stroke-width: 6px;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/estimatedScoreWidget/svg/goals-top-icon.svg",
-        "<svg class=\"estimated-score-widget-goals-svg\" x=\"0px\" y=\"0px\" viewBox=\"-632.7 361.9 200 200\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .estimated-score-widget-goals-svg .st0{fill:none;}\n" +
-        "        .estimated-score-widget-goals-svg .st1{fill: white;}\n" +
-        "    </style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<path class=\"st1\" d=\"M-632.7,473.9c7.1,0.1,14.2,0.4,21.4,0.4c3,0,4.1,0.9,4.9,4c7.8,30.3,26.9,49.5,57.3,57.3c3.2,0.8,4,2,3.9,4.9\n" +
-        "		c-0.3,7.1-0.3,14.3-0.4,21.4c-1.3,0-5.4-0.8-6.2-1c-36.3-7.9-61.4-29.2-75.2-63.6C-629.5,491.3-632.7,475.5-632.7,473.9z\"/>\n" +
-        "	<path class=\"st1\" d=\"M-519.7,561.9c-0.1-7.6-0.4-15.2-0.3-22.9c0-1.1,1.7-2.7,2.8-3c31.2-7.9,50.7-27.4,58.6-58.6c0.3-1.3,2.6-2.8,4-2.9\n" +
-        "		c7.3-0.4,14.6-0.4,21.9-0.6c0,1.7-0.8,6.4-1,7.2c-8,36.5-29.4,61.7-64.1,75.4C-503.6,558.7-518.3,561.9-519.7,561.9z\"/>\n" +
-        "	<path class=\"st1\" d=\"M-545.7,361.9c0.1,7.5,0.4,15,0.3,22.4c0,1.2-1.7,3.1-2.9,3.4c-31.1,7.9-50.5,27.3-58.4,58.5c-0.3,1.2-1.9,2.9-3,2.9\n" +
-        "		c-7.6,0.1-15.3-0.1-22.9-0.3c0-1.3,0.8-5.4,1-6.2c7.7-35.8,28.5-60.7,62.2-74.7C-563.1,365.4-547,361.9-545.7,361.9z\"/>\n" +
-        "	<path class=\"st1\" d=\"M-432.7,448.9c-7.6,0.1-15.3,0.4-22.9,0.2c-1.1,0-2.8-2.3-3.2-3.8c-7.3-27.7-24.3-46.4-51.5-55.6\n" +
-        "		c-9.8-3.3-9.9-3.1-9.8-13.4c0-4.8,0.3-9.6,0.4-14.4c1.3,0,5.4,0.8,6.2,1c36.6,7.9,61.7,29.4,75.4,64.1\n" +
-        "		C-435.8,432.7-432.7,447.5-432.7,448.9z\"/>\n" +
-        "	<path class=\"st1\" d=\"M-581.2,474.6c12,0,23.6,0,35.5,0c0,12,0,23.7,0,35.4C-560.5,508.7-577.8,491.6-581.2,474.6z\"/>\n" +
-        "	<path class=\"st1\" d=\"M-519.8,474.6c12,0,23.7,0,35.4,0c-2.3,16-19.5,33.2-35.4,35.5C-519.8,498.4-519.8,486.7-519.8,474.6z\"/>\n" +
-        "	<path class=\"st1\" d=\"M-545.9,448.9c-11.9,0-23.5,0-35.7,0c5.6-18.4,17.2-30,35.7-35.9C-545.9,425.2-545.9,436.9-545.9,448.9z\"/>\n" +
-        "	<path class=\"st1\" d=\"M-519.8,413.5c16.2,2.7,32.7,19.2,35.5,35.4c-11.8,0-23.5,0-35.5,0C-519.8,437.1-519.8,425.5-519.8,413.5z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html",
-        "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
-        "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
-        "     translate-namespace=\"ESTIMATED_SCORE_WIDGET_DIRECTIVE\">\n" +
-        "    <div class=\"title\" translate=\"{{::widgetTitle}}\"></div>\n" +
-        "    <div class=\"unfinished-diagnostic-title\" ng-if=\"!d.isDiagnosticComplete\" translate=\".UNFINISHED_DIAGNOSTIC_TITLE\"></div>\n" +
-        "    <div class=\"subjects-wrap\">\n" +
-        "        <div ng-repeat=\"widgetItem in d.subjectsScores track by widgetItem.subjectId\"\n" +
-        "             ng-click=\"d.onSubjectClick(widgetItem.subjectId)\"\n" +
-        "             ng-class=\"{ 'selected': (d.currentSubject === widgetItem.subjectId) }\"\n" +
-        "             class=\"subject\"\n" +
-        "             subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
-        "             context-attr=\"class\"\n" +
-        "             tabindex=\"{{isNavMenu ? 0 : -1}}\">\n" +
-        "            <div class=\"subject-title\">\n" +
-        "                <span class=\"capitalize\" translate=\"SUBJECTS.{{widgetItem.subjectId}}\"></span>\n" +
-        "                <span class=\"to-go\" ng-if=\"widgetItem.pointsLeftToMeetUserGoal > 0\"\n" +
-        "                      translate=\".PTS_TO_GO\"\n" +
-        "                      translate-values=\"{pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
-        "            </div>\n" +
-        "            <div class=\"score\" ng-if=\"widgetItem.showScore\">\n" +
-        "                <hr class=\"bar\">\n" +
-        "                <hr class=\"user-goal-fill\"\n" +
-        "                    subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
-        "                    context-attr=\"class\"\n" +
-        "                    ng-style=\"{ width: widgetItem.userGoalPercentage + '%' }\"\n" +
-        "                    ng-class=\"{\n" +
-        "                        'user-goal-met' : (widgetItem.estimatedScore >= widgetItem.userGoal),\n" +
-        "                        'bar-full'    : (widgetItem.userGoalPercentage >= 100)\n" +
-        "                    }\">\n" +
-        "                <hr class=\"current-estimated-score-fill\"\n" +
-        "                    subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
-        "                    context-attr=\"class\"\n" +
-        "                    suffix=\"bg\"\n" +
-        "                    ng-style=\"{ width: widgetItem.estimatedScorePercentage + '%' }\">\n" +
-        "                <div class=\"current-estimated-score\">\n" +
-        "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
-        "                              context-attr=\"class\"\n" +
-        "                              suffix=\"bc\"\n" +
-        "                              ng-style=\"{ left: widgetItem.estimatedScorePercentage + '%' }\">\n" +
-        "                              <md-tooltip md-visible=\"\"\n" +
-        "                                          md-direction=\"top\"\n" +
-        "                                          class=\"tooltip-for-estimated-score-widget md-whiteframe-2dp\">\n" +
-        "                                  <div translate=\".YOUR_GOAL\" translate-values=\"{ goal: {{widgetItem.userGoal}} }\" class=\"top-text\"></div>\n" +
-        "                                      <span class=\"bottom-text\" ng-if=\"widgetItem.estimatedScore >= widgetItem.userGoal\" translate=\".GOAL_REACHED\"></span>\n" +
-        "                                      <span class=\"bottom-text\" ng-if=\"widgetItem.estimatedScore\" translate=\".PTS_TO_GO\" translate-values=\"{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
-        "                              </md-tooltip>\n" +
-        "                            {{widgetItem.estimatedScore === 0 ? '?' : widgetItem.estimatedScore}}\n" +
-        "                        </span>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"divider\"></div>\n" +
-        "\n" +
-        "    <div class=\"inner\">\n" +
-        "        <table class=\"score-summary\">\n" +
-        "            <tr class=\"composite\">\n" +
-        "                <td translate=\".COMPOSITE_SCORE\"></td>\n" +
-        "                <td class=\"num\">{{d.estimatedCompositeScore}}</td>\n" +
-        "            </tr>\n" +
-        "            <tr class=\"goal\">\n" +
-        "                <td translate=\".GOAL_SCORE\"></td>\n" +
-        "                <td class=\"num\">{{d.userCompositeGoal}}</td>\n" +
-        "            </tr>\n" +
-        "        </table>\n" +
-        "        <span class=\"edit-my-goals\"\n" +
-        "              ng-click=\"d.showGoalsEdit()\"\n" +
-        "              translate=\".EDIT_MY_GOALS\"></span>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg",
+    "<svg\n" +
+    "    class=\"estimated-score-widget-close-popup-svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .estimated-score-widget-close-popup-svg .st1{\n" +
+    "            fill:none;\n" +
+    "            stroke: white;\n" +
+    "            stroke-width: 6px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/estimatedScoreWidget/svg/goals-top-icon.svg",
+    "<svg class=\"estimated-score-widget-goals-svg\" x=\"0px\" y=\"0px\" viewBox=\"-632.7 361.9 200 200\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .estimated-score-widget-goals-svg .st0{fill:none;}\n" +
+    "        .estimated-score-widget-goals-svg .st1{fill: white;}\n" +
+    "    </style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<path class=\"st1\" d=\"M-632.7,473.9c7.1,0.1,14.2,0.4,21.4,0.4c3,0,4.1,0.9,4.9,4c7.8,30.3,26.9,49.5,57.3,57.3c3.2,0.8,4,2,3.9,4.9\n" +
+    "		c-0.3,7.1-0.3,14.3-0.4,21.4c-1.3,0-5.4-0.8-6.2-1c-36.3-7.9-61.4-29.2-75.2-63.6C-629.5,491.3-632.7,475.5-632.7,473.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-519.7,561.9c-0.1-7.6-0.4-15.2-0.3-22.9c0-1.1,1.7-2.7,2.8-3c31.2-7.9,50.7-27.4,58.6-58.6c0.3-1.3,2.6-2.8,4-2.9\n" +
+    "		c7.3-0.4,14.6-0.4,21.9-0.6c0,1.7-0.8,6.4-1,7.2c-8,36.5-29.4,61.7-64.1,75.4C-503.6,558.7-518.3,561.9-519.7,561.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-545.7,361.9c0.1,7.5,0.4,15,0.3,22.4c0,1.2-1.7,3.1-2.9,3.4c-31.1,7.9-50.5,27.3-58.4,58.5c-0.3,1.2-1.9,2.9-3,2.9\n" +
+    "		c-7.6,0.1-15.3-0.1-22.9-0.3c0-1.3,0.8-5.4,1-6.2c7.7-35.8,28.5-60.7,62.2-74.7C-563.1,365.4-547,361.9-545.7,361.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-432.7,448.9c-7.6,0.1-15.3,0.4-22.9,0.2c-1.1,0-2.8-2.3-3.2-3.8c-7.3-27.7-24.3-46.4-51.5-55.6\n" +
+    "		c-9.8-3.3-9.9-3.1-9.8-13.4c0-4.8,0.3-9.6,0.4-14.4c1.3,0,5.4,0.8,6.2,1c36.6,7.9,61.7,29.4,75.4,64.1\n" +
+    "		C-435.8,432.7-432.7,447.5-432.7,448.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-581.2,474.6c12,0,23.6,0,35.5,0c0,12,0,23.7,0,35.4C-560.5,508.7-577.8,491.6-581.2,474.6z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-519.8,474.6c12,0,23.7,0,35.4,0c-2.3,16-19.5,33.2-35.4,35.5C-519.8,498.4-519.8,486.7-519.8,474.6z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-545.9,448.9c-11.9,0-23.5,0-35.7,0c5.6-18.4,17.2-30,35.7-35.9C-545.9,425.2-545.9,436.9-545.9,448.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-519.8,413.5c16.2,2.7,32.7,19.2,35.5,35.4c-11.8,0-23.5,0-35.5,0C-519.8,437.1-519.8,425.5-519.8,413.5z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html",
+    "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
+    "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
+    "     translate-namespace=\"ESTIMATED_SCORE_WIDGET_DIRECTIVE\">\n" +
+    "    <div class=\"title\" translate=\"{{::widgetTitle}}\"></div>\n" +
+    "    <div class=\"unfinished-diagnostic-title\" ng-if=\"!d.isDiagnosticComplete\" translate=\".UNFINISHED_DIAGNOSTIC_TITLE\"></div>\n" +
+    "    <div class=\"subjects-wrap\">\n" +
+    "        <div ng-repeat=\"widgetItem in d.subjectsScores track by widgetItem.subjectId\"\n" +
+    "             ng-click=\"d.onSubjectClick(widgetItem.subjectId)\"\n" +
+    "             ng-class=\"{ 'selected': (d.currentSubject === widgetItem.subjectId) }\"\n" +
+    "             class=\"subject\"\n" +
+    "             subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
+    "             context-attr=\"class\"\n" +
+    "             tabindex=\"{{isNavMenu ? 0 : -1}}\">\n" +
+    "            <div class=\"subject-title\">\n" +
+    "                <span class=\"capitalize\" translate=\"SUBJECTS.{{widgetItem.subjectId}}\"></span>\n" +
+    "                <span class=\"to-go\" ng-if=\"widgetItem.pointsLeftToMeetUserGoal > 0\"\n" +
+    "                      translate=\".PTS_TO_GO\"\n" +
+    "                      translate-values=\"{pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
+    "            </div>\n" +
+    "            <div class=\"score\" ng-if=\"widgetItem.showScore\">\n" +
+    "                <hr class=\"bar\">\n" +
+    "                <hr class=\"user-goal-fill\"\n" +
+    "                    subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
+    "                    context-attr=\"class\"\n" +
+    "                    ng-style=\"{ width: widgetItem.userGoalPercentage + '%' }\"\n" +
+    "                    ng-class=\"{\n" +
+    "                        'user-goal-met' : (widgetItem.estimatedScore >= widgetItem.userGoal),\n" +
+    "                        'bar-full'    : (widgetItem.userGoalPercentage >= 100)\n" +
+    "                    }\">\n" +
+    "                <hr class=\"current-estimated-score-fill\"\n" +
+    "                    subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
+    "                    context-attr=\"class\"\n" +
+    "                    suffix=\"bg\"\n" +
+    "                    ng-style=\"{ width: widgetItem.estimatedScorePercentage + '%' }\">\n" +
+    "                <div class=\"current-estimated-score\">\n" +
+    "                        <span subject-id-to-attr-drv=\"{{widgetItem.subjectId}}\"\n" +
+    "                              context-attr=\"class\"\n" +
+    "                              suffix=\"bc\"\n" +
+    "                              ng-style=\"{ left: widgetItem.estimatedScorePercentage + '%' }\">\n" +
+    "                              <md-tooltip md-visible=\"\"\n" +
+    "                                          md-direction=\"top\"\n" +
+    "                                          class=\"tooltip-for-estimated-score-widget md-whiteframe-2dp\">\n" +
+    "                                  <div translate=\".YOUR_GOAL\" translate-values=\"{ goal: {{widgetItem.userGoal}} }\" class=\"top-text\"></div>\n" +
+    "                                      <span class=\"bottom-text\" ng-if=\"widgetItem.estimatedScore >= widgetItem.userGoal\" translate=\".GOAL_REACHED\"></span>\n" +
+    "                                      <span class=\"bottom-text\" ng-if=\"widgetItem.estimatedScore\" translate=\".PTS_TO_GO\" translate-values=\"{ pts: {{widgetItem.pointsLeftToMeetUserGoal}} }\"></span>\n" +
+    "                              </md-tooltip>\n" +
+    "                            {{widgetItem.estimatedScore === 0 ? '?' : widgetItem.estimatedScore}}\n" +
+    "                        </span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"divider\"></div>\n" +
+    "\n" +
+    "    <div class=\"inner\">\n" +
+    "        <table class=\"score-summary\">\n" +
+    "            <tr class=\"composite\">\n" +
+    "                <td translate=\".COMPOSITE_SCORE\"></td>\n" +
+    "                <td class=\"num\">{{d.estimatedCompositeScore}}</td>\n" +
+    "            </tr>\n" +
+    "            <tr class=\"goal\">\n" +
+    "                <td translate=\".GOAL_SCORE\"></td>\n" +
+    "                <td class=\"num\">{{d.userCompositeGoal}}</td>\n" +
+    "            </tr>\n" +
+    "        </table>\n" +
+    "        <span class=\"edit-my-goals\"\n" +
+    "              ng-click=\"d.showGoalsEdit()\"\n" +
+    "              translate=\".EDIT_MY_GOALS\"></span>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -5331,10 +5330,10 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
                 'ngInject';
                 return function(question, skipCheckingUserAnswer) {
-                    return question.manualEvaluation && (
-                            skipCheckingUserAnswer ? true : question.__questionStatus.userAnswer &&
-                                question.__questionStatus.userAnswer !== true
-                        );
+                   return question.manualEvaluation && (
+                           skipCheckingUserAnswer ? true : question.__questionStatus.userAnswer &&
+                           question.__questionStatus.userAnswer !== true
+                       );
                 };
             });
 
@@ -5491,7 +5490,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
                         };
 
                         ZnkEvaluateResultSrv.getEvaluateTypes().then(function (types) {
-                            vm.evaluateTypes = types;
+                             vm.evaluateTypes = types;
                         });
                     }
                 };
@@ -5509,7 +5508,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
+        angular.module('znk.infra-web-app.evaluator').component('evaluateResult', {
             bindings: {
                 pointsGetter: '&points',
                 typeGetter: '&type' // can be a subjectId or other type of id
@@ -5648,160 +5647,160 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     angular.module('znk.infra-web-app.evaluator').provider('ZnkEvaluateResultSrv',
         function() {
 
-            var _evaluateResultByType;
-            var _evaluateTypes;
+        var _evaluateResultByType;
+        var _evaluateTypes;
 
-            this.setEvaluateResultByType = function(evaluateResultByType) {
-                _evaluateResultByType = evaluateResultByType;
-            };
+        this.setEvaluateResultByType = function(evaluateResultByType) {
+            _evaluateResultByType = evaluateResultByType;
+        };
 
-            this.setEvaluateTypes = function(evaluateTypes) {
-                _evaluateTypes = evaluateTypes;
-            };
+        this.setEvaluateTypes = function(evaluateTypes) {
+            _evaluateTypes = evaluateTypes;
+        };
 
-            this.$get = ["$q", "$injector", "$log", function($q, $injector, $log) {
-                'ngInject';
+        this.$get = ["$q", "$injector", "$log", function($q, $injector, $log) {
+            'ngInject';
 
-                var evaluateSrvApi = {};
+            var evaluateSrvApi = {};
 
-                function invokeEvaluateFn(evaluateFn, evaluateFnName) {
-                    if(!evaluateFn) {
-                        var errMsg = 'ZnkEvaluateResultSrv: '+ evaluateFnName +' was not set';
-                        $log.error(errMsg);
-                        return $q.reject(errMsg);
-                    }
-
-                    return $q.when($injector.invoke(evaluateFn));
+            function invokeEvaluateFn(evaluateFn, evaluateFnName) {
+                if(!evaluateFn) {
+                    var errMsg = 'ZnkEvaluateResultSrv: '+ evaluateFnName +' was not set';
+                    $log.error(errMsg);
+                    return $q.reject(errMsg);
                 }
 
-                evaluateSrvApi.getEvaluateResultByType = invokeEvaluateFn.bind(null, _evaluateResultByType, 'evaluateResultByType');
+                return $q.when($injector.invoke(evaluateFn));
+            }
 
-                evaluateSrvApi.getEvaluateTypes = invokeEvaluateFn.bind(null, _evaluateTypes, 'evaluateTypes');
+            evaluateSrvApi.getEvaluateResultByType = invokeEvaluateFn.bind(null, _evaluateResultByType, 'evaluateResultByType');
 
-                return evaluateSrvApi;
+            evaluateSrvApi.getEvaluateTypes = invokeEvaluateFn.bind(null, _evaluateTypes, 'evaluateTypes');
 
-            }];
-        });
+            return evaluateSrvApi;
+
+        }];
+    });
 })(angular);
 
 angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/evaluator/svg/star.svg",
-        "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"-328 58.7 133.4 127.3\"\n" +
-        "     xml:space=\"preserve\"\n" +
-        "     class=\"evaluate-star-svg\">\n" +
-        ">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.evaluate-star-svg .st0{fill:#231F20;}\n" +
-        "</style>\n" +
-        "<path class=\"firstPath st0\" d=\"M-261.3,58.7c-1.3,0-2.6,0.7-3.3,2l-17.8,36.1c-0.5,1.1-1.5,1.8-2.7,2l-39.8,5.8c-3,0.4-4.2,4.1-2,6.2l28.8,28\n" +
-        "	c0.8,0.8,1.2,2,1,3.2l-6.8,39.6c-0.5,2.9,2.6,5.2,5.3,3.8l35.6-18.7c0.5-0.3,1.1-0.5,1.7-0.5V58.7z\"/>\n" +
-        "<path class=\"secondPath st0\" d=\"M-261.3,58.7c1.3,0,2.6,0.7,3.3,2l17.8,36.1c0.5,1.1,1.5,1.8,2.7,2l39.8,5.8c3,0.4,4.2,4.1,2,6.2l-28.8,28\n" +
-        "	c-0.8,0.8-1.2,2-1,3.2l6.8,39.6c0.5,2.9-2.6,5.2-5.3,3.8l-35.6-18.7c-0.5-0.3-1.1-0.5-1.7-0.5V58.7z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/evaluator/templates/evaluateQuestionResult.template.html",
-        "<div class=\"evaluate-question-result-wrapper\"\n" +
-        "     ng-class=\"{\n" +
-        "         'completed': vm.evaluateQuestionResultStates.completed === vm.activeState,\n" +
-        "         'skipped': vm.evaluateQuestionResultStates.skipped === vm.activeState,\n" +
-        "         'evaluated': vm.evaluateQuestionResultStates.evaluated === vm.activeState\n" +
-        "     }\"\n" +
-        "     translate-namespace=\"EVALUATE_QUESTION_RESULT_DRV\">\n" +
-        "    <div class=\"question-index\"\n" +
-        "         ng-class=\"vm.aliasName\">\n" +
-        "        {{::vm.index}}\n" +
-        "    </div>\n" +
-        "     <div class=\"evaluate-question-result-states-switch\"\n" +
-        "          ng-switch=\"vm.activeState\">\n" +
-        "          <div class=\"evaluate-question-result-text\"\n" +
-        "               ng-switch-when=\"1\">\n" +
-        "              <div class=\"completed\"\n" +
-        "                   translate=\".COMPLETED\">\n" +
-        "              </div>\n" +
-        "          </div>\n" +
-        "          <div class=\"evaluate-question-result-text\"\n" +
-        "              ng-switch-when=\"2\">\n" +
-        "              <div class=\"skipped\"\n" +
-        "                   translate=\".SKIPPED\">\n" +
-        "              </div>\n" +
-        "          </div>\n" +
-        "          <div class=\"evaluate-question-result-evaluated\"\n" +
-        "              ng-switch-when=\"3\">\n" +
-        "              <evaluate-result\n" +
-        "                  points=\"vm.points\"\n" +
-        "                  type=\"vm.type\">\n" +
-        "              </evaluate-result>\n" +
-        "          </div>\n" +
-        "     </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/evaluator/templates/evaluateQuestionReviewStates.template.html",
-        "<div class=\"evaluate-review-states-wrapper\"\n" +
-        "     ng-class=\"vm.evaluateTypes[vm.stateData.typeId].aliasName\"\n" +
-        "     translate-namespace=\"EVALUATE_REVIEW_STATES_DRV\">\n" +
-        "     <div class=\"evaluate-review-states-switch\"\n" +
-        "          ng-switch=\"vm.evaluateStatus\">\n" +
-        "          <div class=\"evaluate-review-not-purchase\"\n" +
-        "               ng-switch-when=\"1\">\n" +
-        "              <div class=\"upgrade-text\"\n" +
-        "                   translate=\".UPGRADE_TEXT_{{vm.evaluateTypes[vm.stateData.typeId].aliasName | uppercase}}\">\n" +
-        "              </div>\n" +
-        "              <button class=\"upgrade-btn\"\n" +
-        "                      open-purchase-dialog-on-click\n" +
-        "                      translate=\".UPGRADE_BTN\">\n" +
-        "              </button>\n" +
-        "          </div>\n" +
-        "          <div class=\"evaluate-review-pending\"\n" +
-        "              ng-switch-when=\"2\">\n" +
-        "              <div class=\"pending-title\"\n" +
-        "                   translate=\".PENDING_TITLE\">\n" +
-        "              </div>\n" +
-        "              <div class=\"pending-desc\"\n" +
-        "                   translate=\".PENDING_DESC\">\n" +
-        "              </div>\n" +
-        "          </div>\n" +
-        "          <div class=\"evaluate-review-evaluated\"\n" +
-        "              ng-switch-when=\"3\">\n" +
-        "              <div class=\"evaluated-answer-title\"\n" +
-        "                   translate=\".EVALUATED_ANSWER_TITLE\">\n" +
-        "              </div>\n" +
-        "              <evaluate-result\n" +
-        "                  points=\"vm.stateData.points\"\n" +
-        "                  type=\"vm.stateData.typeId\">\n" +
-        "              </evaluate-result>\n" +
-        "          </div>\n" +
-        "     </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/evaluator/templates/evaluateResult.template.html",
-        "<div class=\"evaluate-result-wrapper\"\n" +
-        "     translate-namespace=\"EVALUATE_RESULT_DRV\">\n" +
-        "    <div class=\"evaluate-status-wrapper\">\n" +
-        "        <div class=\"evaluate-text\"\n" +
-        "             translate=\".{{vm.evaluateText}}\">\n" +
-        "        </div>\n" +
-        "        <div\n" +
-        "            class=\"evaluate-points\"\n" +
-        "            translate=\".POINTS\"\n" +
-        "            translate-values=\"{ pts: '{{vm.points}}' }\">\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"evaluate-stars-wrapper\">\n" +
-        "        <svg-icon\n" +
-        "            ng-repeat=\"star in vm.stars\"\n" +
-        "            ng-class=\"{\n" +
-        "              'starEmpty': star.status === vm.starStatusMap.empty,\n" +
-        "              'starHalf': star.status === vm.starStatusMap.half,\n" +
-        "              'starFull': star.status === vm.starStatusMap.full\n" +
-        "            }\"\n" +
-        "            name=\"evaluator-star\">\n" +
-        "        </svg-icon>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/evaluator/svg/star.svg",
+    "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"-328 58.7 133.4 127.3\"\n" +
+    "     xml:space=\"preserve\"\n" +
+    "     class=\"evaluate-star-svg\">\n" +
+    ">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.evaluate-star-svg .st0{fill:#231F20;}\n" +
+    "</style>\n" +
+    "<path class=\"firstPath st0\" d=\"M-261.3,58.7c-1.3,0-2.6,0.7-3.3,2l-17.8,36.1c-0.5,1.1-1.5,1.8-2.7,2l-39.8,5.8c-3,0.4-4.2,4.1-2,6.2l28.8,28\n" +
+    "	c0.8,0.8,1.2,2,1,3.2l-6.8,39.6c-0.5,2.9,2.6,5.2,5.3,3.8l35.6-18.7c0.5-0.3,1.1-0.5,1.7-0.5V58.7z\"/>\n" +
+    "<path class=\"secondPath st0\" d=\"M-261.3,58.7c1.3,0,2.6,0.7,3.3,2l17.8,36.1c0.5,1.1,1.5,1.8,2.7,2l39.8,5.8c3,0.4,4.2,4.1,2,6.2l-28.8,28\n" +
+    "	c-0.8,0.8-1.2,2-1,3.2l6.8,39.6c0.5,2.9-2.6,5.2-5.3,3.8l-35.6-18.7c-0.5-0.3-1.1-0.5-1.7-0.5V58.7z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/evaluator/templates/evaluateQuestionResult.template.html",
+    "<div class=\"evaluate-question-result-wrapper\"\n" +
+    "     ng-class=\"{\n" +
+    "         'completed': vm.evaluateQuestionResultStates.completed === vm.activeState,\n" +
+    "         'skipped': vm.evaluateQuestionResultStates.skipped === vm.activeState,\n" +
+    "         'evaluated': vm.evaluateQuestionResultStates.evaluated === vm.activeState\n" +
+    "     }\"\n" +
+    "     translate-namespace=\"EVALUATE_QUESTION_RESULT_DRV\">\n" +
+    "    <div class=\"question-index\"\n" +
+    "         ng-class=\"vm.aliasName\">\n" +
+    "        {{::vm.index}}\n" +
+    "    </div>\n" +
+    "     <div class=\"evaluate-question-result-states-switch\"\n" +
+    "          ng-switch=\"vm.activeState\">\n" +
+    "          <div class=\"evaluate-question-result-text\"\n" +
+    "               ng-switch-when=\"1\">\n" +
+    "              <div class=\"completed\"\n" +
+    "                   translate=\".COMPLETED\">\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "          <div class=\"evaluate-question-result-text\"\n" +
+    "              ng-switch-when=\"2\">\n" +
+    "              <div class=\"skipped\"\n" +
+    "                   translate=\".SKIPPED\">\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "          <div class=\"evaluate-question-result-evaluated\"\n" +
+    "              ng-switch-when=\"3\">\n" +
+    "              <evaluate-result\n" +
+    "                  points=\"vm.points\"\n" +
+    "                  type=\"vm.type\">\n" +
+    "              </evaluate-result>\n" +
+    "          </div>\n" +
+    "     </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/evaluator/templates/evaluateQuestionReviewStates.template.html",
+    "<div class=\"evaluate-review-states-wrapper\"\n" +
+    "     ng-class=\"vm.evaluateTypes[vm.stateData.typeId].aliasName\"\n" +
+    "     translate-namespace=\"EVALUATE_REVIEW_STATES_DRV\">\n" +
+    "     <div class=\"evaluate-review-states-switch\"\n" +
+    "          ng-switch=\"vm.evaluateStatus\">\n" +
+    "          <div class=\"evaluate-review-not-purchase\"\n" +
+    "               ng-switch-when=\"1\">\n" +
+    "              <div class=\"upgrade-text\"\n" +
+    "                   translate=\".UPGRADE_TEXT_{{vm.evaluateTypes[vm.stateData.typeId].aliasName | uppercase}}\">\n" +
+    "              </div>\n" +
+    "              <button class=\"upgrade-btn\"\n" +
+    "                      open-purchase-dialog-on-click\n" +
+    "                      translate=\".UPGRADE_BTN\">\n" +
+    "              </button>\n" +
+    "          </div>\n" +
+    "          <div class=\"evaluate-review-pending\"\n" +
+    "              ng-switch-when=\"2\">\n" +
+    "              <div class=\"pending-title\"\n" +
+    "                   translate=\".PENDING_TITLE\">\n" +
+    "              </div>\n" +
+    "              <div class=\"pending-desc\"\n" +
+    "                   translate=\".PENDING_DESC\">\n" +
+    "              </div>\n" +
+    "          </div>\n" +
+    "          <div class=\"evaluate-review-evaluated\"\n" +
+    "              ng-switch-when=\"3\">\n" +
+    "              <div class=\"evaluated-answer-title\"\n" +
+    "                   translate=\".EVALUATED_ANSWER_TITLE\">\n" +
+    "              </div>\n" +
+    "              <evaluate-result\n" +
+    "                  points=\"vm.stateData.points\"\n" +
+    "                  type=\"vm.stateData.typeId\">\n" +
+    "              </evaluate-result>\n" +
+    "          </div>\n" +
+    "     </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/evaluator/templates/evaluateResult.template.html",
+    "<div class=\"evaluate-result-wrapper\"\n" +
+    "     translate-namespace=\"EVALUATE_RESULT_DRV\">\n" +
+    "    <div class=\"evaluate-status-wrapper\">\n" +
+    "        <div class=\"evaluate-text\"\n" +
+    "             translate=\".{{vm.evaluateText}}\">\n" +
+    "        </div>\n" +
+    "        <div\n" +
+    "            class=\"evaluate-points\"\n" +
+    "            translate=\".POINTS\"\n" +
+    "            translate-values=\"{ pts: '{{vm.points}}' }\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"evaluate-stars-wrapper\">\n" +
+    "        <svg-icon\n" +
+    "            ng-repeat=\"star in vm.stars\"\n" +
+    "            ng-class=\"{\n" +
+    "              'starEmpty': star.status === vm.starStatusMap.empty,\n" +
+    "              'starHalf': star.status === vm.starStatusMap.half,\n" +
+    "              'starFull': star.status === vm.starStatusMap.full\n" +
+    "            }\"\n" +
+    "            name=\"evaluator-star\">\n" +
+    "        </svg-icon>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -5825,7 +5824,7 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
                     templateUrl: 'components/faq/templates/faq.template.html',
                     controller: 'FaqController',
                     controllerAs: 'vm'
-                });
+            });
         }]);
 })(angular);
 
@@ -5898,55 +5897,55 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
 })(angular);
 
 angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/faq/svg/circle-arrow.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     class=\"circle-arrow-icon\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 39 39\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        svg.circle-arrow-icon {\n" +
-        "            width: 100%;\n" +
-        "            height: auto;\n" +
-        "        }\n" +
-        "        svg.circle-arrow-icon .st0 {\n" +
-        "            fill: #88C54F;\n" +
-        "        }\n" +
-        "        svg.circle-arrow-icon .st1 {\n" +
-        "            fill: #ffffff;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<circle class=\"st0\" cx=\"19.5\" cy=\"19.5\" r=\"19.5\"/>\n" +
-        "<path class=\"st1\" d=\"M19.7,27.2c-0.2,0-0.4-0.1-0.6-0.2L8.1,18c-0.4-0.3-0.5-1-0.1-1.4c0.3-0.4,1-0.5,1.4-0.1l10.4,8.4l10-8.4\n" +
-        "	c0.4-0.4,1-0.3,1.4,0.1c0.4,0.4,0.3,1-0.1,1.4l-10.6,9C20.2,27.1,20,27.2,19.7,27.2z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/faq/templates/faq.template.html",
-        "<div class=\"app-workouts\" layout=\"row\" flex=\"grow\">\n" +
-        "    <div id=\"faq-container\" class=\"workouts-container base-border-radius\" translate-namespace=\"FAQ\">\n" +
-        "\n" +
-        "        <h1 class=\"main-title\" translate=\".MAIN_TITLE\"></h1>\n" +
-        "\n" +
-        "        <div id=\"faq-inner\">\n" +
-        "            <v-accordion class=\"vAccordion--default\">\n" +
-        "\n" +
-        "                <v-pane ng-repeat=\"faqitem in ::vm.questionsAndAnswers\" expanded=\"$first\">\n" +
-        "                    <v-pane-header>\n" +
-        "                        <svg-icon class=\"faq-icon\" name=\"faq-circle-arrow-icon\"></svg-icon> <span ng-bind-html=\"::faqitem.question\"></span>\n" +
-        "                    </v-pane-header>\n" +
-        "\n" +
-        "                    <v-pane-content>\n" +
-        "                        <div ng-bind-html=\"::faqitem.answer\"></div>\n" +
-        "                    </v-pane-content>\n" +
-        "                </v-pane>\n" +
-        "\n" +
-        "            </v-accordion>\n" +
-        "        </div>\n" +
-        "\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/faq/svg/circle-arrow.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     class=\"circle-arrow-icon\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 39 39\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        svg.circle-arrow-icon {\n" +
+    "            width: 100%;\n" +
+    "            height: auto;\n" +
+    "        }\n" +
+    "        svg.circle-arrow-icon .st0 {\n" +
+    "            fill: #88C54F;\n" +
+    "        }\n" +
+    "        svg.circle-arrow-icon .st1 {\n" +
+    "            fill: #ffffff;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<circle class=\"st0\" cx=\"19.5\" cy=\"19.5\" r=\"19.5\"/>\n" +
+    "<path class=\"st1\" d=\"M19.7,27.2c-0.2,0-0.4-0.1-0.6-0.2L8.1,18c-0.4-0.3-0.5-1-0.1-1.4c0.3-0.4,1-0.5,1.4-0.1l10.4,8.4l10-8.4\n" +
+    "	c0.4-0.4,1-0.3,1.4,0.1c0.4,0.4,0.3,1-0.1,1.4l-10.6,9C20.2,27.1,20,27.2,19.7,27.2z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/faq/templates/faq.template.html",
+    "<div class=\"app-workouts\" layout=\"row\" flex=\"grow\">\n" +
+    "    <div id=\"faq-container\" class=\"workouts-container base-border-radius\" translate-namespace=\"FAQ\">\n" +
+    "\n" +
+    "        <h1 class=\"main-title\" translate=\".MAIN_TITLE\"></h1>\n" +
+    "\n" +
+    "        <div id=\"faq-inner\">\n" +
+    "            <v-accordion class=\"vAccordion--default\">\n" +
+    "\n" +
+    "                <v-pane ng-repeat=\"faqitem in ::vm.questionsAndAnswers\" expanded=\"$first\">\n" +
+    "                    <v-pane-header>\n" +
+    "                        <svg-icon class=\"faq-icon\" name=\"faq-circle-arrow-icon\"></svg-icon> <span ng-bind-html=\"::faqitem.question\"></span>\n" +
+    "                    </v-pane-header>\n" +
+    "\n" +
+    "                    <v-pane-content>\n" +
+    "                        <div ng-bind-html=\"::faqitem.answer\"></div>\n" +
+    "                    </v-pane-content>\n" +
+    "                </v-pane>\n" +
+    "\n" +
+    "            </v-accordion>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -6076,163 +6075,163 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 
 
 angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.completed-v-feedback-svg {width: 100%; height: auto;}\n" +
-        "	.completed-v-feedback-svg .st0{fill:none;enable-background:new    ;}\n" +
-        "	.completed-v-feedback-svg .st1{fill:#CACBCC;}\n" +
-        "	.completed-v-feedback-svg .st2{display:none;fill:none;}\n" +
-        "	.completed-v-feedback-svg .st3{fill:#D1D2D2;}\n" +
-        "	.completed-v-feedback-svg .st4{fill:none;stroke:#FFFFFF;stroke-width:11.9321;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
-        "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
-        "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
-        "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/feedback/svg/feedback-btn-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\" y=\"0px\"\n" +
-        "     class=\"act-feedback-btn-icon\"\n" +
-        "     viewBox=\"0 0 200 178.1\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .act-feedback-btn-icon{\n" +
-        "        width:25px;\n" +
-        "        height:25px;\n" +
-        "        .st0{fill:none;stroke:#231F20;stroke-width:7;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <path  class=\"st0\" d=\"M7.3,61v46.2c0,0,54.1-4.9,72.1,6V55.8C79.4,55.8,66.6,64.1,7.3,61z\"/>\n" +
-        "        <path  class=\"st0\" d=\"M89.9,50.9c0,0,70.2-12,98.8-45.1v157.7c0,0-50.3-43.9-98.8-46.2V50.9z\"/>\n" +
-        "        <polyline class=\"st0\" points=\"25.7,109.1 25.7,160.9 56.8,173 56.8,109.1 	\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/feedback/svg/feedback-close-popup.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.close-pop-svg {width: 100%; height: auto;}\n" +
-        "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-        "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/feedback/svg/feedback-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "	 xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 116.4 115.7\"\n" +
-        "	 xml:space=\"preserve\" class=\"feedback-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.feedback-icon-svg {width: 100%; height: auto;}\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<path d=\"M116.4,92.8C97.8,76.9,76.5,69.3,51.6,71.4c0-16.4,0-33,0-51C75.3,20.6,97.4,15,116.4,0C116.4,30.9,116.4,61.9,116.4,92.8z\n" +
-        "		\"/>\n" +
-        "	<path d=\"M0,32.7C5.4,22.9,13.6,19,24.7,20.2c5.7,0.6,11.4,0.1,17.9,0.1c0,16.7,0,33.1,0,50.4C27.8,68.7,11,77.1,0,60\n" +
-        "		C0,50.9,0,41.8,0,32.7z\"/>\n" +
-        "	<path d=\"M23.3,115.7c-9.8-8.4-6.8-19.7-6.8-30.3c0-1,19.8-3.1,26.1-1.3c3,0.8,1.2,24.5,0.6,31.6C36.6,115.7,30,115.7,23.3,115.7z\"\n" +
-        "		/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/feedback/templates/feedback.template.html",
-        "<div class=\"feedback-dialog\">\n" +
-        "    <md-dialog class=\"base base-border-radius feedback-container\" translate-namespace=\"FEEDBACK_POPUP\">\n" +
-        "        <div class=\"top-icon-wrap\">\n" +
-        "            <div class=\"top-icon\">\n" +
-        "                <div class=\"round-icon-wrap\">\n" +
-        "                    <svg-icon name=\"feedback-icon\"></svg-icon>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"popup-header\">\n" +
-        "            <div class=\"close-popup-wrap\" ng-click=\"vm.cancel();\">\n" +
-        "                <svg-icon name=\"feedback-close-popup\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <md-dialog-content>\n" +
-        "            <div class=\"feedback-inner\">\n" +
-        "                <div class=\"main-title\" translate=\".FEEDBACK\"></div>\n" +
-        "                <ng-switch on=\"vm.success\">\n" +
-        "                    <section ng-switch-when=\"false\">\n" +
-        "                        <div class=\"sub-title\" translate=\".THINK\"></div>\n" +
-        "                        <form novalidate name=\"vm.feedbackForm\" class=\"base-form\" ng-submit=\"vm.sendFrom();\">\n" +
-        "\n" +
-        "							<textarea\n" +
-        "                                    required\n" +
-        "                                    name=\"messageFeedback\"\n" +
-        "                                    ng-model=\"vm.feedbackData.message\"\n" +
-        "                                    placeholder=\"{{'FEEDBACK_POPUP.MESSAGE' | translate}}\">\n" +
-        "                            </textarea>\n" +
-        "\n" +
-        "                            <label\n" +
-        "                                    ng-class=\"{'hidden': !(vm.feedbackForm.messageFeedback.$invalid && vm.feedbackForm.$submitted) }\"\n" +
-        "                                    translate=\".REQUIRED_FIELD\">\n" +
-        "                            </label>\n" +
-        "\n" +
-        "                            <input\n" +
-        "                                    required\n" +
-        "                                    type=\"email\"\n" +
-        "                                    name=\"emailFeedback\"\n" +
-        "                                    placeholder=\"{{'FEEDBACK_POPUP.EMAIL' | translate}}\"\n" +
-        "                                    ng-model=\"vm.feedbackData.email\"\n" +
-        "                                    ng-minlength=\"5\"\n" +
-        "                                    ng-maxlength=\"254\">\n" +
-        "\n" +
-        "                            <label\n" +
-        "                                    ng-class=\"{'hidden': !(vm.feedbackForm.emailFeedback.$invalid && vm.feedbackForm.$submitted) }\"\n" +
-        "                                    translate=\".CORRECT_EMAIL\">\n" +
-        "                            </label>\n" +
-        "\n" +
-        "                            <button\n" +
-        "                                    class=\"md-button success success-green drop-shadow\"\n" +
-        "                                    element-loader\n" +
-        "                                    fill-loader=\"vm.fillLoader\"\n" +
-        "                                    show-loader=\"vm.startLoader\"\n" +
-        "                                    bg-loader=\"'#72ab40'\"\n" +
-        "                                    precentage=\"50\"\n" +
-        "                                    font-color=\"'#FFFFFF'\"\n" +
-        "                                    bg=\"'#87ca4d'\">\n" +
-        "                                <span translate=\".SEND\"></span>\n" +
-        "                            </button>\n" +
-        "                            <div class=\"user-details-border\"></div>\n" +
-        "                            <div class=\"user-email\" ng-if=\"vm.userEmail\" translate=\".USER_EMAIL\"\n" +
-        "                                 translate-values=\"{userEmail: vm.userEmail}\"></div>\n" +
-        "                            <div class=\"user-id\" ng-if=\"vm.userId\" translate=\".USER_ID\"\n" +
-        "                                 translate-values=\"{userId: vm.userId}\"></div>\n" +
-        "                        </form>\n" +
-        "                    </section>\n" +
-        "                    <section ng-switch-default class=\"success-feedback\">\n" +
-        "                        <svg-icon name=\"completed-v-feedback-icon\"></svg-icon>\n" +
-        "                        <div class=\"success-msg\">\n" +
-        "                            <div translate=\".THANKS\"></div>\n" +
-        "                            <div translate=\".OPINION\"></div>\n" +
-        "                        </div>\n" +
-        "                        <md-button aria-label=\"{{'FEEDBACK_POPUP.DONE' | translate}}\"\n" +
-        "                                class=\"success success-green drop-shadow\"\n" +
-        "                                ng-click=\"vm.cancel();\">\n" +
-        "                            <span translate=\".DONE\"></span>\n" +
-        "                        </md-button>\n" +
-        "                    </section>\n" +
-        "                </ng-switch>\n" +
-        "            </div>\n" +
-        "        </md-dialog-content>\n" +
-        "    </md-dialog>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.completed-v-feedback-svg {width: 100%; height: auto;}\n" +
+    "	.completed-v-feedback-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.completed-v-feedback-svg .st1{fill:#CACBCC;}\n" +
+    "	.completed-v-feedback-svg .st2{display:none;fill:none;}\n" +
+    "	.completed-v-feedback-svg .st3{fill:#D1D2D2;}\n" +
+    "	.completed-v-feedback-svg .st4{fill:none;stroke:#FFFFFF;stroke-width:11.9321;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/svg/feedback-btn-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "     class=\"act-feedback-btn-icon\"\n" +
+    "     viewBox=\"0 0 200 178.1\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .act-feedback-btn-icon{\n" +
+    "        width:25px;\n" +
+    "        height:25px;\n" +
+    "        .st0{fill:none;stroke:#231F20;stroke-width:7;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path  class=\"st0\" d=\"M7.3,61v46.2c0,0,54.1-4.9,72.1,6V55.8C79.4,55.8,66.6,64.1,7.3,61z\"/>\n" +
+    "        <path  class=\"st0\" d=\"M89.9,50.9c0,0,70.2-12,98.8-45.1v157.7c0,0-50.3-43.9-98.8-46.2V50.9z\"/>\n" +
+    "        <polyline class=\"st0\" points=\"25.7,109.1 25.7,160.9 56.8,173 56.8,109.1 	\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/svg/feedback-close-popup.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/svg/feedback-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "	 xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 116.4 115.7\"\n" +
+    "	 xml:space=\"preserve\" class=\"feedback-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.feedback-icon-svg {width: 100%; height: auto;}\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<path d=\"M116.4,92.8C97.8,76.9,76.5,69.3,51.6,71.4c0-16.4,0-33,0-51C75.3,20.6,97.4,15,116.4,0C116.4,30.9,116.4,61.9,116.4,92.8z\n" +
+    "		\"/>\n" +
+    "	<path d=\"M0,32.7C5.4,22.9,13.6,19,24.7,20.2c5.7,0.6,11.4,0.1,17.9,0.1c0,16.7,0,33.1,0,50.4C27.8,68.7,11,77.1,0,60\n" +
+    "		C0,50.9,0,41.8,0,32.7z\"/>\n" +
+    "	<path d=\"M23.3,115.7c-9.8-8.4-6.8-19.7-6.8-30.3c0-1,19.8-3.1,26.1-1.3c3,0.8,1.2,24.5,0.6,31.6C36.6,115.7,30,115.7,23.3,115.7z\"\n" +
+    "		/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/feedback/templates/feedback.template.html",
+    "<div class=\"feedback-dialog\">\n" +
+    "    <md-dialog class=\"base base-border-radius feedback-container\" translate-namespace=\"FEEDBACK_POPUP\">\n" +
+    "        <div class=\"top-icon-wrap\">\n" +
+    "            <div class=\"top-icon\">\n" +
+    "                <div class=\"round-icon-wrap\">\n" +
+    "                    <svg-icon name=\"feedback-icon\"></svg-icon>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"popup-header\">\n" +
+    "            <div class=\"close-popup-wrap\" ng-click=\"vm.cancel();\">\n" +
+    "                <svg-icon name=\"feedback-close-popup\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <md-dialog-content>\n" +
+    "            <div class=\"feedback-inner\">\n" +
+    "                <div class=\"main-title\" translate=\".FEEDBACK\"></div>\n" +
+    "                <ng-switch on=\"vm.success\">\n" +
+    "                    <section ng-switch-when=\"false\">\n" +
+    "                        <div class=\"sub-title\" translate=\".THINK\"></div>\n" +
+    "                        <form novalidate name=\"vm.feedbackForm\" class=\"base-form\" ng-submit=\"vm.sendFrom();\">\n" +
+    "\n" +
+    "							<textarea\n" +
+    "                                    required\n" +
+    "                                    name=\"messageFeedback\"\n" +
+    "                                    ng-model=\"vm.feedbackData.message\"\n" +
+    "                                    placeholder=\"{{'FEEDBACK_POPUP.MESSAGE' | translate}}\">\n" +
+    "                            </textarea>\n" +
+    "\n" +
+    "                            <label\n" +
+    "                                    ng-class=\"{'hidden': !(vm.feedbackForm.messageFeedback.$invalid && vm.feedbackForm.$submitted) }\"\n" +
+    "                                    translate=\".REQUIRED_FIELD\">\n" +
+    "                            </label>\n" +
+    "\n" +
+    "                            <input\n" +
+    "                                    required\n" +
+    "                                    type=\"email\"\n" +
+    "                                    name=\"emailFeedback\"\n" +
+    "                                    placeholder=\"{{'FEEDBACK_POPUP.EMAIL' | translate}}\"\n" +
+    "                                    ng-model=\"vm.feedbackData.email\"\n" +
+    "                                    ng-minlength=\"5\"\n" +
+    "                                    ng-maxlength=\"254\">\n" +
+    "\n" +
+    "                            <label\n" +
+    "                                    ng-class=\"{'hidden': !(vm.feedbackForm.emailFeedback.$invalid && vm.feedbackForm.$submitted) }\"\n" +
+    "                                    translate=\".CORRECT_EMAIL\">\n" +
+    "                            </label>\n" +
+    "\n" +
+    "                            <button\n" +
+    "                                    class=\"md-button success success-green drop-shadow\"\n" +
+    "                                    element-loader\n" +
+    "                                    fill-loader=\"vm.fillLoader\"\n" +
+    "                                    show-loader=\"vm.startLoader\"\n" +
+    "                                    bg-loader=\"'#72ab40'\"\n" +
+    "                                    precentage=\"50\"\n" +
+    "                                    font-color=\"'#FFFFFF'\"\n" +
+    "                                    bg=\"'#87ca4d'\">\n" +
+    "                                <span translate=\".SEND\"></span>\n" +
+    "                            </button>\n" +
+    "                            <div class=\"user-details-border\"></div>\n" +
+    "                            <div class=\"user-email\" ng-if=\"vm.userEmail\" translate=\".USER_EMAIL\"\n" +
+    "                                 translate-values=\"{userEmail: vm.userEmail}\"></div>\n" +
+    "                            <div class=\"user-id\" ng-if=\"vm.userId\" translate=\".USER_ID\"\n" +
+    "                                 translate-values=\"{userId: vm.userId}\"></div>\n" +
+    "                        </form>\n" +
+    "                    </section>\n" +
+    "                    <section ng-switch-default class=\"success-feedback\">\n" +
+    "                        <svg-icon name=\"completed-v-feedback-icon\"></svg-icon>\n" +
+    "                        <div class=\"success-msg\">\n" +
+    "                            <div translate=\".THANKS\"></div>\n" +
+    "                            <div translate=\".OPINION\"></div>\n" +
+    "                        </div>\n" +
+    "                        <md-button aria-label=\"{{'FEEDBACK_POPUP.DONE' | translate}}\"\n" +
+    "                                class=\"success success-green drop-shadow\"\n" +
+    "                                ng-click=\"vm.cancel();\">\n" +
+    "                            <span translate=\".DONE\"></span>\n" +
+    "                        </md-button>\n" +
+    "                    </section>\n" +
+    "                </ng-switch>\n" +
+    "            </div>\n" +
+    "        </md-dialog-content>\n" +
+    "    </md-dialog>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -6244,7 +6243,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject';
+            'ngInject'; 
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -6273,155 +6272,155 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
 
 (function () {
     'use strict';
-
+    
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
         .run(["$templateCache", function($templateCache){
-                'ngInject';
+            'ngInject';
 
-                var template =
-                    '<div class="raccoon-in-app show-hide-animation" ng-class="raccoonTypeClass">' +
+            var template =
+                '<div class="raccoon-in-app show-hide-animation" ng-class="raccoonTypeClass">' +
                     '<div class="svg-wrap">' +
-                    '<svg-icon name="iap-msg-close-msg" ng-click="close()"></svg-icon>' +
+                        '<svg-icon name="iap-msg-close-msg" ng-click="close()"></svg-icon>' +
                     '</div>' +
                     '<div class="bubble-wrap">' +
-                    '<div class="msg-wrap">' +
-                    '<div class="msg" ng-bind-html="message"></div>' +
-                    '<svg-icon name="iap-msg-hint-bubble" class="hint-bubble-svg"></svg-icon>' +
-                    '</div>' +
+                        '<div class="msg-wrap">' +
+                            '<div class="msg" ng-bind-html="message"></div>' +
+                            '<svg-icon name="iap-msg-hint-bubble" class="hint-bubble-svg"></svg-icon>' +
+                        '</div>' +
                     '</div>' +
                     '<div class="raccoon">' +
-                    '<div></div>' +
+                        '<div></div>' +
                     '</div>' +
-                    '</div>';
-                $templateCache.put(templateCacheName,template);
-            }]
-        )
-        .service('raccoonIapMsgSrv',
-            ["$compile", "$rootScope", "$animate", "$document", "$timeout", "$templateCache", "$sce", function ($compile, $rootScope, $animate, $document, $timeout, $templateCache, $sce) {
-                'ngInject';
+                '</div>';
+            $templateCache.put(templateCacheName,template);
+        }]
+    )
+    .service('raccoonIapMsgSrv',
+        ["$compile", "$rootScope", "$animate", "$document", "$timeout", "$templateCache", "$sce", function ($compile, $rootScope, $animate, $document, $timeout, $templateCache, $sce) {
+            'ngInject';
 
-                var self = this;
+            var self = this;
 
-                var raccoonTypes = {
-                    HINT_RACCOON: 'HINT',
-                    PRACTICE_RACCOON: 'PRACTICE_HINT'
-                };
-                this.raccoonTypes = raccoonTypes;
+            var raccoonTypes = {
+                HINT_RACCOON: 'HINT',
+                PRACTICE_RACCOON: 'PRACTICE_HINT'
+            };
+            this.raccoonTypes = raccoonTypes;
 
-                var racccoonTypeToClassMap = {};
-                racccoonTypeToClassMap[this.raccoonTypes.HINT_RACCOON] = 'hint-raccoon';
-                racccoonTypeToClassMap[this.raccoonTypes.PRACTICE_RACCOON] = 'hint-raccoon-for-practice';
+            var racccoonTypeToClassMap = {};
+            racccoonTypeToClassMap[this.raccoonTypes.HINT_RACCOON] = 'hint-raccoon';
+            racccoonTypeToClassMap[this.raccoonTypes.PRACTICE_RACCOON] = 'hint-raccoon-for-practice';
 
-                function addPlaceHolderElement() {
-                    var wrapper = angular.element('<div class="raccoon-wrap"></div>');
-                    $document.find('body').append(wrapper);
-                    return wrapper;
+            function addPlaceHolderElement() {
+                var wrapper = angular.element('<div class="raccoon-wrap"></div>');
+                $document.find('body').append(wrapper);
+                return wrapper;
+            }
+
+            var raccoonParentElm = addPlaceHolderElement();
+
+            function _closeOnClickGlobalHandler() {
+                $timeout(function () {
+                    self.closeRaccoonIapMsg();
+                });
+            }
+
+            function _addCloseOnGlobalClickHandler() {
+                $document[0].body.addEventListener('click', _closeOnClickGlobalHandler);
+            }
+
+            function _removeCloseOnGlobalClickHandler() {
+                $document[0].body.removeEventListener('click', _closeOnClickGlobalHandler);
+            }
+
+            function _getRaccoonClass(raccoonType) {
+                return racccoonTypeToClassMap[raccoonType];
+            }
+
+            var scope;
+            /**** DO NOT USE THIS SERVICE, use IapMsgSrv instead!!!!!! ****/
+            this.closeRaccoonIapMsg = function () {
+                _removeCloseOnGlobalClickHandler();
+
+                $animate.leave(raccoonParentElm.children());
+
+                if (scope) {
+                    scope.$destroy();
+                    scope = null;
+                }
+            };
+            /**** DO NOT USE THIS SERVICE, use IapMsgSrv instead!!!!!! ****/
+            this.showRaccoonIapMsg = function (message, raccoonType) {
+                if (scope) {
+                    self.closeRaccoonIapMsg();
                 }
 
-                var raccoonParentElm = addPlaceHolderElement();
+                scope = $rootScope.$new(true);
+                scope.close = this.closeRaccoonIapMsg;
+                $sce.trustAsHtml(message);
+                scope.message = message;
+                scope.raccoonTypeClass = _getRaccoonClass(raccoonType);
 
-                function _closeOnClickGlobalHandler() {
-                    $timeout(function () {
-                        self.closeRaccoonIapMsg();
-                    });
-                }
-
-                function _addCloseOnGlobalClickHandler() {
-                    $document[0].body.addEventListener('click', _closeOnClickGlobalHandler);
-                }
-
-                function _removeCloseOnGlobalClickHandler() {
-                    $document[0].body.removeEventListener('click', _closeOnClickGlobalHandler);
-                }
-
-                function _getRaccoonClass(raccoonType) {
-                    return racccoonTypeToClassMap[raccoonType];
-                }
-
-                var scope;
-                /**** DO NOT USE THIS SERVICE, use IapMsgSrv instead!!!!!! ****/
-                this.closeRaccoonIapMsg = function () {
-                    _removeCloseOnGlobalClickHandler();
-
-                    $animate.leave(raccoonParentElm.children());
-
-                    if (scope) {
-                        scope.$destroy();
-                        scope = null;
-                    }
-                };
-                /**** DO NOT USE THIS SERVICE, use IapMsgSrv instead!!!!!! ****/
-                this.showRaccoonIapMsg = function (message, raccoonType) {
-                    if (scope) {
-                        self.closeRaccoonIapMsg();
-                    }
-
-                    scope = $rootScope.$new(true);
-                    scope.close = this.closeRaccoonIapMsg;
-                    $sce.trustAsHtml(message);
-                    scope.message = message;
-                    scope.raccoonTypeClass = _getRaccoonClass(raccoonType);
-
-                    var template = $templateCache.get(templateCacheName);
-                    var raccoonElm = angular.element(template);
-                    raccoonParentElm.append(raccoonElm);
-                    $animate.enter(raccoonElm, raccoonParentElm, null).then(function(){
-                        _addCloseOnGlobalClickHandler();
-                    });
-                    $compile(raccoonElm)(scope);
-                };
-            }]);
+                var template = $templateCache.get(templateCacheName);
+                var raccoonElm = angular.element(template);
+                raccoonParentElm.append(raccoonElm);
+                $animate.enter(raccoonElm, raccoonParentElm, null).then(function(){
+                    _addCloseOnGlobalClickHandler();
+                });
+                $compile(raccoonElm)(scope);
+            };
+        }]);
 })(angular);
 
 angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/iapMsg/svg/close-msg.svg",
-        "<svg class=\"iap-msg-close-msg-svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"-596.6 492.3 133.2 133.5\">\n" +
-        "    <style>\n" +
-        "        .iap-msg-close-msg-svg{\n" +
-        "            width: 12px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .iap-msg-close-msg-svg line {\n" +
-        "            stroke: #ffffff;\n" +
-        "            stroke-width: 10px;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <path class=\"st0\"/>\n" +
-        "    <g>\n" +
-        "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/iapMsg/svg/hint-bubble.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"0 0 2006.4 737.2\"\n" +
-        "     class=\"iap-msg-hint-bubble-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .iap-msg-hint-bubble-svg{\n" +
-        "            width: 400px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .iap-msg-hint-bubble-svg .st0 {\n" +
-        "            fill: #FFFFFF;\n" +
-        "            stroke: #8A8484;\n" +
-        "            stroke-width: 5;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <path class=\"st0\" d=\"M2003.9,348.5c0-191.1-448-346-1000.7-346S2.5,157.4,2.5,348.5s448,346,1000.7,346\n" +
-        "	c163.9,0,318.6-13.6,455.2-37.8c26.1,18.2,69.5,38.4,153,61.7c83.6,23.3,154.7,14.8,154.7,14.8s-87.6-50.2-134.5-115.4\n" +
-        "	C1858.7,554.4,2003.9,457.3,2003.9,348.5z\"/>\n" +
-        "</svg>\n" +
-        "");
+  $templateCache.put("components/iapMsg/svg/close-msg.svg",
+    "<svg class=\"iap-msg-close-msg-svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"-596.6 492.3 133.2 133.5\">\n" +
+    "    <style>\n" +
+    "        .iap-msg-close-msg-svg{\n" +
+    "            width: 12px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .iap-msg-close-msg-svg line {\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 10px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <path class=\"st0\"/>\n" +
+    "    <g>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/iapMsg/svg/hint-bubble.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 2006.4 737.2\"\n" +
+    "     class=\"iap-msg-hint-bubble-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .iap-msg-hint-bubble-svg{\n" +
+    "            width: 400px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .iap-msg-hint-bubble-svg .st0 {\n" +
+    "            fill: #FFFFFF;\n" +
+    "            stroke: #8A8484;\n" +
+    "            stroke-width: 5;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <path class=\"st0\" d=\"M2003.9,348.5c0-191.1-448-346-1000.7-346S2.5,157.4,2.5,348.5s448,346,1000.7,346\n" +
+    "	c163.9,0,318.6-13.6,455.2-37.8c26.1,18.2,69.5,38.4,153,61.7c83.6,23.3,154.7,14.8,154.7,14.8s-87.6-50.2-134.5-115.4\n" +
+    "	C1858.7,554.4,2003.9,457.3,2003.9,348.5z\"/>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -6444,7 +6443,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
     'use strict';
 
     angular.module('znk.infra-web-app.imageZoomer').directive('imageZoomer', ["$timeout", "$mdDialog", "$document", "$compile", function($timeout, $mdDialog, $document, $compile) {
-        'ngInject';
+       'ngInject';
 
         function compileFn() {
             function preFn(scope, element) {
@@ -6524,7 +6523,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-
+                    
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -6576,58 +6575,58 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
 
 
 angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-645.7 420.9 200.9 199\"\n" +
-        "     class=\"full-screen-icon\">\n" +
-        "<path class=\"st0\"/>\n" +
-        "\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .full-screen-icon {\n" +
-        "            width: 100%;\n" +
-        "			height: auto;\n" +
-        "			fill:none;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<g>\n" +
-        "		<line class=\"st1\" x1=\"-580.6\" y1=\"486.4\" x2=\"-641.7\" y2=\"425.4\"/>\n" +
-        "		<polyline class=\"st1\" points=\"-642.7,462.5 -642.7,423.9 -605.1,423.9 \"/>\n" +
-        "	</g>\n" +
-        "	<g>\n" +
-        "		<line class=\"st1\" x1=\"-509.8\" y1=\"486.4\" x2=\"-448.7\" y2=\"425.4\"/>\n" +
-        "		<polyline class=\"st1\" points=\"-447.7,462.5 -447.7,423.9 -485.4,423.9 \"/>\n" +
-        "	</g>\n" +
-        "	<g>\n" +
-        "		<line class=\"st1\" x1=\"-580.6\" y1=\"554.3\" x2=\"-641.7\" y2=\"615.3\"/>\n" +
-        "		<polyline class=\"st1\" points=\"-642.7,578.2 -642.7,616.8 -605.1,616.8 \"/>\n" +
-        "	</g>\n" +
-        "	<g>\n" +
-        "		<line class=\"st1\" x1=\"-509.8\" y1=\"554.3\" x2=\"-448.7\" y2=\"615.3\"/>\n" +
-        "		<polyline class=\"st1\" points=\"-447.7,578.2 -447.7,616.8 -485.4,616.8 \"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/imageZoomer/svg/image-zoomer-close-popup.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"image-zoomer-close-popup\">\n" +
-        "    <style>\n" +
-        "        .image-zoomer-close-popup{\n" +
-        "        width:15px;\n" +
-        "        height:15px;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <path class=\"st0\"/>\n" +
-        "    <g>\n" +
-        "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
+  $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-645.7 420.9 200.9 199\"\n" +
+    "     class=\"full-screen-icon\">\n" +
+    "<path class=\"st0\"/>\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .full-screen-icon {\n" +
+    "            width: 100%;\n" +
+    "			height: auto;\n" +
+    "			fill:none;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-580.6\" y1=\"486.4\" x2=\"-641.7\" y2=\"425.4\"/>\n" +
+    "		<polyline class=\"st1\" points=\"-642.7,462.5 -642.7,423.9 -605.1,423.9 \"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-509.8\" y1=\"486.4\" x2=\"-448.7\" y2=\"425.4\"/>\n" +
+    "		<polyline class=\"st1\" points=\"-447.7,462.5 -447.7,423.9 -485.4,423.9 \"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-580.6\" y1=\"554.3\" x2=\"-641.7\" y2=\"615.3\"/>\n" +
+    "		<polyline class=\"st1\" points=\"-642.7,578.2 -642.7,616.8 -605.1,616.8 \"/>\n" +
+    "	</g>\n" +
+    "	<g>\n" +
+    "		<line class=\"st1\" x1=\"-509.8\" y1=\"554.3\" x2=\"-448.7\" y2=\"615.3\"/>\n" +
+    "		<polyline class=\"st1\" points=\"-447.7,578.2 -447.7,616.8 -485.4,616.8 \"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/imageZoomer/svg/image-zoomer-close-popup.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"image-zoomer-close-popup\">\n" +
+    "    <style>\n" +
+    "        .image-zoomer-close-popup{\n" +
+    "        width:15px;\n" +
+    "        height:15px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <path class=\"st0\"/>\n" +
+    "    <g>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -6703,114 +6702,114 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-            ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", "CategoryService", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, CategoryService) {
-                'ngInject';
+        ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", "CategoryService", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, CategoryService) {
+            'ngInject';
 
-                var directive = {
-                    scope: {},
-                    require: ['^questionBuilder', '^ngModel'],
-                    templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
-                    link: function link(scope, element, attrs, ctrls) {
+            var directive = {
+                scope: {},
+                require: ['^questionBuilder', '^ngModel'],
+                templateUrl: 'components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html',
+                link: function link(scope, element, attrs, ctrls) {
 
-                        var questionBuilderCtrl = ctrls[0];
-                        var ngModelCtrl = ctrls[1];
-                        var viewMode = questionBuilderCtrl.getViewMode();
-                        var question = questionBuilderCtrl.question;
-                        var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
+                    var questionBuilderCtrl = ctrls[0];
+                    var ngModelCtrl = ctrls[1];
+                    var viewMode = questionBuilderCtrl.getViewMode();
+                    var question = questionBuilderCtrl.question;
+                    var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
 
-                        scope.d = {};
+                    scope.d = {};
 
-                        var init = (function () {
-                            var wasInit;
+                    var init = (function () {
+                        var wasInit;
 
-                            return function () {
-                                if (wasInit) {
-                                    return;
-                                }
-
-                                // add timeout to prevent showing visible answer explanation for a
-                                // second before it's hidden on slide that is not the current slide
-                                // (because the slider shifts from first slide to current)
-                                $timeout(function () {
-                                    element.addClass('answer-explanation-visible');
-                                }, 0, false);
-
-                                var analyticsProps = {
-                                    subjectType: questionSubjectId,
-                                    questionId: question.id
-                                };
-
-                                scope.$watch('d.showWrittenSln', function (isVisible) {
-                                    if (isVisible || isVisible === false) {
-                                        if (isVisible) {
-                                            znkAnalyticsSrv.eventTrack({
-                                                eventName: 'writtenSolutionClicked',
-                                                props: analyticsProps
-                                            });
-                                            znkAnalyticsSrv.timeTrack({ eventName: 'writtenSolutionClosed' });
-                                        } else {
-                                            znkAnalyticsSrv.eventTrack({
-                                                eventName: 'writtenSolutionClosed',
-                                                props: analyticsProps
-                                            });
-                                        }
-                                    }
-                                });
-
-                                wasInit = true;
-                            };
-                        })();
-
-                        function viewChangeListener() {
-                            if (ngModelCtrl.$viewValue) {           // user already answered
-                                init();
-                            } else {
-                                // $watch seems to work for sharer and viewer, while $viewChangeListeners
-                                // worked only for sharer. it's because $viewChangeListeners does not
-                                // invoke when the $modalValue change, only when the $viewValue (via input and etc)
-                                scope.$watch(function () {
-                                    return ngModelCtrl.$viewValue;
-                                }, function (newVal) {
-                                    // newVal undefined meens no answer yet, so must be protected
-                                    if (angular.isDefined(newVal)) {
-                                        init();
-                                    }
-                                });
+                        return function () {
+                            if (wasInit) {
+                                return;
                             }
-                        }
 
-                        switch (viewMode) {
-                            case ZnkExerciseViewModeEnum.REVIEW.enum:
-                                init();
-                                break;
-                            case ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum:
-                                viewChangeListener();
-                                break;
-                        }
+                            // add timeout to prevent showing visible answer explanation for a
+                            // second before it's hidden on slide that is not the current slide
+                            // (because the slider shifts from first slide to current)
+                            $timeout(function () {
+                                element.addClass('answer-explanation-visible');
+                            }, 0, false);
 
-                        function _updateBindExercise() {
-                            questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln, update: true }, question.id);
-                        }
+                            var analyticsProps = {
+                                subjectType: questionSubjectId,
+                                questionId: question.id
+                            };
 
-                        scope.d.close = function () {
-                            scope.d.toggleWrittenSln = false;
-                            questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
-                            _updateBindExercise();
+                            scope.$watch('d.showWrittenSln', function (isVisible) {
+                                if (isVisible || isVisible === false) {
+                                    if (isVisible) {
+                                        znkAnalyticsSrv.eventTrack({
+                                            eventName: 'writtenSolutionClicked',
+                                            props: analyticsProps
+                                        });
+                                        znkAnalyticsSrv.timeTrack({ eventName: 'writtenSolutionClosed' });
+                                    } else {
+                                        znkAnalyticsSrv.eventTrack({
+                                            eventName: 'writtenSolutionClosed',
+                                            props: analyticsProps
+                                        });
+                                    }
+                                }
+                            });
+
+                            wasInit = true;
                         };
+                    })();
 
-                        scope.d.toggleAnswer = function () {
-                            scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
-                            questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
-                            _updateBindExercise();
-                        };
-
-                        questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
-                            scope.d.toggleWrittenSln = newVal.data;
-                        }, question.id);
+                    function viewChangeListener() {
+                        if (ngModelCtrl.$viewValue) {           // user already answered
+                            init();
+                        } else {
+                            // $watch seems to work for sharer and viewer, while $viewChangeListeners
+                            // worked only for sharer. it's because $viewChangeListeners does not
+                            // invoke when the $modalValue change, only when the $viewValue (via input and etc)
+                            scope.$watch(function () {
+                                return ngModelCtrl.$viewValue;
+                            }, function (newVal) {
+                                // newVal undefined meens no answer yet, so must be protected
+                                if (angular.isDefined(newVal)) {
+                                    init();
+                                }
+                            });
+                        }
                     }
-                };
-                return directive;
-            }]
+
+                    switch (viewMode) {
+                        case ZnkExerciseViewModeEnum.REVIEW.enum:
+                            init();
+                            break;
+                        case ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum:
+                            viewChangeListener();
+                            break;
+                    }
+
+                    function _updateBindExercise() {
+                        questionBuilderCtrl.bindExerciseEventManager.update('answerExplanation', { data: scope.d.toggleWrittenSln, update: true }, question.id);
+                    }
+
+                    scope.d.close = function () {
+                        scope.d.toggleWrittenSln = false;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
+                        _updateBindExercise();
+                    };
+
+                    scope.d.toggleAnswer = function () {
+                        scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
+                        _updateBindExercise();
+                    };
+
+                    questionBuilderCtrl.bindExerciseEventManager.registerCb('answerExplanation', function (newVal) {
+                        scope.d.toggleWrittenSln = newVal.data;
+                    }, question.id);
+                }
+            };
+            return directive;
+        }]
         );
 })(angular);
 
@@ -6886,215 +6885,215 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     'use strict';
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('znkExerciseHeader',
         ["$timeout", "SubjectEnum", function($timeout, SubjectEnum){
-            'ngInject';
+        'ngInject';
 
-            return {
-                scope: {
-                    options: '=?',
-                    onClickedQuit: '&?',
-                    timerData: '=?',
-                    subjectId: '=',
-                    categoryId: '&',
-                    sideText: '=',
-                    totalSlideNum: '@',
-                    exerciseNum: '@',
-                    iconName: '@',
-                    iconClickHandler: '&',
-                    showNoCalcIcon: '&',
-                    showNoCalcTooltip: '&'
-                },
-                restrict: 'E',
-                require: '?ngModel',
-                templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
-                controller: function () {
-                    // required: subjectId
-                    if (angular.isUndefined(this.subjectId)) {
-                        throw new Error('Error: exerciseHeaderController: subjectId is required!');
-                    }
-                    this.subjectId = +this.subjectId;
-                    this.categoryId = this.categoryId();
-                    var categoryId = angular.isDefined(this.categoryId) ? this.categoryId : this.subjectId;
-                    this.subjectName = SubjectEnum.getValByEnum(categoryId);
-                },
-                bindToController: true,
-                controllerAs: 'vm',
-                link: function (scope, element, attrs, ngModel) {
-                    if (ngModel) {
-                        ngModel.$render = function () {
-                            scope.vm.currentSlideNum = ngModel.$viewValue;
-                        };
-                    }
-
-                    if (scope.vm.showNoCalcIcon()) {
-                        $timeout(function () {    // timeout fixing md-tooltip visibility issues
-                            scope.vm.showToolTip = scope.vm.showNoCalcTooltip();
-                        });
-                    }
+        return {
+            scope: {
+                options: '=?',
+                onClickedQuit: '&?',
+                timerData: '=?',
+                subjectId: '=',
+                categoryId: '&',
+                sideText: '=',
+                totalSlideNum: '@',
+                exerciseNum: '@',
+                iconName: '@',
+                iconClickHandler: '&',
+                showNoCalcIcon: '&',
+                showNoCalcTooltip: '&'
+            },
+            restrict: 'E',
+            require: '?ngModel',
+            templateUrl: 'components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html',
+            controller: function () {
+                // required: subjectId
+                if (angular.isUndefined(this.subjectId)) {
+                    throw new Error('Error: exerciseHeaderController: subjectId is required!');
                 }
-            };
-        }]);
+                this.subjectId = +this.subjectId;
+                this.categoryId = this.categoryId();
+                var categoryId = angular.isDefined(this.categoryId) ? this.categoryId : this.subjectId;
+                this.subjectName = SubjectEnum.getValByEnum(categoryId);
+            },
+            bindToController: true,
+            controllerAs: 'vm',
+            link: function (scope, element, attrs, ngModel) {
+                if (ngModel) {
+                    ngModel.$render = function () {
+                        scope.vm.currentSlideNum = ngModel.$viewValue;
+                    };
+                }
+
+                if (scope.vm.showNoCalcIcon()) {
+                    $timeout(function () {    // timeout fixing md-tooltip visibility issues
+                        scope.vm.showToolTip = scope.vm.showNoCalcTooltip();
+                    });
+                }
+            }
+        };
+    }]);
 })(angular);
 
 angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
-        "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
-        "    <div class=\"answer-explanation-content-wrapper\"\n" +
-        "         ng-if=\"d.toggleWrittenSln\">\n" +
-        "        <answer-explanation-content class=\"znk-scrollbar\"\n" +
-        "                                    on-close=\"d.close()\">\n" +
-        "        </answer-explanation-content>\n" +
-        "    </div>\n" +
-        "    <div class=\"answer-explanation-header\" ng-click=\"d.toggleAnswer()\">\n" +
-        "        <div class=\"answer-explanation-btn\">\n" +
-        "            <div class=\"main-content-wrapper\">\n" +
-        "                <svg-icon class=\"lamp-icon\" name=\"answer-explanation-lamp-icon\"></svg-icon>\n" +
-        "                <span class=\"text\" translate=\".ANSWER_EXPLANATION\"></span>\n" +
-        "            </div>\n" +
-        "            <div class=\"right-corner corner\"></div>\n" +
-        "            <div class=\"left-corner corner\"></div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanationContent.template.html",
-        "<div class=\"title\">\n" +
-        "    <div translate=\"ANSWER_EXPLANATION.TITLE\"></div>\n" +
-        "    <div class=\"answer-explanation-close\">\n" +
-        "        <svg-icon name=\"answer-explanation-close\"\n" +
-        "                  ng-click=\"d.close()\">\n" +
-        "        </svg-icon>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "<div class=\"flex-wrap\">\n" +
-        "    <div class=\"video-wrap\">\n" +
-        "        <video controls\n" +
-        "               video-ctrl-drv\n" +
-        "               on-play=\"d.onVideoPlay()\"\n" +
-        "               on-ended=\"d.onVideoEnded()\"\n" +
-        "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
-        "            <source ng-src=\"{{::d.videoSrc}}\" type=\"video/mp4\">\n" +
-        "        </video>\n" +
-        "        <div class=\"question-quid-text\">{{::d.quid}}</div>\n" +
-        "    </div>\n" +
-        "    <div class=\"written-solution-wrapper\"\n" +
-        "         ng-bind-html=\"d.writtenSlnContent\">\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html",
-        "<div class=\"exercise-header subject-repeat\" subject-id-to-attr-drv=\"vm.subjectId\"\n" +
-        "     context-attr=\"class\" suffix=\"bg\" translate-namespace=\"CONTAINER_HEADER\">\n" +
-        "   <div class=\"pattern\" subject-id-to-attr-drv=\"vm.subjectId\" context-attr=\"class\" prefix=\"subject-background\"></div>\n" +
-        "\n" +
-        "    <div class=\"left-area\">\n" +
-        "        <div class=\"side-text\">\n" +
-        "            {{vm.sideText | cutString: 40}}\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "\n" +
-        "    <div class=\"center-num-slide\"\n" +
-        "         ng-if=\"vm.options.showNumSlide\">\n" +
-        "        {{vm.currentSlideNum}}/{{::vm.totalSlideNum}}\n" +
-        "    </div>\n" +
-        "    <div class=\"review-mode\" ng-if=\"vm.options.reviewMode\" ui-sref=\"^.summary\">\n" +
-        "        <div class=\"background-opacity\"></div>\n" +
-        "        <div class=\"summary-text\" translate=\".SUMMARY\"></div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"right-area\">\n" +
-        "        <svg-icon class=\"header-icon\" ng-if=\"vm.iconName\" name=\"{{vm.iconName}}\" ng-click=\"vm.iconClickHandler(); vm.showToolTip = false\"></svg-icon>\n" +
-        "\n" +
-        "        <div class=\"date-box\" ng-if=\"vm.options.showDate\">\n" +
-        "            <timer type=\"1\" ng-model=\"vm.timerData.timeLeft\" play=\"true\" config=\"vm.timerData.config\"></timer>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"quit-back-button\" translate=\".QUIT_BTN_TEXT\" ng-if=\"vm.options.showQuit\" ng-click=\"vm.onClickedQuit()\"></div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/infraWebAppZnkExercise/svg/answer-explanation-close.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"-596.6 492.3 133.2 133.5\"\n" +
-        "     class=\"answer-explanation-close\">\n" +
-        "    <style>\n" +
-        "        svg.answer-explanation-close {\n" +
-        "            width: 14px;\n" +
-        "        }\n" +
-        "\n" +
-        "        svg.answer-explanation-close line {\n" +
-        "            stroke: #161616;\n" +
-        "            fill: none;\n" +
-        "            stroke-width: 8;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "\n" +
-        "    <path class=\"st0\"/>\n" +
-        "    <g>\n" +
-        "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/infraWebAppZnkExercise/svg/lamp-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"0 0 51.7 54.3\"\n" +
-        "     class=\"answer-explanation-lamp-icon-svg\">\n" +
-        "    <style>\n" +
-        "        svg.answer-explanation-lamp-icon-svg{\n" +
-        "            width: 18px;\n" +
-        "        }\n" +
-        "\n" +
-        "        svg.answer-explanation-lamp-icon-svg path{\n" +
-        "            stroke: white;\n" +
-        "            fill: white;\n" +
-        "        }\n" +
-        "\n" +
-        "        svg.answer-explanation-lamp-icon-svg path.st0{\n" +
-        "            fill: transparent;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "\n" +
-        "    <g>\n" +
-        "        <path class=\"st0\" d=\"M19.6,44.7c-0.9-0.1-2.1-0.1-2.1-1.3c0.1-4.5-2.5-8.1-3.9-12.1c-2.5-6.8,0.5-14.5,6.7-17.4\n" +
-        "		c5-2.3,9.7-1.7,13.8,1.9c4.5,3.9,5.8,9.1,4.1,14.7c-0.9,3-2.4,5.9-3.4,8.8c-0.4,1-0.5,2.2-0.5,3.3c0,1.5-0.7,2.2-2.2,2.2\n" +
-        "		C27.7,44.7,24.1,44.7,19.6,44.7z\"/>\n" +
-        "        <path class=\"st1\" d=\"M44.5,44.9c-0.4,1.3-1.4,1.2-2.1,0.5c-1.5-1.4-2.9-2.9-4.3-4.3c-0.4-0.4-0.6-0.9-0.2-1.5\n" +
-        "		c0.4-0.5,0.9-0.8,1.4-0.4c1.8,1.6,3.6,3.2,5,5.1C44.5,44.4,44.5,44.7,44.5,44.9z\"/>\n" +
-        "        <path class=\"st2\" d=\"M8,7.8c1,0,5.9,4.7,5.9,5.5c0,0.5-0.3,0.8-0.7,1.1c-0.5,0.4-0.9,0.1-1.2-0.2c-1.5-1.5-3.1-3-4.6-4.5\n" +
-        "		C7.1,9.3,7,8.8,7.3,8.2C7.5,8,7.9,7.9,8,7.8z\"/>\n" +
-        "        <path class=\"st3\"\n" +
-        "              d=\"M43.6,8c1.1,0.1,1.3,1.1,0.7,1.7c-1.4,1.7-3,3.3-4.7,4.7c-0.8,0.7-1.6,0.3-1.9-0.7C37.5,13,42.5,8,43.6,8z\"/>\n" +
-        "        <path class=\"st4\" d=\"M12.7,38.9c0.5,0,0.9,0.2,1.1,0.7c0.3,0.5,0,0.9-0.3,1.2c-1.5,1.5-3,3-4.5,4.5c-0.4,0.4-0.8,0.4-1.3,0.2\n" +
-        "		c-0.5-0.2-0.6-0.7-0.6-1.1C7.2,43.6,11.9,38.9,12.7,38.9z\"/>\n" +
-        "        <path class=\"st5\" d=\"M4.5,27.2c-1,0-2.1,0-3.1,0c-0.7,0-1.4-0.1-1.4-1c0-1,0.6-1.3,1.4-1.3c2,0,3.9,0,5.9,0c0.8,0,1.2,0.5,1.3,1.2\n" +
-        "		c0,0.8-0.5,1.1-1.3,1.1C6.4,27.2,5.4,27.2,4.5,27.2z\"/>\n" +
-        "        <path class=\"st6\" d=\"M47.1,27.2c-0.8,0-1.7,0-2.5,0c-0.8,0-1.6-0.1-1.5-1.2c0-0.7,0.5-1.2,1.3-1.1c2,0,3.9,0,5.9,0\n" +
-        "		c0.9,0,1.5,0.4,1.4,1.4c-0.1,0.9-0.8,0.9-1.5,0.9C49.2,27.2,48.1,27.2,47.1,27.2z\"/>\n" +
-        "        <path class=\"st7\" d=\"M26.9,4.2c0,1,0,2,0,3.1c0,0.7-0.3,1.3-1.1,1.3c-0.8,0-1.1-0.6-1.1-1.3c0-1.9,0-3.9,0-5.8c0-0.7,0.2-1.3,1-1.4\n" +
-        "		c1-0.1,1.3,0.6,1.2,1.4C26.9,2.4,27,3.3,26.9,4.2z\"/>\n" +
-        "        <path class=\"st8\" d=\"M17.4,26.3c0-3.2,1.2-5.3,2.9-7.2c0.6-0.6,1.2-1.3,2.1-0.6c1,0.8,0.3,1.4-0.3,2.1c-3.1,3.4-2.9,7-0.9,10.8\n" +
-        "		c0.5,0.9,1.5,2.1,0,2.8c-1.3,0.6-1.6-0.9-2.1-1.7C18,30.4,17.2,28.2,17.4,26.3z\"/>\n" +
-        "        <path class=\"st9\" d=\"M32,48.8H19.3c-0.6,0-1.1-0.5-1.1-1.1l0,0c0-0.6,0.5-1.1,1.1-1.1H32c0.6,0,1.1,0.5,1.1,1.1l0,0\n" +
-        "		C33.1,48.3,32.6,48.8,32,48.8z\"/>\n" +
-        "        <path class=\"st9\" d=\"M31,51.6H20.6c-0.6,0-1.1-0.5-1.1-1.1l0,0c0-0.6,0.5-1.1,1.1-1.1H31c0.6,0,1.1,0.5,1.1,1.1l0,0\n" +
-        "		C32.1,51.1,31.6,51.6,31,51.6z\"/>\n" +
-        "        <path class=\"st9\" d=\"M27.3,54.3H24c-0.6,0-1.1-0.5-1.1-1.1l0,0c0-0.6,0.5-1.1,1.1-1.1h3.2c0.6,0,1.1,0.5,1.1,1.1l0,0\n" +
-        "		C28.4,53.8,27.9,54.3,27.3,54.3z\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
+  $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
+    "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
+    "    <div class=\"answer-explanation-content-wrapper\"\n" +
+    "         ng-if=\"d.toggleWrittenSln\">\n" +
+    "        <answer-explanation-content class=\"znk-scrollbar\"\n" +
+    "                                    on-close=\"d.close()\">\n" +
+    "        </answer-explanation-content>\n" +
+    "    </div>\n" +
+    "    <div class=\"answer-explanation-header\" ng-click=\"d.toggleAnswer()\">\n" +
+    "        <div class=\"answer-explanation-btn\">\n" +
+    "            <div class=\"main-content-wrapper\">\n" +
+    "                <svg-icon class=\"lamp-icon\" name=\"answer-explanation-lamp-icon\"></svg-icon>\n" +
+    "                <span class=\"text\" translate=\".ANSWER_EXPLANATION\"></span>\n" +
+    "            </div>\n" +
+    "            <div class=\"right-corner corner\"></div>\n" +
+    "            <div class=\"left-corner corner\"></div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanationContent.template.html",
+    "<div class=\"title\">\n" +
+    "    <div translate=\"ANSWER_EXPLANATION.TITLE\"></div>\n" +
+    "    <div class=\"answer-explanation-close\">\n" +
+    "        <svg-icon name=\"answer-explanation-close\"\n" +
+    "                  ng-click=\"d.close()\">\n" +
+    "        </svg-icon>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "<div class=\"flex-wrap\">\n" +
+    "    <div class=\"video-wrap\">\n" +
+    "        <video controls\n" +
+    "               video-ctrl-drv\n" +
+    "               on-play=\"d.onVideoPlay()\"\n" +
+    "               on-ended=\"d.onVideoEnded()\"\n" +
+    "               video-error-poster=\"assets/images/raccoon/video-is-not-available-img.png\">\n" +
+    "            <source ng-src=\"{{::d.videoSrc}}\" type=\"video/mp4\">\n" +
+    "        </video>\n" +
+    "        <div class=\"question-quid-text\">{{::d.quid}}</div>\n" +
+    "    </div>\n" +
+    "    <div class=\"written-solution-wrapper\"\n" +
+    "         ng-bind-html=\"d.writtenSlnContent\">\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/infraWebAppZnkExercise/directives/znkExerciseHeader/exerciseHeader.template.html",
+    "<div class=\"exercise-header subject-repeat\" subject-id-to-attr-drv=\"vm.subjectId\"\n" +
+    "     context-attr=\"class\" suffix=\"bg\" translate-namespace=\"CONTAINER_HEADER\">\n" +
+    "   <div class=\"pattern\" subject-id-to-attr-drv=\"vm.subjectId\" context-attr=\"class\" prefix=\"subject-background\"></div>\n" +
+    "\n" +
+    "    <div class=\"left-area\">\n" +
+    "        <div class=\"side-text\">\n" +
+    "            {{vm.sideText | cutString: 40}}\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"center-num-slide\"\n" +
+    "         ng-if=\"vm.options.showNumSlide\">\n" +
+    "        {{vm.currentSlideNum}}/{{::vm.totalSlideNum}}\n" +
+    "    </div>\n" +
+    "    <div class=\"review-mode\" ng-if=\"vm.options.reviewMode\" ui-sref=\"^.summary\">\n" +
+    "        <div class=\"background-opacity\"></div>\n" +
+    "        <div class=\"summary-text\" translate=\".SUMMARY\"></div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"right-area\">\n" +
+    "        <svg-icon class=\"header-icon\" ng-if=\"vm.iconName\" name=\"{{vm.iconName}}\" ng-click=\"vm.iconClickHandler(); vm.showToolTip = false\"></svg-icon>\n" +
+    "\n" +
+    "        <div class=\"date-box\" ng-if=\"vm.options.showDate\">\n" +
+    "            <timer type=\"1\" ng-model=\"vm.timerData.timeLeft\" play=\"true\" config=\"vm.timerData.config\"></timer>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"quit-back-button\" translate=\".QUIT_BTN_TEXT\" ng-if=\"vm.options.showQuit\" ng-click=\"vm.onClickedQuit()\"></div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/infraWebAppZnkExercise/svg/answer-explanation-close.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"-596.6 492.3 133.2 133.5\"\n" +
+    "     class=\"answer-explanation-close\">\n" +
+    "    <style>\n" +
+    "        svg.answer-explanation-close {\n" +
+    "            width: 14px;\n" +
+    "        }\n" +
+    "\n" +
+    "        svg.answer-explanation-close line {\n" +
+    "            stroke: #161616;\n" +
+    "            fill: none;\n" +
+    "            stroke-width: 8;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "    <path class=\"st0\"/>\n" +
+    "    <g>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/infraWebAppZnkExercise/svg/lamp-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 51.7 54.3\"\n" +
+    "     class=\"answer-explanation-lamp-icon-svg\">\n" +
+    "    <style>\n" +
+    "        svg.answer-explanation-lamp-icon-svg{\n" +
+    "            width: 18px;\n" +
+    "        }\n" +
+    "\n" +
+    "        svg.answer-explanation-lamp-icon-svg path{\n" +
+    "            stroke: white;\n" +
+    "            fill: white;\n" +
+    "        }\n" +
+    "\n" +
+    "        svg.answer-explanation-lamp-icon-svg path.st0{\n" +
+    "            fill: transparent;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "    <g>\n" +
+    "        <path class=\"st0\" d=\"M19.6,44.7c-0.9-0.1-2.1-0.1-2.1-1.3c0.1-4.5-2.5-8.1-3.9-12.1c-2.5-6.8,0.5-14.5,6.7-17.4\n" +
+    "		c5-2.3,9.7-1.7,13.8,1.9c4.5,3.9,5.8,9.1,4.1,14.7c-0.9,3-2.4,5.9-3.4,8.8c-0.4,1-0.5,2.2-0.5,3.3c0,1.5-0.7,2.2-2.2,2.2\n" +
+    "		C27.7,44.7,24.1,44.7,19.6,44.7z\"/>\n" +
+    "        <path class=\"st1\" d=\"M44.5,44.9c-0.4,1.3-1.4,1.2-2.1,0.5c-1.5-1.4-2.9-2.9-4.3-4.3c-0.4-0.4-0.6-0.9-0.2-1.5\n" +
+    "		c0.4-0.5,0.9-0.8,1.4-0.4c1.8,1.6,3.6,3.2,5,5.1C44.5,44.4,44.5,44.7,44.5,44.9z\"/>\n" +
+    "        <path class=\"st2\" d=\"M8,7.8c1,0,5.9,4.7,5.9,5.5c0,0.5-0.3,0.8-0.7,1.1c-0.5,0.4-0.9,0.1-1.2-0.2c-1.5-1.5-3.1-3-4.6-4.5\n" +
+    "		C7.1,9.3,7,8.8,7.3,8.2C7.5,8,7.9,7.9,8,7.8z\"/>\n" +
+    "        <path class=\"st3\"\n" +
+    "              d=\"M43.6,8c1.1,0.1,1.3,1.1,0.7,1.7c-1.4,1.7-3,3.3-4.7,4.7c-0.8,0.7-1.6,0.3-1.9-0.7C37.5,13,42.5,8,43.6,8z\"/>\n" +
+    "        <path class=\"st4\" d=\"M12.7,38.9c0.5,0,0.9,0.2,1.1,0.7c0.3,0.5,0,0.9-0.3,1.2c-1.5,1.5-3,3-4.5,4.5c-0.4,0.4-0.8,0.4-1.3,0.2\n" +
+    "		c-0.5-0.2-0.6-0.7-0.6-1.1C7.2,43.6,11.9,38.9,12.7,38.9z\"/>\n" +
+    "        <path class=\"st5\" d=\"M4.5,27.2c-1,0-2.1,0-3.1,0c-0.7,0-1.4-0.1-1.4-1c0-1,0.6-1.3,1.4-1.3c2,0,3.9,0,5.9,0c0.8,0,1.2,0.5,1.3,1.2\n" +
+    "		c0,0.8-0.5,1.1-1.3,1.1C6.4,27.2,5.4,27.2,4.5,27.2z\"/>\n" +
+    "        <path class=\"st6\" d=\"M47.1,27.2c-0.8,0-1.7,0-2.5,0c-0.8,0-1.6-0.1-1.5-1.2c0-0.7,0.5-1.2,1.3-1.1c2,0,3.9,0,5.9,0\n" +
+    "		c0.9,0,1.5,0.4,1.4,1.4c-0.1,0.9-0.8,0.9-1.5,0.9C49.2,27.2,48.1,27.2,47.1,27.2z\"/>\n" +
+    "        <path class=\"st7\" d=\"M26.9,4.2c0,1,0,2,0,3.1c0,0.7-0.3,1.3-1.1,1.3c-0.8,0-1.1-0.6-1.1-1.3c0-1.9,0-3.9,0-5.8c0-0.7,0.2-1.3,1-1.4\n" +
+    "		c1-0.1,1.3,0.6,1.2,1.4C26.9,2.4,27,3.3,26.9,4.2z\"/>\n" +
+    "        <path class=\"st8\" d=\"M17.4,26.3c0-3.2,1.2-5.3,2.9-7.2c0.6-0.6,1.2-1.3,2.1-0.6c1,0.8,0.3,1.4-0.3,2.1c-3.1,3.4-2.9,7-0.9,10.8\n" +
+    "		c0.5,0.9,1.5,2.1,0,2.8c-1.3,0.6-1.6-0.9-2.1-1.7C18,30.4,17.2,28.2,17.4,26.3z\"/>\n" +
+    "        <path class=\"st9\" d=\"M32,48.8H19.3c-0.6,0-1.1-0.5-1.1-1.1l0,0c0-0.6,0.5-1.1,1.1-1.1H32c0.6,0,1.1,0.5,1.1,1.1l0,0\n" +
+    "		C33.1,48.3,32.6,48.8,32,48.8z\"/>\n" +
+    "        <path class=\"st9\" d=\"M31,51.6H20.6c-0.6,0-1.1-0.5-1.1-1.1l0,0c0-0.6,0.5-1.1,1.1-1.1H31c0.6,0,1.1,0.5,1.1,1.1l0,0\n" +
+    "		C32.1,51.1,31.6,51.6,31,51.6z\"/>\n" +
+    "        <path class=\"st9\" d=\"M27.3,54.3H24c-0.6,0-1.1-0.5-1.1-1.1l0,0c0-0.6,0.5-1.1,1.1-1.1h3.2c0.6,0,1.1,0.5,1.1,1.1l0,0\n" +
+    "		C28.4,53.8,27.9,54.3,27.3,54.3z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -7102,13 +7101,13 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
     angular.module('znk.infra-web-app.invitation',
         ['ngMaterial',
-            'znk.infra.popUp',
-            'znk.infra.svgIcon',
-            'pascalprecht.translate',
-            'znk.infra.presence',
-            'znk.infra.userContext',
-            'znk.infra-web-app.purchase',
-            'znk.infra.user'])
+        'znk.infra.popUp',
+        'znk.infra.svgIcon',
+        'pascalprecht.translate',
+        'znk.infra.presence',
+        'znk.infra.userContext',
+        'znk.infra-web-app.purchase',
+        'znk.infra.user'])
         .config([
             'SvgIconSrvProvider',
             function(SvgIconSrvProvider){
@@ -7190,7 +7189,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
         ["InvitationService", "$filter", "InvitationHelperService", "ENV", "PopUpSrv", "StudentContextSrv", "$timeout", "PresenceService", "$log", function (InvitationService, $filter, InvitationHelperService, ENV, PopUpSrv, StudentContextSrv, $timeout, PresenceService, $log) {
             'ngInject';
 
-            return {
+           return {
                 templateUrl: 'components/invitation/invitationManager/invitation-manager.template.html',
                 restrict: 'E',
                 scope: {},
@@ -7813,349 +7812,349 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 })(angular);
 
 angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/invitation/approveModal/invitationApproveModal.template.html",
-        "<md-dialog ng-cloak class=\"invitation-confirm-modal\" translate-namespace=\"INVITE_APPROVE_MODAL\">\n" +
-        "    <md-toolbar>\n" +
-        "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
-        "            <svg-icon name=\"invitation-close-popup\"></svg-icon>\n" +
-        "        </div>\n" +
-        "    </md-toolbar>\n" +
-        "    <md-dialog-content ng-switch=\"vm.requestMessage\" class=\"invitation-confirm-modal-content\">\n" +
-        "        <section ng-switch-when=\"false\">\n" +
-        "            <div class=\"main-title md-subheader\" translate=\".YOU_HAVE_INVITE\"></div>\n" +
-        "            <div class=\"teacher\">\n" +
-        "                <span>{{::vm.invitation.senderName}}</span>\n" +
-        "                <span class=\"want-to-connect\" translate=\".WANT_TO_CONNECT\"></span>\n" +
-        "            </div>\n" +
-        "            <div class=\"btn-wrap\">\n" +
-        "                <button class=\"md-button md-sm outline-blue\"\n" +
-        "                        ng-disabled=\"vm.btnDisable === true\"\n" +
-        "                        ng-click=\"vm.decline()\"\n" +
-        "                        element-loader\n" +
-        "                        fill-loader=\"vm.cancelFillLoader\"\n" +
-        "                        show-loader=\"vm.cancelStartLoader\"\n" +
-        "                        bg-loader=\"'#acacac'\"\n" +
-        "                        precentage=\"50\"\n" +
-        "                        font-color=\"'#0a9bad'\"\n" +
-        "                        bg=\"'#FFFFFF'\">\n" +
-        "                    <span translate=\".DECLINE\"></span>\n" +
-        "                </button>\n" +
-        "                <button class=\"md-button md-sm primary\"\n" +
-        "                        ng-disabled=\"vm.btnDisable === true\"\n" +
-        "                        ng-click=\"vm.approve()\"\n" +
-        "                        element-loader\n" +
-        "                        fill-loader=\"vm.approveFillLoader\"\n" +
-        "                        show-loader=\"vm.approveStartLoader\"\n" +
-        "                        bg-loader=\"'#07434A'\"\n" +
-        "                        precentage=\"50\"\n" +
-        "                        font-color=\"'#FFFFFF'\"\n" +
-        "                        bg=\"'#0a9bad'\">\n" +
-        "                    <span translate=\".ACCEPT\"></span>\n" +
-        "                </button>\n" +
-        "            </div>\n" +
-        "        </section>\n" +
-        "\n" +
-        "        <div class=\"big-success-msg switch-animation\" ng-switch-when=\"true\">\n" +
-        "            <svg-icon class=\"completed-v-icon-wrap\" name=\"invitation-v-icon\"></svg-icon>\n" +
-        "            <div ng-bind-html=\"vm.responseMessage\"></div>\n" +
-        "            <div class=\"done-btn-wrap\">\n" +
-        "                <md-button aria-label=\"{{'INVITE_APPROVE_MODAL.DONE' | translate}}\"\n" +
-        "                           class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
-        "                    <span translate=\".DONE\"></span>\n" +
-        "                </md-button>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "\n" +
-        "    </md-dialog-content>\n" +
-        "    <div class=\"top-icon-wrap\">\n" +
-        "        <div class=\"top-icon\">\n" +
-        "            <div class=\"round-icon-wrap\">\n" +
-        "                <svg-icon name=\"invitation-exclamation-mark-icon\" class=\"exclamation-mark-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</md-dialog>\n" +
-        "");
-    $templateCache.put("components/invitation/invitationManager/invitation-manager.template.html",
-        "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\" class=\"invitation-manager\">\n" +
-        "    <md-menu md-offset=\"-225 51\">\n" +
-        "        <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" ng-switch=\"hasTeachers\">\n" +
-        "            <div class=\"num-of-receive\" ng-if=\"hasInvitations\">{{getItemsCount(invitations)}}</div>\n" +
-        "            <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
-        "                <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
-        "            </section>\n" +
-        "            <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
-        "                <svg-icon name=\"invitation-teacher-active-icon\" class=\"teacher-active-icon\"></svg-icon>\n" +
-        "            </section>\n" +
-        "        </div>\n" +
-        "        <md-menu-content class=\"md-menu-content-invitation-manager\">\n" +
-        "            <!-- My Teachers -->\n" +
-        "            <div class=\"my-teachers-wrap\" ng-if=\"hasTeachers\">\n" +
-        "                <div class=\"teachers-header\" >\n" +
-        "                    <span translate=\".MY_TEACHERS\"></span>\n" +
-        "                    <svg-icon name=\"tutors-list-edit-icon\" class=\"tutors-list-edit-icon\" ng-class=\"{'delete-techer-mode': deleteTeacherMode}\" ng-click=\"toggleDeleteTeacher()\" md-prevent-menu-close></svg-icon>\n" +
-        "                </div>\n" +
-        "                <div ng-repeat=\"teacher in myTeachers\" class=\"teacher-item\">\n" +
-        "                    <div class=\"inner\">\n" +
-        "                        <div class=\"teacher-status\">\n" +
-        "                            <div class=\"online-indicator\"\n" +
-        "                                 ng-class=\"{'offline': teacher.presence === userStatus.OFFLINE,\n" +
-        "                                'online': teacher.presence === userStatus.ONLINE,\n" +
-        "                                'idle': teacher.presence === userStatus.IDLE}\"></div>\n" +
-        "                        </div>\n" +
-        "                        <div class=\"teacher-name\">{{teacher.senderName}}\n" +
-        "                            <div class=\"teacher-subject\">{{teacher.zinkerzTeacherSubject}}</div>\n" +
-        "                            <div class=\"teacher-email\">{{teacher.senderEmail}}</div>\n" +
-        "                        </div>\n" +
-        "                        <div class=\"actions\">\n" +
-        "                            <div class=\"delete-teacher\" ng-if=\"deleteTeacherMode\" ng-click=\"deleteTeacher(teacher)\">\n" +
-        "                                <span translate=\".REMOVE\"></span>\n" +
-        "                            </div>\n" +
-        "                        </div>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "            <!-- Pending Invitations -->\n" +
-        "            <md-list ng-if=\"hasInvitations\">\n" +
-        "                <md-subheader class=\"invite-sub-title decline-invite-count\" translate=\".PENDING_INVITATIONS\" translate-values=\"{count: getItemsCount(invitations)}\"></md-subheader>\n" +
-        "                <md-list-item ng-repeat=\"invite in invitations\" class=\"invite-list-wrap\">\n" +
-        "                    <div class=\"icon-wrap\">\n" +
-        "                        <svg-icon name=\"invitations-received-icon\" class=\"received-invitations\"></svg-icon>\n" +
-        "                        <div class=\"creation-time\">{{::invite.creationTime | date : 'MMM d'}}</div>\n" +
-        "                    </div>\n" +
-        "                    <div class=\"teacher-wrap\">\n" +
-        "                        <div class=\"teacher-name\">{{::invite.senderName}}</div>\n" +
-        "                        <div class=\"teacher-email\">{{::invite.senderEmail}}</div>\n" +
-        "                    </div>\n" +
-        "                    <div class=\"decline-invite\">\n" +
-        "                        <svg-icon name=\"invitation-close-popup\" class=\"decline-invite-btn\" ng-click=\"decline(invite)\"></svg-icon>\n" +
-        "                    </div>\n" +
-        "                    <div class=\"approve-invite\">\n" +
-        "                        <svg-icon name=\"invitation-v-icon\" class=\"v-icon-btn\" ng-click=\"approve(invite)\"></svg-icon>\n" +
-        "                    </div>\n" +
-        "                </md-list-item>\n" +
-        "            </md-list>\n" +
-        "            <!-- Invite Teacher Btn -->\n" +
-        "            <div class=\"empty-invite\">\n" +
-        "                <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
-        "                <div class=\"invite-action\">\n" +
-        "                    <div class=\"md-button outline-blue invite-btn\" ng-click=\"openInviteModal()\">\n" +
-        "                        <div translate=\".INVITE_STUDENTS\"></div>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </md-menu-content>\n" +
-        "    </md-menu>\n" +
-        "</div>\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html",
-        "<md-dialog class=\"invite-teacher-modal-wrap\" ng-cloak translate-namespace=\"INVITE_TEACHER_MODAL\">\n" +
-        "    <md-toolbar>\n" +
-        "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
-        "            <svg-icon name=\"invitation-close-popup\"></svg-icon>\n" +
-        "        </div>\n" +
-        "    </md-toolbar>\n" +
-        "    <md-dialog-content class=\"modal-content invite-teacher-content\" ng-switch=\"!!vm.showSuccess\">\n" +
-        "        <div class=\"modal-main-title\" translate=\".INVITE_TEACHER\"></div>\n" +
-        "        <form ng-switch-when=\"false\" class=\"invite-teacher-form\" novalidate name=\"inviteTeacherForm\"\n" +
-        "              ng-submit=\"inviteTeacherForm.$valid && vm.sendInvitation()\">\n" +
-        "            <div class=\"znk-input-group\" ng-class=\"{'invalid-input': !vm.teacherEmail && inviteTeacherForm.$submitted}\">\n" +
-        "                <input type=\"email\" autocomplete=\"off\"\n" +
-        "                       placeholder=\"{{::'INVITE_TEACHER_MODAL.TEACHER_EMAIL' | translate}}\" name=\"teacherEmail\"\n" +
-        "                       ng-minlength=\"6\" ng-maxlength=\"25\" ng-required=\"true\" ng-model=\"vm.teacherEmail\">\n" +
-        "                <div class=\"error-msg\" translate=\".REQUIRED\"></div>\n" +
-        "            </div>\n" +
-        "            <div class=\"znk-input-group\">\n" +
-        "                <input type=\"text\" autocomplete=\"off\"\n" +
-        "                       placeholder=\"{{::'INVITE_TEACHER_MODAL.TEACHER_NAME' | translate}}\" name=\"teacherName\"\n" +
-        "                       ng-model=\"vm.teacherName\">\n" +
-        "            </div>\n" +
-        "            <div class=\"btn-wrap\">\n" +
-        "                <div translate=\".INVITE_MSG\" class=\"invite-msg\"></div>\n" +
-        "               <!-- <button type=\"submit\" class=\"md-button success lg drop-shadow\" translate=\".INVITE\"></button>-->\n" +
-        "                <button type=\"submit\" class=\"md-button lg success drop-shadow\"\n" +
-        "                    element-loader\n" +
-        "                    fill-loader=\"vm.fillLoader\"\n" +
-        "                    show-loader=\"vm.startLoader\"\n" +
-        "                    bg-loader=\"'#72ab40'\"\n" +
-        "                    precentage=\"50\"\n" +
-        "                    font-color=\"'#FFFFFF'\"\n" +
-        "                    bg=\"'#87ca4d'\">\n" +
-        "                    <span translate=\".INVITE\"></span>\n" +
-        "                </button>\n" +
-        "            </div>\n" +
-        "        </form>\n" +
-        "        <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
-        "            <svg-icon class=\"completed-v-icon-wrap\" name=\"invitation-v-icon\"></svg-icon>\n" +
-        "            <div translate=\".SUCCESS_INVITE\"></div>\n" +
-        "            <div class=\"done-btn-wrap\">\n" +
-        "                <md-button aria-label=\"{{'INVITE_TEACHER_MODAL.DONE' | translate}}\"\n" +
-        "                    class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
-        "                    <span translate=\".DONE\"></span>\n" +
-        "                </md-button>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </md-dialog-content>\n" +
-        "    <div class=\"top-icon-wrap\">\n" +
-        "        <div class=\"top-icon\">\n" +
-        "            <div class=\"round-icon-wrap\">\n" +
-        "                <div class=\"invite-teacher-icon\"></div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</md-dialog>\n" +
-        "");
-    $templateCache.put("components/invitation/svg/invitation-close-popup.svg",
-        "<svg\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"-596.6 492.3 133.2 133.5\"\n" +
-        "    class=\"invitation-close-popup\">\n" +
-        "    <style>\n" +
-        "        .invitation-close-popup .st0{fill:none;}\n" +
-        "        .invitation-close-popup .st1{fill:none;stroke:\n" +
-        "        #ffffff;;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "    </style>\n" +
-        "    <path class=\"st0\"/>\n" +
-        "    <g>\n" +
-        "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/invitation/svg/invitation-exclamation-mark-icon.svg",
-        "<svg version=\"1.1\" class=\"invitation-exclamation-mark-icon\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-556.8 363.3 50.8 197.2\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.invitation-exclamation-mark-icon .st0 {\n" +
-        "        fill: none;\n" +
-        "        enable-background: new;\n" +
-        "    }\n" +
-        "    .invitation-exclamation-mark-icon {\n" +
-        "       width: 100%;\n" +
-        "        height: auto;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<path d=\"M-505.9,401.6c-0.4,19.5-5.2,38.2-8.7,57.1c-2.8,15.5-4.7,31.2-6.7,46.8c-0.3,2.6-1.1,4-3.7,4.3c-1.5,0.2-2.9,0.6-4.4,0.7\n" +
-        "		c-9.2,0.7-9.6,0.4-10.7-8.7c-3.4-29.6-8-58.9-14.6-87.9c-2.3-10.1-3.2-20.4-0.5-30.7c3.7-14.1,17.2-22.3,31.5-19.3\n" +
-        "		c9.2,1.9,14.7,8.8,16.2,20.9C-506.7,390.3-506.4,396-505.9,401.6z\"/>\n" +
-        "	<path d=\"M-528.9,525.7c10.9,0,16.8,5.3,16.9,15.2c0.1,11-9.3,19.7-21.4,19.6c-8.8,0-14.7-7-14.7-17.7\n" +
-        "		C-548.2,530.9-542.4,525.7-528.9,525.7z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/invitation/svg/invitation-teacher-active-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 193.7 145.6\" xml:space=\"preserve\" class=\"active-teacher-icon\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.active-teacher-icon .st0{display:none;fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "	.active-teacher-icon .st1{fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "	.active-teacher-icon .st2{display:none;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\" d=\"M76.7,114.2H16c-1.6,0-3-1.3-3-3V9c0-1.7,1.4-3,3-3h134c1.6,0,3,1.3,3,3l0,45.9\"/>\n" +
-        "<path class=\"st1\" d=\"M135.7,103.2\"/>\n" +
-        "<path d=\"M83,137.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,137.2,83,137.2z\"/>\n" +
-        "<path d=\"M193.7,145.6c0.8-29.2-29.3-39.7-29.3-39.7l-0.8-0.1c7.1-4.2,11.8-11.9,11.8-20.8c0-12.7-9.8-23.2-22.3-24.1\n" +
-        "	c-0.6,0-1.2-0.1-1.8-0.1c-13.3,0-24.2,10.8-24.2,24.2c0,7.5,3.4,14.2,8.8,18.6l-0.9-0.1l-33.2,17.9c-1.8,0.9-3.9,0.3-4.9-1.4\n" +
-        "	L82.6,95.5c-0.9-1.6-3.1-3.4-4.9-3.9c-6.1-1.7-9.8,2.3-9.7,7.2c0,1.5,0.8,3.7,1.6,5c3.6,5.5,12.2,18.7,17.4,26.2\n" +
-        "	c4.3,6.2,8.4,8,10.8,8.5c1.1,0.2,2.2,0.2,3.3-0.2l9.3-3l-3.3,10.3H193.7z\"/>\n" +
-        "<path class=\"st2\" d=\"M65.8,105.8c-1.1-1.7-2.3-4.7-2.3-7.4c0-2.9,0.8-5.6,2.4-7.7l-24.6-34c-1-1.3-0.7-3.2,0.7-4.2\n" +
-        "	c1.3-1,3.2-0.7,4.2,0.7L70.7,87c2.5-1,5.3-1.1,8.3-0.2c2.9,0.8,6.1,3.3,7.6,6l12.2,21.3h6.4l23-12.4c-3.6-4.9-5.6-10.9-5.6-17.1\n" +
-        "	c0-15.8,12.9-28.7,28.7-28.7c0.6,0,1.2,0,1.8,0.1V9c0-1.6-1.3-3-3-3H16c-1.6,0-3,1.4-3,3v102.2c0,1.6,1.4,3,3,3h55.3\n" +
-        "	C69.1,110.8,67.1,107.7,65.8,105.8z M68,21.2h61c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3S66.3,21.2,68,21.2z M68,41.3h61\n" +
-        "	c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3S66.3,41.3,68,41.3z M68,61.5h46c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3\n" +
-        "	S66.3,61.5,68,61.5z\"/>\n" +
-        "<path d=\"M60,120.2H16c-5,0-9-4-9-9V9c0-5,4-9,9-9h134c5,0,9,4,9,9v41.2c0,3.3-2.7,6-6,6s-6-2.7-6-6V12H19v96.2h41c3.3,0,6,2.7,6,6\n" +
-        "	S63.3,120.2,60,120.2z\"/>\n" +
-        "<path d=\"M129,27.2H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,27.2,129,27.2z\"/>\n" +
-        "<path d=\"M129,47.3H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,47.3,129,47.3z\"/>\n" +
-        "<path d=\"M114,67.5H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h46c1.7,0,3,1.3,3,3S115.7,67.5,114,67.5z\"/>\n" +
-        "<path d=\"M70.7,95.2c-0.9,0-1.8-0.4-2.4-1.2L41.3,56.7c-1-1.3-0.7-3.2,0.7-4.2c1.3-1,3.2-0.7,4.2,0.7l26.9,37.2\n" +
-        "	c1,1.3,0.7,3.2-0.7,4.2C71.9,95,71.3,95.2,70.7,95.2z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/invitation/svg/invitation-v-icon.svg",
-        "<svg\n" +
-        "class=\"v-icon-wrapper\"\n" +
-        "xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\"\n" +
-        "y=\"0px\"\n" +
-        "viewBox=\"-1040 834.9 220.4 220.4\">\n" +
-        "<style type=\"text/css\">\n" +
-        "    .v-icon-wrapper .st0{fill:none;enable-background:new    ;}\n" +
-        "    .v-icon-wrapper .st1{fill:#CACBCC;}\n" +
-        "    .v-icon-wrapper .st2{display:none;fill:none;}\n" +
-        "    .v-icon-wrapper .st3{fill:#D1D2D2;}\n" +
-        "    .v-icon-wrapper .st4{fill:none;stroke:#FFFFFF;stroke-width:11.9321;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "    .v-icon-wrapper {width: 100%; height: auto}\n" +
-        "</style>\n" +
-        "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
-        "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
-        "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
-        "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/invitation/svg/invitations-received-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 76.3 56.3\" class=\"received-invitations-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.received-invitations-svg .st0{fill:none;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\" d=\"M73.8,18.2v25.1c0,5.8-4.8,10.6-10.6,10.6H13.1c-5.8,0-10.6-4.8-10.6-10.6V18.2\"/>\n" +
-        "<line class=\"st0\" x1=\"38.2\" y1=\"2.5\" x2=\"38.2\" y2=\"38.8\"/>\n" +
-        "<line class=\"st0\" x1=\"38.2\" y1=\"40.2\" x2=\"54.5\" y2=\"23.9\"/>\n" +
-        "<line class=\"st0\" x1=\"38.2\" y1=\"40.2\" x2=\"21.9\" y2=\"23.9\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/invitation/svg/teacher-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 196.7 145.2\" class=\"teacher-icon\">\n" +
-        "<path d=\"M76.7,114.2H16c-3.3,0-6-2.7-6-6V6c0-3.3,2.7-6,6-6h134c3.3,0,6,2.7,6,6l0,45.9c0,1.7-1.3,3-3,3c0,0,0,0,0,0\n" +
-        "	c-1.7,0-3-1.3-3-3L150,6L16,6v102.2h60.7c1.7,0,3,1.3,3,3S78.4,114.2,76.7,114.2z\"/>\n" +
-        "<path d=\"M129,24.2H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,24.2,129,24.2z\"/>\n" +
-        "<path d=\"M129,44.3H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,44.3,129,44.3z\"/>\n" +
-        "<path d=\"M114,64.5H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h46c1.7,0,3,1.3,3,3S115.7,64.5,114,64.5z\"/>\n" +
-        "<path d=\"M153,108.8c-1.6,0-2.9-1.2-3-2.8c-0.1-1.7,1.1-3.1,2.8-3.2c11-0.8,19.6-10.1,19.6-21.1c0-11-8.6-20.3-19.6-21.1\n" +
-        "	c-1.7-0.1-2.9-1.6-2.8-3.2c0.1-1.7,1.6-2.9,3.2-2.8c14.1,1.1,25.1,13,25.1,27.1c0,14.1-11,26-25.1,27.1\n" +
-        "	C153.1,108.8,153.1,108.8,153,108.8z\"/>\n" +
-        "<path d=\"M151.2,108.8c-15,0-27.2-12.2-27.2-27.2s12.2-27.2,27.2-27.2c0.7,0,1.4,0,2.1,0.1c1.7,0.1,2.9,1.6,2.8,3.2s-1.5,2.9-3.2,2.8\n" +
-        "	c-0.5,0-1.1-0.1-1.6-0.1c-11.7,0-21.2,9.5-21.2,21.2c0,12.2,10.4,22,22.8,21.1c1.7-0.1,3.1,1.1,3.2,2.8c0.1,1.7-1.1,3.1-2.8,3.2\n" +
-        "	C152.5,108.8,151.8,108.8,151.2,108.8z\"/>\n" +
-        "<path d=\"M115.6,113.8c-1.1,0-2.1-0.6-2.7-1.6c-0.8-1.5-0.2-3.3,1.3-4.1l20.1-10.6c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1\n" +
-        "	L117,113.5C116.5,113.7,116.1,113.8,115.6,113.8z\"/>\n" +
-        "<path d=\"M115,114.2c-1.1,0-2.1-0.6-2.7-1.6c-0.8-1.5-0.2-3.3,1.3-4.1l0.6-0.3c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1\n" +
-        "	l-0.6,0.3C115.9,114.1,115.4,114.2,115,114.2z\"/>\n" +
-        "<path d=\"M193.7,145.2H107c-1,0-1.9-0.5-2.4-1.2c-0.6-0.8-0.7-1.8-0.4-2.7l1.5-4.8l-3.7,1.2c-1.6,0.5-3.3,0.6-4.8,0.3\n" +
-        "	c-3.2-0.7-7.9-2.9-12.6-9.7c-5.2-7.6-13.9-20.9-17.4-26.2c-1-1.6-2.1-4.3-2.1-6.6c-0.1-3.5,1.4-6.7,3.9-8.6c2.6-2,6-2.5,9.6-1.4\n" +
-        "	c2.5,0.7,5.4,3,6.7,5.3l14.1,24.7c0.2,0.3,0.6,0.4,0.9,0.3l13.3-7c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1l-13.3,7\n" +
-        "	c-3.2,1.7-7.1,0.5-8.9-2.6L80,93.5c-0.5-1-2.1-2.2-3.2-2.5c-1.3-0.4-3-0.6-4.3,0.4c-1,0.8-1.6,2.2-1.6,3.8c0,0.9,0.6,2.6,1.1,3.4\n" +
-        "	c3.5,5.4,12.2,18.6,17.3,26.1c3.8,5.5,7.2,6.9,8.9,7.3c0.6,0.1,1.2,0.1,1.7-0.1l9.2-3c1.1-0.3,2.2-0.1,3,0.7s1.1,2,0.7,3l-2.1,6.4\n" +
-        "	h79.5c-1.3-24.4-26.2-33.4-27.3-33.8c-1.6-0.5-2.4-2.3-1.8-3.8c0.5-1.6,2.3-2.4,3.8-1.8c0.3,0.1,32.1,11.6,31.3,42.6\n" +
-        "	C196.6,143.9,195.3,145.2,193.7,145.2z\"/>\n" +
-        "<path d=\"M70.7,92.2c-0.9,0-1.8-0.4-2.4-1.2L41.3,53.7c-1-1.3-0.7-3.2,0.7-4.2c1.3-1,3.2-0.7,4.2,0.7l26.9,37.2\n" +
-        "	c1,1.3,0.7,3.2-0.7,4.2C71.9,92,71.3,92.2,70.7,92.2z\"/>\n" +
-        "<path d=\"M83,134.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,134.2,83,134.2z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/invitation/svg/tutors-list-edit-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 88.5 67.2\" xml:space=\"preserve\" class=\"tutors-list-edit-svg\">\n" +
-        "<g>\n" +
-        "	<path d=\"M21.5,67.1c2.4-9.3,4.4-17.6,6.7-25.9c0.3-1.2,1.5-2.1,2.5-3.1c11.5-11.5,23-23.1,34.5-34.6c4.9-4.9,7.6-4.8,12.6,0.1\n" +
-        "		c2.7,2.7,5.5,5.4,8.1,8.1c3.4,3.6,3.5,7,0.1,10.4C73.8,34.6,61.6,46.8,49.3,59c-0.9,0.9-2.2,1.6-3.4,1.9\n" +
-        "		C38.3,62.9,30.5,64.8,21.5,67.1z M67.8,14.5c-9.2,9.2-18.1,18-26.9,26.8c2.1,2.1,4.5,4.5,6.3,6.3c8.9-8.8,17.8-17.7,26.4-26.2\n" +
-        "		C71.7,19.1,69.5,16.5,67.8,14.5z M30.8,44.6c-0.9,3.4-2.1,7-2.7,10.7c-0.5,2.7,3,5.8,5.7,5.2c3.5-0.8,6.9-1.8,10.3-2.7\n" +
-        "		C39.6,53.3,35.4,49.1,30.8,44.6z\"/>\n" +
-        "	<path d=\"M15.1,60.8c-0.4,2.4-0.8,4.3-1.2,6.4c-4.6,0-9,0-13.9,0c0-2.1,0-4.1,0-6.4C4.9,60.8,9.8,60.8,15.1,60.8z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
+  $templateCache.put("components/invitation/approveModal/invitationApproveModal.template.html",
+    "<md-dialog ng-cloak class=\"invitation-confirm-modal\" translate-namespace=\"INVITE_APPROVE_MODAL\">\n" +
+    "    <md-toolbar>\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
+    "            <svg-icon name=\"invitation-close-popup\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </md-toolbar>\n" +
+    "    <md-dialog-content ng-switch=\"vm.requestMessage\" class=\"invitation-confirm-modal-content\">\n" +
+    "        <section ng-switch-when=\"false\">\n" +
+    "            <div class=\"main-title md-subheader\" translate=\".YOU_HAVE_INVITE\"></div>\n" +
+    "            <div class=\"teacher\">\n" +
+    "                <span>{{::vm.invitation.senderName}}</span>\n" +
+    "                <span class=\"want-to-connect\" translate=\".WANT_TO_CONNECT\"></span>\n" +
+    "            </div>\n" +
+    "            <div class=\"btn-wrap\">\n" +
+    "                <button class=\"md-button md-sm outline-blue\"\n" +
+    "                        ng-disabled=\"vm.btnDisable === true\"\n" +
+    "                        ng-click=\"vm.decline()\"\n" +
+    "                        element-loader\n" +
+    "                        fill-loader=\"vm.cancelFillLoader\"\n" +
+    "                        show-loader=\"vm.cancelStartLoader\"\n" +
+    "                        bg-loader=\"'#acacac'\"\n" +
+    "                        precentage=\"50\"\n" +
+    "                        font-color=\"'#0a9bad'\"\n" +
+    "                        bg=\"'#FFFFFF'\">\n" +
+    "                    <span translate=\".DECLINE\"></span>\n" +
+    "                </button>\n" +
+    "                <button class=\"md-button md-sm primary\"\n" +
+    "                        ng-disabled=\"vm.btnDisable === true\"\n" +
+    "                        ng-click=\"vm.approve()\"\n" +
+    "                        element-loader\n" +
+    "                        fill-loader=\"vm.approveFillLoader\"\n" +
+    "                        show-loader=\"vm.approveStartLoader\"\n" +
+    "                        bg-loader=\"'#07434A'\"\n" +
+    "                        precentage=\"50\"\n" +
+    "                        font-color=\"'#FFFFFF'\"\n" +
+    "                        bg=\"'#0a9bad'\">\n" +
+    "                    <span translate=\".ACCEPT\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </section>\n" +
+    "\n" +
+    "        <div class=\"big-success-msg switch-animation\" ng-switch-when=\"true\">\n" +
+    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"invitation-v-icon\"></svg-icon>\n" +
+    "            <div ng-bind-html=\"vm.responseMessage\"></div>\n" +
+    "            <div class=\"done-btn-wrap\">\n" +
+    "                <md-button aria-label=\"{{'INVITE_APPROVE_MODAL.DONE' | translate}}\"\n" +
+    "                           class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
+    "                    <span translate=\".DONE\"></span>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </md-dialog-content>\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"invitation-exclamation-mark-icon\" class=\"exclamation-mark-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/invitation/invitationManager/invitation-manager.template.html",
+    "<div translate-namespace=\"INVITATION_MANAGER_DIRECTIVE\" class=\"invitation-manager\">\n" +
+    "    <md-menu md-offset=\"-225 51\">\n" +
+    "        <div ng-click=\"$mdOpenMenu($event);\" class=\"md-icon-button invite-icon-btn\" ng-switch=\"hasTeachers\">\n" +
+    "            <div class=\"num-of-receive\" ng-if=\"hasInvitations\">{{getItemsCount(invitations)}}</div>\n" +
+    "            <section ng-switch-when=\"false\" class=\"circle-invite-wrap teacher-icon-wrap\">\n" +
+    "                <svg-icon name=\"invitation-teacher-icon\"></svg-icon>\n" +
+    "            </section>\n" +
+    "            <section ng-switch-when=\"true\" class=\"circle-invite-wrap teacher-active-icon-wrap\">\n" +
+    "                <svg-icon name=\"invitation-teacher-active-icon\" class=\"teacher-active-icon\"></svg-icon>\n" +
+    "            </section>\n" +
+    "        </div>\n" +
+    "        <md-menu-content class=\"md-menu-content-invitation-manager\">\n" +
+    "            <!-- My Teachers -->\n" +
+    "            <div class=\"my-teachers-wrap\" ng-if=\"hasTeachers\">\n" +
+    "                <div class=\"teachers-header\" >\n" +
+    "                    <span translate=\".MY_TEACHERS\"></span>\n" +
+    "                    <svg-icon name=\"tutors-list-edit-icon\" class=\"tutors-list-edit-icon\" ng-class=\"{'delete-techer-mode': deleteTeacherMode}\" ng-click=\"toggleDeleteTeacher()\" md-prevent-menu-close></svg-icon>\n" +
+    "                </div>\n" +
+    "                <div ng-repeat=\"teacher in myTeachers\" class=\"teacher-item\">\n" +
+    "                    <div class=\"inner\">\n" +
+    "                        <div class=\"teacher-status\">\n" +
+    "                            <div class=\"online-indicator\"\n" +
+    "                                 ng-class=\"{'offline': teacher.presence === userStatus.OFFLINE,\n" +
+    "                                'online': teacher.presence === userStatus.ONLINE,\n" +
+    "                                'idle': teacher.presence === userStatus.IDLE}\"></div>\n" +
+    "                        </div>\n" +
+    "                        <div class=\"teacher-name\">{{teacher.senderName}}\n" +
+    "                            <div class=\"teacher-subject\">{{teacher.zinkerzTeacherSubject}}</div>\n" +
+    "                            <div class=\"teacher-email\">{{teacher.senderEmail}}</div>\n" +
+    "                        </div>\n" +
+    "                        <div class=\"actions\">\n" +
+    "                            <div class=\"delete-teacher\" ng-if=\"deleteTeacherMode\" ng-click=\"deleteTeacher(teacher)\">\n" +
+    "                                <span translate=\".REMOVE\"></span>\n" +
+    "                            </div>\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <!-- Pending Invitations -->\n" +
+    "            <md-list ng-if=\"hasInvitations\">\n" +
+    "                <md-subheader class=\"invite-sub-title decline-invite-count\" translate=\".PENDING_INVITATIONS\" translate-values=\"{count: getItemsCount(invitations)}\"></md-subheader>\n" +
+    "                <md-list-item ng-repeat=\"invite in invitations\" class=\"invite-list-wrap\">\n" +
+    "                    <div class=\"icon-wrap\">\n" +
+    "                        <svg-icon name=\"invitations-received-icon\" class=\"received-invitations\"></svg-icon>\n" +
+    "                        <div class=\"creation-time\">{{::invite.creationTime | date : 'MMM d'}}</div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"teacher-wrap\">\n" +
+    "                        <div class=\"teacher-name\">{{::invite.senderName}}</div>\n" +
+    "                        <div class=\"teacher-email\">{{::invite.senderEmail}}</div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"decline-invite\">\n" +
+    "                        <svg-icon name=\"invitation-close-popup\" class=\"decline-invite-btn\" ng-click=\"decline(invite)\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"approve-invite\">\n" +
+    "                        <svg-icon name=\"invitation-v-icon\" class=\"v-icon-btn\" ng-click=\"approve(invite)\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                </md-list-item>\n" +
+    "            </md-list>\n" +
+    "            <!-- Invite Teacher Btn -->\n" +
+    "            <div class=\"empty-invite\">\n" +
+    "                <div class=\"empty-msg\" translate=\".EMPTY_INVITE\"></div>\n" +
+    "                <div class=\"invite-action\">\n" +
+    "                    <div class=\"md-button outline-blue invite-btn\" ng-click=\"openInviteModal()\">\n" +
+    "                        <div translate=\".INVITE_STUDENTS\"></div>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </md-menu-content>\n" +
+    "    </md-menu>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/invitation/inviteTeacherModal/inviteTeacherTemplateModal.template.html",
+    "<md-dialog class=\"invite-teacher-modal-wrap\" ng-cloak translate-namespace=\"INVITE_TEACHER_MODAL\">\n" +
+    "    <md-toolbar>\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
+    "            <svg-icon name=\"invitation-close-popup\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </md-toolbar>\n" +
+    "    <md-dialog-content class=\"modal-content invite-teacher-content\" ng-switch=\"!!vm.showSuccess\">\n" +
+    "        <div class=\"modal-main-title\" translate=\".INVITE_TEACHER\"></div>\n" +
+    "        <form ng-switch-when=\"false\" class=\"invite-teacher-form\" novalidate name=\"inviteTeacherForm\"\n" +
+    "              ng-submit=\"inviteTeacherForm.$valid && vm.sendInvitation()\">\n" +
+    "            <div class=\"znk-input-group\" ng-class=\"{'invalid-input': !vm.teacherEmail && inviteTeacherForm.$submitted}\">\n" +
+    "                <input type=\"email\" autocomplete=\"off\"\n" +
+    "                       placeholder=\"{{::'INVITE_TEACHER_MODAL.TEACHER_EMAIL' | translate}}\" name=\"teacherEmail\"\n" +
+    "                       ng-minlength=\"6\" ng-maxlength=\"25\" ng-required=\"true\" ng-model=\"vm.teacherEmail\">\n" +
+    "                <div class=\"error-msg\" translate=\".REQUIRED\"></div>\n" +
+    "            </div>\n" +
+    "            <div class=\"znk-input-group\">\n" +
+    "                <input type=\"text\" autocomplete=\"off\"\n" +
+    "                       placeholder=\"{{::'INVITE_TEACHER_MODAL.TEACHER_NAME' | translate}}\" name=\"teacherName\"\n" +
+    "                       ng-model=\"vm.teacherName\">\n" +
+    "            </div>\n" +
+    "            <div class=\"btn-wrap\">\n" +
+    "                <div translate=\".INVITE_MSG\" class=\"invite-msg\"></div>\n" +
+    "               <!-- <button type=\"submit\" class=\"md-button success lg drop-shadow\" translate=\".INVITE\"></button>-->\n" +
+    "                <button type=\"submit\" class=\"md-button lg success drop-shadow\"\n" +
+    "                    element-loader\n" +
+    "                    fill-loader=\"vm.fillLoader\"\n" +
+    "                    show-loader=\"vm.startLoader\"\n" +
+    "                    bg-loader=\"'#72ab40'\"\n" +
+    "                    precentage=\"50\"\n" +
+    "                    font-color=\"'#FFFFFF'\"\n" +
+    "                    bg=\"'#87ca4d'\">\n" +
+    "                    <span translate=\".INVITE\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "        <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
+    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"invitation-v-icon\"></svg-icon>\n" +
+    "            <div translate=\".SUCCESS_INVITE\"></div>\n" +
+    "            <div class=\"done-btn-wrap\">\n" +
+    "                <md-button aria-label=\"{{'INVITE_TEACHER_MODAL.DONE' | translate}}\"\n" +
+    "                    class=\"success lg drop-shadow\" ng-click=\"vm.closeModal()\">\n" +
+    "                    <span translate=\".DONE\"></span>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </md-dialog-content>\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <div class=\"invite-teacher-icon\"></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/invitation-close-popup.svg",
+    "<svg\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\"\n" +
+    "    class=\"invitation-close-popup\">\n" +
+    "    <style>\n" +
+    "        .invitation-close-popup .st0{fill:none;}\n" +
+    "        .invitation-close-popup .st1{fill:none;stroke:\n" +
+    "        #ffffff;;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "    </style>\n" +
+    "    <path class=\"st0\"/>\n" +
+    "    <g>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "        <line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/invitation-exclamation-mark-icon.svg",
+    "<svg version=\"1.1\" class=\"invitation-exclamation-mark-icon\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-556.8 363.3 50.8 197.2\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.invitation-exclamation-mark-icon .st0 {\n" +
+    "        fill: none;\n" +
+    "        enable-background: new;\n" +
+    "    }\n" +
+    "    .invitation-exclamation-mark-icon {\n" +
+    "       width: 100%;\n" +
+    "        height: auto;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<path d=\"M-505.9,401.6c-0.4,19.5-5.2,38.2-8.7,57.1c-2.8,15.5-4.7,31.2-6.7,46.8c-0.3,2.6-1.1,4-3.7,4.3c-1.5,0.2-2.9,0.6-4.4,0.7\n" +
+    "		c-9.2,0.7-9.6,0.4-10.7-8.7c-3.4-29.6-8-58.9-14.6-87.9c-2.3-10.1-3.2-20.4-0.5-30.7c3.7-14.1,17.2-22.3,31.5-19.3\n" +
+    "		c9.2,1.9,14.7,8.8,16.2,20.9C-506.7,390.3-506.4,396-505.9,401.6z\"/>\n" +
+    "	<path d=\"M-528.9,525.7c10.9,0,16.8,5.3,16.9,15.2c0.1,11-9.3,19.7-21.4,19.6c-8.8,0-14.7-7-14.7-17.7\n" +
+    "		C-548.2,530.9-542.4,525.7-528.9,525.7z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/invitation-teacher-active-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 193.7 145.6\" xml:space=\"preserve\" class=\"active-teacher-icon\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.active-teacher-icon .st0{display:none;fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "	.active-teacher-icon .st1{fill:none;stroke:#000000;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "	.active-teacher-icon .st2{display:none;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M76.7,114.2H16c-1.6,0-3-1.3-3-3V9c0-1.7,1.4-3,3-3h134c1.6,0,3,1.3,3,3l0,45.9\"/>\n" +
+    "<path class=\"st1\" d=\"M135.7,103.2\"/>\n" +
+    "<path d=\"M83,137.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,137.2,83,137.2z\"/>\n" +
+    "<path d=\"M193.7,145.6c0.8-29.2-29.3-39.7-29.3-39.7l-0.8-0.1c7.1-4.2,11.8-11.9,11.8-20.8c0-12.7-9.8-23.2-22.3-24.1\n" +
+    "	c-0.6,0-1.2-0.1-1.8-0.1c-13.3,0-24.2,10.8-24.2,24.2c0,7.5,3.4,14.2,8.8,18.6l-0.9-0.1l-33.2,17.9c-1.8,0.9-3.9,0.3-4.9-1.4\n" +
+    "	L82.6,95.5c-0.9-1.6-3.1-3.4-4.9-3.9c-6.1-1.7-9.8,2.3-9.7,7.2c0,1.5,0.8,3.7,1.6,5c3.6,5.5,12.2,18.7,17.4,26.2\n" +
+    "	c4.3,6.2,8.4,8,10.8,8.5c1.1,0.2,2.2,0.2,3.3-0.2l9.3-3l-3.3,10.3H193.7z\"/>\n" +
+    "<path class=\"st2\" d=\"M65.8,105.8c-1.1-1.7-2.3-4.7-2.3-7.4c0-2.9,0.8-5.6,2.4-7.7l-24.6-34c-1-1.3-0.7-3.2,0.7-4.2\n" +
+    "	c1.3-1,3.2-0.7,4.2,0.7L70.7,87c2.5-1,5.3-1.1,8.3-0.2c2.9,0.8,6.1,3.3,7.6,6l12.2,21.3h6.4l23-12.4c-3.6-4.9-5.6-10.9-5.6-17.1\n" +
+    "	c0-15.8,12.9-28.7,28.7-28.7c0.6,0,1.2,0,1.8,0.1V9c0-1.6-1.3-3-3-3H16c-1.6,0-3,1.4-3,3v102.2c0,1.6,1.4,3,3,3h55.3\n" +
+    "	C69.1,110.8,67.1,107.7,65.8,105.8z M68,21.2h61c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3S66.3,21.2,68,21.2z M68,41.3h61\n" +
+    "	c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3S66.3,41.3,68,41.3z M68,61.5h46c1.7,0,3,1.3,3,3s-1.3,3-3,3H68c-1.7,0-3-1.3-3-3\n" +
+    "	S66.3,61.5,68,61.5z\"/>\n" +
+    "<path d=\"M60,120.2H16c-5,0-9-4-9-9V9c0-5,4-9,9-9h134c5,0,9,4,9,9v41.2c0,3.3-2.7,6-6,6s-6-2.7-6-6V12H19v96.2h41c3.3,0,6,2.7,6,6\n" +
+    "	S63.3,120.2,60,120.2z\"/>\n" +
+    "<path d=\"M129,27.2H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,27.2,129,27.2z\"/>\n" +
+    "<path d=\"M129,47.3H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,47.3,129,47.3z\"/>\n" +
+    "<path d=\"M114,67.5H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h46c1.7,0,3,1.3,3,3S115.7,67.5,114,67.5z\"/>\n" +
+    "<path d=\"M70.7,95.2c-0.9,0-1.8-0.4-2.4-1.2L41.3,56.7c-1-1.3-0.7-3.2,0.7-4.2c1.3-1,3.2-0.7,4.2,0.7l26.9,37.2\n" +
+    "	c1,1.3,0.7,3.2-0.7,4.2C71.9,95,71.3,95.2,70.7,95.2z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/invitation-v-icon.svg",
+    "<svg\n" +
+    "class=\"v-icon-wrapper\"\n" +
+    "xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\"\n" +
+    "y=\"0px\"\n" +
+    "viewBox=\"-1040 834.9 220.4 220.4\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .v-icon-wrapper .st0{fill:none;enable-background:new    ;}\n" +
+    "    .v-icon-wrapper .st1{fill:#CACBCC;}\n" +
+    "    .v-icon-wrapper .st2{display:none;fill:none;}\n" +
+    "    .v-icon-wrapper .st3{fill:#D1D2D2;}\n" +
+    "    .v-icon-wrapper .st4{fill:none;stroke:#FFFFFF;stroke-width:11.9321;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "    .v-icon-wrapper {width: 100%; height: auto}\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/invitations-received-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 76.3 56.3\" class=\"received-invitations-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.received-invitations-svg .st0{fill:none;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M73.8,18.2v25.1c0,5.8-4.8,10.6-10.6,10.6H13.1c-5.8,0-10.6-4.8-10.6-10.6V18.2\"/>\n" +
+    "<line class=\"st0\" x1=\"38.2\" y1=\"2.5\" x2=\"38.2\" y2=\"38.8\"/>\n" +
+    "<line class=\"st0\" x1=\"38.2\" y1=\"40.2\" x2=\"54.5\" y2=\"23.9\"/>\n" +
+    "<line class=\"st0\" x1=\"38.2\" y1=\"40.2\" x2=\"21.9\" y2=\"23.9\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/teacher-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 196.7 145.2\" class=\"teacher-icon\">\n" +
+    "<path d=\"M76.7,114.2H16c-3.3,0-6-2.7-6-6V6c0-3.3,2.7-6,6-6h134c3.3,0,6,2.7,6,6l0,45.9c0,1.7-1.3,3-3,3c0,0,0,0,0,0\n" +
+    "	c-1.7,0-3-1.3-3-3L150,6L16,6v102.2h60.7c1.7,0,3,1.3,3,3S78.4,114.2,76.7,114.2z\"/>\n" +
+    "<path d=\"M129,24.2H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,24.2,129,24.2z\"/>\n" +
+    "<path d=\"M129,44.3H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h61c1.7,0,3,1.3,3,3S130.7,44.3,129,44.3z\"/>\n" +
+    "<path d=\"M114,64.5H68c-1.7,0-3-1.3-3-3s1.3-3,3-3h46c1.7,0,3,1.3,3,3S115.7,64.5,114,64.5z\"/>\n" +
+    "<path d=\"M153,108.8c-1.6,0-2.9-1.2-3-2.8c-0.1-1.7,1.1-3.1,2.8-3.2c11-0.8,19.6-10.1,19.6-21.1c0-11-8.6-20.3-19.6-21.1\n" +
+    "	c-1.7-0.1-2.9-1.6-2.8-3.2c0.1-1.7,1.6-2.9,3.2-2.8c14.1,1.1,25.1,13,25.1,27.1c0,14.1-11,26-25.1,27.1\n" +
+    "	C153.1,108.8,153.1,108.8,153,108.8z\"/>\n" +
+    "<path d=\"M151.2,108.8c-15,0-27.2-12.2-27.2-27.2s12.2-27.2,27.2-27.2c0.7,0,1.4,0,2.1,0.1c1.7,0.1,2.9,1.6,2.8,3.2s-1.5,2.9-3.2,2.8\n" +
+    "	c-0.5,0-1.1-0.1-1.6-0.1c-11.7,0-21.2,9.5-21.2,21.2c0,12.2,10.4,22,22.8,21.1c1.7-0.1,3.1,1.1,3.2,2.8c0.1,1.7-1.1,3.1-2.8,3.2\n" +
+    "	C152.5,108.8,151.8,108.8,151.2,108.8z\"/>\n" +
+    "<path d=\"M115.6,113.8c-1.1,0-2.1-0.6-2.7-1.6c-0.8-1.5-0.2-3.3,1.3-4.1l20.1-10.6c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1\n" +
+    "	L117,113.5C116.5,113.7,116.1,113.8,115.6,113.8z\"/>\n" +
+    "<path d=\"M115,114.2c-1.1,0-2.1-0.6-2.7-1.6c-0.8-1.5-0.2-3.3,1.3-4.1l0.6-0.3c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1\n" +
+    "	l-0.6,0.3C115.9,114.1,115.4,114.2,115,114.2z\"/>\n" +
+    "<path d=\"M193.7,145.2H107c-1,0-1.9-0.5-2.4-1.2c-0.6-0.8-0.7-1.8-0.4-2.7l1.5-4.8l-3.7,1.2c-1.6,0.5-3.3,0.6-4.8,0.3\n" +
+    "	c-3.2-0.7-7.9-2.9-12.6-9.7c-5.2-7.6-13.9-20.9-17.4-26.2c-1-1.6-2.1-4.3-2.1-6.6c-0.1-3.5,1.4-6.7,3.9-8.6c2.6-2,6-2.5,9.6-1.4\n" +
+    "	c2.5,0.7,5.4,3,6.7,5.3l14.1,24.7c0.2,0.3,0.6,0.4,0.9,0.3l13.3-7c1.5-0.8,3.3-0.2,4.1,1.3c0.8,1.5,0.2,3.3-1.3,4.1l-13.3,7\n" +
+    "	c-3.2,1.7-7.1,0.5-8.9-2.6L80,93.5c-0.5-1-2.1-2.2-3.2-2.5c-1.3-0.4-3-0.6-4.3,0.4c-1,0.8-1.6,2.2-1.6,3.8c0,0.9,0.6,2.6,1.1,3.4\n" +
+    "	c3.5,5.4,12.2,18.6,17.3,26.1c3.8,5.5,7.2,6.9,8.9,7.3c0.6,0.1,1.2,0.1,1.7-0.1l9.2-3c1.1-0.3,2.2-0.1,3,0.7s1.1,2,0.7,3l-2.1,6.4\n" +
+    "	h79.5c-1.3-24.4-26.2-33.4-27.3-33.8c-1.6-0.5-2.4-2.3-1.8-3.8c0.5-1.6,2.3-2.4,3.8-1.8c0.3,0.1,32.1,11.6,31.3,42.6\n" +
+    "	C196.6,143.9,195.3,145.2,193.7,145.2z\"/>\n" +
+    "<path d=\"M70.7,92.2c-0.9,0-1.8-0.4-2.4-1.2L41.3,53.7c-1-1.3-0.7-3.2,0.7-4.2c1.3-1,3.2-0.7,4.2,0.7l26.9,37.2\n" +
+    "	c1,1.3,0.7,3.2-0.7,4.2C71.9,92,71.3,92.2,70.7,92.2z\"/>\n" +
+    "<path d=\"M83,134.2H3c-1.7,0-3-1.3-3-3s1.3-3,3-3h80c1.7,0,3,1.3,3,3S84.7,134.2,83,134.2z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/invitation/svg/tutors-list-edit-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 88.5 67.2\" xml:space=\"preserve\" class=\"tutors-list-edit-svg\">\n" +
+    "<g>\n" +
+    "	<path d=\"M21.5,67.1c2.4-9.3,4.4-17.6,6.7-25.9c0.3-1.2,1.5-2.1,2.5-3.1c11.5-11.5,23-23.1,34.5-34.6c4.9-4.9,7.6-4.8,12.6,0.1\n" +
+    "		c2.7,2.7,5.5,5.4,8.1,8.1c3.4,3.6,3.5,7,0.1,10.4C73.8,34.6,61.6,46.8,49.3,59c-0.9,0.9-2.2,1.6-3.4,1.9\n" +
+    "		C38.3,62.9,30.5,64.8,21.5,67.1z M67.8,14.5c-9.2,9.2-18.1,18-26.9,26.8c2.1,2.1,4.5,4.5,6.3,6.3c8.9-8.8,17.8-17.7,26.4-26.2\n" +
+    "		C71.7,19.1,69.5,16.5,67.8,14.5z M30.8,44.6c-0.9,3.4-2.1,7-2.7,10.7c-0.5,2.7,3,5.8,5.7,5.2c3.5-0.8,6.9-1.8,10.3-2.7\n" +
+    "		C39.6,53.3,35.4,49.1,30.8,44.6z\"/>\n" +
+    "	<path d=\"M15.1,60.8c-0.4,2.4-0.8,4.3-1.2,6.4c-4.6,0-9,0-13.9,0c0-2.1,0-4.1,0-6.4C4.9,60.8,9.8,60.8,15.1,60.8z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -8408,7 +8407,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
 
     angular.module('znk.infra-web-app.liveLessons').controller('UpcomingLessonToasterController',
         ["$mdToast", "MyLiveLessons", "closestLiveLesson", "$timeout", function ($mdToast, MyLiveLessons, closestLiveLesson, $timeout) {
-            'ngInject';
+        'ngInject';
 
             var self = this;
 
@@ -8660,247 +8659,247 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
 })(angular);
 
 angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/liveLessons/svg/calendar-icon.svg",
-        "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" class=\"calendar-icon\"\n" +
-        "     viewBox=\"0 0 176.3 200\">\n" +
-        "    <style>\n" +
-        "        .calendar-icon{\n" +
-        "        enable-background:new 0 0 176.3 200;\n" +
-        "        width:35px;\n" +
-        "        height: auto;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g id=\"XMLID_40_\">\n" +
-        "        <path id=\"XMLID_138_\" d=\"M164.1,200c-50.7,0-101.3,0-152,0C3.1,196-0.1,189.1,0,179.3c0.3-36.5,0.1-73,0.1-109.5c0-1.9,0-3.8,0-5.6\n" +
-        "		c59,0,117.3,0,176,0c0,2,0,3.8,0,5.6c0,36.5-0.2,73,0.1,109.5C176.4,189.1,173.2,196,164.1,200z M163.9,156.3\n" +
-        "		c-10.8,0-21.1,0-31.4,0c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C163.9,177.2,163.9,166.9,163.9,156.3z M123.9,156.2\n" +
-        "		c-10.8,0-21.1,0-31.5,0c0,10.6,0,21,0,31.4c10.7,0,21.1,0,31.5,0C123.9,177,123.9,166.7,123.9,156.2z M52.4,187.7\n" +
-        "		c10.8,0,21.1,0,31.5,0c0-10.6,0-21,0-31.4c-10.7,0-21.1,0-31.5,0C52.4,166.9,52.4,177.2,52.4,187.7z M12.5,156.2\n" +
-        "		c0,10.7,0,21.1,0,31.4c10.7,0,21.1,0,31.4,0c0-10.6,0-20.9,0-31.4C33.4,156.2,23.1,156.2,12.5,156.2z M163.8,147.7\n" +
-        "		c0-10.8,0-21.1,0-31.4c-10.7,0-21.1,0-31.4,0c0,10.7,0,20.9,0,31.4C142.9,147.7,153.2,147.7,163.8,147.7z M123.9,147.7\n" +
-        "		c0-10.8,0-21.1,0-31.5c-10.6,0-21,0-31.4,0c0,10.7,0,21.1,0,31.5C103.1,147.7,113.4,147.7,123.9,147.7z M52.4,147.6\n" +
-        "		c10.8,0,21.2,0,31.4,0c0-10.7,0-21.1,0-31.4c-10.7,0-20.9,0-31.4,0C52.4,126.7,52.4,137,52.4,147.6z M43.9,116.3\n" +
-        "		c-10.7,0-21.1,0-31.4,0c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C43.9,137.2,43.9,127,43.9,116.3z M132.5,76.1\n" +
-        "		c0,10.9,0,21.3,0,31.5c10.7,0,20.9,0,31.3,0c0-10.6,0-21,0-31.5C153.3,76.1,143,76.1,132.5,76.1z M92.5,76.2c0,10.8,0,21.1,0,31.4\n" +
-        "		c10.7,0,21.1,0,31.4,0c0-10.7,0-20.9,0-31.4C113.4,76.2,103.1,76.2,92.5,76.2z M83.9,76.3c-10.8,0-21.1,0-31.4,0\n" +
-        "		c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C83.9,97.2,83.9,86.9,83.9,76.3z M43.9,76.3c-10.8,0-21.2,0-31.4,0\n" +
-        "		c0,10.7,0,21.1,0,31.4c10.7,0,20.9,0,31.4,0C43.9,97.1,43.9,86.9,43.9,76.3z\"/>\n" +
-        "        <path id=\"XMLID_119_\" d=\"M176.1,55.8c-58.9,0-117.1,0-175.7,0c0-6.4-0.6-12.7,0.2-18.9c1-7.6,7.6-12.7,15.5-12.9\n" +
-        "		c4.3-0.1,8.7,0,13,0c4.1,0,8.3,0,13,0c0-5.8-0.1-11.2,0-16.6c0.1-4.7,2.5-7.7,6.2-7.3c4.3,0.4,5.8,3.2,5.8,7.3\n" +
-        "		c-0.1,5.3,0,10.6,0,16.3c22.6,0,45,0,68,0c0-5.4,0.1-10.8,0-16.3c-0.1-4.1,1.4-6.9,5.8-7.3c3.7-0.4,6.2,2.6,6.2,7.3\n" +
-        "		c0.1,5.3,0,10.6,0,16.6c7.8,0,15.4,0,23,0c12.9,0,19,6.1,19,18.9C176.1,47,176.1,51.1,176.1,55.8z M122.2,29.9\n" +
-        "		c-5.7,4.3-7.2,9.1-5.1,14.4c2,5.2,7.3,8.3,12.7,7.6c5.2-0.7,9.5-4.9,10.3-10.1c0.8-4.9-1.5-9.2-5.9-11.2c0,3.1,0.1,6.1,0,9\n" +
-        "		c-0.1,3.7-2.1,6.1-5.8,6.2c-4,0.1-6-2.4-6.1-6.3C122.1,36.6,122.2,33.6,122.2,29.9z M42.2,29.9c-5.7,4.3-7.2,9-5.2,14.3\n" +
-        "		c2,5.2,7.2,8.3,12.7,7.6c5.2-0.7,9.5-4.9,10.4-10.1c0.8-4.8-1.4-9.2-5.9-11.2c0,3.3,0.2,6.4,0,9.5c-0.2,3.4-2.3,5.6-5.7,5.7\n" +
-        "		c-3.7,0.1-5.9-2.1-6.1-5.8C42,36.9,42.2,33.8,42.2,29.9z\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/liveLessons/svg/close-popup.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"close-popup\">\n" +
-        "    <style>\n" +
-        "        .close-popup{\n" +
-        "        width:15px;\n" +
-        "        height:15px;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/liveLessons/svg/reschedule-icon.svg",
-        "<svg version=\"1.1\" id=\"Layer_1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 172 188\"\n" +
-        "     style=\"enable-background:new 0 0 172 188;\"\n" +
-        "     class=\"reschedule-icon\"\n" +
-        "     xml:space=\"preserve\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "    svg.reschedule-icon{\n" +
-        "        width:12px;\n" +
-        "    	.st0{fill:none;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<path id=\"XMLID_65_\" d=\"M12,63.7c49.6,0,98.6,0,147.9,0c0-9,0.3-17.8-0.1-26.6c-0.2-5.4-4.5-8.8-10.1-9.2c-2.8-0.2-6,0.7-8.4-0.3\n" +
-        "	c-2.2-0.9-4.7-3.5-5-5.6c-0.2-1.8,2.4-5.5,4-5.7c6.7-0.7,13.7-1.5,20,2.1c7.3,4.2,11.6,10.5,11.6,19.1c0.1,42.8,0.1,85.6,0,128.5\n" +
-        "	c0,12.3-9.6,21.8-21.9,21.8c-42.7,0.1-85.3,0.1-128,0c-12.5,0-22-9.6-22-22.2c0-42.5,0-85,0-127.5c0-12.6,9.5-22.1,22-22.2\n" +
-        "	c2.5,0,5,0,7.5,0c4,0.1,6.4,2.1,6.4,6.1c-0.1,4-2.6,5.9-6.6,5.9c-2.5,0-5-0.1-7.5,0.1c-5.6,0.5-9.5,4-9.7,9.5\n" +
-        "	C11.8,46.2,12,54.8,12,63.7z M12,76.2c0,29.4,0,58.2,0,87c0,9.4,3.5,12.8,13.1,12.8c40.7,0,81.3,0,122,0c9.5,0,13-3.5,13-13\n" +
-        "	c0-27.3,0-54.6,0-82c0-1.6-0.1-3.2-0.2-4.9C110.4,76.2,61.5,76.2,12,76.2z\"/>\n" +
-        "<path id=\"XMLID_58_\" d=\"M86,27.9c-7.7,0-15.3,0-23,0c-4.7,0-7.6-2.5-7.3-6.2c0.4-4.3,3.1-5.8,7.2-5.8C78.3,16,93.6,16,109,16\n" +
-        "	c4.1,0,6.9,1.7,6.9,6c0,4.3-2.8,6-6.9,6C101.3,27.9,93.7,27.9,86,27.9z\"/>\n" +
-        "<path id=\"XMLID_4_\" d=\"M46.7,58.8C38,58.8,31,51.8,31,43.1S38,27.3,46.7,27.3s15.8,7.1,15.8,15.8S55.4,58.8,46.7,58.8z M46.7,34.3\n" +
-        "	c-4.8,0-8.8,3.9-8.8,8.8s3.9,8.8,8.8,8.8s8.8-3.9,8.8-8.8S51.6,34.3,46.7,34.3z\"/>\n" +
-        "<path id=\"XMLID_5_\" d=\"M46.7,34.3c-1.9,0-3.5-1.6-3.5-3.5V4.4c0-1.9,1.6-3.5,3.5-3.5s3.5,1.6,3.5,3.5v26.4\n" +
-        "	C50.2,32.8,48.7,34.3,46.7,34.3z\"/>\n" +
-        "<path id=\"XMLID_6_\" d=\"M127.2,57.9c-8.7,0-15.8-7.1-15.8-15.8s7.1-15.8,15.8-15.8s15.7,7.1,15.7,15.8S135.8,57.9,127.2,57.9z\n" +
-        "	 M127.2,33.4c-4.8,0-8.8,3.9-8.8,8.8s3.9,8.8,8.8,8.8c4.8,0,8.7-3.9,8.7-8.8S132,33.4,127.2,33.4z\"/>\n" +
-        "<path id=\"XMLID_7_\" d=\"M127.2,33.4c-1.9,0-3.5-1.6-3.5-3.5V3.5c0-1.9,1.6-3.5,3.5-3.5c1.9,0,3.5,1.6,3.5,3.5v26.4\n" +
-        "	C130.7,31.8,129.1,33.4,127.2,33.4z\"/>\n" +
-        "<path id=\"XMLID_26_\" d=\"M56.4,130.4c-1.9,0-3.5-1.5-3.5-3.4c0-1.5,0.1-3,0.2-4.6c2.2-18.5,19-31.7,37.5-29.5\n" +
-        "	c13.3,1.6,24.4,10.9,28.3,23.7c0.6,1.8-0.5,3.8-2.3,4.4c-1.8,0.6-3.8-0.5-4.4-2.3c-3.1-10.2-11.9-17.5-22.5-18.8\n" +
-        "	c-14.7-1.7-28,8.8-29.7,23.4c-0.1,1.2-0.2,2.4-0.2,3.6C59.9,128.7,58.4,130.3,56.4,130.4C56.4,130.4,56.4,130.4,56.4,130.4z\"/>\n" +
-        "<polygon id=\"XMLID_13_\" points=\"122.2,106.1 118.8,121.6 118.7,122.9 102.7,115.2 \"/>\n" +
-        "<path id=\"XMLID_27_\" d=\"M89.1,163c-13.6,0-25.8-8.1-31.1-20.6c-0.8-1.8,0.1-3.8,1.9-4.6c1.8-0.8,3.8,0.1,4.6,1.9\n" +
-        "	c4.2,9.9,13.9,16.3,24.7,16.3c13.9,0,25.3-10.4,26.6-24.2c0.2-1.9,1.9-3.3,3.8-3.2c1.9,0.2,3.3,1.9,3.2,3.8\n" +
-        "	C121,149.8,106.6,163,89.1,163z\"/>\n" +
-        "<polygon id=\"XMLID_3_\" points=\"54.6,150.1 55.4,134.9 55.4,133.5 72.2,139.3 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/liveLessons/templates/myLiveLessonsModal.template.html",
-        "<md-dialog ng-cloak class=\"my-lessons-schedule-wrapper base\" translate-namespace=\"MY_LIVE_LESSONS_POPUP\">\n" +
-        "    <div class=\"top-icon-wrap\">\n" +
-        "        <div class=\"top-icon\">\n" +
-        "            <div class=\"round-icon-wrap\">\n" +
-        "                <svg-icon name=\"calendar-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"close-popup-wrap\">\n" +
-        "        <svg-icon name=\"close-popup\" ng-click=\"vm.closeDialog()\"></svg-icon>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <md-dialog-content>\n" +
-        "        <div class=\"md-dialog-content\">\n" +
-        "            <div class=\"live-lessons-title\" translate=\".LIVE_LESSONS_SCHEDULE\"></div>\n" +
-        "            <div class=\"upcoming-lesson-title\" translate=\".UPCOMING_LESSON\"></div>\n" +
-        "\n" +
-        "            <div class=\"live-lessons-wrapper znk-scrollbar\">\n" +
-        "                <div class=\"live-lesson-repeater\" ng-repeat=\"lesson in vm.liveLessonsArr | orderBy: 'startTime'\">\n" +
-        "                    <div class=\"live-lesson\" >\n" +
-        "                        <div class=\"date\">{{lesson.startTime | date:'d MMM' | uppercase}}</div>\n" +
-        "                        <div class=\"hour\">{{lesson.startTime | date:'h:mm a'}}</div>\n" +
-        "                        <div class=\"educator-name\">{{lesson.educatorName}}</div>\n" +
-        "                    </div>\n" +
-        "                    <div class=\"reschedule-wrapper\">\n" +
-        "                        <md-tooltip md-direction=\"top\" class=\"reschedule-tooltip\">\n" +
-        "                            <div translate=\".RESCHEDULE_LESSON\"></div>\n" +
-        "                        </md-tooltip>\n" +
-        "                        <svg-icon name=\"reschedule-icon\" ng-click=\"vm.openRescheduleModal(lesson)\"></svg-icon>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "\n" +
-        "                <div class=\"no-live-lessons-text\" translate=\".NO_LIVE_LESSONS\"></div>\n" +
-        "            </div>\n" +
-        "            <div class=\"current-time\" translate=\".CURRENT_TIME\"\n" +
-        "                 translate-values=\"{ currentTime: {{'vm.currentTime'}} }\"></div>\n" +
-        "            <div class=\"btn-wrapper\">\n" +
-        "                <md-button\n" +
-        "                    aria-label=\"{{'MY_LIVE_LESSONS_POPUP.OK' | translate}}\"\n" +
-        "                    class=\"ok-button success drop-shadow\"\n" +
-        "                    ng-click=\"vm.closeDialog()\">\n" +
-        "                    <span translate=\".OK\"></span>\n" +
-        "                </md-button>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </md-dialog-content>\n" +
-        "\n" +
-        "</md-dialog>\n" +
-        "");
-    $templateCache.put("components/liveLessons/templates/rescheduleLessonModal.template.html",
-        "<md-dialog ng-cloak class=\"my-lessons-schedule-wrapper base\" translate-namespace=\"RESCHEDULE_LESSON_MODAL\">\n" +
-        "    <div class=\"top-icon-wrap\">\n" +
-        "        <div class=\"top-icon\">\n" +
-        "            <div class=\"round-icon-wrap\">\n" +
-        "                <svg-icon name=\"reschedule-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"close-popup-wrap\">\n" +
-        "        <svg-icon name=\"close-popup\" ng-click=\"vm.closeDialog()\"></svg-icon>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <md-dialog-content>\n" +
-        "        <div ng-switch=\"!!vm.requestWasSent\">\n" +
-        "            <div class=\"md-dialog-content\">\n" +
-        "                <div class=\"reschedule-lesson-title\" translate=\".RESCHEDULE_LESSON\"></div>\n" +
-        "                <div class=\"availability-hours\">\n" +
-        "                    <div class=\"name\">{{vm.teacherName}}</div>\n" +
-        "                    <div class=\"date\">{{vm.teacherAvailabilityHours}}</div>\n" +
-        "                </div>\n" +
-        "                <div class=\"email-container\" ng-switch-when=\"false\">\n" +
-        "                    <div class=\"note-wrapper\" ng-if=\"vm.islessonInNextFortyEightHours\">\n" +
-        "                        <span class=\"red-color-text\" translate=\".NOTE\"></span>\n" +
-        "                        <span class=\"warning-text\" translate=\".RESCHEDULING_FEE_PART1\"></span>\n" +
-        "                        <span class=\"red-color-text\" translate=\".HOURS\"></span>\n" +
-        "                        <div class=\"warning-text\" translate=\".RESCHEDULING_FEE_PART2\"></div>\n" +
-        "                    </div>\n" +
-        "\n" +
-        "                    <textarea class=\"reschedule-container\"\n" +
-        "                              required\n" +
-        "                              ng-model=\"vm.message\"\n" +
-        "                              md-select-on-focus>\n" +
-        "                </textarea>\n" +
-        "                    <div class=\"bottom-lesson\" translate=\".WE_WILL_CONTACT_YOU\"></div>\n" +
-        "                    <div class=\"buttons-wrapper\">\n" +
-        "                        <md-button\n" +
-        "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.CANCEL' | translate}}\"\n" +
-        "                            class=\"md-button cancel-btn\"\n" +
-        "                            translate=\".CANCEL\"\n" +
-        "                            ng-click=\"vm.closeDialog()\">\n" +
-        "                        </md-button>\n" +
-        "                        <md-button\n" +
-        "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.SEND' | translate}}\"\n" +
-        "                            class=\"md-button send-btn\"\n" +
-        "                            translate=\".SEND\"\n" +
-        "                            ng-click=\"vm.send()\">\n" +
-        "                        </md-button>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "\n" +
-        "                <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
-        "                    <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
-        "                    <div translate=\".SUCCESS_SHARED\"></div>\n" +
-        "                    <div class=\"done-btn-wrap\">\n" +
-        "                        <md-button\n" +
-        "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.DONE' | translate}}\"\n" +
-        "                            class=\"success lg drop-shadow\"\n" +
-        "                            ng-click=\"vm.closeDialog()\">\n" +
-        "                            <span translate=\".DONE\"></span>\n" +
-        "                        </md-button>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </md-dialog-content>\n" +
-        "\n" +
-        "</md-dialog>\n" +
-        "");
-    $templateCache.put("components/liveLessons/templates/upcomingLessonToast.template.html",
-        "<div class=\"upcoming-lesson-toast-wrapper base-border-radius\" translate-namespace=\"UPCOMING_LESSON_TOAST\"\n" +
-        "     ng-class=\"{'animate-toast': vm.animateToast}\">\n" +
-        "    <svg-icon name=\"close-popup\" ng-click=\"vm.closeToast()\"></svg-icon>\n" +
-        "\n" +
-        "    <div class=\"left-side-container\" ng-click=\"vm.openMyLessonsPopup()\">\n" +
-        "        <svg-icon name=\"calendar-icon\"></svg-icon>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"right-side-container\" >\n" +
-        "        <div class=\"closest-lesson-details\" ng-click=\"vm.openMyLessonsPopup()\">\n" +
-        "            <div class=\"top-title\" translate=\".YOUR_UPCOMING_LESSON_WITH\"></div>\n" +
-        "            <div class=\"teacher-name\">{{vm.closestLiveLesson.educatorName}}</div>\n" +
-        "            <div class=\"lesson-date\">{{vm.closestLiveLesson.startTime | date: 'EEEE, MMMM d'}}</div>\n" +
-        "            <div class=\"lesson-hour\">{{vm.closestLiveLesson.startTime | date:'h:mm a'}}</div>\n" +
-        "        </div>\n" +
-        "        <div class=\"bottom-container\">\n" +
-        "            <div class=\"bottom-clickable-text\" translate=\".MY_LIVE_LESSONS_SCHEDULE\" ng-click=\"vm.openMyLessonsPopup()\"></div>\n" +
-        "            <div class=\"reschedule-wrapper\" ng-click=\"vm.openRescheduleModal(vm.closestLiveLesson)\">\n" +
-        "                <svg-icon name=\"reschedule-icon\"></svg-icon>\n" +
-        "                <div class=\"reschedule-text\" translate=\".RESCHEDULE\"></div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/liveLessons/svg/calendar-icon.svg",
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" class=\"calendar-icon\"\n" +
+    "     viewBox=\"0 0 176.3 200\">\n" +
+    "    <style>\n" +
+    "        .calendar-icon{\n" +
+    "        enable-background:new 0 0 176.3 200;\n" +
+    "        width:35px;\n" +
+    "        height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g id=\"XMLID_40_\">\n" +
+    "        <path id=\"XMLID_138_\" d=\"M164.1,200c-50.7,0-101.3,0-152,0C3.1,196-0.1,189.1,0,179.3c0.3-36.5,0.1-73,0.1-109.5c0-1.9,0-3.8,0-5.6\n" +
+    "		c59,0,117.3,0,176,0c0,2,0,3.8,0,5.6c0,36.5-0.2,73,0.1,109.5C176.4,189.1,173.2,196,164.1,200z M163.9,156.3\n" +
+    "		c-10.8,0-21.1,0-31.4,0c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C163.9,177.2,163.9,166.9,163.9,156.3z M123.9,156.2\n" +
+    "		c-10.8,0-21.1,0-31.5,0c0,10.6,0,21,0,31.4c10.7,0,21.1,0,31.5,0C123.9,177,123.9,166.7,123.9,156.2z M52.4,187.7\n" +
+    "		c10.8,0,21.1,0,31.5,0c0-10.6,0-21,0-31.4c-10.7,0-21.1,0-31.5,0C52.4,166.9,52.4,177.2,52.4,187.7z M12.5,156.2\n" +
+    "		c0,10.7,0,21.1,0,31.4c10.7,0,21.1,0,31.4,0c0-10.6,0-20.9,0-31.4C33.4,156.2,23.1,156.2,12.5,156.2z M163.8,147.7\n" +
+    "		c0-10.8,0-21.1,0-31.4c-10.7,0-21.1,0-31.4,0c0,10.7,0,20.9,0,31.4C142.9,147.7,153.2,147.7,163.8,147.7z M123.9,147.7\n" +
+    "		c0-10.8,0-21.1,0-31.5c-10.6,0-21,0-31.4,0c0,10.7,0,21.1,0,31.5C103.1,147.7,113.4,147.7,123.9,147.7z M52.4,147.6\n" +
+    "		c10.8,0,21.2,0,31.4,0c0-10.7,0-21.1,0-31.4c-10.7,0-20.9,0-31.4,0C52.4,126.7,52.4,137,52.4,147.6z M43.9,116.3\n" +
+    "		c-10.7,0-21.1,0-31.4,0c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C43.9,137.2,43.9,127,43.9,116.3z M132.5,76.1\n" +
+    "		c0,10.9,0,21.3,0,31.5c10.7,0,20.9,0,31.3,0c0-10.6,0-21,0-31.5C153.3,76.1,143,76.1,132.5,76.1z M92.5,76.2c0,10.8,0,21.1,0,31.4\n" +
+    "		c10.7,0,21.1,0,31.4,0c0-10.7,0-20.9,0-31.4C113.4,76.2,103.1,76.2,92.5,76.2z M83.9,76.3c-10.8,0-21.1,0-31.4,0\n" +
+    "		c0,10.7,0,21.1,0,31.4c10.6,0,20.9,0,31.4,0C83.9,97.2,83.9,86.9,83.9,76.3z M43.9,76.3c-10.8,0-21.2,0-31.4,0\n" +
+    "		c0,10.7,0,21.1,0,31.4c10.7,0,20.9,0,31.4,0C43.9,97.1,43.9,86.9,43.9,76.3z\"/>\n" +
+    "        <path id=\"XMLID_119_\" d=\"M176.1,55.8c-58.9,0-117.1,0-175.7,0c0-6.4-0.6-12.7,0.2-18.9c1-7.6,7.6-12.7,15.5-12.9\n" +
+    "		c4.3-0.1,8.7,0,13,0c4.1,0,8.3,0,13,0c0-5.8-0.1-11.2,0-16.6c0.1-4.7,2.5-7.7,6.2-7.3c4.3,0.4,5.8,3.2,5.8,7.3\n" +
+    "		c-0.1,5.3,0,10.6,0,16.3c22.6,0,45,0,68,0c0-5.4,0.1-10.8,0-16.3c-0.1-4.1,1.4-6.9,5.8-7.3c3.7-0.4,6.2,2.6,6.2,7.3\n" +
+    "		c0.1,5.3,0,10.6,0,16.6c7.8,0,15.4,0,23,0c12.9,0,19,6.1,19,18.9C176.1,47,176.1,51.1,176.1,55.8z M122.2,29.9\n" +
+    "		c-5.7,4.3-7.2,9.1-5.1,14.4c2,5.2,7.3,8.3,12.7,7.6c5.2-0.7,9.5-4.9,10.3-10.1c0.8-4.9-1.5-9.2-5.9-11.2c0,3.1,0.1,6.1,0,9\n" +
+    "		c-0.1,3.7-2.1,6.1-5.8,6.2c-4,0.1-6-2.4-6.1-6.3C122.1,36.6,122.2,33.6,122.2,29.9z M42.2,29.9c-5.7,4.3-7.2,9-5.2,14.3\n" +
+    "		c2,5.2,7.2,8.3,12.7,7.6c5.2-0.7,9.5-4.9,10.4-10.1c0.8-4.8-1.4-9.2-5.9-11.2c0,3.3,0.2,6.4,0,9.5c-0.2,3.4-2.3,5.6-5.7,5.7\n" +
+    "		c-3.7,0.1-5.9-2.1-6.1-5.8C42,36.9,42.2,33.8,42.2,29.9z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveLessons/svg/close-popup.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"close-popup\">\n" +
+    "    <style>\n" +
+    "        .close-popup{\n" +
+    "        width:15px;\n" +
+    "        height:15px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveLessons/svg/reschedule-icon.svg",
+    "<svg version=\"1.1\" id=\"Layer_1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 172 188\"\n" +
+    "     style=\"enable-background:new 0 0 172 188;\"\n" +
+    "     class=\"reschedule-icon\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "    svg.reschedule-icon{\n" +
+    "        width:12px;\n" +
+    "    	.st0{fill:none;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<path id=\"XMLID_65_\" d=\"M12,63.7c49.6,0,98.6,0,147.9,0c0-9,0.3-17.8-0.1-26.6c-0.2-5.4-4.5-8.8-10.1-9.2c-2.8-0.2-6,0.7-8.4-0.3\n" +
+    "	c-2.2-0.9-4.7-3.5-5-5.6c-0.2-1.8,2.4-5.5,4-5.7c6.7-0.7,13.7-1.5,20,2.1c7.3,4.2,11.6,10.5,11.6,19.1c0.1,42.8,0.1,85.6,0,128.5\n" +
+    "	c0,12.3-9.6,21.8-21.9,21.8c-42.7,0.1-85.3,0.1-128,0c-12.5,0-22-9.6-22-22.2c0-42.5,0-85,0-127.5c0-12.6,9.5-22.1,22-22.2\n" +
+    "	c2.5,0,5,0,7.5,0c4,0.1,6.4,2.1,6.4,6.1c-0.1,4-2.6,5.9-6.6,5.9c-2.5,0-5-0.1-7.5,0.1c-5.6,0.5-9.5,4-9.7,9.5\n" +
+    "	C11.8,46.2,12,54.8,12,63.7z M12,76.2c0,29.4,0,58.2,0,87c0,9.4,3.5,12.8,13.1,12.8c40.7,0,81.3,0,122,0c9.5,0,13-3.5,13-13\n" +
+    "	c0-27.3,0-54.6,0-82c0-1.6-0.1-3.2-0.2-4.9C110.4,76.2,61.5,76.2,12,76.2z\"/>\n" +
+    "<path id=\"XMLID_58_\" d=\"M86,27.9c-7.7,0-15.3,0-23,0c-4.7,0-7.6-2.5-7.3-6.2c0.4-4.3,3.1-5.8,7.2-5.8C78.3,16,93.6,16,109,16\n" +
+    "	c4.1,0,6.9,1.7,6.9,6c0,4.3-2.8,6-6.9,6C101.3,27.9,93.7,27.9,86,27.9z\"/>\n" +
+    "<path id=\"XMLID_4_\" d=\"M46.7,58.8C38,58.8,31,51.8,31,43.1S38,27.3,46.7,27.3s15.8,7.1,15.8,15.8S55.4,58.8,46.7,58.8z M46.7,34.3\n" +
+    "	c-4.8,0-8.8,3.9-8.8,8.8s3.9,8.8,8.8,8.8s8.8-3.9,8.8-8.8S51.6,34.3,46.7,34.3z\"/>\n" +
+    "<path id=\"XMLID_5_\" d=\"M46.7,34.3c-1.9,0-3.5-1.6-3.5-3.5V4.4c0-1.9,1.6-3.5,3.5-3.5s3.5,1.6,3.5,3.5v26.4\n" +
+    "	C50.2,32.8,48.7,34.3,46.7,34.3z\"/>\n" +
+    "<path id=\"XMLID_6_\" d=\"M127.2,57.9c-8.7,0-15.8-7.1-15.8-15.8s7.1-15.8,15.8-15.8s15.7,7.1,15.7,15.8S135.8,57.9,127.2,57.9z\n" +
+    "	 M127.2,33.4c-4.8,0-8.8,3.9-8.8,8.8s3.9,8.8,8.8,8.8c4.8,0,8.7-3.9,8.7-8.8S132,33.4,127.2,33.4z\"/>\n" +
+    "<path id=\"XMLID_7_\" d=\"M127.2,33.4c-1.9,0-3.5-1.6-3.5-3.5V3.5c0-1.9,1.6-3.5,3.5-3.5c1.9,0,3.5,1.6,3.5,3.5v26.4\n" +
+    "	C130.7,31.8,129.1,33.4,127.2,33.4z\"/>\n" +
+    "<path id=\"XMLID_26_\" d=\"M56.4,130.4c-1.9,0-3.5-1.5-3.5-3.4c0-1.5,0.1-3,0.2-4.6c2.2-18.5,19-31.7,37.5-29.5\n" +
+    "	c13.3,1.6,24.4,10.9,28.3,23.7c0.6,1.8-0.5,3.8-2.3,4.4c-1.8,0.6-3.8-0.5-4.4-2.3c-3.1-10.2-11.9-17.5-22.5-18.8\n" +
+    "	c-14.7-1.7-28,8.8-29.7,23.4c-0.1,1.2-0.2,2.4-0.2,3.6C59.9,128.7,58.4,130.3,56.4,130.4C56.4,130.4,56.4,130.4,56.4,130.4z\"/>\n" +
+    "<polygon id=\"XMLID_13_\" points=\"122.2,106.1 118.8,121.6 118.7,122.9 102.7,115.2 \"/>\n" +
+    "<path id=\"XMLID_27_\" d=\"M89.1,163c-13.6,0-25.8-8.1-31.1-20.6c-0.8-1.8,0.1-3.8,1.9-4.6c1.8-0.8,3.8,0.1,4.6,1.9\n" +
+    "	c4.2,9.9,13.9,16.3,24.7,16.3c13.9,0,25.3-10.4,26.6-24.2c0.2-1.9,1.9-3.3,3.8-3.2c1.9,0.2,3.3,1.9,3.2,3.8\n" +
+    "	C121,149.8,106.6,163,89.1,163z\"/>\n" +
+    "<polygon id=\"XMLID_3_\" points=\"54.6,150.1 55.4,134.9 55.4,133.5 72.2,139.3 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveLessons/templates/myLiveLessonsModal.template.html",
+    "<md-dialog ng-cloak class=\"my-lessons-schedule-wrapper base\" translate-namespace=\"MY_LIVE_LESSONS_POPUP\">\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"calendar-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"close-popup-wrap\">\n" +
+    "        <svg-icon name=\"close-popup\" ng-click=\"vm.closeDialog()\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <md-dialog-content>\n" +
+    "        <div class=\"md-dialog-content\">\n" +
+    "            <div class=\"live-lessons-title\" translate=\".LIVE_LESSONS_SCHEDULE\"></div>\n" +
+    "            <div class=\"upcoming-lesson-title\" translate=\".UPCOMING_LESSON\"></div>\n" +
+    "\n" +
+    "            <div class=\"live-lessons-wrapper znk-scrollbar\">\n" +
+    "                <div class=\"live-lesson-repeater\" ng-repeat=\"lesson in vm.liveLessonsArr | orderBy: 'startTime'\">\n" +
+    "                    <div class=\"live-lesson\" >\n" +
+    "                        <div class=\"date\">{{lesson.startTime | date:'d MMM' | uppercase}}</div>\n" +
+    "                        <div class=\"hour\">{{lesson.startTime | date:'h:mm a'}}</div>\n" +
+    "                        <div class=\"educator-name\">{{lesson.educatorName}}</div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"reschedule-wrapper\">\n" +
+    "                        <md-tooltip md-direction=\"top\" class=\"reschedule-tooltip\">\n" +
+    "                            <div translate=\".RESCHEDULE_LESSON\"></div>\n" +
+    "                        </md-tooltip>\n" +
+    "                        <svg-icon name=\"reschedule-icon\" ng-click=\"vm.openRescheduleModal(lesson)\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"no-live-lessons-text\" translate=\".NO_LIVE_LESSONS\"></div>\n" +
+    "            </div>\n" +
+    "            <div class=\"current-time\" translate=\".CURRENT_TIME\"\n" +
+    "                 translate-values=\"{ currentTime: {{'vm.currentTime'}} }\"></div>\n" +
+    "            <div class=\"btn-wrapper\">\n" +
+    "                <md-button\n" +
+    "                    aria-label=\"{{'MY_LIVE_LESSONS_POPUP.OK' | translate}}\"\n" +
+    "                    class=\"ok-button success drop-shadow\"\n" +
+    "                    ng-click=\"vm.closeDialog()\">\n" +
+    "                    <span translate=\".OK\"></span>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </md-dialog-content>\n" +
+    "\n" +
+    "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/liveLessons/templates/rescheduleLessonModal.template.html",
+    "<md-dialog ng-cloak class=\"my-lessons-schedule-wrapper base\" translate-namespace=\"RESCHEDULE_LESSON_MODAL\">\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"reschedule-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"close-popup-wrap\">\n" +
+    "        <svg-icon name=\"close-popup\" ng-click=\"vm.closeDialog()\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <md-dialog-content>\n" +
+    "        <div ng-switch=\"!!vm.requestWasSent\">\n" +
+    "            <div class=\"md-dialog-content\">\n" +
+    "                <div class=\"reschedule-lesson-title\" translate=\".RESCHEDULE_LESSON\"></div>\n" +
+    "                <div class=\"availability-hours\">\n" +
+    "                    <div class=\"name\">{{vm.teacherName}}</div>\n" +
+    "                    <div class=\"date\">{{vm.teacherAvailabilityHours}}</div>\n" +
+    "                </div>\n" +
+    "                <div class=\"email-container\" ng-switch-when=\"false\">\n" +
+    "                    <div class=\"note-wrapper\" ng-if=\"vm.islessonInNextFortyEightHours\">\n" +
+    "                        <span class=\"red-color-text\" translate=\".NOTE\"></span>\n" +
+    "                        <span class=\"warning-text\" translate=\".RESCHEDULING_FEE_PART1\"></span>\n" +
+    "                        <span class=\"red-color-text\" translate=\".HOURS\"></span>\n" +
+    "                        <div class=\"warning-text\" translate=\".RESCHEDULING_FEE_PART2\"></div>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <textarea class=\"reschedule-container\"\n" +
+    "                              required\n" +
+    "                              ng-model=\"vm.message\"\n" +
+    "                              md-select-on-focus>\n" +
+    "                </textarea>\n" +
+    "                    <div class=\"bottom-lesson\" translate=\".WE_WILL_CONTACT_YOU\"></div>\n" +
+    "                    <div class=\"buttons-wrapper\">\n" +
+    "                        <md-button\n" +
+    "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.CANCEL' | translate}}\"\n" +
+    "                            class=\"md-button cancel-btn\"\n" +
+    "                            translate=\".CANCEL\"\n" +
+    "                            ng-click=\"vm.closeDialog()\">\n" +
+    "                        </md-button>\n" +
+    "                        <md-button\n" +
+    "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.SEND' | translate}}\"\n" +
+    "                            class=\"md-button send-btn\"\n" +
+    "                            translate=\".SEND\"\n" +
+    "                            ng-click=\"vm.send()\">\n" +
+    "                        </md-button>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
+    "                    <svg-icon class=\"completed-v-icon-wrap\" name=\"completed-v-icon\"></svg-icon>\n" +
+    "                    <div translate=\".SUCCESS_SHARED\"></div>\n" +
+    "                    <div class=\"done-btn-wrap\">\n" +
+    "                        <md-button\n" +
+    "                            aria-label=\"{{'RESCHEDULE_LESSON_MODAL.DONE' | translate}}\"\n" +
+    "                            class=\"success lg drop-shadow\"\n" +
+    "                            ng-click=\"vm.closeDialog()\">\n" +
+    "                            <span translate=\".DONE\"></span>\n" +
+    "                        </md-button>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </md-dialog-content>\n" +
+    "\n" +
+    "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/liveLessons/templates/upcomingLessonToast.template.html",
+    "<div class=\"upcoming-lesson-toast-wrapper base-border-radius\" translate-namespace=\"UPCOMING_LESSON_TOAST\"\n" +
+    "     ng-class=\"{'animate-toast': vm.animateToast}\">\n" +
+    "    <svg-icon name=\"close-popup\" ng-click=\"vm.closeToast()\"></svg-icon>\n" +
+    "\n" +
+    "    <div class=\"left-side-container\" ng-click=\"vm.openMyLessonsPopup()\">\n" +
+    "        <svg-icon name=\"calendar-icon\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"right-side-container\" >\n" +
+    "        <div class=\"closest-lesson-details\" ng-click=\"vm.openMyLessonsPopup()\">\n" +
+    "            <div class=\"top-title\" translate=\".YOUR_UPCOMING_LESSON_WITH\"></div>\n" +
+    "            <div class=\"teacher-name\">{{vm.closestLiveLesson.educatorName}}</div>\n" +
+    "            <div class=\"lesson-date\">{{vm.closestLiveLesson.startTime | date: 'EEEE, MMMM d'}}</div>\n" +
+    "            <div class=\"lesson-hour\">{{vm.closestLiveLesson.startTime | date:'h:mm a'}}</div>\n" +
+    "        </div>\n" +
+    "        <div class=\"bottom-container\">\n" +
+    "            <div class=\"bottom-clickable-text\" translate=\".MY_LIVE_LESSONS_SCHEDULE\" ng-click=\"vm.openMyLessonsPopup()\"></div>\n" +
+    "            <div class=\"reschedule-wrapper\" ng-click=\"vm.openRescheduleModal(vm.closestLiveLesson)\">\n" +
+    "                <svg-icon name=\"reschedule-icon\"></svg-icon>\n" +
+    "                <div class=\"reschedule-text\" translate=\".RESCHEDULE\"></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -8977,7 +8976,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
             controllerAs: 'vm',
             controller: ["$log", "$scope", "$mdDialog", "LiveSessionSrv", "StudentContextSrv", "TeacherContextSrv", "PresenceService", "ENV", "LiveSessionStatusEnum", function ($log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
-                                                                                                                                                                                 PresenceService, ENV, LiveSessionStatusEnum) {
+                                  PresenceService, ENV, LiveSessionStatusEnum) {
                 'ngInject';
 
                 var vm = this;
@@ -9179,7 +9178,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
         };
 
         this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                                                                                                                                                                                                     UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv) {
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv) {
             'ngInject';
 
             var LiveSessionEventsSrv = {};
@@ -9280,7 +9279,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
         ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                                                                                                                                                                                                                                             ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
             'ngInject';
 
             var _this = this;
@@ -9698,7 +9697,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv',function(){
 
         this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", "LiveSessionDataGetterSrv", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
-                                                                                                                                                                           ZnkToastSrv, LiveSessionDataGetterSrv) {
+                              ZnkToastSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
             var childScope, liveSessionPhElement, readyProm;
@@ -9877,204 +9876,204 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 })(angular);
 
 angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/liveSession/components/liveSession/liveSession.template.html",
-        "<div ng-if=\"vm.userLiveSessionState\"\n" +
-        "     ng-class=\"vm.liveSessionCls\">\n" +
-        "    <div class=\"active-state-container\">\n" +
-        "        <div class=\"square-side top\"></div>\n" +
-        "        <div class=\"square-side right\"></div>\n" +
-        "        <div class=\"square-side bottom\"></div>\n" +
-        "        <div class=\"square-side left\"></div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
-        "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
-        "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
-        "           ng-class=\"{'offline': vm.isOffline, 'end-session': vm.isLiveSessionActive}\"\n" +
-        "           ng-click=\"!vm.isLiveSessionActive ? vm.showSessionModal() : vm.endSession()\">\n" +
-        "\n" +
-        "    <span ng-if=\"!vm.isLiveSessionActive\">\n" +
-        "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
-        "            {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
-        "        </md-tooltip>\n" +
-        "        {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
-        "    </span>\n" +
-        "\n" +
-        "    <span ng-if=\"vm.isLiveSessionActive\" title=\"{{'LIVE_SESSION.END_SESSION' | translate}}\">\n" +
-        "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
-        "                        <div class=\"arrow-up\"></div>\n" +
-        "                        {{'LIVE_SESSION.END_SESSION' | translate}}\n" +
-        "        </md-tooltip>\n" +
-        "        {{'LIVE_SESSION.END_SESSION' | translate}}\n" +
-        "    </span>\n" +
-        "</md-button>\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html",
-        "<div class=\"live-session-subject-modal\">\n" +
-        "    <div class=\"base base-border-radius session-container\" translate-namespace=\"LIVE_SESSION\">\n" +
-        "        <div class=\"popup-header\">\n" +
-        "            <div class=\"top-icon-wrap\">\n" +
-        "                <div class=\"top-icon\">\n" +
-        "                    <div class=\"round-icon-wrap\">\n" +
-        "                        <svg-icon name=\"liveSession-start-lesson-popup-icon\"></svg-icon>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"popup-content\">\n" +
-        "            <div class=\"main-title\" translate=\".START_SESSION\"></div>\n" +
-        "            <div class=\"sub-title\" translate=\".SESSION_SUBJECT\"></div>\n" +
-        "            <div class=\"subjects-btns\">\n" +
-        "                <button class=\"subject-icon-wrap\"\n" +
-        "                        ng-repeat=\"subject in ::vm.sessionSubjects\"\n" +
-        "                        ng-class=\"subject.name\"\n" +
-        "                        ng-click=\"vm.startSession(subject); vm.closeModal();\">\n" +
-        "                    <svg-icon name={{subject.iconName}}></svg-icon>\n" +
-        "                    <span>{{subject.name}}</span>\n" +
-        "                </button>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/liveSession/svg/liveSession-english-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xml:space=\"preserve\" x=\"0px\" y=\"0px\"\n" +
-        "     viewBox=\"0 0 80 80\" class=\"reading-svg\">\n" +
-        "\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .reading-svg {\n" +
-        "        width: 100%;\n" +
-        "        height: auto;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "\n" +
-        "    <g>\n" +
-        "        <path d=\"M4.2,11.3c0.3,0,0.5-0.1,0.7-0.1c3.5,0.2,6.9-0.4,10.3-1.5c6.6-2.1,13.1-1,19.6,0.9c3.8,1.1,7.7,1.1,11.5,0\n" +
-        "		c7.8-2.3,15.5-3,23.1,0.4c0.5,0.2,1.1,0.2,1.6,0.2c1.8,0,3.6,0,5.5,0c0,17.3,0,34.5,0,51.8c-10,0-20.1,0-30.1,0\n" +
-        "		c-0.1,0.8-0.1,1.4-0.2,2.1c-3.6,0-7.2,0-11,0c0-0.6-0.1-1.3-0.2-2.1c-10.3,0-20.5,0-30.9,0C4.2,45.7,4.2,28.6,4.2,11.3z M39.4,60.5\n" +
-        "		c0-1.1,0-1.8,0-2.5c0-13.2,0.1-26.4,0.1-39.6c0-4.2,0-4.2-4-5.6c-8.5-2.9-17-3.6-25.3,0.6c-1.2,0.6-1.7,1.3-1.7,2.8\n" +
-        "		c0.1,13.9,0,27.9,0,41.8c0,0.6,0,1.2,0,1.9C18.8,57.6,29,56.7,39.4,60.5z M72.2,60c0-0.8,0-1.5,0-2.1c0-12.8,0-25.6,0-38.5\n" +
-        "		c0-5.6,0-5.7-5.5-7.5c-8.1-2.8-15.8-1.2-23.4,1.8c-1.4,0.5-1.8,1.3-1.8,2.7c0,14.1,0,28.1,0,42.2c0,0.6,0,1.2,0,2\n" +
-        "		C51.7,56.8,61.9,57.6,72.2,60z\"/>\n" +
-        "        <path d=\"M33.2,25.1c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
-        "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,24.8,33.7,25.1,33.2,25.1z\"/>\n" +
-        "        <path d=\"M33.2,33.2c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
-        "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,33,33.7,33.2,33.2,33.2z\"/>\n" +
-        "        <path d=\"M33.2,41.4c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
-        "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,41.1,33.7,41.4,33.2,41.4z\"/>\n" +
-        "        <path d=\"M33.2,49.5c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
-        "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,49.3,33.7,49.5,33.2,49.5z\"/>\n" +
-        "        <path d=\"M66.5,24.7c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
-        "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,24.5,67.1,24.7,66.5,24.7z\"/>\n" +
-        "        <path d=\"M66.5,32.9c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
-        "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,32.6,67.1,32.9,66.5,32.9z\"/>\n" +
-        "        <path d=\"M66.5,41c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
-        "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,40.7,67.1,41,66.5,41z\"/>\n" +
-        "        <path d=\"M66.5,49.2c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
-        "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,48.9,67.1,49.2,66.5,49.2z\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/liveSession/svg/liveSession-math-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xml:space=\"preserve\"\n" +
-        "     x=\"0px\" y=\"0px\"\n" +
-        "     class=\"math-icon-svg\"\n" +
-        "	 viewBox=\"-554 409.2 90 83.8\">\n" +
-        "\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .math-icon-svg{\n" +
-        "            width: 100%;\n" +
-        "            height: auto;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "\n" +
-        "<g>\n" +
-        "	<path d=\"M-491.4,447.3c-3,0-6.1,0-9.1,0c-2.9,0-4.7-1.8-4.7-4.7c0-6.1,0-12.1,0-18.2c0-2.9,1.8-4.7,4.7-4.7c6,0,12,0,18,0\n" +
-        "		c2.8,0,4.7,1.9,4.7,4.7c0,6.1,0,12.1,0,18.2c0,2.8-1.8,4.6-4.6,4.6C-485.4,447.4-488.4,447.3-491.4,447.3z M-491.4,435.5\n" +
-        "		c2.5,0,5,0,7.5,0c1.6,0,2.5-0.8,2.4-2c-0.1-1.5-1.1-1.9-2.4-1.9c-5,0-10.1,0-15.1,0c-1.6,0-2.6,0.8-2.5,2c0.2,1.4,1.1,1.9,2.5,1.9\n" +
-        "		C-496.5,435.5-494,435.5-491.4,435.5z\"/>\n" +
-        "	<path d=\"M-526.6,447.3c-3,0-6,0-8.9,0c-3,0-4.7-1.8-4.8-4.8c0-6,0-11.9,0-17.9c0-3,1.9-4.8,4.9-4.8c5.9,0,11.8,0,17.7,0\n" +
-        "		c3.1,0,4.9,1.8,4.9,4.8c0,6,0,11.9,0,17.9c0,3.1-1.8,4.8-4.9,4.8C-520.6,447.4-523.6,447.3-526.6,447.3z M-526.4,443.5\n" +
-        "		c1.3-0.1,2-0.9,2-2.2c0.1-1.5,0.1-3,0-4.5c0-1.1,0.4-1.4,1.4-1.4c1.4,0.1,2.8,0,4.1,0c1.3,0,2.2-0.5,2.2-1.9c0.1-1.3-0.8-2-2.3-2\n" +
-        "		c-1.4,0-2.8-0.1-4.1,0c-1.2,0.1-1.6-0.4-1.5-1.6c0.1-1.4,0-2.8,0-4.1c0-1.3-0.6-2.2-1.9-2.2c-1.4,0-2,0.8-2,2.2c0,1.5,0,3,0,4.5\n" +
-        "		c0,1-0.3,1.3-1.3,1.3c-1.5,0-3,0-4.5,0c-1.3,0-2.2,0.6-2.2,2c0,1.4,0.9,1.9,2.2,1.9c1.5,0,3,0,4.5,0c1.1,0,1.4,0.4,1.4,1.4\n" +
-        "		c-0.1,1.5,0,3,0,4.5C-528.4,442.6-527.8,443.3-526.4,443.5z\"/>\n" +
-        "	<path d=\"M-526.5,454.9c3,0,6,0,8.9,0c3,0,4.8,1.8,4.8,4.8c0,6,0,12,0,18c0,2.9-1.8,4.7-4.7,4.7c-6.1,0-12.1,0-18.2,0\n" +
-        "		c-2.8,0-4.6-1.9-4.6-4.6c0-6.1,0-12.1,0-18.2c0-2.9,1.8-4.6,4.7-4.7C-532.5,454.8-529.5,454.9-526.5,454.9z M-526.7,471.1\n" +
-        "		c1.6,1.7,2.9,3,4.2,4.3c0.9,0.9,1.9,1.2,3,0.3c1-0.8,0.9-1.9-0.2-3.1c-1-1.1-2.1-2.1-3.2-3.2c-0.6-0.6-0.6-1.1,0-1.7\n" +
-        "		c1-1,2-1.9,2.9-2.9c1.3-1.3,1.4-2.4,0.4-3.3c-0.9-0.8-2-0.7-3.2,0.5c-1.2,1.3-2.3,2.6-3.8,4.3c-1.5-1.7-2.6-3-3.8-4.2\n" +
-        "		c-1.2-1.3-2.4-1.4-3.3-0.5c-1,0.9-0.8,2,0.5,3.3c1.2,1.2,2.4,2.4,3.8,3.8c-1.4,1.4-2.7,2.6-3.9,3.8c-1.2,1.2-1.3,2.3-0.3,3.2\n" +
-        "		c0.9,0.9,2,0.8,3.2-0.4C-529.2,473.9-528.1,472.6-526.7,471.1z\"/>\n" +
-        "	<path d=\"M-505.2,468.5c0-3,0-6,0-8.9c0-2.9,1.7-4.7,4.7-4.7c6.1,0,12.1,0,18.2,0c2.9,0,4.6,1.8,4.7,4.7c0,6,0,12,0,18\n" +
-        "		c0,2.8-1.9,4.7-4.7,4.7c-6.1,0-12.1,0-18.2,0c-2.8,0-4.6-1.8-4.6-4.6C-505.3,474.7-505.2,471.6-505.2,468.5z M-491.4,476\n" +
-        "		c2.5,0,5,0,7.5,0c1.3,0,2.3-0.5,2.4-1.9c0.1-1.3-0.8-2.1-2.4-2.1c-5,0-10.1,0-15.1,0c-1.6,0-2.6,0.9-2.5,2.1\n" +
-        "		c0.2,1.4,1.1,1.9,2.5,1.9C-496.5,476-494,476-491.4,476z M-491.4,461.2c-2.5,0-5.1,0-7.6,0c-1.6,0-2.6,0.8-2.5,2\n" +
-        "		c0.2,1.4,1.1,1.9,2.5,1.9c5,0,10.1,0,15.1,0c1.3,0,2.3-0.4,2.4-1.9c0.1-1.3-0.8-2-2.4-2C-486.4,461.2-488.9,461.2-491.4,461.2z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/liveSession/svg/liveSession-start-lesson-popup-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 170.1 126.2\" xml:space=\"preserve\" class=\"start-lesson-icon-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "	.start-lesson-icon-svg {width: 100%; height: auto;}\n" +
-        "	.start-lesson-icon-svg .st0{fill:#ffffff;enable-background:new;}\n" +
-        "</style>\n" +
-        "<g class=\"st0\">\n" +
-        "	<path d=\"M63.6,90.4c0,11.8,0,23.6,0,35.8c-21.1,0-42,0-63.2,0c-0.1-1.5-0.3-2.9-0.3-4.4c0-14.7-0.1-29.3,0-44\n" +
-        "		c0.1-14.4,6.9-21,21.2-21c8,0,16,0,24,0c7.6,0.1,14.3,2.6,19.7,8.2c4.8,4.9,9.6,9.7,14.5,14.5C83.1,83,87,83,90.7,79.4\n" +
-        "		c5.3-5.3,10.5-10.7,15.9-15.9c4.9-4.7,10.4-4.1,14.1,1.1c2.6,3.7,2.2,7.4-0.8,10.5c-8.7,9.2-17.5,18.3-26.5,27.1\n" +
-        "		c-5.4,5.2-10.8,5.1-16.4-0.1c-4.2-3.9-7.9-8.5-11.8-12.8C64.6,89.6,64.1,90,63.6,90.4z\"/>\n" +
-        "	<path d=\"M161.5,117.4c0-36.7,0-72.4,0-108.4c-25.6,0-51,0-76.8,0c0,17.3,0,34.4,0,51.9c-3.1,0-5.8,0-8.8,0c0-20.1,0-40.2,0-60.6\n" +
-        "		c31.4,0,62.6,0,94.2,0c0,41.8,0,83.5,0,125.6c-31.3,0-62.6,0-94.3,0c0-2.7,0-5.3,0-8.5C104.3,117.4,132.7,117.4,161.5,117.4z\"/>\n" +
-        "	<path d=\"M6.6,25.3C6.6,11,17.9-0.2,32,0c13.7,0.2,25.1,11.7,25.1,25.4c0,13.9-11.7,25.5-25.6,25.3C17.8,50.6,6.6,39.2,6.6,25.3z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/liveSession/svg/liveSession-verbal-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\" y=\"0px\" viewBox=\"-586.4 16.3 301.4 213.6\" xml:space=\"preserve\"\n" +
-        "    class=\"verbal-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "    .verbal-icon-svg {width: 100%; height: auto;}\n" +
-        "    .verbal-icon-svg .st0{fill:none;enable-background:new    ;}\n" +
-        "</style>\n" +
-        "<path d=\"M-546.8,113.1c0-20.2,0-40.3,0-60.5c0-7.8,0.9-9.1,8.7-8c11.5,1.5,22.9,3.7,34.3,6.1c3.5,0.7,6.8,2.7,10,4.3\n" +
-        "	c6.3,3.2,9.2,7.7,9.1,15.5c-0.5,36.6-0.2,73.3-0.2,110c0,8.6-1.3,9.5-9.4,6.7c-15.1-5.2-30.4-8.6-46.5-5.6c-3.6,0.7-5.4-1.1-5.9-4.4\n" +
-        "	c-0.2-1.5-0.1-3-0.1-4.5C-546.8,152.7-546.8,132.9-546.8,113.1z M-526.4,142.5c-1.7,0-2.5,0-3.3,0c-3.2,0-6.4,0.2-6.5,4.3\n" +
-        "	c-0.1,4.1,3,4.6,6.3,4.5c9.9-0.2,18.9,2.8,27.4,7.8c2.6,1.6,5.1,1.8,6.9-1c1.8-3,0.1-5-2.4-6.5C-507.1,146.2-516.7,143-526.4,142.5z\n" +
-        "	 M-529.3,66.9c0.2,0-0.3,0-0.8,0c-3.1,0.2-6.3,0.6-6.1,4.8c0.2,3.9,3.2,4,6.2,4c9.7-0.1,18.6,2.8,26.9,7.7c2.6,1.6,5.4,2.5,7.4-0.7\n" +
-        "	c2.1-3.3-0.1-5.2-2.7-6.8C-507.8,70.4-517.8,67.2-529.3,66.9z M-526.6,117.3c-1.8,0-2.6,0-3.5,0c-3.2,0-6.3,0.5-6.2,4.6\n" +
-        "	c0.1,3.8,3,4.1,6.1,4.1c9.9,0,18.9,2.8,27.4,7.8c2.8,1.7,5.5,2,7.2-1.2c1.6-3.1-0.4-4.9-2.9-6.4C-507.4,121-517.1,117.7-526.6,117.3\n" +
-        "	z M-527.2,92.3c-1.5,0-3-0.1-4.5,0c-2.9,0.2-5.2,1.8-4.4,4.7c0.4,1.6,3.1,3.7,4.7,3.7c10.3,0.1,19.7,2.8,28.5,8\n" +
-        "	c2.8,1.6,5.5,2.1,7.3-1.1c1.7-3.1-0.4-5-2.9-6.4C-507.3,95.9-516.8,92.6-527.2,92.3z\"/>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<path d=\"M-391.9,156.9l-20,5c-1.1,0.3-2-0.5-1.7-1.7l5-20c0.4-1.5,2.2-2.3,3.1-1.4l15.1,15.1C-389.6,154.7-390.5,156.5-391.9,156.9\n" +
-        "		z\"/>\n" +
-        "	<path d=\"M-299.8,34.6l13.9,13.9c1.2,1.2,1.2,3.2,0,4.5l-5.9,5.9c-1.2,1.2-3.2,1.2-4.5,0l-13.9-13.9c-1.2-1.2-1.2-3.2,0-4.5l5.9-5.9\n" +
-        "		C-303,33.3-301,33.3-299.8,34.6z\"/>\n" +
-        "	<path d=\"M-384.3,150.6l85.5-85.5c1-1,1.2-2.5,0.5-3.2l-15.5-15.5c-0.8-0.8-2.2-0.5-3.2,0.5l-85.5,85.5c-1,1-1.2,2.5-0.5,3.2\n" +
-        "		l15.5,15.5C-386.7,151.8-385.3,151.6-384.3,150.6z\"/>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "	<path d=\"M-355.7,129.9c-0.6,0.6-0.9,1.3-0.9,2.1c0,19.4-0.1,38.8,0.1,58.1c0.1,5.5-1.4,7.1-7.1,7.5c-31.1,2-61.3,8.9-90.6,19.6\n" +
-        "		c-3.8,1.4-7,1.5-10.9,0.1c-29.9-10.8-60.7-17.9-92.5-19.8c-4.3-0.3-5.5-1.7-5.5-5.7c0.1-52.7,0.1-105.5,0-158.2\n" +
-        "		c0-4.5,1.6-6.1,6-6.1c30.5-0.2,60.1,4,88.6,15.5c4.1,1.7,4.5,4.1,4.5,7.9c-0.1,46.5-0.1,93.1-0.1,139.6c0,1.7-0.5,3.7,0.1,5.1\n" +
-        "		c0.9,1.8,2.6,3.3,4,4.9c1.6-1.7,3.5-3.1,4.5-5c0.7-1.3,0.2-3.4,0.2-5.1c0-46.3,0.1-92.6-0.1-138.9c0-4.8,1.3-7,5.9-8.8\n" +
-        "		c27.7-11.2,56.5-15,86.1-15.1c5.4,0,6.9,1.9,6.9,7.1c-0.1,9.7-0.2,33.9-0.2,39.7c0,0.8,0.9,1.3,1.5,0.8l21.8-20.9\n" +
-        "		c0.7-0.5,1.1-1.3,1.1-2.1c0-11.1-0.9-11.6-13.4-13.1c0-2.8,0.1-5.7,0-8.6c-0.2-7.9-4-12.9-11.9-13.2c-11.7-0.5-23.5-0.2-35.3,0.7\n" +
-        "		c-21.9,1.7-42.9,7.2-63.3,15.4c-2.4,1-5.9,0.5-8.4-0.5c-27.3-11.3-55.9-15.6-85.2-16.4c-3.6-0.1-7.3,0.1-10.9,0.6\n" +
-        "		c-9.1,1.2-12.8,5.3-13,14.3c-0.1,2.5,0,5,0,7.7c-4.7,0.5-8.6,1-12.6,1.5v181.4c3.6,0.3,7.2,1,10.8,1c28.1,0.1,56.2-0.3,84.2,0.3\n" +
-        "		c7.7,0.2,15.5,2.4,22.9,5c6,2.1,11.3,2.9,17.1,0c8.6-4.2,17.7-5.5,27.4-5.3c26.8,0.4,53.6,0.1,80.4,0.1c9.4,0,11.3-1.9,11.4-11.2\n" +
-        "		c0-31.6-1.6-68.3-1.7-100.3c0-1.4-1.6-2-2.6-1.1C-341.7,115.3-352.5,126.8-355.7,129.9z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
+  $templateCache.put("components/liveSession/components/liveSession/liveSession.template.html",
+    "<div ng-if=\"vm.userLiveSessionState\"\n" +
+    "     ng-class=\"vm.liveSessionCls\">\n" +
+    "    <div class=\"active-state-container\">\n" +
+    "        <div class=\"square-side top\"></div>\n" +
+    "        <div class=\"square-side right\"></div>\n" +
+    "        <div class=\"square-side bottom\"></div>\n" +
+    "        <div class=\"square-side left\"></div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
+    "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
+    "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
+    "           ng-class=\"{'offline': vm.isOffline, 'end-session': vm.isLiveSessionActive}\"\n" +
+    "           ng-click=\"!vm.isLiveSessionActive ? vm.showSessionModal() : vm.endSession()\">\n" +
+    "\n" +
+    "    <span ng-if=\"!vm.isLiveSessionActive\">\n" +
+    "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "            {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
+    "        </md-tooltip>\n" +
+    "        {{'LIVE_SESSION.START_SESSION' | translate}}\n" +
+    "    </span>\n" +
+    "\n" +
+    "    <span ng-if=\"vm.isLiveSessionActive\" title=\"{{'LIVE_SESSION.END_SESSION' | translate}}\">\n" +
+    "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +
+    "                        <div class=\"arrow-up\"></div>\n" +
+    "                        {{'LIVE_SESSION.END_SESSION' | translate}}\n" +
+    "        </md-tooltip>\n" +
+    "        {{'LIVE_SESSION.END_SESSION' | translate}}\n" +
+    "    </span>\n" +
+    "</md-button>\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html",
+    "<div class=\"live-session-subject-modal\">\n" +
+    "    <div class=\"base base-border-radius session-container\" translate-namespace=\"LIVE_SESSION\">\n" +
+    "        <div class=\"popup-header\">\n" +
+    "            <div class=\"top-icon-wrap\">\n" +
+    "                <div class=\"top-icon\">\n" +
+    "                    <div class=\"round-icon-wrap\">\n" +
+    "                        <svg-icon name=\"liveSession-start-lesson-popup-icon\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"popup-content\">\n" +
+    "            <div class=\"main-title\" translate=\".START_SESSION\"></div>\n" +
+    "            <div class=\"sub-title\" translate=\".SESSION_SUBJECT\"></div>\n" +
+    "            <div class=\"subjects-btns\">\n" +
+    "                <button class=\"subject-icon-wrap\"\n" +
+    "                        ng-repeat=\"subject in ::vm.sessionSubjects\"\n" +
+    "                        ng-class=\"subject.name\"\n" +
+    "                        ng-click=\"vm.startSession(subject); vm.closeModal();\">\n" +
+    "                    <svg-icon name={{subject.iconName}}></svg-icon>\n" +
+    "                    <span>{{subject.name}}</span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-english-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xml:space=\"preserve\" x=\"0px\" y=\"0px\"\n" +
+    "     viewBox=\"0 0 80 80\" class=\"reading-svg\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .reading-svg {\n" +
+    "        width: 100%;\n" +
+    "        height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "    <g>\n" +
+    "        <path d=\"M4.2,11.3c0.3,0,0.5-0.1,0.7-0.1c3.5,0.2,6.9-0.4,10.3-1.5c6.6-2.1,13.1-1,19.6,0.9c3.8,1.1,7.7,1.1,11.5,0\n" +
+    "		c7.8-2.3,15.5-3,23.1,0.4c0.5,0.2,1.1,0.2,1.6,0.2c1.8,0,3.6,0,5.5,0c0,17.3,0,34.5,0,51.8c-10,0-20.1,0-30.1,0\n" +
+    "		c-0.1,0.8-0.1,1.4-0.2,2.1c-3.6,0-7.2,0-11,0c0-0.6-0.1-1.3-0.2-2.1c-10.3,0-20.5,0-30.9,0C4.2,45.7,4.2,28.6,4.2,11.3z M39.4,60.5\n" +
+    "		c0-1.1,0-1.8,0-2.5c0-13.2,0.1-26.4,0.1-39.6c0-4.2,0-4.2-4-5.6c-8.5-2.9-17-3.6-25.3,0.6c-1.2,0.6-1.7,1.3-1.7,2.8\n" +
+    "		c0.1,13.9,0,27.9,0,41.8c0,0.6,0,1.2,0,1.9C18.8,57.6,29,56.7,39.4,60.5z M72.2,60c0-0.8,0-1.5,0-2.1c0-12.8,0-25.6,0-38.5\n" +
+    "		c0-5.6,0-5.7-5.5-7.5c-8.1-2.8-15.8-1.2-23.4,1.8c-1.4,0.5-1.8,1.3-1.8,2.7c0,14.1,0,28.1,0,42.2c0,0.6,0,1.2,0,2\n" +
+    "		C51.7,56.8,61.9,57.6,72.2,60z\"/>\n" +
+    "        <path d=\"M33.2,25.1c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,24.8,33.7,25.1,33.2,25.1z\"/>\n" +
+    "        <path d=\"M33.2,33.2c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,33,33.7,33.2,33.2,33.2z\"/>\n" +
+    "        <path d=\"M33.2,41.4c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,41.1,33.7,41.4,33.2,41.4z\"/>\n" +
+    "        <path d=\"M33.2,49.5c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C34.2,49.3,33.7,49.5,33.2,49.5z\"/>\n" +
+    "        <path d=\"M66.5,24.7c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,24.5,67.1,24.7,66.5,24.7z\"/>\n" +
+    "        <path d=\"M66.5,32.9c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,32.6,67.1,32.9,66.5,32.9z\"/>\n" +
+    "        <path d=\"M66.5,41c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,40.7,67.1,41,66.5,41z\"/>\n" +
+    "        <path d=\"M66.5,49.2c-0.2,0-0.5-0.1-0.7-0.2c-9.2-5.2-17-0.3-17.3-0.1c-0.7,0.4-1.6,0.3-2.1-0.4\n" +
+    "		c-0.5-0.7-0.3-1.6,0.4-2c0.4-0.3,9.5-6.2,20.4-0.1c0.7,0.4,1,1.3,0.6,2C67.6,48.9,67.1,49.2,66.5,49.2z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-math-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xml:space=\"preserve\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "     class=\"math-icon-svg\"\n" +
+    "	 viewBox=\"-554 409.2 90 83.8\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .math-icon-svg{\n" +
+    "            width: 100%;\n" +
+    "            height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "<g>\n" +
+    "	<path d=\"M-491.4,447.3c-3,0-6.1,0-9.1,0c-2.9,0-4.7-1.8-4.7-4.7c0-6.1,0-12.1,0-18.2c0-2.9,1.8-4.7,4.7-4.7c6,0,12,0,18,0\n" +
+    "		c2.8,0,4.7,1.9,4.7,4.7c0,6.1,0,12.1,0,18.2c0,2.8-1.8,4.6-4.6,4.6C-485.4,447.4-488.4,447.3-491.4,447.3z M-491.4,435.5\n" +
+    "		c2.5,0,5,0,7.5,0c1.6,0,2.5-0.8,2.4-2c-0.1-1.5-1.1-1.9-2.4-1.9c-5,0-10.1,0-15.1,0c-1.6,0-2.6,0.8-2.5,2c0.2,1.4,1.1,1.9,2.5,1.9\n" +
+    "		C-496.5,435.5-494,435.5-491.4,435.5z\"/>\n" +
+    "	<path d=\"M-526.6,447.3c-3,0-6,0-8.9,0c-3,0-4.7-1.8-4.8-4.8c0-6,0-11.9,0-17.9c0-3,1.9-4.8,4.9-4.8c5.9,0,11.8,0,17.7,0\n" +
+    "		c3.1,0,4.9,1.8,4.9,4.8c0,6,0,11.9,0,17.9c0,3.1-1.8,4.8-4.9,4.8C-520.6,447.4-523.6,447.3-526.6,447.3z M-526.4,443.5\n" +
+    "		c1.3-0.1,2-0.9,2-2.2c0.1-1.5,0.1-3,0-4.5c0-1.1,0.4-1.4,1.4-1.4c1.4,0.1,2.8,0,4.1,0c1.3,0,2.2-0.5,2.2-1.9c0.1-1.3-0.8-2-2.3-2\n" +
+    "		c-1.4,0-2.8-0.1-4.1,0c-1.2,0.1-1.6-0.4-1.5-1.6c0.1-1.4,0-2.8,0-4.1c0-1.3-0.6-2.2-1.9-2.2c-1.4,0-2,0.8-2,2.2c0,1.5,0,3,0,4.5\n" +
+    "		c0,1-0.3,1.3-1.3,1.3c-1.5,0-3,0-4.5,0c-1.3,0-2.2,0.6-2.2,2c0,1.4,0.9,1.9,2.2,1.9c1.5,0,3,0,4.5,0c1.1,0,1.4,0.4,1.4,1.4\n" +
+    "		c-0.1,1.5,0,3,0,4.5C-528.4,442.6-527.8,443.3-526.4,443.5z\"/>\n" +
+    "	<path d=\"M-526.5,454.9c3,0,6,0,8.9,0c3,0,4.8,1.8,4.8,4.8c0,6,0,12,0,18c0,2.9-1.8,4.7-4.7,4.7c-6.1,0-12.1,0-18.2,0\n" +
+    "		c-2.8,0-4.6-1.9-4.6-4.6c0-6.1,0-12.1,0-18.2c0-2.9,1.8-4.6,4.7-4.7C-532.5,454.8-529.5,454.9-526.5,454.9z M-526.7,471.1\n" +
+    "		c1.6,1.7,2.9,3,4.2,4.3c0.9,0.9,1.9,1.2,3,0.3c1-0.8,0.9-1.9-0.2-3.1c-1-1.1-2.1-2.1-3.2-3.2c-0.6-0.6-0.6-1.1,0-1.7\n" +
+    "		c1-1,2-1.9,2.9-2.9c1.3-1.3,1.4-2.4,0.4-3.3c-0.9-0.8-2-0.7-3.2,0.5c-1.2,1.3-2.3,2.6-3.8,4.3c-1.5-1.7-2.6-3-3.8-4.2\n" +
+    "		c-1.2-1.3-2.4-1.4-3.3-0.5c-1,0.9-0.8,2,0.5,3.3c1.2,1.2,2.4,2.4,3.8,3.8c-1.4,1.4-2.7,2.6-3.9,3.8c-1.2,1.2-1.3,2.3-0.3,3.2\n" +
+    "		c0.9,0.9,2,0.8,3.2-0.4C-529.2,473.9-528.1,472.6-526.7,471.1z\"/>\n" +
+    "	<path d=\"M-505.2,468.5c0-3,0-6,0-8.9c0-2.9,1.7-4.7,4.7-4.7c6.1,0,12.1,0,18.2,0c2.9,0,4.6,1.8,4.7,4.7c0,6,0,12,0,18\n" +
+    "		c0,2.8-1.9,4.7-4.7,4.7c-6.1,0-12.1,0-18.2,0c-2.8,0-4.6-1.8-4.6-4.6C-505.3,474.7-505.2,471.6-505.2,468.5z M-491.4,476\n" +
+    "		c2.5,0,5,0,7.5,0c1.3,0,2.3-0.5,2.4-1.9c0.1-1.3-0.8-2.1-2.4-2.1c-5,0-10.1,0-15.1,0c-1.6,0-2.6,0.9-2.5,2.1\n" +
+    "		c0.2,1.4,1.1,1.9,2.5,1.9C-496.5,476-494,476-491.4,476z M-491.4,461.2c-2.5,0-5.1,0-7.6,0c-1.6,0-2.6,0.8-2.5,2\n" +
+    "		c0.2,1.4,1.1,1.9,2.5,1.9c5,0,10.1,0,15.1,0c1.3,0,2.3-0.4,2.4-1.9c0.1-1.3-0.8-2-2.4-2C-486.4,461.2-488.9,461.2-491.4,461.2z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-start-lesson-popup-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 170.1 126.2\" xml:space=\"preserve\" class=\"start-lesson-icon-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "	.start-lesson-icon-svg {width: 100%; height: auto;}\n" +
+    "	.start-lesson-icon-svg .st0{fill:#ffffff;enable-background:new;}\n" +
+    "</style>\n" +
+    "<g class=\"st0\">\n" +
+    "	<path d=\"M63.6,90.4c0,11.8,0,23.6,0,35.8c-21.1,0-42,0-63.2,0c-0.1-1.5-0.3-2.9-0.3-4.4c0-14.7-0.1-29.3,0-44\n" +
+    "		c0.1-14.4,6.9-21,21.2-21c8,0,16,0,24,0c7.6,0.1,14.3,2.6,19.7,8.2c4.8,4.9,9.6,9.7,14.5,14.5C83.1,83,87,83,90.7,79.4\n" +
+    "		c5.3-5.3,10.5-10.7,15.9-15.9c4.9-4.7,10.4-4.1,14.1,1.1c2.6,3.7,2.2,7.4-0.8,10.5c-8.7,9.2-17.5,18.3-26.5,27.1\n" +
+    "		c-5.4,5.2-10.8,5.1-16.4-0.1c-4.2-3.9-7.9-8.5-11.8-12.8C64.6,89.6,64.1,90,63.6,90.4z\"/>\n" +
+    "	<path d=\"M161.5,117.4c0-36.7,0-72.4,0-108.4c-25.6,0-51,0-76.8,0c0,17.3,0,34.4,0,51.9c-3.1,0-5.8,0-8.8,0c0-20.1,0-40.2,0-60.6\n" +
+    "		c31.4,0,62.6,0,94.2,0c0,41.8,0,83.5,0,125.6c-31.3,0-62.6,0-94.3,0c0-2.7,0-5.3,0-8.5C104.3,117.4,132.7,117.4,161.5,117.4z\"/>\n" +
+    "	<path d=\"M6.6,25.3C6.6,11,17.9-0.2,32,0c13.7,0.2,25.1,11.7,25.1,25.4c0,13.9-11.7,25.5-25.6,25.3C17.8,50.6,6.6,39.2,6.6,25.3z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-verbal-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\" y=\"0px\" viewBox=\"-586.4 16.3 301.4 213.6\" xml:space=\"preserve\"\n" +
+    "    class=\"verbal-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .verbal-icon-svg {width: 100%; height: auto;}\n" +
+    "    .verbal-icon-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "</style>\n" +
+    "<path d=\"M-546.8,113.1c0-20.2,0-40.3,0-60.5c0-7.8,0.9-9.1,8.7-8c11.5,1.5,22.9,3.7,34.3,6.1c3.5,0.7,6.8,2.7,10,4.3\n" +
+    "	c6.3,3.2,9.2,7.7,9.1,15.5c-0.5,36.6-0.2,73.3-0.2,110c0,8.6-1.3,9.5-9.4,6.7c-15.1-5.2-30.4-8.6-46.5-5.6c-3.6,0.7-5.4-1.1-5.9-4.4\n" +
+    "	c-0.2-1.5-0.1-3-0.1-4.5C-546.8,152.7-546.8,132.9-546.8,113.1z M-526.4,142.5c-1.7,0-2.5,0-3.3,0c-3.2,0-6.4,0.2-6.5,4.3\n" +
+    "	c-0.1,4.1,3,4.6,6.3,4.5c9.9-0.2,18.9,2.8,27.4,7.8c2.6,1.6,5.1,1.8,6.9-1c1.8-3,0.1-5-2.4-6.5C-507.1,146.2-516.7,143-526.4,142.5z\n" +
+    "	 M-529.3,66.9c0.2,0-0.3,0-0.8,0c-3.1,0.2-6.3,0.6-6.1,4.8c0.2,3.9,3.2,4,6.2,4c9.7-0.1,18.6,2.8,26.9,7.7c2.6,1.6,5.4,2.5,7.4-0.7\n" +
+    "	c2.1-3.3-0.1-5.2-2.7-6.8C-507.8,70.4-517.8,67.2-529.3,66.9z M-526.6,117.3c-1.8,0-2.6,0-3.5,0c-3.2,0-6.3,0.5-6.2,4.6\n" +
+    "	c0.1,3.8,3,4.1,6.1,4.1c9.9,0,18.9,2.8,27.4,7.8c2.8,1.7,5.5,2,7.2-1.2c1.6-3.1-0.4-4.9-2.9-6.4C-507.4,121-517.1,117.7-526.6,117.3\n" +
+    "	z M-527.2,92.3c-1.5,0-3-0.1-4.5,0c-2.9,0.2-5.2,1.8-4.4,4.7c0.4,1.6,3.1,3.7,4.7,3.7c10.3,0.1,19.7,2.8,28.5,8\n" +
+    "	c2.8,1.6,5.5,2.1,7.3-1.1c1.7-3.1-0.4-5-2.9-6.4C-507.3,95.9-516.8,92.6-527.2,92.3z\"/>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<path d=\"M-391.9,156.9l-20,5c-1.1,0.3-2-0.5-1.7-1.7l5-20c0.4-1.5,2.2-2.3,3.1-1.4l15.1,15.1C-389.6,154.7-390.5,156.5-391.9,156.9\n" +
+    "		z\"/>\n" +
+    "	<path d=\"M-299.8,34.6l13.9,13.9c1.2,1.2,1.2,3.2,0,4.5l-5.9,5.9c-1.2,1.2-3.2,1.2-4.5,0l-13.9-13.9c-1.2-1.2-1.2-3.2,0-4.5l5.9-5.9\n" +
+    "		C-303,33.3-301,33.3-299.8,34.6z\"/>\n" +
+    "	<path d=\"M-384.3,150.6l85.5-85.5c1-1,1.2-2.5,0.5-3.2l-15.5-15.5c-0.8-0.8-2.2-0.5-3.2,0.5l-85.5,85.5c-1,1-1.2,2.5-0.5,3.2\n" +
+    "		l15.5,15.5C-386.7,151.8-385.3,151.6-384.3,150.6z\"/>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "	<path d=\"M-355.7,129.9c-0.6,0.6-0.9,1.3-0.9,2.1c0,19.4-0.1,38.8,0.1,58.1c0.1,5.5-1.4,7.1-7.1,7.5c-31.1,2-61.3,8.9-90.6,19.6\n" +
+    "		c-3.8,1.4-7,1.5-10.9,0.1c-29.9-10.8-60.7-17.9-92.5-19.8c-4.3-0.3-5.5-1.7-5.5-5.7c0.1-52.7,0.1-105.5,0-158.2\n" +
+    "		c0-4.5,1.6-6.1,6-6.1c30.5-0.2,60.1,4,88.6,15.5c4.1,1.7,4.5,4.1,4.5,7.9c-0.1,46.5-0.1,93.1-0.1,139.6c0,1.7-0.5,3.7,0.1,5.1\n" +
+    "		c0.9,1.8,2.6,3.3,4,4.9c1.6-1.7,3.5-3.1,4.5-5c0.7-1.3,0.2-3.4,0.2-5.1c0-46.3,0.1-92.6-0.1-138.9c0-4.8,1.3-7,5.9-8.8\n" +
+    "		c27.7-11.2,56.5-15,86.1-15.1c5.4,0,6.9,1.9,6.9,7.1c-0.1,9.7-0.2,33.9-0.2,39.7c0,0.8,0.9,1.3,1.5,0.8l21.8-20.9\n" +
+    "		c0.7-0.5,1.1-1.3,1.1-2.1c0-11.1-0.9-11.6-13.4-13.1c0-2.8,0.1-5.7,0-8.6c-0.2-7.9-4-12.9-11.9-13.2c-11.7-0.5-23.5-0.2-35.3,0.7\n" +
+    "		c-21.9,1.7-42.9,7.2-63.3,15.4c-2.4,1-5.9,0.5-8.4-0.5c-27.3-11.3-55.9-15.6-85.2-16.4c-3.6-0.1-7.3,0.1-10.9,0.6\n" +
+    "		c-9.1,1.2-12.8,5.3-13,14.3c-0.1,2.5,0,5,0,7.7c-4.7,0.5-8.6,1-12.6,1.5v181.4c3.6,0.3,7.2,1,10.8,1c28.1,0.1,56.2-0.3,84.2,0.3\n" +
+    "		c7.7,0.2,15.5,2.4,22.9,5c6,2.1,11.3,2.9,17.1,0c8.6-4.2,17.7-5.5,27.4-5.3c26.8,0.4,53.6,0.1,80.4,0.1c9.4,0,11.3-1.9,11.4-11.2\n" +
+    "		c0-31.6-1.6-68.3-1.7-100.3c0-1.4-1.6-2-2.6-1.1C-341.7,115.3-352.5,126.8-355.7,129.9z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 angular.module('znk.infra-web-app.loadingAnimation', []);
@@ -10084,7 +10083,7 @@ angular.module('znk.infra-web-app.loadingAnimation', []);
 
     angular.module('znk.infra-web-app.loadingAnimation').service('LoadingSrv',
         ["$document", "$rootScope", "$compile", function ($document, $rootScope, $compile) {
-            'ngInject';
+        'ngInject';
 
             var childScope = $rootScope.$new(true);
 
@@ -10599,14 +10598,14 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 return invitationKey;
             };
 
-            //   this.navigateWithInvitationKey = function () {
-            //       // var appUrl = ENV.redirectSignup;
-            //       var inviteId = this.getInvitationKey();
-            //       if (angular.isDefined(inviteId)) {
-            //           appUrl += '#?iid=' + inviteId;
-            //       }
-            //       $window.location.replace(appUrl);
-            // };
+          //   this.navigateWithInvitationKey = function () {
+          //       // var appUrl = ENV.redirectSignup;
+          //       var inviteId = this.getInvitationKey();
+          //       if (angular.isDefined(inviteId)) {
+          //           appUrl += '#?iid=' + inviteId;
+          //       }
+          //       $window.location.replace(appUrl);
+          // };
         }
     );
 })(angular);
@@ -10916,610 +10915,610 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 })(angular);
 
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
-        "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
-        "    <button class=\"social-btn facebook-btn\"\n" +
-        "            ng-click=\"vm.socialAuth('facebook')\"\n" +
-        "            ng-if=\"vm.providers.facebook\"\n" +
-        "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_FB' | translate}}\">\n" +
-        "            <span class=\"loader\"\n" +
-        "                 ng-class=\"{\n" +
-        "                   'active-loader': vm.loading.facebook.showSpinner   \n" +
-        "                 }\">\n" +
-        "            </span>\n" +
-        "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
-        "    </button>\n" +
-        "    <button class=\"social-btn gplus-btn\"\n" +
-        "            ng-click=\"vm.socialAuth('google')\"\n" +
-        "            ng-if=\"vm.providers.google\"\n" +
-        "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_GOOGLE' | translate}}\">\n" +
-        "            <span class=\"loader\"\n" +
-        "                 ng-class=\"{\n" +
-        "                   'active-loader': vm.loading.google.showSpinner   \n" +
-        "                 }\">\n" +
-        "            </span>\n" +
-        "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
-        "    </button>\n" +
-        "     <button class=\"social-btn live-btn\"\n" +
-        "            ng-click=\"vm.socialAuth('live')\"\n" +
-        "            ng-if=\"vm.providers.live\"            \n" +
-        "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_LIVE' | translate}}\">\n" +
-        "            <span class=\"loader\"\n" +
-        "                 ng-class=\"{\n" +
-        "                   'active-loader': vm.loading.live.showSpinner   \n" +
-        "                 }\">\n" +
-        "            </span>\n" +
-        "        <svg-icon name=\"microsoft-icon\"></svg-icon>\n" +
-        "    </button>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/loginApp/svg/dropdown-arrow.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/loginApp/svg/facebook-icon.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"-203 228.4 22.4 48.3\">\n" +
-        "<path d=\"M-180.6,244h-7.6v-5c0-1.9,1.2-2.3,2.1-2.3c0.9,0,5.4,0,5.4,0v-8.3l-7.4,0c-8.2,0-10.1,6.2-10.1,10.1v5.5h-4.8v8.5h4.8\n" +
-        "	c0,10.9,0,24.1,0,24.1h10c0,0,0-13.3,0-24.1h6.8L-180.6,244z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/loginApp/svg/form-envelope.svg",
-        "<svg\n" +
-        "    class=\"login-form-envelope-svg\"\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"0 0 190.2 143.7\">\n" +
-        "    <style>\n" +
-        "        .login-form-envelope-svg{\n" +
-        "            width: 20px;\n" +
-        "            stroke: #CACACA;\n" +
-        "            fill: none;\n" +
-        "            stroke-width: 10;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M174.7,141.2H15.4c-7.1,0-12.9-5.8-12.9-12.9V15.4c0-7.1,5.8-12.9,12.9-12.9h159.3c7.1,0,12.9,5.8,12.9,12.9\n" +
-        "		v112.8C187.7,135.3,181.9,141.2,174.7,141.2z\"/>\n" +
-        "	<path class=\"st0\" d=\"M4.1,7.3l77.3,75.1c7.6,7.4,19.8,7.4,27.4,0l77.3-75.1\"/>\n" +
-        "	<line class=\"st0\" x1=\"77\" y1=\"78\" x2=\"7.7\" y2=\"135.5\"/>\n" +
-        "	<line class=\"st0\" x1=\"112.8\" y1=\"78\" x2=\"182.1\" y2=\"135.5\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/loginApp/svg/form-lock.svg",
-        "<svg class=\"locked-svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"0 0 106 165.2\"\n" +
-        "     version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .locked-svg{\n" +
-        "            width: 15px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .locked-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #CACACA;\n" +
-        "            stroke-width: 6;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        .locked-svg .st1 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #CACACA;\n" +
-        "            stroke-width: 4;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <path class=\"st0\" d=\"M93.4,162.2H12.6c-5.3,0-9.6-4.3-9.6-9.6V71.8c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
-        "		C103,157.9,98.7,162.2,93.4,162.2z\"/>\n" +
-        "        <path class=\"st0\" d=\"M23.2,59.4V33.2C23.2,16.6,36.6,3,53,3h0c16.4,0,29.8,13.6,29.8,30.2v26.1\"/>\n" +
-        "        <path class=\"st1\" d=\"M53.2,91.5c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
-        "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,96.6,47.1,91.5,53.2,91.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/loginApp/svg/google-icon.svg",
-        "<svg x=\"0px\" version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"0 0 604.35 604.35\"\n" +
-        "     class=\"google-icon-wrapper\">\n" +
-        "    <style>\n" +
-        "        .google-icon-wrapper{\n" +
-        "            fill: #fff;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<g id=\"google-plus\">\n" +
-        "		<path d=\"M516.375,255v-76.5h-51V255h-76.5v51h76.5v76.5h51V306h76.5v-51H516.375z M320.025,341.7l-28.051-20.4\n" +
-        "			c-10.2-7.649-20.399-17.85-20.399-35.7s12.75-33.15,25.5-40.8c33.15-25.5,66.3-53.55,66.3-109.65c0-53.55-33.15-84.15-51-99.45\n" +
-        "			h43.35l30.6-35.7h-158.1c-112.2,0-168.3,71.4-168.3,147.9c0,58.65,45.9,122.4,127.5,122.4h20.4c-2.55,7.65-10.2,20.4-10.2,33.15\n" +
-        "			c0,25.5,10.2,35.7,22.95,51c-35.7,2.55-102,10.2-150.45,40.8c-45.9,28.05-58.65,66.3-58.65,94.35\n" +
-        "			c0,58.65,53.55,114.75,168.3,114.75c137.7,0,204.001-76.5,204.001-150.449C383.775,400.35,355.725,372.3,320.025,341.7z\n" +
-        "			 M126.225,109.65c0-56.1,33.15-81.6,68.85-81.6c66.3,0,102,89.25,102,140.25c0,66.3-53.55,79.05-73.95,79.05\n" +
-        "			C159.375,247.35,126.225,168.3,126.225,109.65z M218.024,568.65c-84.15,0-137.7-38.25-137.7-94.351c0-56.1,51-73.95,66.3-81.6\n" +
-        "			c33.15-10.2,76.5-12.75,84.15-12.75s12.75,0,17.85,0c61.2,43.35,86.7,61.2,86.7,102C335.324,530.4,286.875,568.65,218.024,568.65z\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/loginApp/svg/login-username-icon.svg",
-        "<svg\n" +
-        "    class=\"login-username-icon-svg\"\n" +
-        "    x=\"0px\" y=\"0px\"\n" +
-        "    viewBox=\"0 0 155.5 155.1\"\n" +
-        "    style=\"enable-background:new 0 0 155.5 155.1;\">\n" +
-        "    <style>\n" +
-        "        .login-username-icon-svg{\n" +
-        "        width: 20px;\n" +
-        "        stroke: #CACACA;\n" +
-        "        fill: none;\n" +
-        "        stroke-width: 10;\n" +
-        "        stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <circle class=\"st0\" cx=\"77.7\" cy=\"40.3\" r=\"37.8\"/>\n" +
-        "        <path class=\"st0\" d=\"M77.7,152.6h68.5c4,0,7.2-3.5,6.7-7.5c-0.7-6.2-2.3-14.2-3.7-18.2c-8.5-23.7-28.7-30.4-36.3-32.1\n" +
-        "		c-1.8-0.4-3.6,0-5.1,0.9c-15.9,10.1-44.2,10.1-60,0c-1.5-1-3.4-1.3-5.1-0.9c-7.6,1.7-27.8,8.3-36.3,32.1c-1.5,4.1-3,12-3.7,18.2\n" +
-        "		c-0.5,4,2.7,7.5,6.7,7.5H77.7z\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/loginApp/svg/microsoft.svg",
-        "<svg class=\"microsoft-icon\"\n" +
-        "     x=\"0px\" \n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 22.884 22.884\" >\n" +
-        "<g>\n" +
-        "	<g>\n" +
-        "		<path d=\"M13.045,1.997l-1.969,7.872C8.68,8.867,5.479,8.429,2.642,9.307c0.574-2.522,1.97-7.31,1.97-7.31\n" +
-        "			C6.698,0.289,10.756,0.902,13.045,1.997z\"/>\n" +
-        "		<path d=\"M14.184,3.145c2.147,1.257,5.943,1.645,8.7,0.822l-2.251,7.589c-2.313,1.224-6.735,1.133-8.433-0.563L14.184,3.145z\"/>\n" +
-        "		<path d=\"M10.398,11.513l-1.967,7.87C5.953,18.243,2.794,17.481,0,18.82c0,0,1.297-5.069,1.966-7.588\n" +
-        "			C4.131,9.889,8.444,10.286,10.398,11.513z\"/>\n" +
-        "		<path d=\"M11.746,12.641c2.147,1.518,5.796,1.764,8.493,0.72l-2.247,7.592c-2.176,1.479-6.433,1.252-8.435-0.281L11.746,12.641z\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/loginApp/svg/v-icon.svg",
-        "<svg class=\"v-icon-wrapper\" x=\"0px\" y=\"0px\" viewBox=\"0 0 334.5 228.7\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .v-icon-wrapper .st0{\n" +
-        "            fill:#ffffff;\n" +
-        "            stroke:#ffffff;\n" +
-        "            stroke-width:26;\n" +
-        "            stroke-linecap:round;\n" +
-        "            stroke-linejoin:round;\n" +
-        "            stroke-miterlimit:10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<line class=\"st0\" x1=\"13\" y1=\"109.9\" x2=\"118.8\" y2=\"215.7\"/>\n" +
-        "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/loginApp/templates/loginApp.directive.html",
-        "<div class=\"login-app\" ng-class=\"{\n" +
-        "        student: d.userContext === d.userContextObj.STUDENT,\n" +
-        "        educator: d.userContext === d.userContextObj.TEACHER,\n" +
-        "        sat: d.appContext === d.availableApps.SAT,\n" +
-        "        satsm: d.appContext === d.availableApps.SATSM,\n" +
-        "        act: d.appContext === d.availableApps.ACT,\n" +
-        "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
-        "    }\">\n" +
-        "    <header>\n" +
-        "        <div class=\"logo-wrapper\">\n" +
-        "            <a class=\"logo\" href=\"https://www.zinkerz.com\"></a>\n" +
-        "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
-        "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
-        "            </span>\n" +
-        "        </div>\n" +
-        "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
-        "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
-        "                <md-button aria-label=\"Open App Select Menu\"\n" +
-        "                           class=\"md-icon-button\"\n" +
-        "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
-        "                    <div class=\"app-img-holder {{d.appContext.className}}\">{{d.appContext.name}}<span class=\"trademark\">&reg;</span></div>\n" +
-        "                        <div class=\"square {{d.appContext.className}}\">\n" +
-        "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
-        "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
-        "                        </div>\n" +
-        "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
-        "                </md-button>\n" +
-        "                <md-menu-content id=\"app-select-menu\">\n" +
-        "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
-        "                                  ng-click=\"selectApp(app)\">\n" +
-        "                        <div class=\"app-img-holder {{app.className}}\">{{app.name}}<span class=\"trademark\">&reg;</span></div>\n" +
-        "                        <div class=\"square {{app.className}}\">\n" +
-        "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
-        "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
-        "                        </div>\n" +
-        "                    </md-menu-item>\n" +
-        "                </md-menu-content>\n" +
-        "            </md-menu>\n" +
-        "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
-        "        </div>\n" +
-        "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
-        "           class=\"for-educators app-color\"\n" +
-        "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
-        "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
-        "        </a>\n" +
-        "    </header>\n" +
-        "    <div class=\"main\">\n" +
-        "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
-        "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
-        "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
-        "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
-        "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
-        "        </div>\n" +
-        "\n" +
-        "        <div ng-if=\"d.invitationId\">\n" +
-        "            <div ng-switch=\"d.userContext\">\n" +
-        "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
-        "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
-        "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
-        "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"main-inner\">\n" +
-        "            <ng-switch on=\"currentForm\">\n" +
-        "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
-        "                    <login-form app-context=\"d.appContext\"\n" +
-        "                                user-context=\"d.userContext\"\n" +
-        "                                change-password-click=\"changePasswordClick()\">\n" +
-        "                    </login-form>\n" +
-        "                    <p class=\"go-to-signup\">\n" +
-        "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
-        "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-        "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
-        "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-        "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
-        "                    </p>\n" +
-        "                </div>\n" +
-        "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
-        "                    <signup-form app-context=\"d.appContext\"\n" +
-        "                                 user-context=\"d.userContext\">\n" +
-        "                    </signup-form>\n" +
-        "                    <p class=\"go-to-login\">\n" +
-        "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
-        "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-        "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
-        "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-        "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
-        "                    </p>\n" +
-        "                </div>\n" +
-        "\n" +
-        "                <div class=\"change-password-container\" ng-switch-when=\"changePassword\">\n" +
-        "                    <reset-password-form app-context=\"d.appContext\" user-context=\"d.userContext\"\n" +
-        "                                         back-to-login=\"changeCurrentForm('login')\">\n" +
-        "\n" +
-        "                    </reset-password-form>\n" +
-        "                    <a class=\"back-to-login-btn\" ng-click=\"changeCurrentForm('login')\">\n" +
-        "                        <svg-icon name=\"dropdown-arrow\" class=\"back-btn-icon\"></svg-icon>\n" +
-        "                        <span class=\"back-btn-label\" translate=\"CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN\"></span>\n" +
-        "                    </a>\n" +
-        "                </div>\n" +
-        "            </ng-switch>\n" +
-        "            <h2 class=\"banner-text\">\n" +
-        "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
-        "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-        "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
-        "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-        "                        <span translate=\"LOGIN_APP.SATSM_EDUCATOR_TAGLINE\"\n" +
-        "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
-        "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
-        "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-        "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
-        "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
-        "                    </div>\n" +
-        "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-        "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
-        "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-        "                        <span translate=\"LOGIN_APP.SATSM_STUDENT_TAGLINE\"\n" +
-        "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
-        "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
-        "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-        "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
-        "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
-        "                    </div>\n" +
-        "                </ng-switch>\n" +
-        "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
-        "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
-        "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
-        "                </div>\n" +
-        "            </h2>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <footer>\n" +
-        "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
-        "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-        "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
-        "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
-        "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
-        "            </div>\n" +
-        "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-        "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
-        "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
-        "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
-        "            </div>\n" +
-        "        </ng-switch>\n" +
-        "    </footer>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/loginApp/templates/loginForm.directive.html",
-        "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
-        "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
-        "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-        "\n" +
-        "    <promo-code\n" +
-        "        user-context-const=\"d.userContextObj\"\n" +
-        "        user-context=\"userContext\"\n" +
-        "        app-context=\"appContext\">\n" +
-        "    </promo-code>\n" +
-        "\n" +
-        "    <div class=\"social-auth-container\">\n" +
-        "        <div class=\"social-auth\">\n" +
-        "            <oath-login-drv\n" +
-        "                app-context=\"appContext\"\n" +
-        "                user-context=\"userContext\"\n" +
-        "                providers=\"{facebook:true,google:true,live:true}\">\n" +
-        "            </oath-login-drv>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"divider\">\n" +
-        "        <div translate=\".OR\" class=\"text\"></div>\n" +
-        "    </div>\n" +
-        "    <form novalidate\n" +
-        "          name=\"loginform\"\n" +
-        "          ng-submit=\"loginSubmit(loginform)\">\n" +
-        "        <div class=\"inputs-container\">\n" +
-        "            <div class=\"input-wrapper\"\n" +
-        "                 ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-        "                <input type=\"email\"\n" +
-        "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
-        "                       name=\"email\"\n" +
-        "                       ng-model=\"d.loginFormData.email\"\n" +
-        "                       required>\n" +
-        "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"loginform.email.$error.required\"\n" +
-        "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "            <div class=\"input-wrapper\"\n" +
-        "                 ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
-        "                <input type=\"password\"\n" +
-        "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
-        "                       name=\"password\"\n" +
-        "                       autocomplete=\"off\"\n" +
-        "                       ng-minlength=\"6\"\n" +
-        "                       ng-maxlength=\"25\"\n" +
-        "                       ng-model=\"d.loginFormData.password\"\n" +
-        "                       required>\n" +
-        "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"loginform.password.$error.required\"\n" +
-        "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"submit-btn-wrapper\">\n" +
-        "            <button type=\"submit\"\n" +
-        "                    ng-disabled=\"d.disableBtn\"\n" +
-        "                    class=\"app-bg\"\n" +
-        "                    autofocus>\n" +
-        "                <span translate=\".LOGIN_IN\"></span>\n" +
-        "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
-        "            </button>\n" +
-        "        </div>\n" +
-        "        <div class=\"forgot-pwd-wrapper\">\n" +
-        "            <span class=\"app-color\" translate=\".FORGOT_PWD\" ng-click=\"changePasswordClick()\"></span>\n" +
-        "        </div>\n" +
-        "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
-        "    </form>\n" +
-        "</div>\n" +
-        "\n" +
-        "\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/loginApp/templates/resetPasswordForm.directive.html",
-        "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
-        "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
-        "        <form novalidate\n" +
-        "              name=\"changePasswordForm\"\n" +
-        "              ng-submit=\"passwordSubmit(changePasswordForm)\"\n" +
-        "              ng-switch-when=\"false\">\n" +
-        "            <div class=\"inputs-container\">\n" +
-        "                <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
-        "                <div class=\"input-wrapper\"\n" +
-        "                     ng-class=\"changePasswordForm.email.$invalid && changePasswordForm.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                    <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-        "                    <input type=\"email\"\n" +
-        "                           placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
-        "                           name=\"email\"\n" +
-        "                           ng-model=\"d.changePasswordForm.email\"\n" +
-        "                           required>\n" +
-        "                    <span\n" +
-        "                        ng-if=\"(changePasswordForm.$submitted && changePasswordForm.email.$invalid && !changePasswordForm.email.$dirty) || (changePasswordForm.email.$error && changePasswordForm.$submitted)\"\n" +
-        "                        role=\"alert\">\n" +
-        "            <span class=\"validationBox\">\n" +
-        "                <span ng-show=\"changePasswordForm.email.$error.required\"\n" +
-        "                      translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-        "                <span class=\"no-email-massage\" ng-show=\"changePasswordForm.email.$error.noSuchEmail\"\n" +
-        "                      translate=\".NO_SUCH_EMAIL\"></span>\n" +
-        "            </span>\n" +
-        "        </span>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "            <div class=\"submit-btn-wrapper\">\n" +
-        "                <button type=\"submit\"\n" +
-        "                        ng-disabled=\"d.disableBtn\"\n" +
-        "                        class=\"app-bg\"\n" +
-        "                        autofocus>\n" +
-        "                    <span translate=\".SEND\"></span>\n" +
-        "                    <span class=\"loader ng-hide\" ng-show=\"showSpinner\"></span>\n" +
-        "                </button>\n" +
-        "            </div>\n" +
-        "        </form>\n" +
-        "        <div ng-switch-when=\"true\" class=\"success-massage\">\n" +
-        "            <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
-        "                <svg-icon name=\"v-icon\"></svg-icon>\n" +
-        "            <div class=\"massage-text\" translate=\".NEW_PASSWORD_SENT\"></div>\n" +
-        "            <div class=\"submit-btn-wrapper\">\n" +
-        "                <button ng-disabled=\"d.disableBtn\"\n" +
-        "                        class=\"app-bg\"\n" +
-        "                        ng-click=\"backToLogin()\"\n" +
-        "                        autofocus>\n" +
-        "                    <span translate=\".DONE\"></span>\n" +
-        "                </button>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </ng-switch>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/loginApp/templates/signupForm.directive.html",
-        "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
-        "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
-        "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-        "\n" +
-        "    <promo-code\n" +
-        "        user-context-const=\"d.userContextObj\"\n" +
-        "        user-context=\"userContext\"\n" +
-        "        app-context=\"appContext\">\n" +
-        "    </promo-code>\n" +
-        "\n" +
-        "    <div class=\"social-auth-container\">\n" +
-        "        <div class=\"social-auth\">\n" +
-        "            <oath-login-drv\n" +
-        "                app-context=\"appContext\"\n" +
-        "                user-context=\"userContext\"\n" +
-        "                providers=\"{facebook:true,google:true,live:true}\">\n" +
-        "            </oath-login-drv>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"divider\">\n" +
-        "        <div translate=\".OR\" class=\"text\"></div>\n" +
-        "    </div>\n" +
-        "    <form novalidate\n" +
-        "          name=\"signupForm\"\n" +
-        "          ng-submit=\"signupSubmit(signupForm)\">\n" +
-        "        <div class=\"inputs-container\">\n" +
-        "            <div class=\"input-wrapper\" ng-class=\"signupForm.nickname.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
-        "                <input type=\"text\"\n" +
-        "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
-        "                       name=\"nickname\"\n" +
-        "                       ng-model=\"d.signupFormData.nickname\"\n" +
-        "                       required>\n" +
-        "                <span ng-if=\"signupForm.$submitted && signupForm.nickname.$invalid && !signupForm.nickname.$dirty\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"signupForm.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "            <div class=\"input-wrapper\" ng-class=\"signupForm.email.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-        "                <input type=\"email\"\n" +
-        "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
-        "                       name=\"email\"\n" +
-        "                       ng-model=\"d.signupFormData.email\"\n" +
-        "                       required>\n" +
-        "                <span ng-if=\"(signupForm.$submitted && signupForm.email.$invalid && !signupForm.email.$dirty) ||\n" +
-        "                (signupForm.$submitted && signupForm.email.$error)\" role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"signupForm.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-        "                        <span class=\"email-exist-massage\" ng-show=\"signupForm.email.$error.emailTaken\" translate=\"LOGIN_APP.FORM_VALIDATION.EMAIL_TAKEN\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "            <div class=\"input-wrapper\" ng-class=\"signupForm.password.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-        "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
-        "                <input type=\"password\"\n" +
-        "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
-        "                       name=\"password\"\n" +
-        "                       ng-model=\"d.signupFormData.password\"\n" +
-        "                       ng-minlength=\"6\"\n" +
-        "                       ng-maxlength=\"25\"\n" +
-        "                       autocomplete=\"off\"\n" +
-        "                       required>\n" +
-        "                <span ng-if=\"signupForm.$submitted && signupForm.password.$invalid\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"signupForm.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
-        "                        <span ng-show=\"signupForm.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
-        "                        <span ng-show=\"signupForm.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"submit-btn-wrapper\">\n" +
-        "            <button type=\"submit\"\n" +
-        "                    ng-disabled=\"d.disableBtn\"\n" +
-        "                    class=\"app-bg\"\n" +
-        "                    autofocus>\n" +
-        "                <span translate=\".SIGN_UP\"></span>\n" +
-        "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
-        "            </button>\n" +
-        "        </div>\n" +
-        "        <p class=\"signup-disclaimer\"\n" +
-        "           translate-values=\"{termsOfUseHref: d.termsOfUseHref, privacyPolicyHref: d.privacyPolicyHref}\"\n" +
-        "           translate=\".DISCLAIMER\"></p>\n" +
-        "\n" +
-        "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
-        "    </form>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
+    "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
+    "    <button class=\"social-btn facebook-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('facebook')\"\n" +
+    "            ng-if=\"vm.providers.facebook\"\n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_FB' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.facebook.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
+    "        <svg-icon name=\"facebook-icon\"></svg-icon>\n" +
+    "    </button>\n" +
+    "    <button class=\"social-btn gplus-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('google')\"\n" +
+    "            ng-if=\"vm.providers.google\"\n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_GOOGLE' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.google.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
+    "        <svg-icon name=\"google-icon\"></svg-icon>\n" +
+    "    </button>\n" +
+    "     <button class=\"social-btn live-btn\"\n" +
+    "            ng-click=\"vm.socialAuth('live')\"\n" +
+    "            ng-if=\"vm.providers.live\"            \n" +
+    "            title=\"{{'OATH_SOCIAL.CONNECT_WITH_LIVE' | translate}}\">\n" +
+    "            <span class=\"loader\"\n" +
+    "                 ng-class=\"{\n" +
+    "                   'active-loader': vm.loading.live.showSpinner   \n" +
+    "                 }\">\n" +
+    "            </span>\n" +
+    "        <svg-icon name=\"microsoft-icon\"></svg-icon>\n" +
+    "    </button>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/dropdown-arrow.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/facebook-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-203 228.4 22.4 48.3\">\n" +
+    "<path d=\"M-180.6,244h-7.6v-5c0-1.9,1.2-2.3,2.1-2.3c0.9,0,5.4,0,5.4,0v-8.3l-7.4,0c-8.2,0-10.1,6.2-10.1,10.1v5.5h-4.8v8.5h4.8\n" +
+    "	c0,10.9,0,24.1,0,24.1h10c0,0,0-13.3,0-24.1h6.8L-180.6,244z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/form-envelope.svg",
+    "<svg\n" +
+    "    class=\"login-form-envelope-svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 190.2 143.7\">\n" +
+    "    <style>\n" +
+    "        .login-form-envelope-svg{\n" +
+    "            width: 20px;\n" +
+    "            stroke: #CACACA;\n" +
+    "            fill: none;\n" +
+    "            stroke-width: 10;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M174.7,141.2H15.4c-7.1,0-12.9-5.8-12.9-12.9V15.4c0-7.1,5.8-12.9,12.9-12.9h159.3c7.1,0,12.9,5.8,12.9,12.9\n" +
+    "		v112.8C187.7,135.3,181.9,141.2,174.7,141.2z\"/>\n" +
+    "	<path class=\"st0\" d=\"M4.1,7.3l77.3,75.1c7.6,7.4,19.8,7.4,27.4,0l77.3-75.1\"/>\n" +
+    "	<line class=\"st0\" x1=\"77\" y1=\"78\" x2=\"7.7\" y2=\"135.5\"/>\n" +
+    "	<line class=\"st0\" x1=\"112.8\" y1=\"78\" x2=\"182.1\" y2=\"135.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/form-lock.svg",
+    "<svg class=\"locked-svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 106 165.2\"\n" +
+    "     version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .locked-svg{\n" +
+    "            width: 15px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .locked-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #CACACA;\n" +
+    "            stroke-width: 6;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .locked-svg .st1 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #CACACA;\n" +
+    "            stroke-width: 4;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path class=\"st0\" d=\"M93.4,162.2H12.6c-5.3,0-9.6-4.3-9.6-9.6V71.8c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
+    "		C103,157.9,98.7,162.2,93.4,162.2z\"/>\n" +
+    "        <path class=\"st0\" d=\"M23.2,59.4V33.2C23.2,16.6,36.6,3,53,3h0c16.4,0,29.8,13.6,29.8,30.2v26.1\"/>\n" +
+    "        <path class=\"st1\" d=\"M53.2,91.5c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
+    "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,96.6,47.1,91.5,53.2,91.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/google-icon.svg",
+    "<svg x=\"0px\" version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 604.35 604.35\"\n" +
+    "     class=\"google-icon-wrapper\">\n" +
+    "    <style>\n" +
+    "        .google-icon-wrapper{\n" +
+    "            fill: #fff;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<g id=\"google-plus\">\n" +
+    "		<path d=\"M516.375,255v-76.5h-51V255h-76.5v51h76.5v76.5h51V306h76.5v-51H516.375z M320.025,341.7l-28.051-20.4\n" +
+    "			c-10.2-7.649-20.399-17.85-20.399-35.7s12.75-33.15,25.5-40.8c33.15-25.5,66.3-53.55,66.3-109.65c0-53.55-33.15-84.15-51-99.45\n" +
+    "			h43.35l30.6-35.7h-158.1c-112.2,0-168.3,71.4-168.3,147.9c0,58.65,45.9,122.4,127.5,122.4h20.4c-2.55,7.65-10.2,20.4-10.2,33.15\n" +
+    "			c0,25.5,10.2,35.7,22.95,51c-35.7,2.55-102,10.2-150.45,40.8c-45.9,28.05-58.65,66.3-58.65,94.35\n" +
+    "			c0,58.65,53.55,114.75,168.3,114.75c137.7,0,204.001-76.5,204.001-150.449C383.775,400.35,355.725,372.3,320.025,341.7z\n" +
+    "			 M126.225,109.65c0-56.1,33.15-81.6,68.85-81.6c66.3,0,102,89.25,102,140.25c0,66.3-53.55,79.05-73.95,79.05\n" +
+    "			C159.375,247.35,126.225,168.3,126.225,109.65z M218.024,568.65c-84.15,0-137.7-38.25-137.7-94.351c0-56.1,51-73.95,66.3-81.6\n" +
+    "			c33.15-10.2,76.5-12.75,84.15-12.75s12.75,0,17.85,0c61.2,43.35,86.7,61.2,86.7,102C335.324,530.4,286.875,568.65,218.024,568.65z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/login-username-icon.svg",
+    "<svg\n" +
+    "    class=\"login-username-icon-svg\"\n" +
+    "    x=\"0px\" y=\"0px\"\n" +
+    "    viewBox=\"0 0 155.5 155.1\"\n" +
+    "    style=\"enable-background:new 0 0 155.5 155.1;\">\n" +
+    "    <style>\n" +
+    "        .login-username-icon-svg{\n" +
+    "        width: 20px;\n" +
+    "        stroke: #CACACA;\n" +
+    "        fill: none;\n" +
+    "        stroke-width: 10;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <circle class=\"st0\" cx=\"77.7\" cy=\"40.3\" r=\"37.8\"/>\n" +
+    "        <path class=\"st0\" d=\"M77.7,152.6h68.5c4,0,7.2-3.5,6.7-7.5c-0.7-6.2-2.3-14.2-3.7-18.2c-8.5-23.7-28.7-30.4-36.3-32.1\n" +
+    "		c-1.8-0.4-3.6,0-5.1,0.9c-15.9,10.1-44.2,10.1-60,0c-1.5-1-3.4-1.3-5.1-0.9c-7.6,1.7-27.8,8.3-36.3,32.1c-1.5,4.1-3,12-3.7,18.2\n" +
+    "		c-0.5,4,2.7,7.5,6.7,7.5H77.7z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/microsoft.svg",
+    "<svg class=\"microsoft-icon\"\n" +
+    "     x=\"0px\" \n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 22.884 22.884\" >\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path d=\"M13.045,1.997l-1.969,7.872C8.68,8.867,5.479,8.429,2.642,9.307c0.574-2.522,1.97-7.31,1.97-7.31\n" +
+    "			C6.698,0.289,10.756,0.902,13.045,1.997z\"/>\n" +
+    "		<path d=\"M14.184,3.145c2.147,1.257,5.943,1.645,8.7,0.822l-2.251,7.589c-2.313,1.224-6.735,1.133-8.433-0.563L14.184,3.145z\"/>\n" +
+    "		<path d=\"M10.398,11.513l-1.967,7.87C5.953,18.243,2.794,17.481,0,18.82c0,0,1.297-5.069,1.966-7.588\n" +
+    "			C4.131,9.889,8.444,10.286,10.398,11.513z\"/>\n" +
+    "		<path d=\"M11.746,12.641c2.147,1.518,5.796,1.764,8.493,0.72l-2.247,7.592c-2.176,1.479-6.433,1.252-8.435-0.281L11.746,12.641z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/svg/v-icon.svg",
+    "<svg class=\"v-icon-wrapper\" x=\"0px\" y=\"0px\" viewBox=\"0 0 334.5 228.7\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .v-icon-wrapper .st0{\n" +
+    "            fill:#ffffff;\n" +
+    "            stroke:#ffffff;\n" +
+    "            stroke-width:26;\n" +
+    "            stroke-linecap:round;\n" +
+    "            stroke-linejoin:round;\n" +
+    "            stroke-miterlimit:10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<line class=\"st0\" x1=\"13\" y1=\"109.9\" x2=\"118.8\" y2=\"215.7\"/>\n" +
+    "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/loginApp/templates/loginApp.directive.html",
+    "<div class=\"login-app\" ng-class=\"{\n" +
+    "        student: d.userContext === d.userContextObj.STUDENT,\n" +
+    "        educator: d.userContext === d.userContextObj.TEACHER,\n" +
+    "        sat: d.appContext === d.availableApps.SAT,\n" +
+    "        satsm: d.appContext === d.availableApps.SATSM,\n" +
+    "        act: d.appContext === d.availableApps.ACT,\n" +
+    "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
+    "    }\">\n" +
+    "    <header>\n" +
+    "        <div class=\"logo-wrapper\">\n" +
+    "            <a class=\"logo\" href=\"https://www.zinkerz.com\"></a>\n" +
+    "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
+    "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
+    "            </span>\n" +
+    "        </div>\n" +
+    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
+    "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
+    "                <md-button aria-label=\"Open App Select Menu\"\n" +
+    "                           class=\"md-icon-button\"\n" +
+    "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
+    "                    <div class=\"app-img-holder {{d.appContext.className}}\">{{d.appContext.name}}<span class=\"trademark\">&reg;</span></div>\n" +
+    "                        <div class=\"square {{d.appContext.className}}\">\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
+    "                        </div>\n" +
+    "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
+    "                </md-button>\n" +
+    "                <md-menu-content id=\"app-select-menu\">\n" +
+    "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
+    "                                  ng-click=\"selectApp(app)\">\n" +
+    "                        <div class=\"app-img-holder {{app.className}}\">{{app.name}}<span class=\"trademark\">&reg;</span></div>\n" +
+    "                        <div class=\"square {{app.className}}\">\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
+    "                        </div>\n" +
+    "                    </md-menu-item>\n" +
+    "                </md-menu-content>\n" +
+    "            </md-menu>\n" +
+    "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
+    "        </div>\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
+    "           class=\"for-educators app-color\"\n" +
+    "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
+    "        </a>\n" +
+    "    </header>\n" +
+    "    <div class=\"main\">\n" +
+    "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-if=\"d.invitationId\">\n" +
+    "            <div ng-switch=\"d.userContext\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"main-inner\">\n" +
+    "            <ng-switch on=\"currentForm\">\n" +
+    "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
+    "                    <login-form app-context=\"d.appContext\"\n" +
+    "                                user-context=\"d.userContext\"\n" +
+    "                                change-password-click=\"changePasswordClick()\">\n" +
+    "                    </login-form>\n" +
+    "                    <p class=\"go-to-signup\">\n" +
+    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
+    "                    </p>\n" +
+    "                </div>\n" +
+    "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
+    "                    <signup-form app-context=\"d.appContext\"\n" +
+    "                                 user-context=\"d.userContext\">\n" +
+    "                    </signup-form>\n" +
+    "                    <p class=\"go-to-login\">\n" +
+    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
+    "                    </p>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"change-password-container\" ng-switch-when=\"changePassword\">\n" +
+    "                    <reset-password-form app-context=\"d.appContext\" user-context=\"d.userContext\"\n" +
+    "                                         back-to-login=\"changeCurrentForm('login')\">\n" +
+    "\n" +
+    "                    </reset-password-form>\n" +
+    "                    <a class=\"back-to-login-btn\" ng-click=\"changeCurrentForm('login')\">\n" +
+    "                        <svg-icon name=\"dropdown-arrow\" class=\"back-btn-icon\"></svg-icon>\n" +
+    "                        <span class=\"back-btn-label\" translate=\"CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN\"></span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "            </ng-switch>\n" +
+    "            <h2 class=\"banner-text\">\n" +
+    "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SATSM_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SATSM_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                </ng-switch>\n" +
+    "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
+    "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
+    "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
+    "                </div>\n" +
+    "            </h2>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <footer>\n" +
+    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
+    "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
+    "            </div>\n" +
+    "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
+    "            </div>\n" +
+    "        </ng-switch>\n" +
+    "    </footer>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/templates/loginForm.directive.html",
+    "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
+    "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
+    "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\">\n" +
+    "            <oath-login-drv\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
+    "            </oath-login-drv>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
+    "    <form novalidate\n" +
+    "          name=\"loginform\"\n" +
+    "          ng-submit=\"loginSubmit(loginform)\">\n" +
+    "        <div class=\"inputs-container\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                <input type=\"email\"\n" +
+    "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
+    "                       name=\"email\"\n" +
+    "                       ng-model=\"d.loginFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.email.$error.required\"\n" +
+    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "                <input type=\"password\"\n" +
+    "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
+    "                       name=\"password\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       ng-model=\"d.loginFormData.password\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.password.$error.required\"\n" +
+    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"submit-btn-wrapper\">\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".LOGIN_IN\"></span>\n" +
+    "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <div class=\"forgot-pwd-wrapper\">\n" +
+    "            <span class=\"app-color\" translate=\".FORGOT_PWD\" ng-click=\"changePasswordClick()\"></span>\n" +
+    "        </div>\n" +
+    "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
+    "    </form>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/loginApp/templates/resetPasswordForm.directive.html",
+    "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
+    "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
+    "        <form novalidate\n" +
+    "              name=\"changePasswordForm\"\n" +
+    "              ng-submit=\"passwordSubmit(changePasswordForm)\"\n" +
+    "              ng-switch-when=\"false\">\n" +
+    "            <div class=\"inputs-container\">\n" +
+    "                <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
+    "                <div class=\"input-wrapper\"\n" +
+    "                     ng-class=\"changePasswordForm.email.$invalid && changePasswordForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                    <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                    <input type=\"email\"\n" +
+    "                           placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
+    "                           name=\"email\"\n" +
+    "                           ng-model=\"d.changePasswordForm.email\"\n" +
+    "                           required>\n" +
+    "                    <span\n" +
+    "                        ng-if=\"(changePasswordForm.$submitted && changePasswordForm.email.$invalid && !changePasswordForm.email.$dirty) || (changePasswordForm.email.$error && changePasswordForm.$submitted)\"\n" +
+    "                        role=\"alert\">\n" +
+    "            <span class=\"validationBox\">\n" +
+    "                <span ng-show=\"changePasswordForm.email.$error.required\"\n" +
+    "                      translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                <span class=\"no-email-massage\" ng-show=\"changePasswordForm.email.$error.noSuchEmail\"\n" +
+    "                      translate=\".NO_SUCH_EMAIL\"></span>\n" +
+    "            </span>\n" +
+    "        </span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"submit-btn-wrapper\">\n" +
+    "                <button type=\"submit\"\n" +
+    "                        ng-disabled=\"d.disableBtn\"\n" +
+    "                        class=\"app-bg\"\n" +
+    "                        autofocus>\n" +
+    "                    <span translate=\".SEND\"></span>\n" +
+    "                    <span class=\"loader ng-hide\" ng-show=\"showSpinner\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "        <div ng-switch-when=\"true\" class=\"success-massage\">\n" +
+    "            <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
+    "                <svg-icon name=\"v-icon\"></svg-icon>\n" +
+    "            <div class=\"massage-text\" translate=\".NEW_PASSWORD_SENT\"></div>\n" +
+    "            <div class=\"submit-btn-wrapper\">\n" +
+    "                <button ng-disabled=\"d.disableBtn\"\n" +
+    "                        class=\"app-bg\"\n" +
+    "                        ng-click=\"backToLogin()\"\n" +
+    "                        autofocus>\n" +
+    "                    <span translate=\".DONE\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </ng-switch>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/templates/signupForm.directive.html",
+    "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
+    "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
+    "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\">\n" +
+    "            <oath-login-drv\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
+    "            </oath-login-drv>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
+    "    <form novalidate\n" +
+    "          name=\"signupForm\"\n" +
+    "          ng-submit=\"signupSubmit(signupForm)\">\n" +
+    "        <div class=\"inputs-container\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.nickname.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
+    "                <input type=\"text\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
+    "                       name=\"nickname\"\n" +
+    "                       ng-model=\"d.signupFormData.nickname\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupForm.$submitted && signupForm.nickname.$invalid && !signupForm.nickname.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.email.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                <input type=\"email\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
+    "                       name=\"email\"\n" +
+    "                       ng-model=\"d.signupFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"(signupForm.$submitted && signupForm.email.$invalid && !signupForm.email.$dirty) ||\n" +
+    "                (signupForm.$submitted && signupForm.email.$error)\" role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span class=\"email-exist-massage\" ng-show=\"signupForm.email.$error.emailTaken\" translate=\"LOGIN_APP.FORM_VALIDATION.EMAIL_TAKEN\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.password.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "                <input type=\"password\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
+    "                       name=\"password\"\n" +
+    "                       ng-model=\"d.signupFormData.password\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupForm.$submitted && signupForm.password.$invalid\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"submit-btn-wrapper\">\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".SIGN_UP\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <p class=\"signup-disclaimer\"\n" +
+    "           translate-values=\"{termsOfUseHref: d.termsOfUseHref, privacyPolicyHref: d.privacyPolicyHref}\"\n" +
+    "           translate=\".DISCLAIMER\"></p>\n" +
+    "\n" +
+    "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
+    "    </form>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -11760,20 +11759,20 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.myProfile').controller('MyProfileController',
-        ["AuthService", "$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, userProfile, timezonesList, localTimezone) {
-            'ngInject';
+            ["AuthService", "$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, userProfile, timezonesList, localTimezone) {
+                'ngInject';
 
-            var vm = this;
+                var vm = this;
 
-            vm.userProfile = userProfile;
-            vm.timezonesList = timezonesList;
-            vm.localTimezone = localTimezone;
+                vm.userProfile = userProfile;
+                vm.timezonesList = timezonesList;
+                vm.localTimezone = localTimezone;
 
-            vm.closeDialog = function () {
-                $mdDialog.cancel();
-            };
-        }]
-    );
+                vm.closeDialog = function () {
+                    $mdDialog.cancel();
+                };
+            }]
+        );
 })(angular);
 
 (function (angular) {
@@ -11854,275 +11853,275 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 })(angular);
 
 angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/myProfile/components/changePassword/changePassword.template.html",
-        "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
-        "    <div class=\"container-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
-        "    <form name=\"authform\" novalidate class=\"auth-form\" ng-submit=\"vm.changePassword(authform)\" ng-switch-when=\"false\">\n" +
-        "        <div class=\"znk-input-group\"\n" +
-        "             ng-class=\"!vm.changePasswordData.oldPassword && authform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "            <label>{{'MY_PROFILE.CURRENT_PASSWORD' | translate}}</label>\n" +
-        "            <div class=\"znk-input\">\n" +
-        "                <input\n" +
-        "                        type=\"password\"\n" +
-        "                        autocomplete=\"off\"\n" +
-        "                        name=\"oldPassword\"\n" +
-        "                        ng-minlength=\"6\"\n" +
-        "                        ng-maxlength=\"25\"\n" +
-        "                        ng-required=\"true\"\n" +
-        "                        ng-model=\"vm.changePasswordData.oldPassword\">\n" +
-        "\n" +
-        "                <span ng-if=\"!vm.changePasswordData.oldPassword && authform.$submitted\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"authform.oldPassword.$error.required\"\n" +
-        "                              translate=\"{{vm.oldPassError}}\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"znk-input-group\"\n" +
-        "             ng-class=\"!vm.changePasswordData.newPassword && authform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "            <label>{{'MY_PROFILE.NEW_PASSWORD' | translate}}</label>\n" +
-        "            <div class=\"znk-input\">\n" +
-        "                <input\n" +
-        "                        type=\"password\"\n" +
-        "                        autocomplete=\"off\"\n" +
-        "                        name=\"newPassword\"\n" +
-        "                        ng-minlength=\"6\"\n" +
-        "                        ng-maxlength=\"25\"\n" +
-        "                        ng-required=\"true\"\n" +
-        "                        ng-model=\"vm.changePasswordData.newPassword\">\n" +
-        "\n" +
-        "                <span ng-if=\"!vm.changePasswordData.newPassword && authform.$submitted\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"authform.newPassword.$error.required\"\n" +
-        "                              translate=\".PASSWORD_LENGTH\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"znk-input-group\"\n" +
-        "             ng-class=\"!vm.changePasswordData.newPasswordConfirm && authform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "            <label>{{'MY_PROFILE.CONFIRM_PASSWORD' | translate}}</label>\n" +
-        "            <div class=\"znk-input\">\n" +
-        "                <input\n" +
-        "                        type=\"password\"\n" +
-        "                        autocomplete=\"off\"\n" +
-        "                        name=\"newPasswordConfirm\"\n" +
-        "                        ng-minlength=\"6\"\n" +
-        "                        ng-maxlength=\"25\"\n" +
-        "                        ng-required=\"true\"\n" +
-        "                        ng-model=\"vm.changePasswordData.newPasswordConfirm\">\n" +
-        "\n" +
-        "                <span ng-if=\"!vm.changePasswordData.newPasswordConfirm && authform.$submitted\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"authform.newPasswordConfirm.$error.required\"\n" +
-        "                              translate=\".PASSWORD_NOT_MATCH\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"btn-wrap\">\n" +
-        "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
-        "        </div>\n" +
-        "    </form>\n" +
-        "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
-        "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
-        "        <div translate=\".PASSWORD_SAVE_SUCCESS\"></div>\n" +
-        "        <div class=\"done-btn-wrap\">\n" +
-        "            <md-button aria-label=\"{{'CHANGE_PASSWORD.DONE' | translate}}\"\n" +
-        "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
-        "                <span translate=\".DONE\"></span>\n" +
-        "            </md-button>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
-        "        <div class=\"error-msg\">\n" +
-        "            <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
-        "            <div translate=\"{{vm.generalError}}\"></div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</md-dialog-content>\n" +
-        "");
-    $templateCache.put("components/myProfile/components/selectedTestLevel/selectedTestLevel.template.html",
-        "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
-        "    <div class=\"container-title md-subheader\" translate=\".SELECTED_TEST_LEVEL\"></div>\n" +
-        "    <form name=\"authform\" novalidate class=\"auth-form\" ng-submit=\"vm.changeTestLevel(authform)\" ng-switch-when=\"false\">\n" +
-        "        <div class=\"znk-input-group\">\n" +
-        "            <label for=\"selectedTestLevel\">{{'MY_PROFILE.TEST_LEVEL' | translate}}</label>\n" +
-        "            <div class=\"znk-input\">\n" +
-        "                <select id=\"selectedTestLevel\" name=\"selectedTestLevel\"\n" +
-        "                        ng-options=\"selectedTest.name for selectedTest in vm.testLevelList\"\n" +
-        "                        ng-model=\"vm.selectedTestLevel\">\n" +
-        "                </select>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"btn-wrap\">\n" +
-        "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
-        "        </div>\n" +
-        "    </form>\n" +
-        "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
-        "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
-        "        <div translate=\".TEST_LEVEL_SAVE_SUCCESS\"></div>\n" +
-        "        <div class=\"done-btn-wrap\">\n" +
-        "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
-        "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
-        "                <span translate=\".DONE\"></span>\n" +
-        "            </md-button>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
-        "        <div class=\"error-msg\">\n" +
-        "            <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
-        "            <div translate=\"{{vm.generalError}}\"></div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</md-dialog-content>\n" +
-        "");
-    $templateCache.put("components/myProfile/components/updateProfile/updateProfile.template.html",
-        "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
-        "    <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\" ng-switch-when=\"false\">\n" +
-        "        <div class=\"znk-input-group\"\n" +
-        "             ng-class=\"profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "            <label>{{'MY_PROFILE.USERNAME' | translate}}</label>\n" +
-        "            <div class=\"znk-input\">\n" +
-        "                <input\n" +
-        "                        type=\"text\"\n" +
-        "                        autocomplete=\"on\"\n" +
-        "                        name=\"nickname\"\n" +
-        "                        ng-required=\"true\"\n" +
-        "                        ng-model=\"vm.profileData.nickname\">\n" +
-        "                <span ng-if=\"profileform.$submitted && profileform.nickname.$invalid\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"profileform.nickname.$error.required\"\n" +
-        "                              translate=\"{{vm.nicknameError}}\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"znk-input-group\"\n" +
-        "             ng-class=\"profileform.email.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
-        "            <label>{{'MY_PROFILE.EMAIL' | translate}}</label>\n" +
-        "            <div class=\"znk-input\">\n" +
-        "                <input\n" +
-        "                        type=\"email\"\n" +
-        "                        autocomplete=\"on\"\n" +
-        "                        name=\"email\"\n" +
-        "                        ng-disabled=\"true\"\n" +
-        "                        ng-model=\"vm.profileData.email\">\n" +
-        "                <span ng-if=\"profileform.$submitted && profileform.email.$invalid\"\n" +
-        "                      role=\"alert\">\n" +
-        "                    <span class=\"validationBox\">\n" +
-        "                        <span ng-show=\"profileform.email.$error.required\"\n" +
-        "                              translate=\".EMAIL_ERROR\"></span>\n" +
-        "                    </span>\n" +
-        "                </span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"znk-input-group\">\n" +
-        "            <label for=\"timezone\">{{'MY_PROFILE.TIMEZONE' | translate}}</label>\n" +
-        "            <div class=\"znk-input\">\n" +
-        "                <select id=\"timezone\" name=\"timezone\"\n" +
-        "                        ng-options=\"time as time for time in vm.timezonesList\"\n" +
-        "                        ng-model=\"vm.profileData.timezone\"\n" +
-        "                        ng-disabled=\"!vm.profileData.isTimezoneManual\">\n" +
-        "                </select>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"timezone-manual\">\n" +
-        "            <input type=\"checkbox\"\n" +
-        "                   id=\"timezoneManual\" name=\"timezoneManual\"\n" +
-        "                   ng-model=\"vm.profileData.isTimezoneManual\"\n" +
-        "                   ng-change=\"vm.updateProfileTimezone()\">\n" +
-        "            <label for=\"timezoneManual\">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>\n" +
-        "        </div>\n" +
-        "\n" +
-        "        <div class=\"btn-wrap\">\n" +
-        "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
-        "        </div>\n" +
-        "    </form>\n" +
-        "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
-        "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
-        "        <div translate=\".PROFILE_SAVE_SUCCESS\"></div>\n" +
-        "        <div class=\"done-btn-wrap\">\n" +
-        "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
-        "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
-        "                <span translate=\".DONE\"></span>\n" +
-        "            </md-button>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
-        "        <div class=\"error-msg\">\n" +
-        "            <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
-        "            <div translate=\"{{vm.generalError}}\"></div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</md-dialog-content>\n" +
-        "");
-    $templateCache.put("components/myProfile/svg/myProfile-close-popup.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.close-pop-svg {width: 100%; height: auto;}\n" +
-        "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-        "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/myProfile/svg/myProfile-profile-icon.svg",
-        "<svg version=\"1.1\" id=\"Layer_1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 140.7 171.1\" xml:space=\"preserve\" class=\"profile-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.profile-svg {width: 100%; height: auto;}\n" +
-        "	.profile-svg .st0{fill:#000000;}\n" +
-        "</style>\n" +
-        "\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M0.2,171.1c-0.9-10.2,0.8-19.6,3.6-28.9c2.9-9.6,9.3-14.6,19.1-15.7c4.1-0.5,8.3-1.1,12.3-2.1c6.1-1.5,10.7-5.1,13.7-11.2\n" +
-        "		c-7.7-7.5-13.2-16.5-16.9-26.6c-0.3-0.7-0.9-1.7-1.5-1.8c-6.2-0.8-7.3-5.8-8.4-10.4c-0.9-3.7-0.9-7.6-0.9-11.4\n" +
-        "		c0-1.7,0.7-4.4,1.8-4.9c5.5-2.5,3.5-7.2,4.1-11.3c1.3-9.1,2.8-18.3,4.8-27.3c1.8-8.4,7.8-13.3,15.7-16c13.1-4.6,26.4-4,39.9-1.9\n" +
-        "		c7.9,1.3,16,1.9,24,2.8c-3.3,10.2-0.9,21.2,1.5,32.2c0.8,3.5,0.9,7.2,1.1,10.9c0.2,3.9-0.4,7.3,3.3,11c5.5,5.5,1.1,22.2-5.8,26.1\n" +
-        "		c-1,0.6-2.1,1.6-2.6,2.7c-3.8,9.9-9.2,18.8-17.1,26.2c3.7,7.6,10.2,10.7,17.8,11.9c4.3,0.7,8.9,0.6,12.7,2.3\n" +
-        "		c4.2,1.9,9,4.6,11.2,8.3c6.2,10.6,7.4,22.5,7,35C93.7,171.1,47.2,171.1,0.2,171.1z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/myProfile/templates/myProfile.template.html",
-        "<md-dialog ng-cloak class=\"my-profile\" translate-namespace=\"MY_PROFILE\">\n" +
-        "    <div class=\"top-icon-wrap\">\n" +
-        "        <div class=\"top-icon\">\n" +
-        "            <div class=\"round-icon-wrap\">\n" +
-        "                <svg-icon name=\"myProfile-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <md-toolbar>\n" +
-        "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeDialog()\">\n" +
-        "            <svg-icon name=\"myProfile-close-popup\"></svg-icon>\n" +
-        "        </div>\n" +
-        "    </md-toolbar>\n" +
-        "    <div class=\"content-wrapper\">\n" +
-        "        <div class=\"main-title\" translate=\".MY_PROFILE\"></div>\n" +
-        "\n" +
-        "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\"\n" +
-        "                        local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
-        "\n" +
-        "        </update-profile>\n" +
-        "        <selected-test-level class=\"selected-test-level\"></selected-test-level>\n" +
-        "        <change-password class=\"change-password\"></change-password>\n" +
-        "    </div>\n" +
-        "</md-dialog>\n" +
-        "");
+  $templateCache.put("components/myProfile/components/changePassword/changePassword.template.html",
+    "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
+    "    <div class=\"container-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
+    "    <form name=\"authform\" novalidate class=\"auth-form\" ng-submit=\"vm.changePassword(authform)\" ng-switch-when=\"false\">\n" +
+    "        <div class=\"znk-input-group\"\n" +
+    "             ng-class=\"!vm.changePasswordData.oldPassword && authform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <label>{{'MY_PROFILE.CURRENT_PASSWORD' | translate}}</label>\n" +
+    "            <div class=\"znk-input\">\n" +
+    "                <input\n" +
+    "                        type=\"password\"\n" +
+    "                        autocomplete=\"off\"\n" +
+    "                        name=\"oldPassword\"\n" +
+    "                        ng-minlength=\"6\"\n" +
+    "                        ng-maxlength=\"25\"\n" +
+    "                        ng-required=\"true\"\n" +
+    "                        ng-model=\"vm.changePasswordData.oldPassword\">\n" +
+    "\n" +
+    "                <span ng-if=\"!vm.changePasswordData.oldPassword && authform.$submitted\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"authform.oldPassword.$error.required\"\n" +
+    "                              translate=\"{{vm.oldPassError}}\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"znk-input-group\"\n" +
+    "             ng-class=\"!vm.changePasswordData.newPassword && authform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <label>{{'MY_PROFILE.NEW_PASSWORD' | translate}}</label>\n" +
+    "            <div class=\"znk-input\">\n" +
+    "                <input\n" +
+    "                        type=\"password\"\n" +
+    "                        autocomplete=\"off\"\n" +
+    "                        name=\"newPassword\"\n" +
+    "                        ng-minlength=\"6\"\n" +
+    "                        ng-maxlength=\"25\"\n" +
+    "                        ng-required=\"true\"\n" +
+    "                        ng-model=\"vm.changePasswordData.newPassword\">\n" +
+    "\n" +
+    "                <span ng-if=\"!vm.changePasswordData.newPassword && authform.$submitted\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"authform.newPassword.$error.required\"\n" +
+    "                              translate=\".PASSWORD_LENGTH\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"znk-input-group\"\n" +
+    "             ng-class=\"!vm.changePasswordData.newPasswordConfirm && authform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <label>{{'MY_PROFILE.CONFIRM_PASSWORD' | translate}}</label>\n" +
+    "            <div class=\"znk-input\">\n" +
+    "                <input\n" +
+    "                        type=\"password\"\n" +
+    "                        autocomplete=\"off\"\n" +
+    "                        name=\"newPasswordConfirm\"\n" +
+    "                        ng-minlength=\"6\"\n" +
+    "                        ng-maxlength=\"25\"\n" +
+    "                        ng-required=\"true\"\n" +
+    "                        ng-model=\"vm.changePasswordData.newPasswordConfirm\">\n" +
+    "\n" +
+    "                <span ng-if=\"!vm.changePasswordData.newPasswordConfirm && authform.$submitted\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"authform.newPasswordConfirm.$error.required\"\n" +
+    "                              translate=\".PASSWORD_NOT_MATCH\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"btn-wrap\">\n" +
+    "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
+    "        </div>\n" +
+    "    </form>\n" +
+    "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
+    "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
+    "        <div translate=\".PASSWORD_SAVE_SUCCESS\"></div>\n" +
+    "        <div class=\"done-btn-wrap\">\n" +
+    "            <md-button aria-label=\"{{'CHANGE_PASSWORD.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <span translate=\".DONE\"></span>\n" +
+    "            </md-button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
+    "        <div class=\"error-msg\">\n" +
+    "            <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
+    "            <div translate=\"{{vm.generalError}}\"></div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog-content>\n" +
+    "");
+  $templateCache.put("components/myProfile/components/selectedTestLevel/selectedTestLevel.template.html",
+    "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
+    "    <div class=\"container-title md-subheader\" translate=\".SELECTED_TEST_LEVEL\"></div>\n" +
+    "    <form name=\"authform\" novalidate class=\"auth-form\" ng-submit=\"vm.changeTestLevel(authform)\" ng-switch-when=\"false\">\n" +
+    "        <div class=\"znk-input-group\">\n" +
+    "            <label for=\"selectedTestLevel\">{{'MY_PROFILE.TEST_LEVEL' | translate}}</label>\n" +
+    "            <div class=\"znk-input\">\n" +
+    "                <select id=\"selectedTestLevel\" name=\"selectedTestLevel\"\n" +
+    "                        ng-options=\"selectedTest.name for selectedTest in vm.testLevelList\"\n" +
+    "                        ng-model=\"vm.selectedTestLevel\">\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"btn-wrap\">\n" +
+    "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
+    "        </div>\n" +
+    "    </form>\n" +
+    "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
+    "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
+    "        <div translate=\".TEST_LEVEL_SAVE_SUCCESS\"></div>\n" +
+    "        <div class=\"done-btn-wrap\">\n" +
+    "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <span translate=\".DONE\"></span>\n" +
+    "            </md-button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
+    "        <div class=\"error-msg\">\n" +
+    "            <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
+    "            <div translate=\"{{vm.generalError}}\"></div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog-content>\n" +
+    "");
+  $templateCache.put("components/myProfile/components/updateProfile/updateProfile.template.html",
+    "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
+    "    <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\" ng-switch-when=\"false\">\n" +
+    "        <div class=\"znk-input-group\"\n" +
+    "             ng-class=\"profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <label>{{'MY_PROFILE.USERNAME' | translate}}</label>\n" +
+    "            <div class=\"znk-input\">\n" +
+    "                <input\n" +
+    "                        type=\"text\"\n" +
+    "                        autocomplete=\"on\"\n" +
+    "                        name=\"nickname\"\n" +
+    "                        ng-required=\"true\"\n" +
+    "                        ng-model=\"vm.profileData.nickname\">\n" +
+    "                <span ng-if=\"profileform.$submitted && profileform.nickname.$invalid\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"profileform.nickname.$error.required\"\n" +
+    "                              translate=\"{{vm.nicknameError}}\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"znk-input-group\"\n" +
+    "             ng-class=\"profileform.email.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "            <label>{{'MY_PROFILE.EMAIL' | translate}}</label>\n" +
+    "            <div class=\"znk-input\">\n" +
+    "                <input\n" +
+    "                        type=\"email\"\n" +
+    "                        autocomplete=\"on\"\n" +
+    "                        name=\"email\"\n" +
+    "                        ng-disabled=\"true\"\n" +
+    "                        ng-model=\"vm.profileData.email\">\n" +
+    "                <span ng-if=\"profileform.$submitted && profileform.email.$invalid\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"profileform.email.$error.required\"\n" +
+    "                              translate=\".EMAIL_ERROR\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"znk-input-group\">\n" +
+    "            <label for=\"timezone\">{{'MY_PROFILE.TIMEZONE' | translate}}</label>\n" +
+    "            <div class=\"znk-input\">\n" +
+    "                <select id=\"timezone\" name=\"timezone\"\n" +
+    "                        ng-options=\"time as time for time in vm.timezonesList\"\n" +
+    "                        ng-model=\"vm.profileData.timezone\"\n" +
+    "                        ng-disabled=\"!vm.profileData.isTimezoneManual\">\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"timezone-manual\">\n" +
+    "            <input type=\"checkbox\"\n" +
+    "                   id=\"timezoneManual\" name=\"timezoneManual\"\n" +
+    "                   ng-model=\"vm.profileData.isTimezoneManual\"\n" +
+    "                   ng-change=\"vm.updateProfileTimezone()\">\n" +
+    "            <label for=\"timezoneManual\">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"btn-wrap\">\n" +
+    "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
+    "        </div>\n" +
+    "    </form>\n" +
+    "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
+    "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
+    "        <div translate=\".PROFILE_SAVE_SUCCESS\"></div>\n" +
+    "        <div class=\"done-btn-wrap\">\n" +
+    "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <span translate=\".DONE\"></span>\n" +
+    "            </md-button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
+    "        <div class=\"error-msg\">\n" +
+    "            <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
+    "            <div translate=\"{{vm.generalError}}\"></div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog-content>\n" +
+    "");
+  $templateCache.put("components/myProfile/svg/myProfile-close-popup.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/myProfile/svg/myProfile-profile-icon.svg",
+    "<svg version=\"1.1\" id=\"Layer_1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 140.7 171.1\" xml:space=\"preserve\" class=\"profile-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.profile-svg {width: 100%; height: auto;}\n" +
+    "	.profile-svg .st0{fill:#000000;}\n" +
+    "</style>\n" +
+    "\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M0.2,171.1c-0.9-10.2,0.8-19.6,3.6-28.9c2.9-9.6,9.3-14.6,19.1-15.7c4.1-0.5,8.3-1.1,12.3-2.1c6.1-1.5,10.7-5.1,13.7-11.2\n" +
+    "		c-7.7-7.5-13.2-16.5-16.9-26.6c-0.3-0.7-0.9-1.7-1.5-1.8c-6.2-0.8-7.3-5.8-8.4-10.4c-0.9-3.7-0.9-7.6-0.9-11.4\n" +
+    "		c0-1.7,0.7-4.4,1.8-4.9c5.5-2.5,3.5-7.2,4.1-11.3c1.3-9.1,2.8-18.3,4.8-27.3c1.8-8.4,7.8-13.3,15.7-16c13.1-4.6,26.4-4,39.9-1.9\n" +
+    "		c7.9,1.3,16,1.9,24,2.8c-3.3,10.2-0.9,21.2,1.5,32.2c0.8,3.5,0.9,7.2,1.1,10.9c0.2,3.9-0.4,7.3,3.3,11c5.5,5.5,1.1,22.2-5.8,26.1\n" +
+    "		c-1,0.6-2.1,1.6-2.6,2.7c-3.8,9.9-9.2,18.8-17.1,26.2c3.7,7.6,10.2,10.7,17.8,11.9c4.3,0.7,8.9,0.6,12.7,2.3\n" +
+    "		c4.2,1.9,9,4.6,11.2,8.3c6.2,10.6,7.4,22.5,7,35C93.7,171.1,47.2,171.1,0.2,171.1z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/myProfile/templates/myProfile.template.html",
+    "<md-dialog ng-cloak class=\"my-profile\" translate-namespace=\"MY_PROFILE\">\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"myProfile-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <md-toolbar>\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <svg-icon name=\"myProfile-close-popup\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </md-toolbar>\n" +
+    "    <div class=\"content-wrapper\">\n" +
+    "        <div class=\"main-title\" translate=\".MY_PROFILE\"></div>\n" +
+    "\n" +
+    "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\"\n" +
+    "                        local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
+    "\n" +
+    "        </update-profile>\n" +
+    "        <selected-test-level class=\"selected-test-level\"></selected-test-level>\n" +
+    "        <change-password class=\"change-password\"></change-password>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -12241,7 +12240,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                     }
                 });
             };
-        }]);
+    }]);
 })(angular);
 
 (function (angular) {
@@ -12324,7 +12323,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             this.skipSelection = function () {
                 _goToGoalsState([], 'I don\'t know yet');
             };
-        }]);
+    }]);
 })(angular);
 
 
@@ -12512,361 +12511,361 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 })(angular);
 
 angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/onBoarding/svg/onboarding-bubble-1.svg",
-        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-        "\n" +
-        "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 294.6 215.3\" style=\"enable-background:new 0 0 294.6 215.3;\" xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.st0{fill:#FFFFFF;}\n" +
-        "	.st1{fill:#B899C8;}\n" +
-        "	.st2{fill:#8E6FAB;}\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M247.3,59.3c-0.9,0-1.8,0-2.7,0.1c-7.8-19.1-26.6-32.6-48.5-32.6c-7,0-13.7,1.4-19.8,3.9\n" +
-        "		c-9.7-17.4-28.2-29.2-49.5-29.2c-21.2,0-39.7,11.7-49.4,29c-0.6,0-1.2,0-1.8,0c-40.9,0-74.1,26.4-74.1,59\n" +
-        "		c0,31.3,30.5,56.9,69.1,58.9c3.1,15.1,20.7,26.7,42.1,26.7c10.9,0,20.8-3,28.3-7.9c10.1,7.9,23.2,12.7,37.6,12.7\n" +
-        "		c24.5,0,45.4-14,53.9-33.7c4.6,1.5,9.6,2.4,14.8,2.4c25.3,0,45.8-20,45.8-44.6S272.6,59.3,247.3,59.3z\"/>\n" +
-        "	<path class=\"st1\" d=\"M178.6,181.3c-13.7,0-27.1-4.4-37.7-12.4c-7.9,4.9-17.9,7.6-28.2,7.6c-21.4,0-39.4-11.2-43.3-26.7\n" +
-        "		C30.4,147.3,0,120.9,0,89.5c0-33.4,33.9-60.5,75.6-60.5c0.3,0,0.6,0,0.9,0C86.9,11.1,106.1,0,126.8,0c20.7,0,39.8,11,50.2,28.8\n" +
-        "		c6.1-2.3,12.5-3.5,19.1-3.5c21.6,0,41,12.7,49.5,32.6c0.6,0,1.2,0,1.7,0c26.1,0,47.3,20.7,47.3,46.1S273.4,150,247.3,150\n" +
-        "		c-4.8,0-9.4-0.7-14-2.1C224,168.3,202.7,181.3,178.6,181.3z M141.1,165.2l0.8,0.7c10.2,8,23.2,12.4,36.7,12.4\n" +
-        "		c23.4,0,44-12.9,52.5-32.8l0.5-1.3l1.3,0.4c4.6,1.5,9.4,2.3,14.3,2.3c24.4,0,44.3-19.3,44.3-43.1s-19.9-43.1-44.3-43.1\n" +
-        "		c-0.8,0-1.6,0-2.6,0.1l-1.1,0.1l-0.4-1c-7.9-19.2-26.4-31.7-47.1-31.7c-6.6,0-13.1,1.3-19.2,3.8l-1.2,0.5l-0.6-1.2\n" +
-        "		C165.3,13.9,146.8,3,126.8,3c-19.9,0-38.3,10.8-48.1,28.2L78.3,32l-1.5,0c-0.4,0-0.8,0-1.1,0C35.6,31.9,3,57.7,3,89.5\n" +
-        "		c0,30.2,29.7,55.4,67.7,57.4l1.2,0.1l0.2,1.1c2.9,14.5,20.4,25.5,40.6,25.5c10.1,0,19.9-2.7,27.5-7.7L141.1,165.2z\"/>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "	<circle class=\"st0\" cx=\"248.2\" cy=\"198.8\" r=\"15\"/>\n" +
-        "	<path class=\"st1\" d=\"M248.2,215.3c-9.1,0-16.5-7.4-16.5-16.5s7.4-16.5,16.5-16.5c9.1,0,16.5,7.4,16.5,16.5S257.3,215.3,248.2,215.3\n" +
-        "		z M248.2,185.3c-7.4,0-13.5,6.1-13.5,13.5s6.1,13.5,13.5,13.5s13.5-6.1,13.5-13.5S255.7,185.3,248.2,185.3z\"/>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "	<path class=\"st2\" d=\"M78.7,87.1V106c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V92.5l-4.6,6.4c-0.4,0.5-0.9,0.7-1.4,0.7h0h0\n" +
-        "		c-0.6,0-1.1-0.3-1.5-0.7L63,92.5V106c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V87.1c0-1,0.8-1.8,1.8-1.8c0,0,0,0,0.1,0\n" +
-        "		c0.5,0,1.1,0.3,1.4,0.7l6.4,8.8l6.4-8.8c0.4-0.5,0.9-0.7,1.4-0.7c0,0,0,0,0,0C77.9,85.4,78.7,86.2,78.7,87.1z\"/>\n" +
-        "	<path class=\"st2\" d=\"M99,99.8v6.3c0,0.9-0.8,1.7-1.7,1.7c-0.8,0-1.5-0.6-1.7-1.4c-1.2,0.9-2.7,1.4-4.3,1.4c-2.2,0-4.1-0.9-5.4-2.3\n" +
-        "		c-1.4-1.5-2.2-3.5-2.2-5.6c0-2.2,0.8-4.2,2.2-5.6c1.4-1.5,3.3-2.4,5.4-2.4c1.6,0,3,0.5,4.3,1.4c0.2-0.8,0.8-1.4,1.7-1.4\n" +
-        "		c0.9,0,1.7,0.8,1.7,1.7V99.8z M95.6,99.8c0-1.3-0.5-2.5-1.2-3.3c-0.8-0.9-1.9-1.3-3-1.3c-1.2,0-2.2,0.4-3,1.3\n" +
-        "		c-0.8,0.8-1.2,2-1.2,3.3c0,1.3,0.4,2.5,1.2,3.3c0.7,0.8,1.8,1.2,3,1.2c1.1,0,2.2-0.4,3-1.2C95.1,102.2,95.6,101.1,95.6,99.8z\"/>\n" +
-        "	<path class=\"st2\" d=\"M111.8,93.5c0,1-0.8,1.8-1.8,1.8h-0.8v8.9c1,0,1.8,0.8,1.8,1.8c0,1-0.8,1.8-1.8,1.8c-2,0-3.6-1.6-3.6-3.6v-8.9\n" +
-        "		h-0.9c-1,0-1.8-0.8-1.8-1.8c0-1,0.8-1.8,1.8-1.8h0.9v-4.6c0-1,0.8-1.8,1.8-1.8c1,0,1.8,0.8,1.8,1.8v4.6h0.8\n" +
-        "		C111,91.8,111.8,92.5,111.8,93.5z\"/>\n" +
-        "	<path class=\"st2\" d=\"M119.7,106c0,1-0.8,1.8-1.8,1.8c-0.8,0-1.5-0.6-1.7-1.3c0-0.1-0.1-0.3-0.1-0.4V87.1c0-1,0.8-1.8,1.8-1.8\n" +
-        "		c1,0,1.8,0.8,1.8,1.8v5.6c1-0.5,2.2-0.9,3.4-0.9c3.9,0,7,3.2,7,7v7.2c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8v-7.2\n" +
-        "		c0-1.9-1.5-3.4-3.5-3.5c-1.9,0-3.4,1.6-3.4,3.5V106z\"/>\n" +
-        "	<path class=\"st2\" d=\"M144.4,106V87.1c0-1,0.8-1.8,1.8-1.8c1,0,1.8,0.8,1.8,1.8v17.1h8.7c0.9,0,1.8,0.8,1.8,1.8c0,1-0.8,1.8-1.8,1.8\n" +
-        "		h-10.4c-0.1,0-0.1,0-0.1,0c0,0,0,0,0,0C145.2,107.8,144.4,107,144.4,106z\"/>\n" +
-        "	<path class=\"st2\" d=\"M160,99.8c0-4.4,3.4-8,7.8-8c4.2,0,7.5,3.1,7.7,7.4c0,0,0,0.1,0,0.2s0,0.2,0,0.3c-0.1,0.8-0.8,1.3-1.7,1.3\n" +
-        "		h-10.2c0.2,0.7,0.5,1.6,1.1,2.1c0.7,0.8,2,1.3,3.1,1.4c1.2,0.1,2.5-0.2,3.3-0.8c0.7-0.7,2-0.6,2.4-0.1c0.4,0.4,0.7,1.4,0,2.1\n" +
-        "		c-1.6,1.4-3.5,2.1-5.7,2.1C163.4,107.7,160.1,104.1,160,99.8z M163.5,98.2h9.1c-0.3-1.3-2-3.2-4.7-3.4\n" +
-        "		C165.1,94.9,163.8,96.9,163.5,98.2z\"/>\n" +
-        "	<path class=\"st2\" d=\"M191.8,94.3l-5.2,12.4c0,0.1-0.1,0.2-0.1,0.2c0,0,0,0,0,0c-0.1,0.1-0.1,0.2-0.2,0.2c0,0,0,0,0,0\n" +
-        "		c-0.1,0.1-0.1,0.1-0.2,0.2c0,0,0,0,0,0c-0.1,0.1-0.1,0.1-0.2,0.2c0,0,0,0-0.1,0c0,0,0,0,0,0c-0.1,0-0.2,0-0.3,0.1c0,0,0,0-0.1,0\n" +
-        "		c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0,0,0-0.1,0c-0.1,0-0.2-0.1-0.3-0.1c0,0,0,0,0,0c-0.1,0-0.1,0-0.1,0\n" +
-        "		c-0.1,0-0.2-0.1-0.3-0.2c0,0,0,0,0,0c-0.1-0.1-0.1-0.1-0.2-0.2c0,0,0,0-0.1,0c0-0.1-0.1-0.2-0.2-0.2c0,0,0,0,0,0\n" +
-        "		c-0.1,0-0.1-0.1-0.1-0.2l-5.2-12.4c-0.4-0.9,0-1.8,0.9-2.2c0.8-0.4,1.8,0.1,2.1,0.9l3.7,8.7l3.7-8.7c0.4-0.9,1.3-1.3,2.1-0.9\n" +
-        "		C191.8,92.5,192.2,93.5,191.8,94.3z\"/>\n" +
-        "	<path class=\"st2\" d=\"M195.1,99.8c0-4.4,3.4-8,7.8-8c4.2,0,7.5,3.1,7.7,7.4c0,0,0,0.1,0,0.2s0,0.2,0,0.3c-0.1,0.8-0.8,1.3-1.7,1.3\n" +
-        "		h-10.2c0.2,0.7,0.5,1.6,1.1,2.1c0.7,0.8,2,1.3,3.1,1.4c1.2,0.1,2.5-0.2,3.3-0.8c0.7-0.7,2-0.6,2.4-0.1c0.4,0.4,0.7,1.4,0,2.1\n" +
-        "		c-1.6,1.4-3.5,2.1-5.7,2.1C198.5,107.7,195.1,104.1,195.1,99.8z M198.6,98.2h9.1c-0.3-1.3-2-3.2-4.7-3.4\n" +
-        "		C200.2,94.9,198.8,96.9,198.6,98.2z\"/>\n" +
-        "	<path class=\"st2\" d=\"M217,85.4c1,0,1.8,0.8,1.8,1.8V106c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V87.1\n" +
-        "		C215.3,86.2,216.1,85.4,217,85.4z\"/>\n" +
-        "	<path class=\"st2\" d=\"M237.1,87.1V106c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V90.3l-1.3,0.7c-0.3,0.2-0.6,0.3-0.9,0.3\n" +
-        "		c-0.6,0-1.2-0.3-1.5-0.9c-0.5-0.8-0.3-1.9,0.6-2.4l3.9-2.3c0,0,0.1,0,0.1-0.1c0.1,0,0.1-0.1,0.2-0.1c0.1,0,0.1,0,0.2,0\n" +
-        "		c0,0,0.1,0,0.1,0c0.1,0,0.2,0,0.2,0c0,0,0.1,0,0.1,0h0c0.1,0,0.2,0,0.2,0c0,0,0.1,0,0.1,0c0.1,0,0.1,0,0.2,0.1c0,0,0.1,0,0.1,0\n" +
-        "		c0.1,0.1,0.1,0.1,0.2,0.1c0,0,0.1,0.1,0.1,0.1c0,0,0.1,0.1,0.1,0.1c0.1,0,0.1,0.1,0.1,0.1c0,0,0.1,0.1,0.1,0.1c0,0,0.1,0.1,0.1,0.1\n" +
-        "		l0,0.1c0,0,0,0.1,0,0.1c0,0.1,0.1,0.1,0.1,0.2c0,0.1,0,0.1,0.1,0.2c0,0.1,0,0.1,0,0.2C237,86.9,237,87,237.1,87.1\n" +
-        "		C237.1,87.1,237.1,87.1,237.1,87.1z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/onBoarding/svg/onboarding-bubble-2.svg",
-        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-        "\n" +
-        "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 294.6 215.3\" style=\"enable-background:new 0 0 294.6 215.3;\" xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.st0{fill:#FFFFFF;}\n" +
-        "	.st1{fill:#8E6FAB;}\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<circle class=\"st0\" cx=\"20.7\" cy=\"197.8\" r=\"15\"/>\n" +
-        "	<path class=\"st1\" d=\"M20.7,214.3c-9.1,0-16.5-7.4-16.5-16.5s7.4-16.5,16.5-16.5s16.5,7.4,16.5,16.5S29.8,214.3,20.7,214.3z\n" +
-        "		 M20.7,184.3c-7.4,0-13.5,6.1-13.5,13.5s6.1,13.5,13.5,13.5s13.5-6.1,13.5-13.5S28.2,184.3,20.7,184.3z\"/>\n" +
-        "</g>\n" +
-        "<path class=\"st1\" d=\"M153.8,197c-19.5,0-37.8-6.9-50.5-19.1c-4.6,1.5-9.4,2.2-14.2,2.2c-25.4,0-46.1-20.5-46.6-45.8\n" +
-        "	c-22.1-3.6-38.6-22.8-38.6-45.4c0-25.4,20.6-46,46-46c1.7,0,3.3,0.1,5,0.3C62.7,18.9,85.6,2,111.3,2c17.4,0,33.7,7.5,45,20.7\n" +
-        "	c11.9-7.9,26.7-12.3,42-12.3c36.8,0,66.7,24.7,66.7,55c0,5.2-0.9,10.4-2.7,15.4c16.6,9.9,26.8,27.9,26.8,47.2c0,30.3-24.7,55-55,55\n" +
-        "	c-9.7,0-19.3-2.6-27.6-7.5C193.9,189,174.3,197,153.8,197z M104.3,173.3l0.9,0.9c12,11.9,29.7,18.8,48.6,18.8\n" +
-        "	c20.1,0,39.1-7.9,50.9-21.2l1.1-1.3l1.4,0.9c8.1,5,17.4,7.7,27,7.7c28.1,0,51-22.9,51-51c0-18.5-10-35.6-26.2-44.6l-1.5-0.9L258,81\n" +
-        "	c2-5,3-10.3,3-15.6c0-28.1-28.1-51-62.7-51c-15.2,0-29.8,4.5-41.2,12.6l-1.5,1.1l-1.2-1.5C143.8,13.5,128.2,6,111.3,6\n" +
-        "	C86.8,6,65,22.4,58.3,46l-0.5,1.7L56,47.4c-2-0.3-4.1-0.5-6.2-0.5c-23.1,0-42,18.8-42,42c0,21.2,15.8,39.1,36.8,41.6l1.8,0.2\n" +
-        "	l-0.1,2.2c0,0.2,0,0.3,0,0.5c0,23.5,19.1,42.6,42.6,42.6c4.8,0,9.5-0.8,14-2.4L104.3,173.3z\"/>\n" +
-        "<g>\n" +
-        "	<path class=\"st1\" d=\"M73.9,89.4v18.9c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V94.8l-4.6,6.4c-0.4,0.5-0.9,0.7-1.4,0.7h0h0\n" +
-        "		c-0.6,0-1.1-0.3-1.5-0.7l-4.6-6.4v13.5c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V89.4c0-1,0.8-1.8,1.8-1.8c0,0,0,0,0.1,0\n" +
-        "		c0.5,0,1.1,0.3,1.4,0.7l6.4,8.8l6.4-8.8c0.4-0.5,0.9-0.7,1.4-0.7c0,0,0,0,0,0C73,87.7,73.9,88.5,73.9,89.4z\"/>\n" +
-        "	<path class=\"st1\" d=\"M94.2,102.1v6.3c0,0.9-0.8,1.7-1.7,1.7c-0.8,0-1.5-0.6-1.7-1.4c-1.2,0.9-2.7,1.4-4.3,1.4\n" +
-        "		c-2.2,0-4.1-0.9-5.4-2.3c-1.4-1.5-2.2-3.5-2.2-5.6c0-2.2,0.8-4.2,2.2-5.6c1.4-1.5,3.3-2.4,5.4-2.4c1.6,0,3,0.5,4.3,1.4\n" +
-        "		c0.2-0.8,0.8-1.4,1.7-1.4c0.9,0,1.7,0.8,1.7,1.7V102.1z M90.8,102.1c0-1.3-0.5-2.5-1.2-3.3c-0.8-0.9-1.9-1.3-3-1.3\n" +
-        "		c-1.2,0-2.2,0.4-3,1.3c-0.8,0.8-1.2,2-1.2,3.3c0,1.3,0.4,2.5,1.2,3.3c0.7,0.8,1.8,1.2,3,1.2c1.1,0,2.2-0.4,3-1.2\n" +
-        "		C90.3,104.6,90.8,103.4,90.8,102.1z\"/>\n" +
-        "	<path class=\"st1\" d=\"M107,95.8c0,1-0.8,1.8-1.8,1.8h-0.8v8.9c1,0,1.8,0.8,1.8,1.8c0,1-0.8,1.8-1.8,1.8c-2,0-3.6-1.6-3.6-3.6v-8.9\n" +
-        "		h-0.9c-1,0-1.8-0.8-1.8-1.8c0-1,0.8-1.8,1.8-1.8h0.9v-4.6c0-1,0.8-1.8,1.8-1.8c1,0,1.8,0.8,1.8,1.8v4.6h0.8\n" +
-        "		C106.2,94.1,107,94.8,107,95.8z\"/>\n" +
-        "	<path class=\"st1\" d=\"M114.9,108.3c0,1-0.8,1.8-1.8,1.8c-0.8,0-1.5-0.6-1.7-1.3c0-0.1-0.1-0.3-0.1-0.4V89.4c0-1,0.8-1.8,1.8-1.8\n" +
-        "		c1,0,1.8,0.8,1.8,1.8V95c1-0.5,2.2-0.9,3.4-0.9c3.9,0,7,3.2,7,7v7.2c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8v-7.2\n" +
-        "		c0-1.9-1.5-3.4-3.5-3.5c-1.9,0-3.4,1.6-3.4,3.5V108.3z\"/>\n" +
-        "	<path class=\"st1\" d=\"M139.6,108.3V89.4c0-1,0.8-1.8,1.8-1.8c1,0,1.8,0.8,1.8,1.8v17.1h8.7c0.9,0,1.8,0.8,1.8,1.8\n" +
-        "		c0,1-0.8,1.8-1.8,1.8h-10.4c-0.1,0-0.1,0-0.1,0c0,0,0,0,0,0C140.4,110.1,139.6,109.3,139.6,108.3z\"/>\n" +
-        "	<path class=\"st1\" d=\"M155.2,102.1c0-4.4,3.4-8,7.8-8c4.2,0,7.5,3.1,7.7,7.4c0,0,0,0.1,0,0.2s0,0.2,0,0.3c-0.1,0.8-0.8,1.3-1.7,1.3\n" +
-        "		h-10.2c0.2,0.7,0.5,1.6,1.1,2.1c0.7,0.8,2,1.3,3.1,1.4c1.2,0.1,2.5-0.2,3.3-0.8c0.7-0.7,2-0.6,2.4-0.1c0.4,0.4,0.7,1.4,0,2.1\n" +
-        "		c-1.6,1.4-3.5,2.1-5.7,2.1C158.6,110,155.2,106.4,155.2,102.1z M158.7,100.5h9.1c-0.3-1.3-2-3.2-4.7-3.4\n" +
-        "		C160.3,97.2,158.9,99.2,158.7,100.5z\"/>\n" +
-        "	<path class=\"st1\" d=\"M187,96.6l-5.2,12.4c0,0.1-0.1,0.2-0.1,0.2c0,0,0,0,0,0c-0.1,0.1-0.1,0.2-0.2,0.2c0,0,0,0,0,0\n" +
-        "		c-0.1,0.1-0.1,0.1-0.2,0.2c0,0,0,0,0,0c-0.1,0.1-0.1,0.1-0.2,0.2c0,0,0,0-0.1,0c0,0,0,0,0,0c-0.1,0-0.2,0-0.3,0.1c0,0,0,0-0.1,0\n" +
-        "		c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0,0,0-0.1,0c-0.1,0-0.2-0.1-0.3-0.1c0,0,0,0,0,0c-0.1,0-0.1,0-0.1,0\n" +
-        "		c-0.1,0-0.2-0.1-0.3-0.2c0,0,0,0,0,0c-0.1-0.1-0.1-0.1-0.2-0.2c0,0,0,0-0.1,0c0-0.1-0.1-0.2-0.2-0.2c0,0,0,0,0,0\n" +
-        "		c-0.1,0-0.1-0.1-0.1-0.2l-5.2-12.4c-0.4-0.9,0-1.8,0.9-2.2c0.8-0.4,1.8,0.1,2.1,0.9l3.7,8.7l3.7-8.7c0.4-0.9,1.3-1.3,2.1-0.9\n" +
-        "		C187,94.8,187.4,95.8,187,96.6z\"/>\n" +
-        "	<path class=\"st1\" d=\"M190.3,102.1c0-4.4,3.4-8,7.8-8c4.2,0,7.5,3.1,7.7,7.4c0,0,0,0.1,0,0.2s0,0.2,0,0.3c-0.1,0.8-0.8,1.3-1.7,1.3\n" +
-        "		h-10.2c0.2,0.7,0.5,1.6,1.1,2.1c0.7,0.8,2,1.3,3.1,1.4c1.2,0.1,2.5-0.2,3.3-0.8c0.7-0.7,2-0.6,2.4-0.1c0.4,0.4,0.7,1.4,0,2.1\n" +
-        "		c-1.6,1.4-3.5,2.1-5.7,2.1C193.7,110,190.3,106.4,190.3,102.1z M193.7,100.5h9.1c-0.3-1.3-2-3.2-4.7-3.4\n" +
-        "		C195.3,97.2,194,99.2,193.7,100.5z\"/>\n" +
-        "	<path class=\"st1\" d=\"M212.2,87.7c1,0,1.8,0.8,1.8,1.8v18.9c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V89.4\n" +
-        "		C210.5,88.5,211.3,87.7,212.2,87.7z\"/>\n" +
-        "	<path class=\"st1\" d=\"M240.1,108.3c0,1-0.8,1.8-1.8,1.8H227c0,0,0,0,0,0h0c-0.5,0-1-0.2-1.3-0.6c-0.7-0.7-0.6-1.8,0.1-2.5l9.5-8.6\n" +
-        "		c0.9-0.8,1.3-1.9,1.3-3.1c0-1-0.4-2-1.1-2.8c-0.8-0.9-2-1.3-3.1-1.3c-1,0-2,0.4-2.8,1.1l-1,0.9c-0.7,0.7-1.8,0.6-2.5-0.1\n" +
-        "		c-0.6-0.7-0.6-1.8,0.1-2.5l1-0.9c1.4-1.3,3.3-2,5.2-2c2.1,0,4.2,0.9,5.7,2.5c1.3,1.4,2,3.3,2,5.2c0,2.1-0.9,4.2-2.5,5.7l-6,5.5h6.8\n" +
-        "		C239.3,106.5,240.1,107.3,240.1,108.3z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/onBoarding/svg/onboarding-hat-icon.svg",
-        "<svg class=\"on-boarding-hat-svg\"\n" +
-        "     version=\"1.1\" id=\"Layer_1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"-366 104.4 57.2 34.6\"\n" +
-        "     style=\"enable-background:new -366 104.4 57.2 34.6;\"\n" +
-        "     xml:space=\"preserve\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "	.on-boarding-hat-svg .st0 {\n" +
-        "        fill: #87CA4D;\n" +
-        "        width: 47px;\n" +
-        "    }\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M-339.5,139.1c-9.8,0-15.9-5.6-16-5.7c-0.2-0.2-0.3-0.5-0.3-0.7v-11.2c0-0.6,0.4-1,1-1s1,0.4,1,1v10.7\n" +
-        "		c2.1,1.7,13.5,10.2,30-0.1v-10.6c0-0.6,0.4-1,1-1s1,0.4,1,1v11.2c0,0.3-0.2,0.7-0.5,0.8C-328.7,137.7-334.6,139.1-339.5,139.1z\"/>\n" +
-        "	<path class=\"st0\" d=\"M-338.7,128.5c-0.1,0-0.3,0-0.4-0.1l-26.1-10.5c-0.4-0.2-0.7-0.6-0.7-1.1c0-0.5,0.3-0.9,0.7-1.1l26.5-11.2\n" +
-        "		c0.3-0.1,0.6-0.1,0.9,0l26.6,11.2c0.4,0.2,0.7,0.6,0.7,1.1c0,0.5-0.3,0.9-0.7,1.1l-27,10.5C-338.4,128.4-338.6,128.5-338.7,128.5z\n" +
-        "		 M-361.7,116.8l23,9.3l23.9-9.3l-23.5-9.9L-361.7,116.8z\"/>\n" +
-        "	<path class=\"st0\" d=\"M-312.8,126.5c-0.6,0-1-0.4-1-1v-8c0-0.6,0.4-1,1-1s1,0.4,1,1v8C-311.8,126.1-312.2,126.5-312.8,126.5z\"/>\n" +
-        "	<path class=\"st0\" d=\"M-312,130.5c-1.7,0-3.1-1.4-3.1-3.1c0-1.7,1.4-3.1,3.1-3.1s3.1,1.4,3.1,3.1\n" +
-        "		C-308.9,129.1-310.3,130.5-312,130.5z M-312,126.7c-0.4,0-0.7,0.3-0.7,0.7s0.3,0.7,0.7,0.7s0.7-0.3,0.7-0.7S-311.6,126.7-312,126.7\n" +
-        "		z\"/>\n" +
-        "	<path class=\"st0\" d=\"M-315,132.7l1.5-2.7c0.6-1.1,2.2-1.1,2.9,0l1.5,2.7c0.6,1.1-0.2,2.5-1.4,2.5h-3.1\n" +
-        "		C-314.8,135.2-315.6,133.8-315,132.7z\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/onBoarding/svg/onboarding-heart-icon.svg",
-        "<svg class=\"on-boarding-heart-svg\"\n" +
-        "     version=\"1.1\"\n" +
-        "     id=\"Layer_1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"-377 106.7 35.9 31.3\"\n" +
-        "     style=\"enable-background:new -377 106.7 35.9 31.3;\"\n" +
-        "     xml:space=\"preserve\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "	.on-boarding-heart-svg .st0 {\n" +
-        "        fill: #87CA4D;\n" +
-        "    }\n" +
-        "    </style>\n" +
-        "\n" +
-        "<path class=\"st0\" d=\"M-359,138c-0.2,0-0.4-0.1-0.6-0.2c-0.1,0-0.1-0.1-0.2-0.1l-0.2-0.2c-4.3-4-8.8-7.9-13.2-11.6\n" +
-        "	c-3.1-2.7-4.4-6.5-3.6-10.4c0.9-4,4-7.5,7.7-8.6c3.4-1,6.9,0,10,2.9c3.1-2.9,6.7-3.9,10.1-2.9c3.7,1.1,6.7,4.4,7.6,8.5\n" +
-        "	c0.9,3.9-0.4,7.8-3.6,10.5c-6.5,5.5-11.4,10-13,11.5l-0.3,0.2C-358.5,137.9-358.7,138-359,138z M-366.6,108.2\n" +
-        "	c-0.7,0-1.4,0.1-2.1,0.3c-3.2,0.9-5.8,3.9-6.6,7.4c-0.4,2-0.6,5.8,3.1,8.9c4.4,3.7,8.8,7.6,13.2,11.6l0,0c1.6-1.5,6.6-6,13-11.6\n" +
-        "	c2.7-2.3,3.8-5.6,3.1-9c-0.8-3.5-3.4-6.4-6.5-7.3c-3.1-0.9-6.3,0.2-9.1,3c-0.1,0.1-0.3,0.2-0.5,0.2c0,0,0,0,0,0\n" +
-        "	c-0.2,0-0.4-0.1-0.5-0.2C-361.8,109.3-364.2,108.2-366.6,108.2z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/onBoarding/svg/onboarding-target-icon.svg",
-        "<svg class=\"on-boarding-target-svg\"\n" +
-        "     version=\"1.1\"\n" +
-        "     id=\"Layer_1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"-378 104 35 35\"\n" +
-        "     style=\"enable-background:new -378 104 35 35;\"\n" +
-        "     xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.on-boarding-target-svg .st0 {\n" +
-        "        fill: #87CA4D;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M-361,134.6c-7.5,0-13.5-6.1-13.5-13.5s6.1-13.5,13.5-13.5c7.5,0,13.5,6.1,13.5,13.5S-353.5,134.6-361,134.6z\n" +
-        "		 M-361,108.8c-6.8,0-12.3,5.5-12.3,12.3c0,6.8,5.5,12.3,12.3,12.3s12.3-5.5,12.3-12.3C-348.7,114.3-354.2,108.8-361,108.8z\"/>\n" +
-        "	<path class=\"st0\" d=\"M-361,129c-4.4,0-7.9-3.6-7.9-7.9c0-4.4,3.6-7.9,7.9-7.9c4.4,0,7.9,3.6,7.9,7.9\n" +
-        "		C-353.1,125.5-356.6,129-361,129z M-361,114.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7s6.7-3,6.7-6.7\n" +
-        "		C-354.3,117.4-357.3,114.4-361,114.4z\"/>\n" +
-        "	<path class=\"st0\" d=\"M-361,139c-0.6,0-1-0.4-1-1v-33c0-0.6,0.4-1,1-1s1,0.4,1,1v33C-360,138.6-360.4,139-361,139z\"/>\n" +
-        "	<path class=\"st0\" d=\"M-344,122h-33c-0.6,0-1-0.4-1-1s0.4-1,1-1h33c0.6,0,1,0.4,1,1S-343.4,122-344,122z\"/>\n" +
-        "	<circle class=\"st0\" cx=\"-360.9\" cy=\"121.3\" r=\"1.9\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/onBoarding/templates/onBoarding.template.html",
-        "<div class=\"on-board\">\n" +
-        "    <div class=\"container base-border-radius base-box-shadow\" ui-view></div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/onBoarding/templates/onBoardingBar.template.html",
-        "<div class=\"on-board-pager-wrap\">\n" +
-        "    <div class=\"on-board-pager\">\n" +
-        "        <div class=\"icon-circle\" ng-class=\"{'heart-circle-selected': step === 'welcome'}\">\n" +
-        "            <svg-icon class=\"icon\" name=\"on-boarding-heart\"></svg-icon>\n" +
-        "        </div>\n" +
-        "        <div class=\"divider\"></div>\n" +
-        "        <div class=\"icon-circle\" ng-class=\"{'target-circle-selected': step === 'goals'}\">\n" +
-        "            <svg-icon class=\"icon\" name=\"on-boarding-target\"></svg-icon>\n" +
-        "        </div>\n" +
-        "        <div class=\"divider\"></div>\n" +
-        "        <div class=\"icon-circle\" ng-class=\"{'hat-circle-selected': step === 'diagnostic'}\">\n" +
-        "            <svg-icon class=\"icon\" name=\"on-boarding-hat\"></svg-icon>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/onBoarding/templates/onBoardingDiagnostic.template.html",
-        "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.DIAGNOSTIC\">\n" +
-        "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
-        "    <diagnostic-intro show-instructions=\"vm.showInstructions\" show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
-        "    <div class=\"btn-wrap\">\n" +
-        "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
-        "            tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
-        "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
-        "        </md-button>\n" +
-        "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.START_TEST' | translate}}\"\n" +
-        "            autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
-        "            <span translate=\".START_TEST\"></span>\n" +
-        "        </md-button>\n" +
-        "    </div>\n" +
-        "</section>\n" +
-        "<on-boarding-bar step=\"diagnostic\"></on-boarding-bar>\n" +
-        "");
-    $templateCache.put("components/onBoarding/templates/onBoardingGoals.template.html",
-        "<section class=\"step\" translate-namespace=\"ON_BOARDING.GOALS\">\n" +
-        "    <div class=\"goals\">\n" +
-        "        <div class=\"main-title\" translate=\".SET_SCORE_GOALS\"></div>\n" +
-        "        <user-goals on-save=\"vm.saveGoals()\" setting=\"vm.userGoalsSetting\"></user-goals>\n" +
-        "    </div>\n" +
-        "</section>\n" +
-        "<on-boarding-bar step=\"goals\"></on-boarding-bar>\n" +
-        "");
-    $templateCache.put("components/onBoarding/templates/onBoardingIntroTestToTake.template.html",
-        "<section class=\"step intro-test-to-take\" translate-namespace=\"ON_BOARDING.TEST_TO_TAKE\">\n" +
-        "    <div class=\"diagnostic-title\" translate=\".FIGURE_OUT\"></div>\n" +
-        "\n" +
-        "    <div class=\"diagnostic-intro-drv\">\n" +
-        "        <div class=\"description\">\n" +
-        "            <div class=\"diagnostic-text\"\n" +
-        "                 translate=\"{{'.FIGURE_OUT_DESC' | translate}}\">\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"icons-section\">\n" +
-        "        <div class=\"icon-wrapper\">\n" +
-        "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-1\"></svg-icon>\n" +
-        "            <span class=\"diagnostic-text-or\" translate=\".OR\"></span>\n" +
-        "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-2\"></svg-icon>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"raccoon-img-container\">\n" +
-        "        <div class=\"raccoon-img-wrapper\">\n" +
-        "            <div class=\"diagnostic-raccoon\"></div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"btn-wrap\">\n" +
-        "\n" +
-        "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +
-        "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
-        "                   ng-click=\"vm.goToTestToTake()\">\n" +
-        "            <span translate=\".START_TEST\"></span>\n" +
-        "        </md-button>\n" +
-        "    </div>\n" +
-        "</section>\n" +
-        "<on-boarding-bar step=\"diagnostic\"></on-boarding-bar>\n" +
-        "");
-    $templateCache.put("components/onBoarding/templates/onBoardingSchools.template.html",
-        "<section class=\"step\" translate-namespace=\"ON_BOARDING.GOALS\">\n" +
-        "    <div class=\"goals\">\n" +
-        "        <div class=\"main-title\" translate=\".SET_SCORE_GOALS\"></div>\n" +
-        "        <div class=\"sub-title\" translate=\".WHATS_YOUR_DREAM_SCHOOL\"></div>\n" +
-        "        <div class=\"select-schools-title\" translate=\".SELECT_3_DREAM_SCHOOLS\"></div>\n" +
-        "        <school-select user-schools=\"vm.userSchools\"\n" +
-        "                       events=\"vm.schoolSelectEvents\">\n" +
-        "        </school-select>\n" +
-        "        <div class=\"light-title\" ng-click=\"vm.skipSelection()\" translate=\".I_DONT_KNOW\"></div>\n" +
-        "    </div>\n" +
-        "    <div class=\"bg-wrap\">\n" +
-        "        <div class=\"thinking-raccoon\"></div>\n" +
-        "    </div>\n" +
-        "</section>\n" +
-        "<on-boarding-bar step=\"goals\"></on-boarding-bar>\n" +
-        "");
-    $templateCache.put("components/onBoarding/templates/onBoardingTestToTake.template.html",
-        "<div class=\"complete-exercise-container base-border-radius\">\n" +
-        "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
-        "                       settings=\"vm.completeExerciseSettings\">\n" +
-        "    </complete-exercise>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/onBoarding/templates/onBoardingWelcome.template.html",
-        "<section class=\"step make-padding\" translate-namespace=\"ON_BOARDING.WELCOME\">\n" +
-        "    <div class=\"welcome\">\n" +
-        "        <div class=\"main-title\">\n" +
-        "            <span translate=\".WELCOME\"></span>,\n" +
-        "            <span class=\"user-name\">{{vm.username}}!</span>\n" +
-        "        </div>\n" +
-        "        <div class=\"sub-title\">\n" +
-        "            <div translate=\".THANK_YOU_MESSAGE\"></div>\n" +
-        "            <span translate=\".ZINKERZ_APP_WELCOME_TEXT\"></span>\n" +
-        "        </div>\n" +
-        "        <div class=\"sub-title\" translate=\".WE_ARE_HERE_TO_HELP\"></div>\n" +
-        "        <div class=\"btn-wrap\">\n" +
-        "            <md-button aria-label=\"{{'ON_BOARDING.WELCOME.CONTINUE' | translate}}\"\n" +
-        "                autofocus tabindex=\"1\" class=\"md-primary znk inline-block\" ng-click=\"vm.nextStep()\" ng-cloak>\n" +
-        "                <div class=\"btn-text\">\n" +
-        "                    <span translate=\".CONTINUE\" class=\"continue-title\"></span>\n" +
-        "                    <svg-icon name=\"on-boarding-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\"></svg-icon>\n" +
-        "                </div>\n" +
-        "            </md-button>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"smile-raccoon\"></div>\n" +
-        "</section>\n" +
-        "<on-boarding-bar step=\"welcome\"></on-boarding-bar>\n" +
-        "");
+  $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/onBoarding/svg/onboarding-bubble-1.svg",
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "\n" +
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 294.6 215.3\" style=\"enable-background:new 0 0 294.6 215.3;\" xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.st0{fill:#FFFFFF;}\n" +
+    "	.st1{fill:#B899C8;}\n" +
+    "	.st2{fill:#8E6FAB;}\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M247.3,59.3c-0.9,0-1.8,0-2.7,0.1c-7.8-19.1-26.6-32.6-48.5-32.6c-7,0-13.7,1.4-19.8,3.9\n" +
+    "		c-9.7-17.4-28.2-29.2-49.5-29.2c-21.2,0-39.7,11.7-49.4,29c-0.6,0-1.2,0-1.8,0c-40.9,0-74.1,26.4-74.1,59\n" +
+    "		c0,31.3,30.5,56.9,69.1,58.9c3.1,15.1,20.7,26.7,42.1,26.7c10.9,0,20.8-3,28.3-7.9c10.1,7.9,23.2,12.7,37.6,12.7\n" +
+    "		c24.5,0,45.4-14,53.9-33.7c4.6,1.5,9.6,2.4,14.8,2.4c25.3,0,45.8-20,45.8-44.6S272.6,59.3,247.3,59.3z\"/>\n" +
+    "	<path class=\"st1\" d=\"M178.6,181.3c-13.7,0-27.1-4.4-37.7-12.4c-7.9,4.9-17.9,7.6-28.2,7.6c-21.4,0-39.4-11.2-43.3-26.7\n" +
+    "		C30.4,147.3,0,120.9,0,89.5c0-33.4,33.9-60.5,75.6-60.5c0.3,0,0.6,0,0.9,0C86.9,11.1,106.1,0,126.8,0c20.7,0,39.8,11,50.2,28.8\n" +
+    "		c6.1-2.3,12.5-3.5,19.1-3.5c21.6,0,41,12.7,49.5,32.6c0.6,0,1.2,0,1.7,0c26.1,0,47.3,20.7,47.3,46.1S273.4,150,247.3,150\n" +
+    "		c-4.8,0-9.4-0.7-14-2.1C224,168.3,202.7,181.3,178.6,181.3z M141.1,165.2l0.8,0.7c10.2,8,23.2,12.4,36.7,12.4\n" +
+    "		c23.4,0,44-12.9,52.5-32.8l0.5-1.3l1.3,0.4c4.6,1.5,9.4,2.3,14.3,2.3c24.4,0,44.3-19.3,44.3-43.1s-19.9-43.1-44.3-43.1\n" +
+    "		c-0.8,0-1.6,0-2.6,0.1l-1.1,0.1l-0.4-1c-7.9-19.2-26.4-31.7-47.1-31.7c-6.6,0-13.1,1.3-19.2,3.8l-1.2,0.5l-0.6-1.2\n" +
+    "		C165.3,13.9,146.8,3,126.8,3c-19.9,0-38.3,10.8-48.1,28.2L78.3,32l-1.5,0c-0.4,0-0.8,0-1.1,0C35.6,31.9,3,57.7,3,89.5\n" +
+    "		c0,30.2,29.7,55.4,67.7,57.4l1.2,0.1l0.2,1.1c2.9,14.5,20.4,25.5,40.6,25.5c10.1,0,19.9-2.7,27.5-7.7L141.1,165.2z\"/>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "	<circle class=\"st0\" cx=\"248.2\" cy=\"198.8\" r=\"15\"/>\n" +
+    "	<path class=\"st1\" d=\"M248.2,215.3c-9.1,0-16.5-7.4-16.5-16.5s7.4-16.5,16.5-16.5c9.1,0,16.5,7.4,16.5,16.5S257.3,215.3,248.2,215.3\n" +
+    "		z M248.2,185.3c-7.4,0-13.5,6.1-13.5,13.5s6.1,13.5,13.5,13.5s13.5-6.1,13.5-13.5S255.7,185.3,248.2,185.3z\"/>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "	<path class=\"st2\" d=\"M78.7,87.1V106c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V92.5l-4.6,6.4c-0.4,0.5-0.9,0.7-1.4,0.7h0h0\n" +
+    "		c-0.6,0-1.1-0.3-1.5-0.7L63,92.5V106c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V87.1c0-1,0.8-1.8,1.8-1.8c0,0,0,0,0.1,0\n" +
+    "		c0.5,0,1.1,0.3,1.4,0.7l6.4,8.8l6.4-8.8c0.4-0.5,0.9-0.7,1.4-0.7c0,0,0,0,0,0C77.9,85.4,78.7,86.2,78.7,87.1z\"/>\n" +
+    "	<path class=\"st2\" d=\"M99,99.8v6.3c0,0.9-0.8,1.7-1.7,1.7c-0.8,0-1.5-0.6-1.7-1.4c-1.2,0.9-2.7,1.4-4.3,1.4c-2.2,0-4.1-0.9-5.4-2.3\n" +
+    "		c-1.4-1.5-2.2-3.5-2.2-5.6c0-2.2,0.8-4.2,2.2-5.6c1.4-1.5,3.3-2.4,5.4-2.4c1.6,0,3,0.5,4.3,1.4c0.2-0.8,0.8-1.4,1.7-1.4\n" +
+    "		c0.9,0,1.7,0.8,1.7,1.7V99.8z M95.6,99.8c0-1.3-0.5-2.5-1.2-3.3c-0.8-0.9-1.9-1.3-3-1.3c-1.2,0-2.2,0.4-3,1.3\n" +
+    "		c-0.8,0.8-1.2,2-1.2,3.3c0,1.3,0.4,2.5,1.2,3.3c0.7,0.8,1.8,1.2,3,1.2c1.1,0,2.2-0.4,3-1.2C95.1,102.2,95.6,101.1,95.6,99.8z\"/>\n" +
+    "	<path class=\"st2\" d=\"M111.8,93.5c0,1-0.8,1.8-1.8,1.8h-0.8v8.9c1,0,1.8,0.8,1.8,1.8c0,1-0.8,1.8-1.8,1.8c-2,0-3.6-1.6-3.6-3.6v-8.9\n" +
+    "		h-0.9c-1,0-1.8-0.8-1.8-1.8c0-1,0.8-1.8,1.8-1.8h0.9v-4.6c0-1,0.8-1.8,1.8-1.8c1,0,1.8,0.8,1.8,1.8v4.6h0.8\n" +
+    "		C111,91.8,111.8,92.5,111.8,93.5z\"/>\n" +
+    "	<path class=\"st2\" d=\"M119.7,106c0,1-0.8,1.8-1.8,1.8c-0.8,0-1.5-0.6-1.7-1.3c0-0.1-0.1-0.3-0.1-0.4V87.1c0-1,0.8-1.8,1.8-1.8\n" +
+    "		c1,0,1.8,0.8,1.8,1.8v5.6c1-0.5,2.2-0.9,3.4-0.9c3.9,0,7,3.2,7,7v7.2c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8v-7.2\n" +
+    "		c0-1.9-1.5-3.4-3.5-3.5c-1.9,0-3.4,1.6-3.4,3.5V106z\"/>\n" +
+    "	<path class=\"st2\" d=\"M144.4,106V87.1c0-1,0.8-1.8,1.8-1.8c1,0,1.8,0.8,1.8,1.8v17.1h8.7c0.9,0,1.8,0.8,1.8,1.8c0,1-0.8,1.8-1.8,1.8\n" +
+    "		h-10.4c-0.1,0-0.1,0-0.1,0c0,0,0,0,0,0C145.2,107.8,144.4,107,144.4,106z\"/>\n" +
+    "	<path class=\"st2\" d=\"M160,99.8c0-4.4,3.4-8,7.8-8c4.2,0,7.5,3.1,7.7,7.4c0,0,0,0.1,0,0.2s0,0.2,0,0.3c-0.1,0.8-0.8,1.3-1.7,1.3\n" +
+    "		h-10.2c0.2,0.7,0.5,1.6,1.1,2.1c0.7,0.8,2,1.3,3.1,1.4c1.2,0.1,2.5-0.2,3.3-0.8c0.7-0.7,2-0.6,2.4-0.1c0.4,0.4,0.7,1.4,0,2.1\n" +
+    "		c-1.6,1.4-3.5,2.1-5.7,2.1C163.4,107.7,160.1,104.1,160,99.8z M163.5,98.2h9.1c-0.3-1.3-2-3.2-4.7-3.4\n" +
+    "		C165.1,94.9,163.8,96.9,163.5,98.2z\"/>\n" +
+    "	<path class=\"st2\" d=\"M191.8,94.3l-5.2,12.4c0,0.1-0.1,0.2-0.1,0.2c0,0,0,0,0,0c-0.1,0.1-0.1,0.2-0.2,0.2c0,0,0,0,0,0\n" +
+    "		c-0.1,0.1-0.1,0.1-0.2,0.2c0,0,0,0,0,0c-0.1,0.1-0.1,0.1-0.2,0.2c0,0,0,0-0.1,0c0,0,0,0,0,0c-0.1,0-0.2,0-0.3,0.1c0,0,0,0-0.1,0\n" +
+    "		c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0,0,0-0.1,0c-0.1,0-0.2-0.1-0.3-0.1c0,0,0,0,0,0c-0.1,0-0.1,0-0.1,0\n" +
+    "		c-0.1,0-0.2-0.1-0.3-0.2c0,0,0,0,0,0c-0.1-0.1-0.1-0.1-0.2-0.2c0,0,0,0-0.1,0c0-0.1-0.1-0.2-0.2-0.2c0,0,0,0,0,0\n" +
+    "		c-0.1,0-0.1-0.1-0.1-0.2l-5.2-12.4c-0.4-0.9,0-1.8,0.9-2.2c0.8-0.4,1.8,0.1,2.1,0.9l3.7,8.7l3.7-8.7c0.4-0.9,1.3-1.3,2.1-0.9\n" +
+    "		C191.8,92.5,192.2,93.5,191.8,94.3z\"/>\n" +
+    "	<path class=\"st2\" d=\"M195.1,99.8c0-4.4,3.4-8,7.8-8c4.2,0,7.5,3.1,7.7,7.4c0,0,0,0.1,0,0.2s0,0.2,0,0.3c-0.1,0.8-0.8,1.3-1.7,1.3\n" +
+    "		h-10.2c0.2,0.7,0.5,1.6,1.1,2.1c0.7,0.8,2,1.3,3.1,1.4c1.2,0.1,2.5-0.2,3.3-0.8c0.7-0.7,2-0.6,2.4-0.1c0.4,0.4,0.7,1.4,0,2.1\n" +
+    "		c-1.6,1.4-3.5,2.1-5.7,2.1C198.5,107.7,195.1,104.1,195.1,99.8z M198.6,98.2h9.1c-0.3-1.3-2-3.2-4.7-3.4\n" +
+    "		C200.2,94.9,198.8,96.9,198.6,98.2z\"/>\n" +
+    "	<path class=\"st2\" d=\"M217,85.4c1,0,1.8,0.8,1.8,1.8V106c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V87.1\n" +
+    "		C215.3,86.2,216.1,85.4,217,85.4z\"/>\n" +
+    "	<path class=\"st2\" d=\"M237.1,87.1V106c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V90.3l-1.3,0.7c-0.3,0.2-0.6,0.3-0.9,0.3\n" +
+    "		c-0.6,0-1.2-0.3-1.5-0.9c-0.5-0.8-0.3-1.9,0.6-2.4l3.9-2.3c0,0,0.1,0,0.1-0.1c0.1,0,0.1-0.1,0.2-0.1c0.1,0,0.1,0,0.2,0\n" +
+    "		c0,0,0.1,0,0.1,0c0.1,0,0.2,0,0.2,0c0,0,0.1,0,0.1,0h0c0.1,0,0.2,0,0.2,0c0,0,0.1,0,0.1,0c0.1,0,0.1,0,0.2,0.1c0,0,0.1,0,0.1,0\n" +
+    "		c0.1,0.1,0.1,0.1,0.2,0.1c0,0,0.1,0.1,0.1,0.1c0,0,0.1,0.1,0.1,0.1c0.1,0,0.1,0.1,0.1,0.1c0,0,0.1,0.1,0.1,0.1c0,0,0.1,0.1,0.1,0.1\n" +
+    "		l0,0.1c0,0,0,0.1,0,0.1c0,0.1,0.1,0.1,0.1,0.2c0,0.1,0,0.1,0.1,0.2c0,0.1,0,0.1,0,0.2C237,86.9,237,87,237.1,87.1\n" +
+    "		C237.1,87.1,237.1,87.1,237.1,87.1z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/onBoarding/svg/onboarding-bubble-2.svg",
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "\n" +
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 294.6 215.3\" style=\"enable-background:new 0 0 294.6 215.3;\" xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.st0{fill:#FFFFFF;}\n" +
+    "	.st1{fill:#8E6FAB;}\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<circle class=\"st0\" cx=\"20.7\" cy=\"197.8\" r=\"15\"/>\n" +
+    "	<path class=\"st1\" d=\"M20.7,214.3c-9.1,0-16.5-7.4-16.5-16.5s7.4-16.5,16.5-16.5s16.5,7.4,16.5,16.5S29.8,214.3,20.7,214.3z\n" +
+    "		 M20.7,184.3c-7.4,0-13.5,6.1-13.5,13.5s6.1,13.5,13.5,13.5s13.5-6.1,13.5-13.5S28.2,184.3,20.7,184.3z\"/>\n" +
+    "</g>\n" +
+    "<path class=\"st1\" d=\"M153.8,197c-19.5,0-37.8-6.9-50.5-19.1c-4.6,1.5-9.4,2.2-14.2,2.2c-25.4,0-46.1-20.5-46.6-45.8\n" +
+    "	c-22.1-3.6-38.6-22.8-38.6-45.4c0-25.4,20.6-46,46-46c1.7,0,3.3,0.1,5,0.3C62.7,18.9,85.6,2,111.3,2c17.4,0,33.7,7.5,45,20.7\n" +
+    "	c11.9-7.9,26.7-12.3,42-12.3c36.8,0,66.7,24.7,66.7,55c0,5.2-0.9,10.4-2.7,15.4c16.6,9.9,26.8,27.9,26.8,47.2c0,30.3-24.7,55-55,55\n" +
+    "	c-9.7,0-19.3-2.6-27.6-7.5C193.9,189,174.3,197,153.8,197z M104.3,173.3l0.9,0.9c12,11.9,29.7,18.8,48.6,18.8\n" +
+    "	c20.1,0,39.1-7.9,50.9-21.2l1.1-1.3l1.4,0.9c8.1,5,17.4,7.7,27,7.7c28.1,0,51-22.9,51-51c0-18.5-10-35.6-26.2-44.6l-1.5-0.9L258,81\n" +
+    "	c2-5,3-10.3,3-15.6c0-28.1-28.1-51-62.7-51c-15.2,0-29.8,4.5-41.2,12.6l-1.5,1.1l-1.2-1.5C143.8,13.5,128.2,6,111.3,6\n" +
+    "	C86.8,6,65,22.4,58.3,46l-0.5,1.7L56,47.4c-2-0.3-4.1-0.5-6.2-0.5c-23.1,0-42,18.8-42,42c0,21.2,15.8,39.1,36.8,41.6l1.8,0.2\n" +
+    "	l-0.1,2.2c0,0.2,0,0.3,0,0.5c0,23.5,19.1,42.6,42.6,42.6c4.8,0,9.5-0.8,14-2.4L104.3,173.3z\"/>\n" +
+    "<g>\n" +
+    "	<path class=\"st1\" d=\"M73.9,89.4v18.9c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V94.8l-4.6,6.4c-0.4,0.5-0.9,0.7-1.4,0.7h0h0\n" +
+    "		c-0.6,0-1.1-0.3-1.5-0.7l-4.6-6.4v13.5c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V89.4c0-1,0.8-1.8,1.8-1.8c0,0,0,0,0.1,0\n" +
+    "		c0.5,0,1.1,0.3,1.4,0.7l6.4,8.8l6.4-8.8c0.4-0.5,0.9-0.7,1.4-0.7c0,0,0,0,0,0C73,87.7,73.9,88.5,73.9,89.4z\"/>\n" +
+    "	<path class=\"st1\" d=\"M94.2,102.1v6.3c0,0.9-0.8,1.7-1.7,1.7c-0.8,0-1.5-0.6-1.7-1.4c-1.2,0.9-2.7,1.4-4.3,1.4\n" +
+    "		c-2.2,0-4.1-0.9-5.4-2.3c-1.4-1.5-2.2-3.5-2.2-5.6c0-2.2,0.8-4.2,2.2-5.6c1.4-1.5,3.3-2.4,5.4-2.4c1.6,0,3,0.5,4.3,1.4\n" +
+    "		c0.2-0.8,0.8-1.4,1.7-1.4c0.9,0,1.7,0.8,1.7,1.7V102.1z M90.8,102.1c0-1.3-0.5-2.5-1.2-3.3c-0.8-0.9-1.9-1.3-3-1.3\n" +
+    "		c-1.2,0-2.2,0.4-3,1.3c-0.8,0.8-1.2,2-1.2,3.3c0,1.3,0.4,2.5,1.2,3.3c0.7,0.8,1.8,1.2,3,1.2c1.1,0,2.2-0.4,3-1.2\n" +
+    "		C90.3,104.6,90.8,103.4,90.8,102.1z\"/>\n" +
+    "	<path class=\"st1\" d=\"M107,95.8c0,1-0.8,1.8-1.8,1.8h-0.8v8.9c1,0,1.8,0.8,1.8,1.8c0,1-0.8,1.8-1.8,1.8c-2,0-3.6-1.6-3.6-3.6v-8.9\n" +
+    "		h-0.9c-1,0-1.8-0.8-1.8-1.8c0-1,0.8-1.8,1.8-1.8h0.9v-4.6c0-1,0.8-1.8,1.8-1.8c1,0,1.8,0.8,1.8,1.8v4.6h0.8\n" +
+    "		C106.2,94.1,107,94.8,107,95.8z\"/>\n" +
+    "	<path class=\"st1\" d=\"M114.9,108.3c0,1-0.8,1.8-1.8,1.8c-0.8,0-1.5-0.6-1.7-1.3c0-0.1-0.1-0.3-0.1-0.4V89.4c0-1,0.8-1.8,1.8-1.8\n" +
+    "		c1,0,1.8,0.8,1.8,1.8V95c1-0.5,2.2-0.9,3.4-0.9c3.9,0,7,3.2,7,7v7.2c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8v-7.2\n" +
+    "		c0-1.9-1.5-3.4-3.5-3.5c-1.9,0-3.4,1.6-3.4,3.5V108.3z\"/>\n" +
+    "	<path class=\"st1\" d=\"M139.6,108.3V89.4c0-1,0.8-1.8,1.8-1.8c1,0,1.8,0.8,1.8,1.8v17.1h8.7c0.9,0,1.8,0.8,1.8,1.8\n" +
+    "		c0,1-0.8,1.8-1.8,1.8h-10.4c-0.1,0-0.1,0-0.1,0c0,0,0,0,0,0C140.4,110.1,139.6,109.3,139.6,108.3z\"/>\n" +
+    "	<path class=\"st1\" d=\"M155.2,102.1c0-4.4,3.4-8,7.8-8c4.2,0,7.5,3.1,7.7,7.4c0,0,0,0.1,0,0.2s0,0.2,0,0.3c-0.1,0.8-0.8,1.3-1.7,1.3\n" +
+    "		h-10.2c0.2,0.7,0.5,1.6,1.1,2.1c0.7,0.8,2,1.3,3.1,1.4c1.2,0.1,2.5-0.2,3.3-0.8c0.7-0.7,2-0.6,2.4-0.1c0.4,0.4,0.7,1.4,0,2.1\n" +
+    "		c-1.6,1.4-3.5,2.1-5.7,2.1C158.6,110,155.2,106.4,155.2,102.1z M158.7,100.5h9.1c-0.3-1.3-2-3.2-4.7-3.4\n" +
+    "		C160.3,97.2,158.9,99.2,158.7,100.5z\"/>\n" +
+    "	<path class=\"st1\" d=\"M187,96.6l-5.2,12.4c0,0.1-0.1,0.2-0.1,0.2c0,0,0,0,0,0c-0.1,0.1-0.1,0.2-0.2,0.2c0,0,0,0,0,0\n" +
+    "		c-0.1,0.1-0.1,0.1-0.2,0.2c0,0,0,0,0,0c-0.1,0.1-0.1,0.1-0.2,0.2c0,0,0,0-0.1,0c0,0,0,0,0,0c-0.1,0-0.2,0-0.3,0.1c0,0,0,0-0.1,0\n" +
+    "		c-0.1,0-0.2,0-0.3,0c-0.1,0-0.2,0-0.3,0c0,0,0,0-0.1,0c-0.1,0-0.2-0.1-0.3-0.1c0,0,0,0,0,0c-0.1,0-0.1,0-0.1,0\n" +
+    "		c-0.1,0-0.2-0.1-0.3-0.2c0,0,0,0,0,0c-0.1-0.1-0.1-0.1-0.2-0.2c0,0,0,0-0.1,0c0-0.1-0.1-0.2-0.2-0.2c0,0,0,0,0,0\n" +
+    "		c-0.1,0-0.1-0.1-0.1-0.2l-5.2-12.4c-0.4-0.9,0-1.8,0.9-2.2c0.8-0.4,1.8,0.1,2.1,0.9l3.7,8.7l3.7-8.7c0.4-0.9,1.3-1.3,2.1-0.9\n" +
+    "		C187,94.8,187.4,95.8,187,96.6z\"/>\n" +
+    "	<path class=\"st1\" d=\"M190.3,102.1c0-4.4,3.4-8,7.8-8c4.2,0,7.5,3.1,7.7,7.4c0,0,0,0.1,0,0.2s0,0.2,0,0.3c-0.1,0.8-0.8,1.3-1.7,1.3\n" +
+    "		h-10.2c0.2,0.7,0.5,1.6,1.1,2.1c0.7,0.8,2,1.3,3.1,1.4c1.2,0.1,2.5-0.2,3.3-0.8c0.7-0.7,2-0.6,2.4-0.1c0.4,0.4,0.7,1.4,0,2.1\n" +
+    "		c-1.6,1.4-3.5,2.1-5.7,2.1C193.7,110,190.3,106.4,190.3,102.1z M193.7,100.5h9.1c-0.3-1.3-2-3.2-4.7-3.4\n" +
+    "		C195.3,97.2,194,99.2,193.7,100.5z\"/>\n" +
+    "	<path class=\"st1\" d=\"M212.2,87.7c1,0,1.8,0.8,1.8,1.8v18.9c0,1-0.8,1.8-1.8,1.8c-1,0-1.8-0.8-1.8-1.8V89.4\n" +
+    "		C210.5,88.5,211.3,87.7,212.2,87.7z\"/>\n" +
+    "	<path class=\"st1\" d=\"M240.1,108.3c0,1-0.8,1.8-1.8,1.8H227c0,0,0,0,0,0h0c-0.5,0-1-0.2-1.3-0.6c-0.7-0.7-0.6-1.8,0.1-2.5l9.5-8.6\n" +
+    "		c0.9-0.8,1.3-1.9,1.3-3.1c0-1-0.4-2-1.1-2.8c-0.8-0.9-2-1.3-3.1-1.3c-1,0-2,0.4-2.8,1.1l-1,0.9c-0.7,0.7-1.8,0.6-2.5-0.1\n" +
+    "		c-0.6-0.7-0.6-1.8,0.1-2.5l1-0.9c1.4-1.3,3.3-2,5.2-2c2.1,0,4.2,0.9,5.7,2.5c1.3,1.4,2,3.3,2,5.2c0,2.1-0.9,4.2-2.5,5.7l-6,5.5h6.8\n" +
+    "		C239.3,106.5,240.1,107.3,240.1,108.3z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/onBoarding/svg/onboarding-hat-icon.svg",
+    "<svg class=\"on-boarding-hat-svg\"\n" +
+    "     version=\"1.1\" id=\"Layer_1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"-366 104.4 57.2 34.6\"\n" +
+    "     style=\"enable-background:new -366 104.4 57.2 34.6;\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "	.on-boarding-hat-svg .st0 {\n" +
+    "        fill: #87CA4D;\n" +
+    "        width: 47px;\n" +
+    "    }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M-339.5,139.1c-9.8,0-15.9-5.6-16-5.7c-0.2-0.2-0.3-0.5-0.3-0.7v-11.2c0-0.6,0.4-1,1-1s1,0.4,1,1v10.7\n" +
+    "		c2.1,1.7,13.5,10.2,30-0.1v-10.6c0-0.6,0.4-1,1-1s1,0.4,1,1v11.2c0,0.3-0.2,0.7-0.5,0.8C-328.7,137.7-334.6,139.1-339.5,139.1z\"/>\n" +
+    "	<path class=\"st0\" d=\"M-338.7,128.5c-0.1,0-0.3,0-0.4-0.1l-26.1-10.5c-0.4-0.2-0.7-0.6-0.7-1.1c0-0.5,0.3-0.9,0.7-1.1l26.5-11.2\n" +
+    "		c0.3-0.1,0.6-0.1,0.9,0l26.6,11.2c0.4,0.2,0.7,0.6,0.7,1.1c0,0.5-0.3,0.9-0.7,1.1l-27,10.5C-338.4,128.4-338.6,128.5-338.7,128.5z\n" +
+    "		 M-361.7,116.8l23,9.3l23.9-9.3l-23.5-9.9L-361.7,116.8z\"/>\n" +
+    "	<path class=\"st0\" d=\"M-312.8,126.5c-0.6,0-1-0.4-1-1v-8c0-0.6,0.4-1,1-1s1,0.4,1,1v8C-311.8,126.1-312.2,126.5-312.8,126.5z\"/>\n" +
+    "	<path class=\"st0\" d=\"M-312,130.5c-1.7,0-3.1-1.4-3.1-3.1c0-1.7,1.4-3.1,3.1-3.1s3.1,1.4,3.1,3.1\n" +
+    "		C-308.9,129.1-310.3,130.5-312,130.5z M-312,126.7c-0.4,0-0.7,0.3-0.7,0.7s0.3,0.7,0.7,0.7s0.7-0.3,0.7-0.7S-311.6,126.7-312,126.7\n" +
+    "		z\"/>\n" +
+    "	<path class=\"st0\" d=\"M-315,132.7l1.5-2.7c0.6-1.1,2.2-1.1,2.9,0l1.5,2.7c0.6,1.1-0.2,2.5-1.4,2.5h-3.1\n" +
+    "		C-314.8,135.2-315.6,133.8-315,132.7z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/onBoarding/svg/onboarding-heart-icon.svg",
+    "<svg class=\"on-boarding-heart-svg\"\n" +
+    "     version=\"1.1\"\n" +
+    "     id=\"Layer_1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"-377 106.7 35.9 31.3\"\n" +
+    "     style=\"enable-background:new -377 106.7 35.9 31.3;\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "	.on-boarding-heart-svg .st0 {\n" +
+    "        fill: #87CA4D;\n" +
+    "    }\n" +
+    "    </style>\n" +
+    "\n" +
+    "<path class=\"st0\" d=\"M-359,138c-0.2,0-0.4-0.1-0.6-0.2c-0.1,0-0.1-0.1-0.2-0.1l-0.2-0.2c-4.3-4-8.8-7.9-13.2-11.6\n" +
+    "	c-3.1-2.7-4.4-6.5-3.6-10.4c0.9-4,4-7.5,7.7-8.6c3.4-1,6.9,0,10,2.9c3.1-2.9,6.7-3.9,10.1-2.9c3.7,1.1,6.7,4.4,7.6,8.5\n" +
+    "	c0.9,3.9-0.4,7.8-3.6,10.5c-6.5,5.5-11.4,10-13,11.5l-0.3,0.2C-358.5,137.9-358.7,138-359,138z M-366.6,108.2\n" +
+    "	c-0.7,0-1.4,0.1-2.1,0.3c-3.2,0.9-5.8,3.9-6.6,7.4c-0.4,2-0.6,5.8,3.1,8.9c4.4,3.7,8.8,7.6,13.2,11.6l0,0c1.6-1.5,6.6-6,13-11.6\n" +
+    "	c2.7-2.3,3.8-5.6,3.1-9c-0.8-3.5-3.4-6.4-6.5-7.3c-3.1-0.9-6.3,0.2-9.1,3c-0.1,0.1-0.3,0.2-0.5,0.2c0,0,0,0,0,0\n" +
+    "	c-0.2,0-0.4-0.1-0.5-0.2C-361.8,109.3-364.2,108.2-366.6,108.2z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/onBoarding/svg/onboarding-target-icon.svg",
+    "<svg class=\"on-boarding-target-svg\"\n" +
+    "     version=\"1.1\"\n" +
+    "     id=\"Layer_1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"-378 104 35 35\"\n" +
+    "     style=\"enable-background:new -378 104 35 35;\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.on-boarding-target-svg .st0 {\n" +
+    "        fill: #87CA4D;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M-361,134.6c-7.5,0-13.5-6.1-13.5-13.5s6.1-13.5,13.5-13.5c7.5,0,13.5,6.1,13.5,13.5S-353.5,134.6-361,134.6z\n" +
+    "		 M-361,108.8c-6.8,0-12.3,5.5-12.3,12.3c0,6.8,5.5,12.3,12.3,12.3s12.3-5.5,12.3-12.3C-348.7,114.3-354.2,108.8-361,108.8z\"/>\n" +
+    "	<path class=\"st0\" d=\"M-361,129c-4.4,0-7.9-3.6-7.9-7.9c0-4.4,3.6-7.9,7.9-7.9c4.4,0,7.9,3.6,7.9,7.9\n" +
+    "		C-353.1,125.5-356.6,129-361,129z M-361,114.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7s6.7-3,6.7-6.7\n" +
+    "		C-354.3,117.4-357.3,114.4-361,114.4z\"/>\n" +
+    "	<path class=\"st0\" d=\"M-361,139c-0.6,0-1-0.4-1-1v-33c0-0.6,0.4-1,1-1s1,0.4,1,1v33C-360,138.6-360.4,139-361,139z\"/>\n" +
+    "	<path class=\"st0\" d=\"M-344,122h-33c-0.6,0-1-0.4-1-1s0.4-1,1-1h33c0.6,0,1,0.4,1,1S-343.4,122-344,122z\"/>\n" +
+    "	<circle class=\"st0\" cx=\"-360.9\" cy=\"121.3\" r=\"1.9\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoarding.template.html",
+    "<div class=\"on-board\">\n" +
+    "    <div class=\"container base-border-radius base-box-shadow\" ui-view></div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoardingBar.template.html",
+    "<div class=\"on-board-pager-wrap\">\n" +
+    "    <div class=\"on-board-pager\">\n" +
+    "        <div class=\"icon-circle\" ng-class=\"{'heart-circle-selected': step === 'welcome'}\">\n" +
+    "            <svg-icon class=\"icon\" name=\"on-boarding-heart\"></svg-icon>\n" +
+    "        </div>\n" +
+    "        <div class=\"divider\"></div>\n" +
+    "        <div class=\"icon-circle\" ng-class=\"{'target-circle-selected': step === 'goals'}\">\n" +
+    "            <svg-icon class=\"icon\" name=\"on-boarding-target\"></svg-icon>\n" +
+    "        </div>\n" +
+    "        <div class=\"divider\"></div>\n" +
+    "        <div class=\"icon-circle\" ng-class=\"{'hat-circle-selected': step === 'diagnostic'}\">\n" +
+    "            <svg-icon class=\"icon\" name=\"on-boarding-hat\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoardingDiagnostic.template.html",
+    "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.DIAGNOSTIC\">\n" +
+    "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
+    "    <diagnostic-intro show-instructions=\"vm.showInstructions\" show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
+    "    <div class=\"btn-wrap\">\n" +
+    "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "            tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
+    "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
+    "        </md-button>\n" +
+    "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.START_TEST' | translate}}\"\n" +
+    "            autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
+    "            <span translate=\".START_TEST\"></span>\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "</section>\n" +
+    "<on-boarding-bar step=\"diagnostic\"></on-boarding-bar>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoardingGoals.template.html",
+    "<section class=\"step\" translate-namespace=\"ON_BOARDING.GOALS\">\n" +
+    "    <div class=\"goals\">\n" +
+    "        <div class=\"main-title\" translate=\".SET_SCORE_GOALS\"></div>\n" +
+    "        <user-goals on-save=\"vm.saveGoals()\" setting=\"vm.userGoalsSetting\"></user-goals>\n" +
+    "    </div>\n" +
+    "</section>\n" +
+    "<on-boarding-bar step=\"goals\"></on-boarding-bar>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoardingIntroTestToTake.template.html",
+    "<section class=\"step intro-test-to-take\" translate-namespace=\"ON_BOARDING.TEST_TO_TAKE\">\n" +
+    "    <div class=\"diagnostic-title\" translate=\".FIGURE_OUT\"></div>\n" +
+    "\n" +
+    "    <div class=\"diagnostic-intro-drv\">\n" +
+    "        <div class=\"description\">\n" +
+    "            <div class=\"diagnostic-text\"\n" +
+    "                 translate=\"{{'.FIGURE_OUT_DESC' | translate}}\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"icons-section\">\n" +
+    "        <div class=\"icon-wrapper\">\n" +
+    "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-1\"></svg-icon>\n" +
+    "            <span class=\"diagnostic-text-or\" translate=\".OR\"></span>\n" +
+    "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-2\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"raccoon-img-container\">\n" +
+    "        <div class=\"raccoon-img-wrapper\">\n" +
+    "            <div class=\"diagnostic-raccoon\"></div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"btn-wrap\">\n" +
+    "\n" +
+    "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +
+    "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
+    "                   ng-click=\"vm.goToTestToTake()\">\n" +
+    "            <span translate=\".START_TEST\"></span>\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "</section>\n" +
+    "<on-boarding-bar step=\"diagnostic\"></on-boarding-bar>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoardingSchools.template.html",
+    "<section class=\"step\" translate-namespace=\"ON_BOARDING.GOALS\">\n" +
+    "    <div class=\"goals\">\n" +
+    "        <div class=\"main-title\" translate=\".SET_SCORE_GOALS\"></div>\n" +
+    "        <div class=\"sub-title\" translate=\".WHATS_YOUR_DREAM_SCHOOL\"></div>\n" +
+    "        <div class=\"select-schools-title\" translate=\".SELECT_3_DREAM_SCHOOLS\"></div>\n" +
+    "        <school-select user-schools=\"vm.userSchools\"\n" +
+    "                       events=\"vm.schoolSelectEvents\">\n" +
+    "        </school-select>\n" +
+    "        <div class=\"light-title\" ng-click=\"vm.skipSelection()\" translate=\".I_DONT_KNOW\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"bg-wrap\">\n" +
+    "        <div class=\"thinking-raccoon\"></div>\n" +
+    "    </div>\n" +
+    "</section>\n" +
+    "<on-boarding-bar step=\"goals\"></on-boarding-bar>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoardingTestToTake.template.html",
+    "<div class=\"complete-exercise-container base-border-radius\">\n" +
+    "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
+    "                       settings=\"vm.completeExerciseSettings\">\n" +
+    "    </complete-exercise>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/onBoarding/templates/onBoardingWelcome.template.html",
+    "<section class=\"step make-padding\" translate-namespace=\"ON_BOARDING.WELCOME\">\n" +
+    "    <div class=\"welcome\">\n" +
+    "        <div class=\"main-title\">\n" +
+    "            <span translate=\".WELCOME\"></span>,\n" +
+    "            <span class=\"user-name\">{{vm.username}}!</span>\n" +
+    "        </div>\n" +
+    "        <div class=\"sub-title\">\n" +
+    "            <div translate=\".THANK_YOU_MESSAGE\"></div>\n" +
+    "            <span translate=\".ZINKERZ_APP_WELCOME_TEXT\"></span>\n" +
+    "        </div>\n" +
+    "        <div class=\"sub-title\" translate=\".WE_ARE_HERE_TO_HELP\"></div>\n" +
+    "        <div class=\"btn-wrap\">\n" +
+    "            <md-button aria-label=\"{{'ON_BOARDING.WELCOME.CONTINUE' | translate}}\"\n" +
+    "                autofocus tabindex=\"1\" class=\"md-primary znk inline-block\" ng-click=\"vm.nextStep()\" ng-cloak>\n" +
+    "                <div class=\"btn-text\">\n" +
+    "                    <span translate=\".CONTINUE\" class=\"continue-title\"></span>\n" +
+    "                    <svg-icon name=\"on-boarding-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\"></svg-icon>\n" +
+    "                </div>\n" +
+    "            </md-button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"smile-raccoon\"></div>\n" +
+    "</section>\n" +
+    "<on-boarding-bar step=\"welcome\"></on-boarding-bar>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -12874,16 +12873,16 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.promoCode', [])
         .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
-                var svgMap = {
-                    'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
-                    'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
-                    'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
+                'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
+                'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
 
 })(angular);
 
@@ -12976,7 +12975,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             this.$get = ["PROMO_CODE_STATUS", "$translate", "$http", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, PromoCodeTypeEnum) {
                 'ngInject';
 
-                var promoCodeSrv = {};
+               var promoCodeSrv = {};
 
                 var promoCodeStatus;
                 var INVALID = 'PROMO_CODE.INVALID_CODE';
@@ -13071,144 +13070,144 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 })(angular);
 
 angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/promoCode/svg/arrow-icon.svg",
-        "<svg\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    version=\"1.1\" id=\"Capa_1\" x=\"0px\" y=\"0px\"\n" +
-        "    viewBox=\"0 0 611.987 611.987\"\n" +
-        "    xml:space=\"preserve\">\n" +
-        "    <style>\n" +
-        "        svg{\n" +
-        "        width:30px;\n" +
-        "        height:20px;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<g id=\"arrow-R\">\n" +
-        "		<g>\n" +
-        "			<path d=\"M604.652,287.018c-0.532-0.532-1.225-0.692-1.757-1.171L417.717,100.668c-10.329-10.329-27.074-10.329-37.377,0     c-10.328,10.329-10.328,27.074,0,37.376l141.334,141.333H26.622C11.926,279.377,0,291.304,0,306     c0,14.694,11.926,26.621,26.622,26.621h495.052L380.341,473.954c-10.329,10.329-10.329,27.074,0,37.376     c10.329,10.303,27.073,10.329,37.376,0l185.232-185.258c0.532-0.453,1.197-0.612,1.703-1.092c0.825-0.825,0.825-1.97,1.518-2.875     c2.263-2.796,3.86-5.856,4.818-9.158c0.346-1.277,0.586-2.396,0.719-3.7C612.799,301.34,610.749,293.087,604.652,287.018z\" fill=\"#FFFFFF\"/>\n" +
-        "		</g>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/promoCode/svg/close-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.close-pop-svg {width: 100%; height: auto;}\n" +
-        "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-        "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/promoCode/svg/correct-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     class=\"correct-icon-svg\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 188.5 129\"\n" +
-        "     style=\"enable-background:new 0 0 188.5 129;\"\n" +
-        "     xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.correct-icon-svg .st0 {\n" +
-        "        fill: none;\n" +
-        "        stroke: #231F20;\n" +
-        "        stroke-width: 15;\n" +
-        "        stroke-linecap: round;\n" +
-        "        stroke-linejoin: round;\n" +
-        "        stroke-miterlimit: 10;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<line class=\"st0\" x1=\"7.5\" y1=\"62\" x2=\"67\" y2=\"121.5\"/>\n" +
-        "	<line class=\"st0\" x1=\"67\" y1=\"121.5\" x2=\"181\" y2=\"7.5\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/promoCode/templates/promoCode.template.html",
-        "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
-        "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
-        "             'promo-code-invalid': d.promoCodeStatus === d.promoCodeStatusConst.invalid\n" +
-        "             }\">\n" +
-        "\n" +
-        "    <div class=\"promo-code-title\"\n" +
-        "         ng-if=\"!d.promoCodeStatusConst.accepted\"\n" +
-        "         translate=\"{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}\"\n" +
-        "         ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\">\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"promo-code-title accepted-title\">\n" +
-        "        {{d.promoCodeStatusText}}\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
-        "\n" +
-        "        <div class=\"promo-code-input-wrapper\">\n" +
-        "            <div class=\"input-wrapper\"\n" +
-        "               >\n" +
-        "                <md-progress-circular ng-if=\"d.showSpinner\"\n" +
-        "                                      class=\"promo-code-spinner\"\n" +
-        "                                      md-mode=\"indeterminate\"\n" +
-        "                                      md-diameter=\"25\">\n" +
-        "                </md-progress-circular>\n" +
-        "                <input\n" +
-        "                    type=\"text\"\n" +
-        "                    ng-model=\"d.promoCode\"\n" +
-        "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
-        "                    ng-autofocus =\"true\"\n" +
-        "                    placeholder=\"{{'PROMO_CODE.ENTER_YOUR_CODE' | translate}}\">\n" +
-        "                <div class=\"icon-wrapper\" >\n" +
-        "                    <svg-icon class=\"arrow-icon\" name=\"promo-code-arrow-icon\" ng-click=\"d.sendPromoCode(d.promoCode)\"></svg-icon>\n" +
-        "                    <svg-icon class=\"close-icon\" name=\"promo-code-close-icon\" ng-click=\"d.clearInput()\"></svg-icon>\n" +
-        "                    <svg-icon class=\"correct-icon\" name=\"promo-code-correct-icon\"  ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></svg-icon>\n" +
-        "                </div>\n" +
-        "\n" +
-        "                <div class=\"promo-code-status-text\">\n" +
-        "                    {{d.promoCodeStatusText}}\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/promoCode/svg/arrow-icon.svg",
+    "<svg\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    version=\"1.1\" id=\"Capa_1\" x=\"0px\" y=\"0px\"\n" +
+    "    viewBox=\"0 0 611.987 611.987\"\n" +
+    "    xml:space=\"preserve\">\n" +
+    "    <style>\n" +
+    "        svg{\n" +
+    "        width:30px;\n" +
+    "        height:20px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<g id=\"arrow-R\">\n" +
+    "		<g>\n" +
+    "			<path d=\"M604.652,287.018c-0.532-0.532-1.225-0.692-1.757-1.171L417.717,100.668c-10.329-10.329-27.074-10.329-37.377,0     c-10.328,10.329-10.328,27.074,0,37.376l141.334,141.333H26.622C11.926,279.377,0,291.304,0,306     c0,14.694,11.926,26.621,26.622,26.621h495.052L380.341,473.954c-10.329,10.329-10.329,27.074,0,37.376     c10.329,10.303,27.073,10.329,37.376,0l185.232-185.258c0.532-0.453,1.197-0.612,1.703-1.092c0.825-0.825,0.825-1.97,1.518-2.875     c2.263-2.796,3.86-5.856,4.818-9.158c0.346-1.277,0.586-2.396,0.719-3.7C612.799,301.34,610.749,293.087,604.652,287.018z\" fill=\"#FFFFFF\"/>\n" +
+    "		</g>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/promoCode/svg/close-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/promoCode/svg/correct-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     class=\"correct-icon-svg\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 188.5 129\"\n" +
+    "     style=\"enable-background:new 0 0 188.5 129;\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.correct-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #231F20;\n" +
+    "        stroke-width: 15;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<line class=\"st0\" x1=\"7.5\" y1=\"62\" x2=\"67\" y2=\"121.5\"/>\n" +
+    "	<line class=\"st0\" x1=\"67\" y1=\"121.5\" x2=\"181\" y2=\"7.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/promoCode/templates/promoCode.template.html",
+    "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
+    "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
+    "             'promo-code-invalid': d.promoCodeStatus === d.promoCodeStatusConst.invalid\n" +
+    "             }\">\n" +
+    "\n" +
+    "    <div class=\"promo-code-title\"\n" +
+    "         ng-if=\"!d.promoCodeStatusConst.accepted\"\n" +
+    "         translate=\"{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}\"\n" +
+    "         ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\">\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"promo-code-title accepted-title\">\n" +
+    "        {{d.promoCodeStatusText}}\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
+    "\n" +
+    "        <div class=\"promo-code-input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "               >\n" +
+    "                <md-progress-circular ng-if=\"d.showSpinner\"\n" +
+    "                                      class=\"promo-code-spinner\"\n" +
+    "                                      md-mode=\"indeterminate\"\n" +
+    "                                      md-diameter=\"25\">\n" +
+    "                </md-progress-circular>\n" +
+    "                <input\n" +
+    "                    type=\"text\"\n" +
+    "                    ng-model=\"d.promoCode\"\n" +
+    "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
+    "                    ng-autofocus =\"true\"\n" +
+    "                    placeholder=\"{{'PROMO_CODE.ENTER_YOUR_CODE' | translate}}\">\n" +
+    "                <div class=\"icon-wrapper\" >\n" +
+    "                    <svg-icon class=\"arrow-icon\" name=\"promo-code-arrow-icon\" ng-click=\"d.sendPromoCode(d.promoCode)\"></svg-icon>\n" +
+    "                    <svg-icon class=\"close-icon\" name=\"promo-code-close-icon\" ng-click=\"d.clearInput()\"></svg-icon>\n" +
+    "                    <svg-icon class=\"correct-icon\" name=\"promo-code-correct-icon\"  ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></svg-icon>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"promo-code-status-text\">\n" +
+    "                    {{d.promoCodeStatusText}}\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -13242,7 +13241,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             templateUrl:  'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
             controllerAs: 'vm',
             controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "znkAnalyticsSrv", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
-                                                                                                                                                                                        $filter, PurchaseStateEnum, $log, znkAnalyticsSrv) {
+                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -13432,7 +13431,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
         ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                                                                                                                                                                                             PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
             'ngInject';
 
             function getPath(param) {
@@ -13656,405 +13655,405 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 
 
 angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
-        "<ng-switch on=\"vm.purchaseState\">\n" +
-        "\n" +
-        "    <div ng-switch-when=\"pending\">\n" +
-        "        <div class=\"upgraded flex-container\">\n" +
-        "            <div class=\"flex-item\">\n" +
-        "                <div class=\"pending\">\n" +
-        "                    <md-progress-circular md-mode=\"indeterminate\" md-diameter=\"45\"></md-progress-circular>\n" +
-        "                    <span class=\"text\" translate=\".UPGRADE_PENDING\"></span>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div ng-switch-when=\"pro\">\n" +
-        "        <div class=\"upgraded flex-container\">\n" +
-        "            <div class=\"flex-item\">\n" +
-        "                <div class=\"icon-wrapper completed\">\n" +
-        "                    <svg-icon name=\"purchase-check-mark\"></svg-icon>\n" +
-        "                </div>\n" +
-        "                <span class=\"text\" translate=\".UPGRADED_ON\" translate-values=\"{upgradeDate: vm.upgradeDate}\"></span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div ng-switch-when=\"none\">\n" +
-        "        <ng-switch on=\"vm.showForm\">\n" +
-        "            <div ng-switch-when=\"true\">\n" +
-        "                <form\n" +
-        "                    action=\"{{::vm.formAction}}\"\n" +
-        "                    method=\"post\"\n" +
-        "                    target=\"_top\">\n" +
-        "                    <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n" +
-        "                    <input type=\"hidden\" name=\"hosted_button_id\" ng-value=\"::vm.hostedButtonId\">\n" +
-        "                    <input type=\"hidden\" name=\"custom\" ng-value=\"::vm.custom\">\n" +
-        "                    <input type=\"hidden\" name=\"return\" ng-value=\"::vm.returnUrlSuccess\">\n" +
-        "                    <input type=\"hidden\" name=\"cancel_return\" ng-value=\"::vm.returnUrlFailed\">\n" +
-        "                    <input type=\"hidden\" name=\"landing_page\" value=\"billing\">\n" +
-        "                    <input type=\"hidden\" name=\"email\" ng-value=\"::vm.userEmail\">\n" +
-        "                    <div class=\"upgrade-btn-wrapper\">\n" +
-        "                        <button class=\"md-button success drop-shadow inline-block\"\n" +
-        "                                ng-click=\"vm.saveAnalytics()\"\n" +
-        "                                translate=\".UPGRADE_NOW\"\n" +
-        "                                name=\"submit\">\n" +
-        "                        </button>\n" +
-        "                    </div>\n" +
-        "                    <!--<input type=\"image\" src=\"{{vm.btnImgSrc}}\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">-->\n" +
-        "                    <img border=\"0\" ng-src=\"{{::vm.pixelGifSrc}}\" width=\"1\" height=\"1\" alt=\"{{vm.translate('PURCHASE_POPUP.PAYPAL_IMG_ALT')}}\" >\n" +
-        "                </form>\n" +
-        "            </div>\n" +
-        "            <div class=\"upgrade-btn-wrapper\" ng-switch-default>\n" +
-        "                <button class=\"md-button success drop-shadow\"\n" +
-        "                        ng-click=\"vm.showPurchaseError()\"\n" +
-        "                        translate=\".UPGRADE_NOW\"\n" +
-        "                        name=\"submit\">\n" +
-        "                </button>\n" +
-        "            </div>\n" +
-        "        </ng-switch>\n" +
-        "    </div>\n" +
-        "</ng-switch>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/check-mark-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 329.5 223.7\"\n" +
-        "	 class=\"purchase-check-mark-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .purchase-check-mark-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #ffffff;\n" +
-        "            stroke-width: 21;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-        "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/grail-icon.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    viewBox=\"0 0 208.1 203\" class=\"purchase-popup-bullet-4-icon\">\n" +
-        "\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .purchase-popup-bullet-4-icon .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #231F20;\n" +
-        "            stroke-width: 6;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        .purchase-popup-bullet-4-icon .st1 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #231F20;\n" +
-        "            stroke-width: 6;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        .purchase-popup-bullet-4-icon .st2 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #231F20;\n" +
-        "            stroke-width: 4;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <path class=\"st0\" d=\"M104.2,3h74c0,0-8.8,65.7-14.7,82.9c-5.3,15.6-13,32.6-36.7,43.2c-12.3,5.5-10.3,21.7-10.3,31.5\n" +
-        "		c0,11.2,5.4,16.7,13.3,20.4c3.7,1.7,8.3,3.2,14.3,4v15h-40\"/>\n" +
-        "        <path class=\"st0\" d=\"M104.2,3h-74c0,0,8.8,65.7,14.7,82.9c5.3,15.6,13,32.6,36.7,43.2c12.3,5.5,10.3,21.7,10.3,31.5\n" +
-        "		c0,11.2-5.4,16.7-13.3,20.4c-3.7,1.7-8.3,3.2-14.3,4v15h40\"/>\n" +
-        "    </g>\n" +
-        "    <path class=\"st1\" d=\"M176.8,20.4c0,0,71.3-1.5-12.2,67.5\"/>\n" +
-        "    <path class=\"st1\" d=\"M31.3,20.4c0,0-71.3-1.5,12.2,67.5\"/>\n" +
-        "    <polygon class=\"st1\" points=\"102.6,22 113.1,43.4 136.6,46.8 119.6,63.4 123.6,86.9 102.6,75.8 81.5,86.9 85.5,63.4 68.5,46.8\n" +
-        "	92,43.4 \"/>\n" +
-        "    <line class=\"st2\" x1=\"66.6\" y1=\"193.9\" x2=\"143.6\" y2=\"193.9\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/note-and-pencil.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    viewBox=\"0 0 124 141\"\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    class=\"purchase-popup-bullet-2-icon\">\n" +
-        "    <style>\n" +
-        "        .purchase-popup-bullet-2-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
-        "        .purchase-popup-bullet-2-icon .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "        .purchase-popup-bullet-2-icon .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M77.7,139H16.8c-4.5,0-8.3-3.7-8.3-8.3V10.3c0-4.5,3.7-8.3,8.3-8.3h60.9c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
-        "		C85.9,135.3,82.2,139,77.7,139z\"/>\n" +
-        "	<line class=\"st1\" x1=\"2\" y1=\"21.2\" x2=\"17\" y2=\"21.2\"/>\n" +
-        "	<line class=\"st1\" x1=\"2\" y1=\"40.9\" x2=\"17\" y2=\"40.9\"/>\n" +
-        "	<line class=\"st1\" x1=\"2\" y1=\"60.6\" x2=\"17\" y2=\"60.6\"/>\n" +
-        "	<line class=\"st1\" x1=\"2\" y1=\"80.4\" x2=\"17\" y2=\"80.4\"/>\n" +
-        "	<line class=\"st1\" x1=\"2\" y1=\"100.1\" x2=\"17\" y2=\"100.1\"/>\n" +
-        "	<line class=\"st1\" x1=\"2\" y1=\"119.8\" x2=\"17\" y2=\"119.8\"/>\n" +
-        "	<g>\n" +
-        "		<path class=\"st2\" d=\"M122,2v116l-7.3,21l-8.7-20.1V24.5V7.2c0,0,1-5.2,6.6-5.2S122,2,122,2z\"/>\n" +
-        "		<line class=\"st2\" x1=\"106\" y1=\"21.7\" x2=\"122\" y2=\"21.7\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/open-lock-icon.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    viewBox=\"0 0 148.7 174.7\"\n" +
-        "    style=\"enable-background:new 0 0 148.7 174.7;\"\n" +
-        "    class=\"purchase-popup-bullet-5-icon\">\n" +
-        "    <style>\n" +
-        "\n" +
-        "        .purchase-popup-bullet-5-icon .st0{fill:none;stroke:#231F20;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "        .purchase-popup-bullet-5-icon .st1{fill:none;stroke:#231F20;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M93.4,171.7H12.6c-5.3,0-9.6-4.3-9.6-9.6V81.3c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
-        "		C103,167.4,98.7,171.7,93.4,171.7z\"/>\n" +
-        "	<path class=\"st0\" d=\"M78.7,71.7V39.9C78.7,19.6,93.8,3,112.2,3h0c18.4,0,33.5,16.6,33.5,36.9v31.9\"/>\n" +
-        "	<path class=\"st1\" d=\"M53.2,101c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
-        "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,106.1,47.1,101,53.2,101\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/previous-icon.svg",
-        "<svg class=\"previous-icon\" x=\"0px\" y=\"0px\" viewBox=\"-406.9 425.5 190.9 175.7\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-        "    <circle cx=\"-402.8\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-386.1\" cy=\"513\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-386.1\" cy=\"496.1\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-386.1\" cy=\"529.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"479.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"529.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"479.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"462.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"529.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"563.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"463.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"446.3\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"479.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"496.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"547\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"530.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"563.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"446.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"429.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"463.1\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"496.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"479.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"530.3\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"563.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"546.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"597.1\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-303\" cy=\"496.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-303\" cy=\"530.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-303\" cy=\"513.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-286\" cy=\"496.1\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-286\" cy=\"529.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-286\" cy=\"512.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-269.5\" cy=\"496.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-269.5\" cy=\"530.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-269.5\" cy=\"513.3\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-252.7\" cy=\"496.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-252.7\" cy=\"530.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-252.7\" cy=\"513.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-236.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-236.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-236.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-220.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-220.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-220.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/purchase-close-popup.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.close-pop-svg {width: 100%; height: auto;}\n" +
-        "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-        "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/question-mark-square.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    viewBox=\"0 0 117.5 141\"\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    class=\"purchase-popup-bullet-3-icon\">\n" +
-        "    <style>\n" +
-        "\n" +
-        "        .purchase-popup-bullet-3-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
-        "        .purchase-popup-bullet-3-icon .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "        .purchase-popup-bullet-3-icon .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<path class=\"st0\" d=\"M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
-        "		C115.5,135.3,111.8,139,107.2,139z\"/>\n" +
-        "	<g>\n" +
-        "		<path class=\"st1\" d=\"M39.6,54.6c4.4-5.7,11.7-9.2,19.7-8.2c9.7,1.2,17.4,9.1,18.4,18.7c1.2,11-5.9,20.6-15.9,23.1\n" +
-        "			c-3.1,0.8-5.3,3.7-5.3,6.9v8.6\"/>\n" +
-        "		<circle cx=\"56.5\" cy=\"116.7\" r=\"2.8\"/>\n" +
-        "	</g>\n" +
-        "	<line class=\"st2\" x1=\"32.7\" y1=\"34.2\" x2=\"25.7\" y2=\"21.6\"/>\n" +
-        "	<line class=\"st2\" x1=\"84.8\" y1=\"34.2\" x2=\"91.8\" y2=\"21.6\"/>\n" +
-        "	<line class=\"st2\" x1=\"59.3\" y1=\"29.5\" x2=\"59.3\" y2=\"18.5\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/raccoon-logo.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"0 0 237 158\"\n" +
-        "    class=\"raccoon-logo-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .raccoon-logo-svg .circle{fill:#000001;}\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <circle class=\"circle\" cx=\"175\" cy=\"93.1\" r=\"13.7\"/>\n" +
-        "        <path class=\"circle\" d=\"M118.5,155.9c10.2,0,18.5-8.3,18.5-18.5c0-10.2-8.3-18.5-18.5-18.5c-10.2,0-18.5,8.3-18.5,18.5\n" +
-        "		C100,147.6,108.3,155.9,118.5,155.9z\"/>\n" +
-        "        <path class=\"circle\" d=\"M172.4,67.5c-15.8-9.7-34.3-15.3-53.9-15.3c-19.6,0-38.2,5.5-53.9,15.3\n" +
-        "		c13,1.3,23.1,12.3,23.1,25.6c0,1.8-0.2,3.5-0.5,5.1c9.3-5.2,20-8.1,31.3-8.1c11.3,0,22,2.9,31.4,8.1c-0.3-1.7-0.5-3.4-0.5-5.1\n" +
-        "		C149.3,79.8,159.5,68.8,172.4,67.5z\"/>\n" +
-        "        <path class=\"circle\" d=\"M36.3,93.5c-8,10.8-14,23.4-17.4,37.2c-1.2,4.9-0.4,10,2.3,14.3c2.6,4.3,6.8,7.3,11.7,8.5\n" +
-        "		c1.5,0.4,3,0.5,4.5,0.5c8.8,0,16.3-6,18.4-14.5c1.8-7.7,5-14.7,9.2-20.9c-1,0.1-2,0.2-3,0.2C47.9,118.8,36.5,107.5,36.3,93.5z\"/>\n" +
-        "        <path class=\"circle\" d=\"M232.2,92.5c0.6-6.7,6.5-78-4.5-88.4c-9.5-9.1-60.3,16-77.5,24.9\n" +
-        "		C185.3,37.8,215,60.9,232.2,92.5z\"/>\n" +
-        "        <circle class=\"circle\" cx=\"62\" cy=\"93.1\" r=\"13.7\"/>\n" +
-        "        <path class=\"circle\" d=\"M204.1,153.6c10.2-2.4,16.4-12.7,14-22.8c-3.3-13.8-9.3-26.4-17.4-37.2\n" +
-        "		c-0.2,14-11.6,25.3-25.7,25.3c-1,0-2-0.1-3-0.2c4.2,6.2,7.4,13.3,9.2,21c2,8.6,9.6,14.5,18.4,14.5\n" +
-        "		C201.1,154.1,202.6,153.9,204.1,153.6\"/>\n" +
-        "        <path class=\"circle\" d=\"M86.7,29C69.5,20.1,18.8-5,9.2,4.1c-11,10.4-5.1,81.5-4.5,88.4C22,60.8,51.7,37.8,86.7,29z\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/svg/sheet-icon.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    viewBox=\"0 0 117.5 141\"\n" +
-        "    class=\"purchase-popup-bullet-1-icon\">\n" +
-        "    <style>\n" +
-        "        .purchase-popup-bullet-1-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
-        "\n" +
-        "    </style>\n" +
-        "<path class=\"st0\" d=\"M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
-        "	C115.5,135.3,111.8,139,107.2,139z\"/>\n" +
-        "<line class=\"st0\" x1=\"19\" y1=\"26.5\" x2=\"96\" y2=\"26.5\"/>\n" +
-        "<line class=\"st0\" x1=\"19\" y1=\"44.7\" x2=\"70.5\" y2=\"44.7\"/>\n" +
-        "<line class=\"st0\" x1=\"48.5\" y1=\"62.9\" x2=\"96\" y2=\"62.9\"/>\n" +
-        "<line class=\"st0\" x1=\"22.5\" y1=\"81.1\" x2=\"96\" y2=\"81.1\"/>\n" +
-        "<line class=\"st0\" x1=\"22.5\" y1=\"99.3\" x2=\"59.2\" y2=\"99.3\"/>\n" +
-        "<line class=\"st0\" x1=\"72.2\" y1=\"99.3\" x2=\"94.2\" y2=\"99.3\"/>\n" +
-        "<line class=\"st0\" x1=\"22\" y1=\"117.5\" x2=\"95.5\" y2=\"117.5\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/purchase/templates/purchasePopup.template.html",
-        "<md-dialog class=\"purchase-popup base-border-radius\" aria-label=\"Get Zinkerz\" translate-namespace=\"PURCHASE_POPUP\">\n" +
-        "    <div class=\"purchase-popup-container\">\n" +
-        "        <div class=\"popup-header\">\n" +
-        "            <div class=\"raccoon\">\n" +
-        "                <svg-icon name=\"purchase-raccoon-logo-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "            <div class=\"close-popup-wrap\">\n" +
-        "                <svg-icon name=\"purchase-close-popup\" ng-click=\"vm.close()\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <md-dialog-content>\n" +
-        "            <div class=\"md-dialog-content\">\n" +
-        "                <h2>\n" +
-        "                    <span translate=\".GET_ZINKERZ\"></span>\n" +
-        "                    <span class=\"pill pro\" translate=\".PRO\"></span>\n" +
-        "                </h2>\n" +
-        "                <p translate=\".DESCRIPTION\"></p>\n" +
-        "                <div class=\"features-box base-border-radius\">\n" +
-        "                    <ul>\n" +
-        "                        <li>\n" +
-        "                            <div class=\"bullet\">\n" +
-        "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET1ICON' | translate}}\"></svg-icon>\n" +
-        "                            </div>\n" +
-        "                            <span translate=\".BULLET1\"></span>\n" +
-        "                        </li>\n" +
-        "                        <li>\n" +
-        "                            <div class=\"bullet\">\n" +
-        "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET2ICON' | translate}}\"></svg-icon>\n" +
-        "                            </div>\n" +
-        "                            <span translate=\".BULLET2\"></span>\n" +
-        "                        </li>\n" +
-        "                        <li>\n" +
-        "                            <div class=\"bullet\">\n" +
-        "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET3ICON' | translate}}\"></svg-icon>\n" +
-        "                            </div>\n" +
-        "                            <span translate=\".BULLET3\"></span>\n" +
-        "                        </li>\n" +
-        "                        <li>\n" +
-        "                            <div class=\"bullet\">\n" +
-        "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET4ICON' | translate}}\"></svg-icon>\n" +
-        "                            </div>\n" +
-        "                            <span translate=\".BULLET4\"></span>\n" +
-        "                        </li>\n" +
-        "                        <li>\n" +
-        "                            <div class=\"bullet\">\n" +
-        "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET5ICON' | translate}}\"></svg-icon>\n" +
-        "                            </div>\n" +
-        "                            <span translate=\".BULLET5\"></span>\n" +
-        "                        </li>\n" +
-        "                    </ul>\n" +
-        "                </div>\n" +
-        "                <div class=\"price\" ng-show=\"vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
-        "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
-        "                    <b>{{'$' + vm.productPrice}}</b>\n" +
-        "                    <span translate=\".SAVE\" translate-values='{ percent: vm.productDiscountPercentage}'></span>\n" +
-        "                </div>\n" +
-        "                <div class=\"action\">\n" +
-        "                    <purchase-btn purchase-state=\"vm.purchaseState\"></purchase-btn>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </md-dialog-content>\n" +
-        "    </div>\n" +
-        "</md-dialog>\n" +
-        "");
+  $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
+    "<ng-switch on=\"vm.purchaseState\">\n" +
+    "\n" +
+    "    <div ng-switch-when=\"pending\">\n" +
+    "        <div class=\"upgraded flex-container\">\n" +
+    "            <div class=\"flex-item\">\n" +
+    "                <div class=\"pending\">\n" +
+    "                    <md-progress-circular md-mode=\"indeterminate\" md-diameter=\"45\"></md-progress-circular>\n" +
+    "                    <span class=\"text\" translate=\".UPGRADE_PENDING\"></span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div ng-switch-when=\"pro\">\n" +
+    "        <div class=\"upgraded flex-container\">\n" +
+    "            <div class=\"flex-item\">\n" +
+    "                <div class=\"icon-wrapper completed\">\n" +
+    "                    <svg-icon name=\"purchase-check-mark\"></svg-icon>\n" +
+    "                </div>\n" +
+    "                <span class=\"text\" translate=\".UPGRADED_ON\" translate-values=\"{upgradeDate: vm.upgradeDate}\"></span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div ng-switch-when=\"none\">\n" +
+    "        <ng-switch on=\"vm.showForm\">\n" +
+    "            <div ng-switch-when=\"true\">\n" +
+    "                <form\n" +
+    "                    action=\"{{::vm.formAction}}\"\n" +
+    "                    method=\"post\"\n" +
+    "                    target=\"_top\">\n" +
+    "                    <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n" +
+    "                    <input type=\"hidden\" name=\"hosted_button_id\" ng-value=\"::vm.hostedButtonId\">\n" +
+    "                    <input type=\"hidden\" name=\"custom\" ng-value=\"::vm.custom\">\n" +
+    "                    <input type=\"hidden\" name=\"return\" ng-value=\"::vm.returnUrlSuccess\">\n" +
+    "                    <input type=\"hidden\" name=\"cancel_return\" ng-value=\"::vm.returnUrlFailed\">\n" +
+    "                    <input type=\"hidden\" name=\"landing_page\" value=\"billing\">\n" +
+    "                    <input type=\"hidden\" name=\"email\" ng-value=\"::vm.userEmail\">\n" +
+    "                    <div class=\"upgrade-btn-wrapper\">\n" +
+    "                        <button class=\"md-button success drop-shadow inline-block\"\n" +
+    "                                ng-click=\"vm.saveAnalytics()\"\n" +
+    "                                translate=\".UPGRADE_NOW\"\n" +
+    "                                name=\"submit\">\n" +
+    "                        </button>\n" +
+    "                    </div>\n" +
+    "                    <!--<input type=\"image\" src=\"{{vm.btnImgSrc}}\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">-->\n" +
+    "                    <img border=\"0\" ng-src=\"{{::vm.pixelGifSrc}}\" width=\"1\" height=\"1\" alt=\"{{vm.translate('PURCHASE_POPUP.PAYPAL_IMG_ALT')}}\" >\n" +
+    "                </form>\n" +
+    "            </div>\n" +
+    "            <div class=\"upgrade-btn-wrapper\" ng-switch-default>\n" +
+    "                <button class=\"md-button success drop-shadow\"\n" +
+    "                        ng-click=\"vm.showPurchaseError()\"\n" +
+    "                        translate=\".UPGRADE_NOW\"\n" +
+    "                        name=\"submit\">\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </ng-switch>\n" +
+    "    </div>\n" +
+    "</ng-switch>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"purchase-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .purchase-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/grail-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 208.1 203\" class=\"purchase-popup-bullet-4-icon\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .purchase-popup-bullet-4-icon .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #231F20;\n" +
+    "            stroke-width: 6;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .purchase-popup-bullet-4-icon .st1 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #231F20;\n" +
+    "            stroke-width: 6;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .purchase-popup-bullet-4-icon .st2 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #231F20;\n" +
+    "            stroke-width: 4;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path class=\"st0\" d=\"M104.2,3h74c0,0-8.8,65.7-14.7,82.9c-5.3,15.6-13,32.6-36.7,43.2c-12.3,5.5-10.3,21.7-10.3,31.5\n" +
+    "		c0,11.2,5.4,16.7,13.3,20.4c3.7,1.7,8.3,3.2,14.3,4v15h-40\"/>\n" +
+    "        <path class=\"st0\" d=\"M104.2,3h-74c0,0,8.8,65.7,14.7,82.9c5.3,15.6,13,32.6,36.7,43.2c12.3,5.5,10.3,21.7,10.3,31.5\n" +
+    "		c0,11.2-5.4,16.7-13.3,20.4c-3.7,1.7-8.3,3.2-14.3,4v15h40\"/>\n" +
+    "    </g>\n" +
+    "    <path class=\"st1\" d=\"M176.8,20.4c0,0,71.3-1.5-12.2,67.5\"/>\n" +
+    "    <path class=\"st1\" d=\"M31.3,20.4c0,0-71.3-1.5,12.2,67.5\"/>\n" +
+    "    <polygon class=\"st1\" points=\"102.6,22 113.1,43.4 136.6,46.8 119.6,63.4 123.6,86.9 102.6,75.8 81.5,86.9 85.5,63.4 68.5,46.8\n" +
+    "	92,43.4 \"/>\n" +
+    "    <line class=\"st2\" x1=\"66.6\" y1=\"193.9\" x2=\"143.6\" y2=\"193.9\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/note-and-pencil.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 124 141\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    class=\"purchase-popup-bullet-2-icon\">\n" +
+    "    <style>\n" +
+    "        .purchase-popup-bullet-2-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-2-icon .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-2-icon .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M77.7,139H16.8c-4.5,0-8.3-3.7-8.3-8.3V10.3c0-4.5,3.7-8.3,8.3-8.3h60.9c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
+    "		C85.9,135.3,82.2,139,77.7,139z\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"21.2\" x2=\"17\" y2=\"21.2\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"40.9\" x2=\"17\" y2=\"40.9\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"60.6\" x2=\"17\" y2=\"60.6\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"80.4\" x2=\"17\" y2=\"80.4\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"100.1\" x2=\"17\" y2=\"100.1\"/>\n" +
+    "	<line class=\"st1\" x1=\"2\" y1=\"119.8\" x2=\"17\" y2=\"119.8\"/>\n" +
+    "	<g>\n" +
+    "		<path class=\"st2\" d=\"M122,2v116l-7.3,21l-8.7-20.1V24.5V7.2c0,0,1-5.2,6.6-5.2S122,2,122,2z\"/>\n" +
+    "		<line class=\"st2\" x1=\"106\" y1=\"21.7\" x2=\"122\" y2=\"21.7\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/open-lock-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 148.7 174.7\"\n" +
+    "    style=\"enable-background:new 0 0 148.7 174.7;\"\n" +
+    "    class=\"purchase-popup-bullet-5-icon\">\n" +
+    "    <style>\n" +
+    "\n" +
+    "        .purchase-popup-bullet-5-icon .st0{fill:none;stroke:#231F20;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-5-icon .st1{fill:none;stroke:#231F20;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M93.4,171.7H12.6c-5.3,0-9.6-4.3-9.6-9.6V81.3c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
+    "		C103,167.4,98.7,171.7,93.4,171.7z\"/>\n" +
+    "	<path class=\"st0\" d=\"M78.7,71.7V39.9C78.7,19.6,93.8,3,112.2,3h0c18.4,0,33.5,16.6,33.5,36.9v31.9\"/>\n" +
+    "	<path class=\"st1\" d=\"M53.2,101c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
+    "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,106.1,47.1,101,53.2,101\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/previous-icon.svg",
+    "<svg class=\"previous-icon\" x=\"0px\" y=\"0px\" viewBox=\"-406.9 425.5 190.9 175.7\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+    "    <circle cx=\"-402.8\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"513\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"496.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"529.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"479.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"529.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"479.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"462.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"563.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"463.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"446.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"479.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"496.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"547\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"563.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"446.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"429.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"463.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"496.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"479.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"530.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"563.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"546.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"597.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"496.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"513.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"496.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"529.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"512.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"496.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"513.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"496.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"513.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/purchase-close-popup.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/question-mark-square.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 117.5 141\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    class=\"purchase-popup-bullet-3-icon\">\n" +
+    "    <style>\n" +
+    "\n" +
+    "        .purchase-popup-bullet-3-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-3-icon .st1{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "        .purchase-popup-bullet-3-icon .st2{fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<path class=\"st0\" d=\"M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
+    "		C115.5,135.3,111.8,139,107.2,139z\"/>\n" +
+    "	<g>\n" +
+    "		<path class=\"st1\" d=\"M39.6,54.6c4.4-5.7,11.7-9.2,19.7-8.2c9.7,1.2,17.4,9.1,18.4,18.7c1.2,11-5.9,20.6-15.9,23.1\n" +
+    "			c-3.1,0.8-5.3,3.7-5.3,6.9v8.6\"/>\n" +
+    "		<circle cx=\"56.5\" cy=\"116.7\" r=\"2.8\"/>\n" +
+    "	</g>\n" +
+    "	<line class=\"st2\" x1=\"32.7\" y1=\"34.2\" x2=\"25.7\" y2=\"21.6\"/>\n" +
+    "	<line class=\"st2\" x1=\"84.8\" y1=\"34.2\" x2=\"91.8\" y2=\"21.6\"/>\n" +
+    "	<line class=\"st2\" x1=\"59.3\" y1=\"29.5\" x2=\"59.3\" y2=\"18.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/raccoon-logo.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 237 158\"\n" +
+    "    class=\"raccoon-logo-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .raccoon-logo-svg .circle{fill:#000001;}\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <circle class=\"circle\" cx=\"175\" cy=\"93.1\" r=\"13.7\"/>\n" +
+    "        <path class=\"circle\" d=\"M118.5,155.9c10.2,0,18.5-8.3,18.5-18.5c0-10.2-8.3-18.5-18.5-18.5c-10.2,0-18.5,8.3-18.5,18.5\n" +
+    "		C100,147.6,108.3,155.9,118.5,155.9z\"/>\n" +
+    "        <path class=\"circle\" d=\"M172.4,67.5c-15.8-9.7-34.3-15.3-53.9-15.3c-19.6,0-38.2,5.5-53.9,15.3\n" +
+    "		c13,1.3,23.1,12.3,23.1,25.6c0,1.8-0.2,3.5-0.5,5.1c9.3-5.2,20-8.1,31.3-8.1c11.3,0,22,2.9,31.4,8.1c-0.3-1.7-0.5-3.4-0.5-5.1\n" +
+    "		C149.3,79.8,159.5,68.8,172.4,67.5z\"/>\n" +
+    "        <path class=\"circle\" d=\"M36.3,93.5c-8,10.8-14,23.4-17.4,37.2c-1.2,4.9-0.4,10,2.3,14.3c2.6,4.3,6.8,7.3,11.7,8.5\n" +
+    "		c1.5,0.4,3,0.5,4.5,0.5c8.8,0,16.3-6,18.4-14.5c1.8-7.7,5-14.7,9.2-20.9c-1,0.1-2,0.2-3,0.2C47.9,118.8,36.5,107.5,36.3,93.5z\"/>\n" +
+    "        <path class=\"circle\" d=\"M232.2,92.5c0.6-6.7,6.5-78-4.5-88.4c-9.5-9.1-60.3,16-77.5,24.9\n" +
+    "		C185.3,37.8,215,60.9,232.2,92.5z\"/>\n" +
+    "        <circle class=\"circle\" cx=\"62\" cy=\"93.1\" r=\"13.7\"/>\n" +
+    "        <path class=\"circle\" d=\"M204.1,153.6c10.2-2.4,16.4-12.7,14-22.8c-3.3-13.8-9.3-26.4-17.4-37.2\n" +
+    "		c-0.2,14-11.6,25.3-25.7,25.3c-1,0-2-0.1-3-0.2c4.2,6.2,7.4,13.3,9.2,21c2,8.6,9.6,14.5,18.4,14.5\n" +
+    "		C201.1,154.1,202.6,153.9,204.1,153.6\"/>\n" +
+    "        <path class=\"circle\" d=\"M86.7,29C69.5,20.1,18.8-5,9.2,4.1c-11,10.4-5.1,81.5-4.5,88.4C22,60.8,51.7,37.8,86.7,29z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/svg/sheet-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    viewBox=\"0 0 117.5 141\"\n" +
+    "    class=\"purchase-popup-bullet-1-icon\">\n" +
+    "    <style>\n" +
+    "        .purchase-popup-bullet-1-icon .st0{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}\n" +
+    "\n" +
+    "    </style>\n" +
+    "<path class=\"st0\" d=\"M107.2,139h-97c-4.5,0-8.3-3.7-8.3-8.3V10.3C2,5.7,5.7,2,10.3,2h97c4.5,0,8.3,3.7,8.3,8.3v120.5\n" +
+    "	C115.5,135.3,111.8,139,107.2,139z\"/>\n" +
+    "<line class=\"st0\" x1=\"19\" y1=\"26.5\" x2=\"96\" y2=\"26.5\"/>\n" +
+    "<line class=\"st0\" x1=\"19\" y1=\"44.7\" x2=\"70.5\" y2=\"44.7\"/>\n" +
+    "<line class=\"st0\" x1=\"48.5\" y1=\"62.9\" x2=\"96\" y2=\"62.9\"/>\n" +
+    "<line class=\"st0\" x1=\"22.5\" y1=\"81.1\" x2=\"96\" y2=\"81.1\"/>\n" +
+    "<line class=\"st0\" x1=\"22.5\" y1=\"99.3\" x2=\"59.2\" y2=\"99.3\"/>\n" +
+    "<line class=\"st0\" x1=\"72.2\" y1=\"99.3\" x2=\"94.2\" y2=\"99.3\"/>\n" +
+    "<line class=\"st0\" x1=\"22\" y1=\"117.5\" x2=\"95.5\" y2=\"117.5\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/purchase/templates/purchasePopup.template.html",
+    "<md-dialog class=\"purchase-popup base-border-radius\" aria-label=\"Get Zinkerz\" translate-namespace=\"PURCHASE_POPUP\">\n" +
+    "    <div class=\"purchase-popup-container\">\n" +
+    "        <div class=\"popup-header\">\n" +
+    "            <div class=\"raccoon\">\n" +
+    "                <svg-icon name=\"purchase-raccoon-logo-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "            <div class=\"close-popup-wrap\">\n" +
+    "                <svg-icon name=\"purchase-close-popup\" ng-click=\"vm.close()\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <md-dialog-content>\n" +
+    "            <div class=\"md-dialog-content\">\n" +
+    "                <h2>\n" +
+    "                    <span translate=\".GET_ZINKERZ\"></span>\n" +
+    "                    <span class=\"pill pro\" translate=\".PRO\"></span>\n" +
+    "                </h2>\n" +
+    "                <p translate=\".DESCRIPTION\"></p>\n" +
+    "                <div class=\"features-box base-border-radius\">\n" +
+    "                    <ul>\n" +
+    "                        <li>\n" +
+    "                            <div class=\"bullet\">\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET1ICON' | translate}}\"></svg-icon>\n" +
+    "                            </div>\n" +
+    "                            <span translate=\".BULLET1\"></span>\n" +
+    "                        </li>\n" +
+    "                        <li>\n" +
+    "                            <div class=\"bullet\">\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET2ICON' | translate}}\"></svg-icon>\n" +
+    "                            </div>\n" +
+    "                            <span translate=\".BULLET2\"></span>\n" +
+    "                        </li>\n" +
+    "                        <li>\n" +
+    "                            <div class=\"bullet\">\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET3ICON' | translate}}\"></svg-icon>\n" +
+    "                            </div>\n" +
+    "                            <span translate=\".BULLET3\"></span>\n" +
+    "                        </li>\n" +
+    "                        <li>\n" +
+    "                            <div class=\"bullet\">\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET4ICON' | translate}}\"></svg-icon>\n" +
+    "                            </div>\n" +
+    "                            <span translate=\".BULLET4\"></span>\n" +
+    "                        </li>\n" +
+    "                        <li>\n" +
+    "                            <div class=\"bullet\">\n" +
+    "                                <svg-icon class=\"feature-svg\" name=\"{{'PURCHASE_POPUP.BULLET5ICON' | translate}}\"></svg-icon>\n" +
+    "                            </div>\n" +
+    "                            <span translate=\".BULLET5\"></span>\n" +
+    "                        </li>\n" +
+    "                    </ul>\n" +
+    "                </div>\n" +
+    "                <div class=\"price\" ng-show=\"vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
+    "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
+    "                    <b>{{'$' + vm.productPrice}}</b>\n" +
+    "                    <span translate=\".SAVE\" translate-values='{ percent: vm.productDiscountPercentage}'></span>\n" +
+    "                </div>\n" +
+    "                <div class=\"action\">\n" +
+    "                    <purchase-btn purchase-state=\"vm.purchaseState\"></purchase-btn>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </md-dialog-content>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -14091,56 +14090,56 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.settings').controller('SettingsChangePasswordController',
-        ["AuthService", "$mdDialog", "$timeout", function (AuthService, $mdDialog, $timeout) {
-            'ngInject';
+            ["AuthService", "$mdDialog", "$timeout", function (AuthService, $mdDialog, $timeout) {
+                'ngInject';
 
-            var self = this;
-            this.saveTitle = 'SETTING.SAVE';
-            this.oldPassError = 'SETTING.REQUIRED_FIELD';
-            this.generalError = 'SETTING.ERROR_OCCURRED';
-            this.changePasswordData = {};
+                var self = this;
+                this.saveTitle = 'SETTING.SAVE';
+                this.oldPassError = 'SETTING.REQUIRED_FIELD';
+                this.generalError = 'SETTING.ERROR_OCCURRED';
+                this.changePasswordData = {};
 
-            self.changePassword = function (authform) {
-                self.showError = self.showSuccess = false;
+                self.changePassword = function (authform) {
+                    self.showError = self.showSuccess = false;
 
-                if (self.changePasswordData.newPassword !== self.changePasswordData.newPasswordConfirm) {
-                    self.changePasswordData.newPasswordConfirm = undefined;
-                    return;
-                }
+                    if (self.changePasswordData.newPassword !== self.changePasswordData.newPasswordConfirm) {
+                        self.changePasswordData.newPasswordConfirm = undefined;
+                        return;
+                    }
 
-                if (!authform.$invalid) {
-                    self.startLoader = true;
-                    AuthService.changePassword(self.changePasswordData).then(function () {
-                        self.fillLoader = true;
-                        $timeout(function () {
-                            self.startLoader = self.fillLoader = false;
-                            self.showSuccess = true;
-                            self.saveTitle = 'SETTING.DONE';
-                        }, 100);
-                    }, function (err) {
-                        self.fillLoader = true;
+                    if (!authform.$invalid) {
+                        self.startLoader = true;
+                        AuthService.changePassword(self.changePasswordData).then(function () {
+                            self.fillLoader = true;
+                            $timeout(function () {
+                                self.startLoader = self.fillLoader = false;
+                                self.showSuccess = true;
+                                self.saveTitle = 'SETTING.DONE';
+                            }, 100);
+                        }, function (err) {
+                            self.fillLoader = true;
 
-                        $timeout(function () {
-                            self.startLoader = self.fillLoader = false;
-                            if (err.code === 'INVALID_PASSWORD') {
-                                self.changePasswordData.oldPassword = null;
-                                self.oldPassError = 'SETTING.INCORRECT_PASSWORD';
-                            } else if (err.code === 'NETWORK_ERROR') {
-                                self.generalError = 'SETTING.NO_INTERNET_CONNECTION_ERR';
-                                self.showError = true;
-                            } else {
-                                self.showError = true;
-                            }
-                        }, 100);
-                    });
-                }
-            };
+                            $timeout(function () {
+                                self.startLoader = self.fillLoader = false;
+                                if (err.code === 'INVALID_PASSWORD') {
+                                    self.changePasswordData.oldPassword = null;
+                                    self.oldPassError = 'SETTING.INCORRECT_PASSWORD';
+                                } else if (err.code === 'NETWORK_ERROR') {
+                                    self.generalError = 'SETTING.NO_INTERNET_CONNECTION_ERR';
+                                    self.showError = true;
+                                } else {
+                                    self.showError = true;
+                                }
+                            }, 100);
+                        });
+                    }
+                };
 
-            self.closeDialog = function () {
-                $mdDialog.cancel();
-            };
-        }]
-    );
+                self.closeDialog = function () {
+                    $mdDialog.cancel();
+                };
+            }]
+        );
 })(angular);
 
 (function (angular) {
@@ -14165,193 +14164,193 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
 })(angular);
 
 angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/settings/svg/change-password-icon.svg",
-        "<svg class=\"change-password-icon-wrap\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 75 75\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .change-password-icon-wrap{\n" +
-        "            width: 100%;\n" +
-        "            height: auto;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<path d=\"M52.5,30c-4.1,0-7.5-3.4-7.5-7.5s3.4-7.5,7.5-7.5s7.5,3.4,7.5,7.5S56.6,30,52.5,30z M52.5,0C40.1,0,30,10.1,30,22.5V30L0,60\n" +
-        "	v15h15v-7.5h7.5V60H30v-7.5h7.5V45h15C64.9,45,75,34.9,75,22.5S64.9,0,52.5,0z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/settings/svg/completed-v.svg",
-        "<svg\n" +
-        "	class=\"complete-v-icon-svg\"\n" +
-        "	xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "	xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "    x=\"0px\"\n" +
-        "	y=\"0px\"\n" +
-        "	viewBox=\"-1040 834.9 220.4 220.4\"\n" +
-        "	style=\"enable-background:new -1040 834.9 220.4 220.4; width: 100%; height: auto;\"\n" +
-        "    xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.complete-v-icon-svg .st0 {\n" +
-        "        fill: none;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st1 {\n" +
-        "        fill: #CACBCC;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st2 {\n" +
-        "        display: none;\n" +
-        "        fill: none;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st3 {\n" +
-        "        fill: #D1D2D2;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st4 {\n" +
-        "        fill: none;\n" +
-        "        stroke: #FFFFFF;\n" +
-        "        stroke-width: 11.9321;\n" +
-        "        stroke-linecap: round;\n" +
-        "        stroke-linejoin: round;\n" +
-        "        stroke-miterlimit: 10;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
-        "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
-        "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
-        "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/settings/svg/error-icon.svg",
-        "<svg\n" +
-        "    class=\"settings-error-icon\"\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"0 0 54.8 49.1\">\n" +
-        "<path class=\"st0\" d=\"M54,39.8L32.8,3.1C30.4-1,24.4-1,22,3.1L0.8,39.8c-2.4,4.1,0.6,9.3,5.4,9.3h42.4C53.4,49.1,56.4,44,54,39.8z\n" +
-        "	 M29.8,42.9c-0.7,0.6-1.5,0.9-2.4,0.9c-0.9,0-1.7-0.3-2.4-0.9s-1-1.4-1-2.5c0-0.9,0.3-1.7,1-2.4s1.5-1,2.4-1s1.8,0.3,2.4,1\n" +
-        "	c0.7,0.7,1,1.5,1,2.4C30.8,41.4,30.5,42.2,29.8,42.9z M30.7,17.7l-1,11.2c-0.1,1.3-0.3,2.4-0.7,3.1c-0.3,0.7-0.9,1.1-1.7,1.1\n" +
-        "	c-0.8,0-1.4-0.3-1.7-1c-0.3-0.7-0.5-1.7-0.7-3.1l-0.7-10.9C24,15.8,24,14.3,24,13.4c0-1.3,0.3-2.2,1-2.9s1.5-1.1,2.6-1.1\n" +
-        "	c1.3,0,2.2,0.5,2.6,1.4c0.4,0.9,0.7,2.2,0.7,3.9C30.8,15.6,30.8,16.6,30.7,17.7z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/settings/svg/setting-close-popup.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"settings-close-popup\">\n" +
-        "    <style>\n" +
-        "        .settings-close-popup{\n" +
-        "        width:15px;\n" +
-        "        height:15px;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/settings/templates/settingsChangePassword.template.html",
-        "<md-dialog ng-cloak class=\"setting-change-password\" translate-namespace=\"SETTING\">\n" +
-        "    <md-toolbar>\n" +
-        "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeDialog()\">\n" +
-        "            <svg-icon name=\"settings-close-popup\"></svg-icon>\n" +
-        "        </div>\n" +
-        "    </md-toolbar>\n" +
-        "    <md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
-        "        <div class=\"main-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
-        "        <form name=\"authform\" novalidate class=\"auth-form\" ng-submit=\"vm.changePassword(authform)\" ng-switch-when=\"false\">\n" +
-        "            <div class=\"znk-input-group\" ng-class=\"{'invalid-input': !vm.changePasswordData.oldPassword && authform.$submitted}\">\n" +
-        "                <input\n" +
-        "                    type=\"password\"\n" +
-        "                    autocomplete=\"off\"\n" +
-        "                    placeholder=\"{{'SETTING.OLD_PASSWORD' | translate}}\"\n" +
-        "                    name=\"oldPassword\"\n" +
-        "                    ng-minlength=\"6\"\n" +
-        "                    ng-maxlength=\"25\"\n" +
-        "                    ng-required=\"true\"\n" +
-        "                    ng-model=\"vm.changePasswordData.oldPassword\">\n" +
-        "                <div class=\"error-msg\" translate=\"{{vm.oldPassError}}\"></div>\n" +
-        "            </div>\n" +
-        "            <div class=\"znk-input-group\" ng-class=\"{'invalid-input': !vm.changePasswordData.newPassword && authform.$submitted}\">\n" +
-        "                <input\n" +
-        "                    type=\"password\"\n" +
-        "                    autocomplete=\"off\"\n" +
-        "                    placeholder=\"{{'SETTING.NEW_PASSWORD' | translate}}\"\n" +
-        "                    name=\"newPassword\"\n" +
-        "                    ng-minlength=\"6\"\n" +
-        "                    ng-maxlength=\"25\"\n" +
-        "                    ng-required=\"true\"\n" +
-        "                    ng-model=\"vm.changePasswordData.newPassword\">\n" +
-        "                <div class=\"error-msg\" translate=\".PASSWORD_LENGTH\"></div>\n" +
-        "            </div>\n" +
-        "            <div class=\"znk-input-group\" ng-class=\"{'invalid-input': !vm.changePasswordData.newPasswordConfirm && authform.$submitted}\">\n" +
-        "                <input\n" +
-        "                    type=\"password\"\n" +
-        "                    autocomplete=\"off\"\n" +
-        "                    placeholder=\"{{'SETTING.CONFIRM_NEW_PASSWORD' | translate}}\"\n" +
-        "                    name=\"newPasswordConfirm\"\n" +
-        "                    ng-minlength=\"6\"\n" +
-        "                    ng-maxlength=\"25\"\n" +
-        "                    ng-required=\"true\"\n" +
-        "                    ng-model=\"vm.changePasswordData.newPasswordConfirm\">\n" +
-        "                <div class=\"error-msg\" translate=\".PASSWORD_NOT_MATCH\"></div>\n" +
-        "            </div>\n" +
-        "            <div class=\"btn-wrap\">\n" +
-        "                <button\n" +
-        "                    class=\"md-button md-primary green znk drop-shadow\"\n" +
-        "                    element-loader\n" +
-        "                    fill-loader=\"vm.fillLoader\"\n" +
-        "                    show-loader=\"vm.startLoader\"\n" +
-        "                    bg-loader=\"'#72ab40'\"\n" +
-        "                    precentage=\"50\"\n" +
-        "                    font-color=\"'#FFFFFF'\"\n" +
-        "                    bg=\"'#87ca4d'\">\n" +
-        "                   <span translate=\"{{vm.saveTitle}}\"></span>\n" +
-        "                </button>\n" +
-        "            </div>\n" +
-        "        </form>\n" +
-        "        <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
-        "            <svg-icon class=\"completed-v-icon-wrap\" name=\"settings-completed-v-icon\"></svg-icon>\n" +
-        "            <div translate=\".SAVE_SUCCESS\"></div>\n" +
-        "            <div class=\"done-btn-wrap\">\n" +
-        "                <md-button aria-label=\"{{'SETTING.DONE' | translate}}\"\n" +
-        "                    class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
-        "                    <span translate=\".DONE\"></span>\n" +
-        "                </md-button>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\">\n" +
-        "            <div class=\"error-msg\">\n" +
-        "                <svg-icon name=\"settings-danger-red-icon\" class=\"settings-danger-red-icon\"></svg-icon>\n" +
-        "                <div translate=\"{{vm.generalError}}\"></div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </md-dialog-content>\n" +
-        "    <div class=\"top-icon-wrap\">\n" +
-        "        <div class=\"top-icon\">\n" +
-        "            <div class=\"round-icon-wrap\">\n" +
-        "                <svg-icon name=\"settings-change-password-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</md-dialog>\n" +
-        "");
+  $templateCache.put("components/settings/svg/change-password-icon.svg",
+    "<svg class=\"change-password-icon-wrap\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 75 75\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .change-password-icon-wrap{\n" +
+    "            width: 100%;\n" +
+    "            height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<path d=\"M52.5,30c-4.1,0-7.5-3.4-7.5-7.5s3.4-7.5,7.5-7.5s7.5,3.4,7.5,7.5S56.6,30,52.5,30z M52.5,0C40.1,0,30,10.1,30,22.5V30L0,60\n" +
+    "	v15h15v-7.5h7.5V60H30v-7.5h7.5V45h15C64.9,45,75,34.9,75,22.5S64.9,0,52.5,0z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/settings/svg/completed-v.svg",
+    "<svg\n" +
+    "	class=\"complete-v-icon-svg\"\n" +
+    "	xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "	xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "    x=\"0px\"\n" +
+    "	y=\"0px\"\n" +
+    "	viewBox=\"-1040 834.9 220.4 220.4\"\n" +
+    "	style=\"enable-background:new -1040 834.9 220.4 220.4; width: 100%; height: auto;\"\n" +
+    "    xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.complete-v-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st1 {\n" +
+    "        fill: #CACBCC;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st2 {\n" +
+    "        display: none;\n" +
+    "        fill: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st3 {\n" +
+    "        fill: #D1D2D2;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st4 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #FFFFFF;\n" +
+    "        stroke-width: 11.9321;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/settings/svg/error-icon.svg",
+    "<svg\n" +
+    "    class=\"settings-error-icon\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 54.8 49.1\">\n" +
+    "<path class=\"st0\" d=\"M54,39.8L32.8,3.1C30.4-1,24.4-1,22,3.1L0.8,39.8c-2.4,4.1,0.6,9.3,5.4,9.3h42.4C53.4,49.1,56.4,44,54,39.8z\n" +
+    "	 M29.8,42.9c-0.7,0.6-1.5,0.9-2.4,0.9c-0.9,0-1.7-0.3-2.4-0.9s-1-1.4-1-2.5c0-0.9,0.3-1.7,1-2.4s1.5-1,2.4-1s1.8,0.3,2.4,1\n" +
+    "	c0.7,0.7,1,1.5,1,2.4C30.8,41.4,30.5,42.2,29.8,42.9z M30.7,17.7l-1,11.2c-0.1,1.3-0.3,2.4-0.7,3.1c-0.3,0.7-0.9,1.1-1.7,1.1\n" +
+    "	c-0.8,0-1.4-0.3-1.7-1c-0.3-0.7-0.5-1.7-0.7-3.1l-0.7-10.9C24,15.8,24,14.3,24,13.4c0-1.3,0.3-2.2,1-2.9s1.5-1.1,2.6-1.1\n" +
+    "	c1.3,0,2.2,0.5,2.6,1.4c0.4,0.9,0.7,2.2,0.7,3.9C30.8,15.6,30.8,16.6,30.7,17.7z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/settings/svg/setting-close-popup.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\" class=\"settings-close-popup\">\n" +
+    "    <style>\n" +
+    "        .settings-close-popup{\n" +
+    "        width:15px;\n" +
+    "        height:15px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/settings/templates/settingsChangePassword.template.html",
+    "<md-dialog ng-cloak class=\"setting-change-password\" translate-namespace=\"SETTING\">\n" +
+    "    <md-toolbar>\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <svg-icon name=\"settings-close-popup\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </md-toolbar>\n" +
+    "    <md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
+    "        <div class=\"main-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
+    "        <form name=\"authform\" novalidate class=\"auth-form\" ng-submit=\"vm.changePassword(authform)\" ng-switch-when=\"false\">\n" +
+    "            <div class=\"znk-input-group\" ng-class=\"{'invalid-input': !vm.changePasswordData.oldPassword && authform.$submitted}\">\n" +
+    "                <input\n" +
+    "                    type=\"password\"\n" +
+    "                    autocomplete=\"off\"\n" +
+    "                    placeholder=\"{{'SETTING.OLD_PASSWORD' | translate}}\"\n" +
+    "                    name=\"oldPassword\"\n" +
+    "                    ng-minlength=\"6\"\n" +
+    "                    ng-maxlength=\"25\"\n" +
+    "                    ng-required=\"true\"\n" +
+    "                    ng-model=\"vm.changePasswordData.oldPassword\">\n" +
+    "                <div class=\"error-msg\" translate=\"{{vm.oldPassError}}\"></div>\n" +
+    "            </div>\n" +
+    "            <div class=\"znk-input-group\" ng-class=\"{'invalid-input': !vm.changePasswordData.newPassword && authform.$submitted}\">\n" +
+    "                <input\n" +
+    "                    type=\"password\"\n" +
+    "                    autocomplete=\"off\"\n" +
+    "                    placeholder=\"{{'SETTING.NEW_PASSWORD' | translate}}\"\n" +
+    "                    name=\"newPassword\"\n" +
+    "                    ng-minlength=\"6\"\n" +
+    "                    ng-maxlength=\"25\"\n" +
+    "                    ng-required=\"true\"\n" +
+    "                    ng-model=\"vm.changePasswordData.newPassword\">\n" +
+    "                <div class=\"error-msg\" translate=\".PASSWORD_LENGTH\"></div>\n" +
+    "            </div>\n" +
+    "            <div class=\"znk-input-group\" ng-class=\"{'invalid-input': !vm.changePasswordData.newPasswordConfirm && authform.$submitted}\">\n" +
+    "                <input\n" +
+    "                    type=\"password\"\n" +
+    "                    autocomplete=\"off\"\n" +
+    "                    placeholder=\"{{'SETTING.CONFIRM_NEW_PASSWORD' | translate}}\"\n" +
+    "                    name=\"newPasswordConfirm\"\n" +
+    "                    ng-minlength=\"6\"\n" +
+    "                    ng-maxlength=\"25\"\n" +
+    "                    ng-required=\"true\"\n" +
+    "                    ng-model=\"vm.changePasswordData.newPasswordConfirm\">\n" +
+    "                <div class=\"error-msg\" translate=\".PASSWORD_NOT_MATCH\"></div>\n" +
+    "            </div>\n" +
+    "            <div class=\"btn-wrap\">\n" +
+    "                <button\n" +
+    "                    class=\"md-button md-primary green znk drop-shadow\"\n" +
+    "                    element-loader\n" +
+    "                    fill-loader=\"vm.fillLoader\"\n" +
+    "                    show-loader=\"vm.startLoader\"\n" +
+    "                    bg-loader=\"'#72ab40'\"\n" +
+    "                    precentage=\"50\"\n" +
+    "                    font-color=\"'#FFFFFF'\"\n" +
+    "                    bg=\"'#87ca4d'\">\n" +
+    "                   <span translate=\"{{vm.saveTitle}}\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "        <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
+    "            <svg-icon class=\"completed-v-icon-wrap\" name=\"settings-completed-v-icon\"></svg-icon>\n" +
+    "            <div translate=\".SAVE_SUCCESS\"></div>\n" +
+    "            <div class=\"done-btn-wrap\">\n" +
+    "                <md-button aria-label=\"{{'SETTING.DONE' | translate}}\"\n" +
+    "                    class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "                    <span translate=\".DONE\"></span>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\">\n" +
+    "            <div class=\"error-msg\">\n" +
+    "                <svg-icon name=\"settings-danger-red-icon\" class=\"settings-danger-red-icon\"></svg-icon>\n" +
+    "                <div translate=\"{{vm.generalError}}\"></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </md-dialog-content>\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"settings-change-password-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
+    "");
 }]);
 
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config'
+        'znk.infra.config' 
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -14441,7 +14440,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]);
+    ]);  
 })(angular);
 
 /**
@@ -14524,50 +14523,50 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
 
 
 angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/tests/templates/navigationPane.template.html",
-        "<div class=\"app-tests-navigationPane\"\n" +
-        "     translate-namespace=\"NAVIGATION_PANE\">\n" +
-        "    <div class=\"tests-navigation-title-header\"\n" +
-        "         translate=\".MINI_TEST_TITLE\"></div>\n" +
-        "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-        "        <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum} | orderBy:'order'\"\n" +
-        "                      ng-class=\"{\n" +
-        "                        'done': miniExam.isCompleted,\n" +
-        "                        'active': vm.activeId === miniExam.id\n" +
-        "                      }\">\n" +
-        "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}\"\n" +
-        "                       ng-click=\"vm.changeActive(miniExam.id)\">\n" +
-        "                <span>{{miniExam.name}}</span>\n" +
-        "                <div class=\"status-icon-wrapper\"\n" +
-        "                     ng-if=\"miniExam.isCompleted\">\n" +
-        "                    <i class=\"material-icons\">check</i>\n" +
-        "                </div>\n" +
-        "            </md-button>\n" +
-        "        </md-list-item>\n" +
-        "    </md-list>\n" +
-        "    <div class=\"tests-navigation-title-header\"\n" +
-        "         translate=\".FULL_TEST_TITLE\"></div>\n" +
-        "    <md-list class=\"md-list-second-list\"\n" +
-        "             flex=\"grow\"\n" +
-        "             layout=\"column\"\n" +
-        "             layout-align=\"start center\">\n" +
-        "        <md-list-item ng-repeat=\"fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum} | orderBy:'order'\"\n" +
-        "                      ng-class=\"{\n" +
-        "                        'done': fullExam.isCompleted,\n" +
-        "                        'active': vm.activeId === fullExam.id\n" +
-        "                      }\">\n" +
-        "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}\"\n" +
-        "                       ng-click=\"vm.changeActive(fullExam.id)\">\n" +
-        "                <span>{{fullExam.name}}</span>\n" +
-        "                <div class=\"status-icon-wrapper\"\n" +
-        "                     ng-if=\"fullExam.isCompleted\">\n" +
-        "                    <i class=\"material-icons\">check</i>\n" +
-        "                </div>\n" +
-        "            </md-button>\n" +
-        "        </md-list-item>\n" +
-        "    </md-list>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/tests/templates/navigationPane.template.html",
+    "<div class=\"app-tests-navigationPane\"\n" +
+    "     translate-namespace=\"NAVIGATION_PANE\">\n" +
+    "    <div class=\"tests-navigation-title-header\"\n" +
+    "         translate=\".MINI_TEST_TITLE\"></div>\n" +
+    "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
+    "        <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum} | orderBy:'order'\"\n" +
+    "                      ng-class=\"{\n" +
+    "                        'done': miniExam.isCompleted,\n" +
+    "                        'active': vm.activeId === miniExam.id\n" +
+    "                      }\">\n" +
+    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}\"\n" +
+    "                       ng-click=\"vm.changeActive(miniExam.id)\">\n" +
+    "                <span>{{miniExam.name}}</span>\n" +
+    "                <div class=\"status-icon-wrapper\"\n" +
+    "                     ng-if=\"miniExam.isCompleted\">\n" +
+    "                    <i class=\"material-icons\">check</i>\n" +
+    "                </div>\n" +
+    "            </md-button>\n" +
+    "        </md-list-item>\n" +
+    "    </md-list>\n" +
+    "    <div class=\"tests-navigation-title-header\"\n" +
+    "         translate=\".FULL_TEST_TITLE\"></div>\n" +
+    "    <md-list class=\"md-list-second-list\"\n" +
+    "             flex=\"grow\"\n" +
+    "             layout=\"column\"\n" +
+    "             layout-align=\"start center\">\n" +
+    "        <md-list-item ng-repeat=\"fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum} | orderBy:'order'\"\n" +
+    "                      ng-class=\"{\n" +
+    "                        'done': fullExam.isCompleted,\n" +
+    "                        'active': vm.activeId === fullExam.id\n" +
+    "                      }\">\n" +
+    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}\"\n" +
+    "                       ng-click=\"vm.changeActive(fullExam.id)\">\n" +
+    "                <span>{{fullExam.name}}</span>\n" +
+    "                <div class=\"status-icon-wrapper\"\n" +
+    "                     ng-if=\"fullExam.isCompleted\">\n" +
+    "                    <i class=\"material-icons\">check</i>\n" +
+    "                </div>\n" +
+    "            </md-button>\n" +
+    "        </md-list-item>\n" +
+    "    </md-list>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -14594,10 +14593,10 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
-            var svgMap = {
-                'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
-                'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
-            };
+        var svgMap = {
+            'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
+            'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
+        };
             SvgIconSrvProvider.registerSvgSources(svgMap);
 
         }
@@ -14678,7 +14677,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         var vm = this;
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
-
+        
         vm.$onInit = function () {
             $q.all([
                 subjectOrderProm
@@ -14718,27 +14717,27 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
                         }]
                     }
                 })
-                .state('app.tutorial', {
-                    url: '/tipsAndTricks/tutorial/:exerciseId',
-                    templateUrl: 'components/tutorials/templates/tutorialWorkout.template.html',
-                    controller: 'TutorialWorkoutController',
-                    controllerAs: 'vm',
-                    resolve: {
-                        exerciseData: ["TutorialsSrv", "$stateParams", "$state", "ExerciseTypeEnum", "ExerciseParentEnum", function (TutorialsSrv, $stateParams, $state, ExerciseTypeEnum, ExerciseParentEnum) {
-                            var tutorialId = +$stateParams.exerciseId;
-                            return TutorialsSrv.getTutorial(tutorialId).then(function () {
-                                return {
-                                    exerciseId: tutorialId,
-                                    exerciseTypeId: ExerciseTypeEnum.TUTORIAL.enum,
-                                    exerciseParentTypeId: ExerciseParentEnum.TUTORIAL.enum,
-                                    exitAction: function () {
-                                        $state.go('app.tutorials');
-                                    }
-                                };
-                            });
-                        }]
-                    }
-                });
+            .state('app.tutorial', {
+                url: '/tipsAndTricks/tutorial/:exerciseId',
+                templateUrl: 'components/tutorials/templates/tutorialWorkout.template.html',
+                controller: 'TutorialWorkoutController',
+                controllerAs: 'vm',
+                resolve: {
+                    exerciseData: ["TutorialsSrv", "$stateParams", "$state", "ExerciseTypeEnum", "ExerciseParentEnum", function (TutorialsSrv, $stateParams, $state, ExerciseTypeEnum, ExerciseParentEnum) {
+                        var tutorialId = +$stateParams.exerciseId;
+                        return TutorialsSrv.getTutorial(tutorialId).then(function () {
+                            return {
+                                exerciseId: tutorialId,
+                                exerciseTypeId: ExerciseTypeEnum.TUTORIAL.enum,
+                                exerciseParentTypeId: ExerciseParentEnum.TUTORIAL.enum,
+                                exitAction: function () {
+                                    $state.go('app.tutorials');
+                                }
+                            };
+                        });
+                    }]
+                }
+            });
         }
     ]);
 })(angular);
@@ -14762,14 +14761,14 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         ["exerciseData", function(exerciseData) {
             'ngInject';
             this.completeExerciseDetails = {
-                exerciseId: exerciseData.exerciseId,
-                exerciseTypeId: exerciseData.exerciseTypeId,
-                exerciseParentTypeId: exerciseData.exerciseParentTypeId
-            };
+            exerciseId: exerciseData.exerciseId,
+            exerciseTypeId: exerciseData.exerciseTypeId,
+            exerciseParentTypeId: exerciseData.exerciseParentTypeId
+        };
 
-            this.completeExerciseSettings = {
-                exitAction: exerciseData.exitAction
-            };
+        this.completeExerciseSettings = {
+            exitAction: exerciseData.exitAction
+        };
         }]
     );
 })(angular);
@@ -14779,7 +14778,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     angular.module('znk.infra-web-app.tutorials').service('TutorialsSrv',
         ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", "SubjectsSrv", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum, SubjectsSrv) {
             'ngInject';
-
+        
             this.getSubjectOrder = function () {
                 return SubjectsSrv.getSubjectOrder();
             };
@@ -14844,109 +14843,109 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
 })(angular);
 
 angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/tutorials/components/tutorialList/tutorialList.template.html",
-        "<div class=\"tutorials-list-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_LIST_COMPONENTS\">\n" +
-        "    <div class=\"diagnostic-overlay\" ng-if=\"!vm.isDiagnosticComplete\">\n" +
-        "        <div class=\"overlay-text\" translate=\".DIAGNOSTIC_OVERLAY\"></div>\n" +
-        "    </div>\n" +
-        "    <div class=\"tutorials-list-container\" ng-class=\"{blur: !vm.isDiagnosticComplete}\">\n" +
-        "        <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
-        "                            tutorial=\"tutorial\"\n" +
-        "                            ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
-        "        </tutorial-list-item>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/tutorials/components/tutorialListItem/tutorialListItem.template.html",
-        "<div class=\"tutorial-item\" ng-click=\"vm.tutorialClick(vm.tutorial.id)\"\n" +
-        "     ng-class=\"[vm.subjectsMap[vm.activeSubject], {\n" +
-        "     'locked': !vm.tutorial.isAvail,\n" +
-        "     'base-box-shadow': vm.tutorial.isAvail}, {'completed': vm.tutorial.isComplete}]\">\n" +
-        "    <svg-icon name=\"tutorials-locked-icon\" ng-if=\"!vm.tutorial.isAvail\"></svg-icon>\n" +
-        "    <svg-icon name=\"tutorials-check-mark-icon\" ng-if=\"vm.tutorial.isComplete\"></svg-icon>\n" +
-        "    <div class=\"tutorial-name\">{{vm.tutorial.name}}</div>\n" +
-        "    <div class=\"tutorial-category-name\">{{vm.tutorial.categoryName}}</div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/tutorials/components/tutorialPane/tutorialPane.template.html",
-        "<div class=\"tutorial-navigation-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_PANE_COMPONENTS\">\n" +
-        "    <div class=\"pane-title\" translate=\".TITLE\"></div>\n" +
-        "    <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-        "        <md-list-item\n" +
-        "            md-no-ink\n" +
-        "            ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
-        "            ng-click=\"vm.changeActiveSubject(subject)\"\n" +
-        "            class=\"subject-item\"\n" +
-        "            ng-repeat=\"subject in vm.subjecstOrder\">\n" +
-        "            <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
-        "            <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
-        "        </md-list-item>\n" +
-        "    </md-list>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/tutorials/svg/subject-locked-icon.svg",
-        "<svg\n" +
-        "    class=\"subject-locked-svg\"\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"0 0 127.4 180\">\n" +
-        "\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .subject-locked-svg {\n" +
-        "            width: 100%;\n" +
-        "            height: auto;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<g>\n" +
-        "		<path class=\"st0\" d=\"M57.4,0c4,0,8,0,12,0c1.3,0.4,2.5,0.8,3.8,1.1c20,4.5,34.7,15.3,40.5,35.6c2.1,7.5,2.1,15.8,2.4,23.7\n" +
-        "			c0.4,9.1,0.1,18.2,0.1,27.3c4.1,0.5,7.7,1,11.2,1.4c0,30.3,0,60.7,0,91C85,180,42.6,180,0,180c0-30.9,0-61.1,0-91.6\n" +
-        "			c3.7-0.2,7.1-0.4,10.7-0.6c0-12.2-0.2-23.8,0-35.5c0.4-21.6,10-37.7,29.7-46.9C45.8,2.9,51.8,1.8,57.4,0z M98.5,87.9\n" +
-        "			c0-11.5,0-22.5,0-33.4c0-20.3-9.9-32.2-30-36.1C52,15.2,32.1,26.9,29.8,43c-2,14.7-1.4,29.8-1.9,44.9\n" +
-        "			C51.9,87.9,74.9,87.9,98.5,87.9z M71.3,149.8c-0.6-4.1-1.2-7.7-1.6-11.4c-0.5-4-1.3-7.7,2.1-11.5c3.2-3.6,1.7-9.3-2.1-12.4\n" +
-        "			c-3.5-2.9-8.9-2.9-12.4,0c-3.8,3.1-5.4,8.9-2.2,12.4c3.5,3.9,2.5,7.8,2,12c-0.4,3.6-1,7.1-1.5,10.9\n" +
-        "			C60.9,149.8,65.9,149.8,71.3,149.8z\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/tutorials/svg/tutorials-check-mark-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 329.5 223.7\"\n" +
-        "	 class=\"tutorials-check-mark-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .tutorials-check-mark-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #ffffff;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-        "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
-        "<div class=\"app-tests-roadmap layout-row flex-grow\" layout=\"row\" flex=\"grow\">\n" +
-        "    <div class=\"tutorials-main-container\">\n" +
-        "        <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
-        "        <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",
-        "<div class=\"complete-exercise-container base-border-radius\">\n" +
-        "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
-        "                       settings=\"vm.completeExerciseSettings\">\n" +
-        "    </complete-exercise>\n" +
-        "</div>");
+  $templateCache.put("components/tutorials/components/tutorialList/tutorialList.template.html",
+    "<div class=\"tutorials-list-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_LIST_COMPONENTS\">\n" +
+    "    <div class=\"diagnostic-overlay\" ng-if=\"!vm.isDiagnosticComplete\">\n" +
+    "        <div class=\"overlay-text\" translate=\".DIAGNOSTIC_OVERLAY\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"tutorials-list-container\" ng-class=\"{blur: !vm.isDiagnosticComplete}\">\n" +
+    "        <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
+    "                            tutorial=\"tutorial\"\n" +
+    "                            ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
+    "        </tutorial-list-item>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/tutorials/components/tutorialListItem/tutorialListItem.template.html",
+    "<div class=\"tutorial-item\" ng-click=\"vm.tutorialClick(vm.tutorial.id)\"\n" +
+    "     ng-class=\"[vm.subjectsMap[vm.activeSubject], {\n" +
+    "     'locked': !vm.tutorial.isAvail,\n" +
+    "     'base-box-shadow': vm.tutorial.isAvail}, {'completed': vm.tutorial.isComplete}]\">\n" +
+    "    <svg-icon name=\"tutorials-locked-icon\" ng-if=\"!vm.tutorial.isAvail\"></svg-icon>\n" +
+    "    <svg-icon name=\"tutorials-check-mark-icon\" ng-if=\"vm.tutorial.isComplete\"></svg-icon>\n" +
+    "    <div class=\"tutorial-name\">{{vm.tutorial.name}}</div>\n" +
+    "    <div class=\"tutorial-category-name\">{{vm.tutorial.categoryName}}</div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/tutorials/components/tutorialPane/tutorialPane.template.html",
+    "<div class=\"tutorial-navigation-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_PANE_COMPONENTS\">\n" +
+    "    <div class=\"pane-title\" translate=\".TITLE\"></div>\n" +
+    "    <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
+    "        <md-list-item\n" +
+    "            md-no-ink\n" +
+    "            ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
+    "            ng-click=\"vm.changeActiveSubject(subject)\"\n" +
+    "            class=\"subject-item\"\n" +
+    "            ng-repeat=\"subject in vm.subjecstOrder\">\n" +
+    "            <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
+    "            <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
+    "        </md-list-item>\n" +
+    "    </md-list>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/tutorials/svg/subject-locked-icon.svg",
+    "<svg\n" +
+    "    class=\"subject-locked-svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 127.4 180\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .subject-locked-svg {\n" +
+    "            width: 100%;\n" +
+    "            height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<g>\n" +
+    "		<path class=\"st0\" d=\"M57.4,0c4,0,8,0,12,0c1.3,0.4,2.5,0.8,3.8,1.1c20,4.5,34.7,15.3,40.5,35.6c2.1,7.5,2.1,15.8,2.4,23.7\n" +
+    "			c0.4,9.1,0.1,18.2,0.1,27.3c4.1,0.5,7.7,1,11.2,1.4c0,30.3,0,60.7,0,91C85,180,42.6,180,0,180c0-30.9,0-61.1,0-91.6\n" +
+    "			c3.7-0.2,7.1-0.4,10.7-0.6c0-12.2-0.2-23.8,0-35.5c0.4-21.6,10-37.7,29.7-46.9C45.8,2.9,51.8,1.8,57.4,0z M98.5,87.9\n" +
+    "			c0-11.5,0-22.5,0-33.4c0-20.3-9.9-32.2-30-36.1C52,15.2,32.1,26.9,29.8,43c-2,14.7-1.4,29.8-1.9,44.9\n" +
+    "			C51.9,87.9,74.9,87.9,98.5,87.9z M71.3,149.8c-0.6-4.1-1.2-7.7-1.6-11.4c-0.5-4-1.3-7.7,2.1-11.5c3.2-3.6,1.7-9.3-2.1-12.4\n" +
+    "			c-3.5-2.9-8.9-2.9-12.4,0c-3.8,3.1-5.4,8.9-2.2,12.4c3.5,3.9,2.5,7.8,2,12c-0.4,3.6-1,7.1-1.5,10.9\n" +
+    "			C60.9,149.8,65.9,149.8,71.3,149.8z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/tutorials/svg/tutorials-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"tutorials-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .tutorials-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/tutorials/templates/tutorialsRoadmap.template.html",
+    "<div class=\"app-tests-roadmap layout-row flex-grow\" layout=\"row\" flex=\"grow\">\n" +
+    "    <div class=\"tutorials-main-container\">\n" +
+    "        <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
+    "        <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/tutorials/templates/tutorialWorkout.template.html",
+    "<div class=\"complete-exercise-container base-border-radius\">\n" +
+    "    <complete-exercise exercise-details=\"vm.completeExerciseDetails\"\n" +
+    "                       settings=\"vm.completeExerciseSettings\">\n" +
+    "    </complete-exercise>\n" +
+    "</div>");
 }]);
 
 (function (angular) {
@@ -14975,88 +14974,88 @@ angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function($tem
 
 angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [function() {
 
-    var _calcScoreFn;
+        var _calcScoreFn;
 
-    this.setCalcScoreFn = function(calcScoreFn) {
-        _calcScoreFn = calcScoreFn;
-    };
+        this.setCalcScoreFn = function(calcScoreFn) {
+            _calcScoreFn = calcScoreFn;
+        };
 
-    this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', '$injector', function (InfraConfigSrv, StorageSrv, $q, $injector) {
-        var self = this;
-        var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
-        var defaultSubjectScore = self.settings.defaultSubjectScore;
-        var subjects = self.settings.subjects;
+        this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', '$injector', function (InfraConfigSrv, StorageSrv, $q, $injector) {
+            var self = this;
+            var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
+            var defaultSubjectScore = self.settings.defaultSubjectScore;
+            var subjects = self.settings.subjects;
 
-        var userGoalsServiceObj = {};
+            var userGoalsServiceObj = {};
 
-        userGoalsServiceObj.getGoals = function () {
-            return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
-                return globalStorage.get(goalsPath).then(function (userGoals) {
-                    if (angular.equals(userGoals, {})) {
-                        userGoals = _defaultUserGoals();
-                    }
-                    return userGoals;
+            userGoalsServiceObj.getGoals = function () {
+                return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
+                    return globalStorage.get(goalsPath).then(function (userGoals) {
+                        if (angular.equals(userGoals, {})) {
+                            userGoals = _defaultUserGoals();
+                        }
+                        return userGoals;
+                    });
                 });
-            });
-        };
-
-        userGoalsServiceObj.setGoals = function (newGoals) {
-            return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
-                if (arguments.length && angular.isDefined(newGoals)) {
-                    return globalStorage.set(goalsPath, newGoals);
-                }
-                return globalStorage.get(goalsPath).then(function (userGoals) {
-                    if (!userGoals.goals) {
-                        userGoals.goals = _defaultUserGoals();
-                    }
-                    return userGoals;
-                });
-            });
-        };
-
-        userGoalsServiceObj.getCalcScoreFn = function() {
-            return $q.when($injector.invoke(_calcScoreFn, self));
-        };
-
-        userGoalsServiceObj.getGoalsSettings = function() {
-            return self.settings;
-        };
-
-        function getInitTotalScore() {
-            var initTotalScore = 0;
-            angular.forEach(subjects, function() {
-                initTotalScore += defaultSubjectScore;
-            });
-            return initTotalScore;
-        }
-
-        function _defaultUserGoals() {
-            var defaultUserGoals = {
-                isCompleted: false,
-                totalScore: getInitTotalScore()
             };
-            angular.forEach(subjects, function(subject) {
-                defaultUserGoals[subject.name] = defaultSubjectScore;
-            });
-            return defaultUserGoals;
-        }
 
-        function averageSubjectsGoal(goalsObj) {
-            var goalsSum = 0;
-            var goalsLength = 0;
-            angular.forEach(goalsObj, function(goal) {
-                if (angular.isNumber(goal)) {
-                    goalsSum += goal;
-                    goalsLength += 1;
-                }
-            });
-            return Math.round(goalsSum / goalsLength);
-        }
+            userGoalsServiceObj.setGoals = function (newGoals) {
+                return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
+                    if (arguments.length && angular.isDefined(newGoals)) {
+                        return globalStorage.set(goalsPath, newGoals);
+                    }
+                    return globalStorage.get(goalsPath).then(function (userGoals) {
+                        if (!userGoals.goals) {
+                            userGoals.goals = _defaultUserGoals();
+                        }
+                        return userGoals;
+                    });
+                });
+            };
 
-        userGoalsServiceObj.averageSubjectsGoal = averageSubjectsGoal;
+            userGoalsServiceObj.getCalcScoreFn = function() {
+                return $q.when($injector.invoke(_calcScoreFn, self));
+            };
 
-        return userGoalsServiceObj;
-    }];
+            userGoalsServiceObj.getGoalsSettings = function() {
+                 return self.settings;
+            };
+
+            function getInitTotalScore() {
+                var initTotalScore = 0;
+                angular.forEach(subjects, function() {
+                    initTotalScore += defaultSubjectScore;
+                });
+                return initTotalScore;
+            }
+
+            function _defaultUserGoals() {
+                var defaultUserGoals = {
+                    isCompleted: false,
+                    totalScore: getInitTotalScore()
+                };
+                angular.forEach(subjects, function(subject) {
+                    defaultUserGoals[subject.name] = defaultSubjectScore;
+                });
+                return defaultUserGoals;
+            }
+
+            function averageSubjectsGoal(goalsObj) {
+                var goalsSum = 0;
+                var goalsLength = 0;
+                angular.forEach(goalsObj, function(goal) {
+                    if (angular.isNumber(goal)) {
+                        goalsSum += goal;
+                        goalsLength += 1;
+                    }
+                });
+                return Math.round(goalsSum / goalsLength);
+            }
+
+            userGoalsServiceObj.averageSubjectsGoal = averageSubjectsGoal;
+
+            return userGoalsServiceObj;
+        }];
 }]);
 
 angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
@@ -15408,7 +15407,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
 
         function _setUserSchoolsData(userSchools) {
             return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
-                return studentStorage.set(schoolsPath, userSchools);
+                 return studentStorage.set(schoolsPath, userSchools);
             });
         }
 
@@ -15458,266 +15457,266 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
                 });
             });
         };
-    }]);
+}]);
 
 
 angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/userGoalsSelection/svg/arrow-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-468.2 482.4 96 89.8\" class=\"arrow-icon-wrapper\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .arrow-icon-wrapper .st0{fill:#109BAC;}\n" +
-        "        .arrow-icon-wrapper .st1{fill:none;stroke:#fff;stroke-width:5.1237;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
-        "    </style>\n" +
-        "    <path class=\"st0\" d=\"M-417.2,572.2h-6.2c-24.7,0-44.9-20.2-44.9-44.9v0c0-24.7,20.2-44.9,44.9-44.9h6.2c24.7,0,44.9,20.2,44.9,44.9\n" +
-        "    v0C-372.2,552-392.5,572.2-417.2,572.2z\"/>\n" +
-        "    <g>\n" +
-        "        <line class=\"st1\" x1=\"-442.8\" y1=\"527.3\" x2=\"-401.4\" y2=\"527.3\"/>\n" +
-        "        <line class=\"st1\" x1=\"-401.4\" y1=\"527.3\" x2=\"-414.3\" y2=\"514.4\"/>\n" +
-        "        <line class=\"st1\" x1=\"-401.4\" y1=\"527.3\" x2=\"-414.3\" y2=\"540.2\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/svg/dropdown-arrow.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10; width:25px;}\n" +
-        "    </style>\n" +
-        "    <polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/svg/info-icon.svg",
-        "<svg\n" +
-        "    version=\"1.1\"\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"-497 499 28 28\"\n" +
-        "    class=\"info-icon\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.info-icon .st0{fill:none;stroke:#0A9BAD; stroke-width:2;}\n" +
-        "	.info-icon .st2{fill:#0A9BAD;}\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<circle class=\"st0\" cx=\"-483\" cy=\"513\" r=\"13.5\"/>\n" +
-        "	<g>\n" +
-        "		<path class=\"st2\" d=\"M-485.9,509.2h3.9v8.1h3v1.2h-7.6v-1.2h3v-6.9h-2.4V509.2z M-483.5,505.6h1.5v1.9h-1.5V505.6z\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/svg/plus-icon.svg",
-        "<svg class=\"plus-svg\"\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"0 0 16 16\"\n" +
-        "    style=\"enable-background:new 0 0 16 16;\"\n" +
-        "    xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.plus-svg .st0, .plus-svg .st1 {\n" +
-        "        fill: none;\n" +
-        "        stroke: #0a9bad;\n" +
-        "        stroke-width: 2;\n" +
-        "        stroke-linecap: round;\n" +
-        "        stroke-miterlimit: 10;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<line class=\"st0\" x1=\"8\" y1=\"1\" x2=\"8\" y2=\"15\"/>\n" +
-        "<line class=\"st1\" x1=\"1\" y1=\"8\" x2=\"15\" y2=\"8\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/svg/search-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-314.8 416.5 97.5 99.1\" class=\"search-icon-wrapper\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.search-icon-wrapper .st0{fill:none;stroke:#231F20;stroke-width:5;stroke-miterlimit:10;}\n" +
-        "	.search-icon-wrapper .st1{fill:none;stroke:#231F20;stroke-width:5;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<circle class=\"st0\" cx=\"-279.1\" cy=\"452.3\" r=\"33.2\"/>\n" +
-        "<line class=\"st1\" x1=\"-255.3\" y1=\"477.6\" x2=\"-219.8\" y2=\"513.1\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/svg/v-icon.svg",
-        "<svg class=\"v-icon-wrapper\" x=\"0px\" y=\"0px\" viewBox=\"0 0 334.5 228.7\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .v-icon-wrapper .st0{\n" +
-        "            fill:#ffffff;\n" +
-        "            stroke:#ffffff;\n" +
-        "            stroke-width:26;\n" +
-        "            stroke-linecap:round;\n" +
-        "            stroke-linejoin:round;\n" +
-        "            stroke-miterlimit:10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g>\n" +
-        "	<line class=\"st0\" x1=\"13\" y1=\"109.9\" x2=\"118.8\" y2=\"215.7\"/>\n" +
-        "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/templates/editGoals.template.html",
-        "<md-dialog class=\"setting-edit-goals base-border-radius\" translate-namespace=\"SETTING.EDIT_GOALS\">\n" +
-        "    <md-toolbar>\n" +
-        "        <div class=\"close-popup-wrap\" ng-click=\"cancel()\">\n" +
-        "            <svg-icon name=\"estimated-score-widget-close-popup\"></svg-icon>\n" +
-        "        </div>\n" +
-        "    </md-toolbar>\n" +
-        "    <md-dialog-content>\n" +
-        "        <div class=\"main-title md-subheader\" translate=\".MY_GOALS\"></div>\n" +
-        "        <user-goals setting=\"userGoalsSetting\"></user-goals>\n" +
-        "    </md-dialog-content>\n" +
-        "    <div class=\"top-icon-wrap\">\n" +
-        "        <div class=\"top-icon\">\n" +
-        "            <div class=\"round-icon-wrap\">\n" +
-        "                <svg-icon name=\"estimated-score-widget-goals\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</md-dialog>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
-        "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-class=\"{'hide-sign':target < minScore}\">\n" +
-        "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
-        "</div>\n" +
-        "<div class=\"goal\">{{target}}</div>\n" +
-        "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-class=\"{'hide-sign':target > maxScore}\">\n" +
-        "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/templates/schoolSelect.template.html",
-        "<div class=\"school-selector\" translate-namespace=\"SCHOOL_SELECT\">\n" +
-        "    <div class=\"selector\">\n" +
-        "        <div class=\"tag-input-wrap\">\n" +
-        "            <div class=\"search-icon-container\">\n" +
-        "                <svg-icon name=\"user-goals-search-icon\"></svg-icon>\n" +
-        "            </div>\n" +
-        "            <tags-input ng-model=\"d.userSchools\"\n" +
-        "                        text=\"d.text\"\n" +
-        "                        key-property=\"id\"\n" +
-        "                        placeholder=\"{{d.placeholder}}\"\n" +
-        "                        allow-leftover-text=\"true\"\n" +
-        "                        add-from-autocomplete-only=\"true\"\n" +
-        "                        on-tag-adding=\"d.onTagAdding($tag)\"\n" +
-        "                        on-tag-added=\"d.onTagAdded()\"\n" +
-        "                        on-tag-removed=\"d.onTagRemoved()\"\n" +
-        "                        max-tags=\"3\"\n" +
-        "                        template=\"tag-input-template\">\n" +
-        "                <auto-complete source=\"d.querySchools($query)\"\n" +
-        "                               debounce-delay=\"100\"\n" +
-        "                               display-property=\"text\"\n" +
-        "                               max-results-to-show=\"9999\"\n" +
-        "                               highlight-matched-text=\"true\"\n" +
-        "                               min-length=\"{{d.minLengthAutoComplete}}\"\n" +
-        "                               load-on-focus=\"true\"\n" +
-        "                               template=\"auto-complete-template\">\n" +
-        "                </auto-complete>\n" +
-        "            </tags-input>\n" +
-        "            <button class=\"select-btn go-btn\"\n" +
-        "                    ng-click=\"d.save()\"\n" +
-        "                    title=\"{{::'SCHOOL_SELECT.SELECT_TO_CONTINUE' | translate}}\"\n" +
-        "                    ng-disabled=\"d.tagsInputNgModelCtrl.$pristine\">\n" +
-        "                <svg-icon name=\"user-goals-arrow-icon\"\n" +
-        "                          class=\"arrow-icon\">\n" +
-        "                </svg-icon>\n" +
-        "            </button>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "<script type=\"text/ng-template\" id=\"auto-complete-template\">\n" +
-        "    <div ng-show=\"$index==0\" class=\"list-title\">\n" +
-        "        <div class=\"list-left-panel\" translate=\".SCHOOLS\"></div>\n" +
-        "        <div class=\"list-right-panel\" translate=\".REQUIRED_SCORE\"></div>\n" +
-        "    </div>\n" +
-        "    <div class=\"left-panel\">\n" +
-        "        {{::data.text}}\n" +
-        "        <span class=\"location\">{{::data.city}}, {{::data.state}}</span>\n" +
-        "    </div>\n" +
-        "    <div class=\"right-panel\">\n" +
-        "        {{::data.total25th}}{{data.total75th == 'N/A' ? '' : '-' + data.total75th}}\n" +
-        "    </div>\n" +
-        "</script>\n" +
-        "<script type=\"text/ng-template\" id=\"tag-input-template\">\n" +
-        "    <div class=\"tag-wrap\">\n" +
-        "        <span title=\"{{data.text}}\">{{data.text | cutString: 15}}</span>\n" +
-        "        <a class=\"remove-button\" ng-click=\"$removeTag()\">&#10006;</a>\n" +
-        "    </div>\n" +
-        "</script>\n" +
-        "");
-    $templateCache.put("components/userGoalsSelection/templates/userGoals.template.html",
-        "<section translate-namespace=\"USER_GOALS\">\n" +
-        "    <div class=\"goals-schools-wrapper\" ng-if=\"setting.showSchools || goalsSettings.showSchools\">\n" +
-        "        <div class=\"title-wrap\">\n" +
-        "            <div class=\"edit-title\" translate=\".DREAM_SCHOOLS\"></div>\n" +
-        "            <div class=\"edit-link\" ng-click=\"showSchools()\" ng-class=\"{'active' : showSchoolEdit}\">\n" +
-        "                <span translate=\".EDIT\" class=\"edit\"></span>\n" +
-        "                <span translate=\".CANCEL\" class=\"cancel\"></span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"selected-schools-container\" ng-switch=\"userSchools.length\">\n" +
-        "            <div ng-switch-when=\"0\"\n" +
-        "                 class=\"no-school-selected\"\n" +
-        "                 translate=\".I_DONT_KNOW\"></div>\n" +
-        "            <div ng-switch-default class=\"selected-schools\">\n" +
-        "                <div ng-repeat=\"school in userSchools\" class=\"school\">{{school.text}}</div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"subject-wrap\">\n" +
-        "        <div class=\"blur-wrap\"></div>\n" +
-        "        <div class=\"goals-title\" ng-show=\"setting.recommendedGoalsTitle\">\n" +
-        "            <div class=\"recommended-title\" translate=\".RECOMMENDED_GOALS\"></div>\n" +
-        "            <div class=\"info-wrap\">\n" +
-        "                <md-tooltip md-visible=\"vm.showTooltip\" md-direction=\"top\" class=\"goals-info md-whiteframe-2dp\">\n" +
-        "                    <div translate=\".GOALS_INFO\" class=\"top-text\"></div>\n" +
-        "                </md-tooltip>\n" +
-        "                <svg-icon class=\"info-icon\" name=\"user-goals-info-icon\" ng-mouseover=\"vm.showTooltip=true\"\n" +
-        "                          ng-mouseleave=\"vm.showTooltip=false\"></svg-icon>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"subject-goal-wrap\">\n" +
-        "            <div class=\"subjects-goal noselect\">\n" +
-        "                <div class=\"subject\" ng-repeat=\"subject in goalsSettings.subjects\">\n" +
-        "                    <div class=\"icon-wrapper svg-wrapper\" ng-class=\"subject.name+'-bg'\">\n" +
-        "                        <svg-icon name=\"{{subject.svgIcon}}\"></svg-icon>\n" +
-        "                    </div>\n" +
-        "                    <span class=\"subject-title\" translate=\".{{subject.name | uppercase}}\"></span>\n" +
-        "                    <goal-select\n" +
-        "                        min-score=\"scoringLimits.subjects.min || scoringLimits.subjects[subject.id].min\"\n" +
-        "                        max-score=\"scoringLimits.subjects.max || scoringLimits.subjects[subject.id].max\"\n" +
-        "                        update-goal-num=\"goalsSettings.updateGoalNum\"\n" +
-        "                        ng-model=\"userGoals[subject.name]\"\n" +
-        "                        ng-change=\"calcTotal()\">\n" +
-        "                    </goal-select>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"composite-wrap\" ng-if=\"!(setting.hideTotalScore || goalsSettings.hideTotalScore)\">\n" +
-        "            <div class=\"composite-score\">\n" +
-        "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
-        "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <div class=\"save-btn-wrap\">\n" +
-        "        <md-button aria-label=\"{{'USER_GOALS.SAVE' | translate}}\"\n" +
-        "                   autofocus tabindex=\"1\"\n" +
-        "                   class=\"md-primary znk inline-block\"\n" +
-        "                   ng-click=\"saveChanges()\"\n" +
-        "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
-        "            <svg-icon name=\"user-goals-v-icon\" class=\"v-icon\" ng-show=\"showVIcon\"></svg-icon>\n" +
-        "            <span translate=\"{{saveTitle}}\"></span>\n" +
-        "            <svg-icon name=\"user-goals-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\"\n" +
-        "                      ng-show=\"setting.saveBtn.showSaveIcon\"></svg-icon>\n" +
-        "        </md-button>\n" +
-        "    </div>\n" +
-        "    <div class=\"school-selector-wrap animate-if\"\n" +
-        "         ng-if=\"showSchoolEdit\">\n" +
-        "        <school-select events=\"schoolSelectEvents\"\n" +
-        "                       get-selected-schools=\"getSelectedSchools()\">\n" +
-        "        </school-select>\n" +
-        "    </div>\n" +
-        "</section>\n" +
-        "\n" +
-        "\n" +
-        "");
+  $templateCache.put("components/userGoalsSelection/svg/arrow-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-468.2 482.4 96 89.8\" class=\"arrow-icon-wrapper\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .arrow-icon-wrapper .st0{fill:#109BAC;}\n" +
+    "        .arrow-icon-wrapper .st1{fill:none;stroke:#fff;stroke-width:5.1237;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}\n" +
+    "    </style>\n" +
+    "    <path class=\"st0\" d=\"M-417.2,572.2h-6.2c-24.7,0-44.9-20.2-44.9-44.9v0c0-24.7,20.2-44.9,44.9-44.9h6.2c24.7,0,44.9,20.2,44.9,44.9\n" +
+    "    v0C-372.2,552-392.5,572.2-417.2,572.2z\"/>\n" +
+    "    <g>\n" +
+    "        <line class=\"st1\" x1=\"-442.8\" y1=\"527.3\" x2=\"-401.4\" y2=\"527.3\"/>\n" +
+    "        <line class=\"st1\" x1=\"-401.4\" y1=\"527.3\" x2=\"-414.3\" y2=\"514.4\"/>\n" +
+    "        <line class=\"st1\" x1=\"-401.4\" y1=\"527.3\" x2=\"-414.3\" y2=\"540.2\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/svg/dropdown-arrow.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .dropdown-arrow-icon-svg .st0{fill:none;stroke:#000000;stroke-width:18;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10; width:25px;}\n" +
+    "    </style>\n" +
+    "    <polyline class=\"st0\" points=\"9,9 122.4,108.4 233.8,11 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/svg/info-icon.svg",
+    "<svg\n" +
+    "    version=\"1.1\"\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-497 499 28 28\"\n" +
+    "    class=\"info-icon\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.info-icon .st0{fill:none;stroke:#0A9BAD; stroke-width:2;}\n" +
+    "	.info-icon .st2{fill:#0A9BAD;}\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<circle class=\"st0\" cx=\"-483\" cy=\"513\" r=\"13.5\"/>\n" +
+    "	<g>\n" +
+    "		<path class=\"st2\" d=\"M-485.9,509.2h3.9v8.1h3v1.2h-7.6v-1.2h3v-6.9h-2.4V509.2z M-483.5,505.6h1.5v1.9h-1.5V505.6z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/svg/plus-icon.svg",
+    "<svg class=\"plus-svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 16 16\"\n" +
+    "    style=\"enable-background:new 0 0 16 16;\"\n" +
+    "    xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.plus-svg .st0, .plus-svg .st1 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #0a9bad;\n" +
+    "        stroke-width: 2;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<line class=\"st0\" x1=\"8\" y1=\"1\" x2=\"8\" y2=\"15\"/>\n" +
+    "<line class=\"st1\" x1=\"1\" y1=\"8\" x2=\"15\" y2=\"8\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/svg/search-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-314.8 416.5 97.5 99.1\" class=\"search-icon-wrapper\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.search-icon-wrapper .st0{fill:none;stroke:#231F20;stroke-width:5;stroke-miterlimit:10;}\n" +
+    "	.search-icon-wrapper .st1{fill:none;stroke:#231F20;stroke-width:5;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<circle class=\"st0\" cx=\"-279.1\" cy=\"452.3\" r=\"33.2\"/>\n" +
+    "<line class=\"st1\" x1=\"-255.3\" y1=\"477.6\" x2=\"-219.8\" y2=\"513.1\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/svg/v-icon.svg",
+    "<svg class=\"v-icon-wrapper\" x=\"0px\" y=\"0px\" viewBox=\"0 0 334.5 228.7\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .v-icon-wrapper .st0{\n" +
+    "            fill:#ffffff;\n" +
+    "            stroke:#ffffff;\n" +
+    "            stroke-width:26;\n" +
+    "            stroke-linecap:round;\n" +
+    "            stroke-linejoin:round;\n" +
+    "            stroke-miterlimit:10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g>\n" +
+    "	<line class=\"st0\" x1=\"13\" y1=\"109.9\" x2=\"118.8\" y2=\"215.7\"/>\n" +
+    "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/templates/editGoals.template.html",
+    "<md-dialog class=\"setting-edit-goals base-border-radius\" translate-namespace=\"SETTING.EDIT_GOALS\">\n" +
+    "    <md-toolbar>\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"cancel()\">\n" +
+    "            <svg-icon name=\"estimated-score-widget-close-popup\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </md-toolbar>\n" +
+    "    <md-dialog-content>\n" +
+    "        <div class=\"main-title md-subheader\" translate=\".MY_GOALS\"></div>\n" +
+    "        <user-goals setting=\"userGoalsSetting\"></user-goals>\n" +
+    "    </md-dialog-content>\n" +
+    "    <div class=\"top-icon-wrap\">\n" +
+    "        <div class=\"top-icon\">\n" +
+    "            <div class=\"round-icon-wrap\">\n" +
+    "                <svg-icon name=\"estimated-score-widget-goals\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
+    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-class=\"{'hide-sign':target < minScore}\">\n" +
+    "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
+    "</div>\n" +
+    "<div class=\"goal\">{{target}}</div>\n" +
+    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-class=\"{'hide-sign':target > maxScore}\">\n" +
+    "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/templates/schoolSelect.template.html",
+    "<div class=\"school-selector\" translate-namespace=\"SCHOOL_SELECT\">\n" +
+    "    <div class=\"selector\">\n" +
+    "        <div class=\"tag-input-wrap\">\n" +
+    "            <div class=\"search-icon-container\">\n" +
+    "                <svg-icon name=\"user-goals-search-icon\"></svg-icon>\n" +
+    "            </div>\n" +
+    "            <tags-input ng-model=\"d.userSchools\"\n" +
+    "                        text=\"d.text\"\n" +
+    "                        key-property=\"id\"\n" +
+    "                        placeholder=\"{{d.placeholder}}\"\n" +
+    "                        allow-leftover-text=\"true\"\n" +
+    "                        add-from-autocomplete-only=\"true\"\n" +
+    "                        on-tag-adding=\"d.onTagAdding($tag)\"\n" +
+    "                        on-tag-added=\"d.onTagAdded()\"\n" +
+    "                        on-tag-removed=\"d.onTagRemoved()\"\n" +
+    "                        max-tags=\"3\"\n" +
+    "                        template=\"tag-input-template\">\n" +
+    "                <auto-complete source=\"d.querySchools($query)\"\n" +
+    "                               debounce-delay=\"100\"\n" +
+    "                               display-property=\"text\"\n" +
+    "                               max-results-to-show=\"9999\"\n" +
+    "                               highlight-matched-text=\"true\"\n" +
+    "                               min-length=\"{{d.minLengthAutoComplete}}\"\n" +
+    "                               load-on-focus=\"true\"\n" +
+    "                               template=\"auto-complete-template\">\n" +
+    "                </auto-complete>\n" +
+    "            </tags-input>\n" +
+    "            <button class=\"select-btn go-btn\"\n" +
+    "                    ng-click=\"d.save()\"\n" +
+    "                    title=\"{{::'SCHOOL_SELECT.SELECT_TO_CONTINUE' | translate}}\"\n" +
+    "                    ng-disabled=\"d.tagsInputNgModelCtrl.$pristine\">\n" +
+    "                <svg-icon name=\"user-goals-arrow-icon\"\n" +
+    "                          class=\"arrow-icon\">\n" +
+    "                </svg-icon>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "<script type=\"text/ng-template\" id=\"auto-complete-template\">\n" +
+    "    <div ng-show=\"$index==0\" class=\"list-title\">\n" +
+    "        <div class=\"list-left-panel\" translate=\".SCHOOLS\"></div>\n" +
+    "        <div class=\"list-right-panel\" translate=\".REQUIRED_SCORE\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"left-panel\">\n" +
+    "        {{::data.text}}\n" +
+    "        <span class=\"location\">{{::data.city}}, {{::data.state}}</span>\n" +
+    "    </div>\n" +
+    "    <div class=\"right-panel\">\n" +
+    "        {{::data.total25th}}{{data.total75th == 'N/A' ? '' : '-' + data.total75th}}\n" +
+    "    </div>\n" +
+    "</script>\n" +
+    "<script type=\"text/ng-template\" id=\"tag-input-template\">\n" +
+    "    <div class=\"tag-wrap\">\n" +
+    "        <span title=\"{{data.text}}\">{{data.text | cutString: 15}}</span>\n" +
+    "        <a class=\"remove-button\" ng-click=\"$removeTag()\">&#10006;</a>\n" +
+    "    </div>\n" +
+    "</script>\n" +
+    "");
+  $templateCache.put("components/userGoalsSelection/templates/userGoals.template.html",
+    "<section translate-namespace=\"USER_GOALS\">\n" +
+    "    <div class=\"goals-schools-wrapper\" ng-if=\"setting.showSchools || goalsSettings.showSchools\">\n" +
+    "        <div class=\"title-wrap\">\n" +
+    "            <div class=\"edit-title\" translate=\".DREAM_SCHOOLS\"></div>\n" +
+    "            <div class=\"edit-link\" ng-click=\"showSchools()\" ng-class=\"{'active' : showSchoolEdit}\">\n" +
+    "                <span translate=\".EDIT\" class=\"edit\"></span>\n" +
+    "                <span translate=\".CANCEL\" class=\"cancel\"></span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"selected-schools-container\" ng-switch=\"userSchools.length\">\n" +
+    "            <div ng-switch-when=\"0\"\n" +
+    "                 class=\"no-school-selected\"\n" +
+    "                 translate=\".I_DONT_KNOW\"></div>\n" +
+    "            <div ng-switch-default class=\"selected-schools\">\n" +
+    "                <div ng-repeat=\"school in userSchools\" class=\"school\">{{school.text}}</div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"subject-wrap\">\n" +
+    "        <div class=\"blur-wrap\"></div>\n" +
+    "        <div class=\"goals-title\" ng-show=\"setting.recommendedGoalsTitle\">\n" +
+    "            <div class=\"recommended-title\" translate=\".RECOMMENDED_GOALS\"></div>\n" +
+    "            <div class=\"info-wrap\">\n" +
+    "                <md-tooltip md-visible=\"vm.showTooltip\" md-direction=\"top\" class=\"goals-info md-whiteframe-2dp\">\n" +
+    "                    <div translate=\".GOALS_INFO\" class=\"top-text\"></div>\n" +
+    "                </md-tooltip>\n" +
+    "                <svg-icon class=\"info-icon\" name=\"user-goals-info-icon\" ng-mouseover=\"vm.showTooltip=true\"\n" +
+    "                          ng-mouseleave=\"vm.showTooltip=false\"></svg-icon>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"subject-goal-wrap\">\n" +
+    "            <div class=\"subjects-goal noselect\">\n" +
+    "                <div class=\"subject\" ng-repeat=\"subject in goalsSettings.subjects\">\n" +
+    "                    <div class=\"icon-wrapper svg-wrapper\" ng-class=\"subject.name+'-bg'\">\n" +
+    "                        <svg-icon name=\"{{subject.svgIcon}}\"></svg-icon>\n" +
+    "                    </div>\n" +
+    "                    <span class=\"subject-title\" translate=\".{{subject.name | uppercase}}\"></span>\n" +
+    "                    <goal-select\n" +
+    "                        min-score=\"scoringLimits.subjects.min || scoringLimits.subjects[subject.id].min\"\n" +
+    "                        max-score=\"scoringLimits.subjects.max || scoringLimits.subjects[subject.id].max\"\n" +
+    "                        update-goal-num=\"goalsSettings.updateGoalNum\"\n" +
+    "                        ng-model=\"userGoals[subject.name]\"\n" +
+    "                        ng-change=\"calcTotal()\">\n" +
+    "                    </goal-select>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"composite-wrap\" ng-if=\"!(setting.hideTotalScore || goalsSettings.hideTotalScore)\">\n" +
+    "            <div class=\"composite-score\">\n" +
+    "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
+    "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"save-btn-wrap\">\n" +
+    "        <md-button aria-label=\"{{'USER_GOALS.SAVE' | translate}}\"\n" +
+    "                   autofocus tabindex=\"1\"\n" +
+    "                   class=\"md-primary znk inline-block\"\n" +
+    "                   ng-click=\"saveChanges()\"\n" +
+    "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
+    "            <svg-icon name=\"user-goals-v-icon\" class=\"v-icon\" ng-show=\"showVIcon\"></svg-icon>\n" +
+    "            <span translate=\"{{saveTitle}}\"></span>\n" +
+    "            <svg-icon name=\"user-goals-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\"\n" +
+    "                      ng-show=\"setting.saveBtn.showSaveIcon\"></svg-icon>\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "    <div class=\"school-selector-wrap animate-if\"\n" +
+    "         ng-if=\"showSchoolEdit\">\n" +
+    "        <school-select events=\"schoolSelectEvents\"\n" +
+    "                       get-selected-schools=\"getSelectedSchools()\">\n" +
+    "        </school-select>\n" +
+    "    </div>\n" +
+    "</section>\n" +
+    "\n" +
+    "\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -15789,35 +15788,35 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 
 
 angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html",
-        "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
-        "    <div class=\"header\">\n" +
-        "            <span class=\"you-are-viewing-text\"\n" +
-        "                  translate=\".YOU_ARE_VIEWING\">\n" +
-        "            </span>\n" +
-        "    </div>\n" +
-        "    <ng-switch on=\"!!$ctrl.activeScreen\" class=\"sh-viewer-main-container\">\n" +
-        "        <div ng-switch-when=\"false\" class=\"none\">\n" +
-        "            <div class=\"exit-btn\"\n" +
-        "                 ng-click=\"$ctrl.ceSettings.exitAction()\"\n" +
-        "                 translate=\".EXIT\">\n" +
-        "            </div>\n" +
-        "            <div class=\"texts-container\">\n" +
-        "                <div class=\"text1\"\n" +
-        "                     translate=\".NO_OPENED_EXERCISES\">\n" +
-        "                </div>\n" +
-        "                <div class=\"text2\"\n" +
-        "                     translate=\".ONCE_OPEN\">\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div ng-switch-default>\n" +
-        "            <complete-exercise settings=\"$ctrl.ceSettings\">\n" +
-        "            </complete-exercise>\n" +
-        "        </div>\n" +
-        "    </ng-switch>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html",
+    "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
+    "    <div class=\"header\">\n" +
+    "            <span class=\"you-are-viewing-text\"\n" +
+    "                  translate=\".YOU_ARE_VIEWING\">\n" +
+    "            </span>\n" +
+    "    </div>\n" +
+    "    <ng-switch on=\"!!$ctrl.activeScreen\" class=\"sh-viewer-main-container\">\n" +
+    "        <div ng-switch-when=\"false\" class=\"none\">\n" +
+    "            <div class=\"exit-btn\"\n" +
+    "                 ng-click=\"$ctrl.ceSettings.exitAction()\"\n" +
+    "                 translate=\".EXIT\">\n" +
+    "            </div>\n" +
+    "            <div class=\"texts-container\">\n" +
+    "                <div class=\"text1\"\n" +
+    "                     translate=\".NO_OPENED_EXERCISES\">\n" +
+    "                </div>\n" +
+    "                <div class=\"text2\"\n" +
+    "                     translate=\".ONCE_OPEN\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div ng-switch-default>\n" +
+    "            <complete-exercise settings=\"$ctrl.ceSettings\">\n" +
+    "            </complete-exercise>\n" +
+    "        </div>\n" +
+    "    </ng-switch>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 /**
@@ -15998,10 +15997,10 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                     resolve: {
                         diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", function (DiagnosticSrv, DiagnosticIntroSrv) {
                             'ngInject';
-                            return {
-                                diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
-                                diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
-                            };
+                                return {
+                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                                };
                         }]
                     },
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
@@ -16017,7 +16016,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
-
+            
             var svgMap = {
                 'workouts-roadmap-checkmark': 'components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg',
                 'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
@@ -16141,7 +16140,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapBasePreSummaryController',
         ["$timeout", "WorkoutsSrv", "SubjectEnum", "data", "ExerciseStatusEnum", "$filter", "WorkoutsRoadmapSrv", "purchaseService", function ($timeout, WorkoutsSrv, SubjectEnum, data, ExerciseStatusEnum, $filter,
-                                                                                                                                               WorkoutsRoadmapSrv, purchaseService) {
+                  WorkoutsRoadmapSrv, purchaseService) {
             'ngInject';
 
             var DIAGNOSTIC_ORDER = 0;
@@ -16321,7 +16320,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
@@ -16803,807 +16802,807 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 })(angular);
 
 angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html",
-        "<div ng-transclude class=\"main-container\"></div>\n" +
-        "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +
-        "    class=\"lock-overlay-container\">\n" +
-        "    <ng-switch on=\"vm.lockState\">\n" +
-        "        <div class=\"diagnostic-not-completed\"\n" +
-        "             ng-switch-when=\"1\">\n" +
-        "            <div class=\"description\"\n" +
-        "                 translate=\".DIAGNOSTIC_NOT_COMPLETED\">\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div ng-switch-when=\"2\" class=\"prev-not-completed\">\n" +
-        "            <svg-icon name=\"workouts-intro-lock-dotted-arrow\"></svg-icon>\n" +
-        "            <div class=\"description\"\n" +
-        "                 translate=\".PREV_NOT_COMPLETED\">\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div ng-switch-when=\"3\" class=\"no-pro-social-sharing\">\n" +
-        "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
-        "            <div class=\"text1\"\n" +
-        "                 translate=\".MORE_WORKOUTS\">\n" +
-        "            </div>\n" +
-        "            <div class=\"text2\"\n" +
-        "                 translate=\".TELL_FRIENDS\">\n" +
-        "            </div>\n" +
-        "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"\n" +
-        "                       class=\"share-btn md-primary znk\"\n" +
-        "                       md-no-ink>\n" +
-        "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
-        "                <span translate=\".SHARE\"></span>\n" +
-        "            </md-button>\n" +
-        "            <!--<div class=\"text3 get-zinkerz-pro-text\"\n" +
-        "                 translate=\".GET_ZINKERZ_PRO\">\n" +
-        "            </div>\n" +
-        "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
-        "                <span translate=\".UPGRADE\"></span>\n" +
-        "            </md-button>-->\n" +
-        "        </div>\n" +
-        "        <div ng-switch-when=\"4\" class=\"no-pro\">\n" +
-        "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
-        "            <div class=\"description\" translate=\".MORE_PRACTICE\"></div>\n" +
-        "            <div class=\"get-zinkerz-pro-text\" translate=\".GET_ZINKERZ_PRO\"></div>\n" +
-        "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.UPGRADE' | translate}}\"\n" +
-        "                       class=\"upgrade-btn znk md-primary\"\n" +
-        "                       ng-click=\"vm.openPurchaseModal()\">\n" +
-        "                <span translate=\".UPGRADE\"></span>\n" +
-        "            </md-button>\n" +
-        "        </div>\n" +
-        "    </ng-switch>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/directives/workoutsProgress/workoutsProgressDirective.template.html",
-        "<znk-scroll actions=\"vm.scrollActions\" scroll-on-mouse-wheel=\"true\">\n" +
-        "    <div class=\"items-container\">\n" +
-        "        <div class=\"dotted-lines-container\">\n" +
-        "            <div class=\"dotted-line progress\"></div>\n" +
-        "            <div class=\"dotted-line future\"></div>\n" +
-        "        </div>\n" +
-        "        <div class=\"item-container diagnostic\">\n" +
-        "            <div class=\"item\"\n" +
-        "                 ng-class=\"{\n" +
-        "                    selected: vm.selectedWorkout === vm.diagnostic.workoutOrder\n" +
-        "                 }\"\n" +
-        "                 ng-click=\"vm.workoutClick(vm.diagnostic.workoutOrder)\">\n" +
-        "                <ng-switch on=\"vm.diagnostic.status\">\n" +
-        "                    <svg-icon class=\"check-mark-icon\"\n" +
-        "                              name=\"workouts-progress-check-mark-icon\"\n" +
-        "                              ng-switch-when=\"2\">\n" +
-        "                    </svg-icon>\n" +
-        "                    <svg-icon class=\"flag-icon\"\n" +
-        "                              name=\"workouts-progress-flag\"\n" +
-        "                              ng-switch-default>\n" +
-        "                    </svg-icon>\n" +
-        "                </ng-switch>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"item-container\"\n" +
-        "             ng-repeat=\"workout in vm.workouts\">\n" +
-        "            <div class=\"item\"\n" +
-        "                 subject-id-to-attr-drv=\"workout.subjectId\"\n" +
-        "                 suffix=\"bg\"\n" +
-        "                 ng-class=\"{\n" +
-        "                    selected: vm.selectedWorkout === workout.workoutOrder,\n" +
-        "                    pristine: workout.subjectId === undefined\n" +
-        "                 }\"\n" +
-        "                 ng-click=\"vm.workoutClick(workout.workoutOrder)\">\n" +
-        "                <ng-switch on=\"workout.status\">\n" +
-        "                    <svg-icon class=\"check-mark-icon\" name=\"workouts-progress-check-mark-icon\" ng-switch-when=\"2\"></svg-icon>\n" +
-        "                    <span ng-switch-default>\n" +
-        "                        {{::workout.workoutOrder}}\n" +
-        "                    </span>\n" +
-        "                </ng-switch>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"future-item\"></div>\n" +
-        "        <div class=\"future-item\"></div>\n" +
-        "        <div class=\"future-item\"></div>\n" +
-        "        <div class=\"future-item\"></div>\n" +
-        "        <div class=\"future-item\"></div>\n" +
-        "        <div class=\"future-item\"></div>\n" +
-        "    </div>\n" +
-        "</znk-scroll>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/change-subject-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"0 0 86.4 71.6\"\n" +
-        "     class=\"workouts-roadmap-change-subject-svg\">\n" +
-        "\n" +
-        "<style type=\"text/css\">\n" +
-        "    .workouts-roadmap-change-subject-svg{\n" +
-        "        width: 10px;\n" +
-        "    }\n" +
-        "\n" +
-        "    .workouts-roadmap-change-subject-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #231F20;\n" +
-        "            stroke-width: 1.6864;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "</style>\n" +
-        "\n" +
-        "<g>\n" +
-        "	<path id=\"XMLID_70_\" class=\"st0\" d=\"M8.5,29.4C11.7,13.1,26,0.8,43.2,0.8c17.5,0,32,12.7,34.8,29.5\"/>\n" +
-        "	<polyline id=\"XMLID_69_\" class=\"st0\" points=\"65.7,24 78.3,30.3 85.7,18.7 	\"/>\n" +
-        "</g>\n" +
-        "<g>\n" +
-        "	<path id=\"XMLID_68_\" class=\"st0\" d=\"M77.9,42.2c-3.2,16.3-17.5,28.6-34.7,28.6c-17.5,0-32-12.7-34.8-29.5\"/>\n" +
-        "	<polyline id=\"XMLID_67_\" class=\"st0\" points=\"20.7,47.6 8.1,41.3 0.7,52.9 	\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg",
-        "<svg\n" +
-        "	class=\"complete-v-icon-svg\"\n" +
-        "	xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "	xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "    x=\"0px\"\n" +
-        "	y=\"0px\"\n" +
-        "	viewBox=\"-1040 834.9 220.4 220.4\"\n" +
-        "	style=\"enable-background:new -1040 834.9 220.4 220.4;\"\n" +
-        "    xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "    .complete-v-icon-svg{\n" +
-        "        width: 110px;\n" +
-        "    }\n" +
-        "\n" +
-        "	.complete-v-icon-svg .st0 {\n" +
-        "        fill: none;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st1 {\n" +
-        "        fill: #CACBCC;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st2 {\n" +
-        "        display: none;\n" +
-        "        fill: none;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st3 {\n" +
-        "        fill: #D1D2D2;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st4 {\n" +
-        "        fill: none;\n" +
-        "        stroke: #FFFFFF;\n" +
-        "        stroke-width: 11.9321;\n" +
-        "        stroke-linecap: round;\n" +
-        "        stroke-linejoin: round;\n" +
-        "        stroke-miterlimit: 10;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
-        "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
-        "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
-        "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/dotted-arrow.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     class=\"workouts-intro-lock-dotted-arrow-svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"-406.9 425.5 190.9 175.7\">\n" +
-        "    <style>\n" +
-        "        .workouts-intro-lock-dotted-arrow-svg{\n" +
-        "            width: 53px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-intro-lock-dotted-arrow-svg circle{\n" +
-        "            stroke: #161616;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <circle cx=\"-402.8\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-386.1\" cy=\"513\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-386.1\" cy=\"496.1\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-386.1\" cy=\"529.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"479.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-369.6\" cy=\"529.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"479.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"462.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"529.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"563.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-352.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"463.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"446.3\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"479.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"496.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"547\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"530.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-336.1\" cy=\"563.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"446.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"429.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"463.1\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"496.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"479.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"530.3\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"563.5\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"546.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"597.1\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-319.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-303\" cy=\"496.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-303\" cy=\"530.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-303\" cy=\"513.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-286\" cy=\"496.1\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-286\" cy=\"529.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-286\" cy=\"512.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-269.5\" cy=\"496.6\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-269.5\" cy=\"530.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-269.5\" cy=\"513.3\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-252.7\" cy=\"496.7\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-252.7\" cy=\"530.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-252.7\" cy=\"513.4\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-236.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-236.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-236.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-220.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-220.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
-        "    <circle cx=\"-220.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/drill-icon.svg",
-        "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"0 0 199 87\"\n" +
-        "     class=\"workouts-progress-drill-svg\">\n" +
-        "    <style>\n" +
-        "        .workouts-progress-drill-svg {\n" +
-        "            width: 20px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-progress-drill-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-width: 8;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-progress-drill-svg  .st1 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-width: 16;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-progress-drill-svg  .st2 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-width: 10;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-progress-drill-svg  .st3 {\n" +
-        "            clip-path: url(#SVGID_2_);\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-width: 11;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-progress-drill-svg  .st4 {\n" +
-        "            clip-path: url(#SVGID_4_);\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-width: 11;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <line class=\"st0\" x1=\"64\" y1=\"45\" x2=\"138\" y2=\"45\"/>\n" +
-        "        <g>\n" +
-        "            <line class=\"st1\" x1=\"47\" y1=\"8\" x2=\"47\" y2=\"79\"/>\n" +
-        "            <line class=\"st2\" x1=\"29\" y1=\"22\" x2=\"29\" y2=\"65\"/>\n" +
-        "            <g>\n" +
-        "                <defs>\n" +
-        "                    <rect id=\"SVGID_1_\" y=\"38\" width=\"17\" height=\"17\"/>\n" +
-        "                </defs>\n" +
-        "                <clipPath id=\"SVGID_2_\">\n" +
-        "                    <use xlink:href=\"#SVGID_1_\" style=\"overflow:visible;\"/>\n" +
-        "                </clipPath>\n" +
-        "                <line class=\"st3\" x1=\"18\" y1=\"45.5\" x2=\"24\" y2=\"45.5\"/>\n" +
-        "            </g>\n" +
-        "        </g>\n" +
-        "        <g>\n" +
-        "            <line class=\"st1\" x1=\"154\" y1=\"8\" x2=\"154\" y2=\"79\"/>\n" +
-        "            <line class=\"st2\" x1=\"172\" y1=\"22\" x2=\"172\" y2=\"65\"/>\n" +
-        "            <g>\n" +
-        "                <defs>\n" +
-        "                    <rect id=\"SVGID_3_\" x=\"182\" y=\"38\" width=\"17\" height=\"17\"/>\n" +
-        "                </defs>\n" +
-        "                <clipPath id=\"SVGID_4_\">\n" +
-        "                    <use xlink:href=\"#SVGID_3_\" style=\"overflow:visible;\"/>\n" +
-        "                </clipPath>\n" +
-        "                <line class=\"st4\" x1=\"183\" y1=\"45.5\" x2=\"177\" y2=\"45.5\"/>\n" +
-        "            </g>\n" +
-        "        </g>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/flag-icon.svg",
-        "<svg x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"-145 277 60 60\"\n" +
-        "	 class=\"flag-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .flag-svg{\n" +
-        "            width: 23px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .flag-svg .st0 {\n" +
-        "            fill: #ffffff;\n" +
-        "            stroke-width: 5;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "<g id=\"kUxrE9.tif\">\n" +
-        "	<g>\n" +
-        "		<path class=\"st0\" id=\"XMLID_93_\" d=\"M-140.1,287c0.6-1.1,1.7-1.7,2.9-1.4c1.3,0.3,2,1.1,2.3,2.3c1.1,4,2.1,8,3.2,12c2.4,9.3,4.9,18.5,7.3,27.8\n" +
-        "			c0.1,0.3,0.2,0.6,0.2,0.9c0.3,1.7-0.6,3-2.1,3.3c-1.4,0.3-2.8-0.5-3.3-2.1c-1-3.6-2-7.3-2.9-10.9c-2.5-9.5-5-19-7.6-28.6\n" +
-        "			C-140.1,290-140.8,288.3-140.1,287z\"/>\n" +
-        "		<path class=\"st0\" id=\"XMLID_92_\" d=\"M-89.6,289.1c-1,6.8-2.9,13-10,16c-3.2,1.4-6.5,1.6-9.9,0.9c-2-0.4-4-0.7-6-0.6c-4.2,0.3-7.1,2.7-9,6.4\n" +
-        "			c-0.3,0.5-0.5,1.1-0.9,2c-0.3-1-0.5-1.7-0.8-2.5c-2-7-3.9-14.1-5.9-21.2c-0.3-1-0.1-1.7,0.5-2.4c4.5-6,11-7.4,17.5-3.6\n" +
-        "			c3.4,2,6.7,4.2,10.2,6.1c1.9,1,3.9,1.9,5.9,2.4c3.2,0.9,5.9,0,7.9-2.6C-90,289.7-89.8,289.4-89.6,289.1z\"/>\n" +
-        "	</g>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/game-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"0 0 127 147.8\"\n" +
-        "     class=\"workouts-progress-game-svg\">\n" +
-        "    <style>\n" +
-        "        .workouts-progress-game-svg {\n" +
-        "            width: 15px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-progress-game-svg .st0 {\n" +
-        "            fill-rule: evenodd;\n" +
-        "            clip-rule: evenodd;\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-width: 6;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-progress-game-svg .st1 {\n" +
-        "            fill-rule: evenodd;\n" +
-        "            clip-rule: evenodd;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "            fill: #acacac;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workouts-progress-game-svg .st2 {\n" +
-        "            fill-rule: evenodd;\n" +
-        "            clip-rule: evenodd;\n" +
-        "            fill: #acacac;\n" +
-        "            stroke: #acacac;\n" +
-        "        }\n" +
-        "\n" +
-        "\n" +
-        "        /*.workouts-progress-game-svg circle {*/\n" +
-        "            /*stroke: #acacac;*/\n" +
-        "            /*fill: none;*/\n" +
-        "        /*}*/\n" +
-        "\n" +
-        "        /*.workouts-progress-game-svg circle.st1 {*/\n" +
-        "            /*fill: #acacac;*/\n" +
-        "        /*}*/\n" +
-        "\n" +
-        "        /*.workouts-progress-game-svg path {*/\n" +
-        "            /*fill: #acacac;*/\n" +
-        "        /*}*/\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <circle class=\"st0\" cx=\"63.5\" cy=\"84.2\" r=\"60.5\"/>\n" +
-        "        <circle class=\"st1\" cx=\"63.7\" cy=\"84.2\" r=\"6.2\"/>\n" +
-        "        <path class=\"st1\" d=\"M65.2,73.8h-2.5c-0.7,0-1.2-0.3-1.2-0.7V41.5c0-0.4,0.5-0.7,1.2-0.7h2.5c0.7,0,1.2,0.3,1.2,0.7V73\n" +
-        "		C66.4,73.4,65.9,73.8,65.2,73.8z\"/>\n" +
-        "        <path class=\"st2\" d=\"M73.7,80.9l-1.6-2.7c-0.3-0.6-0.3-1.2,0.1-1.4l11.6-6.9c0.4-0.2,1,0,1.3,0.6l1.6,2.7c0.3,0.6,0.3,1.2-0.1,1.4\n" +
-        "		L75,81.5C74.6,81.7,74,81.5,73.7,80.9z\"/>\n" +
-        "        <path class=\"st1\" d=\"M58,9.5v4.6c0,2.9,2.4,5.3,5.3,5.3c2.9,0,5.3-2.4,5.3-5.3V9.5H58z\"/>\n" +
-        "        <path class=\"st1\" d=\"M79.2,3.1c0,1.7-1.4,3.1-3.1,3.1H51.6c-1.7,0-3.1-1.4-3.1-3.1l0,0c0-1.7,1.4-3.1,3.1-3.1h24.5\n" +
-        "		C77.8,0,79.2,1.4,79.2,3.1L79.2,3.1z\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/lock-icon.svg",
-        "<svg class=\"workouts-intro-lock-lock-svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"0 0 106 165.2\"\n" +
-        "     version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        svg.workouts-intro-lock-lock-svg {\n" +
-        "            width: 37px;\n" +
-        "        }\n" +
-        "\n" +
-        "        svg.workouts-intro-lock-lock-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #161616;\n" +
-        "            stroke-width: 6;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "\n" +
-        "        svg.workouts-intro-lock-lock-svg .st1 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #161616;\n" +
-        "            stroke-width: 4;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <path class=\"st0\" d=\"M93.4,162.2H12.6c-5.3,0-9.6-4.3-9.6-9.6V71.8c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
-        "		C103,157.9,98.7,162.2,93.4,162.2z\"/>\n" +
-        "        <path class=\"st0\" d=\"M23.2,59.4V33.2C23.2,16.6,36.6,3,53,3h0c16.4,0,29.8,13.6,29.8,30.2v26.1\"/>\n" +
-        "        <path class=\"st1\" d=\"M53.2,91.5c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
-        "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,96.6,47.1,91.5,53.2,91.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/practice-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 255.2 169\"\n" +
-        "     class=\"practice-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "    .practice-icon-svg{\n" +
-        "        width: 20px;\n" +
-        "    }\n" +
-        "\n" +
-        "    .practice-icon-svg .st0{\n" +
-        "        fill:none;\n" +
-        "        stroke:#acacac;\n" +
-        "        stroke-width:12;\n" +
-        "        stroke-linecap:round;\n" +
-        "        stroke-linejoin:round;\n" +
-        "    }\n" +
-        "\n" +
-        "    .practice-icon-svg .st1{\n" +
-        "        fill:none;\n" +
-        "        stroke:#acacac;\n" +
-        "        stroke-width:12;\n" +
-        "        stroke-linecap:round;\n" +
-        "    }\n" +
-        "\n" +
-        "	.practice-icon-svg .st2{\n" +
-        "        fill:none;\n" +
-        "        stroke:#acacac;\n" +
-        "        stroke-width:12;\n" +
-        "        stroke-linecap:round;\n" +
-        "        stroke-linejoin:round;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<g>\n" +
-        "	<polyline class=\"st0\"\n" +
-        "              points=\"142,41 3,41 3,166 59,166\"/>\n" +
-        "	<line class=\"st1\"\n" +
-        "          x1=\"35\"\n" +
-        "          y1=\"75\"\n" +
-        "          x2=\"93\"\n" +
-        "          y2=\"75\"/>\n" +
-        "	<line class=\"st1\"\n" +
-        "          x1=\"35\"\n" +
-        "          y1=\"102\"\n" +
-        "          x2=\"77\"\n" +
-        "          y2=\"102\"/>\n" +
-        "	<line class=\"st1\"\n" +
-        "          x1=\"35\"\n" +
-        "          y1=\"129\"\n" +
-        "          x2=\"79\"\n" +
-        "          y2=\"129\"/>\n" +
-        "	<polygon class=\"st0\"\n" +
-        "             points=\"216.8,3 111.2,106.8 93,161.8 146.8,146 252.2,41\"/>\n" +
-        "	<line class=\"st2\"\n" +
-        "          x1=\"193.2\"\n" +
-        "          y1=\"31.7\"\n" +
-        "          x2=\"224\"\n" +
-        "          y2=\"64.8\"/>\n" +
-        "	<polygon points=\"102.5,139.7 114.5,153.8 97.2,157.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/share-arrow-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "     viewBox=\"0 0 149.8 116.7\"\n" +
-        "     class=\"share-icon-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .share-icon-svg {\n" +
-        "            width: 16px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .share-icon-svg path{\n" +
-        "            fill: white;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <path d=\"M74.7,33.6c0-11.1,0-21.7,0-33.6c25.4,19.7,49.9,38.8,75.1,58.4c-25,19.5-49.6,38.6-74.9,58.3c0-11.5,0-22,0-32.5\n" +
-        "		c-21.6-5.7-49.4,6.1-74.5,31.2c-2.4-12.2,5.4-38.4,21-55C35.9,45,53.7,36.3,74.7,33.6z\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/tutorial-icon.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"0 0 143.2 207.8\"\n" +
-        "    class=\"tips-n-tricks-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .tips-n-tricks-svg {\n" +
-        "            width: 11px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .tips-n-tricks-svg path {\n" +
-        "            fill: #acacac;\n" +
-        "        }\n" +
-        "\n" +
-        "        .tips-n-tricks-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "        }\n" +
-        "\n" +
-        "        .tips-n-tricks-svg .st1 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-width: 10;\n" +
-        "            stroke-linecap: round;\n" +
-        "        }\n" +
-        "\n" +
-        "        .tips-n-tricks-svg .st2 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #acacac;\n" +
-        "            stroke-width: 8;\n" +
-        "            stroke-linecap: round;\n" +
-        "        }\n" +
-        "\n" +
-        "\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <path class=\"st0\" d=\"M70.5,2.8\"/>\n" +
-        "        <path class=\"st1\" d=\"M110,157.5c0,0-5.1-21,8.7-38.8c10.5-13.5,19.5-28.7,19.5-47.1C138.2,34.8,108.4,5,71.6,5S5,34.8,5,71.6\n" +
-        "		c0,18.4,9.1,33.6,19.5,47.1c13.8,17.8,8.7,38.8,8.7,38.8\"/>\n" +
-        "        <line class=\"st2\" x1=\"41.8\" y1=\"166.5\" x2=\"101.8\" y2=\"166.5\"/>\n" +
-        "        <line class=\"st2\" x1=\"39.8\" y1=\"178.5\" x2=\"103.8\" y2=\"178.5\"/>\n" +
-        "        <line class=\"st2\" x1=\"45.8\" y1=\"190.5\" x2=\"95.8\" y2=\"190.5\"/>\n" +
-        "        <path d=\"M87.5,198.5c-1.2,6.2-7.3,9.3-16.4,9.3s-14.4-3.3-16.4-9.3\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 329.5 223.7\"\n" +
-        "	 class=\"workout-roadmap-check-mark-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .workout-roadmap-check-mark-svg{\n" +
-        "            width: 30px;\n" +
-        "        }\n" +
-        "\n" +
-        "        .workout-roadmap-check-mark-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #ffffff;\n" +
-        "            stroke-width: 21;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-        "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmap.template.html",
-        "<div class=\"workouts-roadmap-container\">\n" +
-        "    <div class=\"workouts-roadmap-wrapper base-border-radius base-box-shadow\">\n" +
-        "        <workouts-progress workouts=\"vm.workoutsProgress\"\n" +
-        "                           ng-disabled=\"vm.freezeWorkoutProgressComponent\"\n" +
-        "                           diagnostic=\"vm.diagnostic\"\n" +
-        "                           active-workout-order=\"{{vm.activeWorkoutOrder}}\"\n" +
-        "                           ng-model=\"vm.selectedItem\">\n" +
-        "        </workouts-progress>\n" +
-        "        <div class=\"workouts-container\"\n" +
-        "             ng-class=\"vm.workoutSwitchAnimation\">\n" +
-        "            <ui-view class=\"workouts-ui-view\"></ui-view>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "    <estimated-score-widget is-nav-menu=\"false\" widget-title=\".TITLE\" ng-model=\"currentSubjectId\"></estimated-score-widget>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html",
-        "<div class=\"workouts-roadmap-base-pre-summary base-workouts-wrapper\"\n" +
-        "     translate-namespace=\"ROADMAP_BASE_PRE_SUMMARY\">\n" +
-        "    <div>\n" +
-        "        <div class=\"diagnostic-workout-title\">{{::vm.text}}</div>\n" +
-        "        <svg-icon class=\"checkmark-icon\"\n" +
-        "                  name=\"workouts-roadmap-checkmark\">\n" +
-        "        </svg-icon>\n" +
-        "        <div class=\"complete-text\"\n" +
-        "             translate=\".COMPLETE\">\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticIntro.template.html",
-        "<div translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_INTRO\"\n" +
-        "     class=\"workouts-roadmap-diagnostic-intro base-workouts-wrapper\">\n" +
-        "    <div>\n" +
-        "        <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
-        "        <diagnostic-intro></diagnostic-intro>\n" +
-        "        <md-button  class=\"md-primary znk\"\n" +
-        "                    autofocus\n" +
-        "                    tabindex=\"1\"\n" +
-        "                    ui-sref=\"app.diagnostic({ skipIntro: true, forceSkipIntro: vm.forceSkipIntro })\"\n" +
-        "                    aria-label=\"{{::vm.buttonTitle}}\"\n" +
-        "                    translate=\"{{vm.buttonTitle}}\"\n" +
-        "                    md-no-ink>\n" +
-        "        </md-button>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html",
-        "<div class=\"workouts-roadmap-diagnostic-summary base-workouts-wrapper\"\n" +
-        "     translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY\">\n" +
-        "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
-        "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
-        "    <div class=\"total-score\"\n" +
-        "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated\"\n" +
-        "         translate=\".DIAG_COMPOS_SCORE\"\n" +
-        "         translate-values=\"{total: vm.compositeScore }\">\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"first-row\">\n" +
-        "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
-        "            ng-class=\"subject.subjectNameAlias\"\n" +
-        "            class=\"subject-score\">\n" +
-        "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
-        "            <div class=\"score-wrapper\">\n" +
-        "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
-        "                <span class=\"bold\">{{::vm.userStats[subject.id] || '-'}}</span>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html",
-        "<div class=\"workouts-roadmap-workout-in-progress base-workouts-wrapper\"\n" +
-        "     translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS\">\n" +
-        "    <div class=\"workouts-roadmap-workout-in-progress-wrapper\">\n" +
-        "        <div class=\"title-wrapper\">\n" +
-        "            <div translate=\".TITLE\"\n" +
-        "                 translate-values=\"{workoutOrder: vm.workout.workoutOrder}\">\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <svg-icon class=\"subject-icon\"\n" +
-        "                  subject-id-to-attr-drv=\"vm.workout.subjectId\"\n" +
-        "                  context-attr=\"name\"\n" +
-        "                  suffix=\"icon\">\n" +
-        "        </svg-icon>\n" +
-        "        <div class=\"subject-title\"\n" +
-        "             translate=\"SUBJECTS.{{vm.workout.subjectId}}\">\n" +
-        "        </div>\n" +
-        "        <div class=\"keep-going-text\" translate=\".KEEP_GOING\"></div>\n" +
-        "        <div class=\"answered-text\"\n" +
-        "             translate=\".ANSWERED\"\n" +
-        "             translate-values=\"{\n" +
-        "                answered: vm.exerciseResult.totalAnsweredNum,\n" +
-        "                total: vm.exerciseResult.totalQuestionNum\n" +
-        "             }\">\n" +
-        "        </div>\n" +
-        "        <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS.CONTINUE' | translate}}\"\n" +
-        "            class=\"znk md-primary continue-btn\"\n" +
-        "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
-        "            <span translate=\".CONTINUE\"></span>\n" +
-        "        </md-button>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapWorkoutIntro.template.html",
-        "<div class=\"workouts-roadmap-workout-intro base-workouts-wrapper\"\n" +
-        "     translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO\">\n" +
-        "    <div class=\"workouts-roadmap-intro-wrapper\">\n" +
-        "        <div class=\"title-wrapper\">\n" +
-        "            <div translate=\".TITLE\"\n" +
-        "                 translate-values=\"{workoutOrder: vm.workoutOrder}\">\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <workout-intro-lock workouts-progress=\"vm.workoutsProgress\">\n" +
-        "            <svg-icon class=\"subject-icon\"\n" +
-        "                      subject-id-to-attr-drv=\"vm.selectedWorkout.subjectId\"\n" +
-        "                      context-attr=\"name\"\n" +
-        "                      suffix=\"icon\">\n" +
-        "            </svg-icon>\n" +
-        "            <div class=\"subject-title\"\n" +
-        "                 translate=\"SUBJECTS.{{vm.selectedWorkout.subjectId}}\">\n" +
-        "            </div>\n" +
-        "            <div class=\"change-subject-container\"\n" +
-        "                 ng-class=\"{\n" +
-        "                'rotate': vm.rotate\n" +
-        "             }\"\n" +
-        "                 ng-click=\"vm.rotate = !vm.rotate; vm.changeSubject()\">\n" +
-        "                <svg-icon name=\"workouts-roadmap-change-subject\"></svg-icon>\n" +
-        "            <span class=\"change-subject-title\"\n" +
-        "                  translate=\".CHANGE_SUBJECT\">\n" +
-        "            </span>\n" +
-        "            </div>\n" +
-        "            <div class=\"how-much-time-title\"\n" +
-        "                 translate=\".HOW_MUCH_TIME\">\n" +
-        "            </div>\n" +
-        "            <div class=\"workout-time-selection-container\">\n" +
-        "                <div class=\"avail-time-item-wrapper\"\n" +
-        "                     ng-disabled=\"!vm.workoutsByTime[workoutAvailTime]\"\n" +
-        "                     ng-repeat=\"workoutAvailTime in vm.workoutAvailTimes\">\n" +
-        "                    <div class=\"avail-time-item\"\n" +
-        "                         ng-class=\"{\n" +
-        "                        active: vm.selectedTime === workoutAvailTime\n" +
-        "                     }\"\n" +
-        "                         ng-click=\"vm.selectTime(workoutAvailTime)\">\n" +
-        "                        <svg-icon class=\"workout-icon\"\n" +
-        "                                  name=\"{{vm.getWorkoutIcon(workoutAvailTime);}}\">\n" +
-        "\n" +
-        "                        </svg-icon>\n" +
-        "                        <span class=\"avail-time-text\">{{workoutAvailTime}}</span>\n" +
-        "                    <span class=\"minutes-text\"\n" +
-        "                          translate=\".MINUTES\">\n" +
-        "                    </span>\n" +
-        "                    </div>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "            <div class=\"start-btn-wrapper\">\n" +
-        "                <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO.START' | translate}}\"\n" +
-        "                           class=\"md-primary znk\"\n" +
-        "                           ng-click=\"vm.startExercise()\"\n" +
-        "                           md-no-ink>\n" +
-        "                    <span translate=\".START\"></span>\n" +
-        "                </md-button>\n" +
-        "            </div>\n" +
-        "        </workout-intro-lock>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html",
+    "<div ng-transclude class=\"main-container\"></div>\n" +
+    "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +
+    "    class=\"lock-overlay-container\">\n" +
+    "    <ng-switch on=\"vm.lockState\">\n" +
+    "        <div class=\"diagnostic-not-completed\"\n" +
+    "             ng-switch-when=\"1\">\n" +
+    "            <div class=\"description\"\n" +
+    "                 translate=\".DIAGNOSTIC_NOT_COMPLETED\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div ng-switch-when=\"2\" class=\"prev-not-completed\">\n" +
+    "            <svg-icon name=\"workouts-intro-lock-dotted-arrow\"></svg-icon>\n" +
+    "            <div class=\"description\"\n" +
+    "                 translate=\".PREV_NOT_COMPLETED\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div ng-switch-when=\"3\" class=\"no-pro-social-sharing\">\n" +
+    "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
+    "            <div class=\"text1\"\n" +
+    "                 translate=\".MORE_WORKOUTS\">\n" +
+    "            </div>\n" +
+    "            <div class=\"text2\"\n" +
+    "                 translate=\".TELL_FRIENDS\">\n" +
+    "            </div>\n" +
+    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"\n" +
+    "                       class=\"share-btn md-primary znk\"\n" +
+    "                       md-no-ink>\n" +
+    "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
+    "                <span translate=\".SHARE\"></span>\n" +
+    "            </md-button>\n" +
+    "            <!--<div class=\"text3 get-zinkerz-pro-text\"\n" +
+    "                 translate=\".GET_ZINKERZ_PRO\">\n" +
+    "            </div>\n" +
+    "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
+    "                <span translate=\".UPGRADE\"></span>\n" +
+    "            </md-button>-->\n" +
+    "        </div>\n" +
+    "        <div ng-switch-when=\"4\" class=\"no-pro\">\n" +
+    "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
+    "            <div class=\"description\" translate=\".MORE_PRACTICE\"></div>\n" +
+    "            <div class=\"get-zinkerz-pro-text\" translate=\".GET_ZINKERZ_PRO\"></div>\n" +
+    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.UPGRADE' | translate}}\"\n" +
+    "                       class=\"upgrade-btn znk md-primary\"\n" +
+    "                       ng-click=\"vm.openPurchaseModal()\">\n" +
+    "                <span translate=\".UPGRADE\"></span>\n" +
+    "            </md-button>\n" +
+    "        </div>\n" +
+    "    </ng-switch>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/directives/workoutsProgress/workoutsProgressDirective.template.html",
+    "<znk-scroll actions=\"vm.scrollActions\" scroll-on-mouse-wheel=\"true\">\n" +
+    "    <div class=\"items-container\">\n" +
+    "        <div class=\"dotted-lines-container\">\n" +
+    "            <div class=\"dotted-line progress\"></div>\n" +
+    "            <div class=\"dotted-line future\"></div>\n" +
+    "        </div>\n" +
+    "        <div class=\"item-container diagnostic\">\n" +
+    "            <div class=\"item\"\n" +
+    "                 ng-class=\"{\n" +
+    "                    selected: vm.selectedWorkout === vm.diagnostic.workoutOrder\n" +
+    "                 }\"\n" +
+    "                 ng-click=\"vm.workoutClick(vm.diagnostic.workoutOrder)\">\n" +
+    "                <ng-switch on=\"vm.diagnostic.status\">\n" +
+    "                    <svg-icon class=\"check-mark-icon\"\n" +
+    "                              name=\"workouts-progress-check-mark-icon\"\n" +
+    "                              ng-switch-when=\"2\">\n" +
+    "                    </svg-icon>\n" +
+    "                    <svg-icon class=\"flag-icon\"\n" +
+    "                              name=\"workouts-progress-flag\"\n" +
+    "                              ng-switch-default>\n" +
+    "                    </svg-icon>\n" +
+    "                </ng-switch>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"item-container\"\n" +
+    "             ng-repeat=\"workout in vm.workouts\">\n" +
+    "            <div class=\"item\"\n" +
+    "                 subject-id-to-attr-drv=\"workout.subjectId\"\n" +
+    "                 suffix=\"bg\"\n" +
+    "                 ng-class=\"{\n" +
+    "                    selected: vm.selectedWorkout === workout.workoutOrder,\n" +
+    "                    pristine: workout.subjectId === undefined\n" +
+    "                 }\"\n" +
+    "                 ng-click=\"vm.workoutClick(workout.workoutOrder)\">\n" +
+    "                <ng-switch on=\"workout.status\">\n" +
+    "                    <svg-icon class=\"check-mark-icon\" name=\"workouts-progress-check-mark-icon\" ng-switch-when=\"2\"></svg-icon>\n" +
+    "                    <span ng-switch-default>\n" +
+    "                        {{::workout.workoutOrder}}\n" +
+    "                    </span>\n" +
+    "                </ng-switch>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"future-item\"></div>\n" +
+    "        <div class=\"future-item\"></div>\n" +
+    "        <div class=\"future-item\"></div>\n" +
+    "        <div class=\"future-item\"></div>\n" +
+    "        <div class=\"future-item\"></div>\n" +
+    "        <div class=\"future-item\"></div>\n" +
+    "    </div>\n" +
+    "</znk-scroll>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/change-subject-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 86.4 71.6\"\n" +
+    "     class=\"workouts-roadmap-change-subject-svg\">\n" +
+    "\n" +
+    "<style type=\"text/css\">\n" +
+    "    .workouts-roadmap-change-subject-svg{\n" +
+    "        width: 10px;\n" +
+    "    }\n" +
+    "\n" +
+    "    .workouts-roadmap-change-subject-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #231F20;\n" +
+    "            stroke-width: 1.6864;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "</style>\n" +
+    "\n" +
+    "<g>\n" +
+    "	<path id=\"XMLID_70_\" class=\"st0\" d=\"M8.5,29.4C11.7,13.1,26,0.8,43.2,0.8c17.5,0,32,12.7,34.8,29.5\"/>\n" +
+    "	<polyline id=\"XMLID_69_\" class=\"st0\" points=\"65.7,24 78.3,30.3 85.7,18.7 	\"/>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "	<path id=\"XMLID_68_\" class=\"st0\" d=\"M77.9,42.2c-3.2,16.3-17.5,28.6-34.7,28.6c-17.5,0-32-12.7-34.8-29.5\"/>\n" +
+    "	<polyline id=\"XMLID_67_\" class=\"st0\" points=\"20.7,47.6 8.1,41.3 0.7,52.9 	\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg",
+    "<svg\n" +
+    "	class=\"complete-v-icon-svg\"\n" +
+    "	xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "	xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "    x=\"0px\"\n" +
+    "	y=\"0px\"\n" +
+    "	viewBox=\"-1040 834.9 220.4 220.4\"\n" +
+    "	style=\"enable-background:new -1040 834.9 220.4 220.4;\"\n" +
+    "    xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .complete-v-icon-svg{\n" +
+    "        width: 110px;\n" +
+    "    }\n" +
+    "\n" +
+    "	.complete-v-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st1 {\n" +
+    "        fill: #CACBCC;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st2 {\n" +
+    "        display: none;\n" +
+    "        fill: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st3 {\n" +
+    "        fill: #D1D2D2;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st4 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #FFFFFF;\n" +
+    "        stroke-width: 11.9321;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/dotted-arrow.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     class=\"workouts-intro-lock-dotted-arrow-svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"-406.9 425.5 190.9 175.7\">\n" +
+    "    <style>\n" +
+    "        .workouts-intro-lock-dotted-arrow-svg{\n" +
+    "            width: 53px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-intro-lock-dotted-arrow-svg circle{\n" +
+    "            stroke: #161616;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <circle cx=\"-402.8\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"513\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"496.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-386.1\" cy=\"529.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"479.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-369.6\" cy=\"529.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"479.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"462.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"563.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-352.6\" cy=\"546.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"463.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"446.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"479.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"496.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"547\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-336.1\" cy=\"563.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"446.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"429.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"463.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"496.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"479.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"530.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"513.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"563.5\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"546.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"597.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-319.1\" cy=\"580.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"496.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-303\" cy=\"513.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"496.1\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"529.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-286\" cy=\"512.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"496.6\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-269.5\" cy=\"513.3\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"496.7\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"530.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-252.7\" cy=\"513.4\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-236.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"496.2\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"529.8\" r=\"4.1\"/>\n" +
+    "    <circle cx=\"-220.1\" cy=\"512.9\" r=\"4.1\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/drill-icon.svg",
+    "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 199 87\"\n" +
+    "     class=\"workouts-progress-drill-svg\">\n" +
+    "    <style>\n" +
+    "        .workouts-progress-drill-svg {\n" +
+    "            width: 20px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-progress-drill-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-width: 8;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-progress-drill-svg  .st1 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-width: 16;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-progress-drill-svg  .st2 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-width: 10;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-progress-drill-svg  .st3 {\n" +
+    "            clip-path: url(#SVGID_2_);\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-width: 11;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-progress-drill-svg  .st4 {\n" +
+    "            clip-path: url(#SVGID_4_);\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-width: 11;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <line class=\"st0\" x1=\"64\" y1=\"45\" x2=\"138\" y2=\"45\"/>\n" +
+    "        <g>\n" +
+    "            <line class=\"st1\" x1=\"47\" y1=\"8\" x2=\"47\" y2=\"79\"/>\n" +
+    "            <line class=\"st2\" x1=\"29\" y1=\"22\" x2=\"29\" y2=\"65\"/>\n" +
+    "            <g>\n" +
+    "                <defs>\n" +
+    "                    <rect id=\"SVGID_1_\" y=\"38\" width=\"17\" height=\"17\"/>\n" +
+    "                </defs>\n" +
+    "                <clipPath id=\"SVGID_2_\">\n" +
+    "                    <use xlink:href=\"#SVGID_1_\" style=\"overflow:visible;\"/>\n" +
+    "                </clipPath>\n" +
+    "                <line class=\"st3\" x1=\"18\" y1=\"45.5\" x2=\"24\" y2=\"45.5\"/>\n" +
+    "            </g>\n" +
+    "        </g>\n" +
+    "        <g>\n" +
+    "            <line class=\"st1\" x1=\"154\" y1=\"8\" x2=\"154\" y2=\"79\"/>\n" +
+    "            <line class=\"st2\" x1=\"172\" y1=\"22\" x2=\"172\" y2=\"65\"/>\n" +
+    "            <g>\n" +
+    "                <defs>\n" +
+    "                    <rect id=\"SVGID_3_\" x=\"182\" y=\"38\" width=\"17\" height=\"17\"/>\n" +
+    "                </defs>\n" +
+    "                <clipPath id=\"SVGID_4_\">\n" +
+    "                    <use xlink:href=\"#SVGID_3_\" style=\"overflow:visible;\"/>\n" +
+    "                </clipPath>\n" +
+    "                <line class=\"st4\" x1=\"183\" y1=\"45.5\" x2=\"177\" y2=\"45.5\"/>\n" +
+    "            </g>\n" +
+    "        </g>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/flag-icon.svg",
+    "<svg x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"-145 277 60 60\"\n" +
+    "	 class=\"flag-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .flag-svg{\n" +
+    "            width: 23px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .flag-svg .st0 {\n" +
+    "            fill: #ffffff;\n" +
+    "            stroke-width: 5;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "<g id=\"kUxrE9.tif\">\n" +
+    "	<g>\n" +
+    "		<path class=\"st0\" id=\"XMLID_93_\" d=\"M-140.1,287c0.6-1.1,1.7-1.7,2.9-1.4c1.3,0.3,2,1.1,2.3,2.3c1.1,4,2.1,8,3.2,12c2.4,9.3,4.9,18.5,7.3,27.8\n" +
+    "			c0.1,0.3,0.2,0.6,0.2,0.9c0.3,1.7-0.6,3-2.1,3.3c-1.4,0.3-2.8-0.5-3.3-2.1c-1-3.6-2-7.3-2.9-10.9c-2.5-9.5-5-19-7.6-28.6\n" +
+    "			C-140.1,290-140.8,288.3-140.1,287z\"/>\n" +
+    "		<path class=\"st0\" id=\"XMLID_92_\" d=\"M-89.6,289.1c-1,6.8-2.9,13-10,16c-3.2,1.4-6.5,1.6-9.9,0.9c-2-0.4-4-0.7-6-0.6c-4.2,0.3-7.1,2.7-9,6.4\n" +
+    "			c-0.3,0.5-0.5,1.1-0.9,2c-0.3-1-0.5-1.7-0.8-2.5c-2-7-3.9-14.1-5.9-21.2c-0.3-1-0.1-1.7,0.5-2.4c4.5-6,11-7.4,17.5-3.6\n" +
+    "			c3.4,2,6.7,4.2,10.2,6.1c1.9,1,3.9,1.9,5.9,2.4c3.2,0.9,5.9,0,7.9-2.6C-90,289.7-89.8,289.4-89.6,289.1z\"/>\n" +
+    "	</g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/game-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 127 147.8\"\n" +
+    "     class=\"workouts-progress-game-svg\">\n" +
+    "    <style>\n" +
+    "        .workouts-progress-game-svg {\n" +
+    "            width: 15px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-progress-game-svg .st0 {\n" +
+    "            fill-rule: evenodd;\n" +
+    "            clip-rule: evenodd;\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-width: 6;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-progress-game-svg .st1 {\n" +
+    "            fill-rule: evenodd;\n" +
+    "            clip-rule: evenodd;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "            fill: #acacac;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workouts-progress-game-svg .st2 {\n" +
+    "            fill-rule: evenodd;\n" +
+    "            clip-rule: evenodd;\n" +
+    "            fill: #acacac;\n" +
+    "            stroke: #acacac;\n" +
+    "        }\n" +
+    "\n" +
+    "\n" +
+    "        /*.workouts-progress-game-svg circle {*/\n" +
+    "            /*stroke: #acacac;*/\n" +
+    "            /*fill: none;*/\n" +
+    "        /*}*/\n" +
+    "\n" +
+    "        /*.workouts-progress-game-svg circle.st1 {*/\n" +
+    "            /*fill: #acacac;*/\n" +
+    "        /*}*/\n" +
+    "\n" +
+    "        /*.workouts-progress-game-svg path {*/\n" +
+    "            /*fill: #acacac;*/\n" +
+    "        /*}*/\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <circle class=\"st0\" cx=\"63.5\" cy=\"84.2\" r=\"60.5\"/>\n" +
+    "        <circle class=\"st1\" cx=\"63.7\" cy=\"84.2\" r=\"6.2\"/>\n" +
+    "        <path class=\"st1\" d=\"M65.2,73.8h-2.5c-0.7,0-1.2-0.3-1.2-0.7V41.5c0-0.4,0.5-0.7,1.2-0.7h2.5c0.7,0,1.2,0.3,1.2,0.7V73\n" +
+    "		C66.4,73.4,65.9,73.8,65.2,73.8z\"/>\n" +
+    "        <path class=\"st2\" d=\"M73.7,80.9l-1.6-2.7c-0.3-0.6-0.3-1.2,0.1-1.4l11.6-6.9c0.4-0.2,1,0,1.3,0.6l1.6,2.7c0.3,0.6,0.3,1.2-0.1,1.4\n" +
+    "		L75,81.5C74.6,81.7,74,81.5,73.7,80.9z\"/>\n" +
+    "        <path class=\"st1\" d=\"M58,9.5v4.6c0,2.9,2.4,5.3,5.3,5.3c2.9,0,5.3-2.4,5.3-5.3V9.5H58z\"/>\n" +
+    "        <path class=\"st1\" d=\"M79.2,3.1c0,1.7-1.4,3.1-3.1,3.1H51.6c-1.7,0-3.1-1.4-3.1-3.1l0,0c0-1.7,1.4-3.1,3.1-3.1h24.5\n" +
+    "		C77.8,0,79.2,1.4,79.2,3.1L79.2,3.1z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/lock-icon.svg",
+    "<svg class=\"workouts-intro-lock-lock-svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 106 165.2\"\n" +
+    "     version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        svg.workouts-intro-lock-lock-svg {\n" +
+    "            width: 37px;\n" +
+    "        }\n" +
+    "\n" +
+    "        svg.workouts-intro-lock-lock-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #161616;\n" +
+    "            stroke-width: 6;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "\n" +
+    "        svg.workouts-intro-lock-lock-svg .st1 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #161616;\n" +
+    "            stroke-width: 4;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path class=\"st0\" d=\"M93.4,162.2H12.6c-5.3,0-9.6-4.3-9.6-9.6V71.8c0-5.3,4.3-9.6,9.6-9.6h80.8c5.3,0,9.6,4.3,9.6,9.6v80.8\n" +
+    "		C103,157.9,98.7,162.2,93.4,162.2z\"/>\n" +
+    "        <path class=\"st0\" d=\"M23.2,59.4V33.2C23.2,16.6,36.6,3,53,3h0c16.4,0,29.8,13.6,29.8,30.2v26.1\"/>\n" +
+    "        <path class=\"st1\" d=\"M53.2,91.5c6,0,10.9,5.1,10.9,11.3c0,2.6-3.1,6-4.2,7c-0.2,0.2-0.3,0.5-0.2,0.8l6.9,22.4H39.4l6.5-22.6\n" +
+    "		c0-0.2,0-0.3-0.1-0.5c-0.8-0.9-3.9-4.4-3.9-7.1C41.9,96.6,47.1,91.5,53.2,91.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/practice-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 255.2 169\"\n" +
+    "     class=\"practice-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "    .practice-icon-svg{\n" +
+    "        width: 20px;\n" +
+    "    }\n" +
+    "\n" +
+    "    .practice-icon-svg .st0{\n" +
+    "        fill:none;\n" +
+    "        stroke:#acacac;\n" +
+    "        stroke-width:12;\n" +
+    "        stroke-linecap:round;\n" +
+    "        stroke-linejoin:round;\n" +
+    "    }\n" +
+    "\n" +
+    "    .practice-icon-svg .st1{\n" +
+    "        fill:none;\n" +
+    "        stroke:#acacac;\n" +
+    "        stroke-width:12;\n" +
+    "        stroke-linecap:round;\n" +
+    "    }\n" +
+    "\n" +
+    "	.practice-icon-svg .st2{\n" +
+    "        fill:none;\n" +
+    "        stroke:#acacac;\n" +
+    "        stroke-width:12;\n" +
+    "        stroke-linecap:round;\n" +
+    "        stroke-linejoin:round;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<polyline class=\"st0\"\n" +
+    "              points=\"142,41 3,41 3,166 59,166\"/>\n" +
+    "	<line class=\"st1\"\n" +
+    "          x1=\"35\"\n" +
+    "          y1=\"75\"\n" +
+    "          x2=\"93\"\n" +
+    "          y2=\"75\"/>\n" +
+    "	<line class=\"st1\"\n" +
+    "          x1=\"35\"\n" +
+    "          y1=\"102\"\n" +
+    "          x2=\"77\"\n" +
+    "          y2=\"102\"/>\n" +
+    "	<line class=\"st1\"\n" +
+    "          x1=\"35\"\n" +
+    "          y1=\"129\"\n" +
+    "          x2=\"79\"\n" +
+    "          y2=\"129\"/>\n" +
+    "	<polygon class=\"st0\"\n" +
+    "             points=\"216.8,3 111.2,106.8 93,161.8 146.8,146 252.2,41\"/>\n" +
+    "	<line class=\"st2\"\n" +
+    "          x1=\"193.2\"\n" +
+    "          y1=\"31.7\"\n" +
+    "          x2=\"224\"\n" +
+    "          y2=\"64.8\"/>\n" +
+    "	<polygon points=\"102.5,139.7 114.5,153.8 97.2,157.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/share-arrow-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "     viewBox=\"0 0 149.8 116.7\"\n" +
+    "     class=\"share-icon-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .share-icon-svg {\n" +
+    "            width: 16px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .share-icon-svg path{\n" +
+    "            fill: white;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path d=\"M74.7,33.6c0-11.1,0-21.7,0-33.6c25.4,19.7,49.9,38.8,75.1,58.4c-25,19.5-49.6,38.6-74.9,58.3c0-11.5,0-22,0-32.5\n" +
+    "		c-21.6-5.7-49.4,6.1-74.5,31.2c-2.4-12.2,5.4-38.4,21-55C35.9,45,53.7,36.3,74.7,33.6z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/tutorial-icon.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 143.2 207.8\"\n" +
+    "    class=\"tips-n-tricks-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .tips-n-tricks-svg {\n" +
+    "            width: 11px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .tips-n-tricks-svg path {\n" +
+    "            fill: #acacac;\n" +
+    "        }\n" +
+    "\n" +
+    "        .tips-n-tricks-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "        }\n" +
+    "\n" +
+    "        .tips-n-tricks-svg .st1 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-width: 10;\n" +
+    "            stroke-linecap: round;\n" +
+    "        }\n" +
+    "\n" +
+    "        .tips-n-tricks-svg .st2 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #acacac;\n" +
+    "            stroke-width: 8;\n" +
+    "            stroke-linecap: round;\n" +
+    "        }\n" +
+    "\n" +
+    "\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <path class=\"st0\" d=\"M70.5,2.8\"/>\n" +
+    "        <path class=\"st1\" d=\"M110,157.5c0,0-5.1-21,8.7-38.8c10.5-13.5,19.5-28.7,19.5-47.1C138.2,34.8,108.4,5,71.6,5S5,34.8,5,71.6\n" +
+    "		c0,18.4,9.1,33.6,19.5,47.1c13.8,17.8,8.7,38.8,8.7,38.8\"/>\n" +
+    "        <line class=\"st2\" x1=\"41.8\" y1=\"166.5\" x2=\"101.8\" y2=\"166.5\"/>\n" +
+    "        <line class=\"st2\" x1=\"39.8\" y1=\"178.5\" x2=\"103.8\" y2=\"178.5\"/>\n" +
+    "        <line class=\"st2\" x1=\"45.8\" y1=\"190.5\" x2=\"95.8\" y2=\"190.5\"/>\n" +
+    "        <path d=\"M87.5,198.5c-1.2,6.2-7.3,9.3-16.4,9.3s-14.4-3.3-16.4-9.3\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"workout-roadmap-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .workout-roadmap-check-mark-svg{\n" +
+    "            width: 30px;\n" +
+    "        }\n" +
+    "\n" +
+    "        .workout-roadmap-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmap.template.html",
+    "<div class=\"workouts-roadmap-container\">\n" +
+    "    <div class=\"workouts-roadmap-wrapper base-border-radius base-box-shadow\">\n" +
+    "        <workouts-progress workouts=\"vm.workoutsProgress\"\n" +
+    "                           ng-disabled=\"vm.freezeWorkoutProgressComponent\"\n" +
+    "                           diagnostic=\"vm.diagnostic\"\n" +
+    "                           active-workout-order=\"{{vm.activeWorkoutOrder}}\"\n" +
+    "                           ng-model=\"vm.selectedItem\">\n" +
+    "        </workouts-progress>\n" +
+    "        <div class=\"workouts-container\"\n" +
+    "             ng-class=\"vm.workoutSwitchAnimation\">\n" +
+    "            <ui-view class=\"workouts-ui-view\"></ui-view>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <estimated-score-widget is-nav-menu=\"false\" widget-title=\".TITLE\" ng-model=\"currentSubjectId\"></estimated-score-widget>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html",
+    "<div class=\"workouts-roadmap-base-pre-summary base-workouts-wrapper\"\n" +
+    "     translate-namespace=\"ROADMAP_BASE_PRE_SUMMARY\">\n" +
+    "    <div>\n" +
+    "        <div class=\"diagnostic-workout-title\">{{::vm.text}}</div>\n" +
+    "        <svg-icon class=\"checkmark-icon\"\n" +
+    "                  name=\"workouts-roadmap-checkmark\">\n" +
+    "        </svg-icon>\n" +
+    "        <div class=\"complete-text\"\n" +
+    "             translate=\".COMPLETE\">\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticIntro.template.html",
+    "<div translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_INTRO\"\n" +
+    "     class=\"workouts-roadmap-diagnostic-intro base-workouts-wrapper\">\n" +
+    "    <div>\n" +
+    "        <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
+    "        <diagnostic-intro></diagnostic-intro>\n" +
+    "        <md-button  class=\"md-primary znk\"\n" +
+    "                    autofocus\n" +
+    "                    tabindex=\"1\"\n" +
+    "                    ui-sref=\"app.diagnostic({ skipIntro: true, forceSkipIntro: vm.forceSkipIntro })\"\n" +
+    "                    aria-label=\"{{::vm.buttonTitle}}\"\n" +
+    "                    translate=\"{{vm.buttonTitle}}\"\n" +
+    "                    md-no-ink>\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html",
+    "<div class=\"workouts-roadmap-diagnostic-summary base-workouts-wrapper\"\n" +
+    "     translate-namespace=\"WORKOUTS_ROADMAP_DIAGNOSTIC_SUMMERY\">\n" +
+    "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
+    "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
+    "    <div class=\"total-score\"\n" +
+    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated\"\n" +
+    "         translate=\".DIAG_COMPOS_SCORE\"\n" +
+    "         translate-values=\"{total: vm.compositeScore }\">\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"first-row\">\n" +
+    "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
+    "            ng-class=\"subject.subjectNameAlias\"\n" +
+    "            class=\"subject-score\">\n" +
+    "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
+    "            <div class=\"score-wrapper\">\n" +
+    "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
+    "                <span class=\"bold\">{{::vm.userStats[subject.id] || '-'}}</span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapWorkoutInProgress.template.html",
+    "<div class=\"workouts-roadmap-workout-in-progress base-workouts-wrapper\"\n" +
+    "     translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS\">\n" +
+    "    <div class=\"workouts-roadmap-workout-in-progress-wrapper\">\n" +
+    "        <div class=\"title-wrapper\">\n" +
+    "            <div translate=\".TITLE\"\n" +
+    "                 translate-values=\"{workoutOrder: vm.workout.workoutOrder}\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <svg-icon class=\"subject-icon\"\n" +
+    "                  subject-id-to-attr-drv=\"vm.workout.subjectId\"\n" +
+    "                  context-attr=\"name\"\n" +
+    "                  suffix=\"icon\">\n" +
+    "        </svg-icon>\n" +
+    "        <div class=\"subject-title\"\n" +
+    "             translate=\"SUBJECTS.{{vm.workout.subjectId}}\">\n" +
+    "        </div>\n" +
+    "        <div class=\"keep-going-text\" translate=\".KEEP_GOING\"></div>\n" +
+    "        <div class=\"answered-text\"\n" +
+    "             translate=\".ANSWERED\"\n" +
+    "             translate-values=\"{\n" +
+    "                answered: vm.exerciseResult.totalAnsweredNum,\n" +
+    "                total: vm.exerciseResult.totalQuestionNum\n" +
+    "             }\">\n" +
+    "        </div>\n" +
+    "        <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS.CONTINUE' | translate}}\"\n" +
+    "            class=\"znk md-primary continue-btn\"\n" +
+    "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
+    "            <span translate=\".CONTINUE\"></span>\n" +
+    "        </md-button>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapWorkoutIntro.template.html",
+    "<div class=\"workouts-roadmap-workout-intro base-workouts-wrapper\"\n" +
+    "     translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO\">\n" +
+    "    <div class=\"workouts-roadmap-intro-wrapper\">\n" +
+    "        <div class=\"title-wrapper\">\n" +
+    "            <div translate=\".TITLE\"\n" +
+    "                 translate-values=\"{workoutOrder: vm.workoutOrder}\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <workout-intro-lock workouts-progress=\"vm.workoutsProgress\">\n" +
+    "            <svg-icon class=\"subject-icon\"\n" +
+    "                      subject-id-to-attr-drv=\"vm.selectedWorkout.subjectId\"\n" +
+    "                      context-attr=\"name\"\n" +
+    "                      suffix=\"icon\">\n" +
+    "            </svg-icon>\n" +
+    "            <div class=\"subject-title\"\n" +
+    "                 translate=\"SUBJECTS.{{vm.selectedWorkout.subjectId}}\">\n" +
+    "            </div>\n" +
+    "            <div class=\"change-subject-container\"\n" +
+    "                 ng-class=\"{\n" +
+    "                'rotate': vm.rotate\n" +
+    "             }\"\n" +
+    "                 ng-click=\"vm.rotate = !vm.rotate; vm.changeSubject()\">\n" +
+    "                <svg-icon name=\"workouts-roadmap-change-subject\"></svg-icon>\n" +
+    "            <span class=\"change-subject-title\"\n" +
+    "                  translate=\".CHANGE_SUBJECT\">\n" +
+    "            </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"how-much-time-title\"\n" +
+    "                 translate=\".HOW_MUCH_TIME\">\n" +
+    "            </div>\n" +
+    "            <div class=\"workout-time-selection-container\">\n" +
+    "                <div class=\"avail-time-item-wrapper\"\n" +
+    "                     ng-disabled=\"!vm.workoutsByTime[workoutAvailTime]\"\n" +
+    "                     ng-repeat=\"workoutAvailTime in vm.workoutAvailTimes\">\n" +
+    "                    <div class=\"avail-time-item\"\n" +
+    "                         ng-class=\"{\n" +
+    "                        active: vm.selectedTime === workoutAvailTime\n" +
+    "                     }\"\n" +
+    "                         ng-click=\"vm.selectTime(workoutAvailTime)\">\n" +
+    "                        <svg-icon class=\"workout-icon\"\n" +
+    "                                  name=\"{{vm.getWorkoutIcon(workoutAvailTime);}}\">\n" +
+    "\n" +
+    "                        </svg-icon>\n" +
+    "                        <span class=\"avail-time-text\">{{workoutAvailTime}}</span>\n" +
+    "                    <span class=\"minutes-text\"\n" +
+    "                          translate=\".MINUTES\">\n" +
+    "                    </span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"start-btn-wrapper\">\n" +
+    "                <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO.START' | translate}}\"\n" +
+    "                           class=\"md-primary znk\"\n" +
+    "                           ng-click=\"vm.startExercise()\"\n" +
+    "                           md-no-ink>\n" +
+    "                    <span translate=\".START\"></span>\n" +
+    "                </md-button>\n" +
+    "            </div>\n" +
+    "        </workout-intro-lock>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -17683,40 +17682,40 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
 })(angular);
 
 angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
-        "<div class=\"exercise-container base-border-radius\">\n" +
-        "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
-        "                         options=\"{\n" +
-        "                            showQuit: true,\n" +
-        "                            showNumSlide: true,\n" +
-        "                            showDate: vm.showTimer,\n" +
-        "                            reviewMode: vm.isComplete\n" +
-        "                         }\"\n" +
-        "                         total-slide-num=\"{{baseZnkExerciseCtrl.numberOfQuestions}}\"\n" +
-        "                         ng-model=\"baseZnkExerciseCtrl.currentIndex\"\n" +
-        "                         side-text=\"vm.headerTitle\"\n" +
-        "                         timer-data=\"baseZnkExerciseCtrl.timerData\"\n" +
-        "                         on-clicked-quit=\"vm.onHeaderQuit()\"\n" +
-        "                         icon-name=\"{{vm.iconName}}\"\n" +
-        "                         icon-click-handler=\"vm.iconClickHandler()\">\n" +
-        "    </znk-exercise-header>\n" +
-        "<!--    <znk-progress-linear-exercise ng-if=\"vm.showTimer\"\n" +
-        "                                  start-time=\"baseZnkExerciseCtrl.startTime\"\n" +
-        "                                  max-time=\"baseZnkExerciseCtrl.maxTime\"\n" +
-        "                                  on-finish-time=\"baseZnkExerciseCtrl.onFinishTime()\"\n" +
-        "                                  on-change-time=\"baseZnkExerciseCtrl.onChangeTime(passedTime)\">\n" +
-        "    </znk-progress-linear-exercise>-->\n" +
-        "    <znk-exercise questions=\"baseZnkExerciseCtrl.exercise.questions\"\n" +
-        "                  ng-model=\"baseZnkExerciseCtrl.resultsData.questionResults\"\n" +
-        "                  settings=\"baseZnkExerciseCtrl.settings\"\n" +
-        "                  actions=\"baseZnkExerciseCtrl.actions\">\n" +
-        "    </znk-exercise>\n" +
-        "    <!--<div ng-if=\"vm.showIntro\" class=\"workout-roadmap-tutorial-intro\"-->\n" +
-        "         <!--ng-include-->\n" +
-        "         <!--src=\"'app/tutorials/templates/tutorialIntro.template.html'\">-->\n" +
-        "    <!--</div>-->\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
+    "<div class=\"exercise-container base-border-radius\">\n" +
+    "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
+    "                         options=\"{\n" +
+    "                            showQuit: true,\n" +
+    "                            showNumSlide: true,\n" +
+    "                            showDate: vm.showTimer,\n" +
+    "                            reviewMode: vm.isComplete\n" +
+    "                         }\"\n" +
+    "                         total-slide-num=\"{{baseZnkExerciseCtrl.numberOfQuestions}}\"\n" +
+    "                         ng-model=\"baseZnkExerciseCtrl.currentIndex\"\n" +
+    "                         side-text=\"vm.headerTitle\"\n" +
+    "                         timer-data=\"baseZnkExerciseCtrl.timerData\"\n" +
+    "                         on-clicked-quit=\"vm.onHeaderQuit()\"\n" +
+    "                         icon-name=\"{{vm.iconName}}\"\n" +
+    "                         icon-click-handler=\"vm.iconClickHandler()\">\n" +
+    "    </znk-exercise-header>\n" +
+    "<!--    <znk-progress-linear-exercise ng-if=\"vm.showTimer\"\n" +
+    "                                  start-time=\"baseZnkExerciseCtrl.startTime\"\n" +
+    "                                  max-time=\"baseZnkExerciseCtrl.maxTime\"\n" +
+    "                                  on-finish-time=\"baseZnkExerciseCtrl.onFinishTime()\"\n" +
+    "                                  on-change-time=\"baseZnkExerciseCtrl.onChangeTime(passedTime)\">\n" +
+    "    </znk-progress-linear-exercise>-->\n" +
+    "    <znk-exercise questions=\"baseZnkExerciseCtrl.exercise.questions\"\n" +
+    "                  ng-model=\"baseZnkExerciseCtrl.resultsData.questionResults\"\n" +
+    "                  settings=\"baseZnkExerciseCtrl.settings\"\n" +
+    "                  actions=\"baseZnkExerciseCtrl.actions\">\n" +
+    "    </znk-exercise>\n" +
+    "    <!--<div ng-if=\"vm.showIntro\" class=\"workout-roadmap-tutorial-intro\"-->\n" +
+    "         <!--ng-include-->\n" +
+    "         <!--src=\"'app/tutorials/templates/tutorialIntro.template.html'\">-->\n" +
+    "    <!--</div>-->\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -17737,13 +17736,13 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.feedback'])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject';
-            var svgMap = {
-                'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
-                'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }]);
+                'ngInject';
+                var svgMap = {
+                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
 })(angular);
 
 (function (angular) {
@@ -17755,7 +17754,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
             controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "ActivePanelSrv", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", "MyLiveLessons", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
-                                                                                                                                                                                                                                                                                                                       UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout,MyLiveLessons) {
+                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout,MyLiveLessons) {
                 'ngInject';
 
                 var vm = this;
@@ -17888,282 +17887,282 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
 
 angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
-        "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
-        "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
-        "        <div class=\"znkHeader-app-logo-wrap\">\n" +
-        "            <svg-icon class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\"\n" +
-        "                      name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\"\n" +
-        "                      ui-sref=\"app.workouts.roadmap\"\n" +
-        "                      ui-sref-opts=\"{reload: true}\">\n" +
-        "            </svg-icon>\n" +
-        "        </div>\n" +
-        "\n" +
-        "        <div class=\"app-states-list\">\n" +
-        "            <md-list flex=\"grow\" layout=\"row\" layout-align=\"start center\">\n" +
-        "                <div ng-repeat=\"headerItem in vm.additionalItems\">\n" +
-        "                    <md-list-item md-ink-ripple\n" +
-        "                                  ui-sref-active=\"active\">\n" +
-        "                        <span class=\"title\" translate=\"{{headerItem.text}}\"></span>\n" +
-        "                        <a ui-sref=\"{{headerItem.goToState}}\"\n" +
-        "                           ui-sref-opts=\"{{headerItem.stateOpt}}\"\n" +
-        "                           class=\"link-full-item\">\n" +
-        "                        </a>\n" +
-        "                    </md-list-item>\n" +
-        "                </div>\n" +
-        "            </md-list>\n" +
-        "        </div>\n" +
-        "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
-        "            <invitation-manager></invitation-manager>\n" +
-        "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +
-        "                <div class=\"pending-purchase-icon-wrapper\" ng-if=\"vm.purchaseState === 'pending'\">\n" +
-        "                    <svg-icon name=\"pending-purchase-clock-icon\"></svg-icon>\n" +
-        "                </div>\n" +
-        "                <span translate=\"{{vm.subscriptionStatus}}\" translate-compile></span>\n" +
-        "            </div>\n" +
-        "            <md-menu md-offset=\"-61 68\">\n" +
-        "                <md-button ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\"\n" +
-        "                           class=\"md-icon-button profile-open-modal-btn\"\n" +
-        "                           aria-label=\"Open sample menu\">\n" +
-        "                    <div>{{vm.userProfile.username}}</div>\n" +
-        "                    <md-icon class=\"material-icons\">{{vm.expandIcon}}</md-icon>\n" +
-        "                </md-button>\n" +
-        "                <md-menu-content class=\"md-menu-content-znk-header\">\n" +
-        "                    <md-list>\n" +
-        "                        <md-list-item class=\"header-modal-item header-modal-item-profile\">\n" +
-        "                            <span class=\"username\">{{vm.userProfile.username}}</span>\n" +
-        "                            <span class=\"email\">{{vm.userProfile.email}}</span>\n" +
-        "                        </md-list-item>\n" +
-        "                        <md-list-item md-ink-ripple\n" +
-        "                                      class=\"header-modal-item header-modal-item-uppercase links purchase-status\">\n" +
-        "                            <span translate=\"{{vm.subscriptionStatus}}\" translate-compile></span>\n" +
-        "                            <span class=\"link-full-item\" ng-click=\"vm.showPurchaseDialog()\"></span>\n" +
-        "                            <ng-switch on=\"vm.purchaseState\">\n" +
-        "                                <div ng-switch-when=\"pending\" class=\"pending-purchase-icon-wrapper\">\n" +
-        "                                    <svg-icon name=\"pending-purchase-clock-icon\"></svg-icon>\n" +
-        "                                </div>\n" +
-        "                                <div ng-switch-when=\"pro\" class=\"check-mark-wrapper\">\n" +
-        "                                    <svg-icon name=\"znkHeader-check-mark-icon\"></svg-icon>\n" +
-        "                                </div>\n" +
-        "                            </ng-switch>\n" +
-        "                        </md-list-item>\n" +
-        "                        <md-list-item\n" +
-        "                            md-ink-ripple\n" +
-        "                            ng-class=\"{'no-live-lessons': vm.noLiveLessons}\"\n" +
-        "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-        "                            <span\n" +
-        "                                ng-click=\"vm.showMyLiveLessonsSchedule()\"\n" +
-        "                                translate=\".MY_LIVE_LESSONS\"></span>\n" +
-        "                        </md-list-item>\n" +
-        "                        <md-list-item md-ink-ripple\n" +
-        "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_GOALS' | translate}}\"\n" +
-        "                                      ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
-        "                                      disable-click-drv\n" +
-        "                                      ng-click=\"vm.showGoalsEdit()\">\n" +
-        "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
-        "                                 translate=\".PROFILE_GOALS\"></div>\n" +
-        "                        </md-list-item>\n" +
-        "                        <md-list-item md-ink-ripple\n" +
-        "                                      aria-label=\"{{'ZNK_HEADER.MY_PROFILE' | translate}}\"\n" +
-        "                                      ng-click=\"vm.showMyProfile()\">\n" +
-        "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
-        "                                 translate=\".MY_PROFILE\"></div>\n" +
-        "                        </md-list-item>\n" +
-        "                        <md-list-item md-ink-ripple>\n" +
-        "                            <a ui-sref=\"app.faq\"\n" +
-        "                               class=\"header-modal-item header-modal-item-uppercase links\"\n" +
-        "                               translate=\".WHAT_IS_THE_THIS_TEST\">\n" +
-        "                            </a>\n" +
-        "                        </md-list-item>\n" +
-        "                        <md-list-item md-ink-ripple\n" +
-        "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_SUPPORT' | translate}}\"\n" +
-        "                                      ng-click=\"vm.showFeedbackDialog()\">\n" +
-        "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
-        "                                 translate=\".PROFILE_SUPPORT\"></div>\n" +
-        "                        </md-list-item>\n" +
-        "                        <div class=\"divider\"></div>\n" +
-        "                        <md-list-item md-ink-ripple\n" +
-        "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_LOGOUT' | translate}}\"\n" +
-        "                                      ng-click=\"vm.logout()\">\n" +
-        "                            <div class=\"header-modal-item header-modal-item-uppercase logout\"\n" +
-        "                                 translate=\".PROFILE_LOGOUT\"></div>\n" +
-        "                        </md-list-item>\n" +
-        "                    </md-list>\n" +
-        "                </md-menu-content>\n" +
-        "            </md-menu>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/znkHeader/svg/check-mark-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 329.5 223.7\"\n" +
-        "	 class=\"check-mark-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .check-mark-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #ffffff;\n" +
-        "            stroke-width: 21;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-        "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/znkHeader/svg/pending-purchase-clock-icon.svg",
-        "<svg\n" +
-        "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"0 0 183 183\"\n" +
-        "    style=\"enable-background:new 0 0 183 183;\" xml:space=\"preserve\"\n" +
-        "    class=\"pending-purchase-clock-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.pending-purchase-clock-svg .st0{fill:none;stroke:#231F20;stroke-width:10.5417;stroke-miterlimit:10;}\n" +
-        "	.pending-purchase-clock-svg .st1{fill:none;stroke:#231F20;stroke-width:12.3467;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "	.pending-purchase-clock-svg .st2{fill:none;stroke:#231F20;stroke-width:11.8313;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<circle class=\"st0\" cx=\"91.5\" cy=\"91.5\" r=\"86.2\"/>\n" +
-        "<line class=\"st1\" x1=\"92.1\" y1=\"96\" x2=\"92.1\" y2=\"35.5\"/>\n" +
-        "<line class=\"st2\" x1=\"92.1\" y1=\"96\" x2=\"131.4\" y2=\"96\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/znkHeader/svg/raccoon-logo.svg",
-        "<svg\n" +
-        "    x=\"0px\"\n" +
-        "    y=\"0px\"\n" +
-        "    viewBox=\"0 0 237 158\"\n" +
-        "    class=\"raccoon-logo-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .raccoon-logo-svg .circle{fill:#000001;}\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "        <circle class=\"circle\" cx=\"175\" cy=\"93.1\" r=\"13.7\"/>\n" +
-        "        <path class=\"circle\" d=\"M118.5,155.9c10.2,0,18.5-8.3,18.5-18.5c0-10.2-8.3-18.5-18.5-18.5c-10.2,0-18.5,8.3-18.5,18.5\n" +
-        "		C100,147.6,108.3,155.9,118.5,155.9z\"/>\n" +
-        "        <path class=\"circle\" d=\"M172.4,67.5c-15.8-9.7-34.3-15.3-53.9-15.3c-19.6,0-38.2,5.5-53.9,15.3\n" +
-        "		c13,1.3,23.1,12.3,23.1,25.6c0,1.8-0.2,3.5-0.5,5.1c9.3-5.2,20-8.1,31.3-8.1c11.3,0,22,2.9,31.4,8.1c-0.3-1.7-0.5-3.4-0.5-5.1\n" +
-        "		C149.3,79.8,159.5,68.8,172.4,67.5z\"/>\n" +
-        "        <path class=\"circle\" d=\"M36.3,93.5c-8,10.8-14,23.4-17.4,37.2c-1.2,4.9-0.4,10,2.3,14.3c2.6,4.3,6.8,7.3,11.7,8.5\n" +
-        "		c1.5,0.4,3,0.5,4.5,0.5c8.8,0,16.3-6,18.4-14.5c1.8-7.7,5-14.7,9.2-20.9c-1,0.1-2,0.2-3,0.2C47.9,118.8,36.5,107.5,36.3,93.5z\"/>\n" +
-        "        <path class=\"circle\" d=\"M232.2,92.5c0.6-6.7,6.5-78-4.5-88.4c-9.5-9.1-60.3,16-77.5,24.9\n" +
-        "		C185.3,37.8,215,60.9,232.2,92.5z\"/>\n" +
-        "        <circle class=\"circle\" cx=\"62\" cy=\"93.1\" r=\"13.7\"/>\n" +
-        "        <path class=\"circle\" d=\"M204.1,153.6c10.2-2.4,16.4-12.7,14-22.8c-3.3-13.8-9.3-26.4-17.4-37.2\n" +
-        "		c-0.2,14-11.6,25.3-25.7,25.3c-1,0-2-0.1-3-0.2c4.2,6.2,7.4,13.3,9.2,21c2,8.6,9.6,14.5,18.4,14.5\n" +
-        "		C201.1,154.1,202.6,153.9,204.1,153.6\"/>\n" +
-        "        <path class=\"circle\" d=\"M86.7,29C69.5,20.1,18.8-5,9.2,4.1c-11,10.4-5.1,81.5-4.5,88.4C22,60.8,51.7,37.8,86.7,29z\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/znkHeader/svg/znk-app-name-logo.svg",
-        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-        "<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n" +
-        "<svg version=\"1.1\" id=\"TOEFL\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-169 364 273 65\" style=\"enable-background:new -169 364 273 65;\" xml:space=\"preserve\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.st0{enable-background:new    ;}\n" +
-        "	.st1{fill:#FF931E;}\n" +
-        "	.st2{fill:#A1A1A1;}\n" +
-        "	.st3{fill:none;enable-background:new    ;}\n" +
-        "	.st4{fill:#000001;}\n" +
-        "</style>\n" +
-        "<g class=\"st0\">\n" +
-        "	<path class=\"st1\" d=\"M-41.1,376.6v27.2h-5.6v-27.2h-10v-5h25.7v5H-41.1z\"/>\n" +
-        "	<path class=\"st1\" d=\"M1.8,399.4c-3.3,3.2-7.5,4.8-12.4,4.8c-4.9,0-9.1-1.6-12.4-4.8c-3.3-3.2-5-7.1-5-11.9s1.7-8.7,5-11.9\n" +
-        "		c3.3-3.2,7.5-4.8,12.4-4.8c4.9,0,9.1,1.6,12.4,4.8c3.3,3.2,5,7.1,5,11.9S5.1,396.2,1.8,399.4z M-2.3,379.3c-2.3-2.3-5-3.4-8.3-3.4\n" +
-        "		c-3.3,0-6.1,1.1-8.3,3.4c-2.3,2.3-3.4,5-3.4,8.3c0,3.2,1.1,6,3.4,8.3c2.3,2.3,5,3.4,8.3,3.4c3.3,0,6.1-1.1,8.3-3.4\n" +
-        "		c2.3-2.3,3.4-5,3.4-8.3C1.1,384.3,0,381.5-2.3,379.3z\"/>\n" +
-        "	<path class=\"st1\" d=\"M37.1,371.7v5.1H19.5v8.5h15.9v4.8H19.5v8.6h18.2v5.1H13.9v-32.2H37.1z\"/>\n" +
-        "	<path class=\"st1\" d=\"M50.4,376.7v8.8h14.7v5H50.4v13.3h-5.6v-32.2h22.1l0,5.1H50.4z\"/>\n" +
-        "	<path class=\"st1\" d=\"M73.5,403.9v-32.2h5.6v27h15.1v5.2H73.5z\"/>\n" +
-        "</g>\n" +
-        "<path class=\"st1\" d=\"M97.4,365c3.4-0.2,6.4,2.4,6.6,5.9s-2.4,6.4-5.9,6.6c-0.2,0-0.5,0-0.7,0c-3.4,0.2-6.4-2.4-6.7-5.8\n" +
-        "	c-0.2-3.4,2.4-6.4,5.8-6.7C96.8,365,97.1,365,97.4,365L97.4,365z M97.3,366.3c-2.7,0-4.9,2.3-4.9,5c0,2.7,2.3,4.9,5,4.9\n" +
-        "	c2.7,0,4.9-2.1,4.9-4.8c0-0.1,0-0.1,0-0.2c0-2.7-2.1-5-4.8-5C97.4,366.3,97.4,366.3,97.3,366.3L97.3,366.3L97.3,366.3z M96.3,374.4\n" +
-        "	h-1.5v-6.2c0.8-0.1,1.7-0.2,2.5-0.2c0.8-0.1,1.5,0.1,2.2,0.5c0.4,0.3,0.7,0.8,0.7,1.3c-0.1,0.7-0.6,1.3-1.3,1.5v0.1\n" +
-        "	c0.6,0.2,1.1,0.8,1.1,1.5c0.1,0.5,0.2,1,0.5,1.5h-1.6c-0.3-0.5-0.4-1-0.5-1.5c-0.1-0.6-0.7-1-1.3-1c0,0,0,0-0.1,0h-0.7L96.3,374.4\n" +
-        "	L96.3,374.4z M96.4,371h0.7c0.8,0,1.5-0.3,1.5-0.9c0-0.6-0.4-0.9-1.4-0.9c-0.3,0-0.6,0-0.8,0.1L96.4,371L96.4,371z\"/>\n" +
-        "<g class=\"st0\">\n" +
-        "	<path class=\"st2\" d=\"M-16,416v1.5h-4.2V429H-22v-11.5h-4.2V416H-16z\"/>\n" +
-        "	<path class=\"st2\" d=\"M-6.2,416v1.4h-6.2v4.3h5v1.4h-5v4.4h6.2v1.4h-8v-13H-6.2z\"/>\n" +
-        "	<path class=\"st2\" d=\"M3,418.1c-0.1,0.1-0.1,0.2-0.2,0.2c-0.1,0-0.1,0.1-0.2,0.1c-0.1,0-0.2-0.1-0.4-0.2s-0.3-0.2-0.5-0.3\n" +
-        "		c-0.2-0.1-0.5-0.2-0.8-0.3s-0.6-0.2-1.1-0.2c-0.4,0-0.7,0.1-1,0.2c-0.3,0.1-0.6,0.2-0.8,0.4c-0.2,0.2-0.4,0.4-0.5,0.6\n" +
-        "		c-0.1,0.2-0.2,0.5-0.2,0.8c0,0.4,0.1,0.7,0.3,0.9c0.2,0.2,0.4,0.4,0.7,0.6c0.3,0.2,0.6,0.3,1,0.4c0.4,0.1,0.8,0.3,1.1,0.4\n" +
-        "		c0.4,0.1,0.8,0.3,1.1,0.4c0.4,0.2,0.7,0.4,1,0.6c0.3,0.3,0.5,0.6,0.7,0.9c0.2,0.4,0.3,0.8,0.3,1.4c0,0.6-0.1,1.1-0.3,1.6\n" +
-        "		c-0.2,0.5-0.5,0.9-0.8,1.3c-0.4,0.4-0.8,0.7-1.4,0.9s-1.2,0.3-1.8,0.3c-0.8,0-1.6-0.2-2.3-0.5c-0.7-0.3-1.3-0.7-1.8-1.2l0.5-0.8\n" +
-        "		c0-0.1,0.1-0.1,0.2-0.2c0.1,0,0.1-0.1,0.2-0.1c0.1,0,0.3,0.1,0.4,0.2s0.4,0.3,0.6,0.4s0.5,0.3,0.9,0.4c0.3,0.1,0.8,0.2,1.3,0.2\n" +
-        "		c0.4,0,0.8-0.1,1.1-0.2s0.6-0.3,0.8-0.5c0.2-0.2,0.4-0.5,0.5-0.7c0.1-0.3,0.2-0.6,0.2-1c0-0.4-0.1-0.7-0.3-1s-0.4-0.5-0.7-0.6\n" +
-        "		c-0.3-0.2-0.6-0.3-1-0.4c-0.4-0.1-0.8-0.2-1.1-0.4c-0.4-0.1-0.8-0.3-1.1-0.4s-0.7-0.4-1-0.6c-0.3-0.3-0.5-0.6-0.7-1\n" +
-        "		s-0.3-0.9-0.3-1.4c0-0.5,0.1-0.9,0.3-1.3s0.4-0.8,0.8-1.1s0.8-0.6,1.3-0.8s1.1-0.3,1.7-0.3c0.7,0,1.4,0.1,2,0.3\n" +
-        "		c0.6,0.2,1.1,0.6,1.6,1L3,418.1z\"/>\n" +
-        "	<path class=\"st2\" d=\"M14.8,416v1.5h-4.2V429H8.8v-11.5H4.6V416H14.8z\"/>\n" +
-        "	<path class=\"st2\" d=\"M22,424.2v4.8h-1.7v-13h3.8c0.8,0,1.5,0.1,2.1,0.3c0.6,0.2,1.1,0.5,1.5,0.8s0.7,0.8,0.9,1.3s0.3,1,0.3,1.7\n" +
-        "		c0,0.6-0.1,1.2-0.3,1.7c-0.2,0.5-0.5,0.9-0.9,1.3c-0.4,0.4-0.9,0.6-1.5,0.8s-1.3,0.3-2.1,0.3H22z M22,422.8h2.1\n" +
-        "		c0.5,0,0.9-0.1,1.3-0.2c0.4-0.1,0.7-0.3,1-0.6c0.3-0.2,0.5-0.5,0.6-0.9c0.1-0.3,0.2-0.7,0.2-1.1c0-0.8-0.3-1.5-0.8-1.9\n" +
-        "		c-0.5-0.5-1.3-0.7-2.3-0.7H22V422.8z\"/>\n" +
-        "	<path class=\"st2\" d=\"M33.1,423.6v5.4h-1.7v-13H35c0.8,0,1.5,0.1,2.1,0.2c0.6,0.2,1.1,0.4,1.5,0.7c0.4,0.3,0.7,0.7,0.9,1.1\n" +
-        "		s0.3,0.9,0.3,1.5c0,0.5-0.1,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.6,1.1s-0.6,0.6-1,0.8c-0.4,0.2-0.8,0.4-1.3,0.5\n" +
-        "		c0.2,0.1,0.4,0.3,0.6,0.6l3.8,5.1h-1.6c-0.3,0-0.6-0.1-0.7-0.4l-3.4-4.6c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.3-0.1-0.5-0.1H33.1z\n" +
-        "		 M33.1,422.3h1.8c0.5,0,1-0.1,1.4-0.2c0.4-0.1,0.7-0.3,1-0.5c0.3-0.2,0.5-0.5,0.6-0.8s0.2-0.7,0.2-1c0-0.8-0.3-1.4-0.8-1.7\n" +
-        "		c-0.5-0.4-1.3-0.6-2.3-0.6h-1.9V422.3z\"/>\n" +
-        "	<path class=\"st2\" d=\"M50.8,416v1.4h-6.2v4.3h5v1.4h-5v4.4h6.2v1.4h-8v-13H50.8z\"/>\n" +
-        "	<path class=\"st2\" d=\"M55.2,424.2v4.8h-1.7v-13h3.8c0.8,0,1.5,0.1,2.1,0.3c0.6,0.2,1.1,0.5,1.5,0.8s0.7,0.8,0.9,1.3s0.3,1,0.3,1.7\n" +
-        "		c0,0.6-0.1,1.2-0.3,1.7c-0.2,0.5-0.5,0.9-0.9,1.3c-0.4,0.4-0.9,0.6-1.5,0.8s-1.3,0.3-2.1,0.3H55.2z M55.2,422.8h2.1\n" +
-        "		c0.5,0,0.9-0.1,1.3-0.2c0.4-0.1,0.7-0.3,1-0.6c0.3-0.2,0.5-0.5,0.6-0.9c0.1-0.3,0.2-0.7,0.2-1.1c0-0.8-0.3-1.5-0.8-1.9\n" +
-        "		c-0.5-0.5-1.3-0.7-2.3-0.7h-2.1V422.8z\"/>\n" +
-        "</g>\n" +
-        "<path class=\"st3\" d=\"z\"/>\n" +
-        "<circle id=\"XMLID_137_\" class=\"st4\" cx=\"-97.6\" cy=\"403\" r=\"5.7\"/>\n" +
-        "<path id=\"XMLID_136_\" class=\"st4\" d=\"M-121,429c4.2,0,7.7-3.4,7.7-7.7c0-4.2-3.4-7.7-7.7-7.7c-4.2,0-7.7,3.4-7.7,7.7\n" +
-        "	C-128.7,425.6-125.2,429-121,429z\"/>\n" +
-        "<path id=\"XMLID_135_\" class=\"st4\" d=\"M-98.7,392.5c-6.5-4-14.2-6.3-22.3-6.3c-8.1,0-15.8,2.3-22.3,6.3c5.4,0.5,9.6,5.1,9.6,10.6\n" +
-        "	c0,0.7-0.1,1.4-0.2,2.1c3.9-2.1,8.3-3.3,13-3.3c4.7,0,9.1,1.2,13,3.3c-0.1-0.7-0.2-1.4-0.2-2.1C-108.3,397.5-104.1,393-98.7,392.5z\"\n" +
-        "	/>\n" +
-        "<path id=\"XMLID_134_\" class=\"st4\" d=\"M-155,403.2c-3.3,4.5-5.8,9.7-7.2,15.4c-0.5,2-0.2,4.1,0.9,5.9c1.1,1.8,2.8,3,4.8,3.5\n" +
-        "	c0.6,0.1,1.2,0.2,1.8,0.2c3.6,0,6.8-2.5,7.6-6c0.8-3.2,2.1-6.1,3.8-8.6c-0.4,0-0.8,0.1-1.2,0.1C-150.2,413.7-154.9,409-155,403.2z\"\n" +
-        "	/>\n" +
-        "<path id=\"XMLID_132_\" class=\"st4\" d=\"M-74,402.8c0.2-2.8,2.7-32.3-1.9-36.6c-3.9-3.7-24.9,6.6-32,10.3\n" +
-        "	C-93.4,380.2-81.1,389.7-74,402.8z\"/>\n" +
-        "<circle id=\"XMLID_131_\" class=\"st4\" cx=\"-144.4\" cy=\"403\" r=\"5.7\"/>\n" +
-        "<path id=\"XMLID_130_\" class=\"st4\" d=\"M-97.6,413.7c-0.4,0-0.8,0-1.3-0.1c1.7,2.6,3.1,5.5,3.8,8.7c0.8,3.5,4,6,7.6,6\n" +
-        "	c0.6,0,1.2-0.1,1.8-0.2c4.2-1,6.8-5.2,5.8-9.4c-1.4-5.7-3.9-10.9-7.2-15.4C-87.1,409-91.8,413.7-97.6,413.7z\"/>\n" +
-        "<path id=\"XMLID_129_\" class=\"st4\" d=\"M-134.1,376.6c-7.1-3.7-28.1-14.1-32-10.3c-4.5,4.3-2.1,33.7-1.9,36.6\n" +
-        "	C-160.9,389.7-148.6,380.2-134.1,376.6z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/znkHeader/svg/znk-header-check-mark-icon.svg",
-        "<svg version=\"1.1\"\n" +
-        "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "     x=\"0px\"\n" +
-        "     y=\"0px\"\n" +
-        "	 viewBox=\"0 0 329.5 223.7\"\n" +
-        "	 class=\"znkHeader-check-mark-svg\">\n" +
-        "    <style type=\"text/css\">\n" +
-        "        .znkHeader-check-mark-svg .st0 {\n" +
-        "            fill: none;\n" +
-        "            stroke: #ffffff;\n" +
-        "            stroke-width: 21;\n" +
-        "            stroke-linecap: round;\n" +
-        "            stroke-linejoin: round;\n" +
-        "            stroke-miterlimit: 10;\n" +
-        "        }\n" +
-        "    </style>\n" +
-        "    <g>\n" +
-        "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
-        "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
-        "    </g>\n" +
-        "</svg>\n" +
-        "");
+  $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
+    "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
+    "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
+    "        <div class=\"znkHeader-app-logo-wrap\">\n" +
+    "            <svg-icon class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\"\n" +
+    "                      name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\"\n" +
+    "                      ui-sref=\"app.workouts.roadmap\"\n" +
+    "                      ui-sref-opts=\"{reload: true}\">\n" +
+    "            </svg-icon>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"app-states-list\">\n" +
+    "            <md-list flex=\"grow\" layout=\"row\" layout-align=\"start center\">\n" +
+    "                <div ng-repeat=\"headerItem in vm.additionalItems\">\n" +
+    "                    <md-list-item md-ink-ripple\n" +
+    "                                  ui-sref-active=\"active\">\n" +
+    "                        <span class=\"title\" translate=\"{{headerItem.text}}\"></span>\n" +
+    "                        <a ui-sref=\"{{headerItem.goToState}}\"\n" +
+    "                           ui-sref-opts=\"{{headerItem.stateOpt}}\"\n" +
+    "                           class=\"link-full-item\">\n" +
+    "                        </a>\n" +
+    "                    </md-list-item>\n" +
+    "                </div>\n" +
+    "            </md-list>\n" +
+    "        </div>\n" +
+    "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
+    "            <invitation-manager></invitation-manager>\n" +
+    "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +
+    "                <div class=\"pending-purchase-icon-wrapper\" ng-if=\"vm.purchaseState === 'pending'\">\n" +
+    "                    <svg-icon name=\"pending-purchase-clock-icon\"></svg-icon>\n" +
+    "                </div>\n" +
+    "                <span translate=\"{{vm.subscriptionStatus}}\" translate-compile></span>\n" +
+    "            </div>\n" +
+    "            <md-menu md-offset=\"-61 68\">\n" +
+    "                <md-button ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\"\n" +
+    "                           class=\"md-icon-button profile-open-modal-btn\"\n" +
+    "                           aria-label=\"Open sample menu\">\n" +
+    "                    <div>{{vm.userProfile.username}}</div>\n" +
+    "                    <md-icon class=\"material-icons\">{{vm.expandIcon}}</md-icon>\n" +
+    "                </md-button>\n" +
+    "                <md-menu-content class=\"md-menu-content-znk-header\">\n" +
+    "                    <md-list>\n" +
+    "                        <md-list-item class=\"header-modal-item header-modal-item-profile\">\n" +
+    "                            <span class=\"username\">{{vm.userProfile.username}}</span>\n" +
+    "                            <span class=\"email\">{{vm.userProfile.email}}</span>\n" +
+    "                        </md-list-item>\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      class=\"header-modal-item header-modal-item-uppercase links purchase-status\">\n" +
+    "                            <span translate=\"{{vm.subscriptionStatus}}\" translate-compile></span>\n" +
+    "                            <span class=\"link-full-item\" ng-click=\"vm.showPurchaseDialog()\"></span>\n" +
+    "                            <ng-switch on=\"vm.purchaseState\">\n" +
+    "                                <div ng-switch-when=\"pending\" class=\"pending-purchase-icon-wrapper\">\n" +
+    "                                    <svg-icon name=\"pending-purchase-clock-icon\"></svg-icon>\n" +
+    "                                </div>\n" +
+    "                                <div ng-switch-when=\"pro\" class=\"check-mark-wrapper\">\n" +
+    "                                    <svg-icon name=\"znkHeader-check-mark-icon\"></svg-icon>\n" +
+    "                                </div>\n" +
+    "                            </ng-switch>\n" +
+    "                        </md-list-item>\n" +
+    "                        <md-list-item\n" +
+    "                            md-ink-ripple\n" +
+    "                            ng-class=\"{'no-live-lessons': vm.noLiveLessons}\"\n" +
+    "                            class=\"header-modal-item header-modal-item-uppercase links\">\n" +
+    "                            <span\n" +
+    "                                ng-click=\"vm.showMyLiveLessonsSchedule()\"\n" +
+    "                                translate=\".MY_LIVE_LESSONS\"></span>\n" +
+    "                        </md-list-item>\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_GOALS' | translate}}\"\n" +
+    "                                      ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
+    "                                      disable-click-drv\n" +
+    "                                      ng-click=\"vm.showGoalsEdit()\">\n" +
+    "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
+    "                                 translate=\".PROFILE_GOALS\"></div>\n" +
+    "                        </md-list-item>\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      aria-label=\"{{'ZNK_HEADER.MY_PROFILE' | translate}}\"\n" +
+    "                                      ng-click=\"vm.showMyProfile()\">\n" +
+    "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
+    "                                 translate=\".MY_PROFILE\"></div>\n" +
+    "                        </md-list-item>\n" +
+    "                        <md-list-item md-ink-ripple>\n" +
+    "                            <a ui-sref=\"app.faq\"\n" +
+    "                               class=\"header-modal-item header-modal-item-uppercase links\"\n" +
+    "                               translate=\".WHAT_IS_THE_THIS_TEST\">\n" +
+    "                            </a>\n" +
+    "                        </md-list-item>\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_SUPPORT' | translate}}\"\n" +
+    "                                      ng-click=\"vm.showFeedbackDialog()\">\n" +
+    "                            <div class=\"header-modal-item header-modal-item-uppercase links\"\n" +
+    "                                 translate=\".PROFILE_SUPPORT\"></div>\n" +
+    "                        </md-list-item>\n" +
+    "                        <div class=\"divider\"></div>\n" +
+    "                        <md-list-item md-ink-ripple\n" +
+    "                                      aria-label=\"{{'ZNK_HEADER.PROFILE_LOGOUT' | translate}}\"\n" +
+    "                                      ng-click=\"vm.logout()\">\n" +
+    "                            <div class=\"header-modal-item header-modal-item-uppercase logout\"\n" +
+    "                                 translate=\".PROFILE_LOGOUT\"></div>\n" +
+    "                        </md-list-item>\n" +
+    "                    </md-list>\n" +
+    "                </md-menu-content>\n" +
+    "            </md-menu>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/znkHeader/svg/check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/znkHeader/svg/pending-purchase-clock-icon.svg",
+    "<svg\n" +
+    "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 183 183\"\n" +
+    "    style=\"enable-background:new 0 0 183 183;\" xml:space=\"preserve\"\n" +
+    "    class=\"pending-purchase-clock-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.pending-purchase-clock-svg .st0{fill:none;stroke:#231F20;stroke-width:10.5417;stroke-miterlimit:10;}\n" +
+    "	.pending-purchase-clock-svg .st1{fill:none;stroke:#231F20;stroke-width:12.3467;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "	.pending-purchase-clock-svg .st2{fill:none;stroke:#231F20;stroke-width:11.8313;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<circle class=\"st0\" cx=\"91.5\" cy=\"91.5\" r=\"86.2\"/>\n" +
+    "<line class=\"st1\" x1=\"92.1\" y1=\"96\" x2=\"92.1\" y2=\"35.5\"/>\n" +
+    "<line class=\"st2\" x1=\"92.1\" y1=\"96\" x2=\"131.4\" y2=\"96\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/znkHeader/svg/raccoon-logo.svg",
+    "<svg\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"0 0 237 158\"\n" +
+    "    class=\"raccoon-logo-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .raccoon-logo-svg .circle{fill:#000001;}\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "        <circle class=\"circle\" cx=\"175\" cy=\"93.1\" r=\"13.7\"/>\n" +
+    "        <path class=\"circle\" d=\"M118.5,155.9c10.2,0,18.5-8.3,18.5-18.5c0-10.2-8.3-18.5-18.5-18.5c-10.2,0-18.5,8.3-18.5,18.5\n" +
+    "		C100,147.6,108.3,155.9,118.5,155.9z\"/>\n" +
+    "        <path class=\"circle\" d=\"M172.4,67.5c-15.8-9.7-34.3-15.3-53.9-15.3c-19.6,0-38.2,5.5-53.9,15.3\n" +
+    "		c13,1.3,23.1,12.3,23.1,25.6c0,1.8-0.2,3.5-0.5,5.1c9.3-5.2,20-8.1,31.3-8.1c11.3,0,22,2.9,31.4,8.1c-0.3-1.7-0.5-3.4-0.5-5.1\n" +
+    "		C149.3,79.8,159.5,68.8,172.4,67.5z\"/>\n" +
+    "        <path class=\"circle\" d=\"M36.3,93.5c-8,10.8-14,23.4-17.4,37.2c-1.2,4.9-0.4,10,2.3,14.3c2.6,4.3,6.8,7.3,11.7,8.5\n" +
+    "		c1.5,0.4,3,0.5,4.5,0.5c8.8,0,16.3-6,18.4-14.5c1.8-7.7,5-14.7,9.2-20.9c-1,0.1-2,0.2-3,0.2C47.9,118.8,36.5,107.5,36.3,93.5z\"/>\n" +
+    "        <path class=\"circle\" d=\"M232.2,92.5c0.6-6.7,6.5-78-4.5-88.4c-9.5-9.1-60.3,16-77.5,24.9\n" +
+    "		C185.3,37.8,215,60.9,232.2,92.5z\"/>\n" +
+    "        <circle class=\"circle\" cx=\"62\" cy=\"93.1\" r=\"13.7\"/>\n" +
+    "        <path class=\"circle\" d=\"M204.1,153.6c10.2-2.4,16.4-12.7,14-22.8c-3.3-13.8-9.3-26.4-17.4-37.2\n" +
+    "		c-0.2,14-11.6,25.3-25.7,25.3c-1,0-2-0.1-3-0.2c4.2,6.2,7.4,13.3,9.2,21c2,8.6,9.6,14.5,18.4,14.5\n" +
+    "		C201.1,154.1,202.6,153.9,204.1,153.6\"/>\n" +
+    "        <path class=\"circle\" d=\"M86.7,29C69.5,20.1,18.8-5,9.2,4.1c-11,10.4-5.1,81.5-4.5,88.4C22,60.8,51.7,37.8,86.7,29z\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/znkHeader/svg/znk-app-name-logo.svg",
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n" +
+    "<svg version=\"1.1\" id=\"TOEFL\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-169 364 273 65\" style=\"enable-background:new -169 364 273 65;\" xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.st0{enable-background:new    ;}\n" +
+    "	.st1{fill:#FF931E;}\n" +
+    "	.st2{fill:#A1A1A1;}\n" +
+    "	.st3{fill:none;enable-background:new    ;}\n" +
+    "	.st4{fill:#000001;}\n" +
+    "</style>\n" +
+    "<g class=\"st0\">\n" +
+    "	<path class=\"st1\" d=\"M-41.1,376.6v27.2h-5.6v-27.2h-10v-5h25.7v5H-41.1z\"/>\n" +
+    "	<path class=\"st1\" d=\"M1.8,399.4c-3.3,3.2-7.5,4.8-12.4,4.8c-4.9,0-9.1-1.6-12.4-4.8c-3.3-3.2-5-7.1-5-11.9s1.7-8.7,5-11.9\n" +
+    "		c3.3-3.2,7.5-4.8,12.4-4.8c4.9,0,9.1,1.6,12.4,4.8c3.3,3.2,5,7.1,5,11.9S5.1,396.2,1.8,399.4z M-2.3,379.3c-2.3-2.3-5-3.4-8.3-3.4\n" +
+    "		c-3.3,0-6.1,1.1-8.3,3.4c-2.3,2.3-3.4,5-3.4,8.3c0,3.2,1.1,6,3.4,8.3c2.3,2.3,5,3.4,8.3,3.4c3.3,0,6.1-1.1,8.3-3.4\n" +
+    "		c2.3-2.3,3.4-5,3.4-8.3C1.1,384.3,0,381.5-2.3,379.3z\"/>\n" +
+    "	<path class=\"st1\" d=\"M37.1,371.7v5.1H19.5v8.5h15.9v4.8H19.5v8.6h18.2v5.1H13.9v-32.2H37.1z\"/>\n" +
+    "	<path class=\"st1\" d=\"M50.4,376.7v8.8h14.7v5H50.4v13.3h-5.6v-32.2h22.1l0,5.1H50.4z\"/>\n" +
+    "	<path class=\"st1\" d=\"M73.5,403.9v-32.2h5.6v27h15.1v5.2H73.5z\"/>\n" +
+    "</g>\n" +
+    "<path class=\"st1\" d=\"M97.4,365c3.4-0.2,6.4,2.4,6.6,5.9s-2.4,6.4-5.9,6.6c-0.2,0-0.5,0-0.7,0c-3.4,0.2-6.4-2.4-6.7-5.8\n" +
+    "	c-0.2-3.4,2.4-6.4,5.8-6.7C96.8,365,97.1,365,97.4,365L97.4,365z M97.3,366.3c-2.7,0-4.9,2.3-4.9,5c0,2.7,2.3,4.9,5,4.9\n" +
+    "	c2.7,0,4.9-2.1,4.9-4.8c0-0.1,0-0.1,0-0.2c0-2.7-2.1-5-4.8-5C97.4,366.3,97.4,366.3,97.3,366.3L97.3,366.3L97.3,366.3z M96.3,374.4\n" +
+    "	h-1.5v-6.2c0.8-0.1,1.7-0.2,2.5-0.2c0.8-0.1,1.5,0.1,2.2,0.5c0.4,0.3,0.7,0.8,0.7,1.3c-0.1,0.7-0.6,1.3-1.3,1.5v0.1\n" +
+    "	c0.6,0.2,1.1,0.8,1.1,1.5c0.1,0.5,0.2,1,0.5,1.5h-1.6c-0.3-0.5-0.4-1-0.5-1.5c-0.1-0.6-0.7-1-1.3-1c0,0,0,0-0.1,0h-0.7L96.3,374.4\n" +
+    "	L96.3,374.4z M96.4,371h0.7c0.8,0,1.5-0.3,1.5-0.9c0-0.6-0.4-0.9-1.4-0.9c-0.3,0-0.6,0-0.8,0.1L96.4,371L96.4,371z\"/>\n" +
+    "<g class=\"st0\">\n" +
+    "	<path class=\"st2\" d=\"M-16,416v1.5h-4.2V429H-22v-11.5h-4.2V416H-16z\"/>\n" +
+    "	<path class=\"st2\" d=\"M-6.2,416v1.4h-6.2v4.3h5v1.4h-5v4.4h6.2v1.4h-8v-13H-6.2z\"/>\n" +
+    "	<path class=\"st2\" d=\"M3,418.1c-0.1,0.1-0.1,0.2-0.2,0.2c-0.1,0-0.1,0.1-0.2,0.1c-0.1,0-0.2-0.1-0.4-0.2s-0.3-0.2-0.5-0.3\n" +
+    "		c-0.2-0.1-0.5-0.2-0.8-0.3s-0.6-0.2-1.1-0.2c-0.4,0-0.7,0.1-1,0.2c-0.3,0.1-0.6,0.2-0.8,0.4c-0.2,0.2-0.4,0.4-0.5,0.6\n" +
+    "		c-0.1,0.2-0.2,0.5-0.2,0.8c0,0.4,0.1,0.7,0.3,0.9c0.2,0.2,0.4,0.4,0.7,0.6c0.3,0.2,0.6,0.3,1,0.4c0.4,0.1,0.8,0.3,1.1,0.4\n" +
+    "		c0.4,0.1,0.8,0.3,1.1,0.4c0.4,0.2,0.7,0.4,1,0.6c0.3,0.3,0.5,0.6,0.7,0.9c0.2,0.4,0.3,0.8,0.3,1.4c0,0.6-0.1,1.1-0.3,1.6\n" +
+    "		c-0.2,0.5-0.5,0.9-0.8,1.3c-0.4,0.4-0.8,0.7-1.4,0.9s-1.2,0.3-1.8,0.3c-0.8,0-1.6-0.2-2.3-0.5c-0.7-0.3-1.3-0.7-1.8-1.2l0.5-0.8\n" +
+    "		c0-0.1,0.1-0.1,0.2-0.2c0.1,0,0.1-0.1,0.2-0.1c0.1,0,0.3,0.1,0.4,0.2s0.4,0.3,0.6,0.4s0.5,0.3,0.9,0.4c0.3,0.1,0.8,0.2,1.3,0.2\n" +
+    "		c0.4,0,0.8-0.1,1.1-0.2s0.6-0.3,0.8-0.5c0.2-0.2,0.4-0.5,0.5-0.7c0.1-0.3,0.2-0.6,0.2-1c0-0.4-0.1-0.7-0.3-1s-0.4-0.5-0.7-0.6\n" +
+    "		c-0.3-0.2-0.6-0.3-1-0.4c-0.4-0.1-0.8-0.2-1.1-0.4c-0.4-0.1-0.8-0.3-1.1-0.4s-0.7-0.4-1-0.6c-0.3-0.3-0.5-0.6-0.7-1\n" +
+    "		s-0.3-0.9-0.3-1.4c0-0.5,0.1-0.9,0.3-1.3s0.4-0.8,0.8-1.1s0.8-0.6,1.3-0.8s1.1-0.3,1.7-0.3c0.7,0,1.4,0.1,2,0.3\n" +
+    "		c0.6,0.2,1.1,0.6,1.6,1L3,418.1z\"/>\n" +
+    "	<path class=\"st2\" d=\"M14.8,416v1.5h-4.2V429H8.8v-11.5H4.6V416H14.8z\"/>\n" +
+    "	<path class=\"st2\" d=\"M22,424.2v4.8h-1.7v-13h3.8c0.8,0,1.5,0.1,2.1,0.3c0.6,0.2,1.1,0.5,1.5,0.8s0.7,0.8,0.9,1.3s0.3,1,0.3,1.7\n" +
+    "		c0,0.6-0.1,1.2-0.3,1.7c-0.2,0.5-0.5,0.9-0.9,1.3c-0.4,0.4-0.9,0.6-1.5,0.8s-1.3,0.3-2.1,0.3H22z M22,422.8h2.1\n" +
+    "		c0.5,0,0.9-0.1,1.3-0.2c0.4-0.1,0.7-0.3,1-0.6c0.3-0.2,0.5-0.5,0.6-0.9c0.1-0.3,0.2-0.7,0.2-1.1c0-0.8-0.3-1.5-0.8-1.9\n" +
+    "		c-0.5-0.5-1.3-0.7-2.3-0.7H22V422.8z\"/>\n" +
+    "	<path class=\"st2\" d=\"M33.1,423.6v5.4h-1.7v-13H35c0.8,0,1.5,0.1,2.1,0.2c0.6,0.2,1.1,0.4,1.5,0.7c0.4,0.3,0.7,0.7,0.9,1.1\n" +
+    "		s0.3,0.9,0.3,1.5c0,0.5-0.1,0.9-0.2,1.3c-0.1,0.4-0.4,0.8-0.6,1.1s-0.6,0.6-1,0.8c-0.4,0.2-0.8,0.4-1.3,0.5\n" +
+    "		c0.2,0.1,0.4,0.3,0.6,0.6l3.8,5.1h-1.6c-0.3,0-0.6-0.1-0.7-0.4l-3.4-4.6c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.3-0.1-0.5-0.1H33.1z\n" +
+    "		 M33.1,422.3h1.8c0.5,0,1-0.1,1.4-0.2c0.4-0.1,0.7-0.3,1-0.5c0.3-0.2,0.5-0.5,0.6-0.8s0.2-0.7,0.2-1c0-0.8-0.3-1.4-0.8-1.7\n" +
+    "		c-0.5-0.4-1.3-0.6-2.3-0.6h-1.9V422.3z\"/>\n" +
+    "	<path class=\"st2\" d=\"M50.8,416v1.4h-6.2v4.3h5v1.4h-5v4.4h6.2v1.4h-8v-13H50.8z\"/>\n" +
+    "	<path class=\"st2\" d=\"M55.2,424.2v4.8h-1.7v-13h3.8c0.8,0,1.5,0.1,2.1,0.3c0.6,0.2,1.1,0.5,1.5,0.8s0.7,0.8,0.9,1.3s0.3,1,0.3,1.7\n" +
+    "		c0,0.6-0.1,1.2-0.3,1.7c-0.2,0.5-0.5,0.9-0.9,1.3c-0.4,0.4-0.9,0.6-1.5,0.8s-1.3,0.3-2.1,0.3H55.2z M55.2,422.8h2.1\n" +
+    "		c0.5,0,0.9-0.1,1.3-0.2c0.4-0.1,0.7-0.3,1-0.6c0.3-0.2,0.5-0.5,0.6-0.9c0.1-0.3,0.2-0.7,0.2-1.1c0-0.8-0.3-1.5-0.8-1.9\n" +
+    "		c-0.5-0.5-1.3-0.7-2.3-0.7h-2.1V422.8z\"/>\n" +
+    "</g>\n" +
+    "<path class=\"st3\" d=\"z\"/>\n" +
+    "<circle id=\"XMLID_137_\" class=\"st4\" cx=\"-97.6\" cy=\"403\" r=\"5.7\"/>\n" +
+    "<path id=\"XMLID_136_\" class=\"st4\" d=\"M-121,429c4.2,0,7.7-3.4,7.7-7.7c0-4.2-3.4-7.7-7.7-7.7c-4.2,0-7.7,3.4-7.7,7.7\n" +
+    "	C-128.7,425.6-125.2,429-121,429z\"/>\n" +
+    "<path id=\"XMLID_135_\" class=\"st4\" d=\"M-98.7,392.5c-6.5-4-14.2-6.3-22.3-6.3c-8.1,0-15.8,2.3-22.3,6.3c5.4,0.5,9.6,5.1,9.6,10.6\n" +
+    "	c0,0.7-0.1,1.4-0.2,2.1c3.9-2.1,8.3-3.3,13-3.3c4.7,0,9.1,1.2,13,3.3c-0.1-0.7-0.2-1.4-0.2-2.1C-108.3,397.5-104.1,393-98.7,392.5z\"\n" +
+    "	/>\n" +
+    "<path id=\"XMLID_134_\" class=\"st4\" d=\"M-155,403.2c-3.3,4.5-5.8,9.7-7.2,15.4c-0.5,2-0.2,4.1,0.9,5.9c1.1,1.8,2.8,3,4.8,3.5\n" +
+    "	c0.6,0.1,1.2,0.2,1.8,0.2c3.6,0,6.8-2.5,7.6-6c0.8-3.2,2.1-6.1,3.8-8.6c-0.4,0-0.8,0.1-1.2,0.1C-150.2,413.7-154.9,409-155,403.2z\"\n" +
+    "	/>\n" +
+    "<path id=\"XMLID_132_\" class=\"st4\" d=\"M-74,402.8c0.2-2.8,2.7-32.3-1.9-36.6c-3.9-3.7-24.9,6.6-32,10.3\n" +
+    "	C-93.4,380.2-81.1,389.7-74,402.8z\"/>\n" +
+    "<circle id=\"XMLID_131_\" class=\"st4\" cx=\"-144.4\" cy=\"403\" r=\"5.7\"/>\n" +
+    "<path id=\"XMLID_130_\" class=\"st4\" d=\"M-97.6,413.7c-0.4,0-0.8,0-1.3-0.1c1.7,2.6,3.1,5.5,3.8,8.7c0.8,3.5,4,6,7.6,6\n" +
+    "	c0.6,0,1.2-0.1,1.8-0.2c4.2-1,6.8-5.2,5.8-9.4c-1.4-5.7-3.9-10.9-7.2-15.4C-87.1,409-91.8,413.7-97.6,413.7z\"/>\n" +
+    "<path id=\"XMLID_129_\" class=\"st4\" d=\"M-134.1,376.6c-7.1-3.7-28.1-14.1-32-10.3c-4.5,4.3-2.1,33.7-1.9,36.6\n" +
+    "	C-160.9,389.7-148.6,380.2-134.1,376.6z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/znkHeader/svg/znk-header-check-mark-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 329.5 223.7\"\n" +
+    "	 class=\"znkHeader-check-mark-svg\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .znkHeader-check-mark-svg .st0 {\n" +
+    "            fill: none;\n" +
+    "            stroke: #ffffff;\n" +
+    "            stroke-width: 21;\n" +
+    "            stroke-linecap: round;\n" +
+    "            stroke-linejoin: round;\n" +
+    "            stroke-miterlimit: 10;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "    <g>\n" +
+    "	    <line class=\"st0\" x1=\"10.5\" y1=\"107.4\" x2=\"116.3\" y2=\"213.2\"/>\n" +
+    "	    <line class=\"st0\" x1=\"116.3\" y1=\"213.2\" x2=\"319\" y2=\"10.5\"/>\n" +
+    "    </g>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -18246,60 +18245,60 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
 
 angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/znkSummary/templates/znkSummaryResults.template.html",
-        "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
-        "    <div class=\"overflowWrap\">\n" +
-        "        <div class=\"gauge-wrap\">\n" +
-        "            <div class=\"gauge-inner-text\">{{::vm.gaugeSuccessRate}}%\n" +
-        "                <div class=\"success-title\" translate=\".SUCCESS\"></div>\n" +
-        "            </div>\n" +
-        "            <canvas\n" +
-        "                id=\"doughnut\"\n" +
-        "                class=\"chart chart-doughnut\"\n" +
-        "                chart-options=\"vm.performenceChart.options\"\n" +
-        "                chart-colours=\"vm.performenceChart.colours\"\n" +
-        "                chart-data=\"vm.performenceChart.data\"\n" +
-        "                chart-labels=\"vm.performenceChart.labels\"\n" +
-        "                chart-legend=\"false\">\n" +
-        "            </canvas>\n" +
-        "        </div>\n" +
-        "        <div class=\"statistics\">\n" +
-        "            <div class=\"stat-row\">\n" +
-        "                <div class=\"stat-val correct\">{{::vm.exerciseResult.correctAnswersNum}}</div>\n" +
-        "                <div class=\"title\" translate=\".CORRECT\"></div>\n" +
-        "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.correctAvgTime}} <span translate=\".SEC\"></span> </div>\n" +
-        "            </div>\n" +
-        "\n" +
-        "            <div class=\"stat-row\">\n" +
-        "                <div class=\"stat-val wrong\">{{::vm.exerciseResult.wrongAnswersNum}}</div>\n" +
-        "                <div class=\"title\" translate=\".WRONG\"></div>\n" +
-        "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.wrongAvgTime}} <span translate=\".SEC\"></span></div>\n" +
-        "            </div>\n" +
-        "\n" +
-        "            <div class=\"stat-row\">\n" +
-        "                <div class=\"stat-val skipped\">{{::vm.exerciseResult.skippedAnswersNum}}</div>\n" +
-        "                <div class=\"title\" translate=\".SKIPPED\"></div>\n" +
-        "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.skippedAvgTime}}  <span translate=\".SEC\"></span></div>\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
-    $templateCache.put("components/znkSummary/templates/znkSummaryTimeline.template.html",
-        "<div class=\"time-line-wrapper\" translate-namespace=\"ZNK_SUMMARY\"\n" +
-        "     ng-class=\"{'seen-summary': vm.seenSummary}\">\n" +
-        "    <div class=\"estimated-score-title\">\n" +
-        "        <span translate=\".ESTIMATED_SCORE\"\n" +
-        "              translate-values=\"{ subjectName: vm.subjectName  }\">\n" +
-        "        </span>\n" +
-        "    </div>\n" +
-        "    <znk-timeline-web-wrapper\n" +
-        "        subject-id=\"{{::vm.currentSubjectId}}\"\n" +
-        "        show-induction=\"true\"\n" +
-        "        active-exercise-id=\"::vm.activeExerciseId\">\n" +
-        "    </znk-timeline-web-wrapper>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/znkSummary/templates/znkSummaryResults.template.html",
+    "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
+    "    <div class=\"overflowWrap\">\n" +
+    "        <div class=\"gauge-wrap\">\n" +
+    "            <div class=\"gauge-inner-text\">{{::vm.gaugeSuccessRate}}%\n" +
+    "                <div class=\"success-title\" translate=\".SUCCESS\"></div>\n" +
+    "            </div>\n" +
+    "            <canvas\n" +
+    "                id=\"doughnut\"\n" +
+    "                class=\"chart chart-doughnut\"\n" +
+    "                chart-options=\"vm.performenceChart.options\"\n" +
+    "                chart-colours=\"vm.performenceChart.colours\"\n" +
+    "                chart-data=\"vm.performenceChart.data\"\n" +
+    "                chart-labels=\"vm.performenceChart.labels\"\n" +
+    "                chart-legend=\"false\">\n" +
+    "            </canvas>\n" +
+    "        </div>\n" +
+    "        <div class=\"statistics\">\n" +
+    "            <div class=\"stat-row\">\n" +
+    "                <div class=\"stat-val correct\">{{::vm.exerciseResult.correctAnswersNum}}</div>\n" +
+    "                <div class=\"title\" translate=\".CORRECT\"></div>\n" +
+    "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.correctAvgTime}} <span translate=\".SEC\"></span> </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"stat-row\">\n" +
+    "                <div class=\"stat-val wrong\">{{::vm.exerciseResult.wrongAnswersNum}}</div>\n" +
+    "                <div class=\"title\" translate=\".WRONG\"></div>\n" +
+    "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.wrongAvgTime}} <span translate=\".SEC\"></span></div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div class=\"stat-row\">\n" +
+    "                <div class=\"stat-val skipped\">{{::vm.exerciseResult.skippedAnswersNum}}</div>\n" +
+    "                <div class=\"title\" translate=\".SKIPPED\"></div>\n" +
+    "                <div class=\"avg-score\"><span translate=\".AVG\"></span>. {{::vm.avgTime.skippedAvgTime}}  <span translate=\".SEC\"></span></div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/znkSummary/templates/znkSummaryTimeline.template.html",
+    "<div class=\"time-line-wrapper\" translate-namespace=\"ZNK_SUMMARY\"\n" +
+    "     ng-class=\"{'seen-summary': vm.seenSummary}\">\n" +
+    "    <div class=\"estimated-score-title\">\n" +
+    "        <span translate=\".ESTIMATED_SCORE\"\n" +
+    "              translate-values=\"{ subjectName: vm.subjectName  }\">\n" +
+    "        </span>\n" +
+    "    </div>\n" +
+    "    <znk-timeline-web-wrapper\n" +
+    "        subject-id=\"{{::vm.currentSubjectId}}\"\n" +
+    "        show-induction=\"true\"\n" +
+    "        active-exercise-id=\"::vm.activeExerciseId\">\n" +
+    "    </znk-timeline-web-wrapper>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -18538,46 +18537,46 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
 })(angular);
 
 angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html",
-        "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
-        "    <div class=\"time-line-wrapper\">\n" +
-        "        <div class=\"progress-val\"\n" +
-        "             ng-style=\"vm.timelineMinMaxStyle\"\n" +
-        "             ng-if=\"vm.timeLineData.data.length\">\n" +
-        "            <div class=\"goal-wrapper\">{{vm.goalPerSubject}}\n" +
-        "                <div class=\"timeline-plus\"\n" +
-        "                     ng-if=\"vm.timelineLinePlus && vm.showInduction\"\n" +
-        "                     ng-class=\"{ 'red-point': vm.isRed, 'green-point': !vm.isRed }\">\n" +
-        "                    {{vm.timelineLinePlus}}\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "            <div class=\"progress-title\"\n" +
-        "                 ng-style=\"{ visibility: (vm.points) ? 'visiable' : 'hidden' }\"\n" +
-        "                 translate=\".POINTS_LEFT\"\n" +
-        "                 translate-values=\"{points: {{vm.points}} }\">\n" +
-        "            </div>\n" +
-        "        </div>\n" +
-        "        <div class=\"tool-tip-area\"\n" +
-        "             ng-if=\"vm.showTooltips\"\n" +
-        "             ng-repeat=\"tooltip in vm.toolTipArr track by $index\"\n" +
-        "             ng-class=\"{'last-item':$last === true}\"\n" +
-        "             ng-style=\"{'top': $last === true ? (tooltip.lineTo.y+50) +'px' : (tooltip.lineTo.y+60) +'px', 'left': $last === true ? (tooltip.lineTo.x - 11) +'px' : (tooltip.lineTo.x-1)+'px'}\">\n" +
-        "            <md-tooltip md-direction=\"top\" class=\"tooltip-box md-whiteframe-2dp\">\n" +
-        "                <div class=\"tooltip-content\">\n" +
-        "                    <div class=\"exercise-date\">{{tooltip.time | date: 'MMM dd'}}</div>\n" +
-        "                    <div class=\"exercise-title\">{{tooltip.workoutTitle}}</div>\n" +
-        "                    <div class=\"score-title\" translate-values=\"{subjectName: vm.subjectEnumToValMap[vm.currentSubjectId]}\" translate=\".ESTIMATED_SUBJECT_SCORE\"></div>\n" +
-        "                    <div class=\"exercise-score\">{{tooltip.score}}</div>\n" +
-        "                </div>\n" +
-        "            </md-tooltip>\n" +
-        "        </div>\n" +
-        "        <canvas znk-timeline\n" +
-        "                timeline-data=\"vm.timeLineData\"\n" +
-        "                timeline-settings=\"vm.options\">\n" +
-        "        </canvas>\n" +
-        "    </div>\n" +
-        "</div>\n" +
-        "");
+  $templateCache.put("components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html",
+    "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
+    "    <div class=\"time-line-wrapper\">\n" +
+    "        <div class=\"progress-val\"\n" +
+    "             ng-style=\"vm.timelineMinMaxStyle\"\n" +
+    "             ng-if=\"vm.timeLineData.data.length\">\n" +
+    "            <div class=\"goal-wrapper\">{{vm.goalPerSubject}}\n" +
+    "                <div class=\"timeline-plus\"\n" +
+    "                     ng-if=\"vm.timelineLinePlus && vm.showInduction\"\n" +
+    "                     ng-class=\"{ 'red-point': vm.isRed, 'green-point': !vm.isRed }\">\n" +
+    "                    {{vm.timelineLinePlus}}\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"progress-title\"\n" +
+    "                 ng-style=\"{ visibility: (vm.points) ? 'visiable' : 'hidden' }\"\n" +
+    "                 translate=\".POINTS_LEFT\"\n" +
+    "                 translate-values=\"{points: {{vm.points}} }\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"tool-tip-area\"\n" +
+    "             ng-if=\"vm.showTooltips\"\n" +
+    "             ng-repeat=\"tooltip in vm.toolTipArr track by $index\"\n" +
+    "             ng-class=\"{'last-item':$last === true}\"\n" +
+    "             ng-style=\"{'top': $last === true ? (tooltip.lineTo.y+50) +'px' : (tooltip.lineTo.y+60) +'px', 'left': $last === true ? (tooltip.lineTo.x - 11) +'px' : (tooltip.lineTo.x-1)+'px'}\">\n" +
+    "            <md-tooltip md-direction=\"top\" class=\"tooltip-box md-whiteframe-2dp\">\n" +
+    "                <div class=\"tooltip-content\">\n" +
+    "                    <div class=\"exercise-date\">{{tooltip.time | date: 'MMM dd'}}</div>\n" +
+    "                    <div class=\"exercise-title\">{{tooltip.workoutTitle}}</div>\n" +
+    "                    <div class=\"score-title\" translate-values=\"{subjectName: vm.subjectEnumToValMap[vm.currentSubjectId]}\" translate=\".ESTIMATED_SUBJECT_SCORE\"></div>\n" +
+    "                    <div class=\"exercise-score\">{{tooltip.score}}</div>\n" +
+    "                </div>\n" +
+    "            </md-tooltip>\n" +
+    "        </div>\n" +
+    "        <canvas znk-timeline\n" +
+    "                timeline-data=\"vm.timeLineData\"\n" +
+    "                timeline-settings=\"vm.options\">\n" +
+    "        </canvas>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -18623,7 +18622,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
             };
 
         }]
-    );
+        );
 })(angular);
 
 (function (angular) {
@@ -18658,101 +18657,101 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
 })(angular);
 
 angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($templateCache) {
-    $templateCache.put("components/znkToast/svg/znkToast-close-popup.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.close-pop-svg {width: 100%; height: auto;}\n" +
-        "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
-        "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
-        "</style>\n" +
-        "<path class=\"st0\"/>\n" +
-        "<g>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-        "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-        "</g>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/znkToast/svg/znkToast-completed-v.svg",
-        "<svg\n" +
-        "	xmlns=\"http://www.w3.org/2000/svg\"\n" +
-        "    x=\"0px\"\n" +
-        "	y=\"0px\"\n" +
-        "	viewBox=\"-1040 834.9 220.4 220.4\"\n" +
-        "	style=\"enable-background:new -1040 834.9 220.4 220.4; width: 100%; height: auto;\"\n" +
-        "    xml:space=\"preserve\"\n" +
-        "    class=\"complete-v-icon-svg\">\n" +
-        "<style type=\"text/css\">\n" +
-        "	.complete-v-icon-svg .st0 {\n" +
-        "        fill: none;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st1 {\n" +
-        "        fill: #CACBCC;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st2 {\n" +
-        "        display: none;\n" +
-        "        fill: none;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st3 {\n" +
-        "        fill: #D1D2D2;\n" +
-        "    }\n" +
-        "\n" +
-        "    .complete-v-icon-svg .st4 {\n" +
-        "        fill: none;\n" +
-        "        stroke: #FFFFFF;\n" +
-        "        stroke-width: 11.9321;\n" +
-        "        stroke-linecap: round;\n" +
-        "        stroke-linejoin: round;\n" +
-        "        stroke-miterlimit: 10;\n" +
-        "    }\n" +
-        "</style>\n" +
-        "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
-        "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
-        "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
-        "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
-        "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/znkToast/svg/znkToast-error-icon.svg",
-        "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-        "    viewBox=\"0 0 54.8 49.1\" class=\"error-icon-svg\">\n" +
-        "\n" +
-        "<style type=\"text/css\">\n" +
-        "    .error-icon-svg {width: 100%; height: auto;}\n" +
-        "    .error-icon-svg .st0{enable-background:new    ;}\n" +
-        "</style>\n" +
-        "\n" +
-        "<path class=\"st0\" d=\"M54,39.8L32.8,3.1C30.4-1,24.4-1,22,3.1L0.8,39.8c-2.4,4.1,0.6,9.3,5.4,9.3h42.4C53.4,49.1,56.4,44,54,39.8z\n" +
-        "	 M29.8,42.9c-0.7,0.6-1.5,0.9-2.4,0.9c-0.9,0-1.7-0.3-2.4-0.9s-1-1.4-1-2.5c0-0.9,0.3-1.7,1-2.4s1.5-1,2.4-1s1.8,0.3,2.4,1\n" +
-        "	c0.7,0.7,1,1.5,1,2.4C30.8,41.4,30.5,42.2,29.8,42.9z M30.7,17.7l-1,11.2c-0.1,1.3-0.3,2.4-0.7,3.1c-0.3,0.7-0.9,1.1-1.7,1.1\n" +
-        "	c-0.8,0-1.4-0.3-1.7-1c-0.3-0.7-0.5-1.7-0.7-3.1l-0.7-10.9C24,15.8,24,14.3,24,13.4c0-1.3,0.3-2.2,1-2.9s1.5-1.1,2.6-1.1\n" +
-        "	c1.3,0,2.2,0.5,2.6,1.4c0.4,0.9,0.7,2.2,0.7,3.9C30.8,15.6,30.8,16.6,30.7,17.7z\"/>\n" +
-        "</svg>\n" +
-        "");
-    $templateCache.put("components/znkToast/templates/znkToast.template.html",
-        "<md-toast ng-cloak\n" +
-        "          ng-class=\"{'toast-wrap': vm.type === 'success',\n" +
-        "                     'toast-wrap-progress': vm.type === 'progress',\n" +
-        "                     'toast-wrap-error': vm.type === 'error'}\">\n" +
-        "    <div class=\"icon-wrap\" ng-switch on=\"vm.type\">\n" +
-        "        <svg-icon name=\"znkToast-completed-v-icon\" ng-switch-when=\"success\"></svg-icon>\n" +
-        "        <svg-icon name=\"znkToast-error-red-icon\"ng-switch-when=\"error\"></svg-icon>\n" +
-        "        <md-progress-circular class=\"progress-icon\" md-mode=\"indeterminate\" md-diameter=\"35\" ng-switch-when=\"progress\"></md-progress-circular>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <div class=\"md-toast-content\">\n" +
-        "        <div class=\"md-toast-text\" flex ng-bind-html=\"vm.msg | translate\"></div>\n" +
-        "    </div>\n" +
-        "\n" +
-        "    <md-button aria-label=\"close popup\"\n" +
-        "        class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
-        "        <svg-icon name=\"znkToast-close-popup\"></svg-icon>\n" +
-        "    </md-button>\n" +
-        "\n" +
-        "</md-toast>\n" +
-        "");
+  $templateCache.put("components/znkToast/svg/znkToast-close-popup.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.close-pop-svg {width: 100%; height: auto;}\n" +
+    "	.close-pop-svg .st0{fill:none;enable-background:new    ;}\n" +
+    "	.close-pop-svg .st1{fill:none;stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;}\n" +
+    "</style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/znkToast/svg/znkToast-completed-v.svg",
+    "<svg\n" +
+    "	xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "    x=\"0px\"\n" +
+    "	y=\"0px\"\n" +
+    "	viewBox=\"-1040 834.9 220.4 220.4\"\n" +
+    "	style=\"enable-background:new -1040 834.9 220.4 220.4; width: 100%; height: auto;\"\n" +
+    "    xml:space=\"preserve\"\n" +
+    "    class=\"complete-v-icon-svg\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.complete-v-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st1 {\n" +
+    "        fill: #CACBCC;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st2 {\n" +
+    "        display: none;\n" +
+    "        fill: none;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st3 {\n" +
+    "        fill: #D1D2D2;\n" +
+    "    }\n" +
+    "\n" +
+    "    .complete-v-icon-svg .st4 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #FFFFFF;\n" +
+    "        stroke-width: 11.9321;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<path class=\"st0\" d=\"M-401,402.7\"/>\n" +
+    "<circle class=\"st1\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<circle class=\"st2\" cx=\"-929.8\" cy=\"945.1\" r=\"110.2\"/>\n" +
+    "<path class=\"st3\" d=\"M-860.2,895.8l40,38.1c-5.6-55.6-52.6-99-109.6-99c-60.9,0-110.2,49.3-110.2,110.2\n" +
+    "	c0,60.9,49.3,110.2,110.2,110.2c11.6,0,22.8-1.8,33.3-5.1l-61.2-58.3L-860.2,895.8z\"/>\n" +
+    "<polyline class=\"st4\" points=\"-996.3,944.8 -951.8,989.3 -863.3,900.8 \"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/znkToast/svg/znkToast-error-icon.svg",
+    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "    viewBox=\"0 0 54.8 49.1\" class=\"error-icon-svg\">\n" +
+    "\n" +
+    "<style type=\"text/css\">\n" +
+    "    .error-icon-svg {width: 100%; height: auto;}\n" +
+    "    .error-icon-svg .st0{enable-background:new    ;}\n" +
+    "</style>\n" +
+    "\n" +
+    "<path class=\"st0\" d=\"M54,39.8L32.8,3.1C30.4-1,24.4-1,22,3.1L0.8,39.8c-2.4,4.1,0.6,9.3,5.4,9.3h42.4C53.4,49.1,56.4,44,54,39.8z\n" +
+    "	 M29.8,42.9c-0.7,0.6-1.5,0.9-2.4,0.9c-0.9,0-1.7-0.3-2.4-0.9s-1-1.4-1-2.5c0-0.9,0.3-1.7,1-2.4s1.5-1,2.4-1s1.8,0.3,2.4,1\n" +
+    "	c0.7,0.7,1,1.5,1,2.4C30.8,41.4,30.5,42.2,29.8,42.9z M30.7,17.7l-1,11.2c-0.1,1.3-0.3,2.4-0.7,3.1c-0.3,0.7-0.9,1.1-1.7,1.1\n" +
+    "	c-0.8,0-1.4-0.3-1.7-1c-0.3-0.7-0.5-1.7-0.7-3.1l-0.7-10.9C24,15.8,24,14.3,24,13.4c0-1.3,0.3-2.2,1-2.9s1.5-1.1,2.6-1.1\n" +
+    "	c1.3,0,2.2,0.5,2.6,1.4c0.4,0.9,0.7,2.2,0.7,3.9C30.8,15.6,30.8,16.6,30.7,17.7z\"/>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/znkToast/templates/znkToast.template.html",
+    "<md-toast ng-cloak\n" +
+    "          ng-class=\"{'toast-wrap': vm.type === 'success',\n" +
+    "                     'toast-wrap-progress': vm.type === 'progress',\n" +
+    "                     'toast-wrap-error': vm.type === 'error'}\">\n" +
+    "    <div class=\"icon-wrap\" ng-switch on=\"vm.type\">\n" +
+    "        <svg-icon name=\"znkToast-completed-v-icon\" ng-switch-when=\"success\"></svg-icon>\n" +
+    "        <svg-icon name=\"znkToast-error-red-icon\"ng-switch-when=\"error\"></svg-icon>\n" +
+    "        <md-progress-circular class=\"progress-icon\" md-mode=\"indeterminate\" md-diameter=\"35\" ng-switch-when=\"progress\"></md-progress-circular>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"md-toast-content\">\n" +
+    "        <div class=\"md-toast-text\" flex ng-bind-html=\"vm.msg | translate\"></div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <md-button aria-label=\"close popup\"\n" +
+    "        class=\"close-toast-wrap\" ng-click=\"vm.closeToast()\">\n" +
+    "        <svg-icon name=\"znkToast-close-popup\"></svg-icon>\n" +
+    "    </md-button>\n" +
+    "\n" +
+    "</md-toast>\n" +
+    "");
 }]);
