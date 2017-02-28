@@ -5,7 +5,7 @@
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
-            subjectId: '@?',
+            currentSubjectId: '@subjectId',
             showInduction: '<?',
             showTooltips: '<?',
             results: '<?'
@@ -21,8 +21,8 @@
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
             var scoringLimits = ScoringService.getScoringLimits();
             var subjects = scoringLimits.subjects;
-            var maxScore = (subjects && subjects.max) ? subjects.max : (subjects[vm.subjectId] && subjects[vm.subjectId].max) ? subjects[vm.subjectId].max : 0;
-            var minScore = (subjects && subjects.min) ? subjects.min : (subjects[vm.subjectId] && subjects[vm.subjectId].min) ? subjects[vm.subjectId].min : 0;
+            var maxScore = (subjects && subjects.max) ? subjects.max : (subjects[vm.currentSubjectId] && subjects[vm.currentSubjectId].max) ? subjects[vm.currentSubjectId].max : 0;
+            var minScore = (subjects && subjects.min) ? subjects.min : (subjects[vm.currentSubjectId] && subjects[vm.currentSubjectId].min) ? subjects[vm.currentSubjectId].min : 0;
             var currentSubjectId;
 
             // options
