@@ -338,7 +338,7 @@ on-boarding-bar {
           top: -34px;
           background-size: contain;
           /*CSS for basic styling and non-retina image path:*/
-          background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");
+          background-image: url("/assets/images/sat-sm-on-boarding-raccoon.png");
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover;
@@ -348,7 +348,7 @@ on-boarding-bar {
           /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
           @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
             .on-board .container .step.intro-test-to-take .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
-              background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x@2x.png");
+              background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");
               background-repeat: no-repeat;
               background-position: center;
               background-size: cover;
