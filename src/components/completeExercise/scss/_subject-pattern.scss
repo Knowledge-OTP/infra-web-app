@@ -6,7 +6,12 @@
     @include background-image-url-retina('/assets/images/math-background-pattern');
     background-size: 123px 134px;
 }
-
+.mathlvl1-subject-pattern{
+   @extend .math-subject-pattern;
+}
+.mathlvl2-subject-pattern{
+    @extend .math-subject-pattern;
+}
 .reading-subject-pattern{
     @include background-image-url-retina('/assets/images/reading-background-pattern');
     background-size: 102px 95px;
