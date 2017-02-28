@@ -6,7 +6,7 @@
         <md-button  class="md-primary znk"
                     autofocus
                     tabindex="1"
-                    ui-sref="app.diagnostic({ skipIntro: true })"
+                    ui-sref="app.diagnostic({ skipIntro: true, forceSkipIntro: vm.forceSkipIntro })"
                     aria-label="{{::vm.buttonTitle}}"
                     translate="{{vm.buttonTitle}}"
                     md-no-ink>
