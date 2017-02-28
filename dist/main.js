@@ -5678,7 +5678,6 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             evaluateSrvApi.getEvaluateTypes = invokeEvaluateFn.bind(null, _evaluateTypes, 'evaluateTypes');
 
             return evaluateSrvApi;
-
         }];
     });
 })(angular);
