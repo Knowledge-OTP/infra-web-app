@@ -286,7 +286,7 @@
                             position: relative;
                             top: -34px;
                             background-size: contain;
-                            @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon@2x', 164px, 166px);
+                            @include full-background-image-retina('/assets/images/sat-sm-on-boarding-raccoon', 164px, 166px);
                         }
                     }
                 }
