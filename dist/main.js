@@ -5001,7 +5001,8 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
+                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -5024,10 +5025,27 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
+                    scope.d.showGoalsEdit = showGoalsEdit;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');
+                        scope.d.onSubjectClick = function (subjectId) {
+                            ngModelCtrl.$setViewValue(+subjectId);
+                            scope.d.currentSubject = subjectId;
+                        };
+
+                        ngModelCtrl.$render = function () {
+                            scope.d.currentSubject = ngModelCtrl.$viewValue;
+                        };
                     }
+
+                    UserGoalsService.getGoals().then(function (userGoals) {
+                        scope.$watchCollection(function () {
+                            return userGoals;
+                        }, function (newVal) {
+                            adjustWidgetData(newVal);
+                        });
+                    });
 
                     function adjustWidgetData(userGoals) {
                         $q.all([
@@ -5114,28 +5132,9 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
                         return (correct / maxEstimatedScore) * 100;
                     }
 
-                    scope.d.showGoalsEdit = function () {
+                    function showGoalsEdit() {
                         userGoalsSelectionService.openEditGoalsDialog();
-                    };
-
-                    if (isNavMenuFlag) {
-                        scope.d.onSubjectClick = function (subjectId) {
-                            ngModelCtrl.$setViewValue(+subjectId);
-                            scope.d.currentSubject = subjectId;
-                        };
-
-                        ngModelCtrl.$render = function () {
-                            scope.d.currentSubject = ngModelCtrl.$viewValue;
-                        };
                     }
-
-                    UserGoalsService.getGoals().then(function (userGoals) {
-                        scope.$watchCollection(function () {
-                            return userGoals;
-                        }, function (newVal) {
-                            adjustWidgetData(newVal);
-                        });
-                    });
                 }
             };
         }]
@@ -5679,7 +5678,6 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             evaluateSrvApi.getEvaluateTypes = invokeEvaluateFn.bind(null, _evaluateTypes, 'evaluateTypes');
 
             return evaluateSrvApi;
-
         }];
     });
 })(angular);
@@ -18289,9 +18287,8 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     "<div class=\"time-line-wrapper\" translate-namespace=\"ZNK_SUMMARY\"\n" +
     "     ng-class=\"{'seen-summary': vm.seenSummary}\">\n" +
     "    <div class=\"estimated-score-title\">\n" +
-    "        <span translate=\"COMPLETE_EXERCISE.SUBJECTS.{{vm.currentSubjectId}}\">\n" +
-    "        </span>\n" +
-    "        <span translate=\".ESTIMATED_SCORE\">\n" +
+    "        <span translate=\".ESTIMATED_SCORE\"\n" +
+    "              translate-values=\"{ subjectName: vm.subjectName  }\">\n" +
     "        </span>\n" +
     "    </div>\n" +
     "    <znk-timeline-web-wrapper\n" +
