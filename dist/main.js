@@ -5678,6 +5678,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
             evaluateSrvApi.getEvaluateTypes = invokeEvaluateFn.bind(null, _evaluateTypes, 'evaluateTypes');
 
             return evaluateSrvApi;
+
         }];
     });
 })(angular);
@@ -18287,8 +18288,9 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     "<div class=\"time-line-wrapper\" translate-namespace=\"ZNK_SUMMARY\"\n" +
     "     ng-class=\"{'seen-summary': vm.seenSummary}\">\n" +
     "    <div class=\"estimated-score-title\">\n" +
-    "        <span translate=\".ESTIMATED_SCORE\"\n" +
-    "              translate-values=\"{ subjectName: vm.subjectName  }\">\n" +
+    "        <span translate=\"COMPLETE_EXERCISE.SUBJECTS.{{vm.currentSubjectId}}\">\n" +
+    "        </span>\n" +
+    "        <span translate=\".ESTIMATED_SCORE\">\n" +
     "        </span>\n" +
     "    </div>\n" +
     "    <znk-timeline-web-wrapper\n" +
