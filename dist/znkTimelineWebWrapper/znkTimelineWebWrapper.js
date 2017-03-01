@@ -32,8 +32,8 @@
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
             var scoringLimits = ScoringService.getScoringLimits();
             var subjects = scoringLimits.subjects;
-            var maxScore = (subjects && subjects.max) ? subjects.max : (subjects[vm.currentSubjectId] && subjects[vm.currentSubjectId].max) ? subjects[vm.currentSubjectId].max : 0;
-            var minScore = (subjects && subjects.min) ? subjects.min : (subjects[vm.currentSubjectId] && subjects[vm.currentSubjectId].min) ? subjects[vm.currentSubjectId].min : 0;
+            var maxScore = (subjects && angular.isNumber(subjects.max)) ? subjects.max : (subjects[vm.currentSubjectId] && angular.isNumber(subjects[vm.currentSubjectId].max)) ? subjects[vm.currentSubjectId].max : 0;
+            var minScore = (subjects && angular.isNumber(subjects.min)) ? subjects.min : (subjects[vm.currentSubjectId] && angular.isNumber(subjects[vm.currentSubjectId].min)) ? subjects[vm.currentSubjectId].min : 0;
             var currentSubjectId;
 
             // options
