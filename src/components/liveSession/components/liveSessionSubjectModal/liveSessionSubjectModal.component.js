@@ -8,7 +8,7 @@
             },
             templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
             controllerAs: 'vm',
-            controller: function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv) {
+            controller: function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, LiveSessionUiSrv, DiagnosticSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -20,7 +20,14 @@
                 };
 
                 function startSession(sessionSubject) {
-                    LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                    DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
+                        if (isDiagnosticCompleted) {
+                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                        } else {
+                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
+                        }
+                    });
+
                 }
             }
         });
