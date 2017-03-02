@@ -14473,7 +14473,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
                             examsWithIsCompletedStatusArr.push(examCopy);
 
                             var getExamResultProm = ExerciseResultSrv.getExamResult(exam.id, true).then(function(examResult){
-                                examCopy.isCompleted = !!(examResult && examResult.isCompleted);
+                                examCopy.isCompleted = !!(examResult && examResult.isComplete);
                             });
 
                             getExamResultPromArr.push(getExamResultProm);
