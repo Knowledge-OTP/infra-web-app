@@ -1000,24 +1000,24 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "        </div>\n" +
     "        <div ng-switch-when=\"3\" class=\"no-pro-social-sharing\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
-    "            <div class=\"text1\"\n" +
-    "                 translate=\".MORE_WORKOUTS\">\n" +
-    "            </div>\n" +
-    "            <div class=\"text2\"\n" +
-    "                 translate=\".TELL_FRIENDS\">\n" +
-    "            </div>\n" +
-    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"\n" +
-    "                       class=\"share-btn md-primary znk\"\n" +
-    "                       md-no-ink>\n" +
-    "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
-    "                <span translate=\".SHARE\"></span>\n" +
-    "            </md-button>\n" +
-    "            <!--<div class=\"text3 get-zinkerz-pro-text\"\n" +
+    "            <!--<div class=\"text1\"-->\n" +
+    "                 <!--translate=\".MORE_WORKOUTS\">-->\n" +
+    "            <!--</div>-->\n" +
+    "            <!--<div class=\"text2\"-->\n" +
+    "                 <!--translate=\".TELL_FRIENDS\">-->\n" +
+    "            <!--</div>-->\n" +
+    "            <!--<md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"-->\n" +
+    "                       <!--class=\"share-btn md-primary znk\"-->\n" +
+    "                       <!--md-no-ink>-->\n" +
+    "                <!--<svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>-->\n" +
+    "                <!--<span translate=\".SHARE\"></span>-->\n" +
+    "            <!--</md-button>-->\n" +
+    "            <div class=\"text3 get-zinkerz-pro-text\"\n" +
     "                 translate=\".GET_ZINKERZ_PRO\">\n" +
     "            </div>\n" +
-    "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
+    "            <md-button class=\"upgrade-btn znk md-primary\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
-    "            </md-button>-->\n" +
+    "            </md-button>\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"4\" class=\"no-pro\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
