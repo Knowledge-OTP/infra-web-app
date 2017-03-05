@@ -8918,6 +8918,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             'znk.infra.analytics',
             'znk.infra.general',
             'znk.infra.svgIcon',
+            'znk.infra-web-app.diagnostic',
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
             'znk.infra.exerciseUtility',
@@ -9035,7 +9036,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             },
             templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
             controllerAs: 'vm',
-            controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv) {
+            controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", "LiveSessionUiSrv", "DiagnosticSrv", function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, LiveSessionUiSrv, DiagnosticSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -9047,7 +9048,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 };
 
                 function startSession(sessionSubject) {
-                    LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                    DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
+                        if (isDiagnosticCompleted) {
+                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                        } else {
+                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
+                        }
+                    });
+
                 }
             }]
         });
@@ -9839,6 +9847,21 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 });
             }
 
+            function showIncompleteDiagnostic(student) {
+                var translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_TITLE');
+                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: student.name });
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.info(
+                        translations.title,
+                        translations.content
+                    );
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
             function showLiveSessionToast() {
                 var options = {
                     hideDelay: 5000,
@@ -9863,6 +9886,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             LiveSessionUiSrv.showEndSessionPopup = showEndSessionPopup;
 
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
+
+            LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
 
 
             //was wrapped with timeout since angular will compile the dom after this service initialization

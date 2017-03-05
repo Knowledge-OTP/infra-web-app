@@ -146,6 +146,21 @@
                 });
             }
 
+            function showIncompleteDiagnostic(student) {
+                var translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_TITLE');
+                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: student.name });
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.info(
+                        translations.title,
+                        translations.content
+                    );
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
             function showLiveSessionToast() {
                 var options = {
                     hideDelay: 5000,
@@ -170,6 +185,8 @@
             LiveSessionUiSrv.showEndSessionPopup = showEndSessionPopup;
 
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
+
+            LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
 
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
