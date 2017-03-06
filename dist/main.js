@@ -1913,11 +1913,15 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, isExam, isModule);
 
                         return exerciseParentContentProm.then(function (exerciseParentContent) {
+
+                            if (angular.equals({},exerciseParentContent)){
+                                $log.debug('completeExercise: exerciseParentContent is empty');
+                            }
+
                             if (isExam) {
                                 exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
                                 exerciseDetails.examId = exerciseDetails.exerciseParentId;
                             }
-
 
                             var getDataPromMap = {
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
