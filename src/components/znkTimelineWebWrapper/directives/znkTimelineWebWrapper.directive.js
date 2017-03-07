@@ -5,6 +5,7 @@
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
+            currentSubjectId: '@subjectId',
             showInduction: '<?',
             showTooltips: '<?',
             results: '<?'
@@ -19,8 +20,9 @@
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
             var scoringLimits = ScoringService.getScoringLimits();
-            var maxScore = (scoringLimits.subjects && scoringLimits.subjects.max) ? scoringLimits.subjects.max : 0;
-            var minScore = (scoringLimits.subjects && scoringLimits.subjects.min) ? scoringLimits.subjects.min : 0;
+            var subjects = scoringLimits.subjects;
+            var maxScore = (subjects && angular.isNumber(subjects.max)) ? subjects.max : (subjects[vm.currentSubjectId] && angular.isNumber(subjects[vm.currentSubjectId].max)) ? subjects[vm.currentSubjectId].max : 0;
+            var minScore = (subjects && angular.isNumber(subjects.min)) ? subjects.min : (subjects[vm.currentSubjectId] && angular.isNumber(subjects[vm.currentSubjectId].min)) ? subjects[vm.currentSubjectId].min : 0;
             var currentSubjectId;
 
             // options
@@ -29,8 +31,10 @@
                 height: 150,
                 distance: 90,
                 upOrDown: 100,
-                yUp: 30,
-                yDown: 100
+                yUp: 40,
+                yDown: 60,
+                xLeft: 20,
+                xRight: 20
             };
 
             var subjectIdToIndexMap = {};
@@ -69,7 +73,7 @@
                         scoreData = _getRegularData(obj.data.lastLine);
                     }
 
-                    vm.timelineMinMaxStyle = { 'top': scoreData.y + 'px', 'left': scoreData.x + 'px' };
+                    vm.timelineMinMaxStyle = {'top': scoreData.y + 'px', 'left': scoreData.x + 'px'};
 
                     _getPromsOrValue().then(function (results) {
                         var userGoals = results[1];
@@ -95,7 +99,7 @@
             };
 
             function _getSummaryData(summeryScore) {
-                var x = summeryScore.lineTo.x;
+                var x = summeryScore.lineTo.x - optionsPerDevice.xLeft;
                 var y = summeryScore.lineTo.y + optionsPerDevice.yDown;
                 var angleDeg;
                 if (summeryScore.next) {
@@ -117,7 +121,7 @@
             function _getRegularData(lastLineObj) {
                 var lastLine = lastLineObj[lastLineObj.length - 1];
                 var beforeLast = lastLineObj[lastLineObj.length - 2];
-                var x = lastLine.lineTo.x - 13;
+                var x = lastLine.lineTo.x - optionsPerDevice.xLeft;
                 var y = (lastLine.lineTo.y < optionsPerDevice.upOrDown) ? lastLine.lineTo.y + optionsPerDevice.yDown : lastLine.lineTo.y - optionsPerDevice.yUp;
                 var angleDeg = Math.atan2(lastLine.lineTo.y - beforeLast.lineTo.y, lastLine.lineTo.x - beforeLast.lineTo.x) * 180 / Math.PI;
 

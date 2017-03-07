@@ -43,7 +43,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
+                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -66,10 +67,27 @@
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
+                    scope.d.showGoalsEdit = showGoalsEdit;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');
+                        scope.d.onSubjectClick = function (subjectId) {
+                            ngModelCtrl.$setViewValue(+subjectId);
+                            scope.d.currentSubject = subjectId;
+                        };
+
+                        ngModelCtrl.$render = function () {
+                            scope.d.currentSubject = ngModelCtrl.$viewValue;
+                        };
                     }
+
+                    UserGoalsService.getGoals().then(function (userGoals) {
+                        scope.$watchCollection(function () {
+                            return userGoals;
+                        }, function (newVal) {
+                            adjustWidgetData(newVal);
+                        });
+                    });
 
                     function adjustWidgetData(userGoals) {
                         $q.all([
@@ -156,28 +174,9 @@
                         return (correct / maxEstimatedScore) * 100;
                     }
 
-                    scope.d.showGoalsEdit = function () {
+                    function showGoalsEdit() {
                         userGoalsSelectionService.openEditGoalsDialog();
-                    };
-
-                    if (isNavMenuFlag) {
-                        scope.d.onSubjectClick = function (subjectId) {
-                            ngModelCtrl.$setViewValue(+subjectId);
-                            scope.d.currentSubject = subjectId;
-                        };
-
-                        ngModelCtrl.$render = function () {
-                            scope.d.currentSubject = ngModelCtrl.$viewValue;
-                        };
                     }
-
-                    UserGoalsService.getGoals().then(function (userGoals) {
-                        scope.$watchCollection(function () {
-                            return userGoals;
-                        }, function (newVal) {
-                            adjustWidgetData(newVal);
-                        });
-                    });
                 }
             };
         }]

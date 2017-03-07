@@ -1913,11 +1913,15 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                         var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, isExam, isModule);
 
                         return exerciseParentContentProm.then(function (exerciseParentContent) {
+
+                            if (angular.equals({},exerciseParentContent)){
+                                $log.debug('completeExercise: exerciseParentContent is empty');
+                            }
+
                             if (isExam) {
                                 exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
                                 exerciseDetails.examId = exerciseDetails.exerciseParentId;
                             }
-
 
                             var getDataPromMap = {
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
@@ -5001,7 +5005,8 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
+                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
             'ngInject';
             var previousValues;
 
@@ -5024,10 +5029,27 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
+                    scope.d.showGoalsEdit = showGoalsEdit;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');
+                        scope.d.onSubjectClick = function (subjectId) {
+                            ngModelCtrl.$setViewValue(+subjectId);
+                            scope.d.currentSubject = subjectId;
+                        };
+
+                        ngModelCtrl.$render = function () {
+                            scope.d.currentSubject = ngModelCtrl.$viewValue;
+                        };
                     }
+
+                    UserGoalsService.getGoals().then(function (userGoals) {
+                        scope.$watchCollection(function () {
+                            return userGoals;
+                        }, function (newVal) {
+                            adjustWidgetData(newVal);
+                        });
+                    });
 
                     function adjustWidgetData(userGoals) {
                         $q.all([
@@ -5114,28 +5136,9 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
                         return (correct / maxEstimatedScore) * 100;
                     }
 
-                    scope.d.showGoalsEdit = function () {
+                    function showGoalsEdit() {
                         userGoalsSelectionService.openEditGoalsDialog();
-                    };
-
-                    if (isNavMenuFlag) {
-                        scope.d.onSubjectClick = function (subjectId) {
-                            ngModelCtrl.$setViewValue(+subjectId);
-                            scope.d.currentSubject = subjectId;
-                        };
-
-                        ngModelCtrl.$render = function () {
-                            scope.d.currentSubject = ngModelCtrl.$viewValue;
-                        };
                     }
-
-                    UserGoalsService.getGoals().then(function (userGoals) {
-                        scope.$watchCollection(function () {
-                            return userGoals;
-                        }, function (newVal) {
-                            adjustWidgetData(newVal);
-                        });
-                    });
                 }
             };
         }]
@@ -8919,6 +8922,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             'znk.infra.analytics',
             'znk.infra.general',
             'znk.infra.svgIcon',
+            'znk.infra-web-app.diagnostic',
             'znk.infra-web-app.activePanel',
             'znk.infra-web-app.znkToast',
             'znk.infra.exerciseUtility',
@@ -9036,7 +9040,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             },
             templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
             controllerAs: 'vm',
-            controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv) {
+            controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", "LiveSessionUiSrv", "DiagnosticSrv", function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, LiveSessionUiSrv, DiagnosticSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -9048,7 +9052,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 };
 
                 function startSession(sessionSubject) {
-                    LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                    DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
+                        if (isDiagnosticCompleted) {
+                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                        } else {
+                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
+                        }
+                    });
+
                 }
             }]
         });
@@ -9840,6 +9851,21 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 });
             }
 
+            function showIncompleteDiagnostic(student) {
+                var translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_TITLE');
+                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: student.name });
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.info(
+                        translations.title,
+                        translations.content
+                    );
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
             function showLiveSessionToast() {
                 var options = {
                     hideDelay: 5000,
@@ -9864,6 +9890,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             LiveSessionUiSrv.showEndSessionPopup = showEndSessionPopup;
 
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
+
+            LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
 
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
@@ -14474,7 +14502,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
                             examsWithIsCompletedStatusArr.push(examCopy);
 
                             var getExamResultProm = ExerciseResultSrv.getExamResult(exam.id, true).then(function(examResult){
-                                examCopy.isCompleted = !!(examResult && examResult.isCompleted);
+                                examCopy.isCompleted = !!(examResult && examResult.isComplete);
                             });
 
                             getExamResultPromArr.push(getExamResultProm);
@@ -16822,24 +16850,24 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "        </div>\n" +
     "        <div ng-switch-when=\"3\" class=\"no-pro-social-sharing\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
-    "            <div class=\"text1\"\n" +
-    "                 translate=\".MORE_WORKOUTS\">\n" +
-    "            </div>\n" +
-    "            <div class=\"text2\"\n" +
-    "                 translate=\".TELL_FRIENDS\">\n" +
-    "            </div>\n" +
-    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"\n" +
-    "                       class=\"share-btn md-primary znk\"\n" +
-    "                       md-no-ink>\n" +
-    "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
-    "                <span translate=\".SHARE\"></span>\n" +
-    "            </md-button>\n" +
-    "            <!--<div class=\"text3 get-zinkerz-pro-text\"\n" +
+    "            <!--<div class=\"text1\"-->\n" +
+    "                 <!--translate=\".MORE_WORKOUTS\">-->\n" +
+    "            <!--</div>-->\n" +
+    "            <!--<div class=\"text2\"-->\n" +
+    "                 <!--translate=\".TELL_FRIENDS\">-->\n" +
+    "            <!--</div>-->\n" +
+    "            <!--<md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"-->\n" +
+    "                       <!--class=\"share-btn md-primary znk\"-->\n" +
+    "                       <!--md-no-ink>-->\n" +
+    "                <!--<svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>-->\n" +
+    "                <!--<span translate=\".SHARE\"></span>-->\n" +
+    "            <!--</md-button>-->\n" +
+    "            <div class=\"text3 get-zinkerz-pro-text\"\n" +
     "                 translate=\".GET_ZINKERZ_PRO\">\n" +
     "            </div>\n" +
-    "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
+    "            <md-button class=\"upgrade-btn znk md-primary\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
-    "            </md-button>-->\n" +
+    "            </md-button>\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"4\" class=\"no-pro\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
@@ -18321,6 +18349,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
         templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
+            currentSubjectId: '@subjectId',
             showInduction: '<?',
             showTooltips: '<?',
             results: '<?'
@@ -18335,8 +18364,9 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             var inProgressProm = false;
             var subjectEnumToValMap = SubjectEnum.getEnumMap();
             var scoringLimits = ScoringService.getScoringLimits();
-            var maxScore = (scoringLimits.subjects && scoringLimits.subjects.max) ? scoringLimits.subjects.max : 0;
-            var minScore = (scoringLimits.subjects && scoringLimits.subjects.min) ? scoringLimits.subjects.min : 0;
+            var subjects = scoringLimits.subjects;
+            var maxScore = (subjects && angular.isNumber(subjects.max)) ? subjects.max : (subjects[vm.currentSubjectId] && angular.isNumber(subjects[vm.currentSubjectId].max)) ? subjects[vm.currentSubjectId].max : 0;
+            var minScore = (subjects && angular.isNumber(subjects.min)) ? subjects.min : (subjects[vm.currentSubjectId] && angular.isNumber(subjects[vm.currentSubjectId].min)) ? subjects[vm.currentSubjectId].min : 0;
             var currentSubjectId;
 
             // options
@@ -18345,8 +18375,10 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                 height: 150,
                 distance: 90,
                 upOrDown: 100,
-                yUp: 30,
-                yDown: 100
+                yUp: 40,
+                yDown: 60,
+                xLeft: 20,
+                xRight: 20
             };
 
             var subjectIdToIndexMap = {};
@@ -18385,7 +18417,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
                         scoreData = _getRegularData(obj.data.lastLine);
                     }
 
-                    vm.timelineMinMaxStyle = { 'top': scoreData.y + 'px', 'left': scoreData.x + 'px' };
+                    vm.timelineMinMaxStyle = {'top': scoreData.y + 'px', 'left': scoreData.x + 'px'};
 
                     _getPromsOrValue().then(function (results) {
                         var userGoals = results[1];
@@ -18411,7 +18443,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             };
 
             function _getSummaryData(summeryScore) {
-                var x = summeryScore.lineTo.x;
+                var x = summeryScore.lineTo.x - optionsPerDevice.xLeft;
                 var y = summeryScore.lineTo.y + optionsPerDevice.yDown;
                 var angleDeg;
                 if (summeryScore.next) {
@@ -18433,7 +18465,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
             function _getRegularData(lastLineObj) {
                 var lastLine = lastLineObj[lastLineObj.length - 1];
                 var beforeLast = lastLineObj[lastLineObj.length - 2];
-                var x = lastLine.lineTo.x - 13;
+                var x = lastLine.lineTo.x - optionsPerDevice.xLeft;
                 var y = (lastLine.lineTo.y < optionsPerDevice.upOrDown) ? lastLine.lineTo.y + optionsPerDevice.yDown : lastLine.lineTo.y - optionsPerDevice.yUp;
                 var angleDeg = Math.atan2(lastLine.lineTo.y - beforeLast.lineTo.y, lastLine.lineTo.x - beforeLast.lineTo.x) * 180 / Math.PI;
 
