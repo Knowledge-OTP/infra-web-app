@@ -55,11 +55,11 @@
 
     <div class="inner">
         <table class="score-summary">
-            <tr class="composite">
+            <tr class="composite" ng-if="!vm.ignoreCompositeScore">
                 <td translate=".COMPOSITE_SCORE"></td>
                 <td class="num">{{d.estimatedCompositeScore}}</td>
             </tr>
-            <tr class="goal">
+            <tr class="goal" ng-if="!vm.ignoreCompositeGoal">
                 <td translate=".GOAL_SCORE"></td>
                 <td class="num">{{d.userCompositeGoal}}</td>
             </tr>

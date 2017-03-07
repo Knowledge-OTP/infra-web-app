@@ -4043,7 +4043,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log) {
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", "ENV", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log,ENV) {
         'ngInject';
 
             var self = this;
@@ -4080,6 +4080,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             }
 
             self.isSubjectsWaitToBeEvaluated = false;
+            self.ignoreCompositeScore = ENV.ignoreCompositeScore;
 
             for (var i in diagnosticScoresObj) {
                 if (diagnosticScoresObj.hasOwnProperty(i)) {
@@ -5005,8 +5006,8 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
-                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", "ENV", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
+                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv, ENV) {
             'ngInject';
             var previousValues;
 
@@ -5030,6 +5031,8 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
                     scope.d.showGoalsEdit = showGoalsEdit;
+                    scope.d.ignoreCompositeScore = ENV.ignoreCompositeScore;
+                    scope.d.vm.ignoreCompositeGoal = ENV.vm.ignoreCompositeGoal;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');
@@ -5282,11 +5285,11 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "\n" +
     "    <div class=\"inner\">\n" +
     "        <table class=\"score-summary\">\n" +
-    "            <tr class=\"composite\">\n" +
+    "            <tr class=\"composite\" ng-if=\"!vm.ignoreCompositeScore\">\n" +
     "                <td translate=\".COMPOSITE_SCORE\"></td>\n" +
     "                <td class=\"num\">{{d.estimatedCompositeScore}}</td>\n" +
     "            </tr>\n" +
-    "            <tr class=\"goal\">\n" +
+    "            <tr class=\"goal\" ng-if=\"!vm.ignoreCompositeGoal\">\n" +
     "                <td translate=\".GOAL_SCORE\"></td>\n" +
     "                <td class=\"num\">{{d.userCompositeGoal}}</td>\n" +
     "            </tr>\n" +
@@ -15003,88 +15006,88 @@ angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function($tem
 
 angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [function() {
 
-        var _calcScoreFn;
+    var _calcScoreFn;
 
-        this.setCalcScoreFn = function(calcScoreFn) {
-            _calcScoreFn = calcScoreFn;
+    this.setCalcScoreFn = function(calcScoreFn) {
+        _calcScoreFn = calcScoreFn;
+    };
+
+    this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', '$injector', function (InfraConfigSrv, StorageSrv, $q, $injector) {
+        var self = this;
+        var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
+        var defaultSubjectScore = self.settings.defaultSubjectScore;
+        var subjects = self.settings.subjects;
+
+        var userGoalsServiceObj = {};
+
+        userGoalsServiceObj.getGoals = function () {
+            return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
+                return globalStorage.get(goalsPath).then(function (userGoals) {
+                    if (angular.equals(userGoals, {})) {
+                        userGoals = _defaultUserGoals();
+                    }
+                    return userGoals;
+                });
+            });
         };
 
-        this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', '$injector', function (InfraConfigSrv, StorageSrv, $q, $injector) {
-            var self = this;
-            var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
-            var defaultSubjectScore = self.settings.defaultSubjectScore;
-            var subjects = self.settings.subjects;
-
-            var userGoalsServiceObj = {};
-
-            userGoalsServiceObj.getGoals = function () {
-                return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
-                    return globalStorage.get(goalsPath).then(function (userGoals) {
-                        if (angular.equals(userGoals, {})) {
-                            userGoals = _defaultUserGoals();
-                        }
-                        return userGoals;
-                    });
-                });
-            };
-
-            userGoalsServiceObj.setGoals = function (newGoals) {
-                return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
-                    if (arguments.length && angular.isDefined(newGoals)) {
-                        return globalStorage.set(goalsPath, newGoals);
+        userGoalsServiceObj.setGoals = function (newGoals) {
+            return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
+                if (arguments.length && angular.isDefined(newGoals)) {
+                    return globalStorage.set(goalsPath, newGoals);
+                }
+                return globalStorage.get(goalsPath).then(function (userGoals) {
+                    if (!userGoals.goals) {
+                        userGoals.goals = _defaultUserGoals();
                     }
-                    return globalStorage.get(goalsPath).then(function (userGoals) {
-                        if (!userGoals.goals) {
-                            userGoals.goals = _defaultUserGoals();
-                        }
-                        return userGoals;
-                    });
+                    return userGoals;
                 });
+            });
+        };
+
+        userGoalsServiceObj.getCalcScoreFn = function() {
+            return $q.when($injector.invoke(_calcScoreFn, self));
+        };
+
+        userGoalsServiceObj.getGoalsSettings = function() {
+            return self.settings;
+        };
+
+        function getInitTotalScore() {
+            var initTotalScore = 0;
+            angular.forEach(subjects, function() {
+                initTotalScore += defaultSubjectScore;
+            });
+            return initTotalScore;
+        }
+
+        function _defaultUserGoals() {
+            var defaultUserGoals = {
+                isCompleted: false,
+                totalScore: getInitTotalScore()
             };
+            angular.forEach(subjects, function(subject) {
+                defaultUserGoals[subject.name] = defaultSubjectScore;
+            });
+            return defaultUserGoals;
+        }
 
-            userGoalsServiceObj.getCalcScoreFn = function() {
-                return $q.when($injector.invoke(_calcScoreFn, self));
-            };
+        function averageSubjectsGoal(goalsObj) {
+            var goalsSum = 0;
+            var goalsLength = 0;
+            angular.forEach(goalsObj, function(goal) {
+                if (angular.isNumber(goal)) {
+                    goalsSum += goal;
+                    goalsLength += 1;
+                }
+            });
+            return Math.round(goalsSum / goalsLength);
+        }
 
-            userGoalsServiceObj.getGoalsSettings = function() {
-                 return self.settings;
-            };
+        userGoalsServiceObj.averageSubjectsGoal = averageSubjectsGoal;
 
-            function getInitTotalScore() {
-                var initTotalScore = 0;
-                angular.forEach(subjects, function() {
-                    initTotalScore += defaultSubjectScore;
-                });
-                return initTotalScore;
-            }
-
-            function _defaultUserGoals() {
-                var defaultUserGoals = {
-                    isCompleted: false,
-                    totalScore: getInitTotalScore()
-                };
-                angular.forEach(subjects, function(subject) {
-                    defaultUserGoals[subject.name] = defaultSubjectScore;
-                });
-                return defaultUserGoals;
-            }
-
-            function averageSubjectsGoal(goalsObj) {
-                var goalsSum = 0;
-                var goalsLength = 0;
-                angular.forEach(goalsObj, function(goal) {
-                    if (angular.isNumber(goal)) {
-                        goalsSum += goal;
-                        goalsLength += 1;
-                    }
-                });
-                return Math.round(goalsSum / goalsLength);
-            }
-
-            userGoalsServiceObj.averageSubjectsGoal = averageSubjectsGoal;
-
-            return userGoalsServiceObj;
-        }];
+        return userGoalsServiceObj;
+    }];
 }]);
 
 angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
@@ -16026,10 +16029,10 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                     resolve: {
                         diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", function (DiagnosticSrv, DiagnosticIntroSrv) {
                             'ngInject';
-                                return {
-                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
-                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
-                                };
+                            return {
+                                diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                            };
                         }]
                     },
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
@@ -17517,15 +17520,15 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
     "    <div class=\"total-score\"\n" +
-    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated\"\n" +
+    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated  && !vm.ignoreCompositeScore\"\n" +
     "         translate=\".DIAG_COMPOS_SCORE\"\n" +
     "         translate-values=\"{total: vm.compositeScore }\">\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"first-row\">\n" +
     "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
-    "            ng-class=\"subject.subjectNameAlias\"\n" +
-    "            class=\"subject-score\">\n" +
+    "             ng-class=\"subject.subjectNameAlias\"\n" +
+    "             class=\"subject-score\">\n" +
     "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
     "            <div class=\"score-wrapper\">\n" +
     "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +

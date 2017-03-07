@@ -43,8 +43,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
-                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", "ENV", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
+                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv, ENV) {
             'ngInject';
             var previousValues;
 
@@ -68,6 +68,8 @@
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
                     scope.d.showGoalsEdit = showGoalsEdit;
+                    scope.d.ignoreCompositeScore = ENV.ignoreCompositeScore;
+                    scope.d.vm.ignoreCompositeGoal = ENV.vm.ignoreCompositeGoal;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');
@@ -320,11 +322,11 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "\n" +
     "    <div class=\"inner\">\n" +
     "        <table class=\"score-summary\">\n" +
-    "            <tr class=\"composite\">\n" +
+    "            <tr class=\"composite\" ng-if=\"!vm.ignoreCompositeScore\">\n" +
     "                <td translate=\".COMPOSITE_SCORE\"></td>\n" +
     "                <td class=\"num\">{{d.estimatedCompositeScore}}</td>\n" +
     "            </tr>\n" +
-    "            <tr class=\"goal\">\n" +
+    "            <tr class=\"goal\" ng-if=\"!vm.ignoreCompositeGoal\">\n" +
     "                <td translate=\".GOAL_SCORE\"></td>\n" +
     "                <td class=\"num\">{{d.userCompositeGoal}}</td>\n" +
     "            </tr>\n" +

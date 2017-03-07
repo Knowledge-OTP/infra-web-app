@@ -7,7 +7,7 @@
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
         function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
-                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv, ENV) {
             'ngInject';
             var previousValues;
 
@@ -31,6 +31,8 @@
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
                     scope.d.showGoalsEdit = showGoalsEdit;
+                    scope.d.ignoreCompositeScore = ENV.ignoreCompositeScore;
+                    scope.d.vm.ignoreCompositeGoal = ENV.vm.ignoreCompositeGoal;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');

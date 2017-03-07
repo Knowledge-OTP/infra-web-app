@@ -611,7 +611,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log) {
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", "ENV", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log,ENV) {
         'ngInject';
 
             var self = this;
@@ -648,6 +648,7 @@
             }
 
             self.isSubjectsWaitToBeEvaluated = false;
+            self.ignoreCompositeScore = ENV.ignoreCompositeScore;
 
             for (var i in diagnosticScoresObj) {
                 if (diagnosticScoresObj.hasOwnProperty(i)) {
