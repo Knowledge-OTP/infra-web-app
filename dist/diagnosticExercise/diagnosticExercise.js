@@ -611,8 +611,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", "ENV", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log,ENV) {
-        'ngInject';
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", function (diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log) {
+            'ngInject';
 
             var self = this;
 
@@ -628,7 +628,7 @@
             });
 
             function getMaxScore(subjectId) {
-                if(scoringLimits.subjects && scoringLimits.subjects.max) {
+                if (scoringLimits.subjects && scoringLimits.subjects.max) {
                     return scoringLimits.subjects.max;
                 }
                 else if (scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max) {
@@ -648,7 +648,6 @@
             }
 
             self.isSubjectsWaitToBeEvaluated = false;
-            self.ignoreCompositeScore = ENV.ignoreCompositeScore;
 
             for (var i in diagnosticScoresObj) {
                 if (diagnosticScoresObj.hasOwnProperty(i)) {
@@ -659,7 +658,7 @@
                 }
             }
 
-            if(self.isSubjectsWaitToBeEvaluated) {
+            if (self.isSubjectsWaitToBeEvaluated) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.EVALUATE_START';
             } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.greatStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';
@@ -695,7 +694,7 @@
                 this.goalPoint = getGoalPoint(goalScoreObj[_subjectName], _subjectId);
                 this.data = [doughnutValues[_subjectName], doughnutValues[_subjectName + GOAL], doughnutValues[_subjectName + MAX]];
                 this.colors = colorsArray;
-                this.subjectName  =  'WORKOUTS_DIAGNOSTIC_SUMMARY.' + angular.uppercase(_subjectName);
+                this.subjectName = 'WORKOUTS_DIAGNOSTIC_SUMMARY.' + angular.uppercase(_subjectName);
                 this.score = diagnosticResultObj.userStats[_subjectId];
                 this.scoreGoal = goalScoreObj[_subjectName];
             }
@@ -712,8 +711,9 @@
                     y: y
                 };
             }
+
             var dataArray = [];
-            angular.forEach(diagnosticSettings.summary.subjects, function(subject) {
+            angular.forEach(diagnosticSettings.summary.subjects, function (subject) {
                 dataArray.push(new GaugeConfig(subject.name, subject.id, subject.colors));
             });
 
@@ -726,7 +726,7 @@
             purchaseService.hasProVersion().then(function (isPro) {
                 self.showUpgradeBtn = !isPro && diagnosticSettings.summary && diagnosticSettings.summary.showUpgradeBtn;
             });
-    }]);
+        }]);
 })(angular);
 
 (function (angular) {

@@ -4043,8 +4043,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticSummaryController',
-        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", "ENV", function(diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log,ENV) {
-        'ngInject';
+        ["diagnosticSummaryData", "SubjectEnum", "SubjectEnumConst", "WorkoutsDiagnosticFlow", "purchaseService", "$log", function (diagnosticSummaryData, SubjectEnum, SubjectEnumConst, WorkoutsDiagnosticFlow, purchaseService, $log) {
+            'ngInject';
 
             var self = this;
 
@@ -4060,7 +4060,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             });
 
             function getMaxScore(subjectId) {
-                if(scoringLimits.subjects && scoringLimits.subjects.max) {
+                if (scoringLimits.subjects && scoringLimits.subjects.max) {
                     return scoringLimits.subjects.max;
                 }
                 else if (scoringLimits.subjects[subjectId] && scoringLimits.subjects[subjectId].max) {
@@ -4080,7 +4080,6 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             }
 
             self.isSubjectsWaitToBeEvaluated = false;
-            self.ignoreCompositeScore = ENV.ignoreCompositeScore;
 
             for (var i in diagnosticScoresObj) {
                 if (diagnosticScoresObj.hasOwnProperty(i)) {
@@ -4091,7 +4090,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 }
             }
 
-            if(self.isSubjectsWaitToBeEvaluated) {
+            if (self.isSubjectsWaitToBeEvaluated) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.EVALUATE_START';
             } else if (diagnosticResultObj.compositeScore > diagnosticSettings.summary.greatStart) {
                 self.footerTranslatedText = 'WORKOUTS_DIAGNOSTIC_SUMMARY.GREAT_START';
@@ -4127,7 +4126,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 this.goalPoint = getGoalPoint(goalScoreObj[_subjectName], _subjectId);
                 this.data = [doughnutValues[_subjectName], doughnutValues[_subjectName + GOAL], doughnutValues[_subjectName + MAX]];
                 this.colors = colorsArray;
-                this.subjectName  =  'WORKOUTS_DIAGNOSTIC_SUMMARY.' + angular.uppercase(_subjectName);
+                this.subjectName = 'WORKOUTS_DIAGNOSTIC_SUMMARY.' + angular.uppercase(_subjectName);
                 this.score = diagnosticResultObj.userStats[_subjectId];
                 this.scoreGoal = goalScoreObj[_subjectName];
             }
@@ -4144,8 +4143,9 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                     y: y
                 };
             }
+
             var dataArray = [];
-            angular.forEach(diagnosticSettings.summary.subjects, function(subject) {
+            angular.forEach(diagnosticSettings.summary.subjects, function (subject) {
                 dataArray.push(new GaugeConfig(subject.name, subject.id, subject.colors));
             });
 
@@ -4158,7 +4158,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             purchaseService.hasProVersion().then(function (isPro) {
                 self.showUpgradeBtn = !isPro && diagnosticSettings.summary && diagnosticSettings.summary.showUpgradeBtn;
             });
-    }]);
+        }]);
 })(angular);
 
 (function (angular) {
@@ -16274,12 +16274,12 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticSummaryController',
-        ["diagnosticData", function (diagnosticData) {
+        ["diagnosticData", "ENV", function (diagnosticData, ENV) {
             'ngInject';
 
             var vm = this;
             var diagnosticSubjects;
-
+            vm.ignoreCompositeScore = ENV.ignoreCompositeScore;
             diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
                 diagnosticSubjects = vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
                 return diagnosticData.diagnosticResultProm;
@@ -16287,7 +16287,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 var diagnosticScoresObj = diagnosticResult.userStats;
                 vm.isSubjectsWaitToBeEvaluated = false;
 
-                for (var i=0, ii = diagnosticSubjects.length; i < ii; i++) {
+                for (var i = 0, ii = diagnosticSubjects.length; i < ii; i++) {
                     var subjectId = diagnosticSubjects[i].id;
 
                     if (!diagnosticScoresObj[subjectId]) {
