@@ -5285,11 +5285,11 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "\n" +
     "    <div class=\"inner\">\n" +
     "        <table class=\"score-summary\">\n" +
-    "            <tr class=\"composite\" ng-if=\"!vm.ignoreCompositeScore\">\n" +
+    "            <tr class=\"composite\" ng-if=\"!d.ignoreCompositeScore\">\n" +
     "                <td translate=\".COMPOSITE_SCORE\"></td>\n" +
     "                <td class=\"num\">{{d.estimatedCompositeScore}}</td>\n" +
     "            </tr>\n" +
-    "            <tr class=\"goal\" ng-if=\"!vm.ignoreCompositeGoal\">\n" +
+    "            <tr class=\"goal\" ng-if=\"!d.ignoreCompositeGoal\">\n" +
     "                <td translate=\".GOAL_SCORE\"></td>\n" +
     "                <td class=\"num\">{{d.userCompositeGoal}}</td>\n" +
     "            </tr>\n" +
