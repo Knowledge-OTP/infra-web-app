@@ -176,10 +176,10 @@
                     resolve: {
                         diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", function (DiagnosticSrv, DiagnosticIntroSrv) {
                             'ngInject';
-                                return {
-                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
-                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
-                                };
+                            return {
+                                diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                            };
                         }]
                     },
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
@@ -421,12 +421,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticSummaryController',
-        ["diagnosticData", function (diagnosticData) {
+        ["diagnosticData", "ENV", function (diagnosticData, ENV) {
             'ngInject';
 
             var vm = this;
             var diagnosticSubjects;
-
+            vm.ignoreCompositeScore = ENV.ignoreCompositeScore;
             diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
                 diagnosticSubjects = vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
                 return diagnosticData.diagnosticResultProm;
@@ -434,7 +434,7 @@
                 var diagnosticScoresObj = diagnosticResult.userStats;
                 vm.isSubjectsWaitToBeEvaluated = false;
 
-                for (var i=0, ii = diagnosticSubjects.length; i < ii; i++) {
+                for (var i = 0, ii = diagnosticSubjects.length; i < ii; i++) {
                     var subjectId = diagnosticSubjects[i].id;
 
                     if (!diagnosticScoresObj[subjectId]) {
@@ -1667,15 +1667,15 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
     "    <div class=\"total-score\"\n" +
-    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated\"\n" +
+    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated  && !vm.ignoreCompositeScore\"\n" +
     "         translate=\".DIAG_COMPOS_SCORE\"\n" +
     "         translate-values=\"{total: vm.compositeScore }\">\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"first-row\">\n" +
     "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
-    "            ng-class=\"subject.subjectNameAlias\"\n" +
-    "            class=\"subject-score\">\n" +
+    "             ng-class=\"subject.subjectNameAlias\"\n" +
+    "             class=\"subject-score\">\n" +
     "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
     "            <div class=\"score-wrapper\">\n" +
     "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
