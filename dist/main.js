@@ -5032,7 +5032,7 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
                     scope.d.showGoalsEdit = showGoalsEdit;
                     scope.d.ignoreCompositeScore = ENV.ignoreCompositeScore;
-                    scope.d.vm.ignoreCompositeGoal = ENV.vm.ignoreCompositeGoal;
+                    scope.d.ignoreCompositeGoal = ENV.ignoreCompositeGoal;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');
