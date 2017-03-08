@@ -257,8 +257,8 @@
         "SKIPPED": "Skipped",
         "CATEGORY": "Category",
         "ESTIMATED_SCORE": "{{subjectName}} Estimated Score",
-        "ACCURACY_LEVEL": "Accuracy Level",
-        "ACCURACY": "accuracy",
+        "MASTERY_LEVEL": "Mastery Level",
+        "MASTERY": "mastery",
         "REVIEW": "REVIEW",
         "TEST_TITLE": "Test Score:"
     },
