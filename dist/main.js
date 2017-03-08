@@ -4421,7 +4421,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                     diagnosticFlowResults.result = {
                         questionId: question.id,
                         categoryId: question.categoryId,
-                        categoryId2: question.categoryId2
+                        categoryId2: question.categoryId2,
+                        difficulty: question.difficulty
                     };
                     if (cb && angular.isFunction(cb)) {
                         cb(diagnosticFlowResults);
