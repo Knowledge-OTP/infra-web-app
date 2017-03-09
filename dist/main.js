@@ -2562,7 +2562,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData) {
                     if (exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum) {
                         var liveSessionOn = !angular.equals(liveSessionData, {});
-                        if (ENV.testToTakeExamId && ENV.testToTakeExamId !==  null) {
+                        if (ENV.testToTakeExamId && ENV.testToTakeExamId !==  null && ENV.testToTakeExamId === exerciseContent.examId) {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                         } else if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
