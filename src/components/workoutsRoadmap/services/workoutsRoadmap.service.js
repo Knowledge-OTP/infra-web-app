@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').provider('WorkoutsRoadmapSrv', [
-        function (StorageRevSrv) {
+        function () {
             var _newSubjectToIgnoreGetter;
             this.setSubjectToIgnoreGetter = function (newWorkoutGeneratorGetter) {
                 _newSubjectToIgnoreGetter = newWorkoutGeneratorGetter;
@@ -14,7 +14,7 @@
                 _workoutAvailTimesGetter = workoutAvailTimesGetter;
             };
 
-            this.$get = function ($injector, $log, $q) {
+            this.$get = function ($injector, $log, $q ,PersonalizationSrv) {
                 'ngInject';
 
                 var WorkoutsRoadmapSrv = {};
@@ -32,7 +32,7 @@
 
                     var newSubjectToIgnoreGetter = $injector.invoke(_newSubjectToIgnoreGetter);
                     return $q.when(newSubjectToIgnoreGetter(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn)).then(function (subjectToIgnore) {
-                        StorageRevSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
+                        PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
                     });
                 };
 
