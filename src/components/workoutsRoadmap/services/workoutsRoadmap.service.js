@@ -14,7 +14,7 @@
                 _workoutAvailTimesGetter = workoutAvailTimesGetter;
             };
 
-            this.$get = function ($injector, $log, $q ,PersonalizationSrv) {
+            this.$get = function ($injector, $log, $q, PersonalizationSrv) {
                 'ngInject';
 
                 var WorkoutsRoadmapSrv = {};
@@ -32,7 +32,11 @@
 
                     var newSubjectToIgnoreGetter = $injector.invoke(_newSubjectToIgnoreGetter);
                     return $q.when(newSubjectToIgnoreGetter(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn)).then(function (subjectToIgnore) {
-                        PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
+                       //in case the 'subjectToIgnore' property was not returned from app config
+                        if (angular.isUndefined(subjectToIgnore)) {
+                            subjectToIgnore = subjectToIgnoreForNextDaily;
+                        }
+                        return PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
                     });
                 };
 
