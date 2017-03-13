@@ -26,7 +26,7 @@
                 WorkoutsRoadmapSrv.generateNewExercise = function (subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn) {
                     var getter, invokedFunc;
 
-                    if (!(_newWorkoutGeneratorGetter && _newSubjectToIgnoreGetter)) {
+                    if (!angular.isFunction(_newWorkoutGeneratorGetter) && !angular.isFunction(_newSubjectToIgnoreGetter)) {
                         var errMsg = 'WorkoutsRoadmapSrv: getter function was not defined!';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
