@@ -9,13 +9,13 @@
         };
 
         this.$get = function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv) {
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
             var LiveSessionEventsSrv = {};
 
             function _listenToLiveSessionData(guid) {
-                var liveSessionDataPath = ENV.studentAppName + '/liveSession/' + guid;
+                var liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
 
                 function _cb(liveSessionData) {
                     if (!liveSessionData) {

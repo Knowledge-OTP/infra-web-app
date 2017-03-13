@@ -218,7 +218,7 @@
             }
 
             this.getLiveSessionDataPath = function (guid) {
-                var LIVE_SESSION_ROOT_PATH = ENV.studentAppName + '/liveSession/';
+                var LIVE_SESSION_ROOT_PATH = '/liveSession/';
                 return LIVE_SESSION_ROOT_PATH + guid;
             };
 
@@ -281,14 +281,14 @@
             isEnabled = _isEnabled;
         };
 
-        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv) {
+        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
             var LiveSessionEventsSrv = {};
 
             function _listenToLiveSessionData(guid) {
-                var liveSessionDataPath = ENV.studentAppName + '/liveSession/' + guid;
+                var liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
 
                 function _cb(liveSessionData) {
                     if (!liveSessionData) {
