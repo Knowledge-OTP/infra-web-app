@@ -502,7 +502,12 @@
         "TIMEZONE": "Timezone",
         "SET_MANUALLY": "Set manually",
         "EMAIL_ERROR": "Email error",
-        "DONE": "Done"
+        "DONE": "Done",
+        "SELECTED_TEST_LEVEL": "Selected Test Level",
+        "MATH_LEVEL_1": "Math Level 1",
+        "MATH_LEVEL_2": "Math Level 2",
+        "TEST_LEVEL": "Test Level",
+        "TEST_LEVEL_SAVE_SUCCESS": "Your test level has been changed successfully."
     },
     "ACTIVE_PANEL": {
         "SHOW_STUDENT_SCREEN": "Show Student Screen",
