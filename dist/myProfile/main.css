@@ -57,7 +57,7 @@
 md-dialog.my-profile {
   background-color: #ffffff;
   overflow: visible;
-  width: 800px;
+  width: 700px;
   height: calc(100vh - 65px);
   border-radius: 20px;
   padding-bottom: 20px;
@@ -91,13 +91,12 @@ md-dialog.my-profile {
         md-dialog.my-profile .top-icon-wrap .top-icon .round-icon-wrap .myProfile-icon * {
           fill: #ffffff; }
   md-dialog.my-profile .main-title {
-    font-size: 32px;
+    font-size: 24px;
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 600;
     text-align: center;
-    padding-top: 20px;
-    margin: 20px;
+    margin: 20px 0 10px;
     background-color: #ffffff; }
   md-dialog.my-profile md-toolbar {
     height: 40px;
@@ -119,36 +118,26 @@ md-dialog.my-profile {
     md-dialog.my-profile .content-wrapper .change-profile, md-dialog.my-profile .content-wrapper .selected-test-level, md-dialog.my-profile .content-wrapper .change-password {
       display: block;
       background-color: #f9f9f9;
-      padding: 20px 20px 0 20px;
+      padding: 12px 75px 0 20px;
       margin: 5px 40px;
       height: 100%;
       border-radius: 15px; }
-      md-dialog.my-profile .content-wrapper .change-profile .container-title, md-dialog.my-profile .content-wrapper .selected-test-level .container-title, md-dialog.my-profile .content-wrapper .change-password .container-title {
-        font-size: 18px;
-        color: #4f4d4d;
-        font-family: Quicksand;
-        font-weight: 600;
-        text-align: center; }
     md-dialog.my-profile .content-wrapper .change-password {
-      margin-bottom: 30px;
       display: block; }
-      md-dialog.my-profile .content-wrapper .change-password .container-title {
-        font-size: 18px;
-        color: #4f4d4d;
-        font-family: Quicksand;
-        font-weight: 600;
-        text-align: center; }
+    md-dialog.my-profile .content-wrapper .container-title {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 600;
+      text-align: center; }
     md-dialog.my-profile .content-wrapper .auth-form {
       margin-right: auto;
-      margin-left: auto;
-      margin-bottom: 10px;
-      margin-top: 43px; }
+      margin-left: auto; }
       md-dialog.my-profile .content-wrapper .auth-form .znk-input-group {
         width: 100%;
         min-height: 0;
         display: -ms-flexbox;
-        display: flex;
-        margin: 10px -10px; }
+        display: flex; }
         md-dialog.my-profile .content-wrapper .auth-form .znk-input-group label {
           width: 30%;
           font-size: 14px;
@@ -165,6 +154,7 @@ md-dialog.my-profile {
           -ms-flex-direction: column;
               flex-direction: column; }
           md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select {
+            height: 30px;
             width: 86%;
             display: block;
             border-radius: 0;
@@ -173,10 +163,8 @@ md-dialog.my-profile {
             margin: 10px 50px 2px 30px;
             color: #161616;
             font-size: 14px; }
-          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select {
-            height: 40px; }
-            md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select[disabled] {
-              color: #acacac; }
+          md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .znk-input select[disabled] {
+            color: #acacac; }
         md-dialog.my-profile .content-wrapper .auth-form .znk-input-group .locked-icon {
           width: 14px;
           display: inline-block;
@@ -189,7 +177,7 @@ md-dialog.my-profile {
           width: 335px;
           padding: 3px 10px;
           position: absolute;
-          right: 37px;
+          right: -20px;
           top: -25px;
           background-color: #ff6766;
           color: white;
@@ -213,7 +201,7 @@ md-dialog.my-profile {
         md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid input, md-dialog.my-profile .content-wrapper .auth-form .znk-input-group.invalid select {
           border-color: #ff6766; }
       md-dialog.my-profile .content-wrapper .auth-form .timezone-manual {
-        margin: -10px 220px;
+        margin: 6px 179px;
         font-size: 14px;
         color: #757a83;
         font-family: Lato;
@@ -223,18 +211,24 @@ md-dialog.my-profile {
         display: flex;
         -ms-flex-pack: end;
             justify-content: flex-end;
-        margin-right: 50px;
+        margin-right: 36px;
+        margin-bottom: 7px;
+        margin-top: 7px;
         outline: none; }
         md-dialog.my-profile .content-wrapper .auth-form .btn-wrap .save-pass-btn {
-          width: 15%;
+          width: 72px;
           margin: 0;
           box-shadow: none;
-          height: 30px;
+          height: 23px;
           background: transparent;
           border-radius: 20px;
-          border: 2px solid #0a9bad;
+          border: 1px solid #0a9bad;
           color: #0a9bad;
-          outline: none; }
+          outline: none;
+          font-size: 14px;
+          font-family: Lato; }
+        md-dialog.my-profile .content-wrapper .auth-form .btn-wrap.merged-top-btn {
+          margin-top: -20px; }
   md-dialog.my-profile .msg-wrap {
     font-size: 12px;
     color: #ffffff;

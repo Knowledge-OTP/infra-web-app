@@ -12,7 +12,7 @@
             }
 
             this.getLiveSessionDataPath = function (guid) {
-                var LIVE_SESSION_ROOT_PATH = ENV.studentAppName + '/liveSession/';
+                var LIVE_SESSION_ROOT_PATH = '/liveSession/';
                 return LIVE_SESSION_ROOT_PATH + guid;
             };
 
