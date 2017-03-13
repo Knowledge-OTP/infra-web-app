@@ -9,6 +9,7 @@
         'znk.infra.general',
         'znk.infra.storage',
         'znk.infra.user',
+        'znk.infra.exerciseUtility',
         'znk.infra-web-app.znkToast'
     ]);
 })(angular);
@@ -329,7 +330,7 @@
         );
 })(angular);
 
-angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/myProfile/components/changePassword/changePassword.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
     "    <div class=\"container-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
@@ -459,17 +460,16 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "");
   $templateCache.put("components/myProfile/components/updateProfile/updateProfile.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
-    "    <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\" ng-switch-when=\"false\">\n" +
-    "        <div class=\"znk-input-group\"\n" +
-    "             ng-class=\"profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "    <form class=\"auth-form\" name=\"profileform\" novalidate ng-submit=\"vm.updateProfile(profileform)\" ng-switch-when=\"false\">\n" +
+    "        <div class=\"znk-input-group\" ng-class=\"profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
     "            <label>{{'MY_PROFILE.USERNAME' | translate}}</label>\n" +
     "            <div class=\"znk-input\">\n" +
     "                <input\n" +
-    "                        type=\"text\"\n" +
-    "                        autocomplete=\"on\"\n" +
-    "                        name=\"nickname\"\n" +
-    "                        ng-required=\"true\"\n" +
-    "                        ng-model=\"vm.profileData.nickname\">\n" +
+    "                    type=\"text\"\n" +
+    "                    autocomplete=\"on\"\n" +
+    "                    name=\"nickname\"\n" +
+    "                    ng-required=\"true\"\n" +
+    "                    ng-model=\"vm.profileData.nickname\">\n" +
     "                <span ng-if=\"profileform.$submitted && profileform.nickname.$invalid\"\n" +
     "                      role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
@@ -484,11 +484,11 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <label>{{'MY_PROFILE.EMAIL' | translate}}</label>\n" +
     "            <div class=\"znk-input\">\n" +
     "                <input\n" +
-    "                        type=\"email\"\n" +
-    "                        autocomplete=\"on\"\n" +
-    "                        name=\"email\"\n" +
-    "                        ng-disabled=\"true\"\n" +
-    "                        ng-model=\"vm.profileData.email\">\n" +
+    "                    type=\"email\"\n" +
+    "                    autocomplete=\"on\"\n" +
+    "                    name=\"email\"\n" +
+    "                    ng-disabled=\"true\"\n" +
+    "                    ng-model=\"vm.profileData.email\">\n" +
     "                <span ng-if=\"profileform.$submitted && profileform.email.$invalid\"\n" +
     "                      role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
@@ -515,8 +515,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "                   ng-change=\"vm.updateProfileTimezone()\">\n" +
     "            <label for=\"timezoneManual\">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>\n" +
     "        </div>\n" +
-    "\n" +
-    "        <div class=\"btn-wrap\">\n" +
+    "        <div class=\"btn-wrap merged-top-btn\">\n" +
     "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
     "        </div>\n" +
     "    </form>\n" +
@@ -525,7 +524,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <div translate=\".PROFILE_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
     "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
-    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "                       class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -592,7 +591,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "\n" +
     "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\"\n" +
     "                        local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
-    "\n" +
     "        </update-profile>\n" +
     "        <selected-test-level class=\"selected-test-level\"></selected-test-level>\n" +
     "        <change-password class=\"change-password\"></change-password>\n" +

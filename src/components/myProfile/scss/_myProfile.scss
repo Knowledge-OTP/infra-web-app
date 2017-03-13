@@ -1,8 +1,7 @@
 md-dialog.my-profile {
     background-color: $bgColor3;
     overflow: visible;
-    width: 800px;
-    // height: auto;
+    width: 700px;
     height: calc(100vh - 65px);
     border-radius: 20px;
     padding-bottom: 20px;
@@ -40,10 +39,9 @@ md-dialog.my-profile {
     }
 
     .main-title {
-        @include text-style(32px, $fontColor3, Quicksand, $semiBoldFontWeight);
+        @include text-style(24px, $fontColor3, Quicksand, $semiBoldFontWeight);
         text-align: center;
-        padding-top: 20px;
-        margin: 20px;
+        margin: 20px 0 10px;
         background-color: $bgColor3;
     }
 
@@ -70,42 +68,32 @@ md-dialog.my-profile {
         .change-profile {
             display: block;
             background-color: $bgColor27;
-            padding: 20px 20px 0 20px;
+            padding: 12px 75px 0 20px;
             margin: 5px 40px;
             height: 100%;
             border-radius: 15px;
-            .container-title {
-                @include text-style(18px, $fontColor3, Quicksand, $semiBoldFontWeight);
-                text-align: center;
-            }
         }
         .selected-test-level {
             @extend .change-profile;
         }
         .change-password {
             @extend .change-profile;
-            margin-bottom: 30px;
             display: block;
-
-            .container-title {
-                @include text-style(18px, $fontColor3, Quicksand, $semiBoldFontWeight);
-                text-align: center;
-            }
+        }
+        .container-title {
+            @include text-style(16px, $fontColor3, Quicksand, $semiBoldFontWeight);
+            text-align: center;
         }
         .auth-form {
             margin: {
                 right: auto;
                 left: auto;
-                bottom: 10px;
-                top: 43px;
-            }
-        ;
+            };
 
             .znk-input-group {
                 width: 100%;
                 min-height: 0;
                 display: flex;
-                margin: 10px -10px;
                 label {
                     width: 30%;
                     @include text-style(14px, $fontColor3, Lato, $lightFontWeight);
@@ -118,6 +106,7 @@ md-dialog.my-profile {
                     display: flex;
                     flex-direction: column;
                     input, select {
+                        height: 30px;
                         width: 86%;
                         display: block;
                         border-radius: 0;
@@ -128,7 +117,6 @@ md-dialog.my-profile {
                         font-size: 14px;
                     }
                     select {
-                        height: 40px;
                         &[disabled] {
                             color: $fontColor14;
                         }
@@ -152,7 +140,7 @@ md-dialog.my-profile {
                         width: 335px;
                         padding: 3px 10px;
                         position: absolute;
-                        right: 37px;
+                        right: -20px;
                         top: -25px;
                         background-color: $bgColor32;
                         color: $fontColor1;
@@ -192,26 +180,36 @@ md-dialog.my-profile {
             }
 
             .timezone-manual {
-                margin: -10px 220px;
+                margin: 6px 179px;
                 @include text-style(14px, $fontColor4, Lato, $lightFontWeight);
             }
 
             .btn-wrap {
                 display: flex;
                 justify-content: flex-end;
-                margin-right: 50px;
+                margin: {
+                    right: 36px;
+                    bottom: 7px;
+                    top: 7px;
+                };
                 outline: none;
                 .save-pass-btn {
-                    width: 15%;
+                    width: 72px;
                     margin: 0;
                     box-shadow: none;
-                    height: 30px;
+                    height: 23px;
                     background: $transparent;
                     border-radius: 20px;
-                    border: 2px solid $bsColor5;
+                    border: 1px solid $bsColor5;
                     color: $fontColor6;
                     outline: none;
+                    font-size: 14px;
+                    font-family: Lato;
 
+                }
+
+                &.merged-top-btn{
+                    margin-top: -20px;
                 }
             }
         }
