@@ -3,9 +3,13 @@
 
     angular.module('znk.infra-web-app.workoutsRoadmap').provider('WorkoutsRoadmapSrv', [
         function () {
-            var _newSubjectToIgnoreGetter;
+            var _newSubjectToIgnoreGetter, _newWorkoutGeneratorGetter;
+
             this.setSubjectToIgnoreGetter = function (newWorkoutGeneratorGetter) {
                 _newSubjectToIgnoreGetter = newWorkoutGeneratorGetter;
+            };
+            this.setNewWorkoutGeneratorGetter = function (newWorkoutGeneratorGetter) {
+                _newWorkoutGeneratorGetter = newWorkoutGeneratorGetter;
             };
 
 
@@ -20,26 +24,31 @@
                 var WorkoutsRoadmapSrv = {};
 
                 WorkoutsRoadmapSrv.generateNewExercise = function (subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn) {
-                    if (!_newSubjectToIgnoreGetter) {
-                        var errMsg = 'WorkoutsRoadmapSrv: newSubjectToIgnoreGetter wsa not defined !!!!';
+                    var getter, invokedFunc;
+
+                    if (!(_newWorkoutGeneratorGetter && _newSubjectToIgnoreGetter)) {
+                        var errMsg = 'WorkoutsRoadmapSrv: getter function was not defined!';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
                     }
-
                     if (!angular.isArray(subjectToIgnoreForNextDaily)) {
                         subjectToIgnoreForNextDaily = subjectToIgnoreForNextDaily ? [subjectToIgnoreForNextDaily] : [];
                     }
+                    getter = _newSubjectToIgnoreGetter || _newWorkoutGeneratorGetter;
+                    invokedFunc = $injector.invoke(getter);
 
-                    var newSubjectToIgnoreGetter = $injector.invoke(_newSubjectToIgnoreGetter);
-                    return $q.when(newSubjectToIgnoreGetter(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn)).then(function (subjectToIgnore) {
-                       //in case the 'subjectToIgnore' property was not returned from app config
-                        if (angular.isUndefined(subjectToIgnore)) {
-                            subjectToIgnore = subjectToIgnoreForNextDaily;
-                        }
-                        return PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
-                    });
+                    if (_newSubjectToIgnoreGetter) {
+                        return $q.when(invokedFunc(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn)).then(function (subjectToIgnore) {
+                            if (angular.isUndefined(subjectToIgnore)) {   //in case the 'subjectToIgnore' property was not returned from app config
+                                subjectToIgnore = subjectToIgnoreForNextDaily;
+                            }
+                            return PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
+                        });
+                    }
+                    else {
+                        return $q.when(invokedFunc(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn));
+                    }
                 };
-
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes = function () {
                     if (!_workoutAvailTimesGetter) {
                         var errMsg = 'WorkoutsRoadmapSrv: workoutAvailTimesGetter wsa not defined !!!!';
