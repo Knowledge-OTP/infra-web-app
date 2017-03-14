@@ -232,6 +232,7 @@
     "ON_BOARDING.TEST_TO_TAKE": {
         "FIGURE_OUT": "Let's Figure Out Which Test Level You Should Take",
         "START_TEST": "START TEST",
+        "SKIP":"I already know, skip test",
         "OR": "or",
         "FIGURE_OUT_DESC": "Solve a set of questions, built specifically to help us identify your proficiency level</br>and recommend the test level you should study for."
     },
@@ -245,7 +246,6 @@
         "DIAGNOSTIC_TEST": "Diagnostic Test",
         "TAKE_IT_LATER": "Take it later",
         "START_TEST": "START TEST",
-        "SKIP":"I already know, skip test",
         "LETS_LEARN": "Let's learn a little about your mastery level in each subject.",
         "THIS_QUICK_TEST": "This quick test will determine your initial estimated score and your training roadmap."
     },
