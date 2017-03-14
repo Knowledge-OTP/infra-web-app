@@ -11640,25 +11640,24 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
             bindings: {},
             templateUrl: 'components/myProfile/components/selectedTestLevel/selectedTestLevel.template.html',
             controllerAs: 'vm',
-            controller: ["AuthService", "$mdDialog", "$timeout", "MyProfileSrv", "StorageSrv", "InfraConfigSrv", "SubjectEnumConst", "$filter", function (AuthService, $mdDialog, $timeout, MyProfileSrv, StorageSrv, InfraConfigSrv, SubjectEnumConst, $filter) {
+            controller: ["AuthService", "$mdDialog", "$timeout", "MyProfileSrv", "StorageSrv", "InfraConfigSrv", "SubjectEnum", "$filter", "CategoryService", function (AuthService, $mdDialog, $timeout, MyProfileSrv, StorageSrv, InfraConfigSrv, SubjectEnum, $filter, CategoryService) {
                 'ngInject';
 
                 var vm = this;
                 var showToast = MyProfileSrv.showToast;
                 var translateFilter = $filter('translate');
-                var USER_SELECTED_TEST_LEVEL_PATH = StorageSrv.variables.appUserSpacePath + '/selectedTestLevel';
                 vm.testLevelList = [
                     {
-                        subjectId: SubjectEnumConst.MATHLVL1,
+                        subjectId: SubjectEnum.MATHLVL1,
                         name: translateFilter('MY_PROFILE.MATH_LEVEL_1')
                     },
                     {
-                        subjectId: SubjectEnumConst.MATHLVL2,
+                        subjectId: SubjectEnum.MATHLVL2,
                         name: translateFilter('MY_PROFILE.MATH_LEVEL_2')
                     }
                 ];
 
-                _getSelectedTestLevel().then(function (selectedTestLevelData) {
+                CategoryService.getUserSelectedLevel1Category().then(function (selectedTestLevelData) {
                     vm.selectedTestLevel = vm.testLevelList.filter(function (item) {
                         return item.subjectId === selectedTestLevelData;
                     })[0];
@@ -11669,7 +11668,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                     var type, msg;
 
                     if (!authform.$invalid) {
-                        _setStudentSelectedData(vm.selectedTestLevel.subjectId).then(function () {
+                        CategoryService.setUserSelectedLevel1Category(vm.selectedTestLevel.subjectId).then(function () {
                             $timeout(function () {
                                 type = 'success';
                                 msg = 'MY_PROFILE.TEST_LEVEL_SAVE_SUCCESS';
@@ -11693,18 +11692,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 vm.closeDialog = function () {
                     $mdDialog.cancel();
                 };
-
-                function _setStudentSelectedData(userSelectedSubjectId) {
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.set(USER_SELECTED_TEST_LEVEL_PATH, userSelectedSubjectId);
-                    });
-                }
-
-                function _getSelectedTestLevel() {
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.get(USER_SELECTED_TEST_LEVEL_PATH);
-                    });
-                }
             }]
         });
 })(angular);
@@ -12311,10 +12298,15 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function ($state, OnBoardingService) {
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'SubjectEnum', 'CategoryService',
+        function ($state, OnBoardingService, SubjectEnum, CategoryService) {
 
+            this.skipTestToTake = function () {
+                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
+                CategoryService.setUserSelectedLevel1Category(SubjectEnum.MATHLVL1.enum);
+                $state.go('app.onBoarding.diagnostic');
 
+            };
             this.goToTestToTake = function () {
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE);
                 $state.go('app.onBoarding.testToTake');
@@ -12828,9 +12820,9 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    </div>\n" +
     "    <div class=\"icons-section\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
-    "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-1\"></svg-icon>\n" +
+    "            <svg-icon class=\"on-boarding-bubble\" name=\"on-boarding-bubble-1\"></svg-icon>\n" +
     "            <span class=\"diagnostic-text-or\" translate=\".OR\"></span>\n" +
-    "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-2\"></svg-icon>\n" +
+    "            <svg-icon class=\"on-boarding-bubble\" name=\"on-boarding-bubble-2\"></svg-icon>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"raccoon-img-container\">\n" +
@@ -12839,6 +12831,12 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"btn-wrap\">\n" +
+    "\n" +
+    "        <md-button aria-label=\"{{'.SKIP' | translate}}\"\n" +
+    "                   tabindex=\"2\" class=\"default sm\"\n" +
+    "                   ng-click=\"vm.skipTestToTake()\">\n" +
+    "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
+    "        </md-button>\n" +
     "\n" +
     "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +
     "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +

@@ -245,6 +245,7 @@
         "DIAGNOSTIC_TEST": "Diagnostic Test",
         "TAKE_IT_LATER": "Take it later",
         "START_TEST": "START TEST",
+        "SKIP":"I already know, skip test",
         "LETS_LEARN": "Let's learn a little about your mastery level in each subject.",
         "THIS_QUICK_TEST": "This quick test will determine your initial estimated score and your training roadmap."
     },

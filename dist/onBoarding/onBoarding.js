@@ -152,10 +152,15 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function ($state, OnBoardingService) {
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'SubjectEnum', 'CategoryService',
+        function ($state, OnBoardingService, SubjectEnum, CategoryService) {
 
+            this.skipTestToTake = function () {
+                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
+                CategoryService.setUserSelectedLevel1Category(SubjectEnum.MATHLVL1.enum);
+                $state.go('app.onBoarding.diagnostic');
 
+            };
             this.goToTestToTake = function () {
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.TEST_TO_TAKE);
                 $state.go('app.onBoarding.testToTake');
@@ -669,9 +674,9 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    </div>\n" +
     "    <div class=\"icons-section\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
-    "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-1\"></svg-icon>\n" +
+    "            <svg-icon class=\"on-boarding-bubble\" name=\"on-boarding-bubble-1\"></svg-icon>\n" +
     "            <span class=\"diagnostic-text-or\" translate=\".OR\"></span>\n" +
-    "            <svg-icon class=\"on-boarding-bubble\"  name=\"on-boarding-bubble-2\"></svg-icon>\n" +
+    "            <svg-icon class=\"on-boarding-bubble\" name=\"on-boarding-bubble-2\"></svg-icon>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"raccoon-img-container\">\n" +
@@ -680,6 +685,12 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"btn-wrap\">\n" +
+    "\n" +
+    "        <md-button aria-label=\"{{'.SKIP' | translate}}\"\n" +
+    "                   tabindex=\"2\" class=\"default sm\"\n" +
+    "                   ng-click=\"vm.skipTestToTake()\">\n" +
+    "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
+    "        </md-button>\n" +
     "\n" +
     "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +
     "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
