@@ -11648,11 +11648,11 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 var translateFilter = $filter('translate');
                 vm.testLevelList = [
                     {
-                        subjectId: SubjectEnum.MATHLVL1,
+                        subjectId: SubjectEnum.MATHLVL1.enum,
                         name: translateFilter('MY_PROFILE.MATH_LEVEL_1')
                     },
                     {
-                        subjectId: SubjectEnum.MATHLVL2,
+                        subjectId: SubjectEnum.MATHLVL2.enum,
                         name: translateFilter('MY_PROFILE.MATH_LEVEL_2')
                     }
                 ];

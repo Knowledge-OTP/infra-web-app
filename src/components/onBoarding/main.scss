@@ -349,14 +349,11 @@
 
                     button {
                         display: inline-block;
-                        padding-right: 45px;
-                        padding-left: 45px;
                         height: 38px;
                         &.default {
-                            color: $fontColor6;
                             border: none;
                             padding: 0;
-                            width: 130px;
+                            width: 180px;
                             text-transform: none;
                             @include set-on-boarding-btn($fontColor6);
                         }
