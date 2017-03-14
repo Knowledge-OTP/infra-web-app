@@ -689,7 +689,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        <md-button aria-label=\"{{'.SKIP' | translate}}\"\n" +
     "                   tabindex=\"2\" class=\"default sm\"\n" +
     "                   ng-click=\"vm.skipTestToTake()\">\n" +
-    "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
+    "            <span translate=\".SKIP\"></span>\n" +
     "        </md-button>\n" +
     "\n" +
     "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +

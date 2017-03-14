@@ -19,12 +19,12 @@
 @import url(#{$googleFontCDN}icon?family=Material+Icons);
 
 
-@mixin set-on-boarding-btn {
+@mixin set-on-boarding-btn ($color) {
     padding-right: 45px;
     padding-left: 45px;
     height: 38px;
     border-radius: 50px;
-    @include text-style(14px, $fontColor1, Lato, $regularFontWeight);
+    @include text-style(14px, $color, Lato, $regularFontWeight);
 }
 
 .on-board {
@@ -108,7 +108,7 @@
                     text-align: center;
 
                     .md-button {
-                      @include set-on-boarding-btn();
+                      @include set-on-boarding-btn($fontColor1);
                         .btn-text {
                             display: flex;
                         .dropdown-arrow-icon{
@@ -358,7 +358,7 @@
                             padding: 0;
                             width: 130px;
                             text-transform: none;
-                            @include set-on-boarding-btn();
+                            @include set-on-boarding-btn($fontColor6);
                         }
                     }
                 }
