@@ -12839,7 +12839,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "        </md-button>\n" +
     "\n" +
     "        <md-button aria-label=\"{{'.START_TEST' | translate}}\"\n" +
-    "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
+    "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary start-test\"\n" +
     "                   ng-click=\"vm.goToTestToTake()\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +

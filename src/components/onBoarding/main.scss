@@ -20,8 +20,6 @@
 
 
 @mixin set-on-boarding-btn ($color) {
-    padding-right: 45px;
-    padding-left: 45px;
     height: 38px;
     border-radius: 50px;
     @include text-style(14px, $color, Lato, $regularFontWeight);
@@ -109,6 +107,8 @@
 
                     .md-button {
                       @include set-on-boarding-btn($fontColor1);
+                        padding-right: 45px;
+                        padding-left: 45px;
                         .btn-text {
                             display: flex;
                         .dropdown-arrow-icon{
@@ -350,6 +350,10 @@
                     button {
                         display: inline-block;
                         height: 38px;
+                        .start-test {
+                            padding-right: 45px;
+                            padding-left: 45px;
+                        }
                         &.default {
                             border: none;
                             padding: 0;
