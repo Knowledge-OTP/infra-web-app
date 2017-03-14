@@ -68,9 +68,30 @@
         "TITLE": "Subjects"
     },
     "SUBJECTS": {
+        "0": "Mathematics",
+        "1": "Reading",
+        "2": "Writing",
+        "3": "Listening",
+        "4": "Speaking",
+        "5": "English",
+        "6": "Science",
         "7": "Verbal",
-        "0": "Math",
-        "8": "Essay"
+        "8": "Essay",
+        "9": "Math level 1",
+        "10": "Math level 2",
+        "DIAGNOSTIC_TITLE":{
+            "0": "Mathematics",
+            "1": "Reading",
+            "2": "Writing",
+            "3": "Listening",
+            "4": "Speaking",
+            "5": "English",
+            "6": "Science",
+            "7": "Verbal",
+            "8": "Essay",
+            "9": "Math",
+            "10": "Math"
+        }
     },
     "CHANGE_PASSOWRD_FORM": {
         "BACK_TO_LOGIN": "Back to Login",
@@ -355,19 +376,6 @@
             "8": "After reading the persuasive essay, assess the essay by answering the following questions.",
             "9": "Solve the following problems.",
             "10": "Solve the following problems."
-        },
-        "SUBJECTS": {
-            "0": "Mathematics",
-            "1": "Reading",
-            "2": "Writing",
-            "3": "Listening",
-            "4": "Speaking",
-            "5": "English",
-            "6": "Science",
-            "7": "Verbal",
-            "8": "Essay",
-            "9": "Math level 1",
-            "10": "Math level 2"
         },
         "EXIT": "Exit",
         "GO_QST": "Go To Questions",
