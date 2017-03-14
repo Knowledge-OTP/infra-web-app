@@ -350,7 +350,7 @@
                     button {
                         display: inline-block;
                         height: 38px;
-                        .start-test {
+                        &.start-test {
                             padding-right: 45px;
                             padding-left: 45px;
                         }
