@@ -339,7 +339,7 @@
                                 }
                             });
                         } else {
-                            $log.error('InvitationService: teacher profile not found ', teacher);
+                            $log.error('InvitationService: teacher profile not found: '+ angular.toJson(teacher));
                         }
                     });
                 }
