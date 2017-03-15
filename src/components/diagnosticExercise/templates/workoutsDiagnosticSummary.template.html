@@ -1,9 +1,10 @@
 <div class="diagnostic-summary-wrapper" translate-namespace="WORKOUTS_DIAGNOSTIC_SUMMARY">
     <div class="title" ng-switch on="vm.isSubjectsWaitToBeEvaluated">
         <div ng-switch-when="false">
-            <div translate=".YOUR_INITIAL_SCORE_ESTIMATE"></div>
-            <span translate=".COMPOSITE_SCORE"></span>
-            <span> {{::vm.compositeScore}}</span>
+            <div class="main-title" translate=".YOUR_INITIAL_SCORE_ESTIMATE"></div>
+            <div class="sub-title" translate=".COMPOSITE_SCORE" ng-hide="::vm.hideCompositeScore">
+                {{::vm.compositeScore}}
+            </div>
         </div>
         <div ng-switch-when="true">
             <span translate=".ESTIMATED_SCORE"></span>
@@ -33,9 +34,8 @@
                             chart-options="doughnut.options"
                             chart-legend="false">
                     </canvas>
-                    <md-tooltip
+                    <md-tooltip znk-tooltip class="md-fab"
                         ng-if="doughnut.scoreGoal > doughnut.score"
-                        class="tooltip-for-diagnostic-summary md-whiteframe-2dp"
                         md-direction="top">
                         <span
                             translate=".GOAL_TOOLTIP"
@@ -53,19 +53,20 @@
 
         </div>
     </div>
-    <!--<div class="upgrade-to-evaluate-wrapper"
+    <div class="upgrade-to-evaluate-wrapper"
          ng-if="vm.showUpgradeBtn">
         <span translate=".UPGRADE_TEXT"></span>
-        <md-button
+        <md-button aria-label="{{'WORKOUTS_DIAGNOSTIC_SUMMARY.UPGRADE_BTN' | translate}}"
             class="znk outline"
             ng-click="vm.showPurchaseDialog()"
             translate=".UPGRADE_BTN">
         </md-button>
-    </div>-->
+    </div>
     <div class="footer-text" translate="{{vm.footerTranslatedText}}"></div>
-    <button autofocus tabindex="1"
+    <md-button aria-label="{{'WORKOUTS_DIAGNOSTIC_SUMMARY.DONE' | translate}}"
+            autofocus tabindex="1"
             class="start-button md-button znk md-primary"
             ui-sref="app.workouts.roadmap.diagnostic"
             translate=".DONE">DONE
-    </button>
+    </md-button>
 </div>

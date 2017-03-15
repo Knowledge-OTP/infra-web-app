@@ -1,11 +1,13 @@
 <section class="step diagnostic" translate-namespace="ON_BOARDING.DIAGNOSTIC">
     <div class="diagnostic-title" translate=".DIAGNOSTIC_TEST"></div>
-    <diagnostic-intro></diagnostic-intro>
+    <diagnostic-intro show-instructions="vm.showInstructions" show-icons-section="vm.showIconsSection"></diagnostic-intro>
     <div class="btn-wrap">
-        <md-button tabindex="2" class="default sm" ng-click="vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')">
+        <md-button aria-label="{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}"
+            tabindex="2" class="default sm" ng-click="vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')">
             <span translate=".TAKE_IT_LATER"></span>
         </md-button>
-        <md-button autofocus tabindex="1" class="md-sm znk md-primary" ng-click="vm.setOnboardingCompleted('app.diagnostic', 'Start Test')">
+        <md-button aria-label="{{'ON_BOARDING.DIAGNOSTIC.START_TEST' | translate}}"
+            autofocus tabindex="1" class="md-sm znk md-primary" ng-click="vm.setOnboardingCompleted('app.diagnostic', 'Start Test')">
             <span translate=".START_TEST"></span>
         </md-button>
     </div>

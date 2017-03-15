@@ -38,7 +38,7 @@
                     var listenerData = getListenerData(userId, event);
                     studentStorage.offEvent('child_added', listenerData.path, listenerData.childAddedHandler);
                     studentStorage.offEvent('child_removed', listenerData.path, listenerData.childRemoveHandler);
-                    
+
                     angular.forEach(registerEvents[userId][event].cb, function (cb, index) {
                         if (cb === valueCB) {
                             registerEvents[userId][event].cb.splice(index, 1);
@@ -80,7 +80,7 @@
                     status: this.invitationStatus.connectToUser,
                     invitationId: invitationId,
                     receiverAppName: ENV.firebaseAppScopeName,
-                    senderAppName: ENV.firebaseDashboardAppScopeName
+                    senderAppName: ENV.dashboardAppName
                 };
                 return this.updateInvitationStatus(invitation).then(function (response) {
                     if (response.data.success) {
@@ -105,7 +105,8 @@
             this.updateInvitationStatus = function (invitation) {
                 var authData = AuthService.getAuth();
                 invitation.uid = authData.uid;
-                invitation.senderAppName = ENV.firebaseDashboardAppScopeName;
+                invitation.senderAppName = ENV.dashboardAppName;
+                invitation.receiverAppName = ENV.studentAppName;
                 invitation.senderEmail = authData.password.email;
                 return updateStatus(invitation);
             };
@@ -124,7 +125,7 @@
                 return UserProfileService.getProfile().then(function (profile) {
                     var authData = AuthService.getAuth();
                     var newInvitiation = [{
-                        receiverAppName: ENV.firebaseDashboardAppScopeName,
+                        receiverAppName: ENV.dashboardAppName,
                         receiverEmail: receiverEmail,
                         receiverName: receiverName || receiverEmail,
                         senderAppName: ENV.firebaseAppScopeName,
@@ -148,7 +149,7 @@
                 var authData = AuthService.getAuth();
                 invitation.uid = authData.uid;
                 invitation.status = this.invitationStatus.senderDelete;
-                invitation.receiverAppName = ENV.firebaseDashboardAppScopeName;
+                invitation.receiverAppName = ENV.dashboardAppName;
                 invitation.senderAppName = ENV.firebaseAppScopeName;
                 invitation.senderEmail = authData.password.email;
                 return updateStatus(invitation);
@@ -323,6 +324,8 @@
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                         teacher.zinkerzTeacher = profile.zinkerzTeacher;
                         teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
+                        teacher.educatorTeachworksName = profile.educatorTeachworksName;
+                        teacher.educatorAvailabilityHours = profile.educatorAvailabilityHours;
 
                         myTeachers[teacher.senderUid] = teacher;
                         angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {

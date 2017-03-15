@@ -22,24 +22,26 @@
         "SKIPPED": "Skipped"
     },
     "FEEDBACK_POPUP": {
-        "FEEDBACK"       : "Feedback",
-        "REQUIRED_FIELD" : "This field is required.",
-        "CORRECT_EMAIL"  : "Please enter a valid email address",
-        "EMAIL"          : "Your email address",
-        "MESSAGE"        : "Send us your comments or suggestions...",
-        "SEND"           : "Send",
-        "THINK"          : "Let us know what you think!",
-        "THANKS"         : "Thank you!",
-        "OPINION"        : "Your feedback is important to us.",
-        "DONE"           : "Done",
-        "USER_EMAIL"     : "email: {{userEmail}}",
-        "USER_ID"        : "uid: {{userId}}"
+        "FEEDBACK": "Feedback",
+        "REQUIRED_FIELD": "This field is required.",
+        "CORRECT_EMAIL": "Please enter a valid email address",
+        "EMAIL": "Your email address",
+        "MESSAGE": "Send us your comments or suggestions...",
+        "SEND": "Send",
+        "THINK": "Let us know what you think!",
+        "THANKS": "Thank you!",
+        "OPINION": "Your feedback is important to us.",
+        "DONE": "Done",
+        "USER_EMAIL": "email: {{userEmail}}",
+        "USER_ID": "uid: {{userId}}"
     },
     "LOGIN_APP": {
         "SAT_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the SAT® test with Zinkerz!",
+        "SATSM_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the SAT® Subject Math test with Zinkerz!",
         "ACT_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the ACT® test with Zinkerz!",
         "TOEFL_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the TOEFL® test with Zinkerz!",
         "SAT_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>SAT® desktop app for educators.",
+        "SATSM_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>SAT® Subject Math desktop app for educators.",
         "ACT_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>ACT® desktop app for educators.",
         "TOEFL_EDUCATOR_TAGLINE": "Welcome to the all-in-one<br/>TOEFL® desktop app for educators.",
         "SIGN_UP_FOR_ZINKERZ_TEST_PREP": "Sign Up for Zinkerz Test Prep",
@@ -50,11 +52,45 @@
         "EDUCATORS_CLICK_HERE": "Educators Click Here",
         "SIGNUP_OR_LOGIN": "Please Sign Up or Log In to",
         "ACCEPT_INVITATION": "Accept The Invitation",
+        "TEST": "test",
+        "PREP": "prep",
         "FORM_VALIDATION": {
             "FIELD_IS_EMPTY": "Required field is empty",
             "PASSWORD_TOO_SHORT": "Password is too short, must be between 6-25 characters",
             "PASSWORD_TOO_LONG": "Password is too long, must be between 6-25 characters",
             "EMAIL_TAKEN": "Email is already taken, please choose another"
+        }
+    },
+    "TUTORIAL_LIST_COMPONENTS": {
+        "DIAGNOSTIC_OVERLAY": "Please complete the diagnostic test in order to access the tutorials"
+    },
+    "TUTORIAL_PANE_COMPONENTS": {
+        "TITLE": "Subjects"
+    },
+    "SUBJECTS": {
+        "0": "Mathematics",
+        "1": "Reading",
+        "2": "Writing",
+        "3": "Listening",
+        "4": "Speaking",
+        "5": "English",
+        "6": "Science",
+        "7": "Verbal",
+        "8": "Essay",
+        "9": "Math level 1",
+        "10": "Math level 2",
+        "DIAGNOSTIC_TITLE":{
+            "0": "Mathematics",
+            "1": "Reading",
+            "2": "Writing",
+            "3": "Listening",
+            "4": "Speaking",
+            "5": "English",
+            "6": "Science",
+            "7": "Verbal",
+            "8": "Essay",
+            "9": "Math",
+            "10": "Math"
         }
     },
     "CHANGE_PASSOWRD_FORM": {
@@ -107,6 +143,7 @@
     "OATH_SOCIAL": {
         "CONNECT_WITH_FB": "Facebook",
         "CONNECT_WITH_GOOGLE": "Google",
+        "CONNECT_WITH_LIVE": "Microsoft Live",
         "ERROR_TITLE": "Connect With {{provider}} Failed",
         "ERROR_CONTENT": "An error occurred while trying to connect with {{provider}}, please try again. If the problem persists please contact us at <a href='//www.zinkerz.com/contact/' target='_blank'>support@zinkerz.com</a>"
     },
@@ -157,9 +194,13 @@
         "PROFILE_GOALS": "my goals",
         "PROFILE_CHANGE_PASSWORD": "change password",
         "PROFILE_SUPPORT": "support",
-        "PROFILE_LOGOUT": "log out"
+        "PROFILE_LOGOUT": "log out",
+        "MY_LIVE_LESSONS": "MY LIVE LESSONS SCHEDULE",
+        "EDUCATOR_ADMIN": "Educator Admin",
+        "ZOE_STUDENTS": "ZOE Students",
+        "APP_LOGO": "znkHeader-app-name-logo"
     },
-    "INVITE_APPROVE_MODAL":{
+    "INVITE_APPROVE_MODAL": {
         "YOU_HAVE_INVITE": "You have an invitation",
         "WANT_TO_CONNECT": "would like to track your progress and view your completed work",
         "DECLINE": "DECLINE",
@@ -170,20 +211,19 @@
         "INVITE_ERROR_MSG": "The invitation you are trying to use is either invalid or expired. Please contact your educator to get a new invitation",
         "GENERAL_ERROR": "An error has occurred, Please try again later"
     },
-
     "INVITATION_MANAGER_DIRECTIVE": {
-        "EMPTY_INVITE":"Invite a teacher to track<br>your progress",
+        "EMPTY_INVITE": "Invite a teacher to track<br>your progress",
         "INVITE_STUDENTS": "Invite a Teacher",
         "PENDING_INVITATIONS": "Pending Invitations",
         "PENDING_CONFORMATIONS": "Pending conformations",
-        "APPROVE_INVITE_ERROR":"We couldn't approve this invitation, please try again later.<br>If this persists please contact support@zinkerz.com",
+        "APPROVE_INVITE_ERROR": "We couldn't approve this invitation, please try again later.<br>If this persists please contact support@zinkerz.com",
         "CANCEL_INVITE_ERROR": "The invitation couldn't be declined, please try again later.<br>If this persists please contact support@zinkerz.com",
         "SUCCESS": "Success",
         "SUCCESS_CONNECT": "You've successfully connected<br>with ",
         "SUCCESS_DECLINE": "The invitation was declined",
         "SUCCESS_DISCONNECT": "You've successfully disconnected from your teacher",
         "DISCONNECT_ERROR": "We couldn't disconnected you from your teacher, please try again later.<br>If this persists please contact support@zinkerz.com",
-        "MY_TEACHERS":"My Teachers",
+        "MY_TEACHERS": "My Teachers",
         "DECLINED_INVITATIONS": "DECLINED",
         "DECLINED_YOR_INVITATION": "declined your invitation",
         "DELETE_INVITATION": "Delete Invitation",
@@ -193,7 +233,6 @@
         "DELETE_SUCCESS": "The invitation was successfully deleted",
         "DELETE_ERROR": "We couldn't delete this invitation, please try again later.<br>If this persists please contact support@zinkerz.com"
     },
-
     "INVITE_TEACHER_MODAL": {
         "INVITE_TEACHER": "Invite a Teacher",
         "TEACHER_EMAIL": "Your teacher's email",
@@ -203,13 +242,19 @@
         "INVITE_MSG": "Your teacher will receive an email invitation.",
         "SUCCESS_INVITE": "You've successfully invited your teacher.",
         "DONE": "Done",
-        "GENERAL_ERROR" : "An error has occurred, Please try again later"
+        "GENERAL_ERROR": "An error has occurred, Please try again later"
     },
     "ON_BOARDING.WELCOME": {
         "WELCOME": "Welcome ",
         "THANK_YOU_MESSAGE": "Thank you for joining us at ",
         "WE_ARE_HERE_TO_HELP": "We'll show you how to earn your highest possible score!",
         "CONTINUE": "CONTINUE"
+    },
+    "ON_BOARDING.TEST_TO_TAKE": {
+        "FIGURE_OUT": "Let's Figure Out Which Test Level You Should Take",
+        "START_TEST": "START TEST",
+        "OR": "or",
+        "FIGURE_OUT_DESC": "Solve a set of questions, built specifically to help us identify your proficiency level</br>and recommend the test level you should study for."
     },
     "ON_BOARDING.GOALS": {
         "SET_SCORE_GOALS": "Set Your Score Goals",
@@ -224,7 +269,7 @@
         "LETS_LEARN": "Let's learn a little about your mastery level in each subject.",
         "THIS_QUICK_TEST": "This quick test will determine your initial estimated score and your training roadmap."
     },
-    "ZNK_SUMMARY":{
+    "ZNK_SUMMARY": {
         "SUCCESS": "success",
         "CORRECT": "Correct",
         "AVG": "Avg",
@@ -244,12 +289,12 @@
         "OLD_PASSWORD": "Old Password",
         "NEW_PASSWORD": "New Password",
         "CONFIRM_NEW_PASSWORD": "Confirm New Password",
-        "REQUIRED_FIELD":"This is required.",
+        "REQUIRED_FIELD": "This is required.",
         "PASSWORD_LENGTH": "Password length must be between 6 to 25 characters.",
         "PASSWORD_NOT_MATCH": "New Password doesn't match.",
         "ERROR_OCCURRED": "An error has occurred, Please try again.",
         "SAVE_SUCCESS": "Your new password has been successfully saved.",
-        "INCORRECT_PASSWORD":"Incorrect password.",
+        "INCORRECT_PASSWORD": "Incorrect password.",
         "NO_INTERNET_CONNECTION_ERR": "No internet connection. Please try again later.",
         "DONE": "Done"
     },
@@ -273,7 +318,7 @@
         "QUESTIONS": "questions",
         "INSTRUCTIONS_TITLE": "Instructions:"
     },
-    "WORKOUTS_ROADMAP_DIAGNOSTIC_INTRO":{
+    "WORKOUTS_ROADMAP_DIAGNOSTIC_INTRO": {
         "DIAGNOSTIC_TEST": "Diagnostic Test",
         "START_TEST": "START TEST",
         "CONTINUE_TEST": "CONTINUE TEST"
@@ -287,7 +332,7 @@
         "COMPLETE": "Completed!",
         "WORKOUT": "Workout"
     },
-    "WORKOUTS_ROADMAP_WORKOUT_INTRO":{
+    "WORKOUTS_ROADMAP_WORKOUT_INTRO": {
         "TITLE": "Workout {{workoutOrder}}",
         "CHANGE_SUBJECT": "Change subject",
         "HOW_MUCH_TIME": "How much time do you have?",
@@ -295,13 +340,13 @@
         "START": "START",
         "MINUTES": "minutes"
     },
-    "WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS":{
+    "WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS": {
         "TITLE": "Workout {{workoutOrder}}",
         "KEEP_GOING": "Let's keep going!",
         "ANSWERED": "Answered: {{answered}}/{{total}}",
         "CONTINUE": "CONTINUE"
     },
-    "WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK":{
+    "WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK": {
         "TITLE": "Workout {{workoutOrder}}",
         "DIAGNOSTIC_NOT_COMPLETED": "This workout will be available after you have <br>completed the diagnostic test",
         "PREV_NOT_COMPLETED": "Complete the previous workout to unlock this workout",
@@ -319,27 +364,18 @@
             "TYPE_3": "{{exerciseParentContent.name + ': &nbsp;' + exerciseContent.name}}",
             "TYPE_4": "{{exerciseParentContent.name + ': &nbsp;' + exerciseContent.name}}"
         },
-        "SECTION_INSTRUCTION":{
-            "0":"Solve the following problems.",
-            "1":"Answer the following questions based on the information in the text.",
-            "2":"Evaluate the following essay.",
-            "3":"You should listen to each conversation or lecture only once. After each conversation or lecture, you will answer a series of questions. Some questions requires listening again to a part of the audio. You may take notes while you listen.",
-            "4":"The following questions requires recording of your response. You will have time to prepare your response and to speak. Further instructions appear on each question.",
-            "5":"Following is a passage with 15 questions. Some portions of text are highlighted to indicate a grammatical or stylistic error. Select the best choice from the four possible options.",
-            "6":"Answer the following questions based on the information presented in the passages.",
-            "7":"",
-            "8":"After reading the persuasive essay, assess the essay by answering the following questions."
-        },
-        "SUBJECTS":{
-            "0":"Mathematics",
-            "1":"Reading",
-            "2":"Writing",
-            "3":"Listening",
-            "4":"Speaking",
-            "5":"English",
-            "6":"Science",
-            "7":"Verbal",
-            "8":"Essay"
+        "SECTION_INSTRUCTION": {
+            "0": "Solve the following problems.",
+            "1": "Answer the following questions based on the information in the text.",
+            "2": "Evaluate the following essay.",
+            "3": "You should listen to each conversation or lecture only once. After each conversation or lecture, you will answer a series of questions. Some questions requires listening again to a part of the audio. You may take notes while you listen.",
+            "4": "The following questions requires recording of your response. You will have time to prepare your response and to speak. Further instructions appear on each question.",
+            "5": "Following is a passage with 15 questions. Some portions of text are highlighted to indicate a grammatical or stylistic error. Select the best choice from the four possible options.",
+            "6": "Answer the following questions based on the information presented in the passages.",
+            "7": "",
+            "8": "After reading the persuasive essay, assess the essay by answering the following questions.",
+            "9": "Solve the following problems.",
+            "10": "Solve the following problems."
         },
         "EXIT": "Exit",
         "GO_QST": "Go To Questions",
@@ -357,7 +393,7 @@
         "CONTINUE_BTN": "CONTINUE",
         "SUMMARY": "Summary"
     },
-    "MY_LIVE_LESSONS_POPUP":{
+    "MY_LIVE_LESSONS_POPUP": {
         "LIVE_LESSONS_SCHEDULE": "Live Lessons Schedule",
         "UPCOMING_LESSON": "UPCOMING LESSON",
         "OK": "OK",
@@ -365,7 +401,6 @@
         "CURRENT_TIME": "Current Time - {{currentTime}}",
         "RESCHEDULE_LESSON": "Reschedule Lesson"
     },
-
     "RESCHEDULE_LESSON_MODAL": {
         "RESCHEDULE_LESSON": "Reschedule Lesson",
         "RESCHEDULE_REQUEST": "Reschedule Request",
@@ -380,18 +415,17 @@
         "SEND": "SEND",
         "SUCCESS_SHARED": "Successfully sent",
         "DONE": "Done",
-        "MESSAGE": "Hello,\r\n\r\nI would like to reschedule my lesson with {{teacherName}}\r\nschedules for {{lessonDate}}\r\n\r\nThanks,\r\n{{studentName}}."
+        "MESSAGE": "Hello,\r\n\r\nI would like to reschedule my lesson with {{teacherName}}\r\nscheduled for {{lessonDate}} to one of the following times:\r\n\r\n1. MM/DD/YYYY  HH:MM \r\n2. MM/DD/YYYY  HH:MM \r\n3. MM/DD/YYYY  HH:MM \r\n\r\nThanks,\r\n{{studentName}}."
     },
-
-    "UPCOMING_LESSON_TOAST":{
+    "UPCOMING_LESSON_TOAST": {
         "YOUR_UPCOMING_LESSON_WITH": "Your upcoming lesson with",
         "MY_LIVE_LESSONS_SCHEDULE": "My Live Lessons Schedule",
         "RESCHEDULE": "Reschedule"
     },
-    "WORKOUTS_DIAGNOSTIC_INTRO":{
+    "WORKOUTS_DIAGNOSTIC_INTRO": {
         "HEADER_TITLE": "Diagnostic Test: {{subject}}"
     },
-    "WORKOUTS_DIAGNOSTIC_EXERCISE":{
+    "WORKOUTS_DIAGNOSTIC_EXERCISE": {
         "HEADER_TITLE": "Diagnostic Test: {{subject}}"
     },
     "WORKOUTS_DIAGNOSTIC_SUMMARY": {
@@ -426,21 +460,24 @@
         "I_DONT_KNOW": "I don't know yet..."
     },
     "SH_VIEWER": {
-        "STUDENT":{
+        "STUDENT": {
             "YOU_ARE_VIEWING": "Your are viewing your teacher's screen: ",
             "NO_OPENED_EXERCISES": "Your teacher does not have any exercises open.",
-            "ONCE_OPEN": "Once your teacher opens an exercise, you will be able to view it here."
+            "ONCE_OPEN": "Once your teacher opens an exercise, you will be able to view it here.",
+            "EXIT": "EXIT"
         },
-        "DASHBOARD":{
+        "DASHBOARD": {
             "YOU_ARE_VIEWING": "Your are viewing your student's screen: ",
             "NO_OPENED_EXERCISES": "Your student does not have any exercises open.",
-            "ONCE_OPEN": "Once your student opens an exercise, you will be able to view it here."
+            "ONCE_OPEN": "Once your student opens an exercise, you will be able to view it here.",
+            "EXIT": "EXIT"
         }
     },
     "TIMELINE_WEB_WRAPPER": {
-        "POINTS_LEFT": "{{points}} pts to go!"
+        "POINTS_LEFT": "{{points}} pts to go!",
+        "ESTIMATED_SUBJECT_SCORE": "Estimated {{subjectName}} Score:"
     },
-    "ANSWER_EXPLANATION":{
+    "ANSWER_EXPLANATION": {
         "ANSWER_EXPLANATION": "Answer explanation",
         "TITLE": "Why is this right?"
     },
@@ -460,18 +497,86 @@
         "CURRENT_PASSWORD": "Current Password",
         "NEW_PASSWORD": "New Password",
         "CONFIRM_PASSWORD": "Confirm Password",
-        "REQUIRED_FIELD":"This is required.",
+        "REQUIRED_FIELD": "This is required.",
         "PASSWORD_LENGTH": "Password length must be between 6 to 25 characters.",
         "PASSWORD_NOT_MATCH": "New Password doesn't match.",
         "ERROR_OCCURRED": "An error has occurred, Please try again.",
         "PASSWORD_SAVE_SUCCESS": "Your password has been changed successfully.",
         "PROFILE_SAVE_SUCCESS": "Your profile has been successfully saved.",
-        "INCORRECT_PASSWORD":"Incorrect password.",
+        "INCORRECT_PASSWORD": "Incorrect password.",
         "NO_INTERNET_CONNECTION_ERR": "No internet connection. Please try again later.",
         "USERNAME": "Username",
         "EMAIL": "Email",
         "TIMEZONE": "Timezone",
         "SET_MANUALLY": "Set manually",
-        "EMAIL_ERROR": "Email error"
+        "EMAIL_ERROR": "Email error",
+        "DONE": "Done",
+        "SELECTED_TEST_LEVEL": "Selected Test Level",
+        "MATH_LEVEL_1": "Math Level 1",
+        "MATH_LEVEL_2": "Math Level 2",
+        "TEST_LEVEL": "Test Level",
+        "TEST_LEVEL_SAVE_SUCCESS": "Your test level has been changed successfully."
+    },
+    "ACTIVE_PANEL": {
+        "SHOW_STUDENT_SCREEN": "Show Student Screen",
+        "SHOW_TEACHER_SCREEN": "Show Teacher Screen",
+        "END_SCREEN_SHARING": "End Screen Sharing",
+        "SHARE_MY_SCREEN": "Share my screen",
+        "END_BTN": "END",
+        "END_SESSION": "End Session"
+    },
+    "LIVE_SESSION": {
+        "START_SESSION": "Start Session",
+        "END_SESSION": "End Session",
+        "SESSION_SUBJECT": "Select session subject.",
+        "MATH": "math",
+        "ENGLISH": "english",
+        "LIVE_SESSION_REQUEST": "Live Session Request",
+        "WANT_TO_JOIN": "Join the live session.",
+        "JOIN_TO_ACTIVE_SESSION": "You have joined a live session.",
+        "END_ALERT": "Session will end in {{endAlertTime}} minutes.",
+        "END_POPUP_TITLE": "Session Ended",
+        "END_POPUP_CONTENT": "Your session has ended",
+        "EXTEND_SESSION": "Want to extend the Session in {{extendTime}} minutes.",
+        "EXTEND": "EXTEND",
+        "CANCEL": "CANCEL",
+        "INCOMPLETE_DIAGNOSTIC_TITLE": "Can't Start Session",
+        "INCOMPLETE_DIAGNOSTIC_CONTENT": "{{studentName}} did not complete the diagnostic test yet.<br/>Please make sure the diagnostic test is completed before starting a session."
+    },
+    "ADMIN": {
+        "EDUCATOR_STUDENT_LINK": "Educator-Student Link",
+        "EDUCATORS_PROFILE": "Educators Profile",
+        "SEARCH": "Search",
+        "MIN_SEARCH_LENGTH": "* please enter at least 3 characters"
+    },
+    "ADMIN.ESLINK": {
+        "LINK_BTN": "Link",
+        "LINK_SUCCEEDED": "LINK SUCCEEDED",
+        "LINK_FAILED": "LINK FAILED",
+        "IS_ZINKERZ_EDUCATOR": "Is Zinkerz Educator",
+        "ZINKERZ_EDUCATOR": "Zinkerz Educator",
+        "SET_AS_ZINKERZ_EDUCATOR": "Set As Zinkerz Educator",
+        "UIGRID_NAME": "Name",
+        "UIGRID_EMAIL": "Email",
+        "SEARCH_STUDENT": "Search Student",
+        "SEARCH_EDUCATOR": "Search Zinkerz Educator",
+        "STUDENT_INITIAL_MSG": "Your users search results will appear here",
+        "STUDENT_NODATA_MSG": "No matching users found for",
+        "EDUCATOR_INITIAL_MSG": "Your Zinkerz Educator search results will appear here",
+        "EDUCATOR_INITIAL_MSG_NOTE": "Note: Only Zinkerz Educators are visible here",
+        "EDUCATOR_NODATA_MSG": "No matching Zinkerz Educators found for",
+        "LINK_MSG": "Link selected and educator in app",
+        "SAT": "SAT Test Prep",
+        "ACT": "ACT Test prep",
+        "TOEFL": "TOEFL Test Prep",
+        "SATSM": "SATSM Test Prep"
+    },
+    "ADMIN.EMETADATA": {
+        "EDUCATOR_PROFILE": "Educator Profile",
+        "AVAILABILITY_HOURS": "AVAILABILITY HOURS",
+        "FROM_TO": "From HH:MM to HH:mm",
+        "ZINKERZ_EDUCATOR": "Zinkerz Educator",
+        "SUBJECT": "Subject",
+        "EDUCATOR_TEACH_WORKS_NAME": "Educator Teach Works Name"
     }
 }

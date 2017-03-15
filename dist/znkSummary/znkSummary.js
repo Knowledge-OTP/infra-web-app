@@ -67,8 +67,8 @@
             var vm = this;
 
             vm.seenSummary = vm.exerciseData.exerciseResult.seenSummary;
-            vm.currentSubjectId = vm.exerciseData.exercise.subjectId;
-            vm.activeExerciseId = vm.exerciseData.exercise.id;
+            vm.currentSubjectId = vm.exerciseData.exerciseResult.subjectId;
+            vm.activeExerciseId = vm.exerciseData.exerciseResult.exerciseId;
 
             vm.subjectName = SubjectEnum.getValByEnum(vm.currentSubjectId);
         }],
@@ -121,8 +121,9 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     "<div class=\"time-line-wrapper\" translate-namespace=\"ZNK_SUMMARY\"\n" +
     "     ng-class=\"{'seen-summary': vm.seenSummary}\">\n" +
     "    <div class=\"estimated-score-title\">\n" +
-    "        <span translate=\".ESTIMATED_SCORE\"\n" +
-    "              translate-values=\"{ subjectName: vm.subjectName  }\">\n" +
+    "        <span translate=\"COMPLETE_EXERCISE.SUBJECTS.{{vm.currentSubjectId}}\">\n" +
+    "        </span>\n" +
+    "        <span translate=\".ESTIMATED_SCORE\">\n" +
     "        </span>\n" +
     "    </div>\n" +
     "    <znk-timeline-web-wrapper\n" +

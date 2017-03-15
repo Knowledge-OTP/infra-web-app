@@ -21,19 +21,23 @@
                 };
 
                 self.getLocalTimezone = function () {
+                    var localTimezone;
                     var dateArray = new Date().toString().split(' ');
                     var timezoneCity = dateArray.find(function (item) {
                         return (item.indexOf('(')!== -1);
                     });
-                    timezoneCity = timezoneCity.replace('(', '');
+
+                    timezoneCity = timezoneCity ? timezoneCity.replace('(', ''): null;
 
                     return self.getTimezonesList().then(function (timezonesList) {
-                        timezonesList = obj2Array(timezonesList);
-                        var localTimezone = timezonesList.find(function (timezone) {
-                            return (timezone.indexOf(timezoneCity)!== -1);
-                        });
+                        if (timezoneCity) {
+                            timezonesList = obj2Array(timezonesList);
+                            localTimezone = timezonesList.find(function (timezone) {
+                                return (timezone.indexOf(timezoneCity)!== -1);
+                            });
+                        }
 
-                        if (!localTimezone){
+                        if (!timezoneCity || !localTimezone){
                             var timezoneGMT = dateArray.find(function (item) {
                                 return (item.indexOf('GMT')!== -1);
                             });
@@ -67,17 +71,6 @@
                         });
                     });
                 };
-
-                // self.showToast = function (type, msg) {
-                //     $mdToast.show({
-                //         locals:{ type: type,  msg: msg },
-                //         templateUrl: 'components/myProfile/templates/toast.template.html',
-                //         position: 'top right',
-                //         hideDelay: 3000,
-                //         controllerAs: 'vm',
-                //         controller: 'ToastController'
-                //     });
-                // };
             }
         );
 })(angular);

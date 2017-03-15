@@ -4,7 +4,7 @@
              translate="{{d.currMapData.diagDesc}}">
         </div>
     </div>
-    <div class="icons-section">
+    <div class="icons-section" ng-if="showIconsSection">
         <div ng-repeat="subject in d.subjects"
              class="icon-circle {{subject.subjectNameAlias}}-color"
              ng-class="{
@@ -20,7 +20,7 @@
     </div>
     <div class="raccoon-img-container">
         <div class="raccoon-img-wrapper">
-            <div class="diagnostic-raccoon" ng-class="'diagnostic-raccoon-'+d.currMapData.subjectNameAlias"></div>
+            <div ng-class="d.currMapData.subjectNameAlias ? 'diagnostic-raccoon-'+d.currMapData.subjectNameAlias : diagnostic-raccoon"></div>
         </div>
     </div>
     <div class="section-question" ng-if="d.currMapData && !d.currMapData.hideSectionQuestion">

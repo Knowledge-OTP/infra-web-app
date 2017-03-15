@@ -19,12 +19,13 @@
                     lastShDataReceived;
 
                 $ctrl.znkExerciseViewModeEnum = ZnkExerciseViewModeEnum;
+                $ctrl.ExerciseTypeEnum = ExerciseTypeEnum;
 
-                function _initTimersVitalData() {
+                function _initTimersVitalData(timeEnabled) {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
 
-                    if (!exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
+                    if (!timeEnabled || !exerciseContent.time || exerciseResult.isComplete || exerciseResult.exerciseTypeId !== ExerciseTypeEnum.SECTION.enum) {
                         return;
                     }
 
@@ -44,29 +45,42 @@
                     var exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var exerciseParentContent = $ctrl.completeExerciseCtrl.getExerciseParentContent();
+                    var exerciseParentTypeId = $ctrl.completeExerciseCtrl.getExerciseParentTypeId();
+                    var exerciseParentId = $ctrl.completeExerciseCtrl.getExerciseParentId();
+                    var moduleExamData = $ctrl.completeExerciseCtrl.getModuleExamData();
 
                     var settings = {
                         exerciseContent: exerciseContent,
                         exerciseResult: exerciseResult,
                         exerciseParentContent: exerciseParentContent,
+                        exerciseParentTypeId: exerciseParentTypeId,
+                        exerciseParentId: exerciseParentId,
+                        moduleExamData: moduleExamData,
                         actions: {
                             done: function () {
                                 $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.SUMMARY);
                                 $ctrl.znkExercise.actions.unbindExerciseView();
-                            }
+                            },
+                            exitAction: $ctrl.completeExerciseCtrl.settings.exitAction,
+                            reviewAction: $ctrl.completeExerciseCtrl.settings.reviewAction
                         }
                     };
 
                     var defaultZnkExerciseSettings = {
+                        exerciseReviewStatus: $ctrl.completeExerciseCtrl.exerciseData.exerciseResult.isReviewed,
+                        isComplete: $ctrl.completeExerciseCtrl.exerciseData.exerciseResult.isComplete,
                         onExerciseReady: function () {
                             $ctrl.znkExercise.actions.bindExerciseViewTo(exerciseViewBinding);
                         }
                     };
+
                     var providedZnkExerciseSettings = $ctrl.completeExerciseCtrl.settings.znkExerciseSettings || {};
                     var znkExerciseSettings = angular.extend(defaultZnkExerciseSettings, providedZnkExerciseSettings);
                     settings.znkExerciseSettings = znkExerciseSettings;
                     settings.exerciseDetails = $ctrl.completeExerciseCtrl.exerciseDetails;
-
+                    var timeEnabledSettings = settings.exerciseDetails.timeEnabled;
+                    var timeEnabled = typeof(timeEnabledSettings) === "boolean" ? timeEnabledSettings : true;
+                    _initTimersVitalData(timeEnabled);
                     $ctrl.znkExercise = $controller('CompleteExerciseBaseZnkExerciseCtrl', {
                         settings: settings
                     });
@@ -179,14 +193,13 @@
                 function _finishExerciseWhenAllQuestionsAnswered() {
                     var exerciseResult = $ctrl.completeExerciseCtrl.getExerciseResult();
                     var numOfUnansweredQuestions = $ctrl.znkExercise._getNumOfUnansweredQuestions(exerciseResult.questionResults);
-                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum ;
+                    var isViewModeAnswerWithResult = $ctrl.znkExercise.settings.viewMode === ZnkExerciseViewModeEnum.ANSWER_WITH_RESULT.enum;
                     if (!numOfUnansweredQuestions && isViewModeAnswerWithResult && !exerciseResult.isComplete) {
                         $ctrl.znkExercise._finishExercise();
                     }
                 }
 
                 this.$onInit = function () {
-                    _initTimersVitalData();
 
                     _invokeExerciseCtrl();
 
@@ -216,7 +229,7 @@
                         }
                     };
 
-                    this.openIntro = function() {
+                    this.openIntro = function () {
                         $ctrl.completeExerciseCtrl.changeViewState(CompleteExerciseSrv.VIEW_STATES.INTRO);
                     };
 

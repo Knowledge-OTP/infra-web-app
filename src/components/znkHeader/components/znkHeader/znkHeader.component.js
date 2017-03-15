@@ -7,7 +7,7 @@
             templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
             controller: function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
-                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout) {
+                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout,MyLiveLessons) {
                 'ngInject';
 
                 var vm = this;
@@ -17,10 +17,18 @@
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
+                vm.showMyLiveLessonsSchedule = MyLiveLessons.liveLessonsScheduleModal;
                 vm.showFeedbackDialog = feedbackSrv.showFeedbackDialog;
                 vm.purchaseData = {};
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
                 vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
+
+                $scope.$on('profile-updated', function(event, args) {
+                    vm.userProfile = {
+                        username: args.profile.nickname,
+                        email: args.profile.email
+                    };
+                });
 
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;

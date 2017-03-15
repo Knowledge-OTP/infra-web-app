@@ -7,10 +7,10 @@
         function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate) {
+                  $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
-            this.subjectId = exerciseData.questionsData.subjectId;
+            this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
@@ -54,14 +54,15 @@
             }
 
             function _onDoneSaveResultsData() {
+                exerciseData.resultsData.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                 exerciseData.resultsData.isComplete = true;
                 exerciseData.resultsData.endedTime = Date.now();
-                exerciseData.resultsData.subjectId = exerciseData.questionsData.subjectId;
+                exerciseData.resultsData.subjectId = self.subjectId;
                 exerciseData.resultsData.exerciseDescription = exerciseData.exam.name;
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
                 exerciseData.resultsData.$save();
                 exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
-                shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
+                shouldBroadCastExerciseProm.then(function (shouldBroadcastFn) {
                     var shouldBroadcast = shouldBroadcastFn({
                         exercise: exerciseData.questionsData,
                         exerciseResult: exerciseData.resultsData,
@@ -179,46 +180,49 @@
                 }
             }
 
-            function _setHeaderTitle(){
-                var subjectTranslateKey = 'SUBJECTS.' + exerciseData.questionsData.subjectId;
-                $translate(subjectTranslateKey).then(function(subjectTranslation){
+            function _setHeaderTitle() {
+                var subjectTranslateKey = 'SUBJECTS.'  + 'DIAGNOSTIC_TITLE.' + self.subjectId;
+                $translate(subjectTranslateKey).then(function (subjectTranslation) {
                     var translateFilter = $filter('translate');
-                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE',{
+                    self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE', {
                         subject: $filter('capitalize')(subjectTranslation)
                     });
-                },function(err){
+                }, function (err) {
                     $log.error('WorkoutsDiagnosticIntroController: ' + err);
                 });
             }
 
             _setNumSlideForNgModel(numQuestionCounter);
 
-            if (exerciseData.questionsData.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
-                var groupDataTypeTitle = {};
-                var PASSAGE = translateFilter('ZNK_EXERCISE.PASSAGE');
-                var groupDataCounter = 0;
-                for (var i = 0; i < questions.length; i++) {
-                    var groupDataId = questions[i].groupDataId;
-                    if (angular.isUndefined(groupDataTypeTitle[groupDataId])) {
-                        groupDataCounter++;
-                        groupDataTypeTitle[groupDataId] = PASSAGE + groupDataCounter;
+            if (SubjectEnum.READING) {
+                if (self.subjectId === SubjectEnum.READING.enum) {     // adding passage title to reading questions
+                    var groupDataTypeTitle = {};
+                    var PASSAGE = translateFilter('ZNK_EXERCISE.PASSAGE');
+                    var groupDataCounter = 0;
+                    for (var i = 0; i < questions.length; i++) {
+                        var groupDataId = questions[i].groupDataId;
+                        if (angular.isUndefined(groupDataTypeTitle[groupDataId])) {
+                            groupDataCounter++;
+                            groupDataTypeTitle[groupDataId] = PASSAGE + groupDataCounter;
+                        }
+                        questions[i].passageTitle = groupDataTypeTitle[groupDataId];
                     }
-                    questions[i].passageTitle = groupDataTypeTitle[groupDataId];
                 }
             }
 
             //  current slide data (should be initialize in every slide)
             var currentDifficulty = diagnosticSettings.levels.medium.num;
-
             var initSlideIndex;
             var mediumLevelNum = diagnosticSettings.levels.medium.num;
 
-            ZnkExerciseUtilitySrv.setQuestionsGroupData(exerciseData.questionsData.questions, exerciseData.questionsData.questionsGroupData, exerciseData.resultsData.playedAudioArticles);
+            ZnkExerciseUtilitySrv.setQuestionsGroupData(questions, exerciseData.questionsData.questionsGroupData, exerciseData.resultsData.playedAudioArticles);
 
             // init question and questionResults for znk-exercise
             if (!diagnosticSettings.isFixed) {
+                WorkoutsDiagnosticFlow.initQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions);
+
                 if (resultsData.questionResults.length === 0) {
-                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, resultsData.questionResults, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                    WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                         self.questions = [diagnosticFlowResults.question];
                         resultsData.questionResults = [diagnosticFlowResults.result];
                     });
@@ -231,7 +235,7 @@
                         return prevValue;
                     }, []);
                     if (_isUndefinedUserAnswer(resultsData.questionResults).length === 0) {
-                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, resultsData.questionResults, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, mediumLevelNum, numQuestionCounter + 1, function (diagnosticFlowResults) {
                             self.questions.push(diagnosticFlowResults.question);
                             resultsData.questionResults.push(diagnosticFlowResults.result);
                         });
@@ -275,7 +279,7 @@
                         var newDifficulty = WorkoutsDiagnosticFlow.getDifficulty(currentDifficulty, isAnswerCorrectly,
                             self.resultsData.questionResults[currentIndex].timeSpent);
                         currentDifficulty = newDifficulty;
-                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(questions, self.resultsData.questionResults, newDifficulty, numQuestionCounter + 1, function (newQuestion) {
+                        WorkoutsDiagnosticFlow.getQuestionsByDifficultyAndOrder(exerciseData.questionsData.questions, newDifficulty, numQuestionCounter + 1, function (newQuestion) {
                             _handleNewSlide(newQuestion);
                         });
                     }
@@ -290,7 +294,7 @@
                             props: {
                                 sectionId: exerciseData.questionsData.id,
                                 order: exerciseData.questionsData.order,
-                                subjectId: exerciseData.questionsData.subjectId
+                                subjectId: self.subjectId
                             }
                         });
                         if (isLastSubject) {

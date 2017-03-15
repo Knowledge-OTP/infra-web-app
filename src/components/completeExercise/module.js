@@ -9,6 +9,7 @@
         'znk.infra.contentGetters',
         'znk.infra.userContext',
         'znk.infra.user',
+        'znk.infra.znkModule',
         'znk.infra.general',
         'znk.infra.filters',
         'znk.infra.znkExercise',
@@ -17,12 +18,13 @@
         'znk.infra.screenSharing',
         'znk.infra.eventManager',
         'znk.infra.stats',
-        'znk.infra.estimatedScore'
+        'znk.infra.estimatedScore',
+        'znk.infra.znkSessionData'
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
             var svgMap = {
-                'book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
+                'completeExercise-book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }

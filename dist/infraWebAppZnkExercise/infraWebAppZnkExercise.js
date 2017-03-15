@@ -38,6 +38,14 @@
 
                         questionBuilderCtrl.bindExerciseEventManager = znkExerciseCtrl.bindExerciseEventManager;
 
+                        questionBuilderCtrl.updateAnswerExplnView = function(isAnswerExplanationOpen){
+                            if(isAnswerExplanationOpen){
+                                element.addClass('answer-explanation-open');
+                            } else {
+                                element.removeClass('answer-explanation-open');
+                            }
+                        };
+
                         element.append('<answer-explanation></answer-explanation>');
                     };
 
@@ -63,7 +71,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-        ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+        ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", "CategoryService", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, CategoryService) {
             'ngInject';
 
             var directive = {
@@ -76,6 +84,7 @@
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
+                    var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
 
                     scope.d = {};
 
@@ -95,7 +104,7 @@
                             }, 0, false);
 
                             var analyticsProps = {
-                                subjectType: question.subjectId,
+                                subjectType: questionSubjectId,
                                 questionId: question.id
                             };
 
@@ -125,12 +134,12 @@
                             init();
                         } else {
                             // $watch seems to work for sharer and viewer, while $viewChangeListeners
-                            // worked only for sharer. it's because $viewChangeListeners does not  
+                            // worked only for sharer. it's because $viewChangeListeners does not
                             // invoke when the $modalValue change, only when the $viewValue (via input and etc)
                             scope.$watch(function () {
                                 return ngModelCtrl.$viewValue;
                             }, function (newVal) {
-                                // newVal undefined meens no answer yet, so must be protected 
+                                // newVal undefined meens no answer yet, so must be protected
                                 if (angular.isDefined(newVal)) {
                                     init();
                                 }
@@ -153,11 +162,13 @@
 
                     scope.d.close = function () {
                         scope.d.toggleWrittenSln = false;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
                         _updateBindExercise();
                     };
 
                     scope.d.toggleAnswer = function () {
                         scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
                         _updateBindExercise();
                     };
 
@@ -179,7 +190,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('answerExplanationContent',
-        ["ENV", "$sce", "znkAnalyticsSrv", function (ENV, $sce, znkAnalyticsSrv) {
+        ["ENV", "$sce", "znkAnalyticsSrv", "CategoryService", function (ENV, $sce, znkAnalyticsSrv, CategoryService) {
             'ngInject';
 
             return {
@@ -191,9 +202,11 @@
                 },
                 link: function (scope, element, attrs, questionBuilderCtrl) {
                     var question = questionBuilderCtrl.question;
+                    var questionCategoryForSubjectId = question.categoryId || question.categoryId2;
+                    var questionSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId);
                     var isPlayFlag = false;
                     var analyticsProps = {
-                        subjectType: question.subjectId,
+                        subjectType: questionSubjectId,
                         questionId: question.id
                     };
 
@@ -203,7 +216,9 @@
                         questionBuilderCtrl.question.writtenSln.replace(/font\-family: \'Lato Regular\';/g, 'font-family: Lato;font-weight: 400;');
                     scope.d.writtenSlnContent = $sce.trustAsHtml(writtenSlnContent);
 
-                    scope.d.videoSrc = $sce.trustAsResourceUrl(ENV.mediaEndPoint + ENV.firebaseAppScopeName + '/videos/questions' + '/' + question.id + '.mp4');
+                    ENV.mediaEndpoint = ENV.mediaEndpoint.slice(-1) === '/' ? ENV.mediaEndpoint : ENV.mediaEndpoint + '/';
+
+                    scope.d.videoSrc = $sce.trustAsResourceUrl(ENV.mediaEndpoint + ENV.firebaseAppScopeName + '/videos/questions' + '/' + question.id + '.mp4');
 
                     scope.d.quid = question.quid || question.id;
 

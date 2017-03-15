@@ -176,10 +176,10 @@
                     resolve: {
                         diagnosticData: ["DiagnosticSrv", "DiagnosticIntroSrv", function (DiagnosticSrv, DiagnosticIntroSrv) {
                             'ngInject';
-                                return {
-                                    diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
-                                    diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
-                                };
+                            return {
+                                diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
+                                diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
+                            };
                         }]
                     },
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmapDiagnosticSummary.template.html',
@@ -265,12 +265,10 @@
                         vm.selectedItem = vm.diagnostic;
                     }
             }
-
             data.exercise = vm.selectedItem;
-
             data.roadmapCtrlActions = {};
             data.roadmapCtrlActions.setCurrWorkout = function (_workoutOrder) {
-                if (!_workoutOrder) {
+                if (angular.isUndefined(_workoutOrder) || _workoutOrder === null || isNaN(_workoutOrder)) {
                     vm.selectedItem = vm.diagnostic;
                 } else {
                     vm.selectedItem = vm.workoutsProgress[_workoutOrder - 1];
@@ -283,11 +281,9 @@
             var LEFT_ANIMATION = 'left-animation';
             var RIGHT_ANIMATION = 'right-animation';
             $scope.$watch('vm.selectedItem', function (newItem, oldItem) {
-
                 if (angular.isUndefined(newItem)) {
                     return;
                 }
-
                 if (newItem !== oldItem) {
                     if (newItem.workoutOrder > oldItem.workoutOrder) {
                         vm.workoutSwitchAnimation = LEFT_ANIMATION;
@@ -410,10 +406,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticIntroController',
-        ["isDiagnosticStarted", function (isDiagnosticStarted) {
+        ["isDiagnosticStarted", "DiagnosticSrv", function (isDiagnosticStarted, DiagnosticSrv) {
             'ngInject';
 
             var vm = this;
+
+            vm.forceSkipIntro = DiagnosticSrv.forceSkipIntro ? DiagnosticSrv.forceSkipIntro : false;
 
             vm.buttonTitle = isDiagnosticStarted ? '.CONTINUE_TEST' : '.START_TEST' ;
         }]);
@@ -423,12 +421,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapDiagnosticSummaryController',
-        ["diagnosticData", function (diagnosticData) {
+        ["diagnosticData", "ENV", function (diagnosticData, ENV) {
             'ngInject';
 
             var vm = this;
             var diagnosticSubjects;
-
+            vm.ignoreCompositeScore = ENV.ignoreCompositeScore;
             diagnosticData.diagnosticIntroConfigMapProm.then(function (diagnosticIntroConfigMap) {
                 diagnosticSubjects = vm.diagnosticSubjects = diagnosticIntroConfigMap.subjects;
                 return diagnosticData.diagnosticResultProm;
@@ -436,7 +434,7 @@
                 var diagnosticScoresObj = diagnosticResult.userStats;
                 vm.isSubjectsWaitToBeEvaluated = false;
 
-                for (var i=0, ii = diagnosticSubjects.length; i < ii; i++) {
+                for (var i = 0, ii = diagnosticSubjects.length; i < ii; i++) {
                     var subjectId = diagnosticSubjects[i].id;
 
                     if (!diagnosticScoresObj[subjectId]) {
@@ -545,18 +543,16 @@
                 vm.workoutAvailTimes = workoutAvailTimes;
             });
 
-            function setTimesWorkouts(getPersonalizedWorkoutsByTimeProm) {
-                getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
-                    vm.workoutsByTime = workoutsByTime;
-                    WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function (workoutAvailTimes) {
-                        for (var i in workoutAvailTimes) {
-                            var time = workoutAvailTimes[i];
-                            if (workoutsByTime[time]) {
-                                vm.selectedTime = time;
-                                break;
-                            }
+            function setTimesWorkouts(workoutsByTime) {
+                vm.workoutsByTime = workoutsByTime;
+                WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function (workoutAvailTimes) {
+                    for (var i in workoutAvailTimes) {
+                        var time = workoutAvailTimes[i];
+                        if (workoutsByTime[time]) {
+                            vm.selectedTime = time;
+                            break;
                         }
-                    });
+                    }
                 });
             }
 
@@ -564,23 +560,22 @@
             var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
             //set times workouts
-            function setWorkoutsTimes(){
+            function setWorkoutsTimes() {
                 var getPersonalizedWorkoutsByTimeProm;
                 var subjectsToIgnore;
 
                 if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
-                    if (!currWorkout.personalizedTimes) {
-                        if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                            subjectsToIgnore = prevWorkout.subjectId;
-                        }
-                        getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
-                    } else {
-                        getPersonalizedWorkoutsByTimeProm = $q.when(currWorkout.personalizedTimes);
+                    if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
+                        subjectsToIgnore = prevWorkout.subjectId;
                     }
-
-                    setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
+                    getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
+                    getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                        setTimesWorkouts(workoutsByTime);
+                    }, function () {
+                    });
                 }
             }
+
             setWorkoutsTimes();
 
             vm.getWorkoutIcon = function (workoutLength) {
@@ -602,13 +597,12 @@
                         usedSubjects = [];
                     }
 
-                    delete currWorkout.personalizedTimes;
                     delete vm.selectedTime;
 
-                    $timeout(function(){
+                    $timeout(function () {
                         var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
-                        setTimesWorkouts(getPersonalizedWorkoutsByTimeProm);
-                        getPersonalizedWorkoutsByTimeProm.then(function () {
+                        getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                            setTimesWorkouts(workoutsByTime);
                             vm.rotate = false;
                         }, function () {
                             vm.rotate = false;
@@ -618,7 +612,7 @@
 
             })();
 
-            vm.startExercise = function(){
+            vm.startExercise = function () {
                 var selectedWorkout = angular.copy(vm.selectedWorkout);
                 var isWorkoutGenerated = selectedWorkout &&
                     angular.isDefined(selectedWorkout.subjectId) &&
@@ -632,7 +626,6 @@
                     currWorkout[prop] = selectedWorkout[prop];
                 });
                 currWorkout.status = ExerciseStatusEnum.ACTIVE.enum;
-                delete currWorkout.personalizedTimes;
                 delete currWorkout.$$hashKey;
                 delete currWorkout.isAvail;
 
@@ -658,8 +651,8 @@
                 });
             };
 
-            vm.selectTime = function(workoutTime){
-                if(!vm.workoutsByTime[workoutTime]){
+            vm.selectTime = function (workoutTime) {
+                if (!vm.workoutsByTime[workoutTime]) {
                     return;
                 }
 
@@ -933,48 +926,65 @@
 
     angular.module('znk.infra-web-app.workoutsRoadmap').provider('WorkoutsRoadmapSrv', [
         function () {
-            var _newWorkoutGeneratorGetter;
-            this.setNewWorkoutGeneratorGetter = function(newWorkoutGeneratorGetter){
+            var _newSubjectToIgnoreGetter, _newWorkoutGeneratorGetter;
+
+            this.setSubjectToIgnoreGetter = function (newWorkoutGeneratorGetter) {
+                _newSubjectToIgnoreGetter = newWorkoutGeneratorGetter;
+            };
+            //support legacy personalization from the web-app
+            this.setNewWorkoutGeneratorGetter = function (newWorkoutGeneratorGetter) {
                 _newWorkoutGeneratorGetter = newWorkoutGeneratorGetter;
             };
 
 
             var _workoutAvailTimesGetter;
-            this.setWorkoutAvailTimes = function(workoutAvailTimesGetter){
+            this.setWorkoutAvailTimes = function (workoutAvailTimesGetter) {
                 _workoutAvailTimesGetter = workoutAvailTimesGetter;
             };
 
-            this.$get = ["$injector", "$log", "$q", function($injector, $log, $q){
+            this.$get = ["$injector", "$log", "$q", "PersonalizationSrv", function ($injector, $log, $q, PersonalizationSrv) {
                 'ngInject';
 
                 var WorkoutsRoadmapSrv = {};
 
-                WorkoutsRoadmapSrv.generateNewExercise = function(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn){
-                    if(!_newWorkoutGeneratorGetter){
-                        var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
+                WorkoutsRoadmapSrv.generateNewExercise = function (subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn) {
+
+                    if (!angular.isFunction(_newWorkoutGeneratorGetter) && !angular.isFunction(_newSubjectToIgnoreGetter)) {
+                        var errMsg = 'WorkoutsRoadmapSrv: getter function was not defined!';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
                     }
-
-                    if(!angular.isArray(subjectToIgnoreForNextDaily)){
+                    if (!angular.isArray(subjectToIgnoreForNextDaily)) {
                         subjectToIgnoreForNextDaily = subjectToIgnoreForNextDaily ? [subjectToIgnoreForNextDaily] : [];
                     }
+                    //if _newSubjectToIgnoreGetter is defined then we use the new personalization from infra, else - support legacy personalization from the web-app.
+                    if (angular.isFunction(_newSubjectToIgnoreGetter)) {
+                        var invokedSubjectToIgnoreFunc = $injector.invoke(_newSubjectToIgnoreGetter);
+                        return $q.when(invokedSubjectToIgnoreFunc(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn)).then(function (subjectToIgnore) {
 
-                    var newExerciseGenerator = $injector.invoke(_newWorkoutGeneratorGetter);
-                    return $q.when(newExerciseGenerator(subjectToIgnoreForNextDaily,workoutOrder,clickedOnChangeSubjectBtn));
+                            //if "subjectToIgnoreForNextDaily" isn't defined, then take subjectToIgnore (in which case we don't care if it's undefined)
+                            if (angular.isUndefined(subjectToIgnoreForNextDaily)) {
+                                subjectToIgnoreForNextDaily = subjectToIgnore;
+                            }
+                            return PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
+                        });
+                    }
+                    else {
+                        var invokedWorkoutGeneratorFunc = $injector.invoke(_newWorkoutGeneratorGetter);
+                        return $q.when(invokedWorkoutGeneratorFunc(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn));
+                    }
                 };
-
-                WorkoutsRoadmapSrv.getWorkoutAvailTimes = function(){
-                    if(!_workoutAvailTimesGetter){
-                        var errMsg = 'WorkoutsRoadmapSrv: newWorkoutGeneratorGetter wsa not defined !!!!';
+                WorkoutsRoadmapSrv.getWorkoutAvailTimes = function () {
+                    if (!_workoutAvailTimesGetter) {
+                        var errMsg = 'WorkoutsRoadmapSrv: workoutAvailTimesGetter wsa not defined!';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
                     }
 
                     var workoutAvailTimes;
-                    if(angular.isFunction(_workoutAvailTimesGetter)){
+                    if (angular.isFunction(_workoutAvailTimesGetter)) {
                         workoutAvailTimes = $injector.invoke(_workoutAvailTimesGetter);
-                    }else{
+                    } else {
                         workoutAvailTimes = _workoutAvailTimesGetter;
                     }
 
@@ -1007,29 +1017,32 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "        </div>\n" +
     "        <div ng-switch-when=\"3\" class=\"no-pro-social-sharing\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
-    "            <div class=\"text1\"\n" +
-    "                 translate=\".MORE_WORKOUTS\">\n" +
-    "            </div>\n" +
-    "            <div class=\"text2\"\n" +
-    "                 translate=\".TELL_FRIENDS\">\n" +
-    "            </div>\n" +
-    "            <md-button class=\"share-btn md-primary znk\"\n" +
-    "                       md-no-ink>\n" +
-    "                <svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>\n" +
-    "                <span translate=\".SHARE\"></span>\n" +
-    "            </md-button>\n" +
-    "            <!--<div class=\"text3 get-zinkerz-pro-text\"\n" +
+    "            <!--<div class=\"text1\"-->\n" +
+    "                 <!--translate=\".MORE_WORKOUTS\">-->\n" +
+    "            <!--</div>-->\n" +
+    "            <!--<div class=\"text2\"-->\n" +
+    "                 <!--translate=\".TELL_FRIENDS\">-->\n" +
+    "            <!--</div>-->\n" +
+    "            <!--<md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.SHARE' | translate}}\"-->\n" +
+    "                       <!--class=\"share-btn md-primary znk\"-->\n" +
+    "                       <!--md-no-ink>-->\n" +
+    "                <!--<svg-icon name=\"workouts-intro-lock-share-arrow\"></svg-icon>-->\n" +
+    "                <!--<span translate=\".SHARE\"></span>-->\n" +
+    "            <!--</md-button>-->\n" +
+    "            <div class=\"text3 get-zinkerz-pro-text\"\n" +
     "                 translate=\".GET_ZINKERZ_PRO\">\n" +
     "            </div>\n" +
-    "            <md-button class=\"upgrade-btn znk outline\" ng-click=\"vm.openPurchaseModal()\">\n" +
+    "            <md-button class=\"upgrade-btn znk md-primary\" ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
-    "            </md-button>-->\n" +
+    "            </md-button>\n" +
     "        </div>\n" +
     "        <div ng-switch-when=\"4\" class=\"no-pro\">\n" +
     "            <svg-icon name=\"workouts-intro-lock-lock\"></svg-icon>\n" +
     "            <div class=\"description\" translate=\".MORE_PRACTICE\"></div>\n" +
     "            <div class=\"get-zinkerz-pro-text\" translate=\".GET_ZINKERZ_PRO\"></div>\n" +
-    "            <md-button class=\"upgrade-btn znk md-primary\" ng-click=\"vm.openPurchaseModal()\">\n" +
+    "            <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK.UPGRADE' | translate}}\"\n" +
+    "                       class=\"upgrade-btn znk md-primary\"\n" +
+    "                       ng-click=\"vm.openPurchaseModal()\">\n" +
     "                <span translate=\".UPGRADE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -1631,7 +1644,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "            <ui-view class=\"workouts-ui-view\"></ui-view>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <estimated-score-widget is-nav-menu=\"false\" ng-model=\"currentSubjectId\"></estimated-score-widget>\n" +
+    "    <estimated-score-widget is-nav-menu=\"false\" widget-title=\".TITLE\" ng-model=\"currentSubjectId\"></estimated-score-widget>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/workoutsRoadmap/templates/workoutsRoadmapBasePreSummary.template.html",
@@ -1657,7 +1670,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "        <md-button  class=\"md-primary znk\"\n" +
     "                    autofocus\n" +
     "                    tabindex=\"1\"\n" +
-    "                    ui-sref=\"app.diagnostic({ skipIntro: true })\"\n" +
+    "                    ui-sref=\"app.diagnostic({ skipIntro: true, forceSkipIntro: vm.forceSkipIntro })\"\n" +
     "                    aria-label=\"{{::vm.buttonTitle}}\"\n" +
     "                    translate=\"{{vm.buttonTitle}}\"\n" +
     "                    md-no-ink>\n" +
@@ -1671,15 +1684,15 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "    <div class=\"diagnostic-workout-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
     "    <div class=\"results-text\" translate=\".DIAG_RES_TEXT\"></div>\n" +
     "    <div class=\"total-score\"\n" +
-    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated\"\n" +
+    "         ng-if=\"!vm.isSubjectsWaitToBeEvaluated  && !vm.ignoreCompositeScore\"\n" +
     "         translate=\".DIAG_COMPOS_SCORE\"\n" +
     "         translate-values=\"{total: vm.compositeScore }\">\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"first-row\">\n" +
     "        <div ng-repeat=\"subject in vm.diagnosticSubjects\"\n" +
-    "            ng-class=\"subject.subjectNameAlias\"\n" +
-    "            class=\"subject-score\">\n" +
+    "             ng-class=\"subject.subjectNameAlias\"\n" +
+    "             class=\"subject-score\">\n" +
     "            <svg-icon class=\"icon-wrapper\" name=\"{{subject.subjectIconName}}\"></svg-icon>\n" +
     "            <div class=\"score-wrapper\">\n" +
     "                <div class=\"score\" translate=\".{{subject.subjectNameAlias | uppercase}}\"></div>\n" +
@@ -1715,7 +1728,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                total: vm.exerciseResult.totalQuestionNum\n" +
     "             }\">\n" +
     "        </div>\n" +
-    "        <md-button class=\"znk md-primary continue-btn\"\n" +
+    "        <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_IN_PROGRESS.CONTINUE' | translate}}\"\n" +
+    "            class=\"znk md-primary continue-btn\"\n" +
     "                   ui-sref=\"app.workouts.workout({workout: vm.workout.workoutOrder})\">\n" +
     "            <span translate=\".CONTINUE\"></span>\n" +
     "        </md-button>\n" +
@@ -1774,7 +1788,8 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"start-btn-wrapper\">\n" +
-    "                <md-button class=\"md-primary znk\"\n" +
+    "                <md-button aria-label=\"{{'WORKOUTS_ROADMAP_WORKOUT_INTRO.START' | translate}}\"\n" +
+    "                           class=\"md-primary znk\"\n" +
     "                           ng-click=\"vm.startExercise()\"\n" +
     "                           md-no-ink>\n" +
     "                    <span translate=\".START\"></span>\n" +

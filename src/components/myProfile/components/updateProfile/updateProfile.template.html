@@ -1,15 +1,14 @@
 <md-dialog-content ng-switch="!!vm.showSuccess">
-    <form name="profileform" novalidate class="auth-form" ng-submit="vm.updateProfile(profileform)" ng-switch-when="false">
-        <div class="znk-input-group"
-             ng-class="profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'">
+    <form class="auth-form" name="profileform" novalidate ng-submit="vm.updateProfile(profileform)" ng-switch-when="false">
+        <div class="znk-input-group" ng-class="profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'">
             <label>{{'MY_PROFILE.USERNAME' | translate}}</label>
             <div class="znk-input">
                 <input
-                        type="text"
-                        autocomplete="on"
-                        name="nickname"
-                        ng-required="true"
-                        ng-model="vm.profileData.nickname">
+                    type="text"
+                    autocomplete="on"
+                    name="nickname"
+                    ng-required="true"
+                    ng-model="vm.profileData.nickname">
                 <span ng-if="profileform.$submitted && profileform.nickname.$invalid"
                       role="alert">
                     <span class="validationBox">
@@ -24,11 +23,11 @@
             <label>{{'MY_PROFILE.EMAIL' | translate}}</label>
             <div class="znk-input">
                 <input
-                        type="email"
-                        autocomplete="on"
-                        name="email"
-                        ng-required="true"
-                        ng-model="vm.profileData.email">
+                    type="email"
+                    autocomplete="on"
+                    name="email"
+                    ng-disabled="true"
+                    ng-model="vm.profileData.email">
                 <span ng-if="profileform.$submitted && profileform.email.$invalid"
                       role="alert">
                     <span class="validationBox">
@@ -55,8 +54,7 @@
                    ng-change="vm.updateProfileTimezone()">
             <label for="timezoneManual">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>
         </div>
-
-        <div class="btn-wrap">
+        <div class="btn-wrap merged-top-btn">
             <button class="save-pass-btn"><span translate="{{vm.saveTitle}}"></span></button>
         </div>
     </form>
@@ -64,7 +62,8 @@
         <svg-icon class="completed-v-icon-wrap" name="myProfile-completed-v-icon"></svg-icon>
         <div translate=".PROFILE_SAVE_SUCCESS"></div>
         <div class="done-btn-wrap">
-            <md-button class="success drop-shadow md-primary green znk" ng-click="vm.closeDialog()">
+            <md-button aria-label="{{'MY_PROFILE.DONE' | translate}}"
+                       class="success drop-shadow md-primary green znk" ng-click="vm.closeDialog()">
                 <span translate=".DONE"></span>
             </md-button>
         </div>

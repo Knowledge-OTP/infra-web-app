@@ -272,14 +272,18 @@ user-goals {
     user-goals .save-btn-wrap .md-button.znk.md-primary {
       padding-right: 45px;
       padding-left: 45px;
-      height: 40px; }
+      height: 38px;
+      font-size: 14px;
+      color: white;
+      font-family: Lato;
+      font-weight: 400; }
     user-goals .save-btn-wrap .dropdown-arrow-icon {
       margin-left: 10px;
       overflow: visible;
       position: relative;
       top: -2px; }
       user-goals .save-btn-wrap .dropdown-arrow-icon svg {
-        width: 15px;
+        width: 14px;
         transform: rotate(-90deg); }
         user-goals .save-btn-wrap .dropdown-arrow-icon svg polyline {
           stroke: white; }
@@ -332,6 +336,8 @@ goal-select {
         stroke: #0a9bad; }
     goal-select .action-btn.minus .st0 {
       display: none; }
+    goal-select .action-btn.hide-sign {
+      visibility: hidden; }
 
 school-select .school-selector .selector .tag-input-wrap {
   width: 560px;

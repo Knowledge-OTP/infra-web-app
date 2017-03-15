@@ -9,64 +9,75 @@
 /* full background image with retina */
 /* full background image with retina */
 oath-login-drv .btn-wrap {
-  border-radius: 25px;
-  overflow: hidden;
-  height: 37px; }
+  height: 40px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -ms-flex-align: center;
+      align-items: center;
+  width: 200px;
+  margin: 0 auto; }
   oath-login-drv .btn-wrap .social-btn {
-    width: 50%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
     color: #ffffff;
-    float: left;
     position: relative;
-    padding-left: 25px;
     cursor: pointer;
-    border: none; }
-    oath-login-drv .btn-wrap .social-btn.gplus-btn {
-      border-top-right-radius: 25px;
-      border-bottom-right-radius: 25px; }
-    oath-login-drv .btn-wrap .social-btn span {
-      display: block;
-      text-indent: -25px;
-      font-size: 14px; }
-      oath-login-drv .btn-wrap .social-btn span.loader {
-        margin: 0;
-        height: 12px;
-        width: 12px;
-        animation: rotate 0.8s infinite linear;
-        border: 3px solid #fff;
-        border-right-color: transparent;
-        border-radius: 50%;
-        position: absolute;
-        top: 10px;
-        right: 15px; }
+    border: none;
+    border-radius: 50%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
 
 @keyframes rotate {
   0% {
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
+    oath-login-drv .btn-wrap .social-btn .loader {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%; }
+      oath-login-drv .btn-wrap .social-btn .loader.active-loader {
+        animation: rotate 2s linear infinite; }
   oath-login-drv .btn-wrap .facebook-btn {
-    background-color: #369;
-    line-height: 32px; }
+    background-color: #369; }
     oath-login-drv .btn-wrap .facebook-btn:hover {
       background-color: #2a547f; }
-    oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] {
-      float: left;
-      margin-top: 9px; }
-      oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] svg {
-        width: 8px;
-        fill: #ffffff; }
+    oath-login-drv .btn-wrap .facebook-btn svg-icon[name="facebook-icon"] svg {
+      width: 8px;
+      fill: #ffffff; }
+    oath-login-drv .btn-wrap .facebook-btn .loader.active-loader {
+      border: 4px solid #369;
+      border-top: 4px solid rgba(0, 0, 0, 0.25);
+      border-bottom: 4px solid rgba(0, 0, 0, 0.25); }
   oath-login-drv .btn-wrap .gplus-btn {
-    background-color: #df4a31;
-    line-height: 32px; }
+    background-color: #df4a31; }
     oath-login-drv .btn-wrap .gplus-btn:hover {
       background-color: #c5402a; }
-    oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] {
-      float: left;
-      margin-top: 9px; }
-      oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] svg {
-        width: 18px;
-        fill: #ffffff; }
+    oath-login-drv .btn-wrap .gplus-btn svg-icon[name="google-icon"] svg {
+      width: 18px;
+      fill: #ffffff; }
+    oath-login-drv .btn-wrap .gplus-btn .loader.active-loader {
+      border: 4px solid #df4a31;
+      border-top: 4px solid rgba(0, 0, 0, 0.25);
+      border-bottom: 4px solid rgba(0, 0, 0, 0.25); }
+  oath-login-drv .btn-wrap .live-btn {
+    background-color: #0076d6; }
+    oath-login-drv .btn-wrap .live-btn:hover {
+      background-color: #025fac; }
+    oath-login-drv .btn-wrap .live-btn svg-icon[name="microsoft-icon"] svg {
+      width: 18px;
+      fill: #ffffff; }
+    oath-login-drv .btn-wrap .live-btn .loader.active-loader {
+      border: 4px solid #0076d6;
+      border-top: 4px solid rgba(0, 0, 0, 0.25);
+      border-bottom: 4px solid rgba(0, 0, 0, 0.25); }
   oath-login-drv .btn-wrap.reset-btn {
     margin-top: 20px; }
 
@@ -244,39 +255,63 @@ promo-code {
   font-style: normal; }
 
 .md-open-menu-container.app-select-menu-open {
-  border-radius: 20px;
+  border-radius: 10px;
   overflow: hidden; }
 
 .md-open-menu-container md-menu-content#app-select-menu {
-  -ms-flex-direction: row;
-      flex-direction: row;
+  -ms-flex-direction: column;
+      flex-direction: column;
   padding: 8px 20px; }
   .md-open-menu-container md-menu-content#app-select-menu md-menu-item {
     -ms-flex-align: center;
         align-items: center;
     cursor: pointer;
-    padding-right: 15px;
     margin-right: 15px;
-    border-right: 1px solid #cccccc; }
+    margin: 5px 0px; }
     .md-open-menu-container md-menu-content#app-select-menu md-menu-item:last-child {
       border-right: none;
       margin-right: 0;
       padding-right: 0; }
     .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder {
-      width: calc(175px / 2);
-      height: calc(55px / 2);
+      width: auto;
+      height: calc(80px / 2);
       background-repeat: no-repeat;
       background-size: contain;
-      padding: 0; }
-      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.sat {
-        background-image: url("/assets/images/sat-name@2x.png");
-        width: 88px; }
-      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.act {
-        background-image: url("/assets/images/act-name@2x.png");
-        width: 95px; }
-      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder.toefl {
-        background-image: url("/assets/images/toefl-name@2x.png");
-        width: 126px; }
+      padding: 0;
+      font-size: 32px;
+      color: #4f4d4d;
+      font-family: SourceSansPro;
+      font-weight: 700;
+      margin-right: 5px; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .app-img-holder .trademark {
+        font-size: 18px;
+        vertical-align: super;
+        font-weight: 400; }
+    .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center;
+      text-align: center; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square .text {
+        font-size: 9px;
+        color: white;
+        font-family: SourceSansPro;
+        font-weight: 400;
+        text-transform: uppercase; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.sat {
+        background-color: #0a9bad; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.satsm {
+        background-color: #AF89D2; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.act {
+        background-color: #87ca4d; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.toefl {
+        background-color: #ff931e; }
 
 login-app {
   transition: all 0.5s; }
@@ -326,25 +361,57 @@ login-app {
         login-app .login-app > header .app-select md-menu .md-button:not([disabled]).md-icon-button:hover {
           background-color: #ffffff; }
         login-app .login-app > header .app-select md-menu > button {
-          width: 175px;
+          width: auto;
           height: auto;
           padding: 8px 15px;
           background-color: #fbfcfc;
-          border-radius: 30px; }
+          border-radius: 30px;
+          display: -ms-flexbox;
+          display: flex; }
           login-app .login-app > header .app-select md-menu > button:hover {
             box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.35); }
         login-app .login-app > header .app-select .app-img-holder {
-          width: 120px;
-          height: calc(55px / 2);
+          width: auto;
+          height: calc(80px / 2);
           background-repeat: no-repeat;
           background-size: contain;
-          float: left; }
-          login-app .login-app > header .app-select .app-img-holder.sat {
-            background-image: url("/assets/images/sat-name@2x.png"); }
-          login-app .login-app > header .app-select .app-img-holder.act {
-            background-image: url("/assets/images/act-name@2x.png"); }
-          login-app .login-app > header .app-select .app-img-holder.toefl {
-            background-image: url("/assets/images/toefl-name@2x.png"); }
+          padding: 0;
+          font-size: 32px;
+          color: #4f4d4d;
+          font-family: SourceSansPro;
+          font-weight: 700;
+          text-transform: none;
+          margin-right: 5px; }
+          login-app .login-app > header .app-select .app-img-holder .trademark {
+            font-size: 18px;
+            vertical-align: super;
+            font-weight: 400; }
+        login-app .login-app > header .app-select .square {
+          width: 30px;
+          height: 30px;
+          padding: 0;
+          display: -ms-flexbox;
+          display: flex;
+          line-height: normal;
+          -ms-flex-direction: column;
+              flex-direction: column;
+          -ms-flex-pack: center;
+              justify-content: center;
+          text-align: center; }
+          login-app .login-app > header .app-select .square .text {
+            font-size: 9px;
+            color: white;
+            font-family: SourceSansPro;
+            font-weight: 400;
+            text-transform: uppercase; }
+          login-app .login-app > header .app-select .square.sat {
+            background-color: #0a9bad; }
+          login-app .login-app > header .app-select .square.satsm {
+            background-color: #AF89D2; }
+          login-app .login-app > header .app-select .square.act {
+            background-color: #87ca4d; }
+          login-app .login-app > header .app-select .square.toefl {
+            background-color: #ff931e; }
         login-app .login-app > header .app-select .expand-menu {
           float: right; }
       login-app .login-app > header .for-educators {
@@ -421,6 +488,14 @@ login-app {
       color: #0a9bad; }
       login-app .login-app.sat .app-color:hover {
         color: #088190; }
+    login-app .login-app.satsm .app-bg {
+      background: #AF89D2; }
+      login-app .login-app.satsm .app-bg:hover {
+        background: #9675b5; }
+    login-app .login-app.satsm .app-color {
+      color: #AF89D2; }
+      login-app .login-app.satsm .app-color:hover {
+        color: #9675b5; }
     login-app .login-app.act .app-bg {
       background: #87ca4d; }
       login-app .login-app.act .app-bg:hover {

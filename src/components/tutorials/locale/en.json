@@ -1,0 +1,8 @@
+{
+    "TUTORIAL_LIST_COMPONENTS": {
+        "DIAGNOSTIC_OVERLAY": "Please complete the diagnostic test in order to access the tutorials"
+    },
+    "TUTORIAL_PANE_COMPONENTS": {
+        "TITLE": "Subjects"
+    }
+}

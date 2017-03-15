@@ -3,12 +3,12 @@
     <div class="tests-navigation-title-header"
          translate=".MINI_TEST_TITLE"></div>
     <md-list flex="grow" layout="column" layout-align="start center">
-        <md-list-item ng-repeat="miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum}"
+        <md-list-item ng-repeat="miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum} | orderBy:'order'"
                       ng-class="{
                         'done': miniExam.isCompleted,
                         'active': vm.activeId === miniExam.id
                       }">
-            <md-button md-no-ink
+            <md-button md-no-ink aria-label="{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}"
                        ng-click="vm.changeActive(miniExam.id)">
                 <span>{{miniExam.name}}</span>
                 <div class="status-icon-wrapper"
@@ -24,12 +24,12 @@
              flex="grow"
              layout="column"
              layout-align="start center">
-        <md-list-item ng-repeat="fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum}"
+        <md-list-item ng-repeat="fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum} | orderBy:'order'"
                       ng-class="{
                         'done': fullExam.isCompleted,
                         'active': vm.activeId === fullExam.id
                       }">
-            <md-button md-no-ink
+            <md-button md-no-ink aria-label="{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}"
                        ng-click="vm.changeActive(fullExam.id)">
                 <span>{{fullExam.name}}</span>
                 <div class="status-icon-wrapper"

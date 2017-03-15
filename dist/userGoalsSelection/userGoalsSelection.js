@@ -509,11 +509,11 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "</md-dialog>\n" +
     "");
   $templateCache.put("components/userGoalsSelection/templates/goalSelect.template.html",
-    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-show=\"target > minScore\">\n" +
+    "<div class=\"action-btn minus\" ng-click=\"updateGoal(false)\" ng-class=\"{'hide-sign':target < minScore}\">\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "<div class=\"goal\">{{target}}</div>\n" +
-    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-show=\"target < maxScore\">\n" +
+    "<div class=\"action-btn plus\" ng-click=\"updateGoal(true)\" ng-class=\"{'hide-sign':target > maxScore}\">\n" +
     "    <svg-icon name=\"user-goals-plus-icon\"></svg-icon>\n" +
     "</div>\n" +
     "");
@@ -603,7 +603,8 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "                <md-tooltip md-visible=\"vm.showTooltip\" md-direction=\"top\" class=\"goals-info md-whiteframe-2dp\">\n" +
     "                    <div translate=\".GOALS_INFO\" class=\"top-text\"></div>\n" +
     "                </md-tooltip>\n" +
-    "                <svg-icon class=\"info-icon\" name=\"user-goals-info-icon\" ng-mouseover=\"vm.showTooltip=true\" ng-mouseleave=\"vm.showTooltip=false\"></svg-icon>\n" +
+    "                <svg-icon class=\"info-icon\" name=\"user-goals-info-icon\" ng-mouseover=\"vm.showTooltip=true\"\n" +
+    "                          ng-mouseleave=\"vm.showTooltip=false\"></svg-icon>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"subject-goal-wrap\">\n" +
@@ -623,7 +624,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"composite-wrap\">\n" +
+    "        <div class=\"composite-wrap\" ng-if=\"!(setting.hideTotalScore || goalsSettings.hideTotalScore)\">\n" +
     "            <div class=\"composite-score\">\n" +
     "                <div class=\"score-title\" translate=\".TOTAL_SCORE\"></div>\n" +
     "                <div class=\"score\">{{userGoals.totalScore}}</div>\n" +
@@ -631,13 +632,15 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"save-btn-wrap\">\n" +
-    "        <md-button autofocus tabindex=\"1\"\n" +
+    "        <md-button aria-label=\"{{'USER_GOALS.SAVE' | translate}}\"\n" +
+    "                   autofocus tabindex=\"1\"\n" +
     "                   class=\"md-primary znk inline-block\"\n" +
     "                   ng-click=\"saveChanges()\"\n" +
     "                   ng-class=\"setting.saveBtn.wrapperClassName\">\n" +
     "            <svg-icon name=\"user-goals-v-icon\" class=\"v-icon\" ng-show=\"showVIcon\"></svg-icon>\n" +
     "            <span translate=\"{{saveTitle}}\"></span>\n" +
-    "            <svg-icon name=\"user-goals-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\" ng-show=\"setting.saveBtn.showSaveIcon\"></svg-icon>\n" +
+    "            <svg-icon name=\"user-goals-dropdown-arrow-icon\" class=\"dropdown-arrow-icon\"\n" +
+    "                      ng-show=\"setting.saveBtn.showSaveIcon\"></svg-icon>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
     "    <div class=\"school-selector-wrap animate-if\"\n" +

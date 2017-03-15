@@ -12,7 +12,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })
         .directive('answerExplanation',
-        function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+        function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, CategoryService) {
             'ngInject';
 
             var directive = {
@@ -25,6 +25,7 @@
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
+                    var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
 
                     scope.d = {};
 
@@ -44,7 +45,7 @@
                             }, 0, false);
 
                             var analyticsProps = {
-                                subjectType: question.subjectId,
+                                subjectType: questionSubjectId,
                                 questionId: question.id
                             };
 
@@ -74,12 +75,12 @@
                             init();
                         } else {
                             // $watch seems to work for sharer and viewer, while $viewChangeListeners
-                            // worked only for sharer. it's because $viewChangeListeners does not  
+                            // worked only for sharer. it's because $viewChangeListeners does not
                             // invoke when the $modalValue change, only when the $viewValue (via input and etc)
                             scope.$watch(function () {
                                 return ngModelCtrl.$viewValue;
                             }, function (newVal) {
-                                // newVal undefined meens no answer yet, so must be protected 
+                                // newVal undefined meens no answer yet, so must be protected
                                 if (angular.isDefined(newVal)) {
                                     init();
                                 }
@@ -102,11 +103,13 @@
 
                     scope.d.close = function () {
                         scope.d.toggleWrittenSln = false;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
                         _updateBindExercise();
                     };
 
                     scope.d.toggleAnswer = function () {
                         scope.d.toggleWrittenSln = !scope.d.toggleWrittenSln;
+                        questionBuilderCtrl.updateAnswerExplnView(scope.d.toggleWrittenSln);
                         _updateBindExercise();
                     };
 

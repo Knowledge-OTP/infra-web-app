@@ -1,0 +1,11 @@
+<div class="tutorials-list-pane base-border-radius base-box-shadow" translate-namespace="TUTORIAL_LIST_COMPONENTS">
+    <div class="diagnostic-overlay" ng-if="!vm.isDiagnosticComplete">
+        <div class="overlay-text" translate=".DIAGNOSTIC_OVERLAY"></div>
+    </div>
+    <div class="tutorials-list-container" ng-class="{blur: !vm.isDiagnosticComplete}">
+        <tutorial-list-item ng-model="vm.activeSubject"
+                            tutorial="tutorial"
+                            ng-repeat="tutorial in vm.tutorialsArrs[vm.activeSubject]">
+        </tutorial-list-item>
+    </div>
+</div>

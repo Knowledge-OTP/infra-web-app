@@ -36,7 +36,8 @@ module.exports = function (grunt) {
         jshint: {
             options: {
                 jshintrc: '.jshintrc',
-                reporter: require('jshint-stylish')
+                reporter: require('jshint-stylish'),
+                reporterOutput: ''
             },
             all: {
                 src: [
@@ -177,7 +178,7 @@ module.exports = function (grunt) {
             ci: {
                 configFile: 'test/karma-unit.conf.js',
                 singleRun: true,
-                browsers: ['PhantomJS']
+                browsers: ['Chrome']
             },
             build: {
                 configFile: 'test/karma-unit.conf.js',

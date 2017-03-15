@@ -1,6 +1,6 @@
 <div class="header-container"
      translate-namespace="COMPLETE_EXERCISE"
-     subject-id-to-attr-drv="$ctrl.exerciseContent.subjectId"
+     subject-id-to-attr-drv="$ctrl.exerciseSubjectId"
      context-attr="class,class"
      suffix="bg,subject-pattern">
     <div class="left-part">
@@ -13,6 +13,7 @@
         <div ng-transclude="preRightPart"></div>
         <div class="exit"
              translate=".EXIT"
+             ng-if="!$ctrl.completeExerciseCtrl.exerciseDetails.hideQuit"
              ng-click="$ctrl.completeExerciseCtrl.settings.exitAction()">
         </div>
     </div>

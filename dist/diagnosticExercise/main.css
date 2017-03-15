@@ -18,7 +18,7 @@
 @import url(//fonts.googleapis.com/icon?family=Material+Icons);
 .app-workouts-diagnostic .exercise-container {
   width: 100%;
-  height: calc(100vh - 95px);
+  height: 100%;
   background-color: white;
   display: -ms-flexbox;
   display: flex;
@@ -28,7 +28,8 @@
   .app-workouts-diagnostic .exercise-container znk-exercise {
     -ms-flex-positive: 1;
         flex-grow: 1;
-    width: 100%; }
+    width: 100%;
+    height: calc(100vh - 145px); }
 
 .app-workouts-diagnostic .inline-block {
   display: inline-block; }
@@ -48,14 +49,14 @@
   -ms-flex-pack: start;
       justify-content: flex-start; }
 
-.app-workouts-diagnostic .md-button {
+.app-workouts-diagnostic .znk.md-button.md-primary {
   display: block;
-  margin: 15px auto;
-  border-radius: 30px; }
-  .app-workouts-diagnostic .md-button.md {
-    width: 180px; }
-  .app-workouts-diagnostic .md-button.primary {
-    text-transform: uppercase; }
+  margin: 15px auto 25px;
+  border-radius: 30px;
+  padding-right: 0;
+  padding-left: 0;
+  width: 180px;
+  text-transform: uppercase; }
 
 .app-workouts-diagnostic .answer-index-wrapper {
   cursor: pointer; }
@@ -69,7 +70,8 @@
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
-      flex-direction: column; }
+      flex-direction: column;
+  height: calc(100vh - 95px); }
   .diagnostic-loading-wrapper .loading-title {
     font-size: 32px;
     color: #4f4d4d;
@@ -90,31 +92,26 @@
           align-self: flex-end; }
 
 .diagnostic-summary-wrapper {
-  padding-top: 50px; }
+  padding-top: 55px; }
   .diagnostic-summary-wrapper .title {
     text-align: center;
     margin-bottom: 52px; }
-    .diagnostic-summary-wrapper .title div {
+    .diagnostic-summary-wrapper .title .main-title {
       font-size: 20px;
       color: #4f4d4d;
       font-family: Quicksand;
-      font-weight: 400;
+      font-weight: 600;
       margin-bottom: 35px; }
-    .diagnostic-summary-wrapper .title span {
+    .diagnostic-summary-wrapper .title .sub-title {
       font-size: 22px;
       color: #4f4d4d;
       font-family: Quicksand;
       font-weight: 800; }
   .diagnostic-summary-wrapper .doughnuts-container {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    -ms-flex-pack: center;
-        justify-content: center; }
+    margin: 0 auto; }
     .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper {
-      margin-left: 9px;
-      margin-right: 9px; }
+      margin: 0 25px;
+      display: inline-block; }
       .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper {
         display: -ms-flexbox;
         display: flex;
@@ -128,7 +125,8 @@
             flex-direction: column;
         border-radius: 13px;
         background-color: #f9f9f9;
-        height: 250px; }
+        height: 250px;
+        width: 215px; }
         .diagnostic-summary-wrapper .doughnuts-container .all-doughnuts-wrapper .doughnut-wrapper .subject-name {
           font-size: 15px;
           color: #757a83;
@@ -202,17 +200,14 @@
     font-family: Lato;
     font-weight: 300;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 35px;
+    width: 390px;
+    margin: 70px auto 0 auto;
     line-height: 25px; }
   .diagnostic-summary-wrapper .start-button.md-button.primary {
-    border-radius: 30px;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 35px;
-    margin-bottom: 35px; }
+    margin-top: 40px; }
   .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper {
     display: -ms-flexbox;
     display: flex;
@@ -220,8 +215,7 @@
         flex-direction: column;
     -ms-flex-align: center;
         align-items: center;
-    margin-top: 60px;
-    margin-bottom: 210px; }
+    margin-top: 60px; }
     .diagnostic-summary-wrapper .upgrade-to-evaluate-wrapper span {
       font-size: 16px;
       color: #4f4d4d;
@@ -236,41 +230,6 @@
       text-transform: inherit;
       padding-left: 35px;
       padding-right: 35px; }
-
-md-tooltip.tooltip-for-diagnostic-summary {
-  opacity: 0;
-  width: auto;
-  height: auto;
-  background: white;
-  padding: 0 5px; }
-  md-tooltip.tooltip-for-diagnostic-summary ._md-content {
-    font-size: 14px;
-    color: #4f4d4d;
-    font-family: Lato;
-    font-weight: 400;
-    height: auto;
-    text-align: center;
-    background: white;
-    white-space: normal; }
-    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show {
-      opacity: 1;
-      transform: none;
-      transition: none;
-      pointer-events: auto;
-      will-change: auto; }
-    md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove {
-      transition: none; }
-      md-tooltip.tooltip-for-diagnostic-summary ._md-content._md-show-remove._md-show-remove-active {
-        transform: none;
-        opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary._md-hide {
-    transition: opacity 0.4s;
-    opacity: 0; }
-  md-tooltip.tooltip-for-diagnostic-summary._md-show {
-    opacity: 1;
-    transition: opacity 0.4s;
-    pointer-events: auto;
-    will-change: opacity; }
 
 /**
 *  FONTS

@@ -1,7 +1,7 @@
 <div class="intro-container"
      translate-namespace="COMPLETE_EXERCISE">
     <div class="title" ng-bind="$ctrl.exerciseParentContent.name"></div>
-    <svg-icon subject-id-to-attr-drv="$ctrl.exerciseContent.subjectId"
+    <svg-icon subject-id-to-attr-drv="$ctrl.exerciseSubjectId"
               context-attr="name"
               suffix="icon"
               class="subject-icon">
@@ -26,6 +26,7 @@
 
     <div class="btn-section">
         <md-button class="md-primary znk"
+                   aria-label="{{'COMPLETE_EXERCISE.START' | translate}}"
                    md-no-ink
                    translate=".START"
                    ng-click="$ctrl.start()">

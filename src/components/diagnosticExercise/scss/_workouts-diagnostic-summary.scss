@@ -1,34 +1,30 @@
 .diagnostic-summary-wrapper {
-    padding-top: 50px;
+    padding-top: 55px;
 
     .title {
         text-align: center;
         margin-bottom: 52px;
-        div {
-            @include text-style(20px, $fontColor3, Quicksand, $regularFontWeight);
+        .main-title {
+            @include text-style(20px, $fontColor3, Quicksand, $semiBoldFontWeight);
             margin-bottom: 35px;
         }
-
-        span {
+        .sub-title {
             @include text-style(22px, $fontColor3, Quicksand, $blackFontWeight);
         }
     }
 
     .doughnuts-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        margin: 0 auto;
         .all-doughnuts-wrapper {
-            margin: {
-                left: 9px;
-                right: 9px;
-            }
+            margin: 0 25px;
+            display: inline-block;
             .doughnut-wrapper {
                 @include flex-middle;
                 @include flex-direction(column);
                 border-radius: 13px;
                 background-color: $bgColor27;
                 height: 250px;
+                width: 215px;
 
                 .subject-name {
                     @include text-style(15px, $fontColor4, Lato, $regularFontWeight);
@@ -106,31 +102,25 @@
     .footer-text {
         @include text-style(18px, $fontColor3, Lato, $lightFontWeight);
         text-align: center;
-        margin: {
-            left: auto;
-            right: auto;
-            top: 35px;
-        }
+        width: 390px;
+        margin: 70px auto 0 auto;
         line-height: 25px;
     }
 
-        .start-button.md-button.primary {
-            border-radius: 30px;
-            display: block;
-            margin: {
-                left: auto;
-                right: auto;
-                top: 35px;
-                bottom: 35px;
-            }
+    .start-button.md-button.primary {
+        display: block;
+        margin: {
+            left: auto;
+            right: auto;
+            top: 40px;
         }
+    }
 
     .upgrade-to-evaluate-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
         margin-top: 60px;
-        margin-bottom: 210px;
         span {
             @include text-style(16px, $fontColor3, Quicksand, $boldFontWeight);
         }
@@ -145,48 +135,4 @@
             }
         }
     }
-
 }
-
-md-tooltip.tooltip-for-diagnostic-summary {
-    opacity: 0;
-    width: auto;
-    height: auto;
-    background: $bgColor1;
-    padding:0 5px;
-    ._md-content {
-        @include text-style(14px, $fontColor3, Lato, 400);
-        height: auto;
-        text-align: center;
-        background: $bgColor1;
-        white-space: normal;
-        // override and cancel .md-content transitions and transform
-        &._md-show {
-            opacity: 1;
-            transform: none;
-            transition: none;
-            pointer-events: auto;
-            will-change: auto;
-        }
-        &._md-show-remove {
-            transition: none;
-            &._md-show-remove-active {
-                transform: none;
-                opacity: 0;
-            }
-        }
-    }
-
-    &._md-hide {
-        transition: opacity 0.4s;
-        opacity: 0;
-    }
-
-    &._md-show {
-        opacity: 1;
-        transition: opacity 0.4s;
-        pointer-events: auto;
-        will-change: opacity;
-    }
-}
-

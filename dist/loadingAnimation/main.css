@@ -1,0 +1,9 @@
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+md-progress-linear.loading-container {
+  position: fixed;
+  top: 0; }
+  md-progress-linear.loading-container .md-bar {
+    background: #87ca4d; }

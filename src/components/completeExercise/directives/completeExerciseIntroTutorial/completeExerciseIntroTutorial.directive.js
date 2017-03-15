@@ -22,6 +22,8 @@
                         return $sce.trustAsHtml(html);
                     };
 
+                    this.showBtn = this.exerciseContent ? this.exerciseContent.questions.length > 0 : false;
+
                     this.goToQuestions = function(){
                         this.completeExerciseIntroCtrl.goToQuestions();
                     };

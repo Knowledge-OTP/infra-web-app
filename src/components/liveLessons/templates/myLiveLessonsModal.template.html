@@ -36,7 +36,10 @@
             <div class="current-time" translate=".CURRENT_TIME"
                  translate-values="{ currentTime: {{'vm.currentTime'}} }"></div>
             <div class="btn-wrapper">
-                <md-button class="ok-button success drop-shadow" ng-click="vm.closeDialog()">
+                <md-button
+                    aria-label="{{'MY_LIVE_LESSONS_POPUP.OK' | translate}}"
+                    class="ok-button success drop-shadow"
+                    ng-click="vm.closeDialog()">
                     <span translate=".OK"></span>
                 </md-button>
             </div>

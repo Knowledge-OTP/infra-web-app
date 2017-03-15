@@ -17,14 +17,15 @@
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-                  UtilitySrv) {
+            $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
             var exerciseResult = settings.exerciseResult;
             var exerciseParentContent = settings.exerciseParentContent;
             var exerciseTypeId = exerciseResult.exerciseTypeId;
+            var exerciseParentTypeId = settings.exerciseParentTypeId;
 
             var isNotLecture = exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum;
 
@@ -35,37 +36,51 @@
             var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
             var initSlideIndex;
 
+            $ctrl.exeriseSubjectId = exerciseResult.subjectId;
+
             function _setExerciseResult() {
                 var isQuestionsArrEmpty = !angular.isArray(exerciseResult.questionResults) || !exerciseResult.questionResults.length;
                 if (isNotLecture && isQuestionsArrEmpty) {
                     exerciseResult.questionResults = exerciseContent.questions.map(function (question) {
-                 return {
+                        var questionCategoriesForSubject = [question.categoryId, question.categoryId2];
+                        return {
                             questionId: question.id,
                             categoryId: question.categoryId,
+                            categoryId2: question.categoryId2,
                             manualEvaluation: question.manualEvaluation || false,
-                            subjectId: question.subjectId,
                             order: question.index,
                             answerTypeId: question.answerTypeId,
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
                             questionFormatId: question.questionFormatId,
+                            subjectId: $ctrl.exeriseSubjectId ? $ctrl.exeriseSubjectId : CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject)
                         };
                     });
                 }
 
-                exerciseResult.subjectId = exerciseContent.subjectId;
                 exerciseResult.exerciseName = exerciseContent.name;
-                exerciseResult.totalQuestionNum = exerciseContent.questions.length;
+                exerciseResult.totalQuestionNum = (exerciseTypeId === ExerciseTypeEnum.LECTURE.enum ? 0 : exerciseContent.questions.length);
                 exerciseResult.calculator = exerciseContent.calculator;
                 exerciseResult.timePreference = exerciseContent.timePreference;
                 exerciseResult.categoryId = exerciseContent.categoryId;
                 exerciseResult.testScoreId = exerciseContent.testScoreId;
-                exerciseResult.moduleId = exerciseContent.moduleId;
+                exerciseResult.moduleId = !exerciseResult.moduleId ? exerciseContent.moduleId : exerciseResult.moduleId;
                 exerciseResult.time = exerciseContent.time;
                 exerciseResult.exerciseOrder = settings.exerciseDetails.exerciseOrder;
 
+                if (exerciseParentTypeId) {
+                    exerciseResult.parentTypeId = exerciseParentTypeId;
+                }
+                if (exerciseParentContent) {
+                    exerciseResult.parentName = exerciseParentContent.name;
+                }
+
                 if (angular.isUndefined(exerciseResult.startedTime)) {
                     exerciseResult.startedTime = Date.now();
+                }
+
+                if(exerciseContent.categoryId2) {
+                    exerciseResult.categoryId2 = exerciseContent.categoryId2;
                 }
             }
 
@@ -74,6 +89,27 @@
                     exerciseContent.questions = exerciseContent.questions.sort(function (a, b) {
                         return a.order - b.order;
                     });
+
+                    if (exerciseContent.moduleId) {
+                        var questionsOrderMap = {};
+                        var questions = exerciseContent.questions;
+                        for (var k = 0; k < questions.length; k++) {
+                            if (angular.isUndefined(questionsOrderMap[questions[k].order])) {
+                                questionsOrderMap[questions[k].order] = questions[k];
+                            } else {
+                                if (questionsOrderMap[questions[k].order].difficulty < questions[k].difficulty) {
+                                    questionsOrderMap[questions[k].order] = questions[k];
+                                }
+                            }
+                        }
+
+                        var sortedQuestionsByDifficulty = UtilitySrv.object.convertToArray(questionsOrderMap);
+                        sortedQuestionsByDifficulty = sortedQuestionsByDifficulty.sort(function (a, b) {
+                            return a.order - b.order;
+                        });
+
+                        exerciseContent.questions = sortedQuestionsByDifficulty;
+                    }
 
                     ZnkExerciseUtilitySrv.setQuestionsGroupData(
                         exerciseContent.questions,
@@ -85,40 +121,59 @@
                     });
                     for (var i = 0; i < exerciseContent.content.length; i++) {
                         exerciseContent.content[i].exerciseTypeId = exerciseTypeId;
-                        exerciseContent.content[i].id = exerciseTypeId + '_' + exerciseContent.id + '_' + exerciseContent.content[i].order;// mandatory for drawing tool
+                        exerciseContent.content[i].id = exerciseTypeId + '_' + exerciseContent.id + '_' + exerciseContent.content[i].order; // mandatory for drawing tool
                     }
-                    exerciseContent.questions = exerciseContent.content;  // lecture question type has content property instead of questions.
+                    exerciseContent.questions = exerciseContent.content; // lecture question type has content property instead of questions.
                 }
             }
 
             function _finishExercise() {
-                exerciseResult.isComplete = true;
-                exerciseResult.endedTime = Date.now();
-                exerciseResult.$save();
-
-                //  stats exercise data
-                StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
-                    $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
-                    var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
-
-                    shouldBroadCastExerciseProm.then(function(shouldBroadcastFn) {
-                        var shouldBroadcast = shouldBroadcastFn({
-                            exercise: exerciseContent,
-                            exerciseResult: exerciseResult,
-                            exerciseParent: exerciseParentIsSectionOnly
-                        });
-                        if (shouldBroadcast) {
-                            var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
-                            var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
-                            $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData) {
+                    if (exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum) {
+                        var liveSessionOn = !angular.equals(liveSessionData, {});
+                        if (ENV.testToTakeExamId && ENV.testToTakeExamId !==  null && ENV.testToTakeExamId === exerciseContent.examId) {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
+                        } else if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
+                        } else {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.NO.enum;
                         }
-                    });
 
-                    settings.actions.done();
+                        //  stats exercise data
+                        StatsEventsHandlerSrv.addNewExerciseResult(exerciseTypeId, exerciseContent, exerciseResult).then(function () {
+                            $ctrl.settings.viewMode = ZnkExerciseViewModeEnum.REVIEW.enum;
+                            var exerciseParentIsSectionOnly = isSection ? exerciseParentContent : undefined;
+
+                            shouldBroadCastExerciseProm.then(function (shouldBroadcastFn) {
+                                var shouldBroadcast = shouldBroadcastFn({
+                                    exercise: exerciseContent,
+                                    exerciseResult: exerciseResult,
+                                    exerciseParent: exerciseParentIsSectionOnly
+                                });
+
+                                if (shouldBroadcast) {
+                                    var exerciseTypeValue = ExerciseTypeEnum.getValByEnum(exerciseTypeId).toLowerCase();
+                                    var broadcastEventName = exerciseEventsConst[exerciseTypeValue].FINISH;
+                                    $rootScope.$broadcast(broadcastEventName, exerciseContent, exerciseResult, exerciseParentIsSectionOnly);
+                                    ExerciseCycleSrv.invoke('afterBroadcastFinishExercise', settings);
+                                }
+                            });
+
+                            settings.actions.done();
+                        });
+                    } else {
+                        exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
+                    }
+                    exerciseResult.isComplete = true;
+                    exerciseResult.endedTime = Date.now();
+                    exerciseResult.$save();
                 });
             }
 
             function _getNumOfUnansweredQuestions(questionsResults) {
+                if (!questionsResults) {
+                    return false;
+                }
                 var numOfUnansweredQuestions = questionsResults.length;
                 var keysArr = Object.keys(questionsResults);
                 angular.forEach(keysArr, function (i) {
@@ -170,6 +225,10 @@
 
                     var defExerciseSettings = {
                         onDone: function onDone() {
+                            if (!isNotLecture) {
+                                settings.actions.exitAction();
+                                return;
+                            }
                             var numOfUnansweredQuestions = _getNumOfUnansweredQuestions(exerciseResult.questionResults);
 
                             var areAllQuestionsAnsweredProm = $q.when(true);
@@ -204,6 +263,12 @@
                                 }
                             });
                         },
+                        onExit: function () {
+                            if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
+
+                                exerciseResult.$save();
+                            }
+                        },
                         viewMode: viewMode,
                         initSlideIndex: initSlideIndex || 0,
                         allowedTimeForExercise: _getAllowedTimeForExercise(),
@@ -212,6 +277,18 @@
                                 exerciseDrawingPathPrefix: exerciseResult.uid,
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
+                        },
+                        onReview: function onReview () {
+                            exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
+                            var saveProm=exerciseResult.$save();
+                            saveProm.then(function(){
+                                if (angular.isFunction(settings.actions.reviewAction)){
+                                    settings.actions.reviewAction();
+                                }
+                            })
+                            .catch(function (err){
+                                $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
+                            });
                         }
                     };
 
@@ -220,9 +297,9 @@
             })();
 
             function _init() {
-                _setExerciseResult();
-
                 _setExerciseContentQuestions();
+
+                _setExerciseResult();
 
                 _setZnkExerciseSettings();
 

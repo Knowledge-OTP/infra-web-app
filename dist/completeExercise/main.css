@@ -224,6 +224,9 @@ complete-exercise-intro-section {
       margin-right: auto;
       margin-bottom: 100px;
       margin-left: auto;
+      font-family: Lato;
+      font-weight: 400;
+      font-size: 16px;
       width: 550px;
       overflow: auto;
       text-align: center; }
@@ -266,18 +269,20 @@ complete-exercise-progress-bar {
 [class*="-subject-pattern"] {
   background-repeat: repeat; }
 
-.math-subject-pattern {
+.math-subject-pattern, .mathlvl1-subject-pattern, .mathlvl2-subject-pattern {
   /*CSS for basic styling and non-retina image path:*/
   background-image: url("/assets/images/math-background-pattern.png");
-  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 123px 134px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-    .math-subject-pattern {
+    .math-subject-pattern, .mathlvl1-subject-pattern, .mathlvl2-subject-pattern {
       background-image: url("/assets/images/math-background-pattern@2x.png"); } }
 
 .reading-subject-pattern, .verbal-subject-pattern {
   /*CSS for basic styling and non-retina image path:*/
   background-image: url("/assets/images/reading-background-pattern.png");
-  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 102px 95px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
     .reading-subject-pattern, .verbal-subject-pattern {
       background-image: url("/assets/images/reading-background-pattern@2x.png"); } }
@@ -285,7 +290,8 @@ complete-exercise-progress-bar {
 .writing-subject-pattern, .essay-subject-pattern {
   /*CSS for basic styling and non-retina image path:*/
   background-image: url("/assets/images/writing-background-pattern.png");
-  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+  /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/
+  background-size: 80px 84px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
     .writing-subject-pattern, .essay-subject-pattern {
       background-image: url("/assets/images/writing-background-pattern@2x.png"); } }

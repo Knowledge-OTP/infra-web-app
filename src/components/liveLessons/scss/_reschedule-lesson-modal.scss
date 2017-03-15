@@ -21,21 +21,25 @@ md-dialog.my-lessons-schedule-wrapper {
 
         }
     }
-    .close-popup-wrap {
-        * {
-            stroke: $bgColor3;
-            stroke-width: 8px;
-        }
-    }
-
     .md-dialog-content {
-        padding: 40px 22px 22px 22px;
+        padding: 80px 22px 22px 22px;
 
         .reschedule-lesson-title {
             @include text-style(32px, $fontColor3, Quicksand, $boldFontWeight);
             text-align: center;
         }
-
+        .availability-hours {
+            text-align: center;
+            width: 470px;
+            margin: 20px auto 0 auto;
+            .name {
+                @include text-style(14px, $fontColor3, Lato, $regularFontWeight);
+            }
+            .date {
+                @include text-style(14px, $fontColor14, Lato, $regularFontWeight);
+                padding-top: 5px;
+            }
+        }
 
         .email-container {
             text-align: center;
@@ -88,22 +92,13 @@ md-dialog.my-lessons-schedule-wrapper {
                     background-color: $bgColor3;
                     border: 1px solid $borderColor4;
                     color: $fontColor6;
-                    width: 160px;
-                    border-radius: 25px;
-                }
-                .cancel-btn:hover {
-                    background-color: $bgColor39;
+
                 }
 
                 .send-btn {
                     background-color: $bgColor5;
                     border: 1px solid $borderColor4;
                     color: $fontColor1;
-                    width: 160px;
-                    border-radius: 25px;
-                }
-                .send-btn:hover {
-                    background-color: $bgColor10;
                 }
             }
         }

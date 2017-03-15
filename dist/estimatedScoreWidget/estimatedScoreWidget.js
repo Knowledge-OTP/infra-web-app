@@ -43,7 +43,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.estimatedScoreWidget').directive('estimatedScoreWidget',
-        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv, userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv) {
+        ["EstimatedScoreSrv", "$q", "SubjectEnum", "UserGoalsService", "EstimatedScoreWidgetSrv", "userGoalsSelectionService", "$timeout", "ScoringService", "DiagnosticSrv", "ENV", function (EstimatedScoreSrv, $q, SubjectEnum, UserGoalsService, EstimatedScoreWidgetSrv,
+                  userGoalsSelectionService, $timeout, ScoringService, DiagnosticSrv, ENV) {
             'ngInject';
             var previousValues;
 
@@ -66,10 +67,29 @@
                     var getExamScoreProm = ScoringService.getExamScoreFn();
                     var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                     var subjectEnumToValMap = SubjectEnum.getEnumMap();
+                    scope.d.showGoalsEdit = showGoalsEdit;
+                    scope.d.ignoreCompositeScore = ENV.ignoreCompositeScore;
+                    scope.d.ignoreCompositeGoal = ENV.ignoreCompositeGoal;
 
                     if (isNavMenuFlag) {
                         angular.element.addClass(element[0], 'is-nav-menu');
+                        scope.d.onSubjectClick = function (subjectId) {
+                            ngModelCtrl.$setViewValue(+subjectId);
+                            scope.d.currentSubject = subjectId;
+                        };
+
+                        ngModelCtrl.$render = function () {
+                            scope.d.currentSubject = ngModelCtrl.$viewValue;
+                        };
                     }
+
+                    UserGoalsService.getGoals().then(function (userGoals) {
+                        scope.$watchCollection(function () {
+                            return userGoals;
+                        }, function (newVal) {
+                            adjustWidgetData(newVal);
+                        });
+                    });
 
                     function adjustWidgetData(userGoals) {
                         $q.all([
@@ -94,9 +114,9 @@
                                 return {
                                     subjectId: subjectId,
                                     estimatedScore: (scope.d.isDiagnosticComplete && (isSubjectExist && typeof (estimatedScoreForSubject.score) === 'number')) ? estimatedScoreForSubject.score : '-',
-                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete && isSubjectExist) ? calcPercentage(estimatedScoreForSubject.score) : 0,
+                                    estimatedScorePercentage: (scope.d.isDiagnosticComplete && isSubjectExist) ? calcPercentage(estimatedScoreForSubject.score, subjectId) : 0,
                                     userGoal: userGoalForSubject,
-                                    userGoalPercentage: calcPercentage(userGoalForSubject),
+                                    userGoalPercentage: calcPercentage(userGoalForSubject, subjectId),
                                     pointsLeftToMeetUserGoal: (scope.d.isDiagnosticComplete && isSubjectExist) ? (userGoalForSubject - estimatedScoreForSubject.score) : 0,
                                     showScore: (typeof userGoals[subjectEnumToValMap[subjectId]] !== 'undefined')
                                 };
@@ -104,7 +124,7 @@
 
                             scores = createAndCountScoresArray(scope.d.widgetItems);
 
-                            scope.d.estimatedCompositeScore = scores.scoresArr.length === scores.subjectsToShow ? examScoresFn(scores.scoresArr): '-';
+                            scope.d.estimatedCompositeScore = scores.scoresArr.length === scores.subjectsToShow ? examScoresFn(scores.scoresArr) : '-';
 
                             function filterSubjects(widgetItem) {
                                 return !!('showScore' in widgetItem && (widgetItem.showScore) !== false);
@@ -150,34 +170,15 @@
                         return scores;
                     }
 
-                    function calcPercentage(correct) {
+                    function calcPercentage(correct, subjectId) {
                         var scoringLimits = ScoringService.getScoringLimits();
-                        var maxEstimatedScore = typeof scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)] !== 'undefined' ? scoringLimits.subjects[Object.getOwnPropertyNames(scoringLimits.subjects)].max : scoringLimits.subjects.max;
+                        var maxEstimatedScore = typeof scoringLimits.subjects[subjectId] !== 'undefined' ? scoringLimits.subjects[subjectId].max : scoringLimits.subjects.max;
                         return (correct / maxEstimatedScore) * 100;
                     }
 
-                    scope.d.showGoalsEdit = function () {
+                    function showGoalsEdit() {
                         userGoalsSelectionService.openEditGoalsDialog();
-                    };
-
-                    if (isNavMenuFlag) {
-                        scope.d.onSubjectClick = function (subjectId) {
-                            ngModelCtrl.$setViewValue(+subjectId);
-                            scope.d.currentSubject = subjectId;
-                        };
-
-                        ngModelCtrl.$render = function () {
-                            scope.d.currentSubject = ngModelCtrl.$viewValue;
-                        };
                     }
-
-                    UserGoalsService.getGoals().then(function (userGoals) {
-                        scope.$watchCollection(function () {
-                            return userGoals;
-                        }, function (newVal) {
-                            adjustWidgetData(newVal);
-                        });
-                    });
                 }
             };
         }]
@@ -321,11 +322,11 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "\n" +
     "    <div class=\"inner\">\n" +
     "        <table class=\"score-summary\">\n" +
-    "            <tr class=\"composite\">\n" +
+    "            <tr class=\"composite\" ng-if=\"!d.ignoreCompositeScore\">\n" +
     "                <td translate=\".COMPOSITE_SCORE\"></td>\n" +
     "                <td class=\"num\">{{d.estimatedCompositeScore}}</td>\n" +
     "            </tr>\n" +
-    "            <tr class=\"goal\">\n" +
+    "            <tr class=\"goal\" ng-if=\"!d.ignoreCompositeGoal\">\n" +
     "                <td translate=\".GOAL_SCORE\"></td>\n" +
     "                <td class=\"num\">{{d.userCompositeGoal}}</td>\n" +
     "            </tr>\n" +

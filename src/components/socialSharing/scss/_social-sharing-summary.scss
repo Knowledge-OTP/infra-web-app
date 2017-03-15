@@ -1,0 +1,47 @@
+complete-exercise-summary {
+    social-sharing {
+        .social-share-wrapper {
+            @include dimension(90px, 25px);
+            background-color: $bgColor1;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            border-radius: 20px;
+            border: 1px solid $borderColor4;
+
+            .share-icon-wrap {
+                transition: 0.5s;
+                border: none;
+                span {
+                    @include text-style(16px, $fontColor6, Lato, $regularFontWeight);
+                    position: relative;
+                }
+
+                &:hover{
+                    background-color: $bgColor19;
+                }
+            }
+            .share-icon {
+                @include dimension(15px, 15px);
+                fill: $bgColor5;
+                margin-bottom: 2px;
+            }
+
+            .share-button.sharer-0 {
+                width: 8px;
+                z-index: 1;
+                font-size: 0;
+                padding: 0;
+                bottom: 30px;
+                right: -13px;
+                ul {
+                    li:nth-child(1), li:nth-child(6), li:nth-child(7), li:nth-child(8) {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}

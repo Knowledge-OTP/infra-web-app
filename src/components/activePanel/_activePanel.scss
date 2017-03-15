@@ -1,0 +1,219 @@
+active-panel {
+    outline: none;
+
+    .active-panel {
+        z-index: 9999;
+        height: 40px;
+        background-color: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 20px;
+        outline: none;
+        // override transition delay when showing / hiding the widget
+        &.ng-animate {
+            transition:0s none;
+            -webkit-transition:0s none;
+            animation: 0s none;
+            -webkit-animation: 0s none;
+        }
+
+        .flex-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+
+            .flex-col {
+                &.callee-status {
+                    align-self: center;
+                    margin: 0 5px;
+                    .online-indicator {
+                        display: inline-block;
+                        background: #87ca4d;
+                        width: 7px;
+                        height: 7px;
+                        border-radius: 6px;
+                        &.offline{
+                            background: #B33520;
+                        }
+                        &.online{
+                            background: #87ca4d;
+                        }
+                        &.idle{
+                            background: #dbb910;
+                        }
+                    }
+                }
+                &.callee-name {
+                    @include text-style(14px, #4f4d4d, Quicksand, $boldFontWeight);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    text-align: left;
+                    margin-right: 20px;
+
+                    .live-session-duration {
+                        @include text-style(12px, #979797, Lato, $regularFontWeight);
+                    }
+                }
+                &.call-controls {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .share-screen-icon-wrap {
+                        display: flex;
+
+                        svg-icon {
+                            &:focus {
+                                outline: none;
+                            }
+                        }
+
+                        .active-share-screen{
+                            display: flex;
+
+                            .show-other-screen {
+                                &.disabled {
+                                    svg-icon.active-panel-track-student-icon,
+                                    svg-icon.active-panel-track-teacher-icon {
+                                        background-color: #8abec4;
+                                    }
+                                }
+                            }
+
+                            .show-other-screen,
+                            svg-icon.share-my-screen,
+                            svg-icon.active-panel-stop-sharing-icon {
+                                outline: none;
+                                margin-left: 10px;
+                                &.disabled,
+                                &.disabled svg-icon {
+                                    cursor: default;
+                                    transition: 1.5s;
+                                }
+                            }
+
+                            svg-icon.share-my-screen {
+                                cursor: pointer;
+                                width: 28px;
+                                height: 28px;
+                                border-radius: 50%;
+                                background-color: #ff931e;
+                                margin-left: 10px;
+                                &.disabled {
+                                    background-color: #e1b688;
+                                }
+                                svg {
+                                    width: 44%;
+                                    path {
+                                        fill: #ffffff;
+                                    }
+                                }
+                            }
+
+                            svg-icon.active-panel-track-student-icon,
+                            svg-icon.active-panel-track-teacher-icon {
+                                cursor: pointer;
+                                width: 28px;
+                                height: 28px;
+                                border-radius: 50%;
+                                background-color: #0a9bad;
+                                svg {
+                                    width: 44%;
+                                    path {
+                                        fill: #ffffff;
+                                    }
+                                }
+                            }
+                        }
+
+                        .end-share-screen {
+                            cursor: pointer;
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 50%;
+                            margin-left: 10px;
+                            background-color: #ffffff;
+                            svg {
+                                width: 100%;
+                                .st1 {
+                                    fill : #ff931e;
+                                }
+                            }
+                            &.isViewer {
+                                svg {
+                                    width: 100%;
+                                    .st1 {
+                                        fill : #0a9bad;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    call-btn {
+                        margin-left: 10px;
+                        svg-icon {
+                            &.etutoring-phone-icon {
+                                width: 28px;
+                                height: 28px;
+                                svg {
+                                    width: 46%;
+                                }
+                            }
+                        }
+                    }
+
+                    .end-session-wrap{
+                        display: flex;
+                        .seperator{
+                            width: 2px;
+                            height: 28px;
+                            background: #e1e1e1;
+                            margin: 0 10px;
+                        }
+
+                        .end-session-btn {
+                            @include text-style(14px, #ffffff, Lato, $regularFontWeight, null, none);
+                            background-color: #ff6766;
+                            padding: 0;
+                            margin: 0;
+                            width: 60px;
+                            height: 30px;
+                            min-height: 30px;
+                            min-width: 60px;
+                            line-height: 28px;
+                            border-radius: 15px;
+                            outline: none;
+                            cursor: pointer;
+                            &:not([disabled]):hover {
+                                background-color: #ff6766;
+                                border: 1px solid #b7b7b7;
+                            }
+                            span {
+                                text-transform: uppercase;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .active-panel-overlay {
+            width: 100%;
+            height: 42px;
+            position: fixed;
+            top: 8px;
+            opacity: 0;
+        }
+    }
+
+    &.screen-share-mode {
+        .active-panel {
+            background-color: #464646;
+            .callee-name {
+                color: #ffffff;
+            }
+        }
+    }
+    }

@@ -7,6 +7,11 @@
             name: 'SAT',
             className: 'sat'
         },
+        SATSM: {
+            id: 'SATSM',
+            name: 'SAT Math',
+            className: 'satsm'
+        },
         TOEFL: {
             id: 'TOEFL',
             name: 'TOEFL',
@@ -186,6 +191,11 @@
                     if (provider === 'facebook') {
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
                     }
+                    if (provider === 'live') {
+                        providerConfig.redirectUri = (env.redirectLive) ? $window.location.protocol + env.redirectLive : $window.location.origin + '/';
+                        // emails supose to be default scope, add it just to make sure, it still microsoft ;)
+                        providerConfig.scope = ['wl.emails'];
+                    }
                 });
             };
 
@@ -215,7 +225,7 @@
             LoginAppSrv.login = (function () {
                 var isLoginInProgress;
 
-                return function (appContext, userContext, formData) {
+                return function (appContext, userContext, formData, signUp) {
                     if (isLoginInProgress) {
                         var errMsg = 'login already in progress';
                         $log.debug(errMsg);
@@ -243,7 +253,9 @@
                             var appRef = _getAppRef(appContext, userContext);
                             return appRef.authWithCustomToken(token.data).then(function (res) {
                                 isLoginInProgress = false;
-                                _redirectToPage(appContext, userContext);
+                                if(!signUp){
+                                    _redirectToPage(appContext, userContext);
+                                }
                                 return res;
                             });
                         });
@@ -271,7 +283,8 @@
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
-                        return LoginAppSrv.login(appContext, userContext, formData).then(function () {
+                        var signUp = true;
+                        return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function () {
                             isSignUpInProgress = false;
                             return _writeUserProfile(formData, appContext, userContext).then(function () {
                                 _redirectToPage(appContext, userContext);

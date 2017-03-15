@@ -9,6 +9,7 @@
         'znk.infra.general',
         'znk.infra.storage',
         'znk.infra.user',
+        'znk.infra.exerciseUtility',
         'znk.infra-web-app.znkToast'
     ]);
 })(angular);
@@ -77,6 +78,83 @@
     'use strict';
 
     angular.module('znk.infra-web-app.myProfile')
+        .component('selectedTestLevel', {
+            bindings: {},
+            templateUrl: 'components/myProfile/components/selectedTestLevel/selectedTestLevel.template.html',
+            controllerAs: 'vm',
+            controller: ["AuthService", "$mdDialog", "$timeout", "MyProfileSrv", "StorageSrv", "InfraConfigSrv", "SubjectEnumConst", "$filter", function (AuthService, $mdDialog, $timeout, MyProfileSrv, StorageSrv, InfraConfigSrv, SubjectEnumConst, $filter) {
+                'ngInject';
+
+                var vm = this;
+                var showToast = MyProfileSrv.showToast;
+                var translateFilter = $filter('translate');
+                var USER_SELECTED_TEST_LEVEL_PATH = StorageSrv.variables.appUserSpacePath + '/selectedTestLevel';
+                vm.testLevelList = [
+                    {
+                        subjectId: SubjectEnumConst.MATHLVL1,
+                        name: translateFilter('MY_PROFILE.MATH_LEVEL_1')
+                    },
+                    {
+                        subjectId: SubjectEnumConst.MATHLVL2,
+                        name: translateFilter('MY_PROFILE.MATH_LEVEL_2')
+                    }
+                ];
+
+                _getSelectedTestLevel().then(function (selectedTestLevelData) {
+                    vm.selectedTestLevel = vm.testLevelList.filter(function (item) {
+                        return item.subjectId === selectedTestLevelData;
+                    })[0];
+                });
+
+                vm.saveTitle = 'MY_PROFILE.SAVE';
+                vm.changeTestLevel = function (authform) {
+                    var type, msg;
+
+                    if (!authform.$invalid) {
+                        _setStudentSelectedData(vm.selectedTestLevel.subjectId).then(function () {
+                            $timeout(function () {
+                                type = 'success';
+                                msg = 'MY_PROFILE.TEST_LEVEL_SAVE_SUCCESS';
+                                showToast(type, msg);
+                            }, 10);
+                        }, function (err) {
+                            $timeout(function () {
+                                type = 'error';
+                                if (err.code === 'NETWORK_ERROR') {
+                                    msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
+                                    showToast(type, msg);
+                                } else {
+                                    msg = 'MY_PROFILE.ERROR_OCCURRED';
+                                    showToast(type, msg);
+                                }
+                            }, 10);
+                        });
+                    }
+                };
+
+                vm.closeDialog = function () {
+                    $mdDialog.cancel();
+                };
+
+                function _setStudentSelectedData(userSelectedSubjectId) {
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.set(USER_SELECTED_TEST_LEVEL_PATH, userSelectedSubjectId);
+                    });
+                }
+
+                function _getSelectedTestLevel() {
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.get(USER_SELECTED_TEST_LEVEL_PATH);
+                    });
+                }
+            }]
+        });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.myProfile')
         .component('updateProfile', {
             bindings: {
                 userProfile: '=',
@@ -85,7 +163,7 @@
             },
             templateUrl:  'components/myProfile/components/updateProfile/updateProfile.template.html',
             controllerAs: 'vm',
-            controller:  ["AuthService", "$mdDialog", "$timeout", "UserProfileService", "MyProfileSrv", function (AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
+            controller:  ["$rootScope", "AuthService", "$mdDialog", "$timeout", "UserProfileService", "MyProfileSrv", function ($rootScope, AuthService, $mdDialog, $timeout, UserProfileService, MyProfileSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -110,6 +188,7 @@
                                 type = 'success';
                                 msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
                                 showToast(type, msg);
+                                $rootScope.$broadcast('profile-updated', { profile: vm.profileData });
                             });
                         }, function (err) {
                             $timeout(function () {
@@ -197,19 +276,23 @@
                 };
 
                 self.getLocalTimezone = function () {
+                    var localTimezone;
                     var dateArray = new Date().toString().split(' ');
                     var timezoneCity = dateArray.find(function (item) {
                         return (item.indexOf('(')!== -1);
                     });
-                    timezoneCity = timezoneCity.replace('(', '');
+
+                    timezoneCity = timezoneCity ? timezoneCity.replace('(', ''): null;
 
                     return self.getTimezonesList().then(function (timezonesList) {
-                        timezonesList = obj2Array(timezonesList);
-                        var localTimezone = timezonesList.find(function (timezone) {
-                            return (timezone.indexOf(timezoneCity)!== -1);
-                        });
+                        if (timezoneCity) {
+                            timezonesList = obj2Array(timezonesList);
+                            localTimezone = timezonesList.find(function (timezone) {
+                                return (timezone.indexOf(timezoneCity)!== -1);
+                            });
+                        }
 
-                        if (!localTimezone){
+                        if (!timezoneCity || !localTimezone){
                             var timezoneGMT = dateArray.find(function (item) {
                                 return (item.indexOf('GMT')!== -1);
                             });
@@ -243,17 +326,6 @@
                         });
                     });
                 };
-
-                // self.showToast = function (type, msg) {
-                //     $mdToast.show({
-                //         locals:{ type: type,  msg: msg },
-                //         templateUrl: 'components/myProfile/templates/toast.template.html',
-                //         position: 'top right',
-                //         hideDelay: 3000,
-                //         controllerAs: 'vm',
-                //         controller: 'ToastController'
-                //     });
-                // };
             }]
         );
 })(angular);
@@ -337,7 +409,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
     "        <div translate=\".PASSWORD_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
-    "            <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <md-button aria-label=\"{{'CHANGE_PASSWORD.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -348,20 +421,55 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <div translate=\"{{vm.generalError}}\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "</md-dialog-content>");
+    "</md-dialog-content>\n" +
+    "");
+  $templateCache.put("components/myProfile/components/selectedTestLevel/selectedTestLevel.template.html",
+    "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
+    "    <div class=\"container-title md-subheader\" translate=\".SELECTED_TEST_LEVEL\"></div>\n" +
+    "    <form name=\"authform\" novalidate class=\"auth-form\" ng-submit=\"vm.changeTestLevel(authform)\" ng-switch-when=\"false\">\n" +
+    "        <div class=\"znk-input-group\">\n" +
+    "            <label for=\"selectedTestLevel\">{{'MY_PROFILE.TEST_LEVEL' | translate}}</label>\n" +
+    "            <div class=\"znk-input\">\n" +
+    "                <select id=\"selectedTestLevel\" name=\"selectedTestLevel\"\n" +
+    "                        ng-options=\"selectedTest.name for selectedTest in vm.testLevelList\"\n" +
+    "                        ng-model=\"vm.selectedTestLevel\">\n" +
+    "                </select>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"btn-wrap\">\n" +
+    "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
+    "        </div>\n" +
+    "    </form>\n" +
+    "    <div class=\"big-success-msg\" ng-switch-when=\"true\">\n" +
+    "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
+    "        <div translate=\".TEST_LEVEL_SAVE_SUCCESS\"></div>\n" +
+    "        <div class=\"done-btn-wrap\">\n" +
+    "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
+    "                class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "                <span translate=\".DONE\"></span>\n" +
+    "            </md-button>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"msg-wrap\" ng-class=\"{'show-error': vm.showError}\" ng-if=\"vm.showError\">\n" +
+    "        <div class=\"error-msg\">\n" +
+    "            <svg-icon name=\"myProfile-danger-red-icon\" class=\"myProfile-danger-red-icon\"></svg-icon>\n" +
+    "            <div translate=\"{{vm.generalError}}\"></div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</md-dialog-content>\n" +
+    "");
   $templateCache.put("components/myProfile/components/updateProfile/updateProfile.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
-    "    <form name=\"profileform\" novalidate class=\"auth-form\" ng-submit=\"vm.updateProfile(profileform)\" ng-switch-when=\"false\">\n" +
-    "        <div class=\"znk-input-group\"\n" +
-    "             ng-class=\"profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "    <form class=\"auth-form\" name=\"profileform\" novalidate ng-submit=\"vm.updateProfile(profileform)\" ng-switch-when=\"false\">\n" +
+    "        <div class=\"znk-input-group\" ng-class=\"profileform.nickname.$invalid && profileform.$submitted ? 'invalid' : 'valid'\">\n" +
     "            <label>{{'MY_PROFILE.USERNAME' | translate}}</label>\n" +
     "            <div class=\"znk-input\">\n" +
     "                <input\n" +
-    "                        type=\"text\"\n" +
-    "                        autocomplete=\"on\"\n" +
-    "                        name=\"nickname\"\n" +
-    "                        ng-required=\"true\"\n" +
-    "                        ng-model=\"vm.profileData.nickname\">\n" +
+    "                    type=\"text\"\n" +
+    "                    autocomplete=\"on\"\n" +
+    "                    name=\"nickname\"\n" +
+    "                    ng-required=\"true\"\n" +
+    "                    ng-model=\"vm.profileData.nickname\">\n" +
     "                <span ng-if=\"profileform.$submitted && profileform.nickname.$invalid\"\n" +
     "                      role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
@@ -376,11 +484,11 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <label>{{'MY_PROFILE.EMAIL' | translate}}</label>\n" +
     "            <div class=\"znk-input\">\n" +
     "                <input\n" +
-    "                        type=\"email\"\n" +
-    "                        autocomplete=\"on\"\n" +
-    "                        name=\"email\"\n" +
-    "                        ng-required=\"true\"\n" +
-    "                        ng-model=\"vm.profileData.email\">\n" +
+    "                    type=\"email\"\n" +
+    "                    autocomplete=\"on\"\n" +
+    "                    name=\"email\"\n" +
+    "                    ng-disabled=\"true\"\n" +
+    "                    ng-model=\"vm.profileData.email\">\n" +
     "                <span ng-if=\"profileform.$submitted && profileform.email.$invalid\"\n" +
     "                      role=\"alert\">\n" +
     "                    <span class=\"validationBox\">\n" +
@@ -407,8 +515,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "                   ng-change=\"vm.updateProfileTimezone()\">\n" +
     "            <label for=\"timezoneManual\">{{'MY_PROFILE.SET_MANUALLY' | translate}}</label>\n" +
     "        </div>\n" +
-    "\n" +
-    "        <div class=\"btn-wrap\">\n" +
+    "        <div class=\"btn-wrap merged-top-btn\">\n" +
     "            <button class=\"save-pass-btn\"><span translate=\"{{vm.saveTitle}}\"></span></button>\n" +
     "        </div>\n" +
     "    </form>\n" +
@@ -416,7 +523,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <svg-icon class=\"completed-v-icon-wrap\" name=\"myProfile-completed-v-icon\"></svg-icon>\n" +
     "        <div translate=\".PROFILE_SAVE_SUCCESS\"></div>\n" +
     "        <div class=\"done-btn-wrap\">\n" +
-    "            <md-button class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
+    "            <md-button aria-label=\"{{'MY_PROFILE.DONE' | translate}}\"\n" +
+    "                       class=\"success drop-shadow md-primary green znk\" ng-click=\"vm.closeDialog()\">\n" +
     "                <span translate=\".DONE\"></span>\n" +
     "            </md-button>\n" +
     "        </div>\n" +
@@ -427,7 +535,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "            <div translate=\"{{vm.generalError}}\"></div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "</md-dialog-content>");
+    "</md-dialog-content>\n" +
+    "");
   $templateCache.put("components/myProfile/svg/myProfile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
@@ -480,10 +589,10 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "    <div class=\"content-wrapper\">\n" +
     "        <div class=\"main-title\" translate=\".MY_PROFILE\"></div>\n" +
     "\n" +
-    "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\" local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
-    "\n" +
+    "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\"\n" +
+    "                        local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
     "        </update-profile>\n" +
-    "\n" +
+    "        <selected-test-level class=\"selected-test-level\"></selected-test-level>\n" +
     "        <change-password class=\"change-password\"></change-password>\n" +
     "    </div>\n" +
     "</md-dialog>\n" +

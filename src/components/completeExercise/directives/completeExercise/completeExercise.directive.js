@@ -1,4 +1,4 @@
-(function(angular) {
+(function (angular) {
     'use strict';
 
     /**
@@ -15,6 +15,9 @@
      *      1: default, sensitive to sharer screen sharing state
      *      2: sensitive to viewer screen sharing state
      *   },
+     *   loadingAnimation: (optional) override the default loading animation, or to turn off the loading animation.
+     *                      in order to override - must have showLoading and hideLoading functions.
+     *                      in order to turn off - set as false;
      *   znkExerciseSettings: znk exercise settings
      *
      * ########
@@ -31,9 +34,9 @@
                 exerciseDetails: '<',
                 settings: '<'
             },
-            controller: function($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
-                ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum,
-                EventManagerSrv) {
+            controller: function ($log, ExerciseResultSrv, ExerciseTypeEnum, $q, BaseExerciseGetterSrv, CompleteExerciseSrv,
+                                  ExerciseParentEnum, $timeout, ScreenSharingSrv, UserScreenSharingStateEnum, ZnkModuleService,
+                                  EventManagerSrv, LoadingSrv, CategoryService) {
                 'ngInject';
 
                 var $ctrl = this;
@@ -41,12 +44,19 @@
                 var VIEW_STATES = CompleteExerciseSrv.VIEW_STATES;
                 var SH_MODE_STATES = CompleteExerciseSrv.MODE_STATES;
 
+                var loadingAnimation = LoadingSrv;
+
+                if( $ctrl.settings.loadingAnimation){
+                    loadingAnimation = $ctrl.settings.loadingAnimation;
+                }
+
                 var currUserShState = UserScreenSharingStateEnum.NONE.enum,
                     shMode,
                     exerciseRebuildProm = $q.when(),
                     syncUpdatesProm = $q.when(),
                     isSharerMode = false,
                     isViewerMode = false,
+                    isDataReady = false,
                     shModeEventManager = new EventManagerSrv(),
                     shDataEventManager = new EventManagerSrv();
 
@@ -56,14 +66,26 @@
                     $ctrl.changeViewState(VIEW_STATES.NONE, true);
                 }
 
+                function _getExerciseParentContentProm(exerciseDetails, isExam, isModule) {
+                    var exerciseParentContentProm = $q.when(null);
+
+                    if (isExam) {
+                        exerciseParentContentProm = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId);
+                    }  else if (isModule) {
+                        exerciseParentContentProm = ExerciseResultSrv.getModuleResultByGuid(exerciseDetails.moduleResultGuid);
+                    }
+
+                    return exerciseParentContentProm;
+                }
+
                 function _setShDataToCurrentExercise() {
                     syncUpdatesProm = syncUpdatesProm
-                        .then(function() {
+                        .then(function () {
                             var promMap = {
                                 exerciseRebuildProm: exerciseRebuildProm,
                                 activeShData: ScreenSharingSrv.getActiveScreenSharingData()
                             };
-                            return $q.all(promMap).then(function(data) {
+                            return $q.all(promMap).then(function (data) {
                                 var activeShData = data.activeShData;
 
                                 activeShData.activeExercise = {};
@@ -71,22 +93,24 @@
                                     'exerciseId',
                                     'exerciseTypeId',
                                     'exerciseParentId',
-                                    'exerciseParentTypeId'
+                                    'exerciseParentTypeId',
+                                    'moduleResultGuid'
                                 ];
-                                angular.forEach(propsToCopyFromCurrExerciseDetails, function(propName) {
+                                angular.forEach(propsToCopyFromCurrExerciseDetails, function (propName) {
                                     activeShData.activeExercise[propName] = $ctrl.exerciseDetails[propName];
                                 });
 
                                 activeShData.activeExercise.resultGuid = $ctrl.exerciseData.exerciseResult.guid;
                                 activeShData.activeExercise.activeScreen = $ctrl.currViewState;
+
                                 shDataEventManager.updateValue(activeShData);
                                 var saveExerciseResultProm = isSharerMode ? $q.when() : $ctrl.exerciseData.exerciseResult.$save();
-                                return saveExerciseResultProm.then(function() {
+                                return saveExerciseResultProm.then(function () {
                                     return activeShData.$save();
                                 });
                             });
                         })
-                        .catch(function(err) {
+                        .catch(function (err) {
                             $log.error(err);
                         });
                 }
@@ -108,30 +132,59 @@
 
                     $ctrl.exerciseDetails = exerciseDetails;
 
-                    exerciseRebuildProm = $timeout(function() {
+                    exerciseRebuildProm = $timeout(function () {
                         var isExam = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.EXAM.enum;
-                        var settings = $ctrl.settings;
-                        var exerciseParentContentProm = isExam ?
-                            BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.exerciseParentId) :
-                            $q.when(settings && settings.exerciseParentContent ? settings.exerciseParentContent : null);
+                        var isModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
+                        var isSection = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
 
-                        return exerciseParentContentProm.then(function(exerciseParentContent) {
+                        var exerciseParentContentProm = _getExerciseParentContentProm(exerciseDetails, isExam, isModule);
+
+                        return exerciseParentContentProm.then(function (exerciseParentContent) {
+
+                            if (angular.equals({},exerciseParentContent)){
+                                $log.debug('completeExercise: exerciseParentContent is empty');
+                            }
+
                             if (isExam) {
                                 exerciseDetails.examSectionsNum = exerciseParentContent && angular.isArray(exerciseParentContent.sections) ? exerciseParentContent.sections.length : 0;
+                                exerciseDetails.examId = exerciseDetails.exerciseParentId;
                             }
+
                             var getDataPromMap = {
                                 exerciseResult: CompleteExerciseSrv.getExerciseResult(exerciseDetails, shMode),
                                 exerciseContent: BaseExerciseGetterSrv.getExerciseByTypeAndId(exerciseDetails.exerciseTypeId, exerciseDetails.exerciseId),
-                                exerciseParentContent: exerciseParentContent
+                                exerciseParentContent: exerciseParentContent,
+                                level1CategoryId: CategoryService.getUserSelectedLevel1Category()
                             };
-                            return $q.all(getDataPromMap).then(function(data) {
+
+                            if (isModule && isSection){
+                                getDataPromMap.moduleExamData = BaseExerciseGetterSrv.getExerciseByNameAndId('exam', exerciseDetails.examId);
+                            }
+
+                            return $q.all(getDataPromMap).then(function (data) {
+                                data.level1CategoryId = !angular.equals(data.level1CategoryId, {}) ? data.level1CategoryId : null;
                                 $ctrl.exerciseData = data;
+                                isDataReady = true;
                                 var newViewState;
 
                                 var exerciseTypeId = data.exerciseResult.exerciseTypeId;
                                 var isSection = exerciseTypeId === ExerciseTypeEnum.SECTION.enum;
                                 var isTutorial = exerciseTypeId === ExerciseTypeEnum.TUTORIAL.enum;
-                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro) {
+                                var isParentModule = exerciseDetails.exerciseParentTypeId === ExerciseParentEnum.MODULE.enum;
+
+                                var exerciseCategoryForSubject = [data.exerciseContent.categoryId, data.exerciseContent.categoryId2];
+                                if (isSection || !data.level1CategoryId){
+                                    $ctrl.exerciseData.exerciseResult.subjectId = CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject);
+                                } else  {
+                                    $ctrl.exerciseData.exerciseResult.subjectId = data.level1CategoryId;
+                                }
+
+                                // skip intro
+                                if (isParentModule) {
+                                    data.exerciseResult.seenIntro = true;
+                                }
+
+                                if (!data.exerciseResult.isComplete && (isSection || isTutorial) && !data.exerciseResult.seenIntro && !$ctrl.exerciseDetails.ignoreIntro) {
                                     newViewState = VIEW_STATES.INTRO;
                                 } else {
                                     newViewState = VIEW_STATES.EXERCISE;
@@ -140,7 +193,7 @@
                                 $ctrl.changeViewState(newViewState, true);
 
                                 if (isSharerMode) {
-                                    $ctrl.exerciseData.exerciseResult.$save().then(function() {
+                                    $ctrl.exerciseData.exerciseResult.$save().then(function () {
                                         _setShDataToCurrentExercise();
                                     });
                                 }
@@ -155,17 +208,17 @@
                 }
 
                 function _createPropGetters(propArray, contextObjectName) {
-                    propArray.forEach(function(propName) {
+                    propArray.forEach(function (propName) {
                         var getterFnName = _getGetterFnName(propName);
-                        $ctrl[getterFnName] = function() {
+                        $ctrl[getterFnName] = function () {
                             return $ctrl[contextObjectName][propName];
                         };
                     });
                 }
 
                 function _updateActiveShDataActiveScreen(newViewState) {
-                    syncUpdatesProm = syncUpdatesProm.then(function() {
-                        return ScreenSharingSrv.getActiveScreenSharingData().then(function(activeShData) {
+                    syncUpdatesProm = syncUpdatesProm.then(function () {
+                        return ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
                             var activeExercise = activeShData.activeExercise;
 
                             if (!activeExercise) {
@@ -176,7 +229,7 @@
                             shDataEventManager.updateValue(activeShData);
                             return activeShData.$save();
                         });
-                    }).catch(function(err) {
+                    }).catch(function (err) {
                         $log.error(err);
                     });
                     return syncUpdatesProm;
@@ -198,9 +251,9 @@
                     shModeEventManager.updateValue(shMode);
                 }
 
-                var _activeShDataChangeHandler = (function() {
+                var _activeShDataChangeHandler = (function () {
                     var firstTrigger = true;
-                    return function(newShData) {
+                    return function (newShData) {
                         shDataEventManager.updateValue(newShData);
 
                         if (firstTrigger) {
@@ -224,12 +277,15 @@
                         var isSameExerciseType = $ctrl.exerciseDetails && activeExercise.exerciseTypeId === $ctrl.exerciseDetails.exerciseTypeId;
                         var isDiffActiveScreen = $ctrl.currViewState !== activeExercise.activeScreen;
                         if (isSameExerciseId && isSameExerciseType) {
-                            if (isDiffActiveScreen) {
+                            if (isDiffActiveScreen && isDataReady) {
                                 var newViewState = activeExercise.activeScreen || VIEW_STATES.NONE;
+
                                 //active screen should never be none if in sharer mode
-                                if (!(newViewState === VIEW_STATES.NONE && isSharerMode)) {
-                                    $ctrl.changeViewState(newViewState, true);
+                                if (newViewState === VIEW_STATES.NONE && isSharerMode) {
+                                    newViewState = VIEW_STATES.EXERCISE;
                                 }
+
+                                $ctrl.changeViewState(newViewState, true);
                             }
                         } else {
                             if (isViewerMode) {
@@ -271,9 +327,17 @@
                     ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(_userShStateChangeHandler);
                 }
 
-                this.changeViewState = function(newViewState, skipActiveScreenUpdate) {
+                this.changeViewState = function (newViewState, skipActiveScreenUpdate) {
                     if ($ctrl.currViewState === newViewState) {
                         return;
+                    }
+
+                    if ($ctrl.settings.loadingAnimation !== false) {
+                        if (!newViewState || newViewState === VIEW_STATES.NONE) {
+                            loadingAnimation.showLoading();
+                        } else {
+                            loadingAnimation.hideLoading(true);
+                        }
                     }
 
                     if (shMode && !skipActiveScreenUpdate) {
@@ -283,7 +347,7 @@
                     }
                 };
 
-                this.$onInit = function() {
+                this.$onInit = function () {
                     var exerciseDetailsPropsToCreateGetters = [
                         'exerciseParentTypeId',
                         'exerciseParentId',
@@ -294,7 +358,9 @@
                     var exerciseDataPropsToCreateGetters = [
                         'exerciseContent',
                         'exerciseParentContent',
-                        'exerciseResult'
+                        'exerciseResult',
+                        'moduleExamData',
+                        'level1CategoryId'
                     ];
                     _createPropGetters(exerciseDataPropsToCreateGetters, 'exerciseData');
 
@@ -305,7 +371,8 @@
                     this.shDataEventManager = shDataEventManager;
                 };
 
-                this.$onChanges = function(changesObj) {
+                this.$onChanges = function (changesObj) {
+
                     if (isViewerMode) {
                         return;
                     }
@@ -320,12 +387,12 @@
                     _rebuildExercise(newExerciseDetails);
                 };
 
-                this.$onDestroy = function() {
+                this.$onDestroy = function () {
                     _unregisterFromUserShEvents();
                     _unregisterFromActiveShDataEvents();
 
                     if (isSharerMode) {
-                        ScreenSharingSrv.getActiveScreenSharingData().then(function(activeShData) {
+                        ScreenSharingSrv.getActiveScreenSharingData().then(function (activeShData) {
                             if (!activeShData) {
                                 return;
                             }

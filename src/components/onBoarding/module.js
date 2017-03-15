@@ -20,6 +20,8 @@
                 'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg',
                 'on-boarding-target': 'components/onBoarding/svg/onboarding-target-icon.svg',
                 'on-boarding-hat': 'components/onBoarding/svg/onboarding-hat-icon.svg',
+                'on-boarding-bubble-1': 'components/onBoarding/svg/onboarding-bubble-1.svg',
+                'on-boarding-bubble-2': 'components/onBoarding/svg/onboarding-bubble-2.svg',
                 'on-boarding-dropdown-arrow-icon': 'components/onBoarding/svg/dropdown-arrow.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
@@ -59,6 +61,16 @@
                 .state('app.onBoarding.diagnostic', {
                     templateUrl: 'components/onBoarding/templates/onBoardingDiagnostic.template.html',
                     controller: 'OnBoardingDiagnosticController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.introTestToTake', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingIntroTestToTake.template.html',
+                    controller: 'OnBoardingIntroTestToTakeController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.testToTake', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
+                    controller: 'OnBoardingTestToTakeController',
                     controllerAs: 'vm'
                 });
         }

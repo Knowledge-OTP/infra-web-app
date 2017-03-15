@@ -37,6 +37,10 @@
                     _setLeftTitle();
 
                     $ctrl.exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
+                    var exerciseData = $ctrl.completeExerciseCtrl.exerciseData;
+                    var level1CategoryId = exerciseData.level1CategoryId;
+                    $ctrl.exerciseSubjectId = level1CategoryId ? level1CategoryId : exerciseData.exerciseResult.subjectId;
+
                 };
             }
         });

@@ -1,8 +1,9 @@
 <div class="time-line-wrapper" translate-namespace="ZNK_SUMMARY"
      ng-class="{'seen-summary': vm.seenSummary}">
     <div class="estimated-score-title">
-        <span translate=".ESTIMATED_SCORE"
-              translate-values="{ subjectName: vm.subjectName  }">
+        <span translate="COMPLETE_EXERCISE.SUBJECTS.{{vm.currentSubjectId}}">
+        </span>
+        <span translate=".ESTIMATED_SCORE">
         </span>
     </div>
     <znk-timeline-web-wrapper

@@ -352,21 +352,23 @@ md-dialog-content.invitation-confirm-modal-content {
       margin: auto; }
     md-dialog-content.invitation-confirm-modal-content .btn-wrap .outline-blue {
       color: #0a9bad; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
-    width: 75px;
-    margin: 8px auto; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
-    font-size: 16px;
-    color: #7d7d7d;
-    font-family: Lato;
-    font-weight: 400;
-    text-align: center;
-    margin: 10px; }
-  md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-pack: center;
-        justify-content: center; }
+  md-dialog-content.invitation-confirm-modal-content .big-success-msg {
+    text-align: center; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .completed-v-icon-wrap {
+      width: 75px;
+      margin: 8px auto; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg div {
+      font-size: 16px;
+      color: #7d7d7d;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      margin: 10px; }
+    md-dialog-content.invitation-confirm-modal-content .big-success-msg .done-btn-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
 /* full background image with retina */
 /* full background image with retina */
@@ -632,7 +634,7 @@ md-menu-content.md-menu-content-invitation-manager {
       font-family: Quicksand;
       font-weight: 700;
       text-align: center;
-      background-color: #c5cae9; }
+      background-color: #fafafa; }
       md-menu-content.md-menu-content-invitation-manager .my-teachers-wrap .teachers-header .tutors-list-edit-icon {
         width: 14px;
         height: 14px;
@@ -774,23 +776,25 @@ md-dialog.invite-teacher-modal-wrap {
         color: #757a83;
         font-family: Lato;
         font-weight: 300; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
-      width: 138px;
-      margin: 0 auto; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
-      font-size: 16px;
-      color: #7d7d7d;
-      font-family: Lato;
-      font-weight: 400;
-      text-align: center;
-      margin-top: 20px; }
-    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: center;
-          justify-content: center; }
-      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
-        margin: 0 auto 65px; }
+    md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg {
+      text-align: center; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .completed-v-icon-wrap {
+        width: 138px;
+        margin: 0 auto; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg div {
+        font-size: 16px;
+        color: #7d7d7d;
+        font-family: Lato;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 20px; }
+      md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center; }
+        md-dialog.invite-teacher-modal-wrap md-dialog-content.invite-teacher-content .big-success-msg .done-btn-wrap .md-button {
+          margin: 0 auto 65px; }
   md-dialog.invite-teacher-modal-wrap .top-icon-wrap {
     position: absolute;
     top: 0;
@@ -847,14 +851,19 @@ md-dialog.invite-teacher-modal-wrap {
   .app-header .main-content-header {
     margin: 0 auto;
     height: 100%;
-    width: 1060px; }
-    .app-header .main-content-header .raccoon-logo-icon svg {
-      height: 37.5px;
-      width: 57px;
-      margin-top: 10px;
-      cursor: pointer; }
+    width: 1227px; }
+    .app-header .main-content-header .znkHeader-app-logo-wrap {
+      display: -ms-flexbox;
+      display: flex;
+      height: 100%;
+      -ms-flex-align: center;
+          align-items: center; }
+      .app-header .main-content-header .znkHeader-app-logo-wrap svg-icon.znkHeader-app-name-logo {
+        width: 100px; }
+        .app-header .main-content-header .znkHeader-app-logo-wrap svg-icon.znkHeader-app-name-logo svg {
+          width: 100%; }
     .app-header .main-content-header .app-states-list {
-      margin-left: 20px; }
+      margin-left: 0; }
       .app-header .main-content-header .app-states-list md-list {
         padding-top: 5px;
         padding-bottom: 0; }

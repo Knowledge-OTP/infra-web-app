@@ -1,0 +1,51 @@
+.tutorial-navigation-pane {
+    width: 225px;
+    height: 100%;
+    background-color: $bgColor1;
+    margin-right: 10px;
+    text-align: center;
+    .pane-title {
+        line-height: 65px;
+        border-bottom: 1px solid $borderColor17;
+        @include text-style(17px, $fontColor3, Quicksand, $boldFontWeight);
+    }
+    .subjects-list {
+        padding: 0 0 20px 0;
+        .subject-item {
+            width: 100%;
+            position: relative;
+            height: 70px;
+            background-color: $bgColor28;
+            border-bottom: 1px solid $borderColor17;
+            border-left: 2px solid;
+            transition: border 0.2s;
+            cursor: pointer;
+            &.active {
+                border-left-width: 10px;
+                background-color: $bgColor19;
+            }
+            .icon-wrapper {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                padding: 8px;
+                * {
+                    fill: white;
+                }
+            }
+            .subject-name {
+                @include text-style(16px, $fontColor3, Lato, $regularFontWeight);
+                text-transform: capitalize;
+                margin-left: 10px;
+            }
+        }
+        .subject-item:hover {
+            transition: 0.2s linear all;
+            background-color: $bgColor39;
+        }
+        .subject-item:active {
+            transition: 0.2s linear all;
+            background-color: $bgColor19;
+        }
+    }
+}

@@ -24,7 +24,8 @@
                 <md-tooltip md-visible="vm.showTooltip" md-direction="top" class="goals-info md-whiteframe-2dp">
                     <div translate=".GOALS_INFO" class="top-text"></div>
                 </md-tooltip>
-                <svg-icon class="info-icon" name="user-goals-info-icon" ng-mouseover="vm.showTooltip=true" ng-mouseleave="vm.showTooltip=false"></svg-icon>
+                <svg-icon class="info-icon" name="user-goals-info-icon" ng-mouseover="vm.showTooltip=true"
+                          ng-mouseleave="vm.showTooltip=false"></svg-icon>
             </div>
         </div>
         <div class="subject-goal-wrap">
@@ -44,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div class="composite-wrap">
+        <div class="composite-wrap" ng-if="!(setting.hideTotalScore || goalsSettings.hideTotalScore)">
             <div class="composite-score">
                 <div class="score-title" translate=".TOTAL_SCORE"></div>
                 <div class="score">{{userGoals.totalScore}}</div>
@@ -52,13 +53,15 @@
         </div>
     </div>
     <div class="save-btn-wrap">
-        <md-button autofocus tabindex="1"
+        <md-button aria-label="{{'USER_GOALS.SAVE' | translate}}"
+                   autofocus tabindex="1"
                    class="md-primary znk inline-block"
                    ng-click="saveChanges()"
                    ng-class="setting.saveBtn.wrapperClassName">
             <svg-icon name="user-goals-v-icon" class="v-icon" ng-show="showVIcon"></svg-icon>
             <span translate="{{saveTitle}}"></span>
-            <svg-icon name="user-goals-dropdown-arrow-icon" class="dropdown-arrow-icon" ng-show="setting.saveBtn.showSaveIcon"></svg-icon>
+            <svg-icon name="user-goals-dropdown-arrow-icon" class="dropdown-arrow-icon"
+                      ng-show="setting.saveBtn.showSaveIcon"></svg-icon>
         </md-button>
     </div>
     <div class="school-selector-wrap animate-if"

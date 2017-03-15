@@ -1,7 +1,9 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function($state, OnBoardingService, znkAnalyticsSrv) {
+        function ($state, OnBoardingService, znkAnalyticsSrv) {
+
+            var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
                 recommendedGoalsTitle: true,
                 saveBtn: {
@@ -11,9 +13,20 @@
             };
 
             this.saveGoals = function () {
-                znkAnalyticsSrv.eventTrack({ eventName: 'onBoardingGoalsStep' });
-                OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
-                $state.go('app.onBoarding.diagnostic');
+                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
+                var nextStep;
+                var nextState;
+
+                if (onBoardingSettings && onBoardingSettings.showTestToTake) {
+                    nextStep = OnBoardingService.steps.INTRO_TEST_TO_TAKE;
+                    nextState = 'app.onBoarding.introTestToTake';
+                } else {
+                    nextStep = OnBoardingService.steps.DIAGNOSTIC;
+                    nextState = 'app.onBoarding.diagnostic';
+                }
+
+                OnBoardingService.setOnBoardingStep(nextStep);
+                $state.go(nextState);
             };
         }]);
 })(angular);

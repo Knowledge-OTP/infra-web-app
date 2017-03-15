@@ -2,7 +2,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.completeExercise').service('CompleteExerciseSrv',
-        function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv, $log, $q, ExerciseParentEnum) {
+        function (ENV, UserProfileService, TeacherContextSrv, ExerciseTypeEnum, ExerciseResultSrv,
+                  $log, $q) {
             'ngInject';
 
             this.VIEW_STATES = {
@@ -27,10 +28,9 @@
             };
 
             this.getExerciseResult = function (exerciseDetails, shMode) {
-                var isLecture = exerciseDetails.exerciseTypeId === ExerciseTypeEnum.LECTURE.enum;
 
-                if(shMode === this.MODE_STATES.VIEWER){
-                    if(!exerciseDetails.resultGuid){
+                if (shMode === this.MODE_STATES.VIEWER) {
+                    if (!exerciseDetails.resultGuid) {
                         var errMsg = 'completeExerciseSrv: exercise details is missing guid property';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
@@ -39,32 +39,14 @@
                     return ExerciseResultSrv.getExerciseResultByGuid(exerciseDetails.resultGuid);
                 }
 
-                switch (exerciseDetails.exerciseParentTypeId) {
-                    case ExerciseParentEnum.MODULE.enum:
-                        if(isLecture){
-                            return ExerciseResultSrv.getExerciseResult(
-                                exerciseDetails.exerciseTypeId,
-                                exerciseDetails.exerciseId,
-                                exerciseDetails.exerciseParentId
-                            );
-                        }
-
-                        return this.getContextUid().then(function (uid) {
-                            return ExerciseResultSrv.getModuleExerciseResult(
-                                uid,
-                                exerciseDetails.exerciseParentId,
-                                exerciseDetails.exerciseTypeId,
-                                exerciseDetails.exerciseId
-                            );
-                        });
-                    default:
-                        return ExerciseResultSrv.getExerciseResult(
-                            exerciseDetails.exerciseTypeId,
-                            exerciseDetails.exerciseId,
-                            exerciseDetails.exerciseParentId,
-                            exerciseDetails.examSectionsNum
-                        );
-                }
+                var dontInit = false;
+                return ExerciseResultSrv.getExerciseResult(
+                    exerciseDetails.exerciseTypeId, 
+                    exerciseDetails.exerciseId, 
+                    exerciseDetails.examId, 
+                    exerciseDetails.examSectionsNum, 
+                    dontInit, 
+                    exerciseDetails.exerciseParentId);
             };
         }
     );
