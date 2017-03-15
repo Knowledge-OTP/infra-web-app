@@ -2,8 +2,15 @@
     'use strict';
 
     angular.module('znk.infra-web-app.promoCode').provider('PromoCodeSrv',
-        function () {
+        function (ENV) {
+
             var backendData = {};
+            var appContext = ENV.firebaseAppScopeName;
+
+            backendData[appContext] = {  //default data
+                backendEndpoint: ENV.backendEndpoint,
+                appName: ENV.studentAppName
+            };
 
             this.setBackendData = function (_backendData) {
                 backendData = _backendData;
@@ -12,7 +19,7 @@
             this.$get = function (PROMO_CODE_STATUS, $translate, $http, PromoCodeTypeEnum) {
                 'ngInject';
 
-               var promoCodeSrv = {};
+                var promoCodeSrv = {};
 
                 var promoCodeStatus;
                 var INVALID = 'PROMO_CODE.INVALID_CODE';
@@ -26,7 +33,7 @@
                 promoCodeStatusText[INVALID] = INVALID;
 
                 promoCodeSrv.checkPromoCode = function (promoCode, appContext) {
-                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
+                    var firebaseAppScopeName = backendData[appContext].firebaseAppScopeName;
                     var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
                     var promoCodeCheckUrl = promoCodeCheckBaseUrl;
@@ -48,7 +55,7 @@
                 };
 
                 promoCodeSrv.updatePromoCode = function (uid, promoCode, appContext) {
-                    var appName =  backendData[appContext].appName;
+                    var appName = backendData[appContext].appName;
                     var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
                     var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl;

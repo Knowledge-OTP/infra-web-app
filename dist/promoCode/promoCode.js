@@ -94,12 +94,12 @@
         if (authData && authData.uid) {
             var search = $location.search();
             var promoCodeId = search.pcid;
-            var appName = ENV.firebaseAppScopeName;
+            var appContext = ENV.firebaseAppScopeName;
 
             delete search.pcid;
 
             if (angular.isDefined(promoCodeId)) {
-                PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appName).then(function () {
+                PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appContext).then(function () {
                     var successTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
                     var SuccessMsg = translate('PROMO_CODE.PROMO_CODE_SUCCESS_MESSAGE');
                     PopUpSrv.success(successTitle, SuccessMsg);
@@ -128,8 +128,15 @@
     'use strict';
 
     angular.module('znk.infra-web-app.promoCode').provider('PromoCodeSrv',
-        function () {
+        ["ENV", function (ENV) {
+
             var backendData = {};
+            var appContext = ENV.firebaseAppScopeName;
+
+            backendData[appContext] = {  //default data
+                backendEndpoint: ENV.backendEndpoint,
+                appName: ENV.studentAppName
+            };
 
             this.setBackendData = function (_backendData) {
                 backendData = _backendData;
@@ -138,7 +145,7 @@
             this.$get = ["PROMO_CODE_STATUS", "$translate", "$http", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, PromoCodeTypeEnum) {
                 'ngInject';
 
-               var promoCodeSrv = {};
+                var promoCodeSrv = {};
 
                 var promoCodeStatus;
                 var INVALID = 'PROMO_CODE.INVALID_CODE';
@@ -152,7 +159,7 @@
                 promoCodeStatusText[INVALID] = INVALID;
 
                 promoCodeSrv.checkPromoCode = function (promoCode, appContext) {
-                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
+                    var firebaseAppScopeName = backendData[appContext].firebaseAppScopeName;
                     var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
                     var promoCodeCheckUrl = promoCodeCheckBaseUrl;
@@ -174,7 +181,7 @@
                 };
 
                 promoCodeSrv.updatePromoCode = function (uid, promoCode, appContext) {
-                    var appName =  backendData[appContext].appName;
+                    var appName = backendData[appContext].appName;
                     var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
                     var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl;
@@ -213,7 +220,7 @@
 
                 return promoCodeSrv;
             }];
-        }
+        }]
     );
 })(angular);
 

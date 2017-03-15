@@ -11,12 +11,12 @@
         if (authData && authData.uid) {
             var search = $location.search();
             var promoCodeId = search.pcid;
-            var appName = ENV.firebaseAppScopeName;
+            var appContext = ENV.firebaseAppScopeName;
 
             delete search.pcid;
 
             if (angular.isDefined(promoCodeId)) {
-                PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appName).then(function () {
+                PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appContext).then(function () {
                     var successTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
                     var SuccessMsg = translate('PROMO_CODE.PROMO_CODE_SUCCESS_MESSAGE');
                     PopUpSrv.success(successTitle, SuccessMsg);
