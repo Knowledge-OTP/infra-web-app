@@ -79,7 +79,7 @@
         "8": "Essay",
         "9": "Math level 1",
         "10": "Math level 2",
-        "DIAGNOSTIC_TITLE":{
+        "DIAGNOSTIC_TITLE": {
             "0": "Mathematics",
             "1": "Reading",
             "2": "Writing",
@@ -179,7 +179,10 @@
         "ENTER_YOUR_CODE": "Enter your code...",
         "ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED": "Zinkerz Educators Code Accepted",
         "PROMO_CODE_ACCEPTED": "Promo Code Accepted",
-        "INVALID_CODE": "Invalid code, please contact support@zinkerz.com"
+        "INVALID_CODE": "Invalid code, please contact support@zinkerz.com",
+        "PROMO_CODE_TITLE": "Promo Code",
+        "PROMO_CODE_SUCCESS_MESSAGE": "Promo code accepted",
+        "PROMO_CODE_ERROR_MESSAGE": "The promo code you are trying to use is either invalid or expired. please contact support@zinkerz.com"
     },
     "ZNK_HEADER": {
         "WORKOUTS": "workouts",
