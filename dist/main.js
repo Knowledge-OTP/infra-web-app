@@ -7686,7 +7686,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                                 }
                             });
                         } else {
-                            $log.error('InvitationService: teacher profile not found ', teacher);
+                            $log.error('InvitationService: teacher profile not found: '+ angular.toJson(teacher));
                         }
                     });
                 }
