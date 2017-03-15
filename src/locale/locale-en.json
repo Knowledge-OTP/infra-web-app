@@ -36,6 +36,7 @@
         "USER_ID": "uid: {{userId}}"
     },
     "LOGIN_APP": {
+        "PAGE_TITLE": "Welcome To Zinkerz",
         "SAT_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the SAT® test with Zinkerz!",
         "SATSM_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the SAT® Subject Math test with Zinkerz!",
         "ACT_STUDENT_TAGLINE": "Welcome!<br/>Start prepping for the ACT® test with Zinkerz!",
