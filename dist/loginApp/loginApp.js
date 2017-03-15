@@ -119,39 +119,36 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService) {
+        ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", "ENV", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService, ENV) {
             'ngInject';
             return {
                 templateUrl: 'components/loginApp/templates/loginApp.directive.html',
                 restrict: 'E',
                 link: function (scope) {
 
+                    var isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+                    var socialProvidersArr = ['facebook', 'google', 'live'];
+                    var invitationKey = InvitationKeyService.getInvitationKey();
+
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
                         appContext: LoginAppSrv.APPS.SAT,
                         userContextObj: LoginAppSrv.USER_CONTEXT,
-                        userContext: LoginAppSrv.USER_CONTEXT.STUDENT,
+                        userContext: isTeacherApp ? LoginAppSrv.USER_CONTEXT.TEACHER : LoginAppSrv.USER_CONTEXT.STUDENT,
                         changePassword: false
                     };
 
-                    var socialProvidersArr = ['facebook', 'google', 'live'];
-                    var invitationKey = InvitationKeyService.getInvitationKey();
-
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
 
-                    scope.currentUserContext = 'student';
-                    scope.currentForm = 'signup';
-
-
+                    scope.currentUserContext = isTeacherApp ? 'teacher' : 'student';
+                    scope.currentForm = 'login';
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
                     };
-
                     scope.changeCurrentForm = function (currentForm) {
                         scope.currentForm = currentForm;
                     };
-
                     scope.changeUserContext = function (context) {
                         scope.d.userContext = context;
                         if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
