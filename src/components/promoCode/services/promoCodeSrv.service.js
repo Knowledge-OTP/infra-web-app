@@ -48,13 +48,13 @@
                 };
 
                 promoCodeSrv.updatePromoCode = function (uid, promoCode, appContext) {
-                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
+                    var appName =  backendData[appContext].appName;
                     var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
                     var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl;
                     promoCodeUpdatekUrl = promoCodeUpdatekUrl.replace('%backendEndpoint%', backendEndpointUrl);
                     var dataToSend = {
-                        appName: firebaseAppScopeName,
+                        appName: appName,
                         uid: uid,
                         promoCode: promoCode
                     };
