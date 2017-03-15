@@ -10723,7 +10723,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             }
 
             function _getUserProfile(appContext, userContext) {
-                var appRef = _getAppRef(appContext, userContext);
+                var appRef = _getGlobalRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
