@@ -2,7 +2,7 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        function ($mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
+        function ($log, $mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
             'ngInject';
             var self = this;
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
@@ -21,6 +21,7 @@
                 NEW_INVITATIONS: 'sent',
                 PENDING_CONFIRMATIONS: 'received'
             };
+
             this.invitationStatus = {
                 pending: 0,
                 approved: 1,
@@ -263,6 +264,7 @@
             this.getMyTeachers = function () {
                 return myTeachers;
             };
+
             function addInvitationUserData(invitation, profile) {
                 var senderEmail;
                 var authData = AuthService.getAuth();
@@ -322,19 +324,23 @@
             function userTeachersChildAdded(teacher) {
                 if (angular.isDefined(teacher)) {
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
-                        teacher.zinkerzTeacher = profile.zinkerzTeacher;
-                        teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
-                        teacher.educatorTeachworksName = profile.educatorTeachworksName;
-                        teacher.educatorAvailabilityHours = profile.educatorAvailabilityHours;
+                        if (profile){
+                            teacher.zinkerzTeacher = profile.zinkerzTeacher;
+                            teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
+                            teacher.educatorTeachworksName = profile.educatorTeachworksName;
+                            teacher.educatorAvailabilityHours = profile.educatorAvailabilityHours;
 
-                        myTeachers[teacher.senderUid] = teacher;
-                        angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {
-                            if (angular.isFunction(cb)) {
-                                $timeout(function () {
-                                    cb(myTeachers);
-                                });
-                            }
-                        });
+                            myTeachers[teacher.senderUid] = teacher;
+                            angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {
+                                if (angular.isFunction(cb)) {
+                                    $timeout(function () {
+                                        cb(myTeachers);
+                                    });
+                                }
+                            });
+                        } else {
+                            $log.error('InvitationService: teacher profile not found: '+ angular.toJson(teacher));
+                        }
                     });
                 }
             }
