@@ -169,14 +169,14 @@ on-boarding-bar {
         margin-top: 105px;
         text-align: center; }
         .on-board .container .step .welcome .btn-wrap .md-button {
-          padding-right: 45px;
-          padding-left: 45px;
           height: 38px;
           border-radius: 50px;
           font-size: 14px;
           color: white;
           font-family: Lato;
-          font-weight: 400; }
+          font-weight: 400;
+          padding-right: 45px;
+          padding-left: 45px; }
           .on-board .container .step .welcome .btn-wrap .md-button .btn-text {
             display: -ms-flexbox;
             display: flex; }
@@ -404,20 +404,18 @@ on-boarding-bar {
         margin: 0 20px 15px 0; }
         .on-board .container .step.intro-test-to-take .btn-wrap button {
           display: inline-block;
-          padding-right: 45px;
-          padding-left: 45px;
           height: 38px; }
+          .on-board .container .step.intro-test-to-take .btn-wrap button.start-test {
+            padding-right: 45px;
+            padding-left: 45px; }
           .on-board .container .step.intro-test-to-take .btn-wrap button.default {
-            color: #0a9bad;
             border: none;
             padding: 0;
-            width: 130px;
+            width: 180px;
             text-transform: none;
-            padding-right: 45px;
-            padding-left: 45px;
             height: 38px;
             border-radius: 50px;
             font-size: 14px;
-            color: white;
+            color: #0a9bad;
             font-family: Lato;
             font-weight: 400; }

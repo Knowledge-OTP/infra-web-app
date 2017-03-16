@@ -1,4 +1,3 @@
-
 <section class="step intro-test-to-take" translate-namespace="ON_BOARDING.TEST_TO_TAKE">
     <div class="diagnostic-title" translate=".FIGURE_OUT"></div>
 
@@ -11,9 +10,9 @@
     </div>
     <div class="icons-section">
         <div class="icon-wrapper">
-            <svg-icon class="on-boarding-bubble"  name="on-boarding-bubble-1"></svg-icon>
+            <svg-icon class="on-boarding-bubble" name="on-boarding-bubble-1"></svg-icon>
             <span class="diagnostic-text-or" translate=".OR"></span>
-            <svg-icon class="on-boarding-bubble"  name="on-boarding-bubble-2"></svg-icon>
+            <svg-icon class="on-boarding-bubble" name="on-boarding-bubble-2"></svg-icon>
         </div>
     </div>
     <div class="raccoon-img-container">
@@ -23,8 +22,14 @@
     </div>
     <div class="btn-wrap">
 
+        <md-button aria-label="{{'.SKIP' | translate}}"
+                   tabindex="2" class="default sm"
+                   ng-click="vm.skipTestToTake()">
+            <span translate=".SKIP"></span>
+        </md-button>
+
         <md-button aria-label="{{'.START_TEST' | translate}}"
-                   autofocus tabindex="1" class="md-sm znk md-primary"
+                   autofocus tabindex="1" class="md-sm znk md-primary start-test"
                    ng-click="vm.goToTestToTake()">
             <span translate=".START_TEST"></span>
         </md-button>

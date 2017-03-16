@@ -6,25 +6,24 @@
             bindings: {},
             templateUrl: 'components/myProfile/components/selectedTestLevel/selectedTestLevel.template.html',
             controllerAs: 'vm',
-            controller: function (AuthService, $mdDialog, $timeout, MyProfileSrv, StorageSrv, InfraConfigSrv, SubjectEnumConst, $filter) {
+            controller: function (AuthService, $mdDialog, $timeout, MyProfileSrv, StorageSrv, InfraConfigSrv, SubjectEnum, $filter, CategoryService) {
                 'ngInject';
 
                 var vm = this;
                 var showToast = MyProfileSrv.showToast;
                 var translateFilter = $filter('translate');
-                var USER_SELECTED_TEST_LEVEL_PATH = StorageSrv.variables.appUserSpacePath + '/selectedTestLevel';
                 vm.testLevelList = [
                     {
-                        subjectId: SubjectEnumConst.MATHLVL1,
+                        subjectId: SubjectEnum.MATHLVL1.enum,
                         name: translateFilter('MY_PROFILE.MATH_LEVEL_1')
                     },
                     {
-                        subjectId: SubjectEnumConst.MATHLVL2,
+                        subjectId: SubjectEnum.MATHLVL2.enum,
                         name: translateFilter('MY_PROFILE.MATH_LEVEL_2')
                     }
                 ];
 
-                _getSelectedTestLevel().then(function (selectedTestLevelData) {
+                CategoryService.getUserSelectedLevel1Category().then(function (selectedTestLevelData) {
                     vm.selectedTestLevel = vm.testLevelList.filter(function (item) {
                         return item.subjectId === selectedTestLevelData;
                     })[0];
@@ -35,7 +34,7 @@
                     var type, msg;
 
                     if (!authform.$invalid) {
-                        _setStudentSelectedData(vm.selectedTestLevel.subjectId).then(function () {
+                        CategoryService.setUserSelectedLevel1Category(vm.selectedTestLevel.subjectId).then(function () {
                             $timeout(function () {
                                 type = 'success';
                                 msg = 'MY_PROFILE.TEST_LEVEL_SAVE_SUCCESS';
@@ -59,18 +58,6 @@
                 vm.closeDialog = function () {
                     $mdDialog.cancel();
                 };
-
-                function _setStudentSelectedData(userSelectedSubjectId) {
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.set(USER_SELECTED_TEST_LEVEL_PATH, userSelectedSubjectId);
-                    });
-                }
-
-                function _getSelectedTestLevel() {
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.get(USER_SELECTED_TEST_LEVEL_PATH);
-                    });
-                }
             }
         });
 })(angular);
