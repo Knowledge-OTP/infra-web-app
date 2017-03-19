@@ -135,7 +135,9 @@
 
             backendData[appContext] = {  //default data
                 backendEndpoint: ENV.backendEndpoint,
-                appName: ENV.studentAppName
+                currentAppName: ENV.firebaseAppScopeName,
+                studentAppName: ENV.studentAppName,
+                dashboardAppName:  ENV.dashboardAppName
             };
 
             this.setBackendData = function (_backendData) {
@@ -159,7 +161,6 @@
                 promoCodeStatusText[INVALID] = INVALID;
 
                 promoCodeSrv.checkPromoCode = function (promoCode, appContext) {
-                    var firebaseAppScopeName = backendData[appContext].firebaseAppScopeName;
                     var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
                     var promoCodeCheckUrl = promoCodeCheckBaseUrl;
@@ -167,7 +168,7 @@
 
                     var dataToSend = {
                         promoCode: promoCode,
-                        appName: firebaseAppScopeName
+                        studentAppName: backendData[appContext].studentAppName
                     };
                     return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
                 };
@@ -181,13 +182,13 @@
                 };
 
                 promoCodeSrv.updatePromoCode = function (uid, promoCode, appContext) {
-                    var appName = backendData[appContext].appName;
                     var backendEndpointUrl = backendData[appContext].backendEndpoint;
+                    var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl.replace('%backendEndpoint%', backendEndpointUrl);
 
-                    var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl;
-                    promoCodeUpdatekUrl = promoCodeUpdatekUrl.replace('%backendEndpoint%', backendEndpointUrl);
                     var dataToSend = {
-                        appName: appName,
+                        currentAppName: backendData[appContext].currentAppName,
+                        studentAppName: backendData[appContext].studentAppName,
+                        dashboardAppName: backendData[appContext].dashboardAppName,
                         uid: uid,
                         promoCode: promoCode
                     };

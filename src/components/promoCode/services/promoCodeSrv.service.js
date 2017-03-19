@@ -5,7 +5,7 @@
         function (ENV) {
 
             var backendData = {};
-            var appContext = ENV.studentAppName;
+            var appContext = ENV.firebaseAppScopeName;
 
             backendData[appContext] = {  //default data
                 backendEndpoint: ENV.backendEndpoint,
@@ -35,7 +35,6 @@
                 promoCodeStatusText[INVALID] = INVALID;
 
                 promoCodeSrv.checkPromoCode = function (promoCode, appContext) {
-                    var studentAppName = backendData[appContext].studentAppName;
                     var backendEndpointUrl = backendData[appContext].backendEndpoint;
 
                     var promoCodeCheckUrl = promoCodeCheckBaseUrl;
@@ -43,7 +42,7 @@
 
                     var dataToSend = {
                         promoCode: promoCode,
-                        studentAppName: studentAppName
+                        studentAppName: backendData[appContext].studentAppName
                     };
                     return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
                 };
