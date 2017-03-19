@@ -6067,7 +6067,8 @@ complete-exercise-summary social-sharing .social-share-wrapper {
       border-style: solid;
       border-width: 10px 0 10px 10px;
       border-color: transparent transparent transparent #f2f2f2;
-      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+      -webkit-filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+              filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
       position: absolute;
       right: -9px;
       top: 18px; }
@@ -6129,7 +6130,8 @@ complete-exercise-summary social-sharing .social-share-wrapper {
         justify-content: flex-start;
     background-color: white; }
     .tutorials-list-pane .tutorials-list-container.blur {
-      filter: blur(7px);
+      -webkit-filter: blur(7px);
+              filter: blur(7px);
       opacity: 0.5; }
 
 .tutorial-item {
@@ -7003,7 +7005,8 @@ workout-intro-lock {
   display: block; }
   workout-intro-lock.lock .main-container {
     opacity: 0.23;
-    filter: blur(7px); }
+    -webkit-filter: blur(7px);
+            filter: blur(7px); }
   workout-intro-lock:not(.lock) .lock-overlay-container {
     display: none; }
   workout-intro-lock .lock-overlay-container {

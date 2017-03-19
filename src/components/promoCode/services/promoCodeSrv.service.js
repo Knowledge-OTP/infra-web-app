@@ -2,8 +2,17 @@
     'use strict';
 
     angular.module('znk.infra-web-app.promoCode').provider('PromoCodeSrv',
-        function () {
+        function (ENV) {
+
             var backendData = {};
+            var _currentApp = ENV.firebaseAppScopeName;
+
+            backendData[_currentApp] = {  //default data
+                backendEndpoint: ENV.backendEndpoint,
+                currentAppName: ENV.firebaseAppScopeName,
+                studentAppName: ENV.studentAppName,
+                dashboardAppName:  ENV.dashboardAppName
+            };
 
             this.setBackendData = function (_backendData) {
                 backendData = _backendData;
@@ -12,7 +21,7 @@
             this.$get = function (PROMO_CODE_STATUS, $translate, $http, PromoCodeTypeEnum) {
                 'ngInject';
 
-               var promoCodeSrv = {};
+                var promoCodeSrv = {};
 
                 var promoCodeStatus;
                 var INVALID = 'PROMO_CODE.INVALID_CODE';
@@ -25,16 +34,15 @@
                 promoCodeStatusText[PromoCodeTypeEnum.ZINKERZ_EDUCATOR.enum] = 'PROMO_CODE.ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED';
                 promoCodeStatusText[INVALID] = INVALID;
 
-                promoCodeSrv.checkPromoCode = function (promoCode, appContext) {
-                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
-                    var backendEndpointUrl = backendData[appContext].backendEndpoint;
+                promoCodeSrv.checkPromoCode = function (promoCode, currentApp) {
+                    var backendEndpointUrl = backendData[currentApp].backendEndpoint;
 
                     var promoCodeCheckUrl = promoCodeCheckBaseUrl;
                     promoCodeCheckUrl = promoCodeCheckUrl.replace('%backendEndpoint%', backendEndpointUrl);
 
                     var dataToSend = {
                         promoCode: promoCode,
-                        appName: firebaseAppScopeName
+                        studentAppName: backendData[currentApp].studentAppName
                     };
                     return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
                 };
@@ -47,14 +55,14 @@
                     return promoCodeToUpdate;
                 };
 
-                promoCodeSrv.updatePromoCode = function (uid, promoCode, appContext) {
-                    var firebaseAppScopeName =  backendData[appContext].firebaseAppScopeName;
-                    var backendEndpointUrl = backendData[appContext].backendEndpoint;
+                promoCodeSrv.updatePromoCode = function (uid, promoCode, currentApp) {
+                    var backendEndpointUrl = backendData[currentApp].backendEndpoint;
+                    var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl.replace('%backendEndpoint%', backendEndpointUrl);
 
-                    var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl;
-                    promoCodeUpdatekUrl = promoCodeUpdatekUrl.replace('%backendEndpoint%', backendEndpointUrl);
                     var dataToSend = {
-                        appName: firebaseAppScopeName,
+                        currentAppName: backendData[currentApp].currentAppName,
+                        studentAppName: backendData[currentApp].studentAppName,
+                        dashboardAppName: backendData[currentApp].dashboardAppName,
                         uid: uid,
                         promoCode: promoCode
                     };
