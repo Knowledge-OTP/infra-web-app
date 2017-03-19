@@ -4,7 +4,7 @@
     angular.module('znk.infra-web-app.adminDashboard')
         .component('eMetadata', {
             bindings: {},
-            templateUrl:  'components/adminDashboard/components/eMetadata/templates/eMetadata.template.html',
+            templateUrl: 'components/adminDashboard/components/eMetadata/templates/eMetadata.template.html',
             controllerAs: 'vm',
             controller: function ($scope, AdminSearchService, $mdDialog, $timeout, $filter, EMetadataService) {
                 'ngInject';
@@ -19,9 +19,6 @@
                     rowHeight: ROW_HEIGHT,
                     selectionRowHeaderWidth: ROW_HEIGHT
                 };
-                var translateFilter = $filter('translate');
-
-
                 _initGrid();
 
                 self.uiGridState = {
@@ -53,19 +50,20 @@
                         self.uiGridState.educator.noData = false;
                     }
                 }
+
                 function _initGrid() {
                     self.gridEducatorsOptions = {
                         columnDefs: [
                             {
-                                field: 'nickname', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
+                                field: 'nickname', displayName: "Name",
                                 cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.nickname}}</div>'
                             },
-                            {field: 'email', displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
+                            {field: 'email', displayName: "Email"},
                             {field: 'uid', displayName: 'UID'},
                             {
                                 field: 'zinkerzTeacher',
                                 width: 150,
-                                displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
+                                displayName: "Is Zinkerz Educator",
                                 cellTemplate: '<div class="ui-grid-cell-contents" >' +
                                 '<div >' +
                                 '<span ng-if="row.entity.zinkerzTeacher" translate="ADMIN.ESLINK.ZINKERZ_EDUCATOR"></span></div>' +
@@ -80,6 +78,7 @@
                         self.gridEducatorApi.selection.on.rowSelectionChanged($scope, _rowSelectedEvent);
                     };
                 }
+
                 function _rowSelectedEvent(row) {
                     EMetadataService.showEducatorProfile(row.entity);
                 }
