@@ -574,17 +574,18 @@
             }
 
             function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
-                var appRef = _getAppRef(appContext, userContext);
+                var appRef = _getGlobalRef(appContext, userContext);
                 var auth = appRef.getAuth();
                 var userProfileRef = appRef.child('users/' + auth.uid);
                 var profile;
                 if (customProfileFlag) {
-                    profile = {profile: formData};
+                    profile = { profile: formData };
                 } else {
                     profile = {
                         profile: {
                             email: formData.email,
-                            nickname: formData.nickname
+                            nickname: formData.nickname,
+                            createdTime: Firebase.ServerValue.TIMESTAMP
                         }
                     };
                 }
