@@ -54,16 +54,17 @@
 
                 self.resetUserData = function() {
                     self.startResetBtnLoader = true;
+                    self.fillResetBtnLoader = undefined;
                     var data = {
                         appName: self.currentAppKey,
                         uid: self.selectedStudent.uid
                     };
                     debugger;
                     ESLinkService.resetUserData(data).then(function success(response){
-                        self.startResetBtnLoader = false;
+                        self.fillResetBtnLoader = false;
                         
                     }, function error(response){
-                        self.startResetBtnLoader = false;
+                        self.fillResetBtnLoader = false;
                     });
                 };
 

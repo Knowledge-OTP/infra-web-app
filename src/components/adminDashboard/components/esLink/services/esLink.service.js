@@ -14,7 +14,7 @@
                     return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
                 };
 
-                this.resetUserdata = function(data) {
+                this.resetUserData = function(data) {
                     if(!data || !data.appName || !data.uid) {
                         $log.error('Both appName and uid is required');
                         return;
