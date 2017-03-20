@@ -3,7 +3,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        function(LoginAppSrv, $window, $log, $auth) {
+        function(LoginAppSrv, $window, $log, $auth, UserProfileService) {
             'ngInject';
 
             var vm = this;
@@ -17,8 +17,17 @@
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
+                    UserProfileService.getProfile().then(function (userProfile) {
                         var updateProfile = false;
+                        if (!userProfile) {
+                            userProfile = {
+                                email: userDataAuth.email,
+                                nickname: userDataAuth.nickname || userDataAuth.name,
+                                createdTime: Firebase.ServerValue.TIMESTAMP,
+                                provider: provider
+                            };
+                            updateProfile = true;
+                        }
 
                         if (!userProfile.email && userDataAuth.email) {
                             userProfile.email = userDataAuth.email;
@@ -35,11 +44,10 @@
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
-
                         loadingProvider.showSpinner = false;
 
                         if (updateProfile) {
-                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
+                            UserProfileService.setProfile(userProfile, userDataAuth.uid).then(function () {
                                 LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {

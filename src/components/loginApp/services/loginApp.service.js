@@ -39,7 +39,7 @@
             return env;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs, UserProfileService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -76,42 +76,6 @@
                 var auth = userContextAppRef.getAuth();
                 var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
-            }
-
-            function _getUserProfile(appContext, userContext) {
-                var appRef = _getGlobalRef(appContext, userContext);
-                var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
-                var deferred = $q.defer();
-                userProfileRef.on('value', function (snapshot) {
-                    var userProfile = snapshot.val() || {};
-                    deferred.resolve(userProfile);
-                }, function (err) {
-                    $log.error('LoginAppSrv _getUserProfile: err=' + err);
-                    deferred.reject(err);
-                });
-                return deferred.promise;
-            }
-
-            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
-                var appRef = _getGlobalRef(appContext, userContext);
-                var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid);
-                var profile;
-                if (customProfileFlag) {
-                    profile = { profile: formData };
-                } else {
-                    profile = {
-                        profile: {
-                            email: formData.email,
-                            nickname: formData.nickname,
-                            createdTime: Firebase.ServerValue.TIMESTAMP
-                        }
-                    };
-                }
-                return userProfileRef.update(profile).catch(function (err) {
-                    $log.error(err);
-                });
             }
 
             function _redirectToPage(appContext, userContext) {
@@ -176,9 +140,8 @@
                 appRef.unauth();
             };
 
-            LoginAppSrv.getUserProfile = _getUserProfile;
             LoginAppSrv.addFirstRegistrationRecord = _addFirstRegistrationRecord;
-            LoginAppSrv.writeUserProfile = _writeUserProfile;
+
             LoginAppSrv.redirectToPage = _redirectToPage;
 
             LoginAppSrv.setSocialProvidersConfig = function (providers, appContent) {
@@ -266,6 +229,7 @@
                     });
                 };
             })();
+
             /**
              * params:
              *  appContext: ACT/SAT etc (APPS constant)
@@ -285,9 +249,9 @@
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
                         var signUp = true;
-                        return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function () {
+                        return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function (userAuth) {
                             isSignUpInProgress = false;
-                            return _writeUserProfile(formData, appContext, userContext).then(function () {
+                            return UserProfileService.setProfile(formData, userAuth.uid).then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
                         });

@@ -1,4 +1,4 @@
-(function (window, angular) {
+(function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp', [
@@ -7,60 +7,37 @@
         'znk.infra.svgIcon',
         'ngMaterial',
         'satellizer',
+        'znk.infra.user',
         'znk.infra.general',
         'znk.infra.autofocus',
         'znk.infra-web-app.promoCode'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'form-envelope': 'components/loginApp/svg/form-envelope.svg',
-                'form-lock': 'components/loginApp/svg/form-lock.svg',
-                'facebook-icon': 'components/loginApp/svg/facebook-icon.svg',
-                'google-icon': 'components/loginApp/svg/google-icon.svg',
-                'login-username-icon': 'components/loginApp/svg/login-username-icon.svg',
-                'dropdown-arrow': 'components/loginApp/svg/dropdown-arrow.svg',
-                'v-icon': 'components/loginApp/svg/v-icon.svg',
-                'loginApp-arrow-icon': 'components/loginApp/svg/arrow-icon.svg',
-                'loginApp-close-icon': 'components/loginApp/svg/close-icon.svg',
-                'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg',
-                'microsoft-icon': 'components/loginApp/svg/microsoft.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ])
-        .run(["$location", "InvitationKeyService", function ($location, InvitationKeyService) {
-            var search = $location.search();
-            var iid = search.iid;
-            if (angular.isDefined(iid) && iid !== null) {
-                InvitationKeyService.saveInvitationKey(iid);
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp')
+        .config([
+            'SvgIconSrvProvider',
+            function (SvgIconSrvProvider) {
+                var svgMap = {
+                    'form-envelope': 'components/loginApp/svg/form-envelope.svg',
+                    'form-lock': 'components/loginApp/svg/form-lock.svg',
+                    'facebook-icon': 'components/loginApp/svg/facebook-icon.svg',
+                    'google-icon': 'components/loginApp/svg/google-icon.svg',
+                    'login-username-icon': 'components/loginApp/svg/login-username-icon.svg',
+                    'dropdown-arrow': 'components/loginApp/svg/dropdown-arrow.svg',
+                    'v-icon': 'components/loginApp/svg/v-icon.svg',
+                    'loginApp-arrow-icon': 'components/loginApp/svg/arrow-icon.svg',
+                    'loginApp-close-icon': 'components/loginApp/svg/close-icon.svg',
+                    'loginApp-correct-icon': 'components/loginApp/svg/correct-icon.svg',
+                    'microsoft-icon': 'components/loginApp/svg/microsoft.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
             }
-            //     var authObj = AuthService.getAuth();
-            //     if (authObj) {
-            //         InvitationStorageSrv.getInvitationObject(iid).then(function (res) {
-            //             var invitation = res;
-            //             if (angular.equals(invitation, {})) {
-            //                 $log.error('Invitation object is empty');
-            //                 return;
-            //             }
-            //             var receiverEmail = invitation.receiverEmail;
-            //             if (receiverEmail === authObj.auth.token.email.toLowerCase()) {
-            //                 redirectToApp();
-            //             } else {
-            //                 logout();
-            //             }
-            //         });
-            //     }
-            // }
-            // function redirectToApp() {
-            //     InvitationKeyService.navigateWithInvitationKey();
-            // }
-            //
-            // function logout() {
-            //     AuthService.logout();
-            // }
-        }]);
-})(window, angular);
+        ]);
+})(angular);
 
 /**
  * attrs:
@@ -377,7 +354,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        ["LoginAppSrv", "$window", "$log", "$auth", function(LoginAppSrv, $window, $log, $auth) {
+        ["LoginAppSrv", "$window", "$log", "$auth", "UserProfileService", function(LoginAppSrv, $window, $log, $auth, UserProfileService) {
             'ngInject';
 
             var vm = this;
@@ -391,8 +368,17 @@
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
+                    UserProfileService.getProfile().then(function (userProfile) {
                         var updateProfile = false;
+                        if (!userProfile) {
+                            userProfile = {
+                                email: userDataAuth.email,
+                                nickname: userDataAuth.nickname || userDataAuth.name,
+                                createdTime: Firebase.ServerValue.TIMESTAMP,
+                                provider: provider
+                            };
+                            updateProfile = true;
+                        }
 
                         if (!userProfile.email && userDataAuth.email) {
                             userProfile.email = userDataAuth.email;
@@ -409,11 +395,10 @@
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
-
                         loadingProvider.showSpinner = false;
 
                         if (updateProfile) {
-                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
+                            UserProfileService.setProfile(userProfile, userDataAuth.uid).then(function () {
                                 LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
                             });
                         } else {
@@ -449,6 +434,19 @@
         };
     });
 })(angular);
+
+(function(window, angular){
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp')
+        .run(["$location", "InvitationKeyService", function ($location, InvitationKeyService) {
+        var search = $location.search();
+        var iid = search.iid;
+        if (angular.isDefined(iid) && iid !== null) {
+            InvitationKeyService.saveInvitationKey(iid);
+        }
+    }]);
+})(window, angular);
 
 (function (angular) {
     'use strict';
@@ -519,7 +517,7 @@
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", "UserProfileService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs, UserProfileService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -556,42 +554,6 @@
                 var auth = userContextAppRef.getAuth();
                 var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
                 return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
-            }
-
-            function _getUserProfile(appContext, userContext) {
-                var appRef = _getGlobalRef(appContext, userContext);
-                var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid + '/profile');
-                var deferred = $q.defer();
-                userProfileRef.on('value', function (snapshot) {
-                    var userProfile = snapshot.val() || {};
-                    deferred.resolve(userProfile);
-                }, function (err) {
-                    $log.error('LoginAppSrv _getUserProfile: err=' + err);
-                    deferred.reject(err);
-                });
-                return deferred.promise;
-            }
-
-            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
-                var appRef = _getGlobalRef(appContext, userContext);
-                var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid);
-                var profile;
-                if (customProfileFlag) {
-                    profile = { profile: formData };
-                } else {
-                    profile = {
-                        profile: {
-                            email: formData.email,
-                            nickname: formData.nickname,
-                            createdTime: Firebase.ServerValue.TIMESTAMP
-                        }
-                    };
-                }
-                return userProfileRef.update(profile).catch(function (err) {
-                    $log.error(err);
-                });
             }
 
             function _redirectToPage(appContext, userContext) {
@@ -656,9 +618,8 @@
                 appRef.unauth();
             };
 
-            LoginAppSrv.getUserProfile = _getUserProfile;
             LoginAppSrv.addFirstRegistrationRecord = _addFirstRegistrationRecord;
-            LoginAppSrv.writeUserProfile = _writeUserProfile;
+
             LoginAppSrv.redirectToPage = _redirectToPage;
 
             LoginAppSrv.setSocialProvidersConfig = function (providers, appContent) {
@@ -746,6 +707,7 @@
                     });
                 };
             })();
+
             /**
              * params:
              *  appContext: ACT/SAT etc (APPS constant)
@@ -765,9 +727,9 @@
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.createUser(formData).then(function () {
                         var signUp = true;
-                        return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function () {
+                        return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function (userAuth) {
                             isSignUpInProgress = false;
-                            return _writeUserProfile(formData, appContext, userContext).then(function () {
+                            return UserProfileService.setProfile(formData, userAuth.uid).then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
                         });
