@@ -41,8 +41,7 @@
         justify-content: flex-start;
     background-color: white; }
     .tutorials-list-pane .tutorials-list-container.blur {
-      -webkit-filter: blur(7px);
-              filter: blur(7px);
+      filter: blur(7px);
       opacity: 0.5; }
 
 .tutorial-item {

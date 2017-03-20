@@ -131,9 +131,9 @@
         ["ENV", function (ENV) {
 
             var backendData = {};
-            var appContext = ENV.firebaseAppScopeName;
+            var _currentApp = ENV.firebaseAppScopeName;
 
-            backendData[appContext] = {  //default data
+            backendData[_currentApp] = {  //default data
                 backendEndpoint: ENV.backendEndpoint,
                 currentAppName: ENV.firebaseAppScopeName,
                 studentAppName: ENV.studentAppName,
@@ -160,15 +160,15 @@
                 promoCodeStatusText[PromoCodeTypeEnum.ZINKERZ_EDUCATOR.enum] = 'PROMO_CODE.ZINKERZ_EDUCATORS_PROMO_CODE_ACCEPTED';
                 promoCodeStatusText[INVALID] = INVALID;
 
-                promoCodeSrv.checkPromoCode = function (promoCode, appContext) {
-                    var backendEndpointUrl = backendData[appContext].backendEndpoint;
+                promoCodeSrv.checkPromoCode = function (promoCode, currentApp) {
+                    var backendEndpointUrl = backendData[currentApp].backendEndpoint;
 
                     var promoCodeCheckUrl = promoCodeCheckBaseUrl;
                     promoCodeCheckUrl = promoCodeCheckUrl.replace('%backendEndpoint%', backendEndpointUrl);
 
                     var dataToSend = {
                         promoCode: promoCode,
-                        studentAppName: backendData[appContext].studentAppName
+                        studentAppName: backendData[currentApp].studentAppName
                     };
                     return $http.post(promoCodeCheckUrl, dataToSend).then(_validPromoCode, _invalidPromoCode);
                 };
@@ -181,14 +181,14 @@
                     return promoCodeToUpdate;
                 };
 
-                promoCodeSrv.updatePromoCode = function (uid, promoCode, appContext) {
-                    var backendEndpointUrl = backendData[appContext].backendEndpoint;
+                promoCodeSrv.updatePromoCode = function (uid, promoCode, currentApp) {
+                    var backendEndpointUrl = backendData[currentApp].backendEndpoint;
                     var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl.replace('%backendEndpoint%', backendEndpointUrl);
 
                     var dataToSend = {
-                        currentAppName: backendData[appContext].currentAppName,
-                        studentAppName: backendData[appContext].studentAppName,
-                        dashboardAppName: backendData[appContext].dashboardAppName,
+                        currentAppName: backendData[currentApp].currentAppName,
+                        studentAppName: backendData[currentApp].studentAppName,
+                        dashboardAppName: backendData[currentApp].dashboardAppName,
                         uid: uid,
                         promoCode: promoCode
                     };
