@@ -17,42 +17,22 @@
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    UserProfileService.getProfile().then(function (userProfile) {
-                        var updateProfile = false;
+                    UserProfileService.getProfileByUserId(userDataAuth.uid).then(function (userProfile) {
+                        var saveProfileProm;
                         if (!userProfile) {
-                            userProfile = {
-                                email: userDataAuth.email,
-                                nickname: userDataAuth.nickname || userDataAuth.name,
-                                createdTime: Firebase.ServerValue.TIMESTAMP,
-                                provider: provider
-                            };
-                            updateProfile = true;
-                        }
-
-                        if (!userProfile.email && userDataAuth.email) {
-                            userProfile.email = userDataAuth.email;
-                            updateProfile = true;
-                        }
-                        if (!userProfile.nickname && (userDataAuth.nickname || userDataAuth.name)) {
-                            userProfile.nickname = userDataAuth.nickname || userDataAuth.name;
-                            updateProfile = true;
-                        }
-                        if (!userProfile.provider) {
-                            userProfile.provider = provider;
-                            updateProfile = true;
+                            var nickname = userDataAuth.nickname || userDataAuth.name;
+                            saveProfileProm = UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
+                        } else {
+                            saveProfileProm = UserProfileService.extendProfileFromAuth(userProfile, userDataAuth);
                         }
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
                         loadingProvider.showSpinner = false;
 
-                        if (updateProfile) {
-                            UserProfileService.setProfile(userProfile, userDataAuth.uid).then(function () {
-                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-                            });
-                        } else {
+                        saveProfileProm.then(function () {
                             LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-                        }
+                        });
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);

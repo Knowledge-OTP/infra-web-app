@@ -251,7 +251,8 @@
                         var signUp = true;
                         return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function (userAuth) {
                             isSignUpInProgress = false;
-                            return UserProfileService.setProfile(formData, userAuth.uid).then(function () {
+                            var saveProfileProm = UserProfileService.createUserProfile(userAuth.uid, formData.email, formData.nickname, formData.provider);
+                            return saveProfileProm.then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
                         });
