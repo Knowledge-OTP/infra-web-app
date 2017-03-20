@@ -80,16 +80,18 @@
                 function _buildQueryBodyByTerm(query, term) {
                     query.query = {
                         "bool": {
-                            "must": [
-                                {
-                                    "term": {"zinkerzTeacher": "true"}
+                            "must": [{
+                                    "term": {
+                                        "zinkerzTeacher": "true"
+                                    }
                                 },
                                 {
                                     "query_string": {
                                         "fields": ["zinkerzTeacher", "nickname", "email"],
                                         "query": term
                                     }
-                                }]
+                                }
+                            ]
                         }
                     };
                 }

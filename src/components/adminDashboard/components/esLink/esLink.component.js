@@ -144,7 +144,11 @@
                             },
                             {field: 'nickname', width: 300, displayName: "Name"},
                             {field: 'email', width: 300, displayName: "Email"},
-                            {field: 'uid', width: 300, displayName: 'UID'}
+                            {field: 'uid', width: 300, displayName: 'UID'},
+                            {field: 'zinkerzSatPro', width: 100, displayName: 'SAT Pro'},
+                            {field: 'zinkerzActPro', width: 100, displayName: 'ACT Pro'},
+                            {field: 'zinkerzToeflPro', width: 100, displayName: 'TOEFL Pro'},
+                            {field: 'zinkerzSatsmPro', width: 100, displayName: 'SATSM Pro'}
                         ]
                     };
                     self.gridEducatorsOptions = {
