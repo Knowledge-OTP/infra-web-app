@@ -5,7 +5,7 @@
             <div class="admin-search-label" translate="ADMIN.ESLINK.SEARCH_EDUCATOR"></div>
             <div admin-search placeholder="{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}" data="vm.gridEducatorsOptions.data" key="educator" state="vm.uiGridState" minlength="3" search-query="vm.educatorSearchQuery" search-results="vm.getEducatorsSearchResults"></div>
             <div class="admin-search-msg" translate="ADMIN.MIN_SEARCH_LENGTH"></div>
-            <div   ui-grid-selection ui-grid="vm.gridEducatorsOptions" class="admin-grid" >
+            <div ui-grid-selection ui-grid="vm.gridEducatorsOptions" class="admin-grid" >
                 <div class="admin-ui-grid-msg" ng-if="vm.uiGridState.educator.initial">
                     <div class="admin-msg">
                         <div translate="ADMIN.ESLINK.EDUCATOR_INITIAL_MSG"></div>
