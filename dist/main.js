@@ -606,7 +606,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     angular.module('znk.infra-web-app.adminDashboard')
         .component('eMetadata', {
             bindings: {},
-            templateUrl:  'components/adminDashboard/components/eMetadata/templates/eMetadata.template.html',
+            templateUrl: 'components/adminDashboard/components/eMetadata/templates/eMetadata.template.html',
             controllerAs: 'vm',
             controller: ["$scope", "AdminSearchService", "$mdDialog", "$timeout", "$filter", "EMetadataService", function ($scope, AdminSearchService, $mdDialog, $timeout, $filter, EMetadataService) {
                 'ngInject';
@@ -621,9 +621,6 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     rowHeight: ROW_HEIGHT,
                     selectionRowHeaderWidth: ROW_HEIGHT
                 };
-                var translateFilter = $filter('translate');
-
-
                 _initGrid();
 
                 self.uiGridState = {
@@ -655,19 +652,20 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         self.uiGridState.educator.noData = false;
                     }
                 }
+
                 function _initGrid() {
                     self.gridEducatorsOptions = {
                         columnDefs: [
                             {
-                                field: 'nickname', displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME'),
+                                field: 'nickname', displayName: "Name",
                                 cellTemplate: '<div class="ui-grid-cell-contents admin-ui-grid-cell-text" >{{row.entity.nickname}}</div>'
                             },
-                            {field: 'email', displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
+                            {field: 'email', displayName: "Email"},
                             {field: 'uid', displayName: 'UID'},
                             {
                                 field: 'zinkerzTeacher',
                                 width: 150,
-                                displayName: translateFilter('ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR'),
+                                displayName: "Is Zinkerz Educator",
                                 cellTemplate: '<div class="ui-grid-cell-contents" >' +
                                 '<div >' +
                                 '<span ng-if="row.entity.zinkerzTeacher" translate="ADMIN.ESLINK.ZINKERZ_EDUCATOR"></span></div>' +
@@ -682,6 +680,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         self.gridEducatorApi.selection.on.rowSelectionChanged($scope, _rowSelectedEvent);
                     };
                 }
+
                 function _rowSelectedEvent(row) {
                     EMetadataService.showEducatorProfile(row.entity);
                 }
@@ -785,58 +784,64 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     angular.module('znk.infra-web-app.adminDashboard').directive('appSelect',
         function () {
 
-        AppSelectController.$inject = ["$scope", "$filter", "ENV"];
-        var directive = {
-            templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
-            restrict: 'E',
-            controllerAs: 'vm',
-            controller: AppSelectController,
-            scope: {
-                currentApp: "="
-            },
-            bindToController: true
-        };
+            AppSelectController.$inject = ["$scope", "ENV", "$translate", "$q"];
+            var directive = {
+                templateUrl: 'components/adminDashboard/components/esLink/directives/app-select.template.html',
+                restrict: 'E',
+                controllerAs: 'vm',
+                controller: AppSelectController,
+                scope: {
+                    currentApp: "="
+                },
+                bindToController: true
+            };
 
-        function AppSelectController($scope, $filter, ENV) {
-            'ngInject';
+            function AppSelectController($scope, ENV, $translate, $q) {
+                'ngInject';
 
-            var self = this;
-            var currentAppName = ENV.firebaseAppScopeName;
-            var translateFilter = $filter('translate');
+                var self = this;
+                var currentAppName = ENV.firebaseAppScopeName;
 
-            function _setCurrentAppName() {
-                var key = Object.keys(self.appName).filter(function (item) {
-                    return currentAppName.indexOf(item.toLowerCase()) > -1;
-                })[0];
-                self.selectedApp = self.appName[key];
-                self.currentApp = key;
+                function _setCurrentAppName() {
+                    var key = Object.keys(self.appName).filter(function (item) {
+                        return currentAppName.indexOf(item.toLowerCase()) > -1;
+                    })[0];
+                    self.selectedApp = self.appName[key];
+                    self.currentApp = key;
+                }
+
+                var translationsPromMap = {};
+                translationsPromMap.SAT = $translate('ADMIN.ESLINK.SAT');
+                translationsPromMap.ACT = $translate('ADMIN.ESLINK.ACT');
+                translationsPromMap.TOEFL = $translate('ADMIN.ESLINK.TOEFL');
+                translationsPromMap.SATSM = $translate('ADMIN.ESLINK.SATSM');
+                $q.all(translationsPromMap).then(function (translatedData) {
+                    self.appName = {
+                        SAT: translatedData.SAT,
+                        ACT: translatedData.ACT,
+                        TOEFL: translatedData.TOEFL,
+                        SATSM: translatedData.SATSM
+                    };
+                    _setCurrentAppName();
+                });
+
+                self.selectApp = function (key) {
+                    self.selectedApp = self.appName[key];
+                    self.currentApp = key;
+                };
+                self.expandIcon = 'expand_more';
+
+                self.znkOpenModal = function () {
+                    self.expandIcon = 'expand_less';
+                };
+
+                $scope.$on('$mdMenuClose', function () {
+                    self.expandIcon = 'expand_more';
+                });
             }
 
-            self.appName = {
-                SAT: translateFilter('ADMIN.ESLINK.SAT'),
-                ACT: translateFilter('ADMIN.ESLINK.ACT'),
-                TOEFL: translateFilter('ADMIN.ESLINK.TOEFL'),
-                SATSM: translateFilter('ADMIN.ESLINK.SATSM')
-            };
-            _setCurrentAppName();
-
-            self.selectApp = function (key) {
-                self.selectedApp = self.appName[key];
-                self.currentApp = key;
-            };
-            self.expandIcon = 'expand_more';
-
-            self.znkOpenModal = function () {
-                self.expandIcon = 'expand_less';
-            };
-
-            $scope.$on('$mdMenuClose', function () {
-                self.expandIcon = 'expand_more';
-            });
-        }
-
-        return directive;
-    });
+            return directive;
+        });
 
 })(angular);
 
@@ -850,6 +855,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
             controllerAs: 'vm',
             controller: ["$filter", "AdminSearchService", "ESLinkService", "$log", "ZnkToastSrv", function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
                 'ngInject';
+
                 var self = this;
                 self.uiGridState = {
                     student: {
@@ -967,8 +973,8 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectStudentRow(row.entity)" name="studentSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
-                            {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
+                            {field: 'nickname', width: 300, displayName: "Name"},
+                            {field: 'email', width: 300, displayName: "Email"},
                             {field: 'uid', width: 300, displayName: 'UID'}
                         ]
                     };
@@ -980,8 +986,8 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectEducatorRow(row.entity)" name="educatorSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName:  translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
-                            {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
+                            {field: 'nickname', width: 300, displayName: "Name"},
+                            {field: 'email', width: 300, displayName: "Email"},
                             {field: 'uid', width: 300, displayName: 'UID'}
                         ]
                     };

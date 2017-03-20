@@ -8,6 +8,7 @@
             controllerAs: 'vm',
             controller: function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
                 'ngInject';
+
                 var self = this;
                 self.uiGridState = {
                     student: {
@@ -125,8 +126,8 @@
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectStudentRow(row.entity)" name="studentSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
-                            {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
+                            {field: 'nickname', width: 300, displayName: "Name"},
+                            {field: 'email', width: 300, displayName: "Email"},
                             {field: 'uid', width: 300, displayName: 'UID'}
                         ]
                     };
@@ -138,8 +139,8 @@
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectEducatorRow(row.entity)" name="educatorSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName:  translateFilter('ADMIN.ESLINK.UIGRID_NAME')},
-                            {field: 'email', width: 300, displayName: translateFilter('ADMIN.ESLINK.UIGRID_EMAIL')},
+                            {field: 'nickname', width: 300, displayName: "Name"},
+                            {field: 'email', width: 300, displayName: "Email"},
                             {field: 'uid', width: 300, displayName: 'UID'}
                         ]
                     };
