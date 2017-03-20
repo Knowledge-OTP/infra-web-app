@@ -18,21 +18,17 @@
                     var userDataAuth = results[0].auth;
 
                     UserProfileService.getProfileByUserId(userDataAuth.uid).then(function (userProfile) {
-                        var saveProfileProm;
                         if (!userProfile) {
                             var nickname = userDataAuth.nickname || userDataAuth.name;
-                            saveProfileProm = UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
-                        } else {
-                            saveProfileProm = UserProfileService.extendProfileFromAuth(userProfile, userDataAuth);
+                            UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
                         }
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
                         loadingProvider.showSpinner = false;
 
-                        saveProfileProm.then(function () {
-                            LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-                        });
+                        LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
+
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);

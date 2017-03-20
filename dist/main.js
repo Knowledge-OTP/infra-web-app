@@ -10273,7 +10273,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
-                        appContext: LoginAppSrv.APPS.SAT,
+                        appContext: LoginAppSrv.APPS.ACT,
                         userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: isTeacherApp ? LoginAppSrv.USER_CONTEXT.TEACHER : LoginAppSrv.USER_CONTEXT.STUDENT,
                         changePassword: false
@@ -10533,21 +10533,17 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     var userDataAuth = results[0].auth;
 
                     UserProfileService.getProfileByUserId(userDataAuth.uid).then(function (userProfile) {
-                        var saveProfileProm;
                         if (!userProfile) {
                             var nickname = userDataAuth.nickname || userDataAuth.name;
-                            saveProfileProm = UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
-                        } else {
-                            saveProfileProm = UserProfileService.extendProfileFromAuth(userProfile, userDataAuth);
+                            UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
                         }
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
                         loadingProvider.showSpinner = false;
 
-                        saveProfileProm.then(function () {
-                            LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-                        });
+                        LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
+
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
@@ -10873,7 +10869,8 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         var signUp = true;
                         return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function (userAuth) {
                             isSignUpInProgress = false;
-                            var saveProfileProm = UserProfileService.createUserProfile(userAuth.uid, formData.email, formData.nickname, formData.provider);
+                            var provider = 'custom';
+                            var saveProfileProm = UserProfileService.createUserProfile(userAuth.uid, formData.email, formData.nickname, provider);
                             return saveProfileProm.then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
