@@ -52,6 +52,21 @@
                     AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
+                self.resetUserData = function() {
+                    self.startResetBtnLoader = true;
+                    var data = {
+                        appName: self.currentAppKey,
+                        uid: self.selectedStudent.uid
+                    };
+                    debugger;
+                    ESLinkService.resetUserData(data).then(function success(response){
+                        self.startResetBtnLoader = false;
+                        
+                    }, function error(response){
+                        self.startResetBtnLoader = false;
+                    });
+                };
+
                 self.link = function () {
                     self.startLoader = true;
                     self.fillLoader = undefined;
