@@ -220,6 +220,18 @@
       border-radius: 50%; }
     .admin-dashboard .ui-grid .ui-grid-row .ui-grid-cell-contents input[type='radio']:checked:before {
       background: #0a9bad; }
+    .admin-dashboard .ui-grid .ui-grid-row .ui-grid-cell-contents .admin-correct-icon {
+      display: block;
+      width: 20px;
+      margin: auto; }
+      .admin-dashboard .ui-grid .ui-grid-row .ui-grid-cell-contents .admin-correct-icon * {
+        stroke: #76b63e; }
+
+md-tooltip[znk-tooltip][md-direction=top].admin-tooltip .md-content {
+  background-color: rgba(0, 0, 0, 0.94); }
+
+md-tooltip[znk-tooltip][md-direction=top].admin-tooltip .arrow {
+  border-top-color: rgba(0, 0, 0, 0.94); }
 
 .admin-esLink .ui-grid .ui-grid-viewport {
   height: 180px !important; }

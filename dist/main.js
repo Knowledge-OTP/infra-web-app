@@ -323,7 +323,7 @@
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/activePanel/activePanel.template.html",
     "<div class=\"active-panel ng-hide\"\n" +
     "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
@@ -522,14 +522,16 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
         'znk.infra-web-app.myProfile',
         'ui.grid',
         'ui.grid.selection',
-        'ui.grid.autoResize'
+        'ui.grid.autoResize',
+        'znk.infra.znkTooltip'
     ])
         .config([
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 var svgMap = {
                     'adminProfile-icon': 'components/adminDashboard/components/eMetadata/svg/admin-profile-icon.svg',
-                    'adminProfile-close-popup': 'components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg'
+                    'adminProfile-close-popup': 'components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg',
+                    'admin-correct-icon': 'components/adminDashboard/svg/correct-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }
@@ -899,6 +901,21 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
                     AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
+                self.resetUserData = function() {
+                    self.startResetBtnLoader = true;
+                    self.fillResetBtnLoader = undefined;
+                    var data = {
+                        appName: self.currentAppKey,
+                        uid: self.selectedStudent.uid
+                    };
+                    ESLinkService.resetUserData(data).then(function success(){
+                        self.fillResetBtnLoader = false;
+                        $log.debug('user data successfully reset');
+                    }, function error(){
+                        self.fillResetBtnLoader = false;
+                    });
+                };
+
                 self.link = function () {
                     self.startLoader = true;
                     self.fillLoader = undefined;
@@ -969,13 +986,38 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
                         columnDefs: [
                             {
                                 field: 'id',
-                                width: "60",
+                                width: "40",
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectStudentRow(row.entity)" name="studentSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: "Name"},
-                            {field: 'email', width: 300, displayName: "Email"},
-                            {field: 'uid', width: 300, displayName: 'UID'}
+                            {field: 'nickname', width: 150, displayName: "Name"},
+                            {
+                                field: 'email', 
+                                width: 250, 
+                                displayName: "Email",
+                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                            },
+                            {field: 'uid', width: 300, displayName: 'UID'},
+                            {
+                                field: 'zinkerzSatPro',
+                                width: 50, displayName: 'SAT',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.sat"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzActPro',
+                                width: 50, displayName: 'ACT',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.act"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzToeflPro',
+                                width: 50, displayName: 'TOEFL',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.toefl"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzSatsmPro',
+                                width: 50, displayName: 'SATSM',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.satsm"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            }
                         ]
                     };
                     self.gridEducatorsOptions = {
@@ -986,9 +1028,22 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectEducatorRow(row.entity)" name="educatorSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: "Name"},
-                            {field: 'email', width: 300, displayName: "Email"},
-                            {field: 'uid', width: 300, displayName: 'UID'}
+                            {
+                                field: 'nickname',
+                                width: 300,
+                                displayName: "Name"
+                            },
+                            {
+                                field: 'email', 
+                                width: 300, 
+                                displayName: "Email",
+                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                            },
+                            {
+                                field: 'uid', 
+                                width: 300, 
+                                displayName: 'UID'
+                            }
                         ]
                     };
                     angular.extend(self.gridStudentsOptions, commonGridOptions);
@@ -1032,11 +1087,20 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
                 'ngInject';
 
                 var apiPath = ENV.backendEndpoint + "/invitation/assosciate_student";
-
+                var resetUserDataPath = ENV.backendEndpoint + "/userModule/delete";
 
                 this.createInvitationFactory = function (senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName) {
                     return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
                 };
+
+                this.resetUserData = function(data) {
+                    if(!data || !data.appName || !data.uid) {
+                        $log.error('Both appName and uid is required');
+                        return;
+                    }
+                    return $http.post(resetUserDataPath, data);
+                };
+
                 this.link = function (data) {
                     if (!(data && angular.isObject(data))) {
                         $log.error('Invitation object is not defined');
@@ -1169,21 +1233,13 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        var source = item._source;
+                        var source = item._source.user ? item._source.user : item._source;
                         if (!source) {
                             return mappedData;
                         }
                         source.uid = item._id;
                         source.zinkerzTeacher = !!source.zinkerzTeacher;
                         return source;
-                        // {
-                        //     uid: item._id,
-                        //     email: source.email,
-                        //     educatorTeachworksName: source.educatorTeachworksName,
-                        //     educatorAvailabilityHours: source.educatorAvailabilityHours,
-                        //     zinkerzTeacher: !!source.zinkerzTeacher,
-                        //     name: source.nickname || source.name
-                        // };
                     });
                     return mappedData;
                 }
@@ -1200,16 +1256,18 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
                 function _buildQueryBodyByTerm(query, term) {
                     query.query = {
                         "bool": {
-                            "must": [
-                                {
-                                    "term": {"zinkerzTeacher": "true"}
+                            "must": [{
+                                    "term": {
+                                        "zinkerzTeacher": "true"
+                                    }
                                 },
                                 {
                                     "query_string": {
                                         "fields": ["zinkerzTeacher", "nickname", "email"],
                                         "query": term
                                     }
-                                }]
+                                }
+                            ]
                         }
                     };
                 }
@@ -1234,7 +1292,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
         );
 })(angular);
 
-angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
@@ -1434,7 +1492,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
     "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
     "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
+    "            <div ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
     "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
     "                    <div class=\"admin-msg\">\n" +
     "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
@@ -1446,7 +1504,6 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1542,6 +1599,19 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"btn-wrap\">\n" +
     "            <button element-loader\n" +
+    "                    ng-disabled=\"!vm.selectedStudent\"\n" +
+    "                    fill-loader=\"vm.fillResetBtnLoader\"\n" +
+    "                    show-loader=\"vm.startResetBtnLoader\"\n" +
+    "                    bg-loader=\"'#037684'\"\n" +
+    "                    precentage=\"50\"\n" +
+    "                    font-color=\"'#FFFFFF'\"\n" +
+    "                    bg=\"'#0a9bad'\"\n" +
+    "                    ng-click=\"vm.resetUserData()\"\n" +
+    "                    class=\"md-button link-btn drop-shadow\"\n" +
+    "                    name=\"submit\">\n" +
+    "                <span translate=\"ADMIN.ESLINK.LINK_RST_BTN\"></span>\n" +
+    "            </button>\n" +
+    "            <button element-loader\n" +
     "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
     "                    fill-loader=\"vm.fillLoader\"\n" +
     "                    show-loader=\"vm.startLoader\"\n" +
@@ -1575,6 +1645,31 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "</div>\n" +
     "");
+  $templateCache.put("components/adminDashboard/svg/correct-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     class=\"correct-icon-svg\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 188.5 129\"\n" +
+    "     style=\"enable-background:new 0 0 188.5 129;\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.correct-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #231F20;\n" +
+    "        stroke-width: 15;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<line class=\"st0\" x1=\"7.5\" y1=\"62\" x2=\"67\" y2=\"121.5\"/>\n" +
+    "	<line class=\"st0\" x1=\"67\" y1=\"121.5\" x2=\"181\" y2=\"7.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
 }]);
 
 (function (angular) {
@@ -1585,7 +1680,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -1740,7 +1835,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
     );
 })(angular);
 
-angular.module('znk.infra-web-app.aws').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -3133,7 +3228,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function ($templa
     );
 })(angular);
 
-angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
     "<svg\n" +
     "    version=\"1.1\"\n" +
@@ -3359,7 +3454,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.config').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.config').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -3434,7 +3529,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function ($tem
     });
 })(angular);
 
-angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -4550,7 +4645,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
 })(angular);
 
 
-angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
@@ -4859,7 +4954,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
         }];
 }]);
 
-angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
@@ -4966,7 +5061,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -5189,7 +5284,7 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg",
     "<svg\n" +
     "    class=\"estimated-score-widget-close-popup-svg\"\n" +
@@ -5699,7 +5794,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     });
 })(angular);
 
-angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/evaluator/svg/star.svg",
     "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\"\n" +
@@ -5912,7 +6007,7 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function ($
     });
 })(angular);
 
-angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/faq/svg/circle-arrow.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -6090,7 +6185,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templa
 })(angular);
 
 
-angular.module('znk.infra-web-app.feedback').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
@@ -6390,7 +6485,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function ($t
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/iapMsg/svg/close-msg.svg",
     "<svg class=\"iap-msg-close-msg-svg\"\n" +
     "     x=\"0px\"\n" +
@@ -6590,7 +6685,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function ($tem
 })(angular);
 
 
-angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\" y=\"0px\"\n" +
@@ -6950,7 +7045,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
@@ -7833,7 +7928,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     );
 })(angular);
 
-angular.module('znk.infra-web-app.invitation').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/invitation/approveModal/invitationApproveModal.template.html",
     "<md-dialog ng-cloak class=\"invitation-confirm-modal\" translate-namespace=\"INVITE_APPROVE_MODAL\">\n" +
     "    <md-toolbar>\n" +
@@ -8299,7 +8394,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function (
         );
 })(angular);
 
-angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -8680,7 +8775,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
     );
 })(angular);
 
-angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/liveLessons/svg/calendar-icon.svg",
     "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" class=\"calendar-icon\"\n" +
     "     viewBox=\"0 0 176.3 200\">\n" +
@@ -9922,7 +10017,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
     });
 })(angular);
 
-angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/liveSession/components/liveSession/liveSession.template.html",
     "<div ng-if=\"vm.userLiveSessionState\"\n" +
     "     ng-class=\"vm.liveSessionCls\">\n" +
@@ -10170,7 +10265,7 @@ angular.module('znk.infra-web-app.loadingAnimation', []);
 })(angular);
 
 
-angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -10958,7 +11053,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     });
 })(angular);
 
-angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
     "    <button class=\"social-btn facebook-btn\"\n" +
@@ -11884,7 +11979,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($t
         );
 })(angular);
 
-angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/myProfile/components/changePassword/changePassword.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
     "    <div class=\"container-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
@@ -12544,7 +12639,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
     "<style type=\"text/css\">\n" +
@@ -13150,7 +13245,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/promoCode/svg/arrow-icon.svg",
     "<svg\n" +
     "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -13735,7 +13830,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
 })(angular);
 
 
-angular.module('znk.infra-web-app.purchase').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
     "<ng-switch on=\"vm.purchaseState\">\n" +
     "\n" +
@@ -14244,7 +14339,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function ($t
         );
 })(angular);
 
-angular.module('znk.infra-web-app.settings').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/settings/svg/change-password-icon.svg",
     "<svg class=\"change-password-icon-wrap\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 75 75\">\n" +
     "    <style type=\"text/css\">\n" +
@@ -14463,7 +14558,7 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function ($t
         );
 })(angular);
 
-angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -14501,7 +14596,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -14603,7 +14698,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
 })(angular);
 
 
-angular.module('znk.infra-web-app.tests').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/tests/templates/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
@@ -14923,7 +15018,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     );
 })(angular);
 
-angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/tutorials/components/tutorialList/tutorialList.template.html",
     "<div class=\"tutorials-list-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_LIST_COMPONENTS\">\n" +
     "    <div class=\"diagnostic-overlay\" ng-if=\"!vm.isDiagnosticComplete\">\n" +
@@ -15037,7 +15132,7 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function ($
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -15139,7 +15234,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
     }];
 }]);
 
-angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -15541,7 +15636,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
 }]);
 
 
-angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/userGoalsSelection/svg/arrow-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-468.2 482.4 96 89.8\" class=\"arrow-icon-wrapper\">\n" +
     "    <style type=\"text/css\">\n" +
@@ -15868,7 +15963,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 })(angular);
 
 
-angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html",
     "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
     "    <div class=\"header\">\n" +
@@ -16899,7 +16994,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html",
     "<div ng-transclude class=\"main-container\"></div>\n" +
     "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +
@@ -17779,7 +17874,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
     "<div class=\"exercise-container base-border-radius\">\n" +
     "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
@@ -17984,7 +18079,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
@@ -18342,7 +18437,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkSummary/templates/znkSummaryResults.template.html",
     "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
     "    <div class=\"overflowWrap\">\n" +
@@ -18639,7 +18734,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function (
     });
 })(angular);
 
-angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html",
     "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
     "    <div class=\"time-line-wrapper\">\n" +
@@ -18759,7 +18854,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkToast/svg/znkToast-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +

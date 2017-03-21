@@ -996,7 +996,7 @@
     });
 })(angular);
 
-angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/liveSession/components/liveSession/liveSession.template.html",
     "<div ng-if=\"vm.userLiveSessionState\"\n" +
     "     ng-class=\"vm.liveSessionCls\">\n" +

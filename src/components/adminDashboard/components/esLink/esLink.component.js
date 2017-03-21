@@ -59,11 +59,10 @@
                         appName: self.currentAppKey,
                         uid: self.selectedStudent.uid
                     };
-                    debugger;
-                    ESLinkService.resetUserData(data).then(function success(response){
+                    ESLinkService.resetUserData(data).then(function success(){
                         self.fillResetBtnLoader = false;
-                        
-                    }, function error(response){
+                        $log.debug('user data successfully reset');
+                    }, function error(){
                         self.fillResetBtnLoader = false;
                     });
                 };
@@ -138,17 +137,38 @@
                         columnDefs: [
                             {
                                 field: 'id',
-                                width: "60",
+                                width: "40",
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectStudentRow(row.entity)" name="studentSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: "Name"},
-                            {field: 'email', width: 300, displayName: "Email"},
+                            {field: 'nickname', width: 150, displayName: "Name"},
+                            {
+                                field: 'email', 
+                                width: 250, 
+                                displayName: "Email",
+                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                            },
                             {field: 'uid', width: 300, displayName: 'UID'},
-                            {field: 'zinkerzSatPro', width: 100, displayName: 'SAT Pro'},
-                            {field: 'zinkerzActPro', width: 100, displayName: 'ACT Pro'},
-                            {field: 'zinkerzToeflPro', width: 100, displayName: 'TOEFL Pro'},
-                            {field: 'zinkerzSatsmPro', width: 100, displayName: 'SATSM Pro'}
+                            {
+                                field: 'zinkerzSatPro',
+                                width: 50, displayName: 'SAT',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.sat"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzActPro',
+                                width: 50, displayName: 'ACT',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.act"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzToeflPro',
+                                width: 50, displayName: 'TOEFL',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.toefl"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzSatsmPro',
+                                width: 50, displayName: 'SATSM',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.satsm"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            }
                         ]
                     };
                     self.gridEducatorsOptions = {
@@ -159,9 +179,22 @@
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectEducatorRow(row.entity)" name="educatorSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: "Name"},
-                            {field: 'email', width: 300, displayName: "Email"},
-                            {field: 'uid', width: 300, displayName: 'UID'}
+                            {
+                                field: 'nickname',
+                                width: 300,
+                                displayName: "Name"
+                            },
+                            {
+                                field: 'email', 
+                                width: 300, 
+                                displayName: "Email",
+                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                            },
+                            {
+                                field: 'uid', 
+                                width: 300, 
+                                displayName: 'UID'
+                            }
                         ]
                     };
                     angular.extend(self.gridStudentsOptions, commonGridOptions);
