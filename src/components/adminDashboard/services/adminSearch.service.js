@@ -8,7 +8,6 @@
 
                 var sizeLimit = 10000;
                 var PROMO_CODES_PATH = StorageSrv.variables.appUserSpacePath + '/promoCodes';
-                var hasUB;
 
                 this.getSearchResultsByTerm = function (queryTerm) {
                     return _getSearchResults(queryTerm, _buildQueryBodyByTerm);
@@ -57,6 +56,7 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
+                        //support legacy query
                         var source = item._source.user ? item._source.user : item._source;
                         if (!source) {
                             return mappedData;
@@ -68,17 +68,26 @@
                     return mappedData;
                 }
 
-                function _buildQueryBody(body, term, proo) {
+                function _buildQueryBody(body, term, hasUB) {
                     body.query = {
-                        "query_string": {
-                            "fields": ["zinkerzTeacher", "nickname", "email"],
-                            "query": term
+                        "bool": {
+                            "must": [
+                                {
+                                    "query_string": {
+                                        "fields": ["zinkerzTeacher", "nickname", "email","user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
+                                        "query": term
+                                    }
+                                }
+                            ]
                         }
                     };
+                    if (hasUB) {
+                        body.query.bool.must.push(_buidQueryForUB());
+                    }
                 }
 
-                function _buildQueryBodyByTerm(query, term) {
-                    query.query = {
+                function _buildQueryBodyByTerm(body, term, hasUB) {
+                    body.query = {
                         "bool": {
                             "must": [
                                 {
@@ -86,12 +95,16 @@
                                 },
                                 {
                                     "query_string": {
-                                        "fields": ["zinkerzTeacher", "nickname", "email"],
+                                        "fields": ["zinkerzTeacher", "nickname", "email","user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
                                         "query": term
                                     }
                                 }]
                         }
                     };
+                    if (hasUB) {
+                        body.query.bool.must.push(_buidQueryForUB());
+                    }
+
                 }
 
                 function _makeTerm(term) {
@@ -105,6 +118,24 @@
                     return newTerm;
                 }
 
+                function _buidQueryForUB() {
+                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + ENV.upwardBoundKey.toLowerCase();
+                    var nestedObj = {
+                        nested: {
+                            path: "user.promoCodes",
+                            query: {
+                                bool: {
+                                    must: {
+                                        match: {}
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    nestedObj.nested.query.bool.must.match[promoCodeKey] = ENV.upwardBoundKey;
+                    return nestedObj;
+                }
+
                 function _escape(text) {
                     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
                 }
@@ -114,9 +145,9 @@
                         return TeacherStorageSrv.get(PROMO_CODES_PATH).then(function (promoCodeData) {
                             var hasUB = false;
                             if (promoCodeData) {
-                                data = Object.keys(promoCodeData).filter(function (key) {
-                                    return promoCodeData[key] === ENV.UB;
-                                });
+                                hasUB = Object.keys(promoCodeData).map(function () {
+                                        return promoCodeData.toString().toLowerCase();
+                                    }).indexOf(ENV.upwardBoundKey.toLowerCase()) > -1;
                             }
                             return $q.when(hasUB);
                         });

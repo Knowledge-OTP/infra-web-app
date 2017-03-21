@@ -6,6 +6,6 @@
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function($templateCache) {
 
 }]);

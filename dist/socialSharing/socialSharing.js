@@ -40,6 +40,6 @@
         );
 })(angular);
 
-angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {
 
 }]);

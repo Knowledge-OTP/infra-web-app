@@ -616,10 +616,11 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv) {
+            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", "StorageSrv", "InfraConfigSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv) {
                 'ngInject';
 
                 var sizeLimit = 10000;
+                var PROMO_CODES_PATH = StorageSrv.variables.appUserSpacePath + '/promoCodes';
 
                 this.getSearchResultsByTerm = function (queryTerm) {
                     return _getSearchResults(queryTerm, _buildQueryBodyByTerm);
@@ -646,13 +647,19 @@
                             "size": sizeLimit
                         }
                     };
-                    buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.data.hits));
+                    hasUBPromoCode().then(function (hasUB) {
+                        buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()), hasUB);
+                        ElasticSearchSrv.search(query).then(function (response) {
+                            deferred.resolve(_searchResults(response.data.hits));
+                        }, function (err) {
+                            $log.error(err.message);
+                            deferred.reject(err.message);
+                        });
                     }, function (err) {
                         $log.error(err.message);
                         deferred.reject(err.message);
                     });
+
                     return deferred.promise;
                 }
 
@@ -662,36 +669,38 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        var source = item._source;
+                        //support legacy query
+                        var source = item._source.user ? item._source.user : item._source;
                         if (!source) {
                             return mappedData;
                         }
                         source.uid = item._id;
                         source.zinkerzTeacher = !!source.zinkerzTeacher;
                         return source;
-                        // {
-                        //     uid: item._id,
-                        //     email: source.email,
-                        //     educatorTeachworksName: source.educatorTeachworksName,
-                        //     educatorAvailabilityHours: source.educatorAvailabilityHours,
-                        //     zinkerzTeacher: !!source.zinkerzTeacher,
-                        //     name: source.nickname || source.name
-                        // };
                     });
                     return mappedData;
                 }
 
-                function _buildQueryBody(body, term) {
+                function _buildQueryBody(body, term, hasUB) {
                     body.query = {
-                        "query_string": {
-                            "fields": ["zinkerzTeacher", "nickname", "email"],
-                            "query": term
+                        "bool": {
+                            "must": [
+                                {
+                                    "query_string": {
+                                        "fields": ["zinkerzTeacher", "nickname", "email","user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
+                                        "query": term
+                                    }
+                                }
+                            ]
                         }
                     };
+                    if (hasUB) {
+                        body.query.bool.must.push(_buidQueryForUB());
+                    }
                 }
 
-                function _buildQueryBodyByTerm(query, term) {
-                    query.query = {
+                function _buildQueryBodyByTerm(body, term, hasUB) {
+                    body.query = {
                         "bool": {
                             "must": [
                                 {
@@ -699,12 +708,16 @@
                                 },
                                 {
                                     "query_string": {
-                                        "fields": ["zinkerzTeacher", "nickname", "email"],
+                                        "fields": ["zinkerzTeacher", "nickname", "email","user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
                                         "query": term
                                     }
                                 }]
                         }
                     };
+                    if (hasUB) {
+                        body.query.bool.must.push(_buidQueryForUB());
+                    }
+
                 }
 
                 function _makeTerm(term) {
@@ -718,16 +731,48 @@
                     return newTerm;
                 }
 
+                function _buidQueryForUB() {
+                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + ENV.upwardBoundKey.toLowerCase();
+                    var nestedObj = {
+                        nested: {
+                            path: "user.promoCodes",
+                            query: {
+                                bool: {
+                                    must: {
+                                        match: {}
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    nestedObj.nested.query.bool.must.match[promoCodeKey] = ENV.upwardBoundKey;
+                    return nestedObj;
+                }
+
                 function _escape(text) {
                     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
                 }
 
-
+                function hasUBPromoCode() {
+                    return InfraConfigSrv.getTeacherStorage().then(function (TeacherStorageSrv) {
+                        return TeacherStorageSrv.get(PROMO_CODES_PATH).then(function (promoCodeData) {
+                            var hasUB = false;
+                            if (promoCodeData) {
+                                hasUB = Object.keys(promoCodeData).map(function () {
+                                        return promoCodeData.toString().toLowerCase();
+                                    }).indexOf(ENV.upwardBoundKey.toLowerCase()) > -1;
+                            }
+                            return $q.when(hasUB);
+                        });
+                    }).catch(function (err) {
+                        $log.debug('AdminSearchService - getPromoCodes: failed to get getTeacherStorage', err);
+                    });
+                }
             }]
         );
 })(angular);
 
-angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
