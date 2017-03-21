@@ -143,8 +143,8 @@
                             },
                             {field: 'nickname', width: 150, displayName: "Name"},
                             {
-                                field: 'email', 
-                                width: 250, 
+                                field: 'email',
+                                width: 250,
                                 displayName: "Email",
                                 cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
@@ -152,22 +152,22 @@
                             {
                                 field: 'zinkerzSatPro',
                                 width: 50, displayName: 'SAT',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.sat"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.sat_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
                             },
                             {
                                 field: 'zinkerzActPro',
                                 width: 50, displayName: 'ACT',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.act"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.act_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
                             },
                             {
                                 field: 'zinkerzToeflPro',
                                 width: 50, displayName: 'TOEFL',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.toefl"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.toefl_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
                             },
                             {
                                 field: 'zinkerzSatsmPro',
                                 width: 50, displayName: 'SATSM',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.satsm"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.satsm_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
                             }
                         ]
                     };
@@ -185,14 +185,14 @@
                                 displayName: "Name"
                             },
                             {
-                                field: 'email', 
-                                width: 300, 
+                                field: 'email',
+                                width: 300,
                                 displayName: "Email",
                                 cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {
-                                field: 'uid', 
-                                width: 300, 
+                                field: 'uid',
+                                width: 300,
                                 displayName: 'UID'
                             }
                         ]
