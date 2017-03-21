@@ -194,9 +194,30 @@
             input[type='radio']:checked:before {
                 background: $bgColor5;
             }
-        }
 
+            .admin-correct-icon {
+                display: block;
+                width: 20px;
+                margin: auto;
+                * {
+                    stroke: $bgColor14;
+                }
+            }
+        }
     }
 }
 
+md-tooltip[znk-tooltip] {
+    &[md-direction=top]{
+        &.admin-tooltip{
+            .md-content {
+                background-color: $bgColor67;
+            }
+            .arrow {
+                border-top-color: $bgColor67;
+            
+            }
+        }
+    }
+}
 
