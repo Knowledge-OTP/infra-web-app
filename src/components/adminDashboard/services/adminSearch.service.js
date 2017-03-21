@@ -49,21 +49,13 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        var source = item._source;
+                        var source = item._source.user ? item._source.user : item._source;
                         if (!source) {
                             return mappedData;
                         }
                         source.uid = item._id;
                         source.zinkerzTeacher = !!source.zinkerzTeacher;
                         return source;
-                        // {
-                        //     uid: item._id,
-                        //     email: source.email,
-                        //     educatorTeachworksName: source.educatorTeachworksName,
-                        //     educatorAvailabilityHours: source.educatorAvailabilityHours,
-                        //     zinkerzTeacher: !!source.zinkerzTeacher,
-                        //     name: source.nickname || source.name
-                        // };
                     });
                     return mappedData;
                 }
@@ -80,16 +72,18 @@
                 function _buildQueryBodyByTerm(query, term) {
                     query.query = {
                         "bool": {
-                            "must": [
-                                {
-                                    "term": {"zinkerzTeacher": "true"}
+                            "must": [{
+                                    "term": {
+                                        "zinkerzTeacher": "true"
+                                    }
                                 },
                                 {
                                     "query_string": {
                                         "fields": ["zinkerzTeacher", "nickname", "email"],
                                         "query": term
                                     }
-                                }]
+                                }
+                            ]
                         }
                     };
                 }

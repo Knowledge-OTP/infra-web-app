@@ -15,14 +15,16 @@
         'znk.infra-web-app.myProfile',
         'ui.grid',
         'ui.grid.selection',
-        'ui.grid.autoResize'
+        'ui.grid.autoResize',
+        'znk.infra.znkTooltip'
     ])
         .config([
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 var svgMap = {
                     'adminProfile-icon': 'components/adminDashboard/components/eMetadata/svg/admin-profile-icon.svg',
-                    'adminProfile-close-popup': 'components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg'
+                    'adminProfile-close-popup': 'components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg',
+                    'admin-correct-icon': 'components/adminDashboard/svg/correct-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }
@@ -392,6 +394,21 @@
                     AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
+                self.resetUserData = function() {
+                    self.startResetBtnLoader = true;
+                    self.fillResetBtnLoader = undefined;
+                    var data = {
+                        appName: self.currentAppKey,
+                        uid: self.selectedStudent.uid
+                    };
+                    ESLinkService.resetUserData(data).then(function success(){
+                        self.fillResetBtnLoader = false;
+                        $log.debug('user data successfully reset');
+                    }, function error(){
+                        self.fillResetBtnLoader = false;
+                    });
+                };
+
                 self.link = function () {
                     self.startLoader = true;
                     self.fillLoader = undefined;
@@ -462,13 +479,38 @@
                         columnDefs: [
                             {
                                 field: 'id',
-                                width: "60",
+                                width: "40",
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectStudentRow(row.entity)" name="studentSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: "Name"},
-                            {field: 'email', width: 300, displayName: "Email"},
-                            {field: 'uid', width: 300, displayName: 'UID'}
+                            {field: 'nickname', width: 150, displayName: "Name"},
+                            {
+                                field: 'email', 
+                                width: 250, 
+                                displayName: "Email",
+                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                            },
+                            {field: 'uid', width: 300, displayName: 'UID'},
+                            {
+                                field: 'zinkerzSatPro',
+                                width: 50, displayName: 'SAT',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.sat"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzActPro',
+                                width: 50, displayName: 'ACT',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.act"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzToeflPro',
+                                width: 50, displayName: 'TOEFL',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.toefl"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzSatsmPro',
+                                width: 50, displayName: 'SATSM',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.satsm"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            }
                         ]
                     };
                     self.gridEducatorsOptions = {
@@ -479,9 +521,22 @@
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectEducatorRow(row.entity)" name="educatorSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: "Name"},
-                            {field: 'email', width: 300, displayName: "Email"},
-                            {field: 'uid', width: 300, displayName: 'UID'}
+                            {
+                                field: 'nickname',
+                                width: 300,
+                                displayName: "Name"
+                            },
+                            {
+                                field: 'email', 
+                                width: 300, 
+                                displayName: "Email",
+                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                            },
+                            {
+                                field: 'uid', 
+                                width: 300, 
+                                displayName: 'UID'
+                            }
                         ]
                     };
                     angular.extend(self.gridStudentsOptions, commonGridOptions);
@@ -525,11 +580,20 @@
                 'ngInject';
 
                 var apiPath = ENV.backendEndpoint + "/invitation/assosciate_student";
-
+                var resetUserDataPath = ENV.backendEndpoint + "/userModule/delete";
 
                 this.createInvitationFactory = function (senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName) {
                     return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
                 };
+
+                this.resetUserData = function(data) {
+                    if(!data || !data.appName || !data.uid) {
+                        $log.error('Both appName and uid is required');
+                        return;
+                    }
+                    return $http.post(resetUserDataPath, data);
+                };
+
                 this.link = function (data) {
                     if (!(data && angular.isObject(data))) {
                         $log.error('Invitation object is not defined');
@@ -662,21 +726,13 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        var source = item._source;
+                        var source = item._source.user ? item._source.user : item._source;
                         if (!source) {
                             return mappedData;
                         }
                         source.uid = item._id;
                         source.zinkerzTeacher = !!source.zinkerzTeacher;
                         return source;
-                        // {
-                        //     uid: item._id,
-                        //     email: source.email,
-                        //     educatorTeachworksName: source.educatorTeachworksName,
-                        //     educatorAvailabilityHours: source.educatorAvailabilityHours,
-                        //     zinkerzTeacher: !!source.zinkerzTeacher,
-                        //     name: source.nickname || source.name
-                        // };
                     });
                     return mappedData;
                 }
@@ -693,16 +749,18 @@
                 function _buildQueryBodyByTerm(query, term) {
                     query.query = {
                         "bool": {
-                            "must": [
-                                {
-                                    "term": {"zinkerzTeacher": "true"}
+                            "must": [{
+                                    "term": {
+                                        "zinkerzTeacher": "true"
+                                    }
                                 },
                                 {
                                     "query_string": {
                                         "fields": ["zinkerzTeacher", "nickname", "email"],
                                         "query": term
                                     }
-                                }]
+                                }
+                            ]
                         }
                     };
                 }
@@ -727,7 +785,7 @@
         );
 })(angular);
 
-angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
@@ -927,7 +985,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
     "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
     "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
+    "            <div ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
     "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
     "                    <div class=\"admin-msg\">\n" +
     "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
@@ -939,7 +997,6 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1035,6 +1092,19 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"btn-wrap\">\n" +
     "            <button element-loader\n" +
+    "                    ng-disabled=\"!vm.selectedStudent\"\n" +
+    "                    fill-loader=\"vm.fillResetBtnLoader\"\n" +
+    "                    show-loader=\"vm.startResetBtnLoader\"\n" +
+    "                    bg-loader=\"'#037684'\"\n" +
+    "                    precentage=\"50\"\n" +
+    "                    font-color=\"'#FFFFFF'\"\n" +
+    "                    bg=\"'#0a9bad'\"\n" +
+    "                    ng-click=\"vm.resetUserData()\"\n" +
+    "                    class=\"md-button link-btn drop-shadow\"\n" +
+    "                    name=\"submit\">\n" +
+    "                <span translate=\"ADMIN.ESLINK.LINK_RST_BTN\"></span>\n" +
+    "            </button>\n" +
+    "            <button element-loader\n" +
     "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
     "                    fill-loader=\"vm.fillLoader\"\n" +
     "                    show-loader=\"vm.startLoader\"\n" +
@@ -1067,5 +1137,30 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "    </button>\n" +
     "\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/adminDashboard/svg/correct-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     class=\"correct-icon-svg\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 188.5 129\"\n" +
+    "     style=\"enable-background:new 0 0 188.5 129;\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.correct-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #231F20;\n" +
+    "        stroke-width: 15;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<line class=\"st0\" x1=\"7.5\" y1=\"62\" x2=\"67\" y2=\"121.5\"/>\n" +
+    "	<line class=\"st0\" x1=\"67\" y1=\"121.5\" x2=\"181\" y2=\"7.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
     "");
 }]);
