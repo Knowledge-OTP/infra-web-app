@@ -19,7 +19,7 @@
 
                     UserProfileService.getProfileByUserId(userDataAuth.uid).then(function (userProfile) {
                         var createUserProfileProm;
-                        if (!userProfile) {
+                        if (Object.keys(userProfile).length === 0) {
                             var nickname = userDataAuth.nickname || userDataAuth.name;
                             createUserProfileProm = UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
                         } else {
