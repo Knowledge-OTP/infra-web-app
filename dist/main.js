@@ -10518,7 +10518,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        ["LoginAppSrv", "$window", "$log", "$auth", "UserProfileService", function(LoginAppSrv, $window, $log, $auth, UserProfileService) {
+        ["$q", "LoginAppSrv", "$window", "$log", "$auth", "UserProfileService", function($q, LoginAppSrv, $window, $log, $auth, UserProfileService) {
             'ngInject';
 
             var vm = this;
@@ -10533,17 +10533,21 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     var userDataAuth = results[0].auth;
 
                     UserProfileService.getProfileByUserId(userDataAuth.uid).then(function (userProfile) {
+                        var createUserProfileProm;
                         if (!userProfile) {
                             var nickname = userDataAuth.nickname || userDataAuth.name;
-                            UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
+                            createUserProfileProm = UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
+                        } else {
+                            createUserProfileProm = $q.when(null);
                         }
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
                         loadingProvider.showSpinner = false;
 
-                        LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-
+                        createUserProfileProm.then(function () {
+                            LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
+                        });
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
