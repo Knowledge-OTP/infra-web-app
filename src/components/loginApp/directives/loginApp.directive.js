@@ -19,7 +19,7 @@
 
                     scope.d = {
                         availableApps: LoginAppSrv.APPS,
-                        appContext: LoginAppSrv.APPS.SAT,
+                        appContext: LoginAppSrv.APPS.ACT,
                         userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: isTeacherApp ? LoginAppSrv.USER_CONTEXT.TEACHER : LoginAppSrv.USER_CONTEXT.STUDENT,
                         changePassword: false

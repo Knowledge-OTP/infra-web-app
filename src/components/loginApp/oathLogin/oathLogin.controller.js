@@ -3,7 +3,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        function(LoginAppSrv, $window, $log, $auth) {
+        function($q, LoginAppSrv, $window, $log, $auth, UserProfileService) {
             'ngInject';
 
             var vm = this;
@@ -17,34 +17,22 @@
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
-                        var updateProfile = false;
-
-                        if (!userProfile.email && userDataAuth.email) {
-                            userProfile.email = userDataAuth.email;
-                            updateProfile = true;
-                        }
-                        if (!userProfile.nickname && (userDataAuth.nickname || userDataAuth.name)) {
-                            userProfile.nickname = userDataAuth.nickname || userDataAuth.name;
-                            updateProfile = true;
-                        }
-                        if (!userProfile.provider) {
-                            userProfile.provider = provider;
-                            updateProfile = true;
+                    UserProfileService.getProfileByUserId(userDataAuth.uid).then(function (userProfile) {
+                        var createUserProfileProm;
+                        if (Object.keys(userProfile).length === 0) {
+                            var nickname = userDataAuth.nickname || userDataAuth.name;
+                            createUserProfileProm = UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
+                        } else {
+                            createUserProfileProm = $q.when(null);
                         }
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
-
                         loadingProvider.showSpinner = false;
 
-                        if (updateProfile) {
-                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
-                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-                            });
-                        } else {
+                        createUserProfileProm.then(function () {
                             LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-                        }
+                        });
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);

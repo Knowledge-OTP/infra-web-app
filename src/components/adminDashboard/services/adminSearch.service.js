@@ -89,16 +89,18 @@
                 function _buildQueryBodyByTerm(body, term, hasUB) {
                     body.query = {
                         "bool": {
-                            "must": [
-                                {
-                                    "term": {"user.zinkerzTeacher": "true"}
+                            "must": [{
+                                    "term": {
+                                        "user.zinkerzTeacher": "true"
+                                    }
                                 },
                                 {
                                     "query_string": {
                                         "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
                                         "query": term
                                     }
-                                }]
+                                }
+                            ]
                         }
                     };
                     if (hasUB) {

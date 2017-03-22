@@ -7,11 +7,20 @@
                 'ngInject';
 
                 var apiPath = ENV.backendEndpoint + "/invitation/assosciate_student";
-
+                var resetUserDataPath = ENV.backendEndpoint + "/userModule/delete";
 
                 this.createInvitationFactory = function (senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName) {
                     return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
                 };
+
+                this.resetUserData = function(data) {
+                    if(!data || !data.appName || !data.uid) {
+                        $log.error('Both appName and uid is required');
+                        return;
+                    }
+                    return $http.post(resetUserDataPath, data);
+                };
+
                 this.link = function (data) {
                     if (!(data && angular.isObject(data))) {
                         $log.error('Invitation object is not defined');

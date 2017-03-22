@@ -556,6 +556,7 @@
     },
     "ADMIN.ESLINK": {
         "LINK_BTN": "Link",
+        "LINK_RST_BTN": "Reset User Data",
         "LINK_SUCCEEDED": "LINK SUCCEEDED",
         "LINK_FAILED": "LINK FAILED",
         "IS_ZINKERZ_EDUCATOR": "Is Zinkerz Educator",
