@@ -85,31 +85,34 @@
     'use strict';
 
     angular.module('znk.infra-web-app.promoCode')
-        .run(["$location", "PromoCodeSrv", "AuthService", "PopUpSrv", "$filter", "ENV", function ($location, PromoCodeSrv, AuthService, PopUpSrv, $filter, ENV) {
+        .run(["$location", "PromoCodeSrv", "AuthService", "PopUpSrv", "$filter", "$injector", function ($location, PromoCodeSrv, AuthService, PopUpSrv, $filter, $injector) {
         'ngInject';
-        var authData = AuthService.getAuth();
-        var translate = $filter('translate');
+            $injector.invoke(['ENV', function(ENV){
+                var authData = AuthService.getAuth();
+                var translate = $filter('translate');
 
 
-        if (authData && authData.uid) {
-            var search = $location.search();
-            var promoCodeId = search.pcid;
-            var appContext = ENV.firebaseAppScopeName;
+                if (authData && authData.uid) {
+                    var search = $location.search();
+                    var promoCodeId = search.pcid;
+                    var appContext = ENV.firebaseAppScopeName;
 
-            delete search.pcid;
+                    delete search.pcid;
 
-            if (angular.isDefined(promoCodeId)) {
-                PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appContext).then(function () {
-                    var successTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
-                    var SuccessMsg = translate('PROMO_CODE.PROMO_CODE_SUCCESS_MESSAGE');
-                    PopUpSrv.success(successTitle, SuccessMsg);
-                }).catch(function () {
-                    var errorTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
-                    var errorMsg = translate('PROMO_CODE.PROMO_CODE_ERROR_MESSAGE');
-                    PopUpSrv.error(errorTitle, errorMsg);
-                });
-            }
-        }
+                    if (angular.isDefined(promoCodeId)) {
+                        PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appContext).then(function () {
+                            var successTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
+                            var SuccessMsg = translate('PROMO_CODE.PROMO_CODE_SUCCESS_MESSAGE');
+                            PopUpSrv.success(successTitle, SuccessMsg);
+                        }).catch(function () {
+                            var errorTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
+                            var errorMsg = translate('PROMO_CODE.PROMO_CODE_ERROR_MESSAGE');
+                            PopUpSrv.error(errorTitle, errorMsg);
+                        });
+                    }
+                }
+            }]);
+
     }]);
 
 })(angular);
@@ -128,17 +131,21 @@
     'use strict';
 
     angular.module('znk.infra-web-app.promoCode').provider('PromoCodeSrv',
-        ["ENV", function (ENV) {
-
+        ["$injector", function ($injector) {
             var backendData = {};
-            var _currentApp = ENV.firebaseAppScopeName;
+            var _currentApp;
 
-            backendData[_currentApp] = {  //default data
-                backendEndpoint: ENV.backendEndpoint,
-                currentAppName: ENV.firebaseAppScopeName,
-                studentAppName: ENV.studentAppName,
-                dashboardAppName:  ENV.dashboardAppName
-            };
+            $injector.invoke(['ENV', function(ENV){
+                backendData = {};
+                _currentApp = ENV.firebaseAppScopeName;
+
+                backendData[_currentApp] = {  //default data
+                    backendEndpoint: ENV.backendEndpoint,
+                    currentAppName: ENV.firebaseAppScopeName,
+                    studentAppName: ENV.studentAppName,
+                    dashboardAppName:  ENV.dashboardAppName
+                };
+            }]);
 
             this.setBackendData = function (_backendData) {
                 backendData = _backendData;
@@ -240,7 +247,7 @@
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/promoCode/svg/arrow-icon.svg",
     "<svg\n" +
     "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
