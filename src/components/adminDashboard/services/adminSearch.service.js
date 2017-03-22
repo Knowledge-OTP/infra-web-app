@@ -7,6 +7,7 @@
                 'ngInject';
 
                 var sizeLimit = 10000;
+                var upwardBoundKey = ENV.upwardBoundKey;
                 var PROMO_CODES_PATH = StorageSrv.variables.appUserSpacePath + '/promoCodes';
 
                 this.getSearchResultsByTerm = function (queryTerm) {
@@ -56,8 +57,7 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        //support legacy query
-                        var source = item._source.user ? item._source.user : item._source;
+                        var source = item._source.user;
                         if (!source) {
                             return mappedData;
                         }
@@ -74,7 +74,7 @@
                             "must": [
                                 {
                                     "query_string": {
-                                        "fields": ["zinkerzTeacher", "nickname", "email","user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
                                         "query": term
                                     }
                                 }
@@ -91,11 +91,11 @@
                         "bool": {
                             "must": [
                                 {
-                                    "term": {"zinkerzTeacher": "true"}
+                                    "term": {"user.zinkerzTeacher": "true"}
                                 },
                                 {
                                     "query_string": {
-                                        "fields": ["zinkerzTeacher", "nickname", "email","user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
                                         "query": term
                                     }
                                 }]
@@ -119,7 +119,7 @@
                 }
 
                 function _buidQueryForUB() {
-                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + ENV.upwardBoundKey.toLowerCase();
+                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + upwardBoundKey.toLowerCase();
                     var nestedObj = {
                         nested: {
                             path: "user.promoCodes",
@@ -132,7 +132,7 @@
                             }
                         }
                     };
-                    nestedObj.nested.query.bool.must.match[promoCodeKey] = ENV.upwardBoundKey;
+                    nestedObj.nested.query.bool.must.match[promoCodeKey] = upwardBoundKey;
                     return nestedObj;
                 }
 
@@ -145,9 +145,9 @@
                         return TeacherStorageSrv.get(PROMO_CODES_PATH).then(function (promoCodeData) {
                             var hasUB = false;
                             if (promoCodeData) {
-                                hasUB = Object.keys(promoCodeData).map(function () {
-                                        return promoCodeData.toString().toLowerCase();
-                                    }).indexOf(ENV.upwardBoundKey.toLowerCase()) > -1;
+                                hasUB = Object.keys(promoCodeData).map(function (item) {
+                                        return item.toString().toLowerCase();
+                                    }).indexOf(upwardBoundKey.toLowerCase()) > -1;
                             }
                             return $q.when(hasUB);
                         });
