@@ -6,17 +6,21 @@
             var backendData = {};
             var _currentApp;
 
-            $injector.invoke(['ENV', function(ENV){
-                backendData = {};
-                _currentApp = ENV.firebaseAppScopeName;
+            try {
+                $injector.invoke(['ENV', function (ENV) {
+                    backendData = {};
+                    _currentApp = ENV.firebaseAppScopeName;
 
-                backendData[_currentApp] = {  //default data
-                    backendEndpoint: ENV.backendEndpoint,
-                    currentAppName: ENV.firebaseAppScopeName,
-                    studentAppName: ENV.studentAppName,
-                    dashboardAppName:  ENV.dashboardAppName
-                };
-            }]);
+                    backendData[_currentApp] = {  //default data
+                        backendEndpoint: ENV.backendEndpoint,
+                        currentAppName: ENV.firebaseAppScopeName,
+                        studentAppName: ENV.studentAppName,
+                        dashboardAppName: ENV.dashboardAppName
+                    };
+                }]);
+            } catch(error){
+
+            }
 
             this.setBackendData = function (_backendData) {
                 backendData = _backendData;
