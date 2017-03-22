@@ -4,52 +4,54 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
 
     var _calcScoreFn;
 
-    this.setCalcScoreFn = function(calcScoreFn) {
+    function _setCalcScoreFn(calcScoreFn) {
         _calcScoreFn = calcScoreFn;
-    };
+    }
 
-    this.$get = ['InfraConfigSrv', 'StorageSrv', '$q', '$injector', function (InfraConfigSrv, StorageSrv, $q, $injector) {
+    this.setCalcScoreFn = _setCalcScoreFn;
+
+    this.$get = function (InfraConfigSrv, StorageSrv, $q, $injector) {
+        'ngInject';
         var self = this;
         var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
         var defaultSubjectScore = self.settings.defaultSubjectScore;
         var subjects = self.settings.subjects;
-
         var userGoalsServiceObj = {};
 
-        userGoalsServiceObj.getGoals = function () {
-            return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
-                return globalStorage.get(goalsPath).then(function (userGoals) {
-                    if (angular.equals(userGoals, {})) {
+        function _getGoals() {
+            return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                return studentStorage.get(goalsPath).then(function (userGoals) {
+                    if (Object.keys(userGoals).length === 0) {
                         userGoals = _defaultUserGoals();
                     }
                     return userGoals;
                 });
             });
-        };
+        }
 
-        userGoalsServiceObj.setGoals = function (newGoals) {
-            return InfraConfigSrv.getGlobalStorage().then(function(globalStorage) {
-                if (arguments.length && angular.isDefined(newGoals)) {
-                    return globalStorage.set(goalsPath, newGoals);
+        function _setGoals(newGoals) {
+            return InfraConfigSrv.getStudentStorage().then(function(studentStorage) {
+                if (arguments.length && typeof newGoals !== 'undefined') {
+                    return studentStorage.set(goalsPath, newGoals);
                 }
-                return globalStorage.get(goalsPath).then(function (userGoals) {
+                return studentStorage.get(goalsPath).then(function (userGoals) {
                     if (!userGoals.goals) {
                         userGoals.goals = _defaultUserGoals();
                     }
                     return userGoals;
                 });
             });
-        };
+        }
 
-        userGoalsServiceObj.getCalcScoreFn = function() {
+        function _getCalcScoreFn() {
             return $q.when($injector.invoke(_calcScoreFn, self));
-        };
+        }
 
-        userGoalsServiceObj.getGoalsSettings = function() {
+        function _getGoalsSettings() {
             return self.settings;
-        };
+        }
 
-        function getInitTotalScore() {
+        function _getInitTotalScore() {
             var initTotalScore = 0;
             angular.forEach(subjects, function() {
                 initTotalScore += defaultSubjectScore;
@@ -60,7 +62,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
         function _defaultUserGoals() {
             var defaultUserGoals = {
                 isCompleted: false,
-                totalScore: getInitTotalScore()
+                totalScore: _getInitTotalScore()
             };
             angular.forEach(subjects, function(subject) {
                 defaultUserGoals[subject.name] = defaultSubjectScore;
@@ -68,11 +70,11 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
             return defaultUserGoals;
         }
 
-        function averageSubjectsGoal(goalsObj) {
+        function _averageSubjectsGoal(goalsObj) {
             var goalsSum = 0;
             var goalsLength = 0;
             angular.forEach(goalsObj, function(goal) {
-                if (angular.isNumber(goal)) {
+                if (typeof goal === 'number') {
                     goalsSum += goal;
                     goalsLength += 1;
                 }
@@ -80,8 +82,12 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
             return Math.round(goalsSum / goalsLength);
         }
 
-        userGoalsServiceObj.averageSubjectsGoal = averageSubjectsGoal;
+        userGoalsServiceObj.getGoals = _getGoals;
+        userGoalsServiceObj.setGoals = _setGoals;
+        userGoalsServiceObj.getCalcScoreFn = _getCalcScoreFn;
+        userGoalsServiceObj.getGoalsSettings = _getGoalsSettings;
+        userGoalsServiceObj.averageSubjectsGoal = _averageSubjectsGoal;
 
         return userGoalsServiceObj;
-    }];
+    };
 }]);
