@@ -32,6 +32,7 @@
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
+                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id);
                     };
                     scope.changeCurrentForm = function (currentForm) {
                         scope.currentForm = currentForm;
