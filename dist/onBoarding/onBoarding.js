@@ -389,7 +389,7 @@
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
     "<style type=\"text/css\">\n" +

@@ -122,6 +122,7 @@
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
+                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id, scope.currentUserContext);
                     };
                     scope.changeCurrentForm = function (currentForm) {
                         scope.currentForm = currentForm;
@@ -133,6 +134,7 @@
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
                             scope.currentUserContext = 'teacher';
                         }
+                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     // App select menu
@@ -506,6 +508,10 @@
                 return AllEnvs[env][appContext];
             }
 
+            LoginAppSrv.getCurrentEnv = function(){
+                return env;
+            };
+
             function _getAppScopeName(userContext, appEnvConfig) {
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }
@@ -727,7 +733,7 @@
     });
 })(angular);
 
-angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
     "    <button class=\"social-btn facebook-btn\"\n" +
