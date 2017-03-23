@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('EMetadataService',
-            function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv,UtilitySrv) {
+            function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv, UtilitySrv) {
                 'ngInject';
 
 
@@ -13,16 +13,18 @@
                 var satURL = "https://sat-dev.firebaseio.com";
                 var actURL = "https://act-dev.firebaseio.com";
                 var tofelURL = "https://znk-toefl-dev.firebaseio.com";
+                var znkURL = "https://znk-dev.firebaseio.com";
 
                 if (!ENV.debug) {
                     satURL = "https://sat2-prod.firebaseio.com/";
                     actURL = "https://act-prod.firebaseio.com/";
                     tofelURL = "https://znk-toefl-prod.firebaseio.com/";
+                    znkURL = "https://znk-prod.firebaseio.com";
                 }
 
 
                 self.showEducatorProfile = function (userProfile) {
-                    if(!userProfile){
+                    if (!userProfile) {
                         $log.error('showEducatorProfile: userProfile object is not undefined');
                         return;
                     }
@@ -75,7 +77,7 @@
                         userId: uid,
                         isZinkerzTeacher: !!isZinkerzTeacher,
                         teachingSubject: subject,
-                        fbUrls: [satURL, actURL, tofelURL]
+                        fbUrls: [satURL, actURL, tofelURL, znkURL]
                     };
                     return $http.post(profilePath, profile);
                 };

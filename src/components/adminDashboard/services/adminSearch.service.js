@@ -74,7 +74,7 @@
                             "must": [
                                 {
                                     "query_string": {
-                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes","user.purche"],
                                         "query": term
                                     }
                                 }
@@ -90,10 +90,10 @@
                     body.query = {
                         "bool": {
                             "must": [{
-                                    "term": {
-                                        "user.zinkerzTeacher": "true"
-                                    }
-                                },
+                                "term": {
+                                    "user.zinkerzTeacher": "true"
+                                }
+                            },
                                 {
                                     "query_string": {
                                         "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
@@ -121,20 +121,15 @@
                 }
 
                 function _buidQueryForUB() {
-                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + upwardBoundKey.toLowerCase();
+                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + ENV.upwardBoundKey;
                     var nestedObj = {
                         nested: {
                             path: "user.promoCodes",
-                            query: {
-                                bool: {
-                                    must: {
-                                        match: {}
-                                    }
-                                }
+                            "filter": {
+                                "exists": {"field": promoCodeKey}
                             }
                         }
                     };
-                    nestedObj.nested.query.bool.must.match[promoCodeKey] = upwardBoundKey;
                     return nestedObj;
                 }
 

@@ -15,14 +15,16 @@
         'znk.infra-web-app.myProfile',
         'ui.grid',
         'ui.grid.selection',
-        'ui.grid.autoResize'
+        'ui.grid.autoResize',
+        'znk.infra.znkTooltip'
     ])
         .config([
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 var svgMap = {
                     'adminProfile-icon': 'components/adminDashboard/components/eMetadata/svg/admin-profile-icon.svg',
-                    'adminProfile-close-popup': 'components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg'
+                    'adminProfile-close-popup': 'components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg',
+                    'admin-correct-icon': 'components/adminDashboard/svg/correct-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }
@@ -187,7 +189,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('EMetadataService',
-            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", "MyProfileSrv", "UtilitySrv", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv,UtilitySrv) {
+            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", "MyProfileSrv", "UtilitySrv", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv, UtilitySrv) {
                 'ngInject';
 
 
@@ -197,16 +199,18 @@
                 var satURL = "https://sat-dev.firebaseio.com";
                 var actURL = "https://act-dev.firebaseio.com";
                 var tofelURL = "https://znk-toefl-dev.firebaseio.com";
+                var znkURL = "https://znk-dev.firebaseio.com";
 
                 if (!ENV.debug) {
                     satURL = "https://sat2-prod.firebaseio.com/";
                     actURL = "https://act-prod.firebaseio.com/";
                     tofelURL = "https://znk-toefl-prod.firebaseio.com/";
+                    znkURL = "https://znk-prod.firebaseio.com";
                 }
 
 
                 self.showEducatorProfile = function (userProfile) {
-                    if(!userProfile){
+                    if (!userProfile) {
                         $log.error('showEducatorProfile: userProfile object is not undefined');
                         return;
                     }
@@ -259,7 +263,7 @@
                         userId: uid,
                         isZinkerzTeacher: !!isZinkerzTeacher,
                         teachingSubject: subject,
-                        fbUrls: [satURL, actURL, tofelURL]
+                        fbUrls: [satURL, actURL, tofelURL, znkURL]
                     };
                     return $http.post(profilePath, profile);
                 };
@@ -392,6 +396,21 @@
                     AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
+                self.resetUserData = function() {
+                    self.startResetBtnLoader = true;
+                    self.fillResetBtnLoader = undefined;
+                    var data = {
+                        appName: self.currentAppKey,
+                        uid: self.selectedStudent.uid
+                    };
+                    ESLinkService.resetUserData(data).then(function success(){
+                        self.fillResetBtnLoader = false;
+                        $log.debug('user data successfully reset');
+                    }, function error(){
+                        self.fillResetBtnLoader = false;
+                    });
+                };
+
                 self.link = function () {
                     self.startLoader = true;
                     self.fillLoader = undefined;
@@ -462,13 +481,38 @@
                         columnDefs: [
                             {
                                 field: 'id',
-                                width: "60",
+                                width: "40",
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectStudentRow(row.entity)" name="studentSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: "Name"},
-                            {field: 'email', width: 300, displayName: "Email"},
-                            {field: 'uid', width: 300, displayName: 'UID'}
+                            {field: 'nickname', width: 150, displayName: "Name"},
+                            {
+                                field: 'email',
+                                width: 250,
+                                displayName: "Email",
+                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                            },
+                            {field: 'uid', width: 300, displayName: 'UID'},
+                            {
+                                field: 'zinkerzSatPro',
+                                width: 50, displayName: 'SAT',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.sat_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzActPro',
+                                width: 50, displayName: 'ACT',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.act_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzToeflPro',
+                                width: 50, displayName: 'TOEFL',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.toefl_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            },
+                            {
+                                field: 'zinkerzSatsmPro',
+                                width: 50, displayName: 'SATSM',
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.satsm_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                            }
                         ]
                     };
                     self.gridEducatorsOptions = {
@@ -479,9 +523,22 @@
                                 displayName: '',
                                 cellTemplate: '<div class="ui-grid-cell-contents" ><input type="radio" ng-click="grid.appScope.selectEducatorRow(row.entity)" name="educatorSelection" value="{{row.entity.uid}}"></div>'
                             },
-                            {field: 'nickname', width: 300, displayName: "Name"},
-                            {field: 'email', width: 300, displayName: "Email"},
-                            {field: 'uid', width: 300, displayName: 'UID'}
+                            {
+                                field: 'nickname',
+                                width: 300,
+                                displayName: "Name"
+                            },
+                            {
+                                field: 'email',
+                                width: 300,
+                                displayName: "Email",
+                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                            },
+                            {
+                                field: 'uid',
+                                width: 300,
+                                displayName: 'UID'
+                            }
                         ]
                     };
                     angular.extend(self.gridStudentsOptions, commonGridOptions);
@@ -525,11 +582,20 @@
                 'ngInject';
 
                 var apiPath = ENV.backendEndpoint + "/invitation/assosciate_student";
-
+                var resetUserDataPath = ENV.backendEndpoint + "/userModule/delete";
 
                 this.createInvitationFactory = function (senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName) {
                     return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
                 };
+
+                this.resetUserData = function(data) {
+                    if(!data || !data.appName || !data.uid) {
+                        $log.error('Both appName and uid is required');
+                        return;
+                    }
+                    return $http.post(resetUserDataPath, data);
+                };
+
                 this.link = function (data) {
                     if (!(data && angular.isObject(data))) {
                         $log.error('Invitation object is not defined');
@@ -670,12 +736,7 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-<<<<<<< HEAD
                         var source = item._source.user;
-=======
-                        //support legacy query
-                        var source = item._source.user ? item._source.user : item._source;
->>>>>>> bbcfeb04d2a078861a9f751eb6e5758109547fc9
                         if (!source) {
                             return mappedData;
                         }
@@ -692,7 +753,7 @@
                             "must": [
                                 {
                                     "query_string": {
-                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes","user.purche"],
                                         "query": term
                                     }
                                 }
@@ -707,23 +768,18 @@
                 function _buildQueryBodyByTerm(body, term, hasUB) {
                     body.query = {
                         "bool": {
-<<<<<<< HEAD
                             "must": [{
-                                    "term": {
-                                        "user.zinkerzTeacher": "true"
-                                    }
-=======
-                            "must": [
-                                {
-                                    "term": {"zinkerzTeacher": "true"}
->>>>>>> bbcfeb04d2a078861a9f751eb6e5758109547fc9
-                                },
+                                "term": {
+                                    "user.zinkerzTeacher": "true"
+                                }
+                            },
                                 {
                                     "query_string": {
                                         "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
                                         "query": term
                                     }
-                                }]
+                                }
+                            ]
                         }
                     };
                     if (hasUB) {
@@ -744,20 +800,15 @@
                 }
 
                 function _buidQueryForUB() {
-                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + upwardBoundKey.toLowerCase();
+                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + ENV.upwardBoundKey;
                     var nestedObj = {
                         nested: {
                             path: "user.promoCodes",
-                            query: {
-                                bool: {
-                                    must: {
-                                        match: {}
-                                    }
-                                }
+                            "filter": {
+                                "exists": {"field": promoCodeKey}
                             }
                         }
                     };
-                    nestedObj.nested.query.bool.must.match[promoCodeKey] = upwardBoundKey;
                     return nestedObj;
                 }
 
@@ -984,7 +1035,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
     "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
     "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
-    "            <div   ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
+    "            <div ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\" >\n" +
     "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.educator.initial\">\n" +
     "                    <div class=\"admin-msg\">\n" +
     "                        <div translate=\"ADMIN.ESLINK.EDUCATOR_INITIAL_MSG\"></div>\n" +
@@ -996,7 +1047,6 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1092,6 +1142,19 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"btn-wrap\">\n" +
     "            <button element-loader\n" +
+    "                    ng-disabled=\"!vm.selectedStudent\"\n" +
+    "                    fill-loader=\"vm.fillResetBtnLoader\"\n" +
+    "                    show-loader=\"vm.startResetBtnLoader\"\n" +
+    "                    bg-loader=\"'#037684'\"\n" +
+    "                    precentage=\"50\"\n" +
+    "                    font-color=\"'#FFFFFF'\"\n" +
+    "                    bg=\"'#0a9bad'\"\n" +
+    "                    ng-click=\"vm.resetUserData()\"\n" +
+    "                    class=\"md-button link-btn drop-shadow\"\n" +
+    "                    name=\"submit\">\n" +
+    "                <span translate=\"ADMIN.ESLINK.LINK_RST_BTN\"></span>\n" +
+    "            </button>\n" +
+    "            <button element-loader\n" +
     "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
     "                    fill-loader=\"vm.fillLoader\"\n" +
     "                    show-loader=\"vm.startLoader\"\n" +
@@ -1124,5 +1187,30 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "    </button>\n" +
     "\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/adminDashboard/svg/correct-icon.svg",
+    "<svg version=\"1.1\"\n" +
+    "     class=\"correct-icon-svg\"\n" +
+    "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
+    "     x=\"0px\"\n" +
+    "     y=\"0px\"\n" +
+    "	 viewBox=\"0 0 188.5 129\"\n" +
+    "     style=\"enable-background:new 0 0 188.5 129;\"\n" +
+    "     xml:space=\"preserve\">\n" +
+    "<style type=\"text/css\">\n" +
+    "	.correct-icon-svg .st0 {\n" +
+    "        fill: none;\n" +
+    "        stroke: #231F20;\n" +
+    "        stroke-width: 15;\n" +
+    "        stroke-linecap: round;\n" +
+    "        stroke-linejoin: round;\n" +
+    "        stroke-miterlimit: 10;\n" +
+    "    }\n" +
+    "</style>\n" +
+    "<g>\n" +
+    "	<line class=\"st0\" x1=\"7.5\" y1=\"62\" x2=\"67\" y2=\"121.5\"/>\n" +
+    "	<line class=\"st0\" x1=\"67\" y1=\"121.5\" x2=\"181\" y2=\"7.5\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
     "");
 }]);
