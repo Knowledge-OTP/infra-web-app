@@ -10393,7 +10393,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
-                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id);
+                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id, scope.currentUserContext);
                     };
                     scope.changeCurrentForm = function (currentForm) {
                         scope.currentForm = currentForm;
@@ -10405,6 +10405,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
                             scope.currentUserContext = 'teacher';
                         }
+                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     // App select menu
