@@ -48,6 +48,10 @@
                 return AllEnvs[env][appContext];
             }
 
+            LoginAppSrv.getCurrentEnv = function(){
+                return env;
+            };
+
             function _getAppScopeName(userContext, appEnvConfig) {
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }
