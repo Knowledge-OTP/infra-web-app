@@ -490,7 +490,7 @@
                                 field: 'email',
                                 width: 250,
                                 displayName: "Email",
-                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                                cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {field: 'uid', width: 300, displayName: 'UID'},
                             {
@@ -532,7 +532,7 @@
                                 field: 'email',
                                 width: 300,
                                 displayName: "Email",
-                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                                cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {
                                 field: 'uid',
