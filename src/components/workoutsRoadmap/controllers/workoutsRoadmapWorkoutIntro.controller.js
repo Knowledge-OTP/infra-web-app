@@ -6,7 +6,7 @@
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
-
+            var MIN_WORKOUT_ORDER = 6;
             var vm = this;
 
             vm.workoutsProgress = data.workoutsProgress;
@@ -40,21 +40,53 @@
             var prevWorkoutOrder = currWorkout.workoutOrder - 1;
             var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
-            //set times workouts
+            // set times workouts
             function setWorkoutsTimes() {
-                var getPersonalizedWorkoutsByTimeProm;
-                var subjectsToIgnore;
+                var subjectsToIgnore = [];
+                var subjectsHash = {};
 
+                if (currWorkout.workoutOrder >= MIN_WORKOUT_ORDER) {
+                    // get last X number of workouts
+                    var lastFiveWorkoutsArray = data.workoutsProgress.slice(currWorkout.workoutOrder - MIN_WORKOUT_ORDER, currWorkout.workoutOrder);
+                    var subjectEnumArrayLength = SubjectEnum.getEnumArr().length;
+                    var subjectEnumMap = SubjectEnum.getEnumMap();
+                    // populate hash table of unique subjectIds
+                    lastFiveWorkoutsArray.forEach(function (item) {
+                        subjectsHash[item.subjectId] = item.subjectId;
+                    });
+                    // get subjects to ignore from subjectsHash
+                    var subjectsToIgnoreArray = Object.keys(subjectEnumMap).filter(function (subjectEnumKey) {
+                        return subjectsHash[subjectEnumKey] !== undefined
+                    });
+                    //if all last X subjects were used, get only the prev subjectId
+                    if (subjectsToIgnoreArray.length === subjectEnumArrayLength) {
+                        _setPrevSubjectAndGetWorkoutData(subjectsToIgnore);
+                    }
+                    else {
+                        //send subjectsToIgnoreArray. array can be between 0 - X subjects
+                        _getPersonalizedWorkoutsByTime(subjectsToIgnoreArray);
+                    }
+                }
+                else {
+                    _setPrevSubjectAndGetWorkoutData(subjectsToIgnore);
+                }
+            }
+            function _setPrevSubjectAndGetWorkoutData(subjectsToIgnore) {
                 if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
                     if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                        subjectsToIgnore = prevWorkout.subjectId;
+                        subjectsToIgnore.push(prevWorkout.subjectId);
                     }
-                    getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
-                    getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
-                        setTimesWorkouts(workoutsByTime);
-                    }, function () {
-                    });
+                    _getPersonalizedWorkoutsByTime(subjectsToIgnore);
+
                 }
+            }
+
+            function _getPersonalizedWorkoutsByTime(subjectsToIgnore) {
+                var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
+                getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                    setTimesWorkouts(workoutsByTime);
+                }, function () {
+                });
             }
 
             setWorkoutsTimes();
