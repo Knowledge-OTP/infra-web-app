@@ -42,11 +42,6 @@
             function AdminSearchController() {
                 var self = this;
                 self.minlength = self.minlength || '3';
-                self.searchResults.bind(null, _searchResult);
-
-                function _searchResult() {
-                    var d = "d";
-                }
             }
 
             return directive;

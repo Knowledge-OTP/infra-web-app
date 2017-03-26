@@ -413,7 +413,7 @@
 
             vm.forceSkipIntro = DiagnosticSrv.forceSkipIntro ? DiagnosticSrv.forceSkipIntro : false;
 
-            vm.buttonTitle = isDiagnosticStarted ? '.CONTINUE_TEST' : '.START_TEST' ;
+            vm.buttonTitle = isDiagnosticStarted ? '.CONTINUE_TEST' : '.START_TEST';
         }]);
 })(angular);
 
@@ -525,7 +525,7 @@
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
-
+            var MIN_WORKOUT_ORDER = 6;
             var vm = this;
 
             vm.workoutsProgress = data.workoutsProgress;
@@ -559,21 +559,53 @@
             var prevWorkoutOrder = currWorkout.workoutOrder - 1;
             var prevWorkout = prevWorkoutOrder >= FIRST_WORKOUT_ORDER ? data.workoutsProgress && data.workoutsProgress[prevWorkoutOrder - 1] : data.diagnostic;
 
-            //set times workouts
+            // set times workouts
             function setWorkoutsTimes() {
-                var getPersonalizedWorkoutsByTimeProm;
-                var subjectsToIgnore;
+                var subjectsToIgnore = [];
+                var subjectsHash = {};
 
+                if (currWorkout.workoutOrder >= MIN_WORKOUT_ORDER) {
+                    // get last X number of workouts
+                    var lastFiveWorkoutsArray = data.workoutsProgress.slice(currWorkout.workoutOrder - MIN_WORKOUT_ORDER, prevWorkoutOrder);
+                    var subjectEnumArrayLength = SubjectEnum.getEnumArr().length;
+                    var subjectEnumMap = SubjectEnum.getEnumMap();
+                    // populate hash table of unique subjectIds
+                    lastFiveWorkoutsArray.forEach(function (item) {
+                        subjectsHash[item.subjectId] = item.subjectId;
+                    });
+                    // get subjects to ignore from subjectsHash
+                    var subjectsToIgnoreArray = Object.keys(subjectEnumMap).filter(function (subjectEnumKey) {
+                        return subjectsHash[subjectEnumKey] !== undefined;
+                    });
+                    //if all last X subjects were used, get only the prev subjectId
+                    if (subjectsToIgnoreArray.length === subjectEnumArrayLength) {
+                        _setPrevSubjectAndGetWorkoutData(subjectsToIgnore);
+                    }
+                    else {
+                        //send subjectsToIgnoreArray. array can be between 0 to X-1 subjects
+                        _getPersonalizedWorkoutsByTime(subjectsToIgnoreArray);
+                    }
+                }
+                else {
+                    _setPrevSubjectAndGetWorkoutData(subjectsToIgnore);
+                }
+            }
+            function _setPrevSubjectAndGetWorkoutData(subjectsToIgnore) {
                 if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
                     if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                        subjectsToIgnore = prevWorkout.subjectId;
+                        subjectsToIgnore.push(prevWorkout.subjectId);
                     }
-                    getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
-                    getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
-                        setTimesWorkouts(workoutsByTime);
-                    }, function () {
-                    });
+                    _getPersonalizedWorkoutsByTime(subjectsToIgnore);
+
                 }
+            }
+
+            function _getPersonalizedWorkoutsByTime(subjectsToIgnore) {
+                var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
+                getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                    setTimesWorkouts(workoutsByTime);
+                }, function () {
+                });
             }
 
             setWorkoutsTimes();
@@ -926,16 +958,11 @@
 
     angular.module('znk.infra-web-app.workoutsRoadmap').provider('WorkoutsRoadmapSrv', [
         function () {
-            var _newSubjectToIgnoreGetter, _newWorkoutGeneratorGetter;
+            var _newSubjectToIgnoreGetter;
 
             this.setSubjectToIgnoreGetter = function (newWorkoutGeneratorGetter) {
                 _newSubjectToIgnoreGetter = newWorkoutGeneratorGetter;
             };
-            //support legacy personalization from the web-app
-            this.setNewWorkoutGeneratorGetter = function (newWorkoutGeneratorGetter) {
-                _newWorkoutGeneratorGetter = newWorkoutGeneratorGetter;
-            };
-
 
             var _workoutAvailTimesGetter;
             this.setWorkoutAvailTimes = function (workoutAvailTimesGetter) {
@@ -949,16 +976,14 @@
 
                 WorkoutsRoadmapSrv.generateNewExercise = function (subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn) {
 
-                    if (!angular.isFunction(_newWorkoutGeneratorGetter) && !angular.isFunction(_newSubjectToIgnoreGetter)) {
-                        var errMsg = 'WorkoutsRoadmapSrv: getter function was not defined!';
-                        $log.error(errMsg);
-                        return $q.reject(errMsg);
-                    }
                     if (!angular.isArray(subjectToIgnoreForNextDaily)) {
                         subjectToIgnoreForNextDaily = subjectToIgnoreForNextDaily ? [subjectToIgnoreForNextDaily] : [];
                     }
-                    //if _newSubjectToIgnoreGetter is defined then we use the new personalization from infra, else - support legacy personalization from the web-app.
-                    if (angular.isFunction(_newSubjectToIgnoreGetter)) {
+                    //if _newSubjectToIgnoreGetter is not defined then we support legacy personalization from the web-app , else - use the new personalization from infra.
+                    if (!angular.isFunction(_newSubjectToIgnoreGetter)) {
+                        return PersonalizationSrv.getPersonalizedExercise(subjectToIgnoreForNextDaily, workoutOrder);
+                    }
+                    else {
                         var invokedSubjectToIgnoreFunc = $injector.invoke(_newSubjectToIgnoreGetter);
                         return $q.when(invokedSubjectToIgnoreFunc(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn)).then(function (subjectToIgnore) {
 
@@ -966,12 +991,9 @@
                             if (angular.isUndefined(subjectToIgnoreForNextDaily)) {
                                 subjectToIgnoreForNextDaily = subjectToIgnore;
                             }
-                            return PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
+                            return PersonalizationSrv.getPersonalizedExercise(subjectToIgnoreForNextDaily, workoutOrder);
                         });
-                    }
-                    else {
-                        var invokedWorkoutGeneratorFunc = $injector.invoke(_newWorkoutGeneratorGetter);
-                        return $q.when(invokedWorkoutGeneratorFunc(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn));
+
                     }
                 };
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes = function () {

@@ -47,7 +47,7 @@
 
                 if (currWorkout.workoutOrder >= MIN_WORKOUT_ORDER) {
                     // get last X number of workouts
-                    var lastFiveWorkoutsArray = data.workoutsProgress.slice(currWorkout.workoutOrder - MIN_WORKOUT_ORDER, currWorkout.workoutOrder);
+                    var lastFiveWorkoutsArray = data.workoutsProgress.slice(currWorkout.workoutOrder - MIN_WORKOUT_ORDER, prevWorkoutOrder);
                     var subjectEnumArrayLength = SubjectEnum.getEnumArr().length;
                     var subjectEnumMap = SubjectEnum.getEnumMap();
                     // populate hash table of unique subjectIds
@@ -56,14 +56,14 @@
                     });
                     // get subjects to ignore from subjectsHash
                     var subjectsToIgnoreArray = Object.keys(subjectEnumMap).filter(function (subjectEnumKey) {
-                        return subjectsHash[subjectEnumKey] !== undefined
+                        return subjectsHash[subjectEnumKey] !== undefined;
                     });
                     //if all last X subjects were used, get only the prev subjectId
                     if (subjectsToIgnoreArray.length === subjectEnumArrayLength) {
                         _setPrevSubjectAndGetWorkoutData(subjectsToIgnore);
                     }
                     else {
-                        //send subjectsToIgnoreArray. array can be between 0 - X subjects
+                        //send subjectsToIgnoreArray. array can be between 0 to X-1 subjects
                         _getPersonalizedWorkoutsByTime(subjectsToIgnoreArray);
                     }
                 }

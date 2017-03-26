@@ -669,7 +669,6 @@
             function AdminSearchController() {
                 var self = this;
                 self.minlength = self.minlength || '3';
-
             }
 
             return directive;
@@ -1185,6 +1184,20 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "    <button class=\"admin-search-btn\" ng-click=\"vm.searchResults(vm.searchQuery)\"\n" +
     "            ng-disabled=\"!vm.searchQuery\" translate=\".SEARCH\">\n" +
     "    </button>\n" +
+    "\n" +
+    "    <!--<button element-loader-->\n" +
+    "            <!--ng-disabled=\"!vm.searchQuery\"-->\n" +
+    "            <!--fill-loader=\"vm.fillLoader\"-->\n" +
+    "            <!--show-loader=\"vm.startLoader\"-->\n" +
+    "            <!--bg-loader=\"'#037684'\"-->\n" +
+    "            <!--precentage=\"50\"-->\n" +
+    "            <!--font-color=\"'#FFFFFF'\"-->\n" +
+    "            <!--bg=\"'#0a9bad'\"-->\n" +
+    "            <!--ng-click=\"vm.searchResults(vm.searchQuery)\"-->\n" +
+    "            <!--class=\"admin-search-btn\"-->\n" +
+    "            <!--name=\"submit\">-->\n" +
+    "        <!--<span translate=\".SEARCH\"></span>-->\n" +
+    "    <!--</button>-->\n" +
     "\n" +
     "</div>\n" +
     "");
