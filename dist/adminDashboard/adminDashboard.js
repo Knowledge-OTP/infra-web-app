@@ -679,11 +679,13 @@
                     }
                     self.searchResults(query).then(function () {
                         $timeout(function () {
-                            self.startLoader = self.fillLoader = false;
+                            self.startLoader = false;
+                            self.fillLoader = false;
                         });
                     }, function () {
                         $timeout(function () {
-                            self.startLoader = self.fillLoader = false;
+                            self.startLoader = false;
+                            self.fillLoader = false;
                         });
                     });
                 };
