@@ -693,7 +693,7 @@
                     return _getSearchResults(queryTerm, _buildQueryBodyByTerm);
                 };
                 this.getSearchResults = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBody);
+                    return _getSearchResults(queryTerm, _buildBaseQueryBody);
                 };
 
                 function _getSearchResults(queryTerm, buildQuery) {
@@ -715,7 +715,7 @@
                         }
                     };
                     hasUBPromoCode().then(function (hasUB) {
-                        buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()), hasUB);
+                        buildQuery.call(null, query.body, queryTerm.toLowerCase(), hasUB);
                         ElasticSearchSrv.search(query).then(function (response) {
                             deferred.resolve(_searchResults(response.data.hits));
                         }, function (err) {
@@ -747,45 +747,31 @@
                     return mappedData;
                 }
 
-                function _buildQueryBody(body, term, hasUB) {
+                function _buildBaseQueryBody(body, term, hasUB) {
                     body.query = {
                         "bool": {
                             "must": [
                                 {
                                     "query_string": {
-                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes","user.purche"],
-                                        "query": term
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purche"],
+                                        "query": _makeTerm(term)
                                     }
                                 }
                             ]
                         }
                     };
                     if (hasUB) {
-                        body.query.bool.must.push(_buidQueryForUB());
+                        body.query.bool.must.push(_buildQueryForUB());
                     }
                 }
 
                 function _buildQueryBodyByTerm(body, term, hasUB) {
-                    body.query = {
-                        "bool": {
-                            "must": [{
-                                "term": {
-                                    "user.zinkerzTeacher": "true"
-                                }
-                            },
-                                {
-                                    "query_string": {
-                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes"],
-                                        "query": term
-                                    }
-                                }
-                            ]
+                    _buildBaseQueryBody(body, term, hasUB);
+                    body.query.bool.must.push({
+                        "term": {
+                            "user.zinkerzTeacher": "true"
                         }
-                    };
-                    if (hasUB) {
-                        body.query.bool.must.push(_buidQueryForUB());
-                    }
-
+                    });
                 }
 
                 function _makeTerm(term) {
@@ -799,7 +785,7 @@
                     return newTerm;
                 }
 
-                function _buidQueryForUB() {
+                function _buildQueryForUB() {
                     var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + ENV.upwardBoundKey;
                     var nestedObj = {
                         nested: {
@@ -821,9 +807,7 @@
                         return TeacherStorageSrv.get(PROMO_CODES_PATH).then(function (promoCodeData) {
                             var hasUB = false;
                             if (promoCodeData) {
-                                hasUB = Object.keys(promoCodeData).map(function (item) {
-                                        return item.toString().toLowerCase();
-                                    }).indexOf(upwardBoundKey.toLowerCase()) > -1;
+                                hasUB = Object.keys(promoCodeData).indexOf(upwardBoundKey) > -1;
                             }
                             return $q.when(hasUB);
                         });
