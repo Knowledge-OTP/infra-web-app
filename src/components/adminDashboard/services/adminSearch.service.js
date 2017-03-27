@@ -3,43 +3,40 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv) {
+            function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv) {
                 'ngInject';
 
                 var sizeLimit = 10000;
-
-                this.getSearchResultsByTerm = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBodyByTerm);
+                var upwardBoundKey = ENV.upwardBoundKey;
+                var PROMO_CODES_PATH = StorageSrv.variables.appUserSpacePath + '/promoCodes';
+                var query = {
+                    index: ENV.elasticSearchIndex,
+                    type: "user",
+                    body: {
+                        "from": 0,
+                        "size": sizeLimit
+                    }
                 };
-                this.getSearchResults = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBody);
+
+                this.getSearchResults = function (queryTerm, hasTeacher) {
+                    return _getSearchResults(queryTerm, hasTeacher);
                 };
 
-                function _getSearchResults(queryTerm, buildQuery) {
+                function _getSearchResults(queryTerm, hasTeacher) {
                     var deferred = $q.defer();
-                    if (!angular.isFunction(buildQuery)) {
-                        $log.error('getSearchResults: buildQuery is not a function');
-                        return;
-                    }
-                    if (!angular.isString(queryTerm)) {
-                        $log.error('getSearchResults: queryTerm is not a string');
-                        return;
-                    }
-                    var query = {
-                        index: ENV.elasticSearchIndex,
-                        type: "user",
-                        body: {
-                            "from": 0,
-                            "size": sizeLimit
-                        }
-                    };
-                    buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.data.hits));
+                    hasUBPromoCode().then(function (hasUB) {
+                        _buildQuery(query.body, queryTerm.toLowerCase(), hasUB, hasTeacher);
+                        ElasticSearchSrv.search(query).then(function (response) {
+                            deferred.resolve(_searchResults(response.data.hits));
+                        }, function (err) {
+                            $log.error(err.message);
+                            deferred.reject(err.message);
+                        });
                     }, function (err) {
                         $log.error(err.message);
                         deferred.reject(err.message);
                     });
+
                     return deferred.promise;
                 }
 
@@ -49,7 +46,7 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        var source = item._source.user ? item._source.user : item._source;
+                        var source = item._source.user;
                         if (!source) {
                             return mappedData;
                         }
@@ -60,32 +57,29 @@
                     return mappedData;
                 }
 
-                function _buildQueryBody(body, term) {
+                function _buildQuery(body, term, hasUB, hasTeacher) {
                     body.query = {
-                        "query_string": {
-                            "fields": ["zinkerzTeacher", "nickname", "email"],
-                            "query": term
-                        }
-                    };
-                }
-
-                function _buildQueryBodyByTerm(query, term) {
-                    query.query = {
                         "bool": {
-                            "must": [{
-                                    "term": {
-                                        "zinkerzTeacher": "true"
-                                    }
-                                },
+                            "must": [
                                 {
                                     "query_string": {
-                                        "fields": ["zinkerzTeacher", "nickname", "email"],
-                                        "query": term
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purche"],
+                                        "query": _makeTerm(term)
                                     }
                                 }
                             ]
                         }
                     };
+                    if (hasTeacher) {
+                        body.query.bool.must.push({
+                            "term": {
+                                "user.zinkerzTeacher": "true"
+                            }
+                        });
+                    }
+                    if (hasUB) {
+                        body.query.bool.must.push(_buildQueryForUB());
+                    }
                 }
 
                 function _makeTerm(term) {
@@ -99,11 +93,36 @@
                     return newTerm;
                 }
 
+                function _buildQueryForUB() {
+                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + ENV.upwardBoundKey;
+                    var nestedObj = {
+                        nested: {
+                            path: "user.promoCodes",
+                            "filter": {
+                                "exists": {"field": promoCodeKey}
+                            }
+                        }
+                    };
+                    return nestedObj;
+                }
+
                 function _escape(text) {
                     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
                 }
 
-
+                function hasUBPromoCode() {
+                    return InfraConfigSrv.getTeacherStorage().then(function (TeacherStorageSrv) {
+                        return TeacherStorageSrv.get(PROMO_CODES_PATH).then(function (promoCodeData) {
+                            var hasUB = false;
+                            if (promoCodeData) {
+                                hasUB = Object.keys(promoCodeData).indexOf(upwardBoundKey) > -1;
+                            }
+                            return $q.when(hasUB);
+                        });
+                    }).catch(function (err) {
+                        $log.debug('AdminSearchService - getPromoCodes: failed to get getTeacherStorage', err);
+                    });
+                }
             }
         );
 })(angular);

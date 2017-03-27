@@ -733,7 +733,7 @@
     });
 })(angular);
 
-angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
     "    <button class=\"social-btn facebook-btn\"\n" +

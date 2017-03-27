@@ -189,7 +189,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('EMetadataService',
-            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", "MyProfileSrv", "UtilitySrv", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv,UtilitySrv) {
+            ["$mdDialog", "$http", "ENV", "$q", "InfraConfigSrv", "$log", "MyProfileSrv", "UtilitySrv", function ($mdDialog, $http, ENV, $q, InfraConfigSrv, $log, MyProfileSrv, UtilitySrv) {
                 'ngInject';
 
 
@@ -199,16 +199,18 @@
                 var satURL = "https://sat-dev.firebaseio.com";
                 var actURL = "https://act-dev.firebaseio.com";
                 var tofelURL = "https://znk-toefl-dev.firebaseio.com";
+                var znkURL = "https://znk-dev.firebaseio.com";
 
                 if (!ENV.debug) {
                     satURL = "https://sat2-prod.firebaseio.com/";
                     actURL = "https://act-prod.firebaseio.com/";
                     tofelURL = "https://znk-toefl-prod.firebaseio.com/";
+                    znkURL = "https://znk-prod.firebaseio.com";
                 }
 
 
                 self.showEducatorProfile = function (userProfile) {
-                    if(!userProfile){
+                    if (!userProfile) {
                         $log.error('showEducatorProfile: userProfile object is not undefined');
                         return;
                     }
@@ -261,7 +263,7 @@
                         userId: uid,
                         isZinkerzTeacher: !!isZinkerzTeacher,
                         teachingSubject: subject,
-                        fbUrls: [satURL, actURL, tofelURL]
+                        fbUrls: [satURL, actURL, tofelURL, znkURL]
                     };
                     return $http.post(profilePath, profile);
                 };
@@ -388,23 +390,23 @@
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResultsByTerm(queryTerm).then(_educatorsSearchResults);
+                    AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
                 };
                 self.getStudentsSearchResults = function (queryTerm) {
                     AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
-                self.resetUserData = function() {
+                self.resetUserData = function () {
                     self.startResetBtnLoader = true;
                     self.fillResetBtnLoader = undefined;
                     var data = {
                         appName: self.currentAppKey,
                         uid: self.selectedStudent.uid
                     };
-                    ESLinkService.resetUserData(data).then(function success(){
+                    ESLinkService.resetUserData(data).then(function success() {
                         self.fillResetBtnLoader = false;
                         $log.debug('user data successfully reset');
-                    }, function error(){
+                    }, function error() {
                         self.fillResetBtnLoader = false;
                     });
                 };
@@ -485,31 +487,31 @@
                             },
                             {field: 'nickname', width: 150, displayName: "Name"},
                             {
-                                field: 'email', 
-                                width: 250, 
+                                field: 'email',
+                                width: 250,
                                 displayName: "Email",
-                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {field: 'uid', width: 300, displayName: 'UID'},
                             {
                                 field: 'zinkerzSatPro',
                                 width: 50, displayName: 'SAT',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.sat"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.sat_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
                             },
                             {
                                 field: 'zinkerzActPro',
                                 width: 50, displayName: 'ACT',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.act"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.act_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
                             },
                             {
                                 field: 'zinkerzToeflPro',
                                 width: 50, displayName: 'TOEFL',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.toefl"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.toefl_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
                             },
                             {
                                 field: 'zinkerzSatsmPro',
                                 width: 50, displayName: 'SATSM',
-                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.satsm"><svg-icon name="admin-correct-icon"></svg-icon></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents" ng-if="row.entity.purchase.satsm_app"><svg-icon name="admin-correct-icon"></svg-icon></div>'
                             }
                         ]
                     };
@@ -527,14 +529,14 @@
                                 displayName: "Name"
                             },
                             {
-                                field: 'email', 
-                                width: 300, 
+                                field: 'email',
+                                width: 300,
                                 displayName: "Email",
-                                cellTemplate:'<div>{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {
-                                field: 'uid', 
-                                width: 300, 
+                                field: 'uid',
+                                width: 300,
                                 displayName: 'UID'
                             }
                         ]
@@ -680,43 +682,40 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv) {
+            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", "StorageSrv", "InfraConfigSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv) {
                 'ngInject';
 
                 var sizeLimit = 10000;
-
-                this.getSearchResultsByTerm = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBodyByTerm);
+                var upwardBoundKey = ENV.upwardBoundKey;
+                var PROMO_CODES_PATH = StorageSrv.variables.appUserSpacePath + '/promoCodes';
+                var query = {
+                    index: ENV.elasticSearchIndex,
+                    type: "user",
+                    body: {
+                        "from": 0,
+                        "size": sizeLimit
+                    }
                 };
-                this.getSearchResults = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBody);
+
+                this.getSearchResults = function (queryTerm, hasTeacher) {
+                    return _getSearchResults(queryTerm, hasTeacher);
                 };
 
-                function _getSearchResults(queryTerm, buildQuery) {
+                function _getSearchResults(queryTerm, hasTeacher) {
                     var deferred = $q.defer();
-                    if (!angular.isFunction(buildQuery)) {
-                        $log.error('getSearchResults: buildQuery is not a function');
-                        return;
-                    }
-                    if (!angular.isString(queryTerm)) {
-                        $log.error('getSearchResults: queryTerm is not a string');
-                        return;
-                    }
-                    var query = {
-                        index: ENV.elasticSearchIndex,
-                        type: "user",
-                        body: {
-                            "from": 0,
-                            "size": sizeLimit
-                        }
-                    };
-                    buildQuery.call(null, query.body, _makeTerm(queryTerm.toLowerCase()));
-                    ElasticSearchSrv.search(query).then(function (response) {
-                        deferred.resolve(_searchResults(response.data.hits));
+                    hasUBPromoCode().then(function (hasUB) {
+                        _buildQuery(query.body, queryTerm.toLowerCase(), hasUB, hasTeacher);
+                        ElasticSearchSrv.search(query).then(function (response) {
+                            deferred.resolve(_searchResults(response.data.hits));
+                        }, function (err) {
+                            $log.error(err.message);
+                            deferred.reject(err.message);
+                        });
                     }, function (err) {
                         $log.error(err.message);
                         deferred.reject(err.message);
                     });
+
                     return deferred.promise;
                 }
 
@@ -726,7 +725,7 @@
                         return mappedData;
                     }
                     mappedData = data.hits.map(function (item) {
-                        var source = item._source.user ? item._source.user : item._source;
+                        var source = item._source.user;
                         if (!source) {
                             return mappedData;
                         }
@@ -737,32 +736,29 @@
                     return mappedData;
                 }
 
-                function _buildQueryBody(body, term) {
+                function _buildQuery(body, term, hasUB, hasTeacher) {
                     body.query = {
-                        "query_string": {
-                            "fields": ["zinkerzTeacher", "nickname", "email"],
-                            "query": term
-                        }
-                    };
-                }
-
-                function _buildQueryBodyByTerm(query, term) {
-                    query.query = {
                         "bool": {
-                            "must": [{
-                                    "term": {
-                                        "zinkerzTeacher": "true"
-                                    }
-                                },
+                            "must": [
                                 {
                                     "query_string": {
-                                        "fields": ["zinkerzTeacher", "nickname", "email"],
-                                        "query": term
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purche"],
+                                        "query": _makeTerm(term)
                                     }
                                 }
                             ]
                         }
                     };
+                    if (hasTeacher) {
+                        body.query.bool.must.push({
+                            "term": {
+                                "user.zinkerzTeacher": "true"
+                            }
+                        });
+                    }
+                    if (hasUB) {
+                        body.query.bool.must.push(_buildQueryForUB());
+                    }
                 }
 
                 function _makeTerm(term) {
@@ -776,16 +772,41 @@
                     return newTerm;
                 }
 
+                function _buildQueryForUB() {
+                    var promoCodeKey = "user.promoCodes." + ENV.studentAppName + "." + ENV.upwardBoundKey;
+                    var nestedObj = {
+                        nested: {
+                            path: "user.promoCodes",
+                            "filter": {
+                                "exists": {"field": promoCodeKey}
+                            }
+                        }
+                    };
+                    return nestedObj;
+                }
+
                 function _escape(text) {
                     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
                 }
 
-
+                function hasUBPromoCode() {
+                    return InfraConfigSrv.getTeacherStorage().then(function (TeacherStorageSrv) {
+                        return TeacherStorageSrv.get(PROMO_CODES_PATH).then(function (promoCodeData) {
+                            var hasUB = false;
+                            if (promoCodeData) {
+                                hasUB = Object.keys(promoCodeData).indexOf(upwardBoundKey) > -1;
+                            }
+                            return $q.when(hasUB);
+                        });
+                    }).catch(function (err) {
+                        $log.debug('AdminSearchService - getPromoCodes: failed to get getTeacherStorage', err);
+                    });
+                }
             }]
         );
 })(angular);
 
-angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +

@@ -317,7 +317,7 @@
         );
 })(angular);
 
-angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/myProfile/components/changePassword/changePassword.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
     "    <div class=\"container-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
