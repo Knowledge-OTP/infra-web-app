@@ -46,23 +46,23 @@
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResultsByTerm(queryTerm).then(_educatorsSearchResults);
+                    AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
                 };
                 self.getStudentsSearchResults = function (queryTerm) {
                     AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
-                self.resetUserData = function() {
+                self.resetUserData = function () {
                     self.startResetBtnLoader = true;
                     self.fillResetBtnLoader = undefined;
                     var data = {
                         appName: self.currentAppKey,
                         uid: self.selectedStudent.uid
                     };
-                    ESLinkService.resetUserData(data).then(function success(){
+                    ESLinkService.resetUserData(data).then(function success() {
                         self.fillResetBtnLoader = false;
                         $log.debug('user data successfully reset');
-                    }, function error(){
+                    }, function error() {
                         self.fillResetBtnLoader = false;
                     });
                 };
@@ -146,7 +146,7 @@
                                 field: 'email',
                                 width: 250,
                                 displayName: "Email",
-                                cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {field: 'uid', width: 300, displayName: 'UID'},
                             {
@@ -188,7 +188,7 @@
                                 field: 'email',
                                 width: 300,
                                 displayName: "Email",
-                                cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {
                                 field: 'uid',

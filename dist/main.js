@@ -897,23 +897,23 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResultsByTerm(queryTerm).then(_educatorsSearchResults);
+                    AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
                 };
                 self.getStudentsSearchResults = function (queryTerm) {
                     AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
-                self.resetUserData = function() {
+                self.resetUserData = function () {
                     self.startResetBtnLoader = true;
                     self.fillResetBtnLoader = undefined;
                     var data = {
                         appName: self.currentAppKey,
                         uid: self.selectedStudent.uid
                     };
-                    ESLinkService.resetUserData(data).then(function success(){
+                    ESLinkService.resetUserData(data).then(function success() {
                         self.fillResetBtnLoader = false;
                         $log.debug('user data successfully reset');
-                    }, function error(){
+                    }, function error() {
                         self.fillResetBtnLoader = false;
                     });
                 };
@@ -997,7 +997,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                                 field: 'email',
                                 width: 250,
                                 displayName: "Email",
-                                cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {field: 'uid', width: 300, displayName: 'UID'},
                             {
@@ -1039,7 +1039,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                                 field: 'email',
                                 width: 300,
                                 displayName: "Email",
-                                cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
+                                cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.email}}<md-tooltip znk-tooltip class="md-fab name-tooltip admin-tooltip" md-direction="top"  md-visible="false">{{row.entity.email}}</md-tooltip></div>'
                             },
                             {
                                 field: 'uid',
@@ -1195,34 +1195,23 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                 var sizeLimit = 10000;
                 var upwardBoundKey = ENV.upwardBoundKey;
                 var PROMO_CODES_PATH = StorageSrv.variables.appUserSpacePath + '/promoCodes';
-
-                this.getSearchResultsByTerm = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBodyByTerm);
+                var query = {
+                    index: ENV.elasticSearchIndex,
+                    type: "user",
+                    body: {
+                        "from": 0,
+                        "size": sizeLimit
+                    }
                 };
-                this.getSearchResults = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildBaseQueryBody);
+
+                this.getSearchResults = function (queryTerm, hasTeacher) {
+                    return _getSearchResults(queryTerm, hasTeacher);
                 };
 
-                function _getSearchResults(queryTerm, buildQuery) {
+                function _getSearchResults(queryTerm, hasTeacher) {
                     var deferred = $q.defer();
-                    if (!angular.isFunction(buildQuery)) {
-                        $log.error('getSearchResults: buildQuery is not a function');
-                        return;
-                    }
-                    if (!angular.isString(queryTerm)) {
-                        $log.error('getSearchResults: queryTerm is not a string');
-                        return;
-                    }
-                    var query = {
-                        index: ENV.elasticSearchIndex,
-                        type: "user",
-                        body: {
-                            "from": 0,
-                            "size": sizeLimit
-                        }
-                    };
                     hasUBPromoCode().then(function (hasUB) {
-                        buildQuery.call(null, query.body, queryTerm.toLowerCase(), hasUB);
+                        _buildQuery(query.body, queryTerm.toLowerCase(), hasUB, hasTeacher);
                         ElasticSearchSrv.search(query).then(function (response) {
                             deferred.resolve(_searchResults(response.data.hits));
                         }, function (err) {
@@ -1254,7 +1243,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     return mappedData;
                 }
 
-                function _buildBaseQueryBody(body, term, hasUB) {
+                function _buildQuery(body, term, hasUB, hasTeacher) {
                     body.query = {
                         "bool": {
                             "must": [
@@ -1267,18 +1256,16 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                             ]
                         }
                     };
+                    if (hasTeacher) {
+                        body.query.bool.must.push({
+                            "term": {
+                                "user.zinkerzTeacher": "true"
+                            }
+                        });
+                    }
                     if (hasUB) {
                         body.query.bool.must.push(_buildQueryForUB());
                     }
-                }
-
-                function _buildQueryBodyByTerm(body, term, hasUB) {
-                    _buildBaseQueryBody(body, term, hasUB);
-                    body.query.bool.must.push({
-                        "term": {
-                            "user.zinkerzTeacher": "true"
-                        }
-                    });
                 }
 
                 function _makeTerm(term) {

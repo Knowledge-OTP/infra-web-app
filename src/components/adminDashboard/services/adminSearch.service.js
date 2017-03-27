@@ -9,34 +9,23 @@
                 var sizeLimit = 10000;
                 var upwardBoundKey = ENV.upwardBoundKey;
                 var PROMO_CODES_PATH = StorageSrv.variables.appUserSpacePath + '/promoCodes';
-
-                this.getSearchResultsByTerm = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildQueryBodyByTerm);
+                var query = {
+                    index: ENV.elasticSearchIndex,
+                    type: "user",
+                    body: {
+                        "from": 0,
+                        "size": sizeLimit
+                    }
                 };
-                this.getSearchResults = function (queryTerm) {
-                    return _getSearchResults(queryTerm, _buildBaseQueryBody);
+
+                this.getSearchResults = function (queryTerm, hasTeacher) {
+                    return _getSearchResults(queryTerm, hasTeacher);
                 };
 
-                function _getSearchResults(queryTerm, buildQuery) {
+                function _getSearchResults(queryTerm, hasTeacher) {
                     var deferred = $q.defer();
-                    if (!angular.isFunction(buildQuery)) {
-                        $log.error('getSearchResults: buildQuery is not a function');
-                        return;
-                    }
-                    if (!angular.isString(queryTerm)) {
-                        $log.error('getSearchResults: queryTerm is not a string');
-                        return;
-                    }
-                    var query = {
-                        index: ENV.elasticSearchIndex,
-                        type: "user",
-                        body: {
-                            "from": 0,
-                            "size": sizeLimit
-                        }
-                    };
                     hasUBPromoCode().then(function (hasUB) {
-                        buildQuery.call(null, query.body, queryTerm.toLowerCase(), hasUB);
+                        _buildQuery(query.body, queryTerm.toLowerCase(), hasUB, hasTeacher);
                         ElasticSearchSrv.search(query).then(function (response) {
                             deferred.resolve(_searchResults(response.data.hits));
                         }, function (err) {
@@ -68,7 +57,7 @@
                     return mappedData;
                 }
 
-                function _buildBaseQueryBody(body, term, hasUB) {
+                function _buildQuery(body, term, hasUB, hasTeacher) {
                     body.query = {
                         "bool": {
                             "must": [
@@ -81,18 +70,16 @@
                             ]
                         }
                     };
+                    if (hasTeacher) {
+                        body.query.bool.must.push({
+                            "term": {
+                                "user.zinkerzTeacher": "true"
+                            }
+                        });
+                    }
                     if (hasUB) {
                         body.query.bool.must.push(_buildQueryForUB());
                     }
-                }
-
-                function _buildQueryBodyByTerm(body, term, hasUB) {
-                    _buildBaseQueryBody(body, term, hasUB);
-                    body.query.bool.must.push({
-                        "term": {
-                            "user.zinkerzTeacher": "true"
-                        }
-                    });
                 }
 
                 function _makeTerm(term) {
