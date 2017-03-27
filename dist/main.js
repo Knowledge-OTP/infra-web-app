@@ -1182,6 +1182,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     self.fillLoader = undefined;
                     if (typeof (self.searchResults) !== "function") {
                         $log.error("adminSearch: searchResultsFunc - 'searchResults' must be a function");
+                        return;
                     }
                     self.searchResults(query).then(function () {
                         $timeout(function () {
