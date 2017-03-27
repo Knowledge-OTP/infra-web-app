@@ -9,6 +9,6 @@
 
             vm.forceSkipIntro = DiagnosticSrv.forceSkipIntro ? DiagnosticSrv.forceSkipIntro : false;
 
-            vm.buttonTitle = isDiagnosticStarted ? '.CONTINUE_TEST' : '.START_TEST' ;
+            vm.buttonTitle = isDiagnosticStarted ? '.CONTINUE_TEST' : '.START_TEST';
         });
 })(angular);

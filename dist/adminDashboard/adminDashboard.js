@@ -126,7 +126,7 @@
                 };
 
                 self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResults(queryTerm).then(_educatorsSearchResults);
+                   return AdminSearchService.getSearchResults(queryTerm).then(_educatorsSearchResults);
                 };
                 self.getTableHeight = function () {
                     var rowHeight = ROW_HEIGHT;
@@ -390,10 +390,10 @@
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
+                   return AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
                 };
                 self.getStudentsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
+                   return AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
                 self.resetUserData = function () {
@@ -631,7 +631,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.adminDashboard').directive('adminSearch',
-        function () {
+        ["$timeout", "$log", function ($timeout, $log) {
             'ngInject';
 
             var directive = {
@@ -670,10 +670,29 @@
                 var self = this;
                 self.minlength = self.minlength || '3';
 
+                self.searchResultsFunc = function (query) {
+                    self.startLoader = true;
+                    self.fillLoader = undefined;
+                    if (typeof (self.searchResults) !== "function") {
+                        $log.error("adminSearch: searchResultsFunc - 'searchResults' must be a function");
+                        return;
+                    }
+                    self.searchResults(query).then(function () {
+                        $timeout(function () {
+                            self.startLoader = false;
+                            self.fillLoader = false;
+                        });
+                    }, function () {
+                        $timeout(function () {
+                            self.startLoader = false;
+                            self.fillLoader = false;
+                        });
+                    });
+                };
             }
 
             return directive;
-        });
+        }]);
 
 })(angular);
 
@@ -1153,8 +1172,22 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                   ng-model=\"vm.searchQuery\">\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <button class=\"admin-search-btn\" ng-click=\"vm.searchResults(vm.searchQuery)\"\n" +
-    "            ng-disabled=\"!vm.searchQuery\" translate=\".SEARCH\">\n" +
+    "    <!--<button class=\"admin-search-btn\" ng-click=\"vm.searchResults(vm.searchQuery)\"-->\n" +
+    "            <!--ng-disabled=\"!vm.searchQuery\" translate=\".SEARCH\">-->\n" +
+    "    <!--</button>-->\n" +
+    "\n" +
+    "    <button element-loader\n" +
+    "            ng-disabled=\"!vm.searchQuery\"\n" +
+    "            fill-loader=\"vm.fillLoader\"\n" +
+    "            show-loader=\"vm.startLoader\"\n" +
+    "            bg-loader=\"'#037684'\"\n" +
+    "            precentage=\"50\"\n" +
+    "            font-color=\"'#FFFFFF'\"\n" +
+    "            bg=\"'#0a9bad'\"\n" +
+    "            ng-click=\"vm.searchResultsFunc(vm.searchQuery)\"\n" +
+    "            class=\"admin-search-btn\"\n" +
+    "            name=\"submit\">\n" +
+    "        <span translate=\".SEARCH\"></span>\n" +
     "    </button>\n" +
     "\n" +
     "</div>\n" +

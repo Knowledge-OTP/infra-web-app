@@ -4,7 +4,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.adminDashboard').directive('adminSearch',
-        function () {
+        function ($timeout, $log) {
             'ngInject';
 
             var directive = {
@@ -43,6 +43,25 @@
                 var self = this;
                 self.minlength = self.minlength || '3';
 
+                self.searchResultsFunc = function (query) {
+                    self.startLoader = true;
+                    self.fillLoader = undefined;
+                    if (typeof (self.searchResults) !== "function") {
+                        $log.error("adminSearch: searchResultsFunc - 'searchResults' must be a function");
+                        return;
+                    }
+                    self.searchResults(query).then(function () {
+                        $timeout(function () {
+                            self.startLoader = false;
+                            self.fillLoader = false;
+                        });
+                    }, function () {
+                        $timeout(function () {
+                            self.startLoader = false;
+                            self.fillLoader = false;
+                        });
+                    });
+                };
             }
 
             return directive;
