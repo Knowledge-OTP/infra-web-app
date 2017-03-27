@@ -29,7 +29,7 @@
                 };
 
                 self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResults(queryTerm).then(_educatorsSearchResults);
+                   return AdminSearchService.getSearchResults(queryTerm).then(_educatorsSearchResults);
                 };
                 self.getTableHeight = function () {
                     var rowHeight = ROW_HEIGHT;

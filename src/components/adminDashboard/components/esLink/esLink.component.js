@@ -46,10 +46,10 @@
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
+                   return AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
                 };
                 self.getStudentsSearchResults = function (queryTerm) {
-                    AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
+                   return AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
                 self.resetUserData = function () {
