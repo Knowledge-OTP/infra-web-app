@@ -31,12 +31,7 @@
                     else {
                         var invokedSubjectToIgnoreFunc = $injector.invoke(_newSubjectToIgnoreGetter);
                         return $q.when(invokedSubjectToIgnoreFunc(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn)).then(function (subjectToIgnore) {
-
-                            //if "subjectToIgnoreForNextDaily" isn't defined, then take subjectToIgnore (in which case we don't care if it's undefined)
-                            if (angular.isUndefined(subjectToIgnoreForNextDaily)) {
-                                subjectToIgnoreForNextDaily = subjectToIgnore;
-                            }
-                            return PersonalizationSrv.getPersonalizedExercise(subjectToIgnoreForNextDaily, workoutOrder);
+                            return PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
                         });
 
                     }

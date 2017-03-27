@@ -525,7 +525,7 @@
             'ngInject';
 
             var FIRST_WORKOUT_ORDER = 1;
-            var MIN_WORKOUT_ORDER = 6;
+            var MIN_ORDER_TO_VERIFY_SUBJECT = 6;
             var vm = this;
 
             vm.workoutsProgress = data.workoutsProgress;
@@ -543,7 +543,7 @@
                 vm.workoutAvailTimes = workoutAvailTimes;
             });
 
-            function setTimesWorkouts(workoutsByTime) {
+            function setWorkoutAvailTimes(workoutsByTime) {
                 vm.workoutsByTime = workoutsByTime;
                 WorkoutsRoadmapSrv.getWorkoutAvailTimes().then(function (workoutAvailTimes) {
                     for (var i in workoutAvailTimes) {
@@ -562,50 +562,45 @@
             // set times workouts
             function setWorkoutsTimes() {
                 var subjectsToIgnore = [];
-                var subjectsHash = {};
+                if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
+                    subjectsToIgnore = _getSubjectToIgnore();
+                    var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
+                    getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
+                        setWorkoutAvailTimes(workoutsByTime);
+                    }, function () {
+                    });
+                }
+            }
 
-                if (currWorkout.workoutOrder >= MIN_WORKOUT_ORDER) {
+            function _getSubjectToIgnore() {
+                var subjectsToIgnore = [];
+                var lastSubjectToIgnoreHash = {};
+                if (currWorkout.workoutOrder >= MIN_ORDER_TO_VERIFY_SUBJECT) {
                     // get last X number of workouts
-                    var lastFiveWorkoutsArray = data.workoutsProgress.slice(currWorkout.workoutOrder - MIN_WORKOUT_ORDER, prevWorkoutOrder);
+                    var lastNumberOfWorkoutsArray = data.workoutsProgress.slice(currWorkout.workoutOrder - MIN_ORDER_TO_VERIFY_SUBJECT, prevWorkoutOrder);
                     var subjectEnumArrayLength = SubjectEnum.getEnumArr().length;
                     var subjectEnumMap = SubjectEnum.getEnumMap();
                     // populate hash table of unique subjectIds
-                    lastFiveWorkoutsArray.forEach(function (item) {
-                        subjectsHash[item.subjectId] = item.subjectId;
-                    });
-                    // get subjects to ignore from subjectsHash
-                    var subjectsToIgnoreArray = Object.keys(subjectEnumMap).filter(function (subjectEnumKey) {
-                        return subjectsHash[subjectEnumKey] !== undefined;
+                    lastNumberOfWorkoutsArray.forEach(function (item) {
+                        lastSubjectToIgnoreHash[item.subjectId] = item.subjectId;
                     });
                     //if all last X subjects were used, get only the prev subjectId
-                    if (subjectsToIgnoreArray.length === subjectEnumArrayLength) {
-                        _setPrevSubjectAndGetWorkoutData(subjectsToIgnore);
+                    if (Object.keys(lastSubjectToIgnoreHash).length === subjectEnumArrayLength) {
+                        if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
+                            subjectsToIgnore.push(prevWorkout.subjectId);
+                        }
                     }
                     else {
-                        //send subjectsToIgnoreArray. array can be between 0 to X-1 subjects
-                        _getPersonalizedWorkoutsByTime(subjectsToIgnoreArray);
+                        // get subjects to ignore from subjectsHash
+                        subjectsToIgnore = Object.keys(subjectEnumMap).filter(function (subjectEnumKey) {
+                            return lastSubjectToIgnoreHash[subjectEnumKey] !== undefined;
+                        });
                     }
                 }
-                else {
-                    _setPrevSubjectAndGetWorkoutData(subjectsToIgnore);
+                else if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
+                    subjectsToIgnore.push(prevWorkout.subjectId);
                 }
-            }
-            function _setPrevSubjectAndGetWorkoutData(subjectsToIgnore) {
-                if (prevWorkout.status === ExerciseStatusEnum.COMPLETED.enum) {
-                    if (currWorkout.workoutOrder !== FIRST_WORKOUT_ORDER) {
-                        subjectsToIgnore.push(prevWorkout.subjectId);
-                    }
-                    _getPersonalizedWorkoutsByTime(subjectsToIgnore);
-
-                }
-            }
-
-            function _getPersonalizedWorkoutsByTime(subjectsToIgnore) {
-                var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(subjectsToIgnore, currWorkout.workoutOrder);
-                getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
-                    setTimesWorkouts(workoutsByTime);
-                }, function () {
-                });
+                return subjectsToIgnore;
             }
 
             setWorkoutsTimes();
@@ -634,7 +629,7 @@
                     $timeout(function () {
                         var getPersonalizedWorkoutsByTimeProm = WorkoutsRoadmapSrv.generateNewExercise(usedSubjects, currWorkout.workoutOrder, true);
                         getPersonalizedWorkoutsByTimeProm.then(function (workoutsByTime) {
-                            setTimesWorkouts(workoutsByTime);
+                            setWorkoutAvailTimes(workoutsByTime);
                             vm.rotate = false;
                         }, function () {
                             vm.rotate = false;
@@ -986,12 +981,7 @@
                     else {
                         var invokedSubjectToIgnoreFunc = $injector.invoke(_newSubjectToIgnoreGetter);
                         return $q.when(invokedSubjectToIgnoreFunc(subjectToIgnoreForNextDaily, workoutOrder, clickedOnChangeSubjectBtn)).then(function (subjectToIgnore) {
-
-                            //if "subjectToIgnoreForNextDaily" isn't defined, then take subjectToIgnore (in which case we don't care if it's undefined)
-                            if (angular.isUndefined(subjectToIgnoreForNextDaily)) {
-                                subjectToIgnoreForNextDaily = subjectToIgnore;
-                            }
-                            return PersonalizationSrv.getPersonalizedExercise(subjectToIgnoreForNextDaily, workoutOrder);
+                            return PersonalizationSrv.getPersonalizedExercise(subjectToIgnore, workoutOrder);
                         });
 
                     }
