@@ -24,7 +24,7 @@
                     if (!angular.isArray(subjectToIgnoreForNextDaily)) {
                         subjectToIgnoreForNextDaily = subjectToIgnoreForNextDaily ? [subjectToIgnoreForNextDaily] : [];
                     }
-                    //if _newSubjectToIgnoreGetter is not defined then we support legacy personalization from the web-app , else - use the new personalization from infra.
+                    //if _newSubjectToIgnoreGetter is not defined then call personalization with the current subjectToIgnoreForNextDaily  , else invoke 'invokedSubjectToIgnore' function from the web-app.
                     if (!angular.isFunction(_newSubjectToIgnoreGetter)) {
                         return PersonalizationSrv.getPersonalizedExercise(subjectToIgnoreForNextDaily, workoutOrder);
                     }
