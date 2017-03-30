@@ -81,7 +81,7 @@
                     }
                     var student = self.selectedStudent;
                     var educator = self.selectedEducator;
-                    var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.name, student.email, educator.email, student.name,
+                    var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.nickname, student.email, educator.email, student.nickname,
                         studentEducatorAppNames.educator, studentEducatorAppNames.student);
 
                     ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);

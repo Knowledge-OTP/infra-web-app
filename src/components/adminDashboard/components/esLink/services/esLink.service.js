@@ -9,8 +9,8 @@
                 var apiPath = ENV.backendEndpoint + "/invitation/assosciate_student";
                 var resetUserDataPath = ENV.backendEndpoint + "/userModule/delete";
 
-                this.createInvitationFactory = function (senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName) {
-                    return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
+                this.createInvitationFactory = function (senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName) {
+                    return new Invitation(senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName);
                 };
 
                 this.resetUserData = function(data) {

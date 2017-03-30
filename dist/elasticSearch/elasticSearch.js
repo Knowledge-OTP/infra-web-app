@@ -13,10 +13,14 @@
                 'ngInject';
                 var uidObj = AuthService.getAuth();
 
-                var apiPath = ENV.backendEndpoint + "/search";
+                var API_PATH = ENV.backendEndpoint + "/search";
+                var ZNK_NAME = "znk-dev";
 
+                if (!ENV.debug) {
+                    ZNK_NAME = "znk-prod";
+                }
                 this.search = function (query) {
-                    var uid =uidObj.uid;
+                    var uid = uidObj.uid;
 
                     if (!angular.isString(uid)) {
                         $log.error('ElasticSearchSrv: uid is not a string or not exist');
@@ -29,9 +33,9 @@
                     var searchObj = {
                         query: query,
                         uid: uid,
-                        appName: ENV.firebaseAppScopeName
+                        appName: ZNK_NAME
                     };
-                    return $http.post(apiPath, searchObj);
+                    return $http.post(API_PATH, searchObj);
                 };
             }]
         );

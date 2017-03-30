@@ -63,7 +63,7 @@
                             "must": [
                                 {
                                     "query_string": {
-                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purche"],
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purchase"],
                                         "query": _makeTerm(term)
                                     }
                                 }
