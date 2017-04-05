@@ -8,11 +8,7 @@
                 var uidObj = AuthService.getAuth();
 
                 var API_PATH = ENV.backendEndpoint + "/search";
-                var ZNK_NAME = "znk-dev";
-
-                if (!ENV.debug) {
-                    ZNK_NAME = "znk-prod";
-                }
+                
                 this.search = function (query) {
                     var uid = uidObj.uid;
 
@@ -26,8 +22,7 @@
                     }
                     var searchObj = {
                         query: query,
-                        uid: uid,
-                        appName: ZNK_NAME
+                        uid: uid
                     };
                     return $http.post(API_PATH, searchObj);
                 };
