@@ -263,7 +263,7 @@
                         userId: uid,
                         isZinkerzTeacher: !!isZinkerzTeacher,
                         teachingSubject: subject,
-                        fbUrls: [satURL, actURL, tofelURL, znkURL]
+                        fbUrls: [satURL, actURL, tofelURL, znkURL] // TODO: remove appURLs after finish moving all users to znk-dev
                     };
                     return $http.post(profilePath, profile);
                 };

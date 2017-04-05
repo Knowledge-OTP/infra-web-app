@@ -770,7 +770,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         userId: uid,
                         isZinkerzTeacher: !!isZinkerzTeacher,
                         teachingSubject: subject,
-                        fbUrls: [satURL, actURL, tofelURL, znkURL]
+                        fbUrls: [satURL, actURL, tofelURL, znkURL] // TODO: remove appURLs after finish moving all users to znk-dev
                     };
                     return $http.post(profilePath, profile);
                 };
@@ -9375,7 +9375,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             case LiveSessionStatusEnum.PENDING_STUDENT.enum:
                                 if (liveSessionData.studentId !== currUid) {
                                     LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
                                 break;
                             case LiveSessionStatusEnum.CONFIRMED.enum:
@@ -9391,6 +9390,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                                 if (liveSessionData.educatorId === currUid) {
                                     userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
 
                                 if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
