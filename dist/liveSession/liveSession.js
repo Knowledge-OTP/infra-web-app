@@ -300,7 +300,6 @@
                             case LiveSessionStatusEnum.PENDING_STUDENT.enum:
                                 if (liveSessionData.studentId !== currUid) {
                                     LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
                                 break;
                             case LiveSessionStatusEnum.CONFIRMED.enum:
@@ -316,6 +315,7 @@
 
                                 if (liveSessionData.educatorId === currUid) {
                                     userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
 
                                 if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
