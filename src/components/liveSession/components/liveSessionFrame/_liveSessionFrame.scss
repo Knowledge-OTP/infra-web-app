@@ -2,7 +2,7 @@
     position: relative;
     z-index: 0;
 
-    live-session{
+    live-session-frame{
         .close-icon-wrapper{
             @include dimension(40px);
             position: fixed;
