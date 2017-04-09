@@ -62,9 +62,9 @@
 
                     var liveSessionHtmlTemplate =
                         '<div class="show-hide-animation">' +
-                        '<live-session user-live-session-state="d.userLiveSessionState" ' +
+                        '<live-session-frame user-live-session-state="d.userLiveSessionState" ' +
                         'on-close="d.onClose()">' +
-                        '</live-session>' +
+                        '</live-session-frame>' +
                         '</div>';
                     var liveSessionElement = angular.element(liveSessionHtmlTemplate);
                     liveSessionPhElement.append(liveSessionElement);
