@@ -37,34 +37,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.liveSession').component('liveSession', {
-            templateUrl: 'components/liveSession/components/liveSession/liveSession.template.html',
-            bindings: {
-                userLiveSessionState: '<',
-                onClose: '&'
-            },
-            controllerAs: 'vm',
-            controller: ["UserLiveSessionStateEnum", "$log", function (UserLiveSessionStateEnum, $log) {
-                'ngInject';
-
-                var vm = this;
-
-                this.$onInit = function () {
-                    if (vm.userLiveSessionState) {
-                        vm.liveSessionCls = 'active-state';
-                    } else {
-                        $log.error('liveSessionComponent: invalid state was provided');
-                    }
-                };
-            }]
-        }
-    );
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.liveSession')
         .component('liveSessionBtn', {
             bindings: {
@@ -121,6 +93,34 @@
             }]
         });
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').component('liveSessionFrame', {
+            templateUrl: 'components/liveSession/components/liveSessionFrame/liveSessionFrame.template.html',
+            bindings: {
+                userLiveSessionState: '<',
+                onClose: '&'
+            },
+            controllerAs: 'vm',
+            controller: ["UserLiveSessionStateEnum", "$log", function (UserLiveSessionStateEnum, $log) {
+                'ngInject';
+
+                var vm = this;
+
+                this.$onInit = function () {
+                    if (vm.userLiveSessionState) {
+                        vm.liveSessionCls = 'active-state';
+                    } else {
+                        $log.error('liveSessionComponent: invalid state was provided');
+                    }
+                };
+            }]
+        }
+    );
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -859,9 +859,9 @@
 
                     var liveSessionHtmlTemplate =
                         '<div class="show-hide-animation">' +
-                        '<live-session user-live-session-state="d.userLiveSessionState" ' +
+                        '<live-session-frame user-live-session-state="d.userLiveSessionState" ' +
                         'on-close="d.onClose()">' +
-                        '</live-session>' +
+                        '</live-session-frame>' +
                         '</div>';
                     var liveSessionElement = angular.element(liveSessionHtmlTemplate);
                     liveSessionPhElement.append(liveSessionElement);
@@ -997,17 +997,6 @@
 })(angular);
 
 angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/liveSession/components/liveSession/liveSession.template.html",
-    "<div ng-if=\"vm.userLiveSessionState\"\n" +
-    "     ng-class=\"vm.liveSessionCls\">\n" +
-    "    <div class=\"active-state-container\">\n" +
-    "        <div class=\"square-side top\"></div>\n" +
-    "        <div class=\"square-side right\"></div>\n" +
-    "        <div class=\"square-side bottom\"></div>\n" +
-    "        <div class=\"square-side left\"></div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "");
   $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
     "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
     "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
@@ -1030,6 +1019,17 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "    </span>\n" +
     "</md-button>\n" +
     "\n" +
+    "");
+  $templateCache.put("components/liveSession/components/liveSessionFrame/liveSessionFrame.template.html",
+    "<div ng-if=\"vm.userLiveSessionState\"\n" +
+    "     ng-class=\"vm.liveSessionCls\">\n" +
+    "    <div class=\"active-state-container\">\n" +
+    "        <div class=\"square-side top\"></div>\n" +
+    "        <div class=\"square-side right\"></div>\n" +
+    "        <div class=\"square-side bottom\"></div>\n" +
+    "        <div class=\"square-side left\"></div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
     "");
   $templateCache.put("components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html",
     "<div class=\"live-session-subject-modal\">\n" +

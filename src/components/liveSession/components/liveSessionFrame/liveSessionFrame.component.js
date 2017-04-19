@@ -1,8 +1,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.liveSession').component('liveSession', {
-            templateUrl: 'components/liveSession/components/liveSession/liveSession.template.html',
+    angular.module('znk.infra-web-app.liveSession').component('liveSessionFrame', {
+            templateUrl: 'components/liveSession/components/liveSessionFrame/liveSessionFrame.template.html',
             bindings: {
                 userLiveSessionState: '<',
                 onClose: '&'
