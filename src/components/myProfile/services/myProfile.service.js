@@ -71,6 +71,10 @@
                         });
                     });
                 };
+
+                self.getAppName = function () {
+                    return ENV.appName.split('-')[0];
+                };
             }
         );
 })(angular);
