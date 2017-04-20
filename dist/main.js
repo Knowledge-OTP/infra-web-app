@@ -11940,7 +11940,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.myProfile').controller('MyProfileController',
-            ["AuthService", "$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, userProfile, timezonesList, localTimezone) {
+            ["AuthService", "$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", "MyProfileSrv", function (AuthService, $mdDialog, $timeout, userProfile, timezonesList, localTimezone, MyProfileSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -11948,6 +11948,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 vm.userProfile = userProfile;
                 vm.timezonesList = timezonesList;
                 vm.localTimezone = localTimezone;
+                vm.appName = MyProfileSrv.getAppName();
 
                 vm.closeDialog = function () {
                     $mdDialog.cancel();
@@ -12028,6 +12029,10 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                             escapeToClose: true
                         });
                     });
+                };
+
+                self.getAppName = function () {
+                    return ENV.appName.split('-')[0];
                 };
             }]
         );
@@ -12295,7 +12300,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\"\n" +
     "                        local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
     "        </update-profile>\n" +
-    "        <selected-test-level class=\"selected-test-level\"></selected-test-level>\n" +
+    "        <selected-test-level class=\"selected-test-level\" ng-if=\"vm.appName === 'satsm'\"></selected-test-level>\n" +
     "        <change-password class=\"change-password\"></change-password>\n" +
     "    </div>\n" +
     "</md-dialog>\n" +
