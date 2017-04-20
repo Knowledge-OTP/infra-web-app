@@ -356,7 +356,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        ["$q", "LoginAppSrv", "$window", "$log", "$auth", "UserProfileService", function($q, LoginAppSrv, $window, $log, $auth, UserProfileService) {
+        ["$q", "LoginAppSrv", "$window", "$log", "$auth", function($q, LoginAppSrv, $window, $log, $auth) {
             'ngInject';
 
             var vm = this;
@@ -370,22 +370,33 @@
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    UserProfileService.getProfileByUserId(userDataAuth.uid).then(function (userProfile) {
-                        var createUserProfileProm;
-                        if (Object.keys(userProfile).length === 0) {
-                            var nickname = userDataAuth.nickname || userDataAuth.name;
-                            createUserProfileProm = UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
-                        } else {
-                            createUserProfileProm = $q.when(null);
+                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
+                        var updateProfile = false;
+
+                        if (!userProfile.email && userDataAuth.email) {
+                            userProfile.email = userDataAuth.email;
+                            updateProfile = true;
+                        }
+                        if (!userProfile.nickname && (userDataAuth.nickname || userDataAuth.name)) {
+                            userProfile.nickname = userDataAuth.nickname || userDataAuth.name;
+                            updateProfile = true;
+                        }
+                        if (!userProfile.provider) {
+                            userProfile.provider = provider;
+                            updateProfile = true;
                         }
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
                         loadingProvider.showSpinner = false;
 
-                        createUserProfileProm.then(function () {
+                        if (updateProfile) {
+                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
+                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
+                            });
+                        } else {
                             LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-                        });
+                        }
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
@@ -576,6 +587,44 @@
 
                 $window.location.href = $window.location.host.indexOf('localhost') > -1 ? "//" + $window.location.host + urlParams : "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
             }
+
+            function _getUserProfile(appContext, userContext) {
+                var globalRef = _getGlobalRef(appContext, userContext);
+                var auth = globalRef.getAuth();
+                var userProfileRef = globalRef.child('users/' + auth.uid + '/profile');
+                var deferred = $q.defer();
+                userProfileRef.on('value', function (snapshot) {
+                    var userProfile = snapshot.val() || {};
+                    deferred.resolve(userProfile);
+                }, function (err) {
+                    $log.error('LoginAppSrv _getUserProfile: err=' + err);
+                    deferred.reject(err);
+                });
+                return deferred.promise;
+            }
+
+            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
+                var appRef = _getAppRef(appContext, userContext);
+                var auth = appRef.getAuth();
+                var userProfileRef = appRef.child('users/' + auth.uid);
+                var profile;
+                if (customProfileFlag) {
+                    profile = {profile: formData};
+                } else {
+                    profile = {
+                        profile: {
+                            email: formData.email,
+                            nickname: formData.nickname
+                        }
+                    };
+                }
+                return userProfileRef.update(profile).catch(function (err) {
+                    $log.error(err);
+                });
+            }
+
+            LoginAppSrv.getUserProfile = _getUserProfile;
+            LoginAppSrv.writeUserProfile = _writeUserProfile;
 
             LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
                 return refDB.authWithCustomToken(token).catch(function (error) {
