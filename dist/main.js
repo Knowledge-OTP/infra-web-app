@@ -12251,7 +12251,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\"\n" +
     "                        local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
     "        </update-profile>\n" +
-    "        <selected-test-level class=\"selected-test-level\" ng-if=\"vm.appName !== 'satsm'\"></selected-test-level>\n" +
+    "        <selected-test-level class=\"selected-test-level\" ng-if=\"vm.appName === 'satsm'\"></selected-test-level>\n" +
     "        <change-password class=\"change-password\"></change-password>\n" +
     "    </div>\n" +
     "</md-dialog>\n" +
