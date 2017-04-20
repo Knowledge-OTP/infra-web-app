@@ -519,9 +519,9 @@
                 return AllEnvs[env][appContext];
             }
 
-            LoginAppSrv.getCurrentEnv = function(){
+            function _getCurrentEnv(){
                 return env;
-            };
+            }
 
             function _getAppScopeName(userContext, appEnvConfig) {
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
@@ -623,16 +623,13 @@
                 });
             }
 
-            LoginAppSrv.getUserProfile = _getUserProfile;
-            LoginAppSrv.writeUserProfile = _writeUserProfile;
-
-            LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
+            function _createAuthWithCustomToken(refDB, token) {
                 return refDB.authWithCustomToken(token).catch(function (error) {
                     $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
                 });
-            };
+            }
 
-            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
+            function _userDataForAuthAndDataFb(data, appContext, userContext) {
                 var refAuthDB = _getGlobalRef(appContext, userContext);
                 var refDataDB = _getAppRef(appContext, userContext);
                 var proms = [
@@ -640,24 +637,16 @@
                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
                 ];
                 return $q.all(proms);
-            };
+            }
 
-            LoginAppSrv.APPS = APPS;
-
-            LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
-
-            LoginAppSrv.logout = function (appContext, userContext) {
+            function _logout(appContext, userContext) {
                 var globalRef = _getGlobalRef(appContext, userContext);
                 var appRef = _getAppRef(appContext, userContext);
                 globalRef.unauth();
                 appRef.unauth();
-            };
+            }
 
-            LoginAppSrv.addFirstRegistrationRecord = _addFirstRegistrationRecord;
-
-            LoginAppSrv.redirectToPage = _redirectToPage;
-
-            LoginAppSrv.setSocialProvidersConfig = function (providers, appContent) {
+            function _setSocialProvidersConfig(providers, appContent) {
                 var env = _getAppEnvConfig(appContent);
                 angular.forEach(providers, function (provider) {
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
@@ -674,9 +663,9 @@
                         providerConfig.scope = ['wl.emails'];
                     }
                 });
-            };
+            }
 
-            LoginAppSrv.resetPassword = function (appId, email, userContext) {
+            function _resetPassword(appId, email, userContext) {
                 var globalRef = _getGlobalRef(appId, userContext);
                 return globalRef.resetPassword({
                     email: email
@@ -691,7 +680,7 @@
                 }).catch(function (error) {
                     return error;
                 });
-            };
+            }
 
             /**
              * params:
@@ -776,6 +765,19 @@
                     });
                 };
             })();
+
+            LoginAppSrv.APPS = APPS;
+            LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
+            LoginAppSrv.logout = _logout;
+            LoginAppSrv.getCurrentEnv = _getCurrentEnv;
+            LoginAppSrv.getUserProfile = _getUserProfile;
+            LoginAppSrv.writeUserProfile = _writeUserProfile;
+            LoginAppSrv.createAuthWithCustomToken = _createAuthWithCustomToken;
+            LoginAppSrv.userDataForAuthAndDataFb = _userDataForAuthAndDataFb;
+            LoginAppSrv.addFirstRegistrationRecord = _addFirstRegistrationRecord;
+            LoginAppSrv.resetPassword = _resetPassword;
+            LoginAppSrv.redirectToPage = _redirectToPage;
+            LoginAppSrv.setSocialProvidersConfig = _setSocialProvidersConfig;
 
             return LoginAppSrv;
         }];

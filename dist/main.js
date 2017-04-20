@@ -10844,9 +10844,9 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 return AllEnvs[env][appContext];
             }
 
-            LoginAppSrv.getCurrentEnv = function(){
+            function _getCurrentEnv(){
                 return env;
-            };
+            }
 
             function _getAppScopeName(userContext, appEnvConfig) {
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
@@ -10948,16 +10948,13 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 });
             }
 
-            LoginAppSrv.getUserProfile = _getUserProfile;
-            LoginAppSrv.writeUserProfile = _writeUserProfile;
-
-            LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
+            function _createAuthWithCustomToken(refDB, token) {
                 return refDB.authWithCustomToken(token).catch(function (error) {
                     $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
                 });
-            };
+            }
 
-            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
+            function _userDataForAuthAndDataFb(data, appContext, userContext) {
                 var refAuthDB = _getGlobalRef(appContext, userContext);
                 var refDataDB = _getAppRef(appContext, userContext);
                 var proms = [
@@ -10965,24 +10962,16 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
                 ];
                 return $q.all(proms);
-            };
+            }
 
-            LoginAppSrv.APPS = APPS;
-
-            LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
-
-            LoginAppSrv.logout = function (appContext, userContext) {
+            function _logout(appContext, userContext) {
                 var globalRef = _getGlobalRef(appContext, userContext);
                 var appRef = _getAppRef(appContext, userContext);
                 globalRef.unauth();
                 appRef.unauth();
-            };
+            }
 
-            LoginAppSrv.addFirstRegistrationRecord = _addFirstRegistrationRecord;
-
-            LoginAppSrv.redirectToPage = _redirectToPage;
-
-            LoginAppSrv.setSocialProvidersConfig = function (providers, appContent) {
+            function _setSocialProvidersConfig(providers, appContent) {
                 var env = _getAppEnvConfig(appContent);
                 angular.forEach(providers, function (provider) {
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
@@ -10999,9 +10988,9 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         providerConfig.scope = ['wl.emails'];
                     }
                 });
-            };
+            }
 
-            LoginAppSrv.resetPassword = function (appId, email, userContext) {
+            function _resetPassword(appId, email, userContext) {
                 var globalRef = _getGlobalRef(appId, userContext);
                 return globalRef.resetPassword({
                     email: email
@@ -11016,7 +11005,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 }).catch(function (error) {
                     return error;
                 });
-            };
+            }
 
             /**
              * params:
@@ -11101,6 +11090,19 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     });
                 };
             })();
+
+            LoginAppSrv.APPS = APPS;
+            LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
+            LoginAppSrv.logout = _logout;
+            LoginAppSrv.getCurrentEnv = _getCurrentEnv;
+            LoginAppSrv.getUserProfile = _getUserProfile;
+            LoginAppSrv.writeUserProfile = _writeUserProfile;
+            LoginAppSrv.createAuthWithCustomToken = _createAuthWithCustomToken;
+            LoginAppSrv.userDataForAuthAndDataFb = _userDataForAuthAndDataFb;
+            LoginAppSrv.addFirstRegistrationRecord = _addFirstRegistrationRecord;
+            LoginAppSrv.resetPassword = _resetPassword;
+            LoginAppSrv.redirectToPage = _redirectToPage;
+            LoginAppSrv.setSocialProvidersConfig = _setSocialProvidersConfig;
 
             return LoginAppSrv;
         }];
