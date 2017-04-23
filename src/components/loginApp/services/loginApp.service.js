@@ -39,7 +39,7 @@
             return env;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs, UserProfileService) {
+        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -133,9 +133,10 @@
             }
 
             function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
-                var appRef = _getAppRef(appContext, userContext);
-                var auth = appRef.getAuth();
-                var userProfileRef = appRef.child('users/' + auth.uid);
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                var znkRef = _getGlobalRef(appContext, userContext);
+                var auth = znkRef.getAuth();
+                var updateProfileProms = [];
                 var profile;
                 if (customProfileFlag) {
                     profile = {profile: formData};
@@ -147,8 +148,15 @@
                         }
                     };
                 }
-                return userProfileRef.update(profile).catch(function (err) {
-                    $log.error(err);
+
+                updateProfileProms.push(znkRef.child('users/' + auth.uid).update(profile));
+                if (appEnvConfig.setUserProfileTwice){
+                    var appRef = _getAppRef(appContext, userContext);
+                    updateProfileProms.push(appRef.child('users/' + auth.uid).update(profile));
+                }
+                return $q.all(updateProfileProms)
+                    .catch(function (err) {
+                        $log.error(err);
                 });
             }
 
@@ -281,9 +289,14 @@
                     return globalRef.createUser(formData).then(function () {
                         var signUp = true;
                         return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function (userAuth) {
+                            $log.debug('LoginAppSrv: User signup: ' + userAuth.uid);
                             isSignUpInProgress = false;
-                            var provider = 'custom';
-                            var saveProfileProm = UserProfileService.createUserProfile(userAuth.uid, formData.email, formData.nickname, provider);
+                            var userProfile = {
+                                email: formData.email,
+                                nickname: formData.nickname,
+                                provider: 'custom'
+                            };
+                            var saveProfileProm = LoginAppSrv.writeUserProfile(userProfile, appContext, userContext, true);
                             return saveProfileProm.then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
