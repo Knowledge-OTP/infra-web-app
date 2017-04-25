@@ -906,8 +906,9 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                 self.resetUserData = function () {
                     self.startResetBtnLoader = true;
                     self.fillResetBtnLoader = undefined;
+                    var appName = self.currentAppKey.toLowerCase()+'_app';
                     var data = {
-                        appName: self.currentAppKey,
+                        appName: appName,
                         uid: self.selectedStudent.uid
                     };
                     ESLinkService.resetUserData(data).then(function success() {
