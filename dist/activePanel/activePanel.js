@@ -13,6 +13,24 @@
     ]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.activePanel')
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
+
+            var svgMap = {
+                'active-panel-call-mute-icon': 'components/calls/svg/call-mute-icon.svg',
+                'active-panel-stop-sharing-icon': 'components/activePanel/svg/stop-sharing-icon.svg',
+                'active-panel-share-screen-icon': 'components/activePanel/svg/share-screen-icon.svg',
+                'active-panel-track-teacher-icon': 'components/activePanel/svg/track-teacher-icon.svg',
+                'active-panel-track-student-icon': 'components/activePanel/svg/track-student-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }]);
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -25,7 +43,7 @@
                         UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
                 'ngInject';
                 return {
-                templateUrl: 'components/activePanel/activePanel.template.html',
+                templateUrl: 'components/activePanel/directives/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
                     var durationToDisplay,
@@ -256,26 +274,8 @@
         }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.activePanel')
-        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
-            'ngInject';
-
-            var svgMap = {
-                'active-panel-call-mute-icon': 'components/calls/svg/call-mute-icon.svg',
-                'active-panel-stop-sharing-icon': 'components/activePanel/svg/stop-sharing-icon.svg',
-                'active-panel-share-screen-icon': 'components/activePanel/svg/share-screen-icon.svg',
-                'active-panel-track-teacher-icon': 'components/activePanel/svg/track-teacher-icon.svg',
-                'active-panel-track-student-icon': 'components/activePanel/svg/track-student-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }]);
-})(angular);
-
 angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/activePanel/activePanel.template.html",
+  $templateCache.put("components/activePanel/directives/activePanel.template.html",
     "<div class=\"active-panel ng-hide\"\n" +
     "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
     "     translate-namespace=\"ACTIVE_PANEL\">\n" +

@@ -29,7 +29,7 @@
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExercise', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExercise/completeExercise.template.html',
             bindings: {
                 exerciseDetails: '<',
                 settings: '<'

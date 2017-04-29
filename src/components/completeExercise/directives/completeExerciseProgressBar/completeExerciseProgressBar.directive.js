@@ -8,7 +8,7 @@
 
                 var directive = {
                     restrict: 'E',
-                    templateUrl: 'components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBarDirective.template.html',
+                    templateUrl: 'components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBar.template.html',
                     scope: {
                         totalTime: '@',
                         duration: '<'

@@ -1,15 +1,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.webAppScreenSharing', [
-        'znk.infra.screenSharing',
-        'znk.infra-web-app.completeExercise'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.webAppScreenSharing')
         .config(["ScreenSharingUiSrvProvider", function (ScreenSharingUiSrvProvider) {
             'ngInject';
@@ -26,7 +17,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.webAppScreenSharing').component('shViewer', {
-        templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html',
+        templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewer.template.html',
         require: {
             screenSharing: '^screenSharing'
         },
@@ -66,8 +57,17 @@
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.webAppScreenSharing', [
+        'znk.infra.screenSharing',
+        'znk.infra-web-app.completeExercise'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html",
+  $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewer.template.html",
     "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
     "    <div class=\"header\">\n" +
     "            <span class=\"you-are-viewing-text\"\n" +

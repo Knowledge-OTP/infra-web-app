@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
-        templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
+        templateUrl: 'components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
             currentSubjectId: '@subjectId',

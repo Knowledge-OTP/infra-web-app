@@ -6,7 +6,7 @@
         function (PromoCodeSrv, PROMO_CODE_STATUS) {
             'ngInject';
             return {
-                templateUrl: 'components/promoCode/templates/promoCode.template.html',
+                templateUrl: 'components/promoCode/directives/promoCode.template.html',
                 restrict: 'E',
                 scope: {
                     userContext: '<',

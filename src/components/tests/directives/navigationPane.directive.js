@@ -11,7 +11,7 @@
             return {
                 scope: {},
                 restrict: 'E',
-                templateUrl: 'components/tests/templates/navigationPane.template.html',
+                templateUrl: 'components/tests/directives/navigationPane.template.html',
                 require: '?ngModel',
                 link: function (scope, element, attributes, ngModelCtrl) {
 

@@ -3,7 +3,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkSummary').component('znkSummaryTimeline', {
-        templateUrl: 'components/znkSummary/templates/znkSummaryTimeline.template.html',
+        templateUrl: 'components/znkSummary/directives/znkSummaryTimeline/znkSummaryTimeline.template.html',
         bindings: {
             exerciseData: '<'
         },

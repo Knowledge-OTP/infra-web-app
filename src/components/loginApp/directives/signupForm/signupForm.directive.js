@@ -9,7 +9,7 @@
         function (LoginAppSrv, $log, $timeout) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/signupForm.directive.html',
+                templateUrl: 'components/loginApp/directives/signupForm/signupForm.template.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',

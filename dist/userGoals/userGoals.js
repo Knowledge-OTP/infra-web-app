@@ -1,13 +1,3 @@
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.userGoals', [
-        'znk.infra.scoring',
-        'znk.infra.utility'
-    ]);
-})(angular);
-
-
 'use strict';
 
 angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [function() {
@@ -101,6 +91,16 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
         return userGoalsServiceObj;
     }];
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.userGoals', [
+        'znk.infra.scoring',
+        'znk.infra.utility'
+    ]);
+})(angular);
+
 
 angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
 

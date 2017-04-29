@@ -1,17 +1,3 @@
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.infraWebAppZnkExercise', [
-        'znk.infra.znkExercise',
-        'znk.infra.analytics',
-        'znk.infra.general',
-        'pascalprecht.translate',
-        'ngMaterial',
-        'ngAnimate',
-        'znk.infra.svgIcon'
-    ]);
-})(angular);
-
 /**
  * attrs:
  */
@@ -301,6 +287,20 @@
             }
         };
     }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.infraWebAppZnkExercise', [
+        'znk.infra.znkExercise',
+        'znk.infra.analytics',
+        'znk.infra.general',
+        'pascalprecht.translate',
+        'ngMaterial',
+        'ngAnimate',
+        'znk.infra.svgIcon'
+    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {

@@ -12,7 +12,7 @@
             var previousValues;
 
             return {
-                templateUrl: 'components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html',
+                templateUrl: 'components/estimatedScoreWidget/directives/estimatedScoreWidget.template.html',
                 require: '?ngModel',
                 restrict: 'E',
                 scope: {

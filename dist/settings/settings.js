@@ -1,18 +1,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.settings', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.auth',
-        'znk.infra.svgIcon',
-        'znk.infra.general'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.settings').config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -103,6 +91,18 @@
                 };
             }]
         );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.settings', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.auth',
+        'znk.infra.svgIcon',
+        'znk.infra.general'
+    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {

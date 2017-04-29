@@ -1,22 +1,3 @@
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tests', [
-        'znk.infra.svgIcon',
-        'pascalprecht.translate',
-        'ngMaterial',
-        'znk.infra.enum',
-        'znk.infra.scoring',
-        'znk.infra.exams',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra.analytics',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.estimatedScoreWidget',
-        'znk.infra.exerciseUtility',
-        'ui.router'
-    ]);  
-})(angular);
-
 /**
  * attrs:
  */
@@ -30,7 +11,7 @@
             return {
                 scope: {},
                 restrict: 'E',
-                templateUrl: 'components/tests/templates/navigationPane.template.html',
+                templateUrl: 'components/tests/directives/navigationPane.template.html',
                 require: '?ngModel',
                 link: function (scope, element, attributes, ngModelCtrl) {
 
@@ -96,8 +77,27 @@
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tests', [
+        'znk.infra.svgIcon',
+        'pascalprecht.translate',
+        'ngMaterial',
+        'znk.infra.enum',
+        'znk.infra.scoring',
+        'znk.infra.exams',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra.analytics',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.estimatedScoreWidget',
+        'znk.infra.exerciseUtility',
+        'ui.router'
+    ]);  
+})(angular);
+
 angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/tests/templates/navigationPane.template.html",
+  $templateCache.put("components/tests/directives/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
     "    <div class=\"tests-navigation-title-header\"\n" +

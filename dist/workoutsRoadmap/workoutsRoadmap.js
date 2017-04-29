@@ -1,90 +1,3 @@
-/**
- * usage instructions:
- *      1) workout progress:
- *          - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
- *              .reading-bg{
- *                  background: red;
- *              }
- *          - define <%= subjectName %>-bg:after style for border color for example
- *              workouts-progress .items-container .item-container .item.selected.reading-bg:after {
- *                   border-color: red;
- *              }
- *
- *      2) WorkoutsRoadmapSrv:
- *          setNewWorkoutGeneratorGetter: provide a function which return a new workout generator function. subjectsToIgnore
- *              will be passed as parameter.
- *              i.e:
- *                  function(WorkoutPersonalization){
- *                      'ngInject';
- *
- *                      return function(subjectToIgnore){
- *                          return WorkoutPersonalizationService.getExercisesByTimeForNewWorkout(subjectToIgnoreForNextDaily);
- *                      }
- *                  }
- *              the return value should be a map of exercise time to exercise meta data i.e:
- *              {
- *                 "5" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 150,
- *                   "exerciseTypeId" : 1,
- *                   "subjectId" : 0
- *                 },
- *                 "10" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 109,
- *                   "exerciseTypeId" : 3,
- *                   "subjectId" : 0
- *                 },
- *                 "15" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 221,
- *                   "exerciseTypeId" : 3,
- *                   "subjectId" : 0
- *                 }
- *               }
- *
- *
- *      3) workoutsRoadmap.diagnostic.summary
- *          this state must set i.e
- *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
- *                   template: '<div>Diagnostic </div>',
- *                   controller: 'WorkoutsRoadMapBaseSummaryController',
- *                   controllerAs: 'vm'
- *               })
- *      4) workoutsRoadmap.workout.inProgress
- *          this state must set i.e
- *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
- *                  template: '<div>Workout in progress</div>',
- *                  controller: function(){}
- *             })
- */
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.workoutsRoadmap', [
-        'pascalprecht.translate',
-        'ngMaterial',
-        'ui.router',
-        'ngAnimate',
-        'znk.infra.svgIcon',
-        'znk.infra.enum',
-        'znk.infra.exerciseUtility',
-        'znk.infra.scroll',
-        'znk.infra.general',
-        'znk.infra.contentGetters',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.socialSharing',
-        'znk.infra.znkExercise',
-        'znk.infra.estimatedScore',
-        'znk.infra.scoring',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.userGoalsSelection',
-        'znk.infra-web-app.estimatedScoreWidget'
-    ]);
-})(angular);
-
 (function (angular) {
     'use strict';
 
@@ -195,10 +108,19 @@
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
-            
+
             var svgMap = {
                 'workouts-roadmap-checkmark': 'components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg',
-                'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
+                'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg',
+                'workouts-intro-lock-dotted-arrow': 'components/workoutsRoadmap/svg/dotted-arrow.svg',
+                'workouts-intro-lock-lock': 'components/workoutsRoadmap/svg/lock-icon.svg',
+                'workouts-intro-lock-share-arrow': 'components/workoutsRoadmap/svg/share-arrow-icon.svg',
+                'workouts-progress-flag': 'components/workoutsRoadmap/svg/flag-icon.svg',
+                'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg',
+                'workouts-progress-tutorial-icon': 'components/workoutsRoadmap/svg/tutorial-icon.svg',
+                'workouts-progress-practice-icon': 'components/workoutsRoadmap/svg/practice-icon.svg',
+                'workouts-progress-game-icon': 'components/workoutsRoadmap/svg/game-icon.svg',
+                'workouts-progress-drill-icon': 'components/workoutsRoadmap/svg/drill-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }]);
@@ -708,22 +630,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap')
-        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
-            'ngInject';
-
-            var svgMap = {
-                'workouts-intro-lock-dotted-arrow': 'components/workoutsRoadmap/svg/dotted-arrow.svg',
-                'workouts-intro-lock-lock': 'components/workoutsRoadmap/svg/lock-icon.svg',
-                'workouts-intro-lock-share-arrow': 'components/workoutsRoadmap/svg/share-arrow-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }])
         .directive('workoutIntroLock',
             ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", "purchaseService", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv, purchaseService) {
                 'ngInject';
 
                 return {
-                    templateUrl: 'components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html',
+                    templateUrl: 'components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLock.template.html',
                     restrict: 'E',
                     transclude: true,
                     scope: {
@@ -800,20 +712,6 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap')
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
-                var svgMap = {
-                    'workouts-progress-flag': 'components/workoutsRoadmap/svg/flag-icon.svg',
-                    'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg',
-                    'workouts-progress-tutorial-icon': 'components/workoutsRoadmap/svg/tutorial-icon.svg',
-                    'workouts-progress-practice-icon': 'components/workoutsRoadmap/svg/practice-icon.svg',
-                    'workouts-progress-game-icon': 'components/workoutsRoadmap/svg/game-icon.svg',
-                    'workouts-progress-drill-icon': 'components/workoutsRoadmap/svg/drill-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ])
         .directive('workoutsProgress',
             ["$timeout", "ExerciseStatusEnum", "$log", function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
                 'ngInject';
@@ -825,7 +723,7 @@
                 };
 
                 var directive = {
-                    templateUrl: 'components/workoutsRoadmap/directives/workoutsProgress/workoutsProgressDirective.template.html',
+                    templateUrl: 'components/workoutsRoadmap/directives/workoutsProgress/workoutsProgress.template.html',
                     restrict: 'E',
                     require: 'ngModel',
                     scope: {
@@ -1009,8 +907,95 @@
     ]);
 })(angular);
 
+/**
+ * usage instructions:
+ *      1) workout progress:
+ *          - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
+ *              .reading-bg{
+ *                  background: red;
+ *              }
+ *          - define <%= subjectName %>-bg:after style for border color for example
+ *              workouts-progress .items-container .item-container .item.selected.reading-bg:after {
+ *                   border-color: red;
+ *              }
+ *
+ *      2) WorkoutsRoadmapSrv:
+ *          setNewWorkoutGeneratorGetter: provide a function which return a new workout generator function. subjectsToIgnore
+ *              will be passed as parameter.
+ *              i.e:
+ *                  function(WorkoutPersonalization){
+ *                      'ngInject';
+ *
+ *                      return function(subjectToIgnore){
+ *                          return WorkoutPersonalizationService.getExercisesByTimeForNewWorkout(subjectToIgnoreForNextDaily);
+ *                      }
+ *                  }
+ *              the return value should be a map of exercise time to exercise meta data i.e:
+ *              {
+ *                 "5" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 150,
+ *                   "exerciseTypeId" : 1,
+ *                   "subjectId" : 0
+ *                 },
+ *                 "10" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 109,
+ *                   "exerciseTypeId" : 3,
+ *                   "subjectId" : 0
+ *                 },
+ *                 "15" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 221,
+ *                   "exerciseTypeId" : 3,
+ *                   "subjectId" : 0
+ *                 }
+ *               }
+ *
+ *
+ *      3) workoutsRoadmap.diagnostic.summary
+ *          this state must set i.e
+ *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
+ *                   template: '<div>Diagnostic </div>',
+ *                   controller: 'WorkoutsRoadMapBaseSummaryController',
+ *                   controllerAs: 'vm'
+ *               })
+ *      4) workoutsRoadmap.workout.inProgress
+ *          this state must set i.e
+ *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
+ *                  template: '<div>Workout in progress</div>',
+ *                  controller: function(){}
+ *             })
+ */
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap', [
+        'pascalprecht.translate',
+        'ngMaterial',
+        'ui.router',
+        'ngAnimate',
+        'znk.infra.svgIcon',
+        'znk.infra.enum',
+        'znk.infra.exerciseUtility',
+        'znk.infra.scroll',
+        'znk.infra.general',
+        'znk.infra.contentGetters',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra-web-app.diagnosticIntro',
+        'znk.infra-web-app.socialSharing',
+        'znk.infra.znkExercise',
+        'znk.infra.estimatedScore',
+        'znk.infra.scoring',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.estimatedScoreWidget'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html",
+  $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLock.template.html",
     "<div ng-transclude class=\"main-container\"></div>\n" +
     "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +
     "    class=\"lock-overlay-container\">\n" +
@@ -1061,7 +1046,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "    </ng-switch>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/workoutsRoadmap/directives/workoutsProgress/workoutsProgressDirective.template.html",
+  $templateCache.put("components/workoutsRoadmap/directives/workoutsProgress/workoutsProgress.template.html",
     "<znk-scroll actions=\"vm.scrollActions\" scroll-on-mouse-wheel=\"true\">\n" +
     "    <div class=\"items-container\">\n" +
     "        <div class=\"dotted-lines-container\">\n" +

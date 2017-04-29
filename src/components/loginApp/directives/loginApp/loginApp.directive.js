@@ -9,7 +9,7 @@
         function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService, ENV) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/loginApp.directive.html',
+                templateUrl: 'components/loginApp/directives/loginApp/loginApp.template.html',
                 restrict: 'E',
                 link: function (scope) {
 
