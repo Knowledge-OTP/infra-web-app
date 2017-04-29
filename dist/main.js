@@ -906,8 +906,9 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                 self.resetUserData = function () {
                     self.startResetBtnLoader = true;
                     self.fillResetBtnLoader = undefined;
+                    var appName = self.currentAppKey.toLowerCase()+'_app';
                     var data = {
-                        appName: self.currentAppKey,
+                        appName: appName,
                         uid: self.selectedStudent.uid
                     };
                     ESLinkService.resetUserData(data).then(function success() {
@@ -1754,7 +1755,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             'ngInject';
 
          function _updateAwsConfig(config, options) {
-            options = options || {}; 
+            options = options || {};
             config = config || false;
 
             if (!config) {
@@ -1764,20 +1765,20 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                        IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
                    }),
                };
-            } 
+            }
 
             $window.AWS.config.update(config);
-         }  
+         }
 
          function _init() {
               _updateAwsConfig();
-         }   
-           
+         }
+
          _init();
 
           function _generateFileName() {
-             return UtilitySrv.general.createGuid();  
-          } 
+             return UtilitySrv.general.createGuid();
+          }
 
           function _getFile(blob, fileName) {
               return new $window.File([blob], fileName);
@@ -1786,7 +1787,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
           function _addSlashToPath(prefixPath) {
               var prefixPathLength = prefixPath.length;
 
-              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength);
 
               if (lastChar === '/') {
                   return prefixPath;
@@ -1815,13 +1816,13 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
               this.filesNames = [];
 
-              this.bucketInstance = new $window.AWS.S3({ 
+              this.bucketInstance = new $window.AWS.S3({
                    params: {
                       Bucket: this.bucketName
                    }
               });
           }
-         
+
         AwsS3.prototype.upload = function(options) {
             var deferred = $q.defer();
             var errMsg;
@@ -1843,7 +1844,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                   deferred.reject(errMsg);
                   return;
             }
-            
+
             var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
             var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
             var filePath = _getFilePath(options.prefixPath, file);
@@ -1866,7 +1867,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             });
 
             return deferred.promise;
-        };  
+        };
 
         AwsS3.prototype.getCurrentFileName = function() {
             var filesLength = this.filesNames.length;
@@ -1880,9 +1881,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
         this.updateConfig = updateConfig;
 
-        // factory for aws bucket instances 
+        // factory for aws bucket instances
         this.newAwsS3 = function (options) {
-            return new AwsS3(options);   
+            return new AwsS3(options);
         };
 
       }]
@@ -3232,11 +3233,11 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                 var dontInit = false;
                 return ExerciseResultSrv.getExerciseResult(
-                    exerciseDetails.exerciseTypeId, 
-                    exerciseDetails.exerciseId, 
-                    exerciseDetails.examId, 
-                    exerciseDetails.examSectionsNum, 
-                    dontInit, 
+                    exerciseDetails.exerciseTypeId,
+                    exerciseDetails.exerciseId,
+                    exerciseDetails.examId,
+                    exerciseDetails.examSectionsNum,
+                    dontInit,
                     exerciseDetails.exerciseParentId);
             };
         }]
@@ -3258,22 +3259,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {                    
+                exerciseCycleSrv.invoke = function (methodName, data) {
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {                      
+                    if (angular.isDefined(hook)) {
                         try {
-                            fn = $injector.invoke(hook);         
+                            fn = $injector.invoke(hook);
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-                        
+
                         return fn.apply(null, data);
-                    } 
+                    }
                 };
 
                 return exerciseCycleSrv;
@@ -3518,7 +3519,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-        
+
     ]);
 })(angular);
 
@@ -4990,7 +4991,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -6408,7 +6409,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject'; 
+            'ngInject';
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -6420,7 +6421,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
 
 (function () {
     'use strict';
-    
+
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -6672,7 +6673,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-                    
+
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -10681,7 +10682,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').controller('OathLoginDrvController',
-        ["$q", "LoginAppSrv", "$window", "$log", "$auth", "UserProfileService", function($q, LoginAppSrv, $window, $log, $auth, UserProfileService) {
+        ["$q", "LoginAppSrv", "$window", "$log", "$auth", function($q, LoginAppSrv, $window, $log, $auth) {
             'ngInject';
 
             var vm = this;
@@ -10695,22 +10696,33 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 }).then(function (results) {
                     var userDataAuth = results[0].auth;
 
-                    UserProfileService.getProfileByUserId(userDataAuth.uid).then(function (userProfile) {
-                        var createUserProfileProm;
-                        if (Object.keys(userProfile).length === 0) {
-                            var nickname = userDataAuth.nickname || userDataAuth.name;
-                            createUserProfileProm = UserProfileService.createUserProfile(userDataAuth.uid, userDataAuth.email, nickname, provider);
-                        } else {
-                            createUserProfileProm = $q.when(null);
+                    LoginAppSrv.getUserProfile(vm.appContext.id, vm.userContext).then(function (userProfile) {
+                        var updateProfile = false;
+
+                        if (!userProfile.email && userDataAuth.email) {
+                            userProfile.email = userDataAuth.email;
+                            updateProfile = true;
+                        }
+                        if (!userProfile.nickname && (userDataAuth.nickname || userDataAuth.name)) {
+                            userProfile.nickname = userDataAuth.nickname || userDataAuth.name;
+                            updateProfile = true;
+                        }
+                        if (!userProfile.provider) {
+                            userProfile.provider = provider;
+                            updateProfile = true;
                         }
 
                         LoginAppSrv.addFirstRegistrationRecord(vm.appContext.id, vm.userContext);
 
                         loadingProvider.showSpinner = false;
 
-                        createUserProfileProm.then(function () {
+                        if (updateProfile) {
+                            LoginAppSrv.writeUserProfile(userProfile, vm.appContext.id, vm.userContext, true).then(function () {
+                                LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
+                            });
+                        } else {
                             LoginAppSrv.redirectToPage(vm.appContext.id, vm.userContext);
-                        });
+                        }
                     });
                 }).catch(function (error) {
                     $log.error('OathLoginDrvController socialAuth', error);
@@ -10824,7 +10836,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", "UserProfileService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs, UserProfileService) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -10833,9 +10845,9 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 return AllEnvs[env][appContext];
             }
 
-            LoginAppSrv.getCurrentEnv = function(){
+            function _getCurrentEnv(){
                 return env;
-            };
+            }
 
             function _getAppScopeName(userContext, appEnvConfig) {
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
@@ -10902,13 +10914,56 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 $window.location.href = $window.location.host.indexOf('localhost') > -1 ? "//" + $window.location.host + urlParams : "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
             }
 
-            LoginAppSrv.createAuthWithCustomToken = function (refDB, token) {
+            function _getUserProfile(appContext, userContext) {
+                var globalRef = _getGlobalRef(appContext, userContext);
+                var auth = globalRef.getAuth();
+                var userProfileRef = globalRef.child('users/' + auth.uid + '/profile');
+                var deferred = $q.defer();
+                userProfileRef.on('value', function (snapshot) {
+                    var userProfile = snapshot.val() || {};
+                    deferred.resolve(userProfile);
+                }, function (err) {
+                    $log.error('LoginAppSrv _getUserProfile: err=' + err);
+                    deferred.reject(err);
+                });
+                return deferred.promise;
+            }
+
+            function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                var znkRef = _getGlobalRef(appContext, userContext);
+                var auth = znkRef.getAuth();
+                var updateProfileProms = [];
+                var profile;
+                if (customProfileFlag) {
+                    profile = {profile: formData};
+                } else {
+                    profile = {
+                        profile: {
+                            email: formData.email,
+                            nickname: formData.nickname
+                        }
+                    };
+                }
+
+                updateProfileProms.push(znkRef.child('users/' + auth.uid).update(profile));
+                if (appEnvConfig.setUserProfileTwice){
+                    var appRef = _getAppRef(appContext, userContext);
+                    updateProfileProms.push(appRef.child('users/' + auth.uid).update(profile));
+                }
+                return $q.all(updateProfileProms)
+                    .catch(function (err) {
+                        $log.error(err);
+                });
+            }
+
+            function _createAuthWithCustomToken(refDB, token) {
                 return refDB.authWithCustomToken(token).catch(function (error) {
                     $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
                 });
-            };
+            }
 
-            LoginAppSrv.userDataForAuthAndDataFb = function (data, appContext, userContext) {
+            function _userDataForAuthAndDataFb(data, appContext, userContext) {
                 var refAuthDB = _getGlobalRef(appContext, userContext);
                 var refDataDB = _getAppRef(appContext, userContext);
                 var proms = [
@@ -10916,24 +10971,16 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     LoginAppSrv.createAuthWithCustomToken(refDataDB, data.dataToken)
                 ];
                 return $q.all(proms);
-            };
+            }
 
-            LoginAppSrv.APPS = APPS;
-
-            LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
-
-            LoginAppSrv.logout = function (appContext, userContext) {
+            function _logout(appContext, userContext) {
                 var globalRef = _getGlobalRef(appContext, userContext);
                 var appRef = _getAppRef(appContext, userContext);
                 globalRef.unauth();
                 appRef.unauth();
-            };
+            }
 
-            LoginAppSrv.addFirstRegistrationRecord = _addFirstRegistrationRecord;
-
-            LoginAppSrv.redirectToPage = _redirectToPage;
-
-            LoginAppSrv.setSocialProvidersConfig = function (providers, appContent) {
+            function _setSocialProvidersConfig(providers, appContent) {
                 var env = _getAppEnvConfig(appContent);
                 angular.forEach(providers, function (provider) {
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
@@ -10950,9 +10997,9 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         providerConfig.scope = ['wl.emails'];
                     }
                 });
-            };
+            }
 
-            LoginAppSrv.resetPassword = function (appId, email, userContext) {
+            function _resetPassword(appId, email, userContext) {
                 var globalRef = _getGlobalRef(appId, userContext);
                 return globalRef.resetPassword({
                     email: email
@@ -10967,7 +11014,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 }).catch(function (error) {
                     return error;
                 });
-            };
+            }
 
             /**
              * params:
@@ -11039,9 +11086,14 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     return globalRef.createUser(formData).then(function () {
                         var signUp = true;
                         return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function (userAuth) {
+                            $log.debug('LoginAppSrv: User signup: ' + userAuth.uid);
                             isSignUpInProgress = false;
-                            var provider = 'custom';
-                            var saveProfileProm = UserProfileService.createUserProfile(userAuth.uid, formData.email, formData.nickname, provider);
+                            var userProfile = {
+                                email: formData.email,
+                                nickname: formData.nickname,
+                                provider: 'custom'
+                            };
+                            var saveProfileProm = LoginAppSrv.writeUserProfile(userProfile, appContext, userContext, true);
                             return saveProfileProm.then(function () {
                                 _redirectToPage(appContext, userContext);
                             });
@@ -11052,6 +11104,19 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     });
                 };
             })();
+
+            LoginAppSrv.APPS = APPS;
+            LoginAppSrv.USER_CONTEXT = USER_CONTEXT;
+            LoginAppSrv.logout = _logout;
+            LoginAppSrv.getCurrentEnv = _getCurrentEnv;
+            LoginAppSrv.getUserProfile = _getUserProfile;
+            LoginAppSrv.writeUserProfile = _writeUserProfile;
+            LoginAppSrv.createAuthWithCustomToken = _createAuthWithCustomToken;
+            LoginAppSrv.userDataForAuthAndDataFb = _userDataForAuthAndDataFb;
+            LoginAppSrv.addFirstRegistrationRecord = _addFirstRegistrationRecord;
+            LoginAppSrv.resetPassword = _resetPassword;
+            LoginAppSrv.redirectToPage = _redirectToPage;
+            LoginAppSrv.setSocialProvidersConfig = _setSocialProvidersConfig;
 
             return LoginAppSrv;
         }];
@@ -11875,7 +11940,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.myProfile').controller('MyProfileController',
-            ["AuthService", "$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", function (AuthService, $mdDialog, $timeout, userProfile, timezonesList, localTimezone) {
+            ["AuthService", "$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", "MyProfileSrv", function (AuthService, $mdDialog, $timeout, userProfile, timezonesList, localTimezone, MyProfileSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -11883,6 +11948,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 vm.userProfile = userProfile;
                 vm.timezonesList = timezonesList;
                 vm.localTimezone = localTimezone;
+                vm.appName = MyProfileSrv.getAppName();
 
                 vm.closeDialog = function () {
                     $mdDialog.cancel();
@@ -11979,6 +12045,10 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                             escapeToClose: true
                         });
                     });
+                };
+
+                self.getAppName = function () {
+                    return ENV.appName.split('-')[0];
                 };
             }]
         );
@@ -12246,7 +12316,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     "        <update-profile user-profile=\"vm.userProfile\" timezones-list=\"vm.timezonesList\"\n" +
     "                        local-timezone=\"vm.localTimezone\" class=\"change-profile\">\n" +
     "        </update-profile>\n" +
-    "        <selected-test-level class=\"selected-test-level\"></selected-test-level>\n" +
+    "        <selected-test-level class=\"selected-test-level\" ng-if=\"vm.appName === 'satsm'\"></selected-test-level>\n" +
     "        <change-password class=\"change-password\"></change-password>\n" +
     "    </div>\n" +
     "</md-dialog>\n" +
@@ -14541,7 +14611,7 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -14577,7 +14647,7 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config' 
+        'znk.infra.config'
     ]);
 })(angular);
 
@@ -14718,7 +14788,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]);  
+    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
@@ -14842,7 +14912,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         var vm = this;
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
-        
+
         vm.$onInit = function () {
             $q.all([
                 subjectOrderProm
@@ -14943,7 +15013,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     angular.module('znk.infra-web-app.tutorials').service('TutorialsSrv',
         ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", "SubjectsSrv", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum, SubjectsSrv) {
             'ngInject';
-        
+
             this.getSubjectOrder = function () {
                 return SubjectsSrv.getSubjectOrder();
             };
@@ -16447,7 +16517,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
