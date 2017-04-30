@@ -2,20 +2,6 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap')
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
-                var svgMap = {
-                    'workouts-progress-flag': 'components/workoutsRoadmap/svg/flag-icon.svg',
-                    'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg',
-                    'workouts-progress-tutorial-icon': 'components/workoutsRoadmap/svg/tutorial-icon.svg',
-                    'workouts-progress-practice-icon': 'components/workoutsRoadmap/svg/practice-icon.svg',
-                    'workouts-progress-game-icon': 'components/workoutsRoadmap/svg/game-icon.svg',
-                    'workouts-progress-drill-icon': 'components/workoutsRoadmap/svg/drill-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ])
         .directive('workoutsProgress',
             function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
                 'ngInject';
@@ -27,7 +13,7 @@
                 };
 
                 var directive = {
-                    templateUrl: 'components/workoutsRoadmap/directives/workoutsProgress/workoutsProgressDirective.template.html',
+                    templateUrl: 'components/workoutsRoadmap/directives/workoutsProgress/workoutsProgress.template.html',
                     restrict: 'E',
                     require: 'ngModel',
                     scope: {

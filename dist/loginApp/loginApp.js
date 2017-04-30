@@ -1,22 +1,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp', [
-        'pascalprecht.translate',
-        'znk.infra.auth',
-        'znk.infra.svgIcon',
-        'ngMaterial',
-        'satellizer',
-        'znk.infra.user',
-        'znk.infra.general',
-        'znk.infra.autofocus',
-        'znk.infra-web-app.promoCode'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.loginApp')
         .config([
             'SvgIconSrvProvider',
@@ -46,60 +30,11 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('resetPasswordForm',
-        ["LoginAppSrv", "$timeout", function (LoginAppSrv, $timeout) {
-            'ngInject';
-            return {
-                templateUrl: 'components/loginApp/templates/resetPasswordForm.directive.html',
-                restrict: 'E',
-                scope: {
-                    appContext: '<',
-                    userContext: '<',
-                    backToLogin: '&'
-                },
-                link: function (scope) {
-                    scope.resetPasswordSucceeded = false;
-                    scope.showSpinner = false;
-                    scope.passwordSubmit = function (changePasswordForm) {
-                        changePasswordForm.email.$setValidity("noSuchEmail", true);
-                        scope.showSpinner = true;
-                        if (changePasswordForm.$invalid) {
-                            scope.showSpinner = false;
-                            return;
-                        }
-                        LoginAppSrv.resetPassword(scope.appContext.id, changePasswordForm.email.$viewValue, scope.userContext).then(function (resetPasswordSate) {
-                            $timeout(function () {
-                                if (angular.isUndefined(resetPasswordSate)) {
-                                    scope.showSpinner = false;
-                                    scope.resetPasswordSucceeded = true;
-                                } else {
-                                    if (resetPasswordSate.code === 'INVALID_USER') {
-                                        scope.showSpinner = false;
-                                        scope.resetPasswordSucceeded = false;
-                                        changePasswordForm.email.$setValidity("noSuchEmail", false);
-                                    }
-                                }
-                            });
-                        });
-                    };
-                }
-            };
-        }]
-    );
-})(angular);
-
-/**
- * attrs:
- */
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
         ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", "ENV", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService, ENV) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/loginApp.directive.html',
+                templateUrl: 'components/loginApp/directives/loginApp/loginApp.template.html',
                 restrict: 'E',
                 link: function (scope) {
 
@@ -203,7 +138,7 @@
         ["LoginAppSrv", "$timeout", "$translate", "$log", function (LoginAppSrv, $timeout, $translate, $log) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/loginForm.directive.html',
+                templateUrl: 'components/loginApp/directives/loginForm/loginForm.template.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',
@@ -293,11 +228,60 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.loginApp').directive('resetPasswordForm',
+        ["LoginAppSrv", "$timeout", function (LoginAppSrv, $timeout) {
+            'ngInject';
+            return {
+                templateUrl: 'components/loginApp/directives/resetPasswordForm/resetPasswordForm.template.html',
+                restrict: 'E',
+                scope: {
+                    appContext: '<',
+                    userContext: '<',
+                    backToLogin: '&'
+                },
+                link: function (scope) {
+                    scope.resetPasswordSucceeded = false;
+                    scope.showSpinner = false;
+                    scope.passwordSubmit = function (changePasswordForm) {
+                        changePasswordForm.email.$setValidity("noSuchEmail", true);
+                        scope.showSpinner = true;
+                        if (changePasswordForm.$invalid) {
+                            scope.showSpinner = false;
+                            return;
+                        }
+                        LoginAppSrv.resetPassword(scope.appContext.id, changePasswordForm.email.$viewValue, scope.userContext).then(function (resetPasswordSate) {
+                            $timeout(function () {
+                                if (angular.isUndefined(resetPasswordSate)) {
+                                    scope.showSpinner = false;
+                                    scope.resetPasswordSucceeded = true;
+                                } else {
+                                    if (resetPasswordSate.code === 'INVALID_USER') {
+                                        scope.showSpinner = false;
+                                        scope.resetPasswordSucceeded = false;
+                                        changePasswordForm.email.$setValidity("noSuchEmail", false);
+                                    }
+                                }
+                            });
+                        });
+                    };
+                }
+            };
+        }]
+    );
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
         ["LoginAppSrv", "$log", "$timeout", function (LoginAppSrv, $log, $timeout) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/signupForm.directive.html',
+                templateUrl: 'components/loginApp/directives/signupForm/signupForm.template.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',
@@ -350,6 +334,22 @@
     );
 })(angular);
 
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp', [
+        'pascalprecht.translate',
+        'znk.infra.auth',
+        'znk.infra.svgIcon',
+        'ngMaterial',
+        'satellizer',
+        'znk.infra.user',
+        'znk.infra.general',
+        'znk.infra.autofocus',
+        'znk.infra-web-app.promoCode'
+    ]);
+})(angular);
 
 /* jshint ignore:start */
 (function (angular) {
@@ -798,6 +798,384 @@
 })(angular);
 
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/loginApp/directives/loginApp/loginApp.template.html",
+    "<div class=\"login-app\" ng-class=\"{\n" +
+    "        student: d.userContext === d.userContextObj.STUDENT,\n" +
+    "        educator: d.userContext === d.userContextObj.TEACHER,\n" +
+    "        sat: d.appContext === d.availableApps.SAT,\n" +
+    "        satsm: d.appContext === d.availableApps.SATSM,\n" +
+    "        act: d.appContext === d.availableApps.ACT,\n" +
+    "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
+    "    }\">\n" +
+    "    <header>\n" +
+    "        <div class=\"logo-wrapper\">\n" +
+    "            <a class=\"logo\" href=\"https://www.zinkerz.com\"></a>\n" +
+    "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
+    "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
+    "            </span>\n" +
+    "        </div>\n" +
+    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
+    "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
+    "                <md-button aria-label=\"Open App Select Menu\"\n" +
+    "                           class=\"md-icon-button\"\n" +
+    "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
+    "                    <div class=\"app-img-holder {{d.appContext.className}}\">{{d.appContext.name}}<span class=\"trademark\">&reg;</span></div>\n" +
+    "                        <div class=\"square {{d.appContext.className}}\">\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
+    "                        </div>\n" +
+    "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
+    "                </md-button>\n" +
+    "                <md-menu-content id=\"app-select-menu\">\n" +
+    "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
+    "                                  ng-click=\"selectApp(app)\">\n" +
+    "                        <div class=\"app-img-holder {{app.className}}\">{{app.name}}<span class=\"trademark\">&reg;</span></div>\n" +
+    "                        <div class=\"square {{app.className}}\">\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
+    "                        </div>\n" +
+    "                    </md-menu-item>\n" +
+    "                </md-menu-content>\n" +
+    "            </md-menu>\n" +
+    "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
+    "        </div>\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
+    "           class=\"for-educators app-color\"\n" +
+    "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
+    "        </a>\n" +
+    "    </header>\n" +
+    "    <div class=\"main\">\n" +
+    "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-if=\"d.invitationId\">\n" +
+    "            <div ng-switch=\"d.userContext\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"main-inner\">\n" +
+    "            <ng-switch on=\"currentForm\">\n" +
+    "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
+    "                    <login-form app-context=\"d.appContext\"\n" +
+    "                                user-context=\"d.userContext\"\n" +
+    "                                change-password-click=\"changePasswordClick()\">\n" +
+    "                    </login-form>\n" +
+    "                    <p class=\"go-to-signup\">\n" +
+    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
+    "                    </p>\n" +
+    "                </div>\n" +
+    "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
+    "                    <signup-form app-context=\"d.appContext\"\n" +
+    "                                 user-context=\"d.userContext\">\n" +
+    "                    </signup-form>\n" +
+    "                    <p class=\"go-to-login\">\n" +
+    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
+    "                    </p>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"change-password-container\" ng-switch-when=\"changePassword\">\n" +
+    "                    <reset-password-form app-context=\"d.appContext\" user-context=\"d.userContext\"\n" +
+    "                                         back-to-login=\"changeCurrentForm('login')\">\n" +
+    "\n" +
+    "                    </reset-password-form>\n" +
+    "                    <a class=\"back-to-login-btn\" ng-click=\"changeCurrentForm('login')\">\n" +
+    "                        <svg-icon name=\"dropdown-arrow\" class=\"back-btn-icon\"></svg-icon>\n" +
+    "                        <span class=\"back-btn-label\" translate=\"CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN\"></span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "            </ng-switch>\n" +
+    "            <h2 class=\"banner-text\">\n" +
+    "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SATSM_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SATSM_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                </ng-switch>\n" +
+    "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
+    "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
+    "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
+    "                </div>\n" +
+    "            </h2>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <footer>\n" +
+    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
+    "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
+    "            </div>\n" +
+    "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
+    "            </div>\n" +
+    "        </ng-switch>\n" +
+    "    </footer>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/directives/loginForm/loginForm.template.html",
+    "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
+    "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
+    "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\">\n" +
+    "            <oath-login-drv\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
+    "            </oath-login-drv>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
+    "    <form novalidate\n" +
+    "          name=\"loginform\"\n" +
+    "          ng-submit=\"loginSubmit(loginform)\">\n" +
+    "        <div class=\"inputs-container\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                <input type=\"email\"\n" +
+    "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
+    "                       name=\"email\"\n" +
+    "                       ng-model=\"d.loginFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.email.$error.required\"\n" +
+    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "                <input type=\"password\"\n" +
+    "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
+    "                       name=\"password\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       ng-model=\"d.loginFormData.password\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.password.$error.required\"\n" +
+    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"submit-btn-wrapper\">\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".LOGIN_IN\"></span>\n" +
+    "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <div class=\"forgot-pwd-wrapper\">\n" +
+    "            <span class=\"app-color\" translate=\".FORGOT_PWD\" ng-click=\"changePasswordClick()\"></span>\n" +
+    "        </div>\n" +
+    "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
+    "    </form>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/loginApp/directives/resetPasswordForm/resetPasswordForm.template.html",
+    "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
+    "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
+    "        <form novalidate\n" +
+    "              name=\"changePasswordForm\"\n" +
+    "              ng-submit=\"passwordSubmit(changePasswordForm)\"\n" +
+    "              ng-switch-when=\"false\">\n" +
+    "            <div class=\"inputs-container\">\n" +
+    "                <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
+    "                <div class=\"input-wrapper\"\n" +
+    "                     ng-class=\"changePasswordForm.email.$invalid && changePasswordForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                    <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                    <input type=\"email\"\n" +
+    "                           placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
+    "                           name=\"email\"\n" +
+    "                           ng-model=\"d.changePasswordForm.email\"\n" +
+    "                           required>\n" +
+    "                    <span\n" +
+    "                        ng-if=\"(changePasswordForm.$submitted && changePasswordForm.email.$invalid && !changePasswordForm.email.$dirty) || (changePasswordForm.email.$error && changePasswordForm.$submitted)\"\n" +
+    "                        role=\"alert\">\n" +
+    "            <span class=\"validationBox\">\n" +
+    "                <span ng-show=\"changePasswordForm.email.$error.required\"\n" +
+    "                      translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                <span class=\"no-email-massage\" ng-show=\"changePasswordForm.email.$error.noSuchEmail\"\n" +
+    "                      translate=\".NO_SUCH_EMAIL\"></span>\n" +
+    "            </span>\n" +
+    "        </span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"submit-btn-wrapper\">\n" +
+    "                <button type=\"submit\"\n" +
+    "                        ng-disabled=\"d.disableBtn\"\n" +
+    "                        class=\"app-bg\"\n" +
+    "                        autofocus>\n" +
+    "                    <span translate=\".SEND\"></span>\n" +
+    "                    <span class=\"loader ng-hide\" ng-show=\"showSpinner\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "        <div ng-switch-when=\"true\" class=\"success-massage\">\n" +
+    "            <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
+    "                <svg-icon name=\"v-icon\"></svg-icon>\n" +
+    "            <div class=\"massage-text\" translate=\".NEW_PASSWORD_SENT\"></div>\n" +
+    "            <div class=\"submit-btn-wrapper\">\n" +
+    "                <button ng-disabled=\"d.disableBtn\"\n" +
+    "                        class=\"app-bg\"\n" +
+    "                        ng-click=\"backToLogin()\"\n" +
+    "                        autofocus>\n" +
+    "                    <span translate=\".DONE\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </ng-switch>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/directives/signupForm/signupForm.template.html",
+    "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
+    "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
+    "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\">\n" +
+    "            <oath-login-drv\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
+    "            </oath-login-drv>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
+    "    <form novalidate\n" +
+    "          name=\"signupForm\"\n" +
+    "          ng-submit=\"signupSubmit(signupForm)\">\n" +
+    "        <div class=\"inputs-container\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.nickname.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
+    "                <input type=\"text\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
+    "                       name=\"nickname\"\n" +
+    "                       ng-model=\"d.signupFormData.nickname\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupForm.$submitted && signupForm.nickname.$invalid && !signupForm.nickname.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.email.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                <input type=\"email\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
+    "                       name=\"email\"\n" +
+    "                       ng-model=\"d.signupFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"(signupForm.$submitted && signupForm.email.$invalid && !signupForm.email.$dirty) ||\n" +
+    "                (signupForm.$submitted && signupForm.email.$error)\" role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span class=\"email-exist-massage\" ng-show=\"signupForm.email.$error.emailTaken\" translate=\"LOGIN_APP.FORM_VALIDATION.EMAIL_TAKEN\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.password.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "                <input type=\"password\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
+    "                       name=\"password\"\n" +
+    "                       ng-model=\"d.signupFormData.password\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupForm.$submitted && signupForm.password.$invalid\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"submit-btn-wrapper\">\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".SIGN_UP\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <p class=\"signup-disclaimer\"\n" +
+    "           translate-values=\"{termsOfUseHref: d.termsOfUseHref, privacyPolicyHref: d.privacyPolicyHref}\"\n" +
+    "           translate=\".DISCLAIMER\"></p>\n" +
+    "\n" +
+    "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
+    "    </form>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
     "    <button class=\"social-btn facebook-btn\"\n" +
@@ -1023,383 +1401,5 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "	<line class=\"st0\" x1=\"118.8\" y1=\"215.7\" x2=\"321.5\" y2=\"13\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/loginApp.directive.html",
-    "<div class=\"login-app\" ng-class=\"{\n" +
-    "        student: d.userContext === d.userContextObj.STUDENT,\n" +
-    "        educator: d.userContext === d.userContextObj.TEACHER,\n" +
-    "        sat: d.appContext === d.availableApps.SAT,\n" +
-    "        satsm: d.appContext === d.availableApps.SATSM,\n" +
-    "        act: d.appContext === d.availableApps.ACT,\n" +
-    "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
-    "    }\">\n" +
-    "    <header>\n" +
-    "        <div class=\"logo-wrapper\">\n" +
-    "            <a class=\"logo\" href=\"https://www.zinkerz.com\"></a>\n" +
-    "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
-    "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
-    "            </span>\n" +
-    "        </div>\n" +
-    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
-    "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
-    "                <md-button aria-label=\"Open App Select Menu\"\n" +
-    "                           class=\"md-icon-button\"\n" +
-    "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
-    "                    <div class=\"app-img-holder {{d.appContext.className}}\">{{d.appContext.name}}<span class=\"trademark\">&reg;</span></div>\n" +
-    "                        <div class=\"square {{d.appContext.className}}\">\n" +
-    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
-    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
-    "                        </div>\n" +
-    "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
-    "                </md-button>\n" +
-    "                <md-menu-content id=\"app-select-menu\">\n" +
-    "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
-    "                                  ng-click=\"selectApp(app)\">\n" +
-    "                        <div class=\"app-img-holder {{app.className}}\">{{app.name}}<span class=\"trademark\">&reg;</span></div>\n" +
-    "                        <div class=\"square {{app.className}}\">\n" +
-    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
-    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
-    "                        </div>\n" +
-    "                    </md-menu-item>\n" +
-    "                </md-menu-content>\n" +
-    "            </md-menu>\n" +
-    "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
-    "        </div>\n" +
-    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
-    "           class=\"for-educators app-color\"\n" +
-    "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
-    "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
-    "        </a>\n" +
-    "    </header>\n" +
-    "    <div class=\"main\">\n" +
-    "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
-    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
-    "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
-    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
-    "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div ng-if=\"d.invitationId\">\n" +
-    "            <div ng-switch=\"d.userContext\">\n" +
-    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
-    "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
-    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
-    "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"main-inner\">\n" +
-    "            <ng-switch on=\"currentForm\">\n" +
-    "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
-    "                    <login-form app-context=\"d.appContext\"\n" +
-    "                                user-context=\"d.userContext\"\n" +
-    "                                change-password-click=\"changePasswordClick()\">\n" +
-    "                    </login-form>\n" +
-    "                    <p class=\"go-to-signup\">\n" +
-    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
-    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
-    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
-    "                    </p>\n" +
-    "                </div>\n" +
-    "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
-    "                    <signup-form app-context=\"d.appContext\"\n" +
-    "                                 user-context=\"d.userContext\">\n" +
-    "                    </signup-form>\n" +
-    "                    <p class=\"go-to-login\">\n" +
-    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
-    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
-    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
-    "                    </p>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"change-password-container\" ng-switch-when=\"changePassword\">\n" +
-    "                    <reset-password-form app-context=\"d.appContext\" user-context=\"d.userContext\"\n" +
-    "                                         back-to-login=\"changeCurrentForm('login')\">\n" +
-    "\n" +
-    "                    </reset-password-form>\n" +
-    "                    <a class=\"back-to-login-btn\" ng-click=\"changeCurrentForm('login')\">\n" +
-    "                        <svg-icon name=\"dropdown-arrow\" class=\"back-btn-icon\"></svg-icon>\n" +
-    "                        <span class=\"back-btn-label\" translate=\"CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN\"></span>\n" +
-    "                    </a>\n" +
-    "                </div>\n" +
-    "            </ng-switch>\n" +
-    "            <h2 class=\"banner-text\">\n" +
-    "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
-    "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.SATSM_EDUCATOR_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
-    "                    </div>\n" +
-    "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.SATSM_STUDENT_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
-    "                    </div>\n" +
-    "                </ng-switch>\n" +
-    "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
-    "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
-    "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
-    "                </div>\n" +
-    "            </h2>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <footer>\n" +
-    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
-    "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
-    "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
-    "            </div>\n" +
-    "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
-    "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
-    "            </div>\n" +
-    "        </ng-switch>\n" +
-    "    </footer>\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/loginForm.directive.html",
-    "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
-    "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
-    "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "\n" +
-    "    <promo-code\n" +
-    "        user-context-const=\"d.userContextObj\"\n" +
-    "        user-context=\"userContext\"\n" +
-    "        app-context=\"appContext\">\n" +
-    "    </promo-code>\n" +
-    "\n" +
-    "    <div class=\"social-auth-container\">\n" +
-    "        <div class=\"social-auth\">\n" +
-    "            <oath-login-drv\n" +
-    "                app-context=\"appContext\"\n" +
-    "                user-context=\"userContext\"\n" +
-    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
-    "            </oath-login-drv>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"divider\">\n" +
-    "        <div translate=\".OR\" class=\"text\"></div>\n" +
-    "    </div>\n" +
-    "    <form novalidate\n" +
-    "          name=\"loginform\"\n" +
-    "          ng-submit=\"loginSubmit(loginform)\">\n" +
-    "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\"\n" +
-    "                 ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"email\"\n" +
-    "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
-    "                       name=\"email\"\n" +
-    "                       ng-model=\"d.loginFormData.email\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
-    "                      role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"loginform.email.$error.required\"\n" +
-    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "            <div class=\"input-wrapper\"\n" +
-    "                 ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
-    "                <input type=\"password\"\n" +
-    "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
-    "                       name=\"password\"\n" +
-    "                       autocomplete=\"off\"\n" +
-    "                       ng-minlength=\"6\"\n" +
-    "                       ng-maxlength=\"25\"\n" +
-    "                       ng-model=\"d.loginFormData.password\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
-    "                      role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"loginform.password.$error.required\"\n" +
-    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\"\n" +
-    "                    ng-disabled=\"d.disableBtn\"\n" +
-    "                    class=\"app-bg\"\n" +
-    "                    autofocus>\n" +
-    "                <span translate=\".LOGIN_IN\"></span>\n" +
-    "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "        <div class=\"forgot-pwd-wrapper\">\n" +
-    "            <span class=\"app-color\" translate=\".FORGOT_PWD\" ng-click=\"changePasswordClick()\"></span>\n" +
-    "        </div>\n" +
-    "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
-    "    </form>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/resetPasswordForm.directive.html",
-    "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
-    "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
-    "        <form novalidate\n" +
-    "              name=\"changePasswordForm\"\n" +
-    "              ng-submit=\"passwordSubmit(changePasswordForm)\"\n" +
-    "              ng-switch-when=\"false\">\n" +
-    "            <div class=\"inputs-container\">\n" +
-    "                <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
-    "                <div class=\"input-wrapper\"\n" +
-    "                     ng-class=\"changePasswordForm.email.$invalid && changePasswordForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                    <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                    <input type=\"email\"\n" +
-    "                           placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
-    "                           name=\"email\"\n" +
-    "                           ng-model=\"d.changePasswordForm.email\"\n" +
-    "                           required>\n" +
-    "                    <span\n" +
-    "                        ng-if=\"(changePasswordForm.$submitted && changePasswordForm.email.$invalid && !changePasswordForm.email.$dirty) || (changePasswordForm.email.$error && changePasswordForm.$submitted)\"\n" +
-    "                        role=\"alert\">\n" +
-    "            <span class=\"validationBox\">\n" +
-    "                <span ng-show=\"changePasswordForm.email.$error.required\"\n" +
-    "                      translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                <span class=\"no-email-massage\" ng-show=\"changePasswordForm.email.$error.noSuchEmail\"\n" +
-    "                      translate=\".NO_SUCH_EMAIL\"></span>\n" +
-    "            </span>\n" +
-    "        </span>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"submit-btn-wrapper\">\n" +
-    "                <button type=\"submit\"\n" +
-    "                        ng-disabled=\"d.disableBtn\"\n" +
-    "                        class=\"app-bg\"\n" +
-    "                        autofocus>\n" +
-    "                    <span translate=\".SEND\"></span>\n" +
-    "                    <span class=\"loader ng-hide\" ng-show=\"showSpinner\"></span>\n" +
-    "                </button>\n" +
-    "            </div>\n" +
-    "        </form>\n" +
-    "        <div ng-switch-when=\"true\" class=\"success-massage\">\n" +
-    "            <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
-    "                <svg-icon name=\"v-icon\"></svg-icon>\n" +
-    "            <div class=\"massage-text\" translate=\".NEW_PASSWORD_SENT\"></div>\n" +
-    "            <div class=\"submit-btn-wrapper\">\n" +
-    "                <button ng-disabled=\"d.disableBtn\"\n" +
-    "                        class=\"app-bg\"\n" +
-    "                        ng-click=\"backToLogin()\"\n" +
-    "                        autofocus>\n" +
-    "                    <span translate=\".DONE\"></span>\n" +
-    "                </button>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </ng-switch>\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/signupForm.directive.html",
-    "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
-    "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
-    "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "\n" +
-    "    <promo-code\n" +
-    "        user-context-const=\"d.userContextObj\"\n" +
-    "        user-context=\"userContext\"\n" +
-    "        app-context=\"appContext\">\n" +
-    "    </promo-code>\n" +
-    "\n" +
-    "    <div class=\"social-auth-container\">\n" +
-    "        <div class=\"social-auth\">\n" +
-    "            <oath-login-drv\n" +
-    "                app-context=\"appContext\"\n" +
-    "                user-context=\"userContext\"\n" +
-    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
-    "            </oath-login-drv>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"divider\">\n" +
-    "        <div translate=\".OR\" class=\"text\"></div>\n" +
-    "    </div>\n" +
-    "    <form novalidate\n" +
-    "          name=\"signupForm\"\n" +
-    "          ng-submit=\"signupSubmit(signupForm)\">\n" +
-    "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupForm.nickname.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
-    "                <input type=\"text\"\n" +
-    "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
-    "                       name=\"nickname\"\n" +
-    "                       ng-model=\"d.signupFormData.nickname\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"signupForm.$submitted && signupForm.nickname.$invalid && !signupForm.nickname.$dirty\"\n" +
-    "                      role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupForm.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupForm.email.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"email\"\n" +
-    "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
-    "                       name=\"email\"\n" +
-    "                       ng-model=\"d.signupFormData.email\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"(signupForm.$submitted && signupForm.email.$invalid && !signupForm.email.$dirty) ||\n" +
-    "                (signupForm.$submitted && signupForm.email.$error)\" role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupForm.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                        <span class=\"email-exist-massage\" ng-show=\"signupForm.email.$error.emailTaken\" translate=\"LOGIN_APP.FORM_VALIDATION.EMAIL_TAKEN\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupForm.password.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
-    "                <input type=\"password\"\n" +
-    "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
-    "                       name=\"password\"\n" +
-    "                       ng-model=\"d.signupFormData.password\"\n" +
-    "                       ng-minlength=\"6\"\n" +
-    "                       ng-maxlength=\"25\"\n" +
-    "                       autocomplete=\"off\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"signupForm.$submitted && signupForm.password.$invalid\"\n" +
-    "                      role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupForm.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
-    "                        <span ng-show=\"signupForm.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
-    "                        <span ng-show=\"signupForm.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\"\n" +
-    "                    ng-disabled=\"d.disableBtn\"\n" +
-    "                    class=\"app-bg\"\n" +
-    "                    autofocus>\n" +
-    "                <span translate=\".SIGN_UP\"></span>\n" +
-    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "        <p class=\"signup-disclaimer\"\n" +
-    "           translate-values=\"{termsOfUseHref: d.termsOfUseHref, privacyPolicyHref: d.privacyPolicyHref}\"\n" +
-    "           translate=\".DISCLAIMER\"></p>\n" +
-    "\n" +
-    "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
-    "    </form>\n" +
-    "</div>\n" +
     "");
 }]);

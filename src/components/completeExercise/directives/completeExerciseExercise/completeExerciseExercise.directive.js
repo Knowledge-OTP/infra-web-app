@@ -4,7 +4,7 @@
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseExercise', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseExercise/completeExerciseExerciseDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseExercise/completeExerciseExercise.template.html',
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },

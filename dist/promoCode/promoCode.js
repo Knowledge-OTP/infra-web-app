@@ -1,21 +1,3 @@
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.promoCode', [])
-        .config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
-                'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
-                'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
-
-})(angular);
-
 
 (function (angular) {
     'use strict';
@@ -24,7 +6,7 @@
         ["PromoCodeSrv", "PROMO_CODE_STATUS", function (PromoCodeSrv, PROMO_CODE_STATUS) {
             'ngInject';
             return {
-                templateUrl: 'components/promoCode/templates/promoCode.template.html',
+                templateUrl: 'components/promoCode/directives/promoCode.template.html',
                 restrict: 'E',
                 scope: {
                     userContext: '<',
@@ -79,6 +61,24 @@
             };
         }]
     );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.promoCode', [])
+        .config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
+                'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
+                'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+
 })(angular);
 
 (function (angular) {
@@ -259,6 +259,53 @@
 })(angular);
 
 angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/promoCode/directives/promoCode.template.html",
+    "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
+    "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
+    "             'promo-code-invalid': d.promoCodeStatus === d.promoCodeStatusConst.invalid\n" +
+    "             }\">\n" +
+    "\n" +
+    "    <div class=\"promo-code-title\"\n" +
+    "         ng-if=\"!d.promoCodeStatusConst.accepted\"\n" +
+    "         translate=\"{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}\"\n" +
+    "         ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\">\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"promo-code-title accepted-title\">\n" +
+    "        {{d.promoCodeStatusText}}\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
+    "\n" +
+    "        <div class=\"promo-code-input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "               >\n" +
+    "                <md-progress-circular ng-if=\"d.showSpinner\"\n" +
+    "                                      class=\"promo-code-spinner\"\n" +
+    "                                      md-mode=\"indeterminate\"\n" +
+    "                                      md-diameter=\"25\">\n" +
+    "                </md-progress-circular>\n" +
+    "                <input\n" +
+    "                    type=\"text\"\n" +
+    "                    ng-model=\"d.promoCode\"\n" +
+    "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
+    "                    ng-autofocus =\"true\"\n" +
+    "                    placeholder=\"{{'PROMO_CODE.ENTER_YOUR_CODE' | translate}}\">\n" +
+    "                <div class=\"icon-wrapper\" >\n" +
+    "                    <svg-icon class=\"arrow-icon\" name=\"promo-code-arrow-icon\" ng-click=\"d.sendPromoCode(d.promoCode)\"></svg-icon>\n" +
+    "                    <svg-icon class=\"close-icon\" name=\"promo-code-close-icon\" ng-click=\"d.clearInput()\"></svg-icon>\n" +
+    "                    <svg-icon class=\"correct-icon\" name=\"promo-code-correct-icon\"  ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></svg-icon>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"promo-code-status-text\">\n" +
+    "                    {{d.promoCodeStatusText}}\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/promoCode/svg/arrow-icon.svg",
     "<svg\n" +
     "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -349,52 +396,5 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
     "	<line class=\"st0\" x1=\"67\" y1=\"121.5\" x2=\"181\" y2=\"7.5\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
-    "");
-  $templateCache.put("components/promoCode/templates/promoCode.template.html",
-    "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
-    "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
-    "             'promo-code-invalid': d.promoCodeStatus === d.promoCodeStatusConst.invalid\n" +
-    "             }\">\n" +
-    "\n" +
-    "    <div class=\"promo-code-title\"\n" +
-    "         ng-if=\"!d.promoCodeStatusConst.accepted\"\n" +
-    "         translate=\"{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}\"\n" +
-    "         ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\">\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"promo-code-title accepted-title\">\n" +
-    "        {{d.promoCodeStatusText}}\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
-    "\n" +
-    "        <div class=\"promo-code-input-wrapper\">\n" +
-    "            <div class=\"input-wrapper\"\n" +
-    "               >\n" +
-    "                <md-progress-circular ng-if=\"d.showSpinner\"\n" +
-    "                                      class=\"promo-code-spinner\"\n" +
-    "                                      md-mode=\"indeterminate\"\n" +
-    "                                      md-diameter=\"25\">\n" +
-    "                </md-progress-circular>\n" +
-    "                <input\n" +
-    "                    type=\"text\"\n" +
-    "                    ng-model=\"d.promoCode\"\n" +
-    "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
-    "                    ng-autofocus =\"true\"\n" +
-    "                    placeholder=\"{{'PROMO_CODE.ENTER_YOUR_CODE' | translate}}\">\n" +
-    "                <div class=\"icon-wrapper\" >\n" +
-    "                    <svg-icon class=\"arrow-icon\" name=\"promo-code-arrow-icon\" ng-click=\"d.sendPromoCode(d.promoCode)\"></svg-icon>\n" +
-    "                    <svg-icon class=\"close-icon\" name=\"promo-code-close-icon\" ng-click=\"d.clearInput()\"></svg-icon>\n" +
-    "                    <svg-icon class=\"correct-icon\" name=\"promo-code-correct-icon\"  ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></svg-icon>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"promo-code-status-text\">\n" +
-    "                    {{d.promoCodeStatusText}}\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
-    "</div>\n" +
     "");
 }]);

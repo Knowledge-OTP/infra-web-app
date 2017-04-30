@@ -4,7 +4,7 @@
 
         var directive = {
             restrict: 'E',
-            templateUrl: 'components/onBoarding/templates/onBoardingBar.template.html',
+            templateUrl: 'components/onBoarding/directives/onBoardingBar.template.html',
             scope: {
                 step: '@'
             }

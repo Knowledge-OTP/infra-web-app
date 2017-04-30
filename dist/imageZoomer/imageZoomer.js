@@ -1,22 +1,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.imageZoomer', [
-        'znk.infra.svgIcon',
-        'ngMaterial'
-    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-        'ngInject';
-        var svgMap = {
-            'image-zoomer-full-screen-icon': 'components/imageZoomer/svg/full-screen-icon.svg',
-            'image-zoomer-close-popup': 'components/imageZoomer/svg/image-zoomer-close-popup.svg'
-        };
-        SvgIconSrvProvider.registerSvgSources(svgMap);
-    }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.imageZoomer').directive('imageZoomer', ["$timeout", "$mdDialog", "$document", "$compile", function($timeout, $mdDialog, $document, $compile) {
        'ngInject';
 
@@ -148,6 +132,22 @@
 
 })(angular);
 
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.imageZoomer', [
+        'znk.infra.svgIcon',
+        'ngMaterial'
+    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
+        'ngInject';
+        var svgMap = {
+            'image-zoomer-full-screen-icon': 'components/imageZoomer/svg/full-screen-icon.svg',
+            'image-zoomer-close-popup': 'components/imageZoomer/svg/image-zoomer-close-popup.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+    }]);
+})(angular);
 
 angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",

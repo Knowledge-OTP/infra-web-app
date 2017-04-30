@@ -1,19 +1,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
-        'znk.infra.znkTimeline',
-        'znk.infra.estimatedScore',
-        'znk.infra-web-app.userGoals',
-        'znk.infra.scoring'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
-        templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
+        templateUrl: 'components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
             currentSubjectId: '@subjectId',
@@ -237,8 +226,19 @@
     });
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
+        'znk.infra.znkTimeline',
+        'znk.infra.estimatedScore',
+        'znk.infra-web-app.userGoals',
+        'znk.infra.scoring'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html",
+  $templateCache.put("components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html",
     "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
     "    <div class=\"time-line-wrapper\">\n" +
     "        <div class=\"progress-val\"\n" +

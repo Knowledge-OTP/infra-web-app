@@ -31,7 +31,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
                 showInstructions: '=?',
                 showIconsSection: '=?'
             },
-            templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
+            templateUrl: 'components/diagnosticIntro/directives/diagnosticIntro.template.html',
             link: function link(scope) {
                 scope.d = {};
 
@@ -129,7 +129,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
 }]);
 
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
+  $templateCache.put("components/diagnosticIntro/directives/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
     "        <div class=\"diagnostic-text\"\n" +

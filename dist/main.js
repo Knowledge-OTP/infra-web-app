@@ -62,6 +62,24 @@
     ]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.activePanel')
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
+
+            var svgMap = {
+                'active-panel-call-mute-icon': 'components/calls/svg/call-mute-icon.svg',
+                'active-panel-stop-sharing-icon': 'components/activePanel/svg/stop-sharing-icon.svg',
+                'active-panel-share-screen-icon': 'components/activePanel/svg/share-screen-icon.svg',
+                'active-panel-track-teacher-icon': 'components/activePanel/svg/track-teacher-icon.svg',
+                'active-panel-track-student-icon': 'components/activePanel/svg/track-student-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }]);
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -74,7 +92,7 @@
                         UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
                 'ngInject';
                 return {
-                templateUrl: 'components/activePanel/activePanel.template.html',
+                templateUrl: 'components/activePanel/directives/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
                     var durationToDisplay,
@@ -305,26 +323,8 @@
         }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.activePanel')
-        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
-            'ngInject';
-
-            var svgMap = {
-                'active-panel-call-mute-icon': 'components/calls/svg/call-mute-icon.svg',
-                'active-panel-stop-sharing-icon': 'components/activePanel/svg/stop-sharing-icon.svg',
-                'active-panel-share-screen-icon': 'components/activePanel/svg/share-screen-icon.svg',
-                'active-panel-track-teacher-icon': 'components/activePanel/svg/track-teacher-icon.svg',
-                'active-panel-track-student-icon': 'components/activePanel/svg/track-student-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }]);
-})(angular);
-
 angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/activePanel/activePanel.template.html",
+  $templateCache.put("components/activePanel/directives/activePanel.template.html",
     "<div class=\"active-panel ng-hide\"\n" +
     "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
     "     translate-namespace=\"ACTIVE_PANEL\">\n" +
@@ -1755,7 +1755,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             'ngInject';
 
          function _updateAwsConfig(config, options) {
-            options = options || {}; 
+            options = options || {};
             config = config || false;
 
             if (!config) {
@@ -1765,20 +1765,20 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                        IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
                    }),
                };
-            } 
+            }
 
             $window.AWS.config.update(config);
-         }  
+         }
 
          function _init() {
               _updateAwsConfig();
-         }   
-           
+         }
+
          _init();
 
           function _generateFileName() {
-             return UtilitySrv.general.createGuid();  
-          } 
+             return UtilitySrv.general.createGuid();
+          }
 
           function _getFile(blob, fileName) {
               return new $window.File([blob], fileName);
@@ -1787,7 +1787,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
           function _addSlashToPath(prefixPath) {
               var prefixPathLength = prefixPath.length;
 
-              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength);
 
               if (lastChar === '/') {
                   return prefixPath;
@@ -1816,13 +1816,13 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
               this.filesNames = [];
 
-              this.bucketInstance = new $window.AWS.S3({ 
+              this.bucketInstance = new $window.AWS.S3({
                    params: {
                       Bucket: this.bucketName
                    }
               });
           }
-         
+
         AwsS3.prototype.upload = function(options) {
             var deferred = $q.defer();
             var errMsg;
@@ -1844,7 +1844,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                   deferred.reject(errMsg);
                   return;
             }
-            
+
             var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
             var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
             var filePath = _getFilePath(options.prefixPath, file);
@@ -1867,7 +1867,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             });
 
             return deferred.promise;
-        };  
+        };
 
         AwsS3.prototype.getCurrentFileName = function() {
             var filesLength = this.filesNames.length;
@@ -1881,9 +1881,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
         this.updateConfig = updateConfig;
 
-        // factory for aws bucket instances 
+        // factory for aws bucket instances
         this.newAwsS3 = function (options) {
-            return new AwsS3(options);   
+            return new AwsS3(options);
         };
 
       }]
@@ -1958,7 +1958,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExercise', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExercise/completeExercise.template.html',
             bindings: {
                 exerciseDetails: '<',
                 settings: '<'
@@ -2341,7 +2341,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseExercise', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseExercise/completeExerciseExerciseDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseExercise/completeExerciseExercise.template.html',
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
@@ -2907,7 +2907,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseHeader', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseHeader/completeExerciseHeaderDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseHeader/completeExerciseHeader.template.html',
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
@@ -2955,7 +2955,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseIntro', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseIntro/completeExerciseIntroDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseIntro/completeExerciseIntro.template.html',
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
@@ -2992,7 +2992,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseIntroSection', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSectionDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSection.template.html',
             require: {
                 completeExerciseIntroCtrl: '^completeExerciseIntro'
             },
@@ -3032,7 +3032,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseIntroTutorial', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorialDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorial.template.html',
             require: {
                 completeExerciseIntroCtrl: '^completeExerciseIntro'
             },
@@ -3070,7 +3070,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                 var directive = {
                     restrict: 'E',
-                    templateUrl: 'components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBarDirective.template.html',
+                    templateUrl: 'components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBar.template.html',
                     scope: {
                         totalTime: '@',
                         duration: '<'
@@ -3233,11 +3233,11 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                 var dontInit = false;
                 return ExerciseResultSrv.getExerciseResult(
-                    exerciseDetails.exerciseTypeId, 
-                    exerciseDetails.exerciseId, 
-                    exerciseDetails.examId, 
-                    exerciseDetails.examSectionsNum, 
-                    dontInit, 
+                    exerciseDetails.exerciseTypeId,
+                    exerciseDetails.exerciseId,
+                    exerciseDetails.examId,
+                    exerciseDetails.examSectionsNum,
+                    dontInit,
                     exerciseDetails.exerciseParentId);
             };
         }]
@@ -3259,22 +3259,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {                    
+                exerciseCycleSrv.invoke = function (methodName, data) {
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {                      
+                    if (angular.isDefined(hook)) {
                         try {
-                            fn = $injector.invoke(hook);         
+                            fn = $injector.invoke(hook);
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-                        
+
                         return fn.apply(null, data);
-                    } 
+                    }
                 };
 
                 return exerciseCycleSrv;
@@ -3327,7 +3327,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExercise/completeExercise.template.html",
     "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <ng-switch on=\"$ctrl.currViewState\"\n" +
     "               class=\"main-container\">\n" +
@@ -3344,7 +3344,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "</div>\n" +
     "\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseExercise/completeExerciseExerciseDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseExercise/completeExerciseExercise.template.html",
     "<div class=\"base-complete-exercise-container\">\n" +
     "    <complete-exercise-header>\n" +
     "        <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>\n" +
@@ -3381,7 +3381,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </znk-exercise>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseHeader/completeExerciseHeaderDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseHeader/completeExerciseHeader.template.html",
     "<div class=\"header-container\"\n" +
     "     translate-namespace=\"COMPLETE_EXERCISE\"\n" +
     "     subject-id-to-attr-drv=\"$ctrl.exerciseSubjectId\"\n" +
@@ -3403,7 +3403,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseIntro/completeExerciseIntroDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntro/completeExerciseIntro.template.html",
     "<div class=\"base-complete-exercise-container\">\n" +
     "    <complete-exercise-header></complete-exercise-header>\n" +
     "    <ng-switch on=\"$ctrl.exerciseTypeId\" class=\"intro-container\" image-zoomer>\n" +
@@ -3414,7 +3414,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </ng-switch>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSectionDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSection.template.html",
     "<div class=\"intro-container\"\n" +
     "     translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <div class=\"title\" ng-bind=\"$ctrl.exerciseParentContent.name\"></div>\n" +
@@ -3451,7 +3451,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorialDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorial.template.html",
     "<div class=\"intro-container\">\n" +
     "    <div class=\"upper-wrapper\">\n" +
     "        <div class=\"video-wrapper\">\n" +
@@ -3480,7 +3480,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBarDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBar.template.html",
     "<div class=\"progress-bar\"></div>\n" +
     "\n" +
     "");
@@ -3519,7 +3519,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-        
+
     ]);
 })(angular);
 
@@ -3587,46 +3587,6 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($templateCache) {
 
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.diagnosticExercise', [
-        'pascalprecht.translate',
-        'ngMaterial',
-        'chart.js',
-        'ui.router',
-        'ngAnimate',
-        'znk.infra.svgIcon',
-        'znk.infra.enum',
-        'znk.infra.analytics',
-        'znk.infra.exams',
-        'znk.infra.estimatedScore',
-        'znk.infra.exerciseUtility',
-        'znk.infra.exerciseResult',
-        'znk.infra.znkExercise',
-        'znk.infra.scroll',
-        'znk.infra.stats',
-        'znk.infra.scoring',
-        'znk.infra.general',
-        'znk.infra.filters',
-        'znk.infra.contentGetters',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.workoutsRoadmap',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.uiTheme'
-    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
-        'ngInject';
-        var svgMap = {
-            'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
-            'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
-            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
-        };
-        SvgIconSrvProvider.registerSvgSources(svgMap);
-    }]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -4322,6 +4282,46 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.diagnosticExercise', [
+        'pascalprecht.translate',
+        'ngMaterial',
+        'chart.js',
+        'ui.router',
+        'ngAnimate',
+        'znk.infra.svgIcon',
+        'znk.infra.enum',
+        'znk.infra.analytics',
+        'znk.infra.exams',
+        'znk.infra.estimatedScore',
+        'znk.infra.exerciseUtility',
+        'znk.infra.exerciseResult',
+        'znk.infra.znkExercise',
+        'znk.infra.scroll',
+        'znk.infra.stats',
+        'znk.infra.scoring',
+        'znk.infra.general',
+        'znk.infra.filters',
+        'znk.infra.contentGetters',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.diagnosticIntro',
+        'znk.infra-web-app.infraWebAppZnkExercise',
+        'znk.infra-web-app.workoutsRoadmap',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.uiTheme'
+    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
+        'ngInject';
+        var svgMap = {
+            'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
+            'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
+            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+    }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.diagnosticExercise').constant('WORKOUTS_DIAGNOSTIC_FLOW', {
         isFixed: false,
         timeLimit: 3 * 60 * 1000,
@@ -4912,7 +4912,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
                 showInstructions: '=?',
                 showIconsSection: '=?'
             },
-            templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
+            templateUrl: 'components/diagnosticIntro/directives/diagnosticIntro.template.html',
             link: function link(scope) {
                 scope.d = {};
 
@@ -4991,7 +4991,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -5010,7 +5010,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
 }]);
 
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/diagnosticIntro/diagnosticIntro.template.html",
+  $templateCache.put("components/diagnosticIntro/directives/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
     "        <div class=\"diagnostic-text\"\n" +
@@ -5120,43 +5120,6 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
 
 }]);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.estimatedScoreWidget', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.enum',
-        'znk.infra.config',
-        'znk.infra.storage',
-        'znk.infra.general',
-        'znk.infra.exerciseResult',
-        'znk.infra.utility',
-        'znk.infra.contentAvail',
-        'znk.infra.content',
-        'znk.infra.znkExercise',
-        'znk.infra.scroll',
-        'znk.infra.autofocus',
-        'znk.infra.exerciseUtility',
-        'znk.infra.estimatedScore',
-        'znk.infra.scoring',
-        'znk.infra.svgIcon',
-        'znk.infra.analytics',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.userGoalsSelection',
-        'znk.infra-web-app.diagnostic'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
-                'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
-})(angular);
-
 /**
  * attrs:
  */
@@ -5171,7 +5134,7 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
             var previousValues;
 
             return {
-                templateUrl: 'components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html',
+                templateUrl: 'components/estimatedScoreWidget/directives/estimatedScoreWidget.template.html',
                 require: '?ngModel',
                 restrict: 'E',
                 scope: {
@@ -5311,6 +5274,43 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.estimatedScoreWidget', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.enum',
+        'znk.infra.config',
+        'znk.infra.storage',
+        'znk.infra.general',
+        'znk.infra.exerciseResult',
+        'znk.infra.utility',
+        'znk.infra.contentAvail',
+        'znk.infra.content',
+        'znk.infra.znkExercise',
+        'znk.infra.scroll',
+        'znk.infra.autofocus',
+        'znk.infra.exerciseUtility',
+        'znk.infra.estimatedScore',
+        'znk.infra.scoring',
+        'znk.infra.svgIcon',
+        'znk.infra.analytics',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.diagnostic'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
+                'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.estimatedScoreWidget').provider('EstimatedScoreWidgetSrv', [
         function () {
             var _subjectOrderGetter;
@@ -5340,53 +5340,7 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
 })(angular);
 
 angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg",
-    "<svg\n" +
-    "    class=\"estimated-score-widget-close-popup-svg\"\n" +
-    "    x=\"0px\"\n" +
-    "    y=\"0px\"\n" +
-    "    viewBox=\"-596.6 492.3 133.2 133.5\">\n" +
-    "\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .estimated-score-widget-close-popup-svg .st1{\n" +
-    "            fill:none;\n" +
-    "            stroke: white;\n" +
-    "            stroke-width: 6px;\n" +
-    "        }\n" +
-    "    </style>\n" +
-    "\n" +
-    "<path class=\"st0\"/>\n" +
-    "<g>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
-    "</g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/estimatedScoreWidget/svg/goals-top-icon.svg",
-    "<svg class=\"estimated-score-widget-goals-svg\" x=\"0px\" y=\"0px\" viewBox=\"-632.7 361.9 200 200\">\n" +
-    "    <style type=\"text/css\">\n" +
-    "        .estimated-score-widget-goals-svg .st0{fill:none;}\n" +
-    "        .estimated-score-widget-goals-svg .st1{fill: white;}\n" +
-    "    </style>\n" +
-    "<path class=\"st0\"/>\n" +
-    "<g>\n" +
-    "	<path class=\"st1\" d=\"M-632.7,473.9c7.1,0.1,14.2,0.4,21.4,0.4c3,0,4.1,0.9,4.9,4c7.8,30.3,26.9,49.5,57.3,57.3c3.2,0.8,4,2,3.9,4.9\n" +
-    "		c-0.3,7.1-0.3,14.3-0.4,21.4c-1.3,0-5.4-0.8-6.2-1c-36.3-7.9-61.4-29.2-75.2-63.6C-629.5,491.3-632.7,475.5-632.7,473.9z\"/>\n" +
-    "	<path class=\"st1\" d=\"M-519.7,561.9c-0.1-7.6-0.4-15.2-0.3-22.9c0-1.1,1.7-2.7,2.8-3c31.2-7.9,50.7-27.4,58.6-58.6c0.3-1.3,2.6-2.8,4-2.9\n" +
-    "		c7.3-0.4,14.6-0.4,21.9-0.6c0,1.7-0.8,6.4-1,7.2c-8,36.5-29.4,61.7-64.1,75.4C-503.6,558.7-518.3,561.9-519.7,561.9z\"/>\n" +
-    "	<path class=\"st1\" d=\"M-545.7,361.9c0.1,7.5,0.4,15,0.3,22.4c0,1.2-1.7,3.1-2.9,3.4c-31.1,7.9-50.5,27.3-58.4,58.5c-0.3,1.2-1.9,2.9-3,2.9\n" +
-    "		c-7.6,0.1-15.3-0.1-22.9-0.3c0-1.3,0.8-5.4,1-6.2c7.7-35.8,28.5-60.7,62.2-74.7C-563.1,365.4-547,361.9-545.7,361.9z\"/>\n" +
-    "	<path class=\"st1\" d=\"M-432.7,448.9c-7.6,0.1-15.3,0.4-22.9,0.2c-1.1,0-2.8-2.3-3.2-3.8c-7.3-27.7-24.3-46.4-51.5-55.6\n" +
-    "		c-9.8-3.3-9.9-3.1-9.8-13.4c0-4.8,0.3-9.6,0.4-14.4c1.3,0,5.4,0.8,6.2,1c36.6,7.9,61.7,29.4,75.4,64.1\n" +
-    "		C-435.8,432.7-432.7,447.5-432.7,448.9z\"/>\n" +
-    "	<path class=\"st1\" d=\"M-581.2,474.6c12,0,23.6,0,35.5,0c0,12,0,23.7,0,35.4C-560.5,508.7-577.8,491.6-581.2,474.6z\"/>\n" +
-    "	<path class=\"st1\" d=\"M-519.8,474.6c12,0,23.7,0,35.4,0c-2.3,16-19.5,33.2-35.4,35.5C-519.8,498.4-519.8,486.7-519.8,474.6z\"/>\n" +
-    "	<path class=\"st1\" d=\"M-545.9,448.9c-11.9,0-23.5,0-35.7,0c5.6-18.4,17.2-30,35.7-35.9C-545.9,425.2-545.9,436.9-545.9,448.9z\"/>\n" +
-    "	<path class=\"st1\" d=\"M-519.8,413.5c16.2,2.7,32.7,19.2,35.5,35.4c-11.8,0-23.5,0-35.5,0C-519.8,437.1-519.8,425.5-519.8,413.5z\"/>\n" +
-    "</g>\n" +
-    "</svg>\n" +
-    "");
-  $templateCache.put("components/estimatedScoreWidget/templates/estimatedScoreWidget.template.html",
+  $templateCache.put("components/estimatedScoreWidget/directives/estimatedScoreWidget.template.html",
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
     "     translate-namespace=\"ESTIMATED_SCORE_WIDGET_DIRECTIVE\">\n" +
@@ -5459,20 +5413,53 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "    </div>\n" +
     "</div>\n" +
     "");
+  $templateCache.put("components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg",
+    "<svg\n" +
+    "    class=\"estimated-score-widget-close-popup-svg\"\n" +
+    "    x=\"0px\"\n" +
+    "    y=\"0px\"\n" +
+    "    viewBox=\"-596.6 492.3 133.2 133.5\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .estimated-score-widget-close-popup-svg .st1{\n" +
+    "            fill:none;\n" +
+    "            stroke: white;\n" +
+    "            stroke-width: 6px;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
+    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/estimatedScoreWidget/svg/goals-top-icon.svg",
+    "<svg class=\"estimated-score-widget-goals-svg\" x=\"0px\" y=\"0px\" viewBox=\"-632.7 361.9 200 200\">\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .estimated-score-widget-goals-svg .st0{fill:none;}\n" +
+    "        .estimated-score-widget-goals-svg .st1{fill: white;}\n" +
+    "    </style>\n" +
+    "<path class=\"st0\"/>\n" +
+    "<g>\n" +
+    "	<path class=\"st1\" d=\"M-632.7,473.9c7.1,0.1,14.2,0.4,21.4,0.4c3,0,4.1,0.9,4.9,4c7.8,30.3,26.9,49.5,57.3,57.3c3.2,0.8,4,2,3.9,4.9\n" +
+    "		c-0.3,7.1-0.3,14.3-0.4,21.4c-1.3,0-5.4-0.8-6.2-1c-36.3-7.9-61.4-29.2-75.2-63.6C-629.5,491.3-632.7,475.5-632.7,473.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-519.7,561.9c-0.1-7.6-0.4-15.2-0.3-22.9c0-1.1,1.7-2.7,2.8-3c31.2-7.9,50.7-27.4,58.6-58.6c0.3-1.3,2.6-2.8,4-2.9\n" +
+    "		c7.3-0.4,14.6-0.4,21.9-0.6c0,1.7-0.8,6.4-1,7.2c-8,36.5-29.4,61.7-64.1,75.4C-503.6,558.7-518.3,561.9-519.7,561.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-545.7,361.9c0.1,7.5,0.4,15,0.3,22.4c0,1.2-1.7,3.1-2.9,3.4c-31.1,7.9-50.5,27.3-58.4,58.5c-0.3,1.2-1.9,2.9-3,2.9\n" +
+    "		c-7.6,0.1-15.3-0.1-22.9-0.3c0-1.3,0.8-5.4,1-6.2c7.7-35.8,28.5-60.7,62.2-74.7C-563.1,365.4-547,361.9-545.7,361.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-432.7,448.9c-7.6,0.1-15.3,0.4-22.9,0.2c-1.1,0-2.8-2.3-3.2-3.8c-7.3-27.7-24.3-46.4-51.5-55.6\n" +
+    "		c-9.8-3.3-9.9-3.1-9.8-13.4c0-4.8,0.3-9.6,0.4-14.4c1.3,0,5.4,0.8,6.2,1c36.6,7.9,61.7,29.4,75.4,64.1\n" +
+    "		C-435.8,432.7-432.7,447.5-432.7,448.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-581.2,474.6c12,0,23.6,0,35.5,0c0,12,0,23.7,0,35.4C-560.5,508.7-577.8,491.6-581.2,474.6z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-519.8,474.6c12,0,23.7,0,35.4,0c-2.3,16-19.5,33.2-35.4,35.5C-519.8,498.4-519.8,486.7-519.8,474.6z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-545.9,448.9c-11.9,0-23.5,0-35.7,0c5.6-18.4,17.2-30,35.7-35.9C-545.9,425.2-545.9,436.9-545.9,448.9z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-519.8,413.5c16.2,2.7,32.7,19.2,35.5,35.4c-11.8,0-23.5,0-35.5,0C-519.8,437.1-519.8,425.5-519.8,413.5z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.evaluator', [
-        'pascalprecht.translate',
-        'znk.infra.evaluator',
-        'znk.infra.svgIcon',
-        'znk.infra.enum',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.purchase'
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -5767,6 +5754,19 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
         }]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.evaluator', [
+        'pascalprecht.translate',
+        'znk.infra.evaluator',
+        'znk.infra.svgIcon',
+        'znk.infra.enum',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.purchase'
+    ]);
+})(angular);
+
 /**
  * EvaluateSrv
  *
@@ -5972,15 +5972,6 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.faq', [
-        'vAccordion',
-        'znk.infra.svgIcon'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.faq').config(
         ["$stateProvider", function ($stateProvider) {
             'ngInject';
@@ -6037,6 +6028,15 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     }]);
 })(angular);
 
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.faq', [
+        'vAccordion',
+        'znk.infra.svgIcon'
+    ]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -6117,33 +6117,6 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.feedback',
-        [
-            'ngMaterial',
-            'znk.infra.popUp',
-            'pascalprecht.translate',
-            'znk.infra.auth',
-            'znk.infra.analytics',
-            'znk.infra.general',
-            'znk.infra.user',
-            'znk.infra.svgIcon'
-        ])
-        .config(
-            ["SvgIconSrvProvider", function (SvgIconSrvProvider) {
-                'ngInject';
-                var svgMap = {
-                    'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
-                    'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
-                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg',
-                    'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.feedback').controller('feedbackCtrl',
         ["$log", "$mdDialog", "$timeout", "$http", "ENV", "UserProfileService", "AuthService", function($log, $mdDialog, $timeout, $http, ENV, UserProfileService, AuthService) {
             'ngInject';
@@ -6217,6 +6190,33 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
             };
             return directive;
         }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.feedback',
+        [
+            'ngMaterial',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'znk.infra.auth',
+            'znk.infra.analytics',
+            'znk.infra.general',
+            'znk.infra.user',
+            'znk.infra.svgIcon'
+        ])
+        .config(
+            ["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
+                var svgMap = {
+                    'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
+                    'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
+                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg',
+                    'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
 })(angular);
 
 
@@ -6409,7 +6409,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject'; 
+            'ngInject';
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -6419,26 +6419,9 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.iapMsg').service('IapMsgSrv',
-        ["raccoonIapMsgSrv", function (raccoonIapMsgSrv) {
-            'ngInject';
-
-            this.raccoonTypes = raccoonIapMsgSrv.raccoonTypes;
-
-            this.showRaccoonIapMsg = function(msg,type){
-                raccoonIapMsgSrv.showRaccoonIapMsg (msg,type);
-                return raccoonIapMsgSrv.closeRaccoonIapMsg;
-            };
-        }]
-    );
-})(angular);
-
 (function () {
     'use strict';
-    
+
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -6540,6 +6523,23 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         }]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.iapMsg').service('IapMsgSrv',
+        ["raccoonIapMsgSrv", function (raccoonIapMsgSrv) {
+            'ngInject';
+
+            this.raccoonTypes = raccoonIapMsgSrv.raccoonTypes;
+
+            this.showRaccoonIapMsg = function(msg,type){
+                raccoonIapMsgSrv.showRaccoonIapMsg (msg,type);
+                return raccoonIapMsgSrv.closeRaccoonIapMsg;
+            };
+        }]
+    );
+})(angular);
+
 angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/iapMsg/svg/close-msg.svg",
     "<svg class=\"iap-msg-close-msg-svg\"\n" +
@@ -6588,22 +6588,6 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
     "</svg>\n" +
     "");
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.imageZoomer', [
-        'znk.infra.svgIcon',
-        'ngMaterial'
-    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-        'ngInject';
-        var svgMap = {
-            'image-zoomer-full-screen-icon': 'components/imageZoomer/svg/full-screen-icon.svg',
-            'image-zoomer-close-popup': 'components/imageZoomer/svg/image-zoomer-close-popup.svg'
-        };
-        SvgIconSrvProvider.registerSvgSources(svgMap);
-    }]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -6689,7 +6673,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-                    
+
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -6739,6 +6723,22 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
 
 })(angular);
 
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.imageZoomer', [
+        'znk.infra.svgIcon',
+        'ngMaterial'
+    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
+        'ngInject';
+        var svgMap = {
+            'image-zoomer-full-screen-icon': 'components/imageZoomer/svg/full-screen-icon.svg',
+            'image-zoomer-close-popup': 'components/imageZoomer/svg/image-zoomer-close-popup.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+    }]);
+})(angular);
 
 angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
@@ -6794,20 +6794,6 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     "</svg>\n" +
     "");
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.infraWebAppZnkExercise', [
-        'znk.infra.znkExercise',
-        'znk.infra.analytics',
-        'znk.infra.general',
-        'pascalprecht.translate',
-        'ngMaterial',
-        'ngAnimate',
-        'znk.infra.svgIcon'
-    ]);
-})(angular);
 
 /**
  * attrs:
@@ -7100,6 +7086,20 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     }]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.infraWebAppZnkExercise', [
+        'znk.infra.znkExercise',
+        'znk.infra.analytics',
+        'znk.infra.general',
+        'pascalprecht.translate',
+        'ngMaterial',
+        'ngAnimate',
+        'znk.infra.svgIcon'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
@@ -7262,36 +7262,6 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "");
 }]);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.invitation',
-        ['ngMaterial',
-        'znk.infra.popUp',
-        'znk.infra.svgIcon',
-        'pascalprecht.translate',
-        'znk.infra.presence',
-        'znk.infra.userContext',
-        'znk.infra-web-app.purchase',
-        'znk.infra.user'])
-        .config([
-            'SvgIconSrvProvider',
-            function(SvgIconSrvProvider){
-
-                var svgMap = {
-                    'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
-                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
-                    'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
-                    'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
-                    'invitations-received-icon': 'components/invitation/svg/invitations-received-icon.svg',
-                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg',
-                    'invitation-exclamation-mark-icon': 'components/invitation/svg/invitation-exclamation-mark-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-
-})(angular);
-
 
 (function (angular) {
     'use strict';
@@ -7346,6 +7316,36 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             };
         }]
     );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.invitation',
+        ['ngMaterial',
+        'znk.infra.popUp',
+        'znk.infra.svgIcon',
+        'pascalprecht.translate',
+        'znk.infra.presence',
+        'znk.infra.userContext',
+        'znk.infra-web-app.purchase',
+        'znk.infra.user'])
+        .config([
+            'SvgIconSrvProvider',
+            function(SvgIconSrvProvider){
+
+                var svgMap = {
+                    'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
+                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
+                    'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
+                    'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
+                    'invitations-received-icon': 'components/invitation/svg/invitations-received-icon.svg',
+                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg',
+                    'invitation-exclamation-mark-icon': 'components/invitation/svg/invitation-exclamation-mark-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
+
 })(angular);
 
 (function (angular) {
@@ -8453,51 +8453,6 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
 
 }]);
 
-(function (window, angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveLessons', [
-        'pascalprecht.translate',
-        'znk.infra.svgIcon',
-        'znk.infra.user',
-        'znk.infra.mailSender',
-        'znk.infra.storage',
-        'ngMaterial'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'close-popup': 'components/liveLessons/svg/close-popup.svg',
-                'reschedule-icon': 'components/liveLessons/svg/reschedule-icon.svg',
-                'calendar-icon': 'components/liveLessons/svg/calendar-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ])
-        .run(["$mdToast", "MyLiveLessons", function ($mdToast, MyLiveLessons) {
-            'ngInject';
-            MyLiveLessons.getClosestLiveLesson().then(function (closestLiveLessonObj) {
-                if (angular.isUndefined(closestLiveLessonObj.startTime)) {
-                    return;
-                }
-
-                var optionsOrPreset = {
-                    templateUrl: 'components/liveLessons/templates/upcomingLessonToast.template.html',
-                    hideDelay: false,
-                    controller: 'UpcomingLessonToasterController',
-                    controllerAs: 'vm',
-                    locals: {
-                        closestLiveLesson: closestLiveLessonObj
-                    }
-                };
-
-                $mdToast.cancel().then(function () {
-                    $mdToast.show(optionsOrPreset);
-                });
-            });
-        }]);
-})(window, angular);
-
 (function (angular) {
     'use strict';
 
@@ -8605,6 +8560,51 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
         }]
     );
 })(angular);
+
+(function (window, angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveLessons', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon',
+        'znk.infra.user',
+        'znk.infra.mailSender',
+        'znk.infra.storage',
+        'ngMaterial'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'close-popup': 'components/liveLessons/svg/close-popup.svg',
+                'reschedule-icon': 'components/liveLessons/svg/reschedule-icon.svg',
+                'calendar-icon': 'components/liveLessons/svg/calendar-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ])
+        .run(["$mdToast", "MyLiveLessons", function ($mdToast, MyLiveLessons) {
+            'ngInject';
+            MyLiveLessons.getClosestLiveLesson().then(function (closestLiveLessonObj) {
+                if (angular.isUndefined(closestLiveLessonObj.startTime)) {
+                    return;
+                }
+
+                var optionsOrPreset = {
+                    templateUrl: 'components/liveLessons/templates/upcomingLessonToast.template.html',
+                    hideDelay: false,
+                    controller: 'UpcomingLessonToasterController',
+                    controllerAs: 'vm',
+                    locals: {
+                        closestLiveLesson: closestLiveLessonObj
+                    }
+                };
+
+                $mdToast.cancel().then(function () {
+                    $mdToast.show(optionsOrPreset);
+                });
+            });
+        }]);
+})(window, angular);
 
 (function (angular) {
     'use strict';
@@ -9077,42 +9077,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.liveSession',
-        [
-            'ngMaterial',
-            'znk.infra.znkSessionData',
-            'znk.infra.popUp',
-            'pascalprecht.translate',
-            'znk.infra.auth',
-            'znk.infra.userContext',
-            'znk.infra.user',
-            'znk.infra.utility',
-            'znk.infra.analytics',
-            'znk.infra.general',
-            'znk.infra.svgIcon',
-            'znk.infra-web-app.diagnostic',
-            'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.znkToast',
-            'znk.infra.exerciseUtility',
-            'znk.infra.znkTooltip',
-            'znk.infra.calls'
-        ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
-                var svgMap = {
-                    'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
-                    'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
-                    'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.liveSession')
         .component('liveSessionBtn', {
             bindings: {
@@ -9268,6 +9232,42 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession',
+        [
+            'ngMaterial',
+            'znk.infra.znkSessionData',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'znk.infra.auth',
+            'znk.infra.userContext',
+            'znk.infra.user',
+            'znk.infra.utility',
+            'znk.infra.analytics',
+            'znk.infra.general',
+            'znk.infra.svgIcon',
+            'znk.infra-web-app.diagnostic',
+            'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.znkToast',
+            'znk.infra.exerciseUtility',
+            'znk.infra.znkTooltip',
+            'znk.infra.calls'
+        ])
+        .config([
+            'SvgIconSrvProvider',
+            function (SvgIconSrvProvider) {
+                var svgMap = {
+                    'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
+                    'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
+                    'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }
+        ]);
+})(angular);
+
 (function(){
     'use strict';
 
@@ -9279,180 +9279,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
         }]
     );
 })();
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveSession').service('LiveSessionDataGetterSrv',
-        ["InfraConfigSrv", "$q", "ENV", "UserProfileService", function (InfraConfigSrv, $q, ENV, UserProfileService) {
-            'ngInject';
-
-            var _this = this;
-
-            function _getStorage() {
-                return InfraConfigSrv.getGlobalStorage();
-            }
-
-            this.getLiveSessionDataPath = function (guid) {
-                var LIVE_SESSION_ROOT_PATH = '/liveSession/';
-                return LIVE_SESSION_ROOT_PATH + guid;
-            };
-
-            this.getLiveSessionDurationPath = function () {
-                return '/settings/liveSessionDuration/';
-            };
-
-            this.getUserLiveSessionRequestsPath  = function (userData) {
-                var appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
-                var USER_DATA_PATH = appName  + '/users/' + userData.uid;
-                return USER_DATA_PATH + '/liveSession';
-            };
-
-            this.getLiveSessionData = function (liveSessionGuid) {
-                var liveSessionDataPath = _this.getLiveSessionDataPath(liveSessionGuid);
-                return _getStorage().then(function (storage) {
-                    return storage.getAndBindToServer(liveSessionDataPath);
-                });
-            };
-
-            this.getLiveSessionDuration = function () {
-                var liveSessionDurationPath = _this.getLiveSessionDurationPath();
-                return _getStorage().then(function (storage) {
-                    return storage.get(liveSessionDurationPath);
-                });
-            };
-
-            this.getCurrUserLiveSessionRequests = function(){
-                return UserProfileService.getCurrUserId().then(function(currUid){
-                    return _getStorage().then(function(storage){
-                        var currUserLiveSessionDataPath = ENV.firebaseAppScopeName + '/users/' + currUid + '/liveSession/active';
-                        return storage.getAndBindToServer(currUserLiveSessionDataPath);
-                    });
-                });
-            };
-
-            this.getCurrUserLiveSessionData = function () {
-                return _this.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
-                    var liveSessionDataPromMap = {};
-                    angular.forEach(currUserLiveSessionRequests, function(isActive, guid){
-                        if(isActive){
-                            liveSessionDataPromMap[guid] = _this.getLiveSessionData(guid);
-                        }
-                    });
-
-                    return $q.all(liveSessionDataPromMap);
-                });
-            };
-        }]
-    );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
-        var isEnabled = true;
-
-        this.enabled = function (_isEnabled) {
-            isEnabled = _isEnabled;
-        };
-
-        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv, LiveSessionDataGetterSrv) {
-            'ngInject';
-
-            var LiveSessionEventsSrv = {};
-
-            function _listenToLiveSessionData(guid) {
-                var liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
-
-                function _cb(liveSessionData) {
-                    if (!liveSessionData) {
-                        return;
-                    }
-
-                    UserProfileService.getCurrUserId().then(function (currUid) {
-                        switch (liveSessionData.status) {
-                            case LiveSessionStatusEnum.PENDING_STUDENT.enum:
-                                if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                }
-                                break;
-                            case LiveSessionStatusEnum.CONFIRMED.enum:
-                                if (liveSessionData.studentId === currUid) {
-                                    LiveSessionUiSrv.showLiveSessionToast();
-                                }
-
-                                var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
-
-                                if (liveSessionData.studentId === currUid) {
-                                    userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
-                                }
-
-                                if (liveSessionData.educatorId === currUid) {
-                                    userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
-                                }
-
-                                if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                                    LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
-                                }
-
-                                break;
-                            case LiveSessionStatusEnum.ENDED.enum:
-                                if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
-                                    LiveSessionSrv._destroyCheckDurationInterval();
-                                }
-
-                                LiveSessionUiSrv.showEndSessionPopup();
-                                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
-                                // Security check to insure there isn't active session
-                                LiveSessionSrv._moveToArchive(liveSessionData);
-                                break;
-                            default:
-                                $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
-                        }
-
-                        LiveSessionSrv._liveSessionDataChanged(liveSessionData);
-                    });
-                }
-
-                InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                    globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
-                });
-            }
-
-            function _startListening() {
-                UserProfileService.getCurrUserId().then(function (currUid) {
-                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                        var appName = ENV.firebaseAppScopeName;
-                        var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
-                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
-                            if (userLiveSessionGuids) {
-                                angular.forEach(userLiveSessionGuids, function (isActive, guid) {
-                                    if(isActive){
-                                        _listenToLiveSessionData(guid);
-                                    }
-                                });
-                            }
-                        });
-                    });
-                });
-            }
-
-            function activate() {
-                if (isEnabled) {
-                    _startListening();
-                }
-            }
-
-            LiveSessionEventsSrv.activate = activate;
-
-            return LiveSessionEventsSrv;
-        }];
-    });
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -9833,6 +9659,180 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             }
         }]
     );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').service('LiveSessionDataGetterSrv',
+        ["InfraConfigSrv", "$q", "ENV", "UserProfileService", function (InfraConfigSrv, $q, ENV, UserProfileService) {
+            'ngInject';
+
+            var _this = this;
+
+            function _getStorage() {
+                return InfraConfigSrv.getGlobalStorage();
+            }
+
+            this.getLiveSessionDataPath = function (guid) {
+                var LIVE_SESSION_ROOT_PATH = '/liveSession/';
+                return LIVE_SESSION_ROOT_PATH + guid;
+            };
+
+            this.getLiveSessionDurationPath = function () {
+                return '/settings/liveSessionDuration/';
+            };
+
+            this.getUserLiveSessionRequestsPath  = function (userData) {
+                var appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
+                var USER_DATA_PATH = appName  + '/users/' + userData.uid;
+                return USER_DATA_PATH + '/liveSession';
+            };
+
+            this.getLiveSessionData = function (liveSessionGuid) {
+                var liveSessionDataPath = _this.getLiveSessionDataPath(liveSessionGuid);
+                return _getStorage().then(function (storage) {
+                    return storage.getAndBindToServer(liveSessionDataPath);
+                });
+            };
+
+            this.getLiveSessionDuration = function () {
+                var liveSessionDurationPath = _this.getLiveSessionDurationPath();
+                return _getStorage().then(function (storage) {
+                    return storage.get(liveSessionDurationPath);
+                });
+            };
+
+            this.getCurrUserLiveSessionRequests = function(){
+                return UserProfileService.getCurrUserId().then(function(currUid){
+                    return _getStorage().then(function(storage){
+                        var currUserLiveSessionDataPath = ENV.firebaseAppScopeName + '/users/' + currUid + '/liveSession/active';
+                        return storage.getAndBindToServer(currUserLiveSessionDataPath);
+                    });
+                });
+            };
+
+            this.getCurrUserLiveSessionData = function () {
+                return _this.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
+                    var liveSessionDataPromMap = {};
+                    angular.forEach(currUserLiveSessionRequests, function(isActive, guid){
+                        if(isActive){
+                            liveSessionDataPromMap[guid] = _this.getLiveSessionData(guid);
+                        }
+                    });
+
+                    return $q.all(liveSessionDataPromMap);
+                });
+            };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
+        var isEnabled = true;
+
+        this.enabled = function (_isEnabled) {
+            isEnabled = _isEnabled;
+        };
+
+        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv, LiveSessionDataGetterSrv) {
+            'ngInject';
+
+            var LiveSessionEventsSrv = {};
+
+            function _listenToLiveSessionData(guid) {
+                var liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
+
+                function _cb(liveSessionData) {
+                    if (!liveSessionData) {
+                        return;
+                    }
+
+                    UserProfileService.getCurrUserId().then(function (currUid) {
+                        switch (liveSessionData.status) {
+                            case LiveSessionStatusEnum.PENDING_STUDENT.enum:
+                                if (liveSessionData.studentId !== currUid) {
+                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                }
+                                break;
+                            case LiveSessionStatusEnum.CONFIRMED.enum:
+                                if (liveSessionData.studentId === currUid) {
+                                    LiveSessionUiSrv.showLiveSessionToast();
+                                }
+
+                                var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+
+                                if (liveSessionData.studentId === currUid) {
+                                    userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
+                                }
+
+                                if (liveSessionData.educatorId === currUid) {
+                                    userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
+                                }
+
+                                if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                                    LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
+                                }
+
+                                break;
+                            case LiveSessionStatusEnum.ENDED.enum:
+                                if (liveSessionData.studentId !== currUid) {
+                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
+                                    LiveSessionSrv._destroyCheckDurationInterval();
+                                }
+
+                                LiveSessionUiSrv.showEndSessionPopup();
+                                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                                // Security check to insure there isn't active session
+                                LiveSessionSrv._moveToArchive(liveSessionData);
+                                break;
+                            default:
+                                $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
+                        }
+
+                        LiveSessionSrv._liveSessionDataChanged(liveSessionData);
+                    });
+                }
+
+                InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                    globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
+                });
+            }
+
+            function _startListening() {
+                UserProfileService.getCurrUserId().then(function (currUid) {
+                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                        var appName = ENV.firebaseAppScopeName;
+                        var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
+                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
+                            if (userLiveSessionGuids) {
+                                angular.forEach(userLiveSessionGuids, function (isActive, guid) {
+                                    if(isActive){
+                                        _listenToLiveSessionData(guid);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+
+            function activate() {
+                if (isEnabled) {
+                    _startListening();
+                }
+            }
+
+            LiveSessionEventsSrv.activate = activate;
+
+            return LiveSessionEventsSrv;
+        }];
+    });
 })(angular);
 
 (function (angular) {
@@ -10327,22 +10327,6 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp', [
-        'pascalprecht.translate',
-        'znk.infra.auth',
-        'znk.infra.svgIcon',
-        'ngMaterial',
-        'satellizer',
-        'znk.infra.user',
-        'znk.infra.general',
-        'znk.infra.autofocus',
-        'znk.infra-web-app.promoCode'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.loginApp')
         .config([
             'SvgIconSrvProvider',
@@ -10372,60 +10356,11 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.loginApp').directive('resetPasswordForm',
-        ["LoginAppSrv", "$timeout", function (LoginAppSrv, $timeout) {
-            'ngInject';
-            return {
-                templateUrl: 'components/loginApp/templates/resetPasswordForm.directive.html',
-                restrict: 'E',
-                scope: {
-                    appContext: '<',
-                    userContext: '<',
-                    backToLogin: '&'
-                },
-                link: function (scope) {
-                    scope.resetPasswordSucceeded = false;
-                    scope.showSpinner = false;
-                    scope.passwordSubmit = function (changePasswordForm) {
-                        changePasswordForm.email.$setValidity("noSuchEmail", true);
-                        scope.showSpinner = true;
-                        if (changePasswordForm.$invalid) {
-                            scope.showSpinner = false;
-                            return;
-                        }
-                        LoginAppSrv.resetPassword(scope.appContext.id, changePasswordForm.email.$viewValue, scope.userContext).then(function (resetPasswordSate) {
-                            $timeout(function () {
-                                if (angular.isUndefined(resetPasswordSate)) {
-                                    scope.showSpinner = false;
-                                    scope.resetPasswordSucceeded = true;
-                                } else {
-                                    if (resetPasswordSate.code === 'INVALID_USER') {
-                                        scope.showSpinner = false;
-                                        scope.resetPasswordSucceeded = false;
-                                        changePasswordForm.email.$setValidity("noSuchEmail", false);
-                                    }
-                                }
-                            });
-                        });
-                    };
-                }
-            };
-        }]
-    );
-})(angular);
-
-/**
- * attrs:
- */
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
         ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", "ENV", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService, ENV) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/loginApp.directive.html',
+                templateUrl: 'components/loginApp/directives/loginApp/loginApp.template.html',
                 restrict: 'E',
                 link: function (scope) {
 
@@ -10529,7 +10464,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
         ["LoginAppSrv", "$timeout", "$translate", "$log", function (LoginAppSrv, $timeout, $translate, $log) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/loginForm.directive.html',
+                templateUrl: 'components/loginApp/directives/loginForm/loginForm.template.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',
@@ -10619,11 +10554,60 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.loginApp').directive('resetPasswordForm',
+        ["LoginAppSrv", "$timeout", function (LoginAppSrv, $timeout) {
+            'ngInject';
+            return {
+                templateUrl: 'components/loginApp/directives/resetPasswordForm/resetPasswordForm.template.html',
+                restrict: 'E',
+                scope: {
+                    appContext: '<',
+                    userContext: '<',
+                    backToLogin: '&'
+                },
+                link: function (scope) {
+                    scope.resetPasswordSucceeded = false;
+                    scope.showSpinner = false;
+                    scope.passwordSubmit = function (changePasswordForm) {
+                        changePasswordForm.email.$setValidity("noSuchEmail", true);
+                        scope.showSpinner = true;
+                        if (changePasswordForm.$invalid) {
+                            scope.showSpinner = false;
+                            return;
+                        }
+                        LoginAppSrv.resetPassword(scope.appContext.id, changePasswordForm.email.$viewValue, scope.userContext).then(function (resetPasswordSate) {
+                            $timeout(function () {
+                                if (angular.isUndefined(resetPasswordSate)) {
+                                    scope.showSpinner = false;
+                                    scope.resetPasswordSucceeded = true;
+                                } else {
+                                    if (resetPasswordSate.code === 'INVALID_USER') {
+                                        scope.showSpinner = false;
+                                        scope.resetPasswordSucceeded = false;
+                                        changePasswordForm.email.$setValidity("noSuchEmail", false);
+                                    }
+                                }
+                            });
+                        });
+                    };
+                }
+            };
+        }]
+    );
+})(angular);
+
+/**
+ * attrs:
+ */
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.loginApp').directive('signupForm',
         ["LoginAppSrv", "$log", "$timeout", function (LoginAppSrv, $log, $timeout) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/signupForm.directive.html',
+                templateUrl: 'components/loginApp/directives/signupForm/signupForm.template.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',
@@ -10676,6 +10660,22 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     );
 })(angular);
 
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.loginApp', [
+        'pascalprecht.translate',
+        'znk.infra.auth',
+        'znk.infra.svgIcon',
+        'ngMaterial',
+        'satellizer',
+        'znk.infra.user',
+        'znk.infra.general',
+        'znk.infra.autofocus',
+        'znk.infra-web-app.promoCode'
+    ]);
+})(angular);
 
 /* jshint ignore:start */
 (function (angular) {
@@ -11124,6 +11124,384 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 })(angular);
 
 angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/loginApp/directives/loginApp/loginApp.template.html",
+    "<div class=\"login-app\" ng-class=\"{\n" +
+    "        student: d.userContext === d.userContextObj.STUDENT,\n" +
+    "        educator: d.userContext === d.userContextObj.TEACHER,\n" +
+    "        sat: d.appContext === d.availableApps.SAT,\n" +
+    "        satsm: d.appContext === d.availableApps.SATSM,\n" +
+    "        act: d.appContext === d.availableApps.ACT,\n" +
+    "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
+    "    }\">\n" +
+    "    <header>\n" +
+    "        <div class=\"logo-wrapper\">\n" +
+    "            <a class=\"logo\" href=\"https://www.zinkerz.com\"></a>\n" +
+    "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
+    "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
+    "            </span>\n" +
+    "        </div>\n" +
+    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
+    "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
+    "                <md-button aria-label=\"Open App Select Menu\"\n" +
+    "                           class=\"md-icon-button\"\n" +
+    "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
+    "                    <div class=\"app-img-holder {{d.appContext.className}}\">{{d.appContext.name}}<span class=\"trademark\">&reg;</span></div>\n" +
+    "                        <div class=\"square {{d.appContext.className}}\">\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
+    "                        </div>\n" +
+    "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
+    "                </md-button>\n" +
+    "                <md-menu-content id=\"app-select-menu\">\n" +
+    "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
+    "                                  ng-click=\"selectApp(app)\">\n" +
+    "                        <div class=\"app-img-holder {{app.className}}\">{{app.name}}<span class=\"trademark\">&reg;</span></div>\n" +
+    "                        <div class=\"square {{app.className}}\">\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
+    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
+    "                        </div>\n" +
+    "                    </md-menu-item>\n" +
+    "                </md-menu-content>\n" +
+    "            </md-menu>\n" +
+    "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
+    "        </div>\n" +
+    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
+    "           class=\"for-educators app-color\"\n" +
+    "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
+    "        </a>\n" +
+    "    </header>\n" +
+    "    <div class=\"main\">\n" +
+    "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
+    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div ng-if=\"d.invitationId\">\n" +
+    "            <div ng-switch=\"d.userContext\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
+    "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
+    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
+    "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"main-inner\">\n" +
+    "            <ng-switch on=\"currentForm\">\n" +
+    "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
+    "                    <login-form app-context=\"d.appContext\"\n" +
+    "                                user-context=\"d.userContext\"\n" +
+    "                                change-password-click=\"changePasswordClick()\">\n" +
+    "                    </login-form>\n" +
+    "                    <p class=\"go-to-signup\">\n" +
+    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
+    "                    </p>\n" +
+    "                </div>\n" +
+    "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
+    "                    <signup-form app-context=\"d.appContext\"\n" +
+    "                                 user-context=\"d.userContext\">\n" +
+    "                    </signup-form>\n" +
+    "                    <p class=\"go-to-login\">\n" +
+    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
+    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
+    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
+    "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
+    "                    </p>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"change-password-container\" ng-switch-when=\"changePassword\">\n" +
+    "                    <reset-password-form app-context=\"d.appContext\" user-context=\"d.userContext\"\n" +
+    "                                         back-to-login=\"changeCurrentForm('login')\">\n" +
+    "\n" +
+    "                    </reset-password-form>\n" +
+    "                    <a class=\"back-to-login-btn\" ng-click=\"changeCurrentForm('login')\">\n" +
+    "                        <svg-icon name=\"dropdown-arrow\" class=\"back-btn-icon\"></svg-icon>\n" +
+    "                        <span class=\"back-btn-label\" translate=\"CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN\"></span>\n" +
+    "                    </a>\n" +
+    "                </div>\n" +
+    "            </ng-switch>\n" +
+    "            <h2 class=\"banner-text\">\n" +
+    "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SATSM_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.SATSM_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
+    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
+    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
+    "                    </div>\n" +
+    "                </ng-switch>\n" +
+    "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
+    "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
+    "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
+    "                </div>\n" +
+    "            </h2>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <footer>\n" +
+    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
+    "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
+    "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
+    "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
+    "            </div>\n" +
+    "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
+    "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
+    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
+    "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
+    "            </div>\n" +
+    "        </ng-switch>\n" +
+    "    </footer>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/directives/loginForm/loginForm.template.html",
+    "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
+    "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
+    "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\">\n" +
+    "            <oath-login-drv\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
+    "            </oath-login-drv>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
+    "    <form novalidate\n" +
+    "          name=\"loginform\"\n" +
+    "          ng-submit=\"loginSubmit(loginform)\">\n" +
+    "        <div class=\"inputs-container\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                <input type=\"email\"\n" +
+    "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
+    "                       name=\"email\"\n" +
+    "                       ng-model=\"d.loginFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.email.$error.required\"\n" +
+    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "                 ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "                <input type=\"password\"\n" +
+    "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
+    "                       name=\"password\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       ng-model=\"d.loginFormData.password\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"loginform.password.$error.required\"\n" +
+    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"submit-btn-wrapper\">\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".LOGIN_IN\"></span>\n" +
+    "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <div class=\"forgot-pwd-wrapper\">\n" +
+    "            <span class=\"app-color\" translate=\".FORGOT_PWD\" ng-click=\"changePasswordClick()\"></span>\n" +
+    "        </div>\n" +
+    "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
+    "    </form>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "");
+  $templateCache.put("components/loginApp/directives/resetPasswordForm/resetPasswordForm.template.html",
+    "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
+    "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
+    "        <form novalidate\n" +
+    "              name=\"changePasswordForm\"\n" +
+    "              ng-submit=\"passwordSubmit(changePasswordForm)\"\n" +
+    "              ng-switch-when=\"false\">\n" +
+    "            <div class=\"inputs-container\">\n" +
+    "                <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
+    "                <div class=\"input-wrapper\"\n" +
+    "                     ng-class=\"changePasswordForm.email.$invalid && changePasswordForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                    <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                    <input type=\"email\"\n" +
+    "                           placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
+    "                           name=\"email\"\n" +
+    "                           ng-model=\"d.changePasswordForm.email\"\n" +
+    "                           required>\n" +
+    "                    <span\n" +
+    "                        ng-if=\"(changePasswordForm.$submitted && changePasswordForm.email.$invalid && !changePasswordForm.email.$dirty) || (changePasswordForm.email.$error && changePasswordForm.$submitted)\"\n" +
+    "                        role=\"alert\">\n" +
+    "            <span class=\"validationBox\">\n" +
+    "                <span ng-show=\"changePasswordForm.email.$error.required\"\n" +
+    "                      translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                <span class=\"no-email-massage\" ng-show=\"changePasswordForm.email.$error.noSuchEmail\"\n" +
+    "                      translate=\".NO_SUCH_EMAIL\"></span>\n" +
+    "            </span>\n" +
+    "        </span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"submit-btn-wrapper\">\n" +
+    "                <button type=\"submit\"\n" +
+    "                        ng-disabled=\"d.disableBtn\"\n" +
+    "                        class=\"app-bg\"\n" +
+    "                        autofocus>\n" +
+    "                    <span translate=\".SEND\"></span>\n" +
+    "                    <span class=\"loader ng-hide\" ng-show=\"showSpinner\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "        <div ng-switch-when=\"true\" class=\"success-massage\">\n" +
+    "            <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
+    "                <svg-icon name=\"v-icon\"></svg-icon>\n" +
+    "            <div class=\"massage-text\" translate=\".NEW_PASSWORD_SENT\"></div>\n" +
+    "            <div class=\"submit-btn-wrapper\">\n" +
+    "                <button ng-disabled=\"d.disableBtn\"\n" +
+    "                        class=\"app-bg\"\n" +
+    "                        ng-click=\"backToLogin()\"\n" +
+    "                        autofocus>\n" +
+    "                    <span translate=\".DONE\"></span>\n" +
+    "                </button>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </ng-switch>\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/loginApp/directives/signupForm/signupForm.template.html",
+    "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
+    "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
+    "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
+    "\n" +
+    "    <promo-code\n" +
+    "        user-context-const=\"d.userContextObj\"\n" +
+    "        user-context=\"userContext\"\n" +
+    "        app-context=\"appContext\">\n" +
+    "    </promo-code>\n" +
+    "\n" +
+    "    <div class=\"social-auth-container\">\n" +
+    "        <div class=\"social-auth\">\n" +
+    "            <oath-login-drv\n" +
+    "                app-context=\"appContext\"\n" +
+    "                user-context=\"userContext\"\n" +
+    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
+    "            </oath-login-drv>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"divider\">\n" +
+    "        <div translate=\".OR\" class=\"text\"></div>\n" +
+    "    </div>\n" +
+    "    <form novalidate\n" +
+    "          name=\"signupForm\"\n" +
+    "          ng-submit=\"signupSubmit(signupForm)\">\n" +
+    "        <div class=\"inputs-container\">\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.nickname.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
+    "                <input type=\"text\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
+    "                       name=\"nickname\"\n" +
+    "                       ng-model=\"d.signupFormData.nickname\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupForm.$submitted && signupForm.nickname.$invalid && !signupForm.nickname.$dirty\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.email.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
+    "                <input type=\"email\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
+    "                       name=\"email\"\n" +
+    "                       ng-model=\"d.signupFormData.email\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"(signupForm.$submitted && signupForm.email.$invalid && !signupForm.email.$dirty) ||\n" +
+    "                (signupForm.$submitted && signupForm.email.$error)\" role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                        <span class=\"email-exist-massage\" ng-show=\"signupForm.email.$error.emailTaken\" translate=\"LOGIN_APP.FORM_VALIDATION.EMAIL_TAKEN\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "            <div class=\"input-wrapper\" ng-class=\"signupForm.password.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
+    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
+    "                <input type=\"password\"\n" +
+    "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
+    "                       name=\"password\"\n" +
+    "                       ng-model=\"d.signupFormData.password\"\n" +
+    "                       ng-minlength=\"6\"\n" +
+    "                       ng-maxlength=\"25\"\n" +
+    "                       autocomplete=\"off\"\n" +
+    "                       required>\n" +
+    "                <span ng-if=\"signupForm.$submitted && signupForm.password.$invalid\"\n" +
+    "                      role=\"alert\">\n" +
+    "                    <span class=\"validationBox\">\n" +
+    "                        <span ng-show=\"signupForm.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
+    "                        <span ng-show=\"signupForm.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
+    "                    </span>\n" +
+    "                </span>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"submit-btn-wrapper\">\n" +
+    "            <button type=\"submit\"\n" +
+    "                    ng-disabled=\"d.disableBtn\"\n" +
+    "                    class=\"app-bg\"\n" +
+    "                    autofocus>\n" +
+    "                <span translate=\".SIGN_UP\"></span>\n" +
+    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <p class=\"signup-disclaimer\"\n" +
+    "           translate-values=\"{termsOfUseHref: d.termsOfUseHref, privacyPolicyHref: d.privacyPolicyHref}\"\n" +
+    "           translate=\".DISCLAIMER\"></p>\n" +
+    "\n" +
+    "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
+    "    </form>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/loginApp/oathLogin/oathLogin.template.html",
     "<div class=\"btn-wrap\" translate-namespace=\"OATH_SOCIAL\">\n" +
     "    <button class=\"social-btn facebook-btn\"\n" +
@@ -11350,401 +11728,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/loginApp/templates/loginApp.directive.html",
-    "<div class=\"login-app\" ng-class=\"{\n" +
-    "        student: d.userContext === d.userContextObj.STUDENT,\n" +
-    "        educator: d.userContext === d.userContextObj.TEACHER,\n" +
-    "        sat: d.appContext === d.availableApps.SAT,\n" +
-    "        satsm: d.appContext === d.availableApps.SATSM,\n" +
-    "        act: d.appContext === d.availableApps.ACT,\n" +
-    "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
-    "    }\">\n" +
-    "    <header>\n" +
-    "        <div class=\"logo-wrapper\">\n" +
-    "            <a class=\"logo\" href=\"https://www.zinkerz.com\"></a>\n" +
-    "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\"\n" +
-    "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
-    "            </span>\n" +
-    "        </div>\n" +
-    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
-    "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
-    "                <md-button aria-label=\"Open App Select Menu\"\n" +
-    "                           class=\"md-icon-button\"\n" +
-    "                           ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
-    "                    <div class=\"app-img-holder {{d.appContext.className}}\">{{d.appContext.name}}<span class=\"trademark\">&reg;</span></div>\n" +
-    "                        <div class=\"square {{d.appContext.className}}\">\n" +
-    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
-    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
-    "                        </div>\n" +
-    "                    <md-icon class=\"material-icons expand-menu\">expand_more</md-icon>\n" +
-    "                </md-button>\n" +
-    "                <md-menu-content id=\"app-select-menu\">\n" +
-    "                    <md-menu-item ng-repeat=\"app in d.availableApps track by app.id\"\n" +
-    "                                  ng-click=\"selectApp(app)\">\n" +
-    "                        <div class=\"app-img-holder {{app.className}}\">{{app.name}}<span class=\"trademark\">&reg;</span></div>\n" +
-    "                        <div class=\"square {{app.className}}\">\n" +
-    "                            <div class=\"text\" translate=\"LOGIN_APP.TEST\"></div>\n" +
-    "                            <div class=\"text\" translate=\"LOGIN_APP.PREP\"></div>\n" +
-    "                        </div>\n" +
-    "                    </md-menu-item>\n" +
-    "                </md-menu-content>\n" +
-    "            </md-menu>\n" +
-    "            <div class=\"app-img-holder {{d.appContext.className}}\" ng-if=\"d.invitationId\"></div>\n" +
-    "        </div>\n" +
-    "        <a ng-if=\"d.userContext===d.userContextObj.STUDENT && !d.invitationId\"\n" +
-    "           class=\"for-educators app-color\"\n" +
-    "           ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
-    "           translate=\"LOGIN_APP.EDUCATORS_CLICK_HERE\">\n" +
-    "        </a>\n" +
-    "    </header>\n" +
-    "    <div class=\"main\">\n" +
-    "        <div ng-switch=\"d.userContext\" ng-if=\"!d.invitationId\">\n" +
-    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
-    "                 src=\"assets/images/login-teacher-bg@2x.jpg\">\n" +
-    "            <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
-    "                 src=\"assets/images/login-student-bg@2x.jpg\">\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div ng-if=\"d.invitationId\">\n" +
-    "            <div ng-switch=\"d.userContext\">\n" +
-    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"1\"\n" +
-    "                     src=\"assets/images/login-teacher-invitation-bg@2x.jpg\">\n" +
-    "                <img class=\"main-banner img-responsive\" ng-switch-when=\"2\"\n" +
-    "                     src=\"assets/images/login-student-invitation-bg@2x.jpg\">\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"main-inner\">\n" +
-    "            <ng-switch on=\"currentForm\">\n" +
-    "                <div class=\"login-container\" ng-switch-when=\"login\">\n" +
-    "                    <login-form app-context=\"d.appContext\"\n" +
-    "                                user-context=\"d.userContext\"\n" +
-    "                                change-password-click=\"changePasswordClick()\">\n" +
-    "                    </login-form>\n" +
-    "                    <p class=\"go-to-signup\">\n" +
-    "                        <span translate=\"LOGIN_FORM.STUDENT.DONT_HAVE_AN_ACCOUNT\"\n" +
-    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                        <span translate=\"LOGIN_FORM.EDUCATOR.DONT_HAVE_AN_ACCOUNT\"\n" +
-    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                        <a ng-click=\"changeCurrentForm('signup')\" translate=\"SIGNUP_FORM.SIGN_UP\"></a>\n" +
-    "                    </p>\n" +
-    "                </div>\n" +
-    "                <div class=\"signup-container\" ng-switch-when=\"signup\">\n" +
-    "                    <signup-form app-context=\"d.appContext\"\n" +
-    "                                 user-context=\"d.userContext\">\n" +
-    "                    </signup-form>\n" +
-    "                    <p class=\"go-to-login\">\n" +
-    "                        <span translate=\"SIGNUP_FORM.STUDENT.ALREADY_HAVE_ACCOUNT\"\n" +
-    "                              ng-if=\"d.userContext===d.userContextObj.STUDENT\"></span>\n" +
-    "                        <span translate=\"SIGNUP_FORM.EDUCATOR.ALREADY_HAVE_ACCOUNT\"\n" +
-    "                              ng-if=\"d.userContext===d.userContextObj.TEACHER\"></span>\n" +
-    "                        <a ng-click=\"changeCurrentForm('login')\" translate=\"LOGIN_FORM.LOGIN_IN\"></a>\n" +
-    "                    </p>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"change-password-container\" ng-switch-when=\"changePassword\">\n" +
-    "                    <reset-password-form app-context=\"d.appContext\" user-context=\"d.userContext\"\n" +
-    "                                         back-to-login=\"changeCurrentForm('login')\">\n" +
-    "\n" +
-    "                    </reset-password-form>\n" +
-    "                    <a class=\"back-to-login-btn\" ng-click=\"changeCurrentForm('login')\">\n" +
-    "                        <svg-icon name=\"dropdown-arrow\" class=\"back-btn-icon\"></svg-icon>\n" +
-    "                        <span class=\"back-btn-label\" translate=\"CHANGE_PASSOWRD_FORM.BACK_TO_LOGIN\"></span>\n" +
-    "                    </a>\n" +
-    "                </div>\n" +
-    "            </ng-switch>\n" +
-    "            <h2 class=\"banner-text\">\n" +
-    "                <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
-    "                    <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                        <span translate=\"LOGIN_APP.SAT_EDUCATOR_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.SATSM_EDUCATOR_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.ACT_EDUCATOR_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.TOEFL_EDUCATOR_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
-    "                    </div>\n" +
-    "                    <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                        <span translate=\"LOGIN_APP.SAT_STUDENT_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.SAT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.SATSM_STUDENT_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.SATSM\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.ACT_STUDENT_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.ACT\"></span>\n" +
-    "                        <span translate=\"LOGIN_APP.TOEFL_STUDENT_TAGLINE\"\n" +
-    "                              ng-if=\"d.appContext===d.availableApps.TOEFL\"></span>\n" +
-    "                    </div>\n" +
-    "                </ng-switch>\n" +
-    "                <div class=\"invitation-title\" ng-if=\"d.invitationId\">\n" +
-    "                    <div class=\"first-row\" translate=\"LOGIN_APP.SIGNUP_OR_LOGIN\"></div>\n" +
-    "                    <div class=\"second-row\" translate=\"LOGIN_APP.ACCEPT_INVITATION\"></div>\n" +
-    "                </div>\n" +
-    "            </h2>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <footer>\n" +
-    "        <ng-switch on=\"currentUserContext\" ng-if=\"!d.invitationId\">\n" +
-    "            <div ng-switch-when=\"teacher\" class=\"switch-student-educator\">\n" +
-    "                <h2 translate=\"LOGIN_APP.CHECK_OUT_OUR_APP_FOR_STUDENTS\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.STUDENT)\"\n" +
-    "                   translate=\"LOGIN_APP.SIGN_UP_FOR_ZINKERZ_TEST_PREP\"></a>\n" +
-    "            </div>\n" +
-    "            <div ng-switch-when=\"student\" class=\"switch-student-educator\">\n" +
-    "                <h2 translate=\"LOGIN_APP.ARE_YOU_AN_EDUCATOR\"></h2>\n" +
-    "                <a href=\"\" class=\"app-color\" ng-click=\"changeUserContext(d.userContextObj.TEACHER)\"\n" +
-    "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
-    "            </div>\n" +
-    "        </ng-switch>\n" +
-    "    </footer>\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/loginForm.directive.html",
-    "<div class=\"form-container login\" translate-namespace=\"LOGIN_FORM\">\n" +
-    "    <div class=\"title\" translate=\"LOGIN_FORM.STUDENT.LOGIN\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
-    "    <div class=\"title\" translate=\"LOGIN_FORM.EDUCATOR.LOGIN\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "\n" +
-    "    <promo-code\n" +
-    "        user-context-const=\"d.userContextObj\"\n" +
-    "        user-context=\"userContext\"\n" +
-    "        app-context=\"appContext\">\n" +
-    "    </promo-code>\n" +
-    "\n" +
-    "    <div class=\"social-auth-container\">\n" +
-    "        <div class=\"social-auth\">\n" +
-    "            <oath-login-drv\n" +
-    "                app-context=\"appContext\"\n" +
-    "                user-context=\"userContext\"\n" +
-    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
-    "            </oath-login-drv>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"divider\">\n" +
-    "        <div translate=\".OR\" class=\"text\"></div>\n" +
-    "    </div>\n" +
-    "    <form novalidate\n" +
-    "          name=\"loginform\"\n" +
-    "          ng-submit=\"loginSubmit(loginform)\">\n" +
-    "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\"\n" +
-    "                 ng-class=\"loginform.email.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"email\"\n" +
-    "                       placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
-    "                       name=\"email\"\n" +
-    "                       ng-model=\"d.loginFormData.email\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"loginform.$submitted && loginform.email.$invalid && !loginform.email.$dirty\"\n" +
-    "                      role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"loginform.email.$error.required\"\n" +
-    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "            <div class=\"input-wrapper\"\n" +
-    "                 ng-class=\"loginform.password.$invalid && loginform.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
-    "                <input type=\"password\"\n" +
-    "                       placeholder=\"{{'LOGIN_FORM.PASSWORD' | translate}}\"\n" +
-    "                       name=\"password\"\n" +
-    "                       autocomplete=\"off\"\n" +
-    "                       ng-minlength=\"6\"\n" +
-    "                       ng-maxlength=\"25\"\n" +
-    "                       ng-model=\"d.loginFormData.password\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"loginform.$submitted && loginform.password.$invalid && !loginform.password.$dirty\"\n" +
-    "                      role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"loginform.password.$error.required\"\n" +
-    "                              translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\"\n" +
-    "                    ng-disabled=\"d.disableBtn\"\n" +
-    "                    class=\"app-bg\"\n" +
-    "                    autofocus>\n" +
-    "                <span translate=\".LOGIN_IN\"></span>\n" +
-    "                <span class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></span>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "        <div class=\"forgot-pwd-wrapper\">\n" +
-    "            <span class=\"app-color\" translate=\".FORGOT_PWD\" ng-click=\"changePasswordClick()\"></span>\n" +
-    "        </div>\n" +
-    "        <p class=\"general-error\">{{d.loginError}}</p>\n" +
-    "    </form>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/resetPasswordForm.directive.html",
-    "<div class=\"form-container\" translate-namespace=\"CHANGE_PASSOWRD_FORM\">\n" +
-    "    <ng-switch on=\"resetPasswordSucceeded\">\n" +
-    "        <form novalidate\n" +
-    "              name=\"changePasswordForm\"\n" +
-    "              ng-submit=\"passwordSubmit(changePasswordForm)\"\n" +
-    "              ng-switch-when=\"false\">\n" +
-    "            <div class=\"inputs-container\">\n" +
-    "                <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
-    "                <div class=\"input-wrapper\"\n" +
-    "                     ng-class=\"changePasswordForm.email.$invalid && changePasswordForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                    <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                    <input type=\"email\"\n" +
-    "                           placeholder=\"{{'LOGIN_FORM.EMAIL' | translate}}\"\n" +
-    "                           name=\"email\"\n" +
-    "                           ng-model=\"d.changePasswordForm.email\"\n" +
-    "                           required>\n" +
-    "                    <span\n" +
-    "                        ng-if=\"(changePasswordForm.$submitted && changePasswordForm.email.$invalid && !changePasswordForm.email.$dirty) || (changePasswordForm.email.$error && changePasswordForm.$submitted)\"\n" +
-    "                        role=\"alert\">\n" +
-    "            <span class=\"validationBox\">\n" +
-    "                <span ng-show=\"changePasswordForm.email.$error.required\"\n" +
-    "                      translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                <span class=\"no-email-massage\" ng-show=\"changePasswordForm.email.$error.noSuchEmail\"\n" +
-    "                      translate=\".NO_SUCH_EMAIL\"></span>\n" +
-    "            </span>\n" +
-    "        </span>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "            <div class=\"submit-btn-wrapper\">\n" +
-    "                <button type=\"submit\"\n" +
-    "                        ng-disabled=\"d.disableBtn\"\n" +
-    "                        class=\"app-bg\"\n" +
-    "                        autofocus>\n" +
-    "                    <span translate=\".SEND\"></span>\n" +
-    "                    <span class=\"loader ng-hide\" ng-show=\"showSpinner\"></span>\n" +
-    "                </button>\n" +
-    "            </div>\n" +
-    "        </form>\n" +
-    "        <div ng-switch-when=\"true\" class=\"success-massage\">\n" +
-    "            <div class=\"title\" translate=\".RESET_PASSWORD\"></div>\n" +
-    "                <svg-icon name=\"v-icon\"></svg-icon>\n" +
-    "            <div class=\"massage-text\" translate=\".NEW_PASSWORD_SENT\"></div>\n" +
-    "            <div class=\"submit-btn-wrapper\">\n" +
-    "                <button ng-disabled=\"d.disableBtn\"\n" +
-    "                        class=\"app-bg\"\n" +
-    "                        ng-click=\"backToLogin()\"\n" +
-    "                        autofocus>\n" +
-    "                    <span translate=\".DONE\"></span>\n" +
-    "                </button>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </ng-switch>\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/loginApp/templates/signupForm.directive.html",
-    "<div class=\"form-container signup\" translate-namespace=\"SIGNUP_FORM\">\n" +
-    "    <div class=\"title\" translate=\".STUDENT.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.STUDENT\"></div>\n" +
-    "    <div class=\"title\" translate=\".EDUCATOR.CREATE_ACCOUNT\" ng-if=\"userContext===d.userContextObj.TEACHER\"></div>\n" +
-    "\n" +
-    "    <promo-code\n" +
-    "        user-context-const=\"d.userContextObj\"\n" +
-    "        user-context=\"userContext\"\n" +
-    "        app-context=\"appContext\">\n" +
-    "    </promo-code>\n" +
-    "\n" +
-    "    <div class=\"social-auth-container\">\n" +
-    "        <div class=\"social-auth\">\n" +
-    "            <oath-login-drv\n" +
-    "                app-context=\"appContext\"\n" +
-    "                user-context=\"userContext\"\n" +
-    "                providers=\"{facebook:true,google:true,live:true}\">\n" +
-    "            </oath-login-drv>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"divider\">\n" +
-    "        <div translate=\".OR\" class=\"text\"></div>\n" +
-    "    </div>\n" +
-    "    <form novalidate\n" +
-    "          name=\"signupForm\"\n" +
-    "          ng-submit=\"signupSubmit(signupForm)\">\n" +
-    "        <div class=\"inputs-container\">\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupForm.nickname.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"login-username-icon\"></svg-icon>\n" +
-    "                <input type=\"text\"\n" +
-    "                       placeholder=\"{{'SIGNUP_FORM.NAME' | translate}}\"\n" +
-    "                       name=\"nickname\"\n" +
-    "                       ng-model=\"d.signupFormData.nickname\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"signupForm.$submitted && signupForm.nickname.$invalid && !signupForm.nickname.$dirty\"\n" +
-    "                      role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupForm.nickname.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupForm.email.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"form-envelope\"></svg-icon>\n" +
-    "                <input type=\"email\"\n" +
-    "                       placeholder=\"{{'SIGNUP_FORM.EMAIL' | translate}}\"\n" +
-    "                       name=\"email\"\n" +
-    "                       ng-model=\"d.signupFormData.email\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"(signupForm.$submitted && signupForm.email.$invalid && !signupForm.email.$dirty) ||\n" +
-    "                (signupForm.$submitted && signupForm.email.$error)\" role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupForm.email.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                        <span class=\"email-exist-massage\" ng-show=\"signupForm.email.$error.emailTaken\" translate=\"LOGIN_APP.FORM_VALIDATION.EMAIL_TAKEN\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "            <div class=\"input-wrapper\" ng-class=\"signupForm.password.$invalid && signupForm.$submitted ? 'invalid' : 'valid'\">\n" +
-    "                <svg-icon name=\"form-lock\"></svg-icon>\n" +
-    "                <input type=\"password\"\n" +
-    "                       placeholder=\"{{'SIGNUP_FORM.PASSWORD' | translate}}\"\n" +
-    "                       name=\"password\"\n" +
-    "                       ng-model=\"d.signupFormData.password\"\n" +
-    "                       ng-minlength=\"6\"\n" +
-    "                       ng-maxlength=\"25\"\n" +
-    "                       autocomplete=\"off\"\n" +
-    "                       required>\n" +
-    "                <span ng-if=\"signupForm.$submitted && signupForm.password.$invalid\"\n" +
-    "                      role=\"alert\">\n" +
-    "                    <span class=\"validationBox\">\n" +
-    "                        <span ng-show=\"signupForm.password.$error.minlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_SHORT\"></span>\n" +
-    "                        <span ng-show=\"signupForm.password.$error.maxlength\" translate=\"LOGIN_APP.FORM_VALIDATION.PASSWORD_TOO_LONG\"></span>\n" +
-    "                        <span ng-show=\"signupForm.password.$error.required\" translate=\"LOGIN_APP.FORM_VALIDATION.FIELD_IS_EMPTY\"></span>\n" +
-    "                    </span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"submit-btn-wrapper\">\n" +
-    "            <button type=\"submit\"\n" +
-    "                    ng-disabled=\"d.disableBtn\"\n" +
-    "                    class=\"app-bg\"\n" +
-    "                    autofocus>\n" +
-    "                <span translate=\".SIGN_UP\"></span>\n" +
-    "                <div class=\"loader ng-hide\" ng-show=\"d.showSpinner\"></div>\n" +
-    "            </button>\n" +
-    "        </div>\n" +
-    "        <p class=\"signup-disclaimer\"\n" +
-    "           translate-values=\"{termsOfUseHref: d.termsOfUseHref, privacyPolicyHref: d.privacyPolicyHref}\"\n" +
-    "           translate=\".DISCLAIMER\"></p>\n" +
-    "\n" +
-    "        <p class=\"general-error\">{{d.signupError}}</p>\n" +
-    "    </form>\n" +
-    "</div>\n" +
-    "");
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.myProfile', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.auth',
-        'znk.infra.svgIcon',
-        'znk.infra.general',
-        'znk.infra.storage',
-        'znk.infra.user',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.znkToast'
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -11971,6 +11955,22 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 };
             }]
         );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.myProfile', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.auth',
+        'znk.infra.svgIcon',
+        'znk.infra.general',
+        'znk.infra.storage',
+        'znk.infra.user',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.znkToast'
+    ]);
 })(angular);
 
 (function (angular) {
@@ -12325,87 +12325,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-
-    angular.module('znk.infra-web-app.onBoarding', [
-        'pascalprecht.translate',
-        'znk.infra.svgIcon',
-        'znk.infra.utility',
-        'znk.infra.config',
-        'znk.infra.analytics',
-        'znk.infra.storage',
-        'znk.infra.user',
-        'ui.router',
-        'ngMaterial',
-        'znk.infra-web-app.userGoalsSelection',
-        'znk.infra-web-app.diagnosticIntro'
-    ]).config([
-        'SvgIconSrvProvider', '$stateProvider',
-        function (SvgIconSrvProvider, $stateProvider) {
-            var svgMap = {
-                'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg',
-                'on-boarding-target': 'components/onBoarding/svg/onboarding-target-icon.svg',
-                'on-boarding-hat': 'components/onBoarding/svg/onboarding-hat-icon.svg',
-                'on-boarding-bubble-1': 'components/onBoarding/svg/onboarding-bubble-1.svg',
-                'on-boarding-bubble-2': 'components/onBoarding/svg/onboarding-bubble-2.svg',
-                'on-boarding-dropdown-arrow-icon': 'components/onBoarding/svg/dropdown-arrow.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-
-            $stateProvider
-                .state('app.onBoarding', {
-                    url: '/onBoarding',
-                    templateUrl: 'components/onBoarding/templates/onBoarding.template.html',
-                    controller: 'OnBoardingController',
-                    controllerAs: 'vm',
-                    resolve: {
-                        onBoardingStep: ['OnBoardingService', function (OnBoardingService) {
-                            return OnBoardingService.getOnBoardingStep();
-                        }]
-                    }
-                })
-                .state('app.onBoarding.welcome', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingWelcome.template.html',
-                    controller: 'OnBoardingWelcomesController',
-                    controllerAs: 'vm',
-                    resolve: {
-                        userProfile: ['UserProfileService', function (UserProfileService) {
-                            return UserProfileService.getProfile();
-                        }]
-                    }
-                })
-                .state('app.onBoarding.schools', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingSchools.template.html',
-                    controller: 'OnBoardingSchoolsController',
-                    controllerAs: 'vm'
-                })
-                .state('app.onBoarding.goals', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingGoals.template.html',
-                    controller: 'OnBoardingGoalsController',
-                    controllerAs: 'vm'
-                })
-                .state('app.onBoarding.diagnostic', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingDiagnostic.template.html',
-                    controller: 'OnBoardingDiagnosticController',
-                    controllerAs: 'vm'
-                })
-                .state('app.onBoarding.introTestToTake', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingIntroTestToTake.template.html',
-                    controller: 'OnBoardingIntroTestToTakeController',
-                    controllerAs: 'vm'
-                })
-                .state('app.onBoarding.testToTake', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
-                    controller: 'OnBoardingTestToTakeController',
-                    controllerAs: 'vm'
-                });
-        }
-    ]);
-
-})(angular);
-
-
-(function (angular) {
-    'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingController', ["$state", "onBoardingStep", function($state, onBoardingStep) {
         'ngInject';
         $state.go(onBoardingStep.url);
@@ -12589,7 +12508,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
         var directive = {
             restrict: 'E',
-            templateUrl: 'components/onBoarding/templates/onBoardingBar.template.html',
+            templateUrl: 'components/onBoarding/directives/onBoardingBar.template.html',
             scope: {
                 step: '@'
             }
@@ -12597,6 +12516,87 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
         return directive;
     });
+
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.onBoarding', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon',
+        'znk.infra.utility',
+        'znk.infra.config',
+        'znk.infra.analytics',
+        'znk.infra.storage',
+        'znk.infra.user',
+        'ui.router',
+        'ngMaterial',
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.diagnosticIntro'
+    ]).config([
+        'SvgIconSrvProvider', '$stateProvider',
+        function (SvgIconSrvProvider, $stateProvider) {
+            var svgMap = {
+                'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg',
+                'on-boarding-target': 'components/onBoarding/svg/onboarding-target-icon.svg',
+                'on-boarding-hat': 'components/onBoarding/svg/onboarding-hat-icon.svg',
+                'on-boarding-bubble-1': 'components/onBoarding/svg/onboarding-bubble-1.svg',
+                'on-boarding-bubble-2': 'components/onBoarding/svg/onboarding-bubble-2.svg',
+                'on-boarding-dropdown-arrow-icon': 'components/onBoarding/svg/dropdown-arrow.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+
+            $stateProvider
+                .state('app.onBoarding', {
+                    url: '/onBoarding',
+                    templateUrl: 'components/onBoarding/templates/onBoarding.template.html',
+                    controller: 'OnBoardingController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        onBoardingStep: ['OnBoardingService', function (OnBoardingService) {
+                            return OnBoardingService.getOnBoardingStep();
+                        }]
+                    }
+                })
+                .state('app.onBoarding.welcome', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingWelcome.template.html',
+                    controller: 'OnBoardingWelcomesController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        userProfile: ['UserProfileService', function (UserProfileService) {
+                            return UserProfileService.getProfile();
+                        }]
+                    }
+                })
+                .state('app.onBoarding.schools', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingSchools.template.html',
+                    controller: 'OnBoardingSchoolsController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.goals', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingGoals.template.html',
+                    controller: 'OnBoardingGoalsController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.diagnostic', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingDiagnostic.template.html',
+                    controller: 'OnBoardingDiagnosticController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.introTestToTake', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingIntroTestToTake.template.html',
+                    controller: 'OnBoardingIntroTestToTakeController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.testToTake', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
+                    controller: 'OnBoardingTestToTakeController',
+                    controllerAs: 'vm'
+                });
+        }
+    ]);
 
 })(angular);
 
@@ -12715,6 +12715,23 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 })(angular);
 
 angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/onBoarding/directives/onBoardingBar.template.html",
+    "<div class=\"on-board-pager-wrap\">\n" +
+    "    <div class=\"on-board-pager\">\n" +
+    "        <div class=\"icon-circle\" ng-class=\"{'heart-circle-selected': step === 'welcome'}\">\n" +
+    "            <svg-icon class=\"icon\" name=\"on-boarding-heart\"></svg-icon>\n" +
+    "        </div>\n" +
+    "        <div class=\"divider\"></div>\n" +
+    "        <div class=\"icon-circle\" ng-class=\"{'target-circle-selected': step === 'goals'}\">\n" +
+    "            <svg-icon class=\"icon\" name=\"on-boarding-target\"></svg-icon>\n" +
+    "        </div>\n" +
+    "        <div class=\"divider\"></div>\n" +
+    "        <div class=\"icon-circle\" ng-class=\"{'hat-circle-selected': step === 'diagnostic'}\">\n" +
+    "            <svg-icon class=\"icon\" name=\"on-boarding-hat\"></svg-icon>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/onBoarding/svg/dropdown-arrow.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 242.8 117.4\" class=\"dropdown-arrow-icon-svg\">\n" +
     "<style type=\"text/css\">\n" +
@@ -12943,23 +12960,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "    <div class=\"container base-border-radius base-box-shadow\" ui-view></div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/onBoarding/templates/onBoardingBar.template.html",
-    "<div class=\"on-board-pager-wrap\">\n" +
-    "    <div class=\"on-board-pager\">\n" +
-    "        <div class=\"icon-circle\" ng-class=\"{'heart-circle-selected': step === 'welcome'}\">\n" +
-    "            <svg-icon class=\"icon\" name=\"on-boarding-heart\"></svg-icon>\n" +
-    "        </div>\n" +
-    "        <div class=\"divider\"></div>\n" +
-    "        <div class=\"icon-circle\" ng-class=\"{'target-circle-selected': step === 'goals'}\">\n" +
-    "            <svg-icon class=\"icon\" name=\"on-boarding-target\"></svg-icon>\n" +
-    "        </div>\n" +
-    "        <div class=\"divider\"></div>\n" +
-    "        <div class=\"icon-circle\" ng-class=\"{'hat-circle-selected': step === 'diagnostic'}\">\n" +
-    "            <svg-icon class=\"icon\" name=\"on-boarding-hat\"></svg-icon>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "");
   $templateCache.put("components/onBoarding/templates/onBoardingDiagnostic.template.html",
     "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.DIAGNOSTIC\">\n" +
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
@@ -13078,24 +13078,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "");
 }]);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.promoCode', [])
-        .config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
-                'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
-                'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
-
-})(angular);
-
 
 (function (angular) {
     'use strict';
@@ -13104,7 +13086,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
         ["PromoCodeSrv", "PROMO_CODE_STATUS", function (PromoCodeSrv, PROMO_CODE_STATUS) {
             'ngInject';
             return {
-                templateUrl: 'components/promoCode/templates/promoCode.template.html',
+                templateUrl: 'components/promoCode/directives/promoCode.template.html',
                 restrict: 'E',
                 scope: {
                     userContext: '<',
@@ -13159,6 +13141,24 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             };
         }]
     );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.promoCode', [])
+        .config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
+                'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
+                'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+
 })(angular);
 
 (function (angular) {
@@ -13339,6 +13339,53 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
 })(angular);
 
 angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
+  $templateCache.put("components/promoCode/directives/promoCode.template.html",
+    "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
+    "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
+    "             'promo-code-invalid': d.promoCodeStatus === d.promoCodeStatusConst.invalid\n" +
+    "             }\">\n" +
+    "\n" +
+    "    <div class=\"promo-code-title\"\n" +
+    "         ng-if=\"!d.promoCodeStatusConst.accepted\"\n" +
+    "         translate=\"{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}\"\n" +
+    "         ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\">\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"promo-code-title accepted-title\">\n" +
+    "        {{d.promoCodeStatusText}}\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
+    "\n" +
+    "        <div class=\"promo-code-input-wrapper\">\n" +
+    "            <div class=\"input-wrapper\"\n" +
+    "               >\n" +
+    "                <md-progress-circular ng-if=\"d.showSpinner\"\n" +
+    "                                      class=\"promo-code-spinner\"\n" +
+    "                                      md-mode=\"indeterminate\"\n" +
+    "                                      md-diameter=\"25\">\n" +
+    "                </md-progress-circular>\n" +
+    "                <input\n" +
+    "                    type=\"text\"\n" +
+    "                    ng-model=\"d.promoCode\"\n" +
+    "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
+    "                    ng-autofocus =\"true\"\n" +
+    "                    placeholder=\"{{'PROMO_CODE.ENTER_YOUR_CODE' | translate}}\">\n" +
+    "                <div class=\"icon-wrapper\" >\n" +
+    "                    <svg-icon class=\"arrow-icon\" name=\"promo-code-arrow-icon\" ng-click=\"d.sendPromoCode(d.promoCode)\"></svg-icon>\n" +
+    "                    <svg-icon class=\"close-icon\" name=\"promo-code-close-icon\" ng-click=\"d.clearInput()\"></svg-icon>\n" +
+    "                    <svg-icon class=\"correct-icon\" name=\"promo-code-correct-icon\"  ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></svg-icon>\n" +
+    "                </div>\n" +
+    "\n" +
+    "                <div class=\"promo-code-status-text\">\n" +
+    "                    {{d.promoCodeStatusText}}\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "");
   $templateCache.put("components/promoCode/svg/arrow-icon.svg",
     "<svg\n" +
     "    xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -13430,74 +13477,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/promoCode/templates/promoCode.template.html",
-    "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
-    "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
-    "             'promo-code-invalid': d.promoCodeStatus === d.promoCodeStatusConst.invalid\n" +
-    "             }\">\n" +
-    "\n" +
-    "    <div class=\"promo-code-title\"\n" +
-    "         ng-if=\"!d.promoCodeStatusConst.accepted\"\n" +
-    "         translate=\"{{(userContext === userContextConst.TEACHER ? '.GOT_A_ZINKERZ_EDUCATORS_PROMO_CODE' : '.GOT_A_PROMO_CODE') | translate}}\"\n" +
-    "         ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\">\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"promo-code-title accepted-title\">\n" +
-    "        {{d.promoCodeStatusText}}\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"promo-code-overlay\" ng-if=\"d.showPromoCodeOverlay\">\n" +
-    "\n" +
-    "        <div class=\"promo-code-input-wrapper\">\n" +
-    "            <div class=\"input-wrapper\"\n" +
-    "               >\n" +
-    "                <md-progress-circular ng-if=\"d.showSpinner\"\n" +
-    "                                      class=\"promo-code-spinner\"\n" +
-    "                                      md-mode=\"indeterminate\"\n" +
-    "                                      md-diameter=\"25\">\n" +
-    "                </md-progress-circular>\n" +
-    "                <input\n" +
-    "                    type=\"text\"\n" +
-    "                    ng-model=\"d.promoCode\"\n" +
-    "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
-    "                    ng-autofocus =\"true\"\n" +
-    "                    placeholder=\"{{'PROMO_CODE.ENTER_YOUR_CODE' | translate}}\">\n" +
-    "                <div class=\"icon-wrapper\" >\n" +
-    "                    <svg-icon class=\"arrow-icon\" name=\"promo-code-arrow-icon\" ng-click=\"d.sendPromoCode(d.promoCode)\"></svg-icon>\n" +
-    "                    <svg-icon class=\"close-icon\" name=\"promo-code-close-icon\" ng-click=\"d.clearInput()\"></svg-icon>\n" +
-    "                    <svg-icon class=\"correct-icon\" name=\"promo-code-correct-icon\"  ng-click=\"d.showPromoCodeOverlay = !d.showPromoCodeOverlay\"></svg-icon>\n" +
-    "                </div>\n" +
-    "\n" +
-    "                <div class=\"promo-code-status-text\">\n" +
-    "                    {{d.promoCodeStatusText}}\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "");
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.purchase',
-        [
-            'ngAnimate',
-            'ui.router',
-            'ngMaterial',
-            'pascalprecht.translate',
-            'znk.infra.svgIcon',
-            'znk.infra.popUp',
-            'znk.infra.enum',
-            'znk.infra.config',
-            'znk.infra.storage',
-            'znk.infra.auth',
-            'znk.infra.analytics'
-        ]);
-})(angular);
-
 
 (function (angular) {
     'use strict';
@@ -13694,6 +13674,26 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             return PurchaseStateEnum;
         }]);
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.purchase',
+        [
+            'ngAnimate',
+            'ui.router',
+            'ngMaterial',
+            'pascalprecht.translate',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'znk.infra.enum',
+            'znk.infra.config',
+            'znk.infra.storage',
+            'znk.infra.auth',
+            'znk.infra.analytics'
+        ]);
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -14328,18 +14328,6 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.settings', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.auth',
-        'znk.infra.svgIcon',
-        'znk.infra.general'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.settings').config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -14430,6 +14418,18 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
                 };
             }]
         );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.settings', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.auth',
+        'znk.infra.svgIcon',
+        'znk.infra.general'
+    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {
@@ -14612,14 +14612,6 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config' 
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-    
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -14651,15 +14643,17 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
         );
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.socialSharing', [
+        'znk.infra.config'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {
 
 }]);
-
-(function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.subjectsOrder', [
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -14689,28 +14683,15 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
     ]);
 })(angular);
 
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.subjectsOrder', [
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {
 
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tests', [
-        'znk.infra.svgIcon',
-        'pascalprecht.translate',
-        'ngMaterial',
-        'znk.infra.enum',
-        'znk.infra.scoring',
-        'znk.infra.exams',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra.analytics',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.estimatedScoreWidget',
-        'znk.infra.exerciseUtility',
-        'ui.router'
-    ]);  
-})(angular);
 
 /**
  * attrs:
@@ -14725,7 +14706,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
             return {
                 scope: {},
                 restrict: 'E',
-                templateUrl: 'components/tests/templates/navigationPane.template.html',
+                templateUrl: 'components/tests/directives/navigationPane.template.html',
                 require: '?ngModel',
                 link: function (scope, element, attributes, ngModelCtrl) {
 
@@ -14791,8 +14772,27 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tests', [
+        'znk.infra.svgIcon',
+        'pascalprecht.translate',
+        'ngMaterial',
+        'znk.infra.enum',
+        'znk.infra.scoring',
+        'znk.infra.exams',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra.analytics',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.estimatedScoreWidget',
+        'znk.infra.exerciseUtility',
+        'ui.router'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/tests/templates/navigationPane.template.html",
+  $templateCache.put("components/tests/directives/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
     "    <div class=\"tests-navigation-title-header\"\n" +
@@ -14837,40 +14837,6 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "</div>\n" +
     "");
 }]);
-
-(function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.tutorials', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.enum',
-        'znk.infra.config',
-        'znk.infra.general',
-        'znk.infra.svgIcon',
-        'ui.router',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra-web-app.completeExercise',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.loadingAnimation',
-        'znk.infra.exerciseResult',
-        'znk.infra.contentAvail',
-        'znk.infra.contentGetters',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.subjectsOrder'
-
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-        var svgMap = {
-            'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
-            'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
-        };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-
-        }
-    ]);
-})(angular);
 
 'use strict';
 angular.module('znk.infra-web-app.tutorials').component('tutorialList', {
@@ -14946,7 +14912,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         var vm = this;
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
-        
+
         vm.$onInit = function () {
             $q.all([
                 subjectOrderProm
@@ -15047,7 +15013,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     angular.module('znk.infra-web-app.tutorials').service('TutorialsSrv',
         ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", "SubjectsSrv", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum, SubjectsSrv) {
             'ngInject';
-        
+
             this.getSubjectOrder = function () {
                 return SubjectsSrv.getSubjectOrder();
             };
@@ -15109,6 +15075,40 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
 
         }]
     );
+})(angular);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.tutorials', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.enum',
+        'znk.infra.config',
+        'znk.infra.general',
+        'znk.infra.svgIcon',
+        'ui.router',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra-web-app.completeExercise',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.loadingAnimation',
+        'znk.infra.exerciseResult',
+        'znk.infra.contentAvail',
+        'znk.infra.contentGetters',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.subjectsOrder'
+
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+        var svgMap = {
+            'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
+            'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
+        };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+
+        }
+    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
@@ -15229,16 +15229,6 @@ angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function($tem
 
 }]);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.userGoals', [
-        'znk.infra.scoring',
-        'znk.infra.utility'
-    ]);
-})(angular);
-
-
 'use strict';
 
 angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [function() {
@@ -15333,38 +15323,19 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
     }];
 }]);
 
-angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
-
-}]);
-
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.userGoalsSelection', [
-        'pascalprecht.translate',
-        'znk.infra.svgIcon',
-        'znk.infra.utility',
-        'znk.infra.general',
-        'ngMaterial',
-        'ngTagsInput',
-        'znk.infra-web-app.userGoals'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'user-goals-plus-icon': 'components/userGoalsSelection/svg/plus-icon.svg',
-                'user-goals-dropdown-arrow-icon': 'components/userGoalsSelection/svg/dropdown-arrow.svg',
-                'user-goals-arrow-icon': 'components/userGoalsSelection/svg/arrow-icon.svg',
-                'user-goals-info-icon': 'components/userGoalsSelection/svg/info-icon.svg',
-                'user-goals-v-icon': 'components/userGoalsSelection/svg/v-icon.svg',
-                'user-goals-search-icon': 'components/userGoalsSelection/svg/search-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
+    angular.module('znk.infra-web-app.userGoals', [
+        'znk.infra.scoring',
+        'znk.infra.utility'
     ]);
-
 })(angular);
 
+
+angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
+
+}]);
 
 (function (angular) {
     'use strict';
@@ -15735,6 +15706,35 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
 }]);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.userGoalsSelection', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon',
+        'znk.infra.utility',
+        'znk.infra.general',
+        'ngMaterial',
+        'ngTagsInput',
+        'znk.infra-web-app.userGoals'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'user-goals-plus-icon': 'components/userGoalsSelection/svg/plus-icon.svg',
+                'user-goals-dropdown-arrow-icon': 'components/userGoalsSelection/svg/dropdown-arrow.svg',
+                'user-goals-arrow-icon': 'components/userGoalsSelection/svg/arrow-icon.svg',
+                'user-goals-info-icon': 'components/userGoalsSelection/svg/info-icon.svg',
+                'user-goals-v-icon': 'components/userGoalsSelection/svg/v-icon.svg',
+                'user-goals-search-icon': 'components/userGoalsSelection/svg/search-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+
+})(angular);
+
+
 angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/userGoalsSelection/svg/arrow-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-468.2 482.4 96 89.8\" class=\"arrow-icon-wrapper\">\n" +
@@ -15997,15 +15997,6 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.webAppScreenSharing', [
-        'znk.infra.screenSharing',
-        'znk.infra-web-app.completeExercise'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.webAppScreenSharing')
         .config(["ScreenSharingUiSrvProvider", function (ScreenSharingUiSrvProvider) {
             'ngInject';
@@ -16022,7 +16013,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
     'use strict';
 
     angular.module('znk.infra-web-app.webAppScreenSharing').component('shViewer', {
-        templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html',
+        templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewer.template.html',
         require: {
             screenSharing: '^screenSharing'
         },
@@ -16062,8 +16053,17 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.webAppScreenSharing', [
+        'znk.infra.screenSharing',
+        'znk.infra-web-app.completeExercise'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html",
+  $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewer.template.html",
     "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
     "    <div class=\"header\">\n" +
     "            <span class=\"you-are-viewing-text\"\n" +
@@ -16093,93 +16093,6 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     "</div>\n" +
     "");
 }]);
-
-/**
- * usage instructions:
- *      1) workout progress:
- *          - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
- *              .reading-bg{
- *                  background: red;
- *              }
- *          - define <%= subjectName %>-bg:after style for border color for example
- *              workouts-progress .items-container .item-container .item.selected.reading-bg:after {
- *                   border-color: red;
- *              }
- *
- *      2) WorkoutsRoadmapSrv:
- *          setNewWorkoutGeneratorGetter: provide a function which return a new workout generator function. subjectsToIgnore
- *              will be passed as parameter.
- *              i.e:
- *                  function(WorkoutPersonalization){
- *                      'ngInject';
- *
- *                      return function(subjectToIgnore){
- *                          return WorkoutPersonalizationService.getExercisesByTimeForNewWorkout(subjectToIgnoreForNextDaily);
- *                      }
- *                  }
- *              the return value should be a map of exercise time to exercise meta data i.e:
- *              {
- *                 "5" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 150,
- *                   "exerciseTypeId" : 1,
- *                   "subjectId" : 0
- *                 },
- *                 "10" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 109,
- *                   "exerciseTypeId" : 3,
- *                   "subjectId" : 0
- *                 },
- *                 "15" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 221,
- *                   "exerciseTypeId" : 3,
- *                   "subjectId" : 0
- *                 }
- *               }
- *
- *
- *      3) workoutsRoadmap.diagnostic.summary
- *          this state must set i.e
- *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
- *                   template: '<div>Diagnostic </div>',
- *                   controller: 'WorkoutsRoadMapBaseSummaryController',
- *                   controllerAs: 'vm'
- *               })
- *      4) workoutsRoadmap.workout.inProgress
- *          this state must set i.e
- *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
- *                  template: '<div>Workout in progress</div>',
- *                  controller: function(){}
- *             })
- */
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.workoutsRoadmap', [
-        'pascalprecht.translate',
-        'ngMaterial',
-        'ui.router',
-        'ngAnimate',
-        'znk.infra.svgIcon',
-        'znk.infra.enum',
-        'znk.infra.exerciseUtility',
-        'znk.infra.scroll',
-        'znk.infra.general',
-        'znk.infra.contentGetters',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.socialSharing',
-        'znk.infra.znkExercise',
-        'znk.infra.estimatedScore',
-        'znk.infra.scoring',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.userGoalsSelection',
-        'znk.infra-web-app.estimatedScoreWidget'
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -16291,10 +16204,19 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     angular.module('znk.infra-web-app.workoutsRoadmap')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
-            
+
             var svgMap = {
                 'workouts-roadmap-checkmark': 'components/workoutsRoadmap/svg/check-mark-inside-circle-icon.svg',
-                'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg'
+                'workouts-roadmap-change-subject': 'components/workoutsRoadmap/svg/change-subject-icon.svg',
+                'workouts-intro-lock-dotted-arrow': 'components/workoutsRoadmap/svg/dotted-arrow.svg',
+                'workouts-intro-lock-lock': 'components/workoutsRoadmap/svg/lock-icon.svg',
+                'workouts-intro-lock-share-arrow': 'components/workoutsRoadmap/svg/share-arrow-icon.svg',
+                'workouts-progress-flag': 'components/workoutsRoadmap/svg/flag-icon.svg',
+                'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg',
+                'workouts-progress-tutorial-icon': 'components/workoutsRoadmap/svg/tutorial-icon.svg',
+                'workouts-progress-practice-icon': 'components/workoutsRoadmap/svg/practice-icon.svg',
+                'workouts-progress-game-icon': 'components/workoutsRoadmap/svg/game-icon.svg',
+                'workouts-progress-drill-icon': 'components/workoutsRoadmap/svg/drill-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }]);
@@ -16595,7 +16517,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
@@ -16804,22 +16726,12 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap')
-        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
-            'ngInject';
-
-            var svgMap = {
-                'workouts-intro-lock-dotted-arrow': 'components/workoutsRoadmap/svg/dotted-arrow.svg',
-                'workouts-intro-lock-lock': 'components/workoutsRoadmap/svg/lock-icon.svg',
-                'workouts-intro-lock-share-arrow': 'components/workoutsRoadmap/svg/share-arrow-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }])
         .directive('workoutIntroLock',
             ["DiagnosticSrv", "ExerciseStatusEnum", "$stateParams", "$q", "SocialSharingSrv", "purchaseService", function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv, purchaseService) {
                 'ngInject';
 
                 return {
-                    templateUrl: 'components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html',
+                    templateUrl: 'components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLock.template.html',
                     restrict: 'E',
                     transclude: true,
                     scope: {
@@ -16896,20 +16808,6 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap')
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
-                var svgMap = {
-                    'workouts-progress-flag': 'components/workoutsRoadmap/svg/flag-icon.svg',
-                    'workouts-progress-check-mark-icon': 'components/workoutsRoadmap/svg/workout-roadmap-check-mark-icon.svg',
-                    'workouts-progress-tutorial-icon': 'components/workoutsRoadmap/svg/tutorial-icon.svg',
-                    'workouts-progress-practice-icon': 'components/workoutsRoadmap/svg/practice-icon.svg',
-                    'workouts-progress-game-icon': 'components/workoutsRoadmap/svg/game-icon.svg',
-                    'workouts-progress-drill-icon': 'components/workoutsRoadmap/svg/drill-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ])
         .directive('workoutsProgress',
             ["$timeout", "ExerciseStatusEnum", "$log", function workoutsProgressDirective($timeout, ExerciseStatusEnum, $log) {
                 'ngInject';
@@ -16921,7 +16819,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 };
 
                 var directive = {
-                    templateUrl: 'components/workoutsRoadmap/directives/workoutsProgress/workoutsProgressDirective.template.html',
+                    templateUrl: 'components/workoutsRoadmap/directives/workoutsProgress/workoutsProgress.template.html',
                     restrict: 'E',
                     require: 'ngModel',
                     scope: {
@@ -17105,8 +17003,95 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     ]);
 })(angular);
 
+/**
+ * usage instructions:
+ *      1) workout progress:
+ *          - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
+ *              .reading-bg{
+ *                  background: red;
+ *              }
+ *          - define <%= subjectName %>-bg:after style for border color for example
+ *              workouts-progress .items-container .item-container .item.selected.reading-bg:after {
+ *                   border-color: red;
+ *              }
+ *
+ *      2) WorkoutsRoadmapSrv:
+ *          setNewWorkoutGeneratorGetter: provide a function which return a new workout generator function. subjectsToIgnore
+ *              will be passed as parameter.
+ *              i.e:
+ *                  function(WorkoutPersonalization){
+ *                      'ngInject';
+ *
+ *                      return function(subjectToIgnore){
+ *                          return WorkoutPersonalizationService.getExercisesByTimeForNewWorkout(subjectToIgnoreForNextDaily);
+ *                      }
+ *                  }
+ *              the return value should be a map of exercise time to exercise meta data i.e:
+ *              {
+ *                 "5" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 150,
+ *                   "exerciseTypeId" : 1,
+ *                   "subjectId" : 0
+ *                 },
+ *                 "10" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 109,
+ *                   "exerciseTypeId" : 3,
+ *                   "subjectId" : 0
+ *                 },
+ *                 "15" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 221,
+ *                   "exerciseTypeId" : 3,
+ *                   "subjectId" : 0
+ *                 }
+ *               }
+ *
+ *
+ *      3) workoutsRoadmap.diagnostic.summary
+ *          this state must set i.e
+ *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
+ *                   template: '<div>Diagnostic </div>',
+ *                   controller: 'WorkoutsRoadMapBaseSummaryController',
+ *                   controllerAs: 'vm'
+ *               })
+ *      4) workoutsRoadmap.workout.inProgress
+ *          this state must set i.e
+ *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
+ *                  template: '<div>Workout in progress</div>',
+ *                  controller: function(){}
+ *             })
+ */
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap', [
+        'pascalprecht.translate',
+        'ngMaterial',
+        'ui.router',
+        'ngAnimate',
+        'znk.infra.svgIcon',
+        'znk.infra.enum',
+        'znk.infra.exerciseUtility',
+        'znk.infra.scroll',
+        'znk.infra.general',
+        'znk.infra.contentGetters',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra-web-app.diagnosticIntro',
+        'znk.infra-web-app.socialSharing',
+        'znk.infra.znkExercise',
+        'znk.infra.estimatedScore',
+        'znk.infra.scoring',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.estimatedScoreWidget'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html",
+  $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLock.template.html",
     "<div ng-transclude class=\"main-container\"></div>\n" +
     "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +
     "    class=\"lock-overlay-container\">\n" +
@@ -17157,7 +17142,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
     "    </ng-switch>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/workoutsRoadmap/directives/workoutsProgress/workoutsProgressDirective.template.html",
+  $templateCache.put("components/workoutsRoadmap/directives/workoutsProgress/workoutsProgress.template.html",
     "<znk-scroll actions=\"vm.scrollActions\" scroll-on-mouse-wheel=\"true\">\n" +
     "    <div class=\"items-container\">\n" +
     "        <div class=\"dotted-lines-container\">\n" +
@@ -17912,16 +17897,6 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkExerciseStatesUtility', [
-        'ui.router',
-        'znk.infra.znkExercise',
-        'znk.infra-web-app.infraWebAppZnkExercise'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.znkExerciseStatesUtility')
         .controller('InfraWebAppExerciseStateCtrl',
             ["$controller", "$scope", "exerciseData", "$filter", "ExerciseTypeEnum", function ($controller, $scope, exerciseData, $filter, ExerciseTypeEnum) {
@@ -17985,6 +17960,16 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
         );
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkExerciseStatesUtility', [
+        'ui.router',
+        'znk.infra.znkExercise',
+        'znk.infra-web-app.infraWebAppZnkExercise'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
     "<div class=\"exercise-container base-border-radius\">\n" +
@@ -18021,33 +18006,6 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     "</div>\n" +
     "");
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkHeader',
-        [   'ngAnimate',
-            'ngMaterial',
-            'znk.infra.svgIcon',
-            'znk.infra.popUp',
-            'pascalprecht.translate',
-            'ui.router',
-            'znk.infra-web-app.purchase',
-            'znk.infra-web-app.onBoarding',
-            'znk.infra-web-app.userGoalsSelection',
-            'znk.infra-web-app.myProfile',
-            'znk.infra.user',
-            'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.feedback'])
-        .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-                'ngInject';
-                var svgMap = {
-                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
-                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -18189,6 +18147,33 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     );
 })(angular);
 
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkHeader',
+        [   'ngAnimate',
+            'ngMaterial',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'ui.router',
+            'znk.infra-web-app.purchase',
+            'znk.infra-web-app.onBoarding',
+            'znk.infra-web-app.userGoalsSelection',
+            'znk.infra-web-app.myProfile',
+            'znk.infra.user',
+            'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.feedback'])
+        .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
+                'ngInject';
+                var svgMap = {
+                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
+})(angular);
 
 angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
@@ -18469,23 +18454,12 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "");
 }]);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkSummary', [
-        'pascalprecht.translate',
-        'chart.js',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.znkTimelineWebWrapper'
-    ]);
-})(angular);
-
 
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.znkSummary').component('znkSummaryResults', {
-        templateUrl: 'components/znkSummary/templates/znkSummaryResults.template.html',
+        templateUrl: 'components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html',
         bindings: {
             exerciseResult: '<'
         },
@@ -18528,7 +18502,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     'use strict';
 
     angular.module('znk.infra-web-app.znkSummary').component('znkSummaryTimeline', {
-        templateUrl: 'components/znkSummary/templates/znkSummaryTimeline.template.html',
+        templateUrl: 'components/znkSummary/directives/znkSummaryTimeline/znkSummaryTimeline.template.html',
         bindings: {
             exerciseData: '<'
         },
@@ -18548,8 +18522,19 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkSummary', [
+        'pascalprecht.translate',
+        'chart.js',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.znkTimelineWebWrapper'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/znkSummary/templates/znkSummaryResults.template.html",
+  $templateCache.put("components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html",
     "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
     "    <div class=\"overflowWrap\">\n" +
     "        <div class=\"gauge-wrap\">\n" +
@@ -18588,7 +18573,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/znkSummary/templates/znkSummaryTimeline.template.html",
+  $templateCache.put("components/znkSummary/directives/znkSummaryTimeline/znkSummaryTimeline.template.html",
     "<div class=\"time-line-wrapper\" translate-namespace=\"ZNK_SUMMARY\"\n" +
     "     ng-class=\"{'seen-summary': vm.seenSummary}\">\n" +
     "    <div class=\"estimated-score-title\">\n" +
@@ -18609,19 +18594,8 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
-        'znk.infra.znkTimeline',
-        'znk.infra.estimatedScore',
-        'znk.infra-web-app.userGoals',
-        'znk.infra.scoring'
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
-        templateUrl: 'components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html',
+        templateUrl: 'components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html',
         bindings: {
             activeExerciseId: '=?',
             currentSubjectId: '@subjectId',
@@ -18845,8 +18819,19 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     });
 })(angular);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
+        'znk.infra.znkTimeline',
+        'znk.infra.estimatedScore',
+        'znk.infra-web-app.userGoals',
+        'znk.infra.scoring'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/znkTimelineWebWrapper/templates/znkTimelineWebWrapper.template.html",
+  $templateCache.put("components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html",
     "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
     "    <div class=\"time-line-wrapper\">\n" +
     "        <div class=\"progress-val\"\n" +
@@ -18887,17 +18872,6 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     "</div>\n" +
     "");
 }]);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkToast', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'ngSanitize',
-        'znk.infra.svgIcon'
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -18963,6 +18937,17 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
                 };
             }]
         );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkToast', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'ngSanitize',
+        'znk.infra.svgIcon'
+    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($templateCache) {
