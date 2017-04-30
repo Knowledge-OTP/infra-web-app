@@ -6,7 +6,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.webAppScreenSharing').component('shViewer', {
-        templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewerDirective.template.html',
+        templateUrl: 'components/webAppScreenSharing/directives/shViewer/shViewer.template.html',
         require: {
             screenSharing: '^screenSharing'
         },

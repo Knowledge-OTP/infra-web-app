@@ -9,7 +9,7 @@
         function (LoginAppSrv, $timeout) {
             'ngInject';
             return {
-                templateUrl: 'components/loginApp/templates/resetPasswordForm.directive.html',
+                templateUrl: 'components/loginApp/directives/resetPasswordForm/resetPasswordForm.template.html',
                 restrict: 'E',
                 scope: {
                     appContext: '<',

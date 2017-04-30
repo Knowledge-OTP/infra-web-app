@@ -10,7 +10,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
                 showInstructions: '=?',
                 showIconsSection: '=?'
             },
-            templateUrl: 'components/diagnosticIntro/diagnosticIntro.template.html',
+            templateUrl: 'components/diagnosticIntro/directives/diagnosticIntro.template.html',
             link: function link(scope) {
                 scope.d = {};
 

@@ -1,20 +1,9 @@
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkSummary', [
-        'pascalprecht.translate',
-        'chart.js',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.znkTimelineWebWrapper'
-    ]);
-})(angular);
-
 
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.znkSummary').component('znkSummaryResults', {
-        templateUrl: 'components/znkSummary/templates/znkSummaryResults.template.html',
+        templateUrl: 'components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html',
         bindings: {
             exerciseResult: '<'
         },
@@ -57,7 +46,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkSummary').component('znkSummaryTimeline', {
-        templateUrl: 'components/znkSummary/templates/znkSummaryTimeline.template.html',
+        templateUrl: 'components/znkSummary/directives/znkSummaryTimeline/znkSummaryTimeline.template.html',
         bindings: {
             exerciseData: '<'
         },
@@ -77,8 +66,19 @@
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkSummary', [
+        'pascalprecht.translate',
+        'chart.js',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.znkTimelineWebWrapper'
+    ]);
+})(angular);
+
 angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/znkSummary/templates/znkSummaryResults.template.html",
+  $templateCache.put("components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html",
     "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
     "    <div class=\"overflowWrap\">\n" +
     "        <div class=\"gauge-wrap\">\n" +
@@ -117,7 +117,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/znkSummary/templates/znkSummaryTimeline.template.html",
+  $templateCache.put("components/znkSummary/directives/znkSummaryTimeline/znkSummaryTimeline.template.html",
     "<div class=\"time-line-wrapper\" translate-namespace=\"ZNK_SUMMARY\"\n" +
     "     ng-class=\"{'seen-summary': vm.seenSummary}\">\n" +
     "    <div class=\"estimated-score-title\">\n" +

@@ -3,7 +3,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkSummary').component('znkSummaryResults', {
-        templateUrl: 'components/znkSummary/templates/znkSummaryResults.template.html',
+        templateUrl: 'components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html',
         bindings: {
             exerciseResult: '<'
         },

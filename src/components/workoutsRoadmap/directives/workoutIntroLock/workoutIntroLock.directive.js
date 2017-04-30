@@ -6,22 +6,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.workoutsRoadmap')
-        .config(function (SvgIconSrvProvider) {
-            'ngInject';
-
-            var svgMap = {
-                'workouts-intro-lock-dotted-arrow': 'components/workoutsRoadmap/svg/dotted-arrow.svg',
-                'workouts-intro-lock-lock': 'components/workoutsRoadmap/svg/lock-icon.svg',
-                'workouts-intro-lock-share-arrow': 'components/workoutsRoadmap/svg/share-arrow-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        })
         .directive('workoutIntroLock',
             function (DiagnosticSrv, ExerciseStatusEnum, $stateParams, $q, SocialSharingSrv, purchaseService) {
                 'ngInject';
 
                 return {
-                    templateUrl: 'components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLockDirective.template.html',
+                    templateUrl: 'components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLock.template.html',
                     restrict: 'E',
                     transclude: true,
                     scope: {

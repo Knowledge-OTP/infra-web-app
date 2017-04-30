@@ -1,70 +1,6 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.liveSession',
-        [
-            'ngMaterial',
-            'znk.infra.znkSessionData',
-            'znk.infra.popUp',
-            'pascalprecht.translate',
-            'znk.infra.auth',
-            'znk.infra.userContext',
-            'znk.infra.user',
-            'znk.infra.utility',
-            'znk.infra.analytics',
-            'znk.infra.general',
-            'znk.infra.svgIcon',
-            'znk.infra-web-app.diagnostic',
-            'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.znkToast',
-            'znk.infra.exerciseUtility',
-            'znk.infra.znkTooltip',
-            'znk.infra.calls'
-        ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
-                var svgMap = {
-                    'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
-                    'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
-                    'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveSession').component('liveSession', {
-            templateUrl: 'components/liveSession/components/liveSession/liveSession.template.html',
-            bindings: {
-                userLiveSessionState: '<',
-                onClose: '&'
-            },
-            controllerAs: 'vm',
-            controller: ["UserLiveSessionStateEnum", "$log", function (UserLiveSessionStateEnum, $log) {
-                'ngInject';
-
-                var vm = this;
-
-                this.$onInit = function () {
-                    if (vm.userLiveSessionState) {
-                        vm.liveSessionCls = 'active-state';
-                    } else {
-                        $log.error('liveSessionComponent: invalid state was provided');
-                    }
-                };
-            }]
-        }
-    );
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.liveSession')
         .component('liveSessionBtn', {
             bindings: {
@@ -121,6 +57,34 @@
             }]
         });
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').component('liveSessionFrame', {
+            templateUrl: 'components/liveSession/components/liveSessionFrame/liveSessionFrame.template.html',
+            bindings: {
+                userLiveSessionState: '<',
+                onClose: '&'
+            },
+            controllerAs: 'vm',
+            controller: ["UserLiveSessionStateEnum", "$log", function (UserLiveSessionStateEnum, $log) {
+                'ngInject';
+
+                var vm = this;
+
+                this.$onInit = function () {
+                    if (vm.userLiveSessionState) {
+                        vm.liveSessionCls = 'active-state';
+                    } else {
+                        $log.error('liveSessionComponent: invalid state was provided');
+                    }
+                };
+            }]
+        }
+    );
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -192,6 +156,42 @@
 })(angular);
 
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession',
+        [
+            'ngMaterial',
+            'znk.infra.znkSessionData',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'znk.infra.auth',
+            'znk.infra.userContext',
+            'znk.infra.user',
+            'znk.infra.utility',
+            'znk.infra.analytics',
+            'znk.infra.general',
+            'znk.infra.svgIcon',
+            'znk.infra-web-app.diagnostic',
+            'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.znkToast',
+            'znk.infra.exerciseUtility',
+            'znk.infra.znkTooltip',
+            'znk.infra.calls'
+        ])
+        .config([
+            'SvgIconSrvProvider',
+            function (SvgIconSrvProvider) {
+                var svgMap = {
+                    'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
+                    'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
+                    'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }
+        ]);
+})(angular);
+
 (function(){
     'use strict';
 
@@ -203,180 +203,6 @@
         }]
     );
 })();
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveSession').service('LiveSessionDataGetterSrv',
-        ["InfraConfigSrv", "$q", "ENV", "UserProfileService", function (InfraConfigSrv, $q, ENV, UserProfileService) {
-            'ngInject';
-
-            var _this = this;
-
-            function _getStorage() {
-                return InfraConfigSrv.getGlobalStorage();
-            }
-
-            this.getLiveSessionDataPath = function (guid) {
-                var LIVE_SESSION_ROOT_PATH = '/liveSession/';
-                return LIVE_SESSION_ROOT_PATH + guid;
-            };
-
-            this.getLiveSessionDurationPath = function () {
-                return '/settings/liveSessionDuration/';
-            };
-
-            this.getUserLiveSessionRequestsPath  = function (userData) {
-                var appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
-                var USER_DATA_PATH = appName  + '/users/' + userData.uid;
-                return USER_DATA_PATH + '/liveSession';
-            };
-
-            this.getLiveSessionData = function (liveSessionGuid) {
-                var liveSessionDataPath = _this.getLiveSessionDataPath(liveSessionGuid);
-                return _getStorage().then(function (storage) {
-                    return storage.getAndBindToServer(liveSessionDataPath);
-                });
-            };
-
-            this.getLiveSessionDuration = function () {
-                var liveSessionDurationPath = _this.getLiveSessionDurationPath();
-                return _getStorage().then(function (storage) {
-                    return storage.get(liveSessionDurationPath);
-                });
-            };
-
-            this.getCurrUserLiveSessionRequests = function(){
-                return UserProfileService.getCurrUserId().then(function(currUid){
-                    return _getStorage().then(function(storage){
-                        var currUserLiveSessionDataPath = ENV.firebaseAppScopeName + '/users/' + currUid + '/liveSession/active';
-                        return storage.getAndBindToServer(currUserLiveSessionDataPath);
-                    });
-                });
-            };
-
-            this.getCurrUserLiveSessionData = function () {
-                return _this.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
-                    var liveSessionDataPromMap = {};
-                    angular.forEach(currUserLiveSessionRequests, function(isActive, guid){
-                        if(isActive){
-                            liveSessionDataPromMap[guid] = _this.getLiveSessionData(guid);
-                        }
-                    });
-
-                    return $q.all(liveSessionDataPromMap);
-                });
-            };
-        }]
-    );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
-        var isEnabled = true;
-
-        this.enabled = function (_isEnabled) {
-            isEnabled = _isEnabled;
-        };
-
-        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv, LiveSessionDataGetterSrv) {
-            'ngInject';
-
-            var LiveSessionEventsSrv = {};
-
-            function _listenToLiveSessionData(guid) {
-                var liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
-
-                function _cb(liveSessionData) {
-                    if (!liveSessionData) {
-                        return;
-                    }
-
-                    UserProfileService.getCurrUserId().then(function (currUid) {
-                        switch (liveSessionData.status) {
-                            case LiveSessionStatusEnum.PENDING_STUDENT.enum:
-                                if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
-                                }
-                                break;
-                            case LiveSessionStatusEnum.CONFIRMED.enum:
-                                if (liveSessionData.studentId === currUid) {
-                                    LiveSessionUiSrv.showLiveSessionToast();
-                                }
-
-                                var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
-
-                                if (liveSessionData.studentId === currUid) {
-                                    userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
-                                }
-
-                                if (liveSessionData.educatorId === currUid) {
-                                    userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-                                }
-
-                                if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                                    LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
-                                }
-
-                                break;
-                            case LiveSessionStatusEnum.ENDED.enum:
-                                if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
-                                    LiveSessionSrv._destroyCheckDurationInterval();
-                                }
-
-                                LiveSessionUiSrv.showEndSessionPopup();
-                                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
-                                // Security check to insure there isn't active session
-                                LiveSessionSrv._moveToArchive(liveSessionData);
-                                break;
-                            default:
-                                $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
-                        }
-
-                        LiveSessionSrv._liveSessionDataChanged(liveSessionData);
-                    });
-                }
-
-                InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                    globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
-                });
-            }
-
-            function _startListening() {
-                UserProfileService.getCurrUserId().then(function (currUid) {
-                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                        var appName = ENV.firebaseAppScopeName;
-                        var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
-                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
-                            if (userLiveSessionGuids) {
-                                angular.forEach(userLiveSessionGuids, function (isActive, guid) {
-                                    if(isActive){
-                                        _listenToLiveSessionData(guid);
-                                    }
-                                });
-                            }
-                        });
-                    });
-                });
-            }
-
-            function activate() {
-                if (isEnabled) {
-                    _startListening();
-                }
-            }
-
-            LiveSessionEventsSrv.activate = activate;
-
-            return LiveSessionEventsSrv;
-        }];
-    });
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -762,6 +588,180 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.liveSession').service('LiveSessionDataGetterSrv',
+        ["InfraConfigSrv", "$q", "ENV", "UserProfileService", function (InfraConfigSrv, $q, ENV, UserProfileService) {
+            'ngInject';
+
+            var _this = this;
+
+            function _getStorage() {
+                return InfraConfigSrv.getGlobalStorage();
+            }
+
+            this.getLiveSessionDataPath = function (guid) {
+                var LIVE_SESSION_ROOT_PATH = '/liveSession/';
+                return LIVE_SESSION_ROOT_PATH + guid;
+            };
+
+            this.getLiveSessionDurationPath = function () {
+                return '/settings/liveSessionDuration/';
+            };
+
+            this.getUserLiveSessionRequestsPath  = function (userData) {
+                var appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
+                var USER_DATA_PATH = appName  + '/users/' + userData.uid;
+                return USER_DATA_PATH + '/liveSession';
+            };
+
+            this.getLiveSessionData = function (liveSessionGuid) {
+                var liveSessionDataPath = _this.getLiveSessionDataPath(liveSessionGuid);
+                return _getStorage().then(function (storage) {
+                    return storage.getAndBindToServer(liveSessionDataPath);
+                });
+            };
+
+            this.getLiveSessionDuration = function () {
+                var liveSessionDurationPath = _this.getLiveSessionDurationPath();
+                return _getStorage().then(function (storage) {
+                    return storage.get(liveSessionDurationPath);
+                });
+            };
+
+            this.getCurrUserLiveSessionRequests = function(){
+                return UserProfileService.getCurrUserId().then(function(currUid){
+                    return _getStorage().then(function(storage){
+                        var currUserLiveSessionDataPath = ENV.firebaseAppScopeName + '/users/' + currUid + '/liveSession/active';
+                        return storage.getAndBindToServer(currUserLiveSessionDataPath);
+                    });
+                });
+            };
+
+            this.getCurrUserLiveSessionData = function () {
+                return _this.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
+                    var liveSessionDataPromMap = {};
+                    angular.forEach(currUserLiveSessionRequests, function(isActive, guid){
+                        if(isActive){
+                            liveSessionDataPromMap[guid] = _this.getLiveSessionData(guid);
+                        }
+                    });
+
+                    return $q.all(liveSessionDataPromMap);
+                });
+            };
+        }]
+    );
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
+        var isEnabled = true;
+
+        this.enabled = function (_isEnabled) {
+            isEnabled = _isEnabled;
+        };
+
+        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv, LiveSessionDataGetterSrv) {
+            'ngInject';
+
+            var LiveSessionEventsSrv = {};
+
+            function _listenToLiveSessionData(guid) {
+                var liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
+
+                function _cb(liveSessionData) {
+                    if (!liveSessionData) {
+                        return;
+                    }
+
+                    UserProfileService.getCurrUserId().then(function (currUid) {
+                        switch (liveSessionData.status) {
+                            case LiveSessionStatusEnum.PENDING_STUDENT.enum:
+                                if (liveSessionData.studentId !== currUid) {
+                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                }
+                                break;
+                            case LiveSessionStatusEnum.CONFIRMED.enum:
+                                if (liveSessionData.studentId === currUid) {
+                                    LiveSessionUiSrv.showLiveSessionToast();
+                                }
+
+                                var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+
+                                if (liveSessionData.studentId === currUid) {
+                                    userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
+                                }
+
+                                if (liveSessionData.educatorId === currUid) {
+                                    userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
+                                }
+
+                                if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                                    LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
+                                }
+
+                                break;
+                            case LiveSessionStatusEnum.ENDED.enum:
+                                if (liveSessionData.studentId !== currUid) {
+                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
+                                    LiveSessionSrv._destroyCheckDurationInterval();
+                                }
+
+                                LiveSessionUiSrv.showEndSessionPopup();
+                                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                                // Security check to insure there isn't active session
+                                LiveSessionSrv._moveToArchive(liveSessionData);
+                                break;
+                            default:
+                                $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
+                        }
+
+                        LiveSessionSrv._liveSessionDataChanged(liveSessionData);
+                    });
+                }
+
+                InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                    globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
+                });
+            }
+
+            function _startListening() {
+                UserProfileService.getCurrUserId().then(function (currUid) {
+                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                        var appName = ENV.firebaseAppScopeName;
+                        var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
+                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
+                            if (userLiveSessionGuids) {
+                                angular.forEach(userLiveSessionGuids, function (isActive, guid) {
+                                    if(isActive){
+                                        _listenToLiveSessionData(guid);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+
+            function activate() {
+                if (isEnabled) {
+                    _startListening();
+                }
+            }
+
+            LiveSessionEventsSrv.activate = activate;
+
+            return LiveSessionEventsSrv;
+        }];
+    });
+})(angular);
+
+(function (angular) {
+    'use strict';
+
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
         var topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
@@ -859,9 +859,9 @@
 
                     var liveSessionHtmlTemplate =
                         '<div class="show-hide-animation">' +
-                        '<live-session user-live-session-state="d.userLiveSessionState" ' +
+                        '<live-session-frame user-live-session-state="d.userLiveSessionState" ' +
                         'on-close="d.onClose()">' +
-                        '</live-session>' +
+                        '</live-session-frame>' +
                         '</div>';
                     var liveSessionElement = angular.element(liveSessionHtmlTemplate);
                     liveSessionPhElement.append(liveSessionElement);
@@ -997,17 +997,6 @@
 })(angular);
 
 angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/liveSession/components/liveSession/liveSession.template.html",
-    "<div ng-if=\"vm.userLiveSessionState\"\n" +
-    "     ng-class=\"vm.liveSessionCls\">\n" +
-    "    <div class=\"active-state-container\">\n" +
-    "        <div class=\"square-side top\"></div>\n" +
-    "        <div class=\"square-side right\"></div>\n" +
-    "        <div class=\"square-side bottom\"></div>\n" +
-    "        <div class=\"square-side left\"></div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "");
   $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
     "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
     "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
@@ -1030,6 +1019,17 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "    </span>\n" +
     "</md-button>\n" +
     "\n" +
+    "");
+  $templateCache.put("components/liveSession/components/liveSessionFrame/liveSessionFrame.template.html",
+    "<div ng-if=\"vm.userLiveSessionState\"\n" +
+    "     ng-class=\"vm.liveSessionCls\">\n" +
+    "    <div class=\"active-state-container\">\n" +
+    "        <div class=\"square-side top\"></div>\n" +
+    "        <div class=\"square-side right\"></div>\n" +
+    "        <div class=\"square-side bottom\"></div>\n" +
+    "        <div class=\"square-side left\"></div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
     "");
   $templateCache.put("components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html",
     "<div class=\"live-session-subject-modal\">\n" +

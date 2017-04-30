@@ -10,7 +10,7 @@
                         UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
                 'ngInject';
                 return {
-                templateUrl: 'components/activePanel/activePanel.template.html',
+                templateUrl: 'components/activePanel/directives/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
                     var durationToDisplay,

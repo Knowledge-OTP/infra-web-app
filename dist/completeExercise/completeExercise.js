@@ -62,7 +62,7 @@
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExercise', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExercise/completeExercise.template.html',
             bindings: {
                 exerciseDetails: '<',
                 settings: '<'
@@ -445,7 +445,7 @@
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseExercise', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseExercise/completeExerciseExerciseDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseExercise/completeExerciseExercise.template.html',
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
@@ -1011,7 +1011,7 @@
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseHeader', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseHeader/completeExerciseHeaderDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseHeader/completeExerciseHeader.template.html',
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
@@ -1059,7 +1059,7 @@
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseIntro', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseIntro/completeExerciseIntroDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseIntro/completeExerciseIntro.template.html',
             require: {
                 completeExerciseCtrl: '^completeExercise'
             },
@@ -1096,7 +1096,7 @@
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseIntroSection', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSectionDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSection.template.html',
             require: {
                 completeExerciseIntroCtrl: '^completeExerciseIntro'
             },
@@ -1136,7 +1136,7 @@
     angular.module('znk.infra-web-app.completeExercise')
         .component('completeExerciseIntroTutorial', {
             restrict: 'E',
-            templateUrl: 'components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorialDirective.template.html',
+            templateUrl: 'components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorial.template.html',
             require: {
                 completeExerciseIntroCtrl: '^completeExerciseIntro'
             },
@@ -1174,7 +1174,7 @@
 
                 var directive = {
                     restrict: 'E',
-                    templateUrl: 'components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBarDirective.template.html',
+                    templateUrl: 'components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBar.template.html',
                     scope: {
                         totalTime: '@',
                         duration: '<'
@@ -1431,7 +1431,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "</g>\n" +
     "</svg>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExercise/completeExerciseDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExercise/completeExercise.template.html",
     "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <ng-switch on=\"$ctrl.currViewState\"\n" +
     "               class=\"main-container\">\n" +
@@ -1448,7 +1448,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "</div>\n" +
     "\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseExercise/completeExerciseExerciseDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseExercise/completeExerciseExercise.template.html",
     "<div class=\"base-complete-exercise-container\">\n" +
     "    <complete-exercise-header>\n" +
     "        <center-part>{{$ctrl.znkExercise.actions.getCurrentIndex() + 1}}/{{::$ctrl.znkExercise.exerciseContent.questions.length}}</center-part>\n" +
@@ -1485,7 +1485,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </znk-exercise>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseHeader/completeExerciseHeaderDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseHeader/completeExerciseHeader.template.html",
     "<div class=\"header-container\"\n" +
     "     translate-namespace=\"COMPLETE_EXERCISE\"\n" +
     "     subject-id-to-attr-drv=\"$ctrl.exerciseSubjectId\"\n" +
@@ -1507,7 +1507,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseIntro/completeExerciseIntroDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntro/completeExerciseIntro.template.html",
     "<div class=\"base-complete-exercise-container\">\n" +
     "    <complete-exercise-header></complete-exercise-header>\n" +
     "    <ng-switch on=\"$ctrl.exerciseTypeId\" class=\"intro-container\" image-zoomer>\n" +
@@ -1518,7 +1518,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </ng-switch>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSectionDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntroSection/completeExerciseIntroSection.template.html",
     "<div class=\"intro-container\"\n" +
     "     translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <div class=\"title\" ng-bind=\"$ctrl.exerciseParentContent.name\"></div>\n" +
@@ -1555,7 +1555,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorialDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseIntroTutorial/completeExerciseIntroTutorial.template.html",
     "<div class=\"intro-container\">\n" +
     "    <div class=\"upper-wrapper\">\n" +
     "        <div class=\"video-wrapper\">\n" +
@@ -1584,7 +1584,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBarDirective.template.html",
+  $templateCache.put("components/completeExercise/directives/completeExerciseProgressBar/completeExerciseProgressBar.template.html",
     "<div class=\"progress-bar\"></div>\n" +
     "\n" +
     "");
