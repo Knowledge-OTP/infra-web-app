@@ -1,6 +1,15 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.webAppScreenSharing', [
+        'znk.infra.screenSharing',
+        'znk.infra-web-app.completeExercise'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.webAppScreenSharing')
         .config(["ScreenSharingUiSrvProvider", function (ScreenSharingUiSrvProvider) {
             'ngInject';
@@ -56,15 +65,6 @@
     });
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.webAppScreenSharing', [
-        'znk.infra.screenSharing',
-        'znk.infra-web-app.completeExercise'
-    ]);
-})(angular);
 
 angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewer.template.html",

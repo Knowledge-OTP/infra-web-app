@@ -1,5 +1,11 @@
 (function (angular) {
     'use strict';
+    angular.module('znk.infra-web-app.subjectsOrder', [
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.subjectsOrder').provider('SubjectsSrv', [
         function () {
             var _subjectOrderGetter;
@@ -23,12 +29,6 @@
                 return SubjectsSrv;
             }];
         }
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.subjectsOrder', [
     ]);
 })(angular);
 

@@ -1755,7 +1755,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             'ngInject';
 
          function _updateAwsConfig(config, options) {
-            options = options || {};
+            options = options || {}; 
             config = config || false;
 
             if (!config) {
@@ -1765,20 +1765,20 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                        IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
                    }),
                };
-            }
+            } 
 
             $window.AWS.config.update(config);
-         }
+         }  
 
          function _init() {
               _updateAwsConfig();
-         }
-
+         }   
+           
          _init();
 
           function _generateFileName() {
-             return UtilitySrv.general.createGuid();
-          }
+             return UtilitySrv.general.createGuid();  
+          } 
 
           function _getFile(blob, fileName) {
               return new $window.File([blob], fileName);
@@ -1787,7 +1787,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
           function _addSlashToPath(prefixPath) {
               var prefixPathLength = prefixPath.length;
 
-              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength);
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
 
               if (lastChar === '/') {
                   return prefixPath;
@@ -1816,13 +1816,13 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
               this.filesNames = [];
 
-              this.bucketInstance = new $window.AWS.S3({
+              this.bucketInstance = new $window.AWS.S3({ 
                    params: {
                       Bucket: this.bucketName
                    }
               });
           }
-
+         
         AwsS3.prototype.upload = function(options) {
             var deferred = $q.defer();
             var errMsg;
@@ -1844,7 +1844,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                   deferred.reject(errMsg);
                   return;
             }
-
+            
             var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
             var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
             var filePath = _getFilePath(options.prefixPath, file);
@@ -1867,7 +1867,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             });
 
             return deferred.promise;
-        };
+        };  
 
         AwsS3.prototype.getCurrentFileName = function() {
             var filesLength = this.filesNames.length;
@@ -1881,9 +1881,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
         this.updateConfig = updateConfig;
 
-        // factory for aws bucket instances
+        // factory for aws bucket instances 
         this.newAwsS3 = function (options) {
-            return new AwsS3(options);
+            return new AwsS3(options);   
         };
 
       }]
@@ -3233,11 +3233,11 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                 var dontInit = false;
                 return ExerciseResultSrv.getExerciseResult(
-                    exerciseDetails.exerciseTypeId,
-                    exerciseDetails.exerciseId,
-                    exerciseDetails.examId,
-                    exerciseDetails.examSectionsNum,
-                    dontInit,
+                    exerciseDetails.exerciseTypeId, 
+                    exerciseDetails.exerciseId, 
+                    exerciseDetails.examId, 
+                    exerciseDetails.examSectionsNum, 
+                    dontInit, 
                     exerciseDetails.exerciseParentId);
             };
         }]
@@ -3259,22 +3259,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {
+                exerciseCycleSrv.invoke = function (methodName, data) {                    
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {
+                    if (angular.isDefined(hook)) {                      
                         try {
-                            fn = $injector.invoke(hook);
+                            fn = $injector.invoke(hook);         
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-
+                        
                         return fn.apply(null, data);
-                    }
+                    } 
                 };
 
                 return exerciseCycleSrv;
@@ -3519,7 +3519,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-
+        
     ]);
 })(angular);
 
@@ -3587,6 +3587,46 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($templateCache) {
 
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.diagnosticExercise', [
+        'pascalprecht.translate',
+        'ngMaterial',
+        'chart.js',
+        'ui.router',
+        'ngAnimate',
+        'znk.infra.svgIcon',
+        'znk.infra.enum',
+        'znk.infra.analytics',
+        'znk.infra.exams',
+        'znk.infra.estimatedScore',
+        'znk.infra.exerciseUtility',
+        'znk.infra.exerciseResult',
+        'znk.infra.znkExercise',
+        'znk.infra.scroll',
+        'znk.infra.stats',
+        'znk.infra.scoring',
+        'znk.infra.general',
+        'znk.infra.filters',
+        'znk.infra.contentGetters',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.diagnosticIntro',
+        'znk.infra-web-app.infraWebAppZnkExercise',
+        'znk.infra-web-app.workoutsRoadmap',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.uiTheme'
+    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
+        'ngInject';
+        var svgMap = {
+            'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
+            'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
+            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+    }]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -4282,46 +4322,6 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise', [
-        'pascalprecht.translate',
-        'ngMaterial',
-        'chart.js',
-        'ui.router',
-        'ngAnimate',
-        'znk.infra.svgIcon',
-        'znk.infra.enum',
-        'znk.infra.analytics',
-        'znk.infra.exams',
-        'znk.infra.estimatedScore',
-        'znk.infra.exerciseUtility',
-        'znk.infra.exerciseResult',
-        'znk.infra.znkExercise',
-        'znk.infra.scroll',
-        'znk.infra.stats',
-        'znk.infra.scoring',
-        'znk.infra.general',
-        'znk.infra.filters',
-        'znk.infra.contentGetters',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.infraWebAppZnkExercise',
-        'znk.infra-web-app.workoutsRoadmap',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.uiTheme'
-    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider) {
-        'ngInject';
-        var svgMap = {
-            'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
-            'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
-            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
-        };
-        SvgIconSrvProvider.registerSvgSources(svgMap);
-    }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.diagnosticExercise').constant('WORKOUTS_DIAGNOSTIC_FLOW', {
         isFixed: false,
         timeLimit: 3 * 60 * 1000,
@@ -4991,7 +4991,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -5119,6 +5119,43 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function($templateCache) {
 
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.estimatedScoreWidget', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.enum',
+        'znk.infra.config',
+        'znk.infra.storage',
+        'znk.infra.general',
+        'znk.infra.exerciseResult',
+        'znk.infra.utility',
+        'znk.infra.contentAvail',
+        'znk.infra.content',
+        'znk.infra.znkExercise',
+        'znk.infra.scroll',
+        'znk.infra.autofocus',
+        'znk.infra.exerciseUtility',
+        'znk.infra.estimatedScore',
+        'znk.infra.scoring',
+        'znk.infra.svgIcon',
+        'znk.infra.analytics',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.diagnostic'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
+                'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+})(angular);
 
 /**
  * attrs:
@@ -5274,43 +5311,6 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.estimatedScoreWidget', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.enum',
-        'znk.infra.config',
-        'znk.infra.storage',
-        'znk.infra.general',
-        'znk.infra.exerciseResult',
-        'znk.infra.utility',
-        'znk.infra.contentAvail',
-        'znk.infra.content',
-        'znk.infra.znkExercise',
-        'znk.infra.scroll',
-        'znk.infra.autofocus',
-        'znk.infra.exerciseUtility',
-        'znk.infra.estimatedScore',
-        'znk.infra.scoring',
-        'znk.infra.svgIcon',
-        'znk.infra.analytics',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.userGoalsSelection',
-        'znk.infra-web-app.diagnostic'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
-                'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
     angular.module('znk.infra-web-app.estimatedScoreWidget').provider('EstimatedScoreWidgetSrv', [
         function () {
             var _subjectOrderGetter;
@@ -5460,6 +5460,19 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     "</svg>\n" +
     "");
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.evaluator', [
+        'pascalprecht.translate',
+        'znk.infra.evaluator',
+        'znk.infra.svgIcon',
+        'znk.infra.enum',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.purchase'
+    ]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -5754,19 +5767,6 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
         }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.evaluator', [
-        'pascalprecht.translate',
-        'znk.infra.evaluator',
-        'znk.infra.svgIcon',
-        'znk.infra.enum',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.purchase'
-    ]);
-})(angular);
-
 /**
  * EvaluateSrv
  *
@@ -5972,6 +5972,15 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.faq', [
+        'vAccordion',
+        'znk.infra.svgIcon'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.faq').config(
         ["$stateProvider", function ($stateProvider) {
             'ngInject';
@@ -6028,15 +6037,6 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     }]);
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.faq', [
-        'vAccordion',
-        'znk.infra.svgIcon'
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';
@@ -6117,6 +6117,33 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.feedback',
+        [
+            'ngMaterial',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'znk.infra.auth',
+            'znk.infra.analytics',
+            'znk.infra.general',
+            'znk.infra.user',
+            'znk.infra.svgIcon'
+        ])
+        .config(
+            ["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
+                var svgMap = {
+                    'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
+                    'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
+                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg',
+                    'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.feedback').controller('feedbackCtrl',
         ["$log", "$mdDialog", "$timeout", "$http", "ENV", "UserProfileService", "AuthService", function($log, $mdDialog, $timeout, $http, ENV, UserProfileService, AuthService) {
             'ngInject';
@@ -6190,33 +6217,6 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
             };
             return directive;
         }]);
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.feedback',
-        [
-            'ngMaterial',
-            'znk.infra.popUp',
-            'pascalprecht.translate',
-            'znk.infra.auth',
-            'znk.infra.analytics',
-            'znk.infra.general',
-            'znk.infra.user',
-            'znk.infra.svgIcon'
-        ])
-        .config(
-            ["SvgIconSrvProvider", function (SvgIconSrvProvider) {
-                'ngInject';
-                var svgMap = {
-                    'feedback-close-popup': 'components/feedback/svg/feedback-close-popup.svg',
-                    'feedback-icon': 'components/feedback/svg/feedback-icon.svg',
-                    'completed-v-feedback-icon': 'components/feedback/svg/completed-v-feedback.svg',
-                    'feedback-btn-icon': 'components/feedback/svg/feedback-btn-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
 })(angular);
 
 
@@ -6409,7 +6409,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject';
+            'ngInject'; 
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -6421,7 +6421,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
 
 (function () {
     'use strict';
-
+    
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -6592,6 +6592,22 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.imageZoomer', [
+        'znk.infra.svgIcon',
+        'ngMaterial'
+    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
+        'ngInject';
+        var svgMap = {
+            'image-zoomer-full-screen-icon': 'components/imageZoomer/svg/full-screen-icon.svg',
+            'image-zoomer-close-popup': 'components/imageZoomer/svg/image-zoomer-close-popup.svg'
+        };
+        SvgIconSrvProvider.registerSvgSources(svgMap);
+    }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.imageZoomer').directive('imageZoomer', ["$timeout", "$mdDialog", "$document", "$compile", function($timeout, $mdDialog, $document, $compile) {
        'ngInject';
 
@@ -6673,7 +6689,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-
+                    
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -6723,22 +6739,6 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
 
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.imageZoomer', [
-        'znk.infra.svgIcon',
-        'ngMaterial'
-    ]).config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-        'ngInject';
-        var svgMap = {
-            'image-zoomer-full-screen-icon': 'components/imageZoomer/svg/full-screen-icon.svg',
-            'image-zoomer-close-popup': 'components/imageZoomer/svg/image-zoomer-close-popup.svg'
-        };
-        SvgIconSrvProvider.registerSvgSources(svgMap);
-    }]);
-})(angular);
 
 angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
@@ -6794,6 +6794,20 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     "</svg>\n" +
     "");
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.infraWebAppZnkExercise', [
+        'znk.infra.znkExercise',
+        'znk.infra.analytics',
+        'znk.infra.general',
+        'pascalprecht.translate',
+        'ngMaterial',
+        'ngAnimate',
+        'znk.infra.svgIcon'
+    ]);
+})(angular);
 
 /**
  * attrs:
@@ -7086,20 +7100,6 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     }]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.infraWebAppZnkExercise', [
-        'znk.infra.znkExercise',
-        'znk.infra.analytics',
-        'znk.infra.general',
-        'pascalprecht.translate',
-        'ngMaterial',
-        'ngAnimate',
-        'znk.infra.svgIcon'
-    ]);
-})(angular);
-
 angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
@@ -7262,6 +7262,36 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     "");
 }]);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.invitation',
+        ['ngMaterial',
+        'znk.infra.popUp',
+        'znk.infra.svgIcon',
+        'pascalprecht.translate',
+        'znk.infra.presence',
+        'znk.infra.userContext',
+        'znk.infra-web-app.purchase',
+        'znk.infra.user'])
+        .config([
+            'SvgIconSrvProvider',
+            function(SvgIconSrvProvider){
+
+                var svgMap = {
+                    'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
+                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
+                    'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
+                    'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
+                    'invitations-received-icon': 'components/invitation/svg/invitations-received-icon.svg',
+                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg',
+                    'invitation-exclamation-mark-icon': 'components/invitation/svg/invitation-exclamation-mark-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
+
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -7316,36 +7346,6 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             };
         }]
     );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.invitation',
-        ['ngMaterial',
-        'znk.infra.popUp',
-        'znk.infra.svgIcon',
-        'pascalprecht.translate',
-        'znk.infra.presence',
-        'znk.infra.userContext',
-        'znk.infra-web-app.purchase',
-        'znk.infra.user'])
-        .config([
-            'SvgIconSrvProvider',
-            function(SvgIconSrvProvider){
-
-                var svgMap = {
-                    'invitation-teacher-icon': 'components/invitation/svg/teacher-icon.svg',
-                    'invitation-close-popup': 'components/invitation/svg/invitation-close-popup.svg',
-                    'invitation-teacher-active-icon': 'components/invitation/svg/invitation-teacher-active-icon.svg',
-                    'tutors-list-edit-icon': 'components/invitation/svg/tutors-list-edit-icon.svg',
-                    'invitations-received-icon': 'components/invitation/svg/invitations-received-icon.svg',
-                    'invitation-v-icon': 'components/invitation/svg/invitation-v-icon.svg',
-                    'invitation-exclamation-mark-icon': 'components/invitation/svg/invitation-exclamation-mark-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-
 })(angular);
 
 (function (angular) {
@@ -8453,6 +8453,51 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
 
 }]);
 
+(function (window, angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.liveLessons', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon',
+        'znk.infra.user',
+        'znk.infra.mailSender',
+        'znk.infra.storage',
+        'ngMaterial'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'close-popup': 'components/liveLessons/svg/close-popup.svg',
+                'reschedule-icon': 'components/liveLessons/svg/reschedule-icon.svg',
+                'calendar-icon': 'components/liveLessons/svg/calendar-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ])
+        .run(["$mdToast", "MyLiveLessons", function ($mdToast, MyLiveLessons) {
+            'ngInject';
+            MyLiveLessons.getClosestLiveLesson().then(function (closestLiveLessonObj) {
+                if (angular.isUndefined(closestLiveLessonObj.startTime)) {
+                    return;
+                }
+
+                var optionsOrPreset = {
+                    templateUrl: 'components/liveLessons/templates/upcomingLessonToast.template.html',
+                    hideDelay: false,
+                    controller: 'UpcomingLessonToasterController',
+                    controllerAs: 'vm',
+                    locals: {
+                        closestLiveLesson: closestLiveLessonObj
+                    }
+                };
+
+                $mdToast.cancel().then(function () {
+                    $mdToast.show(optionsOrPreset);
+                });
+            });
+        }]);
+})(window, angular);
+
 (function (angular) {
     'use strict';
 
@@ -8560,51 +8605,6 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
         }]
     );
 })(angular);
-
-(function (window, angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveLessons', [
-        'pascalprecht.translate',
-        'znk.infra.svgIcon',
-        'znk.infra.user',
-        'znk.infra.mailSender',
-        'znk.infra.storage',
-        'ngMaterial'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'close-popup': 'components/liveLessons/svg/close-popup.svg',
-                'reschedule-icon': 'components/liveLessons/svg/reschedule-icon.svg',
-                'calendar-icon': 'components/liveLessons/svg/calendar-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ])
-        .run(["$mdToast", "MyLiveLessons", function ($mdToast, MyLiveLessons) {
-            'ngInject';
-            MyLiveLessons.getClosestLiveLesson().then(function (closestLiveLessonObj) {
-                if (angular.isUndefined(closestLiveLessonObj.startTime)) {
-                    return;
-                }
-
-                var optionsOrPreset = {
-                    templateUrl: 'components/liveLessons/templates/upcomingLessonToast.template.html',
-                    hideDelay: false,
-                    controller: 'UpcomingLessonToasterController',
-                    controllerAs: 'vm',
-                    locals: {
-                        closestLiveLesson: closestLiveLessonObj
-                    }
-                };
-
-                $mdToast.cancel().then(function () {
-                    $mdToast.show(optionsOrPreset);
-                });
-            });
-        }]);
-})(window, angular);
 
 (function (angular) {
     'use strict';
@@ -9077,6 +9077,42 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.liveSession',
+        [
+            'ngMaterial',
+            'znk.infra.znkSessionData',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'znk.infra.auth',
+            'znk.infra.userContext',
+            'znk.infra.user',
+            'znk.infra.utility',
+            'znk.infra.analytics',
+            'znk.infra.general',
+            'znk.infra.svgIcon',
+            'znk.infra-web-app.diagnostic',
+            'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.znkToast',
+            'znk.infra.exerciseUtility',
+            'znk.infra.znkTooltip',
+            'znk.infra.calls'
+        ])
+        .config([
+            'SvgIconSrvProvider',
+            function (SvgIconSrvProvider) {
+                var svgMap = {
+                    'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
+                    'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
+                    'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }
+        ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.liveSession')
         .component('liveSessionBtn', {
             bindings: {
@@ -9231,42 +9267,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     );
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.liveSession',
-        [
-            'ngMaterial',
-            'znk.infra.znkSessionData',
-            'znk.infra.popUp',
-            'pascalprecht.translate',
-            'znk.infra.auth',
-            'znk.infra.userContext',
-            'znk.infra.user',
-            'znk.infra.utility',
-            'znk.infra.analytics',
-            'znk.infra.general',
-            'znk.infra.svgIcon',
-            'znk.infra-web-app.diagnostic',
-            'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.znkToast',
-            'znk.infra.exerciseUtility',
-            'znk.infra.znkTooltip',
-            'znk.infra.calls'
-        ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
-                var svgMap = {
-                    'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
-                    'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
-                    'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
-})(angular);
 
 (function(){
     'use strict';
@@ -10327,6 +10327,22 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.loginApp', [
+        'pascalprecht.translate',
+        'znk.infra.auth',
+        'znk.infra.svgIcon',
+        'ngMaterial',
+        'satellizer',
+        'znk.infra.user',
+        'znk.infra.general',
+        'znk.infra.autofocus',
+        'znk.infra-web-app.promoCode'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.loginApp')
         .config([
             'SvgIconSrvProvider',
@@ -10660,22 +10676,6 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     );
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.loginApp', [
-        'pascalprecht.translate',
-        'znk.infra.auth',
-        'znk.infra.svgIcon',
-        'ngMaterial',
-        'satellizer',
-        'znk.infra.user',
-        'znk.infra.general',
-        'znk.infra.autofocus',
-        'znk.infra-web-app.promoCode'
-    ]);
-})(angular);
 
 /* jshint ignore:start */
 (function (angular) {
@@ -11733,6 +11733,22 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.myProfile', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.auth',
+        'znk.infra.svgIcon',
+        'znk.infra.general',
+        'znk.infra.storage',
+        'znk.infra.user',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.znkToast'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.myProfile')
         .component('changePassword', {
             bindings: {},
@@ -11955,22 +11971,6 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
                 };
             }]
         );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.myProfile', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.auth',
-        'znk.infra.svgIcon',
-        'znk.infra.general',
-        'znk.infra.storage',
-        'znk.infra.user',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.znkToast'
-    ]);
 })(angular);
 
 (function (angular) {
@@ -12325,6 +12325,87 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.onBoarding', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon',
+        'znk.infra.utility',
+        'znk.infra.config',
+        'znk.infra.analytics',
+        'znk.infra.storage',
+        'znk.infra.user',
+        'ui.router',
+        'ngMaterial',
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.diagnosticIntro'
+    ]).config([
+        'SvgIconSrvProvider', '$stateProvider',
+        function (SvgIconSrvProvider, $stateProvider) {
+            var svgMap = {
+                'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg',
+                'on-boarding-target': 'components/onBoarding/svg/onboarding-target-icon.svg',
+                'on-boarding-hat': 'components/onBoarding/svg/onboarding-hat-icon.svg',
+                'on-boarding-bubble-1': 'components/onBoarding/svg/onboarding-bubble-1.svg',
+                'on-boarding-bubble-2': 'components/onBoarding/svg/onboarding-bubble-2.svg',
+                'on-boarding-dropdown-arrow-icon': 'components/onBoarding/svg/dropdown-arrow.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+
+            $stateProvider
+                .state('app.onBoarding', {
+                    url: '/onBoarding',
+                    templateUrl: 'components/onBoarding/templates/onBoarding.template.html',
+                    controller: 'OnBoardingController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        onBoardingStep: ['OnBoardingService', function (OnBoardingService) {
+                            return OnBoardingService.getOnBoardingStep();
+                        }]
+                    }
+                })
+                .state('app.onBoarding.welcome', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingWelcome.template.html',
+                    controller: 'OnBoardingWelcomesController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        userProfile: ['UserProfileService', function (UserProfileService) {
+                            return UserProfileService.getProfile();
+                        }]
+                    }
+                })
+                .state('app.onBoarding.schools', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingSchools.template.html',
+                    controller: 'OnBoardingSchoolsController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.goals', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingGoals.template.html',
+                    controller: 'OnBoardingGoalsController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.diagnostic', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingDiagnostic.template.html',
+                    controller: 'OnBoardingDiagnosticController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.introTestToTake', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingIntroTestToTake.template.html',
+                    controller: 'OnBoardingIntroTestToTakeController',
+                    controllerAs: 'vm'
+                })
+                .state('app.onBoarding.testToTake', {
+                    templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
+                    controller: 'OnBoardingTestToTakeController',
+                    controllerAs: 'vm'
+                });
+        }
+    ]);
+
+})(angular);
+
+
+(function (angular) {
+    'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingController', ["$state", "onBoardingStep", function($state, onBoardingStep) {
         'ngInject';
         $state.go(onBoardingStep.url);
@@ -12516,87 +12597,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
         return directive;
     });
-
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.onBoarding', [
-        'pascalprecht.translate',
-        'znk.infra.svgIcon',
-        'znk.infra.utility',
-        'znk.infra.config',
-        'znk.infra.analytics',
-        'znk.infra.storage',
-        'znk.infra.user',
-        'ui.router',
-        'ngMaterial',
-        'znk.infra-web-app.userGoalsSelection',
-        'znk.infra-web-app.diagnosticIntro'
-    ]).config([
-        'SvgIconSrvProvider', '$stateProvider',
-        function (SvgIconSrvProvider, $stateProvider) {
-            var svgMap = {
-                'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg',
-                'on-boarding-target': 'components/onBoarding/svg/onboarding-target-icon.svg',
-                'on-boarding-hat': 'components/onBoarding/svg/onboarding-hat-icon.svg',
-                'on-boarding-bubble-1': 'components/onBoarding/svg/onboarding-bubble-1.svg',
-                'on-boarding-bubble-2': 'components/onBoarding/svg/onboarding-bubble-2.svg',
-                'on-boarding-dropdown-arrow-icon': 'components/onBoarding/svg/dropdown-arrow.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-
-            $stateProvider
-                .state('app.onBoarding', {
-                    url: '/onBoarding',
-                    templateUrl: 'components/onBoarding/templates/onBoarding.template.html',
-                    controller: 'OnBoardingController',
-                    controllerAs: 'vm',
-                    resolve: {
-                        onBoardingStep: ['OnBoardingService', function (OnBoardingService) {
-                            return OnBoardingService.getOnBoardingStep();
-                        }]
-                    }
-                })
-                .state('app.onBoarding.welcome', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingWelcome.template.html',
-                    controller: 'OnBoardingWelcomesController',
-                    controllerAs: 'vm',
-                    resolve: {
-                        userProfile: ['UserProfileService', function (UserProfileService) {
-                            return UserProfileService.getProfile();
-                        }]
-                    }
-                })
-                .state('app.onBoarding.schools', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingSchools.template.html',
-                    controller: 'OnBoardingSchoolsController',
-                    controllerAs: 'vm'
-                })
-                .state('app.onBoarding.goals', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingGoals.template.html',
-                    controller: 'OnBoardingGoalsController',
-                    controllerAs: 'vm'
-                })
-                .state('app.onBoarding.diagnostic', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingDiagnostic.template.html',
-                    controller: 'OnBoardingDiagnosticController',
-                    controllerAs: 'vm'
-                })
-                .state('app.onBoarding.introTestToTake', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingIntroTestToTake.template.html',
-                    controller: 'OnBoardingIntroTestToTakeController',
-                    controllerAs: 'vm'
-                })
-                .state('app.onBoarding.testToTake', {
-                    templateUrl: 'components/onBoarding/templates/onBoardingTestToTake.template.html',
-                    controller: 'OnBoardingTestToTakeController',
-                    controllerAs: 'vm'
-                });
-        }
-    ]);
 
 })(angular);
 
@@ -13078,6 +13078,24 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "");
 }]);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.promoCode', [])
+        .config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
+                'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
+                'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -13141,24 +13159,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             };
         }]
     );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.promoCode', [])
-        .config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
-                'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
-                'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
-
 })(angular);
 
 (function (angular) {
@@ -13482,6 +13482,26 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.purchase',
+        [
+            'ngAnimate',
+            'ui.router',
+            'ngMaterial',
+            'pascalprecht.translate',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'znk.infra.enum',
+            'znk.infra.config',
+            'znk.infra.storage',
+            'znk.infra.auth',
+            'znk.infra.analytics'
+        ]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.purchase')
         .component('purchaseBtn', {
             bindings: {
@@ -13674,26 +13694,6 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             return PurchaseStateEnum;
         }]);
 })(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.purchase',
-        [
-            'ngAnimate',
-            'ui.router',
-            'ngMaterial',
-            'pascalprecht.translate',
-            'znk.infra.svgIcon',
-            'znk.infra.popUp',
-            'znk.infra.enum',
-            'znk.infra.config',
-            'znk.infra.storage',
-            'znk.infra.auth',
-            'znk.infra.analytics'
-        ]);
-})(angular);
-
 
 (function (angular) {
     'use strict';
@@ -14328,6 +14328,18 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.settings', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.auth',
+        'znk.infra.svgIcon',
+        'znk.infra.general'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.settings').config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
@@ -14418,18 +14430,6 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
                 };
             }]
         );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.settings', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.auth',
-        'znk.infra.svgIcon',
-        'znk.infra.general'
-    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {
@@ -14612,6 +14612,14 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.socialSharing', [
+        'znk.infra.config' 
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+    
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -14643,17 +14651,15 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
         );
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config'
-    ]);
-})(angular);
-
 angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {
 
 }]);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.subjectsOrder', [
+    ]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -14683,15 +14689,28 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
     ]);
 })(angular);
 
-(function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.subjectsOrder', [
-    ]);
-})(angular);
-
 angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {
 
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.tests', [
+        'znk.infra.svgIcon',
+        'pascalprecht.translate',
+        'ngMaterial',
+        'znk.infra.enum',
+        'znk.infra.scoring',
+        'znk.infra.exams',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra.analytics',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.estimatedScoreWidget',
+        'znk.infra.exerciseUtility',
+        'ui.router'
+    ]);  
+})(angular);
 
 /**
  * attrs:
@@ -14772,25 +14791,6 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
 })(angular);
 
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.tests', [
-        'znk.infra.svgIcon',
-        'pascalprecht.translate',
-        'ngMaterial',
-        'znk.infra.enum',
-        'znk.infra.scoring',
-        'znk.infra.exams',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra.analytics',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.estimatedScoreWidget',
-        'znk.infra.exerciseUtility',
-        'ui.router'
-    ]);
-})(angular);
-
 angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/tests/directives/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
@@ -14837,6 +14837,40 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
     "</div>\n" +
     "");
 }]);
+
+(function (angular) {
+    'use strict';
+    angular.module('znk.infra-web-app.tutorials', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'znk.infra.enum',
+        'znk.infra.config',
+        'znk.infra.general',
+        'znk.infra.svgIcon',
+        'ui.router',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra-web-app.completeExercise',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.loadingAnimation',
+        'znk.infra.exerciseResult',
+        'znk.infra.contentAvail',
+        'znk.infra.contentGetters',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.subjectsOrder'
+
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+        var svgMap = {
+            'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
+            'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
+        };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+
+        }
+    ]);
+})(angular);
 
 'use strict';
 angular.module('znk.infra-web-app.tutorials').component('tutorialList', {
@@ -14912,7 +14946,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         var vm = this;
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
-
+        
         vm.$onInit = function () {
             $q.all([
                 subjectOrderProm
@@ -15013,7 +15047,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     angular.module('znk.infra-web-app.tutorials').service('TutorialsSrv',
         ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", "SubjectsSrv", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum, SubjectsSrv) {
             'ngInject';
-
+        
             this.getSubjectOrder = function () {
                 return SubjectsSrv.getSubjectOrder();
             };
@@ -15075,40 +15109,6 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
 
         }]
     );
-})(angular);
-
-(function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.tutorials', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'znk.infra.enum',
-        'znk.infra.config',
-        'znk.infra.general',
-        'znk.infra.svgIcon',
-        'ui.router',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra-web-app.completeExercise',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.loadingAnimation',
-        'znk.infra.exerciseResult',
-        'znk.infra.contentAvail',
-        'znk.infra.contentGetters',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.subjectsOrder'
-
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-        var svgMap = {
-            'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
-            'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
-        };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-
-        }
-    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
@@ -15229,6 +15229,16 @@ angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function($tem
 
 }]);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.userGoals', [
+        'znk.infra.scoring',
+        'znk.infra.utility'
+    ]);
+})(angular);
+
+
 'use strict';
 
 angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [function() {
@@ -15323,19 +15333,38 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
     }];
 }]);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.userGoals', [
-        'znk.infra.scoring',
-        'znk.infra.utility'
-    ]);
-})(angular);
-
-
 angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
 
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.userGoalsSelection', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon',
+        'znk.infra.utility',
+        'znk.infra.general',
+        'ngMaterial',
+        'ngTagsInput',
+        'znk.infra-web-app.userGoals'
+    ]).config([
+        'SvgIconSrvProvider',
+        function (SvgIconSrvProvider) {
+            var svgMap = {
+                'user-goals-plus-icon': 'components/userGoalsSelection/svg/plus-icon.svg',
+                'user-goals-dropdown-arrow-icon': 'components/userGoalsSelection/svg/dropdown-arrow.svg',
+                'user-goals-arrow-icon': 'components/userGoalsSelection/svg/arrow-icon.svg',
+                'user-goals-info-icon': 'components/userGoalsSelection/svg/info-icon.svg',
+                'user-goals-v-icon': 'components/userGoalsSelection/svg/v-icon.svg',
+                'user-goals-search-icon': 'components/userGoalsSelection/svg/search-icon.svg'
+            };
+            SvgIconSrvProvider.registerSvgSources(svgMap);
+        }
+    ]);
+
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -15706,35 +15735,6 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
 }]);
 
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.userGoalsSelection', [
-        'pascalprecht.translate',
-        'znk.infra.svgIcon',
-        'znk.infra.utility',
-        'znk.infra.general',
-        'ngMaterial',
-        'ngTagsInput',
-        'znk.infra-web-app.userGoals'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
-            var svgMap = {
-                'user-goals-plus-icon': 'components/userGoalsSelection/svg/plus-icon.svg',
-                'user-goals-dropdown-arrow-icon': 'components/userGoalsSelection/svg/dropdown-arrow.svg',
-                'user-goals-arrow-icon': 'components/userGoalsSelection/svg/arrow-icon.svg',
-                'user-goals-info-icon': 'components/userGoalsSelection/svg/info-icon.svg',
-                'user-goals-v-icon': 'components/userGoalsSelection/svg/v-icon.svg',
-                'user-goals-search-icon': 'components/userGoalsSelection/svg/search-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
-
-})(angular);
-
-
 angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/userGoalsSelection/svg/arrow-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-468.2 482.4 96 89.8\" class=\"arrow-icon-wrapper\">\n" +
@@ -15997,6 +15997,15 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.webAppScreenSharing', [
+        'znk.infra.screenSharing',
+        'znk.infra-web-app.completeExercise'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.webAppScreenSharing')
         .config(["ScreenSharingUiSrvProvider", function (ScreenSharingUiSrvProvider) {
             'ngInject';
@@ -16053,15 +16062,6 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 })(angular);
 
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.webAppScreenSharing', [
-        'znk.infra.screenSharing',
-        'znk.infra-web-app.completeExercise'
-    ]);
-})(angular);
-
 angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewer.template.html",
     "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
@@ -16093,6 +16093,93 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     "</div>\n" +
     "");
 }]);
+
+/**
+ * usage instructions:
+ *      1) workout progress:
+ *          - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
+ *              .reading-bg{
+ *                  background: red;
+ *              }
+ *          - define <%= subjectName %>-bg:after style for border color for example
+ *              workouts-progress .items-container .item-container .item.selected.reading-bg:after {
+ *                   border-color: red;
+ *              }
+ *
+ *      2) WorkoutsRoadmapSrv:
+ *          setNewWorkoutGeneratorGetter: provide a function which return a new workout generator function. subjectsToIgnore
+ *              will be passed as parameter.
+ *              i.e:
+ *                  function(WorkoutPersonalization){
+ *                      'ngInject';
+ *
+ *                      return function(subjectToIgnore){
+ *                          return WorkoutPersonalizationService.getExercisesByTimeForNewWorkout(subjectToIgnoreForNextDaily);
+ *                      }
+ *                  }
+ *              the return value should be a map of exercise time to exercise meta data i.e:
+ *              {
+ *                 "5" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 150,
+ *                   "exerciseTypeId" : 1,
+ *                   "subjectId" : 0
+ *                 },
+ *                 "10" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 109,
+ *                   "exerciseTypeId" : 3,
+ *                   "subjectId" : 0
+ *                 },
+ *                 "15" : {
+ *                   "categoryId" : 263,
+ *                   "exerciseId" : 221,
+ *                   "exerciseTypeId" : 3,
+ *                   "subjectId" : 0
+ *                 }
+ *               }
+ *
+ *
+ *      3) workoutsRoadmap.diagnostic.summary
+ *          this state must set i.e
+ *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
+ *                   template: '<div>Diagnostic </div>',
+ *                   controller: 'WorkoutsRoadMapBaseSummaryController',
+ *                   controllerAs: 'vm'
+ *               })
+ *      4) workoutsRoadmap.workout.inProgress
+ *          this state must set i.e
+ *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
+ *                  template: '<div>Workout in progress</div>',
+ *                  controller: function(){}
+ *             })
+ */
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.workoutsRoadmap', [
+        'pascalprecht.translate',
+        'ngMaterial',
+        'ui.router',
+        'ngAnimate',
+        'znk.infra.svgIcon',
+        'znk.infra.enum',
+        'znk.infra.exerciseUtility',
+        'znk.infra.scroll',
+        'znk.infra.general',
+        'znk.infra.contentGetters',
+        'znk.infra-web-app.purchase',
+        'znk.infra-web-app.diagnostic',
+        'znk.infra-web-app.diagnosticIntro',
+        'znk.infra-web-app.socialSharing',
+        'znk.infra.znkExercise',
+        'znk.infra.estimatedScore',
+        'znk.infra.scoring',
+        'znk.infra-web-app.userGoals',
+        'znk.infra-web-app.userGoalsSelection',
+        'znk.infra-web-app.estimatedScoreWidget'
+    ]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -16517,7 +16604,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-
+    
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';
@@ -17000,93 +17087,6 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
                 return WorkoutsRoadmapSrv;
             }];
         }
-    ]);
-})(angular);
-
-/**
- * usage instructions:
- *      1) workout progress:
- *          - define <%= subjectName %>-bg class for all subjects(background color and  for workouts-progress item) for example
- *              .reading-bg{
- *                  background: red;
- *              }
- *          - define <%= subjectName %>-bg:after style for border color for example
- *              workouts-progress .items-container .item-container .item.selected.reading-bg:after {
- *                   border-color: red;
- *              }
- *
- *      2) WorkoutsRoadmapSrv:
- *          setNewWorkoutGeneratorGetter: provide a function which return a new workout generator function. subjectsToIgnore
- *              will be passed as parameter.
- *              i.e:
- *                  function(WorkoutPersonalization){
- *                      'ngInject';
- *
- *                      return function(subjectToIgnore){
- *                          return WorkoutPersonalizationService.getExercisesByTimeForNewWorkout(subjectToIgnoreForNextDaily);
- *                      }
- *                  }
- *              the return value should be a map of exercise time to exercise meta data i.e:
- *              {
- *                 "5" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 150,
- *                   "exerciseTypeId" : 1,
- *                   "subjectId" : 0
- *                 },
- *                 "10" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 109,
- *                   "exerciseTypeId" : 3,
- *                   "subjectId" : 0
- *                 },
- *                 "15" : {
- *                   "categoryId" : 263,
- *                   "exerciseId" : 221,
- *                   "exerciseTypeId" : 3,
- *                   "subjectId" : 0
- *                 }
- *               }
- *
- *
- *      3) workoutsRoadmap.diagnostic.summary
- *          this state must set i.e
- *              $stateProvider.state('app.workouts.roadmap.diagnostic.summary', {
- *                   template: '<div>Diagnostic </div>',
- *                   controller: 'WorkoutsRoadMapBaseSummaryController',
- *                   controllerAs: 'vm'
- *               })
- *      4) workoutsRoadmap.workout.inProgress
- *          this state must set i.e
- *              $stateProvider.state('app.workouts.roadmap.workout.inProgress', {
- *                  template: '<div>Workout in progress</div>',
- *                  controller: function(){}
- *             })
- */
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.workoutsRoadmap', [
-        'pascalprecht.translate',
-        'ngMaterial',
-        'ui.router',
-        'ngAnimate',
-        'znk.infra.svgIcon',
-        'znk.infra.enum',
-        'znk.infra.exerciseUtility',
-        'znk.infra.scroll',
-        'znk.infra.general',
-        'znk.infra.contentGetters',
-        'znk.infra-web-app.purchase',
-        'znk.infra-web-app.diagnostic',
-        'znk.infra-web-app.diagnosticIntro',
-        'znk.infra-web-app.socialSharing',
-        'znk.infra.znkExercise',
-        'znk.infra.estimatedScore',
-        'znk.infra.scoring',
-        'znk.infra-web-app.userGoals',
-        'znk.infra-web-app.userGoalsSelection',
-        'znk.infra-web-app.estimatedScoreWidget'
     ]);
 })(angular);
 
@@ -17897,6 +17897,16 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.znkExerciseStatesUtility', [
+        'ui.router',
+        'znk.infra.znkExercise',
+        'znk.infra-web-app.infraWebAppZnkExercise'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.znkExerciseStatesUtility')
         .controller('InfraWebAppExerciseStateCtrl',
             ["$controller", "$scope", "exerciseData", "$filter", "ExerciseTypeEnum", function ($controller, $scope, exerciseData, $filter, ExerciseTypeEnum) {
@@ -17960,16 +17970,6 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
         );
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkExerciseStatesUtility', [
-        'ui.router',
-        'znk.infra.znkExercise',
-        'znk.infra-web-app.infraWebAppZnkExercise'
-    ]);
-})(angular);
-
 angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
     "<div class=\"exercise-container base-border-radius\">\n" +
@@ -18006,6 +18006,33 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     "</div>\n" +
     "");
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkHeader',
+        [   'ngAnimate',
+            'ngMaterial',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'ui.router',
+            'znk.infra-web-app.purchase',
+            'znk.infra-web-app.onBoarding',
+            'znk.infra-web-app.userGoalsSelection',
+            'znk.infra-web-app.myProfile',
+            'znk.infra.user',
+            'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.feedback'])
+        .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
+                'ngInject';
+                var svgMap = {
+                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -18147,33 +18174,6 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
     );
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkHeader',
-        [   'ngAnimate',
-            'ngMaterial',
-            'znk.infra.svgIcon',
-            'znk.infra.popUp',
-            'pascalprecht.translate',
-            'ui.router',
-            'znk.infra-web-app.purchase',
-            'znk.infra-web-app.onBoarding',
-            'znk.infra-web-app.userGoalsSelection',
-            'znk.infra-web-app.myProfile',
-            'znk.infra.user',
-            'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.feedback'])
-        .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-                'ngInject';
-                var svgMap = {
-                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
-                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-})(angular);
 
 angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
@@ -18454,6 +18454,17 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "");
 }]);
 
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkSummary', [
+        'pascalprecht.translate',
+        'chart.js',
+        'znk.infra.exerciseUtility',
+        'znk.infra-web-app.znkTimelineWebWrapper'
+    ]);
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -18522,17 +18533,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 })(angular);
 
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkSummary', [
-        'pascalprecht.translate',
-        'chart.js',
-        'znk.infra.exerciseUtility',
-        'znk.infra-web-app.znkTimelineWebWrapper'
-    ]);
-})(angular);
-
 angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html",
     "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
@@ -18590,6 +18590,17 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     "</div>\n" +
     "");
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
+        'znk.infra.znkTimeline',
+        'znk.infra.estimatedScore',
+        'znk.infra-web-app.userGoals',
+        'znk.infra.scoring'
+    ]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -18819,17 +18830,6 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     });
 })(angular);
 
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
-        'znk.infra.znkTimeline',
-        'znk.infra.estimatedScore',
-        'znk.infra-web-app.userGoals',
-        'znk.infra.scoring'
-    ]);
-})(angular);
-
 angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html",
     "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
@@ -18872,6 +18872,17 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
     "</div>\n" +
     "");
 }]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkToast', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'ngSanitize',
+        'znk.infra.svgIcon'
+    ]);
+})(angular);
 
 (function (angular) {
     'use strict';
@@ -18937,17 +18948,6 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
                 };
             }]
         );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkToast', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'ngSanitize',
-        'znk.infra.svgIcon'
-    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($templateCache) {
