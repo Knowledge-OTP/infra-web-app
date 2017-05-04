@@ -1,6 +1,33 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.znkHeader',
+        [   'ngAnimate',
+            'ngMaterial',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'pascalprecht.translate',
+            'ui.router',
+            'znk.infra-web-app.purchase',
+            'znk.infra-web-app.onBoarding',
+            'znk.infra-web-app.userGoalsSelection',
+            'znk.infra-web-app.myProfile',
+            'znk.infra.user',
+            'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.feedback'])
+        .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
+                'ngInject';
+                var svgMap = {
+                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
+                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
+                };
+                SvgIconSrvProvider.registerSvgSources(svgMap);
+            }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.znkHeader')
         .component('znkHeader', {
             bindings: {},
@@ -138,33 +165,6 @@
     );
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkHeader',
-        [   'ngAnimate',
-            'ngMaterial',
-            'znk.infra.svgIcon',
-            'znk.infra.popUp',
-            'pascalprecht.translate',
-            'ui.router',
-            'znk.infra-web-app.purchase',
-            'znk.infra-web-app.onBoarding',
-            'znk.infra-web-app.userGoalsSelection',
-            'znk.infra-web-app.myProfile',
-            'znk.infra.user',
-            'znk.infra-web-app.activePanel',
-            'znk.infra-web-app.feedback'])
-        .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-                'ngInject';
-                var svgMap = {
-                    'znkHeader-raccoon-logo-icon': 'components/znkHeader/svg/raccoon-logo.svg',
-                    'znkHeader-check-mark-icon': 'components/znkHeader/svg/check-mark-icon.svg'
-                };
-                SvgIconSrvProvider.registerSvgSources(svgMap);
-            }]);
-})(angular);
 
 angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",

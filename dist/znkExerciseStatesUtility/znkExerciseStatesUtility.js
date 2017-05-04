@@ -1,6 +1,16 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.znkExerciseStatesUtility', [
+        'ui.router',
+        'znk.infra.znkExercise',
+        'znk.infra-web-app.infraWebAppZnkExercise'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.znkExerciseStatesUtility')
         .controller('InfraWebAppExerciseStateCtrl',
             ["$controller", "$scope", "exerciseData", "$filter", "ExerciseTypeEnum", function ($controller, $scope, exerciseData, $filter, ExerciseTypeEnum) {
@@ -62,16 +72,6 @@
                 // }
             }]
         );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkExerciseStatesUtility', [
-        'ui.router',
-        'znk.infra.znkExercise',
-        'znk.infra-web-app.infraWebAppZnkExercise'
-    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {

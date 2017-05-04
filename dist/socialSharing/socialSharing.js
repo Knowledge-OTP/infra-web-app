@@ -1,5 +1,13 @@
 (function (angular) {
     'use strict';
+
+    angular.module('znk.infra-web-app.socialSharing', [
+        'znk.infra.config' 
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
     
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
@@ -30,14 +38,6 @@
                 };
             }]
         );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config' 
-    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {

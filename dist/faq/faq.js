@@ -1,6 +1,15 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.faq', [
+        'vAccordion',
+        'znk.infra.svgIcon'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.faq').config(
         ["$stateProvider", function ($stateProvider) {
             'ngInject';
@@ -57,15 +66,6 @@
     }]);
 })(angular);
 
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.faq', [
-        'vAccordion',
-        'znk.infra.svgIcon'
-    ]);
-})(angular);
 
 (function (angular) {
     'use strict';

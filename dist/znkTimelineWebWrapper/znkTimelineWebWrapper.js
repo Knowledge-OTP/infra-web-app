@@ -1,6 +1,17 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
+        'znk.infra.znkTimeline',
+        'znk.infra.estimatedScore',
+        'znk.infra-web-app.userGoals',
+        'znk.infra.scoring'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.znkTimelineWebWrapper').component('znkTimelineWebWrapper', {
         templateUrl: 'components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html',
         bindings: {
@@ -224,17 +235,6 @@
             });
         }]
     });
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkTimelineWebWrapper', [
-        'znk.infra.znkTimeline',
-        'znk.infra.estimatedScore',
-        'znk.infra-web-app.userGoals',
-        'znk.infra.scoring'
-    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {

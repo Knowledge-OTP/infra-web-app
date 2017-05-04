@@ -1,6 +1,17 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.znkToast', [
+        'ngMaterial',
+        'pascalprecht.translate',
+        'ngSanitize',
+        'znk.infra.svgIcon'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.znkToast')
         .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
             'ngInject';
@@ -62,17 +73,6 @@
                 };
             }]
         );
-})(angular);
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkToast', [
-        'ngMaterial',
-        'pascalprecht.translate',
-        'ngSanitize',
-        'znk.infra.svgIcon'
-    ]);
 })(angular);
 
 angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($templateCache) {
