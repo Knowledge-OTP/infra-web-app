@@ -196,19 +196,6 @@
                 var self = this;
                 var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
 
-                var satURL = "https://sat-dev.firebaseio.com";
-                var actURL = "https://act-dev.firebaseio.com";
-                var tofelURL = "https://znk-toefl-dev.firebaseio.com";
-                var znkURL = "https://znk-dev.firebaseio.com";
-
-                if (!ENV.debug) {
-                    satURL = "https://sat2-prod.firebaseio.com/";
-                    actURL = "https://act-prod.firebaseio.com/";
-                    tofelURL = "https://znk-toefl-prod.firebaseio.com/";
-                    znkURL = "https://znk-prod.firebaseio.com";
-                }
-
-
                 self.showEducatorProfile = function (userProfile) {
                     if (!userProfile) {
                         $log.error('showEducatorProfile: userProfile object is not undefined');
@@ -262,8 +249,7 @@
                     var profile = {
                         userId: uid,
                         isZinkerzTeacher: !!isZinkerzTeacher,
-                        teachingSubject: subject,
-                        fbUrls: [satURL, actURL, tofelURL, znkURL] // TODO: remove appURLs after finish moving all users to znk-dev
+                        teachingSubject: subject
                     };
                     return $http.post(profilePath, profile);
                 };
@@ -426,7 +412,7 @@
                     }
                     var student = self.selectedStudent;
                     var educator = self.selectedEducator;
-                    var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.name, student.email, educator.email, student.name,
+                    var invitationObj = ESLinkService.createInvitationFactory(educator.uid, student.uid, educator.nickname, student.email, educator.email, student.nickname,
                         studentEducatorAppNames.educator, studentEducatorAppNames.student);
 
                     ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
@@ -585,8 +571,8 @@
                 var apiPath = ENV.backendEndpoint + "/invitation/assosciate_student";
                 var resetUserDataPath = ENV.backendEndpoint + "/userModule/delete";
 
-                this.createInvitationFactory = function (senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName) {
-                    return new Invitation(senderUid, senderName, receiverEmail, receiverName, senderAppName, receiverAppName, senderEmail, receiverParentEmail, receiverParentName);
+                this.createInvitationFactory = function (senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName) {
+                    return new Invitation(senderUid, receiverUid, senderName, receiverEmail, senderEmail, receiverName, senderAppName, receiverAppName);
                 };
 
                 this.resetUserData = function(data) {
@@ -759,14 +745,17 @@
                 function _buildQuery(body, term, hasUB, hasTeacher) {
                     body.query = {
                         "bool": {
-                            "must": [
+                            "should": [
                                 {
                                     "query_string": {
-                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purche"],
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purchase"],
                                         "query": _makeTerm(term)
                                     }
-                                }
-                            ]
+                                },
+                                {"query": {"ids": {"values": [term]}}}
+                            ],
+                            "must": [],
+                            "minimum_should_match": 1
                         }
                     };
                     if (hasTeacher) {

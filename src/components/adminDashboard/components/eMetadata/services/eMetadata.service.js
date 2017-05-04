@@ -10,19 +10,6 @@
                 var self = this;
                 var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
 
-                var satURL = "https://sat-dev.firebaseio.com";
-                var actURL = "https://act-dev.firebaseio.com";
-                var tofelURL = "https://znk-toefl-dev.firebaseio.com";
-                var znkURL = "https://znk-dev.firebaseio.com";
-
-                if (!ENV.debug) {
-                    satURL = "https://sat2-prod.firebaseio.com/";
-                    actURL = "https://act-prod.firebaseio.com/";
-                    tofelURL = "https://znk-toefl-prod.firebaseio.com/";
-                    znkURL = "https://znk-prod.firebaseio.com";
-                }
-
-
                 self.showEducatorProfile = function (userProfile) {
                     if (!userProfile) {
                         $log.error('showEducatorProfile: userProfile object is not undefined');
@@ -76,8 +63,7 @@
                     var profile = {
                         userId: uid,
                         isZinkerzTeacher: !!isZinkerzTeacher,
-                        teachingSubject: subject,
-                        fbUrls: [satURL, actURL, tofelURL, znkURL] // TODO: remove appURLs after finish moving all users to znk-dev
+                        teachingSubject: subject
                     };
                     return $http.post(profilePath, profile);
                 };

@@ -60,14 +60,17 @@
                 function _buildQuery(body, term, hasUB, hasTeacher) {
                     body.query = {
                         "bool": {
-                            "must": [
+                            "should": [
                                 {
                                     "query_string": {
-                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purche"],
+                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purchase"],
                                         "query": _makeTerm(term)
                                     }
-                                }
-                            ]
+                                },
+                                {"query": {"ids": {"values": [term]}}}
+                            ],
+                            "must": [],
+                            "minimum_should_match": 1
                         }
                     };
                     if (hasTeacher) {
