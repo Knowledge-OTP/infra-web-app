@@ -2442,6 +2442,9 @@ answer-explanation-content {
         font-family: Lato;
         font-weight: 300; }
 
+znk-exercise-header {
+  width: 100%; }
+
 .exercise-header {
   position: relative;
   overflow: hidden;
