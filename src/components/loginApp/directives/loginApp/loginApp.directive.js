@@ -13,7 +13,7 @@
                 restrict: 'E',
                 link: function (scope) {
 
-                    var isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+                    var isTeacherApp = ENV.appContext ? (ENV.appContext.toLowerCase()) === 'dashboard' : false;
                     var socialProvidersArr = ['facebook', 'google', 'live'];
                     var invitationKey = InvitationKeyService.getInvitationKey();
 
