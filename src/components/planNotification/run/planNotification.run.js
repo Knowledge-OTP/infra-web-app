@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.planNotification').run(
-        function checkPlanNotification(NotificationService, NotificationTypeEnum, ENV, ZnkServiceEnum,
+        function checkPlanNotification(NotificationService, NotificationTypeEnum, ZnkServiceEnum,
                                        PlanNotificationService, PlanService, $log, AuthService, $location){
             'ngInject';
             NotificationService.clean(NotificationTypeEnum.planCreated);
