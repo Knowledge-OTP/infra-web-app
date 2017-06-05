@@ -13104,7 +13104,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                                        PlanNotificationService, PlanService, $log, AuthService, $location){
             'ngInject';
             NotificationService.clean(NotificationTypeEnum.planCreated);
-            NotificationService.on(NotificationTypeEnum.planCreated, PlanNotificationService.newPlanNotification());
+            NotificationService.on(NotificationTypeEnum.planCreated, PlanNotificationService.newPlanNotification);
 
             var search = $location.search();
             if (angular.isDefined(search.planId)) {
@@ -13114,7 +13114,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 }).catch(function (err) {
                     $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
                 });
-                PlanNotificationService.newPlanNotification();
+                PlanNotificationService.newPlanNotification({ refObjId: search.planId });
                 delete search.planId;
                 $location.search(search);
             }
@@ -13130,7 +13130,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             'ngInject';
 
             function newPlanNotification(notification) {
-                $log.debug('notification: ' + notification);
                 showPlanNotificationPopUp().then(function () {
                     $window.open(ENV.myZinkerz + '?planId=' + notification.refObjId);
                 }).catch(function () {

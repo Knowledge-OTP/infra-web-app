@@ -6,7 +6,7 @@
                                        PlanNotificationService, PlanService, $log, AuthService, $location){
             'ngInject';
             NotificationService.clean(NotificationTypeEnum.planCreated);
-            NotificationService.on(NotificationTypeEnum.planCreated, PlanNotificationService.newPlanNotification());
+            NotificationService.on(NotificationTypeEnum.planCreated, PlanNotificationService.newPlanNotification);
 
             var search = $location.search();
             if (angular.isDefined(search.planId)) {
@@ -16,7 +16,7 @@
                 }).catch(function (err) {
                     $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
                 });
-                PlanNotificationService.newPlanNotification();
+                PlanNotificationService.newPlanNotification({ refObjId: search.planId });
                 delete search.planId;
                 $location.search(search);
             }

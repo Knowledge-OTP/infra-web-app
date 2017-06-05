@@ -6,7 +6,6 @@
             'ngInject';
 
             function newPlanNotification(notification) {
-                $log.debug('notification: ' + notification);
                 showPlanNotificationPopUp().then(function () {
                     $window.open(ENV.myZinkerz + '?planId=' + notification.refObjId);
                 }).catch(function () {
