@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('znk.infra-web-app.notification').run(function ($log, InfraConfigSrv, NotificationService) {
+    angular.module('znk.infra-web-app.notification').run(function ($log, InfraConfigSrv, NotificationService, AuthService) {
         'ngInject';
 
         var uid = AuthService.getAuth().uid;
@@ -30,7 +30,7 @@
                         $log.error("error: can not remove item, error: " + error.message);
                     });
                 });
-            })
+            });
         });
 
         function _getStorage() {

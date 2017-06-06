@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.notification').service('NotificationService', function (ENV, $http, UtilitySrv) {
+    angular.module('znk.infra-web-app.notification').service('NotificationService', function (ENV, $http, UtilitySrv, AuthService, $log, InfraConfigSrv) {
         'ngInject';
 
         var self = this;
@@ -10,7 +10,7 @@
         self.notify = function (notificationOptions) {
             // TODO add backendNotificationUrl in allENV
             return $http.post(ENV.backendNotificationUrl, notificationOptions);
-        }
+        };
         self.on = function (notificationTypeEnum, callback) {
             if (!uid) {
                 return;
@@ -22,7 +22,7 @@
                 callbackList = [callback];
                 self.subscribers[notificationTypeEnum] = callbackList;
             }
-        }
+        };
         self.clean = function (notificationTypeEnum) {
             if (!uid) {
                 return;
@@ -50,7 +50,7 @@
                     });
                 });
             });
-        }
+        };
 
         self.createObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
             var newGuid = UtilitySrv.general.createGuid();
@@ -58,7 +58,7 @@
             var pathForDelete = "/notifications/users/" + uid + "/" + notificationData.id + "/pending";
             dataToMoveAndDelete[pathForArchive] = notificationData;
             dataToMoveAndDelete[pathForDelete] = null;
-        }
+        };
         function _getStorage() {
             return InfraConfigSrv.getGlobalStorage();
         }
