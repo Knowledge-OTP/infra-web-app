@@ -13100,8 +13100,8 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.planNotification').run(
-        ["NotificationService", "NotificationTypeEnum", "ENV", "ZnkServiceEnum", "PlanNotificationService", "PlanService", "$log", "AuthService", "$location", function checkPlanNotification(NotificationService, NotificationTypeEnum, ENV, ZnkServiceEnum,
-                                       PlanNotificationService, PlanService, $log, AuthService, $location){
+        ["NotificationService", "NotificationTypeEnum", "ZnkServiceEnum", "$http", "PlanNotificationService", "$log", "AuthService", "$location", "ENV", function checkPlanNotification(NotificationService, NotificationTypeEnum, ZnkServiceEnum, $http,
+                                       PlanNotificationService, $log, AuthService, $location, ENV){
             'ngInject';
             NotificationService.clean(NotificationTypeEnum.planCreated);
             NotificationService.on(NotificationTypeEnum.planCreated, PlanNotificationService.newPlanNotification);
@@ -13109,14 +13109,19 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
             var search = $location.search();
             if (angular.isDefined(search.planId)) {
                 var uid = AuthService.getAuth().uid;
-                PlanService.connectStudentToPlan(search.planId, uid).then(function () {
+                var connectStudentToPlanUrl = ENV.myZinkerz + '/plan/connectStudentToPlan';
+                $http({
+                    method: 'POST',
+                    url: connectStudentToPlanUrl,
+                    data: { planId: search.planId, uid: uid }
+                }).then(function successCallback() {
+                    PlanNotificationService.newPlanNotification({ refObjId: search.planId });
                     $log.debug('checkPlanNotification: connectStudentToPlan successful');
-                }).catch(function (err) {
+                    delete search.planId;
+                    $location.search(search);
+                }, function errorCallback(err) {
                     $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
                 });
-                PlanNotificationService.newPlanNotification({ refObjId: search.planId });
-                delete search.planId;
-                $location.search(search);
             }
         }]
     );
