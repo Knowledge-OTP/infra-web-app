@@ -15,9 +15,8 @@
             if (!uid) {
                 return;
             }
-            var callbackList = [];
-            if (self.subscribers[notificationTypeEnum]) {
-                callbackList = self.subscribers[notificationTypeEnum];
+            var callbackList = self.subscribers[notificationTypeEnum];
+            if (callbackList) {
                 callbackList.push(callback);
             } else {
                 callbackList = [callback];
