@@ -20,7 +20,6 @@ complete-exercise-intro-tutorial {
             }
 
             .content-wrapper {
-                @include text-style(16px, $fontColor2, Lato, $lightFontWeight);
                 margin: {
                     top: 40px;
                     bottom: 100px;
