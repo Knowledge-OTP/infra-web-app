@@ -8,6 +8,7 @@
         var uid = AuthService.getAuth().uid;
         self.subscribers = [];
         self.notify = function (notificationOptions) {
+            // TODO add backendNotificationUrl in allENV
             return $http.post(ENV.backendNotificationUrl, notificationOptions);
         }
         self.on = function (notificationTypeEnum, callback) {
