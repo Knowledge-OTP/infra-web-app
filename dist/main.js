@@ -12331,6 +12331,14 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             return;
         }
         _getStorage().then(function (storage) {
+            // clear the pending path for user
+            storage.set(pathPending, {}).then(function () {
+                initFirebaseChildAddedEvents(storage);
+            });
+        }).catch(function (error) {
+            $log.error(error);
+        });
+        function initFirebaseChildAddedEvents(storage) {
             storage.onEvent('child_added', pathPending, function (dataSnapshot) {
                 var notificationData = dataSnapshot.val();
                 var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
@@ -12344,14 +12352,14 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                     }
                 });
                 var dataToMoveAndDelete = {};
-                NotificationService.createObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
+                NotificationService.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
                 _getStorage().then(function (storage) {
                     storage.update(dataToMoveAndDelete).catch(function (error) {
                         $log.error("error: can not remove item, error: " + error.message);
                     });
                 });
             });
-        });
+        }
 
         function _getStorage() {
             return InfraConfigSrv.getGlobalStorage();
@@ -12368,13 +12376,16 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
         var self = this;
         var uid = AuthService.getAuth().uid;
+        // subscribers list, callbacks grouped by the 'notificationTypeEnum'
         self.subscribers = [];
         self.notify = function (notificationOptions) {
-            // TODO add backendNotificationUrl in allENV
+            // TODO: add backendNotificationUrl in all ENV
+            // send notification object to aws endpoint function
             return $http.post(ENV.backendNotificationUrl, notificationOptions);
         };
         self.on = function (notificationTypeEnum, callback) {
             if (!uid) {
+                $log.error('uid is missing');
                 return;
             }
             var callbackList = self.subscribers[notificationTypeEnum];
@@ -12385,8 +12396,10 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 self.subscribers[notificationTypeEnum] = callbackList;
             }
         };
+        // moves filtered notification by 'notificationTypeEnum' objects to archive (deprecated/on hold)
         self.clean = function (notificationTypeEnum) {
             if (!uid) {
+                $log.error('uid is missing');
                 return;
             }
             var pathPending = "/notifications/users/" + uid + "/pending";
@@ -12403,7 +12416,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                             this.logger.log("notification id for obj:" + JSON.stringify(notificationData) + "is null or empty");
                             continue;
                         }
-                        this.createObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
+                        this.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
                     }
                     _getStorage().then(function (storage) {
                         storage.update(dataToMoveAndDelete).catch(function (error) {
@@ -12413,8 +12426,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
                 });
             });
         };
-
-        self.createObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
+        // populate and prepare object for move and delete in firebase
+        self.populateObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
             var newGuid = UtilitySrv.general.createGuid();
             var pathForArchive = "/notifications/users/" + uid + "/" + newGuid + "/archive";
             var pathForDelete = "/notifications/users/" + uid + "/" + notificationData.id + "/pending";
