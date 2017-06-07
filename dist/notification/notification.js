@@ -24,6 +24,7 @@
         }).catch(function (error) {
             $log.error(error);
         });
+        // call and init firebase 'child_added' event
         function initFirebaseChildAddedEvents(storage) {
             storage.onEvent('child_added', pathPending, function (dataSnapshot) {
                 var notificationData = dataSnapshot.val();
@@ -57,7 +58,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.notification').service('NotificationService', ["ENV", "$http", "UtilitySrv", "AuthService", "$log", "InfraConfigSrv", function (ENV, $http, UtilitySrv, AuthService, $log, InfraConfigSrv) {
+    angular.module('znk.infra-web-app.notification').service('NotificationService', ["ENV", "$http", "AuthService", "$log", "InfraConfigSrv", function (ENV, $http, AuthService, $log, InfraConfigSrv) {
         'ngInject';
 
         var self = this;
@@ -69,9 +70,14 @@
             // send notification object to aws endpoint function
             return $http.post(ENV.backendNotificationUrl, notificationOptions);
         };
+        // subscribe for events
         self.on = function (notificationTypeEnum, callback) {
             if (!uid) {
                 $log.error('uid is missing');
+                return;
+            }
+            if(typeof callback !== "function" ){
+                $log.error('callback property is not a function');
                 return;
             }
             var callbackList = self.subscribers[notificationTypeEnum];
@@ -114,9 +120,8 @@
         };
         // populate and prepare object for move and delete in firebase
         self.populateObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
-            var newGuid = UtilitySrv.general.createGuid();
-            var pathForArchive = "/notifications/users/" + uid + "/" + newGuid + "/archive";
-            var pathForDelete = "/notifications/users/" + uid + "/" + notificationData.id + "/pending";
+            var pathForArchive = "/notifications/users/" + uid + "/archive/" + notificationData.id;
+            var pathForDelete = "/notifications/users/" + uid + "/pending/" + notificationData.id;
             dataToMoveAndDelete[pathForArchive] = notificationData;
             dataToMoveAndDelete[pathForDelete] = null;
         };
