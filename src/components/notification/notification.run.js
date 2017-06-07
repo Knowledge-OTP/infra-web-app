@@ -18,6 +18,7 @@
         }).catch(function (error) {
             $log.error(error);
         });
+        // call and init firebase 'child_added' event
         function initFirebaseChildAddedEvents(storage) {
             storage.onEvent('child_added', pathPending, function (dataSnapshot) {
                 var notificationData = dataSnapshot.val();

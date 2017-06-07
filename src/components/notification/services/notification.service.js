@@ -59,8 +59,8 @@
         // populate and prepare object for move and delete in firebase
         self.populateObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
             var newGuid = UtilitySrv.general.createGuid();
-            var pathForArchive = "/notifications/users/" + uid + "/" + newGuid + "/archive";
-            var pathForDelete = "/notifications/users/" + uid + "/" + notificationData.id + "/pending";
+            var pathForArchive = "/notifications/users/" + uid + "/archive/" + newGuid;
+            var pathForDelete = "/notifications/users/" + uid + "/pending/" + notificationData.id;
             dataToMoveAndDelete[pathForArchive] = notificationData;
             dataToMoveAndDelete[pathForDelete] = null;
         };
