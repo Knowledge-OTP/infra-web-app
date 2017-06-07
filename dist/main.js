@@ -12315,7 +12315,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.notification', ['pascalprecht.translate']);
+    angular.module('znk.infra-web-app.notification', []);
 })(angular);
 
 (function () {
