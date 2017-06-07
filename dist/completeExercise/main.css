@@ -156,10 +156,6 @@ complete-exercise-intro-tutorial {
       complete-exercise-intro-tutorial .intro-container .upper-wrapper .video-wrapper {
         text-align: center; }
       complete-exercise-intro-tutorial .intro-container .upper-wrapper .content-wrapper {
-        font-size: 16px;
-        color: #161616;
-        font-family: Lato;
-        font-weight: 300;
         margin-top: 40px;
         margin-bottom: 100px;
         padding-right: 180px;
@@ -178,7 +174,9 @@ complete-exercise-intro-section {
   top: 50px;
   right: 0;
   bottom: 0;
-  left: 0; }
+  left: 0;
+  font-family: Lato;
+  font-weight: 400; }
   complete-exercise-intro-section .intro-container {
     display: -ms-flexbox;
     display: flex;
@@ -224,9 +222,6 @@ complete-exercise-intro-section {
       margin-right: auto;
       margin-bottom: 100px;
       margin-left: auto;
-      font-family: Lato;
-      font-weight: 400;
-      font-size: 16px;
       width: 550px;
       overflow: auto;
       text-align: center; }
