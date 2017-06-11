@@ -1,8 +1,10 @@
 complete-exercise-intro-section {
     display: block;
+    font: {
+        family: Lato;
+    };
+
     @include absolute-position(50px, 0, 0, 0);
-    font-family: Lato;
-    font-weight: $regularFontWeight;
     .intro-container {
         display: flex;
         flex-direction: column;
