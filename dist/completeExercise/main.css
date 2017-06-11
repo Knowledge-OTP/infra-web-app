@@ -167,6 +167,14 @@ complete-exercise-intro-tutorial {
       complete-exercise-intro-tutorial .intro-container .btn-section .md-button {
         padding-right: 45px;
         padding-left: 45px; }
+    complete-exercise-intro-tutorial .intro-container .orange-square {
+      background-color: #ff931e;
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      padding: 0 3px; }
+      complete-exercise-intro-tutorial .intro-container .orange-square.zero-square {
+        color: #ff931e; }
 
 complete-exercise-intro-section {
   display: block;
