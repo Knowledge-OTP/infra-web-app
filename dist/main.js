@@ -10326,8 +10326,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
         'znk.infra.user',
         'znk.infra.general',
         'znk.infra.autofocus',
-        'znk.infra-web-app.promoCode',
-        'znk.infra-web-app.planNotification'
+        'znk.infra-web-app.promoCode'
     ]);
 })(angular);
 
@@ -10827,7 +10826,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", "PlanNotificationService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs, PlanNotificationService) {
+        this.$get = ["$q", "$http", "$log", "$window", "$location", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, $location, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -10898,7 +10897,8 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     urlParams +=  (questionOrAmpersandSymbol + 'pcid=' + promoCode);
                 }
 
-                var planId = PlanNotificationService.getPlanIdFromUrl();
+                var search = $location.search();
+                var planId = angular.isDefined(search.planId) ? search.planId : null;
                 if (angular.isDefined(planId) && planId !== null) {
                     urlParams +=  (questionOrAmpersandSymbol + 'planId=' + planId);
                 }

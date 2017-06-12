@@ -10,8 +10,7 @@
         'znk.infra.user',
         'znk.infra.general',
         'znk.infra.autofocus',
-        'znk.infra-web-app.promoCode',
-        'znk.infra-web-app.planNotification'
+        'znk.infra-web-app.promoCode'
     ]);
 })(angular);
 
@@ -511,7 +510,7 @@
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", "PlanNotificationService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs, PlanNotificationService) {
+        this.$get = ["$q", "$http", "$log", "$window", "$location", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, $location, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -582,7 +581,8 @@
                     urlParams +=  (questionOrAmpersandSymbol + 'pcid=' + promoCode);
                 }
 
-                var planId = PlanNotificationService.getPlanIdFromUrl();
+                var search = $location.search();
+                var planId = angular.isDefined(search.planId) ? search.planId : null;
                 if (angular.isDefined(planId) && planId !== null) {
                     urlParams +=  (questionOrAmpersandSymbol + 'planId=' + planId);
                 }
