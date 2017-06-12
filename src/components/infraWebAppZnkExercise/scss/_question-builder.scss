@@ -14,7 +14,7 @@ znk-exercise {
         question-builder:not(.answer-explanation-open) {
             .question-basic-style {
                 overflow: auto;
-                height: calc(100% - 200px);
+                height: calc(100% - 50px);
             }
 
             answer-builder {
