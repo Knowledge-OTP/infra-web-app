@@ -2,18 +2,38 @@
     'use strict';
 
     angular.module('znk.infra-web-app.planNotification').service('PlanNotificationService',
-        function ($translate, PopUpSrv, $q, $window, $log, ENV) {
+        function ($translate, PopUpSrv, $q, $window, $log, ENV, $http, AuthService, $location) {
             'ngInject';
 
-            function newPlanNotification(notification) {
-                showPlanNotificationPopUp().then(function () {
+            function _checkPlanNotification(){
+                var search = $location.search();
+                if (angular.isDefined(search.planId)) {
+                    var uid = AuthService.getAuth().uid;
+                    var connectStudentToPlanUrl = ENV.myZinkerz + '/plan/connectStudentToPlan';
+                    $http({
+                        method: 'POST',
+                        url: connectStudentToPlanUrl,
+                        data: { planId: search.planId, uid: uid }
+                    }).then(function successCallback() {
+                        _newPlanNotification({ refObjId: search.planId });
+                        $log.debug('checkPlanNotification: connectStudentToPlan successful');
+                        delete search.planId;
+                        $location.search(search);
+                    }, function errorCallback(err) {
+                        $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
+                    });
+                }
+            }
+
+            function _newPlanNotification(notification) {
+                _showPlanNotificationPopUp().then(function () {
                     $window.open(ENV.myZinkerz + '?planId=' + notification.refObjId);
                 }).catch(function () {
                     $log.debug('newPlanNotification: user closed the popup');
                 });
             }
 
-            function showPlanNotificationPopUp(){
+            function _showPlanNotificationPopUp(){
                 if (!_isPopupSeen()) {
                     var translationsPromMap = {};
                     translationsPromMap.title = $translate('PLAN_NOTIFICATION.NEW_PLAN');
@@ -52,7 +72,8 @@
                 return isPopupSeen;
             }
 
-            this.showPlanNotificationPopUp = showPlanNotificationPopUp;
-            this.newPlanNotification = newPlanNotification;
+            this.checkPlanNotification = _checkPlanNotification;
+            this.showPlanNotificationPopUp = _showPlanNotificationPopUp;
+            this.newPlanNotification = _newPlanNotification;
         });
 })(angular);

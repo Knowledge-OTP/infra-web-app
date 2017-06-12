@@ -1,39 +1,32 @@
 (function(angular) {
 
-    angular.module('demo', ['znk.infra-web-app.planNotification'])
-        .decorator('NotificationTypeEnum', function ($delegate) {
+    angular.module('demo', [
+        'demoEnv',
+        'znk.infra.auth',
+        'znk.infra.storage',
+        'znk.infra-web-app.planNotification'
+    ])
+        .decorator('ENV', function ($delegate) {
             'ngInject';
-            $delegate.planCreated = function () {
-                return 1;
-            };
+
+            $delegate.myZinkerz = '//dev.zinkerz.com/myZinkerz';
+            $delegate.backendNotificationUrl = 'backend Notification Url';
+
             return $delegate;
         })
-        .decorator('NotificationService', function ($delegate) {
+        .decorator('AuthService', function ($delegate) {
             'ngInject';
-            $delegate.clean = function (notificationType) {
-                console.log('notificationType: ' + notificationType);
-            };
 
-            $delegate.on = function (notificationType, cb) {
-                var notification = {
-                    id: "0007a550-0148-4c60-9c1c-c8575a8ac5d5",
-                    toUid: "0007a550-0148-4c60-9c1c-c8575a8ac5d5",
-                    fromUid: "1117a550-0148-4c60-9c1c-c8575a8ac5d5",
-                    subject: "Pan Created",
-                    body: "Plan was Created",
-                    seen: true,
-                    notificationType: 1,
-                    serviceId: 1
-                };
-                cb(notification)
+            $delegate.getAuth = function () {
+                return { uid: 'cf656635-b44c-4fcc-82ef-72fe566d5540' };
             };
-
             return $delegate;
         })
         .controller('Main', function ($scope, PlanNotificationService) {
 
             $scope.openPlanNotification = function() {
-                var planId = 'planIdTest';
+                // var planId = 'planIdTest';
+                var planId = '203233dc-a324-4ead-3f24-ca82556a2d70';
                 PlanNotificationService.newPlanNotification({ refObjId: planId });
             };
 
