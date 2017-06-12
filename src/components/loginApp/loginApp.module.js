@@ -10,6 +10,7 @@
         'znk.infra.user',
         'znk.infra.general',
         'znk.infra.autofocus',
-        'znk.infra-web-app.promoCode'
+        'znk.infra-web-app.promoCode',
+        'znk.infra-web-app.planNotification'
     ]);
 })(angular);

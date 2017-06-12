@@ -39,12 +39,11 @@
             _getStorage().then(function (storage) {
                 // clear the pending path for user
                 storage.set(pathPending, {}).then(function () {
-                    initFirebaseChildAddedEvents(storage).then(function () {
-                        // start listen to plan notifications
-                        NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
-                        PlanNotificationService.checkPlanNotification();
-                    });
+                    initFirebaseChildAddedEvents(storage);
                 });
+                // start listen to plan notifications
+                NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
+                PlanNotificationService.checkPlanNotification();
             }).catch(function (error) {
                 $log.error(error);
             });

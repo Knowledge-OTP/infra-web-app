@@ -10326,7 +10326,8 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
         'znk.infra.user',
         'znk.infra.general',
         'znk.infra.autofocus',
-        'znk.infra-web-app.promoCode'
+        'znk.infra-web-app.promoCode',
+        'znk.infra-web-app.planNotification'
     ]);
 })(angular);
 
@@ -10826,7 +10827,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
+        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", "PlanNotificationService", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs, PlanNotificationService) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -10895,6 +10896,11 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 if (angular.isDefined(promoCode) && promoCode !== null) {
                     urlParams +=  (questionOrAmpersandSymbol + 'pcid=' + promoCode);
+                }
+
+                var planId = PlanNotificationService.getPlanIdFromUrl();
+                if (angular.isDefined(planId) && planId !== null) {
+                    urlParams +=  (questionOrAmpersandSymbol + 'planId=' + planId);
                 }
 
                 if(urlParams !== ''){
@@ -12354,12 +12360,11 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
             _getStorage().then(function (storage) {
                 // clear the pending path for user
                 storage.set(pathPending, {}).then(function () {
-                    initFirebaseChildAddedEvents(storage).then(function () {
-                        // start listen to plan notifications
-                        NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
-                        PlanNotificationService.checkPlanNotification();
-                    });
+                    initFirebaseChildAddedEvents(storage);
                 });
+                // start listen to plan notifications
+                NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
+                PlanNotificationService.checkPlanNotification();
             }).catch(function (error) {
                 $log.error(error);
             });
@@ -13267,20 +13272,23 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
         ["$translate", "PopUpSrv", "$q", "$window", "$log", "ENV", "$http", "AuthService", "$location", function ($translate, PopUpSrv, $q, $window, $log, ENV, $http, AuthService, $location) {
             'ngInject';
 
-            function _checkPlanNotification(){
+            function _getPlanIdFromUrl() {
                 var search = $location.search();
-                if (angular.isDefined(search.planId)) {
+                return angular.isDefined(search.planId) ? search.planId : null;
+            }
+
+            function _checkPlanNotification(){
+                var planId = _getPlanIdFromUrl();
+                if (planId) {
                     var uid = AuthService.getAuth().uid;
                     var connectStudentToPlanUrl = ENV.myZinkerz + '/plan/connectStudentToPlan';
                     $http({
                         method: 'POST',
                         url: connectStudentToPlanUrl,
-                        data: { planId: search.planId, uid: uid }
+                        data: { planId: planId, uid: uid }
                     }).then(function successCallback() {
-                        _newPlanNotification({ refObjId: search.planId });
+                        _newPlanNotification({ refObjId: planId });
                         $log.debug('checkPlanNotification: connectStudentToPlan successful');
-                        delete search.planId;
-                        $location.search(search);
                     }, function errorCallback(err) {
                         $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
                     });
@@ -13334,6 +13342,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 return isPopupSeen;
             }
 
+            this.getPlanIdFromUrl = _getPlanIdFromUrl;
             this.checkPlanNotification = _checkPlanNotification;
             this.showPlanNotificationPopUp = _showPlanNotificationPopUp;
             this.newPlanNotification = _newPlanNotification;
