@@ -20,7 +20,6 @@ complete-exercise-intro-tutorial {
             }
 
             .content-wrapper {
-                @include text-style(16px, $fontColor2, Lato, $lightFontWeight);
                 margin: {
                     top: 40px;
                     bottom: 100px;
@@ -45,5 +44,20 @@ complete-exercise-intro-tutorial {
                 }
             }
         }
+
+        .orange-square {
+            background-color: $bgColor2;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            padding: 0 3px;
+
+            &.zero-square {
+                color: $bgColor2;
+
+            }
+        }
+
+
     }
 }
