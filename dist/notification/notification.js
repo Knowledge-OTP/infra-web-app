@@ -39,18 +39,18 @@
             _getStorage().then(function (storage) {
                 // clear the pending path for user
                 storage.set(pathPending, {}).then(function () {
+                    // start listen to plan notifications
+                    NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
+                    PlanNotificationService.checkPlanNotification();
                     initFirebaseChildAddedEvents(storage);
                 });
-                // start listen to plan notifications
-                NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
-                PlanNotificationService.checkPlanNotification();
             }).catch(function (error) {
                 $log.error(error);
             });
 
             // call and init firebase 'child_added' event
             function initFirebaseChildAddedEvents(storage) {
-                 return storage.onEvent('child_added', pathPending, function (dataSnapshot) {
+                 storage.onEvent('child_added', pathPending, function (dataSnapshot) {
                     var notificationData = dataSnapshot.val();
                     var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
                     if (!callbackList) {
