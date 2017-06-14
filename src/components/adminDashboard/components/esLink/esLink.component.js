@@ -10,9 +10,11 @@
                 'ngInject';
 
                 var self = this;
-                var currentSelectedAppKey;
+                var currentSelectedAppKey = '';
+                self.generatedKey = '';
+                self.selectedStudent = null;
+                self.selectedEducator = null;
                 self.selectedAppHash = {};
-                self.allowLink = true;
                 self.uiGridState = {
                     student: {
                         initial: true,
@@ -40,12 +42,14 @@
                     if (self.gridEducatorApi.selection.selectRow) {
                         self.gridEducatorApi.selection.selectRow(rowData);
                         self.selectedEducator = rowData;
+                        _setSelectedAppHash();
                     }
                 };
                 self.selectStudentRow = function (rowData) {
                     if (self.gridStudentApi.selection.selectRow) {
                         self.gridStudentApi.selection.selectRow(rowData);
                         self.selectedStudent = rowData;
+                        _setSelectedAppHash();
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
@@ -91,10 +95,9 @@
                     ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
 
                 };
-
                 var selectedAppListener = $scope.$on('ADMIN_SELECTED_APP_KEY', function (event, key) {
                     currentSelectedAppKey = key;
-                    _setSelectedAppHash(key);
+                    _setSelectedAppHash();
 
                 });
                 $scope.$on("$destroy", function () {
@@ -103,7 +106,7 @@
                 function _linkSuccess() {
                     _endLoading();
                     var msg = translateFilter('ADMIN.ESLINK.LINK_SUCCEEDED');
-                    _setSelectedAppHash(currentSelectedAppKey);
+                    _setSelectedAppHash();
                     _showNotification('success', msg);
                 }
 
@@ -118,18 +121,10 @@
                     self.startLoader = false;
                 }
 
-                function _clearStates() {
-                    self.selectedStudent = null;
-                    self.selectedEducator = null;
-                    self.studentsSearchQuery = "";
-                    self.educatorSearchQuery = "";
-                }
-
-                function _setSelectedAppHash(key) {
+                function _setSelectedAppHash() {
                     if (self.selectedEducator && self.selectedStudent) {
-                        var uniqueKey = self.selectedEducator.uid + '_' + self.selectedStudent.uid + '_' + key;
-                        self.selectedAppHash[uniqueKey] = !self.selectedAppHash[uniqueKey];
-                        self.allowLink = !self.selectedAppHash[uniqueKey];
+                        self.generatedKey = self.selectedEducator.uid + '_' + self.selectedStudent.uid + '_' + currentSelectedAppKey;
+                        self.selectedAppHash[self.generatedKey] = !self.selectedAppHash[self.generatedKey];
                     }
                 }
 

@@ -1,9 +1,12 @@
 <div class="admin-dashboard admin-esLink" translate-namespace="ADMIN">
-
+    d: {{vm.selectedAppHash[vm.generatedKey]}}
+    dd: {{vm.generatedKey}}
     <div class="admin-main-container-overlay">
         <div class="admin-search-container">
             <div class="admin-search-label" translate="ADMIN.ESLINK.SEARCH_STUDENT"></div>
-            <div admin-search placeholder="{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}" data="vm.gridStudentsOptions.data" minlength="3" key="student" state="vm.uiGridState" search-query="vm.studentsSearchQuery" search-results="vm.getStudentsSearchResults"></div>
+            <div admin-search placeholder="{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}"
+                 data="vm.gridStudentsOptions.data" minlength="3" key="student" state="vm.uiGridState"
+                 search-query="vm.studentsSearchQuery" search-results="vm.getStudentsSearchResults"></div>
             <div class="admin-search-msg" translate="ADMIN.MIN_SEARCH_LENGTH"></div>
             <div ui-grid-selection ui-grid="vm.gridStudentsOptions" class="admin-grid">
                 <div class="admin-ui-grid-msg" ng-if="vm.uiGridState.student.initial">
@@ -22,7 +25,9 @@
 
         <div class="admin-search-container">
             <div class="admin-search-label" translate="ADMIN.ESLINK.SEARCH_EDUCATOR"></div>
-            <div admin-search placeholder="{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}" data="vm.gridEducatorsOptions.data" key="educator" state="vm.uiGridState" minlength="3" search-query="vm.educatorSearchQuery" search-results="vm.getEducatorsSearchResults"></div>
+            <div admin-search placeholder="{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}"
+                 data="vm.gridEducatorsOptions.data" key="educator" state="vm.uiGridState" minlength="3"
+                 search-query="vm.educatorSearchQuery" search-results="vm.getEducatorsSearchResults"></div>
 
             <div class="admin-search-msg" translate="ADMIN.MIN_SEARCH_LENGTH"></div>
             <div ui-grid-selection ui-grid="vm.gridEducatorsOptions" class="admin-grid">
@@ -63,8 +68,9 @@
                     name="submit">
                 <span translate="ADMIN.ESLINK.LINK_RST_BTN"></span>
             </button>
+           2: {{!vm.selectedAppHash[vm.generatedKey]}}
             <button element-loader
-                    ng-disabled="!(vm.selectedStudent && vm.selectedEducator && vm.allowLink)"
+                    ng-disabled=" !vm.selectedAppHash[vm.generatedKey]"
                     fill-loader="vm.fillLoader"
                     show-loader="vm.startLoader"
                     bg-loader="'#037684'"

@@ -289,8 +289,7 @@
                     var key = Object.keys(self.appName).filter(function (item) {
                         return currentAppName.indexOf(item.toLowerCase()) > -1;
                     })[0];
-                    self.selectedApp = self.appName[key];
-                    self.currentApp = key;
+                    self.selectApp(key);
                 }
 
                 var translationsPromMap = {};
@@ -311,6 +310,7 @@
                 self.selectApp = function (key) {
                     self.selectedApp = self.appName[key];
                     self.currentApp = key;
+                    $scope.$emit('ADMIN_SELECTED_APP_KEY', key);
                 };
                 self.expandIcon = 'expand_more';
 
@@ -336,10 +336,15 @@
             bindings: {},
             templateUrl: 'components/adminDashboard/components/esLink/templates/esLink.template.html',
             controllerAs: 'vm',
-            controller: ["$filter", "AdminSearchService", "ESLinkService", "$log", "ZnkToastSrv", function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
+            controller: ["$scope", "$filter", "AdminSearchService", "ESLinkService", "$log", "ZnkToastSrv", function ($scope, $filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
                 'ngInject';
 
                 var self = this;
+                var currentSelectedAppKey = '';
+                self.generatedKey = '';
+                self.selectedStudent = null;
+                self.selectedEducator = null;
+                self.selectedAppHash = {};
                 self.uiGridState = {
                     student: {
                         initial: true,
@@ -367,25 +372,27 @@
                     if (self.gridEducatorApi.selection.selectRow) {
                         self.gridEducatorApi.selection.selectRow(rowData);
                         self.selectedEducator = rowData;
+                        _setSelectedAppHash();
                     }
                 };
                 self.selectStudentRow = function (rowData) {
                     if (self.gridStudentApi.selection.selectRow) {
                         self.gridStudentApi.selection.selectRow(rowData);
                         self.selectedStudent = rowData;
+                        _setSelectedAppHash();
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
-                   return AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
+                    return AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
                 };
                 self.getStudentsSearchResults = function (queryTerm) {
-                   return AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
+                    return AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
                 self.resetUserData = function () {
                     self.startResetBtnLoader = true;
                     self.fillResetBtnLoader = undefined;
-                    var appName = self.currentAppKey.toLowerCase()+'_app';
+                    var appName = self.currentAppKey.toLowerCase() + '_app';
                     var data = {
                         appName: appName,
                         uid: self.selectedStudent.uid
@@ -418,14 +425,19 @@
                     ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
 
                 };
+                var selectedAppListener = $scope.$on('ADMIN_SELECTED_APP_KEY', function (event, key) {
+                    currentSelectedAppKey = key;
+                    _setSelectedAppHash();
+
+                });
+                $scope.$on("$destroy", function () {
+                    selectedAppListener();
+                });
                 function _linkSuccess() {
                     _endLoading();
                     var msg = translateFilter('ADMIN.ESLINK.LINK_SUCCEEDED');
+                    _setSelectedAppHash();
                     _showNotification('success', msg);
-                    self.selectedStudent = null;
-                    self.selectedEducator = null;
-                    self.studentsSearchQuery = "";
-                    self.educatorSearchQuery = "";
                 }
 
                 function _linkError(err) {
@@ -437,6 +449,13 @@
                 function _endLoading() {
                     self.fillLoader = false;
                     self.startLoader = false;
+                }
+
+                function _setSelectedAppHash() {
+                    if (self.selectedEducator && self.selectedStudent) {
+                        self.generatedKey = self.selectedEducator.uid + '_' + self.selectedStudent.uid + '_' + currentSelectedAppKey;
+                        self.selectedAppHash[self.generatedKey] = !self.selectedAppHash[self.generatedKey];
+                    }
                 }
 
                 function _educatorsSearchResults(data) {
@@ -1070,11 +1089,14 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "");
   $templateCache.put("components/adminDashboard/components/esLink/templates/esLink.template.html",
     "<div class=\"admin-dashboard admin-esLink\" translate-namespace=\"ADMIN\">\n" +
-    "\n" +
+    "    d: {{vm.selectedAppHash[vm.generatedKey]}}\n" +
+    "    dd: {{vm.generatedKey}}\n" +
     "    <div class=\"admin-main-container-overlay\">\n" +
     "        <div class=\"admin-search-container\">\n" +
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_STUDENT\"></div>\n" +
-    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}\" data=\"vm.gridStudentsOptions.data\" minlength=\"3\" key=\"student\" state=\"vm.uiGridState\" search-query=\"vm.studentsSearchQuery\" search-results=\"vm.getStudentsSearchResults\"></div>\n" +
+    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_STUDENT' | translate}}\"\n" +
+    "                 data=\"vm.gridStudentsOptions.data\" minlength=\"3\" key=\"student\" state=\"vm.uiGridState\"\n" +
+    "                 search-query=\"vm.studentsSearchQuery\" search-results=\"vm.getStudentsSearchResults\"></div>\n" +
     "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
     "            <div ui-grid-selection ui-grid=\"vm.gridStudentsOptions\" class=\"admin-grid\">\n" +
     "                <div class=\"admin-ui-grid-msg\" ng-if=\"vm.uiGridState.student.initial\">\n" +
@@ -1093,7 +1115,9 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <div class=\"admin-search-container\">\n" +
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_EDUCATOR\"></div>\n" +
-    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\" data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\" search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
+    "            <div admin-search placeholder=\"{{'ADMIN.ESLINK.SEARCH_EDUCATOR' | translate}}\"\n" +
+    "                 data=\"vm.gridEducatorsOptions.data\" key=\"educator\" state=\"vm.uiGridState\" minlength=\"3\"\n" +
+    "                 search-query=\"vm.educatorSearchQuery\" search-results=\"vm.getEducatorsSearchResults\"></div>\n" +
     "\n" +
     "            <div class=\"admin-search-msg\" translate=\"ADMIN.MIN_SEARCH_LENGTH\"></div>\n" +
     "            <div ui-grid-selection ui-grid=\"vm.gridEducatorsOptions\" class=\"admin-grid\">\n" +
@@ -1134,8 +1158,9 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    name=\"submit\">\n" +
     "                <span translate=\"ADMIN.ESLINK.LINK_RST_BTN\"></span>\n" +
     "            </button>\n" +
+    "           2: {{!vm.selectedAppHash[vm.generatedKey]}}\n" +
     "            <button element-loader\n" +
-    "                    ng-disabled=\"!(vm.selectedStudent && vm.selectedEducator)\"\n" +
+    "                    ng-disabled=\" !vm.selectedAppHash[vm.generatedKey]\"\n" +
     "                    fill-loader=\"vm.fillLoader\"\n" +
     "                    show-loader=\"vm.startLoader\"\n" +
     "                    bg-loader=\"'#037684'\"\n" +
@@ -1157,7 +1182,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "        <div class=\"znk-input-group\">\n" +
     "            <input type=\"search\"\n" +
     "                   minlength=\"{{::vm.minlength}}\"\n" +
-    "                   placeholder=\"{{::vm.placeholder}}\"\n" +
+    "                   placeholder=\"{{vm.placeholder}}\"\n" +
     "                   name=\"search-box\"\n" +
     "                   ng-model=\"vm.searchQuery\">\n" +
     "        </div>\n" +
