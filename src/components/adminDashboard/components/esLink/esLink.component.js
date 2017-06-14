@@ -6,10 +6,13 @@
             bindings: {},
             templateUrl: 'components/adminDashboard/components/esLink/templates/esLink.template.html',
             controllerAs: 'vm',
-            controller: function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
+            controller: function ($scope, $filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
                 'ngInject';
 
                 var self = this;
+                var currentSelectedAppKey;
+                self.selectedAppHash = {};
+                self.allowLink = true;
                 self.uiGridState = {
                     student: {
                         initial: true,
@@ -46,16 +49,16 @@
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
-                   return AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
+                    return AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
                 };
                 self.getStudentsSearchResults = function (queryTerm) {
-                   return AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
+                    return AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
                 self.resetUserData = function () {
                     self.startResetBtnLoader = true;
                     self.fillResetBtnLoader = undefined;
-                    var appName = self.currentAppKey.toLowerCase()+'_app';
+                    var appName = self.currentAppKey.toLowerCase() + '_app';
                     var data = {
                         appName: appName,
                         uid: self.selectedStudent.uid
@@ -88,14 +91,20 @@
                     ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
 
                 };
+
+                var selectedAppListener = $scope.$on('ADMIN_SELECTED_APP_KEY', function (event, key) {
+                    currentSelectedAppKey = key;
+                    _setSelectedAppHash(key);
+
+                });
+                $scope.$on("$destroy", function () {
+                    selectedAppListener();
+                });
                 function _linkSuccess() {
                     _endLoading();
                     var msg = translateFilter('ADMIN.ESLINK.LINK_SUCCEEDED');
+                    _setSelectedAppHash(currentSelectedAppKey);
                     _showNotification('success', msg);
-                    self.selectedStudent = null;
-                    self.selectedEducator = null;
-                    self.studentsSearchQuery = "";
-                    self.educatorSearchQuery = "";
                 }
 
                 function _linkError(err) {
@@ -107,6 +116,21 @@
                 function _endLoading() {
                     self.fillLoader = false;
                     self.startLoader = false;
+                }
+
+                function _clearStates() {
+                    self.selectedStudent = null;
+                    self.selectedEducator = null;
+                    self.studentsSearchQuery = "";
+                    self.educatorSearchQuery = "";
+                }
+
+                function _setSelectedAppHash(key) {
+                    if (self.selectedEducator && self.selectedStudent) {
+                        var uniqueKey = self.selectedEducator.uid + '_' + self.selectedStudent.uid + '_' + key;
+                        self.selectedAppHash[uniqueKey] = !self.selectedAppHash[uniqueKey];
+                        self.allowLink = !self.selectedAppHash[uniqueKey];
+                    }
                 }
 
                 function _educatorsSearchResults(data) {

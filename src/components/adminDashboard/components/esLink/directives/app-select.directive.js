@@ -27,8 +27,7 @@
                     var key = Object.keys(self.appName).filter(function (item) {
                         return currentAppName.indexOf(item.toLowerCase()) > -1;
                     })[0];
-                    self.selectedApp = self.appName[key];
-                    self.currentApp = key;
+                    self.selectApp(key);
                 }
 
                 var translationsPromMap = {};
@@ -49,6 +48,7 @@
                 self.selectApp = function (key) {
                     self.selectedApp = self.appName[key];
                     self.currentApp = key;
+                    $scope.$emit('ADMIN_SELECTED_APP_KEY', key);
                 };
                 self.expandIcon = 'expand_more';
 

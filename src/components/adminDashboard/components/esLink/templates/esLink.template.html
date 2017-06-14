@@ -64,7 +64,7 @@
                 <span translate="ADMIN.ESLINK.LINK_RST_BTN"></span>
             </button>
             <button element-loader
-                    ng-disabled="!(vm.selectedStudent && vm.selectedEducator)"
+                    ng-disabled="!(vm.selectedStudent && vm.selectedEducator && vm.allowLink)"
                     fill-loader="vm.fillLoader"
                     show-loader="vm.startLoader"
                     bg-loader="'#037684'"
