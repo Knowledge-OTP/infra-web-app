@@ -1597,8 +1597,6 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "");
   $templateCache.put("components/adminDashboard/components/esLink/templates/esLink.template.html",
     "<div class=\"admin-dashboard admin-esLink\" translate-namespace=\"ADMIN\">\n" +
-    "    d: {{vm.selectedAppHash[vm.generatedKey]}}\n" +
-    "    dd: {{vm.generatedKey}}\n" +
     "    <div class=\"admin-main-container-overlay\">\n" +
     "        <div class=\"admin-search-container\">\n" +
     "            <div class=\"admin-search-label\" translate=\"ADMIN.ESLINK.SEARCH_STUDENT\"></div>\n" +
