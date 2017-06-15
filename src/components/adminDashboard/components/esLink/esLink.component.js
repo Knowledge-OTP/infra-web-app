@@ -6,10 +6,15 @@
             bindings: {},
             templateUrl: 'components/adminDashboard/components/esLink/templates/esLink.template.html',
             controllerAs: 'vm',
-            controller: function ($filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
+            controller: function ($scope, $filter, AdminSearchService, ESLinkService, $log, ZnkToastSrv) {
                 'ngInject';
 
                 var self = this;
+                var currentSelectedAppKey = '';
+                self.generatedKey = '';
+                self.selectedStudent = null;
+                self.selectedEducator = null;
+                self.selectedAppHash = {};
                 self.uiGridState = {
                     student: {
                         initial: true,
@@ -37,25 +42,27 @@
                     if (self.gridEducatorApi.selection.selectRow) {
                         self.gridEducatorApi.selection.selectRow(rowData);
                         self.selectedEducator = rowData;
+                        _setSelectedAppHash();
                     }
                 };
                 self.selectStudentRow = function (rowData) {
                     if (self.gridStudentApi.selection.selectRow) {
                         self.gridStudentApi.selection.selectRow(rowData);
                         self.selectedStudent = rowData;
+                        _setSelectedAppHash();
                     }
                 };
                 self.getEducatorsSearchResults = function (queryTerm) {
-                   return AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
+                    return AdminSearchService.getSearchResults(queryTerm, true).then(_educatorsSearchResults);
                 };
                 self.getStudentsSearchResults = function (queryTerm) {
-                   return AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
+                    return AdminSearchService.getSearchResults(queryTerm).then(_studentsSearchResults);
                 };
 
                 self.resetUserData = function () {
                     self.startResetBtnLoader = true;
                     self.fillResetBtnLoader = undefined;
-                    var appName = self.currentAppKey.toLowerCase()+'_app';
+                    var appName = self.currentAppKey.toLowerCase() + '_app';
                     var data = {
                         appName: appName,
                         uid: self.selectedStudent.uid
@@ -88,14 +95,19 @@
                     ESLinkService.link(invitationObj).then(_linkSuccess, _linkError);
 
                 };
+                var selectedAppListener = $scope.$on('ADMIN_SELECTED_APP_KEY', function (event, key) {
+                    currentSelectedAppKey = key;
+                    _setSelectedAppHash();
+
+                });
+                $scope.$on("$destroy", function () {
+                    selectedAppListener();
+                });
                 function _linkSuccess() {
                     _endLoading();
                     var msg = translateFilter('ADMIN.ESLINK.LINK_SUCCEEDED');
+                    _setSelectedAppHash();
                     _showNotification('success', msg);
-                    self.selectedStudent = null;
-                    self.selectedEducator = null;
-                    self.studentsSearchQuery = "";
-                    self.educatorSearchQuery = "";
                 }
 
                 function _linkError(err) {
@@ -107,6 +119,13 @@
                 function _endLoading() {
                     self.fillLoader = false;
                     self.startLoader = false;
+                }
+
+                function _setSelectedAppHash() {
+                    if (self.selectedEducator && self.selectedStudent) {
+                        self.generatedKey = self.selectedEducator.uid + '_' + self.selectedStudent.uid + '_' + currentSelectedAppKey;
+                        self.selectedAppHash[self.generatedKey] = !self.selectedAppHash[self.generatedKey];
+                    }
                 }
 
                 function _educatorsSearchResults(data) {

@@ -307,7 +307,8 @@ active-panel {
       margin-top: 8px;
       border: 0;
       width: 75px;
-      background-color: #0a9bad; }
+      background-color: #0a9bad;
+      outline: none; }
     .admin-dashboard .admin-main-container-overlay .admin-search-pane .admin-search-btn[disabled] {
       opacity: 0.7; }
     .admin-dashboard .admin-main-container-overlay .admin-search-pane .search-wrap .znk-input-group {
