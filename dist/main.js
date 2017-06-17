@@ -10830,6 +10830,11 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             id: 'ACT',
             name: 'ACT',
             className: 'act'
+        },
+        MYZINKERZ: {
+            id: 'MYZINKERZ',
+            name: 'MYZINKERZ',
+            className: 'myzinkerz'
         }
     };
 
