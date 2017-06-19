@@ -17,14 +17,22 @@
     <style>
         .demo-wrap {
             width: 1060px;
-            margin: 18px auto;
+            margin: 0 auto;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .demo-wrap button {
+           width: 20%;
+           margin-top: 20px;
         }
     </style>
 </head>
 <body ng-app="demo" ng-controller="Main">
 
    <div class="demo-wrap">
-         <button ng-click="openPopup()">Open Change Password Popup</button>
+         <button ng-click="openPlanNotification()">Open Plan Notification</button>
    </div>
 
     <!-- bower:js -->
@@ -59,7 +67,8 @@
     <script src="demo.js"></script>
 
    <script src="infra/demoShared/translate.config.js"></script>
-   <script src="infra/demoShared/storages.config.js"></script>
-   <script src="infra/demoShared/infraSrvUserData.config.js"></script>
+   <!--<script src="infra/demoShared/storages.config.js"></script>-->
+   <script src="infra/demoShared/env.value.js"></script>
+
 </body>
 </html>

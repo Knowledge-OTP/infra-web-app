@@ -28,6 +28,7 @@
 "znk.infra-web-app.myProfile",
 "znk.infra-web-app.notification",
 "znk.infra-web-app.onBoarding",
+"znk.infra-web-app.planNotification",
 "znk.infra-web-app.promoCode",
 "znk.infra-web-app.purchase",
 "znk.infra-web-app.settings",
@@ -10848,7 +10849,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             return env;
         };
 
-        this.$get = ["$q", "$http", "$log", "$window", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
+        this.$get = ["$q", "$http", "$log", "$window", "$location", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, $location, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -10917,6 +10918,12 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 if (angular.isDefined(promoCode) && promoCode !== null) {
                     urlParams +=  (questionOrAmpersandSymbol + 'pcid=' + promoCode);
+                }
+
+                var search = $location.search();
+                var planId = angular.isDefined(search.planId) ? search.planId : null;
+                if (angular.isDefined(planId) && planId !== null) {
+                    urlParams +=  (questionOrAmpersandSymbol + 'planId=' + planId);
                 }
 
                 if(urlParams !== ''){
@@ -12338,134 +12345,159 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.notification', []);
+    angular.module('znk.infra-web-app.notification', [
+        'znk.infra-web-app.planNotification',
+        'znk.infra.auth',
+        'znk.infra.storage'
+    ]);
 })(angular);
-
-(function () {
-    'use strict';
-
-    angular.module('znk.infra-web-app.notification').run(["$log", "InfraConfigSrv", "NotificationService", "AuthService", function ($log, InfraConfigSrv, NotificationService, AuthService) {
-        'ngInject';
-
-        var uid = AuthService.getAuth().uid;
-        var pathPending = "/notifications/users/" + uid + "/pending";
-        if (!uid) {
-            $log.error('uid is missing');
-            return;
-        }
-        _getStorage().then(function (storage) {
-            // clear the pending path for user
-            storage.set(pathPending, {}).then(function () {
-                initFirebaseChildAddedEvents(storage);
-            });
-        }).catch(function (error) {
-            $log.error(error);
-        });
-        // call and init firebase 'child_added' event
-        function initFirebaseChildAddedEvents(storage) {
-            storage.onEvent('child_added', pathPending, function (dataSnapshot) {
-                var notificationData = dataSnapshot.val();
-                var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
-                if (!callbackList) {
-                    $log.log('no subscribers');
-                }
-                callbackList.forEach(function (callback) {
-                    callback(notificationData);
-                    if (!notificationData.id) {
-                        $log.error('notification id is null or empty');
-                    }
-                });
-                var dataToMoveAndDelete = {};
-                NotificationService.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
-                _getStorage().then(function (storage) {
-                    storage.update(dataToMoveAndDelete).catch(function (error) {
-                        $log.error("error: can not remove item, error: " + error.message);
-                    });
-                });
-            });
-        }
-
-        function _getStorage() {
-            return InfraConfigSrv.getGlobalStorage();
-        }
-    }]);
-})(angular);
-
 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.notification').service('NotificationService', ["ENV", "$http", "AuthService", "$log", "InfraConfigSrv", function (ENV, $http, AuthService, $log, InfraConfigSrv) {
-        'ngInject';
+    angular.module('znk.infra-web-app.notification').factory('NotificationTypeEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
 
-        var self = this;
-        var uid = AuthService.getAuth().uid;
-        // subscribers list, callbacks grouped by the 'notificationTypeEnum'
-        self.subscribers = [];
-        self.notify = function (notificationOptions) {
-            // TODO: add backendNotificationUrl in all ENV
-            // send notification object to aws endpoint function
-            return $http.post(ENV.backendNotificationUrl, notificationOptions);
-        };
-        // subscribe for events
-        self.on = function (notificationTypeEnum, callback) {
-            if (!uid) {
-                $log.error('uid is missing');
-                return;
-            }
-            if(typeof callback !== "function" ){
-                $log.error('callback property is not a function');
-                return;
-            }
-            var callbackList = self.subscribers[notificationTypeEnum];
-            if (callbackList) {
-                callbackList.push(callback);
-            } else {
-                callbackList = [callback];
-                self.subscribers[notificationTypeEnum] = callbackList;
-            }
-        };
-        // moves filtered notification by 'notificationTypeEnum' objects to archive (deprecated/on hold)
-        self.clean = function (notificationTypeEnum) {
-            if (!uid) {
-                $log.error('uid is missing');
-                return;
-            }
+            return new EnumSrv.BaseEnum([
+                ['PLAN_PENDING', 1, 'plan pending']
+            ]);
+        }]
+    );
+})(angular);
+
+
+(function () {
+    'use strict';
+
+    angular.module('znk.infra-web-app.notification').run(
+        ["$log", "InfraConfigSrv", "NotificationService", "AuthService", "NotificationTypeEnum", "PlanNotificationService", function ($log, InfraConfigSrv, NotificationService, AuthService, NotificationTypeEnum, PlanNotificationService) {
+            'ngInject';
+
+            var uid = AuthService.getAuth().uid;
             var pathPending = "/notifications/users/" + uid + "/pending";
+            if (!uid) {
+                $log.error('uid is missing');
+                return;
+            }
             _getStorage().then(function (storage) {
-                storage.get(pathPending).then(function (snapshot) {
-                    var notifications = snapshot.val();
-                    var notificationList = notifications.filter(function (item) {
-                        return item.notificationTypeEnum === notificationTypeEnum;
+                // clear the pending path for user
+                storage.set(pathPending, {}).then(function () {
+                    // start listen to plan notifications
+                    NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
+                    PlanNotificationService.checkPlanNotification();
+                    initFirebaseChildAddedEvents(storage);
+                });
+            }).catch(function (error) {
+                $log.error(error);
+            });
+
+            // call and init firebase 'child_added' event
+            function initFirebaseChildAddedEvents(storage) {
+                 storage.onEvent('child_added', pathPending, function (dataSnapshot) {
+                    var notificationData = dataSnapshot.val();
+                    var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
+                    if (!callbackList) {
+                        $log.log('no subscribers');
+                    }
+                    callbackList.forEach(function (callback) {
+                        callback(notificationData);
+                        if (!notificationData.id) {
+                            $log.error('notification id is null or empty');
+                        }
                     });
                     var dataToMoveAndDelete = {};
-                    for (var i = 0; i < notificationList.length; i++) {
-                        var notificationData = notificationList[i];
-                        if (!notificationData.id) {
-                            this.logger.log("notification id for obj:" + JSON.stringify(notificationData) + "is null or empty");
-                            continue;
-                        }
-                        this.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
-                    }
+                    NotificationService.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
                     _getStorage().then(function (storage) {
                         storage.update(dataToMoveAndDelete).catch(function (error) {
                             $log.error("error: can not remove item, error: " + error.message);
                         });
                     });
                 });
-            });
-        };
-        // populate and prepare object for move and delete in firebase
-        self.populateObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
-            var pathForArchive = "/notifications/users/" + uid + "/archive/" + notificationData.id;
-            var pathForDelete = "/notifications/users/" + uid + "/pending/" + notificationData.id;
-            dataToMoveAndDelete[pathForArchive] = notificationData;
-            dataToMoveAndDelete[pathForDelete] = null;
-        };
-        function _getStorage() {
-            return InfraConfigSrv.getGlobalStorage();
-        }
-    }]);
+            }
+
+            function _getStorage() {
+                return InfraConfigSrv.getGlobalStorage();
+            }
+        }]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.notification').service('NotificationService',
+        ["ENV", "$http", "AuthService", "$log", "InfraConfigSrv", function (ENV, $http, AuthService, $log, InfraConfigSrv) {
+            'ngInject';
+
+            var self = this;
+            var uid = AuthService.getAuth().uid;
+            // subscribers list, callbacks grouped by the 'notificationTypeEnum'
+            self.subscribers = [];
+            self.notify = function (notificationOptions) {
+                // TODO: add backendNotificationUrl in all ENV
+                // send notification object to aws endpoint function
+                return $http.post(ENV.backendNotificationUrl, notificationOptions);
+            };
+            // subscribe for events
+            self.on = function (notificationTypeEnum, callback) {
+                if (!uid) {
+                    $log.error('uid is missing');
+                    return;
+                }
+                if(typeof callback !== "function" ){
+                    $log.error('callback property is not a function');
+                    return;
+                }
+                var callbackList = self.subscribers[notificationTypeEnum];
+                if (callbackList) {
+                    callbackList.push(callback);
+                } else {
+                    callbackList = [callback];
+                    self.subscribers[notificationTypeEnum] = callbackList;
+                }
+            };
+            // moves filtered notification by 'notificationTypeEnum' objects to archive (deprecated/on hold)
+            self.clean = function (notificationTypeEnum) {
+                if (!uid) {
+                    $log.error('uid is missing');
+                    return;
+                }
+                var pathPending = "/notifications/users/" + uid + "/pending";
+                _getStorage().then(function (storage) {
+                    storage.get(pathPending).then(function (snapshot) {
+                        var notifications = snapshot.val();
+                        var notificationList = notifications.filter(function (item) {
+                            return item.notificationTypeEnum === notificationTypeEnum;
+                        });
+                        var dataToMoveAndDelete = {};
+                        for (var i = 0; i < notificationList.length; i++) {
+                            var notificationData = notificationList[i];
+                            if (!notificationData.id) {
+                                this.logger.log("notification id for obj:" + JSON.stringify(notificationData) + "is null or empty");
+                                continue;
+                            }
+                            this.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
+                        }
+                        _getStorage().then(function (storage) {
+                            storage.update(dataToMoveAndDelete).catch(function (error) {
+                                $log.error("error: can not remove item, error: " + error.message);
+                            });
+                        });
+                    });
+                });
+            };
+            // populate and prepare object for move and delete in firebase
+            self.populateObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
+                var pathForArchive = "/notifications/users/" + uid + "/archive/" + notificationData.id;
+                var pathForDelete = "/notifications/users/" + uid + "/pending/" + notificationData.id;
+                dataToMoveAndDelete[pathForArchive] = notificationData;
+                dataToMoveAndDelete[pathForDelete] = null;
+            };
+            function _getStorage() {
+                return InfraConfigSrv.getGlobalStorage();
+            }
+        }]);
 })(angular);
 
 angular.module('znk.infra-web-app.notification').run(['$templateCache', function($templateCache) {
@@ -13225,6 +13257,123 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
     "</section>\n" +
     "<on-boarding-bar step=\"welcome\"></on-boarding-bar>\n" +
     "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.planNotification', [
+        'pascalprecht.translate',
+        'znk.infra.svgIcon',
+        'znk.infra.popUp'
+    ]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.planNotification').factory('ZnkServiceEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['ACT', 1, 'act'],
+                ['SAT', 2, 'sat'],
+                ['SATSM', 3, 'satsm'],
+                ['TOEFL', 4, 'toefl'],
+                ['ZNK', 5, 'znk']
+            ]);
+        }]
+    );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.planNotification').service('PlanNotificationService',
+        ["$translate", "PopUpSrv", "$q", "$window", "$log", "ENV", "$http", "AuthService", "$location", function ($translate, PopUpSrv, $q, $window, $log, ENV, $http, AuthService, $location) {
+            'ngInject';
+
+            function _getPlanIdFromUrl() {
+                var search = $location.search();
+                return angular.isDefined(search.planId) ? search.planId : null;
+            }
+
+            function _checkPlanNotification(){
+                var planId = _getPlanIdFromUrl();
+                if (planId) {
+                    var uid = AuthService.getAuth().uid;
+                    var connectStudentToPlanUrl = ENV.myZinkerz + '/plan/connectStudentToPlan';
+                    $http({
+                        method: 'POST',
+                        url: connectStudentToPlanUrl,
+                        data: { planId: planId, uid: uid }
+                    }).then(function successCallback() {
+                        _newPlanNotification({ refObjId: planId });
+                        $log.debug('checkPlanNotification: connectStudentToPlan successful');
+                    }, function errorCallback(err) {
+                        $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
+                    });
+                }
+            }
+
+            function _newPlanNotification(notification) {
+                _showPlanNotificationPopUp().then(function () {
+                    $window.open(ENV.myZinkerz + '?planId=' + notification.refObjId);
+                }).catch(function () {
+                    $log.debug('newPlanNotification: user closed the popup');
+                });
+            }
+
+            function _showPlanNotificationPopUp(){
+                if (!_isPopupSeen()) {
+                    var translationsPromMap = {};
+                    translationsPromMap.title = $translate('PLAN_NOTIFICATION.NEW_PLAN');
+                    translationsPromMap.content= $translate('PLAN_NOTIFICATION.CONTINUE_TO_PLAN');
+                    translationsPromMap.acceptBtnTitle = $translate('PLAN_NOTIFICATION.REJECT');
+                    translationsPromMap.cancelBtnTitle = $translate('PLAN_NOTIFICATION.ACCEPT');
+                    return $q.all(translationsPromMap).then(function(translations){
+                        var popUpInstance = PopUpSrv.warning(
+                            translations.title,
+                            translations.content,
+                            translations.acceptBtnTitle,
+                            translations.cancelBtnTitle
+                        );
+                        $window.localStorage.setItem('lastSeenPlanNotificationPopUp', Date.now());
+                        return popUpInstance.promise.then(function(res){
+                            return $q.reject(res);
+                        },function(res){
+                            return $q.resolve(res);
+                        });
+                    },function(err){
+                        $log.error('planNotificationService: showPlanNotificationPopUp translate failure' + err);
+                        return $q.reject(err);
+                    });
+                } else {
+                    $log.debug('showPlanNotificationPopUp: The popup have been already seen in the last two hours');
+                }
+            }
+
+            function _isPopupSeen() {
+                var isPopupSeen = false;
+                var TWO_HOURS = 7200000;
+                var lastSeenPlanNotificationPopUp = $window.localStorage.getItem('lastSeenPlanNotificationPopUp');
+                if (lastSeenPlanNotificationPopUp){
+                    isPopupSeen = (lastSeenPlanNotificationPopUp + TWO_HOURS) < Date.now();
+                }
+                return isPopupSeen;
+            }
+
+            this.getPlanIdFromUrl = _getPlanIdFromUrl;
+            this.checkPlanNotification = _checkPlanNotification;
+            this.showPlanNotificationPopUp = _showPlanNotificationPopUp;
+            this.newPlanNotification = _newPlanNotification;
+        }]);
+})(angular);
+
+angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function($templateCache) {
+
 }]);
 
 (function (angular) {

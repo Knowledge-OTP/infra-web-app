@@ -584,5 +584,11 @@
         "ZINKERZ_EDUCATOR": "Zinkerz Educator",
         "SUBJECT": "Subject",
         "EDUCATOR_TEACH_WORKS_NAME": "Educator Teach Works Name"
+    },
+    "PLAN_NOTIFICATION": {
+        "NEW_PLAN": "New Plan",
+        "CONTINUE_TO_PLAN": "Continue to plan",
+        "ACCEPT": "Continue",
+        "REJECT": "Cancel"
     }
 }

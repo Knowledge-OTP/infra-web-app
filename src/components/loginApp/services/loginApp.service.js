@@ -39,7 +39,7 @@
             return env;
         };
 
-        this.$get = function ($q, $http, $log, $window, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
+        this.$get = function ($q, $http, $log, $window, $location, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
             'ngInject';
 
             var LoginAppSrv = {};
@@ -108,6 +108,12 @@
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 if (angular.isDefined(promoCode) && promoCode !== null) {
                     urlParams +=  (questionOrAmpersandSymbol + 'pcid=' + promoCode);
+                }
+
+                var search = $location.search();
+                var planId = angular.isDefined(search.planId) ? search.planId : null;
+                if (angular.isDefined(planId) && planId !== null) {
+                    urlParams +=  (questionOrAmpersandSymbol + 'planId=' + planId);
                 }
 
                 if(urlParams !== ''){
