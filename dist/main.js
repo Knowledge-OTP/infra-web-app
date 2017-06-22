@@ -13304,7 +13304,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
                 var planId = _getPlanIdFromUrl();
                 if (planId) {
                     var uid = AuthService.getAuth().uid;
-                    var connectStudentToPlanUrl = ENV.myZinkerz + '/plan/connectStudentToPlan';
+                    var connectStudentToPlanUrl = ENV.zinkerzBE + '/plan/connectStudentToPlan';
                     $http({
                         method: 'POST',
                         url: connectStudentToPlanUrl,
