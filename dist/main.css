@@ -1498,7 +1498,7 @@ estimated-score-widget.is-nav-menu .score-estimate-container .divider {
 
 estimated-score-widget .score-estimate-container {
   width: 323px;
-  height: 665px;
+  height: 100%;
   background-color: #ffffff;
   position: relative;
   border-radius: 15px;
