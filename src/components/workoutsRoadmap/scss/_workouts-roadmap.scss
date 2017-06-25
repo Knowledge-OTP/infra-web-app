@@ -1,7 +1,7 @@
 .workouts-roadmap-container {
     display: flex;
     justify-content: center;
-    min-height: 665px;
+    min-height: 100%;
 
     & > ui-view {
         width: 100%;
