@@ -7083,7 +7083,7 @@ workout-intro-lock {
   display: flex;
   -ms-flex-pack: center;
       justify-content: center;
-  min-height: 665px; }
+  min-height: 100%; }
   .workouts-roadmap-container > ui-view {
     width: 100%;
     height: 100%; }
@@ -7325,7 +7325,7 @@ workout-intro-lock {
       .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .workout-time-selection-container .avail-time-item-wrapper[disabled="disabled"] .avail-time-item svg-icon {
         display: none; }
   .workouts-roadmap-workout-intro .workouts-roadmap-intro-wrapper .start-btn-wrapper {
-    margin-top: 50px; }
+    margin-top: 10px; }
 
 @keyframes rotateAnimation {
   0% {
