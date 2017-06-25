@@ -54,12 +54,12 @@ estimated-score-widget {
 
     .score-estimate-container {
         width: 323px;
-        height: 665px;
+        height: 100%;
         background-color: $bgColor3;
         position: relative;
         border-radius: 15px;
         box-shadow: 0 3px 7px 0 $bsColor3;
-
+        overflow: auto;
         .inner {
             padding: 18px 31px;
         }
