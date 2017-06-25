@@ -43,7 +43,8 @@ estimated-score-widget .score-estimate-container {
   background-color: #ffffff;
   position: relative;
   border-radius: 15px;
-  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
+  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
+  overflow: auto; }
   estimated-score-widget .score-estimate-container .inner {
     padding: 18px 31px; }
   estimated-score-widget .score-estimate-container .divider {

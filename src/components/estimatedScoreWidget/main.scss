@@ -59,7 +59,7 @@ estimated-score-widget {
         position: relative;
         border-radius: 15px;
         box-shadow: 0 3px 7px 0 $bsColor3;
-
+        overflow: auto;
         .inner {
             padding: 18px 31px;
         }
