@@ -299,17 +299,19 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
   $templateCache.put("components/tutorials/components/tutorialPane/tutorialPane.template.html",
     "<div class=\"tutorial-navigation-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_PANE_COMPONENTS\">\n" +
     "    <div class=\"pane-title\" translate=\".TITLE\"></div>\n" +
-    "    <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-    "        <md-list-item\n" +
-    "            md-no-ink\n" +
-    "            ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
-    "            ng-click=\"vm.changeActiveSubject(subject)\"\n" +
-    "            class=\"subject-item\"\n" +
-    "            ng-repeat=\"subject in vm.subjecstOrder\">\n" +
-    "            <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
-    "            <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
-    "        </md-list-item>\n" +
-    "    </md-list>\n" +
+    "    <div class=\"tutorial-container\">\n" +
+    "        <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
+    "            <md-list-item\n" +
+    "                md-no-ink\n" +
+    "                ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
+    "                ng-click=\"vm.changeActiveSubject(subject)\"\n" +
+    "                class=\"subject-item\"\n" +
+    "                ng-repeat=\"subject in vm.subjecstOrder\">\n" +
+    "                <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
+    "                <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
+    "            </md-list-item>\n" +
+    "        </md-list>\n" +
+    "    </div>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/tutorials/svg/subject-locked-icon.svg",
@@ -363,7 +365,9 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "<div class=\"app-tests-roadmap layout-row flex-grow\" layout=\"row\" flex=\"grow\">\n" +
     "    <div class=\"tutorials-main-container\">\n" +
     "        <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
-    "        <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
+    "        <section class=\"tutorials-boxes-container base-border-radius base-box-shadow\">\n" +
+    "            <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
+    "        </section>\n" +
     "    </div>\n" +
     "</div>\n" +
     "\n" +

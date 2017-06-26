@@ -6115,8 +6115,14 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 /* full background image with retina */
 /* full background image with retina */
 .tutorials-main-container {
+  height: 100%;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  background-color: #f2f2f2; }
+  .tutorials-main-container .tutorials-boxes-container {
+    height: 100%; }
 
 .tutorials-list-pane {
   width: 810px;
@@ -6229,39 +6235,43 @@ complete-exercise-summary social-sharing .social-share-wrapper {
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 700; }
-  .tutorial-navigation-pane .subjects-list {
-    padding: 0 0 20px 0; }
-    .tutorial-navigation-pane .subjects-list .subject-item {
-      width: 100%;
-      position: relative;
-      height: 70px;
-      border-bottom: 1px solid #f2f2f2;
-      border-left: 2px solid;
-      transition: border 0.2s;
-      cursor: pointer; }
-      .tutorial-navigation-pane .subjects-list .subject-item.active {
-        border-left-width: 10px;
+  .tutorial-navigation-pane .tutorial-container {
+    height: 90%;
+    overflow-y: auto;
+    overflow-x: hidden; }
+    .tutorial-navigation-pane .tutorial-container .subjects-list {
+      padding: 0 0 20px 0; }
+      .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item {
+        width: 100%;
+        position: relative;
+        height: 70px;
+        border-bottom: 1px solid #f2f2f2;
+        border-left: 2px solid;
+        transition: border 0.2s;
+        cursor: pointer; }
+        .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item.active {
+          border-left-width: 10px;
+          background-color: #c7e0e3; }
+        .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item .icon-wrapper {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          padding: 8px; }
+          .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item .icon-wrapper * {
+            fill: white; }
+        .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item .subject-name {
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400;
+          text-transform: capitalize;
+          margin-left: 10px; }
+      .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item:hover {
+        transition: 0.2s linear all;
+        background-color: #e2f0f2; }
+      .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item:active {
+        transition: 0.2s linear all;
         background-color: #c7e0e3; }
-      .tutorial-navigation-pane .subjects-list .subject-item .icon-wrapper {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        padding: 8px; }
-        .tutorial-navigation-pane .subjects-list .subject-item .icon-wrapper * {
-          fill: white; }
-      .tutorial-navigation-pane .subjects-list .subject-item .subject-name {
-        font-size: 16px;
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 400;
-        text-transform: capitalize;
-        margin-left: 10px; }
-    .tutorial-navigation-pane .subjects-list .subject-item:hover {
-      transition: 0.2s linear all;
-      background-color: #e2f0f2; }
-    .tutorial-navigation-pane .subjects-list .subject-item:active {
-      transition: 0.2s linear all;
-      background-color: #c7e0e3; }
 
 /* fonts size */
 /* general */
