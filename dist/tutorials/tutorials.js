@@ -278,10 +278,12 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "        <div class=\"overlay-text\" translate=\".DIAGNOSTIC_OVERLAY\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"tutorials-list-container\" ng-class=\"{blur: !vm.isDiagnosticComplete}\">\n" +
-    "        <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
-    "                            tutorial=\"tutorial\"\n" +
-    "                            ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
-    "        </tutorial-list-item>\n" +
+    "        <div class=\"flex-container\">\n" +
+    "            <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
+    "                                tutorial=\"tutorial\"\n" +
+    "                                ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
+    "            </tutorial-list-item>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
     "");
@@ -299,17 +301,19 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
   $templateCache.put("components/tutorials/components/tutorialPane/tutorialPane.template.html",
     "<div class=\"tutorial-navigation-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_PANE_COMPONENTS\">\n" +
     "    <div class=\"pane-title\" translate=\".TITLE\"></div>\n" +
-    "    <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-    "        <md-list-item\n" +
-    "            md-no-ink\n" +
-    "            ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
-    "            ng-click=\"vm.changeActiveSubject(subject)\"\n" +
-    "            class=\"subject-item\"\n" +
-    "            ng-repeat=\"subject in vm.subjecstOrder\">\n" +
-    "            <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
-    "            <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
-    "        </md-list-item>\n" +
-    "    </md-list>\n" +
+    "    <div class=\"tutorial-container\">\n" +
+    "        <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
+    "            <md-list-item\n" +
+    "                md-no-ink\n" +
+    "                ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
+    "                ng-click=\"vm.changeActiveSubject(subject)\"\n" +
+    "                class=\"subject-item\"\n" +
+    "                ng-repeat=\"subject in vm.subjecstOrder\">\n" +
+    "                <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
+    "                <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
+    "            </md-list-item>\n" +
+    "        </md-list>\n" +
+    "    </div>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/tutorials/svg/subject-locked-icon.svg",

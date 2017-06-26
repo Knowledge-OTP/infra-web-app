@@ -3342,7 +3342,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "</svg>\n" +
     "");
   $templateCache.put("components/completeExercise/directives/completeExercise/completeExercise.template.html",
-    "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
+    "<div class=\"complete-exercise\" translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <ng-switch on=\"$ctrl.currViewState\"\n" +
     "               class=\"main-container\">\n" +
     "        <div ng-switch-when=\"1\" class=\"animate-view-state\">\n" +
@@ -12723,8 +12723,8 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
-                hideQuit: true,
-                timeEnabled:false,
+                hideQuit: false,
+                timeEnabled: false,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
@@ -12734,6 +12734,9 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 },
                 setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
+                },
+                exitAction: function () {
+                    $state.go('app.onBoarding.introTestToTake');
                 }
             };
         }]);
@@ -15093,45 +15096,47 @@ angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templ
   $templateCache.put("components/tests/directives/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
-    "    <div class=\"tests-navigation-title-header\"\n" +
-    "         translate=\".MINI_TEST_TITLE\"></div>\n" +
-    "    <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-    "        <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum} | orderBy:'order'\"\n" +
-    "                      ng-class=\"{\n" +
+    "    <div class=\"tests-navigation-container\">\n" +
+    "        <div class=\"tests-navigation-title-header\"\n" +
+    "             translate=\".MINI_TEST_TITLE\"></div>\n" +
+    "        <md-list flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
+    "            <md-list-item ng-repeat=\"miniExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.MINI_TEST.enum} | orderBy:'order'\"\n" +
+    "                          ng-class=\"{\n" +
     "                        'done': miniExam.isCompleted,\n" +
     "                        'active': vm.activeId === miniExam.id\n" +
     "                      }\">\n" +
-    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}\"\n" +
-    "                       ng-click=\"vm.changeActive(miniExam.id)\">\n" +
-    "                <span>{{miniExam.name}}</span>\n" +
-    "                <div class=\"status-icon-wrapper\"\n" +
-    "                     ng-if=\"miniExam.isCompleted\">\n" +
-    "                    <i class=\"material-icons\">check</i>\n" +
-    "                </div>\n" +
-    "            </md-button>\n" +
-    "        </md-list-item>\n" +
-    "    </md-list>\n" +
-    "    <div class=\"tests-navigation-title-header\"\n" +
-    "         translate=\".FULL_TEST_TITLE\"></div>\n" +
-    "    <md-list class=\"md-list-second-list\"\n" +
-    "             flex=\"grow\"\n" +
-    "             layout=\"column\"\n" +
-    "             layout-align=\"start center\">\n" +
-    "        <md-list-item ng-repeat=\"fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum} | orderBy:'order'\"\n" +
-    "                      ng-class=\"{\n" +
+    "                <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.MINI_TEST_TITLE' | translate}}\"\n" +
+    "                           ng-click=\"vm.changeActive(miniExam.id)\">\n" +
+    "                    <span>{{miniExam.name}}</span>\n" +
+    "                    <div class=\"status-icon-wrapper\"\n" +
+    "                         ng-if=\"miniExam.isCompleted\">\n" +
+    "                        <i class=\"material-icons\">check</i>\n" +
+    "                    </div>\n" +
+    "                </md-button>\n" +
+    "            </md-list-item>\n" +
+    "        </md-list>\n" +
+    "        <div class=\"tests-navigation-title-header\"\n" +
+    "             translate=\".FULL_TEST_TITLE\"></div>\n" +
+    "        <md-list class=\"md-list-second-list\"\n" +
+    "                 flex=\"grow\"\n" +
+    "                 layout=\"column\"\n" +
+    "                 layout-align=\"start center\">\n" +
+    "            <md-list-item ng-repeat=\"fullExam in vm.examArr | filter : {typeId: vm.ExamTypeEnum.FULL_TEST.enum} | orderBy:'order'\"\n" +
+    "                          ng-class=\"{\n" +
     "                        'done': fullExam.isCompleted,\n" +
     "                        'active': vm.activeId === fullExam.id\n" +
     "                      }\">\n" +
-    "            <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}\"\n" +
-    "                       ng-click=\"vm.changeActive(fullExam.id)\">\n" +
-    "                <span>{{fullExam.name}}</span>\n" +
-    "                <div class=\"status-icon-wrapper\"\n" +
-    "                     ng-if=\"fullExam.isCompleted\">\n" +
-    "                    <i class=\"material-icons\">check</i>\n" +
-    "                </div>\n" +
-    "            </md-button>\n" +
-    "        </md-list-item>\n" +
-    "    </md-list>\n" +
+    "                <md-button md-no-ink aria-label=\"{{'NAVIGATION_PANE.FULL_TEST_TITLE' | translate}}\"\n" +
+    "                           ng-click=\"vm.changeActive(fullExam.id)\">\n" +
+    "                    <span>{{fullExam.name}}</span>\n" +
+    "                    <div class=\"status-icon-wrapper\"\n" +
+    "                         ng-if=\"fullExam.isCompleted\">\n" +
+    "                        <i class=\"material-icons\">check</i>\n" +
+    "                    </div>\n" +
+    "                </md-button>\n" +
+    "            </md-list-item>\n" +
+    "        </md-list>\n" +
+    "    </div>\n" +
     "</div>\n" +
     "");
 }]);
@@ -15416,10 +15421,12 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "        <div class=\"overlay-text\" translate=\".DIAGNOSTIC_OVERLAY\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"tutorials-list-container\" ng-class=\"{blur: !vm.isDiagnosticComplete}\">\n" +
-    "        <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
-    "                            tutorial=\"tutorial\"\n" +
-    "                            ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
-    "        </tutorial-list-item>\n" +
+    "        <div class=\"flex-container\">\n" +
+    "            <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
+    "                                tutorial=\"tutorial\"\n" +
+    "                                ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
+    "            </tutorial-list-item>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
     "");
@@ -15437,17 +15444,19 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
   $templateCache.put("components/tutorials/components/tutorialPane/tutorialPane.template.html",
     "<div class=\"tutorial-navigation-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_PANE_COMPONENTS\">\n" +
     "    <div class=\"pane-title\" translate=\".TITLE\"></div>\n" +
-    "    <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
-    "        <md-list-item\n" +
-    "            md-no-ink\n" +
-    "            ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
-    "            ng-click=\"vm.changeActiveSubject(subject)\"\n" +
-    "            class=\"subject-item\"\n" +
-    "            ng-repeat=\"subject in vm.subjecstOrder\">\n" +
-    "            <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
-    "            <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
-    "        </md-list-item>\n" +
-    "    </md-list>\n" +
+    "    <div class=\"tutorial-container\">\n" +
+    "        <md-list class=\"subjects-list\" flex=\"grow\" layout=\"column\" layout-align=\"start center\">\n" +
+    "            <md-list-item\n" +
+    "                md-no-ink\n" +
+    "                ng-class=\"[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]\"\n" +
+    "                ng-click=\"vm.changeActiveSubject(subject)\"\n" +
+    "                class=\"subject-item\"\n" +
+    "                ng-repeat=\"subject in vm.subjecstOrder\">\n" +
+    "                <svg-icon class=\"icon-wrapper\" ng-class=\"vm.subjectsMap[subject]\" name=\"{{vm.subjectsMap[subject] + '-' + 'icon'}}\"></svg-icon>\n" +
+    "                <div class=\"subject-name\" translate=\"SUBJECTS.{{subject}}\"></div>\n" +
+    "            </md-list-item>\n" +
+    "        </md-list>\n" +
+    "    </div>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/tutorials/svg/subject-locked-icon.svg",

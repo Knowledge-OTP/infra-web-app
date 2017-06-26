@@ -800,19 +800,23 @@ md-dialog .close-popup {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-complete-exercise .animate-view-state.ng-animate {
-  transition: opacity 0.5s linear 0.5s; }
-
-complete-exercise .animate-view-state.ng-leave {
-  display: none; }
-
-complete-exercise .animate-view-state.ng-enter {
-  opacity: 0; }
-
-complete-exercise .animate-view-state.ng-enter.ng-enter-active {
-  opacity: 1; }
+complete-exercise .complete-exercise {
+  height: 100%; }
+  complete-exercise .complete-exercise .main-container {
+    height: 100%; }
+    complete-exercise .complete-exercise .main-container .animate-view-state {
+      height: 100%; }
+    complete-exercise .complete-exercise .main-container .animate-view-state.ng-animate {
+      transition: opacity 0.5s linear 0.5s; }
+    complete-exercise .complete-exercise .main-container .animate-view-state.ng-leave {
+      display: none; }
+    complete-exercise .complete-exercise .main-container .animate-view-state.ng-enter {
+      opacity: 0; }
+    complete-exercise .complete-exercise .main-container .animate-view-state.ng-enter.ng-enter-active {
+      opacity: 1; }
 
 complete-exercise-intro .base-complete-exercise-container {
+  height: 100%;
   position: relative; }
   complete-exercise-intro .base-complete-exercise-container .intro-container img {
     max-width: 400px !important;
@@ -820,6 +824,7 @@ complete-exercise-intro .base-complete-exercise-container {
     vertical-align: middle; }
 
 complete-exercise-exercise .base-complete-exercise-container {
+  height: 100%;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
@@ -6018,86 +6023,91 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-.app-tests-navigationPane .tests-navigation-title-header {
-  color: #4f4d4d;
-  height: 65px;
-  border-bottom: 1px solid #f2f2f2;
-  text-align: center;
-  line-height: 65px;
-  font-size: 17px;
-  font-family: Quicksand;
-  font-weight: 700; }
-
-.app-tests-navigationPane md-list {
-  padding: 0; }
-  .app-tests-navigationPane md-list.md-list-second-list md-list-item {
-    border-top: 1px solid #f2f2f2; }
-  .app-tests-navigationPane md-list md-list-item {
-    position: relative;
-    width: 100%;
-    height: 52.5px;
-    border-bottom: 1px solid #f2f2f2;
-    border-left: 2px solid #0a9bad;
-    transition: 0.1s; }
-    .app-tests-navigationPane md-list md-list-item button {
-      display: -ms-flexbox;
-      display: flex;
-      width: 100%;
-      height: 100%;
-      font-size: 16px;
-      color: #0a9bad;
-      font-family: Lato;
-      font-weight: 400;
-      border-radius: 0;
-      margin: 0;
-      background-color: inherit;
-      -ms-flex-pack: justify;
-          justify-content: space-between; }
-      .app-tests-navigationPane md-list md-list-item button span {
-        margin-left: 25px;
-        text-transform: capitalize; }
-      .app-tests-navigationPane md-list md-list-item button.md-button:not([disabled]):hover {
-        background-color: #ebebeb; }
-    .app-tests-navigationPane md-list md-list-item.done {
-      border-left: 2px solid #87ca4d; }
-      .app-tests-navigationPane md-list md-list-item.done button {
-        color: #4f4d4d; }
-    .app-tests-navigationPane md-list md-list-item.active {
-      background-color: #f2f2f2; }
-      .app-tests-navigationPane md-list md-list-item.active button.md-button:not([disabled]):hover {
-        background-color: #f2f2f2; }
-    .app-tests-navigationPane md-list md-list-item.active:after {
-      content: "\A";
-      border-left: 7.5px solid #0a9bad;
-      left: 0;
-      position: absolute;
-      top: 0;
-      height: 100%; }
-    .app-tests-navigationPane md-list md-list-item.active.done:after {
-      border-left: 7.5px solid #87ca4d; }
-    .app-tests-navigationPane md-list md-list-item.active:before {
-      content: "\A";
-      border-style: solid;
-      border-width: 10px 0 10px 10px;
-      border-color: transparent transparent transparent #f2f2f2;
-      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
-      position: absolute;
-      right: -9px;
-      top: 18px; }
-    .app-tests-navigationPane md-list md-list-item .status-icon-wrapper {
-      position: relative;
-      color: white;
-      background: #87ca4d;
-      border-radius: 100%;
-      margin-right: 5px;
-      width: 22.5px;
-      height: 22.5px; }
-      .app-tests-navigationPane md-list md-list-item .status-icon-wrapper i {
-        font-size: 17px;
-        margin: 0;
-        position: absolute;
-        top: 3px;
-        left: 3px; }
+.app-tests-navigationPane {
+  height: 100%; }
+  .app-tests-navigationPane .tests-navigation-container {
+    height: 98%;
+    overflow-y: auto;
+    overflow-x: hidden; }
+    .app-tests-navigationPane .tests-navigation-container .tests-navigation-title-header {
+      color: #4f4d4d;
+      height: 65px;
+      border-bottom: 1px solid #f2f2f2;
+      text-align: center;
+      line-height: 65px;
+      font-size: 17px;
+      font-family: Quicksand;
+      font-weight: 700; }
+    .app-tests-navigationPane .tests-navigation-container md-list {
+      padding: 0; }
+      .app-tests-navigationPane .tests-navigation-container md-list.md-list-second-list md-list-item {
+        border-top: 1px solid #f2f2f2; }
+      .app-tests-navigationPane .tests-navigation-container md-list md-list-item {
+        position: relative;
+        width: 100%;
+        height: 52.5px;
+        border-bottom: 1px solid #f2f2f2;
+        border-left: 2px solid #0a9bad;
+        transition: 0.1s; }
+        .app-tests-navigationPane .tests-navigation-container md-list md-list-item button {
+          display: -ms-flexbox;
+          display: flex;
+          width: 100%;
+          height: 100%;
+          font-size: 16px;
+          color: #0a9bad;
+          font-family: Lato;
+          font-weight: 400;
+          border-radius: 0;
+          margin: 0;
+          background-color: inherit;
+          -ms-flex-pack: justify;
+              justify-content: space-between; }
+          .app-tests-navigationPane .tests-navigation-container md-list md-list-item button span {
+            margin-left: 25px;
+            text-transform: capitalize; }
+          .app-tests-navigationPane .tests-navigation-container md-list md-list-item button.md-button:not([disabled]):hover {
+            background-color: #ebebeb; }
+        .app-tests-navigationPane .tests-navigation-container md-list md-list-item.done {
+          border-left: 2px solid #87ca4d; }
+          .app-tests-navigationPane .tests-navigation-container md-list md-list-item.done button {
+            color: #4f4d4d; }
+        .app-tests-navigationPane .tests-navigation-container md-list md-list-item.active {
+          background-color: #f2f2f2; }
+          .app-tests-navigationPane .tests-navigation-container md-list md-list-item.active button.md-button:not([disabled]):hover {
+            background-color: #f2f2f2; }
+        .app-tests-navigationPane .tests-navigation-container md-list md-list-item.active:after {
+          content: "\A";
+          border-left: 7.5px solid #0a9bad;
+          left: 0;
+          position: absolute;
+          top: 0;
+          height: 100%; }
+        .app-tests-navigationPane .tests-navigation-container md-list md-list-item.active.done:after {
+          border-left: 7.5px solid #87ca4d; }
+        .app-tests-navigationPane .tests-navigation-container md-list md-list-item.active:before {
+          content: "\A";
+          border-style: solid;
+          border-width: 10px 0 10px 10px;
+          border-color: transparent transparent transparent #f2f2f2;
+          filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+          position: absolute;
+          right: -9px;
+          top: 18px; }
+        .app-tests-navigationPane .tests-navigation-container md-list md-list-item .status-icon-wrapper {
+          position: relative;
+          color: white;
+          background: #87ca4d;
+          border-radius: 100%;
+          margin-right: 5px;
+          width: 22.5px;
+          height: 22.5px; }
+          .app-tests-navigationPane .tests-navigation-container md-list md-list-item .status-icon-wrapper i {
+            font-size: 17px;
+            margin: 0;
+            position: absolute;
+            top: 3px;
+            left: 3px; }
 
 /* fonts size */
 /* general */
@@ -6109,14 +6119,19 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-.tutorials-main-container {
-  display: -ms-flexbox;
-  display: flex; }
+.app-tests-roadmap {
+  height: 100%; }
+  .app-tests-roadmap .tutorials-main-container {
+    height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+        flex-direction: row;
+    background-color: #f2f2f2; }
 
 .tutorials-list-pane {
   width: 810px;
   height: 100%;
-  overflow: auto;
   text-align: center;
   background-color: white; }
   .tutorials-list-pane .diagnostic-overlay {
@@ -6133,17 +6148,23 @@ complete-exercise-summary social-sharing .social-share-wrapper {
       color: #757a83;
       font-family: Quicksand; }
   .tutorials-list-pane .tutorials-list-container {
-    padding: 10px;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    -ms-flex-pack: start;
-        justify-content: flex-start;
-    background-color: white; }
-    .tutorials-list-pane .tutorials-list-container.blur {
-      filter: blur(7px);
-      opacity: 0.5; }
+    height: 100%;
+    padding: 20px 0 20px 20px; }
+    .tutorials-list-pane .tutorials-list-container .flex-container {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 95%;
+      margin: 0;
+      list-style: none;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+      -ms-flex-pack: distribute;
+          justify-content: space-around; }
+      .tutorials-list-pane .tutorials-list-container .flex-container.blur {
+        filter: blur(7px);
+        opacity: 0.5; }
 
 .tutorial-item {
   cursor: pointer;
@@ -6224,39 +6245,43 @@ complete-exercise-summary social-sharing .social-share-wrapper {
     color: #4f4d4d;
     font-family: Quicksand;
     font-weight: 700; }
-  .tutorial-navigation-pane .subjects-list {
-    padding: 0 0 20px 0; }
-    .tutorial-navigation-pane .subjects-list .subject-item {
-      width: 100%;
-      position: relative;
-      height: 70px;
-      border-bottom: 1px solid #f2f2f2;
-      border-left: 2px solid;
-      transition: border 0.2s;
-      cursor: pointer; }
-      .tutorial-navigation-pane .subjects-list .subject-item.active {
-        border-left-width: 10px;
+  .tutorial-navigation-pane .tutorial-container {
+    height: 90%;
+    overflow-y: auto;
+    overflow-x: hidden; }
+    .tutorial-navigation-pane .tutorial-container .subjects-list {
+      padding: 0 0 20px 0; }
+      .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item {
+        width: 100%;
+        position: relative;
+        height: 70px;
+        border-bottom: 1px solid #f2f2f2;
+        border-left: 2px solid;
+        transition: border 0.2s;
+        cursor: pointer; }
+        .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item.active {
+          border-left-width: 10px;
+          background-color: #c7e0e3; }
+        .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item .icon-wrapper {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          padding: 8px; }
+          .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item .icon-wrapper * {
+            fill: white; }
+        .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item .subject-name {
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400;
+          text-transform: capitalize;
+          margin-left: 10px; }
+      .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item:hover {
+        transition: 0.2s linear all;
+        background-color: #e2f0f2; }
+      .tutorial-navigation-pane .tutorial-container .subjects-list .subject-item:active {
+        transition: 0.2s linear all;
         background-color: #c7e0e3; }
-      .tutorial-navigation-pane .subjects-list .subject-item .icon-wrapper {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        padding: 8px; }
-        .tutorial-navigation-pane .subjects-list .subject-item .icon-wrapper * {
-          fill: white; }
-      .tutorial-navigation-pane .subjects-list .subject-item .subject-name {
-        font-size: 16px;
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 400;
-        text-transform: capitalize;
-        margin-left: 10px; }
-    .tutorial-navigation-pane .subjects-list .subject-item:hover {
-      transition: 0.2s linear all;
-      background-color: #e2f0f2; }
-    .tutorial-navigation-pane .subjects-list .subject-item:active {
-      transition: 0.2s linear all;
-      background-color: #c7e0e3; }
 
 /* fonts size */
 /* general */
@@ -7078,7 +7103,8 @@ workout-intro-lock {
   display: flex;
   -ms-flex-pack: center;
       justify-content: center;
-  min-height: 100%; }
+  height: 100%;
+  width: 100%; }
   .workouts-roadmap-container > ui-view {
     width: 100%;
     height: 100%; }

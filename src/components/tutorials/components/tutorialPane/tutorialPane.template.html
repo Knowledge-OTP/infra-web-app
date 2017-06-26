@@ -1,14 +1,16 @@
 <div class="tutorial-navigation-pane base-border-radius base-box-shadow" translate-namespace="TUTORIAL_PANE_COMPONENTS">
     <div class="pane-title" translate=".TITLE"></div>
-    <md-list class="subjects-list" flex="grow" layout="column" layout-align="start center">
-        <md-list-item
-            md-no-ink
-            ng-class="[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]"
-            ng-click="vm.changeActiveSubject(subject)"
-            class="subject-item"
-            ng-repeat="subject in vm.subjecstOrder">
-            <svg-icon class="icon-wrapper" ng-class="vm.subjectsMap[subject]" name="{{vm.subjectsMap[subject] + '-' + 'icon'}}"></svg-icon>
-            <div class="subject-name" translate="SUBJECTS.{{subject}}"></div>
-        </md-list-item>
-    </md-list>
+    <div class="tutorial-container">
+        <md-list class="subjects-list" flex="grow" layout="column" layout-align="start center">
+            <md-list-item
+                md-no-ink
+                ng-class="[vm.subjectsMap[subject] ,{'active': vm.activeSubject === subject}]"
+                ng-click="vm.changeActiveSubject(subject)"
+                class="subject-item"
+                ng-repeat="subject in vm.subjecstOrder">
+                <svg-icon class="icon-wrapper" ng-class="vm.subjectsMap[subject]" name="{{vm.subjectsMap[subject] + '-' + 'icon'}}"></svg-icon>
+                <div class="subject-name" translate="SUBJECTS.{{subject}}"></div>
+            </md-list-item>
+        </md-list>
+    </div>
 </div>

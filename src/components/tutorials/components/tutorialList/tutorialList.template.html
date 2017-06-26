@@ -3,9 +3,11 @@
         <div class="overlay-text" translate=".DIAGNOSTIC_OVERLAY"></div>
     </div>
     <div class="tutorials-list-container" ng-class="{blur: !vm.isDiagnosticComplete}">
-        <tutorial-list-item ng-model="vm.activeSubject"
-                            tutorial="tutorial"
-                            ng-repeat="tutorial in vm.tutorialsArrs[vm.activeSubject]">
-        </tutorial-list-item>
+        <div class="flex-container">
+            <tutorial-list-item ng-model="vm.activeSubject"
+                                tutorial="tutorial"
+                                ng-repeat="tutorial in vm.tutorialsArrs[vm.activeSubject]">
+            </tutorial-list-item>
+        </div>
     </div>
 </div>
