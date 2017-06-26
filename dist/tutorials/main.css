@@ -8,13 +8,15 @@
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-.tutorials-main-container {
-  height: 100%;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: row;
-      flex-direction: row;
-  background-color: #f2f2f2; }
+.app-tests-roadmap {
+  height: 100%; }
+  .app-tests-roadmap .tutorials-main-container {
+    height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+        flex-direction: row;
+    background-color: #f2f2f2; }
 
 .tutorials-list-pane {
   width: 810px;

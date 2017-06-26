@@ -1,6 +1,10 @@
-.tutorials-main-container {
+.app-tests-roadmap {
     height: 100%;
-    display: flex;
-    flex-direction: row;
-    background-color: $bgColor28;
+    .tutorials-main-container {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        background-color: $bgColor28;
+    }
 }
+
