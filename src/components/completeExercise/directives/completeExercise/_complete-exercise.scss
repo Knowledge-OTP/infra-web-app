@@ -3,6 +3,9 @@ complete-exercise {
         height: 100%;
         .main-container {
             height: 100%;
+            .animate-view-state {
+                height: 100%;
+            }
             .animate-view-state.ng-animate {
                 transition:opacity 0.5s linear 0.5s;//delay was added for hiding rendering jumping
             }

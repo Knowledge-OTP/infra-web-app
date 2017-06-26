@@ -804,6 +804,8 @@ complete-exercise .complete-exercise {
   height: 100%; }
   complete-exercise .complete-exercise .main-container {
     height: 100%; }
+    complete-exercise .complete-exercise .main-container .animate-view-state {
+      height: 100%; }
     complete-exercise .complete-exercise .main-container .animate-view-state.ng-animate {
       transition: opacity 0.5s linear 0.5s; }
     complete-exercise .complete-exercise .main-container .animate-view-state.ng-leave {
