@@ -15506,9 +15506,7 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "<div class=\"app-tests-roadmap layout-row flex-grow\" layout=\"row\" flex=\"grow\">\n" +
     "    <div class=\"tutorials-main-container\">\n" +
     "        <tutorial-pane ng-model=\"vm.activeSubject\"></tutorial-pane>\n" +
-    "        <section class=\"tutorials-boxes-container base-border-radius base-box-shadow\">\n" +
-    "            <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
-    "        </section>\n" +
+    "        <tutorial-list ng-model=\"vm.activeSubject\" tutorials=\"vm.tutorials\"></tutorial-list>\n" +
     "    </div>\n" +
     "</div>\n" +
     "\n" +

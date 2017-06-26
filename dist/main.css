@@ -6121,8 +6121,6 @@ complete-exercise-summary social-sharing .social-share-wrapper {
   -ms-flex-direction: row;
       flex-direction: row;
   background-color: #f2f2f2; }
-  .tutorials-main-container .tutorials-boxes-container {
-    height: 100%; }
 
 .tutorials-list-pane {
   width: 810px;
