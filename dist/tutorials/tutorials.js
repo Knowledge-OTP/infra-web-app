@@ -278,10 +278,12 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     "        <div class=\"overlay-text\" translate=\".DIAGNOSTIC_OVERLAY\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"tutorials-list-container\" ng-class=\"{blur: !vm.isDiagnosticComplete}\">\n" +
-    "        <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
-    "                            tutorial=\"tutorial\"\n" +
-    "                            ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
-    "        </tutorial-list-item>\n" +
+    "        <div class=\"flex-container\">\n" +
+    "            <tutorial-list-item ng-model=\"vm.activeSubject\"\n" +
+    "                                tutorial=\"tutorial\"\n" +
+    "                                ng-repeat=\"tutorial in vm.tutorialsArrs[vm.activeSubject]\">\n" +
+    "            </tutorial-list-item>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
     "");

@@ -19,7 +19,6 @@
 .tutorials-list-pane {
   width: 810px;
   height: 100%;
-  overflow: auto;
   text-align: center;
   background-color: white; }
   .tutorials-list-pane .diagnostic-overlay {
@@ -36,17 +35,23 @@
       color: #757a83;
       font-family: Quicksand; }
   .tutorials-list-pane .tutorials-list-container {
-    padding: 10px;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    -ms-flex-pack: start;
-        justify-content: flex-start;
-    background-color: white; }
-    .tutorials-list-pane .tutorials-list-container.blur {
-      filter: blur(7px);
-      opacity: 0.5; }
+    height: 100%;
+    padding: 20px 0 20px 20px; }
+    .tutorials-list-pane .tutorials-list-container .flex-container {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 95%;
+      margin: 0;
+      list-style: none;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+      -ms-flex-pack: distribute;
+          justify-content: space-around; }
+      .tutorials-list-pane .tutorials-list-container .flex-container.blur {
+        filter: blur(7px);
+        opacity: 0.5; }
 
 .tutorial-item {
   cursor: pointer;

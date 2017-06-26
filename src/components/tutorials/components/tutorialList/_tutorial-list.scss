@@ -1,7 +1,6 @@
 .tutorials-list-pane {
     width: 810px;
     height: 100%;
-    overflow: auto;
     text-align: center;
     background-color: $bgColor1;
     .diagnostic-overlay {
@@ -18,14 +17,23 @@
         }
     }
     .tutorials-list-container {
-        padding: 10px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        background-color: $bgColor1;
-        &.blur {
-            filter: blur(7px);
-            opacity: 0.5;
+        height: 100%;
+        padding: 20px 0 20px 20px;
+        .flex-container {
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 95%;
+            margin: 0;
+            list-style: none;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+
+            &.blur {
+                filter: blur(7px);
+                opacity: 0.5;
+            }
         }
+
     }
 }
