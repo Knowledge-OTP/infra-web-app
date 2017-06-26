@@ -1,17 +1,23 @@
 complete-exercise {
-    .animate-view-state.ng-animate {
-        transition:opacity 0.5s linear 0.5s;//delay was added for hiding rendering jumping
-    }
+    .complete-exercise {
+        height: 100%;
+        .main-container {
+            height: 100%;
+            .animate-view-state.ng-animate {
+                transition:opacity 0.5s linear 0.5s;//delay was added for hiding rendering jumping
+            }
 
-    .animate-view-state.ng-leave{
-        display: none;
-    }
+            .animate-view-state.ng-leave{
+                display: none;
+            }
 
-    .animate-view-state.ng-enter {
-        opacity: 0;
-    }
+            .animate-view-state.ng-enter {
+                opacity: 0;
+            }
 
-    .animate-view-state.ng-enter.ng-enter-active {
-        opacity: 1;
+            .animate-view-state.ng-enter.ng-enter-active {
+                opacity: 1;
+            }
+        }
     }
 }

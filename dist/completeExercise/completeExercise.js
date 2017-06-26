@@ -1432,7 +1432,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "</svg>\n" +
     "");
   $templateCache.put("components/completeExercise/directives/completeExercise/completeExercise.template.html",
-    "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
+    "<div class=\"complete-exercise\" translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <ng-switch on=\"$ctrl.currViewState\"\n" +
     "               class=\"main-container\">\n" +
     "        <div ng-switch-when=\"1\" class=\"animate-view-state\">\n" +

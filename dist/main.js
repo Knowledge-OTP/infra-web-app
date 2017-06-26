@@ -3342,7 +3342,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     "</svg>\n" +
     "");
   $templateCache.put("components/completeExercise/directives/completeExercise/completeExercise.template.html",
-    "<div translate-namespace=\"COMPLETE_EXERCISE\">\n" +
+    "<div class=\"complete-exercise\" translate-namespace=\"COMPLETE_EXERCISE\">\n" +
     "    <ng-switch on=\"$ctrl.currViewState\"\n" +
     "               class=\"main-container\">\n" +
     "        <div ng-switch-when=\"1\" class=\"animate-view-state\">\n" +
@@ -12723,8 +12723,8 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
-                hideQuit: true,
-                timeEnabled:false,
+                hideQuit: false,
+                timeEnabled: false,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
@@ -12734,6 +12734,9 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 },
                 setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
+                },
+                exitAction: function () {
+                    $state.go('app.onBoarding.introTestToTake');
                 }
             };
         }]);

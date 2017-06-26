@@ -217,8 +217,8 @@
                 exerciseTypeId: ExerciseTypeEnum.SECTION.enum,
                 exerciseParentId: ENV.testToTakeExamId,
                 exerciseParentTypeId: ExerciseParentEnum.EXAM.enum,
-                hideQuit: true,
-                timeEnabled:false,
+                hideQuit: false,
+                timeEnabled: false,
                 ignoreIntro: true
             };
             this.completeExerciseSettings = {
@@ -228,6 +228,9 @@
                 },
                 setOnBoardingSummaryStepAction: function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
+                },
+                exitAction: function () {
+                    $state.go('app.onBoarding.introTestToTake');
                 }
             };
         }]);

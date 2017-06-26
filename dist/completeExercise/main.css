@@ -8,19 +8,21 @@
 /* font color*/
 /* full background image with retina */
 /* full background image with retina */
-complete-exercise .animate-view-state.ng-animate {
-  transition: opacity 0.5s linear 0.5s; }
-
-complete-exercise .animate-view-state.ng-leave {
-  display: none; }
-
-complete-exercise .animate-view-state.ng-enter {
-  opacity: 0; }
-
-complete-exercise .animate-view-state.ng-enter.ng-enter-active {
-  opacity: 1; }
+complete-exercise .complete-exercise {
+  height: 100%; }
+  complete-exercise .complete-exercise .main-container {
+    height: 100%; }
+    complete-exercise .complete-exercise .main-container .animate-view-state.ng-animate {
+      transition: opacity 0.5s linear 0.5s; }
+    complete-exercise .complete-exercise .main-container .animate-view-state.ng-leave {
+      display: none; }
+    complete-exercise .complete-exercise .main-container .animate-view-state.ng-enter {
+      opacity: 0; }
+    complete-exercise .complete-exercise .main-container .animate-view-state.ng-enter.ng-enter-active {
+      opacity: 1; }
 
 complete-exercise-intro .base-complete-exercise-container {
+  height: 100%;
   position: relative; }
   complete-exercise-intro .base-complete-exercise-container .intro-container img {
     max-width: 400px !important;
@@ -28,6 +30,7 @@ complete-exercise-intro .base-complete-exercise-container {
     vertical-align: middle; }
 
 complete-exercise-exercise .base-complete-exercise-container {
+  height: 100%;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;

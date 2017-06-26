@@ -180,7 +180,8 @@ workout-intro-lock {
   display: flex;
   -ms-flex-pack: center;
       justify-content: center;
-  min-height: 100%; }
+  height: 100%;
+  width: 100%; }
   .workouts-roadmap-container > ui-view {
     width: 100%;
     height: 100%; }
