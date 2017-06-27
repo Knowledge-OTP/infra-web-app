@@ -2950,13 +2950,17 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     });
                 }
 
+                function _getSubjectId(exerciseData) {
+                    return exerciseData.level1CategoryId !== 'undefined' && exerciseData.level1CategoryId !== null ? exerciseData.level1CategoryId :
+                        exerciseData.exerciseResult.subjectId !== 'undefined' && exerciseData.exerciseResult.subjectId !== null ?
+                            exerciseData.exerciseResult.subjectId : exerciseData.exerciseContent.subjectId;
+                }
+
                 this.$onInit = function(){
                     _setLeftTitle();
 
                     $ctrl.exerciseContent = $ctrl.completeExerciseCtrl.getExerciseContent();
-                    var exerciseData = $ctrl.completeExerciseCtrl.exerciseData;
-                    var level1CategoryId = exerciseData.level1CategoryId;
-                    $ctrl.exerciseSubjectId = level1CategoryId ? level1CategoryId : exerciseData.exerciseContent.subjectId;
+                    $ctrl.exerciseSubjectId = _getSubjectId($ctrl.completeExerciseCtrl.exerciseData);
                 };
             }]
         });
