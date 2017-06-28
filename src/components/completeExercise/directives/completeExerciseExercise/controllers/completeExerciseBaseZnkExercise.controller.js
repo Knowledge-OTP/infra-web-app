@@ -17,8 +17,8 @@
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
         function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-            $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
-            UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
+                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+                  UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
             var exerciseContent = settings.exerciseContent;
@@ -79,7 +79,7 @@
                     exerciseResult.startedTime = Date.now();
                 }
 
-                if(exerciseContent.categoryId2) {
+                if (exerciseContent.categoryId2) {
                     exerciseResult.categoryId2 = exerciseContent.categoryId2;
                 }
             }
@@ -131,7 +131,7 @@
                 znkSessionDataSrv.isActiveLiveSession().then(function (liveSessionData) {
                     if (exerciseResult.exerciseTypeId !== ExerciseTypeEnum.LECTURE.enum) {
                         var liveSessionOn = !angular.equals(liveSessionData, {});
-                        if (ENV.testToTakeExamId && ENV.testToTakeExamId !==  null && ENV.testToTakeExamId === exerciseContent.examId) {
+                        if (ENV.testToTakeExamId && ENV.testToTakeExamId !== null && ENV.testToTakeExamId === exerciseContent.examId) {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
                         } else if (angular.isUndefined(exerciseResult.isReviewed) && liveSessionOn) {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.DONE_TOGETHER.enum;
@@ -167,6 +167,8 @@
                     exerciseResult.isComplete = true;
                     exerciseResult.endedTime = Date.now();
                     exerciseResult.$save();
+                }).catch(function (err) {
+                    $log.error('isActiveLiveSession error' + err);
                 });
             }
 
@@ -278,17 +280,17 @@
                                 toucheColorId: ENV.appContext === 'student' ? 1 : 2
                             }
                         },
-                        onReview: function onReview () {
+                        onReview: function onReview() {
                             exerciseResult.isReviewed = ExerciseReviewStatusEnum.YES.enum;
-                            var saveProm=exerciseResult.$save();
-                            saveProm.then(function(){
-                                if (angular.isFunction(settings.actions.reviewAction)){
+                            var saveProm = exerciseResult.$save();
+                            saveProm.then(function () {
+                                if (angular.isFunction(settings.actions.reviewAction)) {
                                     settings.actions.reviewAction();
                                 }
                             })
-                            .catch(function (err){
-                                $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
-                            });
+                                .catch(function (err) {
+                                    $log.error('CompleteExerciseBaseZnkExerciseCtrl: failed to save results,' + err);
+                                });
                         }
                     };
 
