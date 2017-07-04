@@ -14,11 +14,6 @@ znk-exercise {
         question-builder:not(.answer-explanation-open) {
             .question-basic-style {
                 overflow: auto;
-                height: 100%;
-            }
-
-            answer-builder {
-                height: 100%;
             }
         }
     }

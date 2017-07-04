@@ -292,8 +292,4 @@ question-builder.answer-explanation-open .question-basic-style {
     height: calc(100vh - 570px); }
 
 znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) .question-basic-style, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) .question-basic-style {
-  overflow: auto;
-  height: 100%; }
-
-znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) answer-builder, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) answer-builder {
-  height: 100%; }
+  overflow: auto; }
