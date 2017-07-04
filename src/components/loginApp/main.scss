@@ -344,6 +344,20 @@ login-app {
                 }
             }
         }
+         &.myzinkerz {
+            .app-bg {
+                background: $bgColor7;
+                &:hover {
+                    background: $bgColor15;
+                }
+            }
+            .app-color {
+                color: $bgColor7;
+                &:hover {
+                    color: $bgColor15;
+                }
+            }
+        }
 
         .form-container {
             width: 340px;
