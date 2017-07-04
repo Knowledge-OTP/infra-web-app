@@ -4216,6 +4216,8 @@ promo-code {
         background-color: #87ca4d; }
       .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.toefl {
         background-color: #ff931e; }
+      .md-open-menu-container md-menu-content#app-select-menu md-menu-item .square.myzinkerz {
+        background-color: #87ca4d; }
 
 login-app {
   transition: all 0.5s; }
@@ -4316,6 +4318,8 @@ login-app {
             background-color: #87ca4d; }
           login-app .login-app > header .app-select .square.toefl {
             background-color: #ff931e; }
+          login-app .login-app > header .app-select .square.myzinkerz {
+            background-color: #87ca4d; }
         login-app .login-app > header .app-select .expand-menu {
           float: right; }
       login-app .login-app > header .for-educators {
