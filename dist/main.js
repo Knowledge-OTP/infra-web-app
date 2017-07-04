@@ -10835,6 +10835,11 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             id: 'ACT',
             name: 'ACT',
             className: 'act'
+        },
+        MYZINKERZ: {
+            id: 'MYZINKERZ',
+            name: 'MYZINKERZ',
+            className: 'myzinkerz'
         }
     };
 
@@ -11155,6 +11160,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "        satsm: d.appContext === d.availableApps.SATSM,\n" +
     "        act: d.appContext === d.availableApps.ACT,\n" +
     "        toefl: d.appContext === d.availableApps.TOEFL,\n" +
+    "        myzinkerz: d.appContext === d.availableApps.MYZINKERZ\n" +
     "    }\">\n" +
     "    <header>\n" +
     "        <div class=\"logo-wrapper\">\n" +

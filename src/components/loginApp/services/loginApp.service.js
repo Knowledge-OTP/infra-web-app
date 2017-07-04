@@ -21,6 +21,11 @@
             id: 'ACT',
             name: 'ACT',
             className: 'act'
+        },
+        MYZINKERZ: {
+            id: 'MYZINKERZ',
+            name: 'MYZINKERZ',
+            className: 'myzinkerz'
         }
     };
 

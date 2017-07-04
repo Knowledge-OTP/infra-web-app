@@ -76,6 +76,9 @@
                 &.toefl {
                     background-color: $bgColor2;
                 }
+                &.myzinkerz {
+                    background-color: $bgColor7;
+                }
             }
         }
     }
@@ -193,6 +196,9 @@ login-app {
                 }
                 &.toefl {
                     background-color: $bgColor2;
+                }
+                &.myzinkerz {
+                    background-color: $bgColor7;
                 }
             }
                 .expand-menu {
@@ -335,6 +341,20 @@ login-app {
                 color: $bgColor2;
                 &:hover {
                     color: $bgColor56;
+                }
+            }
+        }
+         &.myzinkerz {
+            .app-bg {
+                background: $bgColor7;
+                &:hover {
+                    background: $bgColor15;
+                }
+            }
+            .app-color {
+                color: $bgColor7;
+                &:hover {
+                    color: $bgColor15;
                 }
             }
         }
