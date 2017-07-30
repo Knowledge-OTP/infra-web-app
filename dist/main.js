@@ -10416,8 +10416,10 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     scope.currentForm = 'login';
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
-                        LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
-                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
+                        if (scope.d.appContext.id !== "MYZINKERZ") {
+                            LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
+                            ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
+                        }
                     };
 
                     scope.changeCurrentForm = function (currentForm) {
