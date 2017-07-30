@@ -71,7 +71,7 @@
                     // var search = $location.search();
                     var search = {
                         app: LoginAppSrv.APPS.MYZINKERZ.className,
-                        state: 'login'
+                        state: $location.search().state
                     };
                     if (!!((!angular.equals(search, {}) || invitationKey) && (search.app || search.state || search.userType || invitationKey))) {
                         if (search.app) {
