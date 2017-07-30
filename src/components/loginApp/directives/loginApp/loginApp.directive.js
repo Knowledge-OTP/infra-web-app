@@ -34,8 +34,8 @@
                         scope.d.appContext = app;
                         if (scope.d.appContext.id !== "MYZINKERZ") {
                             LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
-                            ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                         }
+                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     scope.changeCurrentForm = function (currentForm) {
