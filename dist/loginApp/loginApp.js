@@ -63,7 +63,8 @@
                         appContext: LoginAppSrv.APPS.ACT,
                         userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: isTeacherApp ? LoginAppSrv.USER_CONTEXT.TEACHER : LoginAppSrv.USER_CONTEXT.STUDENT,
-                        changePassword: false
+                        changePassword: false,
+                        showCombo: false
                     };
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
@@ -73,11 +74,17 @@
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
                         LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
-                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id, scope.currentUserContext);
+                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                     };
+
                     scope.changeCurrentForm = function (currentForm) {
                         scope.currentForm = currentForm;
                     };
+
+                    scope.toggleCombo = function () {
+                        scope.d.showCombo = !scope.d.showCombo;
+                    };
+
                     scope.changeUserContext = function (context) {
                         scope.d.userContext = context;
                         if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
@@ -85,7 +92,7 @@
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
                             scope.currentUserContext = 'teacher';
                         }
-                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id, scope.currentUserContext);
+                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     // App select menu
@@ -100,7 +107,11 @@
                         scope.d.changePassword = !scope.d.changePassword;
                     };
 
-                    var search = $location.search();
+                    // var search = $location.search();
+                    var search = {
+                        app: LoginAppSrv.APPS.MYZINKERZ.className,
+                        state: 'login'
+                    };
                     if (!!((!angular.equals(search, {}) || invitationKey) && (search.app || search.state || search.userType || invitationKey))) {
                         if (search.app) {
                             angular.forEach(LoginAppSrv.APPS, function (app, index) {
@@ -826,7 +837,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                  translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
     "            </span>\n" +
     "        </div>\n" +
-    "        <div class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
+    "        <div ng-show=\"d.showCombo\" class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
     "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
     "                <md-button aria-label=\"Open App Select Menu\"\n" +
     "                           class=\"md-icon-button\"\n" +
@@ -955,6 +966,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "                   translate=\"LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS\"></a>\n" +
     "            </div>\n" +
     "        </ng-switch>\n" +
+    "          <button ng-click=\"toggleCombo()\"></button>\n" +
     "    </footer>\n" +
     "</div>\n" +
     "");

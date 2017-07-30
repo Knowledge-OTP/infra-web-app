@@ -14,7 +14,7 @@
                   translate="LOGIN_APP.FOR_EDUCATORS">
             </span>
         </div>
-        <div class="app-select" ng-cloak ng-class="{'no-dropdown': d.invitationId}">
+        <div ng-show="d.showCombo" class="app-select" ng-cloak ng-class="{'no-dropdown': d.invitationId}">
             <md-menu md-offset="-10 80" md-no-ink ng-if="!d.invitationId">
                 <md-button aria-label="Open App Select Menu"
                            class="md-icon-button"
@@ -143,5 +143,6 @@
                    translate="LOGIN_APP.CHECK_OUT_ZINKERZ_TOOLS_FOR_TEACHERS"></a>
             </div>
         </ng-switch>
+          <button ng-click="toggleCombo()"></button>
     </footer>
 </div>
