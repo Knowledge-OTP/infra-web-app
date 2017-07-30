@@ -22,7 +22,8 @@
                         appContext: LoginAppSrv.APPS.ACT,
                         userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: isTeacherApp ? LoginAppSrv.USER_CONTEXT.TEACHER : LoginAppSrv.USER_CONTEXT.STUDENT,
-                        changePassword: false
+                        changePassword: false,
+                        showCombo: false
                     };
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
@@ -31,12 +32,20 @@
                     scope.currentForm = 'login';
                     scope.selectApp = function (app) {
                         scope.d.appContext = app;
-                        LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
-                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id, scope.currentUserContext);
+                        if (scope.d.appContext.id !== "MYZINKERZ") {
+                            LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
+                            ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
+                        }
                     };
+
                     scope.changeCurrentForm = function (currentForm) {
                         scope.currentForm = currentForm;
                     };
+
+                    scope.toggleCombo = function () {
+                        scope.d.showCombo = !scope.d.showCombo;
+                    };
+
                     scope.changeUserContext = function (context) {
                         scope.d.userContext = context;
                         if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.STUDENT) {
@@ -44,7 +53,7 @@
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
                             scope.currentUserContext = 'teacher';
                         }
-                        ENV.set(LoginAppSrv.getCurrentEnv(),scope.d.appContext.id, scope.currentUserContext);
+                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     // App select menu
@@ -59,7 +68,11 @@
                         scope.d.changePassword = !scope.d.changePassword;
                     };
 
-                    var search = $location.search();
+                    // var search = $location.search();
+                    var search = {
+                        app: LoginAppSrv.APPS.MYZINKERZ.className,
+                        state: 'login'
+                    };
                     if (!!((!angular.equals(search, {}) || invitationKey) && (search.app || search.state || search.userType || invitationKey))) {
                         if (search.app) {
                             angular.forEach(LoginAppSrv.APPS, function (app, index) {
