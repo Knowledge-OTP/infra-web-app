@@ -10888,9 +10888,9 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }
 
-            function _getGlobalRef(appContext, userContext) {
+            function _getGlobalRef(appContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, _getAppScopeName(userContext, appEnvConfig));
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, 'myzinkerz_app');
             }
 
             function _getAppRef(appContext, userContext) {
