@@ -10952,7 +10952,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     urlParams = '#' + urlParams;
                 }
 
-                if (appName.indexOf('myzinkerz') === -1) {
+                if (appName.toLowerCase().indexOf('myzinkerz') === -1) {
                     appName = appName + '/web-app';
                 }
 

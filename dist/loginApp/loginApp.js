@@ -609,7 +609,7 @@
                     urlParams = '#' + urlParams;
                 }
 
-                if (appName.indexOf('myzinkerz') === -1) {
+                if (appName.toLowerCase().indexOf('myzinkerz') === -1) {
                     appName = appName + '/web-app';
                 }
 
