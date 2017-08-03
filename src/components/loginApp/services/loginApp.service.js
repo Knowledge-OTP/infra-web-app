@@ -125,7 +125,11 @@
                     urlParams = '#' + urlParams;
                 }
 
-                $window.location.href = $window.location.host.indexOf('localhost') > -1 ? "//" + $window.location.host + urlParams : "//" + $window.location.host + '/' + appName + '/web-app' + urlParams;
+                if (appName.toLowerCase().indexOf('myzinkerz') === -1) {
+                    appName = appName + '/web-app';
+                }
+
+                $window.location.href = $window.location.host.indexOf('localhost') > -1 ? "//" + $window.location.host + urlParams : "//" + $window.location.host + '/' + appName + urlParams;
             }
 
             function _getUserProfile(appContext, userContext) {
