@@ -271,7 +271,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     );
 })(angular);
 
-angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/tutorials/components/tutorialList/tutorialList.template.html",
     "<div class=\"tutorials-list-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_LIST_COMPONENTS\">\n" +
     "    <div class=\"diagnostic-overlay\" ng-if=\"!vm.isDiagnosticComplete\">\n" +
