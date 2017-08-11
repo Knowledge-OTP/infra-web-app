@@ -291,12 +291,12 @@
                         var appEnvConfig = _getAppEnvConfig(appContext);
                         var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
                         var postData = {
-                            email: authData.password ? authData.password.email : '',
+                            email: authData.email,
                             uid: authData.uid,
                             fbDataEndPoint: appEnvConfig.fbDataEndPoint,
                             fbEndpoint: appEnvConfig.fbGlobalEndPoint,
                             auth: appEnvConfig.dataAuthSecret,
-                            token: authData.token
+                            token: authData.refreshToken
                         };
 
                         return $http.post(postUrl, postData).then(function (token) {
