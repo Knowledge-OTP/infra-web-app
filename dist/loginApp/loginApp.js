@@ -570,7 +570,7 @@
                     storageBucket: appEnvConfig.firbase_auth_config.storageBucket,
                     messagingSenderId: appEnvConfig.firbase_auth_config.messagingSenderId
                 };
-                return window.firebase.initializeApp(config, 'myzinkerz_app');
+                return window.firebase.initializeApp(config, 'myzinkerzapp');
             }
 
             function _getAppRef(appContext) {
