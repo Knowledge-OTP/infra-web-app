@@ -10888,7 +10888,22 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }*/
 
+            function checkExistFirebaseApp(appContext) {
+                var existApp;
+                window.firebase.apps.forEach(function (app) {
+                    if (app.name.toLowerCase() === appContext.toLowerCase()) {
+                        existApp = app;
+                    }
+                });
+                return  existApp;
+            }
+
             function _getGlobalRef(appContext) {
+                var existApp = checkExistFirebaseApp(appContext);
+                if(existApp) {
+                   return  existApp;
+                }
+
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var config = {
                     apiKey: appEnvConfig.firbase_auth_config.apiKey,
@@ -10902,6 +10917,10 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             }
 
             function _getAppRef(appContext) {
+                var existApp = checkExistFirebaseApp(appContext);
+                if(existApp) {
+                    return  existApp;
+                }
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var config = {
                     apiKey: appEnvConfig.firebase_apiKey,
@@ -10916,7 +10935,6 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 
             function _getUserContextRef(appContext, userContext) {
                 var appRef = _getAppRef(appContext, userContext);
-
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
 
