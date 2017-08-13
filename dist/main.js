@@ -11115,26 +11115,30 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
-                        var appEnvConfig = _getAppEnvConfig(appContext);
-                        var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
-                        var postData = {
-                            email: authData.email,
-                            uid: authData.uid,
-                            fbDataEndPoint: appEnvConfig.fbDataEndPoint,
-                            fbEndpoint: appEnvConfig.fbGlobalEndPoint,
-                            auth: appEnvConfig.dataAuthSecret,
-                            token: authData.getIdToken()
-                        };
-
-                        return $http.post(postUrl, postData).then(function (token) {
-                            var appRef = _getAppRef(appContext, userContext);
-                            return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
-                                isLoginInProgress = false;
-                                if(!signUp){
-                                    _redirectToPage(appContext, userContext);
-                                }
-                                return res;
+                        return authData.getIdToken().then(function (token) {
+                            var appEnvConfig = _getAppEnvConfig(appContext);
+                            var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
+                            var postData = {
+                                email: authData.email,
+                                uid: authData.uid,
+                                fbDataEndPoint: appEnvConfig.fbDataEndPoint,
+                                fbEndpoint: appEnvConfig.fbGlobalEndPoint,
+                                auth: appEnvConfig.dataAuthSecret,
+                                token: token
+                            };
+                            return $http.post(postUrl, postData).then(function (token) {
+                                var appRef = _getAppRef(appContext, userContext);
+                                return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
+                                    isLoginInProgress = false;
+                                    if(!signUp){
+                                        _redirectToPage(appContext, userContext);
+                                    }
+                                    return res;
+                                });
                             });
+                        }).catch(function (err) {
+                            isLoginInProgress = false;
+                            return $q.reject(err);
                         });
                     }).catch(function (err) {
                         isLoginInProgress = false;
