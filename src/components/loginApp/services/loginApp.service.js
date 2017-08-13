@@ -111,7 +111,7 @@
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
 
-                return appRef.database.ref(prefix);
+                return appRef.database().ref(prefix);
             }
 
             function _addFirstRegistrationRecord(appContext, userContext) {
@@ -169,7 +169,7 @@
             function _getUserProfile(appContext, userContext) {
                 var globalRef = _getGlobalRef(appContext, userContext);
                 var auth = globalRef.auth().currentUser;
-                var userProfileRef = globalRef.database.ref('users/' + auth.uid + '/profile');
+                var userProfileRef = globalRef.database().ref('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
                 userProfileRef.on('value', function (snapshot) {
                     var userProfile = snapshot.val() || {};
@@ -197,11 +197,10 @@
                         }
                     };
                 }
-
-                updateProfileProms.push(znkRef.databse.ref('users/' + auth.uid).update(profile));
+                updateProfileProms.push(znkRef.database().ref('users/' + auth.uid).set(profile));
                 if (appEnvConfig.setUserProfileTwice){
                     var appRef = _getAppRef(appContext, userContext);
-                    updateProfileProms.push(appRef.database.ref('users/' + auth.uid).update(profile));
+                    updateProfileProms.push(appRef.database().ref('users/' + auth.uid).set(profile));
                 }
                 return $q.all(updateProfileProms)
                     .catch(function (err) {
