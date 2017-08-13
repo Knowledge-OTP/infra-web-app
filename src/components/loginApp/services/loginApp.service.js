@@ -288,7 +288,7 @@
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
-                        return authData.getIdToken().then(function (token) {
+                        return authData.getToken().then(function (token) {
                             var appEnvConfig = _getAppEnvConfig(appContext);
                             var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
                             var postData = {
