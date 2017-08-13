@@ -570,7 +570,7 @@
                     storageBucket: appEnvConfig.firbase_auth_config.storageBucket,
                     messagingSenderId: appEnvConfig.firbase_auth_config.messagingSenderId
                 };
-                return window.firebase.initializeApp(config, appEnvConfig.appName);
+                return window.firebase.initializeApp(config, appEnvConfig.firebase_projectId);
             }
 
             function _getAppRef(appContext) {
@@ -587,7 +587,7 @@
                     storageBucket: appEnvConfig.firebase_projectId + ".appspot.com",
                     messagingSenderId: appEnvConfig.messagingSenderId
                 };
-                return window.firebase.initializeApp(config, appEnvConfig.appName);
+                return window.firebase.initializeApp(config, appEnvConfig.firebase_projectId);
             }
 
             function _getUserContextRef(appContext, userContext) {
