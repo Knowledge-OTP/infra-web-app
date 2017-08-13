@@ -90,11 +90,11 @@
             }
 
             function _getAppRef(appContext) {
-                var existApp = _checkExistFirebaseApp(appContext);
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                var existApp = _checkExistFirebaseApp(appEnvConfig.firebase_projectId);
                 if(existApp) {
                     return  existApp;
                 }
-                var appEnvConfig = _getAppEnvConfig(appContext);
                 var config = {
                     apiKey: appEnvConfig.firebase_apiKey,
                     authDomain:  appEnvConfig.firebase_projectId + ".firebaseapp.com",
