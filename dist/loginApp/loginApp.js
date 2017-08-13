@@ -772,31 +772,26 @@
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
-                        return authData.getIdToken().then(function(token){
-                            var appEnvConfig = _getAppEnvConfig(appContext);
-                            var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
-                            var postData = {
-                                email: authData.email,
-                                uid: authData.uid,
-                                fbDataEndPoint: appEnvConfig.fbDataEndPoint,
-                                fbEndpoint: appEnvConfig.fbGlobalEndPoint,
-                                auth: appEnvConfig.dataAuthSecret,
-                                token: token
-                            };
+                        var appEnvConfig = _getAppEnvConfig(appContext);
+                        var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
+                        var postData = {
+                            email: authData.email,
+                            uid: authData.uid,
+                            fbDataEndPoint: appEnvConfig.fbDataEndPoint,
+                            fbEndpoint: appEnvConfig.fbGlobalEndPoint,
+                            auth: appEnvConfig.dataAuthSecret,
+                            token: authData.refreshToken
+                        };
 
-                            return $http.post(postUrl, postData).then(function (token) {
-                                var appRef = _getAppRef(appContext, userContext);
-                                return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
-                                    isLoginInProgress = false;
-                                    if(!signUp){
-                                        _redirectToPage(appContext, userContext);
-                                    }
-                                    return res;
-                                });
+                        return $http.post(postUrl, postData).then(function (token) {
+                            var appRef = _getAppRef(appContext, userContext);
+                            return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
+                                isLoginInProgress = false;
+                                if(!signUp){
+                                    _redirectToPage(appContext, userContext);
+                                }
+                                return res;
                             });
-                        }).catch(function (err) {
-                            isLoginInProgress = false;
-                            return $q.reject(err);
                         });
                     }).catch(function (err) {
                         isLoginInProgress = false;
