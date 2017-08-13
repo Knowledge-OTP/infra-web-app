@@ -296,7 +296,7 @@
                             fbDataEndPoint: appEnvConfig.fbDataEndPoint,
                             fbEndpoint: appEnvConfig.fbGlobalEndPoint,
                             auth: appEnvConfig.dataAuthSecret,
-                            token: authData.refreshToken
+                            token: authData.getIdToken()
                         };
 
                         return $http.post(postUrl, postData).then(function (token) {
