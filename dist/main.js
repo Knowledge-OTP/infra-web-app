@@ -10899,12 +10899,12 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             }
 
             function _getGlobalRef(appContext) {
-                var existApp = _checkExistFirebaseApp(appContext);
+                var appEnvConfig = _getAppEnvConfig(appContext);
+                var existApp = _checkExistFirebaseApp(appEnvConfig.firbase_auth_config.projectId);
                 if(existApp) {
                    return  existApp;
                 }
 
-                var appEnvConfig = _getAppEnvConfig(appContext);
                 var config = {
                     apiKey: appEnvConfig.firbase_auth_config.apiKey,
                     authDomain:  appEnvConfig.firbase_auth_config.authDomain,
