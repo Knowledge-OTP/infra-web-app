@@ -11115,7 +11115,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
-                        return authData.getToken().then(function (token) {
+                        return authData.getIdToken().then(function(token){
                             var appEnvConfig = _getAppEnvConfig(appContext);
                             var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
                             var postData = {
@@ -11126,6 +11126,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                                 auth: appEnvConfig.dataAuthSecret,
                                 token: token
                             };
+
                             return $http.post(postUrl, postData).then(function (token) {
                                 var appRef = _getAppRef(appContext, userContext);
                                 return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
