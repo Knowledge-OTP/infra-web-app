@@ -545,7 +545,7 @@
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
             }*/
 
-            function checkExistFirebaseApp(appContext) {
+            function _checkExistFirebaseApp(appContext) {
                 var existApp;
                 window.firebase.apps.forEach(function (app) {
                     if (app.name.toLowerCase() === appContext.toLowerCase()) {
@@ -556,7 +556,7 @@
             }
 
             function _getGlobalRef(appContext) {
-                var existApp = checkExistFirebaseApp(appContext);
+                var existApp = _checkExistFirebaseApp(appContext);
                 if(existApp) {
                    return  existApp;
                 }
@@ -570,11 +570,11 @@
                     storageBucket: appEnvConfig.firbase_auth_config.storageBucket,
                     messagingSenderId: appEnvConfig.firbase_auth_config.messagingSenderId
                 };
-                return window.firebase.initializeApp(config, 'myzinkerz');
+                return window.firebase.initializeApp(config, appEnvConfig.appName);
             }
 
             function _getAppRef(appContext) {
-                var existApp = checkExistFirebaseApp(appContext);
+                var existApp = _checkExistFirebaseApp(appContext);
                 if(existApp) {
                     return  existApp;
                 }
@@ -587,7 +587,7 @@
                     storageBucket: appEnvConfig.firebase_projectId + ".appspot.com",
                     messagingSenderId: appEnvConfig.messagingSenderId
                 };
-                return window.firebase.initializeApp(config, 'dataFireBase');
+                return window.firebase.initializeApp(config, appEnvConfig.appName);
             }
 
             function _getUserContextRef(appContext, userContext) {
