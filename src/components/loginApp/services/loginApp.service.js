@@ -78,15 +78,7 @@
                    return  existApp;
                 }
 
-                var config = {
-                    apiKey: appEnvConfig.firbase_auth_config.apiKey,
-                    authDomain:  appEnvConfig.firbase_auth_config.authDomain,
-                    databaseURL: appEnvConfig.firbase_auth_config.databaseURL,
-                    projectId: appEnvConfig.firbase_auth_config.projectId,
-                    storageBucket: appEnvConfig.firbase_auth_config.storageBucket,
-                    messagingSenderId: appEnvConfig.firbase_auth_config.messagingSenderId
-                };
-                return window.firebase.initializeApp(config, appEnvConfig.firebase_projectId);
+                return window.firebase.initializeApp(appEnvConfig.firbase_auth_config, appEnvConfig.firebase_projectId);
             }
 
             function _getAppRef(appContext) {
