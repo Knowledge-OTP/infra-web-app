@@ -284,6 +284,7 @@
                         var postData = {
                             email: authData.email,
                             uid: authData.uid,
+                            projectId: appEnvConfig.firebase_projectId,
                             fbDataEndPoint: appEnvConfig.fbDataEndPoint,
                             fbEndpoint: appEnvConfig.fbGlobalEndPoint,
                             auth: appEnvConfig.dataAuthSecret,

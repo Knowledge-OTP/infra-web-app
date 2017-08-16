@@ -11111,6 +11111,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         var postData = {
                             email: authData.email,
                             uid: authData.uid,
+                            projectId: appEnvConfig.firebase_projectId,
                             fbDataEndPoint: appEnvConfig.fbDataEndPoint,
                             fbEndpoint: appEnvConfig.fbGlobalEndPoint,
                             auth: appEnvConfig.dataAuthSecret,
