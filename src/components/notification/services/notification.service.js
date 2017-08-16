@@ -41,7 +41,7 @@
                 var pathPending = "/notifications/users/" + uid + "/pending";
                 _getStorage().then(function (storage) {
                     storage.get(pathPending).then(function (snapshot) {
-                        var notifications = snapshot.getValue();
+                        var notifications = snapshot.exportVal();
                         var notificationList = notifications.filter(function (item) {
                             return item.notificationTypeEnum === notificationTypeEnum;
                         });
