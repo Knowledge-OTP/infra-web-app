@@ -11028,9 +11028,12 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
             }
 
             function _createAuthWithCustomToken(refDB, token) {
-                return refDB.auth().signInWithCustomToken(token).catch(function (error) {
-                    $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
-                });
+                return refDB.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
+                    .then(function() {
+                        return refDB.auth().signInWithCustomToken(token).catch(function (error) {
+                            $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
+                        });
+                    });
             }
 
             function _userDataForAuthAndDataFb(data, appContext, userContext) {
@@ -11105,33 +11108,41 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     isLoginInProgress = true;
 
                     var globalRef = _getGlobalRef(appContext, userContext);
-                    return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
-                        var appEnvConfig = _getAppEnvConfig(appContext);
-                        var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
-                        var postData = {
-                            email: authData.email,
-                            uid: authData.uid,
-                            projectId: appEnvConfig.firebase_projectId,
-                            fbDataEndPoint: appEnvConfig.fbDataEndPoint,
-                            fbEndpoint: appEnvConfig.fbGlobalEndPoint,
-                            auth: appEnvConfig.dataAuthSecret,
-                            token: authData.refreshToken
-                        };
+                    return globalRef.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
+                        .then(function() {
+                            return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
+                                var appEnvConfig = _getAppEnvConfig(appContext);
+                                var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
+                                var postData = {
+                                    email: authData.email,
+                                    uid: authData.uid,
+                                    projectId: appEnvConfig.firebase_projectId,
+                                    fbDataEndPoint: appEnvConfig.fbDataEndPoint,
+                                    fbEndpoint: appEnvConfig.fbGlobalEndPoint,
+                                    auth: appEnvConfig.dataAuthSecret,
+                                    token: authData.refreshToken
+                                };
 
-                        return $http.post(postUrl, postData).then(function (token) {
-                            var appRef = _getAppRef(appContext, userContext);
-                            return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
+                                return $http.post(postUrl, postData).then(function (token) {
+                                    var appRef = _getAppRef(appContext, userContext);
+                                    return appRef.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
+                                        .then(function() {
+                                            return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
+                                                isLoginInProgress = false;
+                                                if(!signUp){
+                                                    _redirectToPage(appContext, userContext);
+                                                }
+                                                return res;
+                                            });
+                                        });
+
+                                });
+                            }).catch(function (err) {
                                 isLoginInProgress = false;
-                                if(!signUp){
-                                    _redirectToPage(appContext, userContext);
-                                }
-                                return res;
+                                return $q.reject(err);
                             });
                         });
-                    }).catch(function (err) {
-                        isLoginInProgress = false;
-                        return $q.reject(err);
-                    });
+
                 };
             })();
 
