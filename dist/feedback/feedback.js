@@ -43,7 +43,7 @@
                     email: userEmail
                 };
                 var userAuth = AuthService.getAuth();
-                self.userId = userAuth.auth.uid;
+                self.userId = userAuth.uid;
                 self.userEmail = userEmail;
             });
 

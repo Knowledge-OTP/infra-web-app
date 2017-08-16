@@ -108,7 +108,7 @@
                 invitation.uid = authData.uid;
                 invitation.senderAppName = ENV.dashboardAppName;
                 invitation.receiverAppName = ENV.studentAppName;
-                invitation.senderEmail = authData.password.email;
+                invitation.senderEmail = authData.email;
                 return updateStatus(invitation);
             };
 
@@ -152,7 +152,7 @@
                 invitation.status = this.invitationStatus.senderDelete;
                 invitation.receiverAppName = ENV.dashboardAppName;
                 invitation.senderAppName = ENV.firebaseAppScopeName;
-                invitation.senderEmail = authData.password.email;
+                invitation.senderEmail = authData.email;
                 return updateStatus(invitation);
             };
 
@@ -266,15 +266,8 @@
             };
 
             function addInvitationUserData(invitation, profile) {
-                var senderEmail;
                 var authData = AuthService.getAuth();
-                if (authData.password && authData.password.email) {
-                    senderEmail = authData.password.email;
-                } else if (authData.auth && authData.auth.email) {
-                    senderEmail = authData.auth.email;
-                } else if (authData.token && authData.token.email) {
-                    senderEmail = authData.token.email;
-                }
+                var senderEmail = authData.email;
 
                 invitation.senderUid = authData.uid;
                 invitation.senderName = profile.nickname || profile.email;

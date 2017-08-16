@@ -6176,7 +6176,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templa
                     email: userEmail
                 };
                 var userAuth = AuthService.getAuth();
-                self.userId = userAuth.auth.uid;
+                self.userId = userAuth.uid;
                 self.userEmail = userEmail;
             });
 
@@ -7628,7 +7628,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 invitation.uid = authData.uid;
                 invitation.senderAppName = ENV.dashboardAppName;
                 invitation.receiverAppName = ENV.studentAppName;
-                invitation.senderEmail = authData.password.email;
+                invitation.senderEmail = authData.email;
                 return updateStatus(invitation);
             };
 
@@ -7672,7 +7672,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 invitation.status = this.invitationStatus.senderDelete;
                 invitation.receiverAppName = ENV.dashboardAppName;
                 invitation.senderAppName = ENV.firebaseAppScopeName;
-                invitation.senderEmail = authData.password.email;
+                invitation.senderEmail = authData.email;
                 return updateStatus(invitation);
             };
 
@@ -7786,15 +7786,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             };
 
             function addInvitationUserData(invitation, profile) {
-                var senderEmail;
                 var authData = AuthService.getAuth();
-                if (authData.password && authData.password.email) {
-                    senderEmail = authData.password.email;
-                } else if (authData.auth && authData.auth.email) {
-                    senderEmail = authData.auth.email;
-                } else if (authData.token && authData.token.email) {
-                    senderEmail = authData.token.email;
-                }
+                var senderEmail = authData.email;
 
                 invitation.senderUid = authData.uid;
                 invitation.senderName = profile.nickname || profile.email;
@@ -11946,8 +11939,8 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($t
                 vm.nicknameError = 'MY_PROFILE.REQUIRED_FIELD';
                 vm.profileData = {};
 
-                vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.auth.email;
-                vm.profileData.email = vm.userProfile.email ? vm.userProfile.email : userAuth.auth.email;
+                vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.email;
+                vm.profileData.email = vm.userProfile.email ? vm.userProfile.email : userAuth.email;
                 vm.profileData.timezone = vm.userProfile.isTimezoneManual ? vm.userProfile.timezone : vm.localTimezone;
                 vm.profileData.isTimezoneManual = vm.userProfile.isTimezoneManual ? vm.userProfile.isTimezoneManual : false;
 
@@ -13882,8 +13875,8 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
 
                 function buildForm() {
                     $q.all([AuthService.getAuth(), purchaseService.getProduct()]).then(function (results) {
-                        var userEmail = results[0].auth.email;
-                        var userId = results[0].auth.uid;
+                        var userEmail = results[0].email;
+                        var userId = results[0].uid;
                         var productId = results[1].id;
 
                         if (!userEmail) {

@@ -21,8 +21,8 @@
                 vm.nicknameError = 'MY_PROFILE.REQUIRED_FIELD';
                 vm.profileData = {};
 
-                vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.auth.email;
-                vm.profileData.email = vm.userProfile.email ? vm.userProfile.email : userAuth.auth.email;
+                vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.email;
+                vm.profileData.email = vm.userProfile.email ? vm.userProfile.email : userAuth.email;
                 vm.profileData.timezone = vm.userProfile.isTimezoneManual ? vm.userProfile.timezone : vm.localTimezone;
                 vm.profileData.isTimezoneManual = vm.userProfile.isTimezoneManual ? vm.userProfile.isTimezoneManual : false;
 
