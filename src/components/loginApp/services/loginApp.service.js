@@ -164,7 +164,7 @@
                 var userProfileRef = globalRef.database().ref('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
                 userProfileRef.on('value', function (snapshot) {
-                    var userProfile = snapshot.val() || {};
+                    var userProfile = snapshot.getValue() || {};
                     deferred.resolve(userProfile);
                 }, function (err) {
                     $log.error('LoginAppSrv _getUserProfile: err=' + err);

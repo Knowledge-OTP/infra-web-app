@@ -10984,7 +10984,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                 var userProfileRef = globalRef.database().ref('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
                 userProfileRef.on('value', function (snapshot) {
-                    var userProfile = snapshot.val() || {};
+                    var userProfile = snapshot.getValue() || {};
                     deferred.resolve(userProfile);
                 }, function (err) {
                     $log.error('LoginAppSrv _getUserProfile: err=' + err);
@@ -12422,7 +12422,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($
             // call and init firebase 'child_added' event
             function initFirebaseChildAddedEvents(storage) {
                  storage.onEvent('child_added', pathPending, function (dataSnapshot) {
-                    var notificationData = dataSnapshot.val();
+                    var notificationData = dataSnapshot.getValue();
                     var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
                     if (!callbackList) {
                         $log.log('no subscribers');
@@ -12493,7 +12493,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($
                 var pathPending = "/notifications/users/" + uid + "/pending";
                 _getStorage().then(function (storage) {
                     storage.get(pathPending).then(function (snapshot) {
-                        var notifications = snapshot.val();
+                        var notifications = snapshot.getValue();
                         var notificationList = notifications.filter(function (item) {
                             return item.notificationTypeEnum === notificationTypeEnum;
                         });

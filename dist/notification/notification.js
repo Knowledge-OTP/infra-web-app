@@ -51,7 +51,7 @@
             // call and init firebase 'child_added' event
             function initFirebaseChildAddedEvents(storage) {
                  storage.onEvent('child_added', pathPending, function (dataSnapshot) {
-                    var notificationData = dataSnapshot.val();
+                    var notificationData = dataSnapshot.getValue();
                     var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
                     if (!callbackList) {
                         $log.log('no subscribers');
@@ -122,7 +122,7 @@
                 var pathPending = "/notifications/users/" + uid + "/pending";
                 _getStorage().then(function (storage) {
                     storage.get(pathPending).then(function (snapshot) {
-                        var notifications = snapshot.val();
+                        var notifications = snapshot.getValue();
                         var notificationList = notifications.filter(function (item) {
                             return item.notificationTypeEnum === notificationTypeEnum;
                         });
