@@ -594,7 +594,7 @@
                 var userContextAppRef = _getUserContextRef(appContext, userContext);
                 var auth = userContextAppRef.getAuth();
                 var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
-                return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
+                return firstLoginRef.set(window.firebase.database.ServerValue.TIMESTAMP);
             }
 
             function _redirectToPage(appContext, userContext) {
