@@ -11168,7 +11168,9 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                             };
                             var saveProfileProm = LoginAppSrv.writeUserProfile(userProfile, appContext, userContext, true);
                             return saveProfileProm.then(function () {
-                                _redirectToPage(appContext, userContext);
+                                return _addFirstRegistrationRecord(appContext, userContext).then(function () {
+                                    return _redirectToPage(appContext, userContext);
+                                });
                             });
                         });
                     }).catch(function (err) {
