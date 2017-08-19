@@ -586,14 +586,13 @@
                 var appRef = _getAppRef(appContext, userContext);
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
-
                 return appRef.database().ref(prefix);
             }
 
             function _addFirstRegistrationRecord(appContext, userContext) {
+                var appRef = _getAppRef(appContext, userContext);
                 var userContextAppRef = _getUserContextRef(appContext, userContext);
-                var auth = userContextAppRef.getAuth();
-                var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
+                var firstLoginRef = userContextAppRef.child('firstLogin/' + appRef.auth().currentUser.uid);
                 return firstLoginRef.set(window.firebase.database.ServerValue.TIMESTAMP);
             }
 
