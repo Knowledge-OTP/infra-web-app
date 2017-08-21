@@ -226,9 +226,9 @@
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
-                  $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate, ExerciseReviewStatusEnum, CategoryService) {
+            $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
+            $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+            $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
             this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
@@ -281,7 +281,7 @@
                 exerciseData.resultsData.subjectId = self.subjectId;
                 exerciseData.resultsData.exerciseDescription = exerciseData.exam.name;
                 exerciseData.resultsData.exerciseName = translateFilter('ZNK_EXERCISE.SECTION');
-                exerciseData.resultsData.$save();
+                var savePromise = exerciseData.resultsData.$save();
                 exerciseData.exam.typeId = ExamTypeEnum.DIAGNOSTIC.enum;//  todo(igor): current diagnostic type is incorrect
                 shouldBroadCastExerciseProm.then(function (shouldBroadcastFn) {
                     var shouldBroadcast = shouldBroadcastFn({
@@ -294,6 +294,7 @@
                     }
                 });
                 StatsEventsHandlerSrv.addNewExerciseResult(ExerciseTypeEnum.SECTION.enum, exerciseData.questionsData, exerciseData.resultsData);
+                return savePromise;
             }
 
             function _isLastSubject() {
@@ -307,8 +308,8 @@
                         var lastSection = sectionsByOrder[sectionsByOrder.length - 1];
                         var lastIdStr = lastSection.id.toString();
                         var isMatchingLastSectionToResults = sectionResultsKeys.findIndex(function (element) {
-                                return element === lastIdStr;
-                            }) !== -1;
+                            return element === lastIdStr;
+                        }) !== -1;
                         if (!isMatchingLastSectionToResults) {
                             $log.error('WorkoutsDiagnosticExerciseController _isLastSubject: can\'t find index of the last section that match one section results, that\'s not suppose to happen!');
                             return $q.reject();
@@ -334,7 +335,7 @@
             }
 
             function _isLastQuestion() {
-                return numQuestionCounter === _getNumberOfQuestions();
+                return numQuestionCounter >= _getNumberOfQuestions();
             }
 
             function _getCurrentIndex() {
@@ -402,7 +403,7 @@
             }
 
             function _setHeaderTitle() {
-                var subjectTranslateKey = 'SUBJECTS.'  + 'DIAGNOSTIC_TITLE.' + self.subjectId;
+                var subjectTranslateKey = 'SUBJECTS.' + 'DIAGNOSTIC_TITLE.' + self.subjectId;
                 $translate(subjectTranslateKey).then(function (subjectTranslation) {
                     var translateFilter = $filter('translate');
                     self.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_EXERCISE.HEADER_TITLE', {
@@ -481,10 +482,14 @@
                     $log.debug('WorkoutsDiagnosticExerciseController onSlideChange: initial func');
                     WorkoutsDiagnosticFlow.setCurrentQuestion(value.id, index);
                     self.actions.setSlideDirection(ZnkExerciseSlideDirectionEnum.NONE.enum);
-                    nextQuestion = void(0);
-                    numQuestionCounter = numQuestionCounter + 1;
-                    _setNumSlideForNgModel(numQuestionCounter);
-                    znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
+                    nextQuestion = void (0);
+                    if (!_isLastQuestion()) {
+                        numQuestionCounter = numQuestionCounter + 1;
+                        _setNumSlideForNgModel(numQuestionCounter);
+                        znkAnalyticsSrv.pageTrack({ props: { url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '') } });
+                    } else {
+                        self.actions.forceDoneBtnDisplay(true);
+                    }
                 },
                 onQuestionAnswered: function () {
                     $log.debug('WorkoutsDiagnosticExerciseController onQuestionAnswered: initial func');
@@ -507,22 +512,23 @@
                 },
                 onDone: function () {
                     WorkoutsDiagnosticFlow.markSectionAsDoneToggle(true);
-                    _onDoneSaveResultsData();
-                    _isLastSubject().then(function (isLastSubject) {
-                        znkAnalyticsSrv.eventTrack({
-                            eventName: 'diagnosticSectionCompleted',
-                            questionsArr: exerciseData.resultsData.questionResults,
-                            props: {
-                                sectionId: exerciseData.questionsData.id,
-                                order: exerciseData.questionsData.order,
-                                subjectId: self.subjectId
+                    _onDoneSaveResultsData().then(function () {
+                        _isLastSubject().then(function (isLastSubject) {
+                            znkAnalyticsSrv.eventTrack({
+                                eventName: 'diagnosticSectionCompleted',
+                                questionsArr: exerciseData.resultsData.questionResults,
+                                props: {
+                                    sectionId: exerciseData.questionsData.id,
+                                    order: exerciseData.questionsData.order,
+                                    subjectId: self.subjectId
+                                }
+                            });
+                            if (isLastSubject) {
+                                _goToCurrentState(true);
+                            } else {
+                                _goToCurrentState();
                             }
                         });
-                        if (isLastSubject) {
-                            _goToCurrentState(true);
-                        } else {
-                            _goToCurrentState();
-                        }
                     });
                 },
                 initForceDoneBtnDisplay: false,
