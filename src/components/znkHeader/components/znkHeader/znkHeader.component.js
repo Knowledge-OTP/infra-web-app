@@ -22,6 +22,7 @@
                 vm.purchaseData = {};
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
                 vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
+                vm.myZinkerzUrl = ENV.myZinkerz;
 
                 $scope.$on('profile-updated', function(event, args) {
                     vm.userProfile = {
