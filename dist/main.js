@@ -325,7 +325,7 @@
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/activePanel/directives/activePanel.template.html",
     "<div class=\"active-panel ng-hide\"\n" +
     "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
@@ -1343,7 +1343,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function 
         );
 })(angular);
 
-angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
@@ -1749,7 +1749,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -1904,7 +1904,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
     );
 })(angular);
 
-angular.module('znk.infra-web-app.aws').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -3301,7 +3301,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function ($templa
     );
 })(angular);
 
-angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
     "<svg\n" +
     "    version=\"1.1\"\n" +
@@ -3527,7 +3527,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.config').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.config').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -3602,7 +3602,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function ($tem
     });
 })(angular);
 
-angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -4718,7 +4718,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
 })(angular);
 
 
-angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
@@ -5027,7 +5027,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
         }];
 }]);
 
-angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticIntro/directives/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
@@ -5108,10 +5108,12 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
         .service('ElasticSearchSrv',
             ["ENV", "$log", "$http", "AuthService", function (ENV, $log, $http, AuthService) {
                 'ngInject';
-                var uidObj = AuthService.getAuth();
-
+                var uidObj = {};
+                AuthService.getAuth().then(authData => {
+                    uidObj = authData;
+                });
                 var API_PATH = ENV.backendEndpoint + "/search";
-                
+
                 this.search = function (query) {
                     var uid = uidObj.uid;
 
@@ -5133,7 +5135,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -5356,7 +5358,7 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/estimatedScoreWidget/directives/estimatedScoreWidget.template.html",
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
@@ -5866,7 +5868,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     });
 })(angular);
 
-angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/evaluator/svg/star.svg",
     "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\"\n" +
@@ -6079,7 +6081,7 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function ($
     });
 })(angular);
 
-angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/faq/svg/circle-arrow.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -6162,8 +6164,8 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templa
     'use strict';
 
     angular.module('znk.infra-web-app.feedback').controller('feedbackCtrl',
-        ["$log", "$mdDialog", "$timeout", "$http", "ENV", "UserProfileService", "AuthService", function($log, $mdDialog, $timeout, $http, ENV, UserProfileService, AuthService) {
-            'ngInject';
+    ["$log", "$mdDialog", "$timeout", "$http", "ENV", "UserProfileService", "AuthService", function($log, $mdDialog, $timeout, $http, ENV, UserProfileService, AuthService) {
+        'ngInject';
 
             var self = this;
             var DOORBELLSTATUSOK = 201;
@@ -6175,20 +6177,22 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templa
                 self.feedbackData = {
                     email: userEmail
                 };
-                var userAuth = AuthService.getAuth();
-                self.userId = userAuth.uid;
-                self.userEmail = userEmail;
+                AuthService.getAuth().then(userAuth => {
+                    if (userAuth) {
+                        self.userId = userAuth.uid;
+                        self.userEmail = userEmail || userAuth.email;
+                    }
+                });
             });
 
             this.sendFrom = function () {
                 if (self.feedbackForm.$valid) {
                     self.startLoader = true;
-                    var authData = AuthService.getAuth();
                     var postData = angular.copy(self.feedbackData);
 
                     postData.tags = ENV.firebaseAppScopeName;
                     postData.message += (ENTER_KEY + ENTER_KEY);
-                    postData.message += ' APP-NAME: ' + ENV.firebaseAppScopeName + ', UID: ' + (authData ? authData.uid : 'N/A');
+                    postData.message += ' APP-NAME: ' + ENV.firebaseAppScopeName + ', UID: ' + (self.userId ? self.userId : 'N/A');
 
                     $http.post(ENV.doorBellSubmitURL, (postData)).then(function (data) {
                         self.fillLoader = true;
@@ -6257,7 +6261,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templa
 })(angular);
 
 
-angular.module('znk.infra-web-app.feedback').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
@@ -6557,7 +6561,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function ($t
     );
 })(angular);
 
-angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/iapMsg/svg/close-msg.svg",
     "<svg class=\"iap-msg-close-msg-svg\"\n" +
     "     x=\"0px\"\n" +
@@ -6757,7 +6761,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function ($tem
 })(angular);
 
 
-angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\" y=\"0px\"\n" +
@@ -7117,7 +7121,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
@@ -7536,6 +7540,10 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 timeout: ENV.promiseTimeOut
             };
 
+            AuthService.getAuth().then(authData => {
+                self.authData = authData;
+            });
+
             this.listeners = {
                 USER_TEACHERS: 'approved',
                 NEW_INVITATIONS: 'sent',
@@ -7624,7 +7632,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             };
 
             this.updateInvitationStatus = function (invitation) {
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.senderAppName = ENV.dashboardAppName;
                 invitation.receiverAppName = ENV.studentAppName;
@@ -7644,7 +7652,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
             this.inviteTeacher = function (receiverEmail, receiverName) {
                 return UserProfileService.getProfile().then(function (profile) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     var newInvitiation = [{
                         receiverAppName: ENV.dashboardAppName,
                         receiverEmail: receiverEmail,
@@ -7667,7 +7675,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             };
 
             this.deletePendingConformations = function (invitation) {
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = this.invitationStatus.senderDelete;
                 invitation.receiverAppName = ENV.dashboardAppName;
@@ -7697,7 +7705,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
             this.resentInvitation = function (inviteId) {
                 return this.getInvitationObject(inviteId).then(function (invitation) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     invitation.uid = authData.uid;
                     invitation.status = self.invitationStatus.resent;
                     return self.updateInvitation(invitation).then(
@@ -7730,7 +7738,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
             this.deletePendingInvitation = function (inviteId) {
                 return this.getInvitationObject(inviteId).then(function (invitation) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     invitation.uid = authData.uid;
                     invitation.status = self.invitationStatus.senderDelete;
                     return self.updateInvitation(invitation).then(
@@ -7749,7 +7757,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
             this.approveInvitation = function (invitation) {
                 var oldInvitationStatus = invitation.status;
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = self.invitationStatus.approved;
                 return updateStatus(invitation, oldInvitationStatus);
@@ -7757,7 +7765,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
             this.declineInvitation = function (invitation) {
                 var oldInvitationStatus = invitation.status;
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = self.invitationStatus.receiverDeclined;
                 return updateStatus(invitation, oldInvitationStatus);
@@ -7786,7 +7794,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             };
 
             function addInvitationUserData(invitation, profile) {
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 var senderEmail = authData.email;
 
                 invitation.senderUid = authData.uid;
@@ -7993,7 +8001,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     );
 })(angular);
 
-angular.module('znk.infra-web-app.invitation').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/invitation/approveModal/invitationApproveModal.template.html",
     "<md-dialog ng-cloak class=\"invitation-confirm-modal\" translate-namespace=\"INVITE_APPROVE_MODAL\">\n" +
     "    <md-toolbar>\n" +
@@ -8459,7 +8467,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function (
         );
 })(angular);
 
-angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -8840,7 +8848,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
     );
 })(angular);
 
-angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/liveLessons/svg/calendar-icon.svg",
     "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" class=\"calendar-icon\"\n" +
     "     viewBox=\"0 0 176.3 200\">\n" +
@@ -10082,7 +10090,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
     });
 })(angular);
 
-angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
     "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
     "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
@@ -10330,7 +10338,7 @@ angular.module('znk.infra-web-app.loadingAnimation', []);
 })(angular);
 
 
-angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -11197,7 +11205,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     });
 })(angular);
 
-angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/loginApp/directives/loginApp/loginApp.template.html",
     "<div class=\"login-app\" ng-class=\"{\n" +
     "        student: d.userContext === d.userContextObj.STUDENT,\n" +
@@ -11933,53 +11941,53 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($t
                 'ngInject';
 
                 var vm = this;
-                var userAuth = AuthService.getAuth();
-                var showToast = MyProfileSrv.showToast;
+                AuthService.getAuth().then(userAuth => {
+                    var showToast = MyProfileSrv.showToast;
+                    vm.saveTitle = 'MY_PROFILE.SAVE';
+                    vm.nicknameError = 'MY_PROFILE.REQUIRED_FIELD';
+                    vm.profileData = {};
 
-                vm.saveTitle = 'MY_PROFILE.SAVE';
-                vm.nicknameError = 'MY_PROFILE.REQUIRED_FIELD';
-                vm.profileData = {};
+                    vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.email;
+                    vm.profileData.email = vm.userProfile.email ? vm.userProfile.email : userAuth.email;
+                    vm.profileData.timezone = vm.userProfile.isTimezoneManual ? vm.userProfile.timezone : vm.localTimezone;
+                    vm.profileData.isTimezoneManual = vm.userProfile.isTimezoneManual ? vm.userProfile.isTimezoneManual : false;
 
-                vm.profileData.nickname = vm.userProfile.nickname ? vm.userProfile.nickname : userAuth.email;
-                vm.profileData.email = vm.userProfile.email ? vm.userProfile.email : userAuth.email;
-                vm.profileData.timezone = vm.userProfile.isTimezoneManual ? vm.userProfile.timezone : vm.localTimezone;
-                vm.profileData.isTimezoneManual = vm.userProfile.isTimezoneManual ? vm.userProfile.isTimezoneManual : false;
+                    vm.updateProfile = function (profileform) {
+                        var type, msg;
 
-                vm.updateProfile = function (profileform) {
-                    var type, msg;
-
-                    if (profileform.$valid && profileform.$dirty) {
-                        UserProfileService.setProfile(vm.profileData).then(function () {
-                            $timeout(function () {
-                                type = 'success';
-                                msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
-                                showToast(type, msg);
-                                $rootScope.$broadcast('profile-updated', { profile: vm.profileData });
-                            });
-                        }, function (err) {
-                            $timeout(function () {
-                                type = 'error';
-                                if (err.code === 'NETWORK_ERROR') {
-                                    msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
+                        if (profileform.$valid && profileform.$dirty) {
+                            UserProfileService.setProfile(vm.profileData).then(function () {
+                                $timeout(function () {
+                                    type = 'success';
+                                    msg = 'MY_PROFILE.PROFILE_SAVE_SUCCESS';
                                     showToast(type, msg);
-                                } else {
-                                    msg = 'MY_PROFILE.ERROR_OCCURRED';
-                                    showToast(type, msg);
-                                }
+                                    $rootScope.$broadcast('profile-updated', { profile: vm.profileData });
+                                });
+                            }, function (err) {
+                                $timeout(function () {
+                                    type = 'error';
+                                    if (err.code === 'NETWORK_ERROR') {
+                                        msg = 'MY_PROFILE.NO_INTERNET_CONNECTION_ERR';
+                                        showToast(type, msg);
+                                    } else {
+                                        msg = 'MY_PROFILE.ERROR_OCCURRED';
+                                        showToast(type, msg);
+                                    }
+                                });
                             });
-                        });
-                    }
-                };
+                        }
+                    };
 
-                vm.closeDialog = function () {
-                    $mdDialog.cancel();
-                };
+                    vm.closeDialog = function () {
+                        $mdDialog.cancel();
+                    };
 
-                vm.updateProfileTimezone = function () {
-                    if (!vm.profileData.isTimezoneManual){
-                        vm.profileData.timezone = vm.localTimezone;
-                    }
-                };
+                    vm.updateProfileTimezone = function () {
+                        if (!vm.profileData.isTimezoneManual){
+                            vm.profileData.timezone = vm.localTimezone;
+                        }
+                    };
+                });
             }]
         });
 })(angular);
@@ -12101,7 +12109,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($t
         );
 })(angular);
 
-angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/myProfile/components/changePassword/changePassword.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
     "    <div class=\"container-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
@@ -12402,51 +12410,53 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($
         ["$log", "InfraConfigSrv", "NotificationService", "AuthService", "NotificationTypeEnum", "PlanNotificationService", function ($log, InfraConfigSrv, NotificationService, AuthService, NotificationTypeEnum, PlanNotificationService) {
             'ngInject';
 
-            var uid = AuthService.getAuth().uid;
-            var pathPending = "/notifications/users/" + uid + "/pending";
-            if (!uid) {
-                $log.error('uid is missing');
-                return;
-            }
-            _getStorage().then(function (storage) {
-                // clear the pending path for user
-                storage.set(pathPending, {}).then(function () {
-                    // start listen to plan notifications
-                    NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
-                    PlanNotificationService.checkPlanNotification();
-                    initFirebaseChildAddedEvents(storage);
-                });
-            }).catch(function (error) {
-                $log.error(error);
-            });
-
-            // call and init firebase 'child_added' event
-            function initFirebaseChildAddedEvents(storage) {
-                 storage.onEvent('child_added', pathPending, function (dataSnapshot) {
-                    var notificationData = dataSnapshot.exportVal();
-                    var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
-                    if (!callbackList) {
-                        $log.log('no subscribers');
-                    }
-                    callbackList.forEach(function (callback) {
-                        callback(notificationData);
-                        if (!notificationData.id) {
-                            $log.error('notification id is null or empty');
-                        }
+            AuthService.getAuth().then(authData => {
+                var uid = authData.uid;
+                var pathPending = "/notifications/users/" + uid + "/pending";
+                if (!uid) {
+                    $log.error('uid is missing');
+                    return;
+                }
+                _getStorage().then(function (storage) {
+                    // clear the pending path for user
+                    storage.set(pathPending, {}).then(function () {
+                        // start listen to plan notifications
+                        NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
+                        PlanNotificationService.checkPlanNotification();
+                        initFirebaseChildAddedEvents(storage);
                     });
-                    var dataToMoveAndDelete = {};
-                    NotificationService.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
-                    _getStorage().then(function (storage) {
-                        storage.update(dataToMoveAndDelete).catch(function (error) {
-                            $log.error("error: can not remove item, error: " + error.message);
+                }).catch(function (error) {
+                    $log.error(error);
+                });
+
+                // call and init firebase 'child_added' event
+                function initFirebaseChildAddedEvents(storage) {
+                    storage.onEvent('child_added', pathPending, function (dataSnapshot) {
+                        var notificationData = dataSnapshot.exportVal();
+                        var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
+                        if (!callbackList) {
+                            $log.log('no subscribers');
+                        }
+                        callbackList.forEach(function (callback) {
+                            callback(notificationData);
+                            if (!notificationData.id) {
+                                $log.error('notification id is null or empty');
+                            }
+                        });
+                        var dataToMoveAndDelete = {};
+                        NotificationService.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
+                        _getStorage().then(function (storage) {
+                            storage.update(dataToMoveAndDelete).catch(function (error) {
+                                $log.error("error: can not remove item, error: " + error.message);
+                            });
                         });
                     });
-                });
-            }
+                }
 
-            function _getStorage() {
-                return InfraConfigSrv.getGlobalStorage();
-            }
+                function _getStorage() {
+                    return InfraConfigSrv.getGlobalStorage();
+                }
+            });
         }]);
 })(angular);
 
@@ -12459,76 +12469,78 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($
             'ngInject';
 
             var self = this;
-            var uid = AuthService.getAuth().uid;
-            // subscribers list, callbacks grouped by the 'notificationTypeEnum'
-            self.subscribers = [];
-            self.notify = function (notificationOptions) {
-                // TODO: add backendNotificationUrl in all ENV
-                // send notification object to aws endpoint function
-                return $http.post(ENV.backendNotificationUrl, notificationOptions);
-            };
-            // subscribe for events
-            self.on = function (notificationTypeEnum, callback) {
-                if (!uid) {
-                    $log.error('uid is missing');
-                    return;
-                }
-                if(typeof callback !== "function" ){
-                    $log.error('callback property is not a function');
-                    return;
-                }
-                var callbackList = self.subscribers[notificationTypeEnum];
-                if (callbackList) {
-                    callbackList.push(callback);
-                } else {
-                    callbackList = [callback];
-                    self.subscribers[notificationTypeEnum] = callbackList;
-                }
-            };
-            // moves filtered notification by 'notificationTypeEnum' objects to archive (deprecated/on hold)
-            self.clean = function (notificationTypeEnum) {
-                if (!uid) {
-                    $log.error('uid is missing');
-                    return;
-                }
-                var pathPending = "/notifications/users/" + uid + "/pending";
-                _getStorage().then(function (storage) {
-                    storage.get(pathPending).then(function (snapshot) {
-                        var notifications = snapshot.exportVal();
-                        var notificationList = notifications.filter(function (item) {
-                            return item.notificationTypeEnum === notificationTypeEnum;
-                        });
-                        var dataToMoveAndDelete = {};
-                        for (var i = 0; i < notificationList.length; i++) {
-                            var notificationData = notificationList[i];
-                            if (!notificationData.id) {
-                                this.logger.log("notification id for obj:" + JSON.stringify(notificationData) + "is null or empty");
-                                continue;
+            AuthService.getAuth().then(authData => {
+                var uid = authData.uid;
+                // subscribers list, callbacks grouped by the 'notificationTypeEnum'
+                self.subscribers = [];
+                self.notify = function (notificationOptions) {
+                    // TODO: add backendNotificationUrl in all ENV
+                    // send notification object to aws endpoint function
+                    return $http.post(ENV.backendNotificationUrl, notificationOptions);
+                };
+                // subscribe for events
+                self.on = function (notificationTypeEnum, callback) {
+                    if (!uid) {
+                        $log.error('uid is missing');
+                        return;
+                    }
+                    if(typeof callback !== "function" ){
+                        $log.error('callback property is not a function');
+                        return;
+                    }
+                    var callbackList = self.subscribers[notificationTypeEnum];
+                    if (callbackList) {
+                        callbackList.push(callback);
+                    } else {
+                        callbackList = [callback];
+                        self.subscribers[notificationTypeEnum] = callbackList;
+                    }
+                };
+                // moves filtered notification by 'notificationTypeEnum' objects to archive (deprecated/on hold)
+                self.clean = function (notificationTypeEnum) {
+                    if (!uid) {
+                        $log.error('uid is missing');
+                        return;
+                    }
+                    var pathPending = "/notifications/users/" + uid + "/pending";
+                    _getStorage().then(function (storage) {
+                        storage.get(pathPending).then(function (snapshot) {
+                            var notifications = snapshot.exportVal();
+                            var notificationList = notifications.filter(function (item) {
+                                return item.notificationTypeEnum === notificationTypeEnum;
+                            });
+                            var dataToMoveAndDelete = {};
+                            for (var i = 0; i < notificationList.length; i++) {
+                                var notificationData = notificationList[i];
+                                if (!notificationData.id) {
+                                    this.logger.log("notification id for obj:" + JSON.stringify(notificationData) + "is null or empty");
+                                    continue;
+                                }
+                                this.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
                             }
-                            this.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);
-                        }
-                        _getStorage().then(function (storage) {
-                            storage.update(dataToMoveAndDelete).catch(function (error) {
-                                $log.error("error: can not remove item, error: " + error.message);
+                            _getStorage().then(function (storage) {
+                                storage.update(dataToMoveAndDelete).catch(function (error) {
+                                    $log.error("error: can not remove item, error: " + error.message);
+                                });
                             });
                         });
                     });
-                });
-            };
-            // populate and prepare object for move and delete in firebase
-            self.populateObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
-                var pathForArchive = "/notifications/users/" + uid + "/archive/" + notificationData.id;
-                var pathForDelete = "/notifications/users/" + uid + "/pending/" + notificationData.id;
-                dataToMoveAndDelete[pathForArchive] = notificationData;
-                dataToMoveAndDelete[pathForDelete] = null;
-            };
-            function _getStorage() {
-                return InfraConfigSrv.getGlobalStorage();
-            }
+                };
+                // populate and prepare object for move and delete in firebase
+                self.populateObjectForMoveAndDelete = function (notificationData, dataToMoveAndDelete) {
+                    var pathForArchive = "/notifications/users/" + uid + "/archive/" + notificationData.id;
+                    var pathForDelete = "/notifications/users/" + uid + "/pending/" + notificationData.id;
+                    dataToMoveAndDelete[pathForArchive] = notificationData;
+                    dataToMoveAndDelete[pathForDelete] = null;
+                };
+                function _getStorage() {
+                    return InfraConfigSrv.getGlobalStorage();
+                }
+            });
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.notification').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.notification').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -12926,7 +12938,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/onBoarding/directives/onBoardingBar.template.html",
     "<div class=\"on-board-pager-wrap\">\n" +
     "    <div class=\"on-board-pager\">\n" +
@@ -13334,17 +13346,21 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
             function _checkPlanNotification(){
                 var planId = _getPlanIdFromUrl();
                 if (planId) {
-                    var uid = AuthService.getAuth().uid;
-                    var connectStudentToPlanUrl = ENV.zinkerzBE + '/plan/connectStudentToPlan';
-                    $http({
-                        method: 'POST',
-                        url: connectStudentToPlanUrl,
-                        data: { planId: planId, uid: uid }
-                    }).then(function successCallback() {
-                        _newPlanNotification({ refObjId: planId });
-                        $log.debug('checkPlanNotification: connectStudentToPlan successful');
-                    }, function errorCallback(err) {
-                        $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
+                    AuthService.getAuth().then(authData => {
+                        if (authData && authData.uid) {
+                            var uid = authData.uid;
+                            var connectStudentToPlanUrl = ENV.zinkerzBE + '/plan/connectStudentToPlan';
+                            $http({
+                                method: 'POST',
+                                url: connectStudentToPlanUrl,
+                                data: { planId: planId, uid: uid }
+                            }).then(function successCallback() {
+                                _newPlanNotification({ refObjId: planId });
+                                $log.debug('checkPlanNotification: connectStudentToPlan successful');
+                            }, function errorCallback(err) {
+                                $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
+                            });
+                        }
                     });
                 }
             }
@@ -13403,7 +13419,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -13507,28 +13523,28 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
                 $log.debug('ENV not injected');
             }
 
-            var authData = AuthService.getAuth();
             var translate = $filter('translate');
 
+            AuthService.getAuth().then(authData => {
+                if (authData && authData.uid) {
+                    var search = $location.search();
+                    var promoCodeId = search.pcid;
 
-            if (authData && authData.uid) {
-                var search = $location.search();
-                var promoCodeId = search.pcid;
+                    delete search.pcid;
 
-                delete search.pcid;
-
-                if (angular.isDefined(promoCodeId)) {
-                    PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appContext).then(function () {
-                        var successTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
-                        var SuccessMsg = translate('PROMO_CODE.PROMO_CODE_SUCCESS_MESSAGE');
-                        PopUpSrv.success(successTitle, SuccessMsg);
-                    }).catch(function () {
-                        var errorTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
-                        var errorMsg = translate('PROMO_CODE.PROMO_CODE_ERROR_MESSAGE');
-                        PopUpSrv.error(errorTitle, errorMsg);
-                    });
+                    if (angular.isDefined(promoCodeId)) {
+                        PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appContext).then(function () {
+                            var successTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
+                            var SuccessMsg = translate('PROMO_CODE.PROMO_CODE_SUCCESS_MESSAGE');
+                            PopUpSrv.success(successTitle, SuccessMsg);
+                        }).catch(function () {
+                            var errorTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
+                            var errorMsg = translate('PROMO_CODE.PROMO_CODE_ERROR_MESSAGE');
+                            PopUpSrv.error(errorTitle, errorMsg);
+                        });
+                    }
                 }
-            }
+            });
         }]);
 
 })(angular);
@@ -13667,7 +13683,7 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/promoCode/directives/promoCode.template.html",
     "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
     "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
@@ -14028,36 +14044,34 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+    ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
+        PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
             'ngInject';
 
             function getPath(param) {
-                if (!authData) {
-                    $log.error('Invalid user');
-                    return;
-                }
-                var path;
-                switch (param) {
-                    case 'purchase':
-                        path = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-                        return path.replace('$$uid', '' + authData.uid);
-                    case 'pending':
-                        path = 'pendingPurchases/' + StorageSrv.variables.uid;
-                        return path.replace('$$uid', '' + authData.uid);
-                    default:
+                return AuthService.getAuth().then(authData => {
+                    if (!authData) {
+                        $log.error('Invalid user');
                         return;
-                }
-
+                    }
+                    var path;
+                    switch (param) {
+                        case 'purchase':
+                            path = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                            return path.replace('$$uid', '' + authData.uid);
+                        case 'pending':
+                            path = 'pendingPurchases/' + StorageSrv.variables.uid;
+                            return path.replace('$$uid', '' + authData.uid);
+                        default:
+                            return;
+                    }
+                });
             }
 
             var self = this;
 
             var studentStorageProm = InfraConfigSrv.getStudentStorage();
             var pendingPurchaseDefer;
-            var authData = AuthService.getAuth();
-            var purchasePath = getPath('purchase');
-            var pendingPurchasesPath = getPath('pending');
 
             self.checkUrlParams = function (params) {
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
@@ -14086,33 +14100,38 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
             };
 
             self.getPurchaseData = function () {
-                if (purchasePath) {
-                    return studentStorageProm.then(function (studentStorage) {
-                        return studentStorage.getAndBindToServer(purchasePath);
-                    });
-                } else {
-                    return $q.reject();
-                }
+                return getPath('purchase').then(purchasePath => {
+                    if (purchasePath) {
+                        return studentStorageProm.then(function (studentStorage) {
+                            return studentStorage.getAndBindToServer(purchasePath);
+                        });
+                    } else {
+                        return null;
+                    }
+                });
             };
 
             self.checkPendingStatus = function () {
                 return studentStorageProm.then(function (studentStorage) {
-                    return studentStorage.get(pendingPurchasesPath).then(function (pendingObj) {
-                        var isPending = !angular.equals(pendingObj, {});
-                        if (isPending) {
-                            pendingPurchaseDefer = $q.defer();
-                        }
-                        return isPending;
+                    return getPath('pending').then(pendingPurchasesPath => {
+                        return studentStorage.get(pendingPurchasesPath).then(function (pendingObj) {
+                            var isPending = !angular.equals(pendingObj, {});
+                            if (isPending) {
+                                pendingPurchaseDefer = $q.defer();
+                            }
+                            return isPending;
+                        });
                     });
                 });
             };
 
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
-                return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
+                return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm, getPath('pending')]).then(function (res) {
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
+                    var pendingPurchasesPath = res[3];
 
                     if (!isPurchased) {
                         var pendingPurchaseVal = {
@@ -14142,7 +14161,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                     pendingPurchaseDefer.resolve();
                 }
                 studentStorageProm.then(function (studentStorage) {
-                    return studentStorage.set(pendingPurchasesPath, null);
+                    return getPath('pending').then(pendingPurchasesPath => {
+                        return studentStorage.set(pendingPurchasesPath, null);
+                    });
                 });
             };
 
@@ -14252,7 +14273,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
 })(angular);
 
 
-angular.module('znk.infra-web-app.purchase').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
     "<ng-switch on=\"vm.purchaseState\">\n" +
     "\n" +
@@ -14761,7 +14782,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function ($t
         );
 })(angular);
 
-angular.module('znk.infra-web-app.settings').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/settings/svg/change-password-icon.svg",
     "<svg class=\"change-password-icon-wrap\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 75 75\">\n" +
     "    <style type=\"text/css\">\n" +
@@ -14980,7 +15001,7 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function ($t
         );
 })(angular);
 
-angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -15018,7 +15039,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -15120,7 +15141,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
 })(angular);
 
 
-angular.module('znk.infra-web-app.tests').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/tests/directives/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
@@ -15442,7 +15463,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     );
 })(angular);
 
-angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/tutorials/components/tutorialList/tutorialList.template.html",
     "<div class=\"tutorials-list-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_LIST_COMPONENTS\">\n" +
     "    <div class=\"diagnostic-overlay\" ng-if=\"!vm.isDiagnosticComplete\">\n" +
@@ -15560,7 +15581,7 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function ($
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -15668,7 +15689,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
     }];
 }]);
 
-angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
 
 }]);
 
@@ -16070,7 +16091,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
 }]);
 
 
-angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/userGoalsSelection/svg/arrow-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-468.2 482.4 96 89.8\" class=\"arrow-icon-wrapper\">\n" +
     "    <style type=\"text/css\">\n" +
@@ -16397,7 +16418,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 })(angular);
 
 
-angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewer.template.html",
     "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
     "    <div class=\"header\">\n" +
@@ -17425,7 +17446,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLock.template.html",
     "<div ng-transclude class=\"main-container\"></div>\n" +
     "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +
@@ -18305,7 +18326,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
     "<div class=\"exercise-container base-border-radius\">\n" +
     "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
@@ -18510,7 +18531,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
@@ -18868,7 +18889,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html",
     "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
     "    <div class=\"overflowWrap\">\n" +
@@ -19165,7 +19186,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function (
     });
 })(angular);
 
-angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html",
     "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
     "    <div class=\"time-line-wrapper\">\n" +
@@ -19285,7 +19306,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkToast/svg/znkToast-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +

@@ -29,8 +29,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.feedback').controller('feedbackCtrl',
-        ["$log", "$mdDialog", "$timeout", "$http", "ENV", "UserProfileService", "AuthService", function($log, $mdDialog, $timeout, $http, ENV, UserProfileService, AuthService) {
-            'ngInject';
+    ["$log", "$mdDialog", "$timeout", "$http", "ENV", "UserProfileService", "AuthService", function($log, $mdDialog, $timeout, $http, ENV, UserProfileService, AuthService) {
+        'ngInject';
 
             var self = this;
             var DOORBELLSTATUSOK = 201;
@@ -42,20 +42,22 @@
                 self.feedbackData = {
                     email: userEmail
                 };
-                var userAuth = AuthService.getAuth();
-                self.userId = userAuth.uid;
-                self.userEmail = userEmail;
+                AuthService.getAuth().then(userAuth => {
+                    if (userAuth) {
+                        self.userId = userAuth.uid;
+                        self.userEmail = userEmail || userAuth.email;
+                    }
+                });
             });
 
             this.sendFrom = function () {
                 if (self.feedbackForm.$valid) {
                     self.startLoader = true;
-                    var authData = AuthService.getAuth();
                     var postData = angular.copy(self.feedbackData);
 
                     postData.tags = ENV.firebaseAppScopeName;
                     postData.message += (ENTER_KEY + ENTER_KEY);
-                    postData.message += ' APP-NAME: ' + ENV.firebaseAppScopeName + ', UID: ' + (authData ? authData.uid : 'N/A');
+                    postData.message += ' APP-NAME: ' + ENV.firebaseAppScopeName + ', UID: ' + (self.userId ? self.userId : 'N/A');
 
                     $http.post(ENV.doorBellSubmitURL, (postData)).then(function (data) {
                         self.fillLoader = true;
@@ -124,7 +126,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.feedback').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +

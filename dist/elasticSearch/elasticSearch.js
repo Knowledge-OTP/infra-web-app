@@ -11,10 +11,12 @@
         .service('ElasticSearchSrv',
             ["ENV", "$log", "$http", "AuthService", function (ENV, $log, $http, AuthService) {
                 'ngInject';
-                var uidObj = AuthService.getAuth();
-
+                var uidObj = {};
+                AuthService.getAuth().then(authData => {
+                    uidObj = authData;
+                });
                 var API_PATH = ENV.backendEndpoint + "/search";
-                
+
                 this.search = function (query) {
                     var uid = uidObj.uid;
 
@@ -36,6 +38,6 @@
         );
 })(angular);
 
-angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function($templateCache) {
 
 }]);

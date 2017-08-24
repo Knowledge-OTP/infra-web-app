@@ -5,10 +5,12 @@
         .service('ElasticSearchSrv',
             function (ENV, $log, $http, AuthService) {
                 'ngInject';
-                var uidObj = AuthService.getAuth();
-
+                var uidObj = {};
+                AuthService.getAuth().then(authData => {
+                    uidObj = authData;
+                });
                 var API_PATH = ENV.backendEndpoint + "/search";
-                
+
                 this.search = function (query) {
                     var uid = uidObj.uid;
 

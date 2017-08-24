@@ -218,36 +218,34 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+    ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
+        PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
             'ngInject';
 
             function getPath(param) {
-                if (!authData) {
-                    $log.error('Invalid user');
-                    return;
-                }
-                var path;
-                switch (param) {
-                    case 'purchase':
-                        path = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
-                        return path.replace('$$uid', '' + authData.uid);
-                    case 'pending':
-                        path = 'pendingPurchases/' + StorageSrv.variables.uid;
-                        return path.replace('$$uid', '' + authData.uid);
-                    default:
+                return AuthService.getAuth().then(authData => {
+                    if (!authData) {
+                        $log.error('Invalid user');
                         return;
-                }
-
+                    }
+                    var path;
+                    switch (param) {
+                        case 'purchase':
+                            path = StorageSrv.variables.appUserSpacePath + '/' + 'purchase';
+                            return path.replace('$$uid', '' + authData.uid);
+                        case 'pending':
+                            path = 'pendingPurchases/' + StorageSrv.variables.uid;
+                            return path.replace('$$uid', '' + authData.uid);
+                        default:
+                            return;
+                    }
+                });
             }
 
             var self = this;
 
             var studentStorageProm = InfraConfigSrv.getStudentStorage();
             var pendingPurchaseDefer;
-            var authData = AuthService.getAuth();
-            var purchasePath = getPath('purchase');
-            var pendingPurchasesPath = getPath('pending');
 
             self.checkUrlParams = function (params) {
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
@@ -276,33 +274,38 @@
             };
 
             self.getPurchaseData = function () {
-                if (purchasePath) {
-                    return studentStorageProm.then(function (studentStorage) {
-                        return studentStorage.getAndBindToServer(purchasePath);
-                    });
-                } else {
-                    return $q.reject();
-                }
+                return getPath('purchase').then(purchasePath => {
+                    if (purchasePath) {
+                        return studentStorageProm.then(function (studentStorage) {
+                            return studentStorage.getAndBindToServer(purchasePath);
+                        });
+                    } else {
+                        return null;
+                    }
+                });
             };
 
             self.checkPendingStatus = function () {
                 return studentStorageProm.then(function (studentStorage) {
-                    return studentStorage.get(pendingPurchasesPath).then(function (pendingObj) {
-                        var isPending = !angular.equals(pendingObj, {});
-                        if (isPending) {
-                            pendingPurchaseDefer = $q.defer();
-                        }
-                        return isPending;
+                    return getPath('pending').then(pendingPurchasesPath => {
+                        return studentStorage.get(pendingPurchasesPath).then(function (pendingObj) {
+                            var isPending = !angular.equals(pendingObj, {});
+                            if (isPending) {
+                                pendingPurchaseDefer = $q.defer();
+                            }
+                            return isPending;
+                        });
                     });
                 });
             };
 
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
-                return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm]).then(function (res) {
+                return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm, getPath('pending')]).then(function (res) {
                     var product = res[0];
                     var isPurchased = res[1];
                     var studentStorage = res[2];
+                    var pendingPurchasesPath = res[3];
 
                     if (!isPurchased) {
                         var pendingPurchaseVal = {
@@ -332,7 +335,9 @@
                     pendingPurchaseDefer.resolve();
                 }
                 studentStorageProm.then(function (studentStorage) {
-                    return studentStorage.set(pendingPurchasesPath, null);
+                    return getPath('pending').then(pendingPurchasesPath => {
+                        return studentStorage.set(pendingPurchasesPath, null);
+                    });
                 });
             };
 
@@ -442,7 +447,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.purchase').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
     "<ng-switch on=\"vm.purchaseState\">\n" +
     "\n" +

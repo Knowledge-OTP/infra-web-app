@@ -255,6 +255,10 @@
                 timeout: ENV.promiseTimeOut
             };
 
+            AuthService.getAuth().then(authData => {
+                self.authData = authData;
+            });
+
             this.listeners = {
                 USER_TEACHERS: 'approved',
                 NEW_INVITATIONS: 'sent',
@@ -343,7 +347,7 @@
             };
 
             this.updateInvitationStatus = function (invitation) {
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.senderAppName = ENV.dashboardAppName;
                 invitation.receiverAppName = ENV.studentAppName;
@@ -363,7 +367,7 @@
 
             this.inviteTeacher = function (receiverEmail, receiverName) {
                 return UserProfileService.getProfile().then(function (profile) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     var newInvitiation = [{
                         receiverAppName: ENV.dashboardAppName,
                         receiverEmail: receiverEmail,
@@ -386,7 +390,7 @@
             };
 
             this.deletePendingConformations = function (invitation) {
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = this.invitationStatus.senderDelete;
                 invitation.receiverAppName = ENV.dashboardAppName;
@@ -416,7 +420,7 @@
 
             this.resentInvitation = function (inviteId) {
                 return this.getInvitationObject(inviteId).then(function (invitation) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     invitation.uid = authData.uid;
                     invitation.status = self.invitationStatus.resent;
                     return self.updateInvitation(invitation).then(
@@ -449,7 +453,7 @@
 
             this.deletePendingInvitation = function (inviteId) {
                 return this.getInvitationObject(inviteId).then(function (invitation) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     invitation.uid = authData.uid;
                     invitation.status = self.invitationStatus.senderDelete;
                     return self.updateInvitation(invitation).then(
@@ -468,7 +472,7 @@
 
             this.approveInvitation = function (invitation) {
                 var oldInvitationStatus = invitation.status;
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = self.invitationStatus.approved;
                 return updateStatus(invitation, oldInvitationStatus);
@@ -476,7 +480,7 @@
 
             this.declineInvitation = function (invitation) {
                 var oldInvitationStatus = invitation.status;
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = self.invitationStatus.receiverDeclined;
                 return updateStatus(invitation, oldInvitationStatus);
@@ -505,7 +509,7 @@
             };
 
             function addInvitationUserData(invitation, profile) {
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 var senderEmail = authData.email;
 
                 invitation.senderUid = authData.uid;
@@ -712,7 +716,7 @@
     );
 })(angular);
 
-angular.module('znk.infra-web-app.invitation').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/invitation/approveModal/invitationApproveModal.template.html",
     "<md-dialog ng-cloak class=\"invitation-confirm-modal\" translate-namespace=\"INVITE_APPROVE_MODAL\">\n" +
     "    <md-toolbar>\n" +

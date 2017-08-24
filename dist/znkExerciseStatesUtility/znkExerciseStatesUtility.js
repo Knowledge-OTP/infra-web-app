@@ -74,7 +74,7 @@
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
     "<div class=\"exercise-container base-border-radius\">\n" +
     "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
