@@ -26,7 +26,7 @@
 "znk.infra-web-app.loadingAnimation",
 "znk.infra-web-app.loginApp",
 "znk.infra-web-app.myProfile",
-"znk.infra-web-app.navigationService",
+"znk.infra-web-app.navigation",
 "znk.infra-web-app.notification",
 "znk.infra-web-app.onBoarding",
 "znk.infra-web-app.planNotification",
@@ -12375,7 +12375,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.navigationService').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($templateCache) {
 
 }]);
 
