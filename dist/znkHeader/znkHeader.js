@@ -14,6 +14,7 @@
             'znk.infra-web-app.myProfile',
             'znk.infra.user',
             'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.navigation',
             'znk.infra-web-app.feedback'])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
                 'ngInject';
@@ -31,10 +32,10 @@
     angular.module('znk.infra-web-app.znkHeader')
         .component('znkHeader', {
             bindings: {},
-            templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
+            templateUrl: 'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "ActivePanelSrv", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", "MyLiveLessons", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
-                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout,MyLiveLessons) {
+            controller: ["$scope", "$window", "purchaseService", "znkHeaderSrv", "OnBoardingService", "ActivePanelSrv", "MyProfileSrv", "feedbackSrv", "$rootScope", "UserProfileService", "$injector", "PurchaseStateEnum", "userGoalsSelectionService", "AuthService", "ENV", "$timeout", "MyLiveLessons", "NavigationService", function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
+                UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout, MyLiveLessons, NavigationService) {
                 'ngInject';
 
                 var vm = this;
@@ -51,7 +52,11 @@
                 vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
                 vm.myZinkerzUrl = ENV.myZinkerz;
 
-                $scope.$on('profile-updated', function(event, args) {
+                vm.goToMyZinkerz = function (route) {
+                    NavigationService.navigateToMyZinkerz(route);
+                };
+
+                $scope.$on('profile-updated', function (event, args) {
                     vm.userProfile = {
                         username: args.profile.nickname,
                         email: args.profile.email
@@ -78,7 +83,7 @@
                     vm.isOnBoardingCompleted = isCompleted;
                 });
 
-                vm.invokeOnClickHandler = function(onClickHandler){
+                vm.invokeOnClickHandler = function (onClickHandler) {
                     $injector.invoke(onClickHandler);
                 };
 
@@ -190,7 +195,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "        </div>\n" +
     "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
     "            <invitation-manager></invitation-manager>\n" +
-    "            <a href=\"{{::vm.myZinkerzUrl}}/scheduling/educator\">\n" +
+    "            <a ng-click=\"vm.goToMyZinkerz('scheduling/teacher')\">\n" +
     "                <svg-icon class=\"calendar-icon\" name=\"calendar-icon\"></svg-icon>\n" +
     "            </a>\n" +
     "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +
@@ -229,7 +234,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                            disable-click-drv ng-click=\"vm.showGoalsEdit()\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\" translate=\".PROFILE_GOALS\"></div>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item md-ink-ripple aria-label=\"{{'ZNK_HEADER.MY_PROFILE' | translate}}\" ng-click=\"vm.showMyProfile()\">\n" +
+    "                        <md-list-item md-ink-ripple aria-label=\"{{'ZNK_HEADER.MY_PROFILE' | translate}}\" ng-click=\"vm.goToMyZinkerz('usercard/studentcard')\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\" translate=\".MY_PROFILE\"></div>\n" +
     "                        </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple>\n" +

@@ -19,7 +19,7 @@
         </div>
         <div class="app-user-area" layout="row" layout-align="center center">
             <invitation-manager></invitation-manager>
-            <a href="{{::vm.myZinkerzUrl}}/scheduling/educator">
+            <a ng-click="vm.goToMyZinkerz('scheduling/teacher')">
                 <svg-icon class="calendar-icon" name="calendar-icon"></svg-icon>
             </a>
             <div class="profile-status" ng-click="vm.showPurchaseDialog()">
@@ -58,7 +58,7 @@
                             disable-click-drv ng-click="vm.showGoalsEdit()">
                             <div class="header-modal-item header-modal-item-uppercase links" translate=".PROFILE_GOALS"></div>
                         </md-list-item>
-                        <md-list-item md-ink-ripple aria-label="{{'ZNK_HEADER.MY_PROFILE' | translate}}" ng-click="vm.showMyProfile()">
+                        <md-list-item md-ink-ripple aria-label="{{'ZNK_HEADER.MY_PROFILE' | translate}}" ng-click="vm.goToMyZinkerz('usercard/studentcard')">
                             <div class="header-modal-item header-modal-item-uppercase links" translate=".MY_PROFILE"></div>
                         </md-list-item>
                         <md-list-item md-ink-ripple>

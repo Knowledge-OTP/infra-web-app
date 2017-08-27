@@ -14,6 +14,7 @@
             'znk.infra-web-app.myProfile',
             'znk.infra.user',
             'znk.infra-web-app.activePanel',
+            'znk.infra-web-app.navigation',
             'znk.infra-web-app.feedback'])
         .config(function(SvgIconSrvProvider){
                 'ngInject';
