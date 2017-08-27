@@ -11,9 +11,9 @@
         })
         .service('testUser', function(){
              this.getAuth = function() {
-                 return {
+                 return new Promise(resolve => resolve({
                      uid: 'fakeUid'
-                 };
+                 }));
              };
         })
         .decorator('UserProfileService',function($delegate, $q){

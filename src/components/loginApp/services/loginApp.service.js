@@ -57,34 +57,59 @@
                 return env;
             }
 
-            function _getAppScopeName(userContext, appEnvConfig) {
+           /* function _getAppScopeName(userContext, appEnvConfig) {
                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
+            }*/
+
+            function _checkExistFirebaseApp(appContext) {
+                var existApp;
+                window.firebase.apps.forEach(function (app) {
+                    if (app.name.toLowerCase() === appContext.toLowerCase()) {
+                        existApp = app;
+                    }
+                });
+                return  existApp;
             }
 
             function _getGlobalRef(appContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, 'myzinkerz_app');
+                var existApp = _checkExistFirebaseApp(appEnvConfig.firbase_auth_config.projectId);
+                if(existApp) {
+                   return  existApp;
+                }
+
+                return window.firebase.initializeApp(appEnvConfig.firbase_auth_config, appEnvConfig.firebase_projectId);
             }
 
-            function _getAppRef(appContext, userContext) {
+            function _getAppRef(appContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbDataEndPoint, _getAppScopeName(userContext, appEnvConfig));
+                var existApp = _checkExistFirebaseApp(appEnvConfig.firebase_projectId);
+                if(existApp) {
+                    return  existApp;
+                }
+                var config = {
+                    apiKey: appEnvConfig.firebase_apiKey,
+                    authDomain:  appEnvConfig.firebase_projectId + ".firebaseapp.com",
+                    databaseURL: appEnvConfig.fbDataEndPoint,
+                    projectId: appEnvConfig.firebase_projectId,
+                    storageBucket: appEnvConfig.firebase_projectId + ".appspot.com",
+                    messagingSenderId: appEnvConfig.messagingSenderId
+                };
+                return window.firebase.initializeApp(config, appEnvConfig.firebase_projectId);
             }
 
             function _getUserContextRef(appContext, userContext) {
                 var appRef = _getAppRef(appContext, userContext);
-
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var prefix = userContext === USER_CONTEXT.STUDENT ? appEnvConfig.studentAppName : appEnvConfig.dashboardAppName;
-
-                return appRef.child(prefix);
+                return appRef.database().ref(prefix);
             }
 
             function _addFirstRegistrationRecord(appContext, userContext) {
+                var appRef = _getAppRef(appContext, userContext);
                 var userContextAppRef = _getUserContextRef(appContext, userContext);
-                var auth = userContextAppRef.getAuth();
-                var firstLoginRef = userContextAppRef.child('firstLogin/' + auth.uid);
-                return firstLoginRef.set(Firebase.ServerValue.TIMESTAMP);
+                var firstLoginRef = userContextAppRef.child('firstLogin/' + appRef.auth().currentUser.uid);
+                return firstLoginRef.set(window.firebase.database.ServerValue.TIMESTAMP);
             }
 
             function _redirectToPage(appContext, userContext) {
@@ -134,11 +159,11 @@
 
             function _getUserProfile(appContext, userContext) {
                 var globalRef = _getGlobalRef(appContext, userContext);
-                var auth = globalRef.getAuth();
-                var userProfileRef = globalRef.child('users/' + auth.uid + '/profile');
+                var auth = globalRef.auth().currentUser;
+                var userProfileRef = globalRef.database().ref('users/' + auth.uid + '/profile');
                 var deferred = $q.defer();
                 userProfileRef.on('value', function (snapshot) {
-                    var userProfile = snapshot.val() || {};
+                    var userProfile = snapshot.exportVal() || {};
                     deferred.resolve(userProfile);
                 }, function (err) {
                     $log.error('LoginAppSrv _getUserProfile: err=' + err);
@@ -150,7 +175,7 @@
             function _writeUserProfile(formData, appContext, userContext, customProfileFlag) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
                 var znkRef = _getGlobalRef(appContext, userContext);
-                var auth = znkRef.getAuth();
+                var auth = znkRef.auth().currentUser;
                 var updateProfileProms = [];
                 var profile;
                 if (customProfileFlag) {
@@ -163,11 +188,10 @@
                         }
                     };
                 }
-
-                updateProfileProms.push(znkRef.child('users/' + auth.uid).update(profile));
+                updateProfileProms.push(znkRef.database().ref('users/' + auth.uid).set(profile));
                 if (appEnvConfig.setUserProfileTwice){
                     var appRef = _getAppRef(appContext, userContext);
-                    updateProfileProms.push(appRef.child('users/' + auth.uid).update(profile));
+                    updateProfileProms.push(appRef.database().ref('users/' + auth.uid).set(profile));
                 }
                 return $q.all(updateProfileProms)
                     .catch(function (err) {
@@ -176,9 +200,12 @@
             }
 
             function _createAuthWithCustomToken(refDB, token) {
-                return refDB.authWithCustomToken(token).catch(function (error) {
-                    $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
-                });
+                return refDB.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
+                    .then(function() {
+                        return refDB.auth().signInWithCustomToken(token).catch(function (error) {
+                            $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
+                        });
+                    });
             }
 
             function _userDataForAuthAndDataFb(data, appContext, userContext) {
@@ -194,8 +221,8 @@
             function _logout(appContext, userContext) {
                 var globalRef = _getGlobalRef(appContext, userContext);
                 var appRef = _getAppRef(appContext, userContext);
-                globalRef.unauth();
-                appRef.unauth();
+                globalRef.auth().signOut();
+                appRef.auth().signOut();
             }
 
             function _setSocialProvidersConfig(providers, appContent) {
@@ -219,9 +246,7 @@
 
             function _resetPassword(appId, email, userContext) {
                 var globalRef = _getGlobalRef(appId, userContext);
-                return globalRef.resetPassword({
-                    email: email
-                }, function (error) {
+                return globalRef.auth().sendPasswordResetEmail(email, function (error) {
                     if (error === null) {
                         $log.debug('Reset email was sent');
                     } else {
@@ -255,32 +280,41 @@
                     isLoginInProgress = true;
 
                     var globalRef = _getGlobalRef(appContext, userContext);
-                    return globalRef.authWithPassword(formData).then(function (authData) {
-                        var appEnvConfig = _getAppEnvConfig(appContext);
-                        var postUrl = appEnvConfig.backendEndpoint + 'firebase/token';
-                        var postData = {
-                            email: authData.password ? authData.password.email : '',
-                            uid: authData.uid,
-                            fbDataEndPoint: appEnvConfig.fbDataEndPoint,
-                            fbEndpoint: appEnvConfig.fbGlobalEndPoint,
-                            auth: appEnvConfig.dataAuthSecret,
-                            token: authData.token
-                        };
+                    return globalRef.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
+                        .then(function() {
+                            return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
+                                var appEnvConfig = _getAppEnvConfig(appContext);
+                                var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
+                                var postData = {
+                                    email: authData.email,
+                                    uid: authData.uid,
+                                    projectId: appEnvConfig.firebase_projectId,
+                                    fbDataEndPoint: appEnvConfig.fbDataEndPoint,
+                                    fbEndpoint: appEnvConfig.fbGlobalEndPoint,
+                                    auth: appEnvConfig.dataAuthSecret,
+                                    token: authData.refreshToken
+                                };
 
-                        return $http.post(postUrl, postData).then(function (token) {
-                            var appRef = _getAppRef(appContext, userContext);
-                            return appRef.authWithCustomToken(token.data).then(function (res) {
+                                return $http.post(postUrl, postData).then(function (token) {
+                                    var appRef = _getAppRef(appContext, userContext);
+                                    return appRef.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
+                                        .then(function() {
+                                            return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
+                                                isLoginInProgress = false;
+                                                if(!signUp){
+                                                    _redirectToPage(appContext, userContext);
+                                                }
+                                                return res;
+                                            });
+                                        });
+
+                                });
+                            }).catch(function (err) {
                                 isLoginInProgress = false;
-                                if(!signUp){
-                                    _redirectToPage(appContext, userContext);
-                                }
-                                return res;
+                                return $q.reject(err);
                             });
                         });
-                    }).catch(function (err) {
-                        isLoginInProgress = false;
-                        return $q.reject(err);
-                    });
+
                 };
             })();
 
@@ -301,7 +335,7 @@
                     }
 
                     var globalRef = _getGlobalRef(appContext, userContext);
-                    return globalRef.createUser(formData).then(function () {
+                    return globalRef.auth().createUserWithEmailAndPassword(formData.email, formData.password).then(function () {
                         var signUp = true;
                         return LoginAppSrv.login(appContext, userContext, formData, signUp).then(function (userAuth) {
                             $log.debug('LoginAppSrv: User signup: ' + userAuth.uid);
@@ -313,7 +347,9 @@
                             };
                             var saveProfileProm = LoginAppSrv.writeUserProfile(userProfile, appContext, userContext, true);
                             return saveProfileProm.then(function () {
-                                _redirectToPage(appContext, userContext);
+                                return _addFirstRegistrationRecord(appContext, userContext).then(function () {
+                                    return _redirectToPage(appContext, userContext);
+                                });
                             });
                         });
                     }).catch(function (err) {

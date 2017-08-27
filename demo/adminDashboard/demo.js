@@ -88,7 +88,9 @@
             'ngInject';
 
             $delegate.getAuth = function () {
-                return {uid: 'a844bf16-97f2-449a-a996-bbf229640a01'};
+                return new Promise(function (resolve) {
+                    resolve({uid: 'a844bf16-97f2-449a-a996-bbf229640a01'})
+                });
             };
             return $delegate;
         })

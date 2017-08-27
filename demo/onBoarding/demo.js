@@ -105,15 +105,15 @@ angular.module('demo', ['znk.infra-web-app.onBoarding'])
     .factory('AuthService', function() {
         return {
             getAuth: function() {
-                return {
-                    uid: '666',
+                return new Promise ( resolve => {
+                    resolve ({uid: '666',
                     auth: {
                         name: 'oded'
                     },
                     password: {
                         email: 'oded@zinkerz.com'
-                    }
-                }
+                    }});
+                })
             }
         }
     })// mock ENV
