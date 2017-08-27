@@ -1,0 +1,295 @@
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+answer-explanation {
+  visibility: hidden;
+  will-change: visibility; }
+  answer-explanation.answer-explanation-visible {
+    visibility: visible; }
+  answer-explanation .answer-explanation-wrapper {
+    background: #fdfdfd; }
+    answer-explanation .answer-explanation-wrapper .answer-explanation-close {
+      height: 14px;
+      width: 14px;
+      cursor: pointer;
+      float: right; }
+    answer-explanation .answer-explanation-wrapper .answer-explanation-header {
+      height: 5px;
+      box-shadow: 0px 1px 1px 0.1px rgba(190, 190, 190, 0.75);
+      z-index: 3;
+      background-color: #0a9bad; }
+      answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn {
+        width: 185px;
+        height: 28px;
+        box-shadow: 0px 4px 1px -2px rgba(190, 190, 190, 0.75);
+        cursor: pointer;
+        position: relative;
+        background-color: #0a9bad;
+        margin: 0 auto;
+        border-radius: 0px 0px 10px 10px; }
+        answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .right-corner {
+          transform: rotate(25deg);
+          border-radius: 50px 0px 50px 1px;
+          right: -14px;
+          box-shadow: -7px -2px #0a9bad; }
+        answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .left-corner {
+          transform: rotate(-25deg);
+          border-radius: 0 50px 1px 50px;
+          left: -14px;
+          box-shadow: 7px -2px #0a9bad; }
+        answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .corner {
+          width: 12px;
+          height: 28px;
+          display: inline-block;
+          position: absolute;
+          bottom: -3px; }
+        answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .main-content-wrapper {
+          line-height: 26px; }
+          answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .main-content-wrapper .lamp-icon {
+            margin-top: 3px;
+            margin-left: 7px; }
+          answer-explanation .answer-explanation-wrapper .answer-explanation-header .answer-explanation-btn .main-content-wrapper .text {
+            vertical-align: top;
+            font-size: 14px;
+            color: #ffffff;
+            font-family: Quicksand;
+            font-weight: 400;
+            margin-left: 5px; }
+    answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper {
+      transition: height ease 1s;
+      border-top: 5px solid #0a9bad;
+      height: 360px;
+      overflow: auto; }
+      answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper.ng-enter, answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper.ng-leave.ng-leave-active {
+        overflow: hidden;
+        height: 0; }
+      answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper.ng-enter.ng-enter-active, answer-explanation .answer-explanation-wrapper .answer-explanation-content-wrapper.ng-leave {
+        overflow: hidden;
+        height: 360px; }
+
+answer-explanation-content {
+  display: block; }
+  answer-explanation-content .title {
+    padding: 15px 20px 0;
+    text-align: center;
+    font-size: 18px;
+    color: #161616;
+    font-family: Quicksand;
+    font-weight: bold; }
+  answer-explanation-content svg-icon[name="answer-explanation-close"] svg line {
+    stroke: #161616; }
+  answer-explanation-content .flex-wrap {
+    display: -ms-flexbox;
+    display: flex;
+    padding-top: 25px; }
+    answer-explanation-content .flex-wrap .video-wrap {
+      width: 50%;
+      padding: 0 20px;
+      position: relative; }
+      answer-explanation-content .flex-wrap .video-wrap video {
+        width: 454px;
+        height: 254px; }
+      answer-explanation-content .flex-wrap .video-wrap .question-quid-text {
+        color: #acacac;
+        font-size: 10px;
+        position: absolute;
+        top: 272px; }
+    answer-explanation-content .flex-wrap .written-solution-wrapper {
+      width: 50%;
+      padding: 0 20px; }
+      answer-explanation-content .flex-wrap .written-solution-wrapper p:first-child {
+        margin-top: 0; }
+      answer-explanation-content .flex-wrap .written-solution-wrapper .written-solution {
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 300; }
+
+znk-exercise-header {
+  width: 100%; }
+
+.exercise-header {
+  position: relative;
+  overflow: hidden;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  height: 47px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  color: white;
+  font-family: Lato;
+  font-size: 16px; }
+  .exercise-header .left-area {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
+    .exercise-header .left-area .side-text {
+      padding-left: 25px;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+      text-transform: capitalize; }
+    .exercise-header .left-area .no-math-icon-wrapper {
+      width: 32px;
+      height: 32px;
+      margin-left: 30px;
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      border: 1px solid #81649c;
+      border-radius: 100%; }
+      .exercise-header .left-area .no-math-icon-wrapper svg {
+        width: 15px;
+        height: auto;
+        margin-top: 5px; }
+        .exercise-header .left-area .no-math-icon-wrapper svg path {
+          fill: #81649c; }
+      .exercise-header .left-area .no-math-icon-wrapper .math-no-calc {
+        position: absolute;
+        top: 15px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        transform: rotate(30deg);
+        background-color: #81649c;
+        z-index: 1; }
+  .exercise-header .quit-back-button {
+    padding-right: 25px;
+    cursor: pointer;
+    z-index: 2; }
+  .exercise-header .review-mode {
+    position: absolute;
+    top: 9px;
+    right: 75px;
+    cursor: pointer;
+    z-index: 2;
+    height: 30px;
+    width: 85px;
+    border-radius: 15px; }
+    .exercise-header .review-mode .background-opacity {
+      background: white;
+      opacity: 0.2;
+      height: 100%;
+      position: absolute;
+      width: 100%;
+      border-radius: inherit; }
+    .exercise-header .review-mode .summary-text {
+      font-size: 16px;
+      color: white;
+      font-family: Lato;
+      font-weight: 400;
+      text-align: center;
+      width: 100%;
+      line-height: 30px; }
+  .exercise-header .center-num-slide {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    font-size: 20px;
+    transform: translate(-50%); }
+  .exercise-header .pattern {
+    background-repeat: repeat-x;
+    width: 100%;
+    background-position: inherit;
+    background-size: contain;
+    position: absolute;
+    opacity: 0.8; }
+  .exercise-header .right-area {
+    position: absolute;
+    width: 180px;
+    right: 90px;
+    top: 11px; }
+    .exercise-header .right-area .book-icon svg path, .exercise-header .right-area .book-icon svg line {
+      stroke: white;
+      stroke-width: 4px; }
+    .exercise-header .right-area .header-icon {
+      position: relative;
+      width: 20px;
+      z-index: 2;
+      margin-top: 6px;
+      cursor: pointer;
+      margin-left: 20px;
+      float: right; }
+    .exercise-header .right-area .date-box {
+      float: right;
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+      border-right: 1px solid #ffffff; }
+      .exercise-header .right-area .date-box .timer-view {
+        margin-right: 25px;
+        display: inline-block; }
+      .exercise-header .right-area .date-box svg-icon {
+        position: relative;
+        top: 6px;
+        margin-right: 8px;
+        width: 15px;
+        display: inline-block; }
+        .exercise-header .right-area .date-box svg-icon svg g * {
+          stroke: white; }
+
+md-tooltip.no-calc-tooltip {
+  overflow: visible;
+  width: 250px;
+  height: auto;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding-top: 5px;
+  margin-top: 10px; }
+  md-tooltip.no-calc-tooltip .md-content {
+    overflow: visible; }
+  md-tooltip.no-calc-tooltip .top-text {
+    margin-top: 5px;
+    font-size: 14px;
+    text-align: center; }
+  md-tooltip.no-calc-tooltip .got-it-btn {
+    width: 100px;
+    height: 30px;
+    min-height: 20px;
+    line-height: 28px;
+    margin-bottom: 0; }
+  md-tooltip.no-calc-tooltip .arrow-up, md-tooltip.no-calc-tooltip .arrow-up:before {
+    position: relative;
+    z-index: 1;
+    left: calc(50% - 10px);
+    bottom: 13px;
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 9px solid rgba(0, 0, 0, 0.25); }
+  md-tooltip.no-calc-tooltip .arrow-up:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    border-bottom: 9px solid #ffffff;
+    bottom: -9px;
+    left: -9px; }
+
+question-builder.answer-explanation-open .question-basic-style {
+  overflow: auto;
+  height: calc(100vh - 570px); }
+  question-builder.answer-explanation-open .question-basic-style canvas {
+    height: calc(100vh - 570px); }
+
+znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) .question-basic-style, znk-exercise.pager-displayed question-builder:not(.answer-explanation-open) .question-basic-style {
+  overflow: auto; }

@@ -1,0 +1,231 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* full background image with retina */
+/* full background image with retina */
+estimated-score-widget.is-nav-menu .score-estimate-container .subjects-wrap {
+  border-top: solid;
+  border-color: #f2f2f2;
+  border-width: 2px; }
+
+estimated-score-widget.is-nav-menu .score-estimate-container .subject {
+  color: transparent;
+  margin: 0;
+  height: 92px;
+  padding: 27px 31px;
+  transition: border 0.2s;
+  border-bottom-style: solid;
+  border-bottom-color: #f2f2f2;
+  border-bottom-width: 2px;
+  border-left-style: solid;
+  border-left-width: 2px; }
+  estimated-score-widget.is-nav-menu .score-estimate-container .subject.selected {
+    background-color: #f2f2f2;
+    border-left-width: 7px;
+    border-top-style: solid;
+    border-top-color: #dcdcdc;
+    border-top-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #dcdcdc;
+    border-bottom-width: 1px; }
+
+estimated-score-widget.is-nav-menu .score-estimate-container .divider {
+  display: none; }
+
+estimated-score-widget .score-estimate-container {
+  width: 323px;
+  height: 100%;
+  background-color: #ffffff;
+  position: relative;
+  border-radius: 15px;
+  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27);
+  overflow: auto; }
+  estimated-score-widget .score-estimate-container .inner {
+    padding: 18px 31px; }
+  estimated-score-widget .score-estimate-container .divider {
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    background-color: #f2f2f2; }
+  estimated-score-widget .score-estimate-container .title {
+    text-align: center;
+    font-size: 18px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 700;
+    padding: 18px 31px 0 31px;
+    margin-bottom: 50px; }
+  estimated-score-widget .score-estimate-container .unfinished-diagnostic-title {
+    font-size: 11px;
+    color: #757a83;
+    font-family: Lato;
+    font-weight: 300;
+    width: 200px;
+    position: relative;
+    bottom: 43px;
+    text-align: center;
+    margin: 0 auto; }
+  estimated-score-widget .score-estimate-container .subject {
+    box-sizing: border-box;
+    margin-bottom: 25px;
+    padding: 0 31px; }
+    estimated-score-widget .score-estimate-container .subject .subject-title {
+      text-align: left;
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400; }
+      estimated-score-widget .score-estimate-container .subject .subject-title .capitalize {
+        text-transform: capitalize; }
+      estimated-score-widget .score-estimate-container .subject .subject-title .to-go {
+        float: right;
+        font-size: 13px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 300; }
+    estimated-score-widget .score-estimate-container .subject .score {
+      position: relative;
+      height: 30px;
+      z-index: 10; }
+      estimated-score-widget .score-estimate-container .subject .score hr.bar,
+      estimated-score-widget .score-estimate-container .subject .score hr.user-goal-fill,
+      estimated-score-widget .score-estimate-container .subject .score hr.current-estimated-score-fill {
+        height: 9px;
+        border: none;
+        position: absolute;
+        z-index: 1;
+        margin: 10px 0; }
+      estimated-score-widget .score-estimate-container .subject .score hr.bar {
+        width: 100%;
+        background: #f8f8f8;
+        border-radius: 10px; }
+      estimated-score-widget .score-estimate-container .subject .score hr.user-goal-fill {
+        width: 0;
+        background: #dfdede;
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px; }
+        estimated-score-widget .score-estimate-container .subject .score hr.user-goal-fill.bar-full {
+          border-bottom-right-radius: 10px;
+          border-top-right-radius: 10px; }
+        estimated-score-widget .score-estimate-container .subject .score hr.user-goal-fill.user-goal-met {
+          z-index: 2;
+          background: transparent;
+          border-right-width: 2px;
+          border-right-style: solid; }
+      estimated-score-widget .score-estimate-container .subject .score hr.current-estimated-score-fill {
+        width: 0;
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px; }
+      estimated-score-widget .score-estimate-container .subject .score div.current-estimated-score {
+        text-align: center;
+        font-size: 12px;
+        position: relative; }
+        estimated-score-widget .score-estimate-container .subject .score div.current-estimated-score span {
+          font-size: 15px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 400;
+          position: absolute;
+          min-width: 22px;
+          height: 22px;
+          line-height: 21px;
+          border-radius: 13px;
+          border-width: 1px;
+          border-style: solid;
+          background: #ffffff;
+          left: 0;
+          margin-left: -15px;
+          padding: 0 3px;
+          content: '';
+          z-index: 4;
+          top: 2px;
+          cursor: default; }
+  estimated-score-widget .score-estimate-container table.score-summary {
+    border-spacing: 15px;
+    margin-top: 0;
+    margin-right: -15px;
+    margin-bottom: 15px;
+    margin-left: -15px; }
+    estimated-score-widget .score-estimate-container table.score-summary tr.composite {
+      font-size: 18px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400; }
+      estimated-score-widget .score-estimate-container table.score-summary tr.composite td.num {
+        font-size: 21px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 700; }
+    estimated-score-widget .score-estimate-container table.score-summary tr.goal {
+      font-size: 18px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300; }
+      estimated-score-widget .score-estimate-container table.score-summary tr.goal td.num {
+        font-size: 21px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 400; }
+  estimated-score-widget .score-estimate-container span.edit-my-goals {
+    text-align: left;
+    font-size: 14px;
+    color: #0a9bad;
+    font-family: Lato;
+    font-weight: 400; }
+    estimated-score-widget .score-estimate-container span.edit-my-goals:hover {
+      text-decoration: underline;
+      cursor: pointer; }
+
+estimated-score-widget .estimated-score-animation hr.current-estimated-score-fill {
+  transition: width 0.4s; }
+
+estimated-score-widget .estimated-score-animation .current-estimated-score span {
+  transition: left 0.4s; }
+
+md-tooltip.tooltip-for-estimated-score-widget {
+  opacity: 0;
+  width: 150px;
+  height: 87px;
+  background: #ffffff;
+  padding: 0 5px;
+  z-index: 100; }
+  md-tooltip.tooltip-for-estimated-score-widget ._md-content {
+    height: auto;
+    text-align: center;
+    background: #ffffff;
+    white-space: normal; }
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      pointer-events: auto;
+      will-change: auto; }
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show-remove {
+      transition: none; }
+      md-tooltip.tooltip-for-estimated-score-widget ._md-content._md-show-remove._md-show-remove-active {
+        transform: none;
+        opacity: 0; }
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content .top-text {
+      margin-top: 22px;
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400; }
+    md-tooltip.tooltip-for-estimated-score-widget ._md-content .bottom-text {
+      font-size: 12px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300; }
+  md-tooltip.tooltip-for-estimated-score-widget._md-hide {
+    transition: opacity 0.4s;
+    opacity: 0; }
+  md-tooltip.tooltip-for-estimated-score-widget._md-show {
+    opacity: 1;
+    transition: opacity 0.4s;
+    pointer-events: auto;
+    will-change: opacity; }

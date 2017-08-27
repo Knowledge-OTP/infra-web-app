@@ -1,0 +1,55 @@
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+#faq-container {
+  width: 100%;
+  min-height: 675px;
+  background: #ffffff;
+  margin-right: 30px;
+  /** v-accordion overrides */ }
+  #faq-container .main-title {
+    font-size: 32px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 40px; }
+  #faq-container #faq-inner {
+    padding: 20px 55px; }
+  #faq-container v-accordion v-pane:not(.is-expanded) > v-pane-header .faq-icon {
+    transform: rotate(-90deg); }
+  #faq-container v-accordion v-pane v-pane-header {
+    font-size: 18px;
+    color: #0a9bad;
+    font-family: Quicksand;
+    font-weight: 400;
+    border: none;
+    padding-left: 40px;
+    /** Hide the default v-accordion open/close indicator */ }
+    #faq-container v-accordion v-pane v-pane-header::after, #faq-container v-accordion v-pane v-pane-header::before {
+      display: none; }
+    #faq-container v-accordion v-pane v-pane-header .faq-icon {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      left: 0;
+      transition: transform 0.5s; }
+  #faq-container v-accordion v-pane v-pane-content {
+    font-size: 16px;
+    color: #4f4d4d;
+    font-family: Lato;
+    font-weight: 300;
+    line-height: 24px;
+    padding-left: 40px; }
+  #faq-container v-accordion v-pane v-pane.is-expanded v-pane-header {
+    font-size: 18px;
+    color: #161616;
+    font-family: Quicksand;
+    font-weight: 400; }
