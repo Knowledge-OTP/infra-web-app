@@ -13,7 +13,7 @@
             <span ng-if="d.userContext===d.userContextObj.TEACHER" translate="LOGIN_APP.FOR_EDUCATORS">
             </span>
         </div>
-        <div ng-show="d.showCombo" class="app-select" ng-cloak ng-class="{'no-dropdown': d.invitationId}">
+        <div ng-show="true" class="app-select" ng-cloak ng-class="{'no-dropdown': d.invitationId}">
             <md-menu md-offset="-10 80" md-no-ink ng-if="!d.invitationId">
                 <md-button aria-label="Open App Select Menu" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
                     <div class="app-img-holder {{d.appContext.className}}">{{d.appContext.name}}<span class="trademark">&reg;</span></div>

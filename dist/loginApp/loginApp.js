@@ -47,8 +47,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", "ENV", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService, ENV) {
-            'ngInject';
+    ["LoginAppSrv", "$location", "$timeout", "$document", "InvitationKeyService", "ENV", function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService, ENV) {
+        'ngInject';
             return {
                 templateUrl: 'components/loginApp/directives/loginApp/loginApp.template.html',
                 restrict: 'E',
@@ -64,7 +64,7 @@
                         userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: isTeacherApp ? LoginAppSrv.USER_CONTEXT.TEACHER : LoginAppSrv.USER_CONTEXT.STUDENT,
                         changePassword: false,
-                        showCombo: false
+                        showCombo: true
                     };
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
@@ -76,7 +76,7 @@
                         if (scope.d.appContext.id !== "MYZINKERZ") {
                             LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
                         }
-                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
+                        // ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     scope.changeCurrentForm = function (currentForm) {
@@ -84,7 +84,7 @@
                     };
 
                     scope.toggleCombo = function () {
-                        scope.d.showCombo = !scope.d.showCombo;
+                        scope.d.showCombo = true;
                     };
 
                     scope.changeUserContext = function (context) {
@@ -94,7 +94,7 @@
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
                             scope.currentUserContext = 'teacher';
                         }
-                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
+                        // ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     // App select menu
@@ -537,13 +537,13 @@
                 return AllEnvs[env][appContext];
             }
 
-            function _getCurrentEnv(){
+            function _getCurrentEnv() {
                 return env;
             }
 
-           /* function _getAppScopeName(userContext, appEnvConfig) {
-                return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
-            }*/
+            /* function _getAppScopeName(userContext, appEnvConfig) {
+                 return (userContext === USER_CONTEXT.TEACHER) ? appEnvConfig.dashboardAppName : appEnvConfig.studentAppName;
+             }*/
 
             function _checkExistFirebaseApp(appContext) {
                 var existApp;
@@ -552,34 +552,41 @@
                         existApp = app;
                     }
                 });
-                return  existApp;
+                return existApp;
             }
 
-            function _getGlobalRef(appContext) {
-                var appEnvConfig = _getAppEnvConfig(appContext);
-                var existApp = _checkExistFirebaseApp(appEnvConfig.firbase_auth_config.projectId);
-                if(existApp) {
-                   return  existApp;
+            function _getGlobalRef() {
+                var appEnvConfig = _getAppEnvConfig('MYZINKERZ');
+                var existApp = _checkExistFirebaseApp(appEnvConfig.authAppName);
+                if (existApp) {
+                    return existApp;
                 }
-
-                return window.firebase.initializeApp(appEnvConfig.firbase_auth_config, appEnvConfig.firebase_projectId);
+                return window.firebase.initializeApp(appEnvConfig.firbase_auth_config, appEnvConfig.authAppName);
             }
 
-            function _getAppRef(appContext) {
+            function _getAppRef(appContext, userContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                var existApp = _checkExistFirebaseApp(appEnvConfig.firebase_projectId);
-                if(existApp) {
-                    return  existApp;
-                }
                 var config = {
                     apiKey: appEnvConfig.firebase_apiKey,
-                    authDomain:  appEnvConfig.firebase_projectId + ".firebaseapp.com",
+                    authDomain: appEnvConfig.firebase_projectId + ".firebaseapp.com",
                     databaseURL: appEnvConfig.fbDataEndPoint,
                     projectId: appEnvConfig.firebase_projectId,
                     storageBucket: appEnvConfig.firebase_projectId + ".appspot.com",
                     messagingSenderId: appEnvConfig.messagingSenderId
                 };
-                return window.firebase.initializeApp(config, appEnvConfig.firebase_projectId);
+                if (userContext === 2) {
+                    var existAppS = _checkExistFirebaseApp(appEnvConfig.studentAppName);
+                    if (existAppS) {
+                        return existAppS;
+                    }
+                    return window.firebase.initializeApp(config, appEnvConfig.studentAppName);
+                } else {
+                    var existApp = _checkExistFirebaseApp(appEnvConfig.dashboardAppName);
+                    if (existApp) {
+                        return existApp;
+                    }
+                    return window.firebase.initializeApp(config, appEnvConfig.dashboardAppName);
+                }
             }
 
             function _getUserContextRef(appContext, userContext) {
@@ -621,16 +628,16 @@
 
                 var promoCode = PromoCodeSrv.getPromoCodeToUpdate();
                 if (angular.isDefined(promoCode) && promoCode !== null) {
-                    urlParams +=  (questionOrAmpersandSymbol + 'pcid=' + promoCode);
+                    urlParams += (questionOrAmpersandSymbol + 'pcid=' + promoCode);
                 }
 
                 var search = $location.search();
                 var planId = angular.isDefined(search.planId) ? search.planId : null;
                 if (angular.isDefined(planId) && planId !== null) {
-                    urlParams +=  (questionOrAmpersandSymbol + 'planId=' + planId);
+                    urlParams += (questionOrAmpersandSymbol + 'planId=' + planId);
                 }
 
-                if(urlParams !== ''){
+                if (urlParams !== '') {
                     urlParams = '#' + urlParams;
                 }
 
@@ -663,7 +670,7 @@
                 var updateProfileProms = [];
                 var profile;
                 if (customProfileFlag) {
-                    profile = {profile: formData};
+                    profile = { profile: formData };
                 } else {
                     profile = {
                         profile: {
@@ -673,19 +680,19 @@
                     };
                 }
                 updateProfileProms.push(znkRef.database().ref('users/' + auth.uid).set(profile));
-                if (appEnvConfig.setUserProfileTwice){
+                if (appEnvConfig.setUserProfileTwice) {
                     var appRef = _getAppRef(appContext, userContext);
                     updateProfileProms.push(appRef.database().ref('users/' + auth.uid).set(profile));
                 }
                 return $q.all(updateProfileProms)
                     .catch(function (err) {
                         $log.error(err);
-                });
+                    });
             }
 
             function _createAuthWithCustomToken(refDB, token) {
                 return refDB.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
-                    .then(function() {
+                    .then(function () {
                         return refDB.auth().signInWithCustomToken(token).catch(function (error) {
                             $log.error('LoginAppSrv createAuthWithCustomToken: error=' + error);
                         });
@@ -765,40 +772,39 @@
 
                     var globalRef = _getGlobalRef(appContext, userContext);
                     return globalRef.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
-                        .then(function() {
+                        .then(function () {
                             return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
                                 var appEnvConfig = _getAppEnvConfig(appContext);
                                 var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
                                 var postData = {
-                                    email: authData.email,
+                                    email: authData.email || authData.auth.email || authData.auth.token.email,
                                     uid: authData.uid,
-                                    projectId: appEnvConfig.firebase_projectId,
                                     fbDataEndPoint: appEnvConfig.fbDataEndPoint,
                                     fbEndpoint: appEnvConfig.fbGlobalEndPoint,
                                     auth: appEnvConfig.dataAuthSecret,
-                                    token: authData.refreshToken
+                                    token: authData.refreshToken,
+                                    projectId: appEnvConfig.firebase_projectId
                                 };
-
-                                return $http.post(postUrl, postData).then(function (token) {
-                                    var appRef = _getAppRef(appContext, userContext);
-                                    return appRef.auth().setPersistence(window.firebase.auth.Auth.Persistence.LOCAL)
-                                        .then(function() {
-                                            return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
-                                                isLoginInProgress = false;
-                                                if(!signUp){
-                                                    _redirectToPage(appContext, userContext);
-                                                }
-                                                return res;
-                                            });
+                                return authData.getIdToken().then((clientToken) => {
+                                    postData.token = clientToken;
+                                    return $http.post(postUrl, postData).then(function (token) {
+                                        var appRef = _getAppRef(appContext, userContext);
+                                        return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
+                                            isLoginInProgress = false;
+                                            if (!signUp) {
+                                                _redirectToPage(appContext, userContext);
+                                            }
+                                            return res;
                                         });
-
+                                    });
+                                }).catch(err => {
+                                    $log.debug('failed to get token', err);
                                 });
                             }).catch(function (err) {
                                 isLoginInProgress = false;
                                 return $q.reject(err);
                             });
                         });
-
                 };
             })();
 
@@ -878,7 +884,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
     "            <span ng-if=\"d.userContext===d.userContextObj.TEACHER\" translate=\"LOGIN_APP.FOR_EDUCATORS\">\n" +
     "            </span>\n" +
     "        </div>\n" +
-    "        <div ng-show=\"d.showCombo\" class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
+    "        <div ng-show=\"true\" class=\"app-select\" ng-cloak ng-class=\"{'no-dropdown': d.invitationId}\">\n" +
     "            <md-menu md-offset=\"-10 80\" md-no-ink ng-if=\"!d.invitationId\">\n" +
     "                <md-button aria-label=\"Open App Select Menu\" class=\"md-icon-button\" ng-click=\"openMenu($mdOpenMenu, $event)\">\n" +
     "                    <div class=\"app-img-holder {{d.appContext.className}}\">{{d.appContext.name}}<span class=\"trademark\">&reg;</span></div>\n" +
