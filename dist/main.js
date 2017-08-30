@@ -5113,17 +5113,14 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
 
     angular.module('znk.infra-web-app.elasticSearch')
         .service('ElasticSearchSrv',
-            ["ENV", "$log", "$http", "AuthService", function (ENV, $log, $http, AuthService) {
-                'ngInject';
-                var uidObj = {};
-                AuthService.getAuth().then(authData => {
-                    uidObj = authData;
-                });
-                var API_PATH = ENV.backendEndpoint + "/search";
+        ["ENV", "$log", "$http", "AuthService", function (ENV, $log, $http, AuthService) {
+            'ngInject';
 
-                this.search = function (query) {
-                    var uid = uidObj.uid;
+            var API_PATH = ENV.backendEndpoint + "/search";
 
+            this.search = function (query) {
+                return AuthService.getAuth().then(authData => {
+                    var uid = authData.uid;
                     if (!angular.isString(uid)) {
                         $log.error('ElasticSearchSrv: uid is not a string or not exist');
                         return;
@@ -5137,8 +5134,10 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
                         uid: uid
                     };
                     return $http.post(API_PATH, searchObj);
-                };
-            }]
+                });
+
+            };
+        }]
         );
 })(angular);
 
@@ -12399,20 +12398,20 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.navigation').service('NavigationService', ["ENV", function (ENV) {
+    angular.module('znk.infra-web-app.navigation').service('NavigationService', ["ENV", "$window", function (ENV, $window) {
         'ngInject';
 
         var self = this;
         this.openWindowsMap = {};
 
         this.navigateToMyZinkerz = function (navigationRoute) {
-            const serviceName = 'myZinkerz';
+            const serviceName = 'myzinkerz';
             const existingWindow = self.openWindowsMap[serviceName];
             if (existingWindow && !existingWindow.closed) {
                 existingWindow.focus();
             } else {
                 var appUrl = ENV.zinkerzWebsiteBaseUrl + serviceName + '/' + navigationRoute;
-                self.openWindowsMap[serviceName] = window.open(appUrl);
+                self.openWindowsMap[serviceName] = $window.open(appUrl);
             }
         };
     }]);
@@ -12476,7 +12475,7 @@ angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($
                 // call and init firebase 'child_added' event
                 function initFirebaseChildAddedEvents(storage) {
                     storage.onEvent('child_added', pathPending, function (dataSnapshot) {
-                        var notificationData = dataSnapshot.exportVal();
+                        var notificationData = dataSnapshot.val();
                         var callbackList = NotificationService.subscribers[notificationData.notificationTypeEnum];
                         if (!callbackList) {
                             $log.log('no subscribers');
