@@ -16,6 +16,10 @@
                 timeout: ENV.promiseTimeOut
             };
 
+            AuthService.getAuth().then(authData => {
+                self.authData = authData;
+            });
+
             this.listeners = {
                 USER_TEACHERS: 'approved',
                 NEW_INVITATIONS: 'sent',
@@ -104,11 +108,11 @@
             };
 
             this.updateInvitationStatus = function (invitation) {
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.senderAppName = ENV.dashboardAppName;
                 invitation.receiverAppName = ENV.studentAppName;
-                invitation.senderEmail = authData.password.email;
+                invitation.senderEmail = authData.email;
                 return updateStatus(invitation);
             };
 
@@ -124,7 +128,7 @@
 
             this.inviteTeacher = function (receiverEmail, receiverName) {
                 return UserProfileService.getProfile().then(function (profile) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     var newInvitiation = [{
                         receiverAppName: ENV.dashboardAppName,
                         receiverEmail: receiverEmail,
@@ -147,12 +151,12 @@
             };
 
             this.deletePendingConformations = function (invitation) {
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = this.invitationStatus.senderDelete;
                 invitation.receiverAppName = ENV.dashboardAppName;
                 invitation.senderAppName = ENV.firebaseAppScopeName;
-                invitation.senderEmail = authData.password.email;
+                invitation.senderEmail = authData.email;
                 return updateStatus(invitation);
             };
 
@@ -177,7 +181,7 @@
 
             this.resentInvitation = function (inviteId) {
                 return this.getInvitationObject(inviteId).then(function (invitation) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     invitation.uid = authData.uid;
                     invitation.status = self.invitationStatus.resent;
                     return self.updateInvitation(invitation).then(
@@ -210,7 +214,7 @@
 
             this.deletePendingInvitation = function (inviteId) {
                 return this.getInvitationObject(inviteId).then(function (invitation) {
-                    var authData = AuthService.getAuth();
+                    var authData = self.authData;
                     invitation.uid = authData.uid;
                     invitation.status = self.invitationStatus.senderDelete;
                     return self.updateInvitation(invitation).then(
@@ -229,7 +233,7 @@
 
             this.approveInvitation = function (invitation) {
                 var oldInvitationStatus = invitation.status;
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = self.invitationStatus.approved;
                 return updateStatus(invitation, oldInvitationStatus);
@@ -237,7 +241,7 @@
 
             this.declineInvitation = function (invitation) {
                 var oldInvitationStatus = invitation.status;
-                var authData = AuthService.getAuth();
+                var authData = self.authData;
                 invitation.uid = authData.uid;
                 invitation.status = self.invitationStatus.receiverDeclined;
                 return updateStatus(invitation, oldInvitationStatus);
@@ -266,15 +270,8 @@
             };
 
             function addInvitationUserData(invitation, profile) {
-                var senderEmail;
-                var authData = AuthService.getAuth();
-                if (authData.password && authData.password.email) {
-                    senderEmail = authData.password.email;
-                } else if (authData.auth && authData.auth.email) {
-                    senderEmail = authData.auth.email;
-                } else if (authData.token && authData.token.email) {
-                    senderEmail = authData.token.email;
-                }
+                var authData = self.authData;
+                var senderEmail = authData.email;
 
                 invitation.senderUid = authData.uid;
                 invitation.senderName = profile.nickname || profile.email;

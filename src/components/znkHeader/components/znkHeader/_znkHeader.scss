@@ -7,13 +7,13 @@
         margin: 0 auto;
         height: 100%;
         width: 1227px;
-        .znkHeader-app-logo-wrap{
+        .znkHeader-app-logo-wrap {
             display: flex;
             height: 100%;
             align-items: center;
-            svg-icon.znkHeader-app-name-logo{
+            svg-icon.znkHeader-app-name-logo {
                 width: 100px;
-                svg{
+                svg {
                     width: 100%;
                 }
             }
@@ -36,7 +36,7 @@
                             color: $fontColor6;
                         }
                     }
-                    &.active{
+                    &.active {
                         .title {
                             color: $fontColor6;
                         }
@@ -47,28 +47,28 @@
         .app-user-area {
             align-self: center;
             margin-left: auto;
+            .calendar-icon {
+                width: 18px;
+                fill: $fontColor9;
+            }
             .profile-status {
                 font-size: 16px;
                 padding: 0 12px 0 0;
                 border-right: 1px solid $borderColor24;
                 cursor: pointer;
-
                 .pending-purchase-icon-wrapper {
                     width: 16px;
                     height: 16px;
                     margin-right: 10px;
-                    float:left;
-                    & + span {
-                        @include text-style(16px, null, Lato ,Light, null, null, italic);
+                    float: left;
+                    &+span {
+                        @include text-style(16px, null, Lato, Light, null, null, italic);
                     }
                 }
-
             }
-
             .profile-status:hover {
                 color: $fontColor6;
             }
-
             .profile-open-modal-btn {
                 text-transform: none;
                 font-size: 16px;
@@ -80,7 +80,7 @@
                 background: $bgColor1;
                 width: auto;
                 display: flex;
-                div{
+                div {
                     min-width: 40px;
                 }
             }
@@ -99,7 +99,9 @@
             text-decoration: none;
             color: inherit;
         }
-        &:not(.purchase-status) span {width: 100%;}
+        &:not(.purchase-status) span {
+            width: 100%;
+        }
         &.header-modal-item-profile {
             flex-direction: column;
             align-items: flex-start;
@@ -123,10 +125,10 @@
             font-weight: $bookFontWeight;
             cursor: pointer;
             &.links {
-                color:$fontColor2;
+                color: $fontColor2;
             }
             &.logout {
-                color:$fontColor12;
+                color: $fontColor12;
             }
         }
         .check-mark-wrapper {
@@ -142,7 +144,7 @@
                 display: block;
             }
             svg-icon svg {
-                width:75%;
+                width: 75%;
                 height: 100%;
                 margin: auto;
                 display: block;
@@ -154,12 +156,10 @@
     }
 }
 
-
 .md-menu-content-znk-header {
     min-width: 270px;
     max-height: none;
     padding: 16px 0;
-
     md-list {
         padding: {
             top: 0;
@@ -171,16 +171,14 @@
             border-top: 1px solid $borderColor7;
         }
     }
-
     .pending-purchase-icon-wrapper {
         width: 16px;
         height: auto;
         margin-left: 10px;
         position: relative;
-        top:3px;
+        top: 3px;
     }
-
-    [disabled="disabled"]{
+    [disabled="disabled"] {
         opacity: 0.5;
         cursor: default;
     }
@@ -194,4 +192,3 @@
     width: 100%;
     height: 100%;
 }
-

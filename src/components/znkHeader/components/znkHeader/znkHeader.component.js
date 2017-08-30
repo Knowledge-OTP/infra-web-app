@@ -4,10 +4,10 @@
     angular.module('znk.infra-web-app.znkHeader')
         .component('znkHeader', {
             bindings: {},
-            templateUrl:  'components/znkHeader/components/znkHeader/znkHeader.template.html',
+            templateUrl: 'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
             controller: function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
-                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout,MyLiveLessons) {
+                UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout, MyLiveLessons, NavigationService) {
                 'ngInject';
 
                 var vm = this;
@@ -22,8 +22,13 @@
                 vm.purchaseData = {};
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
                 vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
+                vm.myZinkerzUrl = ENV.myZinkerz;
 
-                $scope.$on('profile-updated', function(event, args) {
+                vm.goToMyZinkerz = function (route) {
+                    NavigationService.navigateToMyZinkerz(route);
+                };
+
+                $scope.$on('profile-updated', function (event, args) {
                     vm.userProfile = {
                         username: args.profile.nickname,
                         email: args.profile.email
@@ -50,7 +55,7 @@
                     vm.isOnBoardingCompleted = isCompleted;
                 });
 
-                vm.invokeOnClickHandler = function(onClickHandler){
+                vm.invokeOnClickHandler = function (onClickHandler) {
                     $injector.invoke(onClickHandler);
                 };
 

@@ -42,17 +42,21 @@
             function _checkPlanNotification(){
                 var planId = _getPlanIdFromUrl();
                 if (planId) {
-                    var uid = AuthService.getAuth().uid;
-                    var connectStudentToPlanUrl = ENV.zinkerzBE + '/plan/connectStudentToPlan';
-                    $http({
-                        method: 'POST',
-                        url: connectStudentToPlanUrl,
-                        data: { planId: planId, uid: uid }
-                    }).then(function successCallback() {
-                        _newPlanNotification({ refObjId: planId });
-                        $log.debug('checkPlanNotification: connectStudentToPlan successful');
-                    }, function errorCallback(err) {
-                        $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
+                    AuthService.getAuth().then(authData => {
+                        if (authData && authData.uid) {
+                            var uid = authData.uid;
+                            var connectStudentToPlanUrl = ENV.zinkerzBE + '/plan/connectStudentToPlan';
+                            $http({
+                                method: 'POST',
+                                url: connectStudentToPlanUrl,
+                                data: { planId: planId, uid: uid }
+                            }).then(function successCallback() {
+                                _newPlanNotification({ refObjId: planId });
+                                $log.debug('checkPlanNotification: connectStudentToPlan successful');
+                            }, function errorCallback(err) {
+                                $log.error('checkPlanNotification: error in PlanService.connectStudentToPlan, err: ' + err);
+                            });
+                        }
                     });
                 }
             }
