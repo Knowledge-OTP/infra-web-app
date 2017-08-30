@@ -10,7 +10,7 @@
 
             this.search = function (query) {
                 return AuthService.getAuth().then(authData => {
-                    var uid = uidObj.uid;
+                    var uid = authData.uid;
                     if (!angular.isString(uid)) {
                         $log.error('ElasticSearchSrv: uid is not a string or not exist');
                         return;
