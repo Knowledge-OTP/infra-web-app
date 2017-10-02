@@ -23,7 +23,7 @@
                         userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: isTeacherApp ? LoginAppSrv.USER_CONTEXT.TEACHER : LoginAppSrv.USER_CONTEXT.STUDENT,
                         changePassword: false,
-                        showCombo: false
+                        showCombo: true
                     };
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);

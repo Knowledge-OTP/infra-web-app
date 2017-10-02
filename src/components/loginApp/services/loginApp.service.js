@@ -63,7 +63,7 @@
 
             function _getGlobalRef(appContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, 'myzinkerz_app');
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, _getAppScopeName(appContext, appEnvConfig));
             }
 
             function _getAppRef(appContext, userContext) {

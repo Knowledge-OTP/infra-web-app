@@ -10413,7 +10413,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         userContextObj: LoginAppSrv.USER_CONTEXT,
                         userContext: isTeacherApp ? LoginAppSrv.USER_CONTEXT.TEACHER : LoginAppSrv.USER_CONTEXT.STUDENT,
                         changePassword: false,
-                        showCombo: false
+                        showCombo: true
                     };
 
                     LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
@@ -10896,7 +10896,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
 
             function _getGlobalRef(appContext) {
                 var appEnvConfig = _getAppEnvConfig(appContext);
-                return new Firebase(appEnvConfig.fbGlobalEndPoint, 'myzinkerz_app');
+                return new Firebase(appEnvConfig.fbGlobalEndPoint, _getAppScopeName(appContext, appEnvConfig));
             }
 
             function _getAppRef(appContext, userContext) {
