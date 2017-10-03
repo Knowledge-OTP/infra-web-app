@@ -123,38 +123,40 @@
 
 
 (function (angular) {
-    'use strict';
+  'use strict';
 
-    angular.module('znk.infra-web-app.liveSession')
-        .component('liveSessionSubjectModal', {
-            bindings: {
-                student: '='
-            },
-            templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
-            controllerAs: 'vm',
-            controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", "LiveSessionUiSrv", "DiagnosticSrv", function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, LiveSessionUiSrv, DiagnosticSrv) {
-                'ngInject';
+  angular.module('znk.infra-web-app.liveSession')
+    .component('liveSessionSubjectModal', {
+      bindings: {
+        student: '='
+      },
+      templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
+      controllerAs: 'vm',
+      controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", "LiveSessionUiSrv", "DiagnosticSrv", function ($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, LiveSessionUiSrv, DiagnosticSrv) {
+        'ngInject';
 
-                var vm = this;
+        var vm = this;
 
-                this.$onInit = function() {
-                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
-                    vm.closeModal = $mdDialog.cancel;
-                    vm.startSession = startSession;
-                };
+        this.$onInit = function () {
+          vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
+          vm.closeModal = $mdDialog.cancel;
+          vm.startSession = startSession;
+        };
 
-                function startSession(sessionSubject) {
-                    DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
-                        if (isDiagnosticCompleted) {
-                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
-                        } else {
-                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
-                        }
-                    });
+        function startSession(sessionSubject) {
+          DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
+            if (isDiagnosticCompleted) {
+              LiveSessionSrv.startLiveSession(vm.student, sessionSubject).then(function () {
+                LiveSessionSrv.makeAutoCall(vm.student.uid);
+              });
+            } else {
+              LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
+            }
+          });
 
-                }
-            }]
-        });
+        }
+      }]
+    });
 })(angular);
 
 (function (angular) {
@@ -696,7 +698,6 @@
 
                                 if (liveSessionData.educatorId === currUid) {
                                     userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
 
                                 if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
