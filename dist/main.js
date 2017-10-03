@@ -65,21 +65,22 @@
 })(angular);
 
 (function (angular) {
-    'use strict';
+  'use strict';
 
-    angular.module('znk.infra-web-app.activePanel')
-        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
-            'ngInject';
+  angular.module('znk.infra-web-app.activePanel')
+    .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+      'ngInject';
 
-            var svgMap = {
-                'active-panel-call-mute-icon': 'components/calls/svg/call-mute-icon.svg',
-                'active-panel-stop-sharing-icon': 'components/activePanel/svg/stop-sharing-icon.svg',
-                'active-panel-share-screen-icon': 'components/activePanel/svg/share-screen-icon.svg',
-                'active-panel-track-teacher-icon': 'components/activePanel/svg/track-teacher-icon.svg',
-                'active-panel-track-student-icon': 'components/activePanel/svg/track-student-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }]);
+      var svgMap = {
+        'active-panel-call-mute-icon': 'components/calls/svg/call-mute-icon.svg',
+        'active-panel-stop-sharing-icon': 'components/activePanel/svg/stop-sharing-icon.svg',
+        'active-panel-share-screen-icon': 'components/activePanel/svg/share-screen-icon.svg',
+        'active-panel-track-teacher-icon': 'components/activePanel/svg/track-teacher-icon.svg',
+        'active-panel-track-student-icon': 'components/activePanel/svg/track-student-icon.svg',
+        'hangouts-icon': 'components/activePanel/svg/hangouts.svg'
+      };
+      SvgIconSrvProvider.registerSvgSources(svgMap);
+    }]);
 })(angular);
 
 
@@ -359,7 +360,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                                </md-tooltip>\n" +
     "                            </svg-icon>\n" +
     "                            <svg-icon ng-switch-default\n" +
-    "                                      name=\"active-panel-track-teacher-icon\"\">\n" +
+    "                                      name=\"active-panel-track-teacher-icon\">\n" +
     "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "                                    {{d.translatedStrings.SHOW_TEACHER_SCREEN}}\n" +
     "                                </md-tooltip>\n" +
@@ -391,6 +392,10 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "\n" +
     "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
     "\n" +
+    "            <svg-icon name=\"hangouts-icon\">\n" +
+    "\n" +
+    "            </svg-icon>\n" +
+    "\n" +
     "            <div class=\"end-session-wrap\" ng-if=\"d.isTeacher\">\n" +
     "                <div class=\"seperator\"></div>\n" +
     "                <md-button class=\"end-session-btn\"\n" +
@@ -406,6 +411,56 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "    </div>\n" +
     "    <div class=\"active-panel-overlay\" ng-if=\"d.disableAllBtns\"></div>\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/activePanel/svg/hangouts.svg",
+    "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" +
+    "<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n" +
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 512 512\" style=\"enable-background:new 0 0 512 512;\" xml:space=\"preserve\">\n" +
+    "<path style=\"fill:#12B347;\" d=\"M246.24,508.847c-4.359-3.141-6.934-8.174-6.934-13.543v-61.847\n" +
+    "	C127.403,424.901,38.957,331.107,38.957,217.043C38.957,97.369,136.327,0,256,0s217.043,97.369,217.043,217.043\n" +
+    "	c0,111.25-65.478,245.325-211.761,294.098C256.194,512.837,250.61,511.997,246.24,508.847z\"/>\n" +
+    "<path style=\"fill:#0F993E;\" d=\"M261.284,511.141c146.281-48.772,211.759-182.848,211.759-294.098C473.043,97.369,375.674,0,256,0\n" +
+    "	v511.894C257.775,511.894,259.555,511.716,261.284,511.141z\"/>\n" +
+    "<path style=\"fill:#E6F3FF;\" d=\"M222.609,155.826h-66.782c-9.217,0-16.696,7.479-16.696,16.696v66.782\n" +
+    "	c0,9.217,7.479,16.696,16.696,16.696h49.813c-1.342,15.055-10.18,28.302-23.889,35.152c-8.239,4.119-11.587,14.152-7.467,22.402\n" +
+    "	c4.085,8.171,14.082,11.609,22.402,7.467c26.283-13.142,42.619-39.565,42.619-68.967c0-18.013,0-61.766,0-79.532\n" +
+    "	C239.304,163.304,231.827,155.826,222.609,155.826z\"/>\n" +
+    "<path style=\"fill:#CFDBE6;\" d=\"M356.174,155.826h-66.782c-9.217,0-16.696,7.479-16.696,16.696v66.782\n" +
+    "	c0,9.217,7.479,16.696,16.696,16.696h49.813c-1.342,15.055-10.18,28.302-23.889,35.152c-8.239,4.119-11.587,14.152-7.467,22.402\n" +
+    "	c4.085,8.171,14.082,11.609,22.402,7.467c26.283-13.142,42.619-39.565,42.619-68.967c0-18.013,0-61.766,0-79.532\n" +
+    "	C372.869,163.304,365.392,155.826,356.174,155.826z\"/>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
     "");
   $templateCache.put("components/activePanel/svg/share-screen-icon.svg",
     "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
