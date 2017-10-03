@@ -3,7 +3,6 @@
   angular.module('znk.infra-web-app.navigation', [
   ]);
 })(angular);
-
 (function (angular) {
   'use strict';
   angular.module('znk.infra-web-app.navigation').service('NavigationService', ["ENV", "$window", function (ENV, $window) {

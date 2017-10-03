@@ -7,12 +7,15 @@
             function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
                          PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
                          $translate, LiveSessionSrv, LiveSessionStatusEnum,
-                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
+                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum, NavigationService, UserProfileService) {
                 'ngInject';
                 return {
                 templateUrl: 'components/activePanel/directives/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
+                    UserProfileService.getProfile().then(function(userProfile) {
+                      scope.d.userProfile = userProfile;
+                    });
                     var durationToDisplay,
                         timerInterval,
                         liveSessionData,

@@ -61,7 +61,9 @@
         'znk.infra.screenSharing',
         'znk.infra.presence',
         'znk.infra.znkTooltip',
-        'znk.infra-web-app.liveSession'
+        'znk.infra-web-app.liveSession',
+        'znk.infra-web-app.navigation',
+        'znk.infra.user'
     ]);
 })(angular);
 
@@ -90,15 +92,18 @@
 
     angular.module('znk.infra-web-app.activePanel')
         .directive('activePanel',
-            ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
+            ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", "NavigationService", "UserProfileService", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
                          PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
                          $translate, LiveSessionSrv, LiveSessionStatusEnum,
-                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
+                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum, NavigationService, UserProfileService) {
                 'ngInject';
                 return {
                 templateUrl: 'components/activePanel/directives/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
+                    UserProfileService.getProfile().then(function(userProfile) {
+                      scope.d.userProfile = userProfile;
+                    });
                     var durationToDisplay,
                         timerInterval,
                         liveSessionData,
@@ -393,7 +398,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "\n" +
     "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
     "\n" +
-    "            <svg-icon name=\"hangouts-icon\">\n" +
+    "            <svg-icon ng-if=\"d.userProfile\" name=\"hangouts-icon\">\n" +
     "\n" +
     "            </svg-icon>\n" +
     "\n" +
@@ -12409,7 +12414,6 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
   angular.module('znk.infra-web-app.navigation', [
   ]);
 })(angular);
-
 (function (angular) {
   'use strict';
   angular.module('znk.infra-web-app.navigation').service('NavigationService', ["ENV", "$window", function (ENV, $window) {
