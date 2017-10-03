@@ -22,7 +22,8 @@
       if (existingUrl && !existingUrl.closed) {
         existingUrl.focus();
       } else {
-        var navigationRoute = url + parameter ? parameter : '';
+        const navigationParam = parameter ? parameter : '';
+        const navigationRoute = url + navigationParam;
         self.openWindowsMap[url] = $window.open(navigationRoute);
       }
     };

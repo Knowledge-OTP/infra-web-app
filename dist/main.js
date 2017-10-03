@@ -101,9 +101,13 @@
                 templateUrl: 'components/activePanel/directives/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
-                    UserProfileService.getProfile().then(function(userProfile) {
-                      scope.d.userProfile = userProfile;
-                    });
+                  UserProfileService.getProfile().then(function (userProfile) {
+                    scope.d.userProfile = userProfile;
+        
+                    scope.d.openHangouts = function() {
+                      NavigationService.navigateToUrl('https://hangouts.google.com/call/', scope.d.userProfile.teacherInfo.hangoutsUri);
+                    };
+                  });
                     var durationToDisplay,
                         timerInterval,
                         liveSessionData,
@@ -398,7 +402,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "\n" +
     "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
     "\n" +
-    "            <svg-icon ng-if=\"d.userProfile\" name=\"hangouts-icon\">\n" +
+    "            <svg-icon ng-click=\"d.openHangouts()\" ng-if=\"d.userProfile.teacherInfo.hangoutsUri\" name=\"hangouts-icon\">\n" +
     "\n" +
     "            </svg-icon>\n" +
     "\n" +
@@ -12438,7 +12442,8 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
       if (existingUrl && !existingUrl.closed) {
         existingUrl.focus();
       } else {
-        var navigationRoute = url + parameter ? parameter : '';
+        const navigationParam = parameter ? parameter : '';
+        const navigationRoute = url + navigationParam;
         self.openWindowsMap[url] = $window.open(navigationRoute);
       }
     };

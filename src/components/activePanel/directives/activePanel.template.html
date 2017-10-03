@@ -62,7 +62,7 @@
 
             <call-btn ng-model="d.callBtnModel"></call-btn>
 
-            <svg-icon ng-if="d.userProfile" name="hangouts-icon">
+            <svg-icon ng-click="d.openHangouts()" ng-if="d.userProfile.teacherInfo.hangoutsUri" name="hangouts-icon">
 
             </svg-icon>
 

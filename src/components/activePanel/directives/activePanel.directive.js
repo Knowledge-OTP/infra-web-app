@@ -13,9 +13,13 @@
                 templateUrl: 'components/activePanel/directives/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
-                    UserProfileService.getProfile().then(function(userProfile) {
-                      scope.d.userProfile = userProfile;
-                    });
+                  UserProfileService.getProfile().then(function (userProfile) {
+                    scope.d.userProfile = userProfile;
+        
+                    scope.d.openHangouts = function() {
+                      NavigationService.navigateToUrl('https://hangouts.google.com/call/', scope.d.userProfile.teacherInfo.hangoutsUri);
+                    };
+                  });
                     var durationToDisplay,
                         timerInterval,
                         liveSessionData,
