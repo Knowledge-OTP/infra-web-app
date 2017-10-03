@@ -49,13 +49,7 @@
                 templateUrl: 'components/activePanel/directives/activePanel.template.html',
                 scope: {},
                 link: function(scope, element) {
-                  UserProfileService.getProfile().then(function (userProfile) {
-                    scope.d.userProfile = userProfile;
-        
-                    scope.d.openHangouts = function() {
-                      NavigationService.navigateToUrl('https://hangouts.google.com/call/', scope.d.userProfile.teacherInfo.hangoutsUri);
-                    };
-                  });
+
                     var durationToDisplay,
                         timerInterval,
                         liveSessionData,
@@ -68,6 +62,7 @@
                         prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
                         bodyDomElem = angular.element($window.document.body),
                         translateNamespace = 'ACTIVE_PANEL';
+                        const hangoutsUrl = 'https://hangouts.google.com/call/';
 
                     $translate([
                         translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
@@ -83,6 +78,10 @@
                         };
                     }).catch(function (err) {
                         $log.debug('Could not fetch translation', err);
+                    });
+
+                    UserProfileService.getProfile().then(function (userProfile) {
+                      scope.d.userProfile = userProfile;
                     });
 
                     function endLiveSession() {
@@ -158,6 +157,10 @@
                                 receiverId: userId
                             };
                         });
+                    }
+
+                    function openHangouts() {
+                      NavigationService.navigateToUrl(hangoutsUrl, scope.d.userProfile.teacherInfo.hangoutsUri);
                     }
 
                     function listenToLiveSessionStatus(newLiveSessionStatus) {
@@ -236,7 +239,8 @@
                         endScreenSharing: endScreenSharing,
                         endSession: endLiveSession,
                         viewOtherUserScreen: viewOtherUserScreen,
-                        shareMyScreen: shareMyScreen
+                        shareMyScreen: shareMyScreen,
+                        openHangouts: openHangouts
                     };
 
                     element.on('$destroy', function() {
