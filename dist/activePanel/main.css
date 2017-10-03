@@ -156,7 +156,8 @@ active-panel {
           border-radius: 50%;
           border: 1px solid #b7b7b7;
           margin-left: 10px;
-          cursor: pointer; }
+          cursor: pointer;
+          background-color: #ffffff; }
         active-panel .active-panel .flex-container .flex-col.call-controls .end-session-wrap {
           display: -ms-flexbox;
           display: flex; }

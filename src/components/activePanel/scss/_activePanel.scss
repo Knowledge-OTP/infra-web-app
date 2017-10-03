@@ -171,7 +171,8 @@ active-panel {
                       border-radius: 50%;
                       border: 1px solid $borderColor6;
                       margin-left: 10px;
-                      cursor: pointer;                  
+                      cursor: pointer;        
+                      background-color: $bgColor3;          
                     }
 
                     .end-session-wrap{
