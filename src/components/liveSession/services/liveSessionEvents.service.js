@@ -42,7 +42,6 @@
 
                                 if (liveSessionData.educatorId === currUid) {
                                     userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
 
                                 if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {

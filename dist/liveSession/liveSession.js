@@ -146,7 +146,9 @@
                 function startSession(sessionSubject) {
                     DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
                         if (isDiagnosticCompleted) {
-                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject).then(function () {
+                                LiveSessionSrv.makeAutoCall(vm.student.uid);
+                            });
                         } else {
                             LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
                         }
@@ -696,7 +698,6 @@
 
                                 if (liveSessionData.educatorId === currUid) {
                                     userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
                                 }
 
                                 if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
