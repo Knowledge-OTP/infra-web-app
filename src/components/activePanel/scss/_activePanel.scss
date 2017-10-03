@@ -164,6 +164,16 @@ active-panel {
                         }
                     }
 
+                    .hangouts-icon {
+                      display: block;
+                      width: 18px;
+                      padding: 5px;
+                      border-radius: 50%;
+                      border: 1px solid $borderColor6;
+                      margin-left: 10px;
+                      cursor: pointer;                  
+                    }
+
                     .end-session-wrap{
                         display: flex;
                         .seperator{
