@@ -13,7 +13,6 @@
         'znk.infra-web-app.navigation',
         'znk.infra.user',
         'znk.infra.utility',
-        'znk.infra.storage',
         'znk.infra.config'
     ]);
 })(angular);

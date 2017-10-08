@@ -13,7 +13,6 @@
         'znk.infra-web-app.navigation',
         'znk.infra.user',
         'znk.infra.utility',
-        'znk.infra.storage',
         'znk.infra.config'
     ]);
 })(angular);
@@ -43,12 +42,12 @@
 
   angular.module('znk.infra-web-app.activePanel')
     .directive('activePanel',
-    ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", "NavigationService", "UserProfileService", "HangoutsService", "StorageSrv", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
+    ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", "NavigationService", "UserProfileService", "HangoutsService", "InfraConfigSrv", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
       PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
       $translate, LiveSessionSrv, LiveSessionStatusEnum,
       UserScreenSharingStateEnum, UserLiveSessionStateEnum,
       CallsEventsSrv, CallsStatusEnum, NavigationService,
-      UserProfileService, HangoutsService, StorageSrv) {
+      UserProfileService, HangoutsService, InfraConfigSrv) {
       'ngInject';
       return {
         templateUrl: 'components/activePanel/directives/activePanel.template.html',
@@ -179,14 +178,23 @@
           }
 
           function writeToStudentPath(studentId, hangoutsUri) {
-            const studentHangoutsPath = ENV.studentAppName + '/users/' + studentId + 'hangoutsSession';
-            return StorageSrv.set(studentHangoutsPath, hangoutsUri);
+            InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+              const studentHangoutsPath = getHangoutsSessionRoute(studentId);
+              return studentStorage.set(studentHangoutsPath, hangoutsUri);
+            });
           }
 
           function deleteStudentPath(studentId) {
-            const studentHangoutsPath = ENV.studentAppName + '/users/' + studentId + 'hangoutsSession';
-            return StorageSrv.update(studentHangoutsPath, null);
+            InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+              const studentHangoutsPath = getHangoutsSessionRoute(studentId);
+              return studentStorage.update(studentHangoutsPath, null);
+            });
+
           }
+          function getHangoutsSessionRoute(studentId) {
+            return '/users/' + studentId + 'hangoutsSession';
+          }
+
 
           function listenToLiveSessionStatus(newLiveSessionStatus) {
             if (prevLiveSessionStatus !== newLiveSessionStatus) {
