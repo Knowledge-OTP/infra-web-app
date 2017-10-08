@@ -224,8 +224,7 @@
               if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                 liveSessionData = newLiveSessionData;
               }
-              const hangoutUri = hangoutsUrl + scope.d.userProfile.teacherInfo.hangoutsUri;
-              return writeToStudentPath(liveSessionData.studentId, hangoutUri);
+              return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile.teacherInfo.hangoutsUri);
               // HangoutsService.sendInvitation(liveSessionData.studentId, liveSessionData.educatorId);
             });
           }
@@ -242,8 +241,8 @@
               const studentHangoutsPath = getHangoutsSessionRoute(studentId);
               return studentStorage.update(studentHangoutsPath, null);
             });
-
           }
+
           function getHangoutsSessionRoute(studentId) {
             return '/users/' + studentId + '/hangoutsSession';
           }
@@ -389,7 +388,7 @@
   'use strict';
 
   angular.module('znk.infra-web-app.activePanel').service('HangoutsService',
-    ["ENV", "UtilitySrv", "UserProfileService", "InfraConfigSrv", "StorageSrv", "PopUpSrv", function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv, PopUpSrv) {
+    ["ENV", "UtilitySrv", "UserProfileService", "InfraConfigSrv", "StorageSrv", "PopUpSrv", "NavigationService", function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv, PopUpSrv, NavigationService) {
       'ngInject';
 
       var self = this;
@@ -409,10 +408,15 @@
         });
       }
 
-      function openHangoutsPopup(hangoutsUri) {
-        console.log(PopUpSrv, hangoutsUri);
+      function openHangoutsPopup(hangoutsUri, studentId) {
+        var confirmationPopup = PopUpSrv.warning('invitation', 'hello', 'yes', 'no');
+        confirmationPopup.promise.then(function (res) {
+          console.log(res, NavigationService);
+          InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+            studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
+          });
+        });
       }
-
     }]);
 })(angular);
 

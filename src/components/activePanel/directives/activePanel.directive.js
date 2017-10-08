@@ -133,8 +133,7 @@
               if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                 liveSessionData = newLiveSessionData;
               }
-              const hangoutUri = hangoutsUrl + scope.d.userProfile.teacherInfo.hangoutsUri;
-              return writeToStudentPath(liveSessionData.studentId, hangoutUri);
+              return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile.teacherInfo.hangoutsUri);
               // HangoutsService.sendInvitation(liveSessionData.studentId, liveSessionData.educatorId);
             });
           }
@@ -151,8 +150,8 @@
               const studentHangoutsPath = getHangoutsSessionRoute(studentId);
               return studentStorage.update(studentHangoutsPath, null);
             });
-
           }
+
           function getHangoutsSessionRoute(studentId) {
             return '/users/' + studentId + '/hangoutsSession';
           }

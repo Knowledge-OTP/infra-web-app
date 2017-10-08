@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('znk.infra-web-app.activePanel').service('HangoutsService',
-    function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv, PopUpSrv) {
+    function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv, PopUpSrv, NavigationService) {
       'ngInject';
 
       var self = this;
@@ -22,9 +22,14 @@
         });
       }
 
-      function openHangoutsPopup(hangoutsUri) {
-        console.log(PopUpSrv, hangoutsUri);
+      function openHangoutsPopup(hangoutsUri, studentId) {
+        var confirmationPopup = PopUpSrv.warning('invitation', 'hello', 'yes', 'no');
+        confirmationPopup.promise.then(function (res) {
+          console.log(res, NavigationService);
+          InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+            studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
+          });
+        });
       }
-
     });
 })(angular);
