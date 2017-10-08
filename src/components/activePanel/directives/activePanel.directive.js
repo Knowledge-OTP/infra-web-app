@@ -133,15 +133,18 @@
               if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                 liveSessionData = newLiveSessionData;
               }
-              return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile.teacherInfo.hangoutsUri);
-              // HangoutsService.sendInvitation(liveSessionData.studentId, liveSessionData.educatorId);
+              return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile);
             });
           }
 
-          function writeToStudentPath(studentId, hangoutsUri) {
+          function writeToStudentPath(studentId, educatorProfile) {
             InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
               const studentHangoutsPath = getHangoutsSessionRoute(studentId);
-              return studentStorage.set(studentHangoutsPath, hangoutsUri);
+              const dataToSave = {
+                email: educatorProfile.authEmail || educatorProfile.email,
+                hangoutsUri: educatorProfile.teacherInfo.hangoutsUri
+              };
+              return studentStorage.set(studentHangoutsPath, dataToSave);
             });
           }
 

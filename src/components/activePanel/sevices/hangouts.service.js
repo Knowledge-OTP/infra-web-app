@@ -17,9 +17,9 @@
             InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
               var appName = ENV.firebaseAppScopeName;
               var userLiveSessionPath = appName + '/users/' + currUid + '/hangoutsSession';
-              globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionUri) {
-                if (hangoutsSessionUri) {
-                  openHangoutsPopup(hangoutsSessionUri, currUid); // TODO: change to open popup for student
+              globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionData) {
+                if (hangoutsSessionData) {
+                  openHangoutsPopup(hangoutsSessionData, currUid); // TODO: change to open popup for student
                 }
               });
             });
@@ -27,17 +27,14 @@
         }
       }
 
-      function openHangoutsPopup(hangoutsUri, studentId) {
-        var navFunc = function () {
-          NavigationService.navigateToUrl(hangoutsUrl, hangoutsUri);
+      function openHangoutsPopup(hangoutsSessionData, studentId) {
+        var joinHangoutsSession = function () {
+          NavigationService.navigateToUrl(hangoutsUrl, hangoutsSessionData.hangoutsUri);
         };
-        PopUpSrv.warning('invitation', 'hello', 'yes', 'no', navFunc);
+        PopUpSrv.warning('invitation', 'hello', 'yes', 'no', joinHangoutsSession);
         InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
           studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
         });
-        // confirmationPopup.promise.then(function (res) {
-        //   console.log(res, NavigationService);
-        // });
       }
     });
 })(angular);

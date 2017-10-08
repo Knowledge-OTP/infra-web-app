@@ -224,15 +224,18 @@
               if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                 liveSessionData = newLiveSessionData;
               }
-              return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile.teacherInfo.hangoutsUri);
-              // HangoutsService.sendInvitation(liveSessionData.studentId, liveSessionData.educatorId);
+              return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile);
             });
           }
 
-          function writeToStudentPath(studentId, hangoutsUri) {
+          function writeToStudentPath(studentId, educatorProfile) {
             InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
               const studentHangoutsPath = getHangoutsSessionRoute(studentId);
-              return studentStorage.set(studentHangoutsPath, hangoutsUri);
+              const dataToSave = {
+                email: educatorProfile.authEmail || educatorProfile.email,
+                hangoutsUri: educatorProfile.teacherInfo.hangoutsUri
+              };
+              return studentStorage.set(studentHangoutsPath, dataToSave);
             });
           }
 
@@ -403,9 +406,9 @@
             InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
               var appName = ENV.firebaseAppScopeName;
               var userLiveSessionPath = appName + '/users/' + currUid + '/hangoutsSession';
-              globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionUri) {
-                if (hangoutsSessionUri) {
-                  openHangoutsPopup(hangoutsSessionUri, currUid); // TODO: change to open popup for student
+              globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionData) {
+                if (hangoutsSessionData) {
+                  openHangoutsPopup(hangoutsSessionData, currUid); // TODO: change to open popup for student
                 }
               });
             });
@@ -413,17 +416,14 @@
         }
       }
 
-      function openHangoutsPopup(hangoutsUri, studentId) {
-        var navFunc = function () {
-          NavigationService.navigateToUrl(hangoutsUrl, hangoutsUri);
+      function openHangoutsPopup(hangoutsSessionData, studentId) {
+        var joinHangoutsSession = function () {
+          NavigationService.navigateToUrl(hangoutsUrl, hangoutsSessionData.hangoutsUri);
         };
-        PopUpSrv.warning('invitation', 'hello', 'yes', 'no', navFunc);
+        PopUpSrv.warning('invitation', 'hello', 'yes', 'no', joinHangoutsSession);
         InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
           studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
         });
-        // confirmationPopup.promise.then(function (res) {
-        //   console.log(res, NavigationService);
-        // });
       }
     }]);
 })(angular);
