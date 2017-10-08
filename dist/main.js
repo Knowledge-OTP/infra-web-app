@@ -393,10 +393,12 @@
 
       var self = this;
       self.listenToHangoutsInvitation = listenToHangoutsInvitation;
+
+      const hangoutsUrl = 'https://hangouts.google.com/call/';
       const isStudent = ENV.appContext.toLowerCase() === 'student';
 
       function listenToHangoutsInvitation() {
-        if (isStudent){
+        if (isStudent) {
           UserProfileService.getCurrUserId().then(function (currUid) {
             InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
               var appName = ENV.firebaseAppScopeName;
@@ -412,13 +414,16 @@
       }
 
       function openHangoutsPopup(hangoutsUri, studentId) {
-        var confirmationPopup = PopUpSrv.warning('invitation', 'hello', 'yes', 'no');
-        confirmationPopup.promise.then(function (res) {
-          console.log(res, NavigationService);
-          InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-            studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
-          });
+        var navFunc = function () {
+          NavigationService.navigateToUrl(hangoutsUrl, hangoutsUri);
+        };
+        PopUpSrv.warning('invitation', 'hello', 'yes', 'no', navFunc);
+        InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+          studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
         });
+        // confirmationPopup.promise.then(function (res) {
+        //   console.log(res, NavigationService);
+        // });
       }
     }]);
 })(angular);
