@@ -341,19 +341,22 @@
 
       var self = this;
       self.listenToHangoutsInvitation = listenToHangoutsInvitation;
+      const isStudent = ENV.appContext.toLowerCase() === 'student';
 
       function listenToHangoutsInvitation() {
-        UserProfileService.getCurrUserId().then(function (currUid) {
-          InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-            var appName = ENV.firebaseAppScopeName;
-            var userLiveSessionPath = appName + '/users/' + currUid + '/hangoutsSession';
-            globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionUri) {
-              if (hangoutsSessionUri) {
-                openHangoutsPopup(hangoutsSessionUri); // TODO: change to open popup for student
-              }
+        if (isStudent){
+          UserProfileService.getCurrUserId().then(function (currUid) {
+            InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+              var appName = ENV.firebaseAppScopeName;
+              var userLiveSessionPath = appName + '/users/' + currUid + '/hangoutsSession';
+              globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionUri) {
+                if (hangoutsSessionUri) {
+                  openHangoutsPopup(hangoutsSessionUri, currUid); // TODO: change to open popup for student
+                }
+              });
             });
           });
-        });
+        }
       }
 
       function openHangoutsPopup(hangoutsUri, studentId) {
