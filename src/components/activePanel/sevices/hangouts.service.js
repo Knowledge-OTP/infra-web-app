@@ -31,7 +31,7 @@
         var joinHangoutsSession = function () {
           NavigationService.navigateToUrl(hangoutsUrl, hangoutsSessionData.hangoutsUri);
         };
-        PopUpSrv.warning('invitation', 'hello', 'yes', 'no', joinHangoutsSession);
+        PopUpSrv.warning('You have been invited to hangouts by' + ' ' + hangoutsSessionData.email, 'Would you like to accept?', 'Yes', 'No', joinHangoutsSession);
         InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
           studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
         });
