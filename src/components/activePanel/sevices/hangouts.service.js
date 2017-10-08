@@ -2,21 +2,11 @@
   'use strict';
 
   angular.module('znk.infra-web-app.activePanel').service('HangoutsService',
-    function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv) {
+    function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv, PopUpSrv) {
       'ngInject';
 
       var self = this;
-
-      // const firebaseStudentUsersPath = ENV.firebaseAppScopeName + 'users';
-      // const firebaseEducatorUsersPath = ENV.firebaseDashboardAppScopeName + 'users';
-
-      // self.sentInvitation = sentInvitation;
       self.listenToHangoutsInvitation = listenToHangoutsInvitation;
-
-      // function sentInvitation(studentId, educatorId) {
-      //   // const hangoutsSessionGuid = UtilitySrv.general.createGuid();
-      //   const studentPath = firebaseStudentPath + ''
-      // }
 
       function listenToHangoutsInvitation() {
         UserProfileService.getCurrUserId().then(function (currUid) {
@@ -33,7 +23,7 @@
       }
 
       function openHangoutsPopup(hangoutsUri) {
-        console.log(hangoutsUri);
+        console.log(PopUpSrv, hangoutsUri);
       }
 
     });

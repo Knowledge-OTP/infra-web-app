@@ -13,6 +13,7 @@
         'znk.infra-web-app.navigation',
         'znk.infra.user',
         'znk.infra.utility',
-        'znk.infra.config'
+        'znk.infra.config',
+        'znk.infra.popUp'
     ]);
 })(angular);

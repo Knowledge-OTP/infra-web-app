@@ -13,7 +13,8 @@
         'znk.infra-web-app.navigation',
         'znk.infra.user',
         'znk.infra.utility',
-        'znk.infra.config'
+        'znk.infra.config',
+        'znk.infra.popUp'
     ]);
 })(angular);
 
@@ -294,15 +295,14 @@
     }]);
 })(angular);
 
-(function(){
+(function () {
   'use strict';
 
   angular.module('znk.infra-web-app.activePanel').run(
-      ["HangoutsService", function(HangoutsService){
-          'ngInject';
-          console.log('listen to hangouts invitation');
-          HangoutsService.listenToHangoutsInvitation();
-      }]
+    ["HangoutsService", function (HangoutsService) {
+      'ngInject';
+      HangoutsService.listenToHangoutsInvitation();
+    }]
   );
 })();
 
@@ -337,21 +337,11 @@
   'use strict';
 
   angular.module('znk.infra-web-app.activePanel').service('HangoutsService',
-    ["ENV", "UtilitySrv", "UserProfileService", "InfraConfigSrv", "StorageSrv", function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv) {
+    ["ENV", "UtilitySrv", "UserProfileService", "InfraConfigSrv", "StorageSrv", "PopUpSrv", function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv, PopUpSrv) {
       'ngInject';
 
       var self = this;
-
-      // const firebaseStudentUsersPath = ENV.firebaseAppScopeName + 'users';
-      // const firebaseEducatorUsersPath = ENV.firebaseDashboardAppScopeName + 'users';
-
-      // self.sentInvitation = sentInvitation;
       self.listenToHangoutsInvitation = listenToHangoutsInvitation;
-
-      // function sentInvitation(studentId, educatorId) {
-      //   // const hangoutsSessionGuid = UtilitySrv.general.createGuid();
-      //   const studentPath = firebaseStudentPath + ''
-      // }
 
       function listenToHangoutsInvitation() {
         UserProfileService.getCurrUserId().then(function (currUid) {
@@ -368,7 +358,7 @@
       }
 
       function openHangoutsPopup(hangoutsUri) {
-        console.log(hangoutsUri);
+        console.log(PopUpSrv, hangoutsUri);
       }
 
     }]);
