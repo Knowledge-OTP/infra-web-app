@@ -154,7 +154,7 @@
 
           }
           function getHangoutsSessionRoute(studentId) {
-            return '/users/' + studentId + 'hangoutsSession';
+            return '/users/' + studentId + '/hangoutsSession';
           }
 
 
