@@ -67,7 +67,6 @@
             prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
             bodyDomElem = angular.element($window.document.body),
             translateNamespace = 'ACTIVE_PANEL';
-          const hangoutsUrl = 'https://hangouts.google.com/call/';
 
           $translate([
             translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
@@ -167,7 +166,7 @@
           }
 
           function openHangouts() {
-            NavigationService.navigateToUrl(hangoutsUrl, scope.d.userProfile.teacherInfo.hangoutsUri);
+            NavigationService.navigateToUrl(scope.d.userProfile.teacherInfo.hangoutsUri);
             LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
               if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                 liveSessionData = newLiveSessionData;
@@ -345,7 +344,6 @@
       var self = this;
       self.listenToHangoutsInvitation = listenToHangoutsInvitation;
 
-      const hangoutsUrl = 'https://hangouts.google.com/call/';
       const isStudent = ENV.appContext.toLowerCase() === 'student';
 
       function listenToHangoutsInvitation() {
@@ -366,7 +364,7 @@
 
       function openHangoutsPopup(hangoutsSessionData, studentId) {
         var joinHangoutsSession = function () {
-          NavigationService.navigateToUrl(hangoutsUrl, hangoutsSessionData.hangoutsUri);
+          NavigationService.navigateToUrl(hangoutsSessionData.hangoutsUri);
         };
         PopUpSrv.warning('You have been invited to hangouts by' + ' ' + hangoutsSessionData.email, 'Would you like to accept?', 'Yes', 'No', joinHangoutsSession);
         InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
@@ -442,7 +440,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "\n" +
     "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
     "\n" +
-    "            <svg-icon ng-click=\"d.openHangouts()\" ng-if=\"d.userProfile.teacherInfo.hangoutsUri\" name=\"hangouts-icon\">\n" +
+    "            <svg-icon ng-click=\"d.openHangouts()\" ng-class=\"{'available':d.userProfile.teacherInfo.hangoutsUri}\" name=\"hangouts-icon\">\n" +
     "\n" +
     "            </svg-icon>\n" +
     "\n" +

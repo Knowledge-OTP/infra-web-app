@@ -28,7 +28,6 @@
             prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
             bodyDomElem = angular.element($window.document.body),
             translateNamespace = 'ACTIVE_PANEL';
-          const hangoutsUrl = 'https://hangouts.google.com/call/';
 
           $translate([
             translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
@@ -128,7 +127,7 @@
           }
 
           function openHangouts() {
-            NavigationService.navigateToUrl(hangoutsUrl, scope.d.userProfile.teacherInfo.hangoutsUri);
+            NavigationService.navigateToUrl(scope.d.userProfile.teacherInfo.hangoutsUri);
             LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
               if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                 liveSessionData = newLiveSessionData;

@@ -172,7 +172,9 @@ active-panel {
                       border: 1px solid $borderColor6;
                       margin-left: 10px;
                       cursor: pointer;        
-                      background-color: $bgColor3;          
+                      &.available{
+                        background-color: $bgColor3;          
+                      }
                     }
 
                     .end-session-wrap{

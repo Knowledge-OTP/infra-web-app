@@ -8,7 +8,6 @@
       var self = this;
       self.listenToHangoutsInvitation = listenToHangoutsInvitation;
 
-      const hangoutsUrl = 'https://hangouts.google.com/call/';
       const isStudent = ENV.appContext.toLowerCase() === 'student';
 
       function listenToHangoutsInvitation() {
@@ -29,7 +28,7 @@
 
       function openHangoutsPopup(hangoutsSessionData, studentId) {
         var joinHangoutsSession = function () {
-          NavigationService.navigateToUrl(hangoutsUrl, hangoutsSessionData.hangoutsUri);
+          NavigationService.navigateToUrl(hangoutsSessionData.hangoutsUri);
         };
         PopUpSrv.warning('You have been invited to hangouts by' + ' ' + hangoutsSessionData.email, 'Would you like to accept?', 'Yes', 'No', joinHangoutsSession);
         InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
