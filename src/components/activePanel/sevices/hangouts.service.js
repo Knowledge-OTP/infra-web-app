@@ -30,7 +30,7 @@
         var joinHangoutsSession = function () {
           NavigationService.navigateToUrl(hangoutsSessionData.hangoutsUri);
         };
-        PopUpSrv.warning('You have been invited to hangouts by' + ' ' + hangoutsSessionData.email, 'Would you like to accept?', 'Yes', 'No', joinHangoutsSession);
+        PopUpSrv.warning('Hangouts Invitation Received', 'Please click Connect below to join your teacher\'s hangout session?', 'Connect', 'Cancel', joinHangoutsSession);
         InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
           studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
         });
