@@ -490,12 +490,15 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                </svg-icon>\n" +
     "            </ng-switch>\n" +
     "\n" +
-    "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
-    "\n" +
-    "            <svg-icon ng-click=\"d.openHangouts()\" ng-class=\"{'available':d.userProfile.teacherInfo.hangoutsUri}\" name=\"hangouts-icon\">\n" +
-    "\n" +
+    "            <svg-icon \n" +
+    "                ng-click=\"d.openHangouts()\" \n" +
+    "                ng-if=\"d.isTeacher\" \n" +
+    "                ng-class=\"{'available':d.userProfile.teacherInfo.hangoutsUri}\" \n" +
+    "                name=\"hangouts-icon\">\n" +
     "            </svg-icon>\n" +
     "\n" +
+    "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
+    "          \n" +
     "            <div class=\"end-session-wrap\" ng-if=\"d.isTeacher\">\n" +
     "                <div class=\"seperator\"></div>\n" +
     "                <md-button class=\"end-session-btn\"\n" +
