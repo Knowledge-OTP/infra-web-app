@@ -27,16 +27,13 @@
       }
 
       function openHangoutsPopup(hangoutsSessionData, studentId) {
-        var joinHangoutsSession = function () {
-          NavigationService.navigateToUrl(hangoutsSessionData.hangoutsUri);
-        };
         var popupProm = PopUpSrv.warning('Hangouts Invitation Received', 
           'Please click Connect below to join your teacher\'s hangout session?', 
           'Cancel', 
           'Connect');
         popupProm.promise.then(
           null,
-          function(res){
+          function(){
             NavigationService.navigateToUrl(hangoutsSessionData.hangoutsUri);
         });
         InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
