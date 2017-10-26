@@ -30,7 +30,15 @@
         var joinHangoutsSession = function () {
           NavigationService.navigateToUrl(hangoutsSessionData.hangoutsUri);
         };
-        PopUpSrv.warning('Hangouts Invitation Received', 'Please click Connect below to join your teacher\'s hangout session?', 'Connect', 'Cancel', joinHangoutsSession);
+        var popupProm = PopUpSrv.warning('Hangouts Invitation Received', 
+          'Please click Connect below to join your teacher\'s hangout session?', 
+          'Cancel', 
+          'Connect');
+        popupProm.promise.then(
+          null,
+          function(res){
+            NavigationService.navigateToUrl(hangoutsSessionData.hangoutsUri);
+        });
         InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
           studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
         });
