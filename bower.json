@@ -5,7 +5,7 @@
     "Zinkerz"
   ],
   "dependencies": {
-    "infra": "https://4f465f366cf88b5bf2f8e33eaff8e219bfe538da:x-oauth-basic@github.com/Knowledge-OTP/infra.git#allen/drawing-colors",
+    "infra": "https://4f465f366cf88b5bf2f8e33eaff8e219bfe538da:x-oauth-basic@github.com/Knowledge-OTP/infra.git#v6.0.94",
     "ng-tags-input": "3.0.0",
     "angular-chart.js": "0.10.2",
     "v-accordion": "1.4.1",
