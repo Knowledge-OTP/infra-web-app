@@ -25,15 +25,16 @@
                     UserProfileService.getCurrUserId().then(function (currUid) {
                         switch (liveSessionData.status) {
                             case LiveSessionStatusEnum.PENDING_STUDENT.enum:
-                                if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                if (liveSessionData.studentId === currUid) {
+                                    LiveSessionUiSrv.showStudentLiveSessionPopUp(liveSessionData.guid)
+                                        .then(function () {
+                                            LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                        }, function () {
+                                            LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                                        });
                                 }
                                 break;
                             case LiveSessionStatusEnum.CONFIRMED.enum:
-                                if (liveSessionData.studentId === currUid) {
-                                    LiveSessionUiSrv.showLiveSessionToast();
-                                }
-
                                 var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
 
                                 if (liveSessionData.studentId === currUid) {
@@ -82,7 +83,7 @@
                         globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
                             if (userLiveSessionGuids) {
                                 angular.forEach(userLiveSessionGuids, function (isActive, guid) {
-                                    if(isActive){
+                                    if (isActive) {
                                         _listenToLiveSessionData(guid);
                                     }
                                 });
