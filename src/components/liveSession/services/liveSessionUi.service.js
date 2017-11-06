@@ -83,6 +83,18 @@
                 _endLiveSession();
             }
 
+            function showLessonNotesPopup(liveSessionGuid) {
+
+
+                liveSessionDataProm.then(liveSessionData => {
+                    $mdDialog.show({
+                        template: '<lesson-notes-popup liveSessionData="liveSessionData"></lesson-notes-popup>',
+                        clickOutsideToClose: true,
+                        escapeToClose: true
+                    });
+                });
+            }
+
             function showStudentLiveSessionPopUp(){
                 var translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
@@ -136,10 +148,15 @@
                 translationsPromMap.title = $translate('LIVE_SESSION.END_POPUP_TITLE');
                 translationsPromMap.content= $translate('LIVE_SESSION.END_POPUP_CONTENT');
                 return $q.all(translationsPromMap).then(function(translations){
-                    PopUpSrv.info(
+                    const popUpInstance = PopUpSrv.info(
                         translations.title,
                         translations.content
                     );
+                    return popUpInstance.promise.then(function(res){
+                        return $q.reject(res);
+                    },function(res){
+                        return $q.resolve(res);
+                    });
                 },function(err){
                     $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
                     return $q.reject(err);
@@ -177,6 +194,8 @@
             LiveSessionUiSrv.activateLiveSession = activateLiveSession;
 
             LiveSessionUiSrv.endLiveSession = endLiveSession;
+
+            LiveSessionUiSrv.showLessonNotesPopup = showLessonNotesPopup;
 
             LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
 

@@ -85,6 +85,16 @@
                 });
             };
 
+            this.updateLiveSession = function (liveSessionToUpdate) {
+                return _getStorage().then(function (data) {
+                    const dataToSave = {
+                        [data.liveSessionData.$$path]: liveSessionToUpdate
+                    };
+
+                    return data.storage.update(dataToSave);
+                });
+            };
+
             this._moveToArchive = function (liveSessionData) {
                 var getDataPromMap = {};
                 getDataPromMap.currUid = UserProfileService.getCurrUserId();

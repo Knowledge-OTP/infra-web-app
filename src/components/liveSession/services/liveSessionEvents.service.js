@@ -26,7 +26,7 @@
                         switch (liveSessionData.status) {
                             case LiveSessionStatusEnum.PENDING_STUDENT.enum:
                                 if (liveSessionData.studentId === currUid) {
-                                    LiveSessionUiSrv.showStudentLiveSessionPopUp(liveSessionData.guid)
+                                    LiveSessionUiSrv.showStudentLiveSessionPopUp()
                                         .then(function () {
                                             LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                                         }, function () {
@@ -57,7 +57,10 @@
                                     LiveSessionSrv._destroyCheckDurationInterval();
                                 }
 
-                                LiveSessionUiSrv.showEndSessionPopup();
+                                LiveSessionUiSrv.showEndSessionPopup()
+                                    .then(function () {
+                                        LiveSessionSrv.showLessonNotesPopup(liveSessionData.guid);
+                                    });
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                                 // Security check to insure there isn't active session
                                 LiveSessionSrv._moveToArchive(liveSessionData);

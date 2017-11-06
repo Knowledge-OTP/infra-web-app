@@ -4,9 +4,8 @@
         '../../../src/scss/imports/spinner';
 
 @import './scss/md-dialog';
-@import './components/liveSessionFrame/liveSessionFrame';
-@import './components/liveSessionBtn/liveSessionBtn';
-@import './components/liveSessionSubjectModal/liveSessionSubjectModal';
+@import '../znkLessonNotes/lessonNotesPopup/lessonNotesPopup.component';
+@import '../znkLessonNotes/lessonNotesPopup/lessonInfo/lesson-info.component';
 
 md-dialog {
     border-radius: 15px;
