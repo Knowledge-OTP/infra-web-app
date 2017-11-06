@@ -6,6 +6,8 @@
 @import './scss/md-dialog';
 @import '../znkLessonNotes/lessonNotesPopup/lessonNotesPopup.component';
 @import '../znkLessonNotes/lessonNotesPopup/lessonInfo/lesson-info.component';
+@import '../znkLessonNotes/lessonNotesPopup/lessonRating/lessonRating.component';
+@import '../znkLessonNotes/lessonNotesPopup/lessonSummaryNote/lessonSummaryNote.component';
 
 md-dialog {
     border-radius: 15px;

@@ -548,39 +548,7 @@
         "EXTEND": "EXTEND",
         "CANCEL": "CANCEL",
         "INCOMPLETE_DIAGNOSTIC_TITLE": "Can't Start Session",
-        "INCOMPLETE_DIAGNOSTIC_CONTENT": "{{studentName}} did not complete the diagnostic test yet.<br/>Please make sure the diagnostic test is completed before starting a session.",
-        "LESSON_NOTES_POPUP": {
-            "TITLE": "Lesson Notes",
-            "SAVE": "Save",
-            "TEST": "Test",
-            "TOPIC": "Topic",
-            "EDUCATOR": "Educator",
-            "STUDENT": "student",
-            "DATE": "Date",
-            "START_TIME": "Start Time",
-            "DURATION": " Duration",
-            "STATUS": "Status",
-            "HOUR": "hour",
-            "HOURS": "hours",
-            "MINUTES": "minutes",
-            "RATING": {
-                "TITLE": "Student Lesson Rating",
-                "TITLE1": "Sucks big time - 1 star",
-                "TITLE2": "Kinda bad - 2 stars",
-                "TITLE3": "Meh - 3 stars",
-                "TITLE4": "Pretty good - 4 stars",
-                "TITLE5": "Awesome - 5 stars"
-            },
-            "SUMMARY_NOTES": {
-                "TITLE": "Lesson Summary Note",
-                "SEND_NOTES": "Send Lesson Notes",
-                "STUDENT_MAIL": "student@mail.com",
-                "ALL_STUDENTS_MAIL": "all-students@mail.com",
-                "PARENT_MAIL": "parent@mail.com",
-                "ALL_PARENTS_MAIL": "all-parents@mail.com",
-                "SEND": "Send",
-                "SENT_ON": "Summary report was sent on"
-            }
+        "INCOMPLETE_DIAGNOSTIC_CONTENT": "{{studentName}} did not complete the diagnostic test yet.<br/>Please make sure the diagnostic test is completed before starting a session."
     },
     "ADMIN": {
         "EDUCATOR_STUDENT_LINK": "Educator-Student Link",
@@ -624,5 +592,40 @@
         "CONTINUE_TO_PLAN": "Continue to plan",
         "ACCEPT": "Continue",
         "REJECT": "Cancel"
+    },
+    "LESSON_NOTES": {
+        "LESSON_NOTES_POPUP": {
+            "TITLE": "Lesson Notes",
+            "SAVE": "Save",
+            "TEST": "Test",
+            "TOPIC": "Topic",
+            "EDUCATOR": "Educator",
+            "STUDENT": "student",
+            "DATE": "Date",
+            "START_TIME": "Start Time",
+            "DURATION": " Duration",
+            "STATUS": "Status",
+            "HOUR": "hour",
+            "HOURS": "hours",
+            "MINUTES": "minutes",
+            "RATING": {
+                "TITLE": "Student Lesson Rating",
+                "TITLE1": "Sucks big time - 1 star",
+                "TITLE2": "Kinda bad - 2 stars",
+                "TITLE3": "Meh - 3 stars",
+                "TITLE4": "Pretty good - 4 stars",
+                "TITLE5": "Awesome - 5 stars"
+            },
+            "SUMMARY_NOTES": {
+                "TITLE": "Lesson Summary Note",
+                "SEND_NOTES": "Send Lesson Notes",
+                "STUDENT_MAIL": "student@mail.com",
+                "ALL_STUDENTS_MAIL": "all-students@mail.com",
+                "PARENT_MAIL": "parent@mail.com",
+                "ALL_PARENTS_MAIL": "all-parents@mail.com",
+                "SEND": "Send",
+                "SENT_ON": "Summary report was sent on"
+            }
+        }
     }
 }

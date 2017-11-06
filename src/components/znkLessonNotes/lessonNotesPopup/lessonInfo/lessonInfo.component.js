@@ -12,11 +12,11 @@
                 'ngInject';
 
                 const vm = this;
+                vm.nameSpace = 'LIVE_SESSION.LESSON_NOTES_POPUP';
+                vm.fields = [];
 
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
-                    vm.nameSpace = 'LIVE_SESSION.LESSON_NOTES_POPUP';
-                    vm.fields = [];
                     vm.dataPromMap.translate = getTranslations();
                     vm.lessonStatusArr = znkLessonNotesSrv.enumToArray(LessonStatusEnum, true);
                     initLessonInfo();

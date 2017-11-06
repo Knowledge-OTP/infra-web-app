@@ -1,0 +1,49 @@
+
+.lesson-summary-notes {
+  margin: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $hintOfRed;
+
+  .znk-uppercase {
+    margin: 20px;
+  }
+
+  .note-txt {
+    width: 90%;
+    height: 280px;
+    resize: none;
+    overflow: auto;
+  }
+  .email-section {
+    width: 90%;
+    margin-top: 20px;
+    .checkbox-group {
+      margin: 20px 0;
+      display: flex;
+      .input-wrap {
+        display: flex;
+        align-items: center;
+        margin-right: 40px;
+        label {
+          text-transform: lowercase;
+          margin-left: 5px;
+        }
+      }
+    }
+    .button-wrapper {
+      display: flex;
+      align-items: center;
+      .text-muted {
+        font-family: lato;
+        margin-left: 20px;
+        opacity: 0.7;
+        font-style: italic;
+        font-size: 14px;
+      }
+      margin-bottom: 20px;
+    }
+
+  }
+}

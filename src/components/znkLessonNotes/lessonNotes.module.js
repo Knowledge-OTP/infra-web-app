@@ -25,9 +25,7 @@
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 const svgMap = {
-                    'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
-                    'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
-                    'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
+                    'znkLessonNotes-star': 'components/znkLessonNotes/svg/star.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }

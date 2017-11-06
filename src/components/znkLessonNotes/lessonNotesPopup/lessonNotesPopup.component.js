@@ -13,8 +13,10 @@
                 'ngInject';
 
                 const vm = this;
+                vm.save = save;
 
                 this.$onInit = function () {
+                    $log.debug('lessonNotesPopup: Init');
                     znkLessonNotesSrv.getLessonById(vm.lessonId).then(lesson => {
                         vm.lesson = lesson;
                     });

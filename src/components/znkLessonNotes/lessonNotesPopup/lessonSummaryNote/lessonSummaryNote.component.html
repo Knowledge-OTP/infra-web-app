@@ -1,0 +1,41 @@
+<div class="lesson-summary-notes">
+    <div class="lato-18-n znk-uppercase" translate="LESSON_NOTES.LESSON_NOTES_POPUP.SUMMARY_NOTES.TITLE"></div>
+
+    <textarea class="lato-14-n note-txt" ng-modal="vm.lesson.lessonNotes.educatorNotes"></textarea>
+
+    <div class="email-section">
+        <div class="lato-16-n">
+            {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.SEND_NOTES' | translate}} ({{vm.mailsToSend.length}})
+        </div>
+        <div class="checkbox-group" ng-if="vm.studentsProfiles.length">
+            <div class="input-wrap">
+                <input #studensMail id="studensMail" type="checkbox"
+                       ng-change="vm.emailSelected(vm.userTypeContextEnum.student, studensMail.checked)">
+                <label for="studensMail" ng-switch="studentsProfiles.length < 2" ng-switch-when="true">
+                    {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.STUDENT_MAIL' | translate}}</label>
+
+                <label for="studensMail" ng-switch-when="false">
+                    {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.ALL_STUDENTS_MAIL' | translate}}</label>
+            </div>
+            <div class="input-wrap">
+                <input #parentsMail id="parentsMail" type="checkbox"
+                       ng-change="vm.emailSelected(vm.userTypeContextEnum.parent, studensMail.checked)">
+                <label for="parentsMail" ng-switch="studentsProfiles.length < 2" ng-switch-when="true">
+                    {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.PARENT_MAIL' | translate}}</label>
+                <label for="parentsMail" ng-switch-when="false">{{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.ALL_PARENTS_MAIL'
+                    |
+                    translate}}</label>
+            </div>
+        </div>
+        <div class="button-wrapper">
+            <button type="button" class="btn-type-2" ng-click="vm.sendEmail()">
+                {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.SEND' | translate}}
+            </button>
+            <div class="text-muted" ng-if="vm.sentDate">
+                {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.SENT_ON' | translate}} {{vm.sentDate | date:'MMM d,'}}
+                {{sentDate | date:'jm'}}
+            </div>
+        </div>
+    </div>
+
+</div>
