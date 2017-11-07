@@ -9,7 +9,7 @@
             },
             templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonNotesPopup.template.html',
             controllerAs: 'vm',
-            controller: function ($log, $mdDialog, LiveSessionSrv, znkLessonNotesSrv) {
+            controller: function ($log, $mdDialog, LiveSessionSrv, ZnkLessonNotesSrv) {
                 'ngInject';
 
                 const vm = this;
@@ -17,7 +17,7 @@
 
                 this.$onInit = function () {
                     $log.debug('lessonNotesPopup: Init');
-                    znkLessonNotesSrv.getLessonById(vm.lessonId).then(lesson => {
+                    ZnkLessonNotesSrv.getLessonById(vm.lessonId).then(lesson => {
                         vm.lesson = lesson;
                     });
                     vm.closeModal = $mdDialog.cancel;

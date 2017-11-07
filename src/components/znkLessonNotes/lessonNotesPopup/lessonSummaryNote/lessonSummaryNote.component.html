@@ -9,8 +9,8 @@
         </div>
         <div class="checkbox-group" ng-if="vm.studentsProfiles.length">
             <div class="input-wrap">
-                <input #studensMail id="studensMail" type="checkbox"
-                       ng-change="vm.emailSelected(vm.userTypeContextEnum.student, studensMail.checked)">
+                <input id="studensMail" type="checkbox"
+                       ng-change="vm.emailSelected(vm.userTypeContextEnum.student, $event.currentTarget.checked)">
                 <label for="studensMail" ng-switch="studentsProfiles.length < 2" ng-switch-when="true">
                     {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.STUDENT_MAIL' | translate}}</label>
 
@@ -18,8 +18,8 @@
                     {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.ALL_STUDENTS_MAIL' | translate}}</label>
             </div>
             <div class="input-wrap">
-                <input #parentsMail id="parentsMail" type="checkbox"
-                       ng-change="vm.emailSelected(vm.userTypeContextEnum.parent, studensMail.checked)">
+                <input id="parentsMail" type="checkbox"
+                       ng-change="vm.emailSelected(vm.userTypeContextEnum.parent, $event.currentTarget.checked)">
                 <label for="parentsMail" ng-switch="studentsProfiles.length < 2" ng-switch-when="true">
                     {{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.PARENT_MAIL' | translate}}</label>
                 <label for="parentsMail" ng-switch-when="false">{{'LESSON.LESSON_NOTES_POPUP.SUMMARY_NOTES.ALL_PARENTS_MAIL'

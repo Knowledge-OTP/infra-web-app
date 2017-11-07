@@ -8,7 +8,7 @@
             },
             templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonInfo/lessonInfo.component.html',
             controllerAs: 'vm',
-            controller: function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, znkLessonNotesSrv) {
+            controller: function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
                 const vm = this;
@@ -18,7 +18,7 @@
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
                     vm.dataPromMap.translate = getTranslations();
-                    vm.lessonStatusArr = znkLessonNotesSrv.enumToArray(LessonStatusEnum, true);
+                    vm.lessonStatusArr = ZnkLessonNotesSrv.enumToArray(LessonStatusEnum, true);
                     initLessonInfo();
                 };
 
@@ -36,7 +36,7 @@
                 }
 
                 function initLessonInfo() {
-                    vm.dataPromMap.serviceList = znkLessonNotesSrv.getServiceList();
+                    vm.dataPromMap.serviceList = ZnkLessonNotesSrv.getServiceList();
                     $q.all(vm.dataPromMap).then((dataMap) => {
                         vm.translate = dataMap.translate;
                         vm.serviceList = dataMap.serviceList;
@@ -78,7 +78,7 @@
                                 field.text = transformDate(vm.lesson.endTime - vm.lesson.startTime, 'DURATION');
                                 break;
                             case `${vm.nameSpace}.STATUS`:
-                                field.text = znkLessonNotesSrv.capitalizeFirstLetter(LessonStatusEnum[vm.lesson.status]);
+                                field.text = ZnkLessonNotesSrv.capitalizeFirstLetter(LessonStatusEnum[vm.lesson.status]);
                                 break;
                         }
                         vm.fields.push(field);
@@ -90,7 +90,7 @@
                     const studentsKeys = Object.keys(vm.lesson.students);
                     studentsKeys.forEach((studentId, index) => {
                         const student = vm.lesson.students[studentId];
-                        studentsNames += vm.znkLessonNotesSrv.getUserFullName(student);
+                        studentsNames += vm.ZnkLessonNotesSrv.getUserFullName(student);
                         studentsNames += index !== (studentsKeys.length - 1) ? ', ' : '';
                     });
 

@@ -8,7 +8,7 @@
             },
             templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonSummaryNote/lessonSummaryNote.component.html',
             controllerAs: 'vm',
-            controller: function ($log, UserTypeContextEnum) {
+            controller: function ($log, UserTypeContextEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
                 const vm = this;
@@ -30,15 +30,15 @@
 
                 function initSummaryNote() {
                     if (!this.lesson.lessonNotes.educatorNotes) {
-                        this.globalService.get().then(globals => {
-                            this.lesson.lessonNotes.educatorNotes = globals.lessonEducatorNotesTemplate;
+                        ZnkLessonNotesSrv.getGlobals().then(globals => {
+                            vm.lesson.lessonNotes.educatorNotes = globals.lessonEducatorNotesTemplate;
                         });
                     }
                 }
 
                 function getStudentProfiles() {
                     const studentsIdArr = Object.keys(this.lesson.students);
-                    this.userProfileService.getUserProfiles(studentsIdArr).first().toPromise()
+                    ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
                         .then(studentsProfiles => {
                             this.logger.log(' studentsProfiles loaded: ', studentsProfiles);
                             this.studentsProfiles = studentsProfiles;

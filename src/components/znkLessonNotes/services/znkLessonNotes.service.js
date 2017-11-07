@@ -1,15 +1,16 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.znkLessonNotes').service('znkLessonNotesSrv',
+    angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
         function ($http, ENV) {
             'ngInject';
 
-            const _this = this;
             // TODO: move to ENV
             const znkBackendBaseUrl = 'https://dev-api.zinkerz.com';
             const schedulingApi = `${znkBackendBaseUrl}/scheduling`;
             const serviceBackendUrl = `${znkBackendBaseUrl}/service`;
+            const globalBackendUrl = `${znkBackendBaseUrl}/global`;
+            const userProfileEndPoint = `${znkBackendBaseUrl}/userprofile`;
 
             function getLessonById(lessonId) {
                 const getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
@@ -35,6 +36,17 @@
                     timeout: ENV.promiseTimeOut,
                     cache: true
                 });
+            }
+
+            function getGlobals() {
+                return this.$http.get(`${globalBackendUrl}`, {
+                    timeout: ENV.promiseTimeOut,
+                    cache: true
+                });
+            }
+
+            function getUserProfiles(uidArr) {
+                return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr);
             }
 
             function enumToArray(enumObj, capitalize, returnedArrType) {
@@ -67,8 +79,6 @@
 
                 return name ? name : profile.nickname ? profile.nickname : profile.email.split('@')[0];
             }
-
-
 
 
         }
