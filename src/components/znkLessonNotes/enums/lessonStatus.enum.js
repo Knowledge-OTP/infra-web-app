@@ -9,7 +9,7 @@
                 ['SCHEDULED', 1, 'scheduled'],
                 ['PENDING_SCHEDULE', 2, 'pendingSchedule'],
                 ['CANCELED', 3, 'canceled'],
-                ['ATTENDED', 4, 'attended']
+                ['ATTENDED', 4, 'attended'],
                 ['MISSED', 5, 'missed']
             ]);
         }

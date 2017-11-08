@@ -10,12 +10,13 @@
             'znk.infra.user',
             'znk.infra.analytics',
             'znk.infra.general',
-            'znk.infra.svgIcon'
+            'znk.infra.svgIcon',
+            'znk.infra.config'
         ])
         .config([
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
-                const svgMap = {
+                let svgMap = {
                     'znkLessonNotes-star': 'components/znkLessonNotes/svg/star.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);

@@ -11,25 +11,26 @@
             controller: function ($log, UserTypeContextEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                const vm = this;
-                vm.sendEmail = sendEmail;
+                let vm = this;
+
                 vm.studentsMails = [];
                 vm.parentsMails = [];
                 vm.mailsToSend = [];
                 vm.sentDate = null;
                 vm.studentsProfiles = [];
                 vm.userTypeContextEnum = UserTypeContextEnum;
-
+                vm.emailSelected = emailSelected;
+                vm.sendEmail = sendEmail;
 
                 this.$onInit = function () {
                     $log.debug('znkLessonSummaryNote: Init');
-                    vm.lesson.lessonNotes = this.lesson.lessonNotes || {};
+                    vm.lesson.lessonNotes = vm.lesson.lessonNotes || {};
                     initSummaryNote();
                     getStudentProfiles();
                 };
 
                 function initSummaryNote() {
-                    if (!this.lesson.lessonNotes.educatorNotes) {
+                    if (!vm.lesson.lessonNotes.educatorNotes) {
                         ZnkLessonNotesSrv.getGlobals().then(globals => {
                             vm.lesson.lessonNotes.educatorNotes = globals.lessonEducatorNotesTemplate;
                         });
@@ -37,34 +38,34 @@
                 }
 
                 function getStudentProfiles() {
-                    const studentsIdArr = Object.keys(this.lesson.students);
+                    let studentsIdArr = Object.keys(vm.lesson.students);
                     ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
                         .then(studentsProfiles => {
-                            this.logger.log(' studentsProfiles loaded: ', studentsProfiles);
-                            this.studentsProfiles = studentsProfiles;
-                            this.studentsProfiles.forEach(profile => {
-                                const studentMail = profile.email || profile.userEmail || profile.authEmail;
-                                this.studentsMails.push(studentMail);
+                            $log.debug(' studentsProfiles loaded: ', studentsProfiles);
+                            vm.studentsProfiles = studentsProfiles;
+                            vm.studentsProfiles.forEach(profile => {
+                                let studentMail = profile.email || profile.userEmail || profile.authEmail;
+                                vm.studentsMails.push(studentMail);
                                 if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
-                                    this.parentsMails.push(profile.studentInfo.parentInfo.email);
+                                    vm.parentsMails.push(profile.studentInfo.parentInfo.email);
                                 }
                             });
                         });
                 }
 
                 function emailSelected(mailGroup, bool) {
-                    if (mailGroup === this.userTypeContextEnum.student) {
-                        this.mailsToSend = bool ? this.mailsToSend.concat(this.studentsMails) :
-                            this.mailsToSend.filter( item => !this.studentsMails.includes( item ));
+                    if (mailGroup === UserTypeContextEnum.student) {
+                        vm.mailsToSend = bool ? vm.mailsToSend.concat(vm.studentsMails) :
+                            vm.mailsToSend.filter( item => !vm.studentsMails.includes( item ));
                     } else {
-                        this.mailsToSend = bool ? this.mailsToSend.concat(this.parentsMails) :
-                            this.mailsToSend.filter( item => !this.parentsMails.includes( item ));
+                        vm.mailsToSend = bool ? vm.mailsToSend.concat(vm.parentsMails) :
+                            vm.mailsToSend.filter( item => !vm.parentsMails.includes( item ));
                     }
                 }
 
                 function sendEmail() {
-                    this.sentDate = new Date().getTime();
-                    this.logger.log(' mailsToSend: ', this.mailsToSend);
+                    vm.sentDate = new Date().getTime();
+                    $log.debug('mailsToSend: ', vm.mailsToSend);
                 }
             }
         });

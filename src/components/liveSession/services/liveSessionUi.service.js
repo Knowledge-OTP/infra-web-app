@@ -136,7 +136,7 @@
                 translationsPromMap.title = $translate('LIVE_SESSION.END_POPUP_TITLE');
                 translationsPromMap.content= $translate('LIVE_SESSION.END_POPUP_CONTENT');
                 return $q.all(translationsPromMap).then(function(translations){
-                    const popUpInstance = PopUpSrv.info(
+                    let popUpInstance = PopUpSrv.info(
                         translations.title,
                         translations.content
                     );

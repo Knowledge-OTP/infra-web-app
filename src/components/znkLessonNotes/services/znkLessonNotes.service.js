@@ -2,18 +2,19 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        function ($http, ENV, $mdDialog) {
+        function ($http, ENV, $mdDialog, InfraConfigSrv) {
             'ngInject';
 
             // TODO: move to ENV
-            const znkBackendBaseUrl = 'https://dev-api.zinkerz.com';
-            const schedulingApi = `${znkBackendBaseUrl}/scheduling`;
-            const serviceBackendUrl = `${znkBackendBaseUrl}/service`;
-            const globalBackendUrl = `${znkBackendBaseUrl}/global`;
-            const userProfileEndPoint = `${znkBackendBaseUrl}/userprofile`;
-            const ZnkLessonNotesSrv = {};
+            let znkBackendBaseUrl = 'https://dev-api.zinkerz.com';
+            let schedulingApi = `${znkBackendBaseUrl}/scheduling`;
+            let serviceBackendUrl = `${znkBackendBaseUrl}/service`;
+            let globalBackendUrl = `${znkBackendBaseUrl}/global`;
+            let userProfileEndPoint = `${znkBackendBaseUrl}/userprofile`;
+            let liveSessionDurationPath = '/settings/liveSessionDuration/';
+            let ZnkLessonNotesSrv = {};
 
-            function openLessonNotesPopup(liveSessionGuid) {
+            function openLessonNotesPopup() {
                 $mdDialog.show({
                     template: '<lesson-notes-popup></lesson-notes-popup>',
                     clickOutsideToClose: true,
@@ -22,7 +23,7 @@
             }
 
             function getLessonById(lessonId) {
-                const getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
+                let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
                 return $http.get(getLessonsApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
@@ -34,8 +35,8 @@
             }
 
             function updateLesson(lessonToUpdate) {
-                const updateLessonApi = `${schedulingApi}/updateLessons`;
-                return this.http.post(updateLessonApi, [lessonToUpdate]).then(lessonArr => {
+                let updateLessonApi = `${schedulingApi}/updateLessons`;
+                return $http.post(updateLessonApi, [lessonToUpdate]).then(lessonArr => {
                     return Promise.resolve(lessonArr[0]);
                 });
             }
@@ -48,7 +49,7 @@
             }
 
             function getGlobals() {
-                return this.$http.get(`${globalBackendUrl}`, {
+                return $http.get(`${globalBackendUrl}`, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
                 });
@@ -89,6 +90,12 @@
                 return name ? name : profile.nickname ? profile.nickname : profile.email.split('@')[0];
             }
 
+            function getLiveSessionDuration() {
+                return InfraConfigSrv.getGlobalStorage().then(function (storage) {
+                    return storage.get(liveSessionDurationPath);
+                });
+            }
+
             ZnkLessonNotesSrv.openLessonNotesPopup = openLessonNotesPopup;
             ZnkLessonNotesSrv.getLessonById = getLessonById;
             ZnkLessonNotesSrv.getLessonsByQuery = getLessonsByQuery;
@@ -98,6 +105,7 @@
             ZnkLessonNotesSrv.getUserProfiles = getUserProfiles;
             ZnkLessonNotesSrv.enumToArray = enumToArray;
             ZnkLessonNotesSrv.getUserFullName = getUserFullName;
+            ZnkLessonNotesSrv.getLiveSessionDuration = getLiveSessionDuration;
 
             return ZnkLessonNotesSrv;
 

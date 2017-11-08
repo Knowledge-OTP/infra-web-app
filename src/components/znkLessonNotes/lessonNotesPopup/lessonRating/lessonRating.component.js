@@ -11,7 +11,7 @@
             controller: function ($log, $translate) {
                 'ngInject';
 
-                const vm = this;
+                let vm = this;
 
                 vm.MIN_STATR_FOR_RATING_FEEDBACK = 2;
                 vm.MAX_STARS = 5;
@@ -21,37 +21,37 @@
 
                 this.$onInit = function () {
                     $log.debug('znkLessonRating: Init');
-                    vm.lesson.lessonNotes = this.lesson.lessonNotes || {};
+                    vm.lesson.lessonNotes = vm.lesson.lessonNotes || {};
                     initStarsArr();
                     if (!vm.lesson.lessonNotes.rating) {
-                        ratingChanged(this.lesson.lessonNotes.rating);
+                        ratingChanged(vm.lesson.lessonNotes.rating);
                     }
                     vm.lesson.lessonNotes.ratingFeedback = vm.lesson.lessonNotes.ratingFeedback || '';
                 };
 
                 function initStarsArr() {
-                    for (let i = 0; i < this.MAX_STARS; i++) {
-                        const starNum = i + 1;
-                        this.starArr[i] = {
+                    for (let i = 0; i < vm.MAX_STARS; i++) {
+                        let starNum = i + 1;
+                        vm.starArr[i] = {
                             title: $translate.instant(`LESSON.LESSON_NOTES_POPUP.RATING.TITLE${starNum}`),
-                            active: (starNum === this.lesson.lessonNotes.rating),  // boolean
+                            active: (starNum === vm.lesson.lessonNotes.rating),  // boolean
                             value: starNum,
                         };
                     }
                 }
 
                 function onHover(selectedStar, bool) {
-                    this.starArr.forEach(star => {
+                    vm.starArr.forEach(star => {
                         star.hover = bool && (star.value <= selectedStar.value);
                     });
                 }
 
                 function ratingChanged(rating) {
-                    this.logger.log('lesson rating changed: ', rating);
-                    this.starArr.forEach(star => {
+                    $log.debug('lesson rating changed: ', rating);
+                    vm.starArr.forEach(star => {
                         star.active = star.value <= rating;
                     });
-                    this.lesson.lessonNotes.rating = rating;
+                    vm.lesson.lessonNotes.rating = rating;
                 }
 
             }

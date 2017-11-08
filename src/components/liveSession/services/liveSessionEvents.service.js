@@ -60,7 +60,7 @@
 
                                 LiveSessionUiSrv.showEndSessionPopup()
                                     .then(function () {
-                                        ZnkLessonNotesSrv.openLessonNotesPopup(liveSessionData.guid);
+                                        ZnkLessonNotesSrv.openLessonNotesPopup();
                                     });
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                                 // Security check to insure there isn't active session

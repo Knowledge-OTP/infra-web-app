@@ -12,7 +12,7 @@
             controller: function ($log, $mdDialog, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                const vm = this;
+                let vm = this;
                 vm.save = save;
 
                 this.$onInit = function () {

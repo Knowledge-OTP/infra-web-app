@@ -8,16 +8,24 @@
             },
             templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
             controllerAs: 'vm',
-            controller: function ($log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
-                                  PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv) {
+            controller: function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
+                                  PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum, UserProfileService) {
                 'ngInject';
 
-                const vm = this;
+                let vm = this;
+                let DOCUMENT_DB_QUERY_KEY = 'getLessonsByEducatorStudentStatusAndRange';
+                let SESSION_DURATION =  {
+                    marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
+                    marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
+                };
+                let dataPromMap = {
+                    liveSessionDuration: ZnkLessonNotesSrv.getLiveSessionDuration(),
+                    educatorId: UserProfileService.getCurrUserId(),
+                };
 
                 this.$onInit = function() {
                     vm.isLiveSessionActive = false;
                     vm.isOffline = true;
-                    vm.isLessonScheduled = false;
                     vm.endSession = endSession;
                     vm.showSessionModal = showSessionModal;
                     initializeLiveSessionStatus();
@@ -40,17 +48,18 @@
                 }
 
                 function showSessionModal() {
-                    if (isLessonScheduled) {
-                        $mdDialog.show({
-                            template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
-                            scope: $scope,
-                            preserveScope: true,
-                            clickOutsideToClose: true
-                        });
-                    } else {
-                        alert('No lesson is scheduled');
-                    }
-
+                    isLessonScheduled().then(isLessonScheduled => {
+                        if (isLessonScheduled) {
+                            $mdDialog.show({
+                                template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
+                                scope: $scope,
+                                preserveScope: true,
+                                clickOutsideToClose: true
+                            });
+                        } else {
+                            $log.debug('showSessionModal: No lesson is scheduled');
+                        }
+                    });
                 }
                 function liveSessionStateChanged(newLiveSessionState) {
                     vm.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
@@ -61,9 +70,30 @@
                     });
                 }
 
-                function checkIfHaveScheduleLesson() {
-                    let now = Date.now();
-                    ZnkLessonNotesSrv.getLessonsByQuery(query)
+
+                function isLessonScheduled() {
+                    return $q.all(dataPromMap).then(dataMap => {
+                        SESSION_DURATION = dataMap.liveSessionDuration ? dataMap.liveSessionDuration : SESSION_DURATION;
+                        let now = Date.now();
+                        let calcStartTime = now - SESSION_DURATION.marginBeforeSessionStart;
+                        let calcEndTime = now + SESSION_DURATION.marginAfterSessionStart;
+                        let query = {
+                            query: DOCUMENT_DB_QUERY_KEY,
+                            values: [
+                                dataMap.educatorId,
+                                [vm.student.uid],
+                                [LessonStatusEnum.SCHEDULED.enum],
+                                calcStartTime,
+                                calcEndTime
+                            ]
+                        };
+
+                        return ZnkLessonNotesSrv.getLessonsByQuery(query).then(lessons => {
+                            return lessons && lessons.length;
+                        }, err => $log.debug('checkIfHaveScheduleLesson: getLessonsByQuery Error: ', err));
+                    });
+
+
                 }
             }
         });

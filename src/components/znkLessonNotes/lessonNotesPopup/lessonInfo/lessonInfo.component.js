@@ -11,7 +11,7 @@
             controller: function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                const vm = this;
+                let vm = this;
                 vm.nameSpace = 'LIVE_SESSION.LESSON_NOTES_POPUP';
                 vm.fields = [];
 
@@ -48,7 +48,7 @@
 
                 function buildViewModal() {
                     Object.keys(vm.translate).forEach(translateKey => {
-                        const field = {label: vm.translate[translateKey], text: null};
+                        let field = {label: vm.translate[translateKey], text: null};
                         switch (translateKey) {
                             case `${vm.nameSpace}.TEST`:
                                 if (!vm.lessonService) {
@@ -87,9 +87,9 @@
 
                 function getStudentsNames() {
                     let studentsNames = '';
-                    const studentsKeys = Object.keys(vm.lesson.students);
+                    let studentsKeys = Object.keys(vm.lesson.students);
                     studentsKeys.forEach((studentId, index) => {
-                        const student = vm.lesson.students[studentId];
+                        let student = vm.lesson.students[studentId];
                         studentsNames += vm.ZnkLessonNotesSrv.getUserFullName(student);
                         studentsNames += index !== (studentsKeys.length - 1) ? ', ' : '';
                     });
@@ -110,10 +110,10 @@
                             transformedDate = $filter('date')(timestamp, pattern);
                             break;
                         case 'DURATION':
-                            const convertedDuration = vm.utilsService.convertMS(timestamp);
+                            let convertedDuration = vm.utilsService.convertMS(timestamp);
                             let hourOrMinText;
                             if (convertedDuration.hour >= 1) {
-                                const translatePath = convertedDuration.hour > 1 ? `${vm.nameSpace}.HOURS` : `${vm.nameSpace}.HOUR`;
+                                let translatePath = convertedDuration.hour > 1 ? `${vm.nameSpace}.HOURS` : `${vm.nameSpace}.HOUR`;
                                 hourOrMinText = $translate.instant(translatePath);
                                 transformedDate = `${convertedDuration.hour} ${hourOrMinText}`;
                             } else {

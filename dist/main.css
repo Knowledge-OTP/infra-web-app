@@ -6,6 +6,13 @@
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* Lato fonts from google*/
 @import url(//fonts.googleapis.com/css?family=Lato:300);
 @import url(//fonts.googleapis.com/css?family=Lato:300italic);
@@ -198,6 +205,13 @@ active-panel {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .znk-input-group {
@@ -759,6 +773,13 @@ md-dialog.admin-profile {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 md-progress-linear.znk-progress-linear-exercise-bar .md-bar {
@@ -798,6 +819,13 @@ md-dialog .close-popup {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 complete-exercise .complete-exercise {
@@ -1103,6 +1131,13 @@ complete-exercise-progress-bar {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 @import url(//fonts.googleapis.com/css?family=Lato:300);
@@ -1337,6 +1372,13 @@ complete-exercise-progress-bar {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 /**
@@ -1470,6 +1512,13 @@ diagnostic-intro {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 estimated-score-widget.is-nav-menu .score-estimate-container .subjects-wrap {
@@ -1702,6 +1751,13 @@ md-tooltip.tooltip-for-estimated-score-widget {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 @import url(//fonts.googleapis.com/css?family=Lato:300);
@@ -1864,6 +1920,13 @@ md-tooltip.tooltip-for-estimated-score-widget {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -1920,6 +1983,13 @@ md-tooltip.tooltip-for-estimated-score-widget {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -2185,6 +2255,13 @@ feedback .feedback-btn {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .raccoon-in-app {
@@ -2281,6 +2358,13 @@ feedback .feedback-btn {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .zoom-image-modal {
@@ -2335,6 +2419,13 @@ img.img-to-zoom {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -2631,6 +2722,13 @@ znk-exercise.done-btn-show question-builder:not(.answer-explanation-open) .quest
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -3229,6 +3327,13 @@ md-dialog.invite-teacher-modal-wrap {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -3618,11 +3723,48 @@ md-dialog.my-lessons-schedule-wrapper {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
 /* general */
 /* full background image with retina */
+.loader, .spinner {
+  margin: 30px auto;
+  font-size: 10px;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  text-indent: -9999em;
+  animation: load5 1.1s infinite ease;
+  transform: translateZ(0); }
+
+@keyframes load5 {
+  0%,
+  100% {
+    box-shadow: 0em -2.6em 0em 0em #000000, 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.5), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.7); }
+  12.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.7), 1.8em -1.8em 0 0em #000000, 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.5); }
+  25% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.5), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.7), 2.5em 0em 0 0em #000000, 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  37.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.5), 2.5em 0em 0 0em rgba(0, 0, 0, 0.7), 1.75em 1.75em 0 0em #000000, 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  50% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.5), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.7), 0em 2.5em 0 0em #000000, -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  62.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.5), 0em 2.5em 0 0em rgba(0, 0, 0, 0.7), -1.8em 1.8em 0 0em #000000, -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  75% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.5), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.7), -2.6em 0em 0 0em #000000, -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  87.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.5), -2.6em 0em 0 0em rgba(0, 0, 0, 0.7), -1.8em -1.8em 0 0em #000000; } }
+
 md-dialog.base {
   overflow: visible;
   width: 580px;
@@ -3892,6 +4034,13 @@ md-dialog {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 md-progress-linear.loading-container {
   position: fixed;
   top: 0; }
@@ -3906,6 +4055,13 @@ md-progress-linear.loading-container {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 oath-login-drv .btn-wrap {
@@ -4633,6 +4789,13 @@ login-app {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .znk-input-group {
@@ -4916,6 +5079,13 @@ md-toast.toast-wrap {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 @import url(//fonts.googleapis.com/css?family=Lato:300);
@@ -5338,6 +5508,13 @@ on-boarding-bar {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 promo-code {
@@ -5505,6 +5682,13 @@ promo-code {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -5745,6 +5929,13 @@ md-toast.purchase-nudge {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .znk-input-group {
@@ -5950,6 +6141,13 @@ md-dialog.setting-change-password {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 complete-exercise-summary social-sharing .social-share-wrapper {
@@ -6029,6 +6227,13 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .app-tests-navigationPane {
@@ -6125,6 +6330,13 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .app-tests-roadmap {
@@ -6299,6 +6511,13 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .md-button.znk[disabled="disabled"] {
@@ -6364,6 +6583,13 @@ complete-exercise-summary social-sharing .social-share-wrapper {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 @import url(//fonts.googleapis.com/css?family=Lato:300);
@@ -6850,6 +7076,13 @@ md-dialog.setting-edit-goals {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 sh-viewer .header {
@@ -6939,6 +7172,13 @@ sh-viewer .sh-viewer-main-container {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 @import url(//fonts.googleapis.com/css?family=Quicksand);
@@ -7420,6 +7660,13 @@ workout-intro-lock {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -7476,6 +7723,13 @@ workout-intro-lock {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -7486,6 +7740,13 @@ workout-intro-lock {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -7723,6 +7984,13 @@ md-toast.purchase-nudge {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -8481,6 +8749,301 @@ md-dialog.invite-teacher-modal-wrap {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+.loader, .spinner {
+  margin: 30px auto;
+  font-size: 10px;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  text-indent: -9999em;
+  animation: load5 1.1s infinite ease;
+  transform: translateZ(0); }
+
+@keyframes load5 {
+  0%,
+  100% {
+    box-shadow: 0em -2.6em 0em 0em #000000, 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.5), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.7); }
+  12.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.7), 1.8em -1.8em 0 0em #000000, 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.5); }
+  25% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.5), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.7), 2.5em 0em 0 0em #000000, 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  37.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.5), 2.5em 0em 0 0em rgba(0, 0, 0, 0.7), 1.75em 1.75em 0 0em #000000, 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  50% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.5), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.7), 0em 2.5em 0 0em #000000, -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.2), -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  62.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.5), 0em 2.5em 0 0em rgba(0, 0, 0, 0.7), -1.8em 1.8em 0 0em #000000, -2.6em 0em 0 0em rgba(0, 0, 0, 0.2), -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  75% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.5), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.7), -2.6em 0em 0 0em #000000, -1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2); }
+  87.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(0, 0, 0, 0.2), 1.8em -1.8em 0 0em rgba(0, 0, 0, 0.2), 2.5em 0em 0 0em rgba(0, 0, 0, 0.2), 1.75em 1.75em 0 0em rgba(0, 0, 0, 0.2), 0em 2.5em 0 0em rgba(0, 0, 0, 0.2), -1.8em 1.8em 0 0em rgba(0, 0, 0, 0.5), -2.6em 0em 0 0em rgba(0, 0, 0, 0.7), -1.8em -1.8em 0 0em #000000; } }
+
+md-dialog.base {
+  overflow: visible;
+  width: 580px;
+  max-width: 580px;
+  height: auto; }
+  md-dialog.base .top-icon-wrap {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 40px; }
+    md-dialog.base .top-icon-wrap .top-icon {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      md-dialog.base .top-icon-wrap .top-icon .round-icon-wrap {
+        width: 76px;
+        height: 76px;
+        border-radius: 38px;
+        -webkit-border-radius: 38px;
+        -moz-border-radius: 38px;
+        background-color: #0a9bad;
+        z-index: 9;
+        margin-top: -15px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -webkit-justify-content: center;
+        -ms-flex-align: center;
+            align-items: center;
+        -webkit-align-items: center; }
+        md-dialog.base .top-icon-wrap .top-icon .round-icon-wrap svg-icon {
+          width: 35px; }
+  md-dialog.base .msg-wrap {
+    font-size: 12px;
+    color: #ffffff;
+    font-family: Lato;
+    font-weight: 400;
+    width: 318px;
+    margin: 0 auto;
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 10px;
+    max-height: 22px;
+    visibility: hidden; }
+    md-dialog.base .msg-wrap.show-error .error-msg {
+      visibility: visible;
+      width: 100%;
+      height: 22px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -webkit-justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      -webkit-align-items: center;
+      background-color: #ff6766; }
+    md-dialog.base .msg-wrap.show-error .success-msg {
+      display: none; }
+    md-dialog.base .msg-wrap.show-success .error-msg {
+      display: none; }
+    md-dialog.base .msg-wrap.show-success .success-msg {
+      visibility: visible;
+      width: 100%;
+      height: 22px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -webkit-justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      -webkit-align-items: center;
+      background-color: #87ca4d; }
+    md-dialog.base .msg-wrap .v-icon {
+      width: 17px;
+      height: 17px;
+      margin-right: 7px; }
+      md-dialog.base .msg-wrap .v-icon * {
+        stroke: #659938; }
+    md-dialog.base .msg-wrap .danger-red-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 7px; }
+      md-dialog.base .msg-wrap .danger-red-icon * {
+        fill: #e1e1e1; }
+  md-dialog.base md-dialog-content .sub-title {
+    margin: 15px auto 37px auto;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -webkit-justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    -webkit-align-items: center; }
+  md-dialog.base .close-popup-wrap {
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    width: 14px;
+    height: 14px;
+    padding: 10px;
+    cursor: pointer; }
+    md-dialog.base .close-popup-wrap .close-popup {
+      width: 14px;
+      height: 19px; }
+
+.lesson-notes-popup {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column; }
+  .lesson-notes-popup .divider {
+    background-color: #e1e1e1;
+    height: 1px;
+    width: 96%;
+    margin: 0 auto; }
+  .lesson-notes-popup button {
+    -ms-flex-item-align: end;
+        align-self: flex-end;
+    margin: 20px;
+    position: relative; }
+    .lesson-notes-popup button .spinner {
+      position: absolute;
+      margin: 0;
+      font-size: 5px;
+      top: 50%;
+      right: 29px;
+      transform: translateY(-50%); }
+
+.lesson-info {
+  height: 170px;
+  margin: 25px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: justify;
+      justify-content: space-between; }
+  .lesson-info .field {
+    width: 50%;
+    height: 40px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center; }
+    .lesson-info .field .label {
+      width: 95px;
+      text-align: right;
+      margin-right: 33px; }
+    .lesson-info .field .text {
+      text-transform: capitalize; }
+    .lesson-info .field select {
+      width: 130px;
+      font-size: 16px; }
+      .lesson-info .field select.attended {
+        color: #87ca4d; }
+      .lesson-info .field select.canceled, .lesson-info .field select.missed {
+        color: #ff6766; }
+
+.lesson-rate {
+  margin: 25px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-align: center;
+      align-items: center; }
+  .lesson-rate .rating {
+    margin-top: 15px;
+    display: -ms-flexbox;
+    display: flex; }
+    .lesson-rate .rating .star-icon {
+      width: 30px;
+      fill: #e1e1e1; }
+      .lesson-rate .rating .star-icon.hover {
+        fill: #FFED85; }
+      .lesson-rate .rating .star-icon.active {
+        fill: #FFD700; }
+  .lesson-rate .note-txt {
+    width: 90%;
+    height: 100px;
+    resize: none;
+    overflow: auto;
+    margin-top: 15px; }
+
+.lesson-summary-notes {
+  margin: 25px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-align: center;
+      align-items: center;
+  background-color: #fbfafb; }
+  .lesson-summary-notes .znk-uppercase {
+    margin: 20px; }
+  .lesson-summary-notes .note-txt {
+    width: 90%;
+    height: 280px;
+    resize: none;
+    overflow: auto; }
+  .lesson-summary-notes .email-section {
+    width: 90%;
+    margin-top: 20px; }
+    .lesson-summary-notes .email-section .checkbox-group {
+      margin: 20px 0;
+      display: -ms-flexbox;
+      display: flex; }
+      .lesson-summary-notes .email-section .checkbox-group .input-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+            align-items: center;
+        margin-right: 40px; }
+        .lesson-summary-notes .email-section .checkbox-group .input-wrap label, .lesson-summary-notes .email-section .checkbox-group .input-wrap .lesson-info .field .label, .lesson-info .field .lesson-summary-notes .email-section .checkbox-group .input-wrap .label {
+          text-transform: lowercase;
+          margin-left: 5px; }
+    .lesson-summary-notes .email-section .button-wrapper {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center;
+      margin-bottom: 20px; }
+      .lesson-summary-notes .email-section .button-wrapper .text-muted {
+        font-family: lato;
+        margin-left: 20px;
+        opacity: 0.7;
+        font-style: italic;
+        font-size: 14px; }
+
+md-dialog {
+  border-radius: 15px; }
+  md-dialog md-backdrop.md-opaque {
+    background-color: #fafafa;
+    opacity: .76; }
+
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -8606,6 +9169,13 @@ znk-summary-timeline .time-line-wrapper {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* fonts size */
 /* general */
 /* paths */
@@ -8706,6 +9276,13 @@ md-tooltip.tooltip-box {
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 md-toast.toast-wrap, md-toast.toast-wrap-error, md-toast.toast-wrap-progress {
