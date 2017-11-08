@@ -2,20 +2,21 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
-        var isEnabled = true;
+        let isEnabled = true;
 
         this.enabled = function (_isEnabled) {
             isEnabled = _isEnabled;
         };
 
         this.$get = function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv, LiveSessionDataGetterSrv) {
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
+                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv) {
             'ngInject';
 
-            var LiveSessionEventsSrv = {};
+            let LiveSessionEventsSrv = {};
 
             function _listenToLiveSessionData(guid) {
-                var liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
+                let liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
 
                 function _cb(liveSessionData) {
                     if (!liveSessionData) {
@@ -35,7 +36,7 @@
                                 }
                                 break;
                             case LiveSessionStatusEnum.CONFIRMED.enum:
-                                var userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+                                let userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
 
                                 if (liveSessionData.studentId === currUid) {
                                     userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
@@ -59,7 +60,7 @@
 
                                 LiveSessionUiSrv.showEndSessionPopup()
                                     .then(function () {
-                                        LiveSessionSrv.showLessonNotesPopup(liveSessionData.guid);
+                                        ZnkLessonNotesSrv.openLessonNotesPopup(liveSessionData.guid);
                                     });
                                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                                 // Security check to insure there isn't active session
@@ -81,8 +82,8 @@
             function _startListening() {
                 UserProfileService.getCurrUserId().then(function (currUid) {
                     InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                        var appName = ENV.firebaseAppScopeName;
-                        var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
+                        let appName = ENV.firebaseAppScopeName;
+                        let userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
                         globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
                             if (userLiveSessionGuids) {
                                 angular.forEach(userLiveSessionGuids, function (isActive, guid) {

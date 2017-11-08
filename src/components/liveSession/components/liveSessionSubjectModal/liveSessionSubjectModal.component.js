@@ -11,7 +11,7 @@
             controller: function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, LiveSessionUiSrv, DiagnosticSrv) {
                 'ngInject';
 
-                var vm = this;
+                let vm = this;
 
                 this.$onInit = function() {
                     vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();

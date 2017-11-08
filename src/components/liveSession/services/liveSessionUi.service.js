@@ -7,17 +7,17 @@
                               ZnkToastSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
-            var childScope, liveSessionPhElement, readyProm;
-            var LiveSessionUiSrv = {};
+            let childScope, liveSessionPhElement, readyProm;
+            let LiveSessionUiSrv = {};
 
-            var SESSION_DURATION =  {
+            let SESSION_DURATION =  {
                 length: ENV.liveSession.sessionLength,
                 extendTime: ENV.liveSession.sessionExtendTime,
                 endAlertTime: ENV.liveSession.sessionEndAlertTime
             };
 
             function _init() {
-                var bodyElement = angular.element(document.body);
+                let bodyElement = angular.element(document.body);
 
                 liveSessionPhElement = angular.element('<div class="live-session-ph"></div>');
 
@@ -39,7 +39,7 @@
                 }
 
                 if(liveSessionPhElement){
-                    var hasContents = !!liveSessionPhElement.contents().length;
+                    let hasContents = !!liveSessionPhElement.contents().length;
                     if(hasContents){
                         $animate.leave(liveSessionPhElement.contents());
                     }
@@ -49,7 +49,7 @@
             function _activateLiveSession(userLiveSessionState) {
                 _endLiveSession();
 
-                var defer = $q.defer();
+                let defer = $q.defer();
 
                 readyProm.then(function(){
                     childScope = $rootScope.$new(true);
@@ -60,13 +60,13 @@
                         }
                     };
 
-                    var liveSessionHtmlTemplate =
+                    let liveSessionHtmlTemplate =
                         '<div class="show-hide-animation">' +
                         '<live-session-frame user-live-session-state="d.userLiveSessionState" ' +
                         'on-close="d.onClose()">' +
                         '</live-session-frame>' +
                         '</div>';
-                    var liveSessionElement = angular.element(liveSessionHtmlTemplate);
+                    let liveSessionElement = angular.element(liveSessionHtmlTemplate);
                     liveSessionPhElement.append(liveSessionElement);
                     $animate.enter(liveSessionElement[0], liveSessionPhElement[0]);
                     $compile(liveSessionPhElement)(childScope);
@@ -83,26 +83,14 @@
                 _endLiveSession();
             }
 
-            function showLessonNotesPopup(liveSessionGuid) {
-
-
-                liveSessionDataProm.then(liveSessionData => {
-                    $mdDialog.show({
-                        template: '<lesson-notes-popup liveSessionData="liveSessionData"></lesson-notes-popup>',
-                        clickOutsideToClose: true,
-                        escapeToClose: true
-                    });
-                });
-            }
-
             function showStudentLiveSessionPopUp(){
-                var translationsPromMap = {};
+                let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
                 translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.REJECT');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.ACCEPT');
                 return $q.all(translationsPromMap).then(function(translations){
-                    var popUpInstance = PopUpSrv.warning(
+                    let popUpInstance = PopUpSrv.warning(
                         translations.title,
                         translations.content,
                         translations.acceptBtnTitle,
@@ -120,13 +108,13 @@
             }
 
             function showSessionEndAlertPopup() {
-                var translationsPromMap = {};
+                let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
                 translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: SESSION_DURATION.extendTime / 60000 });
                 translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
-                    var popUpInstance = PopUpSrv.warning(
+                    let popUpInstance = PopUpSrv.warning(
                         translations.title,
                         translations.content,
                         translations.cancelBtnTitle,
@@ -144,7 +132,7 @@
             }
 
             function showEndSessionPopup() {
-                var translationsPromMap = {};
+                let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_POPUP_TITLE');
                 translationsPromMap.content= $translate('LIVE_SESSION.END_POPUP_CONTENT');
                 return $q.all(translationsPromMap).then(function(translations){
@@ -164,7 +152,7 @@
             }
 
             function showIncompleteDiagnostic(student) {
-                var translationsPromMap = {};
+                let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_TITLE');
                 translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: student.name });
                 return $q.all(translationsPromMap).then(function(translations){
@@ -179,12 +167,12 @@
             }
 
             function showLiveSessionToast() {
-                var options = {
+                let options = {
                     hideDelay: 5000,
                     position: 'top right',
                     toastClass: 'live-session-success-toast'
                 };
-                var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
+                let translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
                 translationsProm.then(function (message) {
                     ZnkToastSrv.showToast('success', message, options);
                 });
@@ -195,7 +183,6 @@
 
             LiveSessionUiSrv.endLiveSession = endLiveSession;
 
-            LiveSessionUiSrv.showLessonNotesPopup = showLessonNotesPopup;
 
             LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
 

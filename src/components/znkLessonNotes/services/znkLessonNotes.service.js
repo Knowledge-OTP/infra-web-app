@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        function ($http, ENV) {
+        function ($http, ENV, $mdDialog) {
             'ngInject';
 
             // TODO: move to ENV
@@ -11,6 +11,15 @@
             const serviceBackendUrl = `${znkBackendBaseUrl}/service`;
             const globalBackendUrl = `${znkBackendBaseUrl}/global`;
             const userProfileEndPoint = `${znkBackendBaseUrl}/userprofile`;
+            const ZnkLessonNotesSrv = {};
+
+            function openLessonNotesPopup(liveSessionGuid) {
+                $mdDialog.show({
+                    template: '<lesson-notes-popup></lesson-notes-popup>',
+                    clickOutsideToClose: true,
+                    escapeToClose: true
+                });
+            }
 
             function getLessonById(lessonId) {
                 const getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
@@ -80,6 +89,17 @@
                 return name ? name : profile.nickname ? profile.nickname : profile.email.split('@')[0];
             }
 
+            ZnkLessonNotesSrv.openLessonNotesPopup = openLessonNotesPopup;
+            ZnkLessonNotesSrv.getLessonById = getLessonById;
+            ZnkLessonNotesSrv.getLessonsByQuery = getLessonsByQuery;
+            ZnkLessonNotesSrv.updateLesson = updateLesson;
+            ZnkLessonNotesSrv.getServiceList = getServiceList;
+            ZnkLessonNotesSrv.getGlobals = getGlobals;
+            ZnkLessonNotesSrv.getUserProfiles = getUserProfiles;
+            ZnkLessonNotesSrv.enumToArray = enumToArray;
+            ZnkLessonNotesSrv.getUserFullName = getUserFullName;
+
+            return ZnkLessonNotesSrv;
 
         }
     );

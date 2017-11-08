@@ -9,7 +9,7 @@
             },
             templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonNotesPopup.template.html',
             controllerAs: 'vm',
-            controller: function ($log, $mdDialog, LiveSessionSrv, ZnkLessonNotesSrv) {
+            controller: function ($log, $mdDialog, ZnkLessonNotesSrv) {
                 'ngInject';
 
                 const vm = this;
@@ -27,7 +27,7 @@
 
                 function save() {
                     vm.showSpinner = true;
-                    LiveSessionSrv.updateLiveSession(vm.lesson)
+                    ZnkLessonNotesSrv.updateLesson(vm.lesson)
                         .then(updatedLesson => {
                             vm.lesson = updatedLesson;
                             vm.showSpinner = false;

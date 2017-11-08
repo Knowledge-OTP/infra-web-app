@@ -11,7 +11,7 @@
             controller: function (UserLiveSessionStateEnum, $log) {
                 'ngInject';
 
-                var vm = this;
+                let vm = this;
 
                 this.$onInit = function () {
                     if (vm.userLiveSessionState) {

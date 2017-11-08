@@ -9,14 +9,15 @@
             templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
             controllerAs: 'vm',
             controller: function ($log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
-                                  PresenceService, ENV, LiveSessionStatusEnum) {
+                                  PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                var vm = this;
+                const vm = this;
 
                 this.$onInit = function() {
                     vm.isLiveSessionActive = false;
                     vm.isOffline = true;
+                    vm.isLessonScheduled = false;
                     vm.endSession = endSession;
                     vm.showSessionModal = showSessionModal;
                     initializeLiveSessionStatus();
@@ -39,12 +40,17 @@
                 }
 
                 function showSessionModal() {
-                    $mdDialog.show({
-                        template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
-                        scope: $scope,
-                        preserveScope: true,
-                        clickOutsideToClose: true
-                    });
+                    if (isLessonScheduled) {
+                        $mdDialog.show({
+                            template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
+                            scope: $scope,
+                            preserveScope: true,
+                            clickOutsideToClose: true
+                        });
+                    } else {
+                        alert('No lesson is scheduled');
+                    }
+
                 }
                 function liveSessionStateChanged(newLiveSessionState) {
                     vm.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
@@ -53,6 +59,11 @@
                     LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
+                }
+
+                function checkIfHaveScheduleLesson() {
+                    let now = Date.now();
+                    ZnkLessonNotesSrv.getLessonsByQuery(query)
                 }
             }
         });
