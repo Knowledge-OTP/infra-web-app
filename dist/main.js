@@ -10055,8 +10055,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
-                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.REJECT');
-                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.ACCEPT');
+                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.JOIN');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
                     let popUpInstance = PopUpSrv.warning(
                         translations.title,
@@ -10079,7 +10079,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
-                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.ACCEPT');
                 return $q.all(translationsPromMap).then(function(translations){
                     let popUpInstance = PopUpSrv.info(
                         translations.title,

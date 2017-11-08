@@ -540,6 +540,7 @@
         "ENGLISH": "english",
         "LIVE_SESSION_REQUEST": "Live Session Request",
         "WANT_TO_JOIN": "Join the live session.",
+        "JOIN": "JOIN",
         "WAIT_TO_STUDENT": "Waiting for student to join the session.",
         "JOIN_TO_ACTIVE_SESSION": "You have joined a live session.",
         "END_ALERT": "Session will end in {{endAlertTime}} minutes.",
