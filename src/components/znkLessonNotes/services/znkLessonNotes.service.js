@@ -5,12 +5,10 @@
         function ($http, ENV, $mdDialog, InfraConfigSrv) {
             'ngInject';
 
-            // TODO: move to ENV
-            let znkBackendBaseUrl = 'https://dev-api.zinkerz.com';
-            let schedulingApi = `${znkBackendBaseUrl}/scheduling`;
-            let serviceBackendUrl = `${znkBackendBaseUrl}/service`;
-            let globalBackendUrl = `${znkBackendBaseUrl}/global`;
-            let userProfileEndPoint = `${znkBackendBaseUrl}/userprofile`;
+            let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
+            let serviceBackendUrl = `${ENV.znkBackendBaseUrl}/service`;
+            let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
+            let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
             let liveSessionDurationPath = '/settings/liveSessionDuration/';
             let ZnkLessonNotesSrv = {};
 

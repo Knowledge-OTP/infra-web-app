@@ -4,7 +4,8 @@
     angular.module('znk.infra-web-app.liveSession')
         .component('liveSessionSubjectModal', {
             bindings: {
-                student: '='
+                student: '=',
+                lessonId: '='
             },
             templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
             controllerAs: 'vm',
@@ -22,7 +23,7 @@
                 function startSession(sessionSubject) {
                     DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
                         if (isDiagnosticCompleted) {
-                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject);
+                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject, vm.lessonId);
                         } else {
                             LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
                         }

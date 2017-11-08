@@ -48,10 +48,11 @@
                 }
 
                 function showSessionModal() {
-                    isLessonScheduled().then(isLessonScheduled => {
-                        if (isLessonScheduled) {
+                    getScheduledLesson().then(scheduledLesson => {
+                        if (scheduledLesson) {
+                            vm.lessonId = scheduledLesson.id;
                             $mdDialog.show({
-                                template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
+                                template: '<live-session-subject-modal student="vm.student" lesson-id="vm.lessonId"></live-session-subject-modal>',
                                 scope: $scope,
                                 preserveScope: true,
                                 clickOutsideToClose: true
@@ -71,7 +72,7 @@
                 }
 
 
-                function isLessonScheduled() {
+                function getScheduledLesson() {
                     return $q.all(dataPromMap).then(dataMap => {
                         SESSION_DURATION = dataMap.liveSessionDuration ? dataMap.liveSessionDuration : SESSION_DURATION;
                         let now = Date.now();
@@ -89,7 +90,7 @@
                         };
 
                         return ZnkLessonNotesSrv.getLessonsByQuery(query).then(lessons => {
-                            return lessons && lessons.length;
+                            return lessons && lessons.length ? lessons[0] : null;
                         }, err => $log.debug('checkIfHaveScheduleLesson: getLessonsByQuery Error: ', err));
                     });
 

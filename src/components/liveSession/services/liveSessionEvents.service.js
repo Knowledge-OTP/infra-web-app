@@ -27,15 +27,21 @@
                         switch (liveSessionData.status) {
                             case LiveSessionStatusEnum.PENDING_STUDENT.enum:
                                 if (liveSessionData.studentId === currUid) {
-                                    LiveSessionUiSrv.showStudentLiveSessionPopUp()
+                                    LiveSessionUiSrv.showStudentConfirmationPopUp()
                                         .then(function () {
                                             LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                                         }, function () {
                                             LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                         });
+                                } else {
+                                    LiveSessionUiSrv.showEducatorPendingPopUp()
+                                        .then(function () {
+                                            LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                                        });
                                 }
                                 break;
                             case LiveSessionStatusEnum.CONFIRMED.enum:
+                                LiveSessionUiSrv.closePopup();
                                 let userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
 
                                 if (liveSessionData.studentId === currUid) {

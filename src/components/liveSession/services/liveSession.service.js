@@ -21,14 +21,18 @@
             let liveSessionInterval = {};
             let isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
 
-            this.startLiveSession = function (studentData, sessionSubject) {
+            this.startLiveSession = function (studentData, sessionSubject, lessonId) {
                 return UserProfileService.getCurrUserId().then(function (currUserId) {
                     let educatorData = {
                         uid: currUserId,
-                        isTeacher: isTeacherApp,
-                        sessionSubject: sessionSubject
+                        isTeacher: isTeacherApp
+
                     };
-                    return _initiateLiveSession(educatorData, studentData, UserLiveSessionStateEnum.EDUCATOR.enum);
+                    let lessonData = {
+                        sessionSubject: sessionSubject,
+                        lessonId: lessonId
+                    };
+                    return _initiateLiveSession(educatorData, studentData, lessonData, UserLiveSessionStateEnum.EDUCATOR.enum);
                 });
             };
 
@@ -246,7 +250,7 @@
                 });
             }
 
-            function _initiateLiveSession(educatorData, studentData, initiator) {
+            function _initiateLiveSession(educatorData, studentData, lessonData, initiator) {
                 let errMsg;
 
                 if (angular.isUndefined(educatorData.isTeacher)) {
@@ -302,7 +306,8 @@
                             startTime: startTime,
                             endTime: null,
                             duration: null,
-                            sessionSubject: educatorData.sessionSubject.id
+                            sessionSubject: lessonData.sessionSubject.id,
+                            lessonId: lessonData.lessonId
                         };
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);

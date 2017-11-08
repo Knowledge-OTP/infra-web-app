@@ -20,7 +20,7 @@
             'znk.infra.exerciseUtility',
             'znk.infra.znkTooltip',
             'znk.infra.calls',
-            'znk.infra.znkLessonNotes'
+            'znk.infra-web-app.znkLessonNotes'
         ])
         .config([
             'SvgIconSrvProvider',

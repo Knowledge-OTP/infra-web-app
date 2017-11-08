@@ -83,7 +83,7 @@
                 _endLiveSession();
             }
 
-            function showStudentLiveSessionPopUp(){
+            function showStudentConfirmationPopUp(){
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
@@ -95,6 +95,27 @@
                         translations.content,
                         translations.acceptBtnTitle,
                         translations.cancelBtnTitle
+                    );
+                    return popUpInstance.promise.then(function(res){
+                        return $q.reject(res);
+                    },function(res){
+                        return $q.resolve(res);
+                    });
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showStudentLiveSessionPopUp translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
+            function showEducatorPendingPopUp(){
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
+                translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.ACCEPT');
+                return $q.all(translationsPromMap).then(function(translations){
+                    let popUpInstance = PopUpSrv.info(
+                        translations.title,
+                        translations.content
                     );
                     return popUpInstance.promise.then(function(res){
                         return $q.reject(res);
@@ -178,13 +199,20 @@
                 });
             }
 
+            function closePopup() {
+                if(PopUpSrv.isPopupOpen()){
+                    PopUpSrv.closePopup();
+                }
+            }
+
 
             LiveSessionUiSrv.activateLiveSession = activateLiveSession;
 
             LiveSessionUiSrv.endLiveSession = endLiveSession;
 
+            LiveSessionUiSrv.showStudentConfirmationPopUp = showStudentConfirmationPopUp;
 
-            LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
+            LiveSessionUiSrv.showEducatorPendingPopUp = showEducatorPendingPopUp;
 
             LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
 
@@ -193,6 +221,8 @@
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
 
             LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
+
+            LiveSessionUiSrv.closePopup = closePopup;
 
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
