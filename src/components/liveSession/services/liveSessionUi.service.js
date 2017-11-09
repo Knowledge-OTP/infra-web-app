@@ -93,8 +93,8 @@
                     let popUpInstance = PopUpSrv.warning(
                         translations.title,
                         translations.content,
-                        translations.acceptBtnTitle,
-                        translations.cancelBtnTitle
+                        translations.cancelBtnTitle,
+                        translations.acceptBtnTitle
                     );
                     return popUpInstance.promise.then(function(res){
                         return $q.reject(res);
@@ -111,10 +111,14 @@
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
-                    let popUpInstance = PopUpSrv.info(
+                    let popUpInstance = PopUpSrv.warning(
                         translations.title,
-                        translations.content
+                        translations.content,
+                        translations.cancelBtnTitle,
+                        null
+
                     );
                     return popUpInstance.promise.then(function(res){
                         return $q.reject(res);

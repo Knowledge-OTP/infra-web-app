@@ -9353,8 +9353,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
-        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
+        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", "ZnkLessonNotesSrv", "LessonStatusEnum", "LessonNotesStatusEnum", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv,
+                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum) {
             'ngInject';
 
             let _this = this;
@@ -9672,12 +9673,30 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         let studentLiveSessionDataGuidPath = studentPath + '/active';
                         dataToSave[studentLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
 
+                        try {
+                            _updateLesson(lessonData.lessonId);
+                        } catch (err) {
+                            $log.error('_initiateLiveSession: updateLesson failed. Error: ', err);
+                        }
+
                         return _getStorage().then(function (StudentStorage) {
                             return StudentStorage.update(dataToSave);
                         });
                     });
 
                 });
+            }
+
+            function _updateLesson(lessonId) {
+                return ZnkLessonNotesSrv.getLessonById(lessonId)
+                    .then(lesson => {
+                        lesson.status = LessonStatusEnum.ATTENDED.enum;
+                        lesson.lessonNotes = lesson.lessonNotes || {};
+                        lesson.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
+                        ZnkLessonNotesSrv.updateLesson(lesson).then(lesson => {
+                            $log.debug('_updateLesson: Lesson: ', lesson);
+                        });
+                    });
             }
 
             function _cleanRegisteredCbToActiveLiveSessionData() {
@@ -10061,8 +10080,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     let popUpInstance = PopUpSrv.warning(
                         translations.title,
                         translations.content,
-                        translations.acceptBtnTitle,
-                        translations.cancelBtnTitle
+                        translations.cancelBtnTitle,
+                        translations.acceptBtnTitle
                     );
                     return popUpInstance.promise.then(function(res){
                         return $q.reject(res);
@@ -10079,10 +10098,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
-                    let popUpInstance = PopUpSrv.info(
+                    let popUpInstance = PopUpSrv.warning(
                         translations.title,
-                        translations.content
+                        translations.content,
+                        translations.cancelBtnTitle,
+                        null
+
                     );
                     return popUpInstance.promise.then(function(res){
                         return $q.reject(res);
@@ -18964,6 +18987,23 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             }
         ]);
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkLessonNotes').factory('LessonNotesStatusEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['PENDING_NOTES', 1, 'pendingNotes'],
+                ['COMPLETE', 2, 'complete'],
+                ['INCOMPLETE', 3, 'incomplete']
+            ]);
+        }]
+    );
+})(angular);
+
 
 (function (angular) {
     'use strict';
