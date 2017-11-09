@@ -9,7 +9,8 @@
             templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
             controllerAs: 'vm',
             controller: function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
-                                  PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum, UserProfileService) {
+                                  PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum,
+                                  UserProfileService, LiveSessionUiSrv) {
                 'ngInject';
 
                 let vm = this;
@@ -58,7 +59,8 @@
                                 clickOutsideToClose: true
                             });
                         } else {
-                            $log.debug('showSessionModal: No lesson is scheduled');
+                            LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
                         }
                     });
                 }

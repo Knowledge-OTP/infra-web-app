@@ -25,7 +25,7 @@
                         if (isDiagnosticCompleted) {
                             LiveSessionSrv.startLiveSession(vm.student, sessionSubject, vm.lessonId);
                         } else {
-                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
+                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
                         }
                     });
 

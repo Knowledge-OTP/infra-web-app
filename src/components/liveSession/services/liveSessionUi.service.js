@@ -111,14 +111,12 @@
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
-                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.OK');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
-                    let popUpInstance = PopUpSrv.warning(
+                    let popUpInstance = PopUpSrv.wait(
                         translations.title,
                         translations.content,
-                        translations.cancelBtnTitle,
-                        translations.acceptBtnTitle
+                        translations.cancelBtnTitle
 
                     );
                     return popUpInstance.promise.then(function(res){
@@ -176,10 +174,25 @@
                 });
             }
 
-            function showIncompleteDiagnostic(student) {
+            function showIncompleteDiagnostic(studentName) {
                 let translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_TITLE');
-                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: student.name });
+                translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
+                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: studentName });
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.info(
+                        translations.title,
+                        translations.content
+                    );
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
+            function showNoLessonScheduledPopup(studentName) {
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
+                translationsPromMap.content= $translate('LIVE_SESSION.NO_LESSON_SCHEDULED', { studentName: studentName });
                 return $q.all(translationsPromMap).then(function(translations){
                     PopUpSrv.info(
                         translations.title,
@@ -225,6 +238,8 @@
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
 
             LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
+
+            LiveSessionUiSrv.showNoLessonScheduledPopup = showNoLessonScheduledPopup;
 
             LiveSessionUiSrv.closePopup = closePopup;
 
