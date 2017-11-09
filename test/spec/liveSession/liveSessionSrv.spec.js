@@ -1,4 +1,4 @@
-describe('testing service "LiveSessionSrv":', function () {
+xdescribe('testing service "LiveSessionSrv":', function () {
     'use strict';
 
     beforeEach(module('znk.infra-web-app.liveSession', 'znk.infra.exerciseUtility', 'htmlTemplates', 'storage.mock', 'testUtility', 'user.mock', 'env.mock'));

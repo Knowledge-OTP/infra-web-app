@@ -9,15 +9,14 @@
 
     angular.module('znk.infra-web-app.elasticSearch')
         .service('ElasticSearchSrv',
-            ["ENV", "$log", "$http", "AuthService", function (ENV, $log, $http, AuthService) {
-                'ngInject';
-                var uidObj = AuthService.getAuth();
+        ["ENV", "$log", "$http", "AuthService", function (ENV, $log, $http, AuthService) {
+            'ngInject';
 
-                var API_PATH = ENV.backendEndpoint + "/search";
-                
-                this.search = function (query) {
-                    var uid = uidObj.uid;
+            var API_PATH = ENV.backendEndpoint + "/search";
 
+            this.search = function (query) {
+                return AuthService.getAuth().then(authData => {
+                    var uid = authData.uid;
                     if (!angular.isString(uid)) {
                         $log.error('ElasticSearchSrv: uid is not a string or not exist');
                         return;
@@ -31,8 +30,10 @@
                         uid: uid
                     };
                     return $http.post(API_PATH, searchObj);
-                };
-            }]
+                });
+
+            };
+        }]
         );
 })(angular);
 

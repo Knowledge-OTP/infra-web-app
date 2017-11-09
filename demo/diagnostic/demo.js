@@ -137,15 +137,17 @@ angular.module('demo', [
     .factory('AuthService', function() {
         return {
             getAuth: function() {
-                return {
-                    uid: '666',
-                    auth: {
-                        name: 'oded'
-                    },
-                    password: {
-                        email: 'oded@zinkerz.com'
-                    }
-                }
+                return new Promise(resolve => {
+                    resolve({
+                            uid: '666',
+                            auth: {
+                                name: 'oded'
+                            },
+                            password: {
+                                email: 'oded@zinkerz.com'
+                            }
+                    })
+                })
             }
         }
     }) // mock ENV

@@ -6,8 +6,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp').directive('loginApp',
-        function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService, ENV) {
-            'ngInject';
+    function (LoginAppSrv, $location, $timeout, $document, InvitationKeyService, ENV) {
+        'ngInject';
             return {
                 templateUrl: 'components/loginApp/directives/loginApp/loginApp.template.html',
                 restrict: 'E',
@@ -35,7 +35,7 @@
                         if (scope.d.appContext.id !== "MYZINKERZ") {
                             LoginAppSrv.setSocialProvidersConfig(socialProvidersArr, scope.d.appContext.id);
                         }
-                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
+                        // ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     scope.changeCurrentForm = function (currentForm) {
@@ -43,7 +43,7 @@
                     };
 
                     scope.toggleCombo = function () {
-                        scope.d.showCombo = !scope.d.showCombo;
+                        scope.d.showCombo = true;
                     };
 
                     scope.changeUserContext = function (context) {
@@ -53,7 +53,7 @@
                         } else if (scope.d.userContext === LoginAppSrv.USER_CONTEXT.TEACHER) {
                             scope.currentUserContext = 'teacher';
                         }
-                        ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
+                        // ENV.set(LoginAppSrv.getCurrentEnv(), scope.d.appContext.id, scope.currentUserContext);
                     };
 
                     // App select menu

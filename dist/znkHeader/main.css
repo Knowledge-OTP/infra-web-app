@@ -884,6 +884,9 @@ md-dialog.invite-teacher-modal-wrap {
       -ms-flex-item-align: center;
           align-self: center;
       margin-left: auto; }
+      .app-header .main-content-header .app-user-area .calendar-icon {
+        width: 18px;
+        fill: #b7b7b7; }
       .app-header .main-content-header .app-user-area .profile-status {
         font-size: 16px;
         padding: 0 12px 0 0;

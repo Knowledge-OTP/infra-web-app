@@ -46,8 +46,8 @@
 
                 function buildForm() {
                     $q.all([AuthService.getAuth(), purchaseService.getProduct()]).then(function (results) {
-                        var userEmail = results[0].auth.email;
-                        var userId = results[0].auth.uid;
+                        var userEmail = results[0].email;
+                        var userId = results[0].uid;
                         var productId = results[1].id;
 
                         if (!userEmail) {
