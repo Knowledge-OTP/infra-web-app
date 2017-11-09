@@ -36,6 +36,8 @@
                                 } else {
                                     LiveSessionUiSrv.showEducatorPendingPopUp()
                                         .then(function () {
+                                            $log.debug('showEducatorPendingPopUp: Closed - wait for student to join.');
+                                        }, function () {
                                             LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                         });
                                 }

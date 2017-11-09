@@ -549,6 +549,7 @@
         "EXTEND_SESSION": "Want to extend the Session in {{extendTime}} minutes.",
         "EXTEND": "EXTEND",
         "CANCEL": "CANCEL",
+        "OK": "OK",
         "INCOMPLETE_DIAGNOSTIC_TITLE": "Can't Start Session",
         "INCOMPLETE_DIAGNOSTIC_CONTENT": "{{studentName}} did not complete the diagnostic test yet.<br/>Please make sure the diagnostic test is completed before starting a session."
     },

@@ -768,6 +768,8 @@
                                 } else {
                                     LiveSessionUiSrv.showEducatorPendingPopUp()
                                         .then(function () {
+                                            $log.debug('showEducatorPendingPopUp: Closed - wait for student to join.');
+                                        }, function () {
                                             LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                         });
                                 }
@@ -997,13 +999,14 @@
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
+                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.OK');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
                     let popUpInstance = PopUpSrv.warning(
                         translations.title,
                         translations.content,
                         translations.cancelBtnTitle,
-                        null
+                        translations.acceptBtnTitle
 
                     );
                     return popUpInstance.promise.then(function(res){
