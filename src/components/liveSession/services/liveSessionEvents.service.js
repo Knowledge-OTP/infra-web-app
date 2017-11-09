@@ -14,95 +14,98 @@
             'ngInject';
 
             let LiveSessionEventsSrv = {};
+            let currUid = null;
 
             function _listenToLiveSessionData(guid) {
                 let liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
 
                 function _cb(liveSessionData) {
-                    if (!liveSessionData) {
+                    if (!liveSessionData || !currUid) {
                         return;
                     }
 
-                    UserProfileService.getCurrUserId().then(function (currUid) {
-                        switch (liveSessionData.status) {
-                            case LiveSessionStatusEnum.PENDING_STUDENT.enum:
-                                if (liveSessionData.studentId === currUid) {
-                                    LiveSessionUiSrv.showStudentConfirmationPopUp()
-                                        .then(function () {
-                                            LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                        }, function () {
-                                            LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                                        });
-                                } else {
-                                    LiveSessionUiSrv.showEducatorPendingPopUp()
-                                        .then(function () {
-                                            $log.debug('showEducatorPendingPopUp: Closed - wait for student to join.');
-                                        }, function () {
-                                            LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                                        });
-                                }
-                                break;
-                            case LiveSessionStatusEnum.CONFIRMED.enum:
-                                LiveSessionUiSrv.closePopup();
-                                let userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
-
-                                if (liveSessionData.studentId === currUid) {
-                                    userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
-                                }
-
-                                if (liveSessionData.educatorId === currUid) {
-                                    userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
-                                }
-
-                                if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                                    LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
-                                }
-
-                                break;
-                            case LiveSessionStatusEnum.ENDED.enum:
-                                if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
-                                    LiveSessionSrv._destroyCheckDurationInterval();
-                                }
-
-                                LiveSessionUiSrv.showEndSessionPopup()
-                                    .then(function () {
-                                        ZnkLessonNotesSrv.openLessonNotesPopup();
+                    switch (liveSessionData.status) {
+                        case LiveSessionStatusEnum.PENDING_STUDENT.enum:
+                            if (liveSessionData.studentId === currUid) {
+                                LiveSessionUiSrv.showStudentConfirmationPopUp()
+                                    .then(() => {
+                                        LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                    }, () => {
+                                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                     });
-                                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
-                                // Security check to insure there isn't active session
-                                LiveSessionSrv._moveToArchive(liveSessionData);
-                                break;
-                            default:
-                                $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
-                        }
+                            } else {
+                                LiveSessionUiSrv.showEducatorPendingPopUp();
+                            }
+                            break;
 
-                        LiveSessionSrv._liveSessionDataChanged(liveSessionData);
-                    });
+                        case LiveSessionStatusEnum.CONFIRMED.enum:
+                            LiveSessionUiSrv.closePopup();
+                            LiveSessionUiSrv.showLiveSessionToast();
+                            let userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+
+                            if (liveSessionData.studentId === currUid) {
+                                userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
+                            }
+
+                            if (liveSessionData.educatorId === currUid) {
+                                userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                                LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
+                            }
+
+                            if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                                LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
+                            }
+
+                            break;
+
+                        case LiveSessionStatusEnum.ENDED.enum:
+                            if (liveSessionData.studentId !== currUid) {
+                                LiveSessionSrv.hangCall(liveSessionData.studentId);
+                                LiveSessionSrv._destroyCheckDurationInterval();
+                            }
+
+                            LiveSessionUiSrv.showEndSessionPopup()
+                                .then(function () {
+                                    ZnkLessonNotesSrv.openLessonNotesPopup();
+                                });
+                            LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                            // Security check to insure there isn't active session
+                            LiveSessionSrv._moveToArchive(liveSessionData);
+                            break;
+                        default:
+                            $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
+                    }
+
+                    LiveSessionSrv._liveSessionDataChanged(liveSessionData);
                 }
 
-                InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                InfraConfigSrv.getGlobalStorage().then(globalStorage => {
                     globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
                 });
             }
 
             function _startListening() {
-                UserProfileService.getCurrUserId().then(function (currUid) {
-                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                UserProfileService.getCurrUserId().then((currUserId) => {
+                    currUid = currUserId;
+                    InfraConfigSrv.getGlobalStorage().then(globalStorage => {
                         let appName = ENV.firebaseAppScopeName;
                         let userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
-                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
-                            if (userLiveSessionGuids) {
-                                angular.forEach(userLiveSessionGuids, function (isActive, guid) {
-                                    if (isActive) {
-                                        _listenToLiveSessionData(guid);
-                                    }
-                                });
-                            }
-                        });
+                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, _listenToUserActivePath);
                     });
                 });
+            }
+
+            function _listenToUserActivePath(userLiveSessionGuids) {
+                if (userLiveSessionGuids) {
+                    userLiveSessionGuids = Array.isArray(userLiveSessionGuids) ? userLiveSessionGuids : Object.keys(userLiveSessionGuids);
+                    userLiveSessionGuids.forEach((isActive, guid) => {
+                        if (isActive) {
+                            _listenToLiveSessionData(guid);
+                        } else {
+                            $log.debug('_listenToUserActivePath: isActive is: ', isActive);
+                        }
+                    });
+                }
             }
 
             function activate() {

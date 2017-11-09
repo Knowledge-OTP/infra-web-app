@@ -102,7 +102,7 @@
                         return $q.resolve(res);
                     });
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showStudentLiveSessionPopUp translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp translate failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -113,19 +113,9 @@
                 translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
-                    let popUpInstance = PopUpSrv.wait(
-                        translations.title,
-                        translations.content,
-                        translations.cancelBtnTitle
-
-                    );
-                    return popUpInstance.promise.then(function(res){
-                        return $q.reject(res);
-                    },function(res){
-                        return $q.resolve(res);
-                    });
+                    PopUpSrv.wait(translations.title, translations.content, translations.cancelBtnTitle);
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showStudentLiveSessionPopUp translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showEducatorPendingPopUp translate failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -179,12 +169,9 @@
                 translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
                 translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: studentName });
                 return $q.all(translationsPromMap).then(function(translations){
-                    PopUpSrv.info(
-                        translations.title,
-                        translations.content
-                    );
+                    PopUpSrv.info(translations.title, translations.content);
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showIncompleteDiagnostic translate failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -194,12 +181,9 @@
                 translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
                 translationsPromMap.content= $translate('LIVE_SESSION.NO_LESSON_SCHEDULED', { studentName: studentName });
                 return $q.all(translationsPromMap).then(function(translations){
-                    PopUpSrv.info(
-                        translations.title,
-                        translations.content
-                    );
+                    PopUpSrv.info(translations.title, translations.content);
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup translate failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -224,25 +208,15 @@
 
 
             LiveSessionUiSrv.activateLiveSession = activateLiveSession;
-
             LiveSessionUiSrv.endLiveSession = endLiveSession;
-
             LiveSessionUiSrv.showStudentConfirmationPopUp = showStudentConfirmationPopUp;
-
             LiveSessionUiSrv.showEducatorPendingPopUp = showEducatorPendingPopUp;
-
             LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
-
             LiveSessionUiSrv.showEndSessionPopup = showEndSessionPopup;
-
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
-
             LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
-
             LiveSessionUiSrv.showNoLessonScheduledPopup = showNoLessonScheduledPopup;
-
             LiveSessionUiSrv.closePopup = closePopup;
-
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
             readyProm = $timeout(function(){

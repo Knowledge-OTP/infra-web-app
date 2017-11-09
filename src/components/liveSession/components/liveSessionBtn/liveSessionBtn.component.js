@@ -10,7 +10,7 @@
             controllerAs: 'vm',
             controller: function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
                                   PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum,
-                                  UserProfileService, LiveSessionUiSrv) {
+                                  UserProfileService, LiveSessionUiSrv, StudentService) {
                 'ngInject';
 
                 let vm = this;
@@ -21,19 +21,24 @@
                 };
                 let dataPromMap = {
                     liveSessionDuration: ZnkLessonNotesSrv.getLiveSessionDuration(),
-                    educatorId: UserProfileService.getCurrUserId(),
+                    educatorId: UserProfileService.getCurrUserId()
                 };
 
                 this.$onInit = function() {
                     vm.isLiveSessionActive = false;
                     vm.isOffline = true;
+                    vm.isDiagnosticCompleted = false;
                     vm.endSession = endSession;
-                    vm.showSessionModal = showSessionModal;
+                    vm.showStartSessionPopup = showStartSessionPopup;
                     initializeLiveSessionStatus();
 
-                    $scope.$watch('vm.student', function (newStudent) {
+                    $scope.$watch('vm.student', newStudent => {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
                             vm.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
+                            StudentService.getStudentResults(newStudent.uid).then(studentResults => {
+                                StudentService.isDiagnosticCompleted(studentResults.examResults)
+                                    .then(isDiagnosticCompleted => vm.isDiagnosticCompleted = isDiagnosticCompleted);
+                            });
                         }
                     }, true);
 
@@ -41,34 +46,38 @@
                 };
 
                 function initializeLiveSessionStatus() {
-                    LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                    LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         if (liveSessionData) {
                             liveSessionStateChanged(liveSessionData.status);
                         }
                     });
                 }
 
-                function showSessionModal() {
+                function showStartSessionPopup() {
+                    if (!vm.isDiagnosticCompleted) {
+                        $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
+                        return LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
+                    }
+
+                    LiveSessionUiSrv.showStartSessionPopUp().then(() => endSession());
+
                     getScheduledLesson().then(scheduledLesson => {
+                        LiveSessionUiSrv.closePopup();
                         if (scheduledLesson) {
-                            vm.lessonId = scheduledLesson.id;
-                            $mdDialog.show({
-                                template: '<live-session-subject-modal student="vm.student" lesson-id="vm.lessonId"></live-session-subject-modal>',
-                                scope: $scope,
-                                preserveScope: true,
-                                clickOutsideToClose: true
-                            });
+                            LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
                         } else {
                             LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
                                 .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
                         }
                     });
                 }
+
                 function liveSessionStateChanged(newLiveSessionState) {
                     vm.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
                 }
+
                 function endSession() {
-                    LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                    LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
                 }

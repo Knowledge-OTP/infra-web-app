@@ -9146,8 +9146,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             },
             templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
             controllerAs: 'vm',
-            controller: ["$q", "$log", "$scope", "$mdDialog", "LiveSessionSrv", "StudentContextSrv", "TeacherContextSrv", "PresenceService", "ENV", "LiveSessionStatusEnum", "ZnkLessonNotesSrv", "LessonStatusEnum", "UserProfileService", function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
-                                  PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum, UserProfileService) {
+            controller: ["$q", "$log", "$scope", "$mdDialog", "LiveSessionSrv", "StudentContextSrv", "TeacherContextSrv", "PresenceService", "ENV", "LiveSessionStatusEnum", "ZnkLessonNotesSrv", "LessonStatusEnum", "UserProfileService", "LiveSessionUiSrv", "StudentService", function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
+                                  PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum,
+                                  UserProfileService, LiveSessionUiSrv, StudentService) {
                 'ngInject';
 
                 let vm = this;
@@ -9158,19 +9159,24 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 };
                 let dataPromMap = {
                     liveSessionDuration: ZnkLessonNotesSrv.getLiveSessionDuration(),
-                    educatorId: UserProfileService.getCurrUserId(),
+                    educatorId: UserProfileService.getCurrUserId()
                 };
 
                 this.$onInit = function() {
                     vm.isLiveSessionActive = false;
                     vm.isOffline = true;
+                    vm.isDiagnosticCompleted = false;
                     vm.endSession = endSession;
-                    vm.showSessionModal = showSessionModal;
+                    vm.showStartSessionPopup = showStartSessionPopup;
                     initializeLiveSessionStatus();
 
-                    $scope.$watch('vm.student', function (newStudent) {
+                    $scope.$watch('vm.student', newStudent => {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
                             vm.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
+                            StudentService.getStudentResults(newStudent.uid).then(studentResults => {
+                                StudentService.isDiagnosticCompleted(studentResults.examResults)
+                                    .then(isDiagnosticCompleted => vm.isDiagnosticCompleted = isDiagnosticCompleted);
+                            });
                         }
                     }, true);
 
@@ -9178,33 +9184,38 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 };
 
                 function initializeLiveSessionStatus() {
-                    LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                    LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         if (liveSessionData) {
                             liveSessionStateChanged(liveSessionData.status);
                         }
                     });
                 }
 
-                function showSessionModal() {
+                function showStartSessionPopup() {
+                    if (!vm.isDiagnosticCompleted) {
+                        $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
+                        return LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
+                    }
+
+                    LiveSessionUiSrv.showStartSessionPopUp().then(() => endSession());
+
                     getScheduledLesson().then(scheduledLesson => {
+                        LiveSessionUiSrv.closePopup();
                         if (scheduledLesson) {
-                            vm.lessonId = scheduledLesson.id;
-                            $mdDialog.show({
-                                template: '<live-session-subject-modal student="vm.student" lesson-id="vm.lessonId"></live-session-subject-modal>',
-                                scope: $scope,
-                                preserveScope: true,
-                                clickOutsideToClose: true
-                            });
+                            LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
                         } else {
-                            $log.debug('showSessionModal: No lesson is scheduled');
+                            LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
                         }
                     });
                 }
+
                 function liveSessionStateChanged(newLiveSessionState) {
                     vm.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
                 }
+
                 function endSession() {
-                    LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                    LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
                 }
@@ -9293,7 +9304,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         if (isDiagnosticCompleted) {
                             LiveSessionSrv.startLiveSession(vm.student, sessionSubject, vm.lessonId);
                         } else {
-                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student);
+                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
                         }
                     });
 
@@ -9373,17 +9384,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             let liveSessionInterval = {};
             let isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
 
-            this.startLiveSession = function (studentData, sessionSubject, lessonId) {
+            this.startLiveSession = function (studentData, lessonData) {
                 return UserProfileService.getCurrUserId().then(function (currUserId) {
                     let educatorData = {
                         uid: currUserId,
                         isTeacher: isTeacherApp
 
                     };
-                    let lessonData = {
-                        sessionSubject: sessionSubject,
-                        lessonId: lessonId
-                    };
+
                     return _initiateLiveSession(educatorData, studentData, lessonData, UserLiveSessionStateEnum.EDUCATOR.enum);
                 });
             };
@@ -9643,7 +9651,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     return $q.all(getDataPromMap).then(function (data) {
                         let dataToSave = {};
 
-                        let startTime = _getRoundTime();
                         let studentPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(studentData, newLiveSessionGuid);
                         let educatorPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(educatorData, newLiveSessionGuid);
                         let newLiveSessionData = {
@@ -9655,11 +9662,12 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
                             extendTime: 0,
-                            startTime: startTime,
+                            educatorStartTime: _getRoundTime(),
+                            startTime: null,
                             endTime: null,
                             duration: null,
-                            sessionSubject: lessonData.sessionSubject.id,
-                            lessonId: lessonData.lessonId
+                            sessionSubject: lessonData.topicId,
+                            lessonId: lessonData.id
                         };
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
@@ -9674,7 +9682,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         dataToSave[studentLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
 
                         try {
-                            _updateLesson(lessonData.lessonId);
+                            _updateLesson(lessonData);
                         } catch (err) {
                             $log.error('_initiateLiveSession: updateLesson failed. Error: ', err);
                         }
@@ -9687,16 +9695,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 });
             }
 
-            function _updateLesson(lessonId) {
-                return ZnkLessonNotesSrv.getLessonById(lessonId)
-                    .then(lesson => {
-                        lesson.status = LessonStatusEnum.ATTENDED.enum;
-                        lesson.lessonNotes = lesson.lessonNotes || {};
-                        lesson.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
-                        ZnkLessonNotesSrv.updateLesson(lesson).then(lesson => {
-                            $log.debug('_updateLesson: Lesson: ', lesson);
-                        });
-                    });
+            function _updateLesson(lesson) {
+                lesson.status = LessonStatusEnum.ATTENDED.enum;
+                lesson.lessonNotes = lesson.lessonNotes || {};
+                lesson.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
+
+                return ZnkLessonNotesSrv.updateLesson(lesson).then(lesson => {
+                    $log.debug('_updateLesson: Lesson: ', lesson);
+                });
             }
 
             function _cleanRegisteredCbToActiveLiveSessionData() {
@@ -9847,95 +9853,98 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             'ngInject';
 
             let LiveSessionEventsSrv = {};
+            let currUid = null;
 
             function _listenToLiveSessionData(guid) {
                 let liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
 
                 function _cb(liveSessionData) {
-                    if (!liveSessionData) {
+                    if (!liveSessionData || !currUid) {
                         return;
                     }
 
-                    UserProfileService.getCurrUserId().then(function (currUid) {
-                        switch (liveSessionData.status) {
-                            case LiveSessionStatusEnum.PENDING_STUDENT.enum:
-                                if (liveSessionData.studentId === currUid) {
-                                    LiveSessionUiSrv.showStudentConfirmationPopUp()
-                                        .then(function () {
-                                            LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                        }, function () {
-                                            LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                                        });
-                                } else {
-                                    LiveSessionUiSrv.showEducatorPendingPopUp()
-                                        .then(function () {
-                                            $log.debug('showEducatorPendingPopUp: Closed - wait for student to join.');
-                                        }, function () {
-                                            LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                                        });
-                                }
-                                break;
-                            case LiveSessionStatusEnum.CONFIRMED.enum:
-                                LiveSessionUiSrv.closePopup();
-                                let userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
-
-                                if (liveSessionData.studentId === currUid) {
-                                    userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
-                                }
-
-                                if (liveSessionData.educatorId === currUid) {
-                                    userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-                                    LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
-                                }
-
-                                if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                                    LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
-                                }
-
-                                break;
-                            case LiveSessionStatusEnum.ENDED.enum:
-                                if (liveSessionData.studentId !== currUid) {
-                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
-                                    LiveSessionSrv._destroyCheckDurationInterval();
-                                }
-
-                                LiveSessionUiSrv.showEndSessionPopup()
-                                    .then(function () {
-                                        ZnkLessonNotesSrv.openLessonNotesPopup();
+                    switch (liveSessionData.status) {
+                        case LiveSessionStatusEnum.PENDING_STUDENT.enum:
+                            if (liveSessionData.studentId === currUid) {
+                                LiveSessionUiSrv.showStudentConfirmationPopUp()
+                                    .then(() => {
+                                        LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                    }, () => {
+                                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                     });
-                                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
-                                // Security check to insure there isn't active session
-                                LiveSessionSrv._moveToArchive(liveSessionData);
-                                break;
-                            default:
-                                $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
-                        }
+                            } else {
+                                LiveSessionUiSrv.showEducatorPendingPopUp();
+                            }
+                            break;
 
-                        LiveSessionSrv._liveSessionDataChanged(liveSessionData);
-                    });
+                        case LiveSessionStatusEnum.CONFIRMED.enum:
+                            LiveSessionUiSrv.closePopup();
+                            LiveSessionUiSrv.showLiveSessionToast();
+                            let userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+
+                            if (liveSessionData.studentId === currUid) {
+                                userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
+                            }
+
+                            if (liveSessionData.educatorId === currUid) {
+                                userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                                LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
+                            }
+
+                            if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                                LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
+                            }
+
+                            break;
+
+                        case LiveSessionStatusEnum.ENDED.enum:
+                            if (liveSessionData.studentId !== currUid) {
+                                LiveSessionSrv.hangCall(liveSessionData.studentId);
+                                LiveSessionSrv._destroyCheckDurationInterval();
+                            }
+
+                            LiveSessionUiSrv.showEndSessionPopup()
+                                .then(function () {
+                                    ZnkLessonNotesSrv.openLessonNotesPopup();
+                                });
+                            LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                            // Security check to insure there isn't active session
+                            LiveSessionSrv._moveToArchive(liveSessionData);
+                            break;
+                        default:
+                            $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
+                    }
+
+                    LiveSessionSrv._liveSessionDataChanged(liveSessionData);
                 }
 
-                InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                InfraConfigSrv.getGlobalStorage().then(globalStorage => {
                     globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
                 });
             }
 
             function _startListening() {
-                UserProfileService.getCurrUserId().then(function (currUid) {
-                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+                UserProfileService.getCurrUserId().then((currUserId) => {
+                    currUid = currUserId;
+                    InfraConfigSrv.getGlobalStorage().then(globalStorage => {
                         let appName = ENV.firebaseAppScopeName;
                         let userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
-                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (userLiveSessionGuids) {
-                            if (userLiveSessionGuids) {
-                                angular.forEach(userLiveSessionGuids, function (isActive, guid) {
-                                    if (isActive) {
-                                        _listenToLiveSessionData(guid);
-                                    }
-                                });
-                            }
-                        });
+                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, _listenToUserActivePath);
                     });
                 });
+            }
+
+            function _listenToUserActivePath(userLiveSessionGuids) {
+                if (userLiveSessionGuids) {
+                    userLiveSessionGuids = Array.isArray(userLiveSessionGuids) ? userLiveSessionGuids : Object.keys(userLiveSessionGuids);
+                    userLiveSessionGuids.forEach((isActive, guid) => {
+                        if (isActive) {
+                            _listenToLiveSessionData(guid);
+                        } else {
+                            $log.debug('_listenToUserActivePath: isActive is: ', isActive);
+                        }
+                    });
+                }
             }
 
             function activate() {
@@ -10091,7 +10100,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         return $q.resolve(res);
                     });
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showStudentLiveSessionPopUp translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp translate failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -10100,23 +10109,11 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
-                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.OK');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
-                    let popUpInstance = PopUpSrv.warning(
-                        translations.title,
-                        translations.content,
-                        translations.cancelBtnTitle,
-                        translations.acceptBtnTitle
-
-                    );
-                    return popUpInstance.promise.then(function(res){
-                        return $q.reject(res);
-                    },function(res){
-                        return $q.resolve(res);
-                    });
+                    PopUpSrv.wait(translations.title, translations.content, translations.cancelBtnTitle);
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showStudentLiveSessionPopUp translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showEducatorPendingPopUp translate failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -10165,17 +10162,26 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 });
             }
 
-            function showIncompleteDiagnostic(student) {
+            function showIncompleteDiagnostic(studentName) {
                 let translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_TITLE');
-                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: student.name });
+                translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
+                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: studentName });
                 return $q.all(translationsPromMap).then(function(translations){
-                    PopUpSrv.info(
-                        translations.title,
-                        translations.content
-                    );
+                    PopUpSrv.info(translations.title, translations.content);
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showIncompleteDiagnostic translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
+            function showNoLessonScheduledPopup(studentName) {
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
+                translationsPromMap.content= $translate('LIVE_SESSION.NO_LESSON_SCHEDULED', { studentName: studentName });
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.info(translations.title, translations.content);
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup translate failure' + err);
                     return $q.reject(err);
                 });
             }
@@ -10200,23 +10206,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
 
             LiveSessionUiSrv.activateLiveSession = activateLiveSession;
-
             LiveSessionUiSrv.endLiveSession = endLiveSession;
-
             LiveSessionUiSrv.showStudentConfirmationPopUp = showStudentConfirmationPopUp;
-
             LiveSessionUiSrv.showEducatorPendingPopUp = showEducatorPendingPopUp;
-
             LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
-
             LiveSessionUiSrv.showEndSessionPopup = showEndSessionPopup;
-
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
-
             LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
-
+            LiveSessionUiSrv.showNoLessonScheduledPopup = showNoLessonScheduledPopup;
             LiveSessionUiSrv.closePopup = closePopup;
-
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
             readyProm = $timeout(function(){
@@ -10233,7 +10231,7 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function(
     "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
     "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
     "           ng-class=\"{'offline': vm.isOffline, 'end-session': vm.isLiveSessionActive}\"\n" +
-    "           ng-click=\"!vm.isLiveSessionActive ? vm.showSessionModal() : vm.endSession()\">\n" +
+    "           ng-click=\"!vm.isLiveSessionActive ? vm.showStartSessionPopup() : vm.endSession()\">\n" +
     "\n" +
     "    <span ng-if=\"!vm.isLiveSessionActive\">\n" +
     "        <md-tooltip znk-tooltip class=\"md-fab\">\n" +

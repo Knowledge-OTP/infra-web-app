@@ -534,6 +534,7 @@
     },
     "LIVE_SESSION": {
         "START_SESSION": "Start Lesson",
+        "STARTING_SESSION": "Starting Lesson...",
         "END_SESSION": "End Lesson",
         "SESSION_SUBJECT": "Select session subject.",
         "MATH": "math",

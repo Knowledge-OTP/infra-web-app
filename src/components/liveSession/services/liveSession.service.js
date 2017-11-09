@@ -22,17 +22,14 @@
             let liveSessionInterval = {};
             let isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
 
-            this.startLiveSession = function (studentData, sessionSubject, lessonId) {
+            this.startLiveSession = function (studentData, lessonData) {
                 return UserProfileService.getCurrUserId().then(function (currUserId) {
                     let educatorData = {
                         uid: currUserId,
                         isTeacher: isTeacherApp
 
                     };
-                    let lessonData = {
-                        sessionSubject: sessionSubject,
-                        lessonId: lessonId
-                    };
+
                     return _initiateLiveSession(educatorData, studentData, lessonData, UserLiveSessionStateEnum.EDUCATOR.enum);
                 });
             };
@@ -292,7 +289,6 @@
                     return $q.all(getDataPromMap).then(function (data) {
                         let dataToSave = {};
 
-                        let startTime = _getRoundTime();
                         let studentPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(studentData, newLiveSessionGuid);
                         let educatorPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(educatorData, newLiveSessionGuid);
                         let newLiveSessionData = {
@@ -304,11 +300,12 @@
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
                             extendTime: 0,
-                            startTime: startTime,
+                            educatorStartTime: _getRoundTime(),
+                            startTime: null,
                             endTime: null,
                             duration: null,
-                            sessionSubject: lessonData.sessionSubject.id,
-                            lessonId: lessonData.lessonId
+                            sessionSubject: lessonData.topicId,
+                            lessonId: lessonData.id
                         };
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
@@ -323,7 +320,7 @@
                         dataToSave[studentLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
 
                         try {
-                            _updateLesson(lessonData.lessonId);
+                            _updateLesson(lessonData);
                         } catch (err) {
                             $log.error('_initiateLiveSession: updateLesson failed. Error: ', err);
                         }
@@ -336,16 +333,14 @@
                 });
             }
 
-            function _updateLesson(lessonId) {
-                return ZnkLessonNotesSrv.getLessonById(lessonId)
-                    .then(lesson => {
-                        lesson.status = LessonStatusEnum.ATTENDED.enum;
-                        lesson.lessonNotes = lesson.lessonNotes || {};
-                        lesson.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
-                        ZnkLessonNotesSrv.updateLesson(lesson).then(lesson => {
-                            $log.debug('_updateLesson: Lesson: ', lesson);
-                        });
-                    });
+            function _updateLesson(lesson) {
+                lesson.status = LessonStatusEnum.ATTENDED.enum;
+                lesson.lessonNotes = lesson.lessonNotes || {};
+                lesson.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
+
+                return ZnkLessonNotesSrv.updateLesson(lesson).then(lesson => {
+                    $log.debug('_updateLesson: Lesson: ', lesson);
+                });
             }
 
             function _cleanRegisteredCbToActiveLiveSessionData() {
