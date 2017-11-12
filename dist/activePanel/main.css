@@ -149,6 +149,16 @@ active-panel {
             height: 28px; }
             active-panel .active-panel .flex-container .flex-col.call-controls call-btn svg-icon.etutoring-phone-icon svg {
               width: 46%; }
+        active-panel .active-panel .flex-container .flex-col.call-controls .hangouts-icon {
+          display: block;
+          width: 18px;
+          padding: 5px;
+          border-radius: 50%;
+          border: 1px solid #b7b7b7;
+          margin-left: 10px;
+          cursor: pointer; }
+          active-panel .active-panel .flex-container .flex-col.call-controls .hangouts-icon.available {
+            background-color: #ffffff; }
         active-panel .active-panel .flex-container .flex-col.call-controls .end-session-wrap {
           display: -ms-flexbox;
           display: flex; }
