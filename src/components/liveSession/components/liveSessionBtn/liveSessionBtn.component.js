@@ -8,22 +8,37 @@
             },
             templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
             controllerAs: 'vm',
-            controller: function ($log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
-                                  PresenceService, ENV, LiveSessionStatusEnum) {
+            controller: function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
+                                  PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum,
+                                  UserProfileService, LiveSessionUiSrv, StudentService) {
                 'ngInject';
 
-                var vm = this;
+                let vm = this;
+                let DOCUMENT_DB_QUERY_KEY = 'getLessonsByEducatorStudentStatusAndRange';
+                let SESSION_DURATION =  {
+                    marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
+                    marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
+                };
+                let dataPromMap = {
+                    liveSessionDuration: ZnkLessonNotesSrv.getLiveSessionDuration(),
+                    educatorId: UserProfileService.getCurrUserId()
+                };
 
                 this.$onInit = function() {
                     vm.isLiveSessionActive = false;
                     vm.isOffline = true;
+                    vm.isDiagnosticCompleted = false;
                     vm.endSession = endSession;
-                    vm.showSessionModal = showSessionModal;
+                    vm.showStartSessionPopup = showStartSessionPopup;
                     initializeLiveSessionStatus();
 
-                    $scope.$watch('vm.student', function (newStudent) {
+                    $scope.$watch('vm.student', newStudent => {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
                             vm.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
+                            StudentService.getStudentResults(newStudent.uid).then(studentResults => {
+                                StudentService.isDiagnosticCompleted(studentResults.examResults)
+                                    .then(isDiagnosticCompleted => vm.isDiagnosticCompleted = isDiagnosticCompleted);
+                            });
                         }
                     }, true);
 
@@ -31,28 +46,66 @@
                 };
 
                 function initializeLiveSessionStatus() {
-                    LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                    LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         if (liveSessionData) {
                             liveSessionStateChanged(liveSessionData.status);
                         }
                     });
                 }
 
-                function showSessionModal() {
-                    $mdDialog.show({
-                        template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
-                        scope: $scope,
-                        preserveScope: true,
-                        clickOutsideToClose: true
+                function showStartSessionPopup() {
+                    if (!vm.isDiagnosticCompleted) {
+                        $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
+                        return LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
+                    }
+
+                    LiveSessionUiSrv.showStartSessionPopUp().then(() => endSession());
+
+                    getScheduledLesson().then(scheduledLesson => {
+                        LiveSessionUiSrv.closePopup();
+                        if (scheduledLesson) {
+                            LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
+                        } else {
+                            LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
+                        }
                     });
                 }
+
                 function liveSessionStateChanged(newLiveSessionState) {
                     vm.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
                 }
+
                 function endSession() {
-                    LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                    LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
+                }
+
+
+                function getScheduledLesson() {
+                    return $q.all(dataPromMap).then(dataMap => {
+                        SESSION_DURATION = dataMap.liveSessionDuration ? dataMap.liveSessionDuration : SESSION_DURATION;
+                        let now = Date.now();
+                        let calcStartTime = now - SESSION_DURATION.marginBeforeSessionStart;
+                        let calcEndTime = now + SESSION_DURATION.marginAfterSessionStart;
+                        let query = {
+                            query: DOCUMENT_DB_QUERY_KEY,
+                            values: [
+                                dataMap.educatorId,
+                                [vm.student.uid],
+                                [LessonStatusEnum.SCHEDULED.enum],
+                                calcStartTime,
+                                calcEndTime
+                            ]
+                        };
+
+                        return ZnkLessonNotesSrv.getLessonsByQuery(query).then(lessons => {
+                            return lessons && lessons.length ? lessons[0] : null;
+                        }, err => $log.debug('checkIfHaveScheduleLesson: getLessonsByQuery Error: ', err));
+                    });
+
+
                 }
             }
         });

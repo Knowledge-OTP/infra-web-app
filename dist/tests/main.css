@@ -6,6 +6,13 @@
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .app-tests-navigationPane {
@@ -75,8 +82,7 @@
           border-style: solid;
           border-width: 10px 0 10px 10px;
           border-color: transparent transparent transparent #f2f2f2;
-          -webkit-filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
-                  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+          filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
           position: absolute;
           right: -9px;
           top: 18px; }

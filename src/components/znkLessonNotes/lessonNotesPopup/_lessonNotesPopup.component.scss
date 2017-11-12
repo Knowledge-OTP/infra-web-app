@@ -1,0 +1,25 @@
+.lesson-notes-popup {
+    display: flex;
+    flex-direction: column;
+
+    .divider {
+        background-color: $mercury;
+        height: 1px;
+        width: 96%;
+        margin: 0 auto;
+    }
+
+    button {
+        align-self: flex-end;
+        margin: 20px;
+        position: relative;
+        .spinner {
+            position: absolute;
+            margin: 0;
+            font-size: 5px;
+            top: 50%;
+            right: 29px;
+            transform: translateY(-50%);
+        }
+    }
+}

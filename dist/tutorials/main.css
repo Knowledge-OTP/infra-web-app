@@ -6,6 +6,13 @@
 /*background*/
 /* box shadow */
 /* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
 /* full background image with retina */
 /* full background image with retina */
 .app-tests-roadmap {
@@ -52,8 +59,7 @@
       -ms-flex-pack: distribute;
           justify-content: space-around; }
       .tutorials-list-pane .tutorials-list-container .flex-container.blur {
-        -webkit-filter: blur(7px);
-                filter: blur(7px);
+        filter: blur(7px);
         opacity: 0.5; }
 
 .tutorial-item {

@@ -19,12 +19,13 @@
             'znk.infra-web-app.znkToast',
             'znk.infra.exerciseUtility',
             'znk.infra.znkTooltip',
-            'znk.infra.calls'
+            'znk.infra.calls',
+            'znk.infra-web-app.znkLessonNotes'
         ])
         .config([
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
-                var svgMap = {
+                let svgMap = {
                     'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
                     'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
                     'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'

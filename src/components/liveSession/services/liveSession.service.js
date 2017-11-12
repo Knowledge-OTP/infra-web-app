@@ -3,38 +3,40 @@
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
         function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
-                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv) {
+                  ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv,
+                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum) {
             'ngInject';
 
-            var _this = this;
+            let _this = this;
 
-            var SESSION_DURATION =  {
+            let SESSION_DURATION =  {
                 length: ENV.liveSession.sessionLength,
                 extendTime: ENV.liveSession.sessionExtendTime,
                 endAlertTime: ENV.liveSession.sessionEndAlertTime
             };
 
-            var activeLiveSessionDataFromAdapter = null;
-            var currUserLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
-            var registeredCbToActiveLiveSessionDataChanges = [];
-            var registeredCbToCurrUserLiveSessionStateChange = [];
-            var liveSessionInterval = {};
-            var isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+            let activeLiveSessionDataFromAdapter = null;
+            let currUserLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+            let registeredCbToActiveLiveSessionDataChanges = [];
+            let registeredCbToCurrUserLiveSessionStateChange = [];
+            let liveSessionInterval = {};
+            let isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
 
-            this.startLiveSession = function (studentData, sessionSubject) {
+            this.startLiveSession = function (studentData, lessonData) {
                 return UserProfileService.getCurrUserId().then(function (currUserId) {
-                    var educatorData = {
+                    let educatorData = {
                         uid: currUserId,
-                        isTeacher: isTeacherApp,
-                        sessionSubject: sessionSubject
+                        isTeacher: isTeacherApp
+
                     };
-                    return _initiateLiveSession(educatorData, studentData, UserLiveSessionStateEnum.EDUCATOR.enum);
+
+                    return _initiateLiveSession(educatorData, studentData, lessonData, UserLiveSessionStateEnum.EDUCATOR.enum);
                 });
             };
 
             this.confirmLiveSession = function (liveSessionGuid) {
                 if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                    var errMsg = 'LiveSessionSrv: live session is already active!!!';
+                    let errMsg = 'LiveSessionSrv: live session is already active!!!';
                     $log.debug(errMsg);
                     return $q.reject(errMsg);
                 }
@@ -68,11 +70,11 @@
             };
 
             this.endLiveSession = function (liveSessionGuid) {
-                var getDataPromMap = {};
+                let getDataPromMap = {};
                 getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
                 getDataPromMap.storage = _getStorage();
                 return $q.all(getDataPromMap).then(function (data) {
-                    var dataToSave = {};
+                    let dataToSave = {};
 
                     data.liveSessionData.status = LiveSessionStatusEnum.ENDED.enum;
                     data.liveSessionData.endTime = _getRoundTime();
@@ -85,32 +87,42 @@
                 });
             };
 
+            this.updateLiveSession = function (liveSessionToUpdate) {
+                return _getStorage().then(function (data) {
+                    let dataToSave = {
+                        [data.liveSessionData.$$path]: liveSessionToUpdate
+                    };
+
+                    return data.storage.update(dataToSave);
+                });
+            };
+
             this._moveToArchive = function (liveSessionData) {
-                var getDataPromMap = {};
+                let getDataPromMap = {};
                 getDataPromMap.currUid = UserProfileService.getCurrUserId();
                 getDataPromMap.currUidLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
                 getDataPromMap.storage = _getStorage();
                 return $q.all(getDataPromMap).then(function (data) {
-                    var dataToSave = {};
+                    let dataToSave = {};
 
                     if (data.currUidLiveSessionRequests){
                         data.currUidLiveSessionRequests[liveSessionData.guid] = false;
-                        var activePath = data.currUidLiveSessionRequests.$$path;
+                        let activePath = data.currUidLiveSessionRequests.$$path;
                         dataToSave[activePath] = {};
-                        var archivePath = activePath.replace('/active', '/archive');
+                        let archivePath = activePath.replace('/active', '/archive');
                         archivePath += '/' + liveSessionData.guid;
                         dataToSave[archivePath] = false;
 
-                        var otherUserLiveSessionRequestPath;
+                        let otherUserLiveSessionRequestPath;
                         if (liveSessionData.studentId !== data.currUid) {
                             otherUserLiveSessionRequestPath = liveSessionData.studentPath;
                         } else {
                             otherUserLiveSessionRequestPath = liveSessionData.teacherPath;
                         }
                         if (otherUserLiveSessionRequestPath){
-                            var otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
+                            let otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
                             dataToSave[otherUserActivePath] = {};
-                            var otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
+                            let otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
                             otherUserArchivePath += '/' + liveSessionData.guid;
                             dataToSave[otherUserArchivePath] = false;
                         }
@@ -145,12 +157,12 @@
                     return $q.when(null);
                 }
 
-                var dataPromMap = {
+                let dataPromMap = {
                     liveSessionData: LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid),
                     currUid: UserProfileService.getCurrUserId()
                 };
                 return $q.all(dataPromMap).then(function(dataMap){
-                    var orig$saveFn = dataMap.liveSessionData.$save;
+                    let orig$saveFn = dataMap.liveSessionData.$save;
                     dataMap.liveSessionData.$save = function () {
                         dataMap.liveSessionData.updatedBy = dataMap.currUid;
                         return orig$saveFn.apply(dataMap.liveSessionData);
@@ -167,8 +179,8 @@
 
                 currUserLiveSessionState = newUserLiveSessionState;
 
-                var isStudentState = newUserLiveSessionState === UserLiveSessionStateEnum.STUDENT.enum;
-                var isEducatorState = newUserLiveSessionState === UserLiveSessionStateEnum.EDUCATOR.enum;
+                let isStudentState = newUserLiveSessionState === UserLiveSessionStateEnum.STUDENT.enum;
+                let isEducatorState = newUserLiveSessionState === UserLiveSessionStateEnum.EDUCATOR.enum;
                 if (isStudentState || isEducatorState) {
                     activeLiveSessionDataFromAdapter = liveSessionData;
                     LiveSessionUiSrv.activateLiveSession(newUserLiveSessionState).then(function () {
@@ -206,7 +218,7 @@
             }
 
             function _getLiveSessionInitStatusByInitiator(initiator) {
-                var initiatorToInitStatusMap = {};
+                let initiatorToInitStatusMap = {};
                 initiatorToInitStatusMap[UserLiveSessionStateEnum.STUDENT.enum] = LiveSessionStatusEnum.PENDING_EDUCATOR.enum;
                 initiatorToInitStatusMap[UserLiveSessionStateEnum.EDUCATOR.enum] = LiveSessionStatusEnum.PENDING_STUDENT.enum;
 
@@ -215,13 +227,13 @@
 
             function _isLiveSessionAlreadyInitiated(educatorId, studentId) {
                 return LiveSessionDataGetterSrv.getCurrUserLiveSessionData().then(function (liveSessionDataMap) {
-                    var isInitiated = false;
-                    var liveSessionDataMapKeys = Object.keys(liveSessionDataMap);
-                    for (var i in liveSessionDataMapKeys) {
-                        var liveSessionDataKey = liveSessionDataMapKeys[i];
-                        var liveSessionData = liveSessionDataMap[liveSessionDataKey];
+                    let isInitiated = false;
+                    let liveSessionDataMapKeys = Object.keys(liveSessionDataMap);
+                    for (let i in liveSessionDataMapKeys) {
+                        let liveSessionDataKey = liveSessionDataMapKeys[i];
+                        let liveSessionData = liveSessionDataMap[liveSessionDataKey];
 
-                        var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
+                        let isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
                         if (isEnded) {
                             _this.endLiveSession(liveSessionData.guid);
                             continue;
@@ -236,8 +248,8 @@
                 });
             }
 
-            function _initiateLiveSession(educatorData, studentData, initiator) {
-                var errMsg;
+            function _initiateLiveSession(educatorData, studentData, lessonData, initiator) {
+                let errMsg;
 
                 if (angular.isUndefined(educatorData.isTeacher)) {
                     errMsg = 'LiveSessionSrv: isTeacher property was not provided!!!';
@@ -251,7 +263,7 @@
                     return $q.reject(errMsg);
                 }
 
-                var initLiveSessionStatus = _getLiveSessionInitStatusByInitiator(initiator);
+                let initLiveSessionStatus = _getLiveSessionInitStatusByInitiator(initiator);
                 if (!initLiveSessionStatus) {
                     errMsg = 'LiveSessionSrv: initiator was not provided';
                     $log.error(errMsg);
@@ -260,27 +272,26 @@
 
                 return _isLiveSessionAlreadyInitiated(educatorData.uid, studentData.uid).then(function (isInitiated) {
                     if (isInitiated) {
-                        var errMsg = 'LiveSessionSrv: live session was already initiated';
+                        let errMsg = 'LiveSessionSrv: live session was already initiated';
                         $log.error(errMsg);
                         return $q.reject(errMsg);
                     }
 
-                    var getDataPromMap = {};
+                    let getDataPromMap = {};
 
                     getDataPromMap.currUserLiveSessionRequests = LiveSessionDataGetterSrv.getCurrUserLiveSessionRequests();
 
-                    var newLiveSessionGuid = UtilitySrv.general.createGuid();
+                    let newLiveSessionGuid = UtilitySrv.general.createGuid();
                     getDataPromMap.newLiveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(newLiveSessionGuid);
 
                     getDataPromMap.currUid = UserProfileService.getCurrUserId();
 
                     return $q.all(getDataPromMap).then(function (data) {
-                        var dataToSave = {};
+                        let dataToSave = {};
 
-                        var startTime = _getRoundTime();
-                        var studentPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(studentData, newLiveSessionGuid);
-                        var educatorPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(educatorData, newLiveSessionGuid);
-                        var newLiveSessionData = {
+                        let studentPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(studentData, newLiveSessionGuid);
+                        let educatorPath = LiveSessionDataGetterSrv.getUserLiveSessionRequestsPath(educatorData, newLiveSessionGuid);
+                        let newLiveSessionData = {
                             guid: newLiveSessionGuid,
                             educatorId: educatorData.uid,
                             studentId: studentData.uid,
@@ -289,10 +300,12 @@
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
                             extendTime: 0,
-                            startTime: startTime,
+                            educatorStartTime: _getRoundTime(),
+                            startTime: null,
                             endTime: null,
                             duration: null,
-                            sessionSubject: educatorData.sessionSubject.id
+                            sessionSubject: lessonData.topicId,
+                            lessonId: lessonData.id
                         };
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
@@ -300,17 +313,33 @@
                         dataToSave[data.newLiveSessionData.$$path] = data.newLiveSessionData;
                         //educator live session requests object update
                         data.currUserLiveSessionRequests[newLiveSessionGuid] = true;
-                        var educatorLiveSessionDataGuidPath = educatorPath + '/active';
+                        let educatorLiveSessionDataGuidPath = educatorPath + '/active';
                         dataToSave[educatorLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
                         //student live session requests object update
-                        var studentLiveSessionDataGuidPath = studentPath + '/active';
+                        let studentLiveSessionDataGuidPath = studentPath + '/active';
                         dataToSave[studentLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
+
+                        try {
+                            _updateLesson(lessonData);
+                        } catch (err) {
+                            $log.error('_initiateLiveSession: updateLesson failed. Error: ', err);
+                        }
 
                         return _getStorage().then(function (StudentStorage) {
                             return StudentStorage.update(dataToSave);
                         });
                     });
 
+                });
+            }
+
+            function _updateLesson(lesson) {
+                lesson.status = LessonStatusEnum.ATTENDED.enum;
+                lesson.lessonNotes = lesson.lessonNotes || {};
+                lesson.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
+
+                return ZnkLessonNotesSrv.updateLesson(lesson).then(lesson => {
+                    $log.debug('_updateLesson: Lesson: ', lesson);
                 });
             }
 
@@ -345,9 +374,9 @@
                             SESSION_DURATION = liveSessionDuration;
                         }
                         liveSessionInterval.interval = $interval(function () {
-                            var liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime);
-                            var maxSessionDuration = SESSION_DURATION.length + activeLiveSessionDataFromAdapter.extendTime;
-                            var EndAlertTime = maxSessionDuration - SESSION_DURATION.endAlertTime;
+                            let liveSessionDuration = (_getRoundTime() - activeLiveSessionDataFromAdapter.startTime);
+                            let maxSessionDuration = SESSION_DURATION.length + activeLiveSessionDataFromAdapter.extendTime;
+                            let EndAlertTime = maxSessionDuration - SESSION_DURATION.endAlertTime;
 
                             if (liveSessionDuration >= maxSessionDuration) {
                                 _this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
@@ -369,7 +398,7 @@
                     liveSessionData.extendTime += SESSION_DURATION.extendTime;
                     return liveSessionData.$save();
                 }).then(function () {
-                    var extendTimeInMin = SESSION_DURATION.extendTime / 60000; // convert to minutes
+                    let extendTimeInMin = SESSION_DURATION.extendTime / 60000; // convert to minutes
                     $log.debug('confirmExtendSession: Live session is extend by ' + extendTimeInMin + ' minutes.');
                 }).catch(function () {
                     $log.debug('confirmExtendSession: Failed to save extend live session in guid: ' + activeLiveSessionDataFromAdapter.guid);

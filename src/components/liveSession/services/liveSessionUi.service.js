@@ -7,17 +7,17 @@
                               ZnkToastSrv, LiveSessionDataGetterSrv) {
             'ngInject';
 
-            var childScope, liveSessionPhElement, readyProm;
-            var LiveSessionUiSrv = {};
+            let childScope, liveSessionPhElement, readyProm;
+            let LiveSessionUiSrv = {};
 
-            var SESSION_DURATION =  {
+            let SESSION_DURATION =  {
                 length: ENV.liveSession.sessionLength,
                 extendTime: ENV.liveSession.sessionExtendTime,
                 endAlertTime: ENV.liveSession.sessionEndAlertTime
             };
 
             function _init() {
-                var bodyElement = angular.element(document.body);
+                let bodyElement = angular.element(document.body);
 
                 liveSessionPhElement = angular.element('<div class="live-session-ph"></div>');
 
@@ -39,7 +39,7 @@
                 }
 
                 if(liveSessionPhElement){
-                    var hasContents = !!liveSessionPhElement.contents().length;
+                    let hasContents = !!liveSessionPhElement.contents().length;
                     if(hasContents){
                         $animate.leave(liveSessionPhElement.contents());
                     }
@@ -49,7 +49,7 @@
             function _activateLiveSession(userLiveSessionState) {
                 _endLiveSession();
 
-                var defer = $q.defer();
+                let defer = $q.defer();
 
                 readyProm.then(function(){
                     childScope = $rootScope.$new(true);
@@ -60,13 +60,13 @@
                         }
                     };
 
-                    var liveSessionHtmlTemplate =
+                    let liveSessionHtmlTemplate =
                         '<div class="show-hide-animation">' +
                         '<live-session-frame user-live-session-state="d.userLiveSessionState" ' +
                         'on-close="d.onClose()">' +
                         '</live-session-frame>' +
                         '</div>';
-                    var liveSessionElement = angular.element(liveSessionHtmlTemplate);
+                    let liveSessionElement = angular.element(liveSessionHtmlTemplate);
                     liveSessionPhElement.append(liveSessionElement);
                     $animate.enter(liveSessionElement[0], liveSessionPhElement[0]);
                     $compile(liveSessionPhElement)(childScope);
@@ -83,18 +83,18 @@
                 _endLiveSession();
             }
 
-            function showStudentLiveSessionPopUp(){
-                var translationsPromMap = {};
+            function showStudentConfirmationPopUp(){
+                let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
-                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.REJECT');
-                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.ACCEPT');
+                translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.JOIN');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.DECLINE');
                 return $q.all(translationsPromMap).then(function(translations){
-                    var popUpInstance = PopUpSrv.warning(
+                    let popUpInstance = PopUpSrv.warning(
                         translations.title,
                         translations.content,
-                        translations.acceptBtnTitle,
-                        translations.cancelBtnTitle
+                        translations.cancelBtnTitle,
+                        translations.acceptBtnTitle
                     );
                     return popUpInstance.promise.then(function(res){
                         return $q.reject(res);
@@ -102,19 +102,32 @@
                         return $q.resolve(res);
                     });
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showStudentLiveSessionPopUp translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
+            function showEducatorPendingPopUp(){
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
+                translationsPromMap.content= $translate('LIVE_SESSION.WAIT_TO_STUDENT');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.wait(translations.title, translations.content, translations.cancelBtnTitle);
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showEducatorPendingPopUp translate failure' + err);
                     return $q.reject(err);
                 });
             }
 
             function showSessionEndAlertPopup() {
-                var translationsPromMap = {};
+                let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
                 translationsPromMap.content= $translate('LIVE_SESSION.EXTEND_SESSION', { extendTime: SESSION_DURATION.extendTime / 60000 });
                 translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap).then(function(translations){
-                    var popUpInstance = PopUpSrv.warning(
+                    let popUpInstance = PopUpSrv.warning(
                         translations.title,
                         translations.content,
                         translations.cancelBtnTitle,
@@ -132,62 +145,78 @@
             }
 
             function showEndSessionPopup() {
-                var translationsPromMap = {};
+                let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_POPUP_TITLE');
                 translationsPromMap.content= $translate('LIVE_SESSION.END_POPUP_CONTENT');
                 return $q.all(translationsPromMap).then(function(translations){
-                    PopUpSrv.info(
+                    let popUpInstance = PopUpSrv.info(
                         translations.title,
                         translations.content
                     );
+                    return popUpInstance.promise.then(function(res){
+                        return $q.reject(res);
+                    },function(res){
+                        return $q.resolve(res);
+                    });
                 },function(err){
                     $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
                     return $q.reject(err);
                 });
             }
 
-            function showIncompleteDiagnostic(student) {
-                var translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_TITLE');
-                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: student.name });
+            function showIncompleteDiagnostic(studentName) {
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
+                translationsPromMap.content= $translate('LIVE_SESSION.INCOMPLETE_DIAGNOSTIC_CONTENT', { studentName: studentName });
                 return $q.all(translationsPromMap).then(function(translations){
-                    PopUpSrv.info(
-                        translations.title,
-                        translations.content
-                    );
+                    PopUpSrv.info(translations.title, translations.content);
                 },function(err){
-                    $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                    $log.error('LiveSessionUiSrv: showIncompleteDiagnostic translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
+            function showNoLessonScheduledPopup(studentName) {
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
+                translationsPromMap.content= $translate('LIVE_SESSION.NO_LESSON_SCHEDULED', { studentName: studentName });
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.info(translations.title, translations.content);
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup translate failure' + err);
                     return $q.reject(err);
                 });
             }
 
             function showLiveSessionToast() {
-                var options = {
+                let options = {
                     hideDelay: 5000,
                     position: 'top right',
                     toastClass: 'live-session-success-toast'
                 };
-                var translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
+                let translationsProm = $translate('LIVE_SESSION.JOIN_TO_ACTIVE_SESSION');
                 translationsProm.then(function (message) {
                     ZnkToastSrv.showToast('success', message, options);
                 });
             }
 
+            function closePopup() {
+                if(PopUpSrv.isPopupOpen()){
+                    PopUpSrv.closePopup();
+                }
+            }
+
 
             LiveSessionUiSrv.activateLiveSession = activateLiveSession;
-
             LiveSessionUiSrv.endLiveSession = endLiveSession;
-
-            LiveSessionUiSrv.showStudentLiveSessionPopUp = showStudentLiveSessionPopUp;
-
+            LiveSessionUiSrv.showStudentConfirmationPopUp = showStudentConfirmationPopUp;
+            LiveSessionUiSrv.showEducatorPendingPopUp = showEducatorPendingPopUp;
             LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
-
             LiveSessionUiSrv.showEndSessionPopup = showEndSessionPopup;
-
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;
-
             LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
-
+            LiveSessionUiSrv.showNoLessonScheduledPopup = showNoLessonScheduledPopup;
+            LiveSessionUiSrv.closePopup = closePopup;
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
             readyProm = $timeout(function(){

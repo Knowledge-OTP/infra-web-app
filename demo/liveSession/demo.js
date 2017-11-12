@@ -8,7 +8,7 @@
         ])
         .config(function () {
             // Replace storageConfig parameters through localStorage
-            localStorage.setItem('email', 'ofir+actEdu@zinkerz.com');
+            localStorage.setItem('email', 'ofir+edu@zinkerz.com');
             localStorage.setItem('password', '123123');
             localStorage.setItem('dataDbPath', 'https://act-dev.firebaseio.com/');
             localStorage.setItem('studentPath', '/act_app');
@@ -28,7 +28,7 @@
                 };
             });
 
-            var calleeNameFunc = function ($q) {
+            const calleeNameFunc = function ($q) {
                 'ngInject';
                 return function () {
                     return $q.when('Ofir Student');
@@ -83,7 +83,7 @@
         })
         .controller('Main', function ($timeout, TeacherContextSrv, StudentContextSrv) {
             'ngInject';
-            var vm = this;
+            const vm = this;
 
             vm.student = {addedTime:1482404147410,
                 invitationId:"caab7c9b-6c3d-410d-3e29-f13c1d10b653",

@@ -3,7 +3,7 @@
 
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', function (LiveSessionSubjectConst) {
-        var topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
+        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
         this.setLiveSessionTopics = function(_topics) {
             if (angular.isArray(_topics) && _topics.length) {
@@ -14,11 +14,11 @@
         this.$get = function (UtilitySrv) {
             'ngInject';
 
-            var LiveSessionSubjectSrv = {};
+            let LiveSessionSubjectSrv = {};
 
             function _getLiveSessionTopics() {
                 return topics.map(function (topicId) {
-                    var topicName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, topicId).toLowerCase();
+                    let topicName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, topicId).toLowerCase();
                     return {
                         id: topicId,
                         name: topicName,
