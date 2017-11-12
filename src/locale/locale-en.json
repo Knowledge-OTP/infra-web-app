@@ -550,6 +550,7 @@
         "EXTEND_SESSION": "Want to extend the Lesson in {{extendTime}} minutes.",
         "EXTEND": "EXTEND",
         "CANCEL": "CANCEL",
+        "DECLINE": "DECLINE",
         "OK": "OK",
         "CANT_START_SESSION": "Can't Start Lesson",
         "INCOMPLETE_DIAGNOSTIC_CONTENT": "{{studentName}} did not complete the diagnostic test yet.<br/>Please make sure the diagnostic test is completed before starting a session.",
@@ -605,7 +606,7 @@
             "TEST": "Test",
             "TOPIC": "Topic",
             "EDUCATOR": "Educator",
-            "STUDENT": "student",
+            "STUDENT": "Student",
             "DATE": "Date",
             "START_TIME": "Start Time",
             "DURATION": " Duration",
@@ -622,14 +623,14 @@
                 "TITLE5": "Awesome - 5 stars"
             },
             "SUMMARY_NOTES": {
-                "TITLE": "Lesson Summary Note",
+                "TITLE": "Lesson Note",
                 "SEND_NOTES": "Send Lesson Notes",
-                "STUDENT_MAIL": "student@mail.com",
-                "ALL_STUDENTS_MAIL": "all-students@mail.com",
-                "PARENT_MAIL": "parent@mail.com",
-                "ALL_PARENTS_MAIL": "all-parents@mail.com",
+                "STUDENT_MAIL": "student email",
+                "ALL_STUDENTS_MAIL": "all student email",
+                "PARENT_MAIL": "parent email",
+                "ALL_PARENTS_MAIL": "all parents email",
                 "SEND": "Send",
-                "SENT_ON": "Summary report was sent on"
+                "SENT_ON": "Lesson notes were sent on"
             }
         }
     }
