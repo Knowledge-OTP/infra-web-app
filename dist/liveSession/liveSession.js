@@ -991,7 +991,7 @@
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
                 translationsPromMap.content= $translate('LIVE_SESSION.WANT_TO_JOIN');
                 translationsPromMap.acceptBtnTitle = $translate('LIVE_SESSION.JOIN');
-                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
+                translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.DECLINE');
                 return $q.all(translationsPromMap).then(function(translations){
                     let popUpInstance = PopUpSrv.warning(
                         translations.title,
