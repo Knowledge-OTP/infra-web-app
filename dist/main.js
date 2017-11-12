@@ -62,243 +62,303 @@
         'znk.infra.screenSharing',
         'znk.infra.presence',
         'znk.infra.znkTooltip',
-        'znk.infra-web-app.liveSession'
+        'znk.infra-web-app.liveSession',
+        'znk.infra-web-app.navigation',
+        'znk.infra.user',
+        'znk.infra.utility',
+        'znk.infra.config',
+        'znk.infra.popUp'
     ]);
 })(angular);
 
 (function (angular) {
-    'use strict';
+  'use strict';
 
-    angular.module('znk.infra-web-app.activePanel')
-        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
-            'ngInject';
+  angular.module('znk.infra-web-app.activePanel')
+    .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+      'ngInject';
 
-            var svgMap = {
-                'active-panel-call-mute-icon': 'components/calls/svg/call-mute-icon.svg',
-                'active-panel-stop-sharing-icon': 'components/activePanel/svg/stop-sharing-icon.svg',
-                'active-panel-share-screen-icon': 'components/activePanel/svg/share-screen-icon.svg',
-                'active-panel-track-teacher-icon': 'components/activePanel/svg/track-teacher-icon.svg',
-                'active-panel-track-student-icon': 'components/activePanel/svg/track-student-icon.svg'
-            };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
-        }]);
+      var svgMap = {
+        'active-panel-call-mute-icon': 'components/calls/svg/call-mute-icon.svg',
+        'active-panel-stop-sharing-icon': 'components/activePanel/svg/stop-sharing-icon.svg',
+        'active-panel-share-screen-icon': 'components/activePanel/svg/share-screen-icon.svg',
+        'active-panel-track-teacher-icon': 'components/activePanel/svg/track-teacher-icon.svg',
+        'active-panel-track-student-icon': 'components/activePanel/svg/track-student-icon.svg',
+        'hangouts-icon': 'components/activePanel/svg/hangouts.svg'
+      };
+      SvgIconSrvProvider.registerSvgSources(svgMap);
+    }]);
 })(angular);
 
 
 (function (angular) {
-    'use strict';
+  'use strict';
 
-    angular.module('znk.infra-web-app.activePanel')
-        .directive('activePanel',
-            ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
-                         PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
-                         $translate, LiveSessionSrv, LiveSessionStatusEnum,
-                        UserScreenSharingStateEnum, UserLiveSessionStateEnum, CallsEventsSrv, CallsStatusEnum) {
-                'ngInject';
-                return {
-                templateUrl: 'components/activePanel/directives/activePanel.template.html',
-                scope: {},
-                link: function(scope, element) {
-                    var durationToDisplay,
-                        timerInterval,
-                        liveSessionData,
-                        liveSessionStatus = 0,
-                        liveSessionDuration = 0,
-                        timerSecondInterval = 1000,
-                        activePanelVisibleClassName = 'activePanel-visible',
-                        isStudent = ENV.appContext.toLowerCase() === 'student',
-                        isTeacher = ENV.appContext.toLowerCase() === 'dashboard',
-                        prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
-                        bodyDomElem = angular.element($window.document.body),
-                        translateNamespace = 'ACTIVE_PANEL';
+  angular.module('znk.infra-web-app.activePanel')
+    .directive('activePanel',
+    ["$window", "$q", "$interval", "$filter", "$log", "CallsUiSrv", "ScreenSharingSrv", "PresenceService", "StudentContextSrv", "TeacherContextSrv", "ENV", "$translate", "LiveSessionSrv", "LiveSessionStatusEnum", "UserScreenSharingStateEnum", "UserLiveSessionStateEnum", "CallsEventsSrv", "CallsStatusEnum", "NavigationService", "UserProfileService", "HangoutsService", "InfraConfigSrv", function ($window, $q, $interval, $filter, $log, CallsUiSrv, ScreenSharingSrv,
+      PresenceService, StudentContextSrv, TeacherContextSrv, ENV,
+      $translate, LiveSessionSrv, LiveSessionStatusEnum,
+      UserScreenSharingStateEnum, UserLiveSessionStateEnum,
+      CallsEventsSrv, CallsStatusEnum, NavigationService,
+      UserProfileService, HangoutsService, InfraConfigSrv) {
+      'ngInject';
+      return {
+        templateUrl: 'components/activePanel/directives/activePanel.template.html',
+        scope: {},
+        link: function (scope, element) {
 
-                    $translate([
-                        translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
-                        translateNamespace + '.' + 'SHOW_TEACHER_SCREEN',
-                        translateNamespace + '.' + 'SHARE_MY_SCREEN',
-                        translateNamespace + '.' + 'END_SCREEN_SHARING'
-                    ]).then(function (translation) {
-                        scope.d.translatedStrings = {
-                            SHOW_STUDENT_SCREEN: translation[translateNamespace + '.' + 'SHOW_STUDENT_SCREEN'],
-                            SHOW_TEACHER_SCREEN: translation[translateNamespace + '.' + 'SHOW_TEACHER_SCREEN'],
-                            SHARE_MY_SCREEN: translation[translateNamespace + '.' + 'SHARE_MY_SCREEN'],
-                            END_SCREEN_SHARING: translation[translateNamespace + '.' + 'END_SCREEN_SHARING']
-                        };
-                    }).catch(function (err) {
-                        $log.debug('Could not fetch translation', err);
-                    });
+          var durationToDisplay,
+            timerInterval,
+            liveSessionData,
+            liveSessionStatus = 0,
+            liveSessionDuration = 0,
+            timerSecondInterval = 1000,
+            activePanelVisibleClassName = 'activePanel-visible',
+            isStudent = ENV.appContext.toLowerCase() === 'student',
+            isTeacher = ENV.appContext.toLowerCase() === 'dashboard',
+            prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
+            bodyDomElem = angular.element($window.document.body),
+            translateNamespace = 'ACTIVE_PANEL';
 
-                    function endLiveSession() {
-                        if (liveSessionData) {
-                            LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                        } else {
-                            LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
-                                if (liveSessionData) {
-                                    LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                                }
-                            });
-                        }
-                    }
-
-                    function startTimer() {
-                        $log.debug('call timer started');
-                        timerInterval = $interval(function () {
-                            liveSessionDuration += timerSecondInterval;
-                            durationToDisplay = $filter('formatDuration')(liveSessionDuration / 1000, 'hh:MM:SS', true);
-                            angular.element(element[0].querySelector('.live-session-duration')).text(durationToDisplay);
-                        }, 1000, 0, false);
-                    }
-
-                    function destroyTimer() {
-                        $interval.cancel(timerInterval);
-                        liveSessionDuration = 0;
-                        durationToDisplay = 0;
-                    }
-
-                    function endScreenSharing(){
-                        if (scope.d.screenShareStatus !== UserScreenSharingStateEnum.NONE.enum) {
-                            ScreenSharingSrv.getActiveScreenSharingData().then(function (screenSharingData) {
-                                if (screenSharingData) {
-                                    ScreenSharingSrv.endSharing(screenSharingData.guid);
-                                }
-                            });
-                        }
-                    }
-
-                    function updateStatus() {
-                        scope.d.currStatus = liveSessionStatus;
-                        $log.debug('ActivePanel d.currStatus: ', scope.d.currStatus);
-
-                        switch (scope.d.currStatus) {
-                            case scope.d.states.NONE :
-                                $log.debug('ActivePanel State: NONE');
-                                bodyDomElem.removeClass(activePanelVisibleClassName);
-                                scope.d.shareScreenBtnsEnable = true;
-                                destroyTimer();
-                                endScreenSharing();
-                                break;
-                            case scope.d.states.LIVE_SESSION :
-                                $log.debug('ActivePanel State: LIVE_SESSION');
-                                bodyDomElem.addClass(activePanelVisibleClassName);
-                                startTimer();
-                                break;
-                            default :
-                                $log.error('currStatus is in an unknown state', scope.d.currStatus);
-                        }
-                    }
-
-                    function getRoundTime() {
-                        return Math.floor(Date.now() / 1000) * 1000;
-                    }
-
-                    function trackUserPresenceCB(userId, newStatus) {
-                        scope.d.currentUserPresenceStatus = newStatus;
-
-                        CallsUiSrv.getCalleeName(userId).then(function (calleeName) {
-                            scope.d.calleeName = calleeName;
-                            scope.d.callBtnModel = {
-                                isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
-                                receiverId: userId
-                            };
-                        });
-                    }
-
-                    function listenToLiveSessionStatus(newLiveSessionStatus) {
-                        if (prevLiveSessionStatus !== newLiveSessionStatus){
-                            prevLiveSessionStatus = newLiveSessionStatus;
-                            LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
-                                if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
-                                    liveSessionData = newLiveSessionData;
-                                }
-
-                                if (isTeacher) {
-                                    PresenceService.startTrackUserPresence(liveSessionData.studentId, trackUserPresenceCB.bind(null, liveSessionData.studentId));
-                                } else if (isStudent) {
-                                    PresenceService.startTrackUserPresence(liveSessionData.educatorId, trackUserPresenceCB.bind(null, liveSessionData.educatorId));
-                                } else {
-                                    $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
-                                }
-
-                                var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
-                                var isConfirmed = liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum;
-                                if (isEnded || isConfirmed) {
-                                    if (isConfirmed) {
-                                        liveSessionStatus = scope.d.states.LIVE_SESSION;
-                                        liveSessionDuration = getRoundTime() - liveSessionData.startTime;
-                                    } else {
-                                        liveSessionStatus = scope.d.states.NONE;
-                                    }
-                                    updateStatus();
-                                }
-                            });
-                        }
-                    }
-
-                    // Listen to status changes in ScreenSharing
-                    function listenToScreenShareStatus(screenSharingStatus) {
-                        if (screenSharingStatus) {
-                            if (screenSharingStatus !== UserScreenSharingStateEnum.NONE.enum) {
-                                scope.d.screenShareStatus = screenSharingStatus;
-                                scope.d.shareScreenBtnsEnable = false;
-                                scope.d.shareScreenViewer = (screenSharingStatus === UserScreenSharingStateEnum.VIEWER.enum);
-                            } else {
-                                scope.d.screenShareStatus = UserScreenSharingStateEnum.NONE.enum;
-                                scope.d.shareScreenBtnsEnable = true;
-                            }
-                        }
-                    }
-
-                    function viewOtherUserScreen() {
-                        var sharerData = {
-                            isTeacher: !isTeacher,
-                            uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
-                        };
-                        $log.debug('viewOtherUserScreen: ', sharerData);
-                        ScreenSharingSrv.viewOtherUserScreen(sharerData);
-                    }
-
-                    function shareMyScreen() {
-                        var viewerData = {
-                            isTeacher: !isTeacher,
-                            uid: isTeacher? liveSessionData.studentId : liveSessionData.educatorId
-                        };
-                        $log.debug('shareMyScreen: ', viewerData);
-                        ScreenSharingSrv.shareMyScreen(viewerData);
-                    }
-
-
-                    scope.d = {
-                        states: {
-                            NONE: 0,
-                            LIVE_SESSION: 1
-                        },
-                        shareScreenBtnsEnable: true,
-                        disableAllBtns: false,
-                        isTeacher: isTeacher,
-                        presenceStatusMap: PresenceService.userStatus,
-                        endScreenSharing: endScreenSharing,
-                        endSession: endLiveSession,
-                        viewOtherUserScreen: viewOtherUserScreen,
-                        shareMyScreen: shareMyScreen
-                    };
-
-                    element.on('$destroy', function() {
-                        destroyTimer();
-                    });
-
-                    function listenToCallsStatus(newCallsStatus) {
-                        scope.d.disableAllBtns = newCallsStatus && newCallsStatus.status === CallsStatusEnum.PENDING_CALL.enum;
-                    }
-
-                    ScreenSharingSrv.registerToCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
-
-                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
-
-                    CallsEventsSrv.registerToCurrUserCallStateChanges(listenToCallsStatus);
-                }
+          $translate([
+            translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
+            translateNamespace + '.' + 'SHOW_TEACHER_SCREEN',
+            translateNamespace + '.' + 'SHARE_MY_SCREEN',
+            translateNamespace + '.' + 'END_SCREEN_SHARING'
+          ]).then(function (translation) {
+            scope.d.translatedStrings = {
+              SHOW_STUDENT_SCREEN: translation[translateNamespace + '.' + 'SHOW_STUDENT_SCREEN'],
+              SHOW_TEACHER_SCREEN: translation[translateNamespace + '.' + 'SHOW_TEACHER_SCREEN'],
+              SHARE_MY_SCREEN: translation[translateNamespace + '.' + 'SHARE_MY_SCREEN'],
+              END_SCREEN_SHARING: translation[translateNamespace + '.' + 'END_SCREEN_SHARING']
             };
-        }]);
+          }).catch(function (err) {
+            $log.debug('Could not fetch translation', err);
+          });
+
+          UserProfileService.getProfile().then(function (userProfile) {
+            scope.d.userProfile = userProfile;
+          });
+
+          function endLiveSession() {
+            if (liveSessionData) {
+              deleteStudentPath(liveSessionData.studentId);
+              LiveSessionSrv.endLiveSession(liveSessionData.guid);
+            } else {
+              LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                if (liveSessionData) {
+                  deleteStudentPath(liveSessionData.studentId);
+                  LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                }
+              });
+            }
+          }
+
+          function startTimer() {
+            $log.debug('call timer started');
+            timerInterval = $interval(function () {
+              liveSessionDuration += timerSecondInterval;
+              durationToDisplay = $filter('formatDuration')(liveSessionDuration / 1000, 'hh:MM:SS', true);
+              angular.element(element[0].querySelector('.live-session-duration')).text(durationToDisplay);
+            }, 1000, 0, false);
+          }
+
+          function destroyTimer() {
+            $interval.cancel(timerInterval);
+            liveSessionDuration = 0;
+            durationToDisplay = 0;
+          }
+
+          function endScreenSharing() {
+            if (scope.d.screenShareStatus !== UserScreenSharingStateEnum.NONE.enum) {
+              ScreenSharingSrv.getActiveScreenSharingData().then(function (screenSharingData) {
+                if (screenSharingData) {
+                  ScreenSharingSrv.endSharing(screenSharingData.guid);
+                }
+              });
+            }
+          }
+
+          function updateStatus() {
+            scope.d.currStatus = liveSessionStatus;
+            $log.debug('ActivePanel d.currStatus: ', scope.d.currStatus);
+
+            switch (scope.d.currStatus) {
+              case scope.d.states.NONE:
+                $log.debug('ActivePanel State: NONE');
+                bodyDomElem.removeClass(activePanelVisibleClassName);
+                scope.d.shareScreenBtnsEnable = true;
+                destroyTimer();
+                endScreenSharing();
+                break;
+              case scope.d.states.LIVE_SESSION:
+                $log.debug('ActivePanel State: LIVE_SESSION');
+                bodyDomElem.addClass(activePanelVisibleClassName);
+                startTimer();
+                break;
+              default:
+                $log.error('currStatus is in an unknown state', scope.d.currStatus);
+            }
+          }
+
+          function getRoundTime() {
+            return Math.floor(Date.now() / 1000) * 1000;
+          }
+
+          function trackUserPresenceCB(userId, newStatus) {
+            scope.d.currentUserPresenceStatus = newStatus;
+
+            CallsUiSrv.getCalleeName(userId).then(function (calleeName) {
+              scope.d.calleeName = calleeName;
+              scope.d.callBtnModel = {
+                isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
+                receiverId: userId
+              };
+            });
+          }
+
+          function openHangouts() {
+            NavigationService.navigateToUrl(scope.d.userProfile.teacherInfo.hangoutsUri);
+            LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
+              if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
+                liveSessionData = newLiveSessionData;
+              }
+              return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile);
+            });
+          }
+
+          function writeToStudentPath(studentId, educatorProfile) {
+            InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+              const studentHangoutsPath = getHangoutsSessionRoute(studentId);
+              const dataToSave = {
+                email: educatorProfile.authEmail || educatorProfile.email,
+                hangoutsUri: educatorProfile.teacherInfo.hangoutsUri
+              };
+              return studentStorage.set(studentHangoutsPath, dataToSave);
+            });
+          }
+
+          function deleteStudentPath(studentId) {
+            InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+              const studentHangoutsPath = getHangoutsSessionRoute(studentId);
+              return studentStorage.update(studentHangoutsPath, null);
+            });
+          }
+
+          function getHangoutsSessionRoute(studentId) {
+            return '/users/' + studentId + '/hangoutsSession';
+          }
+
+
+          function listenToLiveSessionStatus(newLiveSessionStatus) {
+            if (prevLiveSessionStatus !== newLiveSessionStatus) {
+              prevLiveSessionStatus = newLiveSessionStatus;
+              LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
+                if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
+                  liveSessionData = newLiveSessionData;
+                }
+
+                if (isTeacher) {
+                  PresenceService.startTrackUserPresence(liveSessionData.studentId, trackUserPresenceCB.bind(null, liveSessionData.studentId));
+                } else if (isStudent) {
+                  PresenceService.startTrackUserPresence(liveSessionData.educatorId, trackUserPresenceCB.bind(null, liveSessionData.educatorId));
+                } else {
+                  $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
+                }
+
+                var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
+                var isConfirmed = liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum;
+                if (isEnded || isConfirmed) {
+                  if (isConfirmed) {
+                    liveSessionStatus = scope.d.states.LIVE_SESSION;
+                    liveSessionDuration = getRoundTime() - liveSessionData.startTime;
+                  } else {
+                    liveSessionStatus = scope.d.states.NONE;
+                  }
+                  updateStatus();
+                }
+              });
+            }
+          }
+
+          // Listen to status changes in ScreenSharing
+          function listenToScreenShareStatus(screenSharingStatus) {
+            if (screenSharingStatus) {
+              if (screenSharingStatus !== UserScreenSharingStateEnum.NONE.enum) {
+                scope.d.screenShareStatus = screenSharingStatus;
+                scope.d.shareScreenBtnsEnable = false;
+                scope.d.shareScreenViewer = (screenSharingStatus === UserScreenSharingStateEnum.VIEWER.enum);
+              } else {
+                scope.d.screenShareStatus = UserScreenSharingStateEnum.NONE.enum;
+                scope.d.shareScreenBtnsEnable = true;
+              }
+            }
+          }
+
+          function viewOtherUserScreen() {
+            var sharerData = {
+              isTeacher: !isTeacher,
+              uid: isTeacher ? liveSessionData.studentId : liveSessionData.educatorId
+            };
+            $log.debug('viewOtherUserScreen: ', sharerData);
+            ScreenSharingSrv.viewOtherUserScreen(sharerData);
+          }
+
+          function shareMyScreen() {
+            var viewerData = {
+              isTeacher: !isTeacher,
+              uid: isTeacher ? liveSessionData.studentId : liveSessionData.educatorId
+            };
+            $log.debug('shareMyScreen: ', viewerData);
+            ScreenSharingSrv.shareMyScreen(viewerData);
+          }
+
+
+          scope.d = {
+            states: {
+              NONE: 0,
+              LIVE_SESSION: 1
+            },
+            shareScreenBtnsEnable: true,
+            disableAllBtns: false,
+            isTeacher: isTeacher,
+            presenceStatusMap: PresenceService.userStatus,
+            endScreenSharing: endScreenSharing,
+            endSession: endLiveSession,
+            viewOtherUserScreen: viewOtherUserScreen,
+            shareMyScreen: shareMyScreen,
+            openHangouts: openHangouts
+          };
+
+          element.on('$destroy', function () {
+            destroyTimer();
+          });
+
+          function listenToCallsStatus(newCallsStatus) {
+            scope.d.disableAllBtns = newCallsStatus && newCallsStatus.status === CallsStatusEnum.PENDING_CALL.enum;
+          }
+
+          ScreenSharingSrv.registerToCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
+
+          LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
+
+          CallsEventsSrv.registerToCurrUserCallStateChanges(listenToCallsStatus);
+        }
+      };
+    }]);
 })(angular);
+
+(function () {
+  'use strict';
+
+  angular.module('znk.infra-web-app.activePanel').run(
+    ["HangoutsService", function (HangoutsService) {
+      'ngInject';
+      HangoutsService.listenToHangoutsInvitation();
+    }]
+  );
+})();
 
 (function (angular) {
     'use strict';
@@ -325,6 +385,46 @@
                 }
             }
         }]);
+})(angular);
+
+(function (angular) {
+  'use strict';
+
+  angular.module('znk.infra-web-app.activePanel').service('HangoutsService',
+    ["ENV", "UtilitySrv", "UserProfileService", "InfraConfigSrv", "StorageSrv", "PopUpSrv", "NavigationService", function (ENV, UtilitySrv, UserProfileService, InfraConfigSrv, StorageSrv, PopUpSrv, NavigationService) {
+      'ngInject';
+
+      var self = this;
+      self.listenToHangoutsInvitation = listenToHangoutsInvitation;
+
+      const isStudent = ENV.appContext.toLowerCase() === 'student';
+
+      function listenToHangoutsInvitation() {
+        if (isStudent) {
+          UserProfileService.getCurrUserId().then(function (currUid) {
+            InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+              var appName = ENV.firebaseAppScopeName;
+              var userLiveSessionPath = appName + '/users/' + currUid + '/hangoutsSession';
+              globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionData) {
+                if (hangoutsSessionData) {
+                  openHangoutsPopup(hangoutsSessionData, currUid); // TODO: change to open popup for student
+                }
+              });
+            });
+          });
+        }
+      }
+
+      function openHangoutsPopup(hangoutsSessionData, studentId) {
+        var joinHangoutsSession = function () {
+          NavigationService.navigateToUrl(hangoutsSessionData.hangoutsUri);
+        };
+        PopUpSrv.warning('Hangouts Invitation Received', 'Please click Connect below to join your teacher\'s hangout session?', 'Cancel', 'Connect', joinHangoutsSession);
+        InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+          studentStorage.update('/users/' + studentId + '/hangoutsSession', null);
+        });
+      }
+    }]);
 })(angular);
 
 angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
@@ -361,7 +461,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                                </md-tooltip>\n" +
     "                            </svg-icon>\n" +
     "                            <svg-icon ng-switch-default\n" +
-    "                                      name=\"active-panel-track-teacher-icon\"\">\n" +
+    "                                      name=\"active-panel-track-teacher-icon\">\n" +
     "                                <md-tooltip znk-tooltip class=\"md-fab\">\n" +
     "                                    {{d.translatedStrings.SHOW_TEACHER_SCREEN}}\n" +
     "                                </md-tooltip>\n" +
@@ -391,8 +491,15 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "                </svg-icon>\n" +
     "            </ng-switch>\n" +
     "\n" +
-    "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
+    "            <svg-icon \n" +
+    "                ng-click=\"d.openHangouts()\" \n" +
+    "                ng-if=\"d.isTeacher\" \n" +
+    "                ng-class=\"{'available':d.userProfile.teacherInfo.hangoutsUri}\" \n" +
+    "                name=\"hangouts-icon\">\n" +
+    "            </svg-icon>\n" +
     "\n" +
+    "            <call-btn ng-model=\"d.callBtnModel\"></call-btn>\n" +
+    "          \n" +
     "            <div class=\"end-session-wrap\" ng-if=\"d.isTeacher\">\n" +
     "                <div class=\"seperator\"></div>\n" +
     "                <md-button class=\"end-session-btn\"\n" +
@@ -408,6 +515,56 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     "    </div>\n" +
     "    <div class=\"active-panel-overlay\" ng-if=\"d.disableAllBtns\"></div>\n" +
     "</div>\n" +
+    "");
+  $templateCache.put("components/activePanel/svg/hangouts.svg",
+    "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n" +
+    "<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n" +
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"0 0 512 512\" style=\"enable-background:new 0 0 512 512;\" xml:space=\"preserve\">\n" +
+    "<path style=\"fill:#12B347;\" d=\"M246.24,508.847c-4.359-3.141-6.934-8.174-6.934-13.543v-61.847\n" +
+    "	C127.403,424.901,38.957,331.107,38.957,217.043C38.957,97.369,136.327,0,256,0s217.043,97.369,217.043,217.043\n" +
+    "	c0,111.25-65.478,245.325-211.761,294.098C256.194,512.837,250.61,511.997,246.24,508.847z\"/>\n" +
+    "<path style=\"fill:#0F993E;\" d=\"M261.284,511.141c146.281-48.772,211.759-182.848,211.759-294.098C473.043,97.369,375.674,0,256,0\n" +
+    "	v511.894C257.775,511.894,259.555,511.716,261.284,511.141z\"/>\n" +
+    "<path style=\"fill:#E6F3FF;\" d=\"M222.609,155.826h-66.782c-9.217,0-16.696,7.479-16.696,16.696v66.782\n" +
+    "	c0,9.217,7.479,16.696,16.696,16.696h49.813c-1.342,15.055-10.18,28.302-23.889,35.152c-8.239,4.119-11.587,14.152-7.467,22.402\n" +
+    "	c4.085,8.171,14.082,11.609,22.402,7.467c26.283-13.142,42.619-39.565,42.619-68.967c0-18.013,0-61.766,0-79.532\n" +
+    "	C239.304,163.304,231.827,155.826,222.609,155.826z\"/>\n" +
+    "<path style=\"fill:#CFDBE6;\" d=\"M356.174,155.826h-66.782c-9.217,0-16.696,7.479-16.696,16.696v66.782\n" +
+    "	c0,9.217,7.479,16.696,16.696,16.696h49.813c-1.342,15.055-10.18,28.302-23.889,35.152c-8.239,4.119-11.587,14.152-7.467,22.402\n" +
+    "	c4.085,8.171,14.082,11.609,22.402,7.467c26.283-13.142,42.619-39.565,42.619-68.967c0-18.013,0-61.766,0-79.532\n" +
+    "	C372.869,163.304,365.392,155.826,356.174,155.826z\"/>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "<g>\n" +
+    "</g>\n" +
+    "</svg>\n" +
     "");
   $templateCache.put("components/activePanel/svg/share-screen-icon.svg",
     "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
@@ -1771,7 +1928,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             'ngInject';
 
          function _updateAwsConfig(config, options) {
-            options = options || {}; 
+            options = options || {};
             config = config || false;
 
             if (!config) {
@@ -1781,20 +1938,20 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                        IdentityPoolId: options.IdentityPoolId || ENV.IdentityPoolId || 'us-east-1:d356a336-de8a-48c7-b67f-65c634462529'
                    }),
                };
-            } 
+            }
 
             $window.AWS.config.update(config);
-         }  
+         }
 
          function _init() {
               _updateAwsConfig();
-         }   
-           
+         }
+
          _init();
 
           function _generateFileName() {
-             return UtilitySrv.general.createGuid();  
-          } 
+             return UtilitySrv.general.createGuid();
+          }
 
           function _getFile(blob, fileName) {
               return new $window.File([blob], fileName);
@@ -1803,7 +1960,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
           function _addSlashToPath(prefixPath) {
               var prefixPathLength = prefixPath.length;
 
-              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength); 
+              var lastChar = prefixPath.substring(prefixPathLength - 1, prefixPathLength);
 
               if (lastChar === '/') {
                   return prefixPath;
@@ -1832,13 +1989,13 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
               this.filesNames = [];
 
-              this.bucketInstance = new $window.AWS.S3({ 
+              this.bucketInstance = new $window.AWS.S3({
                    params: {
                       Bucket: this.bucketName
                    }
               });
           }
-         
+
         AwsS3.prototype.upload = function(options) {
             var deferred = $q.defer();
             var errMsg;
@@ -1860,7 +2017,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
                   deferred.reject(errMsg);
                   return;
             }
-            
+
             var fileName = blobOption ? _generateFileName() + '.' + (options.ext || 'mp3')  : fileOption.name;
             var file = blobOption ? _getFile(blobOption, fileName) : fileOption;
             var filePath = _getFilePath(options.prefixPath, file);
@@ -1883,7 +2040,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
             });
 
             return deferred.promise;
-        };  
+        };
 
         AwsS3.prototype.getCurrentFileName = function() {
             var filesLength = this.filesNames.length;
@@ -1897,9 +2054,9 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
 
         this.updateConfig = updateConfig;
 
-        // factory for aws bucket instances 
+        // factory for aws bucket instances
         this.newAwsS3 = function (options) {
-            return new AwsS3(options);   
+            return new AwsS3(options);
         };
 
       }]
@@ -3253,11 +3410,11 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                 var dontInit = false;
                 return ExerciseResultSrv.getExerciseResult(
-                    exerciseDetails.exerciseTypeId, 
-                    exerciseDetails.exerciseId, 
-                    exerciseDetails.examId, 
-                    exerciseDetails.examSectionsNum, 
-                    dontInit, 
+                    exerciseDetails.exerciseTypeId,
+                    exerciseDetails.exerciseId,
+                    exerciseDetails.examId,
+                    exerciseDetails.examSectionsNum,
+                    dontInit,
                     exerciseDetails.exerciseParentId);
             };
         }]
@@ -3279,22 +3436,22 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                 'ngInject';
                 var exerciseCycleSrv = {};
 
-                exerciseCycleSrv.invoke = function (methodName, data) {                    
+                exerciseCycleSrv.invoke = function (methodName, data) {
                     var hook = hooksObj[methodName];
                     var fn;
 
-                    if (angular.isDefined(hook)) {                      
+                    if (angular.isDefined(hook)) {
                         try {
-                            fn = $injector.invoke(hook);         
+                            fn = $injector.invoke(hook);
                         } catch(e) {
                             $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
                             return;
                         }
 
                         data = angular.isArray(data) ? data : [data];
-                        
+
                         return fn.apply(null, data);
-                    } 
+                    }
                 };
 
                 return exerciseCycleSrv;
@@ -3539,7 +3696,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     angular.module('znk.infra-web-app.diagnostic', [
         'znk.infra.exerciseResult',
         'znk.infra.exerciseUtility'
-        
+
     ]);
 })(angular);
 
@@ -5017,7 +5174,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -6437,7 +6594,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
         'ngAnimate'
     ])
         .config(["SvgIconSrvProvider", function(SvgIconSrvProvider){
-            'ngInject'; 
+            'ngInject';
 
             var svgMap = {
                 'iap-msg-close-msg': 'components/iapMsg/svg/close-msg.svg',
@@ -6449,7 +6606,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
 
 (function () {
     'use strict';
-    
+
     var templateCacheName = 'raccoonIapMsg.template';
 
     angular.module('znk.infra-web-app.iapMsg')
@@ -6717,7 +6874,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
                     imageParent.append(imageNewParent);
                     imageParent[0].replaceChild(imageNewParent[0], image);
                     imageNewParent.append(image);
-                    
+
                     var svgIconTemplate = '<div class="zoom-icon-wrapper">' +
                         '<svg-icon name="image-zoomer-full-screen-icon"></svg-icon>' +
                         '</div>';
@@ -9278,14 +9435,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
 
 (function (angular) {
-    'use strict';
+  'use strict';
 
     angular.module('znk.infra-web-app.liveSession')
         .component('liveSessionSubjectModal', {
             bindings: {
                 student: '=',
-                lessonId: '='
-            },
+            lessonId: '='},
             templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
             controllerAs: 'vm',
             controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", "LiveSessionUiSrv", "DiagnosticSrv", function($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, LiveSessionUiSrv, DiagnosticSrv) {
@@ -9293,24 +9449,26 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                 let vm = this;
 
-                this.$onInit = function() {
-                    vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
-                    vm.closeModal = $mdDialog.cancel;
-                    vm.startSession = startSession;
-                };
+        this.$onInit = function () {
+          vm.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
+          vm.closeModal = $mdDialog.cancel;
+          vm.startSession = startSession;
+        };
 
-                function startSession(sessionSubject) {
-                    DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
-                        if (isDiagnosticCompleted) {
-                            LiveSessionSrv.startLiveSession(vm.student, sessionSubject, vm.lessonId);
-                        } else {
-                            LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
-                        }
-                    });
+        function startSession(sessionSubject) {
+          DiagnosticSrv.isDiagnosticCompleted().then(function (isDiagnosticCompleted) {
+            if (isDiagnosticCompleted) {
+              LiveSessionSrv.startLiveSession(vm.student, sessionSubject, vm.lessonId).then(function () {
+                LiveSessionSrv.makeAutoCall(vm.student.uid);
+              });
+            } else {
+              LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
+            }
+          });
 
-                }
-            }]
-        });
+        }
+      }]
+    });
 })(angular);
 
 (function (angular) {
@@ -9838,126 +9996,131 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 })(angular);
 
 (function (angular) {
-    'use strict';
+  'use strict';
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
         let isEnabled = true;
 
-        this.enabled = function (_isEnabled) {
-            isEnabled = _isEnabled;
-        };
+    this.enabled = function (_isEnabled) {
+      isEnabled = _isEnabled;
+    };
 
-        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", "ZnkLessonNotesSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
+    this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", "ZnkLessonNotesSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+      UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
                               LiveSessionDataGetterSrv, ZnkLessonNotesSrv) {
-            'ngInject';
+      'ngInject';
 
-            let LiveSessionEventsSrv = {};
-            let currUid = null;
+            let LiveSessionEventsSrv = {};let currUid = null;
 
             function _listenToLiveSessionData(guid) {
                 let liveSessionDataPath = LiveSessionDataGetterSrv.getLiveSessionDataPath(guid);
 
-                function _cb(liveSessionData) {
-                    if (!liveSessionData || !currUid) {
-                        return;
-                    }
+        function _cb(liveSessionData) {
+          if (!liveSessionData || !currUid) {
+            return;
+          }
 
-                    switch (liveSessionData.status) {
-                        case LiveSessionStatusEnum.PENDING_STUDENT.enum:
-                            if (liveSessionData.studentId === currUid) {
-                                LiveSessionUiSrv.showStudentConfirmationPopUp()
-                                    .then(() => {
-                                        LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                    }, () => {
-                                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
+
+                        switch (liveSessionData.status) {
+                            case LiveSessionStatusEnum.PENDING_STUDENT.enum:
+                                if (liveSessionData.studentId === currUid) {
+                                    LiveSessionUiSrv.showStudentConfirmationPopUp()
+                                    .then(() => {LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                }, () => {
+                                LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                     });
                             } else {
                                 LiveSessionUiSrv.showEducatorPendingPopUp();
-                            }
-                            break;
+                            }break;
+                            case LiveSessionStatusEnum.CONFIRMED.enum:
+                                LiveSessionUiSrv.closePopup() ;
+                                    LiveSessionUiSrv.showLiveSessionToast();
+                                let userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
 
-                        case LiveSessionStatusEnum.CONFIRMED.enum:
-                            LiveSessionUiSrv.closePopup();
-                            LiveSessionUiSrv.showLiveSessionToast();
-                            let userLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
+                                if (liveSessionData.studentId === currUid) {
+                                    userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
+                                }
 
-                            if (liveSessionData.studentId === currUid) {
-                                userLiveSessionState = UserLiveSessionStateEnum.STUDENT.enum;
-                            }
+                                if (liveSessionData.educatorId === currUid) {
+                                    userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
 
-                            if (liveSessionData.educatorId === currUid) {
-                                userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-                                LiveSessionSrv.makeAutoCall(liveSessionData.studentId);
-                            }
+                                }
 
-                            if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
-                                LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
-                            }
+                                if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
+                                    LiveSessionSrv._userLiveSessionStateChanged(userLiveSessionState, liveSessionData);
+                                }
 
-                            break;
+                                break;
+                            case LiveSessionStatusEnum.ENDED.enum:
+                                if (liveSessionData.studentId !== currUid) {
+                                    LiveSessionSrv.hangCall(liveSessionData.studentId);
+                                    LiveSessionSrv._destroyCheckDurationInterval();
+                                }
 
-                        case LiveSessionStatusEnum.ENDED.enum:
-                            if (liveSessionData.studentId !== currUid) {
-                                LiveSessionSrv.hangCall(liveSessionData.studentId);
-                                LiveSessionSrv._destroyCheckDurationInterval();
-                            }
-
-                            LiveSessionUiSrv.showEndSessionPopup()
+                                LiveSessionUiSrv.showEndSessionPopup()
                                 .then(function () {
                                     ZnkLessonNotesSrv.openLessonNotesPopup();
-                                });
-                            LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
-                            // Security check to insure there isn't active session
-                            LiveSessionSrv._moveToArchive(liveSessionData);
-                            break;
-                        default:
-                            $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
+                                });LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                                // Security check to insure there isn't active session
+                                LiveSessionSrv._moveToArchive(liveSessionData);
+                                break;
+                            default:
+                                $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
+                        }
+
+                        LiveSessionSrv._liveSessionDataChanged(liveSessionData);
                     }
 
-                    LiveSessionSrv._liveSessionDataChanged(liveSessionData);
-                }
+        InfraConfigSrv.getGlobalStorage().then(globalStorage => {
+          globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
+        });
+      }
 
-                InfraConfigSrv.getGlobalStorage().then(globalStorage => {
-                    globalStorage.onEvent(StorageSrv.EVENTS.VALUE, liveSessionDataPath, _cb);
-                });
-            }
-
-            function _startListening() {
-                UserProfileService.getCurrUserId().then((currUserId) => {
-                    currUid = currUserId;
-                    InfraConfigSrv.getGlobalStorage().then(globalStorage => {
+      function _listenToHangoutsInvitation() {
+        UserProfileService.getCurrUserId().then(function (currUid) {
+          InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+            var appName = ENV.firebaseAppScopeName;
+            var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/hangoutsSession';
+            globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionGuid) {
+              if (hangoutsSessionGuid) {
+                _listenToLiveSessionData(hangoutsSessionGuid);
+              }
+            });
+          });
+        });
+      }      function _startListening() {
+                UserProfileService.getCurrUserId().then((currUserId) => {currUid= currUserId;
+                    InfraConfigSrv.getGlobalStorage().then(globalStorage=> {
                         let appName = ENV.firebaseAppScopeName;
                         let userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/active';
                         globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, _listenToUserActivePath);
                     });
                 });
-            }
-
-            function _listenToUserActivePath(userLiveSessionGuids) {
-                if (userLiveSessionGuids) {
-                    userLiveSessionGuids = Array.isArray(userLiveSessionGuids) ? userLiveSessionGuids : Object.keys(userLiveSessionGuids);
-                    userLiveSessionGuids.forEach((isActive, guid) => {
-                        if (isActive) {
-                            _listenToLiveSessionData(guid);
-                        } else {
-                            $log.debug('_listenToUserActivePath: isActive is: ', isActive);
+            }function _listenToUserActivePath(userLiveSessionGuids) {
+                            if (userLiveSessionGuids) {
+                                userLiveSessionGuids= Array.isArray(userLiveSessionGuids) ? userLiveSessionGuids : Object.keys(userLiveSessionGuids);
+                    userLiveSessionGuids.forEach ((isActive, guid) =>{
+                                    if(isActive){
+                                        _listenToLiveSessionData(guid);
+                                    }else {
+                                $log.debug('_listenToUserActivePath: isActive is: ', isActive);
                         }
                     });
                 }
             }
 
-            function activate() {
-                if (isEnabled) {
-                    _startListening();
-                }
-            }
+      function activate() {
+        if (isEnabled) {
+          _startListening();
+          _listenToHangoutsInvitation();
+        }
+      }
 
-            LiveSessionEventsSrv.activate = activate;
+      LiveSessionEventsSrv.activate = activate;
 
-            return LiveSessionEventsSrv;
-        }];
-    });
+      return LiveSessionEventsSrv;
+    }];
+  });
 })(angular);
 
 (function (angular) {
@@ -12520,30 +12683,41 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
 }]);
 
 (function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.navigation', [
-    ]);
+  'use strict';
+  angular.module('znk.infra-web-app.navigation', [
+  ]);
 })(angular);
 
 (function (angular) {
-    'use strict';
-    angular.module('znk.infra-web-app.navigation').service('NavigationService', ["ENV", "$window", function (ENV, $window) {
-        'ngInject';
+  'use strict';
+  angular.module('znk.infra-web-app.navigation').service('NavigationService', ["ENV", "$window", function (ENV, $window) {
+    'ngInject';
 
-        var self = this;
-        this.openWindowsMap = {};
+    var self = this;
+    this.openWindowsMap = {};
 
-        this.navigateToMyZinkerz = function (navigationRoute) {
-            const serviceName = 'myzinkerz';
-            const existingWindow = self.openWindowsMap[serviceName];
-            if (existingWindow && !existingWindow.closed) {
-                existingWindow.focus();
-            } else {
-                var appUrl = ENV.zinkerzWebsiteBaseUrl + serviceName + '/' + navigationRoute;
-                self.openWindowsMap[serviceName] = $window.open(appUrl);
-            }
-        };
-    }]);
+    this.navigateToMyZinkerz = function (navigationRoute) {
+      const serviceName = 'myzinkerz';
+      const existingWindow = self.openWindowsMap[serviceName];
+      if (existingWindow && !existingWindow.closed) {
+        existingWindow.focus();
+      } else {
+        var appUrl = ENV.zinkerzWebsiteBaseUrl + serviceName + '/' + navigationRoute;
+        self.openWindowsMap[serviceName] = $window.open(appUrl);
+      }
+    };
+
+    this.navigateToUrl = function (url, parameter) {
+      const existingUrl = self.openWindowsMap[url];
+      if (existingUrl && !existingUrl.closed) {
+        existingUrl.focus();
+      } else {
+        const navigationParam = parameter ? parameter : '';
+        const navigationRoute = url + navigationParam;
+        self.openWindowsMap[url] = $window.open(navigationRoute);
+      }
+    };
+  }]);
 })(angular);
 
 angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($templateCache) {
@@ -15135,13 +15309,13 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
     'use strict';
 
     angular.module('znk.infra-web-app.socialSharing', [
-        'znk.infra.config' 
+        'znk.infra.config'
     ]);
 })(angular);
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.socialSharing')
         .service('SocialSharingSrv',
             ["StorageSrv", "InfraConfigSrv", "$q", function (StorageSrv, InfraConfigSrv, $q) {
@@ -15231,7 +15405,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
         'znk.infra-web-app.estimatedScoreWidget',
         'znk.infra.exerciseUtility',
         'ui.router'
-    ]);  
+    ]);
 })(angular);
 
 /**
@@ -15470,7 +15644,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
         var vm = this;
         var subjectOrderProm = TutorialsSrv.getSubjectOrder();
         vm.subjectsMap = SubjectEnum.getEnumMap();
-        
+
         vm.$onInit = function () {
             $q.all([
                 subjectOrderProm
@@ -15571,7 +15745,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     angular.module('znk.infra-web-app.tutorials').service('TutorialsSrv',
         ["$log", "$injector", "$q", "StorageRevSrv", "ExerciseResultSrv", "ContentAvailSrv", "CategoryService", "ExerciseTypeEnum", "ExerciseStatusEnum", "SubjectsSrv", function ($log, $injector, $q, StorageRevSrv, ExerciseResultSrv, ContentAvailSrv, CategoryService, ExerciseTypeEnum, ExerciseStatusEnum, SubjectsSrv) {
             'ngInject';
-        
+
             this.getSubjectOrder = function () {
                 return SubjectsSrv.getSubjectOrder();
             };
@@ -17132,7 +17306,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
 
 (function (angular) {
     'use strict';
-    
+
     angular.module('znk.infra-web-app.workoutsRoadmap').controller('WorkoutsRoadMapWorkoutInProgressController',
         ["data", "ExerciseResultSrv", function (data, ExerciseResultSrv) {
             'ngInject';

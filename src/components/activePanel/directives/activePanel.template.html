@@ -30,7 +30,7 @@
                                 </md-tooltip>
                             </svg-icon>
                             <svg-icon ng-switch-default
-                                      name="active-panel-track-teacher-icon"">
+                                      name="active-panel-track-teacher-icon">
                                 <md-tooltip znk-tooltip class="md-fab">
                                     {{d.translatedStrings.SHOW_TEACHER_SCREEN}}
                                 </md-tooltip>
@@ -60,8 +60,15 @@
                 </svg-icon>
             </ng-switch>
 
-            <call-btn ng-model="d.callBtnModel"></call-btn>
+            <svg-icon 
+                ng-click="d.openHangouts()" 
+                ng-if="d.isTeacher" 
+                ng-class="{'available':d.userProfile.teacherInfo.hangoutsUri}" 
+                name="hangouts-icon">
+            </svg-icon>
 
+            <call-btn ng-model="d.callBtnModel"></call-btn>
+          
             <div class="end-session-wrap" ng-if="d.isTeacher">
                 <div class="seperator"></div>
                 <md-button class="end-session-btn"
