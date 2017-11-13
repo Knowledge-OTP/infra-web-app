@@ -68,36 +68,25 @@
 
                     LiveSessionUiSrv.showWaitPopUp();
 
-                    darkFeaturesValid().then(isValid => {
-                        if (isValid) {
-                            $log.debug('darkFeatures in ON');
-                            getScheduledLesson().then(scheduledLesson => {
+                    UserProfileService.getCurrUserId().then(educatorId => {
+                        UserProfileService.darkFeaturesValid([educatorId, vm.student.uid]).then(isValid => {
+                            if (isValid) {
+                                $log.debug('darkFeatures in ON');
+                                getScheduledLesson().then(scheduledLesson => {
+                                    LiveSessionUiSrv.closePopup();
+                                    if (scheduledLesson) {
+                                        LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
+                                    } else {
+                                        LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                            .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
+                                    }
+                                });
+                            } else {
                                 LiveSessionUiSrv.closePopup();
-                                if (scheduledLesson) {
-                                    LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
-                                } else {
-                                    LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
-                                        .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
-                                }
-                            });
-                        } else {
-                            LiveSessionUiSrv.closePopup();
-                            showSessionModal();
-                        }
-                    });
-                }
-
-                function darkFeaturesValid() {
-                    let isValid = true;
-                    return $q.all([educatorProfileProm, UserProfileService.getProfileByUserId(vm.student.uid)])
-                        .then(dataArr => {
-                            dataArr.forEach(profile => {
-                                if (!profile || !profile.darkFeatures || !(profile.darkFeatures.myZinkerz || profile.darkFeatures.all)) {
-                                    isValid = false;
-                                }
-                            });
-                            return isValid;
+                                showSessionModal();
+                            }
                         });
+                    });
                 }
 
                 function liveSessionStateChanged(newLiveSessionState) {

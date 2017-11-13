@@ -118,6 +118,7 @@
             ZnkLessonNotesSrv.getGlobals = getGlobals;
             ZnkLessonNotesSrv.getUserProfiles = getUserProfiles;
             ZnkLessonNotesSrv.enumToArray = enumToArray;
+            ZnkLessonNotesSrv.capitalizeFirstLetter = capitalizeFirstLetter;
             ZnkLessonNotesSrv.getUserFullName = getUserFullName;
             ZnkLessonNotesSrv.getLiveSessionDuration = getLiveSessionDuration;
             ZnkLessonNotesSrv.convertMS = convertMS;
