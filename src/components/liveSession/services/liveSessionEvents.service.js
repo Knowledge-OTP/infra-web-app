@@ -24,7 +24,6 @@
                         return;
                     }
 
-
                     switch (liveSessionData.status) {
                         case LiveSessionStatusEnum.PENDING_STUDENT.enum:
                             if (liveSessionData.studentId === currUid) {
@@ -38,6 +37,7 @@
                                 LiveSessionUiSrv.showEducatorPendingPopUp();
                             }
                             break;
+
                         case LiveSessionStatusEnum.CONFIRMED.enum:
                             LiveSessionUiSrv.closePopup();
                             LiveSessionUiSrv.showLiveSessionToast();
@@ -57,7 +57,9 @@
                             }
 
                             break;
+
                         case LiveSessionStatusEnum.ENDED.enum:
+                            LiveSessionUiSrv.closePopup();
                             if (liveSessionData.studentId !== currUid) {
                                 LiveSessionSrv.hangCall(liveSessionData.studentId);
                                 LiveSessionSrv._destroyCheckDurationInterval();
@@ -71,6 +73,7 @@
                             // Security check to insure there isn't active session
                             LiveSessionSrv._moveToArchive(liveSessionData);
                             break;
+
                         default:
                             $log.error('LiveSessionEventsSrv: invalid status was received ' + liveSessionData.status);
                     }
@@ -83,19 +86,19 @@
                 });
             }
 
-            function _listenToHangoutsInvitation() {
-                UserProfileService.getCurrUserId().then(function (currUid) {
-                    InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-                        var appName = ENV.firebaseAppScopeName;
-                        var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/hangoutsSession';
-                        globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionGuid) {
-                            if (hangoutsSessionGuid) {
-                                _listenToLiveSessionData(hangoutsSessionGuid);
-                            }
-                        });
-                    });
-                });
-            }
+            // function _listenToHangoutsInvitation() {
+            //     UserProfileService.getCurrUserId().then(function (currUid) {
+            //         InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
+            //             var appName = ENV.firebaseAppScopeName;
+            //             var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/hangoutsSession';
+            //             globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionGuid) {
+            //                 if (hangoutsSessionGuid) {
+            //                     _listenToLiveSessionData(hangoutsSessionGuid);
+            //                 }
+            //             });
+            //         });
+            //     });
+            // }
 
             function _startListening() {
                 UserProfileService.getCurrUserId().then((currUserId) => {
@@ -111,11 +114,11 @@
             function _listenToUserActivePath(userLiveSessionGuids) {
                 if (userLiveSessionGuids) {
                     userLiveSessionGuids = Array.isArray(userLiveSessionGuids) ? userLiveSessionGuids : Object.keys(userLiveSessionGuids);
-                    userLiveSessionGuids.forEach((isActive, guid) => {
-                        if (isActive) {
+                    userLiveSessionGuids.forEach(guid => {
+                        if (guid) {
                             _listenToLiveSessionData(guid);
                         } else {
-                            $log.debug('_listenToUserActivePath: isActive is: ', isActive);
+                            $log.debug('_listenToUserActivePath: Invalid guid');
                         }
                     });
                 }
@@ -124,7 +127,7 @@
             function activate() {
                 if (isEnabled) {
                     _startListening();
-                    _listenToHangoutsInvitation();
+                    // _listenToHangoutsInvitation();
                 }
             }
 

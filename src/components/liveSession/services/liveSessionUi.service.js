@@ -120,6 +120,17 @@
                 });
             }
 
+            function showWaitPopUp(){
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.STARTING_SESSION');
+                return $q.all(translationsPromMap).then(function(translations){
+                    PopUpSrv.wait(translations.title);
+                },function(err){
+                    $log.error('LiveSessionUiSrv: showWaitPopUp translate failure' + err);
+                    return $q.reject(err);
+                });
+            }
+
             function showSessionEndAlertPopup() {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', { endAlertTime: SESSION_DURATION.endAlertTime / 60000 });
@@ -211,6 +222,7 @@
             LiveSessionUiSrv.endLiveSession = endLiveSession;
             LiveSessionUiSrv.showStudentConfirmationPopUp = showStudentConfirmationPopUp;
             LiveSessionUiSrv.showEducatorPendingPopUp = showEducatorPendingPopUp;
+            LiveSessionUiSrv.showWaitPopUp = showWaitPopUp;
             LiveSessionUiSrv.showSessionEndAlertPopup = showSessionEndAlertPopup;
             LiveSessionUiSrv.showEndSessionPopup = showEndSessionPopup;
             LiveSessionUiSrv.showLiveSessionToast = showLiveSessionToast;

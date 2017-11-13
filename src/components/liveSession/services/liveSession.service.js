@@ -300,8 +300,7 @@
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
                             extendTime: 0,
-                            educatorStartTime: _getRoundTime(),
-                            startTime: null,
+                            startTime:  _getRoundTime(),
                             endTime: null,
                             duration: null,
                             sessionSubject: lessonData.topicId,
@@ -320,13 +319,17 @@
                         dataToSave[studentLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
 
                         try {
-                            _updateLesson(lessonData);
+                            if (lessonData.id) {
+                                _updateLesson(lessonData);
+                            }
                         } catch (err) {
                             $log.error('_initiateLiveSession: updateLesson failed. Error: ', err);
                         }
 
                         return _getStorage().then(function (StudentStorage) {
-                            return StudentStorage.update(dataToSave);
+                            return StudentStorage.update(dataToSave).then(() => {
+                                _this.makeAutoCall(newLiveSessionData.studentId);
+                            });
                         });
                     });
 

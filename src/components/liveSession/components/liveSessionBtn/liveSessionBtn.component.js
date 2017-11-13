@@ -53,23 +53,43 @@
                     });
                 }
 
+                function showSessionModal() {
+                    $mdDialog.show({
+                        template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
+                        scope: $scope,
+                        preserveScope: true,
+                        clickOutsideToClose: true
+                    });
+                }
+
                 function showStartSessionPopup() {
                     if (!vm.isDiagnosticCompleted) {
                         $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
                         return LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
                     }
 
-                    LiveSessionUiSrv.showStartSessionPopUp().then(() => endSession());
+                    LiveSessionUiSrv.showWaitPopUp();
 
-                    getScheduledLesson().then(scheduledLesson => {
-                        LiveSessionUiSrv.closePopup();
-                        if (scheduledLesson) {
-                            LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
-                        } else {
-                            LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
-                                .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
-                        }
+                    UserProfileService.getCurrUserId().then(educatorId => {
+                        UserProfileService.getProfileByUserId(educatorId).then(educatorProfile => {
+                            if (educatorProfile && educatorProfile.darkFeatures && educatorProfile.darkFeatures.myZinkerz) {
+                                getScheduledLesson().then(scheduledLesson => {
+                                    LiveSessionUiSrv.closePopup();
+                                    if (scheduledLesson) {
+                                        LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
+                                    } else {
+                                        LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                            .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
+                                    }
+                                });
+                            } else {
+                                LiveSessionUiSrv.closePopup();
+                                showSessionModal();
+                            }
+                        });
                     });
+
+
                 }
 
                 function liveSessionStateChanged(newLiveSessionState) {
