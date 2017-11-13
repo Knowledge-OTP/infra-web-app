@@ -2,10 +2,9 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        function ($http, ENV, $mdDialog, InfraConfigSrv) {
+        function ($rootScope, $rootElement, $http, ENV, $mdDialog, InfraConfigSrv) {
             'ngInject';
 
-            let _this = this;
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
             let serviceBackendUrl = `${ENV.znkBackendBaseUrl}/service`;
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
@@ -14,10 +13,12 @@
             let ZnkLessonNotesSrv = {};
 
             function openLessonNotesPopup(lessonId, userContext) {
-                _this.lessonId = lessonId;
-                _this.userContext = userContext;
+                $rootScope.lessonId = lessonId;
+                $rootScope.userContext = userContext;
                 $mdDialog.show({
-                    template: '<lesson-notes-popup lesson-id="_this.lessonId" user-context="_this.userContext"></lesson-notes-popup>',
+                    template: '<lesson-notes-popup lesson-id="lessonId" user-context="userContext"></lesson-notes-popup>',
+                    parent: $rootElement,
+                    scope: $rootScope,
                     clickOutsideToClose: true,
                     escapeToClose: true
                 });
