@@ -15,16 +15,14 @@
 
                 let vm = this;
                 let DOCUMENT_DB_QUERY_KEY = 'getLessonsByEducatorStudentStatusAndRange';
-                let SESSION_DURATION =  {
+                let SESSION_DURATION = {
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
                 };
-                let dataPromMap = {
-                    liveSessionDuration: ZnkLessonNotesSrv.getLiveSessionDuration(),
-                    educatorId: UserProfileService.getProfile()
-                };
+                let liveSessionDurationProm = ZnkLessonNotesSrv.getLiveSessionDuration();
+                let educatorProfileProm = UserProfileService.getProfile();
 
-                this.$onInit = function() {
+                this.$onInit = function () {
                     vm.isLiveSessionActive = false;
                     vm.isOffline = true;
                     vm.isDiagnosticCompleted = false;
@@ -70,8 +68,8 @@
 
                     LiveSessionUiSrv.showWaitPopUp();
 
-                    UserProfileService.getProfile().then(educatorProfile => {
-                        if (educatorProfile && educatorProfile.darkFeatures && educatorProfile.darkFeatures.myZinkerz) {
+                    darkFeaturesValid().then(isValid => {
+                        if (isValid) {
                             $log.debug('darkFeatures in ON');
                             getScheduledLesson().then(scheduledLesson => {
                                 LiveSessionUiSrv.closePopup();
@@ -89,6 +87,19 @@
                     });
                 }
 
+                function darkFeaturesValid() {
+                    let isValid = true;
+                    return $q.all([educatorProfileProm, UserProfileService.getProfileByUserId(vm.student.uid)])
+                        .then(dataArr => {
+                            dataArr.forEach(profile => {
+                                if (!profile || !profile.darkFeatures || !(profile.darkFeatures.myZinkerz || profile.darkFeatures.all)) {
+                                    isValid = false;
+                                }
+                            });
+                            return isValid;
+                        });
+                }
+
                 function liveSessionStateChanged(newLiveSessionState) {
                     vm.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
                 }
@@ -101,6 +112,10 @@
 
 
                 function getScheduledLesson() {
+                    let dataPromMap = {
+                        liveSessionDuration: liveSessionDurationProm,
+                        educatorProfile: educatorProfileProm
+                    };
                     return $q.all(dataPromMap).then(dataMap => {
                         SESSION_DURATION = dataMap.liveSessionDuration ? dataMap.liveSessionDuration : SESSION_DURATION;
                         let now = Date.now();
@@ -109,7 +124,7 @@
                         let query = {
                             query: DOCUMENT_DB_QUERY_KEY,
                             values: [
-                                dataMap.educatorId,
+                                dataMap.educatorProfile.uid,
                                 [vm.student.uid],
                                 [LessonStatusEnum.SCHEDULED.enum],
                                 calcStartTime,
