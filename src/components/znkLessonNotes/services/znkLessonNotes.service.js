@@ -5,6 +5,7 @@
         function ($http, ENV, $mdDialog, InfraConfigSrv) {
             'ngInject';
 
+            let _this = this;
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
             let serviceBackendUrl = `${ENV.znkBackendBaseUrl}/service`;
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
@@ -12,9 +13,11 @@
             let liveSessionDurationPath = '/settings/liveSessionDuration/';
             let ZnkLessonNotesSrv = {};
 
-            function openLessonNotesPopup() {
+            function openLessonNotesPopup(lessonId, userContext) {
+                _this.lessonId = lessonId;
+                _this.userContext = userContext;
                 $mdDialog.show({
-                    template: '<lesson-notes-popup></lesson-notes-popup>',
+                    template: '<lesson-notes-popup lesson-id="_this.lessonId" user-context="_this.userContext"></lesson-notes-popup>',
                     clickOutsideToClose: true,
                     escapeToClose: true
                 });

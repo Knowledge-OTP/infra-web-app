@@ -4,7 +4,7 @@
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
         function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
                   ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv,
-                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum) {
+                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, UserTypeContextEnum) {
             'ngInject';
 
             let _this = this;
@@ -83,7 +83,25 @@
 
                     _this._moveToArchive(data.liveSessionData);
 
-                    return data.storage.update(dataToSave);
+                    return data.storage.update(dataToSave).then(() => {
+                        UserProfileService.getProfile().then(userProfile => {
+                            if (userProfile && userProfile.darkFeatures && userProfile.darkFeatures.myZinkerz) {
+                                $log.debug('darkFeatures in ON');
+                                let userContext;
+                                if (data.liveSessionData.lessonId) {
+                                    if (userProfile.adminInfo && userProfile.adminInfo.permissions && userProfile.adminInfo.permissions.isAdmin) {
+                                        userContext = UserTypeContextEnum.ADMIN.enum;
+                                    } else {
+                                        userContext = isTeacherApp ? UserTypeContextEnum.EDUCATOR.enum : UserTypeContextEnum.STUDENT.enum;
+                                    }
+                                    ZnkLessonNotesSrv.openLessonNotesPopup(data.liveSessionData, userContext);
+                                }
+
+                            } else {
+                                $log.debug('darkFeatures in OFF');
+                            }
+                        });
+                    });
                 });
             };
 

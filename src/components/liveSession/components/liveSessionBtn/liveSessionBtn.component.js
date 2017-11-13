@@ -21,7 +21,7 @@
                 };
                 let dataPromMap = {
                     liveSessionDuration: ZnkLessonNotesSrv.getLiveSessionDuration(),
-                    educatorId: UserProfileService.getCurrUserId()
+                    educatorId: UserProfileService.getProfile()
                 };
 
                 this.$onInit = function() {
@@ -70,26 +70,23 @@
 
                     LiveSessionUiSrv.showWaitPopUp();
 
-                    UserProfileService.getCurrUserId().then(educatorId => {
-                        UserProfileService.getProfileByUserId(educatorId).then(educatorProfile => {
-                            if (educatorProfile && educatorProfile.darkFeatures && educatorProfile.darkFeatures.myZinkerz) {
-                                getScheduledLesson().then(scheduledLesson => {
-                                    LiveSessionUiSrv.closePopup();
-                                    if (scheduledLesson) {
-                                        LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
-                                    } else {
-                                        LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
-                                            .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
-                                    }
-                                });
-                            } else {
+                    UserProfileService.getProfile().then(educatorProfile => {
+                        if (educatorProfile && educatorProfile.darkFeatures && educatorProfile.darkFeatures.myZinkerz) {
+                            $log.debug('darkFeatures in ON');
+                            getScheduledLesson().then(scheduledLesson => {
                                 LiveSessionUiSrv.closePopup();
-                                showSessionModal();
-                            }
-                        });
+                                if (scheduledLesson) {
+                                    LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
+                                } else {
+                                    LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                        .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
+                                }
+                            });
+                        } else {
+                            LiveSessionUiSrv.closePopup();
+                            showSessionModal();
+                        }
                     });
-
-
                 }
 
                 function liveSessionStateChanged(newLiveSessionState) {
