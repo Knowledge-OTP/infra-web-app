@@ -93,7 +93,8 @@
                 'ngInject';
 
                 let vm = this;
-                vm.nameSpace = 'LIVE_SESSION.LESSON_NOTES_POPUP';
+                vm.dataPromMap = {};
+                vm.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
                 vm.fields = [];
 
                 this.$onInit = function () {
@@ -120,7 +121,7 @@
                     vm.dataPromMap.serviceList = ZnkLessonNotesSrv.getServiceList();
                     $q.all(vm.dataPromMap).then((dataMap) => {
                         vm.translate = dataMap.translate;
-                        vm.serviceList = dataMap.serviceList;
+                        vm.serviceListMap = dataMap.serviceList.data;
                         buildViewModal();
                     });
                 }
@@ -133,13 +134,13 @@
                         switch (translateKey) {
                             case `${vm.nameSpace}.TEST`:
                                 if (!vm.lessonService) {
-                                    vm.lessonService = vm.serviceList.filter(service => service.id === vm.lesson.serviceId)[0];
+                                    vm.lessonService = vm.serviceListMap[vm.lesson.serviceId];
                                 }
                                 field.text = vm.lessonService.name;
                                 break;
                             case `${vm.nameSpace}.TOPIC`:
                                 if (!vm.lessonService) {
-                                    vm.lessonService = vm.serviceList.filter(service => service.id === vm.lesson.serviceId)[0];
+                                    vm.lessonService = vm.serviceListMap[vm.lesson.serviceId];
                                 }
                                 field.text = vm.lessonService.topics[vm.lesson.topicId].name;
                                 break;
@@ -171,7 +172,7 @@
                     let studentsKeys = Object.keys(vm.lesson.students);
                     studentsKeys.forEach((studentId, index) => {
                         let student = vm.lesson.students[studentId];
-                        studentsNames += vm.ZnkLessonNotesSrv.getUserFullName(student);
+                        studentsNames += ZnkLessonNotesSrv.getUserFullName(student);
                         studentsNames += index !== (studentsKeys.length - 1) ? ', ' : '';
                     });
 
@@ -191,7 +192,7 @@
                             transformedDate = $filter('date')(timestamp, pattern);
                             break;
                         case 'DURATION':
-                            let convertedDuration = vm.utilsService.convertMS(timestamp);
+                            let convertedDuration = ZnkLessonNotesSrv.convertMS(timestamp);
                             let hourOrMinText;
                             if (convertedDuration.hour >= 1) {
                                 let translatePath = convertedDuration.hour > 1 ? `${vm.nameSpace}.HOURS` : `${vm.nameSpace}.HOUR`;
@@ -230,7 +231,7 @@
                 this.$onInit = function () {
                     $log.debug('lessonNotesPopup: Init');
                     ZnkLessonNotesSrv.getLessonById(vm.lessonId).then(lesson => {
-                        vm.lesson = lesson;
+                        vm.lesson = lesson.data;
                     });
                     vm.closeModal = $mdDialog.cancel;
                     vm.showSpinner = false;
@@ -241,7 +242,7 @@
                     vm.showSpinner = true;
                     ZnkLessonNotesSrv.updateLesson(vm.lesson)
                         .then(updatedLesson => {
-                            vm.lesson = updatedLesson;
+                            vm.lesson = updatedLesson.data;
                             vm.showSpinner = false;
                             vm.closeModal();
                         })
@@ -346,25 +347,30 @@
                 function initSummaryNote() {
                     if (!vm.lesson.lessonNotes.educatorNotes) {
                         ZnkLessonNotesSrv.getGlobals().then(globals => {
-                            vm.lesson.lessonNotes.educatorNotes = globals.lessonEducatorNotesTemplate;
+                            vm.lesson.lessonNotes.educatorNotes = globals.data.lessonEducatorNotesTemplate;
                         });
                     }
                 }
 
                 function getStudentProfiles() {
-                    let studentsIdArr = Object.keys(vm.lesson.students);
-                    ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
-                        .then(studentsProfiles => {
-                            $log.debug(' studentsProfiles loaded: ', studentsProfiles);
-                            vm.studentsProfiles = studentsProfiles;
-                            vm.studentsProfiles.forEach(profile => {
-                                let studentMail = profile.email || profile.userEmail || profile.authEmail;
-                                vm.studentsMails.push(studentMail);
-                                if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
-                                    vm.parentsMails.push(profile.studentInfo.parentInfo.email);
-                                }
+                    if (vm.lesson.students) {
+                        let studentsIdArr = Object.keys(vm.lesson.students);
+                        ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
+                            .then(studentsProfiles => {
+                                $log.debug(' studentsProfiles loaded: ', studentsProfiles.data);
+                                vm.studentsProfiles = studentsProfiles.data;
+                                vm.studentsProfiles.forEach(profile => {
+                                    let studentMail = profile.email || profile.userEmail || profile.authEmail;
+                                    vm.studentsMails.push(studentMail);
+                                    if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
+                                        vm.parentsMails.push(profile.studentInfo.parentInfo.email);
+                                    }
+                                });
                             });
-                        });
+                    } else {
+                        $log.error('getStudentProfiles: No students in this lesson. lessonId: ', vm.lesson.id);
+                    }
+
                 }
 
                 function emailSelected(mailGroup, bool) {
@@ -389,7 +395,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        ["$http", "ENV", "$mdDialog", "InfraConfigSrv", function ($http, ENV, $mdDialog, InfraConfigSrv) {
+        ["$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "InfraConfigSrv", function ($rootScope, $rootElement, $http, ENV, $mdDialog, InfraConfigSrv) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -399,9 +405,13 @@
             let liveSessionDurationPath = '/settings/liveSessionDuration/';
             let ZnkLessonNotesSrv = {};
 
-            function openLessonNotesPopup() {
+            function openLessonNotesPopup(lessonId, userContext) {
+                $rootScope.lessonId = lessonId;
+                $rootScope.userContext = userContext;
                 $mdDialog.show({
-                    template: '<lesson-notes-popup></lesson-notes-popup>',
+                    template: '<lesson-notes-popup lesson-id="lessonId" user-context="userContext"></lesson-notes-popup>',
+                    parent: $rootElement,
+                    scope: $rootScope,
                     clickOutsideToClose: true,
                     escapeToClose: true
                 });
@@ -476,9 +486,21 @@
             }
 
             function getLiveSessionDuration() {
-                return InfraConfigSrv.getGlobalStorage().then(function (storage) {
+                return InfraConfigSrv.getGlobalStorage().then(storage => {
                     return storage.get(liveSessionDurationPath);
                 });
+            }
+
+            function convertMS(ms) {
+                let day, hour, min, sec;
+                sec = Math.floor(ms / 1000);
+                min = Math.floor(sec / 60);
+                sec = sec % 60;
+                hour = Math.floor(min / 60);
+                min = min % 60;
+                day = Math.floor(hour / 24);
+                hour = hour % 24;
+                return { day, hour, min, sec };
             }
 
             ZnkLessonNotesSrv.openLessonNotesPopup = openLessonNotesPopup;
@@ -489,8 +511,10 @@
             ZnkLessonNotesSrv.getGlobals = getGlobals;
             ZnkLessonNotesSrv.getUserProfiles = getUserProfiles;
             ZnkLessonNotesSrv.enumToArray = enumToArray;
+            ZnkLessonNotesSrv.capitalizeFirstLetter = capitalizeFirstLetter;
             ZnkLessonNotesSrv.getUserFullName = getUserFullName;
             ZnkLessonNotesSrv.getLiveSessionDuration = getLiveSessionDuration;
+            ZnkLessonNotesSrv.convertMS = convertMS;
 
             return ZnkLessonNotesSrv;
 
@@ -514,7 +538,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/lessonNotesPopup/lessonNotesPopup.template.html",
-    "<div class=\"lesson-notes-popup znk-scrollbar\" *ngIf=\"lesson\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
+    "<div class=\"lesson-notes-popup znk-scrollbar\" ng-if=\"vm.lesson\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
     "    <znk-lesson-info lesson=\"vm.lesson\"></znk-lesson-info>\n" +
     "    <div class=\"divider\"></div>\n" +
     "    <znk-lesson-rating lesson=\"vm.lesson\"></znk-lesson-rating>\n" +

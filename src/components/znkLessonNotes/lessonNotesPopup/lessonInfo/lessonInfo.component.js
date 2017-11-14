@@ -12,7 +12,8 @@
                 'ngInject';
 
                 let vm = this;
-                vm.nameSpace = 'LIVE_SESSION.LESSON_NOTES_POPUP';
+                vm.dataPromMap = {};
+                vm.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
                 vm.fields = [];
 
                 this.$onInit = function () {
@@ -39,7 +40,7 @@
                     vm.dataPromMap.serviceList = ZnkLessonNotesSrv.getServiceList();
                     $q.all(vm.dataPromMap).then((dataMap) => {
                         vm.translate = dataMap.translate;
-                        vm.serviceList = dataMap.serviceList;
+                        vm.serviceListMap = dataMap.serviceList.data;
                         buildViewModal();
                     });
                 }
@@ -52,13 +53,13 @@
                         switch (translateKey) {
                             case `${vm.nameSpace}.TEST`:
                                 if (!vm.lessonService) {
-                                    vm.lessonService = vm.serviceList.filter(service => service.id === vm.lesson.serviceId)[0];
+                                    vm.lessonService = vm.serviceListMap[vm.lesson.serviceId];
                                 }
                                 field.text = vm.lessonService.name;
                                 break;
                             case `${vm.nameSpace}.TOPIC`:
                                 if (!vm.lessonService) {
-                                    vm.lessonService = vm.serviceList.filter(service => service.id === vm.lesson.serviceId)[0];
+                                    vm.lessonService = vm.serviceListMap[vm.lesson.serviceId];
                                 }
                                 field.text = vm.lessonService.topics[vm.lesson.topicId].name;
                                 break;
@@ -90,7 +91,7 @@
                     let studentsKeys = Object.keys(vm.lesson.students);
                     studentsKeys.forEach((studentId, index) => {
                         let student = vm.lesson.students[studentId];
-                        studentsNames += vm.ZnkLessonNotesSrv.getUserFullName(student);
+                        studentsNames += ZnkLessonNotesSrv.getUserFullName(student);
                         studentsNames += index !== (studentsKeys.length - 1) ? ', ' : '';
                     });
 
@@ -110,7 +111,7 @@
                             transformedDate = $filter('date')(timestamp, pattern);
                             break;
                         case 'DURATION':
-                            let convertedDuration = vm.utilsService.convertMS(timestamp);
+                            let convertedDuration = ZnkLessonNotesSrv.convertMS(timestamp);
                             let hourOrMinText;
                             if (convertedDuration.hour >= 1) {
                                 let translatePath = convertedDuration.hour > 1 ? `${vm.nameSpace}.HOURS` : `${vm.nameSpace}.HOUR`;

@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        function ($http, ENV, $mdDialog, InfraConfigSrv) {
+        function ($rootScope, $rootElement, $http, ENV, $mdDialog, InfraConfigSrv) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -12,9 +12,13 @@
             let liveSessionDurationPath = '/settings/liveSessionDuration/';
             let ZnkLessonNotesSrv = {};
 
-            function openLessonNotesPopup() {
+            function openLessonNotesPopup(lessonId, userContext) {
+                $rootScope.lessonId = lessonId;
+                $rootScope.userContext = userContext;
                 $mdDialog.show({
-                    template: '<lesson-notes-popup></lesson-notes-popup>',
+                    template: '<lesson-notes-popup lesson-id="lessonId" user-context="userContext"></lesson-notes-popup>',
+                    parent: $rootElement,
+                    scope: $rootScope,
                     clickOutsideToClose: true,
                     escapeToClose: true
                 });
@@ -89,9 +93,21 @@
             }
 
             function getLiveSessionDuration() {
-                return InfraConfigSrv.getGlobalStorage().then(function (storage) {
+                return InfraConfigSrv.getGlobalStorage().then(storage => {
                     return storage.get(liveSessionDurationPath);
                 });
+            }
+
+            function convertMS(ms) {
+                let day, hour, min, sec;
+                sec = Math.floor(ms / 1000);
+                min = Math.floor(sec / 60);
+                sec = sec % 60;
+                hour = Math.floor(min / 60);
+                min = min % 60;
+                day = Math.floor(hour / 24);
+                hour = hour % 24;
+                return { day, hour, min, sec };
             }
 
             ZnkLessonNotesSrv.openLessonNotesPopup = openLessonNotesPopup;
@@ -102,8 +118,10 @@
             ZnkLessonNotesSrv.getGlobals = getGlobals;
             ZnkLessonNotesSrv.getUserProfiles = getUserProfiles;
             ZnkLessonNotesSrv.enumToArray = enumToArray;
+            ZnkLessonNotesSrv.capitalizeFirstLetter = capitalizeFirstLetter;
             ZnkLessonNotesSrv.getUserFullName = getUserFullName;
             ZnkLessonNotesSrv.getLiveSessionDuration = getLiveSessionDuration;
+            ZnkLessonNotesSrv.convertMS = convertMS;
 
             return ZnkLessonNotesSrv;
 

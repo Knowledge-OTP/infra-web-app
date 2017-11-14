@@ -18,7 +18,7 @@
                 this.$onInit = function () {
                     $log.debug('lessonNotesPopup: Init');
                     ZnkLessonNotesSrv.getLessonById(vm.lessonId).then(lesson => {
-                        vm.lesson = lesson;
+                        vm.lesson = lesson.data;
                     });
                     vm.closeModal = $mdDialog.cancel;
                     vm.showSpinner = false;
@@ -29,7 +29,7 @@
                     vm.showSpinner = true;
                     ZnkLessonNotesSrv.updateLesson(vm.lesson)
                         .then(updatedLesson => {
-                            vm.lesson = updatedLesson;
+                            vm.lesson = updatedLesson.data;
                             vm.showSpinner = false;
                             vm.closeModal();
                         })

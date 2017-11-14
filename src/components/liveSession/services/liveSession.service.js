@@ -4,12 +4,12 @@
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
         function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
                   ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv,
-                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum) {
+                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, UserTypeContextEnum) {
             'ngInject';
 
             let _this = this;
 
-            let SESSION_DURATION =  {
+            let SESSION_DURATION = {
                 length: ENV.liveSession.sessionLength,
                 extendTime: ENV.liveSession.sessionExtendTime,
                 endAlertTime: ENV.liveSession.sessionEndAlertTime
@@ -83,7 +83,29 @@
 
                     _this._moveToArchive(data.liveSessionData);
 
-                    return data.storage.update(dataToSave);
+                    return data.storage.update(dataToSave).then(() => {
+                        UserProfileService.darkFeaturesValid([data.liveSessionData.educatorId, data.liveSessionData.studentId])
+                            .then(isValid => {
+                                if (isValid) {
+                                    $log.debug('darkFeatures in ON');
+                                    if (data.liveSessionData.lessonId) {
+                                        UserProfileService.getProfile().then(userProfile => {
+                                            let userContext;
+                                            if (userProfile.adminInfo && userProfile.adminInfo.permissions && userProfile.adminInfo.permissions.isAdmin) {
+                                                userContext = UserTypeContextEnum.ADMIN.enum;
+                                            } else {
+                                                userContext = isTeacherApp ? UserTypeContextEnum.EDUCATOR.enum : UserTypeContextEnum.STUDENT.enum;
+                                            }
+                                            ZnkLessonNotesSrv.openLessonNotesPopup(data.liveSessionData, userContext);
+                                        });
+                                    } else {
+                                        $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
+                                    }
+                                } else {
+                                    $log.debug('darkFeatures in OFF');
+                                }
+                            });
+                    });
                 });
             };
 
@@ -105,7 +127,7 @@
                 return $q.all(getDataPromMap).then(function (data) {
                     let dataToSave = {};
 
-                    if (data.currUidLiveSessionRequests){
+                    if (data.currUidLiveSessionRequests) {
                         data.currUidLiveSessionRequests[liveSessionData.guid] = false;
                         let activePath = data.currUidLiveSessionRequests.$$path;
                         dataToSave[activePath] = {};
@@ -119,7 +141,7 @@
                         } else {
                             otherUserLiveSessionRequestPath = liveSessionData.teacherPath;
                         }
-                        if (otherUserLiveSessionRequestPath){
+                        if (otherUserLiveSessionRequestPath) {
                             let otherUserActivePath = otherUserLiveSessionRequestPath + '/active';
                             dataToSave[otherUserActivePath] = {};
                             let otherUserArchivePath = otherUserLiveSessionRequestPath + '/archive';
@@ -139,8 +161,8 @@
                 }
             };
 
-            this.unregisterFromActiveLiveSessionDataChanges = function(cb){
-                registeredCbToActiveLiveSessionDataChanges =_removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
+            this.unregisterFromActiveLiveSessionDataChanges = function (cb) {
+                registeredCbToActiveLiveSessionDataChanges = _removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
             };
 
             this.registerToCurrUserLiveSessionStateChanges = function (cb) {
@@ -149,7 +171,7 @@
 
             this.unregisterFromCurrUserLiveSessionStateChanges = function (cb) {
                 _cleanRegisteredCbToActiveLiveSessionData();
-                registeredCbToCurrUserLiveSessionStateChange = _removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange,cb);
+                registeredCbToCurrUserLiveSessionStateChange = _removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange, cb);
             };
 
             this.getActiveLiveSessionData = function () {
@@ -161,7 +183,7 @@
                     liveSessionData: LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid),
                     currUid: UserProfileService.getCurrUserId()
                 };
-                return $q.all(dataPromMap).then(function(dataMap){
+                return $q.all(dataPromMap).then(function (dataMap) {
                     let orig$saveFn = dataMap.liveSessionData.$save;
                     dataMap.liveSessionData.$save = function () {
                         dataMap.liveSessionData.updatedBy = dataMap.currUid;
@@ -203,7 +225,7 @@
                 _invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
             };
 
-            this._destroyCheckDurationInterval = function() {
+            this._destroyCheckDurationInterval = function () {
                 $interval.cancel(liveSessionInterval.interval);
                 liveSessionInterval = {};
             };
@@ -300,8 +322,7 @@
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
                             extendTime: 0,
-                            educatorStartTime: _getRoundTime(),
-                            startTime: null,
+                            startTime: _getRoundTime(),
                             endTime: null,
                             duration: null,
                             sessionSubject: lessonData.topicId,
@@ -320,13 +341,17 @@
                         dataToSave[studentLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
 
                         try {
-                            _updateLesson(lessonData);
+                            if (lessonData.id) {
+                                _updateLesson(lessonData);
+                            }
                         } catch (err) {
                             $log.error('_initiateLiveSession: updateLesson failed. Error: ', err);
                         }
 
                         return _getStorage().then(function (StudentStorage) {
-                            return StudentStorage.update(dataToSave);
+                            return StudentStorage.update(dataToSave).then(() => {
+                                _this.makeAutoCall(newLiveSessionData.studentId);
+                            });
                         });
                     });
 
@@ -352,21 +377,21 @@
                 _invokeCbs(registeredCbToCurrUserLiveSessionStateChange, [currUserLiveSessionState]);
             }
 
-            function _removeCbFromCbArr(cbArr, cb){
+            function _removeCbFromCbArr(cbArr, cb) {
                 return cbArr.filter(function (iterationCb) {
                     return iterationCb !== cb;
                 });
             }
 
-            function _invokeCbs(cbArr, args){
-                cbArr.forEach(function(cb){
+            function _invokeCbs(cbArr, args) {
+                cbArr.forEach(function (cb) {
                     cb.apply(null, args);
                 });
             }
 
             function _checkSessionDuration() {
                 if (isTeacherApp && activeLiveSessionDataFromAdapter.status === LiveSessionStatusEnum.CONFIRMED.enum) {
-                    if (liveSessionInterval.interval){
+                    if (liveSessionInterval.interval) {
                         _this._destroyCheckDurationInterval();
                     }
                     LiveSessionDataGetterSrv.getLiveSessionDuration().then(function (liveSessionDuration) {

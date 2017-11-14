@@ -15,16 +15,14 @@
 
                 let vm = this;
                 let DOCUMENT_DB_QUERY_KEY = 'getLessonsByEducatorStudentStatusAndRange';
-                let SESSION_DURATION =  {
+                let SESSION_DURATION = {
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
                 };
-                let dataPromMap = {
-                    liveSessionDuration: ZnkLessonNotesSrv.getLiveSessionDuration(),
-                    educatorId: UserProfileService.getCurrUserId()
-                };
+                let liveSessionDurationProm = ZnkLessonNotesSrv.getLiveSessionDuration();
+                let educatorProfileProm = UserProfileService.getProfile();
 
-                this.$onInit = function() {
+                this.$onInit = function () {
                     vm.isLiveSessionActive = false;
                     vm.isOffline = true;
                     vm.isDiagnosticCompleted = false;
@@ -53,22 +51,41 @@
                     });
                 }
 
+                function showSessionModal() {
+                    $mdDialog.show({
+                        template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
+                        scope: $scope,
+                        preserveScope: true,
+                        clickOutsideToClose: true
+                    });
+                }
+
                 function showStartSessionPopup() {
                     if (!vm.isDiagnosticCompleted) {
                         $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
                         return LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
                     }
 
-                    LiveSessionUiSrv.showStartSessionPopUp().then(() => endSession());
+                    LiveSessionUiSrv.showWaitPopUp();
 
-                    getScheduledLesson().then(scheduledLesson => {
-                        LiveSessionUiSrv.closePopup();
-                        if (scheduledLesson) {
-                            LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
-                        } else {
-                            LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
-                                .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
-                        }
+                    UserProfileService.getCurrUserId().then(educatorId => {
+                        UserProfileService.darkFeaturesValid([educatorId, vm.student.uid]).then(isValid => {
+                            if (isValid) {
+                                $log.debug('darkFeatures in ON');
+                                getScheduledLesson().then(scheduledLesson => {
+                                    LiveSessionUiSrv.closePopup();
+                                    if (scheduledLesson) {
+                                        LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
+                                    } else {
+                                        LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                            .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
+                                    }
+                                });
+                            } else {
+                                LiveSessionUiSrv.closePopup();
+                                showSessionModal();
+                            }
+                        });
                     });
                 }
 
@@ -84,6 +101,10 @@
 
 
                 function getScheduledLesson() {
+                    let dataPromMap = {
+                        liveSessionDuration: liveSessionDurationProm,
+                        educatorProfile: educatorProfileProm
+                    };
                     return $q.all(dataPromMap).then(dataMap => {
                         SESSION_DURATION = dataMap.liveSessionDuration ? dataMap.liveSessionDuration : SESSION_DURATION;
                         let now = Date.now();
@@ -92,7 +113,7 @@
                         let query = {
                             query: DOCUMENT_DB_QUERY_KEY,
                             values: [
-                                dataMap.educatorId,
+                                dataMap.educatorProfile.uid,
                                 [vm.student.uid],
                                 [LessonStatusEnum.SCHEDULED.enum],
                                 calcStartTime,

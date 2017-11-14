@@ -32,25 +32,30 @@
                 function initSummaryNote() {
                     if (!vm.lesson.lessonNotes.educatorNotes) {
                         ZnkLessonNotesSrv.getGlobals().then(globals => {
-                            vm.lesson.lessonNotes.educatorNotes = globals.lessonEducatorNotesTemplate;
+                            vm.lesson.lessonNotes.educatorNotes = globals.data.lessonEducatorNotesTemplate;
                         });
                     }
                 }
 
                 function getStudentProfiles() {
-                    let studentsIdArr = Object.keys(vm.lesson.students);
-                    ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
-                        .then(studentsProfiles => {
-                            $log.debug(' studentsProfiles loaded: ', studentsProfiles);
-                            vm.studentsProfiles = studentsProfiles;
-                            vm.studentsProfiles.forEach(profile => {
-                                let studentMail = profile.email || profile.userEmail || profile.authEmail;
-                                vm.studentsMails.push(studentMail);
-                                if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
-                                    vm.parentsMails.push(profile.studentInfo.parentInfo.email);
-                                }
+                    if (vm.lesson.students) {
+                        let studentsIdArr = Object.keys(vm.lesson.students);
+                        ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
+                            .then(studentsProfiles => {
+                                $log.debug(' studentsProfiles loaded: ', studentsProfiles.data);
+                                vm.studentsProfiles = studentsProfiles.data;
+                                vm.studentsProfiles.forEach(profile => {
+                                    let studentMail = profile.email || profile.userEmail || profile.authEmail;
+                                    vm.studentsMails.push(studentMail);
+                                    if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
+                                        vm.parentsMails.push(profile.studentInfo.parentInfo.email);
+                                    }
+                                });
                             });
-                        });
+                    } else {
+                        $log.error('getStudentProfiles: No students in this lesson. lessonId: ', vm.lesson.id);
+                    }
+
                 }
 
                 function emailSelected(mailGroup, bool) {
