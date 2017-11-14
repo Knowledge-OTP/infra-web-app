@@ -86,20 +86,6 @@
                 });
             }
 
-            // function _listenToHangoutsInvitation() {
-            //     UserProfileService.getCurrUserId().then(function (currUid) {
-            //         InfraConfigSrv.getGlobalStorage().then(function (globalStorage) {
-            //             var appName = ENV.firebaseAppScopeName;
-            //             var userLiveSessionPath = appName + '/users/' + currUid + '/liveSession/hangoutsSession';
-            //             globalStorage.onEvent(StorageSrv.EVENTS.VALUE, userLiveSessionPath, function (hangoutsSessionGuid) {
-            //                 if (hangoutsSessionGuid) {
-            //                     _listenToLiveSessionData(hangoutsSessionGuid);
-            //                 }
-            //             });
-            //         });
-            //     });
-            // }
-
             function _startListening() {
                 UserProfileService.getCurrUserId().then((currUserId) => {
                     currUid = currUserId;
