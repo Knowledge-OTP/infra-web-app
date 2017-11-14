@@ -14,6 +14,7 @@
 
                 let vm = this;
                 vm.save = save;
+                vm.closeModal = closeModal;
 
                 this.$onInit = function () {
                     $log.debug('lessonNotesPopup: Init');
@@ -34,6 +35,10 @@
                             vm.closeModal();
                         })
                         .catch(err => $log.error('lessonNotesPopup: updateLesson failed. Error: ', err));
+                }
+
+                function closeModal() {
+                    $mdDialog.cancel();
                 }
             }
         });

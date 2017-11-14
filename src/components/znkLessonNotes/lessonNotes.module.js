@@ -17,7 +17,9 @@
             'SvgIconSrvProvider',
             function (SvgIconSrvProvider) {
                 let svgMap = {
-                    'znkLessonNotes-star': 'components/znkLessonNotes/svg/star.svg'
+                    'znkLessonNotes-star': 'components/znkLessonNotes/svg/star.svg',
+                    'znkLessonNotes-zoe-new-record': 'components/znkLessonNotes/svg/zoe-new-record-popup-top-icon.svg',
+                    'znkLessonNotes-close-popup': 'components/znkLessonNotes/svg/close-popup.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
             }

@@ -1,11 +1,11 @@
 <div class="lesson-info" ng-if="vm.fields.length" translate-namespace="LESSON_NOTES.LESSON_NOTES_POPUP">
     <div class="field" ng-repeat="field in vm.fields">
         <div class="label">{{field.label}}</div>
-        <div class="text" ng-switch="field.label !== 'Status'" ng-switch-when="true">{{field.text}}</div>
-        <select class="lesson-status" ng-switch-when="false"
-                ng-options="status in lessonStatusArr"
-                ng-model="status"
-                ng-change="field.text = status">
+        <div class="text" ng-if="field.label !== 'Status' || vm.userContext === vm.userTypeContextEnum.STUDENT.enum">{{field.text}}</div>
+        <select class="lesson-status" ng-if="field.label === 'Status' && vm.userContext !== vm.userTypeContextEnum.STUDENT.enum"
+                ng-options="status as status.val for status in vm.lessonStatusArr"
+                ng-model="vm.lessunStatus"
+                ng-change="vm.statusChanged(field, vm.lessunStatus)">
         </select>
     </div>
 

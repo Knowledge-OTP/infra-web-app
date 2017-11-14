@@ -155,27 +155,145 @@ md-dialog.base {
       height: 19px; }
 
 .lesson-notes-popup {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column; }
-  .lesson-notes-popup .divider {
-    background-color: #e1e1e1;
-    height: 1px;
-    width: 96%;
-    margin: 0 auto; }
-  .lesson-notes-popup button {
-    -ms-flex-item-align: end;
-        align-self: flex-end;
-    margin: 20px;
-    position: relative; }
-    .lesson-notes-popup button .spinner {
+  height: 100%;
+  background-color: #ffffff;
+  overflow: visible;
+  width: 700px;
+  border-radius: 15px; }
+  .lesson-notes-popup .top-icon-wrap {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 40px; }
+    .lesson-notes-popup .top-icon-wrap .top-icon {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      .lesson-notes-popup .top-icon-wrap .top-icon .round-icon-wrap {
+        width: 76px;
+        height: 76px;
+        border-radius: 38px;
+        background-color: #0a9bad;
+        z-index: 9;
+        margin-top: -15px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
+        .lesson-notes-popup .top-icon-wrap .top-icon .round-icon-wrap svg {
+          width: 38px;
+          height: 38px;
+          fill: #ffffff; }
+  .lesson-notes-popup md-toolbar {
+    height: 40px;
+    max-height: 40px;
+    min-height: 40px; }
+    .lesson-notes-popup md-toolbar:not(.md-menu-toolbar) {
+      background-color: #0a9bad; }
+    .lesson-notes-popup md-toolbar .close-popup-wrap {
       position: absolute;
-      margin: 0;
-      font-size: 5px;
-      top: 50%;
-      right: 29px;
-      transform: translateY(-50%); }
+      top: -19px;
+      right: -19px;
+      height: 14px;
+      width: 14px;
+      cursor: pointer; }
+      .lesson-notes-popup md-toolbar .close-popup-wrap svg-icon svg {
+        height: 14px;
+        width: 14px;
+        stroke: #ffffff; }
+  .lesson-notes-popup .content-wrapper {
+    height: 95%;
+    width: 700px; }
+    .lesson-notes-popup .content-wrapper .znk-scrollbar {
+      overflow: auto;
+      height: 98%; }
+    .lesson-notes-popup .content-wrapper .title {
+      font-size: 25px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 600;
+      height: 30px;
+      padding: 30px 0 10px 0;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      text-align: center; }
+    .lesson-notes-popup .content-wrapper .divider {
+      background-color: #e1e1e1;
+      height: 1px;
+      width: 96%;
+      margin: 0 auto; }
+    .lesson-notes-popup .content-wrapper .save-btn {
+      margin: 20px;
+      position: relative;
+      float: right; }
+      .lesson-notes-popup .content-wrapper .save-btn .spinner {
+        position: absolute;
+        margin: 0;
+        font-size: 5px;
+        top: 50%;
+        right: 29px;
+        transform: translateY(-50%); }
+  .lesson-notes-popup .lato-18-n {
+    font-size: 18px;
+    color: #4f4d4d;
+    font-family: Lato;
+    font-weight: 400;
+    text-transform: uppercase; }
+  .lesson-notes-popup .lato-16-n {
+    font-size: 16px;
+    color: #4f4d4d;
+    font-family: Lato;
+    font-weight: 400; }
+  .lesson-notes-popup .btn-type-1 {
+    background-color: #0a9bad;
+    border-radius: 3px;
+    width: 154px;
+    height: 35px;
+    border: none;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    cursor: pointer;
+    outline: 0;
+    padding: 0;
+    box-sizing: content-box;
+    outline: none;
+    font-size: 14px;
+    color: #ffffff;
+    font-family: Lato;
+    font-weight: 400;
+    text-transform: uppercase; }
+  .lesson-notes-popup .btn-type-2 {
+    background-color: #ffffff;
+    border-radius: 3px;
+    width: 154px;
+    height: 35px;
+    border: 1px solid #0a9bad;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+    outline: 0;
+    padding: 0;
+    margin: 0 5px;
+    box-sizing: content-box;
+    outline: none;
+    font-size: 14px;
+    color: #0a9bad;
+    font-family: Lato;
+    font-weight: 400;
+    text-transform: uppercase; }
 
 .lesson-info {
   height: 170px;
@@ -198,12 +316,28 @@ md-dialog.base {
     .lesson-info .field .label {
       width: 95px;
       text-align: right;
-      margin-right: 33px; }
+      margin-right: 33px;
+      font-size: 14px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 100;
+      text-transform: uppercase; }
     .lesson-info .field .text {
       text-transform: capitalize; }
     .lesson-info .field select {
       width: 130px;
-      font-size: 16px; }
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 100;
+      border: 1px solid #9A9797;
+      height: 37px;
+      padding-left: 10px;
+      box-sizing: content-box;
+      -webkit-appearance: none;
+      border-radius: 0;
+      background-color: #ffffff;
+      outline: 0; }
       .lesson-info .field select.attended {
         color: #87ca4d; }
       .lesson-info .field select.canceled, .lesson-info .field select.missed {
@@ -221,12 +355,14 @@ md-dialog.base {
     margin-top: 15px;
     display: -ms-flexbox;
     display: flex; }
-    .lesson-rate .rating .star-icon {
-      width: 30px;
-      fill: #e1e1e1; }
-      .lesson-rate .rating .star-icon.hover {
+    .lesson-rate .rating svg-icon.star-icon {
+      outline: none; }
+      .lesson-rate .rating svg-icon.star-icon svg {
+        width: 30px;
+        fill: #e1e1e1; }
+      .lesson-rate .rating svg-icon.star-icon.hover svg {
         fill: #FFED85; }
-      .lesson-rate .rating .star-icon.active {
+      .lesson-rate .rating svg-icon.star-icon.active svg {
         fill: #FFD700; }
   .lesson-rate .note-txt {
     width: 90%;
@@ -246,6 +382,8 @@ md-dialog.base {
   background-color: #fbfafb; }
   .lesson-summary-notes .znk-uppercase {
     margin: 20px; }
+  .lesson-summary-notes .lato-16-n {
+    text-align: left; }
   .lesson-summary-notes .note-txt {
     width: 90%;
     height: 280px;
@@ -264,9 +402,22 @@ md-dialog.base {
         -ms-flex-align: center;
             align-items: center;
         margin-right: 40px; }
+        .lesson-summary-notes .email-section .checkbox-group .input-wrap input[type="checkbox"] {
+          font-size: 20px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 100;
+          height: 20px;
+          width: 20px;
+          border: 1px solid #9A9797;
+          outline: 0; }
         .lesson-summary-notes .email-section .checkbox-group .input-wrap label, .lesson-summary-notes .email-section .checkbox-group .input-wrap .lesson-info .field .label, .lesson-info .field .lesson-summary-notes .email-section .checkbox-group .input-wrap .label {
           text-transform: lowercase;
-          margin-left: 5px; }
+          margin-left: 5px;
+          font-size: 14px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 100; }
     .lesson-summary-notes .email-section .button-wrapper {
       display: -ms-flexbox;
       display: flex;
@@ -281,7 +432,12 @@ md-dialog.base {
         font-size: 14px; }
 
 md-dialog {
-  border-radius: 15px; }
+  border-radius: 15px;
+  overflow: hidden;
+  height: 90%; }
   md-dialog md-backdrop.md-opaque {
     background-color: #fafafa;
     opacity: .76; }
+
+lesson-notes-popup {
+  height: 100%; }

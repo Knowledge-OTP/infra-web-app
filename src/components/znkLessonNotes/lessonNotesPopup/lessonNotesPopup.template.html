@@ -1,11 +1,29 @@
-<div class="lesson-notes-popup znk-scrollbar" ng-if="vm.lesson" translate-namespace="LESSON_NOTES.LESSON_NOTES_POPUP">
-    <znk-lesson-info lesson="vm.lesson"></znk-lesson-info>
-    <div class="divider"></div>
-    <znk-lesson-rating lesson="vm.lesson"></znk-lesson-rating>
-    <div class="divider"></div>
-    <znk-lesson-summary-note lesson="vm.lesson"></znk-lesson-summary-note>
-    <button type="button" class="btn-type-1" ng-click="vm.save()">
-        <span class="btn-text" translate=".SAVE"></span>
-        <span class="spinner" ng-if="showSpinner"></span>
-    </button>
+<div class="lesson-notes-popup" translate-namespace="LESSON_NOTES.LESSON_NOTES_POPUP">
+    <div class="top-icon-wrap">
+        <div class="top-icon">
+            <div class="round-icon-wrap">
+                <svg-icon name="znkLessonNotes-zoe-new-record"></svg-icon>
+            </div>
+        </div>
+    </div>
+
+    <md-toolbar>
+        <div class="close-popup-wrap" ng-click="vm.closeModal()">
+            <svg-icon name="znkLessonNotes-close-popup"></svg-icon>
+        </div>
+    </md-toolbar>
+    <div class="content-wrapper" ng-if="vm.lesson">
+        <div class="znk-scrollbar">
+            <div class="title" translate=".TITLE"></div>
+            <znk-lesson-info lesson="vm.lesson" user-context="vm.userContext"></znk-lesson-info>
+            <div class="divider"></div>
+            <znk-lesson-rating lesson="vm.lesson" user-context="vm.userContext"></znk-lesson-rating>
+            <div class="divider"></div>
+            <znk-lesson-summary-note lesson="vm.lesson" user-context="vm.userContext"></znk-lesson-summary-note>
+            <button type="button" class="btn-type-1 save-btn" ng-click="vm.save()">
+                <span class="btn-text" translate=".SAVE"></span>
+                <span class="spinner" ng-if="showSpinner"></span>
+            </button>
+        </div>
+    </div>
 </div>

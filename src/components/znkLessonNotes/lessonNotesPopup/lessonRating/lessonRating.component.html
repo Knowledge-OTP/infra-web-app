@@ -1,4 +1,4 @@
-<div class="lesson-rate" translate-namespace="LESSON_NOTES.LESSON_NOTES_POPUP.RATING">
+<div class="lesson-rate" ng-if="vm.showComponent" translate-namespace="LESSON_NOTES.LESSON_NOTES_POPUP.RATING">
   <div class="lato-18-n znk-uppercase" translate=".TITLE"></div>
   <div class="rating">
     <svg-icon class="star-icon" name="znkLessonNotes-star" ng-repeat="star in vm.starArr"
@@ -7,6 +7,6 @@
     </svg-icon>
   </div>
 
-  <textarea class="lato-14-n note-txt" ng-model="vm.lesson.lessonNotes.ratingFeedback"
-            ng-if="vm.lesson.lessonNotes.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK"></textarea>
+  <textarea class="lato-14-n note-txt" ng-model="vm.lesson.studentFeedback.studentFreeText"
+            ng-if="vm.lesson.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK"></textarea>
 </div>
