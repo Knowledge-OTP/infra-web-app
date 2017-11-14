@@ -171,9 +171,15 @@ active-panel {
                       border-radius: 50%;
                       border: 1px solid $borderColor6;
                       margin-left: 10px;
-                      cursor: pointer;        
+                        svg * {
+                            fill: $borderColor6;
+                        }
                       &.available{
-                        background-color: $bgColor3;          
+                          cursor: pointer;
+                          background-color: $bgColor3;
+                          svg * {
+                              fill: $malachite;
+                          }
                       }
                     }
 
