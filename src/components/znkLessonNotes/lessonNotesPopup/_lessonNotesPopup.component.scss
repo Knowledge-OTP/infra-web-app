@@ -1,25 +1,169 @@
 .lesson-notes-popup {
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    background-color: $bgColor3;
+    overflow: visible;
+    width: 700px;
+    border-radius: 15px;
 
-    .divider {
-        background-color: $mercury;
-        height: 1px;
-        width: 96%;
-        margin: 0 auto;
-    }
+    .top-icon-wrap {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 40px;
+        .top-icon {
+            display: flex;
+            justify-content: center;
 
-    button {
-        align-self: flex-end;
-        margin: 20px;
-        position: relative;
-        .spinner {
-            position: absolute;
-            margin: 0;
-            font-size: 5px;
-            top: 50%;
-            right: 29px;
-            transform: translateY(-50%);
+            .round-icon-wrap {
+                width: 76px;
+                height: 76px;
+                border-radius: 38px;
+                background-color: $bgColor5;
+                z-index: 9;
+                margin-top: -15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                svg {
+                    width: 38px;
+                    height:38px;
+                    fill: $bgColor3;
+                }
+
+
+            }
         }
     }
+
+    md-toolbar {
+        height: 40px;
+        max-height: 40px;
+        min-height: 40px;
+
+        &:not(.md-menu-toolbar) {
+            background-color: $bgColor5;
+        }
+
+        .close-popup-wrap {
+            @include absolute-position(-19px, -19px);
+            height: 14px;
+            width: 14px;
+            cursor: pointer;
+            svg-icon svg {
+                height: 14px;
+                width: 14px;
+                stroke: $bgColor3;
+            }
+        }
+    }
+
+    .content-wrapper {
+        height: 95%;
+        width: 700px;
+        .znk-scrollbar{
+            overflow: auto;
+            height: 98%;
+        }
+
+        .title {
+            font-size: 25px;
+            color: #4f4d4d;
+            font-family: Quicksand;
+            font-weight: 600;
+            height: 30px;
+            padding: 30px 0 10px 0;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .divider {
+            background-color: $mercury;
+            height: 1px;
+            width: 96%;
+            margin: 0 auto;
+        }
+
+        .save-btn {
+            margin: 20px;
+            position: relative;
+            float: right;
+
+            .spinner {
+                position: absolute;
+                margin: 0;
+                font-size: 5px;
+                top: 50%;
+                right: 29px;
+                transform: translateY(-50%);
+            }
+        }
+
+    }
+
+    .lato-18-n {
+        font-size: 18px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: uppercase;
+    }
+
+    .lato-16-n {
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400;
+    }
+
+    .btn-type-1 {
+        background-color: #0a9bad;
+        border-radius: 3px;
+        width: 154px;
+        height: 35px;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        outline: 0;
+        padding: 0;
+        box-sizing: content-box;
+        outline: none;
+        font-size: 14px;
+        color: #ffffff;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: uppercase;
+    }
+
+    .btn-type-2 {
+        background-color: #ffffff;
+        border-radius: 3px;
+        width: 154px;
+        height: 35px;
+        border: 1px solid #0a9bad;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        cursor: pointer;
+        outline: 0;
+        padding: 0;
+        margin: 0 5px;
+        box-sizing: content-box;
+        outline: none;
+        font-size: 14px;
+        color: #0a9bad;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: uppercase;
+    }
+
 }
+

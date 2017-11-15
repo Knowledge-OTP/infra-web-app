@@ -4,7 +4,8 @@
     angular.module('znk.infra-web-app.znkLessonNotes')
         .component('znkLessonSummaryNote', {
             bindings: {
-                lesson: '='
+                lesson: '=',
+                userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonSummaryNote/lessonSummaryNote.component.html',
             controllerAs: 'vm',
@@ -17,13 +18,18 @@
                 vm.parentsMails = [];
                 vm.mailsToSend = [];
                 vm.sentDate = null;
+                vm.studensMail = false;
+                vm.parentsMail = false;
                 vm.studentsProfiles = [];
+                vm.showComponent = false;
                 vm.userTypeContextEnum = UserTypeContextEnum;
                 vm.emailSelected = emailSelected;
                 vm.sendEmail = sendEmail;
 
                 this.$onInit = function () {
                     $log.debug('znkLessonSummaryNote: Init');
+                    vm.showComponent = vm.userContext === UserTypeContextEnum.EDUCATOR.enum ||
+                        vm.userContext === UserTypeContextEnum.ADMIN.enum;
                     vm.lesson.lessonNotes = vm.lesson.lessonNotes || {};
                     initSummaryNote();
                     getStudentProfiles();
@@ -59,17 +65,19 @@
                 }
 
                 function emailSelected(mailGroup, bool) {
-                    if (mailGroup === UserTypeContextEnum.student) {
+                    if (mailGroup === UserTypeContextEnum.STUDENT.enum) {
                         vm.mailsToSend = bool ? vm.mailsToSend.concat(vm.studentsMails) :
                             vm.mailsToSend.filter( item => !vm.studentsMails.includes( item ));
+                        vm.lesson.lessonNotes.sentMailToStudents = bool;
                     } else {
                         vm.mailsToSend = bool ? vm.mailsToSend.concat(vm.parentsMails) :
                             vm.mailsToSend.filter( item => !vm.parentsMails.includes( item ));
+                        vm.lesson.lessonNotes.sentMailToParents = bool;
                     }
                 }
 
                 function sendEmail() {
-                    vm.sentDate = new Date().getTime();
+                    vm.lesson.lessonNotes.sendMailTime = new Date().getTime();
                     $log.debug('mailsToSend: ', vm.mailsToSend);
                 }
             }

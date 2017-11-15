@@ -4,11 +4,12 @@
     angular.module('znk.infra-web-app.znkLessonNotes')
         .component('znkLessonRating', {
             bindings: {
-                lesson: '='
+                lesson: '=',
+                userContext: '='
             },
-            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonInfo/lessonInfo.component.html',
+            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonRating/lessonRating.component.html',
             controllerAs: 'vm',
-            controller: function ($log, $translate) {
+            controller: function ($log, $translate, UserTypeContextEnum) {
                 'ngInject';
 
                 let vm = this;
@@ -16,17 +17,20 @@
                 vm.MIN_STATR_FOR_RATING_FEEDBACK = 2;
                 vm.MAX_STARS = 5;
                 vm.starArr = [];
+                vm.showComponent = false;
                 vm.onHover = onHover;
                 vm.ratingChanged = ratingChanged;
 
                 this.$onInit = function () {
                     $log.debug('znkLessonRating: Init');
-                    vm.lesson.lessonNotes = vm.lesson.lessonNotes || {};
+                    vm.lesson.studentFeedback = vm.lesson.studentFeedback || {};
+                    vm.showComponent = vm.userContext === UserTypeContextEnum.STUDENT.enum ||
+                        vm.userContext === UserTypeContextEnum.ADMIN.enum;
                     initStarsArr();
-                    if (!vm.lesson.lessonNotes.rating) {
-                        ratingChanged(vm.lesson.lessonNotes.rating);
+                    if (!vm.lesson.studentFeedback.rating) {
+                        ratingChanged(vm.lesson.studentFeedback.rating);
                     }
-                    vm.lesson.lessonNotes.ratingFeedback = vm.lesson.lessonNotes.ratingFeedback || '';
+                    vm.lesson.studentFeedback.studentFreeText = vm.lesson.studentFeedback.studentFreeText || '';
                 };
 
                 function initStarsArr() {
@@ -34,7 +38,7 @@
                         let starNum = i + 1;
                         vm.starArr[i] = {
                             title: $translate.instant(`LESSON.LESSON_NOTES_POPUP.RATING.TITLE${starNum}`),
-                            active: (starNum === vm.lesson.lessonNotes.rating),  // boolean
+                            active: (starNum === vm.lesson.studentFeedback.rating),  // boolean
                             value: starNum,
                         };
                     }
@@ -51,7 +55,7 @@
                     vm.starArr.forEach(star => {
                         star.active = star.value <= rating;
                     });
-                    vm.lesson.lessonNotes.rating = rating;
+                    vm.lesson.studentFeedback.rating = rating;
                 }
 
             }

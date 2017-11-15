@@ -1,36 +1,52 @@
 
 .lesson-info {
-  height: 170px;
-  margin: 25px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  .field {
-    width: 50%;
-    height: 40px;
+    height: 170px;
+    margin: 25px;
     display: flex;
-    align-items: center;
-    .label {
-      @extend label;
-      width: 95px;
-      text-align: right;
-      margin-right: 33px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .field {
+        width: 50%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        .label {
+            @extend label;
+            width: 95px;
+            text-align: right;
+            margin-right: 33px;
+            font-size: 14px;
+            color: #4f4d4d;
+            font-family: Lato;
+            font-weight: 100;
+            text-transform: uppercase;
+        }
+        .text {
+            text-transform: capitalize;
+        }
+        select {
+            width: 130px;
+            font-size: 16px;
+            color: #4f4d4d;
+            font-family: Lato;
+            font-weight: 100;
+            border: 1px solid #9A9797;
+            height: 37px;
+            padding-left: 10px;
+            box-sizing: content-box;
+            -webkit-appearance: none;
+            border-radius: 0;
+            background-color: #ffffff;
+            outline: 0;
+            &.attended {
+                color: $mantis;
+            }
+            &.canceled, &.missed {
+                color: $bittersweet;
+            }
+        }
     }
-    .text {
-      text-transform: capitalize;
-    }
-    select {
-      width: 130px;
-      font-size: 16px;
-      &.attended {
-        color: $mantis;
-      }
-      &.canceled, &.missed {
-        color: $bittersweet;
-      }
-    }
-  }
 
 }

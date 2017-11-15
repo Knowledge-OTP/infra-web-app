@@ -4,22 +4,25 @@
     angular.module('znk.infra-web-app.znkLessonNotes')
         .component('znkLessonInfo', {
             bindings: {
-                lesson: '='
+                lesson: '=',
+                userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonInfo/lessonInfo.component.html',
             controllerAs: 'vm',
-            controller: function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv) {
+            controller: function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv, UserTypeContextEnum) {
                 'ngInject';
 
                 let vm = this;
                 vm.dataPromMap = {};
                 vm.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
                 vm.fields = [];
+                vm.userTypeContextEnum = UserTypeContextEnum;
+                vm.statusChanged = statusChanged;
 
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
                     vm.dataPromMap.translate = getTranslations();
-                    vm.lessonStatusArr = ZnkLessonNotesSrv.enumToArray(LessonStatusEnum, true);
+                    vm.lessonStatusArr = LessonStatusEnum.getEnumArr();
                     initLessonInfo();
                 };
 
@@ -79,7 +82,8 @@
                                 field.text = transformDate(vm.lesson.endTime - vm.lesson.startTime, 'DURATION');
                                 break;
                             case `${vm.nameSpace}.STATUS`:
-                                field.text = ZnkLessonNotesSrv.capitalizeFirstLetter(LessonStatusEnum[vm.lesson.status]);
+                                vm.lessunStatus = vm.lessonStatusArr.filter(status => status.enum === vm.lesson.status)[0];
+                                field.text = vm.lessunStatus.val;
                                 break;
                         }
                         vm.fields.push(field);
@@ -103,11 +107,11 @@
                     let transformedDate;
                     switch (dateType) {
                         case 'DATE':
-                            pattern = 'yMMMd';
+                            pattern = 'MMM d, y';
                             transformedDate = $filter('date')(timestamp, pattern);
                             break;
                         case 'START_TIME':
-                            pattern = 'jm';
+                            pattern = 'h:mm a';
                             transformedDate = $filter('date')(timestamp, pattern);
                             break;
                         case 'DURATION':
@@ -124,6 +128,11 @@
                             break;
                     }
                     return transformedDate;
+                }
+
+                function statusChanged(field, statusEnumObj) {
+                    field.text = statusEnumObj.val;
+                    vm.lesson.status = statusEnumObj.enum;
                 }
 
             }

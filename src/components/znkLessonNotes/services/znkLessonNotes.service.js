@@ -16,8 +16,8 @@
                 $rootScope.lessonId = lessonId;
                 $rootScope.userContext = userContext;
                 $mdDialog.show({
-                    template: '<lesson-notes-popup lesson-id="lessonId" user-context="userContext"></lesson-notes-popup>',
-                    parent: $rootElement,
+                    template: '<lesson-notes-popup lesson-id="lessonId" user-context="userContext"' +
+                    'aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>',
                     scope: $rootScope,
                     clickOutsideToClose: true,
                     escapeToClose: true

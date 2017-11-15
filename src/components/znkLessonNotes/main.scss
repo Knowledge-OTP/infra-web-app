@@ -3,7 +3,7 @@
         '../../../src/scss/imports/mixins',
         '../../../src/scss/imports/spinner';
 
-@import './scss/md-dialog';
+@import '../../scss/imports/md-dialog';
 @import '../znkLessonNotes/lessonNotesPopup/lessonNotesPopup.component';
 @import '../znkLessonNotes/lessonNotesPopup/lessonInfo/lesson-info.component';
 @import '../znkLessonNotes/lessonNotesPopup/lessonRating/lessonRating.component';
@@ -11,11 +11,18 @@
 
 md-dialog {
     border-radius: 15px;
+    overflow: hidden;
+    height: 90%;
     md-backdrop {
         &.md-opaque {
             background-color: $bgColor35;
             opacity: .76;
         }
     }
+}
+
+
+lesson-notes-popup {
+    height: 100%;
 }
 
