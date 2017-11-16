@@ -69,23 +69,24 @@
                     LiveSessionUiSrv.showWaitPopUp();
 
                     UserProfileService.getCurrUserId().then(educatorId => {
-                        UserProfileService.darkFeaturesValid([educatorId, vm.student.uid]).then(isValid => {
-                            if (isValid) {
-                                $log.debug('darkFeatures in ON');
-                                getScheduledLesson().then(scheduledLesson => {
+                        LiveSessionUiSrv.isDarkFeaturesValid([educatorId, vm.student.uid])
+                            .then(isDarkFeaturesValid => {
+                                if (isDarkFeaturesValid) {
+                                    $log.debug('darkFeatures in ON');
+                                    getScheduledLesson().then(scheduledLesson => {
+                                        LiveSessionUiSrv.closePopup();
+                                        if (scheduledLesson) {
+                                            LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
+                                        } else {
+                                            LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                                .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
+                                        }
+                                    });
+                                } else {
                                     LiveSessionUiSrv.closePopup();
-                                    if (scheduledLesson) {
-                                        LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
-                                    } else {
-                                        LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
-                                            .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
-                                    }
-                                });
-                            } else {
-                                LiveSessionUiSrv.closePopup();
-                                showSessionModal();
-                            }
-                        });
+                                    showSessionModal();
+                                }
+                            });
                     });
                 }
 

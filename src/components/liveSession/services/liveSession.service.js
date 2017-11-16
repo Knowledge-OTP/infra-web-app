@@ -84,9 +84,9 @@
                     _this._moveToArchive(data.liveSessionData);
 
                     return data.storage.update(dataToSave).then(() => {
-                        UserProfileService.darkFeaturesValid([data.liveSessionData.educatorId, data.liveSessionData.studentId])
-                            .then(isValid => {
-                                if (isValid) {
+                        LiveSessionUiSrv.isDarkFeaturesValid([data.liveSessionData.educatorId, data.liveSessionData.studentId])
+                            .then(isDarkFeaturesValid => {
+                                if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
                                     if (data.liveSessionData.lessonId) {
                                         UserProfileService.getProfile().then(userProfile => {

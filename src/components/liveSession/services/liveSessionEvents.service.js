@@ -26,6 +26,25 @@
 
                     switch (liveSessionData.status) {
                         case LiveSessionStatusEnum.PENDING_STUDENT.enum:
+                            LiveSessionUiSrv.isDarkFeaturesValid([liveSessionData.educatorId, liveSessionData.studentId])
+                                .then(isDarkFeaturesValid => {
+                                    if (isDarkFeaturesValid) {
+                                        if (liveSessionData.studentId === currUid) {
+                                            LiveSessionUiSrv.showStudentConfirmationPopUp()
+                                                .then(() => {
+                                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                                }, () => {
+                                                    LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                                                });
+                                        } else {
+                                            LiveSessionUiSrv.showEducatorPendingPopUp();
+                                        }
+                                    } else {
+                                        if (liveSessionData.studentId === currUid) {
+                                            LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                        }
+                                    }
+                                });
                             if (liveSessionData.studentId === currUid) {
                                 LiveSessionUiSrv.showStudentConfirmationPopUp()
                                     .then(() => {

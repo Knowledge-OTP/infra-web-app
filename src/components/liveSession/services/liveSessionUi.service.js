@@ -4,11 +4,12 @@
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv',function(){
 
         this.$get = function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
-                              ZnkToastSrv, LiveSessionDataGetterSrv) {
+                              ZnkToastSrv, LiveSessionDataGetterSrv, UserProfileService) {
             'ngInject';
 
             let childScope, liveSessionPhElement, readyProm;
             let LiveSessionUiSrv = {};
+            let darkFeaturesValid  = null;
 
             let SESSION_DURATION =  {
                 length: ENV.liveSession.sessionLength,
@@ -217,6 +218,18 @@
                 }
             }
 
+            function isDarkFeaturesValid(educatorId, studentId) {
+                if (darkFeaturesValid !== null) {
+                    return Promise.resolve(darkFeaturesValid);
+                } else {
+                    return UserProfileService.darkFeaturesValid([educatorId, studentId])
+                        .then(isValid => {
+                            darkFeaturesValid = isValid;
+                            return darkFeaturesValid;
+                        });
+                }
+            }
+
 
             LiveSessionUiSrv.activateLiveSession = activateLiveSession;
             LiveSessionUiSrv.endLiveSession = endLiveSession;
@@ -229,6 +242,7 @@
             LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
             LiveSessionUiSrv.showNoLessonScheduledPopup = showNoLessonScheduledPopup;
             LiveSessionUiSrv.closePopup = closePopup;
+            LiveSessionUiSrv.isDarkFeaturesValid = isDarkFeaturesValid;
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
             readyProm = $timeout(function(){
