@@ -9366,23 +9366,24 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     LiveSessionUiSrv.showWaitPopUp();
 
                     UserProfileService.getCurrUserId().then(educatorId => {
-                        UserProfileService.darkFeaturesValid([educatorId, vm.student.uid]).then(isValid => {
-                            if (isValid) {
-                                $log.debug('darkFeatures in ON');
-                                getScheduledLesson().then(scheduledLesson => {
+                        LiveSessionUiSrv.isDarkFeaturesValid([educatorId, vm.student.uid])
+                            .then(isDarkFeaturesValid => {
+                                if (isDarkFeaturesValid) {
+                                    $log.debug('darkFeatures in ON');
+                                    getScheduledLesson().then(scheduledLesson => {
+                                        LiveSessionUiSrv.closePopup();
+                                        if (scheduledLesson) {
+                                            LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
+                                        } else {
+                                            LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                                .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
+                                        }
+                                    });
+                                } else {
                                     LiveSessionUiSrv.closePopup();
-                                    if (scheduledLesson) {
-                                        LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
-                                    } else {
-                                        LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
-                                            .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
-                                    }
-                                });
-                            } else {
-                                LiveSessionUiSrv.closePopup();
-                                showSessionModal();
-                            }
-                        });
+                                    showSessionModal();
+                                }
+                            });
                     });
                 }
 
@@ -9620,9 +9621,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     _this._moveToArchive(data.liveSessionData);
 
                     return data.storage.update(dataToSave).then(() => {
-                        UserProfileService.darkFeaturesValid([data.liveSessionData.educatorId, data.liveSessionData.studentId])
-                            .then(isValid => {
-                                if (isValid) {
+                        LiveSessionUiSrv.isDarkFeaturesValid([data.liveSessionData.educatorId, data.liveSessionData.studentId])
+                            .then(isDarkFeaturesValid => {
+                                if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
                                     if (data.liveSessionData.lessonId) {
                                         UserProfileService.getProfile().then(userProfile => {
@@ -10064,6 +10065,25 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                     switch (liveSessionData.status) {
                         case LiveSessionStatusEnum.PENDING_STUDENT.enum:
+                            LiveSessionUiSrv.isDarkFeaturesValid([liveSessionData.educatorId, liveSessionData.studentId])
+                                .then(isDarkFeaturesValid => {
+                                    if (isDarkFeaturesValid) {
+                                        if (liveSessionData.studentId === currUid) {
+                                            LiveSessionUiSrv.showStudentConfirmationPopUp()
+                                                .then(() => {
+                                                    LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                                }, () => {
+                                                    LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                                                });
+                                        } else {
+                                            LiveSessionUiSrv.showEducatorPendingPopUp();
+                                        }
+                                    } else {
+                                        if (liveSessionData.studentId === currUid) {
+                                            LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                        }
+                                    }
+                                });
                             if (liveSessionData.studentId === currUid) {
                                 LiveSessionUiSrv.showStudentConfirmationPopUp()
                                     .then(() => {
@@ -10203,12 +10223,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv',function(){
 
-        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", "LiveSessionDataGetterSrv", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
-                              ZnkToastSrv, LiveSessionDataGetterSrv) {
+        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", "LiveSessionDataGetterSrv", "UserProfileService", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
+                              ZnkToastSrv, LiveSessionDataGetterSrv, UserProfileService) {
             'ngInject';
 
             let childScope, liveSessionPhElement, readyProm;
             let LiveSessionUiSrv = {};
+            let darkFeaturesValid  = null;
 
             let SESSION_DURATION =  {
                 length: ENV.liveSession.sessionLength,
@@ -10417,6 +10438,18 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 }
             }
 
+            function isDarkFeaturesValid(educatorId, studentId) {
+                if (darkFeaturesValid !== null) {
+                    return Promise.resolve(darkFeaturesValid);
+                } else {
+                    return UserProfileService.darkFeaturesValid([educatorId, studentId])
+                        .then(isValid => {
+                            darkFeaturesValid = isValid;
+                            return darkFeaturesValid;
+                        });
+                }
+            }
+
 
             LiveSessionUiSrv.activateLiveSession = activateLiveSession;
             LiveSessionUiSrv.endLiveSession = endLiveSession;
@@ -10429,6 +10462,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             LiveSessionUiSrv.showIncompleteDiagnostic = showIncompleteDiagnostic;
             LiveSessionUiSrv.showNoLessonScheduledPopup = showNoLessonScheduledPopup;
             LiveSessionUiSrv.closePopup = closePopup;
+            LiveSessionUiSrv.isDarkFeaturesValid = isDarkFeaturesValid;
 
             //was wrapped with timeout since angular will compile the dom after this service initialization
             readyProm = $timeout(function(){
