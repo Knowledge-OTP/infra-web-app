@@ -45,16 +45,6 @@
                                         }
                                     }
                                 });
-                            if (liveSessionData.studentId === currUid) {
-                                LiveSessionUiSrv.showStudentConfirmationPopUp()
-                                    .then(() => {
-                                        LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
-                                    }, () => {
-                                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                                    });
-                            } else {
-                                LiveSessionUiSrv.showEducatorPendingPopUp();
-                            }
                             break;
 
                         case LiveSessionStatusEnum.CONFIRMED.enum:
