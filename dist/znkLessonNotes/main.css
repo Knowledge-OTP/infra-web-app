@@ -433,8 +433,7 @@ md-dialog.base {
 
 md-dialog {
   border-radius: 15px;
-  overflow: hidden;
-  height: 90%; }
+  overflow: hidden; }
   md-dialog md-backdrop.md-opaque {
     background-color: #fafafa;
     opacity: .76; }
