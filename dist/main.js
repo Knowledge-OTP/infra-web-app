@@ -9311,7 +9311,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 'ngInject';
 
                 let vm = this;
-                let DOCUMENT_DB_QUERY_KEY = 'getLessonsByEducatorStudentStatusAndRange';
                 let SESSION_DURATION = {
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
@@ -9366,7 +9365,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     LiveSessionUiSrv.showWaitPopUp();
 
                     UserProfileService.getCurrUserId().then(educatorId => {
-                        LiveSessionUiSrv.isDarkFeaturesValid([educatorId, vm.student.uid])
+                        LiveSessionUiSrv.isDarkFeaturesValid(educatorId, vm.student.uid)
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
@@ -9408,20 +9407,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         let now = Date.now();
                         let calcStartTime = now - SESSION_DURATION.marginBeforeSessionStart;
                         let calcEndTime = now + SESSION_DURATION.marginAfterSessionStart;
-                        let query = {
-                            query: DOCUMENT_DB_QUERY_KEY,
-                            values: [
-                                dataMap.educatorProfile.uid,
-                                [vm.student.uid],
-                                [LessonStatusEnum.SCHEDULED.enum],
-                                calcStartTime,
-                                calcEndTime
-                            ]
+                        let dateRange = {
+                            startDate: calcStartTime,
+                            endDate: calcEndTime
                         };
 
-                        return ZnkLessonNotesSrv.getLessonsByQuery(query).then(lessons => {
-                            return lessons && lessons.length ? lessons[0] : null;
-                        }, err => $log.debug('checkIfHaveScheduleLesson: getLessonsByQuery Error: ', err));
+                        return ZnkLessonNotesSrv.getLessonsByStudentIds([vm.student.uid], dateRange, dataMap.educatorProfile.uid)
+                            .then(lessons => {
+                                return lessons.data && lessons.data.length ? lessons.data[0] : null;
+                            }, err => $log.debug('getScheduledLesson: getLessonsByStudentIds Error: ', err));
                     });
 
 
@@ -9621,7 +9615,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     _this._moveToArchive(data.liveSessionData);
 
                     return data.storage.update(dataToSave).then(() => {
-                        LiveSessionUiSrv.isDarkFeaturesValid([data.liveSessionData.educatorId, data.liveSessionData.studentId])
+                        LiveSessionUiSrv.isDarkFeaturesValid(data.liveSessionData.educatorId, data.liveSessionData.studentId)
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
@@ -9633,7 +9627,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                             } else {
                                                 userContext = isTeacherApp ? UserTypeContextEnum.EDUCATOR.enum : UserTypeContextEnum.STUDENT.enum;
                                             }
-                                            ZnkLessonNotesSrv.openLessonNotesPopup(data.liveSessionData, userContext);
+                                            ZnkLessonNotesSrv.openLessonNotesPopup(data.liveSessionData.lessonId, userContext);
                                         });
                                     } else {
                                         $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
@@ -10047,9 +10041,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             isEnabled = _isEnabled;
         };
 
-        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", "ZnkLessonNotesSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", "ZnkLessonNotesSrv", "UserTypeContextEnum", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
                               UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
-                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv) {
+                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum) {
             'ngInject';
 
             let LiveSessionEventsSrv = {};
@@ -10065,7 +10059,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                     switch (liveSessionData.status) {
                         case LiveSessionStatusEnum.PENDING_STUDENT.enum:
-                            LiveSessionUiSrv.isDarkFeaturesValid([liveSessionData.educatorId, liveSessionData.studentId])
+                            LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                                 .then(isDarkFeaturesValid => {
                                     if (isDarkFeaturesValid) {
                                         if (liveSessionData.studentId === currUid) {
@@ -10114,8 +10108,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             }
 
                             LiveSessionUiSrv.showEndSessionPopup()
-                                .then(function () {
-                                    ZnkLessonNotesSrv.openLessonNotesPopup();
+                                .then(() => {
+                                    LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                                        .then(isDarkFeaturesValid => {
+                                            if (isDarkFeaturesValid) {
+                                                let userContext = liveSessionData.educatorId === currUid ?
+                                                    UserTypeContextEnum.EDUCATOR.enum : UserTypeContextEnum.STUDENT.enum;
+                                                ZnkLessonNotesSrv.openLessonNotesPopup(liveSessionData.lessonId, userContext);
+                                            }
+                                        });
                                 });
                             LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                             // Security check to insure there isn't active session
@@ -19651,8 +19652,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 $rootScope.lessonId = lessonId;
                 $rootScope.userContext = userContext;
                 $mdDialog.show({
-                    template: '<lesson-notes-popup lesson-id="lessonId" user-context="userContext"' +
-                    'aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>',
+                    template: `<lesson-notes-popup lesson-id="lessonId" user-context="userContext"
+                        aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
                     scope: $rootScope,
                     clickOutsideToClose: true,
                     escapeToClose: true
@@ -19667,8 +19668,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 });
             }
 
-            function getLessonsByQuery(query) {
-                return $http.post(`${schedulingApi}/getLessonsByQuery`, query);
+            function getLessonsByStudentIds(studentIds, dateRange, educatorId) {
+                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId});
             }
 
             function updateLesson(lessonToUpdate) {
@@ -19742,12 +19743,12 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 min = min % 60;
                 day = Math.floor(hour / 24);
                 hour = hour % 24;
-                return { day, hour, min, sec };
+                return {day, hour, min, sec};
             }
 
             ZnkLessonNotesSrv.openLessonNotesPopup = openLessonNotesPopup;
             ZnkLessonNotesSrv.getLessonById = getLessonById;
-            ZnkLessonNotesSrv.getLessonsByQuery = getLessonsByQuery;
+            ZnkLessonNotesSrv.getLessonsByStudentIds = getLessonsByStudentIds;
             ZnkLessonNotesSrv.updateLesson = updateLesson;
             ZnkLessonNotesSrv.getServiceList = getServiceList;
             ZnkLessonNotesSrv.getGlobals = getGlobals;
