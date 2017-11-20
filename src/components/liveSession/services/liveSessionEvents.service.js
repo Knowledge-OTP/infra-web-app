@@ -10,7 +10,7 @@
 
         this.$get = function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
                               UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
-                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv) {
+                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum) {
             'ngInject';
 
             let LiveSessionEventsSrv = {};
@@ -26,7 +26,7 @@
 
                     switch (liveSessionData.status) {
                         case LiveSessionStatusEnum.PENDING_STUDENT.enum:
-                            LiveSessionUiSrv.isDarkFeaturesValid([liveSessionData.educatorId, liveSessionData.studentId])
+                            LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                                 .then(isDarkFeaturesValid => {
                                     if (isDarkFeaturesValid) {
                                         if (liveSessionData.studentId === currUid) {
@@ -75,8 +75,15 @@
                             }
 
                             LiveSessionUiSrv.showEndSessionPopup()
-                                .then(function () {
-                                    ZnkLessonNotesSrv.openLessonNotesPopup();
+                                .then(() => {
+                                    LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                                        .then(isDarkFeaturesValid => {
+                                            if (isDarkFeaturesValid) {
+                                                let userContext = liveSessionData.educatorId === currUid ?
+                                                    UserTypeContextEnum.EDUCATOR.enum : UserTypeContextEnum.STUDENT.enum;
+                                                ZnkLessonNotesSrv.openLessonNotesPopup(liveSessionData.lessonId, userContext);
+                                            }
+                                        });
                                 });
                             LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                             // Security check to insure there isn't active session

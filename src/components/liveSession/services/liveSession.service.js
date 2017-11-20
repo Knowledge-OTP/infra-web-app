@@ -84,7 +84,7 @@
                     _this._moveToArchive(data.liveSessionData);
 
                     return data.storage.update(dataToSave).then(() => {
-                        LiveSessionUiSrv.isDarkFeaturesValid([data.liveSessionData.educatorId, data.liveSessionData.studentId])
+                        LiveSessionUiSrv.isDarkFeaturesValid(data.liveSessionData.educatorId, data.liveSessionData.studentId)
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
@@ -96,7 +96,7 @@
                                             } else {
                                                 userContext = isTeacherApp ? UserTypeContextEnum.EDUCATOR.enum : UserTypeContextEnum.STUDENT.enum;
                                             }
-                                            ZnkLessonNotesSrv.openLessonNotesPopup(data.liveSessionData, userContext);
+                                            ZnkLessonNotesSrv.openLessonNotesPopup(data.liveSessionData.lessonId, userContext);
                                         });
                                     } else {
                                         $log.debug('endLiveSession: There is NO lessonId on liveSessionData');

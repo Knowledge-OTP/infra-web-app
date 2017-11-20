@@ -437,8 +437,8 @@
                 $rootScope.lessonId = lessonId;
                 $rootScope.userContext = userContext;
                 $mdDialog.show({
-                    template: '<lesson-notes-popup lesson-id="lessonId" user-context="userContext"' +
-                    'aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>',
+                    template: `<lesson-notes-popup lesson-id="lessonId" user-context="userContext"
+                        aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
                     scope: $rootScope,
                     clickOutsideToClose: true,
                     escapeToClose: true
@@ -453,8 +453,8 @@
                 });
             }
 
-            function getLessonsByQuery(query) {
-                return $http.post(`${schedulingApi}/getLessonsByQuery`, query);
+            function getLessonsByStudentIds(studentIds, dateRange, educatorId) {
+                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId});
             }
 
             function updateLesson(lessonToUpdate) {
@@ -528,12 +528,12 @@
                 min = min % 60;
                 day = Math.floor(hour / 24);
                 hour = hour % 24;
-                return { day, hour, min, sec };
+                return {day, hour, min, sec};
             }
 
             ZnkLessonNotesSrv.openLessonNotesPopup = openLessonNotesPopup;
             ZnkLessonNotesSrv.getLessonById = getLessonById;
-            ZnkLessonNotesSrv.getLessonsByQuery = getLessonsByQuery;
+            ZnkLessonNotesSrv.getLessonsByStudentIds = getLessonsByStudentIds;
             ZnkLessonNotesSrv.updateLesson = updateLesson;
             ZnkLessonNotesSrv.getServiceList = getServiceList;
             ZnkLessonNotesSrv.getGlobals = getGlobals;
