@@ -1,0 +1,70 @@
+.lesson-rating {
+    margin: 0 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .lesson-rating-title {
+        text-transform: uppercase;
+        margin: 20px;
+    }
+
+    .margin-20 {
+        margin-top: 20px;
+    }
+
+    .rating {
+        display: flex;
+        svg-icon.star-icon {
+            outline: none;
+            svg {
+                width: 30px;
+                fill: $mercury;
+            }
+            &.hover svg {
+                fill: $dolly;
+            }
+            &.active svg {
+                fill: $gold;
+            }
+        }
+    }
+
+    .bad-rating-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        znk-multiple-choice {
+            width: 80%;
+        }
+
+        .note-txt {
+            width: 80%;
+            height: 100px;
+            resize: none;
+            overflow: auto;
+            margin-top: 15px;
+        }
+
+        .student-feedback {
+            width: 80%;
+            .other {
+                text-align: left;
+            }
+        }
+
+    }
+
+    znk-lesson-started-late {
+        width: 80%;
+        margin-top: 15px;
+    }
+
+}
+
+
+
+
+

@@ -1,0 +1,17 @@
+.lesson-started-late {
+  width: 80%;
+  margin: 20px auto;
+  .student-late, .teacher-late {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .btn-group {
+      display: flex;
+      button {
+        width: 56px;
+        margin: 0 5px;
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+<div class="lesson-started-late" ng-if="vm.lessonStartedLate && !vm.isAdmin">
+    <div class="student-late" ng-if="vm.isTeacher">
+        <span class="quicksand-12-b">{{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.STUDENT_LATE' | translate}}</span>
+        <div class="btn-group">
+            <button ng-class="[vm.lesson.lessonNotes.isStudentLate ? 'btn-type-1' : 'btn-type-2']"
+                    ng-click="vm.lesson.lessonNotes.isStudentLate = !vm.lesson.lessonNotes.isStudentLate">
+                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.YES' | translate}}
+            </button>
+            <button ng-class="[!vm.lesson.lessonNotes.isStudentLate ? 'btn-type-1' : 'btn-type-2']"
+                    ng-click="vm.lesson.lessonNotes.isStudentLate = !vm.lesson.lessonNotes.isStudentLate">
+                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.NO' | translate}}
+            </button>
+        </div>
+    </div>
+
+    <div class="teacher-late" ng-if="!vm.isTeacher">
+        <span class="quicksand-12-b">{{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.TEACHER_LATE' | translate}}</span>
+        <div class="btn-group">
+            <button ng-class="[vm.lesson.studentFeedback.isTeacherLate ? 'btn-type-1' : 'btn-type-2']"
+                    ng-click="vm.lesson.studentFeedback.isTeacherLate = !vm.lesson.studentFeedback.isTeacherLate">
+                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.YES' | translate}}
+            </button>
+            <button ng-class="[!vm.lesson.studentFeedback.isTeacherLate ? 'btn-type-1' : 'btn-type-2']"
+                    ng-click="vm.lesson.studentFeedback.isTeacherLate = !vm.lesson.studentFeedback.isTeacherLate">
+                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.NO' | translate}}
+            </button>
+        </div>
+    </div>
+
+</div>

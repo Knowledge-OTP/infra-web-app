@@ -1,0 +1,108 @@
+@import './mixins';
+@import './variables';
+@import './fonts';
+@import './colors';
+
+/*quicksand*/
+.quicksand-32-b {
+  @include text-style(32px, $emperor, Quicksand, $boldFontWeight);
+}
+
+.quicksand-25-b {
+  @include text-style(25px, $emperor, Quicksand, $boldFontWeight);
+}
+
+.quicksand-20-n {
+  @include text-style(20px, $emperor, Quicksand, $normalFontWeight);
+}
+
+.quicksand-20-b {
+  @include text-style(20px, $emperor, Quicksand, $boldFontWeight);
+}
+
+.quicksand-18-b {
+  @include text-style(18px, $emperor, Quicksand, $boldFontWeight);
+}
+.quicksand-18-n {
+  @include text-style(18px, $emperor, Quicksand, $normalFontWeight);
+}
+.quicksand-16-b {
+  @include text-style(16px, $emperor, Quicksand, $boldFontWeight);
+}
+
+.quicksand-16-n {
+  @include text-style(16px, $emperor, Quicksand, $normalFontWeight);
+}
+
+.quicksand-14-b {
+  @include text-style(14px, $emperor, Quicksand, $boldFontWeight);
+}
+
+.quicksand-14-n {
+  @include text-style(14px, $emperor, Quicksand, $normalFontWeight);
+}
+
+.quicksand-12-b {
+  @include text-style(12px, $emperor, Quicksand, $boldFontWeight);
+}
+
+.quicksand-12-n {
+  @include text-style(12px, $emperor, Quicksand, $normalFontWeight);
+}
+
+/*lato*/
+.lato-24-b {
+  @include text-style(24px, $emperor, Lato, $boldFontWeight);
+}
+.lato-20-l {
+  @include text-style(20px, $emperor, Lato, $lightFontWeight);
+}
+.lato-20-n {
+  @include text-style(20px, $emperor, Lato, $normalFontWeight);
+}
+
+.lato-18-n {
+  @include text-style(18px, $emperor, Lato, $normalFontWeight);
+}
+
+.lato-18-b {
+  @include text-style(18px, $emperor, Lato, $boldFontWeight);
+}
+
+.lato-16-n {
+  @include text-style(16px, $emperor, Lato, $normalFontWeight);
+}
+
+.lato-16-l {
+  @include text-style(16px, $emperor, Lato, $lightFontWeight);
+}
+
+.lato-14-n {
+  @include text-style(14px, $emperor, Lato, $normalFontWeight);
+}
+
+.lato-14-l {
+  @include text-style(14px, $emperor, Lato, $lightFontWeight);
+}
+
+.lato-13-n {
+  @include text-style(13px, $emperor, Lato, $normalFontWeight);
+}
+
+.lato-13-l {
+  @include text-style(13px, $emperor, Lato, $lightFontWeight);
+}
+
+.lato-12-n {
+  @include text-style(12px, $emperor, Lato, $normalFontWeight);
+}
+
+.lato-12-l {
+  @include text-style(12px, $emperor, Lato, $lightFontWeight);
+}
+
+.lato-8-n {
+  @include text-style(8px, $emperor, Lato, $normalFontWeight);
+}
+
+

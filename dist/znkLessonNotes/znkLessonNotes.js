@@ -85,12 +85,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes')
-        .component('znkLessonInfo', {
+        .component('znkLessonDetails', {
             bindings: {
                 lesson: '=',
                 userContext: '='
             },
-            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonInfo/lessonInfo.component.html',
+            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonInfo/lesson-details.component.html',
             controllerAs: 'vm',
             controller: ["$http", "$q", "$log", "$filter", "ENV", "$translate", "LessonStatusEnum", "ZnkLessonNotesSrv", "UserTypeContextEnum", function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv, UserTypeContextEnum) {
                 'ngInject';
@@ -228,12 +228,12 @@
     angular.module('znk.infra-web-app.znkLessonNotes')
         .component('lessonNotesPopup', {
             bindings: {
-                lessonId: '=',
+                lesson: '=',
                 userContext: '='
             },
-            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonNotesPopup.template.html',
+            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lesson-notes-popup.template.html',
             controllerAs: 'vm',
-            controller: ["$log", "$mdDialog", "ZnkLessonNotesSrv", function ($log, $mdDialog, ZnkLessonNotesSrv) {
+            controller: ["$log", "$mdDialog", "ZnkLessonNotesSrv", "UserTypeContextEnum", function ($log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum) {
                 'ngInject';
 
                 let vm = this;
@@ -241,12 +241,10 @@
                 vm.closeModal = closeModal;
 
                 this.$onInit = function () {
-                    $log.debug('lessonNotesPopup: Init');
-                    ZnkLessonNotesSrv.getLessonById(vm.lessonId).then(lesson => {
-                        vm.lesson = lesson.data;
-                    });
+                    $log.debug('lessonNotesPopup: Init with Lesson: ', vm.lesson );
                     vm.closeModal = $mdDialog.cancel;
                     vm.showSpinner = false;
+                    vm.isAdmin = vm.userContext === UserTypeContextEnum.ADMIN.enum;
                     vm.save = save;
                 };
 
@@ -272,77 +270,12 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes')
-        .component('znkLessonRating', {
-            bindings: {
-                lesson: '=',
-                userContext: '='
-            },
-            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonRating/lessonRating.component.html',
-            controllerAs: 'vm',
-            controller: ["$log", "$translate", "UserTypeContextEnum", function ($log, $translate, UserTypeContextEnum) {
-                'ngInject';
-
-                let vm = this;
-
-                vm.MIN_STATR_FOR_RATING_FEEDBACK = 2;
-                vm.MAX_STARS = 5;
-                vm.starArr = [];
-                vm.showComponent = false;
-                vm.onHover = onHover;
-                vm.ratingChanged = ratingChanged;
-
-                this.$onInit = function () {
-                    $log.debug('znkLessonRating: Init');
-                    vm.lesson.studentFeedback = vm.lesson.studentFeedback || {};
-                    vm.showComponent = vm.userContext === UserTypeContextEnum.STUDENT.enum ||
-                        vm.userContext === UserTypeContextEnum.ADMIN.enum;
-                    initStarsArr();
-                    if (!vm.lesson.studentFeedback.rating) {
-                        ratingChanged(vm.lesson.studentFeedback.rating);
-                    }
-                    vm.lesson.studentFeedback.studentFreeText = vm.lesson.studentFeedback.studentFreeText || '';
-                };
-
-                function initStarsArr() {
-                    for (let i = 0; i < vm.MAX_STARS; i++) {
-                        let starNum = i + 1;
-                        vm.starArr[i] = {
-                            title: $translate.instant(`LESSON.LESSON_NOTES_POPUP.RATING.TITLE${starNum}`),
-                            active: (starNum === vm.lesson.studentFeedback.rating),  // boolean
-                            value: starNum,
-                        };
-                    }
-                }
-
-                function onHover(selectedStar, bool) {
-                    vm.starArr.forEach(star => {
-                        star.hover = bool && (star.value <= selectedStar.value);
-                    });
-                }
-
-                function ratingChanged(rating) {
-                    $log.debug('lesson rating changed: ', rating);
-                    vm.starArr.forEach(star => {
-                        star.active = star.value <= rating;
-                    });
-                    vm.lesson.studentFeedback.rating = rating;
-                }
-
-            }]
-        });
-})(angular);
-
-
-(function (angular) {
-    'use strict';
-
-    angular.module('znk.infra-web-app.znkLessonNotes')
         .component('znkLessonSummaryNote', {
             bindings: {
                 lesson: '=',
                 userContext: '='
             },
-            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lessonSummaryNote/lessonSummaryNote.component.html',
+            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lesson-teacher-notes/lesson-teacher-notes.component.html',
             controllerAs: 'vm',
             controller: ["$log", "UserTypeContextEnum", "ZnkLessonNotesSrv", function ($log, UserTypeContextEnum, ZnkLessonNotesSrv) {
                 'ngInject';
@@ -418,6 +351,71 @@
             }]
         });
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.znkLessonNotes')
+        .component('znkLessonRating', {
+            bindings: {
+                lesson: '=',
+                userContext: '='
+            },
+            templateUrl: 'components/znkLessonNotes/lessonNotesPopup/lesson-rating/lesson-rating.component.html',
+            controllerAs: 'vm',
+            controller: ["$log", "$translate", "UserTypeContextEnum", function ($log, $translate, UserTypeContextEnum) {
+                'ngInject';
+
+                let vm = this;
+
+                vm.MIN_STATR_FOR_RATING_FEEDBACK = 2;
+                vm.MAX_STARS = 5;
+                vm.starArr = [];
+                vm.showComponent = false;
+                vm.onHover = onHover;
+                vm.ratingChanged = ratingChanged;
+
+                this.$onInit = function () {
+                    $log.debug('znkLessonRating: Init');
+                    vm.lesson.studentFeedback = vm.lesson.studentFeedback || {};
+                    vm.showComponent = vm.userContext === UserTypeContextEnum.STUDENT.enum ||
+                        vm.userContext === UserTypeContextEnum.ADMIN.enum;
+                    initStarsArr();
+                    if (!vm.lesson.studentFeedback.rating) {
+                        ratingChanged(vm.lesson.studentFeedback.rating);
+                    }
+                    vm.lesson.studentFeedback.studentFreeText = vm.lesson.studentFeedback.studentFreeText || '';
+                };
+
+                function initStarsArr() {
+                    for (let i = 0; i < vm.MAX_STARS; i++) {
+                        let starNum = i + 1;
+                        vm.starArr[i] = {
+                            title: $translate.instant(`LESSON.LESSON_NOTES_POPUP.RATING.TITLE${starNum}`),
+                            active: (starNum === vm.lesson.studentFeedback.rating),  // boolean
+                            value: starNum,
+                        };
+                    }
+                }
+
+                function onHover(selectedStar, bool) {
+                    vm.starArr.forEach(star => {
+                        star.hover = bool && (star.value <= selectedStar.value);
+                    });
+                }
+
+                function ratingChanged(rating) {
+                    $log.debug('lesson rating changed: ', rating);
+                    vm.starArr.forEach(star => {
+                        star.active = star.value <= rating;
+                    });
+                    vm.lesson.studentFeedback.rating = rating;
+                }
+
+            }]
+        });
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -551,8 +549,8 @@
 })(angular);
 
 angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function($templateCache) {
-  $templateCache.put("components/znkLessonNotes/lessonNotesPopup/lessonInfo/lessonInfo.component.html",
-    "<div class=\"lesson-info\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
+  $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html",
+    "<div class=\"lesson-details\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
     "    <div class=\"field\" ng-repeat=\"field in vm.fields\">\n" +
     "        <div class=\"label\">{{field.label}}</div>\n" +
     "        <div class=\"text\" ng-if=\"field.label !== 'Status' || vm.userContext === vm.userTypeContextEnum.STUDENT.enum\">{{field.text}}</div>\n" +
@@ -565,7 +563,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/znkLessonNotes/lessonNotesPopup/lessonNotesPopup.template.html",
+  $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html",
     "<div class=\"lesson-notes-popup\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
     "    <div class=\"top-icon-wrap\">\n" +
     "        <div class=\"top-icon\">\n" +
@@ -583,11 +581,15 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    <div class=\"content-wrapper\" ng-if=\"vm.lesson\">\n" +
     "        <div class=\"znk-scrollbar\">\n" +
     "            <div class=\"title\" translate=\".TITLE\"></div>\n" +
-    "            <znk-lesson-info lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-info>\n" +
-    "            <div class=\"divider\"></div>\n" +
-    "            <znk-lesson-rating lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
-    "            <div class=\"divider\"></div>\n" +
-    "            <znk-lesson-summary-note lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-summary-note>\n" +
+    "\n" +
+    "            <znk-lesson-details lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-details>\n" +
+    "            <div class=\"divider\" ng-if=\"vm.isAdmin\"></div>\n" +
+    "\n" +
+    "            <!--<znk-lesson-rating lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-rating>-->\n" +
+    "            <!--<div class=\"divider\" ng-if=\"vm.isAdmin\"></div>-->\n" +
+    "\n" +
+    "            <!--<znk-lesson-summary-note lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-summary-note>-->\n" +
+    "\n" +
     "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.save()\">\n" +
     "                <span class=\"btn-text\" translate=\".SAVE\"></span>\n" +
     "                <span class=\"spinner\" ng-if=\"showSpinner\"></span>\n" +
@@ -596,21 +598,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    </div>\n" +
     "</div>\n" +
     "");
-  $templateCache.put("components/znkLessonNotes/lessonNotesPopup/lessonRating/lessonRating.component.html",
-    "<div class=\"lesson-rate\" ng-if=\"vm.showComponent\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP.RATING\">\n" +
-    "  <div class=\"lato-18-n znk-uppercase\" translate=\".TITLE\"></div>\n" +
-    "  <div class=\"rating\">\n" +
-    "    <svg-icon class=\"star-icon\" name=\"znkLessonNotes-star\" ng-repeat=\"star in vm.starArr\"\n" +
-    "         ng-mouseenter=\"vm.onHover(star, true)\" ng-mouseleave=\"vm.onHover(star, false)\" title=\"{{star.title}}\"\n" +
-    "         ng-class=\"{'active': star.active, 'hover': star.hover}\" ng-click=\"vm.ratingChanged(star.value)\">\n" +
-    "    </svg-icon>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <textarea class=\"lato-14-n note-txt\" ng-model=\"vm.lesson.studentFeedback.studentFreeText\"\n" +
-    "            ng-if=\"vm.lesson.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK\"></textarea>\n" +
-    "</div>\n" +
-    "");
-  $templateCache.put("components/znkLessonNotes/lessonNotesPopup/lessonSummaryNote/lessonSummaryNote.component.html",
+  $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-teacher-notes/lesson-teacher-notes.component.html",
     "<div class=\"lesson-summary-notes\" ng-if=\"vm.showComponent\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP.SUMMARY_NOTES\">\n" +
     "    <div class=\"lato-18-n znk-uppercase\" translate=\".TITLE\"></div>\n" +
     "\n" +
@@ -648,6 +636,20 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
+    "</div>\n" +
+    "");
+  $templateCache.put("components/znkLessonNotes/lesson-rating-popup/lesson-rating/lesson-rating.component.html",
+    "<div class=\"lesson-rate\" ng-if=\"vm.showComponent\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP.RATING\">\n" +
+    "  <div class=\"lato-18-n znk-uppercase\" translate=\".TITLE\"></div>\n" +
+    "  <div class=\"rating\">\n" +
+    "    <svg-icon class=\"star-icon\" name=\"znkLessonNotes-star\" ng-repeat=\"star in vm.starArr\"\n" +
+    "         ng-mouseenter=\"vm.onHover(star, true)\" ng-mouseleave=\"vm.onHover(star, false)\" title=\"{{star.title}}\"\n" +
+    "         ng-class=\"{'active': star.active, 'hover': star.hover}\" ng-click=\"vm.ratingChanged(star.value)\">\n" +
+    "    </svg-icon>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <textarea class=\"lato-14-n note-txt\" ng-model=\"vm.lesson.studentFeedback.studentFreeText\"\n" +
+    "            ng-if=\"vm.lesson.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK\"></textarea>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/svg/close-popup.svg",

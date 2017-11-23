@@ -295,7 +295,7 @@ md-dialog.base {
     font-weight: 400;
     text-transform: uppercase; }
 
-.lesson-info {
+.lesson-details {
   height: 170px;
   margin: 25px;
   display: -ms-flexbox;
@@ -306,14 +306,14 @@ md-dialog.base {
       flex-wrap: wrap;
   -ms-flex-pack: justify;
       justify-content: space-between; }
-  .lesson-info .field {
+  .lesson-details .field {
     width: 50%;
     height: 40px;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
         align-items: center; }
-    .lesson-info .field .label {
+    .lesson-details .field .label {
       width: 95px;
       text-align: right;
       margin-right: 33px;
@@ -322,9 +322,9 @@ md-dialog.base {
       font-family: Lato;
       font-weight: 100;
       text-transform: uppercase; }
-    .lesson-info .field .text {
+    .lesson-details .field .text {
       text-transform: capitalize; }
-    .lesson-info .field select {
+    .lesson-details .field select {
       width: 130px;
       font-size: 16px;
       color: #4f4d4d;
@@ -338,38 +338,10 @@ md-dialog.base {
       border-radius: 0;
       background-color: #ffffff;
       outline: 0; }
-      .lesson-info .field select.attended {
+      .lesson-details .field select.attended {
         color: #87ca4d; }
-      .lesson-info .field select.canceled, .lesson-info .field select.missed {
+      .lesson-details .field select.canceled, .lesson-details .field select.missed {
         color: #ff6766; }
-
-.lesson-rate {
-  margin: 25px;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column;
-  -ms-flex-align: center;
-      align-items: center; }
-  .lesson-rate .rating {
-    margin-top: 15px;
-    display: -ms-flexbox;
-    display: flex; }
-    .lesson-rate .rating svg-icon.star-icon {
-      outline: none; }
-      .lesson-rate .rating svg-icon.star-icon svg {
-        width: 30px;
-        fill: #e1e1e1; }
-      .lesson-rate .rating svg-icon.star-icon.hover svg {
-        fill: #FFED85; }
-      .lesson-rate .rating svg-icon.star-icon.active svg {
-        fill: #FFD700; }
-  .lesson-rate .note-txt {
-    width: 90%;
-    height: 100px;
-    resize: none;
-    overflow: auto;
-    margin-top: 15px; }
 
 .lesson-summary-notes {
   margin: 25px;
@@ -411,7 +383,7 @@ md-dialog.base {
           width: 20px;
           border: 1px solid #9A9797;
           outline: 0; }
-        .lesson-summary-notes .email-section .checkbox-group .input-wrap label, .lesson-summary-notes .email-section .checkbox-group .input-wrap .lesson-info .field .label, .lesson-info .field .lesson-summary-notes .email-section .checkbox-group .input-wrap .label {
+        .lesson-summary-notes .email-section .checkbox-group .input-wrap label, .lesson-summary-notes .email-section .checkbox-group .input-wrap .lesson-details .field .label, .lesson-details .field .lesson-summary-notes .email-section .checkbox-group .input-wrap .label {
           text-transform: lowercase;
           margin-left: 5px;
           font-size: 14px;
@@ -430,6 +402,34 @@ md-dialog.base {
         opacity: 0.7;
         font-style: italic;
         font-size: 14px; }
+
+.lesson-rate {
+  margin: 25px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-align: center;
+      align-items: center; }
+  .lesson-rate .rating {
+    margin-top: 15px;
+    display: -ms-flexbox;
+    display: flex; }
+    .lesson-rate .rating svg-icon.star-icon {
+      outline: none; }
+      .lesson-rate .rating svg-icon.star-icon svg {
+        width: 30px;
+        fill: #e1e1e1; }
+      .lesson-rate .rating svg-icon.star-icon.hover svg {
+        fill: #FFED85; }
+      .lesson-rate .rating svg-icon.star-icon.active svg {
+        fill: #FFD700; }
+  .lesson-rate .note-txt {
+    width: 90%;
+    height: 100px;
+    resize: none;
+    overflow: auto;
+    margin-top: 15px; }
 
 md-dialog {
   border-radius: 15px;

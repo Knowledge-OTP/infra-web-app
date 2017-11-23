@@ -1,0 +1,13 @@
+@import './colors';
+
+.znk-scrollbar {
+  ::-webkit-scrollbar,
+  &::-webkit-scrollbar {
+    width: 10px;
+    background-color: $hintOfRed;
+  }
+  ::-webkit-scrollbar-thumb,
+  &::-webkit-scrollbar-thumb {
+    background-color: $gallery;
+  }
+}

@@ -1,0 +1,92 @@
+@mixin text-style($size: null,$color: null,$family: null,$weight: null,$letter-spacing:null,$text-transform: null, $style: null, $align: null) {
+  @if ($size) {
+    font-size: $size;
+  }
+
+  @if ($color) {
+    color: $color;
+  }
+
+  @if ($family) {
+    font-family: $family;
+  }
+
+  @if $weight {
+    font-weight: $weight;
+  }
+
+  @if $letter-spacing {
+    letter-spacing: $letter-spacing;
+  }
+
+  @if $text-transform {
+    text-transform: $text-transform;
+  }
+
+  @if $style {
+    font-style: $style;
+  }
+
+  @if $align {
+    text-align: $align;
+  }
+}
+
+@mixin button-style($bgColor: null,$borderRadius: null,$width: null,$height: null,$border:null) {
+  @if ($bgColor) {
+    background-color: $bgColor;
+  }
+
+  @if ($borderRadius) {
+    border-radius: $borderRadius;
+  }
+
+  @if ($width) {
+    width: $width;
+  }
+
+  @if $height {
+    height: $height;
+  }
+
+  @if $border {
+    border: $border;
+  } @else {
+    border: none;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  outline: 0;
+  padding: 0;
+  margin: 0 5px;
+  box-sizing: content-box;
+  outline: none;
+}
+
+@mixin dimension($width,$height: null) {
+  width: $width;
+
+  @if $height == null {
+    height: $width;
+  } @else {
+    height: $height;
+  }
+}
+
+@mixin background-image($url,$width: inherit,$height: inherit) {
+  background: {
+    image: url('#{$url}.png');
+    repeat: no-repeat;
+    position: center;
+  }
+  background-size: cover;
+  display: inline-block;
+  @include dimension($width, $height);
+}
+
+@mixin blur-image() {
+  filter: blur(3px);
+  opacity: 0.3;
+}

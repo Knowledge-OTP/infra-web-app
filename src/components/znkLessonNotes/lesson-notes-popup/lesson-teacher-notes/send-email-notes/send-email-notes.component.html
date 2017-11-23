@@ -1,0 +1,36 @@
+<div class="send-email-notes">
+    <div class="lato-16-n">
+        <span translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SEND_NOTES"></span>
+        <span> ({{vm.mailsToSend.length}})</span>
+    </div>
+    <div class="checkbox-group" ng-if="vm.studentsProfiles.length">
+        <div class="input-wrap">
+            <input id="studensMail" type="checkbox" ng-model="vm.studensMail"
+                   ng-change="vm.emailSelected(vm.userTypeContextEnum.STUDENT.enum, vm.studensMail)">
+            <ng-switch on="vm.studentsProfiles.length < 2">
+                <label for="studensMail" ng-switch-when="true"
+                       translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.STUDENT_MAIL"></label>
+                <label for="studensMail" ng-switch-when="false"
+                       translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.ALL_STUDENTS_MAIL"></label>
+            </ng-switch>
+        </div>
+        <div class="input-wrap">
+            <input id="parentsMail" type="checkbox" ng-model="vm.parentsMail"
+                   ng-change="vm.emailSelected(vm.userTypeContextEnum.PARENT.enum, vm.parentsMail)">
+            <ng-switch on="vm.studentsProfiles.length < 2">
+                <label for="parentsMail" ng-switch="" ng-switch-when="true"
+                       translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.PARENT_MAIL"></label>
+                <label for="parentsMail" ng-switch-when="false"
+                       translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.ALL_PARENTS_MAIL"></label>
+            </ng-switch>
+        </div>
+    </div>
+    <div class="button-wrapper">
+        <button type="button" class="btn-type-2" ng-click="vm.sendEmail()"
+                translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SEND"></button>
+        <div class="text-muted" ng-if="vm.lesson.lessonNotes.sendMailTime">
+            <span translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SENT_ON"></span>
+            <span> {{vm.lesson.lessonNotes.sendMailTime | date: 'MMM d, h:mm a'}}</span>
+        </div>
+    </div>
+</div>

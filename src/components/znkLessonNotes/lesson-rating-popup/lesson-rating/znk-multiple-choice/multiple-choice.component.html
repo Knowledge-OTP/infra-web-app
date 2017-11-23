@@ -1,0 +1,9 @@
+<div class="multiple-choice">
+    <div class="quicksand-16-b multiple-choice-title" translate="LESSON_NOTES.LESSON_RATING_POPUP.MULTIPLE_CHOICE.TITLE"></div>
+
+    <div class="choice-group">
+        <button ng-repeat="choice in vm.choicesArr track by $index"
+               ng-class="[choice.active ? 'btn-type-1' : 'btn-type-2']"
+                ng-click="vm.updateChoice(choice)">{{choice.name}}</button>
+    </div>
+</div>

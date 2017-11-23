@@ -80,90 +80,28 @@
         .divider {
             background-color: $mercury;
             height: 1px;
-            width: 96%;
+            width: 94%;
             margin: 0 auto;
         }
 
-        .save-btn {
-            margin: 20px;
-            position: relative;
-            float: right;
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
 
-            .spinner {
-                position: absolute;
-                margin: 0;
-                font-size: 5px;
-                top: 50%;
-                right: 29px;
-                transform: translateY(-50%);
+            button {
+                margin: 20px 30px;
+                position: relative;
+                .spinner {
+                    position: absolute;
+                    margin: 0;
+                    font-size: 5px;
+                    top: 50%;
+                    right: 29px;
+                    transform: translateY(-50%);
+                }
             }
         }
 
     }
-
-    .lato-18-n {
-        font-size: 18px;
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 400;
-        text-transform: uppercase;
-    }
-
-    .lato-16-n {
-        font-size: 16px;
-        color: #4f4d4d;
-        font-family: Lato;
-        font-weight: 400;
-    }
-
-    .btn-type-1 {
-        background-color: #0a9bad;
-        border-radius: 3px;
-        width: 154px;
-        height: 35px;
-        border: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        outline: 0;
-        padding: 0;
-        box-sizing: content-box;
-        outline: none;
-        font-size: 14px;
-        color: #ffffff;
-        font-family: Lato;
-        font-weight: 400;
-        text-transform: uppercase;
-    }
-
-    .btn-type-2 {
-        background-color: #ffffff;
-        border-radius: 3px;
-        width: 154px;
-        height: 35px;
-        border: 1px solid #0a9bad;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
-        justify-content: center;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        cursor: pointer;
-        outline: 0;
-        padding: 0;
-        margin: 0 5px;
-        box-sizing: content-box;
-        outline: none;
-        font-size: 14px;
-        color: #0a9bad;
-        font-family: Lato;
-        font-weight: 400;
-        text-transform: uppercase;
-    }
-
 }
 
