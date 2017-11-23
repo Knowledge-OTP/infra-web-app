@@ -54,7 +54,7 @@
                 this.sendEmail = () => {
                     this.lesson.lessonNotes.sendMailTime = new Date().getTime();
                     $log.debug(' mailsToSend: ', this.mailsToSend);
-                }
+                };
             }
         });
 })(angular);

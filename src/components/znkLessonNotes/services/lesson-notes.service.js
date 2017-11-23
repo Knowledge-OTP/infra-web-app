@@ -50,9 +50,11 @@
 
             this.getLiveSessionSettings = () => {
                 // // Todo: Firebase is not defined
-                // return InfraConfigSrv.getGlobalStorage().then(storage => {
-                //     return storage.get(liveSessionDurationPath);
-                // });
+                if (false) {
+                    return InfraConfigSrv.getGlobalStorage().then(storage => {
+                        return storage.get(liveSessionDurationPath);
+                    });
+                }
 
                 // Todo: implement this fn to get the settings from {{firebase-app-root}}/settings/liveSessionDuration
                 const liveSessionDuration = {

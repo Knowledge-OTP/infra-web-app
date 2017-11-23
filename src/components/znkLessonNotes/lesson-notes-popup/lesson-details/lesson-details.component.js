@@ -9,10 +9,9 @@
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html',
             controllerAs: 'vm',
-            controller: function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv, ZnkLessonNotesUiSrv, UserTypeContextEnum) {
+            controller: function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv,
+                                  ZnkLessonNotesUiSrv, UserTypeContextEnum) {
                 'ngInject';
-
-                let vm = this;
 
                 this.dataPromMap = {};
                 this.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
