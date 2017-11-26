@@ -1,18 +1,39 @@
 @import '../../../src/scss/imports/colors',
-        '../../../src/scss/imports/variables',
-        '../../../src/scss/imports/mixins',
-        '../../../src/scss/imports/spinner';
+'../../../src/scss/imports/variables',
+'../../../src/scss/imports/mixins',
+'../../../src/scss/imports/spinner';
 
+@import 'scss/variables',
+'scss/mixins',
+'scss/fonts',
+'scss/font-style',
+'scss/znk-scroll',
+'scss/colors',
+'scss/buttons';
 @import '../../scss/imports/md-dialog';
-@import '../znkLessonNotes/lessonNotesPopup/lessonNotesPopup.component';
-@import '../znkLessonNotes/lessonNotesPopup/lessonInfo/lesson-info.component';
-@import '../znkLessonNotes/lessonNotesPopup/lessonRating/lessonRating.component';
-@import '../znkLessonNotes/lessonNotesPopup/lessonSummaryNote/lessonSummaryNote.component';
+
+@import 'lesson-notes-popup/lesson-notes-popup.component';
+@import 'lesson-notes-popup/lesson-details/lesson-details.component';
+@import 'lesson-notes-popup/lesson-teacher-notes/lesson-teacher-notes.component';
+@import 'lesson-notes-popup/lesson-teacher-notes/send-email-notes/send-email-notes.component';
+@import 'lesson-notes-popup/lesson-started-late/lesson-started-late.component';
+
+@import 'lesson-rating-popup/lesson-rating-popup.component';
+@import 'lesson-rating-popup/lesson-rating/lesson-rating.component';
+@import 'lesson-rating-popup/lesson-rating/znk-multiple-choice/multiple-choice.component';
+
+input[type="checkbox"] {
+    @include text-style(20px, $emperor, Lato, $lightFontWeight);
+    height: 20px;
+    width: 20px;
+    border: 1px solid $dustyGray;
+    outline: 0;
+}
 
 md-dialog {
     border-radius: 15px;
     overflow: hidden;
-    //height: 90%;
+    max-height: 90%;
     md-backdrop {
         &.md-opaque {
             background-color: $bgColor35;
@@ -21,8 +42,19 @@ md-dialog {
     }
 }
 
+lesson-notes-popup, lesson-rating-popup {
+    //height: 100%;
+    height: 700px;
+}
 
-lesson-notes-popup {
-    height: 100%;
+.divider {
+    background-color: $mercury;
+    height: 1px;
+    width: 94%;
+    margin: 0 auto;
+}
+
+.znk-uppercase {
+    text-transform: uppercase;
 }
 

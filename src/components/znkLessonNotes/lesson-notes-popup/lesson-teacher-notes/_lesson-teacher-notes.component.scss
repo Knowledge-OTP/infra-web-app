@@ -1,0 +1,32 @@
+
+.lesson-teacher-notes {
+    margin: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $hintOfRed;
+
+    .znk-uppercase {
+        margin: 20px;
+    }
+
+    .teacher-title {
+        text-align: center;
+        font-family: lato;
+        opacity: 0.5;
+        font-style: italic;
+        font-size: 14px;
+        margin: 10px;
+    }
+
+    .note-txt {
+        width: 90%;
+        height: 280px;
+        resize: none;
+        overflow: auto;
+    }
+
+    znk-send-email-notes {
+        width: 90%;
+    }
+}

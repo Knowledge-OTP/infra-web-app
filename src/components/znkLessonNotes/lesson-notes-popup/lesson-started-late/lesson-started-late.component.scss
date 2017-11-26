@@ -1,0 +1,22 @@
+.lesson-started-late {
+    width: 100%;
+    margin: 20px 0;
+    .student-view, .teacher-view {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        &-btn-group {
+            display: flex;
+            margin: 0;
+            button {
+                width: 56px;
+                margin: 0 5px;
+            }
+        }
+    }
+    .teacher-view {
+        width: 80%;
+        margin: 0 auto;
+    }
+}

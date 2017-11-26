@@ -1,0 +1,15 @@
+<div class="lesson-teacher-notes" ng-if="vm.showComponent">
+
+    <div class="lato-18-n znk-uppercase" ng-if="vm.isAdmin"
+         translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.ADMIN_TITLE"></div>
+
+    <div class="teacher-title" ng-if="!vm.isAdmin">
+        <div>{{'LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.TEACHER_TITLE1' | translate}}</div>
+        <div>{{'LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.TEACHER_TITLE2' | translate}}</div>
+    </div>
+
+    <textarea class="lato-14-n note-txt" ng-model="vm.lesson.lessonNotes.educatorNotes"></textarea>
+
+    <znk-send-email-notes lesson="vm.lesson" user-context="vm.userContext"></znk-send-email-notes>
+
+</div>
