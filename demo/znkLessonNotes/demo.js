@@ -52,7 +52,7 @@
                     }
                 },
                 "serviceId": "service_1",
-                "topicId": "2",
+                "topicId": "topic_2",
                 "status": 2,
                 "createTime": 1509388819410,
                 "dbType": "lesson",
@@ -80,8 +80,8 @@
                     ]
                 },
             };
-            vm.userContext = UserTypeContextEnum.EDUCATOR.enum;
-            // vm.userContext = UserTypeContextEnum.ADMIN.enum;
+            // vm.userContext = UserTypeContextEnum.EDUCATOR.enum;
+            vm.userContext = UserTypeContextEnum.ADMIN.enum;
             vm.openLessonNotesPopup = (lesson, userContext) => {
                 ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson, userContext);
             };

@@ -17,6 +17,7 @@
         display: flex;
         svg-icon.star-icon {
             outline: none;
+            cursor: pointer;
             svg {
                 width: 30px;
                 fill: $mercury;
@@ -26,6 +27,11 @@
             }
             &.active svg {
                 fill: $gold;
+            }
+        }
+        &.admin-view {
+            svg-icon.star-icon {
+                cursor: default;
             }
         }
     }

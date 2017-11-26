@@ -9705,7 +9705,8 @@ md-dialog.base {
     display: -ms-flexbox;
     display: flex; }
     .lesson-rating .rating svg-icon.star-icon {
-      outline: none; }
+      outline: none;
+      cursor: pointer; }
       .lesson-rating .rating svg-icon.star-icon svg {
         width: 30px;
         fill: #e1e1e1; }
@@ -9713,6 +9714,8 @@ md-dialog.base {
         fill: #FFED85; }
       .lesson-rating .rating svg-icon.star-icon.active svg {
         fill: #FFD700; }
+    .lesson-rating .rating.admin-view svg-icon.star-icon {
+      cursor: default; }
   .lesson-rating .bad-rating-wrapper {
     width: 100%;
     display: -ms-flexbox;
