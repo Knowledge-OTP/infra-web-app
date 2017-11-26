@@ -456,14 +456,14 @@
 
                 this.$onInit = () => {
                     $log.debug('znkLessonRating: Init');
-                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
-                    this.showComponent = this.isAdmin || this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.lesson.studentFeedback = this.lesson.studentFeedback || {};
                     this.lesson.studentFeedback.studentFreeText = this.lesson.studentFeedback.studentFreeText || '';
                     this.initStarsArr();
                     if (this.lesson.studentFeedback.rating) {
                         this.ratingChanged(this.lesson.studentFeedback.rating);
                     }
+                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                    this.showComponent = this.isAdmin || this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.readOnlyStudentFeedback = this.isAdmin ? this.getStudentFeedback() : null;
                 };
 
@@ -479,12 +479,14 @@
                 };
 
                 this.onHover = (selectedStar, bool) => {
+                    if (this.isAdmin) { return; }
                     this.starArr.forEach(star => {
                         star.hover = bool && (star.value <= selectedStar.value);
                     });
                 };
 
                 this.ratingChanged = (rating) => {
+                    if (this.isAdmin) { return; }
                     $log.debug('lesson rating changed: ', rating);
                     this.starArr.forEach(star => {
                         star.active = star.value <= rating;
@@ -773,9 +775,9 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "");
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-started-late/lesson-started-late.component.html",
     "<div class=\"lesson-started-late\" ng-if=\"vm.lessonStartedLate && !vm.isAdmin\">\n" +
-    "    <div class=\"student-late\" ng-if=\"vm.isTeacher\">\n" +
+    "    <div class=\"teacher-view\" ng-if=\"vm.isTeacher\">\n" +
     "        <span class=\"quicksand-12-b\">{{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.STUDENT_LATE' | translate}}</span>\n" +
-    "        <div class=\"btn-group\">\n" +
+    "        <div class=\"teacher-view-btn-group\">\n" +
     "            <button ng-class=\"[vm.lesson.lessonNotes.isStudentLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
     "                    ng-click=\"vm.lesson.lessonNotes.isStudentLate = !vm.lesson.lessonNotes.isStudentLate\">\n" +
     "                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.YES' | translate}}\n" +
@@ -787,9 +789,9 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
-    "    <div class=\"teacher-late\" ng-if=\"!vm.isTeacher\">\n" +
+    "    <div class=\"student-view\" ng-if=\"!vm.isTeacher\">\n" +
     "        <span class=\"quicksand-12-b\">{{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.TEACHER_LATE' | translate}}</span>\n" +
-    "        <div class=\"btn-group\">\n" +
+    "        <div class=\"student-view-btn-group\">\n" +
     "            <button ng-class=\"[vm.lesson.studentFeedback.isTeacherLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
     "                    ng-click=\"vm.lesson.studentFeedback.isTeacherLate = !vm.lesson.studentFeedback.isTeacherLate\">\n" +
     "                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.YES' | translate}}\n" +
@@ -903,7 +905,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    <div class=\"lato-18-n lesson-rating-title\" ng-if=\"vm.isAdmin\"\n" +
     "         translate=\"LESSON_NOTES.LESSON_RATING_POPUP.SUB_TITLE\"></div>\n" +
     "\n" +
-    "    <div class=\"rating\" ng-class=\"[vm.isAdmin ? 'readonly' : 'margin-20']\">\n" +
+    "    <div class=\"rating\" ng-class=\"[vm.isAdmin ? 'admin-view' : 'margin-20']\">\n" +
     "        <svg-icon class=\"star-icon\" name=\"znkLessonNotes-star\" ng-repeat=\"star in vm.starArr\"\n" +
     "                  ng-mouseenter=\"vm.onHover(star, true)\" ng-mouseleave=\"vm.onHover(star, false)\" title=\"{{star.title}}\"\n" +
     "                  ng-class=\"{'active': star.active, 'hover': star.hover}\" ng-click=\"vm.ratingChanged(star.value)\">\n" +
@@ -914,7 +916,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "\n" +
     "        <znk-multiple-choice lesson=\"vm.lesson\" ng-if=\"!vm.isAdmin\"></znk-multiple-choice>\n" +
     "\n" +
-    "        <textarea class=\"lato-14-n note-txt\" ng-if=\"vm.isAdmin\" readonly>{{vm.readOnlyStudentFeedback}}</textarea>\n" +
+    "        <textarea class=\"lato-14-n note-txt admin-view\" ng-if=\"vm.isAdmin\" readonly>{{vm.readOnlyStudentFeedback}}</textarea>\n" +
     "\n" +
     "        <div class=\"student-feedback\" ng-if=\"!vm.isAdmin\">\n" +
     "            <div class=\"lato-14-n other\">{{'LESSON_NOTES.LESSON_RATING_POPUP.OTHER' | translate}}</div>\n" +

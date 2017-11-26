@@ -709,9 +709,9 @@ md-dialog.base {
       display: -ms-flexbox;
       display: flex;
       -ms-flex-pack: justify;
-          justify-content: space-between; }
+          justify-content: space-between;
+      margin: 20px 30px; }
       .lesson-notes-popup .content-wrapper .btn-group button {
-        margin: 20px 30px;
         position: relative; }
         .lesson-notes-popup .content-wrapper .btn-group button .spinner {
           position: absolute;
@@ -826,9 +826,9 @@ md-dialog.base {
       font-size: 14px; }
 
 .lesson-started-late {
-  width: 80%;
-  margin: 20px auto; }
-  .lesson-started-late .student-late, .lesson-started-late .teacher-late {
+  width: 100%;
+  margin: 20px 0; }
+  .lesson-started-late .student-view, .lesson-started-late .teacher-view {
     width: 100%;
     display: -ms-flexbox;
     display: flex;
@@ -836,12 +836,16 @@ md-dialog.base {
         justify-content: space-between;
     -ms-flex-align: center;
         align-items: center; }
-    .lesson-started-late .student-late .btn-group, .lesson-started-late .teacher-late .btn-group {
+    .lesson-started-late .student-view-btn-group, .lesson-started-late .teacher-view-btn-group {
       display: -ms-flexbox;
-      display: flex; }
-      .lesson-started-late .student-late .btn-group button, .lesson-started-late .teacher-late .btn-group button {
+      display: flex;
+      margin: 0; }
+      .lesson-started-late .student-view-btn-group button, .lesson-started-late .teacher-view-btn-group button {
         width: 56px;
         margin: 0 5px; }
+  .lesson-started-late .teacher-view {
+    width: 80%;
+    margin: 0 auto; }
 
 .lesson-rating-popup {
   height: 100%;
@@ -911,9 +915,9 @@ md-dialog.base {
       display: -ms-flexbox;
       display: flex;
       -ms-flex-pack: justify;
-          justify-content: space-between; }
+          justify-content: space-between;
+      margin: 20px 30px; }
       .lesson-rating-popup .content-wrapper .btn-group button {
-        margin: 20px 30px;
         position: relative; }
         .lesson-rating-popup .content-wrapper .btn-group button .spinner {
           position: absolute;
@@ -959,11 +963,13 @@ md-dialog.base {
     .lesson-rating .bad-rating-wrapper znk-multiple-choice {
       width: 80%; }
     .lesson-rating .bad-rating-wrapper .note-txt {
-      width: 80%;
+      width: 100%;
       height: 100px;
       resize: none;
       overflow: auto;
       margin-top: 15px; }
+      .lesson-rating .bad-rating-wrapper .note-txt.admin-view {
+        width: 80%; }
     .lesson-rating .bad-rating-wrapper .student-feedback {
       width: 80%; }
       .lesson-rating .bad-rating-wrapper .student-feedback .other {

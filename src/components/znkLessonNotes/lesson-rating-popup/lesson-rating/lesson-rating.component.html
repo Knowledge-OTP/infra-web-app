@@ -3,7 +3,7 @@
     <div class="lato-18-n lesson-rating-title" ng-if="vm.isAdmin"
          translate="LESSON_NOTES.LESSON_RATING_POPUP.SUB_TITLE"></div>
 
-    <div class="rating" ng-class="[vm.isAdmin ? 'readonly' : 'margin-20']">
+    <div class="rating" ng-class="[vm.isAdmin ? 'admin-view' : 'margin-20']">
         <svg-icon class="star-icon" name="znkLessonNotes-star" ng-repeat="star in vm.starArr"
                   ng-mouseenter="vm.onHover(star, true)" ng-mouseleave="vm.onHover(star, false)" title="{{star.title}}"
                   ng-class="{'active': star.active, 'hover': star.hover}" ng-click="vm.ratingChanged(star.value)">
@@ -14,7 +14,7 @@
 
         <znk-multiple-choice lesson="vm.lesson" ng-if="!vm.isAdmin"></znk-multiple-choice>
 
-        <textarea class="lato-14-n note-txt" ng-if="vm.isAdmin" readonly>{{vm.readOnlyStudentFeedback}}</textarea>
+        <textarea class="lato-14-n note-txt admin-view" ng-if="vm.isAdmin" readonly>{{vm.readOnlyStudentFeedback}}</textarea>
 
         <div class="student-feedback" ng-if="!vm.isAdmin">
             <div class="lato-14-n other">{{'LESSON_NOTES.LESSON_RATING_POPUP.OTHER' | translate}}</div>

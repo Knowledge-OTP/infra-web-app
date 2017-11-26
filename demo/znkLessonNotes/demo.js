@@ -80,8 +80,8 @@
                     ]
                 },
             };
-            // vm.userContext = UserTypeContextEnum.EDUCATOR.enum;
-            vm.userContext = UserTypeContextEnum.ADMIN.enum;
+            vm.userContext = UserTypeContextEnum.EDUCATOR.enum;
+            // vm.userContext = UserTypeContextEnum.ADMIN.enum;
             vm.openLessonNotesPopup = (lesson, userContext) => {
                 ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson, userContext);
             };

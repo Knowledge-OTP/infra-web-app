@@ -19,14 +19,14 @@
 
                 this.$onInit = () => {
                     $log.debug('znkLessonRating: Init');
-                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
-                    this.showComponent = this.isAdmin || this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.lesson.studentFeedback = this.lesson.studentFeedback || {};
                     this.lesson.studentFeedback.studentFreeText = this.lesson.studentFeedback.studentFreeText || '';
                     this.initStarsArr();
                     if (this.lesson.studentFeedback.rating) {
                         this.ratingChanged(this.lesson.studentFeedback.rating);
                     }
+                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                    this.showComponent = this.isAdmin || this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.readOnlyStudentFeedback = this.isAdmin ? this.getStudentFeedback() : null;
                 };
 
@@ -42,12 +42,14 @@
                 };
 
                 this.onHover = (selectedStar, bool) => {
+                    if (this.isAdmin) { return; }
                     this.starArr.forEach(star => {
                         star.hover = bool && (star.value <= selectedStar.value);
                     });
                 };
 
                 this.ratingChanged = (rating) => {
+                    if (this.isAdmin) { return; }
                     $log.debug('lesson rating changed: ', rating);
                     this.starArr.forEach(star => {
                         star.active = star.value <= rating;
