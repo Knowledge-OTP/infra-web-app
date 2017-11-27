@@ -10,7 +10,7 @@
 
         this.$get = function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
                               UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
-                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum) {
+                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum, ZnkLessonNotesUiSrv) {
             'ngInject';
 
             let LiveSessionEventsSrv = {};
@@ -58,7 +58,7 @@
 
                             if (liveSessionData.educatorId === currUid) {
                                 userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
-
+                                LiveSessionSrv.makeAutoCall(liveSessionData.studentId, liveSessionData.guid);
                             }
 
                             if (userLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
@@ -79,9 +79,21 @@
                                     LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                                         .then(isDarkFeaturesValid => {
                                             if (isDarkFeaturesValid) {
-                                                let userContext = liveSessionData.educatorId === currUid ?
-                                                    UserTypeContextEnum.EDUCATOR.enum : UserTypeContextEnum.STUDENT.enum;
-                                                ZnkLessonNotesSrv.openLessonNotesPopup(liveSessionData.lessonId, userContext);
+                                                $log.debug('darkFeatures in ON');
+                                                if (liveSessionData.lessonId) {
+                                                    ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
+                                                        if (liveSessionData.educatorId === currUid) {
+                                                            ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson.data, UserTypeContextEnum.EDUCATOR.enum);
+                                                        } else {
+                                                            ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson.data, UserTypeContextEnum.STUDENT.enum);
+                                                        }
+
+                                                    });
+                                                } else {
+                                                    $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
+                                                }
+                                            } else {
+                                                $log.debug('darkFeatures in OFF');
                                             }
                                         });
                                 });

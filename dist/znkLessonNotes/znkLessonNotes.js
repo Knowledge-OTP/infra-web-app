@@ -663,9 +663,10 @@
 
             this.updateLesson = (lessonToUpdate) => {
                 let updateLessonApi = `${schedulingApi}/updateLessons`;
-                return $http.post(updateLessonApi, [lessonToUpdate]).then(lessonArr => {
-                    return Promise.resolve(lessonArr[0]);
-                });
+                return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
+                    .then(lessonArr => {
+                        return Promise.resolve(lessonArr.data);
+                    });
             };
 
             this.getServiceList = () => {
@@ -696,12 +697,12 @@
 
                 // Todo: implement this fn to get the settings from {{firebase-app-root}}/settings/liveSessionDuration
                 const liveSessionDuration = {
-                    endAlertTime : 300000,
-                    extendTime : 900000,
-                    length : 2700000,
-                    lessonStartedLateTimeout : 300000,
-                    marginAfterSessionStart : 1800000,
-                    marginBeforeSessionStart : 900000
+                    endAlertTime: 300000,
+                    extendTime: 900000,
+                    length: 2700000,
+                    lessonStartedLateTimeout: 300000,
+                    marginAfterSessionStart: 1800000,
+                    marginBeforeSessionStart: 900000
                 };
                 return Promise.resolve(liveSessionDuration);
             };

@@ -2,7 +2,8 @@
     width: 100%;
     margin: 20px 0;
     .student-view, .teacher-view {
-        width: 100%;
+        width: 80%;
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -14,9 +15,5 @@
                 margin: 0 5px;
             }
         }
-    }
-    .teacher-view {
-        width: 80%;
-        margin: 0 auto;
     }
 }

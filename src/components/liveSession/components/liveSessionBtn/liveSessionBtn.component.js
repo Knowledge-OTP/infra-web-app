@@ -18,8 +18,6 @@
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
                 };
-                let liveSessionDurationProm = ZnkLessonNotesSrv.getLiveSessionDuration();
-                let educatorProfileProm = UserProfileService.getProfile();
 
                 this.$onInit = function () {
                     vm.isLiveSessionActive = false;
@@ -102,11 +100,13 @@
 
                 function getScheduledLesson() {
                     let dataPromMap = {
-                        liveSessionDuration: liveSessionDurationProm,
-                        educatorProfile: educatorProfileProm
+                        liveSessionSettings: ZnkLessonNotesSrv.getLiveSessionSettings(),
+                        educatorProfile: UserProfileService.getProfile()
                     };
                     return $q.all(dataPromMap).then(dataMap => {
-                        SESSION_DURATION = dataMap.liveSessionDuration ? dataMap.liveSessionDuration : SESSION_DURATION;
+                        vm.liveSessionSettings = dataMap.liveSessionSettings;
+                        vm.educatorProfile = dataMap.educatorProfile;
+                        SESSION_DURATION = vm.liveSessionSettings ? vm.liveSessionSettings : SESSION_DURATION;
                         let now = Date.now();
                         let calcStartTime = now - SESSION_DURATION.marginBeforeSessionStart;
                         let calcEndTime = now + SESSION_DURATION.marginAfterSessionStart;
@@ -115,7 +115,7 @@
                             endDate: calcEndTime
                         };
 
-                        return ZnkLessonNotesSrv.getLessonsByStudentIds([vm.student.uid], dateRange, dataMap.educatorProfile.uid)
+                        return ZnkLessonNotesSrv.getLessonsByStudentIds([vm.student.uid], dateRange, vm.educatorProfile.uid)
                             .then(lessons => {
                                 return lessons.data && lessons.data.length ? lessons.data[0] : null;
                             }, err => $log.debug('getScheduledLesson: getLessonsByStudentIds Error: ', err));

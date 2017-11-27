@@ -166,9 +166,9 @@
                         translations.content
                     );
                     return popUpInstance.promise.then(function(res){
-                        return $q.reject(res);
-                    },function(res){
                         return $q.resolve(res);
+                    },function(res){
+                        return $q.reject(res);
                     });
                 },function(err){
                     $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);

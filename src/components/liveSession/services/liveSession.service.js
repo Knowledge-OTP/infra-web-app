@@ -4,7 +4,7 @@
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
         function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
                   ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv,
-                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, UserTypeContextEnum) {
+                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, $window) {
             'ngInject';
 
             let _this = this;
@@ -42,13 +42,20 @@
                 }
 
                 return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
+                    liveSessionData.startTime = _getRoundTime();
                     liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
                     return liveSessionData.$save();
                 });
             };
 
-            this.makeAutoCall = function (receiverId) {
+            this.makeAutoCall = function (receiverId, liveSessionDataGuid) {
+                let isAutoCallAlreadyMade = $window.localStorage.getItem('isAutoCallAlreadyMade');
+                isAutoCallAlreadyMade = JSON.parse(isAutoCallAlreadyMade);
+                if (isAutoCallAlreadyMade && isAutoCallAlreadyMade[liveSessionDataGuid]) {
+                    return;
+                }
                 CallsSrv.callsStateChanged(receiverId).then(function (data) {
+                    $window.localStorage.setItem('isAutoCallAlreadyMade', JSON.stringify({[liveSessionDataGuid]: true}));
                     $log.debug('makeAutoCall: success in callsStateChanged, data: ', data);
                 }).catch(function (err) {
                     $log.error('makeAutoCall: error in callsStateChanged, err: ' + err);
@@ -83,29 +90,18 @@
 
                     _this._moveToArchive(data.liveSessionData);
 
-                    return data.storage.update(dataToSave).then(() => {
-                        LiveSessionUiSrv.isDarkFeaturesValid(data.liveSessionData.educatorId, data.liveSessionData.studentId)
-                            .then(isDarkFeaturesValid => {
-                                if (isDarkFeaturesValid) {
-                                    $log.debug('darkFeatures in ON');
-                                    if (data.liveSessionData.lessonId) {
-                                        UserProfileService.getProfile().then(userProfile => {
-                                            let userContext;
-                                            if (userProfile.adminInfo && userProfile.adminInfo.permissions && userProfile.adminInfo.permissions.isAdmin) {
-                                                userContext = UserTypeContextEnum.ADMIN.enum;
-                                            } else {
-                                                userContext = isTeacherApp ? UserTypeContextEnum.EDUCATOR.enum : UserTypeContextEnum.STUDENT.enum;
-                                            }
-                                            ZnkLessonNotesSrv.openLessonNotesPopup(data.liveSessionData.lessonId, userContext);
-                                        });
-                                    } else {
-                                        $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
-                                    }
-                                } else {
-                                    $log.debug('darkFeatures in OFF');
-                                }
-                            });
-                    });
+                    return LiveSessionUiSrv.isDarkFeaturesValid(data.liveSessionData.educatorId, data.liveSessionData.studentId)
+                        .then(isDarkFeaturesValid => {
+                            if (isDarkFeaturesValid) {
+                                return _updateLesson(data.liveSessionData).then(() => {
+                                    return data.storage.update(dataToSave);
+                                });
+                            } else {
+                                $log.debug('_updateLesson: darkFeatures in OFF');
+                                return data.storage.update(dataToSave);
+                            }
+
+                        });
                 });
             };
 
@@ -231,6 +227,28 @@
             };
 
 
+            function _updateLesson(liveSessionData) {
+                return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
+                    if (lesson.data.id) {
+                        // update lesson startTime, endTime and status
+                        lesson.data.startTime = liveSessionData.startTime;
+                        lesson.data.endTime = liveSessionData.endTime;
+                        lesson.data.status = LessonStatusEnum.ATTENDED.enum;
+                        lesson.data.lessonNotes = lesson.data.lessonNotes || {};
+                        lesson.data.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
+                        try {
+                            return ZnkLessonNotesSrv.updateLesson(lesson.data).then(updatedLesson => {
+                                $log.debug('_updateLesson: update lesson startTime & status. updatedLesson: ', updatedLesson);
+                            });
+                        } catch (err) {
+                            $log.error('_updateLesson: updateLesson failed. Error: ', err);
+                        }
+                    } else {
+                        $log.debug('_updateLesson: lessonId is required');
+                    }
+                });
+            }
+
             function _getRoundTime() {
                 return Math.floor(Date.now() / 1000) * 1000;
             }
@@ -322,7 +340,8 @@
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
                             extendTime: 0,
-                            startTime: _getRoundTime(),
+                            educatorStartTime:  _getRoundTime(),
+                            startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
                             sessionSubject: lessonData.topicId,
@@ -340,31 +359,11 @@
                         let studentLiveSessionDataGuidPath = studentPath + '/active';
                         dataToSave[studentLiveSessionDataGuidPath] = data.currUserLiveSessionRequests;
 
-                        try {
-                            if (lessonData.id) {
-                                _updateLesson(lessonData);
-                            }
-                        } catch (err) {
-                            $log.error('_initiateLiveSession: updateLesson failed. Error: ', err);
-                        }
-
                         return _getStorage().then(function (StudentStorage) {
-                            return StudentStorage.update(dataToSave).then(() => {
-                                _this.makeAutoCall(newLiveSessionData.studentId);
-                            });
+                            return StudentStorage.update(dataToSave);
                         });
                     });
 
-                });
-            }
-
-            function _updateLesson(lesson) {
-                lesson.status = LessonStatusEnum.ATTENDED.enum;
-                lesson.lessonNotes = lesson.lessonNotes || {};
-                lesson.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
-
-                return ZnkLessonNotesSrv.updateLesson(lesson).then(lesson => {
-                    $log.debug('_updateLesson: Lesson: ', lesson);
                 });
             }
 
