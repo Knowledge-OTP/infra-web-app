@@ -245,6 +245,10 @@
                 this.save = () => {
                     $log.debug('saving lesson : ', this.lesson);
                     this.showSpinner = true;
+                    // update lessonNotes status only if email sent
+                    if (this.lesson.lessonNotes.sendMailTime) {
+                        this.lesson.lessonNotes.status = LessonNotesStatusEnum.COMPLETE.enum;
+                    }
                     ZnkLessonNotesSrv.updateLesson(this.lesson)
                         .then(updatedLesson => {
                             this.lesson = updatedLesson.data;
