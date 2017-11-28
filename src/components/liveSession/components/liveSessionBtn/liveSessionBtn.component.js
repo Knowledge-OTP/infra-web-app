@@ -13,100 +13,96 @@
                                   UserProfileService, LiveSessionUiSrv, StudentService) {
                 'ngInject';
 
-                let vm = this;
                 let SESSION_DURATION = {
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
                 };
 
-                this.$onInit = function () {
-                    vm.isLiveSessionActive = false;
-                    vm.isOffline = true;
-                    vm.isDiagnosticCompleted = false;
-                    vm.endSession = endSession;
-                    vm.showStartSessionPopup = showStartSessionPopup;
-                    initializeLiveSessionStatus();
+                this.$onInit = () => {
+                    this.isLiveSessionActive = false;
+                    this.isOffline = true;
+                    this.isDiagnosticCompleted = false;
+                    this.initializeLiveSessionStatus();
 
                     $scope.$watch('vm.student', newStudent => {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
-                            vm.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
+                            this.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
                             StudentService.getStudentResults(newStudent.uid).then(studentResults => {
                                 StudentService.isDiagnosticCompleted(studentResults.examResults)
-                                    .then(isDiagnosticCompleted => vm.isDiagnosticCompleted = isDiagnosticCompleted);
+                                    .then(isDiagnosticCompleted => this.isDiagnosticCompleted = isDiagnosticCompleted);
                             });
                         }
                     }, true);
 
-                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(liveSessionStateChanged);
+                    LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(this.liveSessionStateChanged);
                 };
 
-                function initializeLiveSessionStatus() {
+                this.initializeLiveSessionStatus = () => {
                     LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         if (liveSessionData) {
-                            liveSessionStateChanged(liveSessionData.status);
+                            this.liveSessionStateChanged(liveSessionData.status);
                         }
                     });
-                }
+                };
 
-                function showSessionModal() {
+                this.showSessionModal = () => {
                     $mdDialog.show({
                         template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
                         scope: $scope,
                         preserveScope: true,
                         clickOutsideToClose: true
                     });
-                }
+                };
 
-                function showStartSessionPopup() {
-                    if (!vm.isDiagnosticCompleted) {
+                this.showStartSessionPopup = () => {
+                    if (!this.isDiagnosticCompleted) {
                         $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
-                        return LiveSessionUiSrv.showIncompleteDiagnostic(vm.student.name);
+                        return LiveSessionUiSrv.showIncompleteDiagnostic(this.student.name);
                     }
 
                     LiveSessionUiSrv.showWaitPopUp();
 
                     UserProfileService.getCurrUserId().then(educatorId => {
-                        LiveSessionUiSrv.isDarkFeaturesValid(educatorId, vm.student.uid)
+                        LiveSessionUiSrv.isDarkFeaturesValid(educatorId, this.student.uid)
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
-                                    getScheduledLesson().then(scheduledLesson => {
+                                    this.getScheduledLesson().then(scheduledLesson => {
                                         LiveSessionUiSrv.closePopup();
                                         if (scheduledLesson) {
-                                            LiveSessionSrv.startLiveSession(vm.student, scheduledLesson);
+                                            LiveSessionSrv.startLiveSession(this.student, scheduledLesson);
                                         } else {
-                                            LiveSessionUiSrv.showNoLessonScheduledPopup(vm.student.name)
+                                            LiveSessionUiSrv.showNoLessonScheduledPopup(this.student.name)
                                                 .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
                                         }
                                     });
                                 } else {
                                     LiveSessionUiSrv.closePopup();
-                                    showSessionModal();
+                                    this.showSessionModal();
                                 }
                             });
                     });
-                }
+                };
 
-                function liveSessionStateChanged(newLiveSessionState) {
-                    vm.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
-                }
+                this.liveSessionStateChanged = (newLiveSessionState) => {
+                    this.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
+                };
 
-                function endSession() {
+                this.endSession = () => {
                     LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
-                }
+                };
 
-
-                function getScheduledLesson() {
+                this.getScheduledLesson = () => {
                     let dataPromMap = {
                         liveSessionSettings: ZnkLessonNotesSrv.getLiveSessionSettings(),
                         educatorProfile: UserProfileService.getProfile()
                     };
                     return $q.all(dataPromMap).then(dataMap => {
-                        vm.liveSessionSettings = dataMap.liveSessionSettings;
-                        vm.educatorProfile = dataMap.educatorProfile;
-                        SESSION_DURATION = vm.liveSessionSettings ? vm.liveSessionSettings : SESSION_DURATION;
+                        this.liveSessionSettings = dataMap.liveSessionSettings;
+                        this.educatorProfile = dataMap.educatorProfile;
+                        SESSION_DURATION = this.liveSessionSettings ? this.liveSessionSettings : SESSION_DURATION;
                         let now = Date.now();
                         let calcStartTime = now - SESSION_DURATION.marginBeforeSessionStart;
                         let calcEndTime = now + SESSION_DURATION.marginAfterSessionStart;
@@ -115,14 +111,14 @@
                             endDate: calcEndTime
                         };
 
-                        return ZnkLessonNotesSrv.getLessonsByStudentIds([vm.student.uid], dateRange, vm.educatorProfile.uid)
+                        return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
                             .then(lessons => {
                                 return lessons.data && lessons.data.length ? lessons.data[0] : null;
                             }, err => $log.debug('getScheduledLesson: getLessonsByStudentIds Error: ', err));
                     });
 
 
-                }
+                };
             }
         });
 })(angular);

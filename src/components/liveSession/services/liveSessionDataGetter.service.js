@@ -7,52 +7,52 @@
 
             let _this = this;
 
-            function _getStorage() {
+            this._getStorage = () => {
                 return InfraConfigSrv.getGlobalStorage();
-            }
+            };
 
-            this.getLiveSessionDataPath = function (guid) {
+            this.getLiveSessionDataPath = (guid) => {
                 let LIVE_SESSION_ROOT_PATH = '/liveSession/';
                 return LIVE_SESSION_ROOT_PATH + guid;
             };
 
-            this.getLiveSessionDurationPath = function () {
+            this.getLiveSessionDurationPath = () => {
                 return '/settings/liveSessionDuration/';
             };
 
-            this.getUserLiveSessionRequestsPath  = function (userData) {
+            this.getUserLiveSessionRequestsPath  = (userData) => {
                 let appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
                 let USER_DATA_PATH = appName  + '/users/' + userData.uid;
                 return USER_DATA_PATH + '/liveSession';
             };
 
-            this.getLiveSessionData = function (liveSessionGuid) {
+            this.getLiveSessionData = (liveSessionGuid) => {
                 let liveSessionDataPath = _this.getLiveSessionDataPath(liveSessionGuid);
-                return _getStorage().then(function (storage) {
+                return this._getStorage().then((storage) => {
                     return storage.getAndBindToServer(liveSessionDataPath);
                 });
             };
 
-            this.getLiveSessionDuration = function () {
+            this.getLiveSessionDuration = () => {
                 let liveSessionDurationPath = _this.getLiveSessionDurationPath();
-                return _getStorage().then(function (storage) {
+                return this._getStorage().then((storage) => {
                     return storage.get(liveSessionDurationPath);
                 });
             };
 
-            this.getCurrUserLiveSessionRequests = function(){
-                return UserProfileService.getCurrUserId().then(function(currUid){
-                    return _getStorage().then(function(storage){
+            this.getCurrUserLiveSessionRequests = () => {
+                return UserProfileService.getCurrUserId().then(currUid => {
+                    return this._getStorage().then(storage => {
                         let currUserLiveSessionDataPath = ENV.firebaseAppScopeName + '/users/' + currUid + '/liveSession/active';
                         return storage.getAndBindToServer(currUserLiveSessionDataPath);
                     });
                 });
             };
 
-            this.getCurrUserLiveSessionData = function () {
-                return _this.getCurrUserLiveSessionRequests().then(function(currUserLiveSessionRequests){
+            this.getCurrUserLiveSessionData = () => {
+                return _this.getCurrUserLiveSessionRequests().then((currUserLiveSessionRequests) =>{
                     let liveSessionDataPromMap = {};
-                    angular.forEach(currUserLiveSessionRequests, function(isActive, guid){
+                    angular.forEach(currUserLiveSessionRequests, (isActive, guid) => {
                         if(isActive){
                             liveSessionDataPromMap[guid] = _this.getLiveSessionData(guid);
                         }
