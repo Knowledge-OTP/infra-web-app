@@ -11,11 +11,9 @@
             controller: function (UserLiveSessionStateEnum, $log) {
                 'ngInject';
 
-                let vm = this;
-
-                this.$onInit = function () {
-                    if (vm.userLiveSessionState) {
-                        vm.liveSessionCls = 'active-state';
+                this.$onInit = () => {
+                    if (this.userLiveSessionState) {
+                        this.liveSessionCls = 'active-state';
                     } else {
                         $log.error('liveSessionComponent: invalid state was provided');
                     }
