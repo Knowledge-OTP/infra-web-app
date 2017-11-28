@@ -39,6 +39,8 @@
             border-radius: 0;
             background-color: #ffffff;
             outline: 0;
+            text-transform: capitalize;
+
             &.attended {
                 color: $mantis;
             }

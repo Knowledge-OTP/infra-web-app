@@ -9524,7 +9524,8 @@ md-dialog.base {
       -webkit-appearance: none;
       border-radius: 0;
       background-color: #ffffff;
-      outline: 0; }
+      outline: 0;
+      text-transform: capitalize; }
       .lesson-details .field select.attended {
         color: #87ca4d; }
       .lesson-details .field select.canceled, .lesson-details .field select.missed {
@@ -9590,7 +9591,8 @@ md-dialog.base {
   width: 100%;
   margin: 20px 0; }
   .lesson-started-late .student-view, .lesson-started-late .teacher-view {
-    width: 100%;
+    width: 80%;
+    margin: 0 auto;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: justify;
@@ -9604,9 +9606,6 @@ md-dialog.base {
       .lesson-started-late .student-view-btn-group button, .lesson-started-late .teacher-view-btn-group button {
         width: 56px;
         margin: 0 5px; }
-  .lesson-started-late .teacher-view {
-    width: 80%;
-    margin: 0 auto; }
 
 .lesson-rating-popup {
   height: 100%;
@@ -9739,7 +9738,7 @@ md-dialog.base {
       .lesson-rating .bad-rating-wrapper .student-feedback .other {
         text-align: left; }
   .lesson-rating znk-lesson-started-late {
-    width: 80%;
+    width: 100%;
     margin-top: 15px; }
 
 .multiple-choice {
@@ -9780,7 +9779,7 @@ input[type="checkbox"] {
 
 md-dialog {
   border-radius: 15px;
-  overflow: hidden;
+  overflow: hidden !important;
   max-height: 90%; }
   md-dialog md-backdrop.md-opaque {
     background-color: #fafafa;

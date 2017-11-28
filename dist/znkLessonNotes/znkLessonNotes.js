@@ -156,10 +156,11 @@
                                 field.text = this.transformDate(this.lesson.date, 'DATE');
                                 break;
                             case `${this.nameSpace}.START_TIME`:
-                                field.text = this.transformDate(this.lesson.startTime, 'START_TIME');
+                                field.text = this.lesson.startTime ? this.transformDate(this.lesson.startTime, 'START_TIME') : null;
                                 break;
                             case `${this.nameSpace}.DURATION`:
-                                field.text = this.transformDate(this.lesson.endTime - this.lesson.startTime, 'DURATION');
+                                field.text = this.lesson.startTime && this.lesson.end ?
+                                    this.transformDate(this.lesson.endTime - this.lesson.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
                                 this.lessunStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
@@ -348,6 +349,8 @@
             controller: ["$log", "$translate", "UserTypeContextEnum", "ZnkLessonNotesSrv", function ($log, $translate, UserTypeContextEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
+                this.isStudentsMailSelected = false;
+                this.isParentsMailSelected = false;
                 this.studentsMails = [];
                 this.parentsMails = [];
                 this.mailsToSend = [];
@@ -376,7 +379,7 @@
                 };
 
                 this.emailSelected = (mailGroup, bool) => {
-                    if (mailGroup === UserTypeContextEnum.student) {
+                    if (mailGroup === UserTypeContextEnum.STUDENT.enum) {
                         this.mailsToSend = bool ? this.mailsToSend.concat(this.studentsMails) :
                             this.mailsToSend.filter( item => !this.studentsMails.includes( item ));
                         this.lesson.lessonNotes.sentMailToStudents = bool;
@@ -663,9 +666,10 @@
 
             this.updateLesson = (lessonToUpdate) => {
                 let updateLessonApi = `${schedulingApi}/updateLessons`;
-                return $http.post(updateLessonApi, [lessonToUpdate]).then(lessonArr => {
-                    return Promise.resolve(lessonArr[0]);
-                });
+                return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
+                    .then(lessonArr => {
+                        return Promise.resolve(lessonArr.data);
+                    });
             };
 
             this.getServiceList = () => {
@@ -696,12 +700,12 @@
 
                 // Todo: implement this fn to get the settings from {{firebase-app-root}}/settings/liveSessionDuration
                 const liveSessionDuration = {
-                    endAlertTime : 300000,
-                    extendTime : 900000,
-                    length : 2700000,
-                    lessonStartedLateTimeout : 300000,
-                    marginAfterSessionStart : 1800000,
-                    marginBeforeSessionStart : 900000
+                    endAlertTime: 300000,
+                    extendTime: 900000,
+                    length: 2700000,
+                    lessonStartedLateTimeout: 300000,
+                    marginAfterSessionStart: 1800000,
+                    marginBeforeSessionStart: 900000
                 };
                 return Promise.resolve(liveSessionDuration);
             };
@@ -714,7 +718,7 @@
 angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html",
     "<div class=\"lesson-details\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
-    "    <div class=\"field\" ng-repeat=\"field in vm.fields\">\n" +
+    "    <div class=\"field\" ng-repeat=\"field in vm.fields\" ng-if=\"field.text\">\n" +
     "        <div class=\"label\">{{field.label}}</div>\n" +
     "        <div class=\"text\" ng-if=\"field.label !== 'Status' || vm.userContext === vm.userTypeContextEnum.STUDENT.enum\">{{field.text}}</div>\n" +
     "        <select class=\"lesson-status\" ng-if=\"field.label === 'Status' && vm.userContext !== vm.userTypeContextEnum.STUDENT.enum\"\n" +
@@ -723,7 +727,6 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "                ng-change=\"vm.statusChanged(field, vm.lessunStatus)\">\n" +
     "        </select>\n" +
     "    </div>\n" +
-    "\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html",
@@ -830,18 +833,18 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    </div>\n" +
     "    <div class=\"checkbox-group\" ng-if=\"vm.studentsProfiles.length\">\n" +
     "        <div class=\"input-wrap\">\n" +
-    "            <input id=\"studensMail\" type=\"checkbox\" ng-model=\"vm.studensMail\"\n" +
-    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.STUDENT.enum, vm.studensMail)\">\n" +
+    "            <input id=\"studentsMail\" type=\"checkbox\" ng-model=\"vm.isStudentsMailSelected\"\n" +
+    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.STUDENT.enum, vm.isStudentsMailSelected)\">\n" +
     "            <ng-switch on=\"vm.studentsProfiles.length < 2\">\n" +
-    "                <label for=\"studensMail\" ng-switch-when=\"true\"\n" +
+    "                <label for=\"studentsMail\" ng-switch-when=\"true\"\n" +
     "                       translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.STUDENT_MAIL\"></label>\n" +
-    "                <label for=\"studensMail\" ng-switch-when=\"false\"\n" +
+    "                <label for=\"studentsMail\" ng-switch-when=\"false\"\n" +
     "                       translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.ALL_STUDENTS_MAIL\"></label>\n" +
     "            </ng-switch>\n" +
     "        </div>\n" +
     "        <div class=\"input-wrap\">\n" +
-    "            <input id=\"parentsMail\" type=\"checkbox\" ng-model=\"vm.parentsMail\"\n" +
-    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.PARENT.enum, vm.parentsMail)\">\n" +
+    "            <input id=\"parentsMail\" type=\"checkbox\" ng-model=\"vm.isParentsMailSelected\"\n" +
+    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.PARENT.enum, vm.isParentsMailSelected)\">\n" +
     "            <ng-switch on=\"vm.studentsProfiles.length < 2\">\n" +
     "                <label for=\"parentsMail\" ng-switch=\"\" ng-switch-when=\"true\"\n" +
     "                       translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.PARENT_MAIL\"></label>\n" +

@@ -12,6 +12,8 @@
             controller: function ($log, $translate, UserTypeContextEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
+                this.isStudentsMailSelected = false;
+                this.isParentsMailSelected = false;
                 this.studentsMails = [];
                 this.parentsMails = [];
                 this.mailsToSend = [];
@@ -40,7 +42,7 @@
                 };
 
                 this.emailSelected = (mailGroup, bool) => {
-                    if (mailGroup === UserTypeContextEnum.student) {
+                    if (mailGroup === UserTypeContextEnum.STUDENT.enum) {
                         this.mailsToSend = bool ? this.mailsToSend.concat(this.studentsMails) :
                             this.mailsToSend.filter( item => !this.studentsMails.includes( item ));
                         this.lesson.lessonNotes.sentMailToStudents = bool;

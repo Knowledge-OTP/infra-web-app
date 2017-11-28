@@ -32,7 +32,7 @@ input[type="checkbox"] {
 
 md-dialog {
     border-radius: 15px;
-    overflow: hidden;
+    overflow: hidden !important;
     max-height: 90%;
     md-backdrop {
         &.md-opaque {
