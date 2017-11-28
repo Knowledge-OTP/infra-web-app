@@ -9575,6 +9575,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
                     liveSessionData.startTime = _getRoundTime();
                     liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
+                    // update lesson in documentDB/cosmosDB
+                    _updateLesson(liveSessionData);
                     return liveSessionData.$save();
                 });
             };
@@ -9621,18 +9623,11 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                     _this._moveToArchive(data.liveSessionData);
 
-                    return LiveSessionUiSrv.isDarkFeaturesValid(data.liveSessionData.educatorId, data.liveSessionData.studentId)
-                        .then(isDarkFeaturesValid => {
-                            if (isDarkFeaturesValid) {
-                                return _updateLesson(data.liveSessionData).then(() => {
-                                    return data.storage.update(dataToSave);
-                                });
-                            } else {
-                                $log.debug('_updateLesson: darkFeatures in OFF');
-                                return data.storage.update(dataToSave);
-                            }
+                    // update lesson in documentDB/cosmosDB
+                    _updateLesson(data.liveSessionData);
 
-                        });
+                    return data.storage.update(dataToSave);
+
                 });
             };
 
@@ -9759,25 +9754,32 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
 
             function _updateLesson(liveSessionData) {
-                return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
-                    if (lesson.data.id) {
-                        // update lesson startTime, endTime and status
-                        lesson.data.startTime = liveSessionData.startTime;
-                        lesson.data.endTime = liveSessionData.endTime;
-                        lesson.data.status = LessonStatusEnum.ATTENDED.enum;
-                        lesson.data.lessonNotes = lesson.data.lessonNotes || {};
-                        lesson.data.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
-                        try {
-                            return ZnkLessonNotesSrv.updateLesson(lesson.data).then(updatedLesson => {
-                                $log.debug('_updateLesson: update lesson startTime & status. updatedLesson: ', updatedLesson);
+                return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                    .then(isDarkFeaturesValid => {
+                        if (isDarkFeaturesValid) {
+                            return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
+                                if (lesson.data.id) {
+                                    // update lesson startTime, endTime and status
+                                    lesson.data.startTime = lesson.data.startTime ? lesson.data.startTime : liveSessionData.startTime ? liveSessionData.startTime: null;
+                                    lesson.data.endTime = lesson.data.endTime? lesson.data.endTime : liveSessionData.endTime ? liveSessionData.endTime : null;
+                                    lesson.data.status = LessonStatusEnum.ATTENDED.enum;
+                                    lesson.data.lessonNotes = lesson.data.lessonNotes || {};
+                                    lesson.data.lessonNotes.status = lesson.data.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
+                                    try {
+                                        return ZnkLessonNotesSrv.updateLesson(lesson.data).then(updatedLesson => {
+                                            $log.debug('_updateLesson: update lesson startTime & status. updatedLesson: ', updatedLesson);
+                                        });
+                                    } catch (err) {
+                                        $log.error('_updateLesson: updateLesson failed. Error: ', err);
+                                    }
+                                } else {
+                                    $log.debug('_updateLesson: lessonId is required');
+                                }
                             });
-                        } catch (err) {
-                            $log.error('_updateLesson: updateLesson failed. Error: ', err);
+                        } else {
+                            $log.debug('_updateLesson: darkFeatures in OFF');
                         }
-                    } else {
-                        $log.debug('_updateLesson: lessonId is required');
-                    }
-                });
+                    });
             }
 
             function _getRoundTime() {
@@ -19382,10 +19384,11 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                                 field.text = this.transformDate(this.lesson.date, 'DATE');
                                 break;
                             case `${this.nameSpace}.START_TIME`:
-                                field.text = this.transformDate(this.lesson.startTime, 'START_TIME');
+                                field.text = this.lesson.startTime ? this.transformDate(this.lesson.startTime, 'START_TIME') : null;
                                 break;
                             case `${this.nameSpace}.DURATION`:
-                                field.text = this.transformDate(this.lesson.endTime - this.lesson.startTime, 'DURATION');
+                                field.text = this.lesson.startTime && this.lesson.end ?
+                                    this.transformDate(this.lesson.endTime - this.lesson.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
                                 this.lessunStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
@@ -19574,6 +19577,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             controller: ["$log", "$translate", "UserTypeContextEnum", "ZnkLessonNotesSrv", function ($log, $translate, UserTypeContextEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
+                this.isStudentsMailSelected = false;
+                this.isParentsMailSelected = false;
                 this.studentsMails = [];
                 this.parentsMails = [];
                 this.mailsToSend = [];
@@ -19602,7 +19607,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 };
 
                 this.emailSelected = (mailGroup, bool) => {
-                    if (mailGroup === UserTypeContextEnum.student) {
+                    if (mailGroup === UserTypeContextEnum.STUDENT.enum) {
                         this.mailsToSend = bool ? this.mailsToSend.concat(this.studentsMails) :
                             this.mailsToSend.filter( item => !this.studentsMails.includes( item ));
                         this.lesson.lessonNotes.sentMailToStudents = bool;
@@ -19941,7 +19946,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html",
     "<div class=\"lesson-details\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
-    "    <div class=\"field\" ng-repeat=\"field in vm.fields\">\n" +
+    "    <div class=\"field\" ng-repeat=\"field in vm.fields\" ng-if=\"field.text\">\n" +
     "        <div class=\"label\">{{field.label}}</div>\n" +
     "        <div class=\"text\" ng-if=\"field.label !== 'Status' || vm.userContext === vm.userTypeContextEnum.STUDENT.enum\">{{field.text}}</div>\n" +
     "        <select class=\"lesson-status\" ng-if=\"field.label === 'Status' && vm.userContext !== vm.userTypeContextEnum.STUDENT.enum\"\n" +
@@ -19950,7 +19955,6 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "                ng-change=\"vm.statusChanged(field, vm.lessunStatus)\">\n" +
     "        </select>\n" +
     "    </div>\n" +
-    "\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html",
@@ -20057,18 +20061,18 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    </div>\n" +
     "    <div class=\"checkbox-group\" ng-if=\"vm.studentsProfiles.length\">\n" +
     "        <div class=\"input-wrap\">\n" +
-    "            <input id=\"studensMail\" type=\"checkbox\" ng-model=\"vm.studensMail\"\n" +
-    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.STUDENT.enum, vm.studensMail)\">\n" +
+    "            <input id=\"studentsMail\" type=\"checkbox\" ng-model=\"vm.isStudentsMailSelected\"\n" +
+    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.STUDENT.enum, vm.isStudentsMailSelected)\">\n" +
     "            <ng-switch on=\"vm.studentsProfiles.length < 2\">\n" +
-    "                <label for=\"studensMail\" ng-switch-when=\"true\"\n" +
+    "                <label for=\"studentsMail\" ng-switch-when=\"true\"\n" +
     "                       translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.STUDENT_MAIL\"></label>\n" +
-    "                <label for=\"studensMail\" ng-switch-when=\"false\"\n" +
+    "                <label for=\"studentsMail\" ng-switch-when=\"false\"\n" +
     "                       translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.ALL_STUDENTS_MAIL\"></label>\n" +
     "            </ng-switch>\n" +
     "        </div>\n" +
     "        <div class=\"input-wrap\">\n" +
-    "            <input id=\"parentsMail\" type=\"checkbox\" ng-model=\"vm.parentsMail\"\n" +
-    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.PARENT.enum, vm.parentsMail)\">\n" +
+    "            <input id=\"parentsMail\" type=\"checkbox\" ng-model=\"vm.isParentsMailSelected\"\n" +
+    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.PARENT.enum, vm.isParentsMailSelected)\">\n" +
     "            <ng-switch on=\"vm.studentsProfiles.length < 2\">\n" +
     "                <label for=\"parentsMail\" ng-switch=\"\" ng-switch-when=\"true\"\n" +
     "                       translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.PARENT_MAIL\"></label>\n" +

@@ -44,6 +44,8 @@
                 return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then(function (liveSessionData) {
                     liveSessionData.startTime = _getRoundTime();
                     liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
+                    // update lesson in documentDB/cosmosDB
+                    _updateLesson(liveSessionData);
                     return liveSessionData.$save();
                 });
             };
@@ -90,18 +92,11 @@
 
                     _this._moveToArchive(data.liveSessionData);
 
-                    return LiveSessionUiSrv.isDarkFeaturesValid(data.liveSessionData.educatorId, data.liveSessionData.studentId)
-                        .then(isDarkFeaturesValid => {
-                            if (isDarkFeaturesValid) {
-                                return _updateLesson(data.liveSessionData).then(() => {
-                                    return data.storage.update(dataToSave);
-                                });
-                            } else {
-                                $log.debug('_updateLesson: darkFeatures in OFF');
-                                return data.storage.update(dataToSave);
-                            }
+                    // update lesson in documentDB/cosmosDB
+                    _updateLesson(data.liveSessionData);
 
-                        });
+                    return data.storage.update(dataToSave);
+
                 });
             };
 
@@ -228,25 +223,32 @@
 
 
             function _updateLesson(liveSessionData) {
-                return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
-                    if (lesson.data.id) {
-                        // update lesson startTime, endTime and status
-                        lesson.data.startTime = liveSessionData.startTime;
-                        lesson.data.endTime = liveSessionData.endTime;
-                        lesson.data.status = LessonStatusEnum.ATTENDED.enum;
-                        lesson.data.lessonNotes = lesson.data.lessonNotes || {};
-                        lesson.data.lessonNotes.status = LessonNotesStatusEnum.PENDING_NOTES.enum;
-                        try {
-                            return ZnkLessonNotesSrv.updateLesson(lesson.data).then(updatedLesson => {
-                                $log.debug('_updateLesson: update lesson startTime & status. updatedLesson: ', updatedLesson);
+                return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                    .then(isDarkFeaturesValid => {
+                        if (isDarkFeaturesValid) {
+                            return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
+                                if (lesson.data.id) {
+                                    // update lesson startTime, endTime and status
+                                    lesson.data.startTime = lesson.data.startTime ? lesson.data.startTime : liveSessionData.startTime ? liveSessionData.startTime: null;
+                                    lesson.data.endTime = lesson.data.endTime? lesson.data.endTime : liveSessionData.endTime ? liveSessionData.endTime : null;
+                                    lesson.data.status = LessonStatusEnum.ATTENDED.enum;
+                                    lesson.data.lessonNotes = lesson.data.lessonNotes || {};
+                                    lesson.data.lessonNotes.status = lesson.data.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
+                                    try {
+                                        return ZnkLessonNotesSrv.updateLesson(lesson.data).then(updatedLesson => {
+                                            $log.debug('_updateLesson: update lesson startTime & status. updatedLesson: ', updatedLesson);
+                                        });
+                                    } catch (err) {
+                                        $log.error('_updateLesson: updateLesson failed. Error: ', err);
+                                    }
+                                } else {
+                                    $log.debug('_updateLesson: lessonId is required');
+                                }
                             });
-                        } catch (err) {
-                            $log.error('_updateLesson: updateLesson failed. Error: ', err);
+                        } else {
+                            $log.debug('_updateLesson: darkFeatures in OFF');
                         }
-                    } else {
-                        $log.debug('_updateLesson: lessonId is required');
-                    }
-                });
+                    });
             }
 
             function _getRoundTime() {

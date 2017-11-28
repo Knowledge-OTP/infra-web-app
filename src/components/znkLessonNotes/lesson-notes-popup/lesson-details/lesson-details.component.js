@@ -73,10 +73,11 @@
                                 field.text = this.transformDate(this.lesson.date, 'DATE');
                                 break;
                             case `${this.nameSpace}.START_TIME`:
-                                field.text = this.transformDate(this.lesson.startTime, 'START_TIME');
+                                field.text = this.lesson.startTime ? this.transformDate(this.lesson.startTime, 'START_TIME') : null;
                                 break;
                             case `${this.nameSpace}.DURATION`:
-                                field.text = this.transformDate(this.lesson.endTime - this.lesson.startTime, 'DURATION');
+                                field.text = this.lesson.startTime && this.lesson.end ?
+                                    this.transformDate(this.lesson.endTime - this.lesson.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
                                 this.lessunStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
