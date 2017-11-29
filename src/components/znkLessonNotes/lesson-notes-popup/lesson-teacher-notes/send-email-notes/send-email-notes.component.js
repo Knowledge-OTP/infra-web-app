@@ -51,12 +51,9 @@
                             this.mailsToSend.filter( item => !this.parentsMails.includes( item ));
                         this.lesson.lessonNotes.sentMailToParents = bool;
                     }
+                    ZnkLessonNotesSrv._mailsToSend = this.mailsToSend;
                 };
 
-                this.sendEmail = () => {
-                    this.lesson.lessonNotes.sendMailTime = new Date().getTime();
-                    $log.debug(' mailsToSend: ', this.mailsToSend);
-                };
             }
         });
 })(angular);

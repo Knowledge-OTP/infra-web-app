@@ -813,18 +813,14 @@ md-dialog.base {
       .send-email-notes .checkbox-group .input-wrap label {
         text-transform: lowercase;
         margin-left: 5px; }
-  .send-email-notes .button-wrapper {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-        align-items: center;
-    margin-bottom: 20px; }
-    .send-email-notes .button-wrapper .text-muted {
-      font-family: lato;
-      margin-left: 20px;
-      opacity: 0.7;
-      font-style: italic;
-      font-size: 14px; }
+  .send-email-notes .text-muted {
+    font-family: lato;
+    margin-left: 20px;
+    opacity: 0.7;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center; }
 
 .lesson-started-late {
   width: 100%;

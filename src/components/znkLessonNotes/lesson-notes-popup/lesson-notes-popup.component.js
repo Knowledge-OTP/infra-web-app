@@ -20,20 +20,23 @@
                     this.lesson.lessonNotes.status =  this.lesson.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
                 };
 
-                this.save = () => {
+                this.submit = () => {
                     $log.debug('saving lesson : ', this.lesson);
                     this.showSpinner = true;
-                    // update lessonNotes status only if email sent
-                    if (this.lesson.lessonNotes.sendMailTime) {
-                        this.lesson.lessonNotes.status = LessonNotesStatusEnum.COMPLETE.enum;
-                    }
-                    ZnkLessonNotesSrv.updateLesson(this.lesson)
-                        .then(updatedLesson => {
-                            this.lesson = updatedLesson.data;
-                            this.showSpinner = false;
-                            this.closeModal();
-                        })
-                        .catch(err => $log.error('lessonNotesPopup: updateLesson failed. Error: ', err));
+                    ZnkLessonNotesSrv.sendEmail().then(() => {
+                        // update sendMailTime and lessonNotes status only if email sent
+                        this.lesson.lessonNotes.sendMailTime = new Date().getTime();
+                        this.lesson.lessonNotes.status = this.lesson.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
+                            LessonNotesStatusEnum.COMPLETE.enum : this.lesson.lessonNotes.status;
+                        ZnkLessonNotesSrv.updateLesson(this.lesson)
+                            .then(updatedLesson => {
+                                this.lesson = updatedLesson.data;
+                                this.showSpinner = false;
+                                this.closeModal();
+                            })
+                            .catch(err => $log.error('lessonNotesPopup: updateLesson failed. Error: ', err));
+                    }).catch(err => this.logger.log('lessonNotesPopup: sendEmail failed. Error: ', err));
+
                 };
 
                 this.closeModal = () => {

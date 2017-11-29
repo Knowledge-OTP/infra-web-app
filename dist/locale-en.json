@@ -600,7 +600,7 @@
         "REJECT": "Cancel"
     },
     "LESSON_NOTES": {
-        "SAVE": "Save",
+        "SUBMIT": "Submit",
         "DO_IT_LATER": "Do It Later",
         "LESSON_RATING_POPUP": {
             "TITLE": "How was this session?",

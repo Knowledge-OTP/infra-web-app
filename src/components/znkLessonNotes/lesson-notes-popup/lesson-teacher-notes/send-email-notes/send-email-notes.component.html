@@ -25,12 +25,8 @@
             </ng-switch>
         </div>
     </div>
-    <div class="button-wrapper">
-        <button type="button" class="btn-type-2" ng-click="vm.sendEmail()"
-                translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SEND"></button>
-        <div class="text-muted" ng-if="vm.lesson.lessonNotes.sendMailTime">
-            <span translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SENT_ON"></span>
-            <span> {{vm.lesson.lessonNotes.sendMailTime | date: 'MMM d, h:mm a'}}</span>
-        </div>
+    <div class="text-muted" ng-if="vm.lesson.lessonNotes.sendMailTime">
+        <span translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SENT_ON"></span>
+        <span> {{vm.lesson.lessonNotes.sendMailTime | date: 'MMM d, h:mm a'}}</span>
     </div>
 </div>

@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        function ($rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
+        function ($log, $rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -10,6 +10,8 @@
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
             let liveSessionDurationPath = '/settings/liveSessionDuration/';
+
+            this._mailsToSend = [];
 
             this.getLessonById = (lessonId) => {
                 let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
@@ -69,7 +71,11 @@
                 return Promise.resolve(liveSessionDuration);
             };
 
-
+            this.sendEmail = () => {
+                // TODO: implement sendEmail
+                $log.debug('mailsToSend: ', this._mailsToSend);
+                return Promise.resolve('mail sent');
+            };
         }
     );
 })(angular);
