@@ -12795,7 +12795,6 @@ angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.notification', [
-        'znk.infra-web-app.planNotification',
         'znk.infra.auth',
         'znk.infra.storage'
     ]);
@@ -12820,7 +12819,7 @@ angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.notification').run(
-        ["$log", "InfraConfigSrv", "NotificationService", "AuthService", "NotificationTypeEnum", "PlanNotificationService", function ($log, InfraConfigSrv, NotificationService, AuthService, NotificationTypeEnum, PlanNotificationService) {
+        ["$log", "InfraConfigSrv", "NotificationService", "AuthService", function ($log, InfraConfigSrv, NotificationService, AuthService) {
             'ngInject';
 
             AuthService.getAuth().then(authData => {
@@ -12833,9 +12832,6 @@ angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($
                 _getStorage().then(function (storage) {
                     // clear the pending path for user
                     storage.set(pathPending, {}).then(function () {
-                        // start listen to plan notifications
-                        NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
-                        PlanNotificationService.checkPlanNotification();
                         initFirebaseChildAddedEvents(storage);
                     });
                 }).catch(function (error) {

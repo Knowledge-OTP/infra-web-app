@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.notification').run(
-        function ($log, InfraConfigSrv, NotificationService, AuthService, NotificationTypeEnum, PlanNotificationService) {
+        function ($log, InfraConfigSrv, NotificationService, AuthService) {
             'ngInject';
 
             AuthService.getAuth().then(authData => {
@@ -15,9 +15,6 @@
                 _getStorage().then(function (storage) {
                     // clear the pending path for user
                     storage.set(pathPending, {}).then(function () {
-                        // start listen to plan notifications
-                        NotificationService.on(NotificationTypeEnum.PLAN_PENDING, PlanNotificationService.newPlanNotification);
-                        PlanNotificationService.checkPlanNotification();
                         initFirebaseChildAddedEvents(storage);
                     });
                 }).catch(function (error) {
