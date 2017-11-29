@@ -9,7 +9,8 @@
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html',
             controllerAs: 'vm',
-            controller: function ($log, $mdDialog, $translate, ZnkLessonNotesSrv, UserTypeContextEnum, LessonNotesStatusEnum, ZnkToastSrv) {
+            controller: function ($log, $mdDialog, $translate, ZnkLessonNotesSrv, UserTypeContextEnum, LessonStatusEnum,
+                                  LessonNotesStatusEnum, ZnkToastSrv) {
                 'ngInject';
 
                 this.$onInit = () => {
@@ -25,6 +26,9 @@
                     this.showSpinner = true;
                     ZnkLessonNotesSrv.sendEmail()
                         .then(() => {
+                            // update lesson status
+                            this.lesson.status = this.lesson.status === LessonStatusEnum.SCHEDULED.enum ?
+                                LessonStatusEnum.ATTENDED.enum : this.lesson.status;
                             // update sendMailTime and lessonNotes status only if email sent
                             this.lesson.lessonNotes.sendMailTime = new Date().getTime();
                             this.lesson.lessonNotes.status = this.lesson.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?

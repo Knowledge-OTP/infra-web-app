@@ -52,9 +52,7 @@
             ["$mdToast", function ($mdToast) {
                 'ngInject';
 
-                var self = this;
-
-                self.showToast = function (type, msg, options) {
+                this.showToast = (type, msg, options) => {
                     options = options || {};
 
                     $mdToast.show({
@@ -68,7 +66,7 @@
                     });
                 };
 
-                self.hideToast = function() {
+                this.hideToast = () => {
                     $mdToast.hide();
                 };
             }]
