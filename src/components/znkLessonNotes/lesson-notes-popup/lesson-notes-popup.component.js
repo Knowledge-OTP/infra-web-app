@@ -22,28 +22,39 @@
                 };
 
                 this.submit = () => {
-                    $log.debug('saving lesson : ', this.lesson);
                     this.showSpinner = true;
-                    ZnkLessonNotesSrv.sendEmail()
-                        .then(() => {
-                            // update lesson status
-                            this.lesson.status = this.lesson.status === LessonStatusEnum.SCHEDULED.enum ?
-                                LessonStatusEnum.ATTENDED.enum : this.lesson.status;
-                            // update sendMailTime and lessonNotes status only if email sent
-                            this.lesson.lessonNotes.sendMailTime = new Date().getTime();
-                            this.lesson.lessonNotes.status = this.lesson.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
-                                LessonNotesStatusEnum.COMPLETE.enum : this.lesson.lessonNotes.status;
-                            this.saveLesson();
-                        })
-                        .catch(err => {
-                            $log.error('lessonNotesPopup: sendEmail failed. Error: ', err);
-                            let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.SEND_MAIL_FAILED');
-                            translationsProm.then(message => {
-                                ZnkToastSrv.showToast('error', message);
+                    if (ZnkLessonNotesSrv._mailsToSend.length > 0) {
+                        ZnkLessonNotesSrv.sendEmails(this.lesson)
+                            .then(() => {
+                                let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_EMAIL_SENT');
+                                translationsProm.then(message => {
+                                    ZnkToastSrv.showToast('success', message);
+                                });
+                                // update lesson status
+                                this.lesson.status = this.lesson.status === LessonStatusEnum.SCHEDULED.enum ?
+                                    LessonStatusEnum.ATTENDED.enum : this.lesson.status;
+                                // update sendMailTime and lessonNotes status only if email sent
+                                this.lesson.lessonNotes.sendMailTime = new Date().getTime();
+                                this.lesson.lessonNotes.status = this.lesson.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
+                                    LessonNotesStatusEnum.COMPLETE.enum : this.lesson.lessonNotes.status;
+                                this.saveLesson();
+                            })
+                            .catch(err => {
+                                $log.error('lessonNotesPopup: sendEmail failed. Error: ', err);
+                                let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.SEND_MAIL_FAILED');
+                                translationsProm.then(message => {
+                                    ZnkToastSrv.showToast('error', message);
+                                });
+                                this.doItLater();
                             });
-                            this.doItLater();
+                    } else {
+                        $log.error('lessonNotesPopup: At list one email is required');
+                        let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.NO_MAIL');
+                        translationsProm.then(message => {
+                            ZnkToastSrv.showToast('error', message);
                         });
-
+                        this.doItLater();
+                    }
                 };
 
                 this.doItLater = () => {
@@ -51,10 +62,15 @@
                 };
 
                 this.saveLesson = () => {
+                    $log.debug('saving lesson : ', this.lesson);
                     ZnkLessonNotesSrv.updateLesson(this.lesson)
                         .then(updatedLesson => {
                             this.lesson = updatedLesson.data;
                             this.showSpinner = false;
+                            let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
+                            translationsProm.then(message => {
+                                ZnkToastSrv.showToast('success', message);
+                            });
                             $mdDialog.cancel();
                         })
                         .catch(err => {
