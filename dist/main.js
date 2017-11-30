@@ -9466,7 +9466,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 };
 
                 this.startSession = (sessionSubject) => {
-                    let lessonData = { topicId: sessionSubject };
+                    let lessonData = { topicId: `topic_${sessionSubject}` };
                     LiveSessionSrv.startLiveSession(this.student, lessonData);
                 };
             }]
