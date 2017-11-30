@@ -1,21 +1,13 @@
 <div class="lesson-notes-popup" ng-if="vm.lesson">
 
-    <!--TODO: create component-->
-
-    <div class="top-icon-wrap">
-        <div class="top-icon">
-            <div class="round-icon-wrap">
-                <svg-icon name="znkLessonNotes-zoe-new-record"></svg-icon>
-            </div>
+    <div class="znk-popup-header">
+        <div class="icon-wrapper">
+            <svg-icon name="znkLessonNotes-zoe-new-record"></svg-icon>
         </div>
-    </div>
-
-    <md-toolbar>
-        <div class="close-popup-wrap" ng-click="vm.closeModal()">
+        <div class="close-popup-wrap" ng-click="vm.doItLater()">
             <svg-icon name="znkLessonNotes-close-popup"></svg-icon>
         </div>
-    </md-toolbar>
-    <!--TODO: create component-->
+    </div>
 
     <div class="content-wrapper" ng-if="vm.lesson">
         <div class="znk-scrollbar">

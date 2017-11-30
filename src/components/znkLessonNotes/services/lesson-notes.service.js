@@ -61,7 +61,7 @@
             this.sendEmails = (lesson) => {
                 if (this._mailsToSend.length) {
                     const mailPromArr = [];
-                    this.getServiceList().then(serviceList => {
+                    return this.getServiceList().then(serviceList => {
                         $log.debug('mailsToSend: ', this._mailsToSend);
                         const lessonService = serviceList.data[lesson.serviceId];
                         const topicName = lessonService.topics[lesson.topicId].name;
@@ -80,10 +80,14 @@
                             mailTemplateParams.studentFirstName = profile.firstName || '';
                             const emails = [];
                             const studentMail = profile.email || profile.userEmail || profile.authEmail;
-                            emails.push(studentMail);
+                            if (studentMail) {
+                                emails.push(studentMail);
+                            }
                             if (lesson.lessonNotes.sentMailToParents) {
-                                const parentMail = profile.studentInfo.parentInfo.email;
-                                emails.push(parentMail);
+                                const parentMail = profile.studentInfo && profile.studentInfo.parentInfo ? profile.studentInfo.parentInfo.email: null;
+                                if (parentMail) {
+                                    emails.push(parentMail);
+                                }
                             }
                             // TODO: implement sendEmail service
                             // Mailer.prototype.sendEmail = function(emails,params,templateName, imageAttachment, replyToEmail, dontSendEmail, options)

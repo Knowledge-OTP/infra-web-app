@@ -5,54 +5,38 @@
     width: 700px;
     border-radius: 15px;
 
-    .top-icon-wrap {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 40px;
-        .top-icon {
-            display: flex;
-            justify-content: center;
+    .znk-popup-header{
+        position: relative;
+        height: 33px;
+        border-radius: 15px 15px 0 0;
+        background-color: $bgColor5;
 
-            .round-icon-wrap {
-                width: 76px;
-                height: 76px;
-                border-radius: 38px;
-                background-color: $bgColor5;
-                z-index: 9;
-                margin-top: -15px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+        .icon-wrapper{
+            @include dimension(76px, 76px);
+            border-radius: 50%;
+            @include absolute-position(-12px, 50%);
+            margin-right: -28.5px;
+            @include flex-middle;
+            background-color: $bgColor5;
+
+            svg-icon {
                 svg {
                     width: 38px;
                     height:38px;
                     fill: $bgColor3;
                 }
-
-
             }
-        }
-    }
-
-    md-toolbar {
-        height: 40px;
-        max-height: 40px;
-        min-height: 40px;
-
-        &:not(.md-menu-toolbar) {
-            background-color: $bgColor5;
         }
 
         .close-popup-wrap {
-            @include absolute-position(-19px, -19px);
+            @include absolute-position(10px, 10px);
             height: 14px;
             width: 14px;
             cursor: pointer;
             svg-icon svg {
                 height: 14px;
                 width: 14px;
-                stroke: $bgColor3;
+                fill: $bgColor3;
             }
         }
     }
