@@ -9314,6 +9314,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
                 };
+                let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                let educatorProfileProm = UserProfileService.getProfile();
 
                 this.$onInit = () => {
                     this.isLiveSessionActive = false;
@@ -9393,8 +9395,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                 this.getScheduledLesson = () => {
                     let dataPromMap = {
-                        liveSessionSettings: ZnkLessonNotesSrv.getLiveSessionSettings(),
-                        educatorProfile: UserProfileService.getProfile()
+                        liveSessionDuration: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
+                        educatorProfile: this.educatorProfile ? $q.when(this.educatorProfile) : educatorProfileProm
                     };
                     return $q.all(dataPromMap).then(dataMap => {
                         this.liveSessionSettings = dataMap.liveSessionSettings;
@@ -19844,7 +19846,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                     template: `<lesson-notes-popup lesson="lesson" user-context="userContext"
                         aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
                     scope: $rootScope,
-                    clickOutsideToClose: true,
+                    clickOutsideToClose: false,
                     escapeToClose: true
                 });
             };
@@ -19855,7 +19857,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                     template: `<lesson-rating-popup lesson="lesson"
                         aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
                     scope: $rootScope,
-                    clickOutsideToClose: true,
+                    clickOutsideToClose: false,
                     escapeToClose: true
                 });
             };
@@ -19954,7 +19956,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             this.sendEmails = (lesson) => {
                 if (this._mailsToSend.length) {
                     const mailPromArr = [];
-                    this.getServiceList().then(serviceList => {
+                    return this.getServiceList().then(serviceList => {
                         $log.debug('mailsToSend: ', this._mailsToSend);
                         const lessonService = serviceList.data[lesson.serviceId];
                         const topicName = lessonService.topics[lesson.topicId].name;
@@ -19973,10 +19975,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                             mailTemplateParams.studentFirstName = profile.firstName || '';
                             const emails = [];
                             const studentMail = profile.email || profile.userEmail || profile.authEmail;
-                            emails.push(studentMail);
+                            if (studentMail) {
+                                emails.push(studentMail);
+                            }
                             if (lesson.lessonNotes.sentMailToParents) {
-                                const parentMail = profile.studentInfo.parentInfo.email;
-                                emails.push(parentMail);
+                                const parentMail = profile.studentInfo && profile.studentInfo.parentInfo ? profile.studentInfo.parentInfo.email: null;
+                                if (parentMail) {
+                                    emails.push(parentMail);
+                                }
                             }
                             // TODO: implement sendEmail service
                             // Mailer.prototype.sendEmail = function(emails,params,templateName, imageAttachment, replyToEmail, dontSendEmail, options)
@@ -20013,22 +20019,14 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html",
     "<div class=\"lesson-notes-popup\" ng-if=\"vm.lesson\">\n" +
     "\n" +
-    "    <!--TODO: create component-->\n" +
-    "\n" +
-    "    <div class=\"top-icon-wrap\">\n" +
-    "        <div class=\"top-icon\">\n" +
-    "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"znkLessonNotes-zoe-new-record\"></svg-icon>\n" +
-    "            </div>\n" +
+    "    <div class=\"znk-popup-header\">\n" +
+    "        <div class=\"icon-wrapper\">\n" +
+    "            <svg-icon name=\"znkLessonNotes-zoe-new-record\"></svg-icon>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <md-toolbar>\n" +
-    "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"vm.doItLater()\">\n" +
     "            <svg-icon name=\"znkLessonNotes-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
-    "    </md-toolbar>\n" +
-    "    <!--TODO: create component-->\n" +
+    "    </div>\n" +
     "\n" +
     "    <div class=\"content-wrapper\" ng-if=\"vm.lesson\">\n" +
     "        <div class=\"znk-scrollbar\">\n" +
@@ -20223,12 +20221,15 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/svg/close-popup.svg",
-    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\">\n" +
-    "<path class=\"st0\"/>\n" +
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-1010.6 704.8 137.2 137.5\" style=\"enable-background:new -1010.6 704.8 137.2 137.5;\" xml:space=\"preserve\">\n" +
+    "<path class=\"st0\" d=\"M-412,214.5\"/>\n" +
     "<g>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "	<path class=\"st1\" d=\"M-879.4,842.3c-1.5,0-3.1-0.6-4.2-1.8l-125.2-125.3c-2.3-2.3-2.3-6.1,0-8.5c2.3-2.3,6.1-2.3,8.5,0l125.2,125.3\n" +
+    "		c2.3,2.3,2.3,6.1,0,8.5C-876.3,841.7-877.9,842.3-879.4,842.3z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-1004.6,842c-1.5,0-3.1-0.6-4.2-1.8c-2.3-2.3-2.3-6.1,0-8.5l125.2-125.2c2.3-2.3,6.1-2.3,8.5,0\n" +
+    "		c2.3,2.3,2.3,6.1,0,8.5l-125.2,125.2C-1001.5,841.4-1003.1,842-1004.6,842z\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
     "");
