@@ -130,10 +130,6 @@
                             });
                         }
 
-                        function stopTrackUserPresence() {
-
-                        }
-
                         function openHangouts() {
                             if (!scope.d.userProfile || !scope.d.userProfile.teacherInfo || !scope.d.userProfile.teacherInfo.hangoutsUri) {
                                 return;

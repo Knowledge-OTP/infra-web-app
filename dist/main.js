@@ -141,14 +141,19 @@
                         });
 
                         function endLiveSession() {
-                            if (liveSessionData) {
+                            function endSessionAndStopTrack(liveSessionData) {
                                 deleteStudentPath(liveSessionData.studentId);
                                 LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                                PresenceService.stopTrackUserPresence(liveSessionData.studentId);
+                                PresenceService.stopTrackUserPresence(liveSessionData.educatorId);
+                            }
+
+                            if (liveSessionData) {
+                                endSessionAndStopTrack(liveSessionData);
                             } else {
                                 LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
                                     if (liveSessionData) {
-                                        deleteStudentPath(liveSessionData.studentId);
-                                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                                        endSessionAndStopTrack(liveSessionData);
                                     }
                                 });
                             }
@@ -335,10 +340,6 @@
 
                         element.on('$destroy', function () {
                             destroyTimer();
-                            if (liveSessionData) {
-                                PresenceService.stopTrackUserPresence(liveSessionData.studentId);
-                                PresenceService.stopTrackUserPresence(liveSessionData.educatorId);
-                            }
                         });
 
                         function listenToCallsStatus(newCallsStatus) {
