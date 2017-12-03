@@ -18,7 +18,7 @@
                 };
 
                 this.startSession = (sessionSubject) => {
-                    let lessonData = { topicId: sessionSubject };
+                    let lessonData = { sessionSubject: sessionSubject };
                     LiveSessionSrv.startLiveSession(this.student, lessonData);
                 };
             }
