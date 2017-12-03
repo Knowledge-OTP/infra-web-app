@@ -11,6 +11,7 @@
             'znk.infra.analytics',
             'znk.infra.general',
             'znk.infra.svgIcon',
+            'znk.infra-web-app.znkToast',
             'znk.infra.config'
         ])
         .config([

@@ -31,6 +31,7 @@
                         .then(studentsProfiles => {
                             $log.debug(' studentsProfiles loaded: ', studentsProfiles);
                             this.studentsProfiles = studentsProfiles.data;
+                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles.data;
                             this.studentsProfiles.forEach(profile => {
                                 const studentMail = profile.email || profile.userEmail || profile.authEmail;
                                 this.studentsMails.push(studentMail);
@@ -51,12 +52,9 @@
                             this.mailsToSend.filter( item => !this.parentsMails.includes( item ));
                         this.lesson.lessonNotes.sentMailToParents = bool;
                     }
+                    ZnkLessonNotesSrv._mailsToSend = this.mailsToSend;
                 };
 
-                this.sendEmail = () => {
-                    this.lesson.lessonNotes.sendMailTime = new Date().getTime();
-                    $log.debug(' mailsToSend: ', this.mailsToSend);
-                };
             }
         });
 })(angular);

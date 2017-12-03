@@ -12,7 +12,7 @@
                     template: `<lesson-notes-popup lesson="lesson" user-context="userContext"
                         aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
                     scope: $rootScope,
-                    clickOutsideToClose: true,
+                    clickOutsideToClose: false,
                     escapeToClose: true
                 });
             };
@@ -23,7 +23,7 @@
                     template: `<lesson-rating-popup lesson="lesson"
                         aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
                     scope: $rootScope,
-                    clickOutsideToClose: true,
+                    clickOutsideToClose: false,
                     escapeToClose: true
                 });
             };

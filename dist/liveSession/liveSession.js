@@ -54,6 +54,8 @@
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
                 };
+                let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                let educatorProfileProm = UserProfileService.getProfile();
 
                 this.$onInit = () => {
                     this.isLiveSessionActive = false;
@@ -133,8 +135,8 @@
 
                 this.getScheduledLesson = () => {
                     let dataPromMap = {
-                        liveSessionSettings: ZnkLessonNotesSrv.getLiveSessionSettings(),
-                        educatorProfile: UserProfileService.getProfile()
+                        liveSessionDuration: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
+                        educatorProfile: this.educatorProfile ? $q.when(this.educatorProfile) : educatorProfileProm
                     };
                     return $q.all(dataPromMap).then(dataMap => {
                         this.liveSessionSettings = dataMap.liveSessionSettings;

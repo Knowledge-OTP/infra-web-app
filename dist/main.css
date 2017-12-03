@@ -9399,50 +9399,43 @@ md-dialog.base {
   overflow: visible;
   width: 700px;
   border-radius: 15px; }
-  .lesson-notes-popup .top-icon-wrap {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 40px; }
-    .lesson-notes-popup .top-icon-wrap .top-icon {
+  .lesson-notes-popup .znk-popup-header {
+    position: relative;
+    height: 33px;
+    border-radius: 15px 15px 0 0;
+    background-color: #0a9bad; }
+    .lesson-notes-popup .znk-popup-header .icon-wrapper {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      position: absolute;
+      top: -12px;
+      right: 50%;
+      margin-right: -28.5px;
       display: -ms-flexbox;
       display: flex;
       -ms-flex-pack: center;
-          justify-content: center; }
-      .lesson-notes-popup .top-icon-wrap .top-icon .round-icon-wrap {
-        width: 76px;
-        height: 76px;
-        border-radius: 38px;
-        background-color: #0a9bad;
-        z-index: 9;
-        margin-top: -15px;
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-pack: center;
-            justify-content: center;
-        -ms-flex-align: center;
-            align-items: center; }
-        .lesson-notes-popup .top-icon-wrap .top-icon .round-icon-wrap svg {
-          width: 38px;
-          height: 38px;
-          fill: #ffffff; }
-  .lesson-notes-popup md-toolbar {
-    height: 40px;
-    max-height: 40px;
-    min-height: 40px; }
-    .lesson-notes-popup md-toolbar:not(.md-menu-toolbar) {
+          justify-content: center;
+      -webkit-justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      -webkit-align-items: center;
       background-color: #0a9bad; }
-    .lesson-notes-popup md-toolbar .close-popup-wrap {
+      .lesson-notes-popup .znk-popup-header .icon-wrapper svg-icon svg {
+        width: 38px;
+        height: 38px;
+        fill: #ffffff; }
+    .lesson-notes-popup .znk-popup-header .close-popup-wrap {
       position: absolute;
-      top: -19px;
-      right: -19px;
+      top: 10px;
+      right: 10px;
       height: 14px;
       width: 14px;
       cursor: pointer; }
-      .lesson-notes-popup md-toolbar .close-popup-wrap svg-icon svg {
+      .lesson-notes-popup .znk-popup-header .close-popup-wrap svg-icon svg {
         height: 14px;
         width: 14px;
-        stroke: #ffffff; }
+        fill: #ffffff; }
   .lesson-notes-popup .content-wrapper {
     height: 95%;
     width: 700px; }
@@ -9574,18 +9567,14 @@ md-dialog.base {
       .send-email-notes .checkbox-group .input-wrap label {
         text-transform: lowercase;
         margin-left: 5px; }
-  .send-email-notes .button-wrapper {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-        align-items: center;
-    margin-bottom: 20px; }
-    .send-email-notes .button-wrapper .text-muted {
-      font-family: lato;
-      margin-left: 20px;
-      opacity: 0.7;
-      font-style: italic;
-      font-size: 14px; }
+  .send-email-notes .text-muted {
+    font-family: lato;
+    margin-left: 20px;
+    opacity: 0.7;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center; }
 
 .lesson-started-late {
   width: 100%;

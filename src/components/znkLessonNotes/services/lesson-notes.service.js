@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        function ($rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
+        function ($log, $rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -10,6 +10,9 @@
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
             let liveSessionDurationPath = '/settings/liveSessionDuration/';
+
+            this._mailsToSend = [];
+            this._studentsProfiles = [];
 
             this.getLessonById = (lessonId) => {
                 let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
@@ -50,26 +53,56 @@
             };
 
             this.getLiveSessionSettings = () => {
-                // // Todo: Firebase is not defined
-                if (false) {
-                    return InfraConfigSrv.getGlobalStorage().then(storage => {
-                        return storage.get(liveSessionDurationPath);
-                    });
-                }
-
-                // Todo: implement this fn to get the settings from {{firebase-app-root}}/settings/liveSessionDuration
-                const liveSessionDuration = {
-                    endAlertTime: 300000,
-                    extendTime: 900000,
-                    length: 2700000,
-                    lessonStartedLateTimeout: 300000,
-                    marginAfterSessionStart: 1800000,
-                    marginBeforeSessionStart: 900000
-                };
-                return Promise.resolve(liveSessionDuration);
+                return InfraConfigSrv.getGlobalStorage().then(storage => {
+                    return storage.get(liveSessionDurationPath);
+                });
             };
 
+            this.sendEmails = (lesson) => {
+                if (this._mailsToSend.length) {
+                    const mailPromArr = [];
+                    return this.getServiceList().then(serviceList => {
+                        $log.debug('mailsToSend: ', this._mailsToSend);
+                        const lessonService = serviceList.data[lesson.serviceId];
+                        const topicName = lessonService.topics[lesson.topicId].name;
+                        const mailTemplateParams = {
+                            date: lesson.date,
+                            startTime: lesson.startTime,
+                            service: lessonService.name,
+                            topic: topicName,
+                            status: lesson.status,
+                            educatorFirstName: lesson.educatorFirstName,
+                            educatorLastName: lesson.educatorLastName,
+                            educatorNotes: lesson.lessonNotes.educatorNotes
+                        };
 
+                        this._studentsProfiles.forEach(profile => {
+                            mailTemplateParams.studentFirstName = profile.firstName || '';
+                            const emails = [];
+                            const studentMail = profile.email || profile.userEmail || profile.authEmail;
+                            if (studentMail) {
+                                emails.push(studentMail);
+                            }
+                            if (lesson.lessonNotes.sentMailToParents) {
+                                const parentMail = profile.studentInfo && profile.studentInfo.parentInfo ? profile.studentInfo.parentInfo.email: null;
+                                if (parentMail) {
+                                    emails.push(parentMail);
+                                }
+                            }
+                            // TODO: implement sendEmail service
+                            // Mailer.prototype.sendEmail = function(emails,params,templateName, imageAttachment, replyToEmail, dontSendEmail, options)
+                            mailPromArr.push($http.post('MAILER_API', { emails: emails, params: mailTemplateParams }));
+                        });
+
+                        // return Promise.all(mailPromArr);  uncomment when mailer api is available
+                        return Promise.resolve('mail sent');
+
+                    });
+                } else {
+                    $log.error('sendEmails: At list one email is required');
+                    return Promise.reject('At list one email is required');
+                }
+            };
         }
     );
 })(angular);

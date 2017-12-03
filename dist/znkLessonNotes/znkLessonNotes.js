@@ -11,6 +11,7 @@
             'znk.infra.analytics',
             'znk.infra.general',
             'znk.infra.svgIcon',
+            'znk.infra-web-app.znkToast',
             'znk.infra.config'
         ])
         .config([
@@ -231,31 +232,78 @@
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html',
             controllerAs: 'vm',
-            controller: ["$log", "$mdDialog", "ZnkLessonNotesSrv", "UserTypeContextEnum", "LessonNotesStatusEnum", function($log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum, LessonNotesStatusEnum) {
+            controller: ["$log", "$mdDialog", "$translate", "ZnkLessonNotesSrv", "UserTypeContextEnum", "LessonStatusEnum", "LessonNotesStatusEnum", "ZnkToastSrv", function ($log, $mdDialog, $translate, ZnkLessonNotesSrv, UserTypeContextEnum, LessonStatusEnum,
+                                  LessonNotesStatusEnum, ZnkToastSrv) {
                 'ngInject';
 
                 this.$onInit = () => {
-                    $log.debug('lessonNotesPopup: Init with Lesson: ', this.lesson );
+                    $log.debug('lessonNotesPopup: Init with Lesson: ', this.lesson);
                     this.showSpinner = false;
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.lesson.lessonNotes = this.lesson.lessonNotes || {};
-                    this.lesson.lessonNotes.status =  this.lesson.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
+                    this.lesson.lessonNotes.status = this.lesson.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
                 };
 
-                this.save = () => {
-                    $log.debug('saving lesson : ', this.lesson);
+                this.submit = () => {
                     this.showSpinner = true;
+                    if (ZnkLessonNotesSrv._mailsToSend.length > 0) {
+                        ZnkLessonNotesSrv.sendEmails(this.lesson)
+                            .then(() => {
+                                let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_EMAIL_SENT');
+                                translationsProm.then(message => {
+                                    ZnkToastSrv.showToast('success', message);
+                                });
+                                // update lesson status
+                                this.lesson.status = this.lesson.status === LessonStatusEnum.SCHEDULED.enum ?
+                                    LessonStatusEnum.ATTENDED.enum : this.lesson.status;
+                                // update sendMailTime and lessonNotes status only if email sent
+                                this.lesson.lessonNotes.sendMailTime = new Date().getTime();
+                                this.lesson.lessonNotes.status = this.lesson.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
+                                    LessonNotesStatusEnum.COMPLETE.enum : this.lesson.lessonNotes.status;
+                                this.saveLesson();
+                            })
+                            .catch(err => {
+                                $log.error('lessonNotesPopup: sendEmail failed. Error: ', err);
+                                let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.SEND_MAIL_FAILED');
+                                translationsProm.then(message => {
+                                    ZnkToastSrv.showToast('error', message);
+                                });
+                                this.doItLater();
+                            });
+                    } else {
+                        $log.error('lessonNotesPopup: At list one email is required');
+                        let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.NO_MAIL');
+                        translationsProm.then(message => {
+                            ZnkToastSrv.showToast('error', message);
+                        });
+                        this.doItLater();
+                    }
+                };
+
+                this.doItLater = () => {
+                    this.saveLesson();
+                };
+
+                this.saveLesson = () => {
+                    $log.debug('saving lesson : ', this.lesson);
                     ZnkLessonNotesSrv.updateLesson(this.lesson)
                         .then(updatedLesson => {
                             this.lesson = updatedLesson.data;
                             this.showSpinner = false;
-                            this.closeModal();
+                            let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
+                            translationsProm.then(message => {
+                                ZnkToastSrv.showToast('success', message);
+                            });
+                            $mdDialog.cancel();
                         })
-                        .catch(err => $log.error('lessonNotesPopup: updateLesson failed. Error: ', err));
-                };
-
-                this.closeModal = () => {
-                    $mdDialog.cancel();
+                        .catch(err => {
+                            this.showSpinner = false;
+                            $log.error('lessonNotesPopup: updateLesson failed. Error: ', err);
+                            let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.UPDATE_LESSON_FAILED');
+                            translationsProm.then(message => {
+                                ZnkToastSrv.showToast('error', message);
+                            });
+                        });
                 };
             }]
         });
@@ -368,6 +416,7 @@
                         .then(studentsProfiles => {
                             $log.debug(' studentsProfiles loaded: ', studentsProfiles);
                             this.studentsProfiles = studentsProfiles.data;
+                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles.data;
                             this.studentsProfiles.forEach(profile => {
                                 const studentMail = profile.email || profile.userEmail || profile.authEmail;
                                 this.studentsMails.push(studentMail);
@@ -388,12 +437,9 @@
                             this.mailsToSend.filter( item => !this.parentsMails.includes( item ));
                         this.lesson.lessonNotes.sentMailToParents = bool;
                     }
+                    ZnkLessonNotesSrv._mailsToSend = this.mailsToSend;
                 };
 
-                this.sendEmail = () => {
-                    this.lesson.lessonNotes.sendMailTime = new Date().getTime();
-                    $log.debug(' mailsToSend: ', this.mailsToSend);
-                };
             }]
         });
 })(angular);
@@ -592,7 +638,7 @@
                     template: `<lesson-notes-popup lesson="lesson" user-context="userContext"
                         aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
                     scope: $rootScope,
-                    clickOutsideToClose: true,
+                    clickOutsideToClose: false,
                     escapeToClose: true
                 });
             };
@@ -603,7 +649,7 @@
                     template: `<lesson-rating-popup lesson="lesson"
                         aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
                     scope: $rootScope,
-                    clickOutsideToClose: true,
+                    clickOutsideToClose: false,
                     escapeToClose: true
                 });
             };
@@ -643,7 +689,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        ["$rootScope", "$rootElement", "$http", "ENV", "InfraConfigSrv", function ($rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "InfraConfigSrv", function ($log, $rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -651,6 +697,9 @@
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
             let liveSessionDurationPath = '/settings/liveSessionDuration/';
+
+            this._mailsToSend = [];
+            this._studentsProfiles = [];
 
             this.getLessonById = (lessonId) => {
                 let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
@@ -691,26 +740,56 @@
             };
 
             this.getLiveSessionSettings = () => {
-                // // Todo: Firebase is not defined
-                if (false) {
-                    return InfraConfigSrv.getGlobalStorage().then(storage => {
-                        return storage.get(liveSessionDurationPath);
-                    });
-                }
-
-                // Todo: implement this fn to get the settings from {{firebase-app-root}}/settings/liveSessionDuration
-                const liveSessionDuration = {
-                    endAlertTime: 300000,
-                    extendTime: 900000,
-                    length: 2700000,
-                    lessonStartedLateTimeout: 300000,
-                    marginAfterSessionStart: 1800000,
-                    marginBeforeSessionStart: 900000
-                };
-                return Promise.resolve(liveSessionDuration);
+                return InfraConfigSrv.getGlobalStorage().then(storage => {
+                    return storage.get(liveSessionDurationPath);
+                });
             };
 
+            this.sendEmails = (lesson) => {
+                if (this._mailsToSend.length) {
+                    const mailPromArr = [];
+                    return this.getServiceList().then(serviceList => {
+                        $log.debug('mailsToSend: ', this._mailsToSend);
+                        const lessonService = serviceList.data[lesson.serviceId];
+                        const topicName = lessonService.topics[lesson.topicId].name;
+                        const mailTemplateParams = {
+                            date: lesson.date,
+                            startTime: lesson.startTime,
+                            service: lessonService.name,
+                            topic: topicName,
+                            status: lesson.status,
+                            educatorFirstName: lesson.educatorFirstName,
+                            educatorLastName: lesson.educatorLastName,
+                            educatorNotes: lesson.lessonNotes.educatorNotes
+                        };
 
+                        this._studentsProfiles.forEach(profile => {
+                            mailTemplateParams.studentFirstName = profile.firstName || '';
+                            const emails = [];
+                            const studentMail = profile.email || profile.userEmail || profile.authEmail;
+                            if (studentMail) {
+                                emails.push(studentMail);
+                            }
+                            if (lesson.lessonNotes.sentMailToParents) {
+                                const parentMail = profile.studentInfo && profile.studentInfo.parentInfo ? profile.studentInfo.parentInfo.email: null;
+                                if (parentMail) {
+                                    emails.push(parentMail);
+                                }
+                            }
+                            // TODO: implement sendEmail service
+                            // Mailer.prototype.sendEmail = function(emails,params,templateName, imageAttachment, replyToEmail, dontSendEmail, options)
+                            mailPromArr.push($http.post('MAILER_API', { emails: emails, params: mailTemplateParams }));
+                        });
+
+                        // return Promise.all(mailPromArr);  uncomment when mailer api is available
+                        return Promise.resolve('mail sent');
+
+                    });
+                } else {
+                    $log.error('sendEmails: At list one email is required');
+                    return Promise.reject('At list one email is required');
+                }
+            };
         }]
     );
 })(angular);
@@ -732,22 +811,14 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html",
     "<div class=\"lesson-notes-popup\" ng-if=\"vm.lesson\">\n" +
     "\n" +
-    "    <!--TODO: create component-->\n" +
-    "\n" +
-    "    <div class=\"top-icon-wrap\">\n" +
-    "        <div class=\"top-icon\">\n" +
-    "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"znkLessonNotes-zoe-new-record\"></svg-icon>\n" +
-    "            </div>\n" +
+    "    <div class=\"znk-popup-header\">\n" +
+    "        <div class=\"icon-wrapper\">\n" +
+    "            <svg-icon name=\"znkLessonNotes-zoe-new-record\"></svg-icon>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <md-toolbar>\n" +
-    "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
+    "        <div class=\"close-popup-wrap\" ng-click=\"vm.doItLater()\">\n" +
     "            <svg-icon name=\"znkLessonNotes-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
-    "    </md-toolbar>\n" +
-    "    <!--TODO: create component-->\n" +
+    "    </div>\n" +
     "\n" +
     "    <div class=\"content-wrapper\" ng-if=\"vm.lesson\">\n" +
     "        <div class=\"znk-scrollbar\">\n" +
@@ -763,12 +834,12 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            <znk-lesson-teacher-notes lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-teacher-notes>\n" +
     "\n" +
     "            <div class=\"btn-group\">\n" +
-    "                <button type=\"button\" class=\"btn-type-link-gray znk-uppercase\" ng-click=\"vm.closeModal()\"\n" +
+    "                <button type=\"button\" class=\"btn-type-link-gray znk-uppercase\" ng-click=\"vm.doItLater()\"\n" +
     "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
     "                </button>\n" +
     "\n" +
-    "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.save()\">\n" +
-    "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SAVE\"></span>\n" +
+    "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
+    "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
     "                    <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
     "                </button>\n" +
     "            </div>\n" +
@@ -853,13 +924,9 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            </ng-switch>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"button-wrapper\">\n" +
-    "        <button type=\"button\" class=\"btn-type-2\" ng-click=\"vm.sendEmail()\"\n" +
-    "                translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SEND\"></button>\n" +
-    "        <div class=\"text-muted\" ng-if=\"vm.lesson.lessonNotes.sendMailTime\">\n" +
-    "            <span translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SENT_ON\"></span>\n" +
-    "            <span> {{vm.lesson.lessonNotes.sendMailTime | date: 'MMM d, h:mm a'}}</span>\n" +
-    "        </div>\n" +
+    "    <div class=\"text-muted\" ng-if=\"vm.lesson.lessonNotes.sendMailTime\">\n" +
+    "        <span translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SENT_ON\"></span>\n" +
+    "        <span> {{vm.lesson.lessonNotes.sendMailTime | date: 'MMM d, h:mm a'}}</span>\n" +
     "    </div>\n" +
     "</div>\n" +
     "");
@@ -946,12 +1013,15 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/svg/close-popup.svg",
-    "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
-    "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\">\n" +
-    "<path class=\"st0\"/>\n" +
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-1010.6 704.8 137.2 137.5\" style=\"enable-background:new -1010.6 704.8 137.2 137.5;\" xml:space=\"preserve\">\n" +
+    "<path class=\"st0\" d=\"M-412,214.5\"/>\n" +
     "<g>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"496.5\" x2=\"-467.4\" y2=\"621.8\"/>\n" +
-    "	<line class=\"st1\" x1=\"-592.6\" y1=\"621.5\" x2=\"-467.4\" y2=\"496.3\"/>\n" +
+    "	<path class=\"st1\" d=\"M-879.4,842.3c-1.5,0-3.1-0.6-4.2-1.8l-125.2-125.3c-2.3-2.3-2.3-6.1,0-8.5c2.3-2.3,6.1-2.3,8.5,0l125.2,125.3\n" +
+    "		c2.3,2.3,2.3,6.1,0,8.5C-876.3,841.7-877.9,842.3-879.4,842.3z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-1004.6,842c-1.5,0-3.1-0.6-4.2-1.8c-2.3-2.3-2.3-6.1,0-8.5l125.2-125.2c2.3-2.3,6.1-2.3,8.5,0\n" +
+    "		c2.3,2.3,2.3,6.1,0,8.5l-125.2,125.2C-1001.5,841.4-1003.1,842-1004.6,842z\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
     "");
