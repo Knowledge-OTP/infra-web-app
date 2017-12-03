@@ -372,7 +372,7 @@
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
-                            sessionSubject: lessonData.topicId,
+                            sessionSubject: this._getSessionSubject(lessonData),
                             lessonId: lessonData.id
                         };
 
@@ -393,6 +393,16 @@
                     });
 
                 });
+            };
+
+            this._getSessionSubject = (lesson) => {
+                console.log('_getSessionSubject Lesson : ', lesson);
+                if (lesson.sessionSubject) {
+                    return lesson.sessionSubject.id;
+                } else {
+                    let topicIdArr = lesson.topicId.split('_');
+                    return Number(topicIdArr[1]);
+                }
             };
 
             this._cleanRegisteredCbToActiveLiveSessionData = () => {
