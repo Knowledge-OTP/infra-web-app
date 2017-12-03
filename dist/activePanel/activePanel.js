@@ -282,6 +282,10 @@
 
                         element.on('$destroy', function () {
                             destroyTimer();
+                            if (liveSessionData) {
+                                PresenceService.stopTrackUserPresence(liveSessionData.studentId);
+                                PresenceService.stopTrackUserPresence(liveSessionData.educatorId);
+                            }
                         });
 
                         function listenToCallsStatus(newCallsStatus) {
