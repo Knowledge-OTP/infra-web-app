@@ -9496,6 +9496,22 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.liveSession').factory('MyZinkerzTopicMapEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['TOPIC_1', 1, 'topic_1'],
+                ['TOPIC_2', 2, 'topic_2']
+            ]);
+        }]
+    );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.liveSession').factory('UserLiveSessionStateEnum',
         ["EnumSrv", function (EnumSrv) {
             'ngInject';
@@ -9526,9 +9542,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionSrv',
-        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", "ZnkLessonNotesSrv", "LessonStatusEnum", "LessonNotesStatusEnum", "$window", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
+        ["UserProfileService", "InfraConfigSrv", "$q", "UtilitySrv", "LiveSessionDataGetterSrv", "LiveSessionStatusEnum", "ENV", "$log", "UserLiveSessionStateEnum", "LiveSessionUiSrv", "$interval", "CallsSrv", "CallsErrorSrv", "ZnkLessonNotesSrv", "LessonStatusEnum", "LessonNotesStatusEnum", "$window", "LiveSessionSubjectSrv", function (UserProfileService, InfraConfigSrv, $q, UtilitySrv, LiveSessionDataGetterSrv, LiveSessionStatusEnum,
                   ENV, $log, UserLiveSessionStateEnum, LiveSessionUiSrv, $interval, CallsSrv, CallsErrorSrv,
-                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, $window) {
+                  ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, $window, LiveSessionSubjectSrv) {
             'ngInject';
 
             let SESSION_DURATION = {
@@ -9896,7 +9912,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
-                            sessionSubject: this._getSessionSubject(lessonData),
+                            sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData),
                             lessonId: lessonData.id
                         };
 
@@ -9917,16 +9933,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     });
 
                 });
-            };
-
-            this._getSessionSubject = (lesson) => {
-                console.log('_getSessionSubject Lesson : ', lesson);
-                if (lesson.sessionSubject) {
-                    return lesson.sessionSubject.id;
-                } else {
-                    let topicIdArr = lesson.topicId.split('_');
-                    return Number(topicIdArr[1]);
-                }
             };
 
             this._cleanRegisteredCbToActiveLiveSessionData = () => {
@@ -10209,7 +10215,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             }
         };
 
-        this.$get = (UtilitySrv) => {
+        this.$get = (UtilitySrv, MyZinkerzTopicMapEnum) => {
             'ngInject';
 
             let LiveSessionSubjectSrv = {};
@@ -10223,6 +10229,20 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         iconName: 'liveSession-' + topicName + '-icon'
                     };
                 });
+            };
+
+            LiveSessionSubjectSrv.getSessionSubject = (lesson) => {
+                console.log('_getSessionSubject Lesson : ', lesson);
+                if (lesson.sessionSubject) {
+                    return lesson.sessionSubject.id;
+                } else {
+                    let topicIdNum = MyZinkerzTopicMapEnum[lesson.topicId.toUpperCase()].enum;
+                    if (angular.isDefined(topicIdNum)) {
+                        return topicIdNum;
+                    } else {
+                        throw new Error('Error: getSessionSubject: subjectId/topicId is undefined!');
+                    }
+                }
             };
 
             return LiveSessionSubjectSrv;
@@ -19928,7 +19948,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             };
 
             this.updateLesson = (lessonToUpdate) => {
-                let updateLessonApi = `${schedulingApi}/updateLessons`;
+                let updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
                     .then(lessonArr => {
                         return Promise.resolve(lessonArr.data);
