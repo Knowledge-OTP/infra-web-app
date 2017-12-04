@@ -11,7 +11,7 @@
             }
         };
 
-        this.$get = (UtilitySrv) => {
+        this.$get = (UtilitySrv, MyZinkerzTopicMapEnum) => {
             'ngInject';
 
             let LiveSessionSubjectSrv = {};
@@ -25,6 +25,20 @@
                         iconName: 'liveSession-' + topicName + '-icon'
                     };
                 });
+            };
+
+            LiveSessionSubjectSrv.getSessionSubject = (lesson) => {
+                console.log('_getSessionSubject Lesson : ', lesson);
+                if (lesson.sessionSubject) {
+                    return lesson.sessionSubject.id;
+                } else {
+                    let topicIdNum = MyZinkerzTopicMapEnum[lesson.topicId.toUpperCase()].enum;
+                    if (angular.isDefined(topicIdNum)) {
+                        return topicIdNum;
+                    } else {
+                        throw new Error('Error: getSessionSubject: subjectId/topicId is undefined!');
+                    }
+                }
             };
 
             return LiveSessionSubjectSrv;

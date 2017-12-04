@@ -27,7 +27,7 @@
             };
 
             this.updateLesson = (lessonToUpdate) => {
-                let updateLessonApi = `${schedulingApi}/updateLessons`;
+                let updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
                     .then(lessonArr => {
                         return Promise.resolve(lessonArr.data);
