@@ -1,8 +1,8 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController', ['userProfile', 'OnBoardingService', '$state', 'znkAnalyticsSrv',
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController',
         function (userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
-
+            'ngInject';
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.username = userProfile.nickname || '';
 
@@ -20,5 +20,5 @@
                 OnBoardingService.setOnBoardingStep(nextStep);
                 $state.go(nextState);
             };
-        }]);
+        });
 })(angular);

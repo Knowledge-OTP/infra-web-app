@@ -23,14 +23,12 @@
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.diagnostic'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
                 'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        });
 })(angular);

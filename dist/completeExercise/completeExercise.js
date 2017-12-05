@@ -20,15 +20,13 @@
         'znk.infra.stats',
         'znk.infra.estimatedScore',
         'znk.infra.znkSessionData'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'completeExercise-book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        }]);
 })();
 
 (function (angular) {
@@ -1355,40 +1353,38 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseCycleSrv',
-        function () {
-            var hooksObj = {};
+    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseCycleSrv', function () {
+        'ngInject';
+        var hooksObj = {};
 
-            this.setInvokeFunctions = function (_hooksObj) {
-                hooksObj = _hooksObj;
+        this.setInvokeFunctions = function (_hooksObj) {
+            hooksObj = _hooksObj;
+        };
+
+        this.$get = ["$log", "$injector", function ($log, $injector) {
+            var exerciseCycleSrv = {};
+
+            exerciseCycleSrv.invoke = function (methodName, data) {
+                var hook = hooksObj[methodName];
+                var fn;
+
+                if (angular.isDefined(hook)) {
+                    try {
+                        fn = $injector.invoke(hook);
+                    } catch (e) {
+                        $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: ' + e);
+                        return;
+                    }
+
+                    data = angular.isArray(data) ? data : [data];
+
+                    return fn.apply(null, data);
+                }
             };
 
-            this.$get = ["$log", "$injector", function ($log, $injector) {
-                'ngInject';
-                var exerciseCycleSrv = {};
-
-                exerciseCycleSrv.invoke = function (methodName, data) {                    
-                    var hook = hooksObj[methodName];
-                    var fn;
-
-                    if (angular.isDefined(hook)) {                      
-                        try {
-                            fn = $injector.invoke(hook);         
-                        } catch(e) {
-                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
-                            return;
-                        }
-
-                        data = angular.isArray(data) ? data : [data];
-                        
-                        return fn.apply(null, data);
-                    } 
-                };
-
-                return exerciseCycleSrv;
-            }];
-        }
-    );
+            return exerciseCycleSrv;
+        }];
+    });
 })(angular);
 
 angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {

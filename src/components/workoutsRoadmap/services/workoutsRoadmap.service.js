@@ -1,8 +1,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.workoutsRoadmap').provider('WorkoutsRoadmapSrv', [
+    angular.module('znk.infra-web-app.workoutsRoadmap').provider('WorkoutsRoadmapSrv',
         function () {
+            'ngInject';
             var _newSubjectToIgnoreGetter;
 
             this.setSubjectToIgnoreGetter = function (newWorkoutGeneratorGetter) {
@@ -15,7 +16,6 @@
             };
 
             this.$get = function ($injector, $log, $q, PersonalizationSrv) {
-                'ngInject';
 
                 var WorkoutsRoadmapSrv = {};
 
@@ -55,6 +55,5 @@
 
                 return WorkoutsRoadmapSrv;
             };
-        }
-    ]);
+        });
 })(angular);

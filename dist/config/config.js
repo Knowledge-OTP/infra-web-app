@@ -1,24 +1,19 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.config', []).config([
-        function(){}
-    ]);
+    angular.module('znk.infra-web-app.config', []);
 })(angular);
 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.config').provider('WebAppInfraConfigSrv', [
-        function () {
-            this.$get = [
-                function () {
+    angular.module('znk.infra-web-app.config').provider('WebAppInfraConfigSrv', function () {
+            'ngInject';
+            this.$get = function () {
                     var webAppInfraConfigSrv = {};
                     return webAppInfraConfigSrv;
-                }
-            ];
-        }
-    ]);
+                };
+        });
 })(angular);
 
 angular.module('znk.infra-web-app.config').run(['$templateCache', function($templateCache) {

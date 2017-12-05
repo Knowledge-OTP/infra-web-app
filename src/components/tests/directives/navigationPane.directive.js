@@ -14,7 +14,6 @@
                 templateUrl: 'components/tests/directives/navigationPane.template.html',
                 require: '?ngModel',
                 link: function (scope, element, attributes, ngModelCtrl) {
-
                     scope.vm = {};
 
                     scope.vm.ExamTypeEnum = ExamTypeEnum;

@@ -6,15 +6,13 @@
         'znk.infra.svgIcon',
         'znk.infra.config',
         'ngMaterial'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'diagnostic-intro-check-mark': 'components/diagnosticIntro/svg/diagnostic-intro-check-mark-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        }]);
 
 })(angular);
 
@@ -91,9 +89,9 @@ angular.module('znk.infra-web-app.diagnosticIntro').directive('diagnosticIntro',
 
 'use strict';
 
-angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv', [
+angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv',
     function DiagnosticIntroSrv() {
-
+        'ngInject';
         var _activeData;
 
         var _configMap;
@@ -106,11 +104,11 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             _configMap = configMap;
         };
 
-        this.$get = ['$injector', '$log', '$q', function($injector, $log, $q) {
+        this.$get = ["$injector", "$log", "$q", function($injector, $log, $q) {
             return {
                 getActiveData: function() {
                     if (!_activeData) {
-                        var errorMsg = 'DiagnosticIntroSrv: no activeData!'; 
+                        var errorMsg = 'DiagnosticIntroSrv: no activeData!';
                         $log.error(errorMsg);
                         return $q.reject(errorMsg);
                     }
@@ -126,7 +124,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
                 }
             };
         }];
-}]);
+});
 
 angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/diagnosticIntro/directives/diagnosticIntro.template.html",

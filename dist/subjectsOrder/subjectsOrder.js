@@ -1,20 +1,19 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.subjectsOrder', [
-    ]);
+    angular.module('znk.infra-web-app.subjectsOrder', []);
 })(angular);
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.subjectsOrder').provider('SubjectsSrv', [
+    angular.module('znk.infra-web-app.subjectsOrder').provider('SubjectsSrv',
         function () {
+            'ngInject';
             var _subjectOrderGetter;
             this.setSubjectOrder = function (subjectOrderGetter) {
                 _subjectOrderGetter = subjectOrderGetter;
             };
 
             this.$get = ["$q", "$log", "$injector", function ($q, $log, $injector) {
-                'ngInject';
                 var SubjectsSrv = {};
                 SubjectsSrv.getSubjectOrder = function () {
                     if (!_subjectOrderGetter) {
@@ -28,8 +27,7 @@
                 };
                 return SubjectsSrv;
             }];
-        }
-    ]);
+        });
 })(angular);
 
 angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {

@@ -20,13 +20,11 @@
         'znk.infra.stats',
         'znk.infra.estimatedScore',
         'znk.infra.znkSessionData'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'completeExercise-book-icon': 'components/completeExercise/assets/svg/book-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        });
 })();

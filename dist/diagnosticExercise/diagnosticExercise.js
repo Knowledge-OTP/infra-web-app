@@ -767,7 +767,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise').provider('WorkoutsDiagnosticFlow', [function () {
+    angular.module('znk.infra-web-app.diagnosticExercise').provider('WorkoutsDiagnosticFlow', function () {
+        'ngInject';
 
         var _diagnosticSettings;
 
@@ -775,8 +776,7 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -1111,7 +1111,7 @@
 
                 return workoutsDiagnosticFlowObjApi;
             }];
-    }]);
+    });
 
 })(angular);
 

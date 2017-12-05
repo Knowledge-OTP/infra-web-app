@@ -1,8 +1,8 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController',
         function ($state, OnBoardingService, znkAnalyticsSrv) {
-
+            'ngInject';
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
                 recommendedGoalsTitle: true,
@@ -28,5 +28,5 @@
                 OnBoardingService.setOnBoardingStep(nextStep);
                 $state.go(nextState);
             };
-        }]);
+        });
 })(angular);

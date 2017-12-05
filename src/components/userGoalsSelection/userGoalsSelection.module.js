@@ -9,9 +9,8 @@
         'ngMaterial',
         'ngTagsInput',
         'znk.infra-web-app.userGoals'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'user-goals-plus-icon': 'components/userGoalsSelection/svg/plus-icon.svg',
                 'user-goals-dropdown-arrow-icon': 'components/userGoalsSelection/svg/dropdown-arrow.svg',
@@ -21,8 +20,7 @@
                 'user-goals-search-icon': 'components/userGoalsSelection/svg/search-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        });
 
 })(angular);
 

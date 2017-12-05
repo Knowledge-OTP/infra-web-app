@@ -13,9 +13,9 @@
         'ngMaterial',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.diagnosticIntro'
-    ]).config([
-        'SvgIconSrvProvider', '$stateProvider',
-        function (SvgIconSrvProvider, $stateProvider) {
+    ]).config(
+        ["SvgIconSrvProvider", "$stateProvider", function (SvgIconSrvProvider, $stateProvider) {
+            'ngInject';
             var svgMap = {
                 'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg',
                 'on-boarding-target': 'components/onBoarding/svg/onboarding-target-icon.svg',
@@ -73,8 +73,7 @@
                     controller: 'OnBoardingTestToTakeController',
                     controllerAs: 'vm'
                 });
-        }
-    ]);
+        }]);
 
 })(angular);
 
@@ -119,9 +118,9 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function ($state, OnBoardingService, znkAnalyticsSrv) {
-
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController',
+        ["$state", "OnBoardingService", "znkAnalyticsSrv", function ($state, OnBoardingService, znkAnalyticsSrv) {
+            'ngInject';
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
                 recommendedGoalsTitle: true,
@@ -152,9 +151,9 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController', ['$state', 'OnBoardingService', 'SubjectEnum', 'CategoryService',
-        function ($state, OnBoardingService, SubjectEnum, CategoryService) {
-
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingIntroTestToTakeController',
+        ["$state", "OnBoardingService", "SubjectEnum", "CategoryService", function ($state, OnBoardingService, SubjectEnum, CategoryService) {
+            'ngInject';
             this.skipTestToTake = function () {
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.DIAGNOSTIC);
                 CategoryService.setUserSelectedLevel1Category(SubjectEnum.MATHLVL1.enum);
@@ -170,9 +169,9 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
-        function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
-
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController',
+        ["$state", "OnBoardingService", "userGoalsSelectionService", "znkAnalyticsSrv", "$timeout", function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
+            'ngInject';
             function _addEvent(clicked) {
                 znkAnalyticsSrv.eventTrack({
                     eventName: 'onBoardingSchoolsStep',
@@ -238,9 +237,9 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController', ['userProfile', 'OnBoardingService', '$state', 'znkAnalyticsSrv',
-        function (userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
-
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController',
+        ["userProfile", "OnBoardingService", "$state", "znkAnalyticsSrv", function (userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
+            'ngInject';
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.username = userProfile.nickname || '';
 
@@ -319,8 +318,9 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
-        this.$get = ['InfraConfigSrv', 'StorageSrv', function (InfraConfigSrv, StorageSrv) {
+    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', function () {
+        'ngInject';
+        this.$get = ["InfraConfigSrv", "StorageSrv", function (InfraConfigSrv, StorageSrv) {
             var self = this;
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
@@ -389,7 +389,7 @@
 
             return onBoardingServiceObj;
         }];
-    }]);
+    });
 })(angular);
 
 angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {

@@ -1,12 +1,10 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').config([
-        'ZnkEvaluatorSrvProvider',
+    angular.module('znk.infra-web-app.evaluator').config(
         function (ZnkEvaluatorSrvProvider) {
-
+            'ngInject';
             ZnkEvaluatorSrvProvider.shouldEvaluateQuestionFnGetter(function (purchaseService) {
-                'ngInject';
                 return function(question) {
                     return purchaseService.hasProVersion().then(function(isPro) {
                         return isPro &&
@@ -18,7 +16,6 @@
             });
 
             ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
-                'ngInject';
                 return function(question, skipCheckingUserAnswer) {
                    return question.manualEvaluation && (
                            skipCheckingUserAnswer ? true : question.__questionStatus.userAnswer &&
@@ -28,7 +25,6 @@
             });
 
             ZnkEvaluatorSrvProvider.isEvaluateExerciseTypeFnGetter(function (ZnkEvaluatorSrv) {
-                'ngInject';
                 var evaluateQuestionTypeFn = ZnkEvaluatorSrv.isEvaluateQuestionTypeFn();
                 return function(questions) {
                     var isExerciseEvaluateType = false;
@@ -44,7 +40,6 @@
             });
 
             ZnkEvaluatorSrvProvider.getEvaluateStatusFnGetter(function (EvaluatorStatesEnum, purchaseService) {
-                'ngInject';
                 return function(evaluatorData) {
                     return purchaseService.hasProVersion().then(function(isPro) {
                         if (!isPro) {
@@ -57,7 +52,6 @@
                     });
                 };
             });
-        }
-    ]);
+        });
 
 })(angular);

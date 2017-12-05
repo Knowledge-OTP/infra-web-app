@@ -1,7 +1,8 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
-        this.$get = ['InfraConfigSrv', 'StorageSrv', function (InfraConfigSrv, StorageSrv) {
+    angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', function () {
+        'ngInject';
+        this.$get = function (InfraConfigSrv, StorageSrv) {
             var self = this;
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
@@ -69,6 +70,6 @@
             };
 
             return onBoardingServiceObj;
-        }];
-    }]);
+        };
+    });
 })(angular);
