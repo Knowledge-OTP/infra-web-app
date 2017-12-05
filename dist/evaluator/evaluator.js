@@ -339,28 +339,26 @@
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.evaluator').provider('ZnkEvaluateResultSrv',
-        function() {
-
+    angular.module('znk.infra-web-app.evaluator').provider('ZnkEvaluateResultSrv', function () {
+        'ngInject';
         var _evaluateResultByType;
         var _evaluateTypes;
 
-        this.setEvaluateResultByType = function(evaluateResultByType) {
+        this.setEvaluateResultByType = function (evaluateResultByType) {
             _evaluateResultByType = evaluateResultByType;
         };
 
-        this.setEvaluateTypes = function(evaluateTypes) {
+        this.setEvaluateTypes = function (evaluateTypes) {
             _evaluateTypes = evaluateTypes;
         };
 
-        this.$get = ["$q", "$injector", "$log", function($q, $injector, $log) {
-            'ngInject';
+        this.$get = ["$q", "$injector", "$log", function ($q, $injector, $log) {
 
             var evaluateSrvApi = {};
 
             function invokeEvaluateFn(evaluateFn, evaluateFnName) {
-                if(!evaluateFn) {
-                    var errMsg = 'ZnkEvaluateResultSrv: '+ evaluateFnName +' was not set';
+                if (!evaluateFn) {
+                    var errMsg = 'ZnkEvaluateResultSrv: ' + evaluateFnName + ' was not set';
                     $log.error(errMsg);
                     return $q.reject(errMsg);
                 }

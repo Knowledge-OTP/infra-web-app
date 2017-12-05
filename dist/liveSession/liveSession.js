@@ -781,17 +781,17 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
+        'ngInject';
         let isEnabled = true;
 
         this.enabled = (_isEnabled) => {
             isEnabled = _isEnabled;
         };
 
-        this.$get = (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", "ZnkLessonNotesSrv", "UserTypeContextEnum", "ZnkLessonNotesUiSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
                      UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
                      LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum,
-                     ZnkLessonNotesUiSrv) => {
-            'ngInject';
+                     ZnkLessonNotesUiSrv) {
 
             let currUid = null;
             let LiveSessionEventsSrv = {};
@@ -936,7 +936,7 @@
             };
 
             return LiveSessionEventsSrv;
-        };
+        }];
     });
 })(angular);
 
@@ -945,6 +945,7 @@
 
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
+        'ngInject';
         let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
         this.setLiveSessionTopics = (_topics) => {
@@ -953,8 +954,7 @@
             }
         };
 
-        this.$get = (UtilitySrv, MyZinkerzTopicMapEnum) => {
-            'ngInject';
+        this.$get = ["UtilitySrv", "MyZinkerzTopicMapEnum", function (UtilitySrv, MyZinkerzTopicMapEnum) {
 
             let LiveSessionSubjectSrv = {};
 
@@ -984,7 +984,7 @@
             };
 
             return LiveSessionSubjectSrv;
-        };
+        }];
     }]);
 })(angular);
 
@@ -992,10 +992,10 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv', function () {
+        'ngInject';
 
-        this.$get = ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
-                     ZnkToastSrv, LiveSessionDataGetterSrv, UserProfileService) => {
-            'ngInject';
+        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", "LiveSessionDataGetterSrv", "UserProfileService", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
+                     ZnkToastSrv, LiveSessionDataGetterSrv, UserProfileService) {
 
             let LiveSessionUiSrv = {};
             let childScope, liveSessionPhElement, readyProm;
@@ -1222,7 +1222,7 @@
             });
 
             return LiveSessionUiSrv;
-        };
+        }];
     });
 })(angular);
 

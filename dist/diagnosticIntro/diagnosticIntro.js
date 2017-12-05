@@ -104,7 +104,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             _configMap = configMap;
         };
 
-        this.$get = ['$injector', '$log', '$q', function($injector, $log, $q) {
+        this.$get = ["$injector", "$log", "$q", function($injector, $log, $q) {
             return {
                 getActiveData: function() {
                     if (!_activeData) {

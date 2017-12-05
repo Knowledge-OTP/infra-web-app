@@ -517,6 +517,7 @@
     };
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
+        'ngInject';
         var env = 'dev';
         this.setEnv = function (newEnv) {
             env = newEnv;
@@ -527,8 +528,6 @@
         };
 
         this.$get = ["$q", "$http", "$log", "$window", "$location", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, $location, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
-            'ngInject';
-
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {

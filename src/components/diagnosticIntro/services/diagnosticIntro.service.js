@@ -15,7 +15,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             _configMap = configMap;
         };
 
-        this.$get = ['$injector', '$log', '$q', function($injector, $log, $q) {
+        this.$get = function($injector, $log, $q) {
             return {
                 getActiveData: function() {
                     if (!_activeData) {
@@ -34,5 +34,5 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
                     return $q.when($injector.invoke(_configMap));
                 }
             };
-        }];
+        };
 });

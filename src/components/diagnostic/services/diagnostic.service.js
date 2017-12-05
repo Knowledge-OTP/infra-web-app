@@ -1,13 +1,13 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {
+        'ngInject';
         var _diagnosticExamIdGetter;
         this.setDiagnosticExamIdGetter = function(diagnosticExamIdGetter){
             _diagnosticExamIdGetter = diagnosticExamIdGetter;
         };
 
         this.$get = function($log, $q, ExerciseResultSrv, ExerciseStatusEnum, $injector){
-            'ngInject';
 
             var DiagnosticSrv = {};
 

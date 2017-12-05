@@ -3427,40 +3427,38 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseCycleSrv',
-        function () {
-            var hooksObj = {};
+    angular.module('znk.infra-web-app.completeExercise').provider('ExerciseCycleSrv', function () {
+        'ngInject';
+        var hooksObj = {};
 
-            this.setInvokeFunctions = function (_hooksObj) {
-                hooksObj = _hooksObj;
+        this.setInvokeFunctions = function (_hooksObj) {
+            hooksObj = _hooksObj;
+        };
+
+        this.$get = ["$log", "$injector", function ($log, $injector) {
+            var exerciseCycleSrv = {};
+
+            exerciseCycleSrv.invoke = function (methodName, data) {
+                var hook = hooksObj[methodName];
+                var fn;
+
+                if (angular.isDefined(hook)) {
+                    try {
+                        fn = $injector.invoke(hook);
+                    } catch (e) {
+                        $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: ' + e);
+                        return;
+                    }
+
+                    data = angular.isArray(data) ? data : [data];
+
+                    return fn.apply(null, data);
+                }
             };
 
-            this.$get = ["$log", "$injector", function ($log, $injector) {
-                'ngInject';
-                var exerciseCycleSrv = {};
-
-                exerciseCycleSrv.invoke = function (methodName, data) {                    
-                    var hook = hooksObj[methodName];
-                    var fn;
-
-                    if (angular.isDefined(hook)) {                      
-                        try {
-                            fn = $injector.invoke(hook);         
-                        } catch(e) {
-                            $log.error('exerciseCycleSrv invoke: faild to invoke hook! methodName: ' + methodName + 'e: '+ e);
-                            return;
-                        }
-
-                        data = angular.isArray(data) ? data : [data];
-                        
-                        return fn.apply(null, data);
-                    } 
-                };
-
-                return exerciseCycleSrv;
-            }];
-        }
-    );
+            return exerciseCycleSrv;
+        }];
+    });
 })(angular);
 
 angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
@@ -3675,15 +3673,12 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.config').provider('WebAppInfraConfigSrv',
-        function () {
+    angular.module('znk.infra-web-app.config').provider('WebAppInfraConfigSrv', function () {
             'ngInject';
-            this.$get = [
-                function () {
+            this.$get = function () {
                     var webAppInfraConfigSrv = {};
                     return webAppInfraConfigSrv;
-                }
-            ];
+                };
         });
 })(angular);
 
@@ -3704,13 +3699,13 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.diagnostic').provider('DiagnosticSrv', function () {
+        'ngInject';
         var _diagnosticExamIdGetter;
         this.setDiagnosticExamIdGetter = function(diagnosticExamIdGetter){
             _diagnosticExamIdGetter = diagnosticExamIdGetter;
         };
 
         this.$get = ["$log", "$q", "ExerciseResultSrv", "ExerciseStatusEnum", "$injector", function($log, $q, ExerciseResultSrv, ExerciseStatusEnum, $injector){
-            'ngInject';
 
             var DiagnosticSrv = {};
 
@@ -4544,8 +4539,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -5170,7 +5164,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
             _configMap = configMap;
         };
 
-        this.$get = ['$injector', '$log', '$q', function($injector, $log, $q) {
+        this.$get = ["$injector", "$log", "$q", function($injector, $log, $q) {
             return {
                 getActiveData: function() {
                     if (!_activeData) {
@@ -5981,28 +5975,26 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.evaluator').provider('ZnkEvaluateResultSrv',
-        function() {
-
+    angular.module('znk.infra-web-app.evaluator').provider('ZnkEvaluateResultSrv', function () {
+        'ngInject';
         var _evaluateResultByType;
         var _evaluateTypes;
 
-        this.setEvaluateResultByType = function(evaluateResultByType) {
+        this.setEvaluateResultByType = function (evaluateResultByType) {
             _evaluateResultByType = evaluateResultByType;
         };
 
-        this.setEvaluateTypes = function(evaluateTypes) {
+        this.setEvaluateTypes = function (evaluateTypes) {
             _evaluateTypes = evaluateTypes;
         };
 
-        this.$get = ["$q", "$injector", "$log", function($q, $injector, $log) {
-            'ngInject';
+        this.$get = ["$q", "$injector", "$log", function ($q, $injector, $log) {
 
             var evaluateSrvApi = {};
 
             function invokeEvaluateFn(evaluateFn, evaluateFnName) {
-                if(!evaluateFn) {
-                    var errMsg = 'ZnkEvaluateResultSrv: '+ evaluateFnName +' was not set';
+                if (!evaluateFn) {
+                    var errMsg = 'ZnkEvaluateResultSrv: ' + evaluateFnName + ' was not set';
                     $log.error(errMsg);
                     return $q.reject(errMsg);
                 }
@@ -10025,17 +10017,17 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
+        'ngInject';
         let isEnabled = true;
 
         this.enabled = (_isEnabled) => {
             isEnabled = _isEnabled;
         };
 
-        this.$get = (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+        this.$get = ["UserProfileService", "InfraConfigSrv", "$q", "StorageSrv", "ENV", "LiveSessionStatusEnum", "UserLiveSessionStateEnum", "$log", "LiveSessionUiSrv", "LiveSessionSrv", "LiveSessionDataGetterSrv", "ZnkLessonNotesSrv", "UserTypeContextEnum", "ZnkLessonNotesUiSrv", function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
                      UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
                      LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum,
-                     ZnkLessonNotesUiSrv) => {
-            'ngInject';
+                     ZnkLessonNotesUiSrv) {
 
             let currUid = null;
             let LiveSessionEventsSrv = {};
@@ -10180,7 +10172,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             };
 
             return LiveSessionEventsSrv;
-        };
+        }];
     });
 })(angular);
 
@@ -10189,6 +10181,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
+        'ngInject';
         let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
         this.setLiveSessionTopics = (_topics) => {
@@ -10197,8 +10190,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             }
         };
 
-        this.$get = (UtilitySrv, MyZinkerzTopicMapEnum) => {
-            'ngInject';
+        this.$get = ["UtilitySrv", "MyZinkerzTopicMapEnum", function (UtilitySrv, MyZinkerzTopicMapEnum) {
 
             let LiveSessionSubjectSrv = {};
 
@@ -10228,7 +10220,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             };
 
             return LiveSessionSubjectSrv;
-        };
+        }];
     }]);
 })(angular);
 
@@ -10236,10 +10228,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv', function () {
+        'ngInject';
 
-        this.$get = ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
-                     ZnkToastSrv, LiveSessionDataGetterSrv, UserProfileService) => {
-            'ngInject';
+        this.$get = ["$rootScope", "$timeout", "$compile", "$animate", "PopUpSrv", "$translate", "$q", "$log", "ENV", "ZnkToastSrv", "LiveSessionDataGetterSrv", "UserProfileService", function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
+                     ZnkToastSrv, LiveSessionDataGetterSrv, UserProfileService) {
 
             let LiveSessionUiSrv = {};
             let childScope, liveSessionPhElement, readyProm;
@@ -10466,7 +10458,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             });
 
             return LiveSessionUiSrv;
-        };
+        }];
     });
 })(angular);
 
@@ -11240,6 +11232,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     };
 
     angular.module('znk.infra-web-app.loginApp').provider('LoginAppSrv', function () {
+        'ngInject';
         var env = 'dev';
         this.setEnv = function (newEnv) {
             env = newEnv;
@@ -11250,8 +11243,6 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
         };
 
         this.$get = ["$q", "$http", "$log", "$window", "$location", "SatellizerConfig", "InvitationKeyService", "PromoCodeSrv", "AllEnvs", function ($q, $http, $log, $window, $location, SatellizerConfig, InvitationKeyService, PromoCodeSrv, AllEnvs) {
-            'ngInject';
-
             var LoginAppSrv = {};
 
             function _getAppEnvConfig(appContext) {
@@ -13982,6 +13973,7 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
 
     angular.module('znk.infra-web-app.promoCode').provider('PromoCodeSrv',
         ["$injector", function ($injector) {
+            'ngInject';
             var backendData = {};
             var _currentApp;
 
@@ -14006,8 +13998,6 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
             };
 
             this.$get = ["PROMO_CODE_STATUS", "$translate", "$http", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, PromoCodeTypeEnum) {
-                'ngInject';
-
                 var promoCodeSrv = {};
 
                 var promoCodeStatus;
@@ -18894,49 +18884,46 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.znkHeader').provider('znkHeaderSrv',
+    angular.module('znk.infra-web-app.znkHeader').provider('znkHeaderSrv', function () {
+        'ngInject';
+        var additionalNavMenuItems = [];
 
-        function () {
-            var additionalNavMenuItems = [];
+        this.addAdditionalNavMenuItems = function (additionalItems) {
+            if (!angular.isArray(additionalItems)) {
+                additionalNavMenuItems.push(additionalItems);
+            } else {
+                additionalNavMenuItems = additionalItems;
+            }
+        };
 
-            this.addAdditionalNavMenuItems = function (additionalItems) {
-                if (!angular.isArray(additionalItems)) {
-                    additionalNavMenuItems.push(additionalItems);
-                } else {
-                    additionalNavMenuItems = additionalItems;
-                }
-            };
+        this.$get = function () {
+            var navItemsArray = [];
 
-            this.$get = function () {
-                'ngInject';
-                var navItemsArray = [];
+            function addDefaultNavItem(_text, _goToState, _stateOpt) {
 
-                function addDefaultNavItem(_text, _goToState, _stateOpt) {
-
-                    var navItem = {
-                        text: _text,
-                        goToState: _goToState,
-                        stateOpt: _stateOpt
-                    };
-
-                    navItemsArray.push(navItem);
-                }
-
-                addDefaultNavItem('ZNK_HEADER.WORKOUTS', 'app.workouts.roadmap', { reload: true });
-                addDefaultNavItem('ZNK_HEADER.TESTS', 'app.tests.roadmap');
-                addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials');
-                addDefaultNavItem('ZNK_HEADER.PERFORMANCE', 'app.performance');
-                addDefaultNavItem('ZNK_HEADER.ETUTORING', 'app.eTutoring');
-
-                return {
-                    getAdditionalItems: function () {
-                        return navItemsArray.concat(additionalNavMenuItems);  // return array of default nav items with additional nav items
-                    }
+                var navItem = {
+                    text: _text,
+                    goToState: _goToState,
+                    stateOpt: _stateOpt
                 };
-            };
 
-        }
-    );
+                navItemsArray.push(navItem);
+            }
+
+            addDefaultNavItem('ZNK_HEADER.WORKOUTS', 'app.workouts.roadmap', {reload: true});
+            addDefaultNavItem('ZNK_HEADER.TESTS', 'app.tests.roadmap');
+            addDefaultNavItem('ZNK_HEADER.TUTORIALS', 'app.tutorials');
+            addDefaultNavItem('ZNK_HEADER.PERFORMANCE', 'app.performance');
+            addDefaultNavItem('ZNK_HEADER.ETUTORING', 'app.eTutoring');
+
+            return {
+                getAdditionalItems: function () {
+                    return navItemsArray.concat(additionalNavMenuItems);  // return array of default nav items with additional nav items
+                }
+            };
+        };
+
+    });
 })(angular);
 
 

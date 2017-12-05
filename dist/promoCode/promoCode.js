@@ -137,6 +137,7 @@
 
     angular.module('znk.infra-web-app.promoCode').provider('PromoCodeSrv',
         ["$injector", function ($injector) {
+            'ngInject';
             var backendData = {};
             var _currentApp;
 
@@ -161,8 +162,6 @@
             };
 
             this.$get = ["PROMO_CODE_STATUS", "$translate", "$http", "PromoCodeTypeEnum", function (PROMO_CODE_STATUS, $translate, $http, PromoCodeTypeEnum) {
-                'ngInject';
-
                 var promoCodeSrv = {};
 
                 var promoCodeStatus;
