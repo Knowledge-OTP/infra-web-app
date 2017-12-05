@@ -18,17 +18,15 @@
         'ui.grid.autoResize',
         'znk.infra.znkTooltip'
     ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
                 var svgMap = {
                     'adminProfile-icon': 'components/adminDashboard/components/eMetadata/svg/admin-profile-icon.svg',
                     'adminProfile-close-popup': 'components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg',
                     'admin-correct-icon': 'components/adminDashboard/svg/correct-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
+            }]);
 })(angular);
 
 (function (angular) {

@@ -9,9 +9,8 @@
         'ngMaterial',
         'ngTagsInput',
         'znk.infra-web-app.userGoals'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'user-goals-plus-icon': 'components/userGoalsSelection/svg/plus-icon.svg',
                 'user-goals-dropdown-arrow-icon': 'components/userGoalsSelection/svg/dropdown-arrow.svg',
@@ -21,8 +20,7 @@
                 'user-goals-search-icon': 'components/userGoalsSelection/svg/search-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        }]);
 
 })(angular);
 
@@ -321,8 +319,9 @@
 
 'use strict';
 
-angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q', '$mdDialog',
-    function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q, $mdDialog) {
+angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService',
+    ["InfraConfigSrv", "StorageSrv", "ENV", "$http", "UserGoalsService", "$q", "$mdDialog", function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q, $mdDialog) {
+        'ngInject';
         var schoolsPath = StorageSrv.variables.appUserSpacePath + '/dreamSchools';
 
         this.getAppSchoolsList = function () {

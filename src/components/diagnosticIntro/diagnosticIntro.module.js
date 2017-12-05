@@ -6,15 +6,13 @@
         'znk.infra.svgIcon',
         'znk.infra.config',
         'ngMaterial'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'diagnostic-intro-check-mark': 'components/diagnosticIntro/svg/diagnostic-intro-check-mark-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        });
 
 })(angular);
 

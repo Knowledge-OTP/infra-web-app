@@ -23,16 +23,14 @@
         'znk.infra-web-app.userGoals',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.diagnostic'
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'estimated-score-widget-goals': 'components/estimatedScoreWidget/svg/goals-top-icon.svg',
                 'estimated-score-widget-close-popup': 'components/estimatedScoreWidget/svg/estimated-score-widget-close-popup.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        }]);
 })(angular);
 
 /**
@@ -189,16 +187,15 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.estimatedScoreWidget').provider('EstimatedScoreWidgetSrv', [
+    angular.module('znk.infra-web-app.estimatedScoreWidget').provider('EstimatedScoreWidgetSrv',
         function () {
+            'ngInject';
             var _subjectOrderGetter;
             this.setSubjectOrder = function(subjectOrderGetter){
                 _subjectOrderGetter = subjectOrderGetter;
             };
 
             this.$get = ["$log", "$injector", "$q", function ($log, $injector, $q) {
-                'ngInject';
-
                 var EstimatedScoreWidgetSrv = {};
 
                 EstimatedScoreWidgetSrv.getSubjectOrder = function(){
@@ -213,8 +210,7 @@
 
                 return EstimatedScoreWidgetSrv;
             }];
-        }
-    ]);
+        });
 })(angular);
 
 angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {

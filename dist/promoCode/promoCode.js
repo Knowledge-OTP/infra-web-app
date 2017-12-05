@@ -2,17 +2,15 @@
     'use strict';
 
     angular.module('znk.infra-web-app.promoCode', [])
-        .config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'promo-code-arrow-icon': 'components/promoCode/svg/arrow-icon.svg',
                 'promo-code-close-icon': 'components/promoCode/svg/close-icon.svg',
                 'promo-code-correct-icon': 'components/promoCode/svg/correct-icon.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        }]);
 
 })(angular);
 
@@ -246,9 +244,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',['EnumSrv',
-        function(EnumSrv) {
-
+    angular.module('znk.infra-web-app.promoCode').service('PromoCodeTypeEnum',
+        ["EnumSrv", function(EnumSrv) {
+            'ngInject';
             var PromoCodeTypeEnum = new EnumSrv.BaseEnum([
                 ['FREE_LICENSE', 1, 'free license'],
                 ['ZINKERZ_EDUCATOR', 2, 'zinkerz educator'],

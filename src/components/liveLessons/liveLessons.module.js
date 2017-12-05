@@ -11,6 +11,7 @@
     ]).config([
         'SvgIconSrvProvider',
         function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'close-popup': 'components/liveLessons/svg/close-popup.svg',
                 'reschedule-icon': 'components/liveLessons/svg/reschedule-icon.svg',

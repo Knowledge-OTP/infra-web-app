@@ -1,16 +1,15 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.estimatedScoreWidget').provider('EstimatedScoreWidgetSrv', [
+    angular.module('znk.infra-web-app.estimatedScoreWidget').provider('EstimatedScoreWidgetSrv',
         function () {
+            'ngInject';
             var _subjectOrderGetter;
             this.setSubjectOrder = function(subjectOrderGetter){
                 _subjectOrderGetter = subjectOrderGetter;
             };
 
             this.$get = function ($log, $injector, $q) {
-                'ngInject';
-
                 var EstimatedScoreWidgetSrv = {};
 
                 EstimatedScoreWidgetSrv.getSubjectOrder = function(){
@@ -25,6 +24,5 @@
 
                 return EstimatedScoreWidgetSrv;
             };
-        }
-    ]);
+        });
 })(angular);

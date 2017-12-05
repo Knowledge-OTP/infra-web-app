@@ -10,8 +10,8 @@
 
 'use strict';
 
-angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [function() {
-
+angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', function() {
+    'ngInject';
     var _calcScoreFn;
 
     function _setCalcScoreFn(calcScoreFn) {
@@ -21,7 +21,6 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
     this.setCalcScoreFn = _setCalcScoreFn;
 
     this.$get = ["InfraConfigSrv", "StorageSrv", "$q", "$injector", function (InfraConfigSrv, StorageSrv, $q, $injector) {
-        'ngInject';
         var self = this;
         var goalsPath = StorageSrv.variables.appUserSpacePath + '/goals';
         var defaultSubjectScore = self.settings.defaultSubjectScore;
@@ -100,7 +99,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
 
         return userGoalsServiceObj;
     }];
-}]);
+});
 
 angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
 

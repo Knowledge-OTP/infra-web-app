@@ -161,8 +161,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase')
-        .controller('PurchaseDialogController',
-            ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
+        .controller('PurchaseDialogController', ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
                 'ngInject';
 
                 var vm = this;
@@ -191,7 +190,6 @@
                     vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
                 });
 
-
                 vm.close = function () {
                     $mdDialog.cancel();
                 };
@@ -201,9 +199,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.purchase').service('PurchaseStateEnum',['EnumSrv',
-        function(EnumSrv) {
-
+    angular.module('znk.infra-web-app.purchase').service('PurchaseStateEnum',
+        ["EnumSrv", function(EnumSrv) {
+            'ngInject';
             var PurchaseStateEnum = new EnumSrv.BaseEnum([
                 ['PENDING', 'pending', 'pending'],
                 ['PRO', 'pro', 'pro'],

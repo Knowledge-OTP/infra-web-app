@@ -18,9 +18,8 @@
     'use strict';
 
     angular.module('znk.infra-web-app.loginApp')
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
                 var svgMap = {
                     'form-envelope': 'components/loginApp/svg/form-envelope.svg',
                     'form-lock': 'components/loginApp/svg/form-lock.svg',
@@ -35,8 +34,7 @@
                     'microsoft-icon': 'components/loginApp/svg/microsoft.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
+            }]);
 })(angular);
 
 /**

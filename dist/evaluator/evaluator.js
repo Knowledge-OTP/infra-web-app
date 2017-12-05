@@ -14,12 +14,10 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').config([
-        'ZnkEvaluatorSrvProvider',
-        function (ZnkEvaluatorSrvProvider) {
-
-            ZnkEvaluatorSrvProvider.shouldEvaluateQuestionFnGetter(["purchaseService", function (purchaseService) {
-                'ngInject';
+    angular.module('znk.infra-web-app.evaluator').config(
+        ["ZnkEvaluatorSrvProvider", function (ZnkEvaluatorSrvProvider) {
+            'ngInject';
+            ZnkEvaluatorSrvProvider.shouldEvaluateQuestionFnGetter(function (purchaseService) {
                 return function(question) {
                     return purchaseService.hasProVersion().then(function(isPro) {
                         return isPro &&
@@ -28,10 +26,9 @@
                             question.__questionStatus.userAnswer !== true;
                     });
                 };
-            }]);
+            });
 
             ZnkEvaluatorSrvProvider.isEvaluateQuestionTypeFnGetter(function () {
-                'ngInject';
                 return function(question, skipCheckingUserAnswer) {
                    return question.manualEvaluation && (
                            skipCheckingUserAnswer ? true : question.__questionStatus.userAnswer &&
@@ -40,8 +37,7 @@
                 };
             });
 
-            ZnkEvaluatorSrvProvider.isEvaluateExerciseTypeFnGetter(["ZnkEvaluatorSrv", function (ZnkEvaluatorSrv) {
-                'ngInject';
+            ZnkEvaluatorSrvProvider.isEvaluateExerciseTypeFnGetter(function (ZnkEvaluatorSrv) {
                 var evaluateQuestionTypeFn = ZnkEvaluatorSrv.isEvaluateQuestionTypeFn();
                 return function(questions) {
                     var isExerciseEvaluateType = false;
@@ -54,10 +50,9 @@
                     }
                     return isExerciseEvaluateType;
                 };
-            }]);
+            });
 
-            ZnkEvaluatorSrvProvider.getEvaluateStatusFnGetter(["EvaluatorStatesEnum", "purchaseService", function (EvaluatorStatesEnum, purchaseService) {
-                'ngInject';
+            ZnkEvaluatorSrvProvider.getEvaluateStatusFnGetter(function (EvaluatorStatesEnum, purchaseService) {
                 return function(evaluatorData) {
                     return purchaseService.hasProVersion().then(function(isPro) {
                         if (!isPro) {
@@ -69,24 +64,21 @@
                         }
                     });
                 };
-            }]);
-        }
-    ]);
+            });
+        }]);
 
 })(angular);
 
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    angular.module('znk.infra-web-app.evaluator').config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+            'ngInject';
             var svgMap = {
                 'evaluator-star': 'components/evaluator/svg/star.svg'
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
-        }
-    ]);
+        }]);
 
 })(angular);
 
@@ -291,9 +283,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.evaluator').service('EvaluatorStatesEnum', ['EnumSrv',
-        function(EnumSrv) {
-
+    angular.module('znk.infra-web-app.evaluator').service('EvaluatorStatesEnum',
+        ["EnumSrv", function(EnumSrv) {
+            'ngInject';
             var EvaluatorStatesEnum = new EnumSrv.BaseEnum([
                 ['NOT_PURCHASE', 1, 'not purchase'],
                 ['PENDING', 2, 'pending'],

@@ -1,8 +1,8 @@
 (function (angular) {
     'use strict';
-    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
+    angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController',
         function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
-
+            'ngInject';
             function _addEvent(clicked) {
                 znkAnalyticsSrv.eventTrack({
                     eventName: 'onBoardingSchoolsStep',
@@ -32,6 +32,6 @@
             this.skipSelection = function () {
                 _goToGoalsState([], 'I don\'t know yet');
             };
-    }]);
+    });
 })(angular);
 

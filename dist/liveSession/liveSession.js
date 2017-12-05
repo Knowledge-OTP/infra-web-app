@@ -22,17 +22,15 @@
             'znk.infra.calls',
             'znk.infra-web-app.znkLessonNotes'
         ])
-        .config([
-            'SvgIconSrvProvider',
-            function (SvgIconSrvProvider) {
+        .config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+                'ngInject';
                 let svgMap = {
                     'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
                     'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
                     'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
-            }
-        ]);
+            }]);
 })(angular);
 
 (function (angular) {

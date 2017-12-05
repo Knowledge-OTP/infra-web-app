@@ -19,15 +19,13 @@
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.subjectsOrder'
 
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(function (SvgIconSrvProvider) {
+        'ngInject';
         var svgMap = {
             'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
             'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
         };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
+        SvgIconSrvProvider.registerSvgSources(svgMap);
 
-        }
-    ]);
+    });
 })(angular);

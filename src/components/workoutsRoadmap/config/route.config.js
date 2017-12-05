@@ -1,9 +1,9 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.workoutsRoadmap').config([
-        '$stateProvider',
+    angular.module('znk.infra-web-app.workoutsRoadmap').config(
         function ($stateProvider) {
+            'ngInject';
             $stateProvider
                 .state('app.workouts', {
                     template: '<ui-view></ui-view>',
@@ -14,7 +14,6 @@
                     templateUrl: 'components/workoutsRoadmap/templates/workoutsRoadmap.template.html',
                     resolve: {
                         data: function data(ExerciseStatusEnum, WorkoutsSrv, DiagnosticSrv, $q) {
-                            'ngInject';
 
                             var isDiagnosticCompletedProm = DiagnosticSrv.getDiagnosticStatus();
                             var workoutsProgressProm = WorkoutsSrv.getAllWorkouts();
@@ -51,7 +50,6 @@
                     controllerAs: 'vm',
                     resolve: {
                         isDiagnosticStarted: function (DiagnosticSrv, ExerciseStatusEnum) {
-                            'ngInject';
 
                             return DiagnosticSrv.getDiagnosticStatus().then(function (status) {
                                 return status === ExerciseStatusEnum.ACTIVE.enum;
@@ -88,7 +86,6 @@
                 .state('app.workouts.roadmap.diagnostic.summary', {
                     resolve: {
                         diagnosticData: function (DiagnosticSrv, DiagnosticIntroSrv) {
-                            'ngInject';
                             return {
                                 diagnosticResultProm: DiagnosticSrv.getDiagnosticExamResult(),
                                 diagnosticIntroConfigMapProm: DiagnosticIntroSrv.getConfigMap()
@@ -99,5 +96,5 @@
                     controller: 'WorkoutsRoadMapDiagnosticSummaryController',
                     controllerAs: 'vm'
                 });
-        }]);
+        });
 })(angular);

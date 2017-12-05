@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService', ['InfraConfigSrv', 'StorageSrv', 'ENV', '$http', 'UserGoalsService', '$q', '$mdDialog',
+angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelectionService',
     function(InfraConfigSrv, StorageSrv, ENV, $http, UserGoalsService, $q, $mdDialog) {
+        'ngInject';
         var schoolsPath = StorageSrv.variables.appUserSpacePath + '/dreamSchools';
 
         this.getAppSchoolsList = function () {
@@ -72,5 +73,5 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
                 });
             });
         };
-}]);
+});
 

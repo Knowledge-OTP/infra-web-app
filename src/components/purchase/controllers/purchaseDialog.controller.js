@@ -2,8 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase')
-        .controller('PurchaseDialogController',
-            ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
+        .controller('PurchaseDialogController', function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
                 'ngInject';
 
                 var vm = this;
@@ -32,9 +31,8 @@
                     vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
                 });
 
-
                 vm.close = function () {
                     $mdDialog.cancel();
                 };
-            }]);
+            });
 })(angular);

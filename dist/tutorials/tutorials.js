@@ -19,17 +19,15 @@
         'znk.infra-web-app.purchase',
         'znk.infra-web-app.subjectsOrder'
 
-    ]).config([
-        'SvgIconSrvProvider',
-        function (SvgIconSrvProvider) {
+    ]).config(["SvgIconSrvProvider", function (SvgIconSrvProvider) {
+        'ngInject';
         var svgMap = {
             'tutorials-locked-icon': 'components/tutorials/svg/subject-locked-icon.svg',
             'tutorials-check-mark-icon': 'components/tutorials/svg/tutorials-check-mark-icon.svg'
         };
-            SvgIconSrvProvider.registerSvgSources(svgMap);
+        SvgIconSrvProvider.registerSvgSources(svgMap);
 
-        }
-    ]);
+    }]);
 })(angular);
 
 'use strict';
@@ -129,9 +127,9 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.tutorials').config([
-        '$stateProvider',
-        function ($stateProvider) {
+    angular.module('znk.infra-web-app.tutorials').config(
+        ["$stateProvider", function ($stateProvider) {
+            'ngInject';
             $stateProvider
                 .state('app.tutorials', {
                     url: '/tipsAndTricks',
@@ -146,29 +144,28 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
                         }]
                     }
                 })
-            .state('app.tutorial', {
-                url: '/tipsAndTricks/tutorial/:exerciseId',
-                templateUrl: 'components/tutorials/templates/tutorialWorkout.template.html',
-                controller: 'TutorialWorkoutController',
-                controllerAs: 'vm',
-                resolve: {
-                    exerciseData: ["TutorialsSrv", "$stateParams", "$state", "ExerciseTypeEnum", "ExerciseParentEnum", function (TutorialsSrv, $stateParams, $state, ExerciseTypeEnum, ExerciseParentEnum) {
-                        var tutorialId = +$stateParams.exerciseId;
-                        return TutorialsSrv.getTutorial(tutorialId).then(function () {
-                            return {
-                                exerciseId: tutorialId,
-                                exerciseTypeId: ExerciseTypeEnum.TUTORIAL.enum,
-                                exerciseParentTypeId: ExerciseParentEnum.TUTORIAL.enum,
-                                exitAction: function () {
-                                    $state.go('app.tutorials');
-                                }
-                            };
-                        });
-                    }]
-                }
-            });
-        }
-    ]);
+                .state('app.tutorial', {
+                    url: '/tipsAndTricks/tutorial/:exerciseId',
+                    templateUrl: 'components/tutorials/templates/tutorialWorkout.template.html',
+                    controller: 'TutorialWorkoutController',
+                    controllerAs: 'vm',
+                    resolve: {
+                        exerciseData: ["TutorialsSrv", "$stateParams", "$state", "ExerciseTypeEnum", "ExerciseParentEnum", function (TutorialsSrv, $stateParams, $state, ExerciseTypeEnum, ExerciseParentEnum) {
+                            var tutorialId = +$stateParams.exerciseId;
+                            return TutorialsSrv.getTutorial(tutorialId).then(function () {
+                                return {
+                                    exerciseId: tutorialId,
+                                    exerciseTypeId: ExerciseTypeEnum.TUTORIAL.enum,
+                                    exerciseParentTypeId: ExerciseParentEnum.TUTORIAL.enum,
+                                    exitAction: function () {
+                                        $state.go('app.tutorials');
+                                    }
+                                };
+                            });
+                        }]
+                    }
+                });
+        }]);
 })(angular);
 
 (function (angular) {

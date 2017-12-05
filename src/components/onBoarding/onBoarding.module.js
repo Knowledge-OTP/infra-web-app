@@ -13,9 +13,9 @@
         'ngMaterial',
         'znk.infra-web-app.userGoalsSelection',
         'znk.infra-web-app.diagnosticIntro'
-    ]).config([
-        'SvgIconSrvProvider', '$stateProvider',
+    ]).config(
         function (SvgIconSrvProvider, $stateProvider) {
+            'ngInject';
             var svgMap = {
                 'on-boarding-heart': 'components/onBoarding/svg/onboarding-heart-icon.svg',
                 'on-boarding-target': 'components/onBoarding/svg/onboarding-target-icon.svg',
@@ -73,8 +73,7 @@
                     controller: 'OnBoardingTestToTakeController',
                     controllerAs: 'vm'
                 });
-        }
-    ]);
+        });
 
 })(angular);
 

@@ -767,7 +767,8 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.diagnosticExercise').provider('WorkoutsDiagnosticFlow', [function () {
+    angular.module('znk.infra-web-app.diagnosticExercise').provider('WorkoutsDiagnosticFlow', function () {
+        'ngInject';
 
         var _diagnosticSettings;
 
@@ -1111,7 +1112,7 @@
 
                 return workoutsDiagnosticFlowObjApi;
             }];
-    }]);
+    });
 
 })(angular);
 
