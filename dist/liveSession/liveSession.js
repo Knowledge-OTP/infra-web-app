@@ -585,7 +585,8 @@
                     // update lesson startTime, endTime and status
                     lesson.startTime = lesson.startTime ? lesson.startTime : liveSessionData.startTime ? liveSessionData.startTime: null;
                     lesson.endTime = lesson.endTime? lesson.data.endTime : liveSessionData.endTime ? liveSessionData.endTime : null;
-                    lesson.status = LessonStatusEnum.ATTENDED.enum;
+                    lesson.status = lesson.status === LessonStatusEnum.SCHEDULED.enum ?
+                        LessonStatusEnum.ATTENDED.enum : lesson.status;
                     lesson.lessonNotes = lesson.lessonNotes || {};
                     lesson.lessonNotes.status = lesson.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
                     lesson.liveSessions = lesson.liveSessions || [];
