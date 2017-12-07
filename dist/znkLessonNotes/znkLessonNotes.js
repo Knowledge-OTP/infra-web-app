@@ -693,6 +693,7 @@
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
+            let lessonApi = `${ENV.znkBackendBaseUrl}/lesson`;
             let serviceBackendUrl = `${ENV.znkBackendBaseUrl}/service`;
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
@@ -704,6 +705,14 @@
             this.getLessonById = (lessonId) => {
                 let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
                 return $http.get(getLessonsApi, {
+                    timeout: ENV.promiseTimeOut,
+                    cache: true
+                });
+            };
+
+            this.getLessonsByBackToBackId = (backToBackId) => {
+                let getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
+                return $http.get(getBackToBackApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
                 });
@@ -932,21 +941,17 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "");
   $templateCache.put("components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html",
     "<div class=\"lesson-rating-popup\" ng-if=\"vm.lesson\">\n" +
-    "    <div class=\"top-icon-wrap\">\n" +
-    "        <div class=\"top-icon\">\n" +
-    "            <div class=\"round-icon-wrap\">\n" +
-    "                <svg-icon name=\"znkLessonNotes-star\"></svg-icon>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
     "\n" +
-    "    <md-toolbar>\n" +
+    "    <div class=\"znk-popup-header\">\n" +
+    "        <div class=\"icon-wrapper\">\n" +
+    "            <svg-icon name=\"znkLessonNotes-star\"></svg-icon>\n" +
+    "        </div>\n" +
     "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
     "            <svg-icon name=\"znkLessonNotes-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
-    "    </md-toolbar>\n" +
+    "    </div>\n" +
     "\n" +
-    "    <div class=\"content-wrapper\">\n" +
+    "    <div class=\"content-wrapper\" ng-if=\"vm.lesson\">\n" +
     "        <div class=\"znk-scrollbar\">\n" +
     "            <div class=\"quicksand-25-b title\" translate=\"LESSON_NOTES.LESSON_RATING_POPUP.TITLE\"></div>\n" +
     "\n" +

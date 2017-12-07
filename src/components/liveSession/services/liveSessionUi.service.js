@@ -14,7 +14,6 @@
             let SESSION_DURATION = {
                 length: ENV.liveSession.sessionLength,
                 extendTime: ENV.liveSession.sessionExtendTime,
-                endAlertTime: ENV.liveSession.sessionEndAlertTime
             };
 
             LiveSessionUiSrv._init = () => {
@@ -129,7 +128,7 @@
 
             LiveSessionUiSrv.showSessionEndAlertPopup = () => {
                 let translationsPromMap = {};
-                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT', {endAlertTime: SESSION_DURATION.endAlertTime / 60000});
+                translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT');
                 translationsPromMap.content = $translate('LIVE_SESSION.EXTEND_SESSION', {extendTime: SESSION_DURATION.extendTime / 60000});
                 translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');

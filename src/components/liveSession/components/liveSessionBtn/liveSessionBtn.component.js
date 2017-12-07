@@ -10,12 +10,15 @@
             controllerAs: 'vm',
             controller: function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
                                   PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum,
-                                  UserProfileService, LiveSessionUiSrv, StudentService) {
+                                  UserProfileService, LiveSessionUiSrv, StudentService, UtilitySrv) {
                 'ngInject';
 
                 let SESSION_DURATION = {
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
-                    marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
+                    marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart,
+                    length: ENV.liveSession.sessionLength,
+                    queryLessonStart: 4500000,
+                    queryLessonEnd: 900000
                 };
                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
                 let educatorProfileProm = UserProfileService.getProfile();
@@ -98,7 +101,7 @@
 
                 this.getScheduledLesson = () => {
                     let dataPromMap = {
-                        liveSessionDuration: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
+                        liveSessionSettings: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
                         educatorProfile: this.educatorProfile ? $q.when(this.educatorProfile) : educatorProfileProm
                     };
                     return $q.all(dataPromMap).then(dataMap => {
@@ -106,8 +109,8 @@
                         this.educatorProfile = dataMap.educatorProfile;
                         SESSION_DURATION = this.liveSessionSettings ? this.liveSessionSettings : SESSION_DURATION;
                         let now = Date.now();
-                        let calcStartTime = now - SESSION_DURATION.marginBeforeSessionStart;
-                        let calcEndTime = now + SESSION_DURATION.marginAfterSessionStart;
+                        let calcStartTime = now - SESSION_DURATION.queryLessonStart;
+                        let calcEndTime = now + SESSION_DURATION.length + SESSION_DURATION.queryLessonEnd;
                         let dateRange = {
                             startDate: calcStartTime,
                             endDate: calcEndTime
@@ -115,10 +118,63 @@
 
                         return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
                             .then(lessons => {
-                                return lessons.data && lessons.data.length ? lessons.data[0] : null;
-                            }, err => $log.debug('getScheduledLesson: getLessonsByStudentIds Error: ', err));
+                                return this.getLessonInRange(lessons.data);
+                            }, err => $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err));
                     });
 
+
+                };
+
+                this.getLessonInRange = (lessons) => {
+                    let scheduledLesson = null;
+                    if (lessons && lessons.length > 0) {
+                        if (lessons.length === 1) {
+                            scheduledLesson = lessons.pop();
+                        } else {
+                            $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
+                            scheduledLesson = this.checkBack2BackLesson(lessons);
+                        }
+                    }
+                    $log.debug(`getLessonInRange: lessons is not defined or lessons.length === 0 `);
+                    return scheduledLesson;
+                };
+
+                this.checkBack2BackLesson = (lessons) => {
+                    $log.debug(`checkBack2BackLesson`);
+                    let scheduledLesson = null;
+                    let back2BackLessons = [];
+                    let now = Date.now();
+                    lessons.forEach(lesson => {
+                        let startTimeRange = lesson.date - SESSION_DURATION.marginBeforeSessionStart;
+                        let endTimeRange = lesson.date + SESSION_DURATION.length + SESSION_DURATION.marginAfterSessionStart;
+                        if ((startTimeRange < now < endTimeRange) && !scheduledLesson) {
+                            scheduledLesson = lesson;
+                            back2BackLessons.push(lesson);
+                        } else if (scheduledLesson) {
+                            if (back2BackLessons.length) {
+                                if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_DURATION.length) === lesson.date) {
+                                    $log.debug(`checkBack2BackLesson: b2b lesson found. lessonId: ${lesson.id}`);
+                                    back2BackLessons.push(lesson);
+                                } else {
+                                    $log.debug(`checkBack2BackLesson: this lesson isn't b2b lesson.`);
+                                }
+                            }
+                        }
+                    });
+
+                    if (back2BackLessons.length > 1) {
+                        let newB2BLessonId = UtilitySrv.general.createGuid();
+                        let updateB2BLessonProms = [];
+                        back2BackLessons.forEach(b2bLesson => {
+                            b2bLesson.backToBackId = newB2BLessonId;
+                            updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
+                        });
+                        Promise.all(updateB2BLessonProms)
+                            .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
+                            .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
+                    }
+
+                    return scheduledLesson;
 
                 };
             }

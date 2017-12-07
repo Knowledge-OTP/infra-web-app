@@ -10,7 +10,6 @@
             let SESSION_DURATION = {
                 length: ENV.liveSession.sessionLength,
                 extendTime: ENV.liveSession.sessionExtendTime,
-                endAlertTime: ENV.liveSession.sessionEndAlertTime
             };
 
             let activeLiveSessionDataFromAdapter = null;
@@ -230,12 +229,9 @@
                         }
                         liveSessionInterval.interval = $interval(() => {
                             let liveSessionDuration = (this._getRoundTime() - activeLiveSessionDataFromAdapter.startTime);
-                            let maxSessionDuration = SESSION_DURATION.length + activeLiveSessionDataFromAdapter.extendTime;
-                            let EndAlertTime = maxSessionDuration - SESSION_DURATION.endAlertTime;
+                            let EndAlertTime = SESSION_DURATION.length + activeLiveSessionDataFromAdapter.extendTime;
 
-                            if (liveSessionDuration >= maxSessionDuration) {
-                                this.endLiveSession(activeLiveSessionDataFromAdapter.guid);
-                            } else if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
+                            if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
                                 LiveSessionUiSrv.showSessionEndAlertPopup().then(() => {
                                     this.confirmExtendSession();
                                 }, function updateIntervalAlertShown() {
@@ -249,24 +245,42 @@
             };
 
             this._updateLesson = (liveSessionData) => {
+                function updateSingleLesson(lesson) {
+                    // update lesson startTime, endTime and status
+                    lesson.startTime = lesson.startTime ? lesson.startTime : liveSessionData.startTime ? liveSessionData.startTime: null;
+                    lesson.endTime = lesson.endTime? lesson.data.endTime : liveSessionData.endTime ? liveSessionData.endTime : null;
+                    lesson.status = LessonStatusEnum.ATTENDED.enum;
+                    lesson.lessonNotes = lesson.lessonNotes || {};
+                    lesson.lessonNotes.status = lesson.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
+                    lesson.liveSessions = lesson.liveSessions || [];
+                    lesson.liveSessions.push(liveSessionData.guid);
+                    lesson.liveSessions = UtilitySrv.array.removeDuplicates(lesson.liveSessions);
+                    return ZnkLessonNotesSrv.updateLesson(lesson);
+                }
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
-                            return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
-                                if (lesson.data.id) {
-                                    // update lesson startTime, endTime and status
-                                    lesson.data.startTime = lesson.data.startTime ? lesson.data.startTime : liveSessionData.startTime ? liveSessionData.startTime: null;
-                                    lesson.data.endTime = lesson.data.endTime? lesson.data.endTime : liveSessionData.endTime ? liveSessionData.endTime : null;
-                                    lesson.data.status = LessonStatusEnum.ATTENDED.enum;
-                                    lesson.data.lessonNotes = lesson.data.lessonNotes || {};
-                                    lesson.data.lessonNotes.status = lesson.data.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
-                                    try {
-                                        return ZnkLessonNotesSrv.updateLesson(lesson.data).then(updatedLesson => {
-                                            $log.debug('_updateLesson: update lesson startTime & status. updatedLesson: ', updatedLesson);
-                                        });
-                                    } catch (err) {
-                                        $log.error('_updateLesson: updateLesson failed. Error: ', err);
+                            return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lessonData => {
+                                let lesson = lessonData.data;
+                                let updatePromArr = [];
+                                if (lesson.id) {
+                                    if (lesson.backToBackId) {
+                                        // update all backToBack lessons
+                                        ZnkLessonNotesSrv.getLessonsByBackToBackId(lesson.backToBackId)
+                                            .then(backToBackLessonsRes => {
+                                                let backToBackLessonsArr = backToBackLessonsRes.data;
+                                                backToBackLessonsArr.forEach(b2bLesson => {
+                                                    updatePromArr.push(updateSingleLesson(b2bLesson));
+                                                });
+                                            });
+                                    } else {
+                                        updatePromArr.push(updateSingleLesson(lesson));
                                     }
+
+                                    Promise.all(updatePromArr)
+                                        .then(updatedLessons => $log.debug('_updateLesson: update lessons for startTime & status. updatedLessons: ', updatedLessons))
+                                        .catch (err => $log.error('_updateLesson: updateLesson failed. Error: ', err));
+
                                 } else {
                                     $log.debug('_updateLesson: lessonId is required');
                                 }
@@ -367,7 +381,7 @@
                             studentPath: studentPath,
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
-                            extendTime: 0,
+                            extendTime: this._getExtendTime(lessonData),
                             educatorStartTime:  this._getRoundTime(),
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
@@ -393,6 +407,33 @@
                     });
 
                 });
+            };
+
+            this._getExtendTime = (lessonData) => {
+                let extendTime = 0;
+                if (lessonData.backToBackId) {
+                    let dataMapProm = {
+                        liveSessionDuration: LiveSessionDataGetterSrv.getLiveSessionDuration(),
+                        lessonsByBackToBackId: ZnkLessonNotesSrv.getLessonsByBackToBackId(lessonData.backToBackId)
+                    };
+                    $q.all(dataMapProm)
+                        .then(dataMap => {
+                            let liveSessionDuration = dataMap.liveSessionDuration;
+                            let b2bLessonArr = dataMap.lessonsByBackToBackId;
+                            if (b2bLessonArr && b2bLessonArr.length) {
+                                extendTime = b2bLessonArr.length * liveSessionDuration.sessionLength;
+                            } else {
+                                $log.debug(`_getExtendTime: No backToBack lessons were found with lessonsByBackToBackId: ${lessonData.backToBackId}`);
+                            }
+                            return extendTime;
+                        })
+                        .catch(err => {
+                            $log.debug(`_getExtendTime: Failed to get liveSessionDuration or lessonsByBackToBackId lessons. Error: `, err);
+                            return extendTime;
+                        });
+                } else {
+                    return $q.when(extendTime);
+                }
             };
 
             this._cleanRegisteredCbToActiveLiveSessionData = () => {
