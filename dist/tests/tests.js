@@ -96,7 +96,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.tests').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/tests/directives/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +

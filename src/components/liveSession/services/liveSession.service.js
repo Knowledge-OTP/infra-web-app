@@ -13,6 +13,7 @@
             };
 
             let activeLiveSessionDataFromAdapter = null;
+            let scheduledLessonFromAdapter = null;
             let currUserLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
             let registeredCbToActiveLiveSessionDataChanges = [];
             let registeredCbToCurrUserLiveSessionStateChange = [];
@@ -26,6 +27,8 @@
                         isTeacher: isTeacherApp
 
                     };
+
+                    scheduledLessonFromAdapter = lessonData.scheduledLesson || null;
 
                     return this._initiateLiveSession(educatorData, studentData, lessonData, UserLiveSessionStateEnum.EDUCATOR.enum);
                 });
@@ -245,19 +248,6 @@
             };
 
             this._updateLesson = (liveSessionData) => {
-                function updateSingleLesson(lesson) {
-                    // update lesson startTime, endTime and status
-                    lesson.startTime = lesson.startTime ? lesson.startTime : liveSessionData.startTime ? liveSessionData.startTime: null;
-                    lesson.endTime = lesson.endTime? lesson.data.endTime : liveSessionData.endTime ? liveSessionData.endTime : null;
-                    lesson.status = lesson.status === LessonStatusEnum.SCHEDULED.enum ?
-                        LessonStatusEnum.ATTENDED.enum : lesson.status;
-                    lesson.lessonNotes = lesson.lessonNotes || {};
-                    lesson.lessonNotes.status = lesson.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
-                    lesson.liveSessions = lesson.liveSessions || [];
-                    lesson.liveSessions.push(liveSessionData.guid);
-                    lesson.liveSessions = UtilitySrv.array.removeDuplicates(lesson.liveSessions);
-                    return ZnkLessonNotesSrv.updateLesson(lesson);
-                }
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
@@ -265,17 +255,17 @@
                                 let lesson = lessonData.data;
                                 let updatePromArr = [];
                                 if (lesson.id) {
-                                    if (lesson.backToBackId) {
+                                    if (liveSessionData.backToBackId) {
                                         // update all backToBack lessons
-                                        ZnkLessonNotesSrv.getLessonsByBackToBackId(lesson.backToBackId)
+                                        ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
                                             .then(backToBackLessonsRes => {
                                                 let backToBackLessonsArr = backToBackLessonsRes.data;
                                                 backToBackLessonsArr.forEach(b2bLesson => {
-                                                    updatePromArr.push(updateSingleLesson(b2bLesson));
+                                                    updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
                                                 });
                                             });
                                     } else {
-                                        updatePromArr.push(updateSingleLesson(lesson));
+                                        updatePromArr.push(this.updateSingleLesson(lesson, liveSessionData));
                                     }
 
                                     Promise.all(updatePromArr)
@@ -290,6 +280,23 @@
                             $log.debug('_updateLesson: darkFeatures in OFF');
                         }
                     });
+            };
+
+            this.updateSingleLesson = (lesson, liveSessionData) => {
+                // update lesson startTime, endTime and status
+                lesson.lessonSummary = lesson.lessonSummary || {};
+                lesson.lessonSummary.startTime = lesson.lessonSummary.startTime ? lesson.lessonSummary.startTime :
+                    liveSessionData.startTime ? liveSessionData.startTime: null;
+                lesson.lessonSummary.endTime = lesson.lessonSummary.endTime ? lesson.lessonSummary.endTime :
+                    liveSessionData.endTime ? liveSessionData.endTime : null;
+                lesson.status = lesson.status === LessonStatusEnum.SCHEDULED.enum ?
+                    LessonStatusEnum.ATTENDED.enum : lesson.status;
+                lesson.lessonSummary.lessonNotes = lesson.lessonSummary.lessonNotes || {};
+                lesson.lessonSummary.lessonNotes.status = lesson.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
+                lesson.lessonSummary.liveSessions = lesson.lessonSummary.liveSessions || [];
+                lesson.lessonSummary.liveSessions.push(liveSessionData.guid);
+                lesson.lessonSummary.liveSessions = UtilitySrv.array.removeDuplicates(lesson.lessonSummary.liveSessions);
+                return ZnkLessonNotesSrv.updateLesson(lesson);
             };
 
             this._getRoundTime = () => {
@@ -382,13 +389,14 @@
                             studentPath: studentPath,
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
-                            extendTime: this._getExtendTime(lessonData),
+                            expectedSessionEndTime: lessonData.expectedSessionEndTime,
                             educatorStartTime:  this._getRoundTime(),
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
                             sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData),
-                            lessonId: lessonData.id
+                            lessonId: lessonData.scheduledLesson ? lessonData.scheduledLesson.id : null,
+                            backToBackId: lessonData.scheduledLesson ? lessonData.scheduledLesson.backToBackId : null
                         };
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
@@ -408,33 +416,6 @@
                     });
 
                 });
-            };
-
-            this._getExtendTime = (lessonData) => {
-                let extendTime = 0;
-                if (lessonData.backToBackId) {
-                    let dataMapProm = {
-                        liveSessionDuration: LiveSessionDataGetterSrv.getLiveSessionDuration(),
-                        lessonsByBackToBackId: ZnkLessonNotesSrv.getLessonsByBackToBackId(lessonData.backToBackId)
-                    };
-                    $q.all(dataMapProm)
-                        .then(dataMap => {
-                            let liveSessionDuration = dataMap.liveSessionDuration;
-                            let b2bLessonArr = dataMap.lessonsByBackToBackId;
-                            if (b2bLessonArr && b2bLessonArr.length) {
-                                extendTime = b2bLessonArr.length * liveSessionDuration.sessionLength;
-                            } else {
-                                $log.debug(`_getExtendTime: No backToBack lessons were found with lessonsByBackToBackId: ${lessonData.backToBackId}`);
-                            }
-                            return extendTime;
-                        })
-                        .catch(err => {
-                            $log.debug(`_getExtendTime: Failed to get liveSessionDuration or lessonsByBackToBackId lessons. Error: `, err);
-                            return extendTime;
-                        });
-                } else {
-                    return $q.when(extendTime);
-                }
             };
 
             this._cleanRegisteredCbToActiveLiveSessionData = () => {

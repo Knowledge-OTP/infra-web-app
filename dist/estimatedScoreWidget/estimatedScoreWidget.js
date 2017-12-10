@@ -217,7 +217,7 @@
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/estimatedScoreWidget/directives/estimatedScoreWidget.template.html",
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +

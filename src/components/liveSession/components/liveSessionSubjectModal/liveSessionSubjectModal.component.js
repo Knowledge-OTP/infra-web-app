@@ -9,8 +9,10 @@
             },
             templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
             controllerAs: 'vm',
-            controller: function ($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv) {
+            controller: function (ENV, $mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, ZnkLessonNotesSrv) {
                 'ngInject';
+
+                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
 
                 this.$onInit = () =>  {
                     this.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
@@ -18,8 +20,12 @@
                 };
 
                 this.startSession = (sessionSubject) => {
-                    let lessonData = { sessionSubject: sessionSubject };
-                    LiveSessionSrv.startLiveSession(this.student, lessonData);
+                    liveSessionSettingsProm.then(liveSessionSettings => {
+                        let expectedSessionEndTime = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let lessonData = { sessionSubject, expectedSessionEndTime };
+                        LiveSessionSrv.startLiveSession(this.student, lessonData);
+                    });
+
                 };
             }
         });

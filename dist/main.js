@@ -434,7 +434,7 @@
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/activePanel/directives/activePanel.template.html",
     "<div class=\"active-panel ng-hide\"\n" +
     "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
@@ -1509,7 +1509,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
         );
 })(angular);
 
-angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
@@ -1915,7 +1915,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -2070,7 +2070,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
     );
 })(angular);
 
-angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.aws').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -3467,7 +3467,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     );
 })(angular);
 
-angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
     "<svg\n" +
     "    version=\"1.1\"\n" +
@@ -3693,7 +3693,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.config').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.config').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -3768,7 +3768,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     });
 })(angular);
 
-angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -4890,7 +4890,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 })(angular);
 
 
-angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
@@ -5199,7 +5199,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
         }];
 }]);
 
-angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/diagnosticIntro/directives/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
@@ -5306,7 +5306,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -5529,7 +5529,7 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/estimatedScoreWidget/directives/estimatedScoreWidget.template.html",
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
@@ -6039,7 +6039,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     });
 })(angular);
 
-angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/evaluator/svg/star.svg",
     "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\"\n" +
@@ -6252,7 +6252,7 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     });
 })(angular);
 
-angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/faq/svg/circle-arrow.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -6432,7 +6432,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 })(angular);
 
 
-angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.feedback').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
@@ -6732,7 +6732,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     );
 })(angular);
 
-angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/iapMsg/svg/close-msg.svg",
     "<svg class=\"iap-msg-close-msg-svg\"\n" +
     "     x=\"0px\"\n" +
@@ -6932,7 +6932,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
 })(angular);
 
 
-angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\" y=\"0px\"\n" +
@@ -7292,7 +7292,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
@@ -8172,7 +8172,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     );
 })(angular);
 
-angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.invitation').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/invitation/approveModal/invitationApproveModal.template.html",
     "<md-dialog ng-cloak class=\"invitation-confirm-modal\" translate-namespace=\"INVITE_APPROVE_MODAL\">\n" +
     "    <md-toolbar>\n" +
@@ -8638,7 +8638,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         );
 })(angular);
 
-angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -9019,7 +9019,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
     );
 })(angular);
 
-angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/liveLessons/svg/calendar-icon.svg",
     "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" class=\"calendar-icon\"\n" +
     "     viewBox=\"0 0 176.3 200\">\n" +
@@ -9319,9 +9319,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart,
                     length: ENV.liveSession.sessionLength,
-                    queryLessonStart: 4500000,
-                    queryLessonEnd: 900000
+                    queryLessonStart: 4500000
                 };
+                let queryLessonNum = 4; // multiple this number by the lesson length for the getScheduledLesson query
                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
                 let educatorProfileProm = UserProfileService.getProfile();
 
@@ -9374,10 +9374,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
-                                    this.getScheduledLesson().then(scheduledLesson => {
+                                    this.getScheduledLessonData().then(scheduledLessonData => {
                                         LiveSessionUiSrv.closePopup();
-                                        if (scheduledLesson) {
-                                            LiveSessionSrv.startLiveSession(this.student, scheduledLesson);
+                                        if (scheduledLessonData) {
+                                            LiveSessionSrv.startLiveSession(this.student, scheduledLessonData);
                                         } else {
                                             LiveSessionUiSrv.showNoLessonScheduledPopup(this.student.name)
                                                 .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
@@ -9401,7 +9401,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     });
                 };
 
-                this.getScheduledLesson = () => {
+                this.getScheduledLessonData = () => {
                     let dataPromMap = {
                         liveSessionSettings: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
                         educatorProfile: this.educatorProfile ? $q.when(this.educatorProfile) : educatorProfileProm
@@ -9412,7 +9412,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         SESSION_DURATION = this.liveSessionSettings ? this.liveSessionSettings : SESSION_DURATION;
                         let now = Date.now();
                         let calcStartTime = now - SESSION_DURATION.queryLessonStart;
-                        let calcEndTime = now + SESSION_DURATION.length + SESSION_DURATION.queryLessonEnd;
+                        let calcEndTime = now + (SESSION_DURATION.length * queryLessonNum);
                         let dateRange = {
                             startDate: calcStartTime,
                             endDate: calcEndTime
@@ -9428,55 +9428,69 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 };
 
                 this.getLessonInRange = (lessons) => {
-                    let scheduledLesson = null;
+                    let scheduledLessonMap = {};
                     if (lessons && lessons.length > 0) {
+                        // No multiple lesson return single lesson
                         if (lessons.length === 1) {
-                            scheduledLesson = lessons.pop();
+                            scheduledLessonMap.scheduledLesson = lessons.pop();
+                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_DURATION.length;
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
-                            scheduledLesson = this.checkBack2BackLesson(lessons);
+                            scheduledLessonMap = this.checkBack2BackLesson(lessons);
                         }
                     }
                     $log.debug(`getLessonInRange: lessons is not defined or lessons.length === 0 `);
-                    return scheduledLesson;
+                    return scheduledLessonMap;
                 };
 
                 this.checkBack2BackLesson = (lessons) => {
                     $log.debug(`checkBack2BackLesson`);
-                    let scheduledLesson = null;
+                    let scheduledLessonMap = {};
                     let back2BackLessons = [];
                     let now = Date.now();
                     lessons.forEach(lesson => {
                         let startTimeRange = lesson.date - SESSION_DURATION.marginBeforeSessionStart;
                         let endTimeRange = lesson.date + SESSION_DURATION.length + SESSION_DURATION.marginAfterSessionStart;
-                        if ((startTimeRange < now < endTimeRange) && !scheduledLesson) {
-                            scheduledLesson = lesson;
+                        if ((startTimeRange < now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
+                            scheduledLessonMap.scheduledLesson = lesson;
                             back2BackLessons.push(lesson);
-                        } else if (scheduledLesson) {
-                            if (back2BackLessons.length) {
-                                if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_DURATION.length) === lesson.date) {
-                                    $log.debug(`checkBack2BackLesson: b2b lesson found. lessonId: ${lesson.id}`);
-                                    back2BackLessons.push(lesson);
-                                } else {
-                                    $log.debug(`checkBack2BackLesson: this lesson isn't b2b lesson.`);
+                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_DURATION.length;
+                        } else if (scheduledLessonMap.scheduledLesson) {
+                            // must be second iteration or above
+                            if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_DURATION.length) === lesson.date) {
+                                $log.debug(`checkBack2BackLesson: b2b lesson found. lessonId: ${lesson.id}`);
+                                // scenario when the second lesson in the array is the actual scheduledLesson and not the first one
+                                if (lesson.date < now) {
+                                    back2BackLessons.pop();
+                                    scheduledLessonMap.scheduledLesson = lesson;
                                 }
+                                back2BackLessons.push(lesson);
+                                scheduledLessonMap.expectedSessionEndTime = lesson.date + SESSION_DURATION.length;
+                            } else {
+                                $log.debug(`checkBack2BackLesson: this lesson isn't b2b lesson.`);
                             }
                         }
                     });
 
                     if (back2BackLessons.length > 1) {
-                        let newB2BLessonId = UtilitySrv.general.createGuid();
-                        let updateB2BLessonProms = [];
-                        back2BackLessons.forEach(b2bLesson => {
-                            b2bLesson.backToBackId = newB2BLessonId;
-                            updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
-                        });
-                        Promise.all(updateB2BLessonProms)
-                            .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
-                            .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
+                        if (!back2BackLessons[0].backToBackId) {
+                            let newB2BLessonId = UtilitySrv.general.createGuid();
+                            let updateB2BLessonProms = [];
+                            back2BackLessons.forEach(b2bLesson => {
+                                b2bLesson.backToBackId = newB2BLessonId;
+                                updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
+                            });
+                            Promise.all(updateB2BLessonProms)
+                                .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
+                                .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
+                        } else {
+                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] al ready have backToBackId`);
+                        }
+                    } else {
+                        $log.debug(`checkBack2BackLesson: back2BackLessons.length === 0`);
                     }
 
-                    return scheduledLesson;
+                    return scheduledLessonMap;
 
                 };
             }]
@@ -9520,8 +9534,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             },
             templateUrl: 'components/liveSession/components/liveSessionSubjectModal/liveSessionSubjectModal.template.html',
             controllerAs: 'vm',
-            controller: ["$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", function ($mdDialog, LiveSessionSubjectSrv, LiveSessionSrv) {
+            controller: ["ENV", "$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", "ZnkLessonNotesSrv", function (ENV, $mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, ZnkLessonNotesSrv) {
                 'ngInject';
+
+                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
 
                 this.$onInit = () =>  {
                     this.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
@@ -9529,8 +9545,12 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 };
 
                 this.startSession = (sessionSubject) => {
-                    let lessonData = { sessionSubject: sessionSubject };
-                    LiveSessionSrv.startLiveSession(this.student, lessonData);
+                    liveSessionSettingsProm.then(liveSessionSettings => {
+                        let expectedSessionEndTime = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let lessonData = { sessionSubject, expectedSessionEndTime };
+                        LiveSessionSrv.startLiveSession(this.student, lessonData);
+                    });
+
                 };
             }]
         });
@@ -9614,6 +9634,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             };
 
             let activeLiveSessionDataFromAdapter = null;
+            let scheduledLessonFromAdapter = null;
             let currUserLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
             let registeredCbToActiveLiveSessionDataChanges = [];
             let registeredCbToCurrUserLiveSessionStateChange = [];
@@ -9627,6 +9648,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         isTeacher: isTeacherApp
 
                     };
+
+                    scheduledLessonFromAdapter = lessonData.scheduledLesson || null;
 
                     return this._initiateLiveSession(educatorData, studentData, lessonData, UserLiveSessionStateEnum.EDUCATOR.enum);
                 });
@@ -9846,19 +9869,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             };
 
             this._updateLesson = (liveSessionData) => {
-                function updateSingleLesson(lesson) {
-                    // update lesson startTime, endTime and status
-                    lesson.startTime = lesson.startTime ? lesson.startTime : liveSessionData.startTime ? liveSessionData.startTime: null;
-                    lesson.endTime = lesson.endTime? lesson.data.endTime : liveSessionData.endTime ? liveSessionData.endTime : null;
-                    lesson.status = lesson.status === LessonStatusEnum.SCHEDULED.enum ?
-                        LessonStatusEnum.ATTENDED.enum : lesson.status;
-                    lesson.lessonNotes = lesson.lessonNotes || {};
-                    lesson.lessonNotes.status = lesson.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
-                    lesson.liveSessions = lesson.liveSessions || [];
-                    lesson.liveSessions.push(liveSessionData.guid);
-                    lesson.liveSessions = UtilitySrv.array.removeDuplicates(lesson.liveSessions);
-                    return ZnkLessonNotesSrv.updateLesson(lesson);
-                }
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
@@ -9866,17 +9876,17 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                 let lesson = lessonData.data;
                                 let updatePromArr = [];
                                 if (lesson.id) {
-                                    if (lesson.backToBackId) {
+                                    if (liveSessionData.backToBackId) {
                                         // update all backToBack lessons
-                                        ZnkLessonNotesSrv.getLessonsByBackToBackId(lesson.backToBackId)
+                                        ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
                                             .then(backToBackLessonsRes => {
                                                 let backToBackLessonsArr = backToBackLessonsRes.data;
                                                 backToBackLessonsArr.forEach(b2bLesson => {
-                                                    updatePromArr.push(updateSingleLesson(b2bLesson));
+                                                    updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
                                                 });
                                             });
                                     } else {
-                                        updatePromArr.push(updateSingleLesson(lesson));
+                                        updatePromArr.push(this.updateSingleLesson(lesson, liveSessionData));
                                     }
 
                                     Promise.all(updatePromArr)
@@ -9891,6 +9901,23 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             $log.debug('_updateLesson: darkFeatures in OFF');
                         }
                     });
+            };
+
+            this.updateSingleLesson = (lesson, liveSessionData) => {
+                // update lesson startTime, endTime and status
+                lesson.lessonSummary = lesson.lessonSummary || {};
+                lesson.lessonSummary.startTime = lesson.lessonSummary.startTime ? lesson.lessonSummary.startTime :
+                    liveSessionData.startTime ? liveSessionData.startTime: null;
+                lesson.lessonSummary.endTime = lesson.lessonSummary.endTime ? lesson.lessonSummary.endTime :
+                    liveSessionData.endTime ? liveSessionData.endTime : null;
+                lesson.status = lesson.status === LessonStatusEnum.SCHEDULED.enum ?
+                    LessonStatusEnum.ATTENDED.enum : lesson.status;
+                lesson.lessonSummary.lessonNotes = lesson.lessonSummary.lessonNotes || {};
+                lesson.lessonSummary.lessonNotes.status = lesson.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
+                lesson.lessonSummary.liveSessions = lesson.lessonSummary.liveSessions || [];
+                lesson.lessonSummary.liveSessions.push(liveSessionData.guid);
+                lesson.lessonSummary.liveSessions = UtilitySrv.array.removeDuplicates(lesson.lessonSummary.liveSessions);
+                return ZnkLessonNotesSrv.updateLesson(lesson);
             };
 
             this._getRoundTime = () => {
@@ -9983,13 +10010,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             studentPath: studentPath,
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
-                            extendTime: this._getExtendTime(lessonData),
+                            expectedSessionEndTime: lessonData.expectedSessionEndTime,
                             educatorStartTime:  this._getRoundTime(),
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
                             sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData),
-                            lessonId: lessonData.id
+                            lessonId: lessonData.scheduledLesson ? lessonData.scheduledLesson.id : null,
+                            backToBackId: lessonData.scheduledLesson ? lessonData.scheduledLesson.backToBackId : null
                         };
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
@@ -10009,33 +10037,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     });
 
                 });
-            };
-
-            this._getExtendTime = (lessonData) => {
-                let extendTime = 0;
-                if (lessonData.backToBackId) {
-                    let dataMapProm = {
-                        liveSessionDuration: LiveSessionDataGetterSrv.getLiveSessionDuration(),
-                        lessonsByBackToBackId: ZnkLessonNotesSrv.getLessonsByBackToBackId(lessonData.backToBackId)
-                    };
-                    $q.all(dataMapProm)
-                        .then(dataMap => {
-                            let liveSessionDuration = dataMap.liveSessionDuration;
-                            let b2bLessonArr = dataMap.lessonsByBackToBackId;
-                            if (b2bLessonArr && b2bLessonArr.length) {
-                                extendTime = b2bLessonArr.length * liveSessionDuration.sessionLength;
-                            } else {
-                                $log.debug(`_getExtendTime: No backToBack lessons were found with lessonsByBackToBackId: ${lessonData.backToBackId}`);
-                            }
-                            return extendTime;
-                        })
-                        .catch(err => {
-                            $log.debug(`_getExtendTime: Failed to get liveSessionDuration or lessonsByBackToBackId lessons. Error: `, err);
-                            return extendTime;
-                        });
-                } else {
-                    return $q.when(extendTime);
-                }
             };
 
             this._cleanRegisteredCbToActiveLiveSessionData = () => {
@@ -10334,12 +10335,12 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                 });
             };
 
-            LiveSessionSubjectSrv.getSessionSubject = (lesson) => {
-                console.log('_getSessionSubject Lesson : ', lesson);
-                if (lesson.sessionSubject) {
-                    return lesson.sessionSubject.id;
+            LiveSessionSubjectSrv.getSessionSubject = (lessonData) => {
+                console.log('_getSessionSubject lessonData : ', lessonData);
+                if (lessonData.sessionSubject) {
+                    return lessonData.sessionSubject.id;
                 } else {
-                    let topicIdNum = MyZinkerzTopicMapEnum[lesson.topicId.toUpperCase()].enum;
+                    let topicIdNum = MyZinkerzTopicMapEnum[lessonData.scheduledLesson.topicId.toUpperCase()].enum;
                     if (angular.isDefined(topicIdNum)) {
                         return topicIdNum;
                     } else {
@@ -10447,8 +10448,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                         );
                         return popUpInstance.promise
                         // todo: figure out why it's opposite
-                            .then(res => $q.reject(res))
-                            .catch(err => $q.resolve(err));
+                            .then(res => $q.resolve(res))
+                            .catch(err => $q.reject(err));
                     }).catch(err => {
                         $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp translate failure' + err);
                         return $q.reject(err);
@@ -10506,6 +10507,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             };
 
             LiveSessionUiSrv.showEndSessionPopup = () => {
+                LiveSessionUiSrv.closePopup();
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_POPUP_TITLE');
                 translationsPromMap.content = $translate('LIVE_SESSION.END_POPUP_CONTENT');
@@ -10590,7 +10592,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     });
 })(angular);
 
-angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
     "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
     "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
@@ -10837,7 +10839,7 @@ angular.module('znk.infra-web-app.loadingAnimation', []);
 })(angular);
 
 
-angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -11710,7 +11712,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     });
 })(angular);
 
-angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/loginApp/directives/loginApp/loginApp.template.html",
     "<div class=\"login-app\" ng-class=\"{\n" +
     "        student: d.userContext === d.userContextObj.STUDENT,\n" +
@@ -12614,7 +12616,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
         );
 })(angular);
 
-angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/myProfile/components/changePassword/changePassword.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
     "    <div class=\"container-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
@@ -12921,7 +12923,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
   }]);
 })(angular);
 
-angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.navigation').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -13083,7 +13085,7 @@ angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.notification').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.notification').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -13481,7 +13483,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/onBoarding/directives/onBoardingBar.template.html",
     "<div class=\"on-board-pager-wrap\">\n" +
     "    <div class=\"on-board-pager\">\n" +
@@ -13962,7 +13964,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -14226,7 +14228,7 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/promoCode/directives/promoCode.template.html",
     "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
     "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
@@ -14816,7 +14818,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 })(angular);
 
 
-angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.purchase').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
     "<ng-switch on=\"vm.purchaseState\">\n" +
     "\n" +
@@ -15325,7 +15327,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
         );
 })(angular);
 
-angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.settings').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/settings/svg/change-password-icon.svg",
     "<svg class=\"change-password-icon-wrap\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 75 75\">\n" +
     "    <style type=\"text/css\">\n" +
@@ -15544,7 +15546,7 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
         );
 })(angular);
 
-angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -15582,7 +15584,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -15684,7 +15686,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
 })(angular);
 
 
-angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.tests').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/tests/directives/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
@@ -16006,7 +16008,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     );
 })(angular);
 
-angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/tutorials/components/tutorialList/tutorialList.template.html",
     "<div class=\"tutorials-list-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_LIST_COMPONENTS\">\n" +
     "    <div class=\"diagnostic-overlay\" ng-if=\"!vm.isDiagnosticComplete\">\n" +
@@ -16124,7 +16126,7 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -16232,7 +16234,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
     }];
 }]);
 
-angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -16634,7 +16636,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
 }]);
 
 
-angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/userGoalsSelection/svg/arrow-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-468.2 482.4 96 89.8\" class=\"arrow-icon-wrapper\">\n" +
     "    <style type=\"text/css\">\n" +
@@ -16961,7 +16963,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 })(angular);
 
 
-angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewer.template.html",
     "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
     "    <div class=\"header\">\n" +
@@ -17989,7 +17991,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLock.template.html",
     "<div ng-transclude class=\"main-container\"></div>\n" +
     "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +
@@ -18869,7 +18871,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
     "<div class=\"exercise-container base-border-radius\">\n" +
     "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
@@ -19080,7 +19082,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
@@ -20177,7 +20179,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     );
 })(angular);
 
-angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html",
     "<div class=\"lesson-details\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
     "    <div class=\"field\" ng-repeat=\"field in vm.fields\" ng-if=\"field.text\">\n" +
@@ -20522,7 +20524,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html",
     "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
     "    <div class=\"overflowWrap\">\n" +
@@ -20819,7 +20821,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     });
 })(angular);
 
-angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html",
     "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
     "    <div class=\"time-line-wrapper\">\n" +
@@ -20937,7 +20939,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkToast/svg/znkToast-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +

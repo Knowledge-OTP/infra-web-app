@@ -1391,7 +1391,7 @@
     );
 })(angular);
 
-angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
     "<svg\n" +
     "    version=\"1.1\"\n" +

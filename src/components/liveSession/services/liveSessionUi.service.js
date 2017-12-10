@@ -92,8 +92,8 @@
                         );
                         return popUpInstance.promise
                         // todo: figure out why it's opposite
-                            .then(res => $q.reject(res))
-                            .catch(err => $q.resolve(err));
+                            .then(res => $q.resolve(res))
+                            .catch(err => $q.reject(err));
                     }).catch(err => {
                         $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp translate failure' + err);
                         return $q.reject(err);
@@ -151,6 +151,7 @@
             };
 
             LiveSessionUiSrv.showEndSessionPopup = () => {
+                LiveSessionUiSrv.closePopup();
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_POPUP_TITLE');
                 translationsPromMap.content = $translate('LIVE_SESSION.END_POPUP_CONTENT');
