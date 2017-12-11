@@ -9319,7 +9319,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart,
                     length: ENV.liveSession.sessionLength,
-                    queryLessonStart: 4500000
+                    queryLessonStart: ENV.liveSession.queryLessonStart,
                 };
                 let queryLessonNum = 4; // multiple this number by the lesson length for the getScheduledLesson query
                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
