@@ -251,15 +251,13 @@
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
-                            return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lessonData => {
-                                let lesson = lessonData.data;
+                            return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
                                 let updatePromArr = [];
                                 if (lesson.id) {
                                     if (liveSessionData.backToBackId) {
                                         // update all backToBack lessons
                                         ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
-                                            .then(backToBackLessonsRes => {
-                                                let backToBackLessonsArr = backToBackLessonsRes.data;
+                                            .then(backToBackLessonsArr => {
                                                 backToBackLessonsArr.forEach(b2bLesson => {
                                                     updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
                                                 });

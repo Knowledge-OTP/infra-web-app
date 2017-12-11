@@ -20,7 +20,7 @@
                     queryLessonStart: ENV.liveSession.queryLessonStart,
                 };
                 let queryLessonNum = 4; // multiple this number by the lesson length for the getScheduledLesson query
-                let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => globalVariables.liveSession);
                 let educatorProfileProm = UserProfileService.getProfile();
 
                 this.$onInit = () => {
@@ -118,7 +118,7 @@
 
                         return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
                             .then(lessons => {
-                                return this.getLessonInRange(lessons.data);
+                                return this.getLessonInRange(lessons);
                             }, err => $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err));
                     });
 

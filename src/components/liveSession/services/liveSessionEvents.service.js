@@ -82,9 +82,9 @@
                                     if (liveSessionData.lessonId) {
                                         ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
                                             if (liveSessionData.educatorId === currUid) {
-                                                ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson.data, UserTypeContextEnum.EDUCATOR.enum);
+                                                ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson, UserTypeContextEnum.EDUCATOR.enum);
                                             } else {
-                                                ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson.data, UserTypeContextEnum.STUDENT.enum);
+                                                ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson, UserTypeContextEnum.STUDENT.enum);
                                             }
 
                                         });

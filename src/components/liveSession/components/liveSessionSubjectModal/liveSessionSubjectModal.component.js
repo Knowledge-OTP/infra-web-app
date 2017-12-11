@@ -12,7 +12,8 @@
             controller: function (ENV, $mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables()
+                     .then(globalVariables => globalVariables.liveSession);
 
                 this.$onInit = () =>  {
                     this.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();

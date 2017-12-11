@@ -62,8 +62,7 @@
 
                     if (lesson.backToBackId) {
                         ZnkLessonNotesSrv.getLessonsByBackToBackId(lesson.backToBackId)
-                            .then(backToBackLessonsRes => {
-                                let backToBackLessonsArr = backToBackLessonsRes.data;
+                            .then(backToBackLessonsArr => {
                                 backToBackLessonsArr.forEach(b2bLesson => {
                                     updatePromArr.push(this.updateLessonNotes(b2bLesson));
                                 });

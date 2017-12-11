@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        function ($log, $rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
+        function ($log, $rootScope, $rootElement, $http, ENV) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -10,7 +10,6 @@
             let serviceBackendUrl = `${ENV.znkBackendBaseUrl}/service`;
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
-            let liveSessionDurationPath = '/settings/liveSessionDuration/';
 
             this._mailsToSend = [];
             this._studentsProfiles = [];
@@ -20,7 +19,7 @@
                 return $http.get(getLessonsApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(lesson => lesson.data);
             };
 
             this.getLessonsByBackToBackId = (backToBackId) => {
@@ -28,43 +27,36 @@
                 return $http.get(getBackToBackApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(lessons => lessons.data);
             };
 
             this.getLessonsByStudentIds = (studentIds, dateRange, educatorId) => {
-                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId});
+                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId})
+                    .then(lessons => lessons.data);
             };
 
             this.updateLesson = (lessonToUpdate) => {
                 let updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
-                    .then(lessonArr => {
-                        return Promise.resolve(lessonArr.data);
-                    });
+                    .then(lessons => lessons.data[0]);
             };
 
             this.getServiceList = () => {
                 return $http.get(`${serviceBackendUrl}/`, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(services => services.data);
             };
 
-            this.getGlobals = () => {
+            this.getGlobalVariables = () => {
                 return $http.get(`${globalBackendUrl}`, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(globalVariables => globalVariables.data);
             };
 
             this.getUserProfiles = (uidArr) => {
                 return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr);
-            };
-
-            this.getLiveSessionSettings = () => {
-                return InfraConfigSrv.getGlobalStorage().then(storage => {
-                    return storage.get(liveSessionDurationPath);
-                });
             };
 
             this.sendEmails = (lesson) => {

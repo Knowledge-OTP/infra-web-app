@@ -775,7 +775,7 @@
                 });
             };
 
-            this.getGlobals = () => {
+            this.getGlobalVariables = () => {
                 return $http.get(`${globalBackendUrl}`, {
                     timeout: ENV.promiseTimeOut,
                     cache: true

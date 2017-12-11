@@ -32,8 +32,8 @@
                 };
 
                 this.determineLessonStartedLate = () => {
-                    ZnkLessonNotesSrv.getLiveSessionSettings().then(liveSessionSettings => {
-                        this.lessonStartedLate = (this.lesson.date + liveSessionSettings.lessonStartedLateTimeout) < this.lesson.startTime;
+                    ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => {
+                        this.lessonStartedLate = (this.lesson.date + globalVariables.liveSession.lessonStartedLateTimeout) < this.lesson.startTime;
                     });
                 };
             }

@@ -30,8 +30,8 @@
                     ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
                         .then(studentsProfiles => {
                             $log.debug(' studentsProfiles loaded: ', studentsProfiles);
-                            this.studentsProfiles = studentsProfiles.data;
-                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles.data;
+                            this.studentsProfiles = studentsProfiles;
+                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles;
                             this.studentsProfiles.forEach(profile => {
                                 const studentMail = profile.email || profile.userEmail || profile.authEmail;
                                 this.studentsMails.push(studentMail);
