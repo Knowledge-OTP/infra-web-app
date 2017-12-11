@@ -6,6 +6,7 @@
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
+            let lessonApi = `${ENV.znkBackendBaseUrl}/lesson`;
             let serviceBackendUrl = `${ENV.znkBackendBaseUrl}/service`;
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
@@ -17,6 +18,14 @@
             this.getLessonById = (lessonId) => {
                 let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
                 return $http.get(getLessonsApi, {
+                    timeout: ENV.promiseTimeOut,
+                    cache: true
+                });
+            };
+
+            this.getLessonsByBackToBackId = (backToBackId) => {
+                let getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
+                return $http.get(getBackToBackApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
                 });

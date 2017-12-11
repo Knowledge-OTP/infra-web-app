@@ -10,13 +10,16 @@
             controllerAs: 'vm',
             controller: function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
                                   PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum,
-                                  UserProfileService, LiveSessionUiSrv, StudentService) {
+                                  UserProfileService, LiveSessionUiSrv, StudentService, UtilitySrv) {
                 'ngInject';
 
                 let SESSION_DURATION = {
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
-                    marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart
+                    marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart,
+                    length: ENV.liveSession.sessionLength,
+                    queryLessonStart: ENV.liveSession.queryLessonStart,
                 };
+                let queryLessonNum = 4; // multiple this number by the lesson length for the getScheduledLesson query
                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
                 let educatorProfileProm = UserProfileService.getProfile();
 
@@ -69,10 +72,10 @@
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
-                                    this.getScheduledLesson().then(scheduledLesson => {
+                                    this.getScheduledLessonData().then(scheduledLessonData => {
                                         LiveSessionUiSrv.closePopup();
-                                        if (scheduledLesson) {
-                                            LiveSessionSrv.startLiveSession(this.student, scheduledLesson);
+                                        if (scheduledLessonData) {
+                                            LiveSessionSrv.startLiveSession(this.student, scheduledLessonData);
                                         } else {
                                             LiveSessionUiSrv.showNoLessonScheduledPopup(this.student.name)
                                                 .then(() => $log.debug('showSessionModal: No lesson is scheduled'));
@@ -96,9 +99,9 @@
                     });
                 };
 
-                this.getScheduledLesson = () => {
+                this.getScheduledLessonData = () => {
                     let dataPromMap = {
-                        liveSessionDuration: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
+                        liveSessionSettings: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
                         educatorProfile: this.educatorProfile ? $q.when(this.educatorProfile) : educatorProfileProm
                     };
                     return $q.all(dataPromMap).then(dataMap => {
@@ -106,8 +109,8 @@
                         this.educatorProfile = dataMap.educatorProfile;
                         SESSION_DURATION = this.liveSessionSettings ? this.liveSessionSettings : SESSION_DURATION;
                         let now = Date.now();
-                        let calcStartTime = now - SESSION_DURATION.marginBeforeSessionStart;
-                        let calcEndTime = now + SESSION_DURATION.marginAfterSessionStart;
+                        let calcStartTime = now - SESSION_DURATION.queryLessonStart;
+                        let calcEndTime = now + (SESSION_DURATION.length * queryLessonNum);
                         let dateRange = {
                             startDate: calcStartTime,
                             endDate: calcEndTime
@@ -115,10 +118,77 @@
 
                         return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
                             .then(lessons => {
-                                return lessons.data && lessons.data.length ? lessons.data[0] : null;
-                            }, err => $log.debug('getScheduledLesson: getLessonsByStudentIds Error: ', err));
+                                return this.getLessonInRange(lessons.data);
+                            }, err => $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err));
                     });
 
+
+                };
+
+                this.getLessonInRange = (lessons) => {
+                    let scheduledLessonMap = {};
+                    if (lessons && lessons.length > 0) {
+                        // No multiple lesson return single lesson
+                        if (lessons.length === 1) {
+                            scheduledLessonMap.scheduledLesson = lessons.pop();
+                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_DURATION.length;
+                        } else {
+                            $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
+                            scheduledLessonMap = this.checkBack2BackLesson(lessons);
+                        }
+                    }
+                    $log.debug(`getLessonInRange: lessons is not defined or lessons.length === 0 `);
+                    return scheduledLessonMap;
+                };
+
+                this.checkBack2BackLesson = (lessons) => {
+                    $log.debug(`checkBack2BackLesson`);
+                    let scheduledLessonMap = {};
+                    let back2BackLessons = [];
+                    let now = Date.now();
+                    lessons.forEach(lesson => {
+                        let startTimeRange = lesson.date - SESSION_DURATION.marginBeforeSessionStart;
+                        let endTimeRange = lesson.date + SESSION_DURATION.length + SESSION_DURATION.marginAfterSessionStart;
+                        if ((startTimeRange < now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
+                            scheduledLessonMap.scheduledLesson = lesson;
+                            back2BackLessons.push(lesson);
+                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_DURATION.length;
+                        } else if (scheduledLessonMap.scheduledLesson) {
+                            // must be second iteration or above
+                            if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_DURATION.length) === lesson.date) {
+                                $log.debug(`checkBack2BackLesson: b2b lesson found. lessonId: ${lesson.id}`);
+                                // scenario when the second lesson in the array is the actual scheduledLesson and not the first one
+                                if (lesson.date < now) {
+                                    back2BackLessons.pop();
+                                    scheduledLessonMap.scheduledLesson = lesson;
+                                }
+                                back2BackLessons.push(lesson);
+                                scheduledLessonMap.expectedSessionEndTime = lesson.date + SESSION_DURATION.length;
+                            } else {
+                                $log.debug(`checkBack2BackLesson: this lesson isn't b2b lesson.`);
+                            }
+                        }
+                    });
+
+                    if (back2BackLessons.length > 1) {
+                        if (!back2BackLessons[0].backToBackId) {
+                            let newB2BLessonId = UtilitySrv.general.createGuid();
+                            let updateB2BLessonProms = [];
+                            back2BackLessons.forEach(b2bLesson => {
+                                b2bLesson.backToBackId = newB2BLessonId;
+                                updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
+                            });
+                            Promise.all(updateB2BLessonProms)
+                                .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
+                                .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
+                        } else {
+                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] al ready have backToBackId`);
+                        }
+                    } else {
+                        $log.debug(`checkBack2BackLesson: back2BackLessons.length === 0`);
+                    }
+
+                    return scheduledLessonMap;
 
                 };
             }

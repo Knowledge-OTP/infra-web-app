@@ -30,14 +30,8 @@
                                 translationsProm.then(message => {
                                     ZnkToastSrv.showToast('success', message);
                                 });
-                                // update lesson status
-                                this.lesson.status = this.lesson.status === LessonStatusEnum.SCHEDULED.enum ?
-                                    LessonStatusEnum.ATTENDED.enum : this.lesson.status;
-                                // update sendMailTime and lessonNotes status only if email sent
-                                this.lesson.lessonNotes.sendMailTime = new Date().getTime();
-                                this.lesson.lessonNotes.status = this.lesson.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
-                                    LessonNotesStatusEnum.COMPLETE.enum : this.lesson.lessonNotes.status;
-                                this.saveLesson();
+
+                                this.saveLesson(this.lesson, true);
                             })
                             .catch(err => {
                                 $log.error('lessonNotesPopup: sendEmail failed. Error: ', err);
@@ -58,14 +52,29 @@
                 };
 
                 this.doItLater = () => {
-                    this.saveLesson();
+                    this.saveLesson(this.lesson, false);
                 };
 
-                this.saveLesson = () => {
-                    $log.debug('saving lesson : ', this.lesson);
-                    ZnkLessonNotesSrv.updateLesson(this.lesson)
+                this.saveLesson = (lesson, hasMailSent) => {
+                    $log.debug('saving lesson : ', lesson);
+                    lesson = hasMailSent ? this.updateLessonNotes(lesson) : lesson;
+                    let updatePromArr = [];
+
+                    if (lesson.backToBackId) {
+                        ZnkLessonNotesSrv.getLessonsByBackToBackId(lesson.backToBackId)
+                            .then(backToBackLessonsRes => {
+                                let backToBackLessonsArr = backToBackLessonsRes.data;
+                                backToBackLessonsArr.forEach(b2bLesson => {
+                                    updatePromArr.push(this.updateLessonNotes(b2bLesson));
+                                });
+                            });
+                    } else {
+                        updatePromArr.push(this.updateLessonNotes(lesson));
+                    }
+
+                    Promise.all(updatePromArr)
                         .then(updatedLesson => {
-                            this.lesson = updatedLesson.data;
+                            $log.debug('lessonNotesPopup saveLesson:  updatedLessons: ', updatedLesson.data);
                             this.showSpinner = false;
                             let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
                             translationsProm.then(message => {
@@ -82,6 +91,16 @@
                             });
                         });
                 };
+
+                this.updateLessonNotes = (lesson) => {
+                    // update sendMailTime and status in lessonNotes only if email sent
+                    lesson.lessonNotes.sendMailTime = new Date().getTime();
+                    lesson.lessonNotes.status = lesson.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
+                        LessonNotesStatusEnum.COMPLETE.enum : lesson.lessonNotes.status;
+
+                    return lesson;
+                };
+
             }
         });
 })(angular);

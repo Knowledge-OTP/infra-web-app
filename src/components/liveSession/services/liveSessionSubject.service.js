@@ -27,12 +27,12 @@
                 });
             };
 
-            LiveSessionSubjectSrv.getSessionSubject = (lesson) => {
-                console.log('_getSessionSubject Lesson : ', lesson);
-                if (lesson.sessionSubject) {
-                    return lesson.sessionSubject.id;
+            LiveSessionSubjectSrv.getSessionSubject = (lessonData) => {
+                console.log('_getSessionSubject lessonData : ', lessonData);
+                if (lessonData.sessionSubject) {
+                    return lessonData.sessionSubject.id;
                 } else {
-                    let topicIdNum = MyZinkerzTopicMapEnum[lesson.topicId.toUpperCase()].enum;
+                    let topicIdNum = MyZinkerzTopicMapEnum[lessonData.scheduledLesson.topicId.toUpperCase()].enum;
                     if (angular.isDefined(topicIdNum)) {
                         return topicIdNum;
                     } else {
