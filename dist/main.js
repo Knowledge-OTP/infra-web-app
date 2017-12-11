@@ -9546,7 +9546,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
 
                 this.startSession = (sessionSubject) => {
                     liveSessionSettingsProm.then(liveSessionSettings => {
-                        let expectedSessionEndTime = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let liveSessionLength = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let expectedSessionEndTime = LiveSessionSrv._getRoundTime() + liveSessionLength;
                         let lessonData = { sessionSubject, expectedSessionEndTime };
                         LiveSessionSrv.startLiveSession(this.student, lessonData);
                     });
@@ -9872,31 +9873,26 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
-                            return ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lessonData => {
-                                let lesson = lessonData.data;
-                                let updatePromArr = [];
-                                if (lesson.id) {
-                                    if (liveSessionData.backToBackId) {
-                                        // update all backToBack lessons
-                                        ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
-                                            .then(backToBackLessonsRes => {
-                                                let backToBackLessonsArr = backToBackLessonsRes.data;
-                                                backToBackLessonsArr.forEach(b2bLesson => {
-                                                    updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
-                                                });
-                                            });
-                                    } else {
-                                        updatePromArr.push(this.updateSingleLesson(lesson, liveSessionData));
-                                    }
+                            let updatePromArr = [];
+                            if (liveSessionData.backToBackId) {
+                                // update all backToBack lessons
+                                ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
+                                    .then(backToBackLessonsRes => {
+                                        let backToBackLessonsArr = backToBackLessonsRes.data;
+                                        backToBackLessonsArr.forEach(b2bLesson => {
+                                            updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
+                                        });
+                                    });
+                            } else {
+                                ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lessonData => {
+                                    let lesson = lessonData.data;
+                                    updatePromArr.push(this.updateSingleLesson(lesson, liveSessionData));
+                                });
+                            }
+                            return Promise.all(updatePromArr)
+                                .then(updatedLessons => $log.debug('_updateLesson: update lessons for startTime & status. updatedLessons: ', updatedLessons))
+                                .catch (err => $log.error('_updateLesson: updateLesson failed. Error: ', err));
 
-                                    Promise.all(updatePromArr)
-                                        .then(updatedLessons => $log.debug('_updateLesson: update lessons for startTime & status. updatedLessons: ', updatedLessons))
-                                        .catch (err => $log.error('_updateLesson: updateLesson failed. Error: ', err));
-
-                                } else {
-                                    $log.debug('_updateLesson: lessonId is required');
-                                }
-                            });
                         } else {
                             $log.debug('_updateLesson: darkFeatures in OFF');
                         }
