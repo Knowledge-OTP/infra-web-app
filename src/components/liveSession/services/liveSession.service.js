@@ -7,8 +7,8 @@
                   ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, $window, LiveSessionSubjectSrv) {
             'ngInject';
 
-            let SESSION_DURATION = {
-                length: ENV.liveSession.sessionLength,
+            let SESSION_SETTINGS = {
+                length: ENV.liveSession.length,
                 extendTime: ENV.liveSession.sessionExtendTime,
             };
 
@@ -228,11 +228,11 @@
                     }
                     LiveSessionDataGetterSrv.getLiveSessionDuration().then((liveSessionDuration) => {
                         if (liveSessionDuration) {
-                            SESSION_DURATION = liveSessionDuration;
+                            SESSION_SETTINGS = liveSessionDuration;
                         }
                         liveSessionInterval.interval = $interval(() => {
                             let liveSessionDuration = (this._getRoundTime() - activeLiveSessionDataFromAdapter.startTime);
-                            let EndAlertTime = SESSION_DURATION.length + activeLiveSessionDataFromAdapter.extendTime;
+                            let EndAlertTime = SESSION_SETTINGS.length + activeLiveSessionDataFromAdapter.extendTime;
 
                             if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
                                 LiveSessionUiSrv.showSessionEndAlertPopup().then(() => {
@@ -272,7 +272,7 @@
                         } else {
                             $log.debug('_updateLesson: darkFeatures in OFF');
                         }
-                    });
+                    }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
             this.updateSingleLesson = (lesson, liveSessionData) => {
@@ -387,10 +387,16 @@
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
-                            sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData),
-                            lessonId: lessonData.scheduledLesson ? lessonData.scheduledLesson.id : null,
-                            backToBackId: lessonData.scheduledLesson ? lessonData.scheduledLesson.backToBackId : null
+                            sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData)
                         };
+
+                        if (lessonData.scheduledLesson) {
+                            if (lessonData.scheduledLesson.backToBackId) {
+                                newLiveSessionData.backToBackId = lessonData.scheduledLesson.backToBackId;
+                            } else {
+                                newLiveSessionData.lessonId = lessonData.scheduledLesson.id;
+                            }
+                        }
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
 
@@ -435,10 +441,10 @@
             this.confirmExtendSession = () => {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid)
                     .then((liveSessionData) => {
-                    liveSessionData.extendTime += SESSION_DURATION.extendTime;
+                    liveSessionData.extendTime += SESSION_SETTINGS.extendTime;
                     return liveSessionData.$save();
                 }).then(() => {
-                    let extendTimeInMin = SESSION_DURATION.extendTime / 60000; // convert to minutes
+                    let extendTimeInMin = SESSION_SETTINGS.extendTime / 60000; // convert to minutes
                     $log.debug('confirmExtendSession: Live session is extend by ' + extendTimeInMin + ' minutes.');
                 }).catch(() => {
                     $log.debug('confirmExtendSession: Failed to save extend live session in guid: ' + activeLiveSessionDataFromAdapter.guid);

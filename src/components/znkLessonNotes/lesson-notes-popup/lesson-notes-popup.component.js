@@ -73,7 +73,7 @@
 
                     Promise.all(updatePromArr)
                         .then(updatedLesson => {
-                            $log.debug('lessonNotesPopup saveLesson:  updatedLessons: ', updatedLesson.data);
+                            $log.debug('lessonNotesPopup saveLesson:  updatedLessons: ', updatedLesson);
                             this.showSpinner = false;
                             let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
                             translationsProm.then(message => {

@@ -542,6 +542,7 @@
         "LIVE_SESSION_REQUEST": "Live Lesson Request",
         "WANT_TO_JOIN": "Join the live session.",
         "JOIN": "JOIN",
+        "STUDENT_DECLINE_SESSION": "Student decline the live session request",
         "WAIT_TO_STUDENT": "Waiting for student to join the session.",
         "JOIN_TO_ACTIVE_SESSION": "You have joined a live session.",
         "END_POPUP_TITLE": "Lesson Ended",

@@ -126,7 +126,7 @@
                     this.dataPromMap.serviceList = ZnkLessonNotesSrv.getServiceList();
                     $q.all(this.dataPromMap).then((dataMap) => {
                         this.translate = dataMap.translate;
-                        this.serviceListMap = dataMap.serviceList.data;
+                        this.serviceListMap = dataMap.serviceList;
                         this.buildViewModal();
                     });
                 };
@@ -285,8 +285,7 @@
 
                     if (lesson.backToBackId) {
                         ZnkLessonNotesSrv.getLessonsByBackToBackId(lesson.backToBackId)
-                            .then(backToBackLessonsRes => {
-                                let backToBackLessonsArr = backToBackLessonsRes.data;
+                            .then(backToBackLessonsArr => {
                                 backToBackLessonsArr.forEach(b2bLesson => {
                                     updatePromArr.push(this.updateLessonNotes(b2bLesson));
                                 });
@@ -297,7 +296,7 @@
 
                     Promise.all(updatePromArr)
                         .then(updatedLesson => {
-                            $log.debug('lessonNotesPopup saveLesson:  updatedLessons: ', updatedLesson.data);
+                            $log.debug('lessonNotesPopup saveLesson:  updatedLessons: ', updatedLesson);
                             this.showSpinner = false;
                             let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
                             translationsProm.then(message => {
@@ -362,8 +361,8 @@
                 };
 
                 this.determineLessonStartedLate = () => {
-                    ZnkLessonNotesSrv.getLiveSessionSettings().then(liveSessionSettings => {
-                        this.lessonStartedLate = (this.lesson.date + liveSessionSettings.lessonStartedLateTimeout) < this.lesson.startTime;
+                    ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => {
+                        this.lessonStartedLate = (this.lesson.date + globalVariables.liveSession.lessonStartedLateTimeout) < this.lesson.startTime;
                     });
                 };
             }]
@@ -434,8 +433,8 @@
                     ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
                         .then(studentsProfiles => {
                             $log.debug(' studentsProfiles loaded: ', studentsProfiles);
-                            this.studentsProfiles = studentsProfiles.data;
-                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles.data;
+                            this.studentsProfiles = studentsProfiles;
+                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles;
                             this.studentsProfiles.forEach(profile => {
                                 const studentMail = profile.email || profile.userEmail || profile.authEmail;
                                 this.studentsMails.push(studentMail);
@@ -491,8 +490,7 @@
 
                     if (this.lesson.backToBackId) {
                         ZnkLessonNotesSrv.getLessonsByBackToBackId(this.lesson.backToBackId)
-                            .then(backToBackLessonsRes => {
-                                let backToBackLessonsArr = backToBackLessonsRes.data;
+                            .then(backToBackLessonsArr => {
                                 backToBackLessonsArr.forEach(b2bLesson => {
                                     updatePromArr.push(this.updateStudentFeedback(this.lesson, b2bLesson));
                                 });
@@ -503,7 +501,7 @@
 
                     Promise.all(updatePromArr)
                         .then(updatedLesson => {
-                            this.lesson = updatedLesson.data;
+                            this.lesson = updatedLesson;
                             this.showSpinner = false;
                             this.closeModal();
                         })
@@ -727,7 +725,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "InfraConfigSrv", function ($log, $rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", function ($log, $rootScope, $rootElement, $http, ENV) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -735,7 +733,6 @@
             let serviceBackendUrl = `${ENV.znkBackendBaseUrl}/service`;
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
-            let liveSessionDurationPath = '/settings/liveSessionDuration/';
 
             this._mailsToSend = [];
             this._studentsProfiles = [];
@@ -745,7 +742,7 @@
                 return $http.get(getLessonsApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(lesson => lesson.data);
             };
 
             this.getLessonsByBackToBackId = (backToBackId) => {
@@ -753,43 +750,36 @@
                 return $http.get(getBackToBackApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(lessons => lessons.data);
             };
 
             this.getLessonsByStudentIds = (studentIds, dateRange, educatorId) => {
-                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId});
+                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId})
+                    .then(lessons => lessons.data);
             };
 
             this.updateLesson = (lessonToUpdate) => {
                 let updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
-                    .then(lessonArr => {
-                        return Promise.resolve(lessonArr.data);
-                    });
+                    .then(lessons => lessons.data[0]);
             };
 
             this.getServiceList = () => {
                 return $http.get(`${serviceBackendUrl}/`, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(services => services.data);
             };
 
             this.getGlobalVariables = () => {
                 return $http.get(`${globalBackendUrl}`, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(globalVariables => globalVariables.data);
             };
 
             this.getUserProfiles = (uidArr) => {
                 return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr);
-            };
-
-            this.getLiveSessionSettings = () => {
-                return InfraConfigSrv.getGlobalStorage().then(storage => {
-                    return storage.get(liveSessionDurationPath);
-                });
             };
 
             this.sendEmails = (lesson) => {
@@ -797,7 +787,7 @@
                     const mailPromArr = [];
                     return this.getServiceList().then(serviceList => {
                         $log.debug('mailsToSend: ', this._mailsToSend);
-                        const lessonService = serviceList.data[lesson.serviceId];
+                        const lessonService = serviceList[lesson.serviceId];
                         const topicName = lessonService.topics[lesson.topicId].name;
                         const mailTemplateParams = {
                             date: lesson.date,

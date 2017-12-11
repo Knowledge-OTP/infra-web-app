@@ -42,7 +42,7 @@
                     this.dataPromMap.serviceList = ZnkLessonNotesSrv.getServiceList();
                     $q.all(this.dataPromMap).then((dataMap) => {
                         this.translate = dataMap.translate;
-                        this.serviceListMap = dataMap.serviceList.data;
+                        this.serviceListMap = dataMap.serviceList;
                         this.buildViewModal();
                     });
                 };

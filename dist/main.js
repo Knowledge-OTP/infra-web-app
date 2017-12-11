@@ -9315,14 +9315,14 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                                   UserProfileService, LiveSessionUiSrv, StudentService, UtilitySrv) {
                 'ngInject';
 
-                let SESSION_DURATION = {
+                let SESSION_SETTINGS = {
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart,
-                    length: ENV.liveSession.sessionLength,
+                    length: ENV.liveSession.length,
                     queryLessonStart: ENV.liveSession.queryLessonStart,
                 };
                 let queryLessonNum = 4; // multiple this number by the lesson length for the getScheduledLesson query
-                let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => globalVariables.liveSession);
                 let educatorProfileProm = UserProfileService.getProfile();
 
                 this.$onInit = () => {
@@ -9387,7 +9387,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                                     LiveSessionUiSrv.closePopup();
                                     this.showSessionModal();
                                 }
-                            });
+                            }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
                     });
                 };
 
@@ -9409,10 +9409,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     return $q.all(dataPromMap).then(dataMap => {
                         this.liveSessionSettings = dataMap.liveSessionSettings;
                         this.educatorProfile = dataMap.educatorProfile;
-                        SESSION_DURATION = this.liveSessionSettings ? this.liveSessionSettings : SESSION_DURATION;
+                        SESSION_SETTINGS = this.liveSessionSettings ? this.liveSessionSettings : SESSION_SETTINGS;
                         let now = Date.now();
-                        let calcStartTime = now - SESSION_DURATION.queryLessonStart;
-                        let calcEndTime = now + (SESSION_DURATION.length * queryLessonNum);
+                        let calcStartTime = now - SESSION_SETTINGS.queryLessonStart;
+                        let calcEndTime = now + (SESSION_SETTINGS.length * queryLessonNum);
                         let dateRange = {
                             startDate: calcStartTime,
                             endDate: calcEndTime
@@ -9420,7 +9420,12 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
 
                         return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
                             .then(lessons => {
-                                return this.getLessonInRange(lessons.data);
+                                if (lessons && lessons.length) {
+                                    lessons.sort(UtilitySrv.array.sortByField('date'));
+                                    return this.getLessonInRange(lessons);
+                                } else {
+                                    return null;
+                                }
                             }, err => $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err));
                     });
 
@@ -9433,7 +9438,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                         // No multiple lesson return single lesson
                         if (lessons.length === 1) {
                             scheduledLessonMap.scheduledLesson = lessons.pop();
-                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_DURATION.length;
+                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
                             scheduledLessonMap = this.checkBack2BackLesson(lessons);
@@ -9449,15 +9454,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     let back2BackLessons = [];
                     let now = Date.now();
                     lessons.forEach(lesson => {
-                        let startTimeRange = lesson.date - SESSION_DURATION.marginBeforeSessionStart;
-                        let endTimeRange = lesson.date + SESSION_DURATION.length + SESSION_DURATION.marginAfterSessionStart;
+                        let startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
+                        let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
                         if ((startTimeRange < now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
                             scheduledLessonMap.scheduledLesson = lesson;
                             back2BackLessons.push(lesson);
-                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_DURATION.length;
+                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
                         } else if (scheduledLessonMap.scheduledLesson) {
                             // must be second iteration or above
-                            if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_DURATION.length) === lesson.date) {
+                            if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_SETTINGS.length) === lesson.date) {
                                 $log.debug(`checkBack2BackLesson: b2b lesson found. lessonId: ${lesson.id}`);
                                 // scenario when the second lesson in the array is the actual scheduledLesson and not the first one
                                 if (lesson.date < now) {
@@ -9465,7 +9470,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                                     scheduledLessonMap.scheduledLesson = lesson;
                                 }
                                 back2BackLessons.push(lesson);
-                                scheduledLessonMap.expectedSessionEndTime = lesson.date + SESSION_DURATION.length;
+                                scheduledLessonMap.expectedSessionEndTime = lesson.date + SESSION_SETTINGS.length;
                             } else {
                                 $log.debug(`checkBack2BackLesson: this lesson isn't b2b lesson.`);
                             }
@@ -9537,7 +9542,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
             controller: ["ENV", "$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", "ZnkLessonNotesSrv", function (ENV, $mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables()
+                     .then(globalVariables => globalVariables.liveSession);
 
                 this.$onInit = () =>  {
                     this.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
@@ -9546,7 +9552,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
 
                 this.startSession = (sessionSubject) => {
                     liveSessionSettingsProm.then(liveSessionSettings => {
-                        let liveSessionLength = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let liveSessionLength = liveSessionSettings.length || ENV.liveSession.length;
                         let expectedSessionEndTime = LiveSessionSrv._getRoundTime() + liveSessionLength;
                         let lessonData = { sessionSubject, expectedSessionEndTime };
                         LiveSessionSrv.startLiveSession(this.student, lessonData);
@@ -9629,8 +9635,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                   ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, $window, LiveSessionSubjectSrv) {
             'ngInject';
 
-            let SESSION_DURATION = {
-                length: ENV.liveSession.sessionLength,
+            let SESSION_SETTINGS = {
+                length: ENV.liveSession.length,
                 extendTime: ENV.liveSession.sessionExtendTime,
             };
 
@@ -9850,11 +9856,11 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     }
                     LiveSessionDataGetterSrv.getLiveSessionDuration().then((liveSessionDuration) => {
                         if (liveSessionDuration) {
-                            SESSION_DURATION = liveSessionDuration;
+                            SESSION_SETTINGS = liveSessionDuration;
                         }
                         liveSessionInterval.interval = $interval(() => {
                             let liveSessionDuration = (this._getRoundTime() - activeLiveSessionDataFromAdapter.startTime);
-                            let EndAlertTime = SESSION_DURATION.length + activeLiveSessionDataFromAdapter.extendTime;
+                            let EndAlertTime = SESSION_SETTINGS.length + activeLiveSessionDataFromAdapter.extendTime;
 
                             if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
                                 LiveSessionUiSrv.showSessionEndAlertPopup().then(() => {
@@ -9877,15 +9883,13 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                             if (liveSessionData.backToBackId) {
                                 // update all backToBack lessons
                                 ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
-                                    .then(backToBackLessonsRes => {
-                                        let backToBackLessonsArr = backToBackLessonsRes.data;
+                                    .then(backToBackLessonsArr => {
                                         backToBackLessonsArr.forEach(b2bLesson => {
                                             updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
                                         });
                                     });
                             } else {
-                                ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lessonData => {
-                                    let lesson = lessonData.data;
+                                ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
                                     updatePromArr.push(this.updateSingleLesson(lesson, liveSessionData));
                                 });
                             }
@@ -9896,7 +9900,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                         } else {
                             $log.debug('_updateLesson: darkFeatures in OFF');
                         }
-                    });
+                    }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
             this.updateSingleLesson = (lesson, liveSessionData) => {
@@ -10011,10 +10015,16 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
-                            sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData),
-                            lessonId: lessonData.scheduledLesson ? lessonData.scheduledLesson.id : null,
-                            backToBackId: lessonData.scheduledLesson ? lessonData.scheduledLesson.backToBackId : null
+                            sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData)
                         };
+
+                        if (lessonData.scheduledLesson) {
+                            if (lessonData.scheduledLesson.backToBackId) {
+                                newLiveSessionData.backToBackId = lessonData.scheduledLesson.backToBackId;
+                            } else {
+                                newLiveSessionData.lessonId = lessonData.scheduledLesson.id;
+                            }
+                        }
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
 
@@ -10059,10 +10069,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
             this.confirmExtendSession = () => {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid)
                     .then((liveSessionData) => {
-                    liveSessionData.extendTime += SESSION_DURATION.extendTime;
+                    liveSessionData.extendTime += SESSION_SETTINGS.extendTime;
                     return liveSessionData.$save();
                 }).then(() => {
-                    let extendTimeInMin = SESSION_DURATION.extendTime / 60000; // convert to minutes
+                    let extendTimeInMin = SESSION_SETTINGS.extendTime / 60000; // convert to minutes
                     $log.debug('confirmExtendSession: Live session is extend by ' + extendTimeInMin + ' minutes.');
                 }).catch(() => {
                     $log.debug('confirmExtendSession: Failed to save extend live session in guid: ' + activeLiveSessionDataFromAdapter.guid);
@@ -10185,7 +10195,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                                 LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                             }
                         }
-                    });
+                    }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
             LiveSessionEventsSrv._handelLiveSessionConfirmed = (liveSessionData) => {
@@ -10209,34 +10219,43 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
 
             LiveSessionEventsSrv._handelLiveSessionEnded = (liveSessionData) => {
                 LiveSessionUiSrv.closePopup();
+                // determind if student decline the live session request
+                const isStudentDeclineTheSession = !!liveSessionData.startTime;
+
                 if (liveSessionData.studentId !== currUid) {
                     LiveSessionSrv.hangCall(liveSessionData.studentId);
                     LiveSessionSrv._destroyCheckDurationInterval();
                 }
 
-                LiveSessionUiSrv.showEndSessionPopup()
-                    .then(() => {
-                        LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
-                            .then(isDarkFeaturesValid => {
-                                if (isDarkFeaturesValid) {
-                                    $log.debug('darkFeatures in ON');
-                                    if (liveSessionData.lessonId) {
-                                        ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
-                                            if (liveSessionData.educatorId === currUid) {
-                                                ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson.data, UserTypeContextEnum.EDUCATOR.enum);
-                                            } else {
-                                                ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson.data, UserTypeContextEnum.STUDENT.enum);
-                                            }
-
-                                        });
+                if (isStudentDeclineTheSession) {
+                    if (liveSessionData.educatorId === currUid) {
+                        LiveSessionUiSrv.showStudentDeclineSessionPopup();
+                    }
+                } else {
+                    LiveSessionUiSrv.showEndSessionPopup()
+                        .then(() => {
+                            LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                                .then(isDarkFeaturesValid => {
+                                    if (isDarkFeaturesValid) {
+                                        $log.debug('darkFeatures in ON');
+                                        if (liveSessionData.lessonId) {
+                                            ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
+                                                if (liveSessionData.educatorId === currUid) {
+                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson, UserTypeContextEnum.EDUCATOR.enum);
+                                                } else {
+                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson, UserTypeContextEnum.STUDENT.enum);
+                                                }
+                                            });
+                                        } else {
+                                            $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
+                                        }
                                     } else {
-                                        $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
+                                        $log.debug('darkFeatures in OFF');
                                     }
-                                } else {
-                                    $log.debug('darkFeatures in OFF');
-                                }
-                            });
-                    });
+                                }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
+                        });
+                }
+
                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                 // Security check to insure there isn't active session
                 LiveSessionSrv._moveToArchive(liveSessionData);
@@ -10362,8 +10381,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
             let childScope, liveSessionPhElement, readyProm;
             let darkFeaturesValid = null;
 
-            let SESSION_DURATION = {
-                length: ENV.liveSession.sessionLength,
+            let SESSION_SETTINGS = {
+                length: ENV.liveSession.length,
                 extendTime: ENV.liveSession.sessionExtendTime,
             };
 
@@ -10378,7 +10397,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                 LiveSessionDataGetterSrv.getLiveSessionDuration()
                     .then((liveSessionDuration) => {
                         if (liveSessionDuration) {
-                            SESSION_DURATION = liveSessionDuration;
+                            SESSION_SETTINGS = liveSessionDuration;
                         }
                     }).catch(err => {
                     $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
@@ -10438,11 +10457,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                         let popUpInstance = PopUpSrv.warning(
                             translations.title,
                             translations.content,
-                            translations.cancelBtnTitle,
-                            translations.acceptBtnTitle
+                            translations.acceptBtnTitle,
+                            translations.cancelBtnTitle
                         );
                         return popUpInstance.promise
-                        // todo: figure out why it's opposite
                             .then(res => $q.resolve(res))
                             .catch(err => $q.reject(err));
                     }).catch(err => {
@@ -10480,7 +10498,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
             LiveSessionUiSrv.showSessionEndAlertPopup = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT');
-                translationsPromMap.content = $translate('LIVE_SESSION.EXTEND_SESSION', {extendTime: SESSION_DURATION.extendTime / 60000});
+                translationsPromMap.content = $translate('LIVE_SESSION.EXTEND_SESSION', {extendTime: SESSION_SETTINGS.extendTime / 60000});
                 translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap)
@@ -10506,6 +10524,26 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_POPUP_TITLE');
                 translationsPromMap.content = $translate('LIVE_SESSION.END_POPUP_CONTENT');
+                return $q.all(translationsPromMap)
+                    .then(translations => {
+                        let popUpInstance = PopUpSrv.info(
+                            translations.title,
+                            translations.content
+                        );
+                        return popUpInstance.promise
+                            .then(res => $q.resolve(res))
+                            .catch(err => $q.reject(err));
+                    }).catch(err => {
+                        $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                        return $q.reject(err);
+                    });
+            };
+
+            LiveSessionUiSrv.showStudentDeclineSessionPopup = () => {
+                LiveSessionUiSrv.closePopup();
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
+                translationsPromMap.content = $translate('LIVE_SESSION.STUDENT_DECLINE_SESSION');
                 return $q.all(translationsPromMap)
                     .then(translations => {
                         let popUpInstance = PopUpSrv.info(
@@ -19459,7 +19497,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                     this.dataPromMap.serviceList = ZnkLessonNotesSrv.getServiceList();
                     $q.all(this.dataPromMap).then((dataMap) => {
                         this.translate = dataMap.translate;
-                        this.serviceListMap = dataMap.serviceList.data;
+                        this.serviceListMap = dataMap.serviceList;
                         this.buildViewModal();
                     });
                 };
@@ -19618,8 +19656,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                     if (lesson.backToBackId) {
                         ZnkLessonNotesSrv.getLessonsByBackToBackId(lesson.backToBackId)
-                            .then(backToBackLessonsRes => {
-                                let backToBackLessonsArr = backToBackLessonsRes.data;
+                            .then(backToBackLessonsArr => {
                                 backToBackLessonsArr.forEach(b2bLesson => {
                                     updatePromArr.push(this.updateLessonNotes(b2bLesson));
                                 });
@@ -19630,7 +19667,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                     Promise.all(updatePromArr)
                         .then(updatedLesson => {
-                            $log.debug('lessonNotesPopup saveLesson:  updatedLessons: ', updatedLesson.data);
+                            $log.debug('lessonNotesPopup saveLesson:  updatedLessons: ', updatedLesson);
                             this.showSpinner = false;
                             let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
                             translationsProm.then(message => {
@@ -19695,8 +19732,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 };
 
                 this.determineLessonStartedLate = () => {
-                    ZnkLessonNotesSrv.getLiveSessionSettings().then(liveSessionSettings => {
-                        this.lessonStartedLate = (this.lesson.date + liveSessionSettings.lessonStartedLateTimeout) < this.lesson.startTime;
+                    ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => {
+                        this.lessonStartedLate = (this.lesson.date + globalVariables.liveSession.lessonStartedLateTimeout) < this.lesson.startTime;
                     });
                 };
             }]
@@ -19767,8 +19804,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                     ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
                         .then(studentsProfiles => {
                             $log.debug(' studentsProfiles loaded: ', studentsProfiles);
-                            this.studentsProfiles = studentsProfiles.data;
-                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles.data;
+                            this.studentsProfiles = studentsProfiles;
+                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles;
                             this.studentsProfiles.forEach(profile => {
                                 const studentMail = profile.email || profile.userEmail || profile.authEmail;
                                 this.studentsMails.push(studentMail);
@@ -19824,8 +19861,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                     if (this.lesson.backToBackId) {
                         ZnkLessonNotesSrv.getLessonsByBackToBackId(this.lesson.backToBackId)
-                            .then(backToBackLessonsRes => {
-                                let backToBackLessonsArr = backToBackLessonsRes.data;
+                            .then(backToBackLessonsArr => {
                                 backToBackLessonsArr.forEach(b2bLesson => {
                                     updatePromArr.push(this.updateStudentFeedback(this.lesson, b2bLesson));
                                 });
@@ -19836,7 +19872,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                     Promise.all(updatePromArr)
                         .then(updatedLesson => {
-                            this.lesson = updatedLesson.data;
+                            this.lesson = updatedLesson;
                             this.showSpinner = false;
                             this.closeModal();
                         })
@@ -20060,7 +20096,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "InfraConfigSrv", function ($log, $rootScope, $rootElement, $http, ENV, InfraConfigSrv) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", function ($log, $rootScope, $rootElement, $http, ENV) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -20068,7 +20104,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
             let serviceBackendUrl = `${ENV.znkBackendBaseUrl}/service`;
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
-            let liveSessionDurationPath = '/settings/liveSessionDuration/';
 
             this._mailsToSend = [];
             this._studentsProfiles = [];
@@ -20078,7 +20113,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 return $http.get(getLessonsApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(lesson => lesson.data);
             };
 
             this.getLessonsByBackToBackId = (backToBackId) => {
@@ -20086,43 +20121,36 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 return $http.get(getBackToBackApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(lessons => lessons.data);
             };
 
             this.getLessonsByStudentIds = (studentIds, dateRange, educatorId) => {
-                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId});
+                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId})
+                    .then(lessons => lessons.data);
             };
 
             this.updateLesson = (lessonToUpdate) => {
                 let updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
-                    .then(lessonArr => {
-                        return Promise.resolve(lessonArr.data);
-                    });
+                    .then(lessons => lessons.data[0]);
             };
 
             this.getServiceList = () => {
                 return $http.get(`${serviceBackendUrl}/`, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(services => services.data);
             };
 
-            this.getGlobals = () => {
+            this.getGlobalVariables = () => {
                 return $http.get(`${globalBackendUrl}`, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                });
+                }).then(globalVariables => globalVariables.data);
             };
 
             this.getUserProfiles = (uidArr) => {
                 return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr);
-            };
-
-            this.getLiveSessionSettings = () => {
-                return InfraConfigSrv.getGlobalStorage().then(storage => {
-                    return storage.get(liveSessionDurationPath);
-                });
             };
 
             this.sendEmails = (lesson) => {
@@ -20130,7 +20158,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                     const mailPromArr = [];
                     return this.getServiceList().then(serviceList => {
                         $log.debug('mailsToSend: ', this._mailsToSend);
-                        const lessonService = serviceList.data[lesson.serviceId];
+                        const lessonService = serviceList[lesson.serviceId];
                         const topicName = lessonService.topics[lesson.topicId].name;
                         const mailTemplateParams = {
                             date: lesson.date,

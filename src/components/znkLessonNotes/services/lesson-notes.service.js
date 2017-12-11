@@ -64,7 +64,7 @@
                     const mailPromArr = [];
                     return this.getServiceList().then(serviceList => {
                         $log.debug('mailsToSend: ', this._mailsToSend);
-                        const lessonService = serviceList.data[lesson.serviceId];
+                        const lessonService = serviceList[lesson.serviceId];
                         const topicName = lessonService.topics[lesson.topicId].name;
                         const mailTemplateParams = {
                             date: lesson.date,

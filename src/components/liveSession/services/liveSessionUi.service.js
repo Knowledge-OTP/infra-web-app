@@ -10,8 +10,8 @@
             let childScope, liveSessionPhElement, readyProm;
             let darkFeaturesValid = null;
 
-            let SESSION_DURATION = {
-                length: ENV.liveSession.sessionLength,
+            let SESSION_SETTINGS = {
+                length: ENV.liveSession.length,
                 extendTime: ENV.liveSession.sessionExtendTime,
             };
 
@@ -26,10 +26,10 @@
                 LiveSessionDataGetterSrv.getLiveSessionDuration()
                     .then((liveSessionDuration) => {
                         if (liveSessionDuration) {
-                            SESSION_DURATION = liveSessionDuration;
+                            SESSION_SETTINGS = liveSessionDuration;
                         }
                     }).catch(err => {
-                    $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
+                    $log.error('LiveSessionUiSrv: getLiveSessionDuration Error: ' + err);
                 });
             };
 
@@ -86,15 +86,14 @@
                         let popUpInstance = PopUpSrv.warning(
                             translations.title,
                             translations.content,
-                            translations.cancelBtnTitle,
-                            translations.acceptBtnTitle
+                            translations.acceptBtnTitle,
+                            translations.cancelBtnTitle
                         );
                         return popUpInstance.promise
-                        // todo: figure out why it's opposite
                             .then(res => $q.resolve(res))
                             .catch(err => $q.reject(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -108,7 +107,7 @@
                     .then(translations => {
                         PopUpSrv.wait(translations.title, translations.content, translations.cancelBtnTitle);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showEducatorPendingPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showEducatorPendingPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -120,7 +119,7 @@
                     .then(translations => {
                         PopUpSrv.wait(translations.title);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showWaitPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showWaitPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -128,7 +127,7 @@
             LiveSessionUiSrv.showSessionEndAlertPopup = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT');
-                translationsPromMap.content = $translate('LIVE_SESSION.EXTEND_SESSION', {extendTime: SESSION_DURATION.extendTime / 60000});
+                translationsPromMap.content = $translate('LIVE_SESSION.EXTEND_SESSION', {extendTime: SESSION_SETTINGS.extendTime / 60000});
                 translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap)
@@ -144,7 +143,7 @@
                             .then(res => $q.reject(res))
                             .catch(err => $q.resolve(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -164,7 +163,27 @@
                             .then(res => $q.resolve(res))
                             .catch(err => $q.reject(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showEndSessionPopup Error: ' + err);
+                        return $q.reject(err);
+                    });
+            };
+
+            LiveSessionUiSrv.showStudentDeclineSessionPopup = () => {
+                LiveSessionUiSrv.closePopup();
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
+                translationsPromMap.content = $translate('LIVE_SESSION.STUDENT_DECLINE_SESSION');
+                return $q.all(translationsPromMap)
+                    .then(translations => {
+                        let popUpInstance = PopUpSrv.info(
+                            translations.title,
+                            translations.content
+                        );
+                        return popUpInstance.promise
+                            .then(res => $q.resolve(res))
+                            .catch(err => $q.reject(err));
+                    }).catch(err => {
+                        $log.error('LiveSessionUiSrv: showStudentDeclineSessionPopup Error ' + err);
                         return $q.reject(err);
                     });
             };
@@ -177,7 +196,7 @@
                     .then(translations => {
                         PopUpSrv.info(translations.title, translations.content);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showIncompleteDiagnostic translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showIncompleteDiagnostic Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -190,7 +209,7 @@
                     .then(translations => {
                         PopUpSrv.info(translations.title, translations.content);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup Error: ' + err);
                         return $q.reject(err);
                     });
             };
