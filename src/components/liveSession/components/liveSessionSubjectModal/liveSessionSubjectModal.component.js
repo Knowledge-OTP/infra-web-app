@@ -21,7 +21,8 @@
 
                 this.startSession = (sessionSubject) => {
                     liveSessionSettingsProm.then(liveSessionSettings => {
-                        let expectedSessionEndTime = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let liveSessionLength = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let expectedSessionEndTime = LiveSessionSrv._getRoundTime() + liveSessionLength;
                         let lessonData = { sessionSubject, expectedSessionEndTime };
                         LiveSessionSrv.startLiveSession(this.student, lessonData);
                     });
