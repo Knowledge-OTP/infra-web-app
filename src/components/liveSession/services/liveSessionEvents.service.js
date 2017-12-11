@@ -2,17 +2,17 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionEventsSrv', function () {
+        'ngInject';
         let isEnabled = true;
 
         this.enabled = (_isEnabled) => {
             isEnabled = _isEnabled;
         };
 
-        this.$get = (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
+        this.$get = function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
                      UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
                      LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum,
-                     ZnkLessonNotesUiSrv) => {
-            'ngInject';
+                     ZnkLessonNotesUiSrv) {
 
             let currUid = null;
             let LiveSessionEventsSrv = {};

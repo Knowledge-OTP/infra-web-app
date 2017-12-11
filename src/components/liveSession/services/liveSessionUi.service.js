@@ -2,10 +2,9 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionUiSrv', function () {
-
-        this.$get = ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
-                     ZnkToastSrv, LiveSessionDataGetterSrv, UserProfileService) => {
-            'ngInject';
+        'ngInject';
+        this.$get = function ($rootScope, $timeout, $compile, $animate, PopUpSrv, $translate, $q, $log, ENV,
+                     ZnkToastSrv, LiveSessionDataGetterSrv, UserProfileService) {
 
             let LiveSessionUiSrv = {};
             let childScope, liveSessionPhElement, readyProm;

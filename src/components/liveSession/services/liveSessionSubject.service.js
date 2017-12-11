@@ -3,6 +3,7 @@
 
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', function (LiveSessionSubjectConst) {
+        'ngInject';
         let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
 
         this.setLiveSessionTopics = (_topics) => {
@@ -11,8 +12,7 @@
             }
         };
 
-        this.$get = (UtilitySrv, MyZinkerzTopicMapEnum) => {
-            'ngInject';
+        this.$get = function (UtilitySrv, MyZinkerzTopicMapEnum) {
 
             let LiveSessionSubjectSrv = {};
 
