@@ -255,15 +255,13 @@
                             if (liveSessionData.backToBackId) {
                                 // update all backToBack lessons
                                 ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
-                                    .then(backToBackLessonsRes => {
-                                        let backToBackLessonsArr = backToBackLessonsRes.data;
+                                    .then(backToBackLessonsArr => {
                                         backToBackLessonsArr.forEach(b2bLesson => {
                                             updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
                                         });
                                     });
                             } else {
-                                ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lessonData => {
-                                    let lesson = lessonData.data;
+                                ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
                                     updatePromArr.push(this.updateSingleLesson(lesson, liveSessionData));
                                 });
                             }
