@@ -175,11 +175,15 @@
                         }
                     });
 
+                    // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
+                    let newLessonSummaryId = UtilitySrv.general.createGuid();
+
                     if (back2BackLessons.length > 1) {
                         if (!back2BackLessons[0].backToBackId) {
                             let newB2BLessonId = UtilitySrv.general.createGuid();
                             let updateB2BLessonProms = [];
                             back2BackLessons.forEach(b2bLesson => {
+                                b2bLesson.lessonSummaryId = b2bLesson.lessonSummaryId || newLessonSummaryId;
                                 b2bLesson.backToBackId = newB2BLessonId;
                                 updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
                             });
@@ -187,10 +191,11 @@
                                 .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
                                 .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
                         } else {
-                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] al ready have backToBackId`);
+                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] all ready have backToBackId`);
                         }
                     } else {
-                        $log.debug(`checkBack2BackLesson: back2BackLessons.length === 0`);
+                        scheduledLessonMap.scheduledLesson.lessonSummaryId = scheduledLessonMap.scheduledLesson.lessonSummaryId || lessonSummaryId;
+                        $log.debug(`checkBack2BackLesson: no back2back lesson just single scheduledLesson`);
                     }
 
                     return scheduledLessonMap;

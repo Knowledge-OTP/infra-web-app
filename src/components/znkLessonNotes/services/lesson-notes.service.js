@@ -22,6 +22,14 @@
                 }).then(lesson => lesson.data);
             };
 
+            this.getSummaryLessonById = (summaryLessonId) => {
+                let getSummaryLessonApi = `${lessonApi}/getSummaryLessonById?summaryLessonId=${summaryLessonId}`;
+                return $http.get(getSummaryLessonApi, {
+                    timeout: ENV.promiseTimeOut,
+                    cache: true
+                }).then(summaryLesson => summaryLesson.data);
+            };
+
             this.getLessonsByBackToBackId = (backToBackId) => {
                 let getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
                 return $http.get(getBackToBackApi, {
@@ -39,6 +47,18 @@
                 let updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
                     .then(lessons => lessons.data[0]);
+            };
+
+            this.updateLessonStatus = (lessonId, isBackToBackId) => {
+                let updateLessonStatusApi = `${lessonApi}/updateLessonStatus`;
+                return $http.post(updateLessonStatusApi, {lessonId, isBackToBackId})
+                    .then(lessons => lessons.data[0]);
+            };
+
+            this.saveLessonSummary = (lessonSummary) => {
+                let saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
+                return $http.post(saveLessonSummaryApi, lessonSummary)
+                    .then(lessonSummary => lessonSummary.data);
             };
 
             this.getServiceList = () => {

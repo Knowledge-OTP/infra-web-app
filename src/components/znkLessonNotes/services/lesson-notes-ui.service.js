@@ -5,11 +5,11 @@
         function ($rootScope, $rootElement, $http, ENV, $mdDialog) {
             'ngInject';
 
-            this.openLessonNotesPopup = (lesson, userContext) => {
-                $rootScope.lesson = lesson;
+            this.openLessonNotesPopup = (lessonSummary, userContext) => {
+                $rootScope.lessonSummary = lessonSummary;
                 $rootScope.userContext = userContext;
                 $mdDialog.show({
-                    template: `<lesson-notes-popup lesson="lesson" user-context="userContext"
+                    template: `<lesson-notes-popup lesson-summary="lessonSummary" user-context="userContext"
                         aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
                     scope: $rootScope,
                     clickOutsideToClose: false,
@@ -17,10 +17,10 @@
                 });
             };
 
-            this.openLessonRatingPopup = (lesson) => {
-                $rootScope.lesson = lesson;
+            this.openLessonRatingPopup = (lessonSummary) => {
+                $rootScope.lessonSummary = lessonSummary;
                 $mdDialog.show({
-                    template: `<lesson-rating-popup lesson="lesson"
+                    template: `<lesson-rating-popup lesson-summary="lessonSummary"
                         aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
                     scope: $rootScope,
                     clickOutsideToClose: false,

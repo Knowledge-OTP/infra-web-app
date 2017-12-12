@@ -87,16 +87,16 @@
                                 .then(isDarkFeaturesValid => {
                                     if (isDarkFeaturesValid) {
                                         $log.debug('darkFeatures in ON');
-                                        if (liveSessionData.lessonId) {
-                                            ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
+                                        if (liveSessionData.lessonSummaryId) {
+                                            ZnkLessonNotesSrv.getSummaryLessonById(liveSessionData.lessonSummaryId).then(lessonSummary => {
                                                 if (liveSessionData.educatorId === currUid) {
-                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson, UserTypeContextEnum.EDUCATOR.enum);
+                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
                                                 } else {
-                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson, UserTypeContextEnum.STUDENT.enum);
+                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lessonSummary, UserTypeContextEnum.STUDENT.enum);
                                                 }
                                             });
                                         } else {
-                                            $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
+                                            $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
                                         }
                                     } else {
                                         $log.debug('darkFeatures in OFF');
