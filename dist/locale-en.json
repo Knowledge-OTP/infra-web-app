@@ -613,13 +613,14 @@
             "STAR5": "Awesome - 5 stars",
             "MULTIPLE_CHOICE": {
                 "TITLE": "What can be improved?",
-                "CHOICE1": "Clarity Of Explanation",
-                "CHOICE2": "Time Menagemant",
-                "CHOICE3": "Punctuality",
-                "CHOICE4": "Time Given For Practice",
-                "CHOICE5": "Checks For Understanding",
-                "CHOICE6": "Staying On Task",
-                "CHOICE7": "Technical Difficulties"
+                "CHOICE1": "Clarity",
+                "CHOICE2": "Pacing",
+                "CHOICE3": "Organization",
+                "CHOICE4": "Friendliness",
+                "CHOICE5": "Content",
+                "CHOICE6": "Engagement",
+                "CHOICE7": "Professionalism",
+                "CHOICE8": "Technical Difficulties"
             },
             "OTHER": "Other",
             "FREE_TEXT_PLACEHOLDER": "Enter your comment",

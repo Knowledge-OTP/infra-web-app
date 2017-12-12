@@ -4,7 +4,8 @@
     angular.module('znk.infra-web-app.znkLessonNotes')
         .component('lessonRatingPopup', {
             bindings: {
-                lesson: '='
+                lesson: '=',
+                lessonSummary: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html',
             controllerAs: 'vm',
@@ -12,7 +13,8 @@
                 'ngInject';
 
                 this.$onInit = () => {
-                    $log.debug('lessonRatingPopup: Init with Lesson: ', this.lesson );
+                    $log.debug('lessonRatingPopup: Init with lesson: ', this.lesson );
+                    $log.debug('lessonRatingPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.closeModal = $mdDialog.cancel;
                     this.showSpinner = false;
                     this.userContext = UserTypeContextEnum.STUDENT.enum;
@@ -20,32 +22,15 @@
 
                 this.save = () => {
                     this.showSpinner = true;
-                    $log.debug('saving lesson : ', this.lesson);
-                    let updatePromArr = [];
-
-                    if (this.lesson.backToBackId) {
-                        ZnkLessonNotesSrv.getLessonsByBackToBackId(this.lesson.backToBackId)
-                            .then(backToBackLessonsArr => {
-                                backToBackLessonsArr.forEach(b2bLesson => {
-                                    updatePromArr.push(this.updateStudentFeedback(this.lesson, b2bLesson));
-                                });
-                            });
-                    } else {
-                        updatePromArr.push(ZnkLessonNotesSrv.updateLesson(this.lesson));
-                    }
-
-                    Promise.all(updatePromArr)
-                        .then(updatedLesson => {
-                            this.lesson = updatedLesson;
+                    $log.debug('saving lessonSummary : ', this.lessonSummary);
+                    ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
+                        .then(updatedLessonSummary => {
+                            this.lessonSummary = updatedLessonSummary;
                             this.showSpinner = false;
                             this.closeModal();
                         })
-                        .catch(err => $log.error('lessonNotesPopup: updateLesson/s failed. Error: ', err));
-                };
+                        .catch(err => $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err));
 
-                this.updateStudentFeedback = (currentLesson, b2bLesson) => {
-                    b2bLesson.studentFeedback = currentLesson.studentFeedback;
-                    return b2bLesson;
                 };
 
                 this.closeModal = () => {

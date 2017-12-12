@@ -4,8 +4,8 @@
         <div class="text" ng-if="field.label !== 'Status' || vm.userContext === vm.userTypeContextEnum.STUDENT.enum">{{field.text}}</div>
         <select class="lesson-status" ng-if="field.label === 'Status' && vm.userContext !== vm.userTypeContextEnum.STUDENT.enum"
                 ng-options="status as status.val for status in vm.lessonStatusArr"
-                ng-model="vm.lessunStatus"
-                ng-change="vm.statusChanged(field, vm.lessunStatus)">
+                ng-model="vm.lessonStatus"
+                ng-change="vm.statusChanged(field, vm.lessonStatus)">
         </select>
     </div>
 </div>

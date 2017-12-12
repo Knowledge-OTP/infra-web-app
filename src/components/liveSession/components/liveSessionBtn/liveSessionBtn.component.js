@@ -194,7 +194,7 @@
                             $log.debug(`checkBack2BackLesson: back2BackLessons[0] all ready have backToBackId`);
                         }
                     } else {
-                        scheduledLessonMap.scheduledLesson.lessonSummaryId = scheduledLessonMap.scheduledLesson.lessonSummaryId || lessonSummaryId;
+                        scheduledLessonMap.scheduledLesson.lessonSummaryId = scheduledLessonMap.scheduledLesson.lessonSummaryId || newLessonSummaryId;
                         $log.debug(`checkBack2BackLesson: no back2back lesson just single scheduledLesson`);
                     }
 

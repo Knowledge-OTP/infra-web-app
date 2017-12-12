@@ -9477,11 +9477,15 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                         }
                     });
 
+                    // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
+                    let newLessonSummaryId = UtilitySrv.general.createGuid();
+
                     if (back2BackLessons.length > 1) {
                         if (!back2BackLessons[0].backToBackId) {
                             let newB2BLessonId = UtilitySrv.general.createGuid();
                             let updateB2BLessonProms = [];
                             back2BackLessons.forEach(b2bLesson => {
+                                b2bLesson.lessonSummaryId = b2bLesson.lessonSummaryId || newLessonSummaryId;
                                 b2bLesson.backToBackId = newB2BLessonId;
                                 updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
                             });
@@ -9489,10 +9493,11 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                                 .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
                                 .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
                         } else {
-                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] al ready have backToBackId`);
+                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] all ready have backToBackId`);
                         }
                     } else {
-                        $log.debug(`checkBack2BackLesson: back2BackLessons.length === 0`);
+                        scheduledLessonMap.scheduledLesson.lessonSummaryId = scheduledLessonMap.scheduledLesson.lessonSummaryId || newLessonSummaryId;
+                        $log.debug(`checkBack2BackLesson: no back2back lesson just single scheduledLesson`);
                     }
 
                     return scheduledLessonMap;
@@ -9672,8 +9677,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                 return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then((liveSessionData) => {
                     liveSessionData.startTime = this._getRoundTime();
                     liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
-                    // update lesson in documentDB/cosmosDB
-                    this._updateLesson(liveSessionData);
                     return liveSessionData.$save();
                 });
             };
@@ -9720,8 +9723,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
 
                     this._moveToArchive(data.liveSessionData);
 
-                    // update lesson in documentDB/cosmosDB
-                    this._updateLesson(data.liveSessionData);
+                    // create lesson summary in documentDB/cosmosDB
+                    this._saveLessonSummary(data.liveSessionData);
 
                     return data.storage.update(dataToSave);
 
@@ -9875,49 +9878,39 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                 }
             };
 
-            this._updateLesson = (liveSessionData) => {
+            this._updateLessonsStatus = (liveSessionData) => {
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
-                            let updatePromArr = [];
                             if (liveSessionData.backToBackId) {
-                                // update all backToBack lessons
-                                ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
-                                    .then(backToBackLessonsArr => {
-                                        backToBackLessonsArr.forEach(b2bLesson => {
-                                            updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
-                                        });
-                                    });
+                                return ZnkLessonNotesSrv.updateLessonStatus(liveSessionData.backToBackId, true);
                             } else {
-                                ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
-                                    updatePromArr.push(this.updateSingleLesson(lesson, liveSessionData));
-                                });
+                                return ZnkLessonNotesSrv.updateLessonStatus(liveSessionData.lessonId, false);
                             }
-                            return Promise.all(updatePromArr)
-                                .then(updatedLessons => $log.debug('_updateLesson: update lessons for startTime & status. updatedLessons: ', updatedLessons))
-                                .catch (err => $log.error('_updateLesson: updateLesson failed. Error: ', err));
-
                         } else {
                             $log.debug('_updateLesson: darkFeatures in OFF');
                         }
                     }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
-            this.updateSingleLesson = (lesson, liveSessionData) => {
-                // update lesson startTime, endTime and status
-                lesson.lessonSummary = lesson.lessonSummary || {};
-                lesson.lessonSummary.startTime = lesson.lessonSummary.startTime ? lesson.lessonSummary.startTime :
-                    liveSessionData.startTime ? liveSessionData.startTime: null;
-                lesson.lessonSummary.endTime = lesson.lessonSummary.endTime ? lesson.lessonSummary.endTime :
-                    liveSessionData.endTime ? liveSessionData.endTime : null;
-                lesson.status = lesson.status === LessonStatusEnum.SCHEDULED.enum ?
-                    LessonStatusEnum.ATTENDED.enum : lesson.status;
-                lesson.lessonSummary.lessonNotes = lesson.lessonSummary.lessonNotes || {};
-                lesson.lessonSummary.lessonNotes.status = lesson.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
-                lesson.lessonSummary.liveSessions = lesson.lessonSummary.liveSessions || [];
-                lesson.lessonSummary.liveSessions.push(liveSessionData.guid);
-                lesson.lessonSummary.liveSessions = UtilitySrv.array.removeDuplicates(lesson.lessonSummary.liveSessions);
-                return ZnkLessonNotesSrv.updateLesson(lesson);
+            this._saveLessonSummary = (liveSessionData) => {
+                return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                    .then(isDarkFeaturesValid => {
+                        if (isDarkFeaturesValid) {
+                            let lessonSummary = {
+                                id: liveSessionData.lessonSummaryId,
+                                startTime: liveSessionData.startTime,
+                                endTime: liveSessionData.endTime,
+                                lessonNotes: {
+                                    status: LessonNotesStatusEnum.PENDING_NOTES.enum
+                                },
+                                liveSessions: [liveSessionData.guid]
+                            };
+                            return ZnkLessonNotesSrv.saveLessonSummary(lessonSummary);
+                        } else {
+                            $log.debug('_updateLesson: darkFeatures in OFF');
+                        }
+                    }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
             this._getRoundTime = () => {
@@ -10019,6 +10012,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                         };
 
                         if (lessonData.scheduledLesson) {
+                            // add lessonSummaryId prop to liveSessionObj to popup lessonNotes/rating in the end of the lesson
+                            newLiveSessionData.lessonSummaryId = lessonData.scheduledLesson.lessonSummaryId;
                             if (lessonData.scheduledLesson.backToBackId) {
                                 newLiveSessionData.backToBackId = lessonData.scheduledLesson.backToBackId;
                             } else {
@@ -10219,8 +10214,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
 
             LiveSessionEventsSrv._handelLiveSessionEnded = (liveSessionData) => {
                 LiveSessionUiSrv.closePopup();
-                // determind if student decline the live session request
-                const isStudentDeclineTheSession = !!liveSessionData.startTime;
+                // determine if student decline the live session request
+                const isStudentDeclineTheSession = !liveSessionData.startTime;
 
                 if (liveSessionData.studentId !== currUid) {
                     LiveSessionSrv.hangCall(liveSessionData.studentId);
@@ -10238,16 +10233,16 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                                 .then(isDarkFeaturesValid => {
                                     if (isDarkFeaturesValid) {
                                         $log.debug('darkFeatures in ON');
-                                        if (liveSessionData.lessonId) {
-                                            ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
+                                        if (liveSessionData.lessonSummaryId) {
+                                            ZnkLessonNotesSrv.getSummaryLessonById(liveSessionData.lessonSummaryId).then(lessonSummary => {
                                                 if (liveSessionData.educatorId === currUid) {
-                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson, UserTypeContextEnum.EDUCATOR.enum);
+                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
                                                 } else {
-                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson, UserTypeContextEnum.STUDENT.enum);
+                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lessonSummary, UserTypeContextEnum.STUDENT.enum);
                                                 }
                                             });
                                         } else {
-                                            $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
+                                            $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
                                         }
                                     } else {
                                         $log.debug('darkFeatures in OFF');
@@ -10400,7 +10395,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                             SESSION_SETTINGS = liveSessionDuration;
                         }
                     }).catch(err => {
-                    $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
+                    $log.error('LiveSessionUiSrv: getLiveSessionDuration Error: ' + err);
                 });
             };
 
@@ -10464,7 +10459,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                             .then(res => $q.resolve(res))
                             .catch(err => $q.reject(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -10478,7 +10473,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     .then(translations => {
                         PopUpSrv.wait(translations.title, translations.content, translations.cancelBtnTitle);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showEducatorPendingPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showEducatorPendingPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -10490,7 +10485,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     .then(translations => {
                         PopUpSrv.wait(translations.title);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showWaitPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showWaitPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -10514,7 +10509,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                             .then(res => $q.reject(res))
                             .catch(err => $q.resolve(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -10534,7 +10529,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                             .then(res => $q.resolve(res))
                             .catch(err => $q.reject(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showEndSessionPopup Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -10554,7 +10549,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                             .then(res => $q.resolve(res))
                             .catch(err => $q.reject(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showStudentDeclineSessionPopup Error ' + err);
                         return $q.reject(err);
                     });
             };
@@ -10567,7 +10562,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     .then(translations => {
                         PopUpSrv.info(translations.title, translations.content);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showIncompleteDiagnostic translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showIncompleteDiagnostic Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -10580,7 +10575,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     .then(translations => {
                         PopUpSrv.info(translations.title, translations.content);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -19460,6 +19455,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
         .component('znkLessonDetails', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html',
@@ -19528,15 +19524,15 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                                 field.text = this.transformDate(this.lesson.date, 'DATE');
                                 break;
                             case `${this.nameSpace}.START_TIME`:
-                                field.text = this.lesson.startTime ? this.transformDate(this.lesson.startTime, 'START_TIME') : null;
+                                field.text = this.lessonSummary.startTime ? this.transformDate(this.lessonSummary.startTime, 'START_TIME') : null;
                                 break;
                             case `${this.nameSpace}.DURATION`:
-                                field.text = this.lesson.startTime && this.lesson.end ?
-                                    this.transformDate(this.lesson.endTime - this.lesson.startTime, 'DURATION') : null;
+                                field.text = this.lessonSummary.startTime && this.lessonSummary.endTime ?
+                                    this.transformDate(this.lessonSummary.endTime - this.lessonSummary.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
-                                this.lessunStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
-                                field.text = this.lessunStatus.val;
+                                this.lessonStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
+                                field.text = this.lessonStatus.val;
                                 break;
                         }
                         this.fields.push(field);
@@ -19599,6 +19595,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
         .component('lessonNotesPopup', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html',
@@ -19608,24 +19605,25 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 'ngInject';
 
                 this.$onInit = () => {
-                    $log.debug('lessonNotesPopup: Init with Lesson: ', this.lesson);
+                    $log.debug('lessonNotesPopup: Init with lesson: ', this.lesson);
+                    $log.debug('lessonNotesPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.showSpinner = false;
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
-                    this.lesson.lessonNotes = this.lesson.lessonNotes || {};
-                    this.lesson.lessonNotes.status = this.lesson.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
+                    this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
+                    this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
                 };
 
                 this.submit = () => {
                     this.showSpinner = true;
                     if (ZnkLessonNotesSrv._mailsToSend.length > 0) {
-                        ZnkLessonNotesSrv.sendEmails(this.lesson)
+                        ZnkLessonNotesSrv.sendEmails(this.lesson, this.lessonSummary)
                             .then(() => {
                                 let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_EMAIL_SENT');
                                 translationsProm.then(message => {
                                     ZnkToastSrv.showToast('success', message);
                                 });
 
-                                this.saveLesson(this.lesson, true);
+                                this.saveLessonSummary(this.lessonSummary, true);
                             })
                             .catch(err => {
                                 $log.error('lessonNotesPopup: sendEmail failed. Error: ', err);
@@ -19646,28 +19644,15 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 };
 
                 this.doItLater = () => {
-                    this.saveLesson(this.lesson, false);
+                    this.saveLessonSummary(this.lessonSummary, false);
                 };
 
-                this.saveLesson = (lesson, hasMailSent) => {
-                    $log.debug('saving lesson : ', lesson);
-                    lesson = hasMailSent ? this.updateLessonNotes(lesson) : lesson;
-                    let updatePromArr = [];
-
-                    if (lesson.backToBackId) {
-                        ZnkLessonNotesSrv.getLessonsByBackToBackId(lesson.backToBackId)
-                            .then(backToBackLessonsArr => {
-                                backToBackLessonsArr.forEach(b2bLesson => {
-                                    updatePromArr.push(this.updateLessonNotes(b2bLesson));
-                                });
-                            });
-                    } else {
-                        updatePromArr.push(this.updateLessonNotes(lesson));
-                    }
-
-                    Promise.all(updatePromArr)
-                        .then(updatedLesson => {
-                            $log.debug('lessonNotesPopup saveLesson:  updatedLessons: ', updatedLesson);
+                this.saveLessonSummary = (lessonSummary, hasMailSent) => {
+                    $log.debug('saving lessonSummary : ', lessonSummary);
+                    lessonSummary = hasMailSent ? this.updateLessonNotes(lessonSummary) : lessonSummary;
+                    ZnkLessonNotesSrv.saveLessonSummary(lessonSummary)
+                        .then(updatedLessonSummary => {
+                            $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', updatedLessonSummary);
                             this.showSpinner = false;
                             let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
                             translationsProm.then(message => {
@@ -19677,7 +19662,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                         })
                         .catch(err => {
                             this.showSpinner = false;
-                            $log.error('lessonNotesPopup: updateLesson failed. Error: ', err);
+                            $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err);
                             let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.UPDATE_LESSON_FAILED');
                             translationsProm.then(message => {
                                 ZnkToastSrv.showToast('error', message);
@@ -19685,13 +19670,13 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                         });
                 };
 
-                this.updateLessonNotes = (lesson) => {
+                this.updateLessonNotes = (lessonSummary) => {
                     // update sendMailTime and status in lessonNotes only if email sent
-                    lesson.lessonNotes.sendMailTime = new Date().getTime();
-                    lesson.lessonNotes.status = lesson.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
-                        LessonNotesStatusEnum.COMPLETE.enum : lesson.lessonNotes.status;
+                    lessonSummary.lessonNotes.sendMailTime = new Date().getTime();
+                    lessonSummary.lessonNotes.status = lessonSummary.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
+                        LessonNotesStatusEnum.COMPLETE.enum : lessonSummary.lessonNotes.status;
 
-                    return lesson;
+                    return lessonSummary;
                 };
 
             }]
@@ -19705,6 +19690,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
         .component('znkLessonStartedLate', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-started-late/lesson-started-late.component.html',
@@ -19723,17 +19709,17 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.isTeacher = this.userContext === UserTypeContextEnum.EDUCATOR.enum;
                     if (this.isTeacher) {
-                        this.lesson.lessonNotes.isStudentLate = !ZnkLessonNotesUiSrv.isNullOrUndefined(this.lesson.lessonNotes.isStudentLate) ?
-                            this.lesson.lessonNotes.isStudentLate : false;
+                        this.lessonSummary.lessonNotes.isStudentLate = !ZnkLessonNotesUiSrv.isNullOrUndefined(this.lessonSummary.lessonNotes.isStudentLate) ?
+                            this.lessonSummary.lessonNotes.isStudentLate : false;
                     } else {
-                        this.lesson.studentFeedback.isTeacherLate = !ZnkLessonNotesUiSrv.isNullOrUndefined(this.lesson.studentFeedback.isTeacherLate) ?
-                            this.lesson.studentFeedback.isTeacherLate : false;
+                        this.lessonSummary.studentFeedback.isTeacherLate = !ZnkLessonNotesUiSrv.isNullOrUndefined(this.lessonSummary.studentFeedback.isTeacherLate) ?
+                            this.lessonSummary.studentFeedback.isTeacherLate : false;
                     }
                 };
 
                 this.determineLessonStartedLate = () => {
                     ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => {
-                        this.lessonStartedLate = (this.lesson.date + globalVariables.liveSession.lessonStartedLateTimeout) < this.lesson.startTime;
+                        this.lessonStartedLate = (this.lesson.date + globalVariables.liveSession.lessonStartedLateTimeout) < this.lessonSummary.startTime;
                     });
                 };
             }]
@@ -19747,6 +19733,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
         .component('znkLessonTeacherNotes', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-teacher-notes/lesson-teacher-notes.component.html',
@@ -19758,14 +19745,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                     $log.debug('znkLessonTeacherNotes: Init');
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.showComponent = this.isAdmin || this.userContext === UserTypeContextEnum.EDUCATOR.enum;
-                    this.lesson.lessonNotes = this.lesson.lessonNotes || {};
+                    this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
                     this.initEducatorNotes();
                 };
 
                 this.initEducatorNotes = () => {
-                    if (!this.lesson.lessonNotes.educatorNotes) {
+                    if (!this.lessonSummary.lessonNotes.educatorNotes) {
                         $translate('LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.NOTES_TEMPLATE')
-                            .then(notesTemplate => this.lesson.lessonNotes.educatorNotes = notesTemplate);
+                            .then(notesTemplate => this.lessonSummary.lessonNotes.educatorNotes = notesTemplate);
                     }
                 };
             }]
@@ -19779,6 +19766,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
         .component('znkSendEmailNotes', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-teacher-notes/send-email-notes/send-email-notes.component.html',
@@ -19820,11 +19808,11 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                     if (mailGroup === UserTypeContextEnum.STUDENT.enum) {
                         this.mailsToSend = bool ? this.mailsToSend.concat(this.studentsMails) :
                             this.mailsToSend.filter( item => !this.studentsMails.includes( item ));
-                        this.lesson.lessonNotes.sentMailToStudents = bool;
+                        this.lessonSummary.lessonNotes.sentMailToStudents = bool;
                     } else {
                         this.mailsToSend = bool ? this.mailsToSend.concat(this.parentsMails) :
                             this.mailsToSend.filter( item => !this.parentsMails.includes( item ));
-                        this.lesson.lessonNotes.sentMailToParents = bool;
+                        this.lessonSummary.lessonNotes.sentMailToParents = bool;
                     }
                     ZnkLessonNotesSrv._mailsToSend = this.mailsToSend;
                 };
@@ -19840,7 +19828,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     angular.module('znk.infra-web-app.znkLessonNotes')
         .component('lessonRatingPopup', {
             bindings: {
-                lesson: '='
+                lesson: '=',
+                lessonSummary: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html',
             controllerAs: 'vm',
@@ -19848,7 +19837,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 'ngInject';
 
                 this.$onInit = () => {
-                    $log.debug('lessonRatingPopup: Init with Lesson: ', this.lesson );
+                    $log.debug('lessonRatingPopup: Init with lesson: ', this.lesson );
+                    $log.debug('lessonRatingPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.closeModal = $mdDialog.cancel;
                     this.showSpinner = false;
                     this.userContext = UserTypeContextEnum.STUDENT.enum;
@@ -19856,32 +19846,15 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                 this.save = () => {
                     this.showSpinner = true;
-                    $log.debug('saving lesson : ', this.lesson);
-                    let updatePromArr = [];
-
-                    if (this.lesson.backToBackId) {
-                        ZnkLessonNotesSrv.getLessonsByBackToBackId(this.lesson.backToBackId)
-                            .then(backToBackLessonsArr => {
-                                backToBackLessonsArr.forEach(b2bLesson => {
-                                    updatePromArr.push(this.updateStudentFeedback(this.lesson, b2bLesson));
-                                });
-                            });
-                    } else {
-                        updatePromArr.push(ZnkLessonNotesSrv.updateLesson(this.lesson));
-                    }
-
-                    Promise.all(updatePromArr)
-                        .then(updatedLesson => {
-                            this.lesson = updatedLesson;
+                    $log.debug('saving lessonSummary : ', this.lessonSummary);
+                    ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
+                        .then(updatedLessonSummary => {
+                            this.lessonSummary = updatedLessonSummary;
                             this.showSpinner = false;
                             this.closeModal();
                         })
-                        .catch(err => $log.error('lessonNotesPopup: updateLesson/s failed. Error: ', err));
-                };
+                        .catch(err => $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err));
 
-                this.updateStudentFeedback = (currentLesson, b2bLesson) => {
-                    b2bLesson.studentFeedback = currentLesson.studentFeedback;
-                    return b2bLesson;
                 };
 
                 this.closeModal = () => {
@@ -19898,6 +19871,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
         .component('znkLessonRating', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating/lesson-rating.component.html',
@@ -19912,11 +19886,11 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                 this.$onInit = () => {
                     $log.debug('znkLessonRating: Init');
-                    this.lesson.studentFeedback = this.lesson.studentFeedback || {};
-                    this.lesson.studentFeedback.studentFreeText = this.lesson.studentFeedback.studentFreeText || '';
+                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
+                    this.lessonSummary.studentFeedback.studentFreeText = this.lessonSummary.studentFeedback.studentFreeText || '';
                     this.initStarsArr();
-                    if (this.lesson.studentFeedback.rating) {
-                        this.ratingChanged(this.lesson.studentFeedback.rating);
+                    if (this.lessonSummary.studentFeedback.rating) {
+                        this.ratingChanged(this.lessonSummary.studentFeedback.rating);
                     }
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.showComponent = this.isAdmin || this.userContext === UserTypeContextEnum.STUDENT.enum;
@@ -19928,7 +19902,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                         let starNum = i + 1;
                         this.starArr[i] = {
                             title: $translate.instant(`LESSON_NOTES.LESSON_RATING_POPUP.STAR${starNum}`),
-                            active: (starNum === this.lesson.studentFeedback.rating),  // boolean
+                            active: (starNum === this.lessonSummary.studentFeedback.rating),  // boolean
                             value: starNum,
                         };
                     }
@@ -19947,18 +19921,18 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                     this.starArr.forEach(star => {
                         star.active = star.value <= rating;
                     });
-                    this.lesson.studentFeedback.rating = rating;
+                    this.lessonSummary.studentFeedback.rating = rating;
                 };
 
                 this.getStudentFeedback = () => {
                     let strToReturn = '';
 
-                    if (this.lesson.studentFeedback.multipleChoice) {
-                        strToReturn += this.lesson.studentFeedback.multipleChoice.join('; ');
+                    if (this.lessonSummary.studentFeedback.multipleChoice) {
+                        strToReturn += this.lessonSummary.studentFeedback.multipleChoice.join('; ');
                         strToReturn += '\n\r';
-                        strToReturn += this.lesson.studentFeedback.studentFreeText;
+                        strToReturn += this.lessonSummary.studentFeedback.studentFreeText;
                     } else {
-                        strToReturn = this.lesson.studentFeedback.studentFreeText;
+                        strToReturn = this.lessonSummary.studentFeedback.studentFreeText;
                     }
 
                     return strToReturn;
@@ -19975,7 +19949,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     angular.module('znk.infra-web-app.znkLessonNotes')
         .component('znkMultipleChoice', {
             bindings: {
-                lesson: '='
+                lesson: '=',
+                lessonSummary: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating/znk-multiple-choice/multiple-choice.component.html',
             controllerAs: 'vm',
@@ -19986,14 +19961,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 this.choicesArr = [];
 
                 this.$onInit = () => {
-                    this.lesson.studentFeedback.multipleChoice = this.lesson.studentFeedback.multipleChoice || [];
+                    this.lessonSummary.studentFeedback.multipleChoice = this.lessonSummary.studentFeedback.multipleChoice || [];
                     this.getTranslations().then((translations) => {
                         this.choicesArr = Object.keys(translations).map(key => {
                             return { name: translations[key], active: false };
                         });
 
-                        if (this.lesson.studentFeedback.multipleChoice.length) {
-                            this.lesson.studentFeedback.multipleChoice.forEach(studentChoice => {
+                        if (this.lessonSummary.studentFeedback.multipleChoice.length) {
+                            this.lessonSummary.studentFeedback.multipleChoice.forEach(studentChoice => {
                                 this.choicesArr.forEach(choiceObj => {
                                     if (choiceObj.name === studentChoice) {
                                         choiceObj.active = true;
@@ -20013,16 +19988,17 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                         `${this.nameSpace}.CHOICE5`,
                         `${this.nameSpace}.CHOICE6`,
                         `${this.nameSpace}.CHOICE7`,
+                        `${this.nameSpace}.CHOICE8`,
                     ]);
                 };
 
                 this.updateChoice = (choice) => {
                     choice.active = !choice.active;
                     if (choice.active) {
-                        this.lesson.studentFeedback.multipleChoice.push(choice.name);
+                        this.lessonSummary.studentFeedback.multipleChoice.push(choice.name);
                     } else {
-                        this.lesson.studentFeedback.multipleChoice =
-                            this.lesson.studentFeedback.multipleChoice.filter(item => item !== choice.name);
+                        this.lessonSummary.studentFeedback.multipleChoice =
+                            this.lessonSummary.studentFeedback.multipleChoice.filter(item => item !== choice.name);
                     }
                 };
 
@@ -20035,30 +20011,52 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesUiSrv',
-        ["$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", function ($rootScope, $rootElement, $http, ENV, $mdDialog) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "ZnkLessonNotesSrv", "UtilitySrv", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, ZnkLessonNotesSrv, UtilitySrv) {
             'ngInject';
 
-            this.openLessonNotesPopup = (lesson, userContext) => {
-                $rootScope.lesson = lesson;
-                $rootScope.userContext = userContext;
-                $mdDialog.show({
-                    template: `<lesson-notes-popup lesson="lesson" user-context="userContext"
+            this.openLessonNotesPopup = (lessonSummary, userContext) => {
+                ZnkLessonNotesSrv.getLessonsBySummaryLessonId(lessonSummary.id)
+                    .then(lessons => {
+                        if (lessons && lessons.length) {
+                            lessons.sort(UtilitySrv.array.sortByField('date'));
+                        } else {
+                            $log.error('openLessonNotesPopup: getLessonsBySummaryLessonId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            return;
+                        }
+                        $rootScope.lesson = lessons.pop();
+                        $rootScope.lessonSummary = lessonSummary;
+                        $rootScope.userContext = userContext;
+                        $mdDialog.show({
+                            template: `<lesson-notes-popup lesson-summary="lessonSummary" lesson="lesson" user-context="userContext"
                         aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
-                    scope: $rootScope,
-                    clickOutsideToClose: false,
-                    escapeToClose: true
-                });
+                            scope: $rootScope,
+                            clickOutsideToClose: false,
+                            escapeToClose: true
+                        })
+                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsBySummaryLessonId: Error: ${err}`));
+                    });
             };
 
-            this.openLessonRatingPopup = (lesson) => {
-                $rootScope.lesson = lesson;
-                $mdDialog.show({
-                    template: `<lesson-rating-popup lesson="lesson"
-                        aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
-                    scope: $rootScope,
-                    clickOutsideToClose: false,
-                    escapeToClose: true
-                });
+            this.openLessonRatingPopup = (lessonSummary) => {
+                ZnkLessonNotesSrv.getLessonsBySummaryLessonId(lessonSummary.id)
+                    .then(lessons => {
+                        if (lessons && lessons.length) {
+                            lessons.sort(UtilitySrv.array.sortByField('date'));
+                        } else {
+                            $log.error('openLessonNotesPopup: getLessonsBySummaryLessonId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            return;
+                        }
+                        $rootScope.lesson = lessons.pop();
+                        $rootScope.lessonSummary = lessonSummary;
+                        $mdDialog.show({
+                            template: `<lesson-rating-popup lesson-summary="lessonSummary" lesson="lesson"
+                            aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
+                            scope: $rootScope,
+                            clickOutsideToClose: false,
+                            escapeToClose: true
+                        });
+                    })
+                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsBySummaryLessonId: Error: ${err}`));
             };
 
             this.getUserFullName = (profile) => {
@@ -20116,6 +20114,22 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 }).then(lesson => lesson.data);
             };
 
+            this.getSummaryLessonById = (summaryLessonId) => {
+                let getSummaryLessonApi = `${lessonApi}/getSummaryLessonById?summaryLessonId=${summaryLessonId}`;
+                return $http.get(getSummaryLessonApi, {
+                    timeout: ENV.promiseTimeOut,
+                    cache: true
+                }).then(summaryLesson => summaryLesson.data);
+            };
+
+            this.getLessonsBySummaryLessonId = (summaryLessonId) => {
+                let getLessonsBySummaryLessonIdApi = `${lessonApi}/getLessonsBySummaryLessonId?summaryLessonId=${summaryLessonId}`;
+                return $http.get(getLessonsBySummaryLessonIdApi, {
+                    timeout: ENV.promiseTimeOut,
+                    cache: true
+                }).then(lessons => lessons.data);
+            };
+
             this.getLessonsByBackToBackId = (backToBackId) => {
                 let getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
                 return $http.get(getBackToBackApi, {
@@ -20133,6 +20147,18 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 let updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
                     .then(lessons => lessons.data[0]);
+            };
+
+            this.updateLessonStatus = (lessonId, isBackToBackId) => {
+                let updateLessonStatusApi = `${lessonApi}/updateLessonStatus`;
+                return $http.post(updateLessonStatusApi, {lessonId, isBackToBackId})
+                    .then(lessons => lessons.data[0]);
+            };
+
+            this.saveLessonSummary = (lessonSummary) => {
+                let saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
+                return $http.post(saveLessonSummaryApi, lessonSummary)
+                    .then(lessonSummary => lessonSummary.data);
             };
 
             this.getServiceList = () => {
@@ -20153,7 +20179,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr);
             };
 
-            this.sendEmails = (lesson) => {
+            this.sendEmails = (lesson, lessonSummary) => {
                 if (this._mailsToSend.length) {
                     const mailPromArr = [];
                     return this.getServiceList().then(serviceList => {
@@ -20162,13 +20188,13 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                         const topicName = lessonService.topics[lesson.topicId].name;
                         const mailTemplateParams = {
                             date: lesson.date,
-                            startTime: lesson.startTime,
+                            startTime: lessonSummary.startTime,
                             service: lessonService.name,
                             topic: topicName,
                             status: lesson.status,
                             educatorFirstName: lesson.educatorFirstName,
                             educatorLastName: lesson.educatorLastName,
-                            educatorNotes: lesson.lessonNotes.educatorNotes
+                            educatorNotes: lessonSummary.lessonNotes.educatorNotes
                         };
 
                         this._studentsProfiles.forEach(profile => {
@@ -20178,7 +20204,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                             if (studentMail) {
                                 emails.push(studentMail);
                             }
-                            if (lesson.lessonNotes.sentMailToParents) {
+                            if (lessonSummary.lessonNotes.sentMailToParents) {
                                 const parentMail = profile.studentInfo && profile.studentInfo.parentInfo ? profile.studentInfo.parentInfo.email: null;
                                 if (parentMail) {
                                     emails.push(parentMail);
@@ -20210,14 +20236,14 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "        <div class=\"text\" ng-if=\"field.label !== 'Status' || vm.userContext === vm.userTypeContextEnum.STUDENT.enum\">{{field.text}}</div>\n" +
     "        <select class=\"lesson-status\" ng-if=\"field.label === 'Status' && vm.userContext !== vm.userTypeContextEnum.STUDENT.enum\"\n" +
     "                ng-options=\"status as status.val for status in vm.lessonStatusArr\"\n" +
-    "                ng-model=\"vm.lessunStatus\"\n" +
-    "                ng-change=\"vm.statusChanged(field, vm.lessunStatus)\">\n" +
+    "                ng-model=\"vm.lessonStatus\"\n" +
+    "                ng-change=\"vm.statusChanged(field, vm.lessonStatus)\">\n" +
     "        </select>\n" +
     "    </div>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html",
-    "<div class=\"lesson-notes-popup\" ng-if=\"vm.lesson\">\n" +
+    "<div class=\"lesson-notes-popup\" ng-if=\"vm.lesson && vm.lessonSummary\">\n" +
     "\n" +
     "    <div class=\"znk-popup-header\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
@@ -20228,18 +20254,18 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
-    "    <div class=\"content-wrapper\" ng-if=\"vm.lesson\">\n" +
+    "    <div class=\"content-wrapper\">\n" +
     "        <div class=\"znk-scrollbar\">\n" +
     "            <div class=\"title\" translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\"></div>\n" +
     "\n" +
-    "            <znk-lesson-details lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-details>\n" +
-    "            <znk-lesson-started-late lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-started-late>\n" +
+    "            <znk-lesson-details lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-details>\n" +
+    "            <znk-lesson-started-late lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-started-late>\n" +
     "            <div class=\"divider\" ng-if=\"vm.isAdmin\"></div>\n" +
     "\n" +
-    "            <znk-lesson-rating lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
+    "            <znk-lesson-rating lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
     "            <div class=\"divider\" ng-if=\"vm.isAdmin\"></div>\n" +
     "\n" +
-    "            <znk-lesson-teacher-notes lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-teacher-notes>\n" +
+    "            <znk-lesson-teacher-notes lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-teacher-notes>\n" +
     "\n" +
     "            <div class=\"btn-group\">\n" +
     "                <button type=\"button\" class=\"btn-type-link-gray znk-uppercase\" ng-click=\"vm.doItLater()\"\n" +
@@ -20260,12 +20286,12 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    <div class=\"teacher-view\" ng-if=\"vm.isTeacher\">\n" +
     "        <span class=\"quicksand-12-b\">{{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.STUDENT_LATE' | translate}}</span>\n" +
     "        <div class=\"teacher-view-btn-group\">\n" +
-    "            <button ng-class=\"[vm.lesson.lessonNotes.isStudentLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
-    "                    ng-click=\"vm.lesson.lessonNotes.isStudentLate = !vm.lesson.lessonNotes.isStudentLate\">\n" +
+    "            <button ng-class=\"[vm.lessonSummary.lessonNotes.isStudentLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
+    "                    ng-click=\"vm.lessonSummary.lessonNotes.isStudentLate = !vm.lessonSummary.lessonNotes.isStudentLate\">\n" +
     "                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.YES' | translate}}\n" +
     "            </button>\n" +
-    "            <button ng-class=\"[!vm.lesson.lessonNotes.isStudentLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
-    "                    ng-click=\"vm.lesson.lessonNotes.isStudentLate = !vm.lesson.lessonNotes.isStudentLate\">\n" +
+    "            <button ng-class=\"[!vm.lessonSummary.lessonNotes.isStudentLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
+    "                    ng-click=\"vm.lessonSummary.lessonNotes.isStudentLate = !vm.lessonSummary.lessonNotes.isStudentLate\">\n" +
     "                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.NO' | translate}}\n" +
     "            </button>\n" +
     "        </div>\n" +
@@ -20274,12 +20300,12 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    <div class=\"student-view\" ng-if=\"!vm.isTeacher\">\n" +
     "        <span class=\"quicksand-12-b\">{{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.TEACHER_LATE' | translate}}</span>\n" +
     "        <div class=\"student-view-btn-group\">\n" +
-    "            <button ng-class=\"[vm.lesson.studentFeedback.isTeacherLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
-    "                    ng-click=\"vm.lesson.studentFeedback.isTeacherLate = !vm.lesson.studentFeedback.isTeacherLate\">\n" +
+    "            <button ng-class=\"[vm.lessonSummary.studentFeedback.isTeacherLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
+    "                    ng-click=\"vm.lessonSummary.studentFeedback.isTeacherLate = !vm.lessonSummary.studentFeedback.isTeacherLate\">\n" +
     "                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.YES' | translate}}\n" +
     "            </button>\n" +
-    "            <button ng-class=\"[!vm.lesson.studentFeedback.isTeacherLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
-    "                    ng-click=\"vm.lesson.studentFeedback.isTeacherLate = !vm.lesson.studentFeedback.isTeacherLate\">\n" +
+    "            <button ng-class=\"[!vm.lessonSummary.studentFeedback.isTeacherLate ? 'btn-type-1' : 'btn-type-2']\"\n" +
+    "                    ng-click=\"vm.lessonSummary.studentFeedback.isTeacherLate = !vm.lessonSummary.studentFeedback.isTeacherLate\">\n" +
     "                {{'LESSON_NOTES.LESSON_RATING_POPUP.LESSON_STARTED_LATE.NO' | translate}}\n" +
     "            </button>\n" +
     "        </div>\n" +
@@ -20300,7 +20326,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "\n" +
     "    <textarea class=\"lato-14-n note-txt\" ng-model=\"vm.lesson.lessonNotes.educatorNotes\"></textarea>\n" +
     "\n" +
-    "    <znk-send-email-notes lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-send-email-notes>\n" +
+    "    <znk-send-email-notes lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-send-email-notes>\n" +
     "\n" +
     "</div>\n" +
     "");
@@ -20332,14 +20358,14 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            </ng-switch>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    <div class=\"text-muted\" ng-if=\"vm.lesson.lessonNotes.sendMailTime\">\n" +
+    "    <div class=\"text-muted\" ng-if=\"vm.lessonSummary.lessonNotes.sendMailTime\">\n" +
     "        <span translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SENT_ON\"></span>\n" +
-    "        <span> {{vm.lesson.lessonNotes.sendMailTime | date: 'MMM d, h:mm a'}}</span>\n" +
+    "        <span> {{vm.lessonSummary.lessonNotes.sendMailTime | date: 'MMM d, h:mm a'}}</span>\n" +
     "    </div>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html",
-    "<div class=\"lesson-rating-popup\" ng-if=\"vm.lesson\">\n" +
+    "<div class=\"lesson-rating-popup\" ng-if=\"vm.lesson && vm.lessonSummary\">\n" +
     "\n" +
     "    <div class=\"znk-popup-header\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
@@ -20350,14 +20376,14 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "        </div>\n" +
     "    </div>\n" +
     "\n" +
-    "    <div class=\"content-wrapper\" ng-if=\"vm.lesson\">\n" +
+    "    <div class=\"content-wrapper\">\n" +
     "        <div class=\"znk-scrollbar\">\n" +
     "            <div class=\"quicksand-25-b title\" translate=\"LESSON_NOTES.LESSON_RATING_POPUP.TITLE\"></div>\n" +
     "\n" +
-    "            <znk-lesson-details lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-details>\n" +
+    "            <znk-lesson-details lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-details>\n" +
     "            <div class=\"divider\"></div>\n" +
     "\n" +
-    "            <znk-lesson-rating lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
+    "            <znk-lesson-rating lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
     "\n" +
     "            <div class=\"btn-group\">\n" +
     "                <button type=\"button\" class=\"btn-type-link-gray znk-uppercase\" ng-click=\"vm.closeModal()\"\n" +
@@ -20386,7 +20412,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "        </svg-icon>\n" +
     "    </div>\n" +
     "\n" +
-    "    <div class=\"bad-rating-wrapper\" ng-if=\"vm.lesson.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK\">\n" +
+    "    <div class=\"bad-rating-wrapper\" ng-if=\"vm.lessonSummary.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK\">\n" +
     "\n" +
     "        <znk-multiple-choice lesson=\"vm.lesson\" ng-if=\"!vm.isAdmin\"></znk-multiple-choice>\n" +
     "\n" +
@@ -20396,12 +20422,12 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            <div class=\"lato-14-n other\">{{'LESSON_NOTES.LESSON_RATING_POPUP.OTHER' | translate}}</div>\n" +
     "            <textarea class=\"lato-14-n note-txt\"\n" +
     "                      placeholder=\"{{'LESSON_NOTES.LESSON_RATING_POPUP.FREE_TEXT_PLACEHOLDER' | translate}}\"\n" +
-    "                      ng-model=\"vm.lesson.studentFeedback.studentFreeText\"></textarea>\n" +
+    "                      ng-model=\"vm.lessonSummary.studentFeedback.studentFreeText\"></textarea>\n" +
     "        </div>\n" +
     "\n" +
     "    </div>\n" +
     "\n" +
-    "    <znk-lesson-started-late lesson=\"vm.lesson\" user-context=\"vm.userContext\"></znk-lesson-started-late>\n" +
+    "    <znk-lesson-started-late lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-started-late>\n" +
     "\n" +
     "</div>\n" +
     "");

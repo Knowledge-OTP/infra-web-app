@@ -30,6 +30,14 @@
                 }).then(summaryLesson => summaryLesson.data);
             };
 
+            this.getLessonsBySummaryLessonId = (summaryLessonId) => {
+                let getLessonsBySummaryLessonIdApi = `${lessonApi}/getLessonsBySummaryLessonId?summaryLessonId=${summaryLessonId}`;
+                return $http.get(getLessonsBySummaryLessonIdApi, {
+                    timeout: ENV.promiseTimeOut,
+                    cache: true
+                }).then(lessons => lessons.data);
+            };
+
             this.getLessonsByBackToBackId = (backToBackId) => {
                 let getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
                 return $http.get(getBackToBackApi, {
@@ -79,7 +87,7 @@
                 return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr);
             };
 
-            this.sendEmails = (lesson) => {
+            this.sendEmails = (lesson, lessonSummary) => {
                 if (this._mailsToSend.length) {
                     const mailPromArr = [];
                     return this.getServiceList().then(serviceList => {
@@ -88,13 +96,13 @@
                         const topicName = lessonService.topics[lesson.topicId].name;
                         const mailTemplateParams = {
                             date: lesson.date,
-                            startTime: lesson.startTime,
+                            startTime: lessonSummary.startTime,
                             service: lessonService.name,
                             topic: topicName,
                             status: lesson.status,
                             educatorFirstName: lesson.educatorFirstName,
                             educatorLastName: lesson.educatorLastName,
-                            educatorNotes: lesson.lessonNotes.educatorNotes
+                            educatorNotes: lessonSummary.lessonNotes.educatorNotes
                         };
 
                         this._studentsProfiles.forEach(profile => {
@@ -104,7 +112,7 @@
                             if (studentMail) {
                                 emails.push(studentMail);
                             }
-                            if (lesson.lessonNotes.sentMailToParents) {
+                            if (lessonSummary.lessonNotes.sentMailToParents) {
                                 const parentMail = profile.studentInfo && profile.studentInfo.parentInfo ? profile.studentInfo.parentInfo.email: null;
                                 if (parentMail) {
                                     emails.push(parentMail);
