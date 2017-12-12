@@ -9320,8 +9320,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart,
                     length: ENV.liveSession.length,
                     queryLessonStart: ENV.liveSession.queryLessonStart,
+                    queryLessonMultipleByNum: ENV.queryLessonMultipleByNum // multiple this number by the lesson length for the getScheduledLesson query
                 };
-                let queryLessonNum = 4; // multiple this number by the lesson length for the getScheduledLesson query
                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => globalVariables.liveSession);
                 let educatorProfileProm = UserProfileService.getProfile();
 
@@ -9412,7 +9412,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                         SESSION_SETTINGS = this.liveSessionSettings ? this.liveSessionSettings : SESSION_SETTINGS;
                         let now = Date.now();
                         let calcStartTime = now - SESSION_SETTINGS.queryLessonStart;
-                        let calcEndTime = now + (SESSION_SETTINGS.length * queryLessonNum);
+                        let calcEndTime = now + (SESSION_SETTINGS.length * SESSION_SETTINGS.queryLessonMultipleByNum);
                         let dateRange = {
                             startDate: calcStartTime,
                             endDate: calcEndTime
@@ -10234,7 +10234,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                                     if (isDarkFeaturesValid) {
                                         $log.debug('darkFeatures in ON');
                                         if (liveSessionData.lessonSummaryId) {
-                                            ZnkLessonNotesSrv.getSummaryLessonById(liveSessionData.lessonSummaryId).then(lessonSummary => {
+                                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {
                                                 if (liveSessionData.educatorId === currUid) {
                                                     ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
                                                 } else {
@@ -20015,12 +20015,12 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
             'ngInject';
 
             this.openLessonNotesPopup = (lessonSummary, userContext) => {
-                ZnkLessonNotesSrv.getLessonsBySummaryLessonId(lessonSummary.id)
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryId(lessonSummary.id)
                     .then(lessons => {
                         if (lessons && lessons.length) {
                             lessons.sort(UtilitySrv.array.sortByField('date'));
                         } else {
-                            $log.error('openLessonNotesPopup: getLessonsBySummaryLessonId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryId: No lessons were found with lessonSummaryId ', lessonSummary.id);
                             return;
                         }
                         $rootScope.lesson = lessons.pop();
@@ -20033,17 +20033,17 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                             clickOutsideToClose: false,
                             escapeToClose: true
                         })
-                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsBySummaryLessonId: Error: ${err}`));
+                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsByLessonSummaryId: Error: ${err}`));
                     });
             };
 
             this.openLessonRatingPopup = (lessonSummary) => {
-                ZnkLessonNotesSrv.getLessonsBySummaryLessonId(lessonSummary.id)
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryId(lessonSummary.id)
                     .then(lessons => {
                         if (lessons && lessons.length) {
                             lessons.sort(UtilitySrv.array.sortByField('date'));
                         } else {
-                            $log.error('openLessonNotesPopup: getLessonsBySummaryLessonId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryId: No lessons were found with lessonSummaryId ', lessonSummary.id);
                             return;
                         }
                         $rootScope.lesson = lessons.pop();
@@ -20056,7 +20056,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                             escapeToClose: true
                         });
                     })
-                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsBySummaryLessonId: Error: ${err}`));
+                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsByLessonSummaryId: Error: ${err}`));
             };
 
             this.getUserFullName = (profile) => {
@@ -20114,17 +20114,17 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 }).then(lesson => lesson.data);
             };
 
-            this.getSummaryLessonById = (summaryLessonId) => {
-                let getSummaryLessonApi = `${lessonApi}/getSummaryLessonById?summaryLessonId=${summaryLessonId}`;
-                return $http.get(getSummaryLessonApi, {
+            this.getLessonSummaryById = (lessonSummaryId) => {
+                let getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
+                return $http.get(getLessonSummaryApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                }).then(summaryLesson => summaryLesson.data);
+                }).then(lessonSummary => lessonSummary.data);
             };
 
-            this.getLessonsBySummaryLessonId = (summaryLessonId) => {
-                let getLessonsBySummaryLessonIdApi = `${lessonApi}/getLessonsBySummaryLessonId?summaryLessonId=${summaryLessonId}`;
-                return $http.get(getLessonsBySummaryLessonIdApi, {
+            this.getLessonsByLessonSummaryId = (lessonSummaryId) => {
+                let getLessonsByLessonSummaryIdApi = `${lessonApi}/getLessonsByLessonSummaryId?lessonSummaryId=${lessonSummaryId}`;
+                return $http.get(getLessonsByLessonSummaryIdApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
                 }).then(lessons => lessons.data);

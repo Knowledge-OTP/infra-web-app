@@ -6,12 +6,12 @@
             'ngInject';
 
             this.openLessonNotesPopup = (lessonSummary, userContext) => {
-                ZnkLessonNotesSrv.getLessonsBySummaryLessonId(lessonSummary.id)
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryId(lessonSummary.id)
                     .then(lessons => {
                         if (lessons && lessons.length) {
                             lessons.sort(UtilitySrv.array.sortByField('date'));
                         } else {
-                            $log.error('openLessonNotesPopup: getLessonsBySummaryLessonId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryId: No lessons were found with lessonSummaryId ', lessonSummary.id);
                             return;
                         }
                         $rootScope.lesson = lessons.pop();
@@ -24,17 +24,17 @@
                             clickOutsideToClose: false,
                             escapeToClose: true
                         })
-                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsBySummaryLessonId: Error: ${err}`));
+                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsByLessonSummaryId: Error: ${err}`));
                     });
             };
 
             this.openLessonRatingPopup = (lessonSummary) => {
-                ZnkLessonNotesSrv.getLessonsBySummaryLessonId(lessonSummary.id)
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryId(lessonSummary.id)
                     .then(lessons => {
                         if (lessons && lessons.length) {
                             lessons.sort(UtilitySrv.array.sortByField('date'));
                         } else {
-                            $log.error('openLessonNotesPopup: getLessonsBySummaryLessonId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryId: No lessons were found with lessonSummaryId ', lessonSummary.id);
                             return;
                         }
                         $rootScope.lesson = lessons.pop();
@@ -47,7 +47,7 @@
                             escapeToClose: true
                         });
                     })
-                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsBySummaryLessonId: Error: ${err}`));
+                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsByLessonSummaryId: Error: ${err}`));
             };
 
             this.getUserFullName = (profile) => {

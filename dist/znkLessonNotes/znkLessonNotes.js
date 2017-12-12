@@ -649,12 +649,12 @@
             'ngInject';
 
             this.openLessonNotesPopup = (lessonSummary, userContext) => {
-                ZnkLessonNotesSrv.getLessonsBySummaryLessonId(lessonSummary.id)
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryId(lessonSummary.id)
                     .then(lessons => {
                         if (lessons && lessons.length) {
                             lessons.sort(UtilitySrv.array.sortByField('date'));
                         } else {
-                            $log.error('openLessonNotesPopup: getLessonsBySummaryLessonId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryId: No lessons were found with lessonSummaryId ', lessonSummary.id);
                             return;
                         }
                         $rootScope.lesson = lessons.pop();
@@ -667,17 +667,17 @@
                             clickOutsideToClose: false,
                             escapeToClose: true
                         })
-                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsBySummaryLessonId: Error: ${err}`));
+                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsByLessonSummaryId: Error: ${err}`));
                     });
             };
 
             this.openLessonRatingPopup = (lessonSummary) => {
-                ZnkLessonNotesSrv.getLessonsBySummaryLessonId(lessonSummary.id)
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryId(lessonSummary.id)
                     .then(lessons => {
                         if (lessons && lessons.length) {
                             lessons.sort(UtilitySrv.array.sortByField('date'));
                         } else {
-                            $log.error('openLessonNotesPopup: getLessonsBySummaryLessonId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryId: No lessons were found with lessonSummaryId ', lessonSummary.id);
                             return;
                         }
                         $rootScope.lesson = lessons.pop();
@@ -690,7 +690,7 @@
                             escapeToClose: true
                         });
                     })
-                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsBySummaryLessonId: Error: ${err}`));
+                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsByLessonSummaryId: Error: ${err}`));
             };
 
             this.getUserFullName = (profile) => {
@@ -748,17 +748,17 @@
                 }).then(lesson => lesson.data);
             };
 
-            this.getSummaryLessonById = (summaryLessonId) => {
-                let getSummaryLessonApi = `${lessonApi}/getSummaryLessonById?summaryLessonId=${summaryLessonId}`;
-                return $http.get(getSummaryLessonApi, {
+            this.getLessonSummaryById = (lessonSummaryId) => {
+                let getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
+                return $http.get(getLessonSummaryApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                }).then(summaryLesson => summaryLesson.data);
+                }).then(lessonSummary => lessonSummary.data);
             };
 
-            this.getLessonsBySummaryLessonId = (summaryLessonId) => {
-                let getLessonsBySummaryLessonIdApi = `${lessonApi}/getLessonsBySummaryLessonId?summaryLessonId=${summaryLessonId}`;
-                return $http.get(getLessonsBySummaryLessonIdApi, {
+            this.getLessonsByLessonSummaryId = (lessonSummaryId) => {
+                let getLessonsByLessonSummaryIdApi = `${lessonApi}/getLessonsByLessonSummaryId?lessonSummaryId=${lessonSummaryId}`;
+                return $http.get(getLessonsByLessonSummaryIdApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
                 }).then(lessons => lessons.data);

@@ -22,17 +22,17 @@
                 }).then(lesson => lesson.data);
             };
 
-            this.getSummaryLessonById = (summaryLessonId) => {
-                let getSummaryLessonApi = `${lessonApi}/getSummaryLessonById?summaryLessonId=${summaryLessonId}`;
-                return $http.get(getSummaryLessonApi, {
+            this.getLessonSummaryById = (lessonSummaryId) => {
+                let getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
+                return $http.get(getLessonSummaryApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                }).then(summaryLesson => summaryLesson.data);
+                }).then(lessonSummary => lessonSummary.data);
             };
 
-            this.getLessonsBySummaryLessonId = (summaryLessonId) => {
-                let getLessonsBySummaryLessonIdApi = `${lessonApi}/getLessonsBySummaryLessonId?summaryLessonId=${summaryLessonId}`;
-                return $http.get(getLessonsBySummaryLessonIdApi, {
+            this.getLessonsByLessonSummaryId = (lessonSummaryId) => {
+                let getLessonsByLessonSummaryIdApi = `${lessonApi}/getLessonsByLessonSummaryId?lessonSummaryId=${lessonSummaryId}`;
+                return $http.get(getLessonsByLessonSummaryIdApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
                 }).then(lessons => lessons.data);

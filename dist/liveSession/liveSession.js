@@ -55,8 +55,8 @@
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart,
                     length: ENV.liveSession.length,
                     queryLessonStart: ENV.liveSession.queryLessonStart,
+                    queryLessonMultipleByNum: ENV.queryLessonMultipleByNum // multiple this number by the lesson length for the getScheduledLesson query
                 };
-                let queryLessonNum = 4; // multiple this number by the lesson length for the getScheduledLesson query
                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => globalVariables.liveSession);
                 let educatorProfileProm = UserProfileService.getProfile();
 
@@ -147,7 +147,7 @@
                         SESSION_SETTINGS = this.liveSessionSettings ? this.liveSessionSettings : SESSION_SETTINGS;
                         let now = Date.now();
                         let calcStartTime = now - SESSION_SETTINGS.queryLessonStart;
-                        let calcEndTime = now + (SESSION_SETTINGS.length * queryLessonNum);
+                        let calcEndTime = now + (SESSION_SETTINGS.length * SESSION_SETTINGS.queryLessonMultipleByNum);
                         let dateRange = {
                             startDate: calcStartTime,
                             endDate: calcEndTime
@@ -969,7 +969,7 @@
                                     if (isDarkFeaturesValid) {
                                         $log.debug('darkFeatures in ON');
                                         if (liveSessionData.lessonSummaryId) {
-                                            ZnkLessonNotesSrv.getSummaryLessonById(liveSessionData.lessonSummaryId).then(lessonSummary => {
+                                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {
                                                 if (liveSessionData.educatorId === currUid) {
                                                     ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
                                                 } else {

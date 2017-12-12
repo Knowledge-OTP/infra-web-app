@@ -88,7 +88,7 @@
                                     if (isDarkFeaturesValid) {
                                         $log.debug('darkFeatures in ON');
                                         if (liveSessionData.lessonSummaryId) {
-                                            ZnkLessonNotesSrv.getSummaryLessonById(liveSessionData.lessonSummaryId).then(lessonSummary => {
+                                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {
                                                 if (liveSessionData.educatorId === currUid) {
                                                     ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
                                                 } else {
