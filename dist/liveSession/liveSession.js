@@ -618,9 +618,9 @@
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
                             if (liveSessionData.backToBackId) {
-                                return ZnkLessonNotesSrv.updateLessonStatus(liveSessionData.backToBackId, true);
+                                return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.backToBackId, LessonStatusEnum.ATTENDED.enum, true);
                             } else {
-                                return ZnkLessonNotesSrv.updateLessonStatus(liveSessionData.lessonId, false);
+                                return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.lessonId, LessonStatusEnum.ATTENDED.enum, false);
                             }
                         } else {
                             $log.debug('_updateLesson: darkFeatures in OFF');

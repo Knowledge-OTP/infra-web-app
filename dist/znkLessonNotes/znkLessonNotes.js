@@ -649,12 +649,12 @@
             'ngInject';
 
             this.openLessonNotesPopup = (lessonSummary, userContext) => {
-                ZnkLessonNotesSrv.getLessonsByLessonSummaryId(lessonSummary.id)
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryIds([lessonSummary.id])
                     .then(lessons => {
                         if (lessons && lessons.length) {
                             lessons.sort(UtilitySrv.array.sortByField('date'));
                         } else {
-                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryIds: No lessons were found with lessonSummaryId ', lessonSummary.id);
                             return;
                         }
                         $rootScope.lesson = lessons.pop();
@@ -667,17 +667,17 @@
                             clickOutsideToClose: false,
                             escapeToClose: true
                         })
-                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsByLessonSummaryId: Error: ${err}`));
+                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsByLessonSummaryIds: Error: ${err}`));
                     });
             };
 
             this.openLessonRatingPopup = (lessonSummary) => {
-                ZnkLessonNotesSrv.getLessonsByLessonSummaryId(lessonSummary.id)
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryIds([lessonSummary.id])
                     .then(lessons => {
                         if (lessons && lessons.length) {
                             lessons.sort(UtilitySrv.array.sortByField('date'));
                         } else {
-                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryId: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryIds: No lessons were found with lessonSummaryId ', lessonSummary.id);
                             return;
                         }
                         $rootScope.lesson = lessons.pop();
@@ -690,7 +690,7 @@
                             escapeToClose: true
                         });
                     })
-                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsByLessonSummaryId: Error: ${err}`));
+                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsByLessonSummaryIds: Error: ${err}`));
             };
 
             this.getUserFullName = (profile) => {
@@ -756,12 +756,10 @@
                 }).then(lessonSummary => lessonSummary.data);
             };
 
-            this.getLessonsByLessonSummaryId = (lessonSummaryId) => {
-                let getLessonsByLessonSummaryIdApi = `${lessonApi}/getLessonsByLessonSummaryId?lessonSummaryId=${lessonSummaryId}`;
-                return $http.get(getLessonsByLessonSummaryIdApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(lessons => lessons.data);
+            this.getLessonsByLessonSummaryIds = (lessonSummaryIds) => {
+                let getLessonsByLessonSummaryIdsApi = `${lessonApi}/getLessonsByLessonSummaryIds`;
+                return $http.post(getLessonsByLessonSummaryIdsApi, lessonSummaryIds)
+                    .then(lessons => lessons.data);
             };
 
             this.getLessonsByBackToBackId = (backToBackId) => {
@@ -783,10 +781,22 @@
                     .then(lessons => lessons.data[0]);
             };
 
-            this.updateLessonStatus = (lessonId, isBackToBackId) => {
-                let updateLessonStatusApi = `${lessonApi}/updateLessonStatus`;
-                return $http.post(updateLessonStatusApi, {lessonId, isBackToBackId})
-                    .then(lessons => lessons.data[0]);
+            this.updateLessonsStatus = (id, newStatus, isBackToBackId) => {
+                let lessonsProm = isBackToBackId ? this.getLessonsByBackToBackId(id) : this.getLessonById(id);
+                return lessonsProm.then(lessons => {
+                    let updateLessonPromArr = [];
+                    if (lessons && lessons.length) {
+                        updateLessonPromArr = lessons.map(lesson => {
+                            // TODO: need to validate previous status before update
+                            lesson.status = newStatus;
+                            return this.updateLesson(lesson);
+                        });
+                        return Promise.all(updateLessonPromArr);
+                    } else {
+                        $log.error(`updateLessonsStatus: NO lessons are found with this id: ${id}, isBackToBackId: ${isBackToBackId}`);
+                    }
+                });
+
             };
 
             this.saveLessonSummary = (lessonSummary) => {

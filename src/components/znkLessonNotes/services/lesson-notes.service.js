@@ -30,12 +30,10 @@
                 }).then(lessonSummary => lessonSummary.data);
             };
 
-            this.getLessonsByLessonSummaryId = (lessonSummaryId) => {
-                let getLessonsByLessonSummaryIdApi = `${lessonApi}/getLessonsByLessonSummaryId?lessonSummaryId=${lessonSummaryId}`;
-                return $http.get(getLessonsByLessonSummaryIdApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(lessons => lessons.data);
+            this.getLessonsByLessonSummaryIds = (lessonSummaryIds) => {
+                let getLessonsByLessonSummaryIdsApi = `${lessonApi}/getLessonsByLessonSummaryIds`;
+                return $http.post(getLessonsByLessonSummaryIdsApi, lessonSummaryIds)
+                    .then(lessons => lessons.data);
             };
 
             this.getLessonsByBackToBackId = (backToBackId) => {
@@ -57,10 +55,22 @@
                     .then(lessons => lessons.data[0]);
             };
 
-            this.updateLessonStatus = (lessonId, isBackToBackId) => {
-                let updateLessonStatusApi = `${lessonApi}/updateLessonStatus`;
-                return $http.post(updateLessonStatusApi, {lessonId, isBackToBackId})
-                    .then(lessons => lessons.data[0]);
+            this.updateLessonsStatus = (id, newStatus, isBackToBackId) => {
+                let lessonsProm = isBackToBackId ? this.getLessonsByBackToBackId(id) : this.getLessonById(id);
+                return lessonsProm.then(lessons => {
+                    let updateLessonPromArr = [];
+                    if (lessons && lessons.length) {
+                        updateLessonPromArr = lessons.map(lesson => {
+                            // TODO: need to validate previous status before update
+                            lesson.status = newStatus;
+                            return this.updateLesson(lesson);
+                        });
+                        return Promise.all(updateLessonPromArr);
+                    } else {
+                        $log.error(`updateLessonsStatus: NO lessons are found with this id: ${id}, isBackToBackId: ${isBackToBackId}`);
+                    }
+                });
+
             };
 
             this.saveLessonSummary = (lessonSummary) => {
